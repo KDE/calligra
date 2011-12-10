@@ -24,6 +24,7 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#include <QTime>
 #include <math.h>
 
 #ifndef M_PI
@@ -69,6 +70,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_insideTable = false;
+    qsrand(QTime::currentTime().msec());
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
@@ -161,6 +163,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_flipV = false;
     m_rot = 0;
 
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    KoXmlWriter *tempBodyHolder = 0;
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
+        tempBodyHolder = body;
+        body = m_currentDrawingObject->pictureElement();
+    }
+#endif
+
 #ifndef DOCXXMLDOCREADER_CPP
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -191,6 +201,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("draw:layer", "backgroundobjects");
     }
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+#endif
+
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    if (m_context->m_groupDepthCounter == 0) {
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            // use relative position to the cell's top-left corner
+            m_svgX = f.m_colOff;
+            m_svgY = f.m_rowOff;
+
+            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                QString endCellAddress = m_currentDrawingObject->toCellAddress();
+                QString end_x = EMU_TO_CM_STRING(f.m_colOff);
+                QString end_y = EMU_TO_CM_STRING(f.m_rowOff);
+
+                body->addAttribute("table:end-cell-address", endCellAddress);
+                body->addAttribute("table:end-x", end_x); //cm
+                body->addAttribute("table:end-y", end_y); //cm
+            }
+        }
+    }
 #endif
 
     if (m_rot == 0) {
@@ -260,6 +292,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
 #endif
+
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    // If we anchored to cell, we save odf to different buffer that body operates on
+    // Here we restore the original body buffer for next drawing which might be anchored
+    // to sheet
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
+        body = tempBodyHolder;
+    }
+#endif
+
 
 #ifndef DOCXXMLDOCREADER_CPP
     popCurrentDrawStyle();
@@ -473,7 +515,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
-
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter++;
+#endif
         while (!atEnd()) {
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
@@ -484,13 +528,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                 ELSE_TRY_READ_IF(sp)
                 ELSE_TRY_READ_IF(grpSpPr)
                 ELSE_TRY_READ_IF(cxnSp)
-    #ifdef PPTXXMLSLIDEREADER_CPP
+#ifdef PPTXXMLSLIDEREADER_CPP
                 ELSE_TRY_READ_IF(graphicFrame)
-    #endif
+#endif
                 SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
             }
         }
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter--;
+#endif
     }
 
     body = drawFrameBuf.originalWriter();
@@ -771,8 +818,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 #endif
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #ifndef PPTXXMLSLIDEREADER_CPP
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 #else
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
@@ -793,9 +840,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     // only either draw:style-name or presentation:style-name
     // is allowed, but not both.
     if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
-        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::GraphicType);
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::TextType);
+        KoGenStyle::copyPropertiesFromStyle(*m_currentDrawStyle, m_currentPresentationStyle, KoGenStyle::ParagraphType);
+        const QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     } else {
+        const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", styleName);
     }
     inheritShapePosition();
@@ -1259,12 +1310,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
-#if defined(XLSXXMLDRAWINGREADER_CPP)
-extern QString columnName(uint column);
-//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
-//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
-#endif
-
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1295,8 +1340,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
             hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
-                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
                 //chartexport->m_end_x = f.m_colOff;
                 //chartexport->m_end_y = f.m_rowOff;
                 chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
@@ -1920,10 +1964,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Update Automatic Numbering info
     //---------------------------------------------
     if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-        m_continueListNumbering[m_currentListLevel] = false;
+        QList<quint16> levels = m_continueListNumbering.keys();
+        for (quint16 i = 0; i < levels.size(); i++) {
+            if (levels[i] >= m_currentListLevel) {
+                m_continueListNumbering.remove(levels[i]);
+                m_lvlXmlIdMap.remove(levels[i]);
+            }
+        }
     }
-    if (m_prevListLevel > m_currentListLevel) {
-        m_continueListNumbering[m_prevListLevel] = false;
+    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+        if (m_prevListLevel > m_currentListLevel) {
+            QList<quint16> levels = m_continueListNumbering.keys();
+            for (quint16 i = 0; i < levels.size(); i++) {
+                if (levels[i] > m_currentListLevel) {
+                    m_continueListNumbering.remove(levels[i]);
+                    m_lvlXmlIdMap.remove(levels[i]);
+                }
+            }
+        }
     }
 
     //---------------------------------------------
@@ -1963,12 +2021,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             body->startElement("text:list");
             body->addAttribute("text:style-name", listStyleName);
             m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+
             //continue numbering if applicable
             if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+
+                QString xmlId = QString("lvl%1").arg(m_currentListLevel);
+                xmlId.append(QString("_%1").arg(qrand()));
+                body->addAttribute("xml:id", xmlId);
+
                 if (m_continueListNumbering.contains(m_currentListLevel) &&
                     m_continueListNumbering[m_currentListLevel]) {
-                    body->addAttribute("text:continue-numbering", "true");
+                    body->addAttribute("text:continue-list", m_lvlXmlIdMap[m_currentListLevel]);
                 }
+                m_lvlXmlIdMap[m_currentListLevel] = xmlId;
             }
             body->startElement("text:list-item");
             for (int i = 1; i < m_currentListLevel; i++) {

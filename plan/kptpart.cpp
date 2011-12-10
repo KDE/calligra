@@ -34,8 +34,7 @@
 #include "kpttask.h"
 #include "KPlatoXmlLoader.h"
 #include "kptpackage.h"
-
-//#include "KDGanttViewTaskLink.h"
+#include "kptworkpackagemergedialog.h"
 
 #include <KoZoomHandler.h>
 #include <KoStore.h>
@@ -49,6 +48,8 @@
 #include <qpainter.h>
 #include <QDir>
 #include <QMutableMapIterator>
+#include <QTreeView>
+#include <QStandardItemModel>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -72,7 +73,8 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_project( 0 ), m_parentWidget( parentWidget ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
-        m_viewlistModified( false )
+        m_viewlistModified( false ),
+        m_checkingForWorkPackages( false )
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
@@ -94,7 +96,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project ); // register myself
 
-    QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
+    QTimer::singleShot ( 5000, this, SLOT( autoCheckForWorkPackages() ) );
 
     connect(this, SIGNAL(modified(bool)), SLOT(slotModified(bool)));
 }
@@ -442,9 +444,15 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
         package = loadWorkPackageXML( project, store->device(), doc, url );
-        ok = (bool)package;
+        if ( package ) {
+            package->url = url;
+            m_workpackages.insert( package->timeTag, package );
+        } else {
+            ok = false;
+        }
     }
     store->close();
+    //###
     if ( ok && package && package->settings.documents ) {
         ok = extractFiles( store, package );
     }
@@ -456,13 +464,12 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url )
+Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &/*url*/ )
 {
     QString value;
     bool ok = true;
     Project *proj = 0;
     Package *package = 0;
-    QString timeTag;
     KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
@@ -470,7 +477,7 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     if ( value.isEmpty() ) {
         kDebug() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
-        return false;
+        return 0;
     } else if ( value == "application/x-vnd.kde.kplato.work" ) {
         m_xmlLoader.setMimetype( value );
         m_xmlLoader.setWorkVersion( plan.attribute( "version", "0.0.0" ) );
@@ -480,14 +487,14 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         if ( ! ok ) {
             setErrorMessage( loader.errorMessage() );
             delete proj;
-            return false;
+            return 0;
         }
         package = loader.package();
-        timeTag = loader.timeTag();
+        package->timeTag = KDateTime::fromString( loader.timeTag(), KDateTime::ISODate );
     } else if ( value != "application/x-vnd.kde.plan.work" ) {
         kDebug() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
-        return false;
+        return 0;
     } else {
         QString syntaxVersion = plan.attribute( "version", "0.0.0" );
         m_xmlLoader.setWorkVersion( syntaxVersion );
@@ -498,7 +505,7 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
             if ( ret == KMessageBox::Cancel ) {
                 setErrorMessage( "USER_CANCELED" );
-                return false;
+                return 0;
             }
         }
         m_xmlLoader.setVersion( plan.attribute( "plan-version", PLAN_FILE_SYNTAX_VERSION ) );
@@ -520,9 +527,10 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
                     //TODO add some ui here
                 }
             } else if ( e.tagName() == "workpackage" ) {
-                timeTag = e.attribute( "time-tag" );
+                package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
+                kDebug()<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {
                     if ( elem.tagName() != "settings" ) {
@@ -536,6 +544,7 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         }
         if ( proj->numChildren() > 0 ) {
             package->task = static_cast<Task*>( proj->childNode( 0 ) );
+            package->toTask = qobject_cast<Task*>( m_project->findNode( package->task->id() ) );
             WorkPackage &wp = package->task->workPackage();
             if ( wp.ownerId().isEmpty() ) {
                 wp.setOwnerId( package->ownerId );
@@ -547,14 +556,14 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     }
     if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
         ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
-        if ( ok && m_mergedPackages.contains( timeTag ) ) {
+        if ( ok && m_mergedPackages.contains( package->timeTag ) ) {
             ok = false; // already merged
         }
-        if ( ok && ! timeTag.isEmpty() && ! m_mergedPackages.contains( timeTag ) ) {
-            m_mergedPackages[ timeTag ] = proj; // register this for next time
+        if ( ok && package->timeTag.isValid() && ! m_mergedPackages.contains( package->timeTag ) ) {
+            m_mergedPackages[ package->timeTag ] = proj; // register this for next time
         }
-        if ( ok && timeTag.isEmpty() ) {
-            kWarning()<<"Work package is not time tagged";
+        if ( ok && ! package->timeTag.isValid() ) {
+            kWarning()<<"Work package is not time tagged:"<<proj->childNode( 0 )->name()<<package->url;
             ok = false;
         }
     }
@@ -564,7 +573,6 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         return 0;
     }
     Q_ASSERT( package );
-    m_workpackages.insert( package, url );
     return package;
 }
 
@@ -598,14 +606,27 @@ bool Part::extractFile( KoStore *store, Package *package, const Document *doc )
     }
     package->documents.insert( tmpfile.fileName(), doc->url() );
     tmpfile.setAutoRemove( false );
+    kDebug()<<"extracted:"<<doc->url().fileName()<<"->"<<tmpfile.fileName();
     return true;
 }
 
-void Part::checkForWorkPackages()
+void Part::autoCheckForWorkPackages()
 {
-    if ( ! isReadWrite() || ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
-        QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
+    if ( m_config.checkForWorkPackages() ) {
+        checkForWorkPackages( true );
+    }
+    QTimer::singleShot ( 10000, this, SLOT( autoCheckForWorkPackages() ) );
+}
+
+void Part::checkForWorkPackages( bool keep )
+{
+    if ( m_checkingForWorkPackages || ! isReadWrite() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         return;
+    }
+    m_checkingForWorkPackages = true;
+    if ( ! keep ) {
+        qDeleteAll( m_mergedPackages );
+        m_mergedPackages.clear();
     }
     QDir dir( m_config.retrieveUrl().path(), "*.planwork" );
     m_infoList = dir.entryInfoList( QDir::Files | QDir::Readable, QDir::Time );
@@ -623,36 +644,81 @@ void Part::checkForWorkPackage()
         }
         // all files read
         // remove other projects
-        QMutableMapIterator<Package*, KUrl> it( m_workpackages );
+        QMutableMapIterator<KDateTime, Package*> it( m_workpackages );
         while ( it.hasNext() ) {
             it.next();
-            if ( it.key()->project->id() != m_project->id() ) {
-                delete it.key()->project;
-                delete it.key();
+            Package *package = it.value();
+            if ( package->project->id() != m_project->id() ) {
+                delete package->project;
+                delete package;
                 it.remove();
             }
         }
         // Merge our workpackages
         if ( ! m_workpackages.isEmpty() ) {
-            QStringList lst;
-            foreach ( const Package *p, m_workpackages.keys() ) {
-                lst << QString( "%1: %2" ).arg( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() ).arg( p->project->childNode( 0 )->name() );
+            WorkPackageMergeDialog *dia = new WorkPackageMergeDialog( i18n( "New work packages detected. Merge data with existing tasks?" ), m_workpackages );
+            if ( dia->exec() == KDialog::Yes ) {
+                // merge the oldest first
+                foreach( int i, dia->checkedList() ) {
+                    mergeWorkPackage( m_workpackages.values().at( i ) );
+                }
+                // 'Yes' was hit so terminate all packages
+                foreach( const Package *p, m_workpackages.values() ) {
+                    terminateWorkPackage( p );
+                }
             }
-            int r = KMessageBox::questionYesNoList( 0, "New work packages detected. Merge data with existing tasks?", lst );
-            if ( r == KMessageBox::Yes ) {
-                mergeWorkPackages();
-            }
-            qDeleteAll( m_workpackages.keys() );
+            delete dia;
+            qDeleteAll( m_workpackages.values() );
             m_workpackages.clear();
         }
     }
-    QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
+    m_checkingForWorkPackages = false;
 }
 
 void Part::mergeWorkPackages()
 {
-    foreach ( const Package *p, m_workpackages.keys() ) {
-        mergeWorkPackage( p );
+    foreach ( Package *package, m_workpackages ) {
+        mergeWorkPackage( package );
+    }
+}
+
+void Part::terminateWorkPackage( const Package *package )
+{
+    QFile file( package->url.path() );
+    if ( ! file.exists() ) {
+        return;
+    }
+    if ( KPlatoSettings::deleteFile() || KPlatoSettings::saveUrl().isEmpty() ) {
+        file.remove();
+    } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl().isEmpty() ) {
+        QDir dir( KPlatoSettings::saveUrl().path() );
+        if ( ! dir.exists() ) {
+            if ( ! dir.mkpath( dir.path() ) ) {
+                //TODO message
+                kDebug()<<"Could not create directory:"<<dir.path();
+                return;
+            }
+        }
+        QFileInfo from( file );
+        QString name = KPlatoSettings::saveUrl().path() + '/' + from.fileName();
+        if ( file.rename( name ) ) {
+            return;
+        }
+        name = KPlatoSettings::saveUrl().path() + '/';
+        name += from.completeBaseName() + "-%1";
+        if ( ! from.suffix().isEmpty() ) {
+            name += '.' + from.suffix();
+        }
+        int i = 0;
+        bool ok = false;
+        while ( ! ok && i < 1000 ) {
+            ++i;
+            ok = QFile::rename( file.fileName(), name.arg( i ) );
+        }
+        if ( ! ok ) {
+            //TODO message
+            kDebug()<<"terminateWorkPackage: Failed to save"<<file.fileName();
+        }
     }
 }
 
@@ -660,49 +726,10 @@ void Part::mergeWorkPackage( const Package *package )
 {
     const Project &proj = *(package->project);
     if ( proj.id() == m_project->id() && proj.childNode( 0 ) ) {
-        const Task *from = qobject_cast<const Task*>( proj.childNode( 0 ) );
-        Task *to = qobject_cast<Task*>( m_project->findNode( from->id() ) );
+        const Task *from = package->task;
+        Task *to = package->toTask;
         if ( to && from ) {
             mergeWorkPackage( to, from, package );
-        }
-        if ( KPlatoSettings::leaveFile() ) {
-            return;
-        }
-        QFile file( m_workpackages[ const_cast<Package*>(package) ].path() );
-        if ( ! file.exists() ) {
-            return;
-        }
-        if ( KPlatoSettings::deleteFile() ) {
-            file.remove();
-        } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl().isEmpty() ) {
-            QDir dir( KPlatoSettings::saveUrl().path() );
-            if ( ! dir.exists() ) {
-                if ( ! dir.mkpath( dir.path() ) ) {
-                    //TODO message
-                    kDebug()<<"Could not create directory:"<<dir.path();
-                    return;
-                }
-            }
-            QFileInfo from( file );
-            QString name = KPlatoSettings::saveUrl().path() + '/' + from.fileName();
-            if ( file.rename( name ) ) {
-                return;
-            }
-            name = KPlatoSettings::saveUrl().path() + '/';
-            name += from.completeBaseName() + "-%1";
-            if ( ! from.suffix().isEmpty() ) {
-                name += '.' + from.suffix();
-            }
-            int i = 0;
-            bool ok = false;
-            while ( ! ok && i < 1000 ) {
-                ++i;
-                ok = QFile::rename( file.fileName(), name.arg( i ) );
-            }
-            if ( ! ok ) {
-                //TODO message
-                kDebug()<<"mergeWorkPackage: Failed to save"<<file.fileName();
-            }
         }
     }
 }
@@ -772,6 +799,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
             if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
                 docsaved = true;
                 //TODO: async
+                kDebug()<<"Moved file:"<<src<<it.value();
             }
         }
     }
@@ -782,7 +810,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     WorkPackage *wp = new WorkPackage( from->workPackage() );
     wp->setParentTask( to );
     if ( ! wp->transmitionTime().isValid() ) {
-        wp->setTransmitionTime( DateTime::currentDateTime() );
+        wp->setTransmitionTime( package->timeTag );
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );

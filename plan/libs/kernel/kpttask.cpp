@@ -3235,46 +3235,44 @@ EffortCostMap Completion::actualEffortCost( long int id, KPlato::EffortCostCalcu
     if ( ! isStarted() ) {
         return map;
     }
-    QList< const QMap<QDate, UsedEffort::ActualEffort>* > lst;
+    QList< QMap<QDate, UsedEffort::ActualEffort> > lst;
     QList< double > rate;
     QDate start, end;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         //kDebug()<<m_node->name()<<r->name();
-        const QMap<QDate, UsedEffort::ActualEffort> &m = usedEffort( r )->actualEffortMap();
-        if ( m.isEmpty() ) {
+        lst << usedEffort( r )->actualEffortMap();
+        if ( lst.last().isEmpty() ) {
+            lst.takeLast();
             continue;
         }
         if ( r->type() == Resource::Type_Material ) {
             if ( type == ECCT_All ) {
-                lst.append( &m );
                 rate.append( r->normalRate() );
             } else if ( type == ECCT_EffortWork ) {
-                lst.append( &m );
                 rate.append( 0.0 );
             } else {
+                lst.takeLast();
                 continue;
             }
         } else {
-            lst.append( &m );
             rate.append( r->normalRate() );
         }
-        if ( ! start.isValid() || start > m.keys().first() ) {
-            start = m.keys().first();
+        if ( ! start.isValid() || start > lst.last().keys().first() ) {
+            start = lst.last().keys().first();
         }
-        if ( ! end.isValid() || end < m.keys().last() ) {
-            end = m.keys().last();
+        if ( ! end.isValid() || end < lst.last().keys().last() ) {
+            end = lst.last().keys().last();
         }
     }
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
             for ( int i = 0; i < lst.count(); ++i ) {
-                UsedEffort::ActualEffort a = lst.at( i )->value( d );
+                UsedEffort::ActualEffort a = lst.at( i ).value( d );
                 double nc = rate.value( i );
                 Duration eff = a.normalEffort();
                 double cost = eff.toDouble( Duration::Unit_h ) * nc;
                 c.add( eff, cost );
-                //kDebug()<<m_node->name()<<d<<eff.toDouble(Duration::Unit_h)<<nc<<cost<<"->"<<c.effort().toDouble(Duration::Unit_h)<<c.cost();
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
@@ -3722,10 +3720,17 @@ void Completion::printDebug(const QByteArray& _indent) const {
         qDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
     }
 }
-
 #endif
 
 
 }  //KPlato namespace
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug operator<<( QDebug dbg, const KPlato::Completion::UsedEffort::ActualEffort &ae )
+{
+    dbg << QString( "%1" ).arg( ae.normalEffort().toDouble( KPlato::Duration::Unit_h ), 1 );
+    return dbg;
+}
+#endif
 
 #include "kpttask.moc"

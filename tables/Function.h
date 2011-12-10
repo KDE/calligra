@@ -28,6 +28,7 @@
 #include <QVector>
 
 #include "Region.h"
+#include "Value.h"
 
 #include "calligra_tables_export.h"
 
@@ -38,7 +39,6 @@ namespace Calligra
 namespace Tables
 {
 class Sheet;
-class Value;
 class ValueCalc;
 class Function;
 

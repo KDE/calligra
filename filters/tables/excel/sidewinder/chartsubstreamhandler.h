@@ -67,6 +67,7 @@ private:
     Charting::Series* m_currentSeries;
     Charting::Obj* m_currentObj;
     QStack<Charting::Obj*> m_stack;
+    QStack<Charting::Series*> m_seriesStack;
     std::vector<XFRecord> m_xfTable;
 
     class InternalDataCache;

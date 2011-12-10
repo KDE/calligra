@@ -27,6 +27,7 @@
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 
+#include "calligraversion.h"
 #include <KoDocument.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
@@ -614,7 +615,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
 {
     TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1453,7 +1454,7 @@ DoubleTreeViewBase::~DoubleTreeViewBase()
 KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
 {
     DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

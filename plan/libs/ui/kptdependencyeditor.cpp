@@ -27,6 +27,8 @@
 #include "kptrelation.h"
 #include "kptschedule.h"
 
+#include "calligraversion.h"
+
 #include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
 #include <QModelIndex>
@@ -2321,7 +2323,7 @@ void DependencyEditor::slotDeleteTask()
 KoPrintJob *DependencyEditor::createPrintJob()
 {
     DependecyViewPrintingDialog *dia = new DependecyViewPrintingDialog( this, m_view );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

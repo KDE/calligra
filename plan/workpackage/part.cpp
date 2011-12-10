@@ -181,7 +181,11 @@ bool DocumentChild::setDoc( const Document *doc )
     }
     m_doc = doc;
     KUrl url;
-    if ( doc->sendAs() == Document::SendAs_Copy ) {
+    if ( parentPackage()->newDocuments().contains( doc ) ) {
+        url = parentPackage()->newDocuments().value( doc );
+        Q_ASSERT( url.isValid() );
+        parentPackage()->removeNewDocument( doc );
+    } else if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc );
         if ( url.url().isEmpty() ) {
             KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
@@ -713,7 +717,7 @@ WorkPackage *Part::findWorkPackage( const Node *node ) const
 
 bool Part::editWorkpackageDocument( const Document *doc )
 {
-    kDebug()<<doc<<doc->url();
+    //kDebug()<<doc<<doc->url();
     // start in any suitable application
     return editOtherDocument( doc );
 }

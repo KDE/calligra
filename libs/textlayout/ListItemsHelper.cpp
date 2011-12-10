@@ -283,6 +283,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         // set the counter for the current un-numbered list to the counter index of the previous list item.
         // index-1 because the list counter would have already incremented by one
         data->setCounterIndex(index - 1);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            data->setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
+            data->setCounterSpacing(0);
+        }
         return;
     }
 
@@ -436,7 +440,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         } else {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
-            counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
+                counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
             width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }

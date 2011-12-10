@@ -71,7 +71,6 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupFinishPage();
     
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
-    
 }
 
 
@@ -90,11 +89,16 @@ void ImportTableWizard::next() {
     if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
+            return;
         }
-    }
-    else {
-        KAssistantDialog::next();
-    }
+    } else if (currentPage() == m_alterTablePageItem) {
+      if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
+            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue", i18n("Object name exists")));
+            return;
+      }
+    }  
+        
+    KAssistantDialog::next();
 }
 
 void ImportTableWizard::accept() {
@@ -384,7 +388,7 @@ void ImportTableWizard::arriveImportingPage()
         //setNextEnabled(m_importingPageWidget, false);
         enableButton(KDialog::User2, false);
     }
-    #endif
+#endif
 
     QString txt;
 

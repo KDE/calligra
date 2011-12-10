@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -982,8 +982,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         }
         //alter sorting for either existing or new row
         if (record && rowPropertySet) {
+            // this will automatically update "sorting" property
             d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING,
-                                         orderByColumn->ascending() ? 1 : 2); // this will automatically update "sorting" property
+                                         orderByColumn->ascending() ? 1 : 2);
             // in slotBeforeCellChanged()
             d->data->saveRowChanges(*record, true);
             (*rowPropertySet)["sorting"].clearModifiedFlag(); // this property should look "fresh"
@@ -1198,7 +1199,7 @@ void KexiQueryDesignerGuiEditor::slotDragOverTableRow(
     KexiDB::RecordData * /*record*/, int /*row*/, QDragMoveEvent* e)
 {
     if (e->provides("kexi/field")) {
-        e->acceptAction(true);
+        e->setAccepted(true);
     }
 }
 
@@ -1394,221 +1395,288 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     return valueExpr;
 }
 
-void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
-        QVariant& newValue, KexiDB::ResultInfo* result)
+void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *record,
+    int colnum, QVariant& newValue, KexiDB::ResultInfo* result)
 {
-    if (colnum == COLUMN_ID_COLUMN) {
-        if (newValue.isNull()) {
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(), false/*!allowSignals*/);
-            d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
-            d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
+    switch (colnum) {
+    case COLUMN_ID_COLUMN: slotBeforeColumnCellChanged(record, newValue, result); break;
+    case COLUMN_ID_TABLE: slotBeforeTableCellChanged(record, newValue, result); break;
+    case COLUMN_ID_VISIBLE: slotBeforeVisibleCellChanged(record, newValue, result); break;
 #ifndef KEXI_NO_QUERY_TOTALS
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
+    case COLUMN_ID_TOTALS: slotBeforeTotalsCellChanged(record, newValue, result); break;
 #endif
-            d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
-            d->sets->eraseCurrentPropertySet();
-        } else {
-            //auto fill 'table' column
-            QString fieldId(newValue.toString().trimmed());   //tmp, can look like "table.field"
-            QString fieldName; //"field" part of "table.field" or expression string
-            QString tableName; //empty for expressions
-            QByteArray alias;
-            QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
-            const bool isExpression = !d->fieldColumnIdentifiers.contains(fieldId.toLower());
-            if (isExpression) {
-                //this value is entered by hand and doesn't match
-                //any value in the combo box -- we're assuming this is an expression
-                //-table remains null
-                //-find "alias" in something like "alias : expr"
-                const int id = fieldId.indexOf(':');
-                if (id > 0) {
-                    alias = fieldId.left(id).trimmed().toLatin1();
-                    if (!KexiUtils::isIdentifier(alias)) {
-                        result->success = false;
-                        result->allowToDiscardChanges = true;
-                        result->column = colnum;
-                        result->msg = i18n(
-                                          "Entered column alias \"%1\" is not a valid identifier.", QString(alias));
-                        result->desc = i18n("Identifiers should start with a letter or '_' character");
-                        return;
-                    }
-                }
-                fieldName = fieldId.mid(id + 1).trimmed();
-                //check expr.
-                KexiDB::BaseExpr *e;
-                int dummyToken;
-                if ((e = parseExpressionString(fieldName, dummyToken, false/*allowRelationalOperator*/))) {
-                    fieldName = e->toString(); //print it prettier
-                    //this is just checking: destroy expr. object
-                    delete e;
-                } else {
-                    result->success = false;
-                    result->allowToDiscardChanges = true;
-                    result->column = colnum;
-                    result->msg = i18n("Invalid expression \"%1\"", fieldName);
-                    return;
-                }
-            } else {//not expr.
-                //this value is properly selected from combo box list
-                if (fieldId == "*") {
-                    tableName = "*";
-                }
-                else {
-                    if (!KexiDB::splitToTableAndFieldParts(
-                                fieldId, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName))
-                    {
-                        kWarning() << "no 'field' or 'table.field'";
-                        return;
-                    }
-                }
-            }
-            bool saveOldValue = true;
-            KoProperty::Set *set = d->sets->findPropertySetForItem(*record); //*propertyBuffer();
-            if (!set) {
-                saveOldValue = false; // no old val.
-                const int row = d->data->indexOf(record);
-                if (row < 0) {
-                    result->success = false;
-                    return;
-                }
-                set = createPropertySet(row, tableName, fieldName, true);
-                propertySetSwitched();
-            }
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(tableName), false/*!allowSignals*/);
-            d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(true));
-#ifndef KEXI_NO_QUERY_TOTALS
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));
-#endif
-            if (!sortingAllowed(fieldName, tableName)) {
-                // sorting is not available for "*" or "table.*" rows
-//! @todo what about expressions?
-                d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
-            }
-            //update properties
-            (*set)["field"].setValue(fieldName, saveOldValue);
-            if (isExpression) {
-                //-no alias but it's needed:
-                if (alias.isEmpty()) //-try oto get old alias
-                    alias = (*set)["alias"].value().toByteArray();
-                if (alias.isEmpty()) //-generate smallest unique alias
-                    alias = generateUniqueAlias();
-            }
-            (*set)["isExpression"].setValue(QVariant(isExpression), saveOldValue);
-            if (!alias.isEmpty()) {
-                (*set)["alias"].setValue(alias, saveOldValue);
-                //pretty printed "alias: expr"
-                newValue = QString(alias) + ": " + fieldName;
-            }
-            (*set)["caption"].setValue(QString(), saveOldValue);
-            (*set)["table"].setValue(tableName, saveOldValue);
-            updatePropertiesVisibility(*set);
-        }
-    } else if (colnum == COLUMN_ID_TABLE) {
-        if (newValue.isNull()) {
-            if (!(*record)[COLUMN_ID_COLUMN].toString().isEmpty())
-                d->data->updateRowEditBuffer(record, COLUMN_ID_COLUMN, QVariant(), false/*!allowSignals*/);
-            d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
-#ifndef KEXI_NO_QUERY_TOTALS
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
-#endif
-            d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
-            d->sets->eraseCurrentPropertySet();
-        }
-        //update property
-        KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
-        if (set) {
-            if ((*set)["isExpression"].value().toBool() == false) {
-                (*set)["table"] = newValue;
-                (*set)["caption"] = QString();
-            } else {
-                //do not set table for expr. columns
-                newValue = QVariant();
-            }
-//   KoProperty::Set &set = *propertyBuffer();
-            updatePropertiesVisibility(*set);
-        }
-    } else if (colnum == COLUMN_ID_VISIBLE) {
-        bool saveOldValue = true;
-        if (!propertySet()) {
-            saveOldValue = false;
-            createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
-                              (*record)[COLUMN_ID_TABLE].toString(), (*record)[COLUMN_ID_COLUMN].toString(), true);
-#ifndef KEXI_NO_QUERY_TOTALS
-            d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));//totals
-#endif
-            propertySetSwitched();
-        }
-        KoProperty::Set &set = *propertySet();
-        set["visible"].setValue(newValue, saveOldValue);
+    case COLUMN_ID_SORTING: slotBeforeSortingCellChanged(record, newValue, result); break;
+    case COLUMN_ID_CRITERIA: slotBeforeCriteriaCellChanged(record, newValue, result); break;
+    default: Q_ASSERT_X(false, "colnum", "unhandled value");
     }
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+    if (newValue.isNull()) {
+        d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(),
+                                     false/*!allowSignals*/);
+        d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
+        d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
 #ifndef KEXI_NO_QUERY_TOTALS
-    else if (colnum == COLUMN_ID_TOTALS) {
-        //TODO:
-        //unused yet
+            d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
+#endif
+        d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
+        d->sets->eraseCurrentPropertySet();
+        return;
+    }
+
+    //auto fill 'table' column
+    QString fieldId(newValue.toString().trimmed());   //tmp, can look like "table.field"
+    QString fieldName; //"field" part of "table.field" or expression string
+    QString tableName; //empty for expressions
+    QByteArray alias;
+    QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
+    const bool isExpression = !d->fieldColumnIdentifiers.contains(fieldId.toLower());
+    if (isExpression) {
+        //this value is entered by hand and doesn't match
+        //any value in the combo box -- we're assuming this is an expression
+        //-table remains null
+        //-find "alias" in something like "alias : expr"
+        const int id = fieldId.indexOf(':');
+        if (id > 0) {
+            alias = fieldId.left(id).trimmed().toLatin1();
+            if (!KexiUtils::isIdentifier(alias)) {
+                result->success = false;
+                result->allowToDiscardChanges = true;
+                result->column = COLUMN_ID_COLUMN;
+                result->msg = i18n(
+                    "Entered column alias \"%1\" is not a valid identifier.", QString(alias));
+                result->desc = i18n("Identifiers should start with a letter or '_' character");
+                return;
+            }
+        }
+        fieldName = fieldId.mid(id + 1).trimmed();
+        //check expr.
+        KexiDB::BaseExpr *e;
+        int dummyToken;
+        if ((e = parseExpressionString(fieldName, dummyToken,
+                                       false/*allowRelationalOperator*/)))
+        {
+            fieldName = e->toString(); //print it prettier
+            //this is just checking: destroy expr. object
+            delete e;
+        }
+        else {
+            result->success = false;
+            result->allowToDiscardChanges = true;
+            result->column = COLUMN_ID_COLUMN;
+            result->msg = i18n("Invalid expression \"%1\"", fieldName);
+            return;
+        }
+    }
+    else {//not expr.
+        //this value is properly selected from combo box list
+        if (fieldId == "*") {
+            tableName = "*";
+        }
+        else {
+            if (!KexiDB::splitToTableAndFieldParts(
+                        fieldId, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName))
+            {
+                kWarning() << "no 'field' or 'table.field'";
+                return;
+            }
+        }
+    }
+    bool saveOldValue = true;
+    KoProperty::Set *set = d->sets->findPropertySetForItem(*record); //*propertyBuffer();
+    if (!set) {
+        saveOldValue = false; // no old val.
+        const int row = d->data->indexOf(record);
+        if (row < 0) {
+            result->success = false;
+            return;
+        }
+        set = createPropertySet(row, tableName, fieldName, true);
+        propertySetSwitched();
+    }
+    d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(tableName),
+                                 false/*!allowSignals*/);
+    d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(true));
+#ifndef KEXI_NO_QUERY_TOTALS
+    d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));
+#endif
+    if (!sortingAllowed(fieldName, tableName)) {
+        // sorting is not available for "*" or "table.*" rows
+//! @todo what about expressions?
+        d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
+    }
+    //update properties
+    (*set)["field"].setValue(fieldName, saveOldValue);
+    if (isExpression) {
+        //-no alias but it's needed:
+        if (alias.isEmpty()) //-try oto get old alias
+            alias = (*set)["alias"].value().toByteArray();
+        if (alias.isEmpty()) //-generate smallest unique alias
+            alias = generateUniqueAlias();
+    }
+    (*set)["isExpression"].setValue(QVariant(isExpression), saveOldValue);
+    if (!alias.isEmpty()) {
+        (*set)["alias"].setValue(alias, saveOldValue);
+        //pretty printed "alias: expr"
+        newValue = QString(alias) + ": " + fieldName;
+    }
+    (*set)["caption"].setValue(QString(), saveOldValue);
+    (*set)["table"].setValue(tableName, saveOldValue);
+    updatePropertiesVisibility(*set);
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeTableCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+    Q_UNUSED(result)
+    if (newValue.isNull()) {
+        if (!(*record)[COLUMN_ID_COLUMN].toString().isEmpty()) {
+            d->data->updateRowEditBuffer(record, COLUMN_ID_COLUMN, QVariant(),
+                                         false/*!allowSignals*/);
+        }
+        d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
+#ifndef KEXI_NO_QUERY_TOTALS
+        d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
+#endif
+        d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
+        d->sets->eraseCurrentPropertySet();
+    }
+    //update property
+    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    if (set) {
+        if ((*set)["isExpression"].value().toBool() == false) {
+            (*set)["table"] = newValue;
+            (*set)["caption"] = QString();
+        }
+        else {
+            //do not set table for expr. columns
+            newValue = QVariant();
+        }
+//   KoProperty::Set &set = *propertyBuffer();
+        updatePropertiesVisibility(*set);
+    }
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeVisibleCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+    Q_UNUSED(result)
+    bool saveOldValue = true;
+    if (!propertySet()) {
+        saveOldValue = false;
+        createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
+                          (*record)[COLUMN_ID_TABLE].toString(),
+                          (*record)[COLUMN_ID_COLUMN].toString(), true);
+#ifndef KEXI_NO_QUERY_TOTALS
+        d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));//totals
+#endif
+        propertySetSwitched();
+    }
+    KoProperty::Set &set = *propertySet();
+    set["visible"].setValue(newValue, saveOldValue);
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeTotalsCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+#ifdef KEXI_NO_QUERY_TOTALS
+    Q_UNUSED(record)
+    Q_UNUSED(newValue)
+    Q_UNUSED(result)
+#else
+    //TODO:
+    //unused yet
+    setDirty(true);
+#endif
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeSortingCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+    bool saveOldValue = true;
+    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    if (!set) {
+        saveOldValue = false;
+        set = createPropertySet(d->dataTable->dataAwareObject()->currentRow(),
+                                (*record)[COLUMN_ID_TABLE].toString(),
+                                (*record)[COLUMN_ID_COLUMN].toString(), true);
+#ifndef KEXI_NO_QUERY_TOTALS
+        d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));//totals
+#endif
+        propertySetSwitched();
+    }
+    QString table(set->property("table").value().toString());
+    QString field(set->property("field").value().toString());
+    if (newValue.toInt() == 0 || sortingAllowed(field, table)) {
+        KoProperty::Property &property = set->property("sorting");
+        QString key(property.listData()->keysAsStringList()[ newValue.toInt()]);
+        kDebug() << "new key=" << key;
+        property.setValue(key, saveOldValue);
+    }
+    else { //show msg: sorting is not available
+        result->success = false;
+        result->allowToDiscardChanges = true;
+        result->column = COLUMN_ID_SORTING;
+        result->msg = i18n("Could not set sorting for multiple columns (%1)",
+                           table == "*" ? table : (table + ".*"));
+    }
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordData *record,
+    QVariant& newValue, KexiDB::ResultInfo* result)
+{
+//! @todo this is primitive, temporary: reuse SQL parser
+    QString operatorStr, argStr;
+    KexiDB::BaseExpr* e = 0;
+    const QString str = newValue.toString().trimmed();
+    int token;
+    QString field, table;
+    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
+    if (set) {
+        field = (*set)["field"].value().toString();
+        table = (*set)["table"].value().toString();
+    }
+    if (!str.isEmpty() && (!set || table == "*" || field.contains("*"))) {
+        //asterisk found! criteria not allowed
+        result->success = false;
+        result->allowToDiscardChanges = true;
+        result->column = COLUMN_ID_CRITERIA;
+        if (propertySet())
+            result->msg = i18n("Could not set criteria for \"%1\"",
+                               table == "*" ? table : field);
+        else
+            result->msg = i18n("Could not set criteria for empty record");
+        //moved to result->allowToDiscardChanges handler
+        //d->dataTable->dataAwareObject()->cancelEditor();
+        //prevents further editing of this cell
+    }
+    else if (str.isEmpty()
+             || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
+    {
+        if (e) {
+            QString tokenStr;
+            if (token != '=') {
+                KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
+                tokenStr = be.tokenToString() + " ";
+            }
+            if (set) {
+                (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
+            }
+            //this is just checking: destroy expr. object
+            delete e;
+        } else if (set && str.isEmpty()) {
+            (*set)["criteria"] = QVariant(); //clear it
+        }
         setDirty(true);
     }
-#endif
-    else if (colnum == COLUMN_ID_SORTING) {
-        KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
-        QString table(set->property("table").value().toString());
-        QString field(set->property("field").value().toString());
-        if (newValue.toInt() == 0 || sortingAllowed(field, table)) {
-            KoProperty::Property &property = set->property("sorting");
-            QString key(property.listData()->keysAsStringList()[ newValue.toInt()]);
-            kDebug() << "new key=" << key;
-            property.setValue(key, true);
-        } else { //show msg: sorting is not available
-            result->success = false;
-            result->allowToDiscardChanges = true;
-            result->column = colnum;
-            result->msg = i18n("Could not set sorting for multiple columns (%1)",
-                               table == "*" ? table : (table + ".*"));
-        }
-    } else if (colnum == COLUMN_ID_CRITERIA) {
-//! @todo this is primitive, temporary: reuse SQL parser
-        QString operatorStr, argStr;
-        KexiDB::BaseExpr* e = 0;
-        const QString str = newValue.toString().trimmed();
-        int token;
-        QString field, table;
-        KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
-        if (set) {
-            field = (*set)["field"].value().toString();
-            table = (*set)["table"].value().toString();
-        }
-        if (!str.isEmpty() && (!set || table == "*" || field.contains("*"))) {
-            //asterisk found! criteria not allowed
-            result->success = false;
-            result->allowToDiscardChanges = true;
-            result->column = colnum;
-            if (propertySet())
-                result->msg = i18n("Could not set criteria for \"%1\"",
-                                   table == "*" ? table : field);
-            else
-                result->msg = i18n("Could not set criteria for empty record");
-            //moved to result->allowToDiscardChanges handler //d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
-        } else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/))) {
-            if (e) {
-                QString tokenStr;
-                if (token != '=') {
-                    KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
-                    tokenStr = be.tokenToString() + " ";
-                }
-                if (set) {
-                    (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
-                }
-                //this is just checking: destroy expr. object
-                delete e;
-            } else if (set && str.isEmpty()) {
-                (*set)["criteria"] = QVariant(); //clear it
-            }
-            setDirty(true);
-        } else {
-            result->success = false;
-            result->allowToDiscardChanges = true;
-            result->column = colnum;
-            result->msg = i18n("Invalid criteria \"%1\"", newValue.toString());
-        }
+    else {
+        result->success = false;
+        result->allowToDiscardChanges = true;
+        result->column = COLUMN_ID_CRITERIA;
+        result->msg = i18n("Invalid criteria \"%1\"", newValue.toString());
     }
 }
 
@@ -1750,7 +1818,8 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
 //    d->dataTable->dataAwareObject()->setCursorPosition(d->dataTable->dataAwareObject()->currentRow(),0);
                 //d->dataTable->dataAwareObject()->startEditCurrentCell();
                 d->data->updateRowEditBuffer(d->dataTable->dataAwareObject()->selectedItem(),
-                                             0, QVariant(set["alias"].value().toString() + ": " + set["field"].value().toString()));
+                                             0, QVariant(set["alias"].value().toString()
+                                                         + ": " + set["field"].value().toString()));
                 d->data->saveRowChanges(*d->dataTable->dataAwareObject()->selectedItem(), true);
 //    d->dataTable->dataAwareObject()->acceptRowEdit();
             }

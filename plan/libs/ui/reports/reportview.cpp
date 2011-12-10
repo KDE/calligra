@@ -844,13 +844,20 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     tb->addSeparator();
 
     m_actionGroup = new QActionGroup(tb);
-    
+    // allow only the following item types, there is not appropriate data for others
+    QStringList itemtypes;
+    itemtypes << "report:label"
+        << "report:field"
+        << "report:text"
+        << "report:check"
+        << "report:line"
+        << "report:chart"
+        << ""; //separator
     foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
-        if ( a->objectName() == "report:image" || a->objectName() == "report:shape" ) {
-            m_actionGroup->removeAction(a);
+        if ( ! itemtypes.contains( a->objectName() ) ) {
+            m_actionGroup->removeAction( a );
             continue;
         }
-
         tb->addAction( a );
         connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
     }

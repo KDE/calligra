@@ -149,8 +149,8 @@ void DocxXmlDocumentReader::init()
     m_dropCapWriter = 0;
     m_currentTableNumber = 0;
     m_wasCaption = false;
-    m_listFound = false;
     m_closeHyperlink = false;
+    m_listFound = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
@@ -243,8 +243,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
- - ins (Inserted Run Content) §17.13.5.18
+ - [done] del (Deleted Run Content) §17.13.5.14
+ - [done] ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
@@ -285,6 +285,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
             }
             ++counter;
             TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
             ELSE_TRY_READ_IF(tbl)
@@ -1697,11 +1699,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
+ - [done] del (Deleted Run Content) §17.13.5.14
  - dir (Bidirectional Embedding Level) §17.3.2.8
  - [done] fldSimple (Simple Field) §17.16.19
  - [done] hyperlink (Hyperlink) §17.16.22
- - ins (Inserted Run Content) §17.13.5.18
+ - [done] ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
@@ -1763,6 +1765,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(smartTag)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
@@ -1770,6 +1774,178 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     }
     if (closeTag) {
         body->endElement(); // text:bookmark, text:a
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL del
+//! del (Deleted Run Content)
+/*! ECMA-376, 17.13.5.18, p.959.
+
+  This element specifies that the inline-level content contained within it
+  shall be treated as deleted content which has been tracked as a revision.
+
+  Parent elements, Child elements: sync to ins (Inserted Run Content)
+
+ */
+//! @todo: read more attributes and child emenets
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_del()
+{
+    READ_PROLOGUE
+
+    m_changeTrackingState.push(DeletedRunContent);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
+            ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF(smartTag)
+            SKIP_UNKNOWN
+        }
+    }
+
+    if (m_changeTrackingState.isEmpty()) {
+        kWarning() << "Error: ChangeTrackingState stack is corrupt!";
+    } else {
+        m_changeTrackingState.pop();
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ins
+//! ins (Inserted Run Content)
+/*! ECMA-376, 17.13.5.18, p.959.
+
+  This element specifies that the inline-level content contained within it shall
+  be treated as inserted content which has been tracked as a revision.
+
+  Parent elements:
+  - bdo (§17.3.2.3)
+  - [done] body (§17.2.2)
+  - comment (§17.13.4.2)
+  - customXml (§17.5.1.3)
+  - deg (§22.1.2.26)
+  - del (§17.13.5.14)
+  - den (§22.1.2.28)
+  - dir (§17.3.2.8)
+  - docPartBody (§17.12.6)
+  - e (§22.1.2.32)
+  - [done] endnote (§17.11.2)
+  - [done] fldSimple (§17.16.19)
+  - fName (§22.1.2.37)
+  - [done] footnote (§17.11.10)
+  - [done] ftr (§17.10.3)
+  - [done] hdr (§17.10.4)
+  - [done] hyperlink (§17.16.22)
+  - lim (§22.1.2.52
+  - moveFrom (§17.13.5.22)
+  - moveTo (§17.13.5.25)
+  - num (§22.1.2.75)
+  - [done] oMath (§22.1.2.77)
+  - [done] p (§17.3.1.22)
+  - rt (§17.3.3.24
+  - rubyBase (§17.3.3.27)
+  - sdtContent (§17.5.2.36)
+  - [done] smartTag (§17.5.1.9)
+  - sub (§22.1.2.112)
+  - sup (§22.1.2.114)
+  - tbl (§17.4.38)
+  - tc (§17.4.66)
+  - tr (§17.4.79)
+
+  Child elements:
+  - acc (Accent) §22.1.2.1
+  - bar (Bar) §22.1.2.7
+  - bdo (Bidirectional Override) §17.3.2.3
+  - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+  - [done] bookmarkStart (Bookmark Start) §17.13.6.2
+  - borderBox (Border-Box Object) §22.1.2.11
+  - box (Box Object) §22.1.2.13
+  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+  - customXml (Inline-Level Custom XML Element) §17.5.1.3
+  - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+  - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+  - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+  - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+  - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+  - d (Delimiter Object) §22.1.2.24
+  - [done] del (Deleted Run Content) §17.13.5.14
+  - dir (Bidirectional Embedding Level) §17.3.2.8
+  - eqArr (Array Object) §22.1.2.34
+  - f (Fraction Object) §22.1.2.36
+  - func (Function Apply Object) §22.1.2.39
+  - groupChr (Group-Character Object) §22.1.2.41
+  - [done] ins (Inserted Run Content) §17.13.5.18
+  - limLow (Lower-Limit Object) §22.1.2.54
+  - limUpp (Upper-Limit Object) §22.1.2.56
+  - m (Matrix Object) §22.1.2.60
+  - moveFrom (Move Source Run Content) §17.13.5.22
+  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+  - moveTo (Move Destination Run Content) §17.13.5.25
+  - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+  - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+  - nary (n-ary Operator Object) §22.1.2.70
+  - [done] oMath (Office Math) §22.1.2.77
+  - [done] oMathPara (Office Math Paragraph) §22.1.2.78
+  - permEnd (Range Permission End) §17.13.7.1
+  - permStart (Range Permission Start) §17.13.7.2
+  - phant (Phantom Object) §22.1.2.81
+  - proofErr (Proofing Error Anchor) §17.13.8.1
+  - [done] r (Run) §22.1.2.87
+  - [done] r (Text Run) §17.3.2.25
+  - rad (Radical Object) §22.1.2.88
+  - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
+  - [done] smartTag (Inline-Level Smart Tag) §17.5.1.9
+  - sPre (Pre-Sub-Superscript Object) §22.1.2.99
+  - sSub (Subscript Object) §22.1.2.101
+  - sSubSup (Sub-Superscript Object) §22.1.2.103
+  - sSup (Superscript Object) §22.1.2.105
+*/
+//! @todo: read more attributes and child emenets
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_ins()
+{
+    READ_PROLOGUE
+
+    m_changeTrackingState.push(InsertedRunContent);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
+            ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF(smartTag)
+            SKIP_UNKNOWN
+        }
+    }
+
+    if (m_changeTrackingState.isEmpty()) {
+        kWarning() << "Error: ChangeTrackingState stack is corrupt!";
+    } else {
+        m_changeTrackingState.pop();
     }
 
     READ_EPILOGUE
@@ -1893,11 +2069,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
+ - [done] del (Deleted Run Content) §17.13.5.14
  - dir (Bidirectional Embedding Level) §17.3.2.8
  - [done] fldSimple (Simple Field) §17.16.19
  - [done] hyperlink (Hyperlink) §17.16.22 - WML only
- - ins (Inserted Run Content) §17.13.5.18
+ - [done] ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
@@ -1978,6 +2154,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             //ELSE_TRY_READ_IF(commentRangeEnd)
             TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
@@ -2065,6 +2243,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             // In ooxml it seems that nothing should be created if sectPr was present
             if (!m_createSectionToNext) {
                 if (m_listFound) {
+
+                    // update the size of a bullet picture
+                    if ((m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType)
+                        && (m_currentBulletProperties.bulletSizePt() == "UNUSED")) {
+                        int percent = 100;
+                        if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
+                            STRING_TO_INT(m_currentBulletProperties.bulletRelativeSize(), percent,
+                                          QString("PictureType: processing bulletRelativeSize"));
+                        }
+                        QString fontSize = m_currentParagraphStyle.property("fo:font-size",KoGenStyle::TextType);
+                        // Using the default font size at the moment
+                        if (fontSize.isEmpty()) {
+                            fontSize = m_context->m_defaultFontSizePt;
+                        }
+                        qreal base = 10; //fair enough
+                        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+                            fontSize.chop(2);
+                            STRING_TO_QREAL(fontSize, base, QString("PictureType: processing font-size"));
+                        }
+                        m_currentBulletProperties.setBulletSizePt(percent * base / 100);
+                    }
+
                     // update automatic numbering info
                     if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 
@@ -2247,11 +2447,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
+ - [done] del (Deleted Run Content) §17.13.5.14
  - dir (Bidirectional Embedding Level) §17.3.2.8
  - [done] fldSimple (Simple Field) §17.16.19
  - [done] hyperlink (Hyperlink) §17.16.22
- - ins (Inserted Run Content) §17.13.5.18
+ - [done] ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
@@ -2289,6 +2489,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_smartTag()
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(sdt)
             SKIP_UNKNOWN
         }
@@ -2328,7 +2530,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_smartTag()
  - dayLong (Date Block - Long Day Format) §17.3.3.5
  - dayShort (Date Block - Short Day Format) §17.3.3.6
  - delInstrText (Deleted Field Code) §17.16.13
- - delText (Deleted Text) §17.3.3.7
+ - [done] delText (Deleted Text) §17.3.3.7
  - [done] drawing (DrawingML Object) §17.3.3.9
  - endnoteRef (Endnote Reference Mark) §17.11.6
  - [done] endnoteReference (Endnote Reference) §17.11.7
@@ -2399,6 +2601,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
             ELSE_TRY_READ_IF(ptab)
+            ELSE_TRY_READ_IF(delText)
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
@@ -2427,6 +2630,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (m_context->m_namedDefaultStyles.contains("text")) {
             m_currentTextStyle.setParentName(m_context->m_namedDefaultStyles.value("text"));
         }
+    }
+
+    // inserted/deleted run content, use a different color and
+    // underline/line-through
+    if (!m_changeTrackingState.isEmpty()) {
+        if (m_changeTrackingState.top() == InsertedRunContent) {
+            m_currentTextStyle.addProperty("style:text-underline-mode", "continuous");
+            m_currentTextStyle.addProperty("style:text-underline-style", "solid");
+            m_currentTextStyle.addProperty("style:text-underline-type", "single");
+            m_currentTextStyle.addProperty("style:text-underline-width", "auto");
+        } else {
+            m_currentTextStyle.addProperty("style:text-line-through-mode", "continuous");
+            m_currentTextStyle.addProperty("style:text-line-through-style", "solid");
+            m_currentTextStyle.addProperty("style:text-line-through-type", "single");
+            m_currentTextStyle.addProperty("style:text-line-through-width", "auto");
+        }
+        m_currentTextStyle.addProperty("style:text-underline-color", "#800080");
+        m_currentTextStyle.addProperty("fo:color", "#800080");
     }
 
     // We want to write to the higher body level
@@ -3005,6 +3226,35 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     }
 
     readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL delText
+//! delText (Deleted Text)
+/*! ECMA-376, 17.3.3.7, p.351.
+
+  This element specifies that this run contains literal text which shall be
+  displayed in the document.  The delText element shall be used for all text
+  runs which are part of a region of text that is contained in a deleted region
+  using the del element.
+
+  Parent Elements:
+  - [done] r (§22.1.2.87)
+  - [done] r (§17.3.2.25)
+
+  @todo: attribute xml:space
+ */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_delText()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isCharacters()) {
+            body->addTextSpan(text().toString());
+        }
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
     READ_EPILOGUE
 }
 
@@ -4205,7 +4455,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
 
  - bdo (Bidirectional Override) §17.3.2.3
  - [done] bookmarkEnd (Bookmark End)   §17.13.6.1
- - [done] bookmarkStart (Bookmark Start)                                                §17.13.6.2
+ - [done] bookmarkStart (Bookmark Start)                                         §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End)                                    §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start)                                §17.13.4.4
  - customXml (Inline-Level Custom XML Element)                                   §17.5.1.3
@@ -4217,25 +4467,25 @@ bool DocxXmlDocumentReader::handleSpecialField()
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start)             §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End)     §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content)                                                     §17.13.5.14
+ - [done] del (Deleted Run Content)                                              §17.13.5.14
  - dir (Bidirectional Embedding Level)                                           §17.3.2.8
  - [done] fldSimple (Simple Field)                                               §17.16.19
  - [done] hyperlink (Hyperlink)                                                  §17.16.22
- - ins (Inserted Run Content)                                                    §17.13.5.18
+ - [done] ins (Inserted Run Content)                                             §17.13.5.18
  - moveFrom (Move Source Run Content)                                            §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End)                       §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start)                   §17.13.5.24
  - moveTo (Move Destination Run Content)                                         §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
- - [done] oMath (Office Math)                                                           §22.1.2.77
- - [done] oMathPara (Office Math Paragraph)                                             §22.1.2.78
+ - [done] oMath (Office Math)                                                    §22.1.2.77
+ - [done] oMathPara (Office Math Paragraph)                                      §22.1.2.78
  - permEnd (Range Permission End)                                                §17.13.7.1
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
  - [done] r (Text Run)                                                           §17.3.2.25
- - [done] sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
- - [done] smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
+ - [done] sdt (Inline-Level Structured Document Tag)                             §17.5.2.31
+ - [done] smartTag (Inline-Level Smart Tag)                                      §17.5.1.9
  - subDoc (Anchor for Subdocument Location)                                      §17.17.1.1
 
  @todo support all elements
@@ -4258,6 +4508,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
@@ -6457,6 +6709,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
             if (qualifiedName() == "m:r") {
                 TRY_READ(r_m)
             }
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             SKIP_UNKNOWN
         }
     }

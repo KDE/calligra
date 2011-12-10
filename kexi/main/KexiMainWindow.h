@@ -149,7 +149,7 @@ public:
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
+    static int create(int argc, char *argv[], const KexiAboutData &aboutData);
 
     //! \return KexiMainWindow singleton (if it is instantiated)
 //  static KexiMainWindow* self();

@@ -66,6 +66,7 @@ protected:
 
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
+    KoFilter::ConversionStatus read_ofPieChart();
     KoFilter::ConversionStatus read_doughnutChart();
     KoFilter::ConversionStatus read_areaChart();
     KoFilter::ConversionStatus read_area3DChart();
@@ -121,6 +122,7 @@ protected:
     KoFilter::ConversionStatus read_ptCount();
     KoFilter::ConversionStatus read_numLit();
     KoFilter::ConversionStatus read_strCache();
+    KoFilter::ConversionStatus read_marker();
     KoFilter::ConversionStatus read_serMarker();
 
 private:
@@ -136,6 +138,7 @@ private:
     bool m_autoTitleDeleted;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
+    bool m_serMarkerDefined;
 
     class Private;
     Private * const d;

@@ -71,15 +71,18 @@ class logger:
 		self.suitename = name
 		print "##teamcity[testSuiteStarted name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 	def endTestSuite(self):
 		if not self.suitename: return
 		print "##teamcity[testSuiteFinished name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 		self.suitename = None
 	def startTest(self, name):
 		if not self.suitename: return
 		self.testname = name
 		print "##teamcity[testStarted name='" + self.testname + "']"
+		sys.stdout.flush()
 	# fail the current test
 	def failTest(self, backtrace):
 		if not self.suitename or not self.testname: return
@@ -88,11 +91,13 @@ class logger:
 			bt = bt + self.escape(l)
 		print "##teamcity[testFailed name='" + self.testname \
 			+ "' details='" + bt + "']"
+		sys.stdout.flush()
 	# end test, pass duration as integer representing the milliseconds
 	def endTest(self, duration):
 		if not self.suitename or not self.testname: return
 		print "##teamcity[testFinished name='" + self.testname \
 			+ "' duration='" + str(duration) + "']"
+		sys.stdout.flush()
 		self.testname = None
 
 def containsRealError(err):
@@ -137,11 +142,15 @@ class odfvalidator:
 
 	def validateFile(self, zip, file, validator):
 		try:
-			xml = lxml.etree.XML(zip.read(file));
+			data = zip.read(file)
+			xml = lxml.etree.XML(data);
 		except lxml.etree.XMLSyntaxError as e:
 			return e
 		except KeyError as e:
 			return e
+		if len(data) > 1000000:
+			# if the xml file is larger than 1M, the validator may hang
+			return
 		if not validator.validate(xml):
 			return validator.error_log.last_error
 
@@ -230,6 +239,7 @@ def profile(dir, file, logger, validator):
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
+	os.close(roundtripfd)
 	r.backtrace = None
 	if r.returnValue != 0:
 		if maxbacktraces > 0:
@@ -242,6 +252,7 @@ def profile(dir, file, logger, validator):
 			r.backtrace = debugresult.stdout
 			for l in r.backtrace:
 				print l.rstrip()
+				sys.stdout.flush()
 			logger.failTest(r.backtrace)
 		else:
 			logger.failTest("Crash, no backtrace: limit reached.")
@@ -256,9 +267,8 @@ def profile(dir, file, logger, validator):
 		if err != None:
 			logger.failTest(str(err))
 
+	# remove the roundtripfile and the temporary file
 	os.remove(tmpfilename)
-	# close file descriptor to roundtripfile and remove the roundtripfile
-	os.close(roundtripfd)
 	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
