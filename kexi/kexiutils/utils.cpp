@@ -716,13 +716,9 @@ void KexiUtils::setMargins(QLayout *layout, int value)
 QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
 {
     QPixmap dest(original);
-    {
-        QPainter p(&dest);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        QPixmap colorize(original.size());
-        colorize.fill(color);
-        p.drawPixmap(0, 0, colorize);
-    }
+    QPainter p(&dest);
+    p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    p.fillRect(dest.rect(), color);
     return dest;
 }
 
