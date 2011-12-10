@@ -1427,7 +1427,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
 #undef CURRENT_EL
 #define CURRENT_EL ofPieChart
 //! ofPieChart (Pie of Pie or Bar of Pie Charts)
-/*! ECMA-376, §21.2.2.126, p..
+/*! ECMA-376, §21.2.2.126, p.4057.
 
  Parent elements:
  - plotArea §21.2.2.145
@@ -1450,21 +1450,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ofPieChart()
     // KDChart used in the charting-plugin doesn't support pie-of-pie or bar-of-pie
     // charts nor does ODF. So, we do the same OO.org is doing and just translate
     // it to pie-chart what is better then nothing.
-    if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::PieImpl();
-    }
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(ser)) {
-                TRY_READ(pieChart_Ser)
-            }
-        }
-    }
-    qDeleteAll(d->m_seriesData);
-    d->m_seriesData.clear();
-    return KoFilter::OK;
+    return read_pieChart();
 }
 
 #undef CURRENT_EL
