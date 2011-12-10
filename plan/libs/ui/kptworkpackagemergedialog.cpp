@@ -185,7 +185,7 @@ QList<int> WorkPackageMergeDialog::checkedList() const
 }
 void WorkPackageMergeDialog::slotChanged()
 {
-    enableButton( KDialog::Yes, ! checkedList().isEmpty() );
+    enableButton( KDialog::Yes, m_model->rowCount() > 0 );
 }
 
 } // namespace KPlato
