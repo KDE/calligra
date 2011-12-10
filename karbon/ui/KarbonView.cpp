@@ -112,8 +112,6 @@
 #include <KoShapeRegistry.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
 #include <KoZoomController.h>
 
