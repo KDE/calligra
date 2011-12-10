@@ -18,6 +18,7 @@
 */
 
 #include "kexidisplayutils.h"
+#include <kexiutils/utils.h>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -26,9 +27,10 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <KColorScheme>
 
-// a color for displaying default values or autonumbers
-#define SPECIAL_TEXT_COLOR Qt::blue
+//! A color for displaying default values or autonumbers
+#define SPECIAL_TEXT_COLOR KColorScheme(QPalette::Active, KColorScheme::View).foreground(KColorScheme::LinkText).color()
 
 K_GLOBAL_STATIC(QPixmap, KexiDisplayUtils_autonum)
 
@@ -68,6 +70,7 @@ static void initDisplayUtilsImages()
 {
     /*! @warning not reentrant! */
     KexiDisplayUtils_autonum->loadFromData(embed_vec[0].data, embed_vec[0].size);
+    *KexiDisplayUtils_autonum = KexiUtils::replaceColors(*KexiDisplayUtils_autonum, SPECIAL_TEXT_COLOR);
 }
 
 //-----------------
