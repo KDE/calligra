@@ -33,15 +33,28 @@
 
 #include <KComponentData>
 #include <KSharedConfig>
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qpointer.h"
-//#include "private/qwidget_p.h"
+#include <QStyleOption>
+#include <QDateTime>
+#include <QCache>
+#include <QMap>
+#include <QHash>
+#include <QBasicTimer>
+#include <QPointer>
+#include <QAbstractButton>
 
 class QEventLoop;
+
+//! Used to define transparent clickable logo area
+class ClickableLogoArea : public QAbstractButton
+{
+    Q_OBJECT
+public:
+    ClickableLogoArea(QWidget *parent = 0);
+protected slots:
+    void slotClicked();
+protected:
+    virtual void paintEvent(QPaintEvent*);
+};
 
 //used to walk up the popup list
 struct KexiMenuWidgetCaused {
@@ -254,6 +267,9 @@ public:
     //bool persistentSelectionsEnabled;
 
     OxygenHelper *oxygenHelper;
+
+    QPixmap calligraLogoPixmap;
+    ClickableLogoArea *clickableLogoArea;
 };
 
 #endif // KEXIMENUWIDGET_P_H

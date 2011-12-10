@@ -33,6 +33,10 @@
 #include <KColorUtils>
 #include <KGlobalSettings>
 #include <KIconLoader>
+#include <KStandardDirs>
+#include <KLocale>
+#include <KDebug>
+#include <kexi_version.h>
 
 #include "qdebug.h"
 #include "qcache.h"
@@ -60,6 +64,8 @@
 #include "qtoolbutton.h"
 #include "qpushbutton.h"
 #include <QScopedPointer>
+#include <QDesktopServices>
+#include <QUrl>
 //#include <private/qpushbutton_p.h>
 //#include <private/qaction_p.h>
 //#include <private/qsoftkeymanager_p.h>
@@ -67,6 +73,9 @@
 // #ifdef Q_WS_X11
 // #   include <private/qt_x11_p.h>
 // #endif
+
+const int logoBottomMargin = 84 - 12;
+const char* calligraUrl = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
@@ -2067,6 +2076,41 @@ QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QActio
 }
 #endif
 
+ClickableLogoArea::ClickableLogoArea(QWidget *parent)
+ : QAbstractButton(parent)
+{
+    connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+}
+
+void ClickableLogoArea::slotClicked()
+{
+    QDesktopServices::openUrl(QUrl(calligraUrl));
+}
+
+void ClickableLogoArea::paintEvent(QPaintEvent*)
+{
+}
+
+/*!
+  \reimp
+*/
+void KexiMenuWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    const QString calligraLogo
+        = KStandardDirs::locate("data", "kexi/pics/calligra-logo-white-glow.png");
+    d->calligraLogoPixmap = QPixmap(calligraLogo);
+
+    const QRect logoRect((width() - 2 - 100) / 2,
+                         height() - logoBottomMargin - 71 - 12,
+                         100, 71);
+    d->clickableLogoArea = new ClickableLogoArea(this);
+    d->clickableLogoArea->setGeometry(logoRect);
+    d->clickableLogoArea->setCursor(Qt::PointingHandCursor);
+    d->clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", calligraUrl));
+    d->clickableLogoArea->show();
+}
+
 /*!
   \reimp
 */
@@ -2242,6 +2286,26 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     menuOpt.rect = rect();
     menuOpt.menuRect = rect();
     style()->drawControl(QStyle::CE_MenuEmptyArea, &menuOpt, &p, this);
+
+    // version
+    p.setFont(KGlobalSettings::smallestReadableFont());
+    QColor textColor;
+    textColor = palette().color(QPalette::Base);
+    p.setPen(QPen(textColor));
+    p.drawText(0, height() - logoBottomMargin + 1, width(), logoBottomMargin - 1,
+               Qt::AlignHCenter | Qt::AlignTop,
+               QLatin1String(Kexi::versionString()));
+    textColor = palette().color(QPalette::WindowText);
+    textColor.setAlpha(180);
+    p.setPen(QPen(textColor));
+    p.drawText(0, height() - logoBottomMargin, width(), logoBottomMargin,
+               Qt::AlignHCenter | Qt::AlignTop,
+               QLatin1String(Kexi::versionString()));
+
+    // logo
+    p.drawPixmap((width() - d->calligraLogoPixmap.width()) / 2,
+                    height() - d->calligraLogoPixmap.height() - 20,
+                    d->calligraLogoPixmap);
 }
 
 #ifndef QT_NO_WHEELEVENT
@@ -2983,5 +3047,3 @@ void KexiMenuWidget::setSeparatorsCollapsible(bool collapse)
         update();
     }
 }
-
-#include "KexiMenuWidget.moc"
