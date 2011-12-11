@@ -659,7 +659,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
   - layout (Layout) ยง21.2.2.88
   - [Done]line3DChart (3D Line Charts) ยง21.2.2.96
   - [Done]lineChart (Line Charts) ยง21.2.2.97
-  - ofPieChart (Pie of Pie or Bar of Pie Charts) ยง21.2.2.126
+  - [Done]ofPieChart (Pie of Pie or Bar of Pie Charts) ยง21.2.2.126
   - [Done]pie3DChart (3D Pie Charts) ยง21.2.2.140
   - [Done]pieChart (Pie Charts) ยง21.2.2.141
   - [Done]radarChart (Radar Charts) ยง21.2.2.153
@@ -688,6 +688,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             //ELSE_TRY_READ_IF(serAx) // z-axis
             ELSE_TRY_READ_IF(pieChart)
             ELSE_TRY_READ_IF(pie3DChart)
+            ELSE_TRY_READ_IF(ofPieChart)
             ELSE_TRY_READ_IF(doughnutChart)
             ELSE_TRY_READ_IF(areaChart)
             ELSE_TRY_READ_IF(area3DChart)
@@ -1420,6 +1421,49 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
     qDeleteAll(d->m_seriesData);
     d->m_seriesData.clear();
 
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ofPieChart
+//! ofPieChart (Pie of Pie or Bar of Pie Charts)
+/*! ECMA-376, ยง21.2.2.126, p.4057.
+
+ Parent elements:
+ - plotArea ยง21.2.2.145
+
+ Child elements:
+ - custSplit (Custom Split) ง5.7.2.35
+ - dLbls (Data Labels) ง5.7.2.49
+ - extLst (Chart Extensibility) ง5.7.2.64
+ - gapWidth (Gap Width) ง5.7.2.75
+ - ofPieType (Pie of Pie or Bar of Pie Type) ง5.7.2.128
+ - secondPieSize (Second Pie Size) ง5.7.2.165
+ - ser (Pie Chart Series) ง5.7.2.170
+ - serLines (Series Lines) ง5.7.2.177
+ - splitPos (Split Position) ง5.7.2.196
+ - splitType (Split Type) ง5.7.2.197
+ - varyColors (Vary Colors by Point) ง5.7.2.228
+*/
+KoFilter::ConversionStatus XlsxXmlChartReader::read_ofPieChart()
+{
+    // KDChart used in the charting-plugin doesn't support pie-of-pie or bar-of-pie
+    // charts nor does ODF. So, we do the same OO.org is doing and just translate
+    // it to pie-chart what is better then nothing.
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::PieImpl();
+    }
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ser)) {
+                TRY_READ(pieChart_Ser)
+            }
+        }
+    }
+    qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
     return KoFilter::OK;
 }
 

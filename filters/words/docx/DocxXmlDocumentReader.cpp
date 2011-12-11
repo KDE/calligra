@@ -46,6 +46,8 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 #define DOCXXMLDOCREADER_CPP
 
+//#define DOCXXML_DEBUG_TABLES
+
 #include <MsooXmlReader_p.h>
 
 #include <KoTable.h>
@@ -2139,8 +2141,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     bool sectionAdded = false;
 
     if (m_createSectionStyle) {
-        // This is done to avoid the style to being duplicate to some other
-        // style
+        // To avoid the style to become a duplicate or being duplicated.
         m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
         m_createSectionStyle = false;
         sectionAdded = true;
@@ -3853,8 +3854,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
             m_currentParagraphStyle.addProperty("fo:background-color", fillColor);
         }
         if (caller == shd_tcPr) {
-            m_currentStyleProperties->backgroundColor = fillColor;
-            m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
+            m_currentTableStyleProperties->backgroundColor = fillColor;
+            m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
         }
         if (caller == shd_rPr && val == "clear") {
             if (m_currentTextStyleProperties->background() == QBrush()) {
@@ -4004,23 +4005,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
             const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
+                m_currentTableStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
             }
             else if (QUALIFIED_NAME_IS(left)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
+                m_currentTableStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
+                m_currentTableStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
             }
             else if (QUALIFIED_NAME_IS(right)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
+                m_currentTableStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
             }
         }
     }
@@ -4054,23 +4055,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
             const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
+                m_currentTableStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
             }
             else if (QUALIFIED_NAME_IS(left)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
+                m_currentTableStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
+                m_currentTableStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
             }
             else if (QUALIFIED_NAME_IS(right)) {
                 READ_ATTR(w)
-                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
+                m_currentTableStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
             }
         }
     }
@@ -4086,12 +4087,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
  - [done] tblPr (§17.4.60)
  - [done] tblPr (§17.4.59)
  - [done] tblPr (§17.7.6.4)
- - [done] tblPr (§17.7.6.3)
+ - [done] tblPr (§17.7.6.3)
 
  Child elements:
- - ...
-
- @todo support all elements
+ - [done] bottom (Table Bottom Border) §17.4.4
+ - [done] end (Table Trailing Edge Border) §17.4.13
+ - [done] insideH (Table Inside Horizontal Edges Border) §17.4.23
+ - [done] insideV (Table Inside Vertical Edges Border) §17.4.25
+ - [done] start (Table Leading Edge Border) §17.4.37
+ - [done] top (Table Top Border) §17.4.77
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 {
@@ -4102,28 +4106,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                m_currentStyleProperties->top = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
-            }
-            else if (QUALIFIED_NAME_IS(left)) {
-                m_currentStyleProperties->left = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftBorder;
+                m_currentTableStyleProperties->top = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                m_currentStyleProperties->bottom = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+                m_currentTableStyleProperties->bottom = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                m_currentTableStyleProperties->left = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftBorder;
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                m_currentStyleProperties->right = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightBorder;
+                m_currentTableStyleProperties->right = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightBorder;
             }
             else if (QUALIFIED_NAME_IS(insideV)) {
-                m_currentStyleProperties->insideV = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
+                m_currentTableStyleProperties->insideV = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
             }
             else if (QUALIFIED_NAME_IS(insideH)) {
-                m_currentStyleProperties->insideH = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+                m_currentTableStyleProperties->insideH = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
             }
         }
     }
@@ -4143,7 +4147,7 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     TRY_READ_ATTR(themeColor)
     TRY_READ_ATTR(color)
 
-    if (color.isEmpty()) {
+    if (!color.isEmpty()) {
         QString colorString = QString("#").append(color);
         borderData.innerPen.setColor(QColor(colorString));
         borderData.outerPen.setColor(QColor(colorString));
@@ -4310,7 +4314,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblpPr()
  Parent elements:
  - [done] tblPr (§17.4.60)
  - [done] tblPr (§17.4.59)
- - [done] tblPr (§17.7.6.4)
+ - [done] tblPr (§17.7.6.4)
  - [done] tblPr (§17.7.6.3)
 
  Child elements:
@@ -4322,10 +4326,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentTableStyle = val;
+    m_currentTableStyleName = val;
 
     //Inheriting values from the defined style
-    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyle);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
     Q_ASSERT(tableStyle);
     if (tableStyle) {
         m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
@@ -5152,27 +5156,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     KoTable table;
     m_table = &table;
 
-    m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber++));
+    m_table->setName(QLatin1String("Table") + QString::number(++m_currentTableNumber));
     m_currentTableRowNumber = 0;
     m_currentTableColumnNumber = 0;
 
     m_currentDefaultCellStyle = 0;
-    m_currentStyleProperties = 0;
+    m_currentTableStyleProperties = 0;
     m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
 
-    m_currentTableStyle.clear();
+    m_currentTableStyleName.clear();
     m_currentDrawStyleName.clear();
 
     m_tableMainStyle = KoTblStyle::create();
     if (m_moveToStylesXml) {
         m_tableMainStyle->setAutoStyleInStylesDotXml(true);
     }
-    m_tableMainStyle->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+    //Disable to get a style of type TableAutoStyle.
+//     m_tableMainStyle->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
 
     bool sectionAdded = false;
     if (m_createSectionStyle) {
         m_createSectionStyle = false;
         sectionAdded = true;
+
+        // To avoid the style to become a duplicate or being duplicated.
+        m_tableMainStyle->setMasterPageName("placeholder");
     }
     // Fix me, for tables inside tables this might not work
     m_activeRoles = 0;
@@ -5185,13 +5193,36 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(QUALIFIED_NAME_IS(tblPr)) {
-                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
-                TRY_READ(tblPr)
-                m_currentDefaultCellStyle = m_currentStyleProperties;
-                m_currentStyleProperties = 0;
 
-                m_currentTableStyleBase = m_currentTableStyle;
-                m_currentTableStyle.clear();
+                //tblPr/tblBorders
+                m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
+                TRY_READ(tblPr)
+                m_currentDefaultCellStyle = m_currentTableStyleProperties;
+                m_currentTableStyleProperties = 0;
+
+                //debug border information
+#ifdef DOCXXML_DEBUG_TABLES
+		kDebug() << "==> [tblBorders] information: <====================";
+		kDebug() << "top:" << m_currentDefaultCellStyle->top.style;
+		kDebug() << "bottom:" << m_currentDefaultCellStyle->bottom.style;
+		kDebug() << "left:" << m_currentDefaultCellStyle->left.style;
+		kDebug() << "right:" << m_currentDefaultCellStyle->right.style;
+		kDebug() << "insideH:" << m_currentDefaultCellStyle->insideH.style;
+		kDebug() << "insideV:" << m_currentDefaultCellStyle->insideV.style;
+#endif
+                //reference to the default parent style from styles.xml
+                if (m_currentTableStyleName.isEmpty() &&
+                    m_context->m_namedDefaultStyles.contains("table"))
+                {
+                    m_currentTableStyleName = m_context->m_namedDefaultStyles.value("table");
+                    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
+                    Q_ASSERT(tableStyle);
+                    if (tableStyle) {
+                        m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
+                    }
+                }
+                m_currentTableStyleBase = m_currentTableStyleName;
+                m_currentTableStyleName.clear();
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
@@ -5220,6 +5251,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_table->setTableStyle(m_tableMainStyle);
 
     defineTableStyles();
+
+#ifdef DOCXXML_DEBUG_TABLES
+    kDebug() << "----------------------------------------";
+#endif
 
     m_table->saveOdf(*body, *mainStyles);
 
@@ -5254,24 +5289,38 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
+    converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
+#ifdef DOCXXML_DEBUG_TABLES
+        kDebug() << "----- [ROW" << row +1 << "] ----------";
+#endif
         for(int column = 0; column < columnCount; ++column ) {
+#ifdef DOCXXML_DEBUG_TABLES
+            kDebug() << "----- [COLUMN" << column +1 << "] ----------";
+#endif
             KoCellStyle::Ptr style = styleConverter.style(row, column);
             if (m_moveToStylesXml) {
                 style->setAutoStyleInStylesDotXml(true);
             }
             m_table->cellAt(row, column)->setStyle(style);
+#ifdef DOCXXML_DEBUG_TABLES
+            style = m_table->cellAt(row, column)->style();
+            kDebug() << "[check] top:" << style->borders()->topBorderData().style;
+            kDebug() << "[check] bottom:" << style->borders()->bottomBorderData().style;
+            kDebug() << "[check] left:" << style->borders()->leftBorderData().style;
+            kDebug() << "[check] right:" << style->borders()->rightBorderData().style;
+#endif
         }
     }
-    //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL tblPr
 //! tblPr handler (Table Properties)
 /*! ECMA-376, 17.4.60, p. 492.
+
  This element specifies the set of table-wide properties applied to the current table.
  These properties affect the appearance of all rows and cells within the parent table,
  but can be overridden by individual table-level exception, row, and cell level properties
@@ -5314,6 +5363,59 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
             ELSE_TRY_READ_IF_IN_CONTEXT(jc)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblPrEx
+//! tblPrEx (Table-Level Property Exceptions)
+/*! ECMA-376, 17.4.61, p. 484.
+
+  Parent elements:
+  - [done] tr (§17.4.79)
+
+  Child elements
+  - jc (Table Alignment Exception) §17.4.27
+  - shd (Table Shading Exception) §17.4.31
+  - [done] tblBorders (Table Borders Exceptions) §17.4.40
+  - tblCellMar (Table Cell Margin Exceptions) §17.4.42
+  - tblCellSpacing (Table Cell Spacing Exception) §17.4.45
+  - tblInd (Table Indent from Leading Margin Exception) §17.4.52
+  - tblLayout (Table Layout Exception) §17.4.54
+  - tblLook (Table Style Conditional Formatting Settings Exception) §17.4.55
+  - tblPrExChange (Revision Information for Table-Level Property Exceptions) §17.13.5.35
+  - tblW (Preferred Table Width Exception) §17.4.65
+ */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPrEx()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(tblBorders)) {
+                m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
+                TRY_READ_IF(tblBorders)
+                m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+                m_currentLocalTableStyles->setLocalStyle(m_currentTableStyleProperties,
+                    m_currentTableRowNumber, -1);
+#ifdef DOCXXML_DEBUG_TABLES
+		kDebug() << "====> [Row" << m_currentTableRowNumber << " Column (-1)" <<
+                            "] Border information:";
+		kDebug() << "top:" << m_currentTableStyleProperties->top.style;
+		kDebug() << "bottom:" << m_currentTableStyleProperties->bottom.style;
+		kDebug() << "left:" << m_currentTableStyleProperties->left.style;
+		kDebug() << "right:" << m_currentTableStyleProperties->right.style;
+#endif
+                m_currentTableStyleProperties = 0;
+
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -5442,7 +5544,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] sdt (Cell-Level Structured Document Tag) §17.5.2.32
- - tblPrEx (Table-Level Property Exceptions) §17.4.61
+ - [done] tblPrEx (Table-Level Property Exceptions) §17.4.61
  - tc (Table Cell) §17.4.66
  - [done]trPr (Table Row Properties) §17.4.82
 */
@@ -5462,6 +5564,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF(tblPrEx)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -5490,7 +5593,7 @@ child elements:
  - jc (Table Row Alignment) §17.4.28
  - tblCellSpacing (Table Row Cell Spacing) §17.4.44
  - tblHeader (Repeat Table Row on Every New Page) §17.4.50
- - [done]trHeight (Table Row Height) §17.4.81
+ - [done] trHeight (Table Row Height) §17.4.81
  - trPrChange (Revision Information for Table Row Properties) §17.13.5.37
  - wAfter (Preferred Width After Table Row) §17.4.86
  - wBefore (Preferred Width Before Table Row) §17.4.87
@@ -5688,9 +5791,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 int currentRow =  m_currentTableRowNumber;
                 int currentColumn = m_currentTableColumnNumber;
                 MSOOXML::TableStyleProperties* currentDefaultCellStyle = m_currentDefaultCellStyle;
-                MSOOXML::TableStyleProperties* currentStyleProperties = m_currentStyleProperties;
+                MSOOXML::TableStyleProperties* currentStyleProperties = m_currentTableStyleProperties;
                 MSOOXML::LocalTableStyles* currentLocalStyles = m_currentLocalTableStyles;
-                QString currentTableStyle = m_currentTableStyle;
+                QString currentTableStyle = m_currentTableStyleName;
                 KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
 
                 QBuffer buffer;
@@ -5709,15 +5812,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 m_currentTableRowNumber = currentRow;
                 m_currentTableColumnNumber = currentColumn;
                 m_currentDefaultCellStyle = currentDefaultCellStyle;
-                m_currentStyleProperties = currentStyleProperties;
+                m_currentTableStyleProperties = currentStyleProperties;
                 m_currentLocalTableStyles = currentLocalStyles;
-                m_currentTableStyle = currentTableStyle;
+                m_currentTableStyleName = currentTableStyle;
             }
             else if(QUALIFIED_NAME_IS(tcPr)) {
-                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tcPr)
-                m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
-                m_currentStyleProperties = 0;
+                m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
+                m_currentLocalTableStyles->setLocalStyle(m_currentTableStyleProperties,
+                    m_currentTableRowNumber, m_currentTableColumnNumber);
+
+#ifdef DOCXXML_DEBUG_TABLES
+		kDebug() << "====> [Row" << m_currentTableRowNumber << " Column" <<
+                            m_currentTableColumnNumber << "] Border information:";
+		kDebug() << "top:" << m_currentTableStyleProperties->top.style;
+		kDebug() << "bottom:" << m_currentTableStyleProperties->bottom.style;
+		kDebug() << "left:" << m_currentTableStyleProperties->left.style;
+		kDebug() << "right:" << m_currentTableStyleProperties->right.style;
+#endif
+                m_currentTableStyleProperties = 0;
             }
 //             ELSE_TRY_READ_IF(bookmarkStart)
 //             ELSE_TRY_READ_IF(bookmarkEnd)
@@ -5823,8 +5937,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vAlign()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentStyleProperties->verticalAlign = val;
-        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
+        m_currentTableStyleProperties->verticalAlign = val;
+        m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
     }
 
     readNext();
@@ -5852,8 +5966,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirectionTc()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentStyleProperties->glyphOrientation = false;
-        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::GlyphOrientation;
+        m_currentTableStyleProperties->glyphOrientation = false;
+        m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::GlyphOrientation;
     }
 
     readNext();
@@ -5907,7 +6021,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
 #undef CURRENT_EL
 #define CURRENT_EL tcBorders
 //! tcBorders handlers (table cell borders)
-/*
+/*! ECMA-376, 17.4.67, p.494.
+
  Parent elements:
  - [done] tcPr (§17.7.6.8);
  - [done] tcPr (§17.7.6.9);
@@ -5916,10 +6031,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
 
  Child elements:
  - [done] bottom (Table Cell Bottom Border) §17.4.3
- - end (Table Cell Trailing Edge Border) §17.4.12
+ - [done] end (Table Cell Trailing Edge Border) §17.4.12
  - [done] insideH (Table Cell Inside Horizontal Edges Border) §17.4.24
  - [done] insideV (Table Cell Inside Vertical Edges Border) §17.4.26
- - start (Table Cell Leading Edge Border) §17.4.34
+ - [done] start (Table Cell Leading Edge Border) §17.4.34
  - [done] tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
  - [done] top (Table Cell Top Border) §17.4.75
  - [done] tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
@@ -5933,28 +6048,36 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                m_currentStyleProperties->top = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
+                m_currentTableStyleProperties->top = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                m_currentStyleProperties->bottom = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+                m_currentTableStyleProperties->bottom = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                m_currentTableStyleProperties->left = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftBorder;
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                m_currentTableStyleProperties->right = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightBorder;
             }
             else if (QUALIFIED_NAME_IS(insideV)) {
-                m_currentStyleProperties->insideV = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
+                m_currentTableStyleProperties->insideV = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
             }
             else if (QUALIFIED_NAME_IS(insideH)) {
-                m_currentStyleProperties->insideH = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+                m_currentTableStyleProperties->insideH = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
             }
             else if (QUALIFIED_NAME_IS(tl2br)) {
-                m_currentStyleProperties->tl2br = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tl2brBorder;
+                m_currentTableStyleProperties->tl2br = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tl2brBorder;
             }
             else if (QUALIFIED_NAME_IS(tr2bl)) {
-                m_currentStyleProperties->tr2bl = getBorderData();
-                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tr2blBorder;
+                m_currentTableStyleProperties->tr2bl = getBorderData();
+                m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tr2blBorder;
             }
             SKIP_UNKNOWN
         }

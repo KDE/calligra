@@ -389,7 +389,7 @@ public:
      * Returns the name of the first vacation that the given date falls into.
      * If no vacation is found QString::Null is returned.
      */
-    const QString& vacationName(time_t vd) const
+    QString vacationName(time_t vd) const
     {
         return vacationList.vacationName(vd);
     }
