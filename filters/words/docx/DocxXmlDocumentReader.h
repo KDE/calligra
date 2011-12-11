@@ -158,6 +158,7 @@ protected:
     KoFilter::ConversionStatus read_bdr();
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
+    KoFilter::ConversionStatus read_tblPrEx();
     KoFilter::ConversionStatus read_tblGrid();
     KoFilter::ConversionStatus read_gridCol();
     KoFilter::ConversionStatus read_tr();
@@ -251,12 +252,12 @@ protected:
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
     KoTable* m_table;
-    QString m_currentTableStyle;
+    QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
-    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
     QString m_currentTableStyleBase;
 
