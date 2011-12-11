@@ -2,11 +2,13 @@
 Name=furnace
 Name[bg]=пещ
 Name[es]=horno
+Name[it]=forno
 Name[nb]=ovn
 Name[nl]=oven
 Name[pl]=palenisko
 Name[pt]=fornalha
 Name[pt_BR]=fornalha
+Name[ru]=Печь
 Name[sv]=ugn
 Name[uk]=Піч
 Name[x-test]=xxfurnacexx

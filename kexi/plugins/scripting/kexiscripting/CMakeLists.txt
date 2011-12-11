@@ -24,7 +24,6 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
 

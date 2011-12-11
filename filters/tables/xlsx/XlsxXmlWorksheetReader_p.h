@@ -119,6 +119,7 @@ public:
     Sheet* sheet;
     int columnIndex;
     bool hidden;
+    QString styleName;
 
     Column(/*Sheet* s,*/ int index) : /*sheet(s),*/ columnIndex(index), hidden(false) {}
     ~Column() {}

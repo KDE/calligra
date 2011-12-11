@@ -71,6 +71,7 @@ class OdfSavingContext;
 class Sheet;
 class Validity;
 class Value;
+class CellTest;
 
 /**
  * An accessor to the actual cell data.
@@ -620,6 +621,8 @@ protected:
 public:
     ShapeLoadingData loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
+    friend class CellTest;
+
     class Private;
     QSharedDataPointer<Private> d;
 

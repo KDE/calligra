@@ -103,7 +103,7 @@ WaitCursorRemover::~WaitCursorRemover()
 
 //--------------------------------------------------------------------------------
 
-QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
+QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, const char* objName)
 {
     if (!o)
         return 0;

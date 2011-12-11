@@ -411,7 +411,7 @@ QStringList ChartReportData::fieldNames() const
     return names;
 }
 
-void ChartReportData::addExpression( const QString &field, const QVariant &value, int relation )
+void ChartReportData::addExpression( const QString &field, const QVariant &/*value*/, int /*relation*/ )
 {
 //     kDebug()<<field<<value<<relation;
     QStringList lst = field.split( '=', QString::SkipEmptyParts );

@@ -21,7 +21,7 @@
  *
  */
 
-// This is not a normail heder, *don't* add include guards to it.
+// This is not a normal header, *don't* add include guards to it.
 // This will cause the compiler to get wrong offsets and to corrupt the stack.
 
 // included by DocxXmlDocumentReader
@@ -97,13 +97,14 @@ enum blipFillCaller {
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 bool m_insideTable;
-qreal m_largestParaFont; // Largest font size used in the paragraph
-qreal m_minParaFont;     // minimum font size used in the paragraph
+qreal m_maxParaFontPt; // Largest font size used in the paragraph
+qreal m_minParaFontPt; // minimum font size used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
 void handleRprAttributes(const QXmlStreamAttributes& attrs);
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_DrawingML_br();
 KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();
@@ -180,6 +181,10 @@ QString m_prevListStyleName;
 int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
 
+// Map of level keys and xml:id values of text:list elements to continue
+// automatic numbering.
+QMap<quint16, QString> m_lvlXmlIdMap;
+
 // true - continue numbered list, false - restart numbering
 QMap<quint16, bool> m_continueListNumbering;
 
@@ -235,6 +240,8 @@ int m_svgChWidth; //! set by read_chExt()
 int m_svgChHeight; //! set by read_chExt()
 // These have to be in a vector in order to support group shapes within
 // a group shape
+
+
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
 struct GroupProp {
     qint64 svgXOld;

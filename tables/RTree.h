@@ -34,13 +34,6 @@
 // this is much slower but it is here so it is easy to check that still all works.
 //#define DYNAMIC_CAST
 
-// This is for hunting down the bugs 264602 and 263414 and 281670
-// Remove it once the bugs got fixed cause it slows down things in debug-mode without
-// any real need except hunting down those bugs!
-// Note that if it still crashes (and not asserts) then the reason is that we need to
-// make a deep copy of the m_castRoot in the RTree assignment-operator!
-#define HUNT_DYNAMIC_CAST_BUG
-
 namespace Calligra
 {
 namespace Tables
@@ -225,9 +218,6 @@ public:
     void clear() {
         KoRTree<T>::clear();
         m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-        Q_ASSERT(m_castRoot);
-#endif
     }
 
 protected:
@@ -246,17 +236,11 @@ protected:
     void adjustTree(typename KoRTree<T>::Node *node1, typename KoRTree<T>::Node *node2) {
         KoRTree<T>::adjustTree(node1, node2);
         m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-        Q_ASSERT(m_castRoot);
-#endif
     }
 
     void condenseTree(typename KoRTree<T>::Node * node, QVector<typename KoRTree<T>::Node *> & reinsert) {
         KoRTree<T>::condenseTree(node, reinsert);
         m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-        Q_ASSERT(m_castRoot);
-#endif
     }
 
 private:
@@ -400,9 +384,6 @@ RTree<T>::RTree()
     delete this->m_root;
     this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
     m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-    Q_ASSERT(m_castRoot);
-#endif
 }
 
 template<typename T>
@@ -486,9 +467,6 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
         delete KoRTree<T>::m_root;
         KoRTree<T>::m_root = nodes.first().first;
         m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-        Q_ASSERT(m_castRoot);
-#endif
     }
 }
 
@@ -723,9 +701,6 @@ void RTree<T>::operator=(const RTree<T>& other)
         *dynamic_cast<NonLeafNode*>(this->m_root) = *dynamic_cast<NonLeafNode*>(other.m_root);
     }
     m_castRoot = dynamic_cast<Node*>(this->m_root);
-#ifdef HUNT_DYNAMIC_CAST_BUG
-    Q_ASSERT(m_castRoot);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////

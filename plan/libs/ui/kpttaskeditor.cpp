@@ -1293,6 +1293,11 @@ void TaskWorkPackageView::setGuiActive( bool activate )
     }
 }
 
+void TaskWorkPackageView::slotRefreshView()
+{
+    emit checkForWorkPackages();
+}
+
 void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
     kDebug()<<curr.row()<<","<<curr.column();

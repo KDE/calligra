@@ -83,8 +83,8 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     view->setRenderHint(QPainter::Antialiasing, true);
     view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
-    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
-            this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
+    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource,ConnectionTarget)),
+            this, SLOT(connectionCreated(ConnectionSource,ConnectionTarget)));
     connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
 
     QSet<ConnectionSource::SourceType> inputs;

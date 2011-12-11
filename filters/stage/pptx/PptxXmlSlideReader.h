@@ -277,15 +277,6 @@ protected:
      */
     qreal processParagraphSpacing(const qreal margin, const qreal fontSize);
 
-
-    /**
-     * NOTE: Testing inheritance of missing properties from style
-     * type=="other".
-     *
-     * @return font-size for the corresponding level from type=="other"
-     */
-    QString inheritFontSizeFromOther();
-
 private:
 
     void saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);

@@ -215,8 +215,8 @@ void KarbonGradientEditWidget::setupConnections()
     connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientTarget, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
-    connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(opacityChanged(qreal, bool)));
-    connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(stopChanged()));
+    connect(m_opacity, SIGNAL(valueChanged(qreal,bool)), this, SLOT(opacityChanged(qreal,bool)));
+    connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(stopChanged()));
     connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
 }
 

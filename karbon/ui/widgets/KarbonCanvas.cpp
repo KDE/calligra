@@ -268,6 +268,12 @@ void KarbonCanvas::wheelEvent(QWheelEvent *e)
 
 QVariant KarbonCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (d->toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return d->toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

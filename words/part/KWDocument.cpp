@@ -42,10 +42,10 @@
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
-#include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
+#include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoTextAnchor.h>

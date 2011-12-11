@@ -89,6 +89,8 @@ signals:
 
 public slots:
     virtual void slotFileClose();
+    virtual void setCaption( const QString &text );
+    virtual void setCaption( const QString &text, bool modified );
 
 protected slots:
     virtual bool queryClose();

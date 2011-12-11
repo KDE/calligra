@@ -37,8 +37,15 @@ namespace MSOOXML {
 struct MSOOXML_EXPORT TableStyleProperties
 {
     TableStyleProperties() {
-        bordersToEdgesOnly = false;
+/*         bordersToEdgesOnly = false; */
+        target = Table;
     }
+
+    enum Target {
+        Table,
+        TableRow,
+        TableCell
+    };
 
     enum Property {
         BottomBorder = 1,
@@ -58,6 +65,9 @@ struct MSOOXML_EXPORT TableStyleProperties
         GlyphOrientation = 16384,
         BackgroundOpacity = 32768
     };
+
+    Target target;
+
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
 
@@ -81,9 +91,9 @@ struct MSOOXML_EXPORT TableStyleProperties
     QString verticalAlign;
     bool glyphOrientation;
 
-    // There seems to be behavior that when ooxml defines wholetbl borders, it wants them to be
-    // applied only to the cells which are on the edges, not to every cell
-    bool bordersToEdgesOnly;
+    // OOXML: It seems that if wholetbl borders are defined, those should be
+    // only applied to cells which are on the edges, not to every cell.
+/*     bool bordersToEdgesOnly; */
 
     KoGenStyle textStyle;
     KoGenStyle paragraphStyle;
@@ -165,7 +175,10 @@ protected:
     void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
 
 private:
-    void applyBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyTableBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+
+    void applyCellBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style);
+
     void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
 
     int m_row;
