@@ -236,8 +236,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->status->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->status->setMinimumWidth(300);
     addStatusBarItem(d->status, 1);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
-            d->status, SLOT(setText(const QString &)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            d->status, SLOT(setText(QString)));
     d->cursorCoords = new QLabel(QString(), this);
     d->cursorCoords->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->cursorCoords->setMinimumWidth(50);
@@ -274,25 +274,25 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    connect(p, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
+    connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
     d->vertRuler->setUnit(p->unit());
     d->vertRuler->setVisible(false);
 
-    connect(d->canvas, SIGNAL(documentOriginChanged(const QPoint &)), this, SLOT(pageOffsetChanged()));
+    connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)),
-            this, SLOT(mousePositionChanged(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
+            this, SLOT(mousePositionChanged(QPoint)));
     d->vertRuler->createGuideToolConnection(d->canvas);
     d->horizRuler->createGuideToolConnection(d->canvas);
 
     updateRuler();
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
-    connect(d->colorBar, SIGNAL(colorSelected(const KoColor&)), this, SLOT(applyPaletteColor(const KoColor&)));
+    connect(d->colorBar, SIGNAL(colorSelected(KoColor)), this, SLOT(applyPaletteColor(KoColor)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
     connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
@@ -307,8 +307,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -1397,8 +1397,8 @@ void KarbonView::createLayersTabDock()
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
-                layerDocker, SLOT(setPart(KParts::Part *)));
+        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+                layerDocker, SLOT(setPart(KParts::Part*)));
     }
 }
 

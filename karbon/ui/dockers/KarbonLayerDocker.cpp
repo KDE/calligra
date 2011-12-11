@@ -167,7 +167,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     }
     setViewMode(mode);
 
-    connect(m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+    connect(m_layerView, SIGNAL(clicked(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
 
     m_updateTimer.setSingleShot(true);
     m_updateTimer.setInterval(250);
