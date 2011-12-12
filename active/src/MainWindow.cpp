@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(m_view);
     connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
-    setWindowState(windowState() | Qt::WindowFullScreen);
+    resize(800, 600);
 }
 
 void MainWindow::openFile(const QString &path)
