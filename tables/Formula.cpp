@@ -422,7 +422,14 @@ const Token& TokenStack::top(unsigned index)
 // helper function: return true for valid identifier character
 bool Calligra::Tables::isIdentifier(QChar ch)
 {
-    return (ch.unicode() == '_') || (ch.unicode() == '$') || (ch.unicode() == '.') || (ch.isLetter());
+    switch(ch.unicode()) {
+    case '_':
+    case '$':
+    case '.':
+        return true;
+    default:
+        return ch.isLetter();
+    }
 }
 
 
