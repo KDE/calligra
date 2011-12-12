@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONCOLORPATCHWIDGET_H
-#define KARBONCOLORPATCHWIDGET_H
+#ifndef KARBONPALETTEWIDGET_H
+#define KARBONPALETTEWIDGET_H
 
 #include <KoColor.h>
 #include <QtGui/QWidget>
@@ -84,4 +84,4 @@ private:
     bool m_hasDragged;
 };
 
-#endif // KARBONCOLORPATCHWIDGET_H
+#endif // KARBONPALETTEWIDGET_H

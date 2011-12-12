@@ -181,8 +181,39 @@ bool DocumentChild::setDoc( const Document *doc )
     }
     m_doc = doc;
     KUrl url;
-    if ( doc->sendAs() == Document::SendAs_Copy ) {
+    if ( parentPackage()->newDocuments().contains( doc ) ) {
+        url = parentPackage()->newDocuments().value( doc );
+        Q_ASSERT( url.isValid() );
+        parentPackage()->removeNewDocument( doc );
+    } else if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc );
+        if ( url.url().isEmpty() ) {
+            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+            return false;
+        }
+        m_copy = true;
+    } else {
+        url = doc->url();
+    }
+    if ( ! url.isValid() ) {
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        return false;
+    }
+    setFileInfo( url );
+    return true;
+}
+
+bool DocumentChild::openDoc( const Document *doc, KoStore *store )
+{
+    Q_ASSERT ( m_doc == 0 );
+    if ( isOpen() ) {
+        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().pathOrUrl() ) );
+        return false;
+    }
+    m_doc = doc;
+    KUrl url;
+    if ( doc->sendAs() == Document::SendAs_Copy ) {
+        url = parentPackage()->extractFile( doc, store );
         if ( url.url().isEmpty() ) {
             KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
             return false;
@@ -214,7 +245,11 @@ bool DocumentChild::editDoc()
     KUrl filename( filePath() );
     KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
     KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
-    return startProcess( service, filename );
+    bool editing = startProcess( service, filename );
+    if ( editing ) {
+        m_type = Type_Other; // FIXME: try to be more specific
+    }
+    return editing;
 }
 
 bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
@@ -352,7 +387,7 @@ void Part::addCommand( KUndo2Command *cmd )
     }
 }
 
-bool Part::setWorkPackage( WorkPackage *wp )
+bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
 {
     //kDebug();
     QString id = wp->id();
@@ -364,7 +399,7 @@ bool Part::setWorkPackage( WorkPackage *wp )
             delete wp;
             return false;
         }
-        m_packageMap[ id ]->merge( this, wp );
+        m_packageMap[ id ]->merge( this, wp, store );
         delete wp;
         return true;
     }
@@ -574,7 +609,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
     WorkPackage *wp = new WorkPackage( m_loadingFromProjectStore );
     wp->loadXML( plan, m_xmlLoader );
     m_xmlLoader.stopLoad();
-    if ( ! setWorkPackage( wp ) ) {
+    if ( ! setWorkPackage( wp, store ) ) {
         // rejected, so nothing changed...
         return true;
     }
@@ -682,7 +717,7 @@ WorkPackage *Part::findWorkPackage( const Node *node ) const
 
 bool Part::editWorkpackageDocument( const Document *doc )
 {
-    kDebug()<<doc<<doc->url();
+    //kDebug()<<doc<<doc->url();
     // start in any suitable application
     return editOtherDocument( doc );
 }
@@ -713,6 +748,18 @@ void Part::viewWorkpackageDocument( Document *doc )
     }
     // open for view
     viewDocument( filename );
+}
+
+bool Part::removeDocument( Document *doc )
+{
+    if ( doc == 0 ) {
+        return false;
+    }
+    WorkPackage *wp = findWorkPackage( doc );
+    if ( wp == 0 ) {
+        return false;
+    }
+    return wp->removeDocument( this, doc );
 }
 
 bool Part::viewDocument( const KUrl &filename )

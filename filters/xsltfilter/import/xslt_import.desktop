@@ -23,6 +23,7 @@ Name[ru]=Фильтр импорта документов Calligra посред�
 Name[sv]=Calligra XSLT-importfilter
 Name[uk]=Фільтр експорту XSLT для Calligra
 Name[x-test]=xxCalligra XSLT Import Filterxx
+Name[zh_CN]=Calligra XSLT 导入过滤器
 Name[zh_TW]=Calligra XSLT 匯入過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service

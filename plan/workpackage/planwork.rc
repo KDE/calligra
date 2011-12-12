@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlatoWork" version="0">
+<kpartgui name="PlanWork" version="1">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
            <Action name="package_remove_selected"/>
@@ -18,9 +18,11 @@
     <Menu name="editdocument_popup">
         <Action name="view_document"/>
         <Action name="edit_document"/>
+        <Action name="remove_document"/>
     </Menu>
     <Menu name="viewdocument_popup">
         <Action name="view_document"/>
+        <Action name="remove_document"/>
     </Menu>
 
 </kpartgui>

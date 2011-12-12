@@ -30,7 +30,6 @@ target_link_libraries(
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 #kexicore
 #kexiguiutils

@@ -296,7 +296,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:marker-end-center
         // draw:marker-end-width
         style.addPropertyPt("draw:marker-end-width",
-                            lineWidthPt*4*(1+ds.lineEndArrowWidth()), gt);
+                            lineWidthPt * 2 + ds.lineEndArrowWidth(), gt);
         // draw:marker-start
         quint32 lineStartArrowhead = ds.lineStartArrowhead();
         if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
@@ -305,7 +305,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:marker-start-center
         // draw:marker-start-width
         style.addPropertyPt("draw:marker-start-width",
-                            lineWidthPt*4*(1+ds.lineStartArrowWidth()), gt);
+                            lineWidthPt * 2 + ds.lineStartArrowWidth(), gt);
     }
     // draw:measure-align
     // draw:measure-vertical-align

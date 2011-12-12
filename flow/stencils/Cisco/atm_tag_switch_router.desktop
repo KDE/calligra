@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=ATM Tag Switch Router
 Name[bg]=Комутиращ маршрутизатор ATM
-Name[ca]=ATM Tag Switch Router
+Name[ca]=Encaminador commutador ATM Tag
 Name[el]=ATM Tag Switch Router
 Name[et]=ATM Tag kommutaator-marsruuter
 Name[nb]=ATM taggsvitsj-ruter
@@ -10,7 +10,9 @@ Name[nl]=ATM Tag Switch Router
 Name[pl]=Router przełączający znaczniki ATM
 Name[pt]=Encaminhador-Comutador ATM
 Name[pt_BR]=Roteador/Comutador ATM Tag
+Name[ru]=ATM маршрутизатор отметчик коммутатор
 Name[sv]=ATM-taggväxelrouter
 Name[uk]=Маршрутизатор мереж ATM
 Name[x-test]=xxATM Tag Switch Routerxx
+Name[zh_CN]=ATM 标记交换路由器
 Name[zh_TW]=ATM 標籤交換路由器

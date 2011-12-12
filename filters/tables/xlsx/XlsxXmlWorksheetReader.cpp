@@ -138,6 +138,15 @@ static void splitToRowAndColumn(const QString source, QString& row, int& column)
     }
 }
 
+//! @return value @a cm with cm suffix
+static QString printCm(double cm)
+{
+    QString string;
+    string.sprintf("%3.3fcm", cm);
+    return string;
+}
+
+
 QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleForPosition(const QString& positionLetter, int positionNumber)
 {
     QString startLetter, endLetter;
@@ -303,6 +312,34 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     return KoFilter::OK;
 }
 
+
+QString XlsxXmlWorksheetReader::computeColumnWidth(qreal widthNumber) const
+{
+    //! CASE #S3300
+    //! Column width measured as the number of characters of the maximum digit width of the
+    //! numbers 0, 1, 2, …, 9 as rendered in the normal style's font. There are 4 pixels of margin
+    //! padding (two on each side), plus 1 pixel padding for the gridlines.
+    //! For explanation of width, see p. 1778
+    //simplified:
+    //! @todo hardcoded, not 100% accurate
+    kDebug() << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
+    const double realSize = round(PT_TO_PX(11.0)) * 0.75;
+    kDebug() << "realSize:" << realSize;
+    const double averageDigitWidth = realSize * 2.0 / 3.0;
+    kDebug() << "averageDigitWidth:" << averageDigitWidth;
+
+    QString result;
+    if (averageDigitWidth * widthNumber == 0) {
+        result = QLatin1String("0cm");
+    }
+    else
+    {
+        result = printCm(PX_TO_CM(averageDigitWidth * widthNumber));
+    }
+
+    return result;
+}
+
 void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
 {
     if (d->warningAboutWorksheetSizeDisplayed)
@@ -324,7 +361,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     XlsxComment *comment = m_context->comments->value(ref);
     if (!comment)
         return;
-    kDebug() << "Saving annotation for cell" << ref;
+    //kDebug() << "Saving annotation for cell" << ref;
     body->startElement("office:annotation");
     body->startElement("dc:creator");
     body->addTextNode(comment->author(m_context->comments));
@@ -549,6 +586,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
     delete body;
     body = heldBody;
 
+    // Adding drawings, if there are any
+    if (drawingBuffer.size() > 0) {
+        body->startElement("table:shapes");
+        body->addCompleteElement(&drawingBuffer);
+        body->endElement(); // table:shapes
+    }
+
     // now we have everything to start writing the actual cells
     int c = 0;
     while (c <= m_context->sheet->maxColumn()) {
@@ -556,6 +600,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
         int repeatedColumns = 1;
         bool currentColumnHidden = false;
         Column* column = m_context->sheet->column(c, false);
+        if (column) {
+            if (!column->styleName.isEmpty()) {
+                body->addAttribute("table:style-name", column->styleName);
+            } else {
+                if (m_context->sheet->m_defaultColWidth != -1.0) {
+                    saveColumnStyle( computeColumnWidth( m_context->sheet->m_defaultColWidth ) );
+                }
+            }
+        }
+
         if (column && column->hidden) {
             body->addAttribute("table:visibility", "collapse");
             currentColumnHidden = true;
@@ -589,17 +643,22 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
 
     const int rowCount = m_context->sheet->maxRow();
     for(int r = 0; r <= rowCount; ++r) {
+        const int columnCount = m_context->sheet->maxCellsInRow(r);
+        Row* row = m_context->sheet->row(r, false);
         body->startElement("table:table-row");
-        if (Row* row = m_context->sheet->row(r, false)) {
+        if (row) {
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
+            } else if (m_context->sheet->m_defaultRowHeight != -1.0) {
+                QString styleName = processRowStyle(m_context->sheet->m_defaultRowHeight); // in pt
+                body->addAttribute("table:style-name", styleName);
             }
+
             if (row->hidden) {
                 body->addAttribute("table:visibility", "collapse");
             }
             //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
-            const int columnCount = m_context->sheet->maxCellsInRow(r);
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = m_context->sheet->cell(c, r, false)) {
@@ -694,13 +753,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                 body->endElement(); // table:table-cell
             }
         }
+
+        if (!row || columnCount <= 0) {
+            // element table:table-row may not be empty
+            body->startElement("table:table-cell");
+            body->endElement(); // table:table-cell
+        }
         body->endElement(); // table:table-row
     }
-
-    // Adding drawings, if there are any
-    body->startElement("table:shapes");
-    body->addCompleteElement(&drawingBuffer);
-    body->endElement(); // table:shapes
 
     body->endElement(); // table:table
 
@@ -745,6 +805,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
     if (m_context->firstRoundOfReading) {
         body = oldBody;
     }
+
+
 
     return KoFilter::OK;
 }
@@ -946,12 +1008,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
     TRY_READ_ATTR_WITHOUT_NS(defaultColWidth)
     TRY_READ_ATTR_WITHOUT_NS(baseColWidth)
     bool ok;
+
     const double drh = defaultRowHeight.toDouble(&ok);
-    if(ok) m_context->sheet->m_defaultRowHeight = drh;
+    if (ok) {
+        m_context->sheet->m_defaultRowHeight = drh;
+    }
+
     const double dcw = defaultColWidth.toDouble(&ok);
-    if(ok) m_context->sheet->m_defaultColWidth = dcw;
+    if (ok) {
+        m_context->sheet->m_defaultColWidth = dcw;
+    }
+
     const double bcw = baseColWidth.toDouble(&ok);
-    if(ok) m_context->sheet->m_baseColWidth = bcw;
+    if (ok) {
+        m_context->sheet->m_baseColWidth = bcw;
+    }
 
     readNext();
     READ_EPILOGUE
@@ -1005,14 +1076,6 @@ void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
         const QString currentTableColumnStyleName(d->savedStyles[widthString]);
         body->addAttribute("table:style-name", currentTableColumnStyleName);
     }
-}
-
-//! @return value @a cm with cm suffix
-static QString printCm(double cm)
-{
-    QString string;
-    string.sprintf("%3.3fcm", cm);
-    return string;
 }
 
 void XlsxXmlWorksheetReader::appendTableColumns(int columns, const QString& width)
@@ -1074,23 +1137,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
         double widthNumber = width.toDouble(&ok);
         if (!ok)
             return KoFilter::WrongFormat;
-        //! CASE #S3300
-        //! Column width measured as the number of characters of the maximum digit width of the
-        //! numbers 0, 1, 2, …, 9 as rendered in the normal style's font. There are 4 pixels of margin
-        //! padding (two on each side), plus 1 pixel padding for the gridlines.
-        //! For explanation of width, see p. 1778
-//simplified:
-//! @todo hardcoded, not 100% accurate
-        kDebug() << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
-        const double realSize = round(PT_TO_PX(11.0)) * 0.75;
-        kDebug() << "realSize:" << realSize;
-        const double averageDigitWidth = realSize * 2.0 / 3.0;
-        kDebug() << "averageDigitWidth:" << averageDigitWidth;
-        if (averageDigitWidth * widthNumber == 0)
-            realWidthString = QLatin1String("0cm");
-        else
-            realWidthString = printCm(PX_TO_CM(averageDigitWidth * widthNumber));
 
+        realWidthString = computeColumnWidth(widthNumber);
         kDebug() << "realWidthString:" << realWidthString;
 //moved        saveColumnStyle(realWidthString);
 //! @todo hardcoded table:default-cell-style-name
@@ -1105,6 +1153,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
 //moved    body->endElement(); // table:table-column
     appendTableColumns(maxCol - minCol + 1, realWidthString);
+    if (d->savedStyles.contains(realWidthString)) {
+        column->styleName = d->savedStyles.value(realWidthString);
+    }
 
     m_columnCount += (maxCol - minCol);
 
@@ -1145,14 +1196,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     READ_EPILOGUE
 }
 
-QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
+QString XlsxXmlWorksheetReader::processRowStyle(double height)
 {
-    double height = -1.0;
-    if(!_heightString.isEmpty()) {
-        bool ok;
-        height = _heightString.toDouble(&ok);
-        if(!ok) height = -1.0;
-    } else {
+    if (height == -1.0) {
         height = m_context->sheet->m_defaultRowHeight;
     }
     KoGenStyle tableRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
@@ -1216,7 +1262,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     m_currentColumn = 0;
     Row* row = m_context->sheet->row(m_currentRow, true);
     if (!ht.isEmpty()) {
-        row->styleName = processRowStyle(ht);
+        bool ok;
+        qreal height = ht.toDouble(&ok);
+        if (ok) {
+            row->styleName = processRowStyle(height);
+        }
     }
 
     if (!hidden.isEmpty()) {
@@ -2013,12 +2063,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
     ref.replace(QRegExp("[0-9]+$"), QString::number(m_context->sheet->maxRow()+1));
 
     ref.prepend(".");
-    ref.prepend(m_context->worksheetName);
+    QString sheetName = m_context->worksheetName;
+    if (sheetName.contains('.') || sheetName.contains(' ') || sheetName.contains('\'')) {
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    }
+    ref.prepend(sheetName);
 
     int colon = ref.indexOf(':');
     if (colon > 0) {
         ref.insert(colon + 1, '.');
-        ref.insert(colon + 1, m_context->worksheetName);
+        ref.insert(colon + 1, sheetName);
     }
 
     XlsxXmlWorksheetReaderContext::AutoFilter autoFilter;

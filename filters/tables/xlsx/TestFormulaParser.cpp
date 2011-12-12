@@ -68,6 +68,9 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("whole column")
         << "IF(A=B,A:B,2)"
         << "=IF(A=B;A$1:B$65536;2)";
+    QTest::newRow("Sheetname")
+        << "=IF('Sheet 1'!A1,''Sheet '1''!A2,'''Sheet 1'''!A3"
+        << "=IF('Sheet 1'!A1;'Sheet ''1'!A2;'Sheet 1'!A3";
 }
 
 void TestFormulaParser::testConvertFormula()

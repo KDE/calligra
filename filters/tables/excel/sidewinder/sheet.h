@@ -190,6 +190,10 @@ public:
 
     void setAutoFilters(const Calligra::Tables::Filter& filter);
     Calligra::Tables::Filter autoFilters() const;
+
+    void setRightToLeft(bool rtl);
+    bool isRightToLeft() const;
+
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
 #endif
@@ -205,10 +209,6 @@ private:
 
     Hyperlink hyperlink(unsigned column, unsigned row) const;
     void setHyperlink(unsigned column, unsigned row, const Hyperlink& link);
-
-    QList<PictureObject*> pictures(unsigned column, unsigned row) const;
-    void setPictures(unsigned column, unsigned row, const QList<PictureObject*>& pictures);
-    void addPicture(unsigned column, unsigned row, PictureObject* picture);
 
     QList<ChartObject*> charts(unsigned column, unsigned row) const;
     void setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts);

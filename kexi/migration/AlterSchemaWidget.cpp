@@ -23,6 +23,8 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QLineEdit>
+
 #include <kexidb/tableschema.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -38,11 +40,13 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_table = new QTableView(this);
     m_columnType = new QComboBox(this);
     m_columnPKey = new QCheckBox(this);
+    m_tableName = new QLineEdit(this);
 
     m_columnNumLabel = new QLabel(i18n("Column %1",QString::number(1)), this);
     m_columnTypeLabel = new QLabel(i18n("Type"), this);
     m_columnPKeyLabel = new QLabel(i18n("Primary Key"), this);
-
+    m_tableNameLabel = new QLabel(i18n("Table Name"), this);
+    
     m_types = KexiDB::Field::typeNames();
     m_types.removeFirst(); //Remove InvalidTypes
 
@@ -50,12 +54,14 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
         m_columnType->addItem(KexiDB::Field::typeName(i), i);
     }
 
-    m_layout->addWidget(m_columnNumLabel, 0, 0, 1, 2);
-    m_layout->addWidget(m_columnTypeLabel, 1, 0);
-    m_layout->addWidget(m_columnPKeyLabel, 1, 1);
-    m_layout->addWidget(m_columnType, 2, 0);
-    m_layout->addWidget(m_columnPKey, 2, 1);
-    m_layout->addWidget(m_table, 3, 0, 1, 2);
+    m_layout->addWidget(m_tableNameLabel, 0, 0, 1, 1);
+    m_layout->addWidget(m_tableName, 0, 1, 1, 1);
+    m_layout->addWidget(m_columnNumLabel, 1, 0, 1, 2);
+    m_layout->addWidget(m_columnTypeLabel, 2, 0);
+    m_layout->addWidget(m_columnPKeyLabel, 2, 1);
+    m_layout->addWidget(m_columnType, 3, 0);
+    m_layout->addWidget(m_columnPKey, 3, 1);
+    m_layout->addWidget(m_table, 4, 0, 1, 2);
 
     setLayout(m_layout);
 
@@ -80,6 +86,7 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
     m_newSchema = new KexiDB::TableSchema(*ts, false);
     m_newSchema->setName(m_originalSchema->name().replace('.', '_')); //Handle case where a file has been imported
 
+    m_tableName->setText(ts->name());
     m_model->setSchema(m_newSchema);
     tableClicked(m_model->index(0,0));
 }
@@ -123,5 +130,6 @@ void AlterSchemaWidget::pkeyClicked(bool pkey){
 
 KexiDB::TableSchema* AlterSchemaWidget::newSchema()
 {
+    m_newSchema->setName(m_tableName->text());
     return m_newSchema;
 }

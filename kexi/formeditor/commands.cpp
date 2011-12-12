@@ -2052,7 +2052,7 @@ public:
     {
     }
     Form *form;
-    QWidget *widget;
+    QPointer<QWidget> widget;
     QByteArray editedWidgetClass;
     QString text;
     QString oldText;

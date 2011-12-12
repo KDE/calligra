@@ -146,7 +146,8 @@ void AccountsTester::defaultAccount() {
 
     t->completion().setEntrymode( Completion::EnterEffortPerResource );
     Completion::UsedEffort *ue = new Completion::UsedEffort();
-    ue->setEffort( tomorrow, new Completion::UsedEffort::ActualEffort(  Duration( 0, 6, 0 ) ) );
+    Completion::UsedEffort::ActualEffort e(  Duration( 0, 6, 0 ) ) ;
+    ue->setEffort( tomorrow, e );
     t->completion().addUsedEffort( r, ue );
     ec = project->accounts().actualCost( *a, t->startTime().date(), tomorrow );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 6.0 );

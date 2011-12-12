@@ -1,6 +1,13 @@
 
 Calligra Plan current:
 
+* Improve users control of work package merging
+
+* PlanWork:
+  Add remove document command
+  Support adding new documents of any type
+  Support updating existing reference documents
+
 * Fix bug 259225: Display performance index numbers in red when spi/cpi is < 1.0
 
 * Fix bug 286495: Update reports automatically when schedule changes

@@ -389,23 +389,6 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     QPainterPath shapePath;
     (this->*drawPath)(sx1, sy1, sx2, sy2, out, shapePath);
 
-    // Temporary support for arrowheads: remove when the core gets marker
-    // support (we already support that via addGraphicStyleToDrawElement).
-    //
-    // The idea is not to render perfectly (rotation, style etc.), but convey
-    // the semantic sense that there *is* an arrowhead.
-    if (ds.lineStartArrowhead()) {
-        shapePath.moveTo(sx1, sy1);
-        shapePath.lineTo(sx1 + 70, sy1 + 70/2);
-        shapePath.lineTo(sx1 + 70, sy1 - 70/2);
-        shapePath.closeSubpath();
-    }
-    if (ds.lineEndArrowhead()) {
-        shapePath.moveTo(sx2, sy2);
-        shapePath.lineTo(sx2 - 70, sy2 + 70/2);
-        shapePath.lineTo(sx2 - 70, sy2 - 70/2);
-        shapePath.closeSubpath();
-    }
     shapePath = m.map(shapePath);
 
     // translate the QPainterPath into svg:d attribute
@@ -1068,6 +1051,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("svg:x", client->formatPos(trect.x()));
         out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
+    //NOTE: z-index is set in ODrawToOdf::Client::addTextStyles
     //draw:z-index
     //presentation:class-names
     //presentation:style-name
@@ -1091,9 +1075,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
     const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
-    IMsoArray _c = ds.pSegmentInfo_complex();
+    IMsoArray segmentInfo = ds.pSegmentInfo_complex();
 
-    if (!_v.data.isEmpty() && !_c.data.isEmpty()) {
+    if (!_v.data.isEmpty() && !segmentInfo.data.isEmpty()) {
 
         QVector<QPoint> verticesPoints;
 
@@ -1143,9 +1127,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         ushort msopathtype;
         bool nOffRange = false;
 
-        for (int i = 0, n = 0; ((i < _c.nElems) && !nOffRange); i++) {
+        for (int i = 0, n = 0; ((i < segmentInfo.nElems) && !nOffRange); i++) {
 
-            msopathtype = (((*(ushort *)(_c.data.data() + i * 2)) >> 13) & 0x7);
+            msopathtype = (((*(ushort *)(segmentInfo.data.data() + i * 2)) >> 13) & 0x7);
 
             switch (msopathtype) {
             case msopathLineTo:
@@ -1162,7 +1146,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             case msopathCurveTo:
             {
-                if (n + 2 > verticesPoints.size()) {
+                if (n + 2 >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
                     break;

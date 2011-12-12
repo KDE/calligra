@@ -641,7 +641,10 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
-            moveCursor(selectionEnd(), false);
+            int selEnd = selectionEnd();
+            if (selEnd >= 0) {
+                setCursorPosition(selEnd);
+            }
             event->accept();
             return;
         }
@@ -652,7 +655,10 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         if (hasSelectedText()
             && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
-            moveCursor(selectionStart(), false);
+            int selStart = selectionStart();
+            if (selStart >= 0) {
+                setCursorPosition(selStart);
+            }
             event->accept();
             return;
         }

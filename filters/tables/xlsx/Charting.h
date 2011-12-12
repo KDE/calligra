@@ -31,25 +31,6 @@
 namespace Charting
 {
   
-    class Gradient
-    {        
-    public:
-        Gradient(){ angle =  0.0; }
-        class GradientStop
-        {
-        public:
-            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
-            qreal position;
-            QColor knownColorValue;
-            qreal tintVal;
-            qreal satVal;
-            qreal shadeVal;
-            QString referenceColor;
-        };
-        QVector< GradientStop > gradientStops;
-        qreal angle;
-    };
-
     class Value
     {
     public:
@@ -123,7 +104,26 @@ namespace Charting
         bool m_fill;
         AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
     };
-    
+
+    class Gradient
+    {
+    public:
+        Gradient(){ angle =  0.0; }
+        class GradientStop
+        {
+        public:
+            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
+            qreal position;
+            QColor knownColorValue;
+            qreal tintVal;
+            qreal satVal;
+            qreal shadeVal;
+            QString referenceColor;
+        };
+        QVector< GradientStop > gradientStops;
+        qreal angle;
+    };
+
     class Fill
     {
     public:        
@@ -187,8 +187,10 @@ namespace Charting
     class RadarImpl : public ChartImpl
     {
     public:
-        RadarImpl() : ChartImpl() {}
-        virtual QByteArray name() const { return "radar"; }
+        /// If true then the radar-chart is filled (an RadarArea chart) else not.
+        bool m_filled;
+        RadarImpl(bool filled = false) : ChartImpl(), m_filled(filled) {}
+        virtual QByteArray name() const { return m_filled ? "filled-radar" : "radar"; }
     };
 
     class AreaImpl : public ChartImpl
@@ -208,10 +210,10 @@ namespace Charting
     class ScatterImpl : public ChartImpl
     {
     public:
-        enum ScatterStyle{ None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+        enum ScatterStyle { None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+        ScatterStyle style;
         ScatterImpl() : ChartImpl(), style( LineMarker ) {}
         virtual QByteArray name() const { return "scatter"; }
-        ScatterStyle style;
     };
 
     class BubbleImpl : public ChartImpl
@@ -292,7 +294,7 @@ namespace Charting
         Cell(int columnIndex, int rowIndex) : m_column(columnIndex), m_row(rowIndex), m_valueType("string"){};
     };
 
-    // cell data represetation of internal table
+    /// cell data represetation of internal table
     class InternalTable
     {
     public:
@@ -301,7 +303,8 @@ namespace Charting
 
         Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
         {
-            const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
+            const uint maximumSpreadsheetColumns = 0x7FFF; // MSOOXML::maximumSpreadsheetColumns()
+            const unsigned hashed = (rowIndex + 1) * maximumSpreadsheetColumns + columnIndex + 1;
             Cell* c = m_cells[ hashed ];
             if (!c && autoCreate) {
                 c = new Cell(columnIndex, rowIndex);
@@ -325,11 +328,30 @@ namespace Charting
         QHash<int, int> m_maxCellsInRow;
     };
 
+    /// Different types of markers.
+    enum MarkerType {
+        NoMarker,
+        AutoMarker,
+        SquareMarker,
+        DiamondMarker,
+        StarMarker,
+        DotMarker,
+        DashMarker,
+        PlusMarker,
+        CircleMarker,
+        SymbolXMarker,
+        TriangleMarker
+        // TODO fill the missing marker types in
+    };
+
+    class DataPoint : public Obj
+    {
+    public:
+    };
+
     class Series : public Obj
     {
     public:
-        // TODO fill the missing marker types in
-        enum MarkerType{ None, Square, Diamond, Star, Dot, Dash, Plus, Circle, SymbolX, Triangle };
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
         int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
@@ -352,20 +374,29 @@ namespace Charting
         QStringList m_domainValuesCellRangeAddress;
         /// The referenced values used in the chart
         QMap<Value::DataId, Value*> m_datasetValue;
+        /// The data-points in the series.
+        QList<DataPoint*> m_dataPoints;
         /// The formatting for the referenced values
         QList<Format*> m_datasetFormat;
         /// List of text records attached to the series.
         QList<Text*> m_texts;
-        // range that contains label
+        /// range that contains label
         QString m_labelCell;
-        // marker type
-        MarkerType markerType;
+        /// marker type
+        MarkerType m_markerType;
         ShapeProperties* spPr;
 
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), markerType( None ),spPr(0) {}
-        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); delete spPr; }
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), m_markerType(NoMarker),spPr(0) {}
+        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_dataPoints); qDeleteAll(m_datasetFormat); delete spPr; }
     };
-    
+
+    class PlotArea : public Obj
+    {
+    public:
+        explicit PlotArea() : Obj() {}
+        virtual ~PlotArea() {}
+    };
+
     class Legend : public Obj
     {
     public:
@@ -378,7 +409,6 @@ namespace Charting
     {
     public:
         QString m_sheetName;
-        int m_fromRow, m_fromColumn, m_toRow, m_toColumn;
         
         /// If true then the chart is a 3d chart else teh chart is 2d.
         bool m_is3d;
@@ -399,6 +429,10 @@ namespace Charting
         QString m_title;
         /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
         ChartImpl *m_impl;
+        /// The plot-area.
+        PlotArea *m_plotArea;
+        /// The legend.
+        Legend *m_legend;
         /// List of defined axes.
         QList<Axis*> m_axes;
         /// Whether the chart is vertical or not.
@@ -411,18 +445,17 @@ namespace Charting
         int m_style;
         Gradient* m_fillGradient;
         Gradient* m_plotAreaFillGradient;
-        QColor m_plotAreaFillColor;
-        bool m_showMarker;
+        MarkerType m_markerType;
         bool m_showLines;
         qreal m_textSize;
 
         // charts internal table
         InternalTable m_internalTable;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false), m_showLines( false ), m_textSize( 10 ) {
+        explicit Chart() : Obj(), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_plotArea(0), m_legend(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_markerType(NoMarker), m_showLines( false ), m_textSize( 10 ) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
-        virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }
+        virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_plotArea; delete m_legend; delete m_fillGradient; delete m_plotAreaFillGradient; }
         
         void addRange(const QRect& range)
         {

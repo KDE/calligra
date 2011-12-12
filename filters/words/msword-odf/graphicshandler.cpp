@@ -207,17 +207,6 @@ void WordsGraphicsHandler::init()
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
 
-    //Provide the backgroud color information to the Document
-    DrawStyle ds = getBgDrawStyle();
-    if (ds.fFilled()) {
-        MSO::OfficeArtCOLORREF fc = ds.fillColor();
-        QColor color = QColor(fc.red, fc.green, fc.blue);
-        QString tmp = color.name();
-        if (tmp != m_document->currentBgColor()) {
-            m_document->updateBgColor(tmp);
-        }
-    }
-
     const OfficeArtBStoreContainer* blipStore = 0;
     blipStore = m_officeArtDggContainer.blipStore.data();
 
@@ -235,11 +224,6 @@ void WordsGraphicsHandler::init()
     }
 }
 
-void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
-{
-    emit textBoxFound(index, stylesxml);
-}
-
 DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
@@ -247,6 +231,11 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
         shape = (m_pOfficeArtBodyDgContainer->shape).data();
     }
     return DrawStyle(&m_officeArtDggContainer, 0, shape);
+}
+
+void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
+{
+    emit textBoxFound(index, stylesxml);
 }
 
 void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
@@ -828,6 +817,10 @@ void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, *styles);
     styles->insert(style);
+
+    MSO::OfficeArtCOLORREF fc = ds.fillColor();
+    QColor color = QColor(fc.red, fc.green, fc.blue);
+    m_document->updateBgColor(color.name());
 }
 
 void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)

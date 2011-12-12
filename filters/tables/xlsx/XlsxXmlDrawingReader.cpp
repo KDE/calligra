@@ -69,7 +69,7 @@ int rowHeight2(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight =
     return defaultRowHeight * row + dy;
 }
 
-// Returns A for 1, B for 2, C for 3, etc.
+// Returns A for 0, B for 1, C for 2, etc.
 QString columnName2(uint column)
 {
     QString s;
@@ -113,6 +113,8 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
         } break;
         case Picture: {
             m_picture->saveXml(xmlWriter);
+            delete m_picture;
+            m_type = Unknown;
         } break;
         case Shape: {
             Q_ASSERT(m_shapeBody);
@@ -123,6 +125,17 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
         } break;
     }
 }
+
+KoXmlWriter* XlsxDrawingObject::pictureWriter()
+{
+    if (m_type == Unknown) {
+        setPicture(new XlsxXmlEmbeddedPicture());
+    }
+    Q_ASSERT(m_picture);
+    return m_picture->pictureWriter();
+}
+
+
 
 QRect XlsxDrawingObject::positionRect() const
 {
@@ -153,7 +166,7 @@ QString XlsxDrawingObject::cellAddress(const QString &sheetname, int row, int co
     QString result;
     if(!sheetname.isEmpty())
         result += sheetname + '.';
-    result += columnName2(column) + QString::number(row);
+    result += columnName2(column) + QString::number(row + 1);
     return result;
 }
 
@@ -171,6 +184,12 @@ QString XlsxDrawingObject::toCellAddress() const
     return cellAddress(m_sheet->m_name, f.m_row, f.m_col);
 }
 
+bool XlsxDrawingObject::isAnchoredToCell() const
+{
+    return (m_positions.contains(FromAnchor));
+}
+
+
 XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file)
     : MSOOXML::MsooXmlReaderContext(_worksheetReaderContext->relationships)
     , import(_worksheetReaderContext->import)
@@ -179,6 +198,7 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
     , themes((_worksheetReaderContext->themes))
     , worksheetReaderContext(_worksheetReaderContext)
     , sheet(_sheet)
+    , m_groupDepthCounter(0)
 {
 }
 
@@ -193,6 +213,7 @@ XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
     , m_anchorType(XlsxDrawingObject::NoAnchor)
     , m_chartNumber(0)
 {
+    initDrawingML();
 }
 
 XlsxXmlDrawingReader::~XlsxXmlDrawingReader()
@@ -304,7 +325,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& refe
     }
 
     if (m_currentDrawingObject->m_type != XlsxDrawingObject::Unknown) {
-        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+        if (m_currentDrawingObject->isAnchoredToCell()) {
             XlsxDrawingObject::Position pos = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             Cell* cell = m_context->sheet->cell(pos.m_col, pos.m_row, true);
             cell->appendDrawing(m_currentDrawingObject);
@@ -510,22 +531,37 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
     return KoFilter::OK;
 }
 
-XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture()
+XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture():m_pictureWriter(0)
 {
-
+    m_pictureBuffer.open(QIODevice::ReadWrite);
 }
 
-void XlsxXmlEmbeddedPicture::setImageXml(const QString imageXml)
+XlsxXmlEmbeddedPicture::~XlsxXmlEmbeddedPicture()
 {
-   m_imageXml = imageXml;
+    delete m_pictureWriter;
 }
+
+
+KoXmlWriter* XlsxXmlEmbeddedPicture::pictureWriter()
+{
+    if (!m_pictureWriter) {
+        m_pictureWriter = new KoXmlWriter(&m_pictureBuffer);
+    }
+    return m_pictureWriter;
+}
+
 
 bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all needed attributes to .ods
 {
-    xmlWriter->addCompleteElement(m_imageXml.toUtf8());
+    Q_ASSERT(m_pictureWriter);
+    if (!m_pictureWriter || !m_pictureWriter->device()->size()){
+        return false;
+    }
 
+    xmlWriter->addCompleteElement(m_pictureWriter->device());
     return true;
 }
+
 
 // in PPTX we do not have pPr, so p@text:style-name should be added earlier
 //#define SETUP_PARA_STYLE_IN_READ_P

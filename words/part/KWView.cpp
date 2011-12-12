@@ -346,14 +346,17 @@ void KWView::setupActions()
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
-    action->setChecked(m_document->config().viewFrameBorders());
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, false);
+    action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
 
     action = new KAction(i18n("Show Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
+
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
-    action->setChecked(m_document->config().showFormattingChars());
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, false);
+    action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
 
@@ -361,7 +364,8 @@ void KWView::setupActions()
     action->setCheckable(true);
     actionCollection()->addAction("view_tableborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
-    action->setChecked(m_document->config().showTableBorders());
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, false);
+    action->setChecked(m_document->config().showTableBorders()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 

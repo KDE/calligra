@@ -85,7 +85,9 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
             << TaskWorkPackageModel::NodeActualEffort
             << TaskWorkPackageModel::NodeRemainingEffort
             << TaskWorkPackageModel::NodePlannedEffort
+            << TaskWorkPackageModel::NodeStartTime
             << TaskWorkPackageModel::NodeActualStart
+            << TaskWorkPackageModel::NodeEndTime
             << TaskWorkPackageModel::NodeActualFinish
             << TaskWorkPackageModel::ProjectName
             << TaskWorkPackageModel::ProjectManager;

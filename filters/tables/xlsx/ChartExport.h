@@ -60,6 +60,7 @@ public:
     //unsigned long m_colL, m_rwT;
 #endif
     qreal m_x, m_y, m_width, m_height; //in pt
+    qreal m_end_x, m_end_y; //in pt
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
@@ -74,14 +75,15 @@ private:
     Charting::Chart* m_chart;
     const MSOOXML::DrawingMLTheme* m_theme;
     bool sheetReplacement;
-    QString genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genChartAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genChartAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genPlotAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     void addShapePropertyStyle( /*const*/ Charting::Series* series, KoGenStyle& style, KoGenStyles& mainStyles );
-    void addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData = 1, bool strokes = true );
+    void addDataThemeToStyle( KoGenStyle& style, int dataNumber, int maxNumData = 1, bool strokes = true );
     QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
+    QColor labelFontColor() const;
     void writeInternalTable ( KoXmlWriter* bodyWriter );
     QList< QColor > m_palette;
     // tells if a 2003 color palette has been set

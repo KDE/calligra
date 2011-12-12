@@ -499,8 +499,8 @@ QList<QWidget *> KarbonGradientTool::createOptionWidgets()
     chooser->setObjectName("KarbonGradientChooser");
     chooser->setColumnCount(1);
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(gradientSelected(KoResource *)));
+    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(gradientSelected(KoResource*)));
 
     QList<QWidget *> widgets;
     m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));
