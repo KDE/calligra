@@ -292,7 +292,6 @@ void CanvasController::setPreferredCenter(const QPoint& viewPoint)
 
 void CanvasController::recenterPreferred()
 {
-    kDebug() << "BLEH";
 }
 
 void CanvasController::zoomTo(const QRect& rect)
