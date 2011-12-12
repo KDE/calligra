@@ -54,6 +54,8 @@
 #include <QtGui/QGraphicsWidget>
 #include <QtCore/QSettings>
 #include <QtCore/QFileInfo>
+#include <KoFindText.h>
+#include <KoShapeManager.h>
 
 /*!
 * extensions
@@ -80,6 +82,12 @@ CanvasController::CanvasController(QDeclarativeItem* parent)
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setClip(true);
     loadSettings();
+
+    QList<QTextDocument*> texts;
+    m_find = new KoFindText(texts, this);
+    connect(m_find, SIGNAL(updateCanvas()), SLOT(updateCanvasItem()));
+    connect(m_find, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect(m_find, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 void CanvasController::openDocument(const QString& path)
@@ -209,6 +217,10 @@ void CanvasController::openDocument(const QString& path)
         }
 
         setCanvas(m_canvasItem);
+
+        QList<QTextDocument*> texts;
+        KoFindText::findTextInShapes(m_canvasItem->shapeManager()->shapes(), texts);
+        m_find->addDocuments(texts);
     }
 
     kDebug() << "Requesting tool activation";
@@ -305,7 +317,8 @@ void CanvasController::zoomIn(const QPoint& center)
 
 void CanvasController::ensureVisible(KoShape* shape)
 {
-    kDebug() << shape;
+    setCameraX(shape->position().x());
+    setCameraY(shape->position().y());
 }
 
 void CanvasController::ensureVisible(const QRectF& rect, bool smooth)
@@ -603,7 +616,7 @@ void CanvasController::updateCanvasItem()
 {
     if (m_canvasItem) {
         switch (m_documentType) {
-        case CADocumentInfo::TextDocument:
+            case CADocumentInfo::TextDocument:
             dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
             break;
         case CADocumentInfo::Spreadsheet:
@@ -654,6 +667,40 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
         zoomToFit();
     }
     QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
+}
+
+QString CanvasController::searchString() const
+{
+    return m_searchString;
+}
+
+void CanvasController::setSearchString(const QString& string)
+{
+    m_searchString = string;
+
+    if (m_documentType == CADocumentInfo::TextDocument) {
+        if (m_find) {
+            m_find->find(m_searchString);
+        }
+    }
+
+    emit searchStringChanged();
+}
+
+void CanvasController::findMatchFound(const KoFindMatch &match)
+{
+    if (m_documentType != CADocumentInfo::TextDocument) {
+        return;
+    }
+    QTextCursor cursor = match.location().value<QTextCursor>();
+    cursor.position();
+    KWDocument *doc = qobject_cast<KWDocument*>(m_doc);
+    doc;
+}
+
+void CanvasController::findNoMatchFound()
+{
+    kDebug() << "FIND NO MATCH";
 }
 
 #include "CanvasController.moc"

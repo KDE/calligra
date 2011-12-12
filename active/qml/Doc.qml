@@ -63,6 +63,8 @@ Item {
 
         Component.onCompleted: documentLoaded.connect(initToolbar)
         onDocumentLoaded: docRootRect.documentLoaded()
+
+        //searchString: findToolbar.searchString
     }
 
     Button {
@@ -77,6 +79,15 @@ Item {
 
         onClicked: toggleEdit();
     }
+
+//     FindToolbar {
+//         id: findToolbar
+//         height: 32
+//
+//         anchors.left: parent.left
+//         anchors.right: parent.right
+//         anchors.bottom: parent.bottom
+//     }
 
     MouseArea {
         id: flickableMouseArea
