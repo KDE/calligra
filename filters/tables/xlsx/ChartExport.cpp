@@ -520,6 +520,38 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         bodyWriter->startElement("chart:axis");
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
+
+        bool useTheme = !chart()->m_areaFormat && m_theme;
+        if ( useTheme ) {
+            // Following assumes that we just need to invert the in genChartAreaStyle used font-color for the axis. It's
+            // not clear yet (means any documentation in the specs is missing) if that is really correct thing to do.
+            const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+            switch( styleID ) {
+                case( 33 ):
+                case( 34 ):
+                case( 35 ):
+                case( 36 ):
+                case( 37 ):
+                case( 38 ):
+                case( 39 ):
+                case( 40 ): {
+                    axisstyle.addProperty( "fo:font-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::TextType );
+                } break;
+                case( 41 ):
+                case( 42 ):
+                case( 43 ):
+                case( 44 ):
+                case( 45 ):
+                case( 46 ):
+                case( 47 ):
+                case( 48 ): {
+                    axisstyle.addProperty( "fo:font-color", colorScheme.value( "lt1" )->value().name(), KoGenStyle::TextType );
+                } break;
+                default:
+                    break;
+            }
+        }
+
         bodyWriter->addAttribute( "chart:style-name", styles.insert( axisstyle, "ch" ) );
         switch(axis->m_type) {
             case Charting::Axis::VerticalValueAxis:
