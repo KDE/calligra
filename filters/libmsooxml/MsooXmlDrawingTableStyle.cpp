@@ -39,7 +39,8 @@ DrawingTableStyleConverter::~DrawingTableStyleConverter()
 {
 }
 
-void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
+void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style,
+                                            int row, int column, const QPair<int, int> &spans)
 {
     if (!m_style) {
         return;
@@ -51,10 +52,10 @@ void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type typ
 //         styleProperties->bordersToEdgesOnly = true;
 //     }
 
-    TableStyleConverter::applyStyle(styleProperties, style, row, column);
+    TableStyleConverter::applyStyle(styleProperties, style, row, column, spans);
 }
 
-KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
+KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QPair<int, int> &spans)
 {
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < m_properties.rowCount());
@@ -67,23 +68,23 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 
     KoCellStyle::Ptr cellStyle = KoCellStyle::create();
 
-    //This is a somehow tangled process.
-    //First we have to apply the properties in the following order:
-    //* Whole table
-    //* Banded columns, even column banding
-    //* Banded rows, even row banding
-    //* First row, last row
-    //* First column, last column
-    //* Top left, top right, bottom left, bottom right
+    // When specified, the conditional formats are applied in the following
+    // order (therefore subsequent formats override properties on previous
+    // formats):
     //
-    //NOTE: Subsequent properties that apply override previous ones.
+    // * Whole table
+    // * Banded columns, even column banding
+    // * Banded rows, even row banding
+    // * First row, last row
+    // * First column, last column
+    // * Top left, top right, bottom left, bottom right
     //
-    //NOTE: The standard doesn't say what happens to colliding properties in
-    //the same hierarchy level (say, it's the first column and last column, or
-    //it's first row and last row at once, I assume left to right priority on
-    //the elements in the previous list.)
+    // NOTE: The standard doesn't say what happens to colliding properties in
+    // the same hierarchy level (say, it's the first column and last column, or
+    // it's first row and last row at once, I assume left to right priority on
+    // the elements in the previous list.)
     //
-    //See MSOOXML Table Styles §17.7.6 for details
+    // See MSOOXML Table Styles §17.7.6 for details.
 
     const DrawingTableStyleConverterProperties::Roles& role = m_properties.roles();
     const int lastRow = m_properties.rowCount() - 1;
@@ -92,14 +93,14 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
     kDebug() << "==> WholeTblStyle:";
 #endif
-    applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column);
+    applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
     kDebug() << "<== [END] WholeTblStyle:";
 #endif
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
     kDebug() << "==> localDefaultCellStyle:";
 #endif
-    TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column);
+    TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
     kDebug() << "<== [END] localDefaultCellStyle:";
 #endif
@@ -116,10 +117,10 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
                 if (column != 0) {
                     // Banding reversed
                     if ((column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
-                        applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column);
+                        applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column, spans);
                     }
                     else {
-                        applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
+                        applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column, spans);
                     }
                 }
             }
@@ -129,10 +130,10 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #endif
                 //Is the column in the even band?
                 if ((column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
-                    applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
+                    applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column, spans);
                 }
                 else {
-                    applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column);
+                    applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column, spans);
                 }
             }
         }
@@ -150,10 +151,10 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
                 if (row != 0) {
                     // In case the first row is activated, the banding applying is reversed
                     if( (row % (m_properties.rowBandSize() * 2)) < m_properties.rowBandSize()) {
-                        applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column);
+                        applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column, spans);
                     }
                     else {
-                        applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
+                        applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column, spans);
                     }
                 }
             }
@@ -163,12 +164,25 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #endif
                 //Is the row in the even band?
                 if( (row % (m_properties.rowBandSize() * 2)) < m_properties.rowBandSize()) {
-                    applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
+                    applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column, spans);
                 }
                 else {
-                    applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column);
+                    applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column, spans);
                 }
             }
+        }
+    }
+
+    //NOTE: According to test data, at least for the first table cell the
+    //FirstCol format applies before the FirstRow format.  Also the previous
+    //approach with RowBanded cells might be an option.
+
+    if(role & DrawingTableStyleConverterProperties::FirstCol) {
+        if(column == 0) {
+#ifdef MSOOXMLDRAWING_DEBUG_TABLES
+            kDebug() << "====> FirstCol:";
+#endif
+            applyStyle(DrawingTableStyle::FirstCol, cellStyle, row, column, spans);
         }
     }
 
@@ -177,7 +191,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> FirstRow:";
 #endif
-            applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column, spans);
         }
     }
 
@@ -186,25 +200,18 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> LastRow:";
 #endif
-            applyStyle(DrawingTableStyle::LastRow, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::LastRow, cellStyle, row, column, spans);
         }
     }
 
-    if(role & DrawingTableStyleConverterProperties::FirstCol) {
-        if(column == 0) {
-#ifdef MSOOXMLDRAWING_DEBUG_TABLES
-            kDebug() << "====> FirstCol:";
-#endif
-            applyStyle(DrawingTableStyle::FirstCol, cellStyle, row, column);
-        }
-    }
+
 
     if(role & DrawingTableStyleConverterProperties::LastCol) {
         if(column == lastColumn) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> LastCol:";
 #endif
-            applyStyle(DrawingTableStyle::LastCol, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::LastCol, cellStyle, row, column, spans);
         }
     }
 
@@ -213,7 +220,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> NeCell:";
 #endif
-            applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column, spans);
         }
     }
 
@@ -222,7 +229,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> NwCell:";
 #endif
-            applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column, spans);
         }
     }
 
@@ -231,7 +238,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> SeCell:";
 #endif
-            applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column, spans);
         }
     }
 
@@ -240,7 +247,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
             kDebug() << "====> SwCell:";
 #endif
-            applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column);
+            applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column, spans);
         }
     }
 
@@ -249,7 +256,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         kDebug() << "==> RowStyle:";
 #endif
-        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column);
+        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         kDebug() << "<== [END] RowStyle:";
 #endif
@@ -260,7 +267,7 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         kDebug() << "==> CellStyle:";
 #endif
-        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column);
+        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
         kDebug() << "<== [END] CellStyle:";
 #endif

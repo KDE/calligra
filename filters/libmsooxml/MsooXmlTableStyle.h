@@ -36,14 +36,16 @@ namespace MSOOXML {
 
 struct MSOOXML_EXPORT TableStyleProperties
 {
-    TableStyleProperties() {
+    TableStyleProperties()
+    :    target(Table)
+    {
 /*         bordersToEdgesOnly = false; */
-        target = Table;
     }
 
     enum Target {
         Table,
         TableRow,
+        TableColumn,
         TableCell
     };
 
@@ -169,17 +171,26 @@ public:
     TableStyleConverter(int row, int column);
     virtual ~TableStyleConverter();
 
-    virtual KoCellStyle::Ptr style(int row, int column) = 0;
+    virtual KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) = 0;
 
 protected:
-    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                    int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyTableBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyTableBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                int row, int column, const QPair<int, int> &spans);
+
+    void applyRowBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                              int row, int column, const QPair<int, int> &spans);
+
+    void applyColumnBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                 int row, int column, const QPair<int, int> &spans);
 
     void applyCellBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style);
 
-    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                         int row, int column);
 
     int m_row;
     int m_column;

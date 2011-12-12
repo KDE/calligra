@@ -107,17 +107,29 @@ TableStyleConverter::~TableStyleConverter()
 {
 }
 
-void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                     int row, int column, const QPair<int, int> &spans)
 {
     if(!styleProperties) {
         return;
     }
 
-    if (styleProperties->target == TableStyleProperties::TableCell) {
+    switch (styleProperties->target) {
+    case TableStyleProperties::TableRow:
+        applyRowBordersStyle(styleProperties, style, row, column, spans);
+        break;
+    case TableStyleProperties::TableColumn:
+        applyColumnBordersStyle(styleProperties, style, row, column, spans);
+        break;
+    case TableStyleProperties::TableCell:
         applyCellBordersStyle(styleProperties, style);
-    } else {
-        applyTableBordersStyle(styleProperties, style, row, column);
+        break;
+    default:
+        applyTableBordersStyle(styleProperties, style, row, column, spans);
+        break;
     }
+
+    //TODO: A similar logic to borders should be used for all other properties!
 
     applyBackground(styleProperties, style, row, column);
 
@@ -166,10 +178,11 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     }
 }
 
-void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                                 int row, int column, const QPair<int, int> &spans)
 {
-    const int lastRow = m_row - 1;
-    const int lastColumn = m_column - 1;
+    const int lastRow = m_row;
+    const int lastColumn = m_column;
 
     //Borders, are a bit tricky too; we have to take into account whether the cell
     //has borders facing other cells or facing the border of the table.
@@ -195,7 +208,7 @@ void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProp
     }
 
     if (setProperties & TableStyleProperties::BottomBorder) {
-        if (row == lastRow) {
+        if ((row + spans.first) == lastRow) {
             KoBorder::BorderData* bottomData;
             bottomData = &styleProperties->bottom;
             style->borders()->setBottomBorderData(*bottomData);
@@ -231,7 +244,7 @@ void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProp
     }
 
     if (setProperties & TableStyleProperties::RightBorder) {
-        if (column == lastColumn) {
+        if ((column + spans.second) == lastColumn) {
             KoBorder::BorderData* rightData;
             rightData = &styleProperties->right;
             style->borders()->setRightBorderData(*rightData);
@@ -251,14 +264,10 @@ void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProp
     if (setProperties & TableStyleProperties::InsideVBorder) {
         KoBorder::BorderData* insideVData;
         insideVData = &styleProperties->insideV;
-        if (column == lastColumn) {
+        if (column != 0) {
             style->borders()->setLeftBorderData(*insideVData);
         }
-        else if (column == 0) {
-            style->borders()->setRightBorderData(*insideVData);
-        }
-        else {
-            style->borders()->setLeftBorderData(*insideVData);
+        if ((column + spans.second) != lastColumn) {
             style->borders()->setRightBorderData(*insideVData);
         }
     }
@@ -266,14 +275,10 @@ void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProp
     if (setProperties & TableStyleProperties::InsideHBorder) {
         KoBorder::BorderData* insideHData;
         insideHData = &styleProperties->insideH;
-        if (row == lastRow) {
+        if (row != 0) {
             style->borders()->setTopBorderData(*insideHData);
         }
-        else if (row == 0) {
-            style->borders()->setBottomBorderData(*insideHData);
-        }
-        else {
-            style->borders()->setTopBorderData(*insideHData);
+        if ((row + spans.first) != lastRow) {
             style->borders()->setBottomBorderData(*insideHData);
         }
     }
@@ -313,6 +318,122 @@ void TableStyleConverter::applyCellBordersStyle(TableStyleProperties* props, KoC
         style->borders()->setTrblBorderData(props->tr2bl);
     }
     //TODO: process InsideHBorder, InsideVBorder
+}
+
+void TableStyleConverter::applyRowBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
+                                               int row, int column, const QPair<int, int> &spans)
+{
+    const int lastColumn = m_column;
+    const int lastRow = m_row;
+
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        style->borders()->setTopBorderData(props->top);
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        style->borders()->setBottomBorderData(props->bottom);
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        if (column == 0) {
+            style->borders()->setLeftBorderData(props->left);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        if ((column + spans.second) == lastColumn) {
+            style->borders()->setRightBorderData(props->right);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &props->insideH;
+        if (row != 0) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        if ((row + spans.first) != lastRow) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &props->insideV;
+        if (column != 0) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        if ((column + spans.second) != lastColumn) {
+            style->borders()->setRightBorderData(*insideVData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(props->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(props->tr2bl);
+    }
+}
+
+void TableStyleConverter::applyColumnBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
+                                                  int row, int column, const QPair<int, int> &spans)
+{
+    const int lastColumn = m_column;
+    const int lastRow = m_row;
+
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        if (row == 0) {
+            style->borders()->setTopBorderData(props->top);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        if ((row + spans.first) == lastRow) {
+            style->borders()->setBottomBorderData(props->bottom);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        style->borders()->setLeftBorderData(props->left);
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        style->borders()->setRightBorderData(props->right);
+    }
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &props->insideH;
+        if (row != 0) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        if ((row + spans.first) != lastRow) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &props->insideV;
+        if (column != 0) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        if ((column + spans.second) != lastColumn) {
+            style->borders()->setRightBorderData(*insideVData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(props->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(props->tr2bl);
+    }
 }
 
 TableStyle::TableStyle()
