@@ -474,18 +474,20 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
       bodyWriter->endElement(); // chart:title
     //}
 
-    bodyWriter->startElement("chart:legend");
-    bodyWriter->addAttribute("chart:legend-position", "end");
+    if (chart()->m_legend) {
+        bodyWriter->startElement("chart:legend");
+        bodyWriter->addAttribute("chart:legend-position", "end");
 
-    KoGenStyle legendstyle(KoGenStyle::ChartAutoStyle, "chart");
+        KoGenStyle legendstyle(KoGenStyle::ChartAutoStyle, "chart");
 
-    QColor labelColor = labelFontColor();
-    if (labelColor.isValid())
-        legendstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
+        QColor labelColor = labelFontColor();
+        if (labelColor.isValid())
+            legendstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
 
-    bodyWriter->addAttribute( "chart:style-name", styles.insert( legendstyle, "lg" ) );
+        bodyWriter->addAttribute( "chart:style-name", styles.insert( legendstyle, "lg" ) );
 
-    bodyWriter->endElement(); // chart:legend
+        bodyWriter->endElement(); // chart:legend
+    }
 
     bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 

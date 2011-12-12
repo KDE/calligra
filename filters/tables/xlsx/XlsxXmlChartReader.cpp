@@ -1050,6 +1050,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_formatCode()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 {
     READ_PROLOGUE
+    if (!m_context->m_chart->m_legend) {
+        m_context->m_chart->m_legend = new Charting::Legend();
+    }
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
