@@ -28,6 +28,7 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxUtils.h"
+#include "NumberFormatParser.h"
 
 #define MSOOXML_CURRENT_NS "c"
 #define MSOOXML_CURRENT_CLASS XlsxXmlChartReader
@@ -94,7 +95,7 @@ public:
 
 QString Tx::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,"string");
+    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,KoGenStyle::NumericTextStyle);
     return m_strRef.m_f;
 }
 
@@ -111,23 +112,30 @@ public:
 
 QString Cat::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    const bool dateFormat = !m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General";
     if (m_numRef.m_numCache.m_ptCount != 0) {
-        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, dateFormat ? "date-format" : "float", m_numRef.m_numCache.formatCode );
+        KoGenStyle::Type formatType = KoGenStyle::NumericNumberStyle;
+        if (!m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General") {
+            KoGenStyles dummyStyles;
+            NumberFormatParser::setStyles(&dummyStyles);
+            KoGenStyle style = NumberFormatParser::parse(m_numRef.m_numCache.formatCode);
+            formatType = style.type();
+            NumberFormatParser::setStyles(0);
+        }
+        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, formatType, m_numRef.m_numCache.formatCode );
         return m_numRef.m_f;
     }
 
-    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,"string");
+    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,KoGenStyle::NumericTextStyle);
     return m_strRef.m_f;
 }
 
 QString Cat::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 {
     if (m_numLit.m_ptCount != 0) {
-        return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,"float");
+        return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,KoGenStyle::NumericNumberStyle);
     }
 
-    return chartReader->AlocateAndWriteIntoInternalTable(m_strLit.m_cache,"string");
+    return chartReader->AlocateAndWriteIntoInternalTable(m_strLit.m_cache,KoGenStyle::NumericTextStyle);
 }
 
 class Val {
@@ -141,13 +149,13 @@ public:
 
 QString Val::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,KoGenStyle::NumericNumberStyle);
     return m_numRef.m_f;
 }
 
 QString Val::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,"float");
+    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,KoGenStyle::NumericNumberStyle);
 }
 
 class XVal {
@@ -164,21 +172,21 @@ public:
 QString XVal::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
     if (m_numRef.m_numCache.m_ptCount != 0) {
-        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,KoGenStyle::NumericNumberStyle);
         return m_numRef.m_f;
     }
 
-    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,"string");
+    chartReader->WriteIntoInternalTable(m_strRef.m_f,m_strRef.m_strCache.m_cache,KoGenStyle::NumericTextStyle);
     return m_strRef.m_f;
 }
 
 QString XVal::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 {
     if (m_numLit.m_ptCount != 0) {
-        return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,"float");
+        return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,KoGenStyle::NumericNumberStyle);
     }
 
-    return chartReader->AlocateAndWriteIntoInternalTable(m_strLit.m_cache,"string");
+    return chartReader->AlocateAndWriteIntoInternalTable(m_strLit.m_cache,KoGenStyle::NumericTextStyle);
 }
 
 
@@ -193,13 +201,13 @@ public:
 
 QString YVal::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,KoGenStyle::NumericNumberStyle);
     return m_numRef.m_f;
 }
 
 QString YVal::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,"float");
+    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,KoGenStyle::NumericNumberStyle);
 }
 
 
@@ -214,13 +222,13 @@ public:
 
 QString BubbleSize::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+    chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,KoGenStyle::NumericNumberStyle);
     return m_numRef.m_f;
 }
 
 QString BubbleSize::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 {
-    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,"float");
+    return chartReader->AlocateAndWriteIntoInternalTable(m_numLit.m_cache,KoGenStyle::NumericNumberStyle);
 }
 
 class Ser
@@ -1042,6 +1050,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_formatCode()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 {
     READ_PROLOGUE
+    if (!m_context->m_chart->m_legend) {
+        m_context->m_chart->m_legend = new Charting::Legend();
+    }
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -3310,7 +3321,7 @@ int charToInt( const QString& string )
     return ret;
 }
 
-QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, QString format)
+QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, KoGenStyle::Type formatType)
 {
     if (buffer.size() == 0)
         return QString();
@@ -3322,26 +3333,70 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
     range += "!$" + columnName(internalTable->maxColumn()+1) +"$" + "1" + ":$" + columnName(internalTable->maxColumn()+1) +
              "$" + QString::number(buffer.size());
 
-    WriteIntoInternalTable(range, buffer, format);
+    WriteIntoInternalTable(range, buffer, formatType);
     return range;
 }
 
-QString convertToFormat( const QString& format, const QString& value )
+QString convertToFormat( KoGenStyle::Type formatType )
 {
-    QString res = value;
-    if ( !format.isEmpty() && format != QString::fromLatin1( "General" ) )
-    {
-        int ivalue = value.toInt();
-        QString newFormat = format;
-        newFormat.replace( QRegExp( "[m{1}]" ), "M" );
-        QDateTime time( QDate( 1899, 12, 30 ) );
-        time = time.addDays( ivalue );
-        res = time.toString( newFormat );
+    switch (formatType) {
+        case KoGenStyle::NumericDateStyle:
+            return "date";
+        case KoGenStyle::NumericTimeStyle:
+            return "time";
+        case KoGenStyle::NumericPercentageStyle:
+            return "percentage";
+        case KoGenStyle::NumericCurrencyStyle:
+            return "currency";
+        case KoGenStyle::NumericTextStyle:
+            return "string";
+        case KoGenStyle::NumericBooleanStyle:
+            return "boolean";
+        case KoGenStyle::NumericNumberStyle:
+        case KoGenStyle::NumericFractionStyle:
+        case KoGenStyle::NumericScientificStyle:
+            return "float";
+        default:
+            kWarning() << "Unhandled format-type=" << formatType;
+            break;
     }
-    return res;
+    return "string";
 }
 
-void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString)
+QString convertToFormat( KoGenStyle::Type formatType, const QString& formatString, const QString& value )
+{
+    switch (formatType) {
+        case KoGenStyle::NumericDateStyle: {
+            QString f = formatString;
+            f.replace( QRegExp( "[m{1}]" ), "M" );
+            QDateTime dt( QDate( 1899, 12, 30 ) );
+            return dt.addDays( value.toInt() ).toString( f );
+        }
+        case KoGenStyle::NumericTimeStyle: {
+            QTime t(0,0,0,0);
+            t.addSecs( value.toInt() );
+            return t.toString( Qt::ISODate );
+        }
+        case KoGenStyle::NumericPercentageStyle: {
+            return value + '%';
+        }
+        /*TODO
+        case KoGenStyle::NumericCurrencyStyle:
+        case KoGenStyle::NumericBooleanStyle:
+        case KoGenStyle::NumericFractionStyle:
+        case KoGenStyle::NumericScientificStyle:
+        */
+        case KoGenStyle::NumericNumberStyle:
+        case KoGenStyle::NumericTextStyle:
+            return value;
+        default:
+            kWarning() << "Unhandled format-type=" << formatType;
+            break;
+    }
+    return value;
+}
+
+void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString)
 {
     if(range.isEmpty()) {
         return;
@@ -3383,8 +3438,8 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             int bufferIndex = 0;
             for(int i = startColumn; i <=endColumn; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(i,startRow,true);
-                cell->m_valueType = format;
-                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
+                cell->m_valueType = convertToFormat( formatType );
+                cell->m_value = convertToFormat( formatType, formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << startRow;
@@ -3397,8 +3452,8 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             int bufferIndex = 0;
             for(int i = startRow; i <=endRow; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(startColumn,i,true);
-                cell->m_valueType = format;
-                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
+                cell->m_valueType = convertToFormat( formatType );
+                cell->m_value = convertToFormat( formatType, formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << i;
@@ -3408,8 +3463,8 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
     } else {
         if (buffer.size() != 0) {
             Charting::Cell *cell = internalTable->cell(startColumn,startRow,true);
-            cell->m_valueType = format;
-            cell->m_value = convertToFormat( formatString, buffer[ 0 ] );
+            cell->m_valueType = convertToFormat( formatType );
+            cell->m_value = convertToFormat( formatType, formatString, buffer[ 0 ] );
 //            kDebug()<<"m_value " << format;
 //            kDebug()<<"buffer[bufferIndex] " << buffer[0];
 //            kDebug()<<"cell row" << startRow;
