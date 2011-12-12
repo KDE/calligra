@@ -82,7 +82,7 @@ class XlsxDrawingObject {
         KoXmlWriter* setShape(XlsxShape* shape);
         void save(KoXmlWriter* xmlWriter);
 
-        KoXmlWriter * pictureElement();
+        KoXmlWriter * pictureWriter();
 
 
         /**
@@ -183,7 +183,7 @@ public:
      * the image anchored/embedded to element like cell.
      * The ownership of this pointer belong to XlsxXmlEmbeddedPicture class.
      * */
-    KoXmlWriter * pictureElement();
+    KoXmlWriter * pictureWriter();
 
     /**
      * Save the .xml part of the picture (the picture itself isn't stored here)
@@ -192,7 +192,7 @@ public:
     bool saveXml(KoXmlWriter *xmlWriter);
 
 private:
-    KoXmlWriter * m_pictureElement;
+    KoXmlWriter * m_pictureWriter;
     QBuffer m_pictureBuffer;
 };
 
