@@ -14,6 +14,7 @@ set(pptximport_PART_SRCS
     PptxXmlCommentAuthorsReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(pptximport ${pptximport_PART_SRCS})

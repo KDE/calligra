@@ -1018,7 +1018,15 @@ void ChartExport::writeInternalTable ( KoXmlWriter* bodyWriter )
                     if (!cell->m_value.isEmpty()) {
                         if (!cell->m_valueType.isEmpty()) {
                             bodyWriter->addAttribute("office:value-type", cell->m_valueType);
-                            if (cell->m_valueType == "float") {
+                            if (cell->m_valueType == "string") {
+                                bodyWriter->addAttribute("office:string-value", cell->m_value);
+                            } else if (cell->m_valueType == "boolean") {
+                                bodyWriter->addAttribute("office:boolean-value", cell->m_value);
+                            } else if (cell->m_valueType == "date") {
+                                bodyWriter->addAttribute("office:date-value", cell->m_value);
+                            } else if (cell->m_valueType == "time") {
+                                bodyWriter->addAttribute("office:time-value", cell->m_value);
+                            } else { // float, percentage and currency including fraction and scientific
                                 bodyWriter->addAttribute("office:value", cell->m_value);
                             }
                         }
