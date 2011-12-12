@@ -113,7 +113,12 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
         return;
     }
 
-    applyBordersStyle(styleProperties, style, row, column);
+    if (styleProperties->target == TableStyleProperties::TableCell) {
+        applyCellBordersStyle(styleProperties, style);
+    } else {
+        applyTableBordersStyle(styleProperties, style, row, column);
+    }
+
     applyBackground(styleProperties, style, row, column);
 
     if (styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
@@ -161,7 +166,7 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     }
 }
 
-void TableStyleConverter::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     const int lastRow = m_row - 1;
     const int lastColumn = m_column - 1;
@@ -172,77 +177,142 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
     if (setProperties & TableStyleProperties::TopBorder) {
-        KoBorder::BorderData* topData;
         if (row == 0) {
+            KoBorder::BorderData* topData;
             topData = &styleProperties->top;
-        }
-        else {
-            topData = &styleProperties->insideH;
-            if (topData->innerPen.widthF() == 0) {
-                topData = &styleProperties->top;
-            }
-        }
-        if (!styleProperties->bordersToEdgesOnly || row == 0) {
             style->borders()->setTopBorderData(*topData);
+
+//             if (!styleProperties->bordersToEdgesOnly) {
+//                 style->borders()->setTopBorderData(*topData);
+//             }
         }
+//         else {
+//             topData = &styleProperties->insideH;
+//             if (topData->innerPen.widthF() == 0) {
+//                 topData = &styleProperties->top;
+//             }
+//         }
     }
 
     if (setProperties & TableStyleProperties::BottomBorder) {
-        KoBorder::BorderData* bottomData;
         if (row == lastRow) {
+            KoBorder::BorderData* bottomData;
             bottomData = &styleProperties->bottom;
-        }
-        else {
-            bottomData = &styleProperties->insideH;
-            if (bottomData->innerPen.widthF() == 0) {
-                bottomData = &styleProperties->bottom;
-            }
-        }
-        if (!styleProperties->bordersToEdgesOnly || row == lastRow) {
             style->borders()->setBottomBorderData(*bottomData);
+
+//             if (!styleProperties->bordersToEdgesOnly) {
+//                 style->borders()->setBottomBorderData(*bottomData);
+//             }
         }
+//         else {
+//             bottomData = &styleProperties->insideH;
+//             if (bottomData->innerPen.widthF() == 0) {
+//                 bottomData = &styleProperties->bottom;
+//             }
+//         }
     }
 
     if (setProperties & TableStyleProperties::LeftBorder) {
-        KoBorder::BorderData* leftData;
         if (column == 0) {
+            KoBorder::BorderData* leftData;
             leftData = &styleProperties->left;
-        }
-        else {
-            leftData = &styleProperties->insideV;
-            if (leftData->innerPen.widthF() == 0) {
-                leftData = &styleProperties->left;
-            }
-        }
-        if (!styleProperties->bordersToEdgesOnly || column == 0) {
             style->borders()->setLeftBorderData(*leftData);
+
+//             if (!styleProperties->bordersToEdgesOnly) {
+//                 style->borders()->setLeftBorderData(*leftData);
+//             }
         }
+//         else {
+//             leftData = &styleProperties->insideV;
+//             if (leftData->innerPen.widthF() == 0) {
+//                 leftData = &styleProperties->left;
+//             }
+//         }
     }
 
     if (setProperties & TableStyleProperties::RightBorder) {
-        KoBorder::BorderData* rightData;
         if (column == lastColumn) {
+            KoBorder::BorderData* rightData;
             rightData = &styleProperties->right;
+            style->borders()->setRightBorderData(*rightData);
+
+//             if (!styleProperties->bordersToEdgesOnly) {
+//                 style->borders()->setRightBorderData(*rightData);
+//             }
+        }
+//         else {
+//             rightData = &styleProperties->insideV;
+//             if (rightData->innerPen.widthF() == 0) {
+//                 rightData = &styleProperties->right;
+//             }
+//         }
+    }
+
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &styleProperties->insideV;
+        if (column == lastColumn) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        else if (column == 0) {
+            style->borders()->setRightBorderData(*insideVData);
         }
         else {
-            rightData = &styleProperties->insideV;
-            if (rightData->innerPen.widthF() == 0) {
-                rightData = &styleProperties->right;
-            }
+            style->borders()->setLeftBorderData(*insideVData);
+            style->borders()->setRightBorderData(*insideVData);
         }
-        if (!styleProperties->bordersToEdgesOnly || column == lastColumn) {
-            style->borders()->setRightBorderData(*rightData);
+    }
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &styleProperties->insideH;
+        if (row == lastRow) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        else if (row == 0) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
+        else {
+            style->borders()->setTopBorderData(*insideHData);
+            style->borders()->setBottomBorderData(*insideHData);
         }
     }
 
     if (setProperties & TableStyleProperties::Tl2brBorder) {
-        KoBorder::BorderData* tl2brData = &styleProperties->tl2br;
-        style->borders()->setTlbrBorderData(*tl2brData);
+        style->borders()->setTlbrBorderData(styleProperties->tl2br);
     }
     if (setProperties & TableStyleProperties::Tr2blBorder) {
-        KoBorder::BorderData* tr2blData = &styleProperties->tr2bl;
-        style->borders()->setTrblBorderData(*tr2blData);
+        style->borders()->setTrblBorderData(styleProperties->tr2bl);
     }
+}
+
+void TableStyleConverter::applyCellBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style)
+{
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        style->borders()->setTopBorderData(props->top);
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        style->borders()->setBottomBorderData(props->bottom);
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        style->borders()->setLeftBorderData(props->left);
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        style->borders()->setRightBorderData(props->right);
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(props->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(props->tr2bl);
+    }
+    //TODO: process InsideHBorder, InsideVBorder
 }
 
 TableStyle::TableStyle()

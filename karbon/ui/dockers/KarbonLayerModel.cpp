@@ -141,28 +141,6 @@ QModelIndex KarbonLayerModel::parent(const QModelIndex &child) const
         return QModelIndex();
 
     return parentIndexFromShape(childShape);
-
-    // check if child shape is a layer, and return invalid model index if it is
-    KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>(childShape);
-    if (childlayer)
-        return QModelIndex();
-
-    // get the children's parent shape
-    KoShapeContainer *parentShape = childShape->parent();
-    if (! parentShape)
-        return QModelIndex();
-
-    // check if the parent is a layer
-    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>(parentShape);
-    if (parentLayer)
-        return createIndex(m_document->layers().indexOf(parentLayer), 0, parentShape);
-
-    // get the grandparent to determine the row of the parent shape
-    KoShapeContainer *grandParentShape = parentShape->parent();
-    if (! grandParentShape)
-        return QModelIndex();
-
-    return createIndex(indexFromChild(grandParentShape, parentShape), 0, parentShape);
 }
 
 QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const

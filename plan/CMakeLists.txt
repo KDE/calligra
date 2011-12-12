@@ -71,7 +71,6 @@ set(planprivate_LIB_SRCS
 
     about/aboutpage.cpp
 
-    kptpackage.cpp
     KPlatoXmlLoader.cpp
 )
 

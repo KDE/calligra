@@ -157,7 +157,42 @@ QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const Char
     return mainStyles.insert( gradStyle, "ms_chart_gradient" );
 }
 
-QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
+QColor ChartExport::labelFontColor() const
+{
+    bool useTheme = !chart()->m_areaFormat && m_theme;
+    if ( useTheme ) {
+        // Following assumes that we just need to invert the in genChartAreaStyle used font-color for the axis. It's
+        // not clear yet (means any documentation in the specs is missing) if that is really correct thing to do.
+        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+        switch( chart()->m_style ) {
+            case( 33 ):
+            case( 34 ):
+            case( 35 ):
+            case( 36 ):
+            case( 37 ):
+            case( 38 ):
+            case( 39 ):
+            case( 40 ): {
+                return colorScheme.value( "dk1" )->value();
+            } break;
+            case( 41 ):
+            case( 42 ):
+            case( 43 ):
+            case( 44 ):
+            case( 45 ):
+            case( 46 ):
+            case( 47 ):
+            case( 48 ): {
+                return colorScheme.value( "lt1" )->value();
+            } break;
+            default:
+                break;
+        }
+    }
+    return QColor();
+}
+
+QString ChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
     if ( chart()->m_fillGradient ) {
         style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
@@ -167,7 +202,7 @@ QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoG
         bool useTheme = !chart()->m_areaFormat && m_theme;
         if ( useTheme ) {
             const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-            switch( styleID ) {
+            switch( chart()->m_style ) {
                 case( 33 ):
                 case( 34 ):
                 case( 35 ):
@@ -194,8 +229,13 @@ QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoG
             }
         }
         if ( !useTheme ) {
-            style.addProperty( "draw:fill-color", chart()->m_areaFormat && chart()->m_areaFormat->m_fill ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
-            if ( chart()->m_areaFormat && chart()->m_areaFormat->m_foreground.alpha() < 255 )
+            QColor color;
+            if ( chart()->m_areaFormat && chart()->m_areaFormat->m_fill && chart()->m_areaFormat->m_foreground.isValid() )
+                color = chart()->m_areaFormat->m_foreground;
+            else
+                color = QColor("#FFFFFF");
+            style.addProperty( "draw:fill-color", color.name(), KoGenStyle::GraphicType );
+            if ( color.alpha() < 255 )
                 style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
     }
@@ -203,14 +243,14 @@ QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoG
 }
 
 
-QString ChartExport::genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
+QString ChartExport::genChartAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles )
 {
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
-    return genChartAreaStyle( styleID, style, styles, mainStyles );
+    return genChartAreaStyle( style, styles, mainStyles );
 }
 
 
-QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
+QString ChartExport::genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
     Charting::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat && chart()->m_plotArea->m_areaFormat->m_fill ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
     if ( chart()->m_plotAreaFillGradient ) {
@@ -221,7 +261,7 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
         bool useTheme = !areaFormat && m_theme;
         if ( useTheme ) {
             const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-            switch( styleID ) {
+            switch( chart()->m_style ) {
                 case( 33 ):
                 case( 34 ): {
                     style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.2 ).name(), KoGenStyle::GraphicType );
@@ -232,7 +272,7 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
                 case( 38 ):
                 case( 39 ):
                 case( 40 ): {
-                    QString prop = QString::fromLatin1( "accent%1" ).arg( styleID - 34 );
+                    QString prop = QString::fromLatin1( "accent%1" ).arg( chart()->m_style - 34 );
                     style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
                 } break;
                 case( 41 ):
@@ -251,8 +291,13 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
             }
         }
         if ( !useTheme ) {
-            style.addProperty( "draw:fill-color", areaFormat ? areaFormat->m_foreground.name() : (paletteSet ? "#C0C0C0" : "#FFFFFF"), KoGenStyle::GraphicType );
-            if ( areaFormat && areaFormat->m_foreground.alpha() < 255 )
+            QColor color;
+            if ( areaFormat && areaFormat->m_foreground.isValid() )
+                color = areaFormat->m_foreground;
+            else
+                color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
+            style.addProperty( "draw:fill-color", color.name(), KoGenStyle::GraphicType );
+            if ( color.alpha() < 255 )
                 style.addProperty( "draw:opacity", QString( "%1\%" ).arg( areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
     }
@@ -304,10 +349,10 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
     }
 }
 
-QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
+QString ChartExport::genPlotAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles )
 {
     KoGenStyle style(KoGenStyle::ChartAutoStyle/*, "chart"*/);
-    return genPlotAreaStyle( styleID, style, styles, mainStyles );
+    return genPlotAreaStyle( style, styles, mainStyles );
 }
 
 QString replaceSheet( const QString &originalString, const QString &replacementSheet )
@@ -374,8 +419,6 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if(!chart() || !chart()->m_impl || m_href.isEmpty())
         return false;
     
-    const int styleID = chart()->m_style;
-
     KoGenStyles styles;
     KoGenStyles mainStyles;
 
@@ -401,7 +444,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->addAttributePt("svg:height", m_height);
     }
     
-    bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styleID, styles, mainStyles ) );
+    bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styles, mainStyles ) );
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     //foreach(Charting::Text* t, chart()->m_texts) {
@@ -410,7 +453,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         in order to center it we need to know the textbox size, and to do that we need
         the used font metrics.
 
-        Also, for now, the defualt implementation of KChart centers
+        Also, for now, the default implementation of KChart centers
         the title, so we get close to the expected behavior. We ignore any offset though.
 
         Nonetheless, the formula should be something like this:
@@ -431,10 +474,20 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
       bodyWriter->endElement(); // chart:title
     //}
 
-    //<chart:legend chart:legend-position="end" svg:x="7.031cm" svg:y="2.843cm" chart:style-name="ch2"/>
-    bodyWriter->startElement("chart:legend");
-    bodyWriter->addAttribute("chart:legend-position", "end");
-    bodyWriter->endElement(); // chart:legend
+    if (chart()->m_legend) {
+        bodyWriter->startElement("chart:legend");
+        bodyWriter->addAttribute("chart:legend-position", "end");
+
+        KoGenStyle legendstyle(KoGenStyle::ChartAutoStyle, "chart");
+
+        QColor labelColor = labelFontColor();
+        if (labelColor.isValid())
+            legendstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
+
+        bodyWriter->addAttribute( "chart:style-name", styles.insert( legendstyle, "lg" ) );
+
+        bodyWriter->endElement(); // chart:legend
+    }
 
     bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 
@@ -477,7 +530,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if( chart()->m_f100 ) {
         chartstyle.addProperty("chart:percentage", "true");
     }
-    bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( styleID, chartstyle, styles, mainStyles ) );
+    bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( chartstyle, styles, mainStyles ) );
 
     QString verticalCellRangeAddress = chart()->m_verticalCellRangeAddress;
 // FIXME microsoft treats the regions from this area in a different order, so dont use it or x and y values will be switched
@@ -510,6 +563,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         bodyWriter->startElement("chart:axis");
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
+
+        QColor labelColor = labelFontColor();
+        if (labelColor.isValid())
+            axisstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
+
         bodyWriter->addAttribute( "chart:style-name", styles.insert( axisstyle, "ch" ) );
         switch(axis->m_type) {
             case Charting::Axis::VerticalValueAxis:
@@ -642,7 +700,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
 
         if ( chart()->m_impl->name() != "circle" && chart()->m_impl->name() != "ring" )
-            addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count(), lines );
+            addDataThemeToStyle( seriesstyle, curSerNum, chart()->m_series.count(), lines );
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
 
@@ -735,23 +793,34 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
-            if ( chart()->m_impl->name() == "circle" || chart()->m_impl->name() == "ring" )
-            {
-                if ( paletteSet )
-                {
-                    if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
-                    {
-                      gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-                      gs.addProperty( "draw:fill-color", m_palette.at( 16 + j ).name(), KoGenStyle::GraphicType );
+
+            if ( chart()->m_impl->name() == "circle" || chart()->m_impl->name() == "ring" ) {
+                QColor fillColor;
+                if ( j < series->m_dataPoints.count() ) {
+                    Charting::DataPoint *dataPoint = series->m_dataPoints[j];
+                    if ( dataPoint->m_areaFormat ) {
+                        fillColor = dataPoint->m_areaFormat->m_foreground;
                     }
                 }
-                else
-                    addDataThemeToStyle( styleID, gs, j, series->m_countYValues, lines );
+                if ( fillColor.isValid() ) {
+                    gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+                    gs.addProperty( "draw:fill-color", fillColor.name(), KoGenStyle::GraphicType );
+                }
+                else if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker ) {
+                    if ( paletteSet ) {
+                        gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+                        gs.addProperty( "draw:fill-color", m_palette.at( 16 + j ).name(), KoGenStyle::GraphicType );
+                    }
+                    else {
+                        addDataThemeToStyle( gs, j, series->m_countYValues, lines );
+                    }
+                }
             }/*
             else
             {
-                addSeriesThemeToStyle( styleID, gs, curSerNum, chart()->m_series.count() );
+                addSeriesThemeToStyle( gs, curSerNum, chart()->m_series.count() );
             }*/
+
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart:style-name", styles.insert(gs, "ch"));
@@ -848,7 +917,7 @@ inline QColor shadeColor( const QColor& col, qreal factor )
     return result;
 }
 
-void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData, bool strokes )
+void ChartExport::addDataThemeToStyle( KoGenStyle& style, int dataNumber, int maxNumData, bool strokes )
 {
     if (!m_theme) return;
 
@@ -868,7 +937,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     const int rounds = dataNumber / 6;
     const int maxRounds = maxNumData / 6 + 1;
     QColor seriesColor;
-    if ( std::find( patternTwoIndexes, patternTwoIndexes + 6, styleID ) != patternTwoIndexes + 6 )
+    if ( std::find( patternTwoIndexes, patternTwoIndexes + 6, chart()->m_style ) != patternTwoIndexes + 6 )
     {
         const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( ( dataNumber % 6 ) + 1 );
         
@@ -877,7 +946,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
         if ( rounds > 1 )
             seriesColor = tintColor( seriesColor, tintFactor );        
     }
-    else if ( std::find( patternOneIndexes, patternOneIndexes + 5, styleID ) != patternOneIndexes + 5 )
+    else if ( std::find( patternOneIndexes, patternOneIndexes + 5, chart()->m_style ) != patternOneIndexes + 5 )
     {
         const QString themeColorString = QString::fromLatin1( "dk1" );
         seriesColor = colorScheme.value( themeColorString )->value();
@@ -887,7 +956,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
         if ( rounds > 1 )
             seriesColor = tintColor( seriesColor, tintFactor );
     }
-    else if ( std::find( patternFourIndexes, patternFourIndexes + 5, styleID ) != patternFourIndexes + 5 )
+    else if ( std::find( patternFourIndexes, patternFourIndexes + 5, chart()->m_style ) != patternFourIndexes + 5 )
     {
         const QString themeColorString = QString::fromLatin1( "dk1" );
         seriesColor = colorScheme.value( themeColorString )->value();
@@ -901,7 +970,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     {
         for ( int i = 0; i < fadePatterns.count(); ++i )
         {
-            if ( std::find( fadePatterns[ i ], fadePatterns[ i ] + 6, styleID ) != fadePatterns[ i ] + 6 )
+            if ( std::find( fadePatterns[ i ], fadePatterns[ i ] + 6, chart()->m_style ) != fadePatterns[ i ] + 6 )
             {
                 const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( i + 1 );
                 seriesColor = colorScheme.value( themeColorString )->value();
@@ -965,7 +1034,15 @@ void ChartExport::writeInternalTable ( KoXmlWriter* bodyWriter )
                     if (!cell->m_value.isEmpty()) {
                         if (!cell->m_valueType.isEmpty()) {
                             bodyWriter->addAttribute("office:value-type", cell->m_valueType);
-                            if (cell->m_valueType == "float") {
+                            if (cell->m_valueType == "string") {
+                                bodyWriter->addAttribute("office:string-value", cell->m_value);
+                            } else if (cell->m_valueType == "boolean") {
+                                bodyWriter->addAttribute("office:boolean-value", cell->m_value);
+                            } else if (cell->m_valueType == "date") {
+                                bodyWriter->addAttribute("office:date-value", cell->m_value);
+                            } else if (cell->m_valueType == "time") {
+                                bodyWriter->addAttribute("office:time-value", cell->m_value);
+                            } else { // float, percentage and currency including fraction and scientific
                                 bodyWriter->addAttribute("office:value", cell->m_value);
                             }
                         }

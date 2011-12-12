@@ -60,6 +60,7 @@ Comment=PostgreSQL Import Plugin for Kexi
 Comment[nb]=PostgreSQL import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de PostgreSQL para o Kexi
 Comment[pt_BR]=Plugin de Importação do PostgreSQL para o Kexi
+Comment[ru]=Драйвер миграции PostrgeSQL для Kexi
 Comment[sv]=PostgreSQL importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з PostgreSQL для Kexi
 Comment[x-test]=xxPostgreSQL Import Plugin for Kexixx

@@ -28,16 +28,8 @@
 #include "kexi_export.h"
 #include <calligraversion.h>
 
-#ifdef CUSTOM_VERSION /* user-friendly version info */
-# include "custom_global.h"
-#else /* default */
-# define KEXI_APP_NAME "Kexi"
-#endif
-
-#ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
-#endif
-
+#define KEXI_APP_NAME "Kexi"
+#define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
 #define KEXI_VERSION_MAJOR CALLIGRA_VERSION_MAJOR
 #define KEXI_VERSION_MINOR CALLIGRA_VERSION_MINOR
 #define KEXI_VERSION_RELEASE CALLIGRA_VERSION_RELEASE

@@ -47,6 +47,7 @@
 #include <QItemSelection>
 #include <QApplication>
 #include <QResizeEvent>
+#include <QTimer>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -966,8 +967,8 @@ void PerformanceStatusBase::drawValues()
         spi_ = budget.bcwpEffort( date ) / bh;
     }
     cpi_ = 0.0;
-    if ( actual.costTo( date ) > 0.0 ) {
-        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
+    if ( actual.effortTo( date ) > 0.0 ) {
+        cpi_ = budget.bcwpEffort( date ) / actual.hoursTo( date );
     }
     m->setData( m->index( 1, 3 ), locale->formatNumber( cpi_ ) );
     m->setData( m->index( 1, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
@@ -1034,6 +1035,8 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     addWidget( m_chart );
 
     connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+
+    QTimer::singleShot( 0, this, SLOT(resizeSplitters()) );
 }
 
 void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, const QItemSelection& )
@@ -1095,6 +1098,25 @@ void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
 KoPrintJob *PerformanceStatusTreeView::createPrintJob( ViewBase *view )
 {
     return m_chart->createPrintJob( view );
+}
+
+// hackish way to get resonable initial splitter sizes
+void PerformanceStatusTreeView::resizeSplitters()
+{
+    int x1 = sizes().value( 0 );
+    int x2 = sizes().value( 1 );
+    if ( x1 == 0 && x2 == 0 ) {
+        // not shown yet, try later
+        QTimer::singleShot( 100, this, SLOT(resizeSplitters()) );
+        return;
+    }
+    if ( x1 == 0 || x2 == 0 ) {
+        // one is hidden, do nothing
+        return;
+    }
+    int tot = x1 + x2;
+    x1 = qMax( x1, qMin( ( tot ) / 2, 150 ) );
+    setSizes( QList<int>() << x1 << ( tot - x1 ) );
 }
 
 //-----------------------------------

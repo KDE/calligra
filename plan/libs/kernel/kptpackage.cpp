@@ -17,38 +17,13 @@
 */
 
 
-#ifndef KPLATO_KPTPACKAGE_H
-#define KPLATO_KPTPACKAGE_H
+#include "kptpackage.h"
 
-#include "kpttask.h"
+using namespace KPlato;
 
-#include "kptpackage.h" //Note! in parent dir
-
-#include <KUrl>
-
-#include <QString>
-
-namespace KPlato {
-
-class Project;
-
-// temporary convinience class
-class Package
+Package::Package()
+    : task( 0 ),
+    toTask( 0 )
 {
-public:
-    Package();
-    KUrl url;
-    Project *project;
-    KDateTime timeTag;
-    QString ownerId;
-    QString ownerName;
-
-    WorkPackageSettings settings;
-
-    Task *task;
-    QMap<QString, KUrl> documents;
-};
-
 }
 
-#endif // KPLATO_KPTPACKAGE_H

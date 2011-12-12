@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONCOLORBARWIDGET_H
-#define KARBONCOLORBARWIDGET_H
+#ifndef KARBONPALETTEBARWIDGET_H
+#define KARBONPALETTEBARWIDGET_H
 
 #include <KoColorSet.h>
 #include <KoResourceServerAdapter.h>
@@ -60,4 +60,4 @@ private:
     KoResourceServerAdapter<KoColorSet> m_palettes;
 };
 
-#endif // KARBONCOLORBARWIDGET_H
+#endif // KARBONPALETTEBARWIDGET_H

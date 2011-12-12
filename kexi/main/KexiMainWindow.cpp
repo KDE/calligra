@@ -136,7 +136,6 @@
 #ifdef FEEDBACK_INCLUDE
 #include FEEDBACK_INCLUDE
 #endif
-#include <kapplication.h>
 #include <kaboutdata.h>
 #include <ktoolinvocation.h>
 #endif
@@ -230,22 +229,16 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 }*/
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
+int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
 {
-    Kexi::initCmdLineArgs(argc, argv, aboutdata);
+    Kexi::initCmdLineArgs(argc, argv, aboutData);
 
     bool GUIenabled = true;
-    /// @note According to GCC 4.3 the following variable is not used, commented for now
-    //QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindow is created
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
@@ -335,9 +328,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
-#ifdef KEXI_ADD_CUSTOM_KexiMainWindow
-# include "KexiMainWindow_ctor.h"
-#endif
 }
 
 KexiMainWindow::~KexiMainWindow()

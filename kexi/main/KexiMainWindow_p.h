@@ -140,11 +140,21 @@ public:
      : QWidget(parent)
     {
         setAutoFillBackground(true);
+        alterBackground();
+    }
+    void alterBackground()
+    {
         QPalette pal(palette());
-        QColor bg(Qt::white);
+        QColor bg(KexiUtils::isLightColorScheme() ? Qt::white : Qt::black);
         bg.setAlpha(150);
         pal.setColor(QPalette::Window, bg);
         setPalette(pal);
+    }
+    virtual void changeEvent(QEvent *e) {
+        if (e->type() == QEvent::PaletteChange) {
+            alterBackground();
+        }
+        QWidget::changeEvent(e);
     }
 };
 
@@ -487,6 +497,8 @@ public:
     virtual QSize tabSizeHint(int index) const;
 
     KexiTabbedToolBarStyle* customStyle;
+protected:
+    virtual void changeEvent(QEvent *e);
 };
 
 //! Style proxy for KexiTabbedToolBar, to get the "Kexi" tab style right.
@@ -494,11 +506,17 @@ class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
 {
 public:
     explicit KexiTabbedToolBarStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
-        const QString kexiBlackFname
-            = KStandardDirs::locate("data", "kexi/pics/kexi-logo.png");
-        kexiBlackPixmap = QPixmap(kexiBlackFname);
+        updateLogo();
     }
     virtual ~KexiTabbedToolBarStyle() {
+    }
+    void updateLogo() {
+        const QString kexiBlackFname
+            = KStandardDirs::locate("data",
+                                    KexiUtils::isLightColorScheme()
+                                    ? "kexi/pics/kexi-logo.png"
+                                    : "kexi/pics/kexi-logo-white.png");
+        kexiBlackPixmap = QPixmap(kexiBlackFname);
     }
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *painter, const QWidget *widget = 0) const
@@ -661,6 +679,14 @@ QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
         return s;
     }
     return KTabBar::tabSizeHint(index);
+}
+
+void KexiTabbedToolBarTabBar::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::PaletteChange) {
+        customStyle->updateLogo();
+    }
+    KTabBar::changeEvent(e);
 }
 
 void KexiTabbedToolBar::Private::toggleMainMenu()

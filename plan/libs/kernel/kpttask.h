@@ -745,4 +745,10 @@ public:
 
 }  //KPlato namespace
 
+Q_DECLARE_METATYPE( KPlato::Completion::UsedEffort::ActualEffort )
+
+#ifndef QT_NO_DEBUG_STREAM
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Completion::UsedEffort::ActualEffort &ae );
+#endif
+
 #endif

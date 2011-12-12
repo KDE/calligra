@@ -24,6 +24,7 @@ set(kplatokernel_LIB_SRCS
     kptschedule.cpp
     kptwbsdefinition.cpp
     kptcommand.cpp
+    kptpackage.cpp
 
     kptschedulerplugin.cpp
 

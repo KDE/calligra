@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Gigabit Switch Router (ATM Tag)
 Name[bg]=Гигабит комутиращ маршрутизатор (ATM Tag)
-Name[ca]=Enrutador Gigabit (etiqueta ATM)
+Name[ca]=Encaminador Gigabit (etiqueta ATM)
 Name[el]=Gigabit Switch Router (ATM Tag)
 Name[et]=Gigabit-kommutaator-marsruuter (ATM Tag)
 Name[it]=Gigabit Switch Router (ATM Tag)
@@ -11,6 +11,7 @@ Name[nl]=Gigabit Switch Router (ATM Tag)
 Name[pl]=Router przełączający gigabitowy (znaczniki ATM)
 Name[pt]=Encaminhador Gigabit (ATM)
 Name[pt_BR]=Roteador/Comutador Gigabit (ATM Tag)
+Name[ru]=Маршрутизатор-коммутатор с поддержкой гигабитной сети (метка ATM)
 Name[sv]=Gigabit växelrouter (ATM-tagg)
 Name[uk]=Маршрутизатор гігабітового комутатора (ATM Tag)
 Name[x-test]=xxGigabit Switch Router (ATM Tag)xx
