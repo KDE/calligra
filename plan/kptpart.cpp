@@ -656,23 +656,35 @@ void Part::checkForWorkPackage()
         }
         // Merge our workpackages
         if ( ! m_workpackages.isEmpty() ) {
-            WorkPackageMergeDialog *dia = new WorkPackageMergeDialog( i18n( "New work packages detected. Merge data with existing tasks?" ), m_workpackages );
-            if ( dia->exec() == KDialog::Yes ) {
-                // merge the oldest first
-                foreach( int i, dia->checkedList() ) {
-                    mergeWorkPackage( m_workpackages.values().at( i ) );
-                }
-                // 'Yes' was hit so terminate all packages
-                foreach( const Package *p, m_workpackages.values() ) {
-                    terminateWorkPackage( p );
-                }
-            }
-            delete dia;
-            qDeleteAll( m_workpackages.values() );
-            m_workpackages.clear();
+            WorkPackageMergeDialog *dlg = new WorkPackageMergeDialog( i18n( "New work packages detected. Merge data with existing tasks?" ), m_workpackages );
+            connect(dlg, SIGNAL(finished(int)), SLOT(workPackageMergeDialogFinished(int)));
+            dlg->show();
+            dlg->raise();
+            dlg->activateWindow();
         }
     }
+}
+
+void Part::workPackageMergeDialogFinished( int result )
+{
+    WorkPackageMergeDialog *dlg = qobject_cast<WorkPackageMergeDialog*>( sender() );
+    if ( dlg == 0 ) {
+        return;
+    }
+    if ( result == KDialog::Yes ) {
+        // merge the oldest first
+        foreach( int i, dlg->checkedList() ) {
+            mergeWorkPackage( m_workpackages.values().at( i ) );
+        }
+        // 'Yes' was hit so terminate all packages
+        foreach( const Package *p, m_workpackages.values() ) {
+            terminateWorkPackage( p );
+        }
+    }
+    qDeleteAll( m_workpackages );
+    m_workpackages.clear();
     m_checkingForWorkPackages = false;
+    dlg->deleteLater();
 }
 
 void Part::mergeWorkPackages()
