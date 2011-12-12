@@ -126,10 +126,10 @@ public:
     DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
     virtual ~DrawingTableStyleConverter();
 
-    KoCellStyle::Ptr style(int row, int column);
+    KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);
 
     DrawingTableStyle * const m_style;
     DrawingTableStyleConverterProperties const& m_properties;

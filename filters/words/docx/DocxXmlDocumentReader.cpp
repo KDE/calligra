@@ -5292,6 +5292,8 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
+    QPair<int, int> spans;
+
     for(int row = 0; row < rowCount; ++row ) {
 #ifdef DOCXXML_DEBUG_TABLES
         kDebug() << "----- [ROW" << row +1 << "] ----------";
@@ -5300,7 +5302,9 @@ void DocxXmlDocumentReader::defineTableStyles()
 #ifdef DOCXXML_DEBUG_TABLES
             kDebug() << "----- [COLUMN" << column +1 << "] ----------";
 #endif
-            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            spans.first = m_table->cellAt(row, column)->rowSpan();
+            spans.second = m_table->cellAt(row, column)->columnSpan();
+            KoCellStyle::Ptr style = styleConverter.style(row, column, spans);
             if (m_moveToStylesXml) {
                 style->setAutoStyleInStylesDotXml(true);
             }
@@ -6107,8 +6111,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
+        int span = 0;
+        STRING_TO_INT(val, span, "gridSpan");
         KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
-        cell->setColumnSpan(val.toInt());
+        cell->setColumnSpan(span);
     }
 
     readNext();
