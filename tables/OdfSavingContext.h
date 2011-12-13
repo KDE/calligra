@@ -75,7 +75,7 @@ public:
         if (it != m_cellAnchoredShapes.constEnd()) {
             AnchoredShape::const_iterator rit = (*it).constFind(row);
             if (rit != (*it).constEnd()) {
-                QMultiHash<int, KoShape*>::const_iterator cit((*rit).constBegin()), cend((*it).constEnd());
+                QMultiHash<int, KoShape*>::const_iterator cit((*rit).constBegin()), cend((*rit).constEnd());
                 for (; cit != cend; ++cit)
                     if (cit.key() > column) return cit.key();  // found one
 
