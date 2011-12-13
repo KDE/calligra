@@ -23,6 +23,7 @@
 #include "Cell.h"
 #include "GenValidationStyle.h"
 #include "Sheet.h"
+#include "calligra_tables_limits.h"
 
 #include <KoShapeSavingContext.h>
 
@@ -47,6 +48,8 @@ public:
             : shapeContext(shapeContext) {}
 
     void insertCellAnchoredShape(const Sheet *sheet, int row, int column, KoShape* shape) {
+        Q_ASSERT_X(1 <= column && column <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(column).toLocal8Bit());
+        Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
         m_cellAnchoredShapes[sheet][row].insert(column, shape);
     }
 
