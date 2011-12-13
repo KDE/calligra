@@ -314,6 +314,7 @@ void TaskWorkPackageView::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    saveContext();
 }
 
 
