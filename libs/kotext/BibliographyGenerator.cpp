@@ -33,6 +33,8 @@
 
 #include <QTextFrame>
 
+static QList<SortKeyPair> sortKeys;
+
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
     , m_bibDocument(bibDocument)
@@ -61,6 +63,33 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager,QStr
     return style;
 }
 
+static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
+{
+    if ( keyIndex == sortKeys.size() ) return true;
+    else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
+        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return true;
+        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return false;
+    } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
+        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return false;
+        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return true;
+    } else return compare_on( keyIndex + 1, c1, c2 );
+
+    return false;
+}
+
+static bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
+{
+    return compare_on(0, c1, c2);
+}
+
+static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair> keys)
+{
+    sortKeys = keys;
+    sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
+    qSort(cites.begin(), cites.end(), lessThan);
+    return cites;
+}
+
 void BibliographyGenerator::generate()
 {
     if (!m_bibInfo)
@@ -75,7 +104,8 @@ void BibliographyGenerator::generate()
     if (!m_bibInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_bibInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
-            titleStyle = styleManager->defaultParagraphStyle();
+            titleStyle = styleManager->defaultBibliographyTitleStyle();
+            m_bibInfo->m_indexTitleTemplate.styleName = titleStyle->name();
         }
 
         QTextBlock titleTextBlock = cursor.block();
@@ -92,7 +122,9 @@ void BibliographyGenerator::generate()
         citeList = KoTextDocument(m_block.document())
                 .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
     } else {
-        citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
+        KoTextDocument *doc = new KoTextDocument(m_block.document());
+        citeList = sort(doc->inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock()),
+                        KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortKeys());
     }
 
     foreach (KoInlineCite *cite, citeList)
@@ -105,7 +137,8 @@ void BibliographyGenerator::generate()
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
             if (bibTemplateStyle == 0) {
-                bibTemplateStyle = generateTemplateStyle(styleManager, cite->bibliographyType());
+                bibTemplateStyle = styleManager->defaultBibliographyEntryStyle(bibEntryTemplate.bibliographyType);
+                bibEntryTemplate.styleName = bibTemplateStyle->name();
             }
         } else {
             qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
@@ -122,7 +155,7 @@ void BibliographyGenerator::generate()
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
-                    cursor.insertText(QString(" ").append(cite->dataField(indexEntry->dataField)));
+                    cursor.insertText(QString(((spanEnabled)?" ":"")).append(cite->dataField(indexEntry->dataField)));
                     spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
                     break;
                 }
@@ -159,8 +192,3 @@ void BibliographyGenerator::generate()
     }
     cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }
-
-
-
-
-
