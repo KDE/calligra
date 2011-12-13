@@ -29,6 +29,8 @@
 
 #include "KoOdfBibliographyConfiguration.h"
 
+class KoInlineCite;
+
 class BibliographyConfigureDialog : public QDialog
 {
     Q_OBJECT
@@ -39,6 +41,7 @@ public:
 public slots:
     void addSortKey();
     void save(QAbstractButton *);
+    void sortMethodChanged(bool);
 
 private:
     Ui::BibliographyConfigureDialog dialog;

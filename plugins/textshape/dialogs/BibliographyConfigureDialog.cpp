@@ -45,9 +45,14 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
 
     connect(dialog.buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(save(QAbstractButton*)));
     connect(dialog.addSortKeyButton, SIGNAL(clicked()), this, SLOT(addSortKey()));
+    connect(dialog.sortByPosition, SIGNAL(clicked(bool)), this, SLOT(sortMethodChanged(bool)));
 
-    dialog.sortKeyGroupBox->setVisible(!m_bibConfiguration->sortByPosition()
-                                       || m_bibConfiguration->sortKeys().isEmpty());
+    dialog.sortKeyGroupBox->setDisabled(m_bibConfiguration->sortByPosition());
+
+    if (m_bibConfiguration->sortKeys().isEmpty()) {
+        m_bibConfiguration->setSortKeys(m_bibConfiguration->sortKeys()
+                                        << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder));
+    }
 
     foreach (SortKeyPair key, m_bibConfiguration->sortKeys()) {
         dialog.sortKeyGroupBox->layout()->addWidget(
@@ -65,6 +70,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
         m_bibConfiguration->setSuffix(dialog.suffix->text());
         m_bibConfiguration->setSortAlgorithm(dialog.sortAlgorithm->currentText());
         m_bibConfiguration->setSortByPosition(dialog.sortByPosition->isChecked());
+        m_bibConfiguration->setNumberedEntries(dialog.numberedEntries->isChecked());
 
         QList<SortKeyPair> sortKeys;
 
@@ -78,13 +84,23 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 
         KoTextDocument(m_document).styleManager()->setBibliographyConfiguration(m_bibConfiguration);
     }
-    emit accept();//QObjectList
+    emit accept();
 }
 
 void BibliographyConfigureDialog::addSortKey()
 {
     dialog.sortKeyGroupBox->layout()->addWidget(
                 new SortKeyWidget("identifier", Qt::AscendingOrder, dialog.sortKeyGroupBox));
+}
+
+void BibliographyConfigureDialog::sortMethodChanged(bool sortByPosition)
+{
+    m_bibConfiguration->setSortByPosition(sortByPosition);
+
+    if (!sortByPosition && m_bibConfiguration->sortKeys().isEmpty()) {
+        m_bibConfiguration->setSortKeys(m_bibConfiguration->sortKeys()
+                                        << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder));
+    }
 }
 
 SortKeyWidget::SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent) :
