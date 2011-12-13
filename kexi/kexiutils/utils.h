@@ -261,9 +261,13 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
  with accessibility settings. */
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
-/*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
+/*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps 
  that have to reflect the foreground color. */
-KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
+KEXIUTILS_EXPORT void replaceColors(QPixmap* original, const QColor& color);
+
+/*! Replaces colors in image @a original using @a color color. Used for coloring bitmaps 
+ that have to reflect the foreground color. */
+KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
 
 /*! @return true if curent color scheme is light.
  Lightness of window background is checked to measure this. */

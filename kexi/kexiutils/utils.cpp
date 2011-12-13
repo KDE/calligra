@@ -714,13 +714,20 @@ void KexiUtils::setMargins(QLayout *layout, int value)
     layout->setContentsMargins(value, value, value, value);
 }
 
-QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
 {
-    QPixmap dest(original);
-    QPainter p(&dest);
+    Q_ASSERT(original);
+    QImage dest(original->toImage());
+    replaceColors(&dest, color);
+    *original = QPixmap::fromImage(dest);
+}
+
+void KexiUtils::replaceColors(QImage* original, const QColor& color)
+{
+    Q_ASSERT(original);
+    QPainter p(original);
     p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    p.fillRect(dest.rect(), color);
-    return dest;
+    p.fillRect(original->rect(), color);
 }
 
 bool KexiUtils::isLightColorScheme()
