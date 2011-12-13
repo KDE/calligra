@@ -1800,15 +1800,19 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
     KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
 }
 
-void KoTextEditor::insertBibliography()
+void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
 
     QTextBlockFormat bibFormat;
-    KoBibliographyInfo *info = new KoBibliographyInfo();
+    KoBibliographyInfo *newBibInfo = info->clone();
     QTextDocument *bibDocument = new QTextDocument();
 
-    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
