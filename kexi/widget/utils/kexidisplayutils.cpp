@@ -69,8 +69,10 @@ static struct Embed {
 static void initDisplayUtilsImages()
 {
     /*! @warning not reentrant! */
-    KexiDisplayUtils_autonum->loadFromData(embed_vec[0].data, embed_vec[0].size);
-    *KexiDisplayUtils_autonum = KexiUtils::replaceColors(*KexiDisplayUtils_autonum, SPECIAL_TEXT_COLOR);
+    QImage autonum;
+    autonum.loadFromData(embed_vec[0].data, embed_vec[0].size);
+    KexiUtils::replaceColors(&autonum, SPECIAL_TEXT_COLOR);
+    *KexiDisplayUtils_autonum = QPixmap::fromImage(autonum);
 }
 
 //-----------------
