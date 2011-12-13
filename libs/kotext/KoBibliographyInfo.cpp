@@ -23,6 +23,7 @@
 #include <KoXmlNS.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
+#include <KoOdfBibliographyConfiguration.h>
 
 #include <QTextCursor>
 
@@ -135,6 +136,22 @@ void KoBibliographyInfo::setGenerator(BibliographyGeneratorInterface *generator)
 void KoBibliographyInfo::setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates)
 {
     m_entryTemplate = entryTemplates;
+}
+
+KoBibliographyInfo *KoBibliographyInfo::clone()
+{
+    KoBibliographyInfo *newBibInfo = new KoBibliographyInfo();
+    newBibInfo->m_entryTemplate.clear();
+    newBibInfo->m_name = QString(m_name);
+    newBibInfo->m_styleName = QString(m_name);
+    newBibInfo->m_indexTitleTemplate = m_indexTitleTemplate;
+
+    for (int i = 0; i < m_entryTemplate.size() ; i++) {
+        newBibInfo->m_entryTemplate.insert(KoOdfBibliographyConfiguration::bibTypes.at(i),
+                                           m_entryTemplate[KoOdfBibliographyConfiguration::bibTypes.at(i)]);
+    }
+
+    return newBibInfo;
 }
 
 BibliographyGeneratorInterface *KoBibliographyInfo::generator() const

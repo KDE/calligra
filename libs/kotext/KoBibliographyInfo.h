@@ -49,6 +49,7 @@ public:
     void setGenerator(BibliographyGeneratorInterface *generator);
     void setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates);
 
+    KoBibliographyInfo *clone();
     BibliographyGeneratorInterface *generator() const;
 
     QString m_name;
