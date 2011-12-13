@@ -587,7 +587,7 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
                                     .arg(bibConfiguration->suffix());
     } else {
         d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
-                    .arg(QString::number(manager()->citationsSortedByPosition(true).values().indexOf(this) + 1))
+                    .arg(QString::number(manager()->citationsSortedByPosition(true).indexOf(this) + 1))
                     .arg(bibConfiguration->suffix());
     }
 
@@ -615,7 +615,7 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
                                     .arg(bibConfiguration->suffix());
     } else {
         d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
-                    .arg(QString::number(manager()->citationsSortedByPosition(true).values().indexOf(this) + 1))
+                    .arg(QString::number(manager()->citationsSortedByPosition(true, document->firstBlock()).indexOf(this) + 1))
                     .arg(bibConfiguration->suffix());
     }
 
