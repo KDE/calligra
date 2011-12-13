@@ -536,8 +536,14 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
                 // update ? what if open, modified ...
                 if ( doc->type() == Document::Type_Product ) {
                     //### FIXME. user feedback
-                    kWarning()<<"We do not update existing deliverables";
+                    kWarning()<<"We do not update existing deliverables (except name change)";
+                    if ( doc->name() != org->name() ) {
+                        m->addCommand( new DocumentModifyNameCmd( org, doc->name() ) );
+                    }
                 } else {
+                    if ( doc->name() != org->name() ) {
+                        m->addCommand( new DocumentModifyNameCmd( org, doc->name() ) );
+                    }
                     if ( doc->sendAs() != org->sendAs() ) {
                         m->addCommand( new DocumentModifySendAsCmd( org, doc->sendAs() ) );
                     }
