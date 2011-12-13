@@ -62,7 +62,6 @@ KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
     d->suffix = "]";
     d->numberedEntries = false;
     d->sortByPosition = true;
-    d->sortKeys << QPair<QString, Qt::SortOrder>("identifier",Qt::AscendingOrder);
 }
 
 KoOdfBibliographyConfiguration::~KoOdfBibliographyConfiguration()
@@ -95,7 +94,7 @@ void KoOdfBibliographyConfiguration::loadOdf(const KoXmlElement &element)
     d->suffix = element.attributeNS(KoXmlNS::text, "suffix", QString::null);
     d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false")) == "true")
                          ? true : false;
-    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("false")) == "true")
+    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("true")) == "true")
                         ? true : false;
     d->sortAlgorithm = element.attributeNS(KoXmlNS::text, "sort-algorithm", QString::null);
 
