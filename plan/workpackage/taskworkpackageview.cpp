@@ -73,13 +73,13 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     TaskWorkPackageModel *m = new TaskWorkPackageModel( part, this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setStretchLastSection( false );
 
     createItemDelegates( m );
 
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
-    masterView()->setDefaultColumns( QList<int>() << 0 );
+    QList<int> lst1; lst1 << 2 << -1; // display column 0 and 1 (NodeName and NodeType ) in left view
+    masterView()->setDefaultColumns( QList<int>() << 0 << 1 );
     QList<int> show;
     show << TaskWorkPackageModel::NodeCompleted
             << TaskWorkPackageModel::NodeActualEffort
