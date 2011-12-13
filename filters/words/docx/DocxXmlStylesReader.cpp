@@ -534,16 +534,17 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
     m_currentTableStyleProperties->paragraphStyle = m_currentParagraphStyle;
 
     if (type == "firstRow") {
-        // In docx predefined styles for first row, even though it may define insideV to be 0 and bottom
-        // border to have something, it in reality wishes insideV to also contain the bottom data
-        if (m_currentTableStyleProperties->insideH.innerPen.widthF() == 0) {
-            m_currentTableStyleProperties->insideH = m_currentTableStyleProperties->bottom;
-        }
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        // In docx predefined styles for first row, even though it may define
+        // insideV to be 0 and bottom border to have something, it in reality
+        // wishes insideV to also contain the bottom data
+//         if (m_currentTableStyleProperties->insideH.innerPen.widthF() == 0) {
+//             m_currentTableStyleProperties->insideH = m_currentTableStyleProperties->bottom;
+//         }
+//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstRow, m_currentTableStyleProperties);
     }
     else if (type == "lastRow") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastRow, m_currentTableStyleProperties);
     }
     else if (type == "band1Horz") {
@@ -559,30 +560,26 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Vertical, m_currentTableStyleProperties);
     }
     else if (type == "firstCol") {
-        if (m_currentTableStyleProperties->insideV.innerPen.widthF() == 0) {
-            m_currentTableStyleProperties->insideV = m_currentTableStyleProperties->right;
-        }
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+//         if (m_currentTableStyleProperties->insideV.innerPen.widthF() == 0) {
+//             m_currentTableStyleProperties->insideV = m_currentTableStyleProperties->right;
+//         }
+//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstCol, m_currentTableStyleProperties);
     }
     else if (type == "lastCol") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastCol, m_currentTableStyleProperties);
     }
     else if (type == "nwCell") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NwCell, m_currentTableStyleProperties);
     }
     else if (type == "neCell") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NeCell, m_currentTableStyleProperties);
     }
     else if (type == "swCell") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SwCell, m_currentTableStyleProperties);
     }
     else if (type == "seCell") {
-        m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SeCell, m_currentTableStyleProperties);
     }
 

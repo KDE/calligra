@@ -6086,6 +6086,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
             SKIP_UNKNOWN
         }
     }
+    m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
 
     READ_EPILOGUE
 }

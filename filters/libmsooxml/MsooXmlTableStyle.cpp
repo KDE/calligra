@@ -106,7 +106,55 @@ TableStyleConverter::TableStyleConverter(int row, int column)
 TableStyleConverter::~TableStyleConverter()
 {
 }
-
+// NOTE: At the moment all the properties are put together, but according to
+// the spec we should keep table-level properties and row/cell-level properties
+// separate.  TODO: Table-level exception properties.
+//
+// ECMA-376:
+//
+// The appearance of a table cell border in the document shall be determined by
+// the following settings:
+//
+// * If the tblCellSpacing element value (§17.4.45;§17.4.44;§17.4.46) applied
+// to the cell is non-zero, then the cell border shall always be displayed
+//
+// * Otherwise, the display of the border is subject to the conflict resolution
+// algorithm defined by the tcBorders element (§17.4.67) and the tblBorders
+// element (§17.4.40;§17.4.39)
+//
+//
+// 17.4.39 tblBorders (Table Borders)
+//
+// If the cell spacing is zero, then there is a conflict [Example: Between the
+// left border of all cells in the first column and the left border of the
+// table. end example], which shall be resolved as follows:
+//
+// * If there is a cell border, then the cell border shall be displayed
+//
+// * If there is no cell border but there is a table-level exception border on
+// this table row, then the table-level exception border shall be displayed
+//
+// * If there is no cell or table-level exception border, then the table border
+// shall be displayed
+//
+//
+// 17.4.67 tcBorders (Table Cell Borders)
+//
+// If the cell spacing is zero, then there can be a conflict between two
+// adjacent cell borders [Example: Between the left border of all cells in the
+// second column and the right border of all cells in the first column of the
+// table. end example], which shall be resolved as follows:
+//
+// * If either conflicting table cell border is nil or none (no border), then
+// the opposing border shall be displayed.
+//
+// * If a cell border conflicts with a table border, the cell border always
+// wins.
+//
+// * Each border shall then be assigned a weight using the formula described in
+// the spec, and the border value using this calculation shall be displayed
+// over the alternative border:
+//
 void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
                                      int row, int column, const QPair<int, int> &spans)
 {
@@ -293,29 +341,37 @@ void TableStyleConverter::applyTableBordersStyle(TableStyleProperties* styleProp
 
 void TableStyleConverter::applyCellBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style)
 {
+    //NOTE: Let's keep the local variables until it's unstable.
+
     TableStyleProperties::Properties setProperties = props->setProperties;
 
     if (setProperties & TableStyleProperties::TopBorder) {
-        style->borders()->setTopBorderData(props->top);
+        KoBorder::BorderData* data = &props->top;
+        style->borders()->setTopBorderData(*data);
     }
 
     if (setProperties & TableStyleProperties::BottomBorder) {
-        style->borders()->setBottomBorderData(props->bottom);
+        KoBorder::BorderData* data = &props->bottom;
+        style->borders()->setBottomBorderData(*data);
     }
 
     if (setProperties & TableStyleProperties::LeftBorder) {
-        style->borders()->setLeftBorderData(props->left);
+        KoBorder::BorderData* data = &props->left;
+        style->borders()->setLeftBorderData(*data);
     }
 
     if (setProperties & TableStyleProperties::RightBorder) {
-        style->borders()->setRightBorderData(props->right);
+        KoBorder::BorderData* data = &props->right;
+        style->borders()->setRightBorderData(*data);
     }
 
     if (setProperties & TableStyleProperties::Tl2brBorder) {
-        style->borders()->setTlbrBorderData(props->tl2br);
+        KoBorder::BorderData* data = &props->tl2br;
+        style->borders()->setTlbrBorderData(*data);
     }
     if (setProperties & TableStyleProperties::Tr2blBorder) {
-        style->borders()->setTrblBorderData(props->tr2bl);
+        KoBorder::BorderData* data = &props->tr2bl;
+        style->borders()->setTrblBorderData(*data);
     }
     //TODO: process InsideHBorder, InsideVBorder
 }
