@@ -28,13 +28,15 @@
 
 class KoInlineCite;
 class KoBibliographyInfo;
+class BibliographyEntryTemplate;
 
 class InsertBibliographyDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
-    void setDefaultIndexEntries();
+    QMap<QString, BibliographyEntryTemplate> defaultEntryTemplates();
+
 public slots:
     void insert();
     void updateFields();

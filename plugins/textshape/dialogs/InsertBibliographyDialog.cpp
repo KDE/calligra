@@ -22,12 +22,13 @@
 #include <BibliographyGenerator.h>
 #include <KoParagraphStyle.h>
 #include <KoOdfBibliographyConfiguration.h>
+#include <KoBibliographyInfo.h>
 #include <QMessageBox>
 
 InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
     QDialog(parent),
     m_editor(editor),
-    m_bibInfo(new KoBibliographyInfo)
+    m_bibInfo(new KoBibliographyInfo())
 {
     dialog.setupUi(this);
 
@@ -40,13 +41,16 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     //connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
     //connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
 
-    setDefaultIndexEntries();
+    dialog.addedFields->clear();
+    dialog.availableFields->clear();
+    m_bibInfo->m_entryTemplate = defaultEntryTemplates();
+    dialog.bibTypes->setCurrentRow(0,QItemSelectionModel::Select);
     show();
 }
 
 void InsertBibliographyDialog::insert()
 {
-    m_editor->insertBibliography();
+    m_editor->insertBibliography(new KoBibliographyInfo());
 
     m_editor->movePosition(QTextCursor::Left);
     KoBibliographyInfo *bibInfo = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
@@ -101,8 +105,8 @@ void InsertBibliographyDialog::addField()
         }
         else span->text = ",";
 
-        m_bibInfo->m_entryTemplate[bibType].indexEntries.append(newEntry);
         m_bibInfo->m_entryTemplate[bibType].indexEntries.append(span);
+        m_bibInfo->m_entryTemplate[bibType].indexEntries.append(newEntry);
     }
 }
 
@@ -138,11 +142,9 @@ void InsertBibliographyDialog::removeTabStop()
     }*/
 }
 
-void InsertBibliographyDialog::setDefaultIndexEntries()
+QMap<QString, BibliographyEntryTemplate> InsertBibliographyDialog::defaultEntryTemplates()
 {
-    dialog.addedFields->clear();
-    dialog.availableFields->clear();
-
+    QMap<QString, BibliographyEntryTemplate> entryTemplates;
     foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
         BibliographyEntryTemplate bibEntryTemplate;
 
@@ -170,7 +172,7 @@ void InsertBibliographyDialog::setDefaultIndexEntries()
         bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
         bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(year));
 
-        m_bibInfo->m_entryTemplate[bibType] = bibEntryTemplate;
+        entryTemplates[bibType] = bibEntryTemplate;
     }
-    dialog.bibTypes->setCurrentRow(0,QItemSelectionModel::Select);
+    return entryTemplates;
 }
