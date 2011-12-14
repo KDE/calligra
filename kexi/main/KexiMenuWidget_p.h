@@ -41,6 +41,7 @@
 #include <QBasicTimer>
 #include <QPointer>
 #include <QAbstractButton>
+#include "KexiMenuWidget.h"
 
 class QEventLoop;
 
