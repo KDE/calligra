@@ -61,11 +61,13 @@ public:
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    TaskWorkPackageModel *model() const;
+    TaskWorkPackageModel *itemModel() const;
     
     Project *project() const;
     void setProject( Project *project );
-    
+
+    Document *currentDocument() const;
+    Node *currentNode() const;
     QList<Node*> selectedNodes() const;
 
 signals:
@@ -88,7 +90,7 @@ public:
     
     void setupGui();
 
-    TaskWorkPackageModel *model() const { return m_view->model(); }
+    TaskWorkPackageModel *itemModel() const { return m_view->itemModel(); }
     
     virtual void updateReadWrite( bool readwrite );
     Node *currentNode() const;

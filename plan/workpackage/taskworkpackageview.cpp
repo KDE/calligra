@@ -113,24 +113,51 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
 
 void TaskWorkPackageTreeView::setSortOrder( int col, Qt::SortOrder order )
 {
-    DoubleTreeViewBase::model()->sort( col, order );
+    model()->sort( col, order );
 }
 
-TaskWorkPackageModel *TaskWorkPackageTreeView::model() const
+TaskWorkPackageModel *TaskWorkPackageTreeView::itemModel() const
 {
-    return static_cast<TaskWorkPackageModel*>( static_cast<QSortFilterProxyModel*>( DoubleTreeViewBase::model() )->sourceModel() );
+    return static_cast<TaskWorkPackageModel*>( static_cast<QSortFilterProxyModel*>( model() )->sourceModel() );
 }
 
 Project *TaskWorkPackageTreeView::project() const
 {
-    return model()->project();
+    return itemModel()->project();
+}
+
+Document *TaskWorkPackageTreeView::currentDocument() const
+{
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return 0;
+    }
+    return itemModel()->documentForIndex( sf->mapToSource(  selectionModel()->currentIndex() ) );
+}
+
+Node *TaskWorkPackageTreeView::currentNode() const
+{
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return 0;
+    }
+    return itemModel()->nodeForIndex( sf->mapToSource(  selectionModel()->currentIndex() ) );
 }
 
 QList<Node*> TaskWorkPackageTreeView::selectedNodes() const
 {
     QList<Node*> lst;
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return lst;
+    }
     foreach( const QModelIndex &idx, selectionModel()->selectedIndexes() ) {
-        Node *n = model()->nodeForIndex( idx );
+        QModelIndex i = sf->mapToSource( idx );
+        Q_ASSERT( i.isValid() && i.model() == itemModel() );
+        Node *n = itemModel()->nodeForIndex( i );
         if ( n && ! lst.contains( n ) ) {
             lst << n;
         }
@@ -140,7 +167,7 @@ QList<Node*> TaskWorkPackageTreeView::selectedNodes() const
 
 void TaskWorkPackageTreeView::setProject( Project *project )
 {
-    model()->setProject( project );
+    itemModel()->setProject( project );
 }
 
 void TaskWorkPackageTreeView::slotActivated( const QModelIndex index )
@@ -201,7 +228,7 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( itemModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
@@ -231,12 +258,12 @@ QList<Node*> TaskWorkPackageView::selectedNodes() const
 
 Node *TaskWorkPackageView::currentNode() const
 {
-    return m_view->model()->nodeForIndex( m_view->selectionModel()->currentIndex() );
+    return m_view->currentNode();
 }
 
 Document *TaskWorkPackageView::currentDocument() const
 {
-    return m_view->model()->documentForIndex( m_view->selectionModel()->currentIndex() );
+    return m_view->currentDocument();
 }
 
 
@@ -256,11 +283,22 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, co
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    Node *node = m_view->model()->nodeForIndex( index );
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( m_view->model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return;
+    }
+    QModelIndex idx = sf->mapToSource( index );
+    if ( ! idx.isValid() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+
+    Node *node = itemModel()->nodeForIndex( idx );
     if ( node ) {
         return slotContextMenuRequested( node, pos );
     }
-    Document *doc = m_view->model()->documentForIndex( index );
+    Document *doc = itemModel()->documentForIndex( idx );
     if ( doc ) {
         return slotContextMenuRequested( doc, pos );
     }
@@ -354,7 +392,7 @@ bool TaskWorkPackageView::loadContext()
         kDebug()<<"No settings";
         return false;
     }
-    return m_view->loadContext( model()->columnMap(), context );
+    return m_view->loadContext( itemModel()->columnMap(), context );
 }
 
 void TaskWorkPackageView::saveContext()
@@ -362,7 +400,7 @@ void TaskWorkPackageView::saveContext()
     QDomDocument doc ( "TaskWorkPackageView" );
     QDomElement context = doc.createElement( "TaskWorkPackageViewSettings" );
     doc.appendChild( context );
-    m_view->saveContext( model()->columnMap(), context );
+    m_view->saveContext( itemModel()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
     kDebug()<<endl<<doc.toString();
