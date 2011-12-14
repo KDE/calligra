@@ -170,6 +170,7 @@ Region::Region(const Region& list)
     d = new Private();
     d->map = list.d->map;
 
+    //d->cells.reserve(list.d->cells.size());
     ConstIterator end(list.d->cells.constEnd());
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
@@ -812,6 +813,156 @@ bool Region::isValid(const QRect& rect)
 }
 
 // static
+#if 1
+void append(const QChar *from, const QChar *to, QChar **dest)
+{
+    while (from < to) {
+        **dest = *from;
+        ++from;
+        ++*dest;
+    }
+}
+
+void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
+{
+    enum { Start, InQuotes } state = Start;
+
+    if (*data == QChar('$', 0)) {
+        ++data;
+    }
+
+    bool isRange = false;
+
+    const QChar *pos = data;
+    while (data < end) {
+        switch (state) {
+        case Start:
+            switch (data->unicode()) {
+            case '\'': // quoted sheet name or named area
+                state = InQuotes;
+                break;
+            case '.': // sheet name separator
+                if (pos != data && !isRange) {
+                    append(pos, data, &out);
+                    *out = QChar('!', 0);
+                    ++out;
+                }
+                pos = data;
+                ++pos;
+                break;
+            case ':': { // cell separator
+                isRange = true;
+                append(pos, data, &out);
+                *out = *data; // append :
+                ++out;
+                const QChar * next = data + 1;
+                if (!next->isNull()) {
+                    const QChar * nextnext = next + 1;
+                    if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
+                        ++data;
+                    }
+                }
+                pos = data;
+            }   break;
+            case ' ': // range separator
+                append(pos, data, &out);
+                *out = QChar(';', 0);
+                ++out;
+                pos = data;
+                break;
+            default:
+                break;
+            }
+            break;
+        case InQuotes:
+            if (data->unicode() == '\'') {
+                // an escaped apostrophe?
+                // As long as Tables does not support fixed sheets eat the dollar sign.
+                const QChar * next = data + 1;
+                if (!next->isNull() && *next == QChar('\'', 0)) {
+                    ++data;
+                }
+                else { // the end
+                    state = Start;
+                }
+            }
+            break;
+        }
+        ++data;
+    }
+    append(pos, data, &out);
+}
+void loadOdfNG(const QChar *&data, const QChar *&end, QChar *&out)
+{
+    enum { Start, InQuotes } state = Start;
+
+    if (*data == QChar('$', 0)) {
+        ++data;
+    }
+
+    bool isRange = false;
+
+    const QChar *pos = data;
+    while (data < end) {
+        switch (state) {
+        case Start:
+            switch (data->unicode()) {
+            case '\'': // quoted sheet name or named area
+                pos = data;
+                state = InQuotes;
+                break;
+            case '.': // sheet name separator
+                if (pos != data && !isRange) {
+                    append(pos, data, &out);
+                    *out = QChar('!', 0);
+                    ++out;
+                }
+                pos = data;
+                ++pos;
+                break;
+            case ':': { // cell separator
+                isRange = true;
+                append(pos, data, &out);
+                *out = *data; // append :
+                ++out;
+                pos = data;
+                const QChar * next = data + 1;
+                if (!next->isNull()) {
+                    const QChar * nextnext = next + 1;
+                    if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
+                        ++data;
+                    }
+                }
+            }   break;
+            case ' ': // range separator
+                append(pos, data, &out);
+                *out = QChar(';', 0);
+                ++out;
+                pos = data;
+                break;
+            default:
+                break;
+            }
+            break;
+        case InQuotes:
+            if (data->unicode() == '\'') {
+                // an escaped apostrophe?
+                // As long as Tables does not support fixed sheets eat the dollar sign.
+                const QChar * next = data + 1;
+                if (!next->isNull() && *next == QChar('\'', 0)) {
+                    ++data;
+                }
+                else { // the end
+                    state = Start;
+                }
+            }
+            break;
+        }
+        ++data;
+    }
+    append(pos, data, &out);
+}
+
 QString Region::loadOdf(const QString& expression)
 {
     QString result;
@@ -868,6 +1019,7 @@ QString Region::loadOdf(const QString& expression)
     }
     return result + temp;
 }
+#endif
 
 // static
 QString Region::saveOdf(const QString& expression)
@@ -1094,7 +1246,7 @@ Region::Point::Point(const QString& string)
     uint p = 0;
 
     // Fixed ?
-    if (string[0] == '$') {
+    if (string[0] == QChar('$', 0)) {
         m_fixedColumn = true;
         p++;
     }
@@ -1103,7 +1255,7 @@ Region::Point::Point(const QString& string)
     if (p == length)
         return;
 
-    if ((string[p] < 'A' || string[p] > 'Z') && (string[p] < 'a' || string[p] > 'z'))
+    if ((string[p] < QChar('A',0) || string[p] > QChar('Z',0)) && (string[p] < QChar('a') || string[p] > QChar('z')))
         return;
 
     //default is error
@@ -1129,7 +1281,7 @@ Region::Point::Point(const QString& string)
     if (p == length)
         return;
 
-    if (string[p] == '$') {
+    if (string[p] == QChar('$', 0)) {
         m_fixedRow = true;
         p++;
     }

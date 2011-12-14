@@ -77,8 +77,11 @@ CALLIGRA_TABLES_ODF_EXPORT QString encodeColumnLabelText(int column);
  * to check if the given string is a cell-reference like $A$1 or D17. Note
  * that this will return false for cell-ranges like A1:B2 or cell-references
  * given with sheet-name like Sheet1:A1.
+ *
+ * @param text The text to check
+ * @param startPos The position in the string where we should start to check
  */
-CALLIGRA_TABLES_ODF_EXPORT bool isCellReference(const QString &text);
+CALLIGRA_TABLES_ODF_EXPORT bool isCellReference(const QString &text, int startPos = 0);
 
 /**
  * Generate and return the ODF formula for this cell (\p thisRow, \p thisColumn) based on the formula in the
@@ -151,6 +154,7 @@ QPen decodePen(const QString &str);
  */
 // TODO check visibility
 CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
+CALLIGRA_TABLES_ODF_EXPORT QString decodeFormulaNG(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
 
 /**
  * \ingroup OpenDocument
