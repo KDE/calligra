@@ -950,6 +950,12 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+
+                QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
+                if (!textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", textareas);
+                }
+
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
                 if (m_contentAvLstExists) {
