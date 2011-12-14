@@ -157,10 +157,11 @@ bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
     return true;
 }
 
-void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
 }
 
 KoPageLayout & KPrNotes::pageLayout()
