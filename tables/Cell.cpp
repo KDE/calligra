@@ -1387,23 +1387,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 break;
             }
         }
-        QString input = oasisFormula;
-        oasisFormula = Odf::decodeFormulaNG(oasisFormula, locale(), namespacePrefix);
-        QString check = Odf::decodeFormula(input, locale(), namespacePrefix);
-        if (oasisFormula != check) {
-            static bool fileOpen = false;
-            static QFile file("/tmp/formula.check");
-            static QDataStream out;   // we will serialize the data into the file
-            if (!fileOpen) {
-                file.open(QIODevice::WriteOnly|QIODevice::Append);
-                out.setDevice(&file);
-                fileOpen = true;
-            }
-            out << input << check;
-            //qDebug() << "XXX" << input;
-            //qDebug() << " XXX" << check;
-            //qDebug() << " XXX" << oasisFormula;
-        }
+        oasisFormula = Odf::decodeFormula(oasisFormula, locale(), namespacePrefix);
         setUserInput(oasisFormula);
     } else if (!userInput().isEmpty() && userInput().at(0) == '=')  //prepend ' to the text to avoid = to be painted
         setUserInput(userInput().prepend('\''));

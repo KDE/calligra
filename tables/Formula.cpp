@@ -47,8 +47,6 @@
 
 #define CALLIGRA_TABLES_UNICODE_OPERATORS
 
-#define DEBUG 1
-
 /*
   To understand how this formula engine works, please refer to the documentation
   in file DESIGN.html.
@@ -674,9 +672,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     while (state != Finish) {
         switch (state) {
         case Start:
-#if DEBUG
-            qDebug() << "Start";
-#endif
             tokenStart = data;
             if (data->isSpace()) {
                 ++data;
@@ -732,9 +727,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InIdentifier:
-#if DEBUG
-            qDebug() << "InIdentifier";
-#endif
             if (isIdentifier(*data) || data->isDigit()) {
                 *out = *data;
                 ++out;
@@ -783,9 +775,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InCell:
-#if DEBUG
-            qDebug() << "InCell";
-#endif
             if (isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
             }
@@ -819,9 +808,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InRange:
-#if DEBUG
-            qDebug() << "InRange";
-#endif
             if (isIdentifier(*data) || data->isDigit() || *data == QChar('!', 0)) {
                 *out++ = *data++;
             }
@@ -834,9 +820,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InSheetOrAreaName:
-#if DEBUG
-            qDebug() << "InSheetOrAreaName";
-#endif
             if (*data != QChar('\'', 0)) {
                 *out++ = *data++;
             }
@@ -865,9 +848,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InNumber:
-#if DEBUG
-            qDebug() << "InNumber";
-#endif
             if (data->isDigit()) { // consume as long as it's digit
                 *out++ = *data++;
             }
@@ -904,9 +884,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InDecimal:
-#if DEBUG
-            qDebug() << "InDecimal";
-#endif
             if (data->isDigit()) {
                 *out++ = *data++;
             }
@@ -924,9 +901,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InExpIndicator:
-#if DEBUG
-            qDebug() << "InExpIndicator";
-#endif
             if (*data == QChar('+', 0) || *data == QChar('-', 0)) {
                 *out++ = *data++;
             }
@@ -944,9 +918,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InExponent:
-#if DEBUG
-            qDebug() << "InExponent";
-#endif
             if (data->isDigit()) {
                 *out++ = *data++;
             }
@@ -959,9 +930,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InString:
-#if DEBUG
-            qDebug() << "InString";
-#endif
             if (*data != QChar('"', 0)) {
                 *out++ = *data++;
             }
@@ -980,9 +948,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InError: {
-#if DEBUG
-            qDebug() << "InError";
-#endif
             ushort c = data->unicode();
             switch (c) {
             case '!':
@@ -1049,9 +1014,6 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     }
 
     if (!data->isNull())  {
-#if DEBUG
-        qDebug() << "end not null";
-#endif
         tokens.append(Token(Token::Unknown, expr.mid(tokenStart - start), tokenStart - start));
         parseError = true;
     }

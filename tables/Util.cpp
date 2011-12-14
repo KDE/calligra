@@ -39,8 +39,6 @@
 
 using namespace Calligra::Tables;
 
-#define DEBUG 1
-
 
 //used in Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
@@ -440,16 +438,10 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
         ++out;
     }
 
-#if DEBUG
-    qDebug() << "Begin";
-#endif
     const QChar *pos = data;
     while (!data->isNull()) {
         switch (state) {
         case Start: {
-#if DEBUG
-            qDebug() << "Start";
-#endif
             if (data->isDigit()) { // check for number
                 state = InNumber;
                 *out++ = *data++;
@@ -521,9 +513,6 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
                     pos = data;
                     break;
                 default:
-#if DEBUG
-                    qDebug() << "handleOperator";
-#endif
                     const QChar *operatorStart = data;
                     if (!parseOperator(data, out)) {
                         *out++ = *data++;
@@ -536,9 +525,6 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
             }
         }   break;
         case InNumber:
-#if DEBUG
-            qDebug() << "InNumber";
-#endif
             if (data->isDigit()) {
                 *out++ = *data++;
             }
@@ -559,18 +545,12 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
 
             break;
         case InString:
-#if DEBUG
-            qDebug() << "InString";
-#endif
             if (*data == QChar('"', 0)) {
                 state = Start;
             }
             *out++ = *data++;
             break;
         case InIdentifier: {
-#if DEBUG
-            qDebug() << "InIdentifier";
-#endif
             if (isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
             }
@@ -579,9 +559,6 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
             }
         }   break;
         case InReference:
-#if DEBUG
-            qDebug() << "InReference";
-#endif
             switch (data->unicode()) {
             case ']':
                 Region::loadOdf(pos, data, out);
@@ -597,9 +574,6 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
             ++data;
             break;
         case InSheetName:
-#if DEBUG
-            qDebug() << "InSheetName";
-#endif
             if (*data == QChar('\'', 0)) {
                 ++data;
                 if (!data->isNull() && *data == QChar('\'', 0)) {

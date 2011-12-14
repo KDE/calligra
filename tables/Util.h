@@ -153,8 +153,7 @@ QPen decodePen(const QString &str);
  * \note Use Region::loadOdf() for plain cell references.
  */
 // TODO check visibility
-CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
-CALLIGRA_TABLES_ODF_EXPORT QString decodeFormulaNG(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
+CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
 
 /**
  * \ingroup OpenDocument

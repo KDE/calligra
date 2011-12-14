@@ -383,7 +383,6 @@ public:
      * this function returns tokens which is not valid.
      */
     Tokens scan(const QString& expr, const KLocale* locale = 0) const;
-    Tokens scanNG(const QString &expr, const KLocale* locale = 0) const;
 
     /**
      * Assignment operator.
