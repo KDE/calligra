@@ -89,6 +89,7 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
 {
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
+    QPair<int, int> spans;
 
     MSOOXML::DrawingTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
@@ -99,7 +100,9 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            spans.first = m_table->cellAt(row, column)->rowSpan();
+            spans.second = m_table->cellAt(row, column)->columnSpan();
+            KoCellStyle::Ptr style = styleConverter.style(row, column, spans);
             m_table->cellAt(row, column)->setStyle(style);
         }
     }

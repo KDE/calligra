@@ -355,13 +355,20 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role ) const
 {
     //kDebug()<<doc->url().fileName()<<column<<role;
-    if ( role != Qt::DisplayRole ) {
-        return QVariant();
-    }
-    switch ( column ) {
-        case NodeName: return doc->name();
-        default:
-            return "";
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case NodeName: return doc->name();
+            case NodeType: return doc->typeToString( doc->type(), true );
+            case NodeStatusNote: return doc->status();
+            default:
+                return "";
+        }
+    } else if ( role == Qt::ToolTipRole ) {
+        switch ( column ) {
+            case NodeName: return doc->typeToString( doc->type(), true );
+            default:
+                break;
+        }
     }
     return QVariant();
 }

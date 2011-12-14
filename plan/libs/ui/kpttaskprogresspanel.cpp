@@ -339,8 +339,10 @@ void TaskProgressPanelImpl::enableWidgets() {
 
     addEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
     removeEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
-    for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
-        entryTable->model()->setFlags( i, 0 );
+    if ( finished->isChecked() ) {
+        for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
+            entryTable->model()->setFlags( i, Qt::NoItemFlags );
+        }
     }
 
     resourceTable->model()->setReadOnly( ( ! started->isChecked() ) || finished->isChecked() || m_completion.entrymode() != Completion::EnterEffortPerResource );
@@ -429,7 +431,7 @@ void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
 
 void TaskProgressPanelImpl::slotSelectionChanged( const QItemSelection &sel )
 {
-    removeEntryBtn->setEnabled( !sel.isEmpty() );
+    removeEntryBtn->setEnabled( ! sel.isEmpty() && started->isChecked() && ! finished->isChecked() );
 }
 
 }  //KPlato namespace

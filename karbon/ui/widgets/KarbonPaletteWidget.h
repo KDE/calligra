@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONCOLORPATCHWIDGET_H
-#define KARBONCOLORPATCHWIDGET_H
+#ifndef KARBONPALETTEWIDGET_H
+#define KARBONPALETTEWIDGET_H
 
 #include <KoColor.h>
 #include <QtGui/QWidget>
@@ -29,7 +29,7 @@ class KarbonPaletteWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KarbonPaletteWidget(QWidget *parent = 0);
+    explicit KarbonPaletteWidget(QWidget *parent = 0);
     virtual ~KarbonPaletteWidget();
 
     /// Set orientation of color bar
@@ -84,4 +84,4 @@ private:
     bool m_hasDragged;
 };
 
-#endif // KARBONCOLORPATCHWIDGET_H
+#endif // KARBONPALETTEWIDGET_H

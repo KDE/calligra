@@ -108,14 +108,49 @@ Startup
 *before opening check if database has been already opened and if so, activate the window instead of opening second instance; D-Bus iface needed
 *inform other instances of Kexi that database was opened so they can update last-modified property of the Recently opened projects; D-Bus iface needed
 
-~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
-
 TODO: go with FF implementation:
 http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
 TODO: use right-hand tab button for window list as in FF
 
 
 TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
+
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 5 (2.3.85) ~~~~~~~~~~~~~~~~
+
+TODO: Widgets [code] fix memory leak introduced in KexiFieldComboBox::setTableOrQuery()
+
+2011-12-10..11
+General
+*[code] fix KexiUtils::replaceColors()
+Table View
+*Make Kexi obey color scheme selection for KDE
+**Table view color support improved for dark schemes
+CCBUG:279694
+Main Window
+*Add Calligra branding to the Kexi Menu
+**Clicking on the logo opens the calligra.org web site
+*Make menu and logo look OK for black color schemes
+Forms
+*Do not create inline editing command when inserting, this fixes possible crash in undo/redo
+*[code] Fix connection to inlineEditorDeleted()
+TODO: clicking on form should exit from inline editing mode
+
+2011-12-07
+General
+*[code] properly delete Kexi's "about data" structure, simplify the API, remove CUSTOM version ifdefs
+Query Designer
+*Fix crash when selecting sort order in a query field
+**[code] Properly update current row pointer after row insert
+*Fix crash when selecting sort order without query field specified
+BUG:255304
+*[code] Split KexiQueryDesignerGuiEditor::slotBeforeCellChanged to functions per column
+
+2011-12-02
+General
+*fix build with gcc 4.2.1 under OpenBSD
+BUG:288085
 
 2011-11-30
 Reports
@@ -146,6 +181,7 @@ Startup
 Startup
 *Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
 Main Window
+BUG:282651
 *fix build of search line edit for msvc
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~

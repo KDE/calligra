@@ -21,29 +21,27 @@
 
 #include "kexi_version.h"
 
-using namespace Kexi;
-
-KEXICORE_EXPORT unsigned int version()
+KEXICORE_EXPORT unsigned int Kexi::version()
 {
     return KEXI_VERSION;
 }
 
-KEXICORE_EXPORT unsigned int versionMajor()
+KEXICORE_EXPORT unsigned int Kexi::versionMajor()
 {
     return KEXI_VERSION_MAJOR;
 }
 
-KEXICORE_EXPORT unsigned int versionMinor()
+KEXICORE_EXPORT unsigned int Kexi::versionMinor()
 {
     return KEXI_VERSION_MINOR;
 }
 
-KEXICORE_EXPORT unsigned int versionRelease()
+KEXICORE_EXPORT unsigned int Kexi::versionRelease()
 {
     return KEXI_VERSION_RELEASE;
 }
 
-KEXICORE_EXPORT const char *versionString()
+KEXICORE_EXPORT const char *Kexi::versionString()
 {
     return KEXI_VERSION_STRING;
 }

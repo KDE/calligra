@@ -24,6 +24,8 @@
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
 
+#include "kptaccountsmodel.h" // FIXME hack to get at i18n'ed header text
+
 #include <QComboBox>
 
 #include <kdebug.h>
@@ -92,9 +94,6 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
             }
         }
     }
-    int mode = m_completion.entrymode();
-    mode = mode > 1 ? 1 : 0;
-    editmode->setCurrentIndex( mode );
 
     enableWidgets();
     started->setFocus();
@@ -103,10 +102,7 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     entryTable->model()->setTask( task );
     entryTable->setCompletion( &m_completion );
 
-    connect( editmode, SIGNAL( currentIndexChanged( int ) ), SLOT( slotEditmodeChanged( int ) ) );
-    connect( editmode, SIGNAL( activated( int ) ), SLOT( slotChanged() ) );
-
-    connect( addEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( addEntry() ) );
+    connect( addEntryBtn, SIGNAL( clicked() ), this, SLOT( slotAddEntry() ) );
     connect( removeEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( removeEntry() ) );
 
     connect( entryTable, SIGNAL( rowInserted( const QDate ) ), SLOT( slotEntryAdded( const QDate ) ) );
@@ -129,9 +125,11 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotFinishTimeChanged( const QDateTime& )));
 
     removeEntryBtn->setEnabled( false );
+}
 
-    // TODO edit mode
-
+QSize TaskCompletionPanel::sizeHint() const
+{
+    return QWidget::sizeHint().expandedTo( QSize( 610, 0 ) );
 }
 
 KUndo2Command *TaskCompletionPanel::buildCommand()
@@ -185,13 +183,6 @@ void TaskCompletionPanel::slotChanged()
     emit changed( true ); //FIXME
 }
 
-void TaskCompletionPanel::optionChanged( int id )
-{
-    m_completion.setEntrymode( static_cast<Completion::Entrymode>( id ) );
-    entryTable->model()->slotDataChanged();
-    enableWidgets();
-}
-
 void TaskCompletionPanel::slotStartedChanged(bool state) {
     m_completion.setStarted( state );
     if (state) {
@@ -241,6 +232,17 @@ void TaskCompletionPanel::slotStartTimeChanged( const QDateTime &dt )
     
 }
 
+void TaskCompletionPanel::slotAddEntry()
+{
+    CompletionEntryItemModel *m = static_cast<CompletionEntryItemModel*>( entryTable->model() );
+    int col = KPlato::CompletionEntryItemModel::Property_UsedEffort;
+
+    entryTable->addEntry();
+
+    m_completion.setEntrymode( Completion::EnterEffortPerTask );
+    m->setFlags( col, Qt::ItemIsEditable );
+}
+
 void TaskCompletionPanel::slotEntryChanged()
 {
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
@@ -274,15 +276,16 @@ void TaskCompletionPanel::slotSelectionChanged( const QItemSelection &sel )
 
 void TaskCompletionPanel::slotEditmodeChanged( int index )
 {
-    m_completion.setEntrymode( index == 0 ? Completion::EnterCompleted : Completion::EnterEffortPerTask );
-    emit changed( true );
 }
 
 //-------------------
 CompletionEntryItemModel::CompletionEntryItemModel( QObject *parent )
-    : KPlato::CompletionEntryItemModel( parent )
+    : KPlato::CompletionEntryItemModel( parent ),
+    m_calculate( false )
 {
-    m_headers << "Accumulated";
+    // FIXME after string freeze is lifted
+    CostBreakdownItemModel m;
+    m_headers << m.headerData( 2, Qt::Horizontal ).toString();
 }
 
 int CompletionEntryItemModel::columnCount( const QModelIndex& ) const
@@ -363,6 +366,7 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                 removeEntry( od );
                 addEntry( value.toDate() );
                 // emit dataChanged( idx, idx );
+                m_calculate = true;
                 return true;
             }
             if ( idx.column() == Property_Completion ) {
@@ -371,7 +375,7 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                     return false;
                 }
                 e->percentFinished = value.toInt();
-                if ( m_completion->entrymode() == Completion::EnterCompleted && m_node ) {
+                if ( m_calculate && m_node && idx.row() == rowCount() - 1 ) {
                     // calculate used/remaining
                     Duration est = m_node->plannedEffort( id(), ECCT_EffortWork );
                     e->totalPerformed = est * e->percentFinished / 100;
@@ -385,6 +389,7 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                 if ( e == 0 ) {
                     return false;
                 }
+                m_calculate = false;
                 Duration prev;
                 if ( idx.row() > 0 ) {
                     Completion::Entry *pe = m_completion->entry( date( idx.row() - 1 ).toDate() );
@@ -407,6 +412,7 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                 if ( e == 0 ) {
                     return false;
                 }
+                m_calculate = false;
                 double v( value.toList()[0].toDouble() );
                 Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
                 Duration d = Estimate::scale( v, unit, scales() );

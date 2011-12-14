@@ -167,7 +167,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     KoXmlWriter *tempBodyHolder = 0;
     if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
         tempBodyHolder = body;
-        body = m_currentDrawingObject->pictureElement();
+        body = m_currentDrawingObject->pictureWriter();
     }
 #endif
 
