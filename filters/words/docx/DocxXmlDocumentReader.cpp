@@ -64,7 +64,7 @@ public:
     BorderMap() {
         insert(QString(), KoBorder::BorderNone);
         insert("nil", KoBorder::BorderNone);
-        insert("none", KoBorder::BorderNone);
+        insert("none", KoBorder::BorderSolid);
         insert("single", KoBorder::BorderSolid);
         insert("thick", KoBorder::BorderSolid); //FIXME find a better representation
         insert("double", KoBorder::BorderDouble);

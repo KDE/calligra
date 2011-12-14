@@ -506,7 +506,23 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
 #undef CURRENT_EL
 #define CURRENT_EL tblStylePr
-//! tbleStylePr (table style handler)
+//! tblStylePr  (Style Conditional Table Formatting Properties)
+/*! ECMA-376, 17.7.6.6, p.731
+
+  This element specifies a set of formatting properties which shall be
+  conditionally applied to the parts of a table which match the requirement
+  specified on the type attribute.
+
+  Parent elements:
+  - [done] style (§17.7.4.17)
+
+  Child elements:
+  - [done] pPr (Table Style Conditional Formatting Paragraph Properties) §17.7.6.1
+  - [done] rPr (Table Style Conditional Formatting Run Properties) §17.7.6.2
+  - [done] tblPr (Table Style Conditional Formatting Table Properties) §17.7.6.3
+  - [done] tcPr (Table Style Conditional Formatting Table Cell Properties) §17.7.6.8
+  - trPr (Table Style Conditional Formatting Table Row Properties) §17.7.6.10
+ */
 KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 {
     READ_PROLOGUE
@@ -525,6 +541,8 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
             TRY_READ_IF(tcPr)
             ELSE_TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(pPr)
+            ELSE_TRY_READ_IF(tblPr)
+            //TODO: Add trPr and test for regressions!
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
@@ -540,11 +558,15 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 //         if (m_currentTableStyleProperties->insideH.innerPen.widthF() == 0) {
 //             m_currentTableStyleProperties->insideH = m_currentTableStyleProperties->bottom;
 //         }
-//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstRow, m_currentTableStyleProperties);
     }
     else if (type == "lastRow") {
-//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastRow, m_currentTableStyleProperties);
     }
     else if (type == "band1Horz") {
@@ -563,11 +585,15 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 //         if (m_currentTableStyleProperties->insideV.innerPen.widthF() == 0) {
 //             m_currentTableStyleProperties->insideV = m_currentTableStyleProperties->right;
 //         }
-//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+        }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstCol, m_currentTableStyleProperties);
     }
     else if (type == "lastCol") {
-//         m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+        }
         m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastCol, m_currentTableStyleProperties);
     }
     else if (type == "nwCell") {
