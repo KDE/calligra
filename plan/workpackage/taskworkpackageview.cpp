@@ -108,6 +108,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     masterView()->header()->setSortIndicator( TaskWorkPackageModel::NodeType, Qt::AscendingOrder );
 
     connect(masterView()->header(), SIGNAL(sectionMoved(int, int, int)), SIGNAL(sectionsMoved()));
+    connect(slaveView()->header(), SIGNAL(sectionMoved(int, int, int)), SIGNAL(sectionsMoved()));
 }
 
 void TaskWorkPackageTreeView::setSortOrder( int col, Qt::SortOrder order )
