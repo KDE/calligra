@@ -76,12 +76,8 @@ Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
             case NodeActualFinish:
             case NodeCompleted:
             case NodeRemainingEffort:
-                flags |= Qt::ItemIsEditable;
-                break;
             case NodeActualEffort:
-                if ( t->completion().entrymode() == Completion::EnterEffortPerTask || t->completion().entrymode() == Completion::EnterEffortPerResource ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             default: break;
         }
@@ -492,8 +488,15 @@ bool TaskWorkPackageModel::setFinishedTime( Node *node, const QVariant &value, i
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
-                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
-                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    QDate lastdate = t->completion().entryDate();
+                    if ( ! lastdate.isValid() || lastdate < value.toDate() ) {
+                        Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                        m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    } else {
+                        Completion::Entry *e = new Completion::Entry( *( t->completion().entry( lastdate ) ) );
+                        e->percentFinished = 100;
+                        m->addCommand( new ModifyCompletionEntryCmd( t->completion(), lastdate, e ) );
+                    }
                 }
             }
             m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );

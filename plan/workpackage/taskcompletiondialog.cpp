@@ -216,9 +216,6 @@ void TaskCompletionPanel::slotFinishTimeChanged( const QDateTime &dt )
         return;
     }
     m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
-    if ( m_completion.percentFinished() == 100 ) {
-        m_completion.takeEntry( m_completion.entryDate() );
-    }
     if ( m_completion.percentFinished() < 100 ) {
         m_completion.setPercentFinished( dt.date(), 100 );
     }
