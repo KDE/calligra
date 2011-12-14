@@ -68,9 +68,13 @@ public:
     
     QList<Node*> selectedNodes() const;
 
+signals:
+    void sectionsMoved();
+
 protected slots:
     void slotActivated( const QModelIndex index );
-    
+    void setSortOrder( int col, Qt::SortOrder order );
+
 protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
@@ -107,6 +111,7 @@ public slots:
 
 protected slots:
     virtual void slotOptions();
+    void sectionsMoved();
 
 protected:
     void updateActionsEnabled( bool on );

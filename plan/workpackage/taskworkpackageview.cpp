@@ -29,24 +29,13 @@
 #include "kptitemviewsettup.h"
 #include "planworksettings.h"
 
-#include <KoDocument.h>
 
 #include <QDragMoveEvent>
 #include <QMenu>
 #include <QModelIndex>
-#include <QVBoxLayout>
 #include <QWidget>
-#include <QTextBrowser>
-#include <QTextCursor>
-#include <QTextTableFormat>
-#include <QTextLength>
-#include <QTextTable>
-#include <QTextFrame>
-#include <QTextFrameFormat>
-#include <QTextCharFormat>
-#include <QTextTableCell>
-#include <QLineEdit>
-#include <QItemSelection>
+#include <QSortFilterProxyModel>
+#include <QHeaderView>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -70,8 +59,15 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    TaskWorkPackageModel *m = new TaskWorkPackageModel( part, this );
-    setModel( m );
+    masterView()->header()->setSortIndicatorShown( true );
+    masterView()->header()->setClickable( true );
+    slaveView()->header()->setSortIndicatorShown( true );
+    slaveView()->header()->setClickable( true );
+
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( this );
+    TaskWorkPackageModel *m = new TaskWorkPackageModel( part, sf );
+    sf->setSourceModel( m );
+    setModel( sf );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::SingleSelection );
     setStretchLastSection( false );
@@ -103,11 +99,25 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     masterView()->setFocus();
 
     kDebug()<<PlanWorkSettings::self()->taskWorkPackageView();
+    masterView()->header()->setClickable( true );
+    slaveView()->header()->setSortIndicatorShown( true );
+
+    connect(masterView()->header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), SLOT(setSortOrder(int, Qt::SortOrder)));
+    connect(slaveView()->header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), SLOT(setSortOrder(int, Qt::SortOrder)));
+
+    masterView()->header()->setSortIndicator( TaskWorkPackageModel::NodeType, Qt::AscendingOrder );
+
+    connect(masterView()->header(), SIGNAL(sectionMoved(int, int, int)), SIGNAL(sectionsMoved()));
+}
+
+void TaskWorkPackageTreeView::setSortOrder( int col, Qt::SortOrder order )
+{
+    DoubleTreeViewBase::model()->sort( col, order );
 }
 
 TaskWorkPackageModel *TaskWorkPackageTreeView::model() const
 {
-    return static_cast<TaskWorkPackageModel*>( DoubleTreeViewBase::model() );
+    return static_cast<TaskWorkPackageModel*>( static_cast<QSortFilterProxyModel*>( DoubleTreeViewBase::model() )->sourceModel() );
 }
 
 Project *TaskWorkPackageTreeView::project() const
@@ -199,6 +209,8 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 
     loadContext();
+
+    connect(m_view, SIGNAL(sectionsMoved()), SLOT(sectionsMoved()));
 }
 
 void TaskWorkPackageView::updateReadWrite( bool rw )
@@ -327,6 +339,11 @@ void TaskWorkPackageView::slotOptions()
     saveContext();
 }
 
+void TaskWorkPackageView::sectionsMoved()
+{
+    saveContext();
+}
+
 bool TaskWorkPackageView::loadContext()
 {
     KoXmlDocument doc;
@@ -347,6 +364,7 @@ void TaskWorkPackageView::saveContext()
     m_view->saveContext( model()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
+    kDebug()<<endl<<doc.toString();
 }
 
 KoPrintJob *TaskWorkPackageView::createPrintJob()
