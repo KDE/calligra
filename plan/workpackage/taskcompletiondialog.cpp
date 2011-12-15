@@ -204,22 +204,26 @@ void TaskCompletionPanel::slotFinishedChanged(bool state) {
     if (state) {
         kDebug()<<state;
         setFinished();
-        kDebug()<<finishTime->dateTime();
-        slotCalculateEffort();
+        Completion::Entry *e = m_completion.entry( m_completion.finishTime().date() );
+        if ( e == 0 ) {
+            kDebug()<<"no entry on this date, just add one:"<<m_completion.finishTime().date();
+            e = new Completion::Entry( 100, Duration::zeroDuration, m_package->node()->plannedEffort() );
+            m_completion.addEntry( m_completion.finishTime().date(), e );
+            entryTable->setCompletion( &m_completion );
+            kDebug()<<"Entry added:"<<m_completion.finishTime().date()<<m_completion.entry( m_completion.finishTime().date() );
+        } else {
+            // row exists, use model to update to respect calculation mode
+            int row = entryTable->model()->rowCount() - 1;
+            QModelIndex idx = entryTable->model()->index( row, CompletionEntryItemModel::Property_Completion );
+            entryTable->model()->setData( idx, 100 );
+        }
     }   
     enableWidgets();
 }
 
 void TaskCompletionPanel::slotFinishTimeChanged( const QDateTime &dt )
 {
-    if ( ! m_completion.isFinished() ) {
-        return;
-    }
     m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
-    if ( m_completion.percentFinished() < 100 ) {
-        m_completion.setPercentFinished( dt.date(), 100 );
-    }
-    entryTable->setCompletion( &m_completion ); // for refresh
 }
 
 void TaskCompletionPanel::slotStartTimeChanged( const QDateTime &dt )
@@ -243,6 +247,9 @@ void TaskCompletionPanel::slotAddEntry()
 void TaskCompletionPanel::slotEntryChanged()
 {
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    if ( ! finished->isChecked() && ! m_completion.isFinished() && m_completion.percentFinished() == 100 ) {
+        finished->setChecked( true );
+    }
 }
 
 void TaskCompletionPanel::enableWidgets() {
@@ -377,6 +384,8 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                     Duration est = m_node->plannedEffort( id(), ECCT_EffortWork );
                     e->totalPerformed = est * e->percentFinished / 100;
                     e->remainingEffort = est - e->totalPerformed;
+                } else if ( e->percentFinished == 100 && e->remainingEffort != 0 ) {
+                    e->remainingEffort = Duration::zeroDuration;
                 }
                 emit dataChanged( idx, createIndex( idx.row(), 3 ) );
                 return true;

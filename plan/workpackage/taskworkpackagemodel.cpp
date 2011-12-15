@@ -376,8 +376,8 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
     }
     if ( node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
-        QDateTime dt = QDateTime::currentDateTime();
-        QDate date = dt.date();
+        QDate date = qMax( c.entryDate(), QDate::currentDate() );
+        QDateTime dt( date, QTime::currentTime() );
         // xgettext: no-c-format
         MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
         if ( ! c.isStarted() ) {
@@ -389,8 +389,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
         }
+        bool newentry = c.entryDate() < date;
         emit executeCommand( m ); // also adds a new entry if necessary
-        if ( c.entrymode() == Completion::EnterCompleted ) {
+        if ( newentry ) {
+            // new entry so calculate used/remaining based on completion
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
             kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
@@ -398,6 +400,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             cmd->execute();
             m->addCommand( cmd );
             cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        } else if ( c.isFinished() && c.remainingEffort() != 0 ) {
+            ModifyCompletionRemainingEffortCmd *cmd = new ModifyCompletionRemainingEffortCmd( c, date, Duration::zeroDuration );
             cmd->execute();
             m->addCommand( cmd );
         }
