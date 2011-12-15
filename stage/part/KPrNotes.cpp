@@ -27,13 +27,13 @@
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeLayer.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoPASavingContext.h>
-
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
