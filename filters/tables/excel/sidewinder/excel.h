@@ -38,6 +38,8 @@
 #include "ODrawToOdf.h"
 #include "pictures.h"
 
+class QTextDocument;
+
 namespace Swinder
 {
 
@@ -794,8 +796,9 @@ public:
         VDistributed = 7
     };
 
-
     QString m_text;
+    QTextDocument *m_doc; // NULL if plainText else it defines the richText
+
     HorizontalAlignment halign;
     VerticalAlignment valign;
 

@@ -36,6 +36,9 @@
 #include <QFile>
 #include <QTextCodec>
 #include <QtEndian>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
 
 #include <pole.h>
 #include "swinder.h"
@@ -1628,7 +1631,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 const unsigned TxORecord::id = 0x1B6;
 
-TxORecord::TxORecord(Workbook *book) : Record(book) {}
+TxORecord::TxORecord(Workbook *book) : Record(book), m_doc(0) {}
 TxORecord::~TxORecord() {}
 
 void TxORecord::dump(std::ostream& out) const
@@ -1658,7 +1661,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
         startPict += 4 + cbFmla;
     } else {
-        //const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
+        //const unsigned long ifntEmpty = readU16(startPict); // FontIndex
         startPict += 2;
         const unsigned *endOffset = continuePositions;
         while (data + *endOffset <= startPict && *endOffset < size) endOffset++;
@@ -1673,8 +1676,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     // XLUnicodeStringNoCch
     m_text = QString();
+    unsigned k = 1;
     if(fHighByte) {
-        for (unsigned k = 1; startPict + k + 1 < endPict; k += 2) {
+        for (; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
             if (!zc) break;
             if (!QChar(zc).isPrint() && zc != 10) {
@@ -1684,7 +1688,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
             m_text.append(QChar(zc));
         }
     } else {
-        for (unsigned k = 1; startPict + k < endPict; k += 1) {
+        for (; startPict + k < endPict; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
             if (!uc) break;
             if (!QChar(uc).isPrint() && uc != 10) {
@@ -1692,6 +1696,55 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
                 break;
             }
             m_text.append(QChar(uc));
+        }
+    }
+
+    // Now look for TxORun structures that specify the formatting run information for the TxO record.
+    delete m_doc; m_doc = 0;
+    int ToXRunsPositionIndex = 0;
+    do {
+        unsigned pos = continuePositions[ToXRunsPositionIndex];
+        if (pos + 8 > size) {
+            ToXRunsPositionIndex = 0;
+            break; // not found
+        }
+        if (pos >= k) {
+            break; // we have it
+        }
+        ++ToXRunsPositionIndex;
+    } while(false);
+    if (ToXRunsPositionIndex > 0) {
+        m_doc = new QTextDocument();
+        m_doc->setPlainText(m_text);
+        QTextCursor cursor(m_doc);
+        //cursor.setVisualNavigation(true);
+        QTextCharFormat format;
+        unsigned pos = continuePositions[ToXRunsPositionIndex];
+        for(;pos + 8 <= size; pos += 8) { // now walk through the array of Run records
+            const unsigned ich = readU16(data + pos);
+            const unsigned ifnt = readU16(data + pos + 2);
+
+            if (format.isValid()) {
+                cursor.setPosition(ich, QTextCursor::KeepAnchor);
+                cursor.setCharFormat(format);
+                cursor.setPosition(ich, QTextCursor::MoveAnchor);
+            }
+
+            if (ich >= unsigned(m_text.length())) {
+                break;
+            }
+
+            FormatFont font = m_workbook->font(ifnt);
+            Q_ASSERT(!font.isNull());
+            format.setFontFamily(font.fontFamily());
+            format.setFontPointSize(font.fontSize());
+            format.setForeground(QBrush(font.color()));
+            format.setFontWeight(font.bold() ? QFont::Bold : QFont::Normal);
+            format.setFontItalic(font.italic());
+            format.setFontUnderline(font.underline());
+            format.setFontStrikeOut(font.strikeout());
+            //TODO font.subscript()
+            //TODO font.superscript()
         }
     }
 

@@ -22,6 +22,8 @@
 #include <ODrawToOdf.h>
 #include <excel.h>
 
+class KoStyleManager;
+
 namespace Swinder {
     class Sheet;
 }
@@ -45,16 +47,21 @@ public:
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 
+    void setStyleManager(KoStyleManager* styleManager);
+    KoStyleManager* styleManager() const;
+
     void setZIndexAttribute(Writer& out);
 
     void setZIndex(quint32 zindex){ m_zIndex = zindex; }
     quint32 zIndex() const { return m_zIndex; }
 
     void setShapeText(const Swinder::TxORecord& text);
+
 private:
     Swinder::Sheet* m_sheet;
     Swinder::TxORecord m_shapeText;
     quint32 m_zIndex;
+    KoStyleManager* m_styleManager;
 };
 
 #endif // ODRAWCLIENT_H

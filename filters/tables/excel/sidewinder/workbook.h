@@ -39,6 +39,7 @@ namespace Swinder
 
 class Sheet;
 class Format;
+class FormatFont;
 
 class Workbook : public QObject
 {
@@ -142,6 +143,9 @@ public:
     QList< QColor > colorTable() const;
     QColor customColor(unsigned index) const;
     QColor color(unsigned index) const;
+
+    FormatFont font(unsigned index) const;
+    void setFont(unsigned index, const FormatFont &font);
 
     enum Version {
         Excel95,

@@ -43,6 +43,7 @@ public:
     QList<QColor> colorTable;
     Version version;
     QMap<QByteArray, QString> pictureNames; // uid, filename
+    std::map<unsigned, FormatFont> fonts; // mapping from font index to Swinder::FormatFont
 };
 
 Workbook::Workbook(KoStore* store)
@@ -289,6 +290,16 @@ QColor Workbook::color(unsigned index) const
     }
 
     return color;
+}
+
+FormatFont Workbook::font(unsigned index) const
+{
+    return d->fonts[index];
+}
+
+void Workbook::setFont(unsigned index, const FormatFont &font)
+{
+    d->fonts[index] = font;
 }
 
 Workbook::Version Workbook::version() const

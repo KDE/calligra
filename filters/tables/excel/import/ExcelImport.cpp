@@ -580,6 +580,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
             OfficeArtObject* o = objs[i];
             client.setShapeText(o->text());
             client.setZIndex(o->index());
+            client.setStyleManager(outputDoc->map()->textStyleManager());
             odraw.processDrawingObject(o->object(), writer);
         }
 
@@ -597,6 +598,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
                     client.setZIndex(o->index());
+                    client.setStyleManager(outputDoc->map()->textStyleManager());
                     odraw.processDrawingObject(o->object(), transw);
                 }
             } else {
@@ -605,6 +607,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Tables::Sheet* os)
                     OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
                     client.setZIndex(o->index());
+                    client.setStyleManager(outputDoc->map()->textStyleManager());
                     odraw.processDrawingObject(o->object(), writer);
                 }
             }
@@ -1051,6 +1054,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Tables::Cell o
             OfficeArtObject* o = objects[i];
             client.setShapeText(o->text());
             client.setZIndex(o->index());
+            client.setStyleManager(outputDoc->map()->textStyleManager());
             odraw.processDrawingObject(o->object(), writer);
         }
     }
