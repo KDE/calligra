@@ -104,7 +104,7 @@ public:
         PIDSI_LASTPRINTED_DTM = 0x0b,
         PIDSI_CREATE_DTM = 0x0c,
         PIDSI_LASTSAVED_DTM = 0x0d,
-        PIDSI_APPNAME = 0x12,
+        PIDSI_APPNAME = 0x12
     };
 
     bool hasProperty(PropertyType type) const;
