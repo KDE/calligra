@@ -386,7 +386,7 @@ KEXIUTILS_EXPORT QPixmap scaledPixmap(const WidgetMargins& margins, const QRect&
 
 //! A helper for automatic deleting of contents of containers.
 template <typename Container>
-class KEXIUTILS_EXPORT ContainerDeleter
+class ContainerDeleter
 {
 public:
     ContainerDeleter(Container& container) : m_container(container) {}
@@ -402,7 +402,7 @@ private:
 
 //! @short Autodeleted hash
 template <class Key, class T>
-class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T>
+class AutodeletedHash : public QHash<Key, T>
 {
 public:
     AutodeletedHash(const AutodeletedHash& other) : QHash<Key, T>(other), m_autoDelete(false) {}
@@ -422,7 +422,7 @@ private:
 
 //! @short Autodeleted list
 template <typename T>
-class KEXIUTILS_EXPORT AutodeletedList : public QList<T>
+class AutodeletedList : public QList<T>
 {
 public:
     AutodeletedList(const AutodeletedList& other)
@@ -509,7 +509,7 @@ private:
 //! @short Case insensitive hash container supporting QString or QByteArray keys.
 //! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
 template <typename Key, typename T>
-class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T>
+class CaseInsensitiveHash : public QHash<Key, T>
 {
 public:
     CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
@@ -584,7 +584,7 @@ private:
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
 template <typename T>
-class KEXIUTILS_EXPORT Setter
+class Setter
 {
 public:
     //! Creates a new setter object for variable @a var,
