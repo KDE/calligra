@@ -170,7 +170,7 @@ Region::Region(const Region& list)
     d = new Private();
     d->map = list.d->map;
 
-    //d->cells.reserve(list.d->cells.size());
+    d->cells.reserve(list.d->cells.size());
     ConstIterator end(list.d->cells.constEnd());
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
