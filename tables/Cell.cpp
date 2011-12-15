@@ -161,9 +161,9 @@ KLocale* Cell::locale() const
 bool Cell::isDefault() const
 {
     // check each stored attribute
-    if (value() != Value())
+    if (value().isEmpty())
         return false;
-    if (formula() != Formula())
+    if (formula() != Formula::empty())
         return false;
     if (!link().isEmpty())
         return false;

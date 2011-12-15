@@ -1631,7 +1631,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 const unsigned TxORecord::id = 0x1B6;
 
-TxORecord::TxORecord(Workbook *book) : Record(book), m_doc(0) {}
+TxORecord::TxORecord(Workbook *book) : Record(book) {}
 TxORecord::~TxORecord() {}
 
 void TxORecord::dump(std::ostream& out) const
@@ -1699,8 +1699,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
     }
 
+    m_doc.clear();
+
     // Now look for TxORun structures that specify the formatting run information for the TxO record.
-    delete m_doc; m_doc = 0;
     int ToXRunsPositionIndex = 0;
     do {
         unsigned pos = continuePositions[ToXRunsPositionIndex];
@@ -1714,9 +1715,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         ++ToXRunsPositionIndex;
     } while(false);
     if (ToXRunsPositionIndex > 0) {
-        m_doc = new QTextDocument();
+        m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
         m_doc->setPlainText(m_text);
-        QTextCursor cursor(m_doc);
+        QTextCursor cursor(m_doc.data());
         //cursor.setVisualNavigation(true);
         QTextCharFormat format;
         unsigned pos = continuePositions[ToXRunsPositionIndex];
