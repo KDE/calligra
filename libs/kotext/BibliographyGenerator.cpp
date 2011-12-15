@@ -65,7 +65,7 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager,QStr
 
 static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
-    if ( keyIndex == sortKeys.size() ) return true;
+    if ( keyIndex == sortKeys.size() ) return false;
     else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
         if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return true;
         else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return false;
