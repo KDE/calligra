@@ -797,7 +797,7 @@ public:
     };
 
     QString m_text;
-    QTextDocument *m_doc; // NULL if plainText else it defines the richText
+    QSharedPointer<QTextDocument> m_doc; // NULL if plainText else it defines the richText
 
     HorizontalAlignment halign;
     VerticalAlignment valign;

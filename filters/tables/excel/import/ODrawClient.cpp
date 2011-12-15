@@ -161,7 +161,7 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
         KoEmbeddedDocumentSaver embeddedSaver;
         KoShapeSavingContext context(out.xml, out.styles, embeddedSaver);
         KoTextWriter textWriter(context);
-        textWriter.write(m_shapeText.m_doc, 0);
+        textWriter.write(m_shapeText.m_doc.data(), 0);
 
         doc.setStyleManager(0);
     } else { // plain-text
