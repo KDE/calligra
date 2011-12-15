@@ -696,7 +696,11 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
             if (record->definedName() == "_FilterDatabase") {
                 if (record->m_formula.id() == FormulaToken::Area3d) {
                     std::pair<unsigned, QRect> area = record->m_formula.filterArea3d();
-                    d->workbook->addFilterRange(area.first, area.second);
+                    QString sheetName = "Error";
+                    if (area.first < d->externSheetTable.size()) {
+                        sheetName = d->externSheetTable[area.first];
+                    }
+                    d->workbook->addFilterRange(sheetName, area.second);
                 }
             }
         } else {

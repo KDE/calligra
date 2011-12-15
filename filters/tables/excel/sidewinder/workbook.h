@@ -117,6 +117,7 @@ public:
     QList<QRect> filterRanges(unsigned sheet) const;
     QList<QRect> filterRanges(const Sheet* sheet) const;
     void addFilterRange(unsigned sheet, const QRect& range);
+    void addFilterRange(const QString& sheet, const QRect& range);
 
     int activeTab() const;
     void setActiveTab(int tab);

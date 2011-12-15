@@ -164,6 +164,20 @@ void Workbook::addFilterRange(unsigned sheet, const QRect& range)
     d->filterRanges[sheet].push_back(range);
 }
 
+void Workbook::addFilterRange(const QString &sheet, const QRect &range)
+{
+    int idx = -1;
+    for (unsigned i = 0; i < d->sheets.size(); i++) {
+        if (d->sheets[i]->name() == sheet) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx >= 0) {
+        addFilterRange(idx, range);
+    }
+}
+
 int Workbook::activeTab() const
 {
     return d->activeTab;
