@@ -87,12 +87,12 @@ QString Calligra::Tables::Util::encodeColumnLabelText(int column)
 bool Calligra::Tables::Util::isCellReference(const QString &text, int startPos)
 {
     int length = text.length();
-    if (length < 1)
+    if (length < 1 || startPos >= length)
         return false;
 
     const QChar *data = text.constData();
 
-    if (startPos > 0 && startPos < length) {
+    if (startPos > 0) {
         data += startPos;
     }
 

@@ -812,7 +812,7 @@ bool Region::isValid(const QRect& rect)
         return true;
 }
 
-void append(const QChar *from, const QChar *to, QChar **dest)
+static void append(const QChar *from, const QChar *to, QChar **dest)
 {
     while (from < to) {
         **dest = *from;
@@ -1132,14 +1132,14 @@ Region::Element::~Element()
 /***************************************************************************
   class Point
 ****************************************************************************/
-int firstNonCharPos(const QString& s, int pos = 0)
+static int firstNonCharPos(const QString& s, int pos = 0)
 {
     int result = -1;
     const QChar *data = s.constData();
     int i = 0;
     while (!data->isNull()) {
         if (i >= pos) {
-            char c = data->toLatin1();
+            char c = data->unicode();
             if (c < 'A' || c > 'z' || (c < 'a' && c > 'Z')) {
                 result = i;
                 break;
@@ -1184,7 +1184,7 @@ Region::Point::Point(const QString& string)
     if (p == length)
         return;
 
-    if ((string[p] < QChar('A',0) || string[p] > QChar('Z',0)) && (string[p] < QChar('a') || string[p] > QChar('z')))
+    if ((string[p] < QChar('A',0) || string[p] > QChar('Z',0)) && (string[p] < QChar('a', 0) || string[p] > QChar('z', 0)))
         return;
 
     //default is error

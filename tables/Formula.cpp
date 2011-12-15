@@ -673,40 +673,47 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
         switch (state) {
         case Start:
             tokenStart = data;
+            // Whitespaces can be used as intersect-operator for two arrays.
             if (data->isSpace()) {
                 ++data;
             }
+            // check for number
             else if (data->isDigit()) {
                 state = InNumber;
                 *out++ = *data++;
             }
+            // terminator character
             else if (data->isNull()) {
                 state = Finish;
             }
             else {
                 switch (data->unicode()) {
-                case '"':
+                case '"': // a string ?
                     *out++ = *data++;
                     state = InString;
                     break;
-                case '\'':
+                case '\'': // aposthrophe (') marks sheet name for 3-d cell, e.g 'Sales Q3'!A4, or a named range
                     ++data;
                     state = InSheetOrAreaName;
                     break;
-                case '#':
+                case '#': // error value?
                     *out++ = *data++;
                     state = InError;
                     break;
                 default:
+                    // decimal dot ?
                     if (*data == decimal[0]) {
                         *out++ = *data++;
                         state = InDecimal;
                     }
+                    // beginning with alphanumeric ?
+                    // could be identifier, cell, range, or function...
                     else if (isIdentifier(*data)) {
                         *out++ = *data++;
                         state = InIdentifier;
                     }
                     else {
+                        // look for operator match
                         if (parseOperator(data, out)) {
                             token.resize(out - outStart);
                             tokens.append(Token(Token::Operator, token, tokenStart - start));
@@ -714,6 +721,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                             out = outStart;
                         }
                         else {
+                            // not matched an operator, add an Unknown token and remember we had a parse error
                             parseError = true;
                             *out++ = *data++;
                             token.resize(out - outStart);
@@ -727,16 +735,19 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InIdentifier:
+            // consume as long as alpha, dollar sign, underscore, or digit
             if (isIdentifier(*data) || data->isDigit()) {
                 *out = *data;
                 ++out;
                 ++data;
             }
+            // a '!' ? then this must be sheet name, e.g "Sheet4!", unless the next character is '='
             else if (*data == QChar('!', 0) && !(data + 1)->isNull() && *(data + 1) != QChar('=', 0)) {
                 *out++ = *data++;
                 cellStart = out;
                 state = InCell;
             }
+            // a '(' ? then this must be a function identifier
             else if (*data == QChar('(', 0)) {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Identifier, token, tokenStart - start));
@@ -744,14 +755,18 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                 out = outStart;
                 state = Start;
             }
+            // we're done with identifier
             else {
                 *out = QChar();
+                // check for cell reference,  e.g A1, VV123, ...
                 if (Util::isCellReference(token)) {
+                    // so up to now we've got something like A2 or Sheet2!F4
+                    // check for range reference
                     if (*data == QChar(':', 0)) {
-                        //token.resize(length);
                         *out++ = *data++;
                         state = InRange;
                     }
+                    // we're done with cell reference
                     else {
                         token.resize(out - outStart);
                         tokens.append(Token(Token::Cell, token, tokenStart - start));
@@ -775,15 +790,15 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InCell:
+            // consume as long as alpha, dollar sign, underscore, or digit
             if (isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
             }
             else {
-                //QString cell = token.mid(cellStart - outStart, out - cellStart);
-                //QString cell = token.mid(cellStart - outStart, out - cellStart);
                 *out = QChar();
+                // check if it's a cell ref like A32, not named area
                 if (!Util::isCellReference(token, cellStart - outStart)) {
-                    // regexp failed, means we have something like "Sheet2!TotalSales"
+                    // test failed, means we have something like "Sheet2!TotalSales"
                     // and not "Sheet2!A2"
                     // thus, assume so far that it's a named area
                     token.resize(out - outStart);
@@ -792,12 +807,15 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     out = outStart;
                     state = Start;
                 }
-                else { // FIXME this part is a copy paste
+                else {
+                    // so up to now we've got something like A2 or Sheet2!F4
+                    // check for range reference
                     if (*data == QChar(':', 0)) {
                         *out++ = *data++;
                         state = InRange;
                     }
                     else {
+                        // we're done with cell reference
                         token.resize(out - outStart);
                         tokens.append(Token(Token::Cell, token, tokenStart - start));
                         token.resize(length);
@@ -808,9 +826,11 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InRange:
+            // consume as long as alpha, dollar sign, underscore, or digit or !
             if (isIdentifier(*data) || data->isDigit() || *data == QChar('!', 0)) {
                 *out++ = *data++;
             }
+            // we're done with range reference
             else {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Range, token, tokenStart - start));
@@ -820,11 +840,14 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InSheetOrAreaName:
+            // consume until '
             if (*data != QChar('\'', 0)) {
                 *out++ = *data++;
             }
             else {
+                // eat the aposthrophe itself
                 ++data;
+                // must be followed by '!' to be sheet name
                 if (!data->isNull() && *data == QChar('!', 0)) {
                     *out++ = *data++;
                     cellStart = out;
@@ -848,10 +871,12 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InNumber:
-            if (data->isDigit()) { // consume as long as it's digit
+            // consume as long as it's digit
+            if (data->isDigit()) {
                 *out++ = *data++;
             }
-            else if (!thousand.isEmpty() && (*data == thousand[0])) { // skip thousand separator
+            // skip thousand separator
+            else if (!thousand.isEmpty() && (*data == thousand[0])) {
                 ++data;
             }
             // convert decimal separator to '.', also support '.' directly
@@ -861,20 +886,25 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                 ++data;
                 state = InDecimal;
             }
+            // exponent ?
             else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
                 *out++ = QChar('E', 0);
                 ++data;
                 state = InExpIndicator;
             }
+            // reference sheet delimiter?
             else if (*data == QChar('!', 0)) {
                 *out++ = *data++;
                 cellStart = out;
                 state = InCell;
             }
+            // identifier?
             else if (isIdentifier(*data)) {
+                // has to be a sheet or area name then
                 *out++ = *data++;
                 state = InIdentifier;
             }
+            // we're done with integer number
             else {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Integer, token, tokenStart - start));
@@ -884,14 +914,17 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InDecimal:
+            // consume as long as it's digit
             if (data->isDigit()) {
                 *out++ = *data++;
             }
+            // exponent ?
             else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
                 *out++ = QChar('E', 0);
                 ++data;
                 state = InExpIndicator;
             }
+            // we're done with floating-point number
             else {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Float, token, tokenStart - start));
@@ -901,13 +934,16 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InExpIndicator:
+            // possible + or - right after E, e.g 1.23E+12 or 4.67E-8
             if (*data == QChar('+', 0) || *data == QChar('-', 0)) {
                 *out++ = *data++;
             }
+            // consume as long as it's digit
             else if (data->isDigit()) {
                 *out++ = *data++;
                 state = InExponent;
             }
+            // invalid thing here
             else {
                 parseError = true;
                 token.resize(out - outStart);
@@ -918,9 +954,11 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InExponent:
+            // consume as long as it's digit
             if (data->isDigit()) {
                 *out++ = *data++;
             }
+            // we're done with floating-point number
             else {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Float, token, tokenStart - start));
@@ -930,11 +968,13 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             }
             break;
         case InString:
+            // consume until "
             if (*data != QChar('"', 0)) {
                 *out++ = *data++;
             }
             else {
                 *out++ = *data++;
+                // check for escaped ""
                 if (data->isNull() || *data != QChar('"', 0)) {
                     token.resize(out - outStart);
                     tokens.append(Token(Token::String, token, tokenStart - start));
@@ -1013,6 +1053,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
         }
     }
 
+    // parse error if any text remains
     if (!data->isNull())  {
         tokens.append(Token(Token::Unknown, expr.mid(tokenStart - start), tokenStart - start));
         parseError = true;
