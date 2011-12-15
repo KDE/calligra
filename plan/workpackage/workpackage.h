@@ -135,6 +135,7 @@ public:
 
 signals:
     void modified( bool );
+    void saveWorkPackage( WorkPackage* );
 
 public slots:
     void setModified( bool on ) { m_modified = on; }

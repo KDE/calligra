@@ -613,6 +613,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
         // rejected, so nothing changed...
         return true;
     }
+    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     emit changed();
     return true;
 }
@@ -655,6 +656,7 @@ bool Part::loadKPlatoXML( const KoXmlDocument &document, KoStore* )
         // rejected, so nothing changed...
         return true;
     }
+    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     emit changed();
     return true;
 }
@@ -776,22 +778,12 @@ bool Part::viewDocument( const KUrl &filename )
 
 void Part::setDocumentClean( bool clean )
 {
+    kDebug()<<clean;
+    setModified( ! clean );
     if ( ! clean ) {
-        return setModified( ! clean );
+        saveModifiedWorkPackages();
+        return;
     }
-    bool mod = false;
-    foreach ( WorkPackage *wp, m_packageMap ) {
-        foreach( DocumentChild *ch, wp->childDocs() ) {
-            if ( ch->isModified() || ch->isFileModified() ) {
-                mod = true;
-                break;
-            }
-        }
-        if ( mod == true ) {
-            break;
-        }
-    }
-    setModified( mod );
 }
 
 void Part::setModified( bool mod )
@@ -803,6 +795,21 @@ void Part::setModified( bool mod )
 bool Part::saveAs( const KUrl &/*url*/ )
 {
     return false;
+}
+
+void Part::saveModifiedWorkPackages()
+{
+    foreach ( WorkPackage *wp, m_packageMap ) {
+        if ( wp->isModified() ) {
+            saveWorkPackage( wp );
+        }
+    }
+    m_undostack->setClean();
+}
+
+void Part::saveWorkPackage( WorkPackage *wp )
+{
+    wp->saveToProjects( this );
 }
 
 bool Part::saveWorkPackages( bool silent )

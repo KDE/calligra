@@ -134,6 +134,7 @@ void WorkPackage::slotChildModified( bool mod )
 {
     kDebug()<<mod;
     emit modified( isModified() );
+    emit saveWorkPackage( this );
 }
 
 void WorkPackage::removeChild( DocumentChild *child )

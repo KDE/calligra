@@ -89,8 +89,8 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
  
     KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
-    
-    KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
+
+//     KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
 
     QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
     a->setEnabled( false );
