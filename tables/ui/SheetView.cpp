@@ -245,7 +245,13 @@ const CellView& SheetView::cellView(int col, int row)
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
+#ifdef CALLIGRA_TABLES_MT
+    // create a copy as long as the mutex is locked
+    CellView cellViewCopy = *v;
+    return cellViewCopy;
+#else
     return *v;
+#endif
 }
 
 void SheetView::setPaintCellRange(const QRect& rect)
