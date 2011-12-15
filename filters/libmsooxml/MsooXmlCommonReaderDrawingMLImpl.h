@@ -937,6 +937,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_customPath);
+                if (!m_textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", m_textareas);
+                }
                 body->addCompleteElement(m_customEquations.toUtf8());
                 body->endElement(); // draw:enhanced-geometry
             }
@@ -1232,6 +1235,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     m_contentAvLstExists = false;
     m_customPath = QString();
     m_customEquations = QString();
+    m_textareas = QString();
 
     while (!atEnd()) {
         readNext();
@@ -2824,6 +2828,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
             else if (name() == "pathLst") {
                 m_customPath = handler.handle_pathLst(this);
                 m_customEquations += handler.pathEquationsCreated();
+            }
+            else if (name() == "rect") {
+                m_textareas = handler.handle_rect(this);
             }
 
         }
