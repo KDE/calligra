@@ -1196,7 +1196,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     READ_EPILOGUE
 }
 
-QString XlsxXmlWorksheetReader::processRowStyle(double height)
+QString XlsxXmlWorksheetReader::processRowStyle(qreal height)
 {
     if (height == -1.0) {
         height = m_context->sheet->m_defaultRowHeight;
