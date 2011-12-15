@@ -1713,7 +1713,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
             break; // we have it
         }
         ++ToXRunsPositionIndex;
-    } while(false);
+    } while(true);
     if (ToXRunsPositionIndex > 0) {
         m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
         m_doc->setPlainText(m_text);
