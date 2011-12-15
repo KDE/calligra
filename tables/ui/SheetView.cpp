@@ -239,17 +239,13 @@ const CellView& SheetView::cellView(int col, int row)
 #ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
-    if (!d->cache.contains(QPoint(col, row))) {
-        CellView *v = createCellView(col, row);
+    CellView *v = d->cache.object(QPoint(col, row));
+    if (!v) {
+        v = createCellView(col, row);
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
-#ifdef CALLIGRA_TABLES_MT
-    CellView v = *d->cache.object(QPoint(col, row));
-    return v;
-#else
-    return *d->cache.object(QPoint(col, row));
-#endif
+    return *v;
 }
 
 void SheetView::setPaintCellRange(const QRect& rect)
