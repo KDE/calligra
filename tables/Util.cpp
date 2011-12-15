@@ -451,41 +451,40 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
                 // could be identifier, cell, range, or function...
                 state = InIdentifier;
                 int i = data - start;
-                QString midString(expression.mid(i));
-
-                const static QString errorType("ERROR.TYPE");
                 const static QString errorTypeReplacement("ERRORTYPE");
-                const static QString legacyNormsdist("LEGACY.NORMSDIST");
                 const static QString legacyNormsdistReplacement("LEGACYNORMSDIST");
-                const static QString legacyNormsinv("LEGACY.NORMSINV");
                 const static QString legacyNormsinvReplacement("LEGACYNORMSINV");
-                const static QString table("TABLE");
                 const static QString multipleOperations("MULTIPLE.OPERATIONS");
-                const static QString neg("NEG");
-                if (midString.startsWith(errorType)) {
+                if (expression.midRef(i,10).compare(QLatin1String("ERROR.TYPE")) == 0) {
                     // replace it
                     int outPos = out - outStart;
                     result.replace(outPos, 9, errorTypeReplacement);
                     data += 10; // number of characters in "ERROR.TYPE"
                     out += 9;
-                } else if (midString.startsWith(legacyNormsdist)) {
-                    // replace it
-                    int outPos = out - outStart;
-                    result.replace(outPos, 15, legacyNormsdistReplacement);
-                    data += 16; // number of characters in "LEGACY.NORMSDIST"
-                    out += 15;
-                } else if (midString.startsWith(legacyNormsinv)) {
-                    // replace it
-                    int outPos = out - outStart;
-                    result.replace(outPos, 14, legacyNormsinvReplacement);
-                    data += 15; // number of characters in "LEGACY.NORMSINV"
-                    out += 14;
-                } else if (namespacePrefix == "oooc:" && midString.startsWith(table) && !isIdentifier(expression[i+5])) {
+                }
+                else if (expression.midRef(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
+                    if (expression.midRef(i + 12, 4).compare(QLatin1String("DIST")) == 0) {
+                        // replace it
+                        int outPos = out - outStart;
+                        result.replace(outPos, 15, legacyNormsdistReplacement);
+                        data += 16; // number of characters in "LEGACY.NORMSDIST"
+                        out += 15;
+                    }
+                    else if (expression.midRef(i + 12, 3).compare(QLatin1String("INV")) == 0) {
+                        // replace it
+                        int outPos = out - outStart;
+                        result.replace(outPos, 14, legacyNormsinvReplacement);
+                        data += 15; // number of characters in "LEGACY.NORMSINV"
+                        out += 14;
+                    }
+                }
+                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !isIdentifier(expression[i+5])) {
                     int outPos = out - outStart;
                     result.replace(outPos, 19, multipleOperations);
                     data += 5;
                     out += 19;
-                } else if (midString.startsWith(neg) && i+3 < expression.length() && !isIdentifier(expression[i+3])) {
+                }
+                else if (expression.midRef(i, 3).compare(QLatin1String("NEG")) == 0) {
                     *out = QChar('-', 0);
                     data += 3;
                     ++out;
