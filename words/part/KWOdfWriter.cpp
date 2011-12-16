@@ -255,8 +255,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
         if (fs->frameCount() == 1) {
             // may be a frame that is anchored to text, don't save those here.
-            KoTextAnchor *anchor = (KoTextAnchor *)fs->frames().first()->anchor();
-            if (anchor && anchor->anchorType() != KoTextAnchor::AnchorPage)
+            if (fs->frames().first()->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
         }
 

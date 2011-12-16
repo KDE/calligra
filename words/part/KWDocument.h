@@ -45,6 +45,7 @@ class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
+class KoTextAnchor;
 
 class KLocalizedString;
 class QIODevice;
@@ -68,6 +69,7 @@ public:
     /// reimplemented from KoShapeBasedDocumentBase
     void removeShape(KoShape *shape);
 
+    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument

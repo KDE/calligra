@@ -141,17 +141,22 @@ KWDocument::~KWDocument()
 // any call coming in here is due to the undo/redo framework, pasting or for nested frames
 void KWDocument::addShape(KoShape *shape)
 {
+    addShape(shape, 0);
+}
+
+void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
+{
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     kDebug(32001) << "shape=" << shape << "frame=" << frame;
     if (frame == 0) {
         if (shape->shapeId() == TextShape_SHAPEID) {
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
             tfs->setName("Text");
-            frame = new KWFrame(shape, tfs);
+            frame = new KWFrame(shape, tfs, anchor);
         } else {
             KWFrameSet *fs = new KWFrameSet();
             fs->setName(shape->shapeId());
-            frame = new KWFrame(shape, fs);
+            frame = new KWFrame(shape, fs, anchor);
         }
     }
     Q_ASSERT(frame->frameSet());

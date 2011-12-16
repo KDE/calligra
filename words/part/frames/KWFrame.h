@@ -127,7 +127,7 @@ public:
     */
 
     int anchoredPageNumber() const {
-        return m_anchor->pageNumber();
+        return m_anchor ? m_anchor->pageNumber() : -1;
     }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -136,8 +136,8 @@ public:
         m_anchoredFrameOffset = offset;
     }
 
-    KoTextAnchor *anchor() {
-        return m_anchor;
+    KoTextAnchor::AnchorType anchorType() {
+        return m_anchor ? m_anchor->anchorType() : KoTextAnchor::AnchorPage;
     }
 
     /**

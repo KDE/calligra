@@ -42,6 +42,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
+#include "commands/KWShapeCreateCommand.h"
 #include <KoShapeReorderCommand.h>
 #include "ui_KWInsertImage.h"
 
@@ -54,7 +55,6 @@
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
-#include <KoShapeCreateCommand.h>
 #include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
@@ -953,6 +953,7 @@ void KWView::anchorToPage()
 
     if (anchor) {
         m_document->inlineTextObjectManager()->removeInlineObject(anchor);
+        anchor->setAnchorType(KoTextAnchor::AnchorPage);
         anchor->shape()->notifyChanged();
     }
 }
@@ -1511,7 +1512,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             editor.insertInlineObject(anchor);
 
             // create the undo step.
-            KoShapeCreateCommand *cmd = new KoShapeCreateCommand(kwdocument(), shape);
+            KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
             KoSelection *selection = m_canvas->shapeManager()->selection();
             selection->deselectAll();
             selection->select(shape);
