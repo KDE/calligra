@@ -852,12 +852,10 @@ void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
             case ':': { // cell separator
                 isRange = true;
                 append(pos, data, &out);
-                *out = *data; // append :
-                ++out;
-                const QChar * next = data + 1;
-                if (!next->isNull()) {
-                    const QChar * nextnext = next + 1;
-                    if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
+                *out++ = *data++; // append :
+                if (!data->isNull()) {
+                    const QChar * next = data + 1;
+                    if (!next->isNull() && *data == QChar('$', 0) && *next != QChar('.', 0)) {
                         ++data;
                     }
                 }
