@@ -411,6 +411,7 @@ bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
     connect( wp->project(), SIGNAL( changed() ), wp, SLOT( projectChanged() ) );
     connect ( wp, SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
     emit workPackageAdded( wp, indexOf( wp ) );
+    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     return true;
 }
 
@@ -613,7 +614,6 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
         // rejected, so nothing changed...
         return true;
     }
-    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     emit changed();
     return true;
 }
@@ -656,7 +656,6 @@ bool Part::loadKPlatoXML( const KoXmlDocument &document, KoStore* )
         // rejected, so nothing changed...
         return true;
     }
-    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     emit changed();
     return true;
 }
