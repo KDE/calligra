@@ -568,7 +568,6 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
         delete m;
     } else {
         part->addCommand( m );
-        setModified( true ); // FIXME needs to follow redo/undo
     }
 }
 
