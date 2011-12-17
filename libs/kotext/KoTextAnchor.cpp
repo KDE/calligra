@@ -315,7 +315,7 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
     if (!changeTracker)
         return;
-    
+
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     if (changeElement && changeElement->getChangeType() == KoGenChange::DeleteChange) {
         changePen.setColor(changeTracker->getDeletionBgColor());
