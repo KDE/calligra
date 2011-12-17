@@ -411,6 +411,7 @@ bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
     connect( wp->project(), SIGNAL( changed() ), wp, SLOT( projectChanged() ) );
     connect ( wp, SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
     emit workPackageAdded( wp, indexOf( wp ) );
+    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     return true;
 }
 
@@ -776,22 +777,12 @@ bool Part::viewDocument( const KUrl &filename )
 
 void Part::setDocumentClean( bool clean )
 {
+    kDebug()<<clean;
+    setModified( ! clean );
     if ( ! clean ) {
-        return setModified( ! clean );
+        saveModifiedWorkPackages();
+        return;
     }
-    bool mod = false;
-    foreach ( WorkPackage *wp, m_packageMap ) {
-        foreach( DocumentChild *ch, wp->childDocs() ) {
-            if ( ch->isModified() || ch->isFileModified() ) {
-                mod = true;
-                break;
-            }
-        }
-        if ( mod == true ) {
-            break;
-        }
-    }
-    setModified( mod );
 }
 
 void Part::setModified( bool mod )
@@ -803,6 +794,21 @@ void Part::setModified( bool mod )
 bool Part::saveAs( const KUrl &/*url*/ )
 {
     return false;
+}
+
+void Part::saveModifiedWorkPackages()
+{
+    foreach ( WorkPackage *wp, m_packageMap ) {
+        if ( wp->isModified() ) {
+            saveWorkPackage( wp );
+        }
+    }
+    m_undostack->setClean();
+}
+
+void Part::saveWorkPackage( WorkPackage *wp )
+{
+    wp->saveToProjects( this );
 }
 
 bool Part::saveWorkPackages( bool silent )

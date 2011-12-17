@@ -218,7 +218,7 @@ public:
 
     virtual ScheduleManager *manager() const { return 0; }
     
-    class Log {
+    class KPLATOKERNEL_EXPORT Log {
         public:
             enum Type { Type_Debug = 0, Type_Info, Type_Warning, Type_Error };
             Log() 

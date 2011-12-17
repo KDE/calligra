@@ -91,18 +91,18 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
     const int lastColumn = m_properties.columnCount() - 1;
 
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "==> WholeTblStyle:";
+    kDebug() << "==> [styles.xml] TABLE-level:";
 #endif
     applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "<== [END] WholeTblStyle:";
+    kDebug() << "<== [END] [styles.xml] TABLE-level:";
 #endif
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "==> localDefaultCellStyle:";
+    kDebug() << "==> [local] TABLE-level:";
 #endif
     TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column, spans);
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-    kDebug() << "<== [END] localDefaultCellStyle:";
+    kDebug() << "<== [END] [local] TABLE-level:";
 #endif
 
     if (role & DrawingTableStyleConverterProperties::ColumnBanded) {
@@ -251,27 +251,45 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column, const QP
         }
     }
 
-    TableStyleProperties* localStyle = m_properties.localStyles().localStyle(row, -1);
-    if (localStyle) {
+    TableStyleProperties* localProperties = m_properties.localStyles().localStyle(row, -1);
+    if (localProperties) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "==> RowStyle:";
+        kDebug() << "==> ROW-level:";
 #endif
-        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column, spans);
+        TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
+        localProperties = 0;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "<== [END] RowStyle:";
+        kDebug() << "<== [END] ROW-level:";
 #endif
     }
 
-    localStyle = m_properties.localStyles().localStyle(row, column);
-    if (localStyle) {
+    localProperties = m_properties.localStyles().localStyle(row, column);
+    if (localProperties) {
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "==> CellStyle:";
+        kDebug() << "==> CELL-level:";
 #endif
-        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column, spans);
+        TableStyleConverter::applyStyle(localProperties, cellStyle, row, column, spans);
+        localProperties = 0;
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-        kDebug() << "<== [END] CellStyle:";
+        kDebug() << "<== [END] CELL-level:";
 #endif
     }
+
+    //RE-APPLY table-level border properties from tblBorders
+#ifdef MSOOXMLDRAWING_DEBUG_TABLES
+    kDebug() << "==> [REAPPLY]: TABLE/ROW-level properties";
+#endif
+    TableStyleProperties* tableProperties = 0;
+    if (m_style) {
+        tableProperties = m_style->properties(DrawingTableStyle::WholeTbl);
+    }
+    reapplyTableLevelBordersStyle(tableProperties,
+                                  m_properties.localDefaultCellStyle(),
+                                  m_properties.localStyles().localStyle(row, -1),
+                                  cellStyle, row, column, spans);
+#ifdef MSOOXMLDRAWING_DEBUG_TABLES
+    kDebug() << "<== [END] [REAPPLY]: TABLE/ROW-level properties";
+#endif
 
     return cellStyle;
 }

@@ -1022,7 +1022,6 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:class-names
     //draw:data
     //draw:engine
-    //draw:id
     //draw:layer
     out.xml.addAttribute("draw:layer", "layout");
     //draw:name

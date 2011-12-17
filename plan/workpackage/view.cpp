@@ -213,7 +213,9 @@ void View::print( QPrinter &/*printer*/, QPrintDialog &/*printDialog*/ )
 
 void View::slotSelectionChanged()
 {
-    actionRemoveSelectedPackages->setEnabled( ! currentView()->selectedNodes().isEmpty() );
+    bool enable = ! currentView()->selectedNodes().isEmpty();
+    actionRemoveSelectedPackages->setEnabled( enable );
+    actionRemoveCurrentPackage->setEnabled( enable );
 }
 
 void View::slotEditCut()
