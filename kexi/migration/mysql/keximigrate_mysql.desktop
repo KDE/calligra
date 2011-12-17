@@ -59,6 +59,7 @@ Name[zh_CN]=MySQL
 Name[zh_TW]=MySQL
 Comment=MySQL Import Plugin for Kexi
 Comment[cs]=Modul Kexi pro import MySQL
+Comment[it]=Estensione di importazione MySQL per Kexi
 Comment[nb]=MySQL import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de MySQL para o Kexi
 Comment[pt_BR]=Plugin de Importação do MySQL para o Kexi
