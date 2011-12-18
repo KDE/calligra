@@ -190,9 +190,8 @@ public:
 
    ~KDateTablePrivate()
    {
-       QList<QString> lst = customPaintingModes.keys();
-       foreach( QString k, lst ) {
-           delete customPaintingModes.take( k );
+       foreach( KDateTableDateDelegate *delegate, customPaintingModes ) {
+           delete delegate;
        }
    }
 
