@@ -1443,7 +1443,8 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             shape->setTextRunAroundThreshold(threshold);
         }
 
-        double distance = uiInsertImage.distance->value();
+        KoTextAnchor *anchor   = 0;
+        double        distance = uiInsertImage.distance->value();
         shape->setTextRunAroundDistance(distance);
 
         // only if we have a text shape, we will anchor to the text inside.
@@ -1451,7 +1452,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
             // Create the anchor
             QTextDocument *qdoc = textShapeData->document();
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
+            anchor = new KoTextAnchor(shape);
 
             // anchor
             // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
@@ -1510,28 +1511,19 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             // insert the anchor into the text document
             KoTextEditor editor(qdoc);
             editor.insertInlineObject(anchor);
-
-            // create the undo step.
-            KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
-            KoSelection *selection = m_canvas->shapeManager()->selection();
-            selection->deselectAll();
-            selection->select(shape);
-            m_canvas->addCommand(cmd);
-
         }
         else {
             shape->setPosition(pos);
             pos += QPointF(25,25); // increase the position for each shape we insert so the
                                    // user can see them all.
-            // add the shape floating, like in stage
-            KUndo2Command *cmd = m_canvas->shapeController()->addShapeDirect(shape);
-            if (cmd) {
-                KoSelection *selection = m_canvas->shapeManager()->selection();
-                selection->deselectAll();
-                selection->select(shape);
-            }
-            m_canvas->addCommand(cmd);
         }
+        
+        // create the undo step.
+        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
+        KoSelection *selection = m_canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
+        m_canvas->addCommand(cmd);
     }
 }
 
