@@ -93,7 +93,7 @@ void ImportTableWizard::next() {
         }
     } else if (currentPage() == m_alterTablePageItem) {
       if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
-            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue", i18n("Object name exists")));
+            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue.", i18n("Object Name Exists")));
             return;
       }
     }  
