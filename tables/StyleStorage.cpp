@@ -294,7 +294,7 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
             const int col = d->usedColumns[i];
             tableContext.columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
         }
-        for (int i = 0; i < d->usedColumns.count(); ++i) {
+        for (int i = 0; i < d->usedRow.count(); ++i) {
             const int row = d->usedRow[i];
             tableContext.rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
         }
