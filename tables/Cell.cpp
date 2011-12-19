@@ -1833,8 +1833,8 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
             continue;
 
         if (element.localName() == "a") {
-            // It may the case that the object(s) are embedded into a hyperlink to actions are done on
-            // clicking it/them butg since we do not supported objects-with-hyperlinks yet we just fetch
+            // It may the case that the object(s) are embedded into a hyperlink so actions are done on
+            // clicking it/them but since we do not supported objects-with-hyperlinks yet we just fetch
             // the inner elements and use them to at least create and show the objects (see bug 249862).
             KoXmlElement e;
             forEachElement(e, element) {
