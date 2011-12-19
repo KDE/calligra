@@ -198,6 +198,7 @@ set(flake_SRCS
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
+    svg/SvgCustomSavingContext.cpp
 )
 
 kde4_add_ui_files(flake_SRCS

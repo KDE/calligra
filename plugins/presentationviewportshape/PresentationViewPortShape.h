@@ -26,7 +26,9 @@
 #include <KoPathShape.h>
 #include <SvgShape.h>
 
+
 #define PresentationViewPortShapeId "PresentationViewPortShape"
+
 
 class KoParameterShape;
 
@@ -59,7 +61,7 @@ public:
 
     virtual QSizeF size() const;
 
-    //Methods for the frame object
+    
     void initializeAnimationProperties(); 
     void initializeTransitionProfiles();
     /**
@@ -67,7 +69,7 @@ public:
      * And saves it into this frame.
      */
     void parseAnimationProperties(const KoXmlElement& e); 
-    bool saveAnimationAttributes(SvgSavingContext &context);
+    bool saveAnimationAttributes(SvgSavingContext *context);
     
     QString toString();//TODO:Needed?
     void setRefId(const QString& refid);//TODO:Redundant?

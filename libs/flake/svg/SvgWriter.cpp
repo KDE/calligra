@@ -110,34 +110,36 @@ bool SvgWriter::save(QIODevice &outputDevice)
     else{
       svgStream << m_svgHeader;
     }
-    {
-	SvgSavingContext *context = 0;
+    SvgSavingContext *savingContext = 0;
+    
+    if(!m_savingContext){
+       savingContext = new SvgSavingContext();
+        }
+         else{ 
+	    savingContext = m_savingContext; 
+	     }
+    
+    if (savingContext->initialize(outputDevice, m_writeInlineImages)) {
 
-	if(!m_savingContext){
-	  context = new SvgSavingContext(outputDevice, m_writeInlineImages);
-	}
-	 else{
-	   context = m_savingContext;
-	 }
         // top level shapes
         foreach(KoShape *shape, m_toplevelShapes) {
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
             if(layer) {
-                saveLayer(layer, *context);
+                saveLayer(layer, *savingContext);
             } else {
                 KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
                 if (group)
-                    saveGroup(group, *context);
+                    saveGroup(group, *savingContext);
                 else
-                    saveShape(shape, *context);
+                    saveShape(shape, *savingContext);
             }
         }
-        if(context != m_savingContext){
-	  delete context;
-	}
-	
+        savingContext->finalize();
     }
-    
+
+    if(savingContext != m_savingContext){ 
+       delete savingContext; 
+        }
     // end tag:
     svgStream << endl << "</svg>" << endl;
 

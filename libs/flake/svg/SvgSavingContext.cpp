@@ -39,14 +39,13 @@
 class SvgSavingContext::Private
 {
 public:
-    Private(QIODevice &outputDevice)
-        : output(outputDevice), styleWriter(0), shapeWriter(0), animationPropertiesWriter(0)
+    Private()
+         : output(0), styleWriter(0), shapeWriter(0)
         , saveInlineImages(true)
     {
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
         styleWriter->startElement("defs");
         shapeWriter = new KoXmlWriter(&shapeBuffer, 1);
-	animationPropertiesWriter = new KoXmlWriter(&animationPropertiesBuffer, 1);//Should be used in a derived class of SvgSavingCOntext for Stage specifically
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
         userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
@@ -58,36 +57,51 @@ public:
         delete shapeWriter;
     }
 
-    QIODevice &output;
+    QIODevice *output;
     QBuffer styleBuffer;
     QBuffer shapeBuffer;
-    QBuffer animationPropertiesBuffer;
+
     KoXmlWriter *styleWriter;
     KoXmlWriter *shapeWriter;
-    KoXmlWriter *animationPropertiesWriter;
-    
+
     QHash<QString, int> uniqueNames;
     QHash<const KoShape*, QString> shapeIds;
     QTransform userSpaceMatrix;
     bool saveInlineImages;
 };
 
-SvgSavingContext::SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages)
-    : d(new Private(outputDevice))
+SvgSavingContext::SvgSavingContext()
+    : d(new Private())
 {
-    d->saveInlineImages = saveInlineImages;
 }
 
 SvgSavingContext::~SvgSavingContext()
 {
-    d->styleWriter->endElement();
-    d->output.write(d->styleBuffer.data());
-    d->output.write("\n");
-    d->output.write(d->shapeBuffer.data());
-    d->output.write("\n");
-    d->output.write(d->animationPropertiesBuffer.data());
-    
     delete d;
+}
+bool SvgSavingContext::initialize(QIODevice &outputDevice, bool saveInlineImages)
+{
+    d->output = &outputDevice;
+    d->saveInlineImages = saveInlineImages;
+    return d->output != 0;
+}
+
+bool SvgSavingContext::finalize()
+{
+    if(!d->output)
+        return false;
+
+    d->styleWriter->endElement();
+    d->output->write(d->styleBuffer.data());
+    d->output->write("\n");
+    d->output->write(d->shapeBuffer.data());
+
+    return true;
+ }
+
+QIODevice& SvgSavingContext::outputDevice()
+{
+    return *d->output;
 }
 
 KoXmlWriter &SvgSavingContext::styleWriter()
@@ -98,11 +112,6 @@ KoXmlWriter &SvgSavingContext::styleWriter()
 KoXmlWriter &SvgSavingContext::shapeWriter()
 {
     return *d->shapeWriter;
-}
-
-KoXmlWriter &SvgSavingContext::animationPropertiesWriter()
-{
-    return *d->animationPropertiesWriter;
 }
 
 QString SvgSavingContext::createUID(const QString &base)
@@ -161,7 +170,7 @@ bool SvgSavingContext::isSavingInlineImages() const
 
 QString SvgSavingContext::createFileName(const QString &extension)
 {
-    QFile *file = qobject_cast<QFile*>(&d->output);
+    QFile *file = qobject_cast<QFile*>(d->output);
     if (!file)
         return QString();
 

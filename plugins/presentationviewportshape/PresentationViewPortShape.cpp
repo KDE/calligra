@@ -12,7 +12,7 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
+ * along with this library; see thehttp://www.cplusplus.com/doc/tutorial/typecasting/ file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
@@ -25,12 +25,13 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 #include <SvgStyleWriter.h>
+#include <SvgCustomSavingContext.h>
 
 #include "PresentationViewPortShapeUtil.h"
+
 
 const QString PresentationViewPortShape::title("title");
 const QString PresentationViewPortShape::refid("refid");
@@ -223,27 +224,29 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttributePt("height", size.height());
 
     context.shapeWriter().endElement();
+    
     //Save animation attributes
-    saveAnimationAttributes(context);
+    saveAnimationAttributes(&context);
     qDebug () << "PVPShape::saveSvg()" << endl;
     return true;
 }
 
-bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& context)
+bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext *savingContext)
 {
-    context.animationPropertiesWriter().startElement("sozi:frame");
-    context.animationPropertiesWriter().addAttribute("sozi:title", m_animationAttributes[PresentationViewPortShape::title]);
-    context.animationPropertiesWriter().addAttribute("sozi:refid", m_animationAttributes[PresentationViewPortShape::refid]);
-    context.animationPropertiesWriter().addAttribute("sozi:transition-profile", m_animationAttributes[PresentationViewPortShape::transitionProfile]);
-    context.animationPropertiesWriter().addAttribute("sozi:hide", m_animationAttributes[PresentationViewPortShape::hide]);
-    context.animationPropertiesWriter().addAttribute("sozi:clip", m_animationAttributes[PresentationViewPortShape::clip]);
-    context.animationPropertiesWriter().addAttribute("sozi:timeout-enable", m_animationAttributes[PresentationViewPortShape::timeoutEnable]);
-    context.animationPropertiesWriter().addAttribute("sozi:timeout-ms", m_animationAttributes[PresentationViewPortShape::timeoutMs]);
-    context.animationPropertiesWriter().addAttribute("sozi:transition-zoom-percent", m_animationAttributes[PresentationViewPortShape::transitionZoomPercent]);
-    context.animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
+   /* SvgCustomSavingContext *context = dynamic_cast<SvgCustomSavingContext*>(savingContext);
+    context->animationPropertiesWriter().startElement("sozi:frame");
+    context->animationPropertiesWriter().addAttribute("sozi:title", m_animationAttributes[PresentationViewPortShape::title]);
+    context->animationPropertiesWriter().addAttribute("sozi:refid", m_animationAttributes[PresentationViewPortShape::refid]);
+    context->animationPropertiesWriter().addAttribute("sozi:transition-profile", m_animationAttributes[PresentationViewPortShape::transitionProfile]);
+    context->animationPropertiesWriter().addAttribute("sozi:hide", m_animationAttributes[PresentationViewPortShape::hide]);
+    context->animationPropertiesWriter().addAttribute("sozi:clip", m_animationAttributes[PresentationViewPortShape::clip]);
+    context->animationPropertiesWriter().addAttribute("sozi:timeout-enable", m_animationAttributes[PresentationViewPortShape::timeoutEnable]);
+    context->animationPropertiesWriter().addAttribute("sozi:timeout-ms", m_animationAttributes[PresentationViewPortShape::timeoutMs]);
+    context->animationPropertiesWriter().addAttribute("sozi:transition-zoom-percent", m_animationAttributes[PresentationViewPortShape::transitionZoomPercent]);
+    context->animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
     
-    context.animationPropertiesWriter().endElement();
-    
+    context->animationPropertiesWriter().endElement();
+   */
     return true;
 }
 

@@ -35,7 +35,7 @@
 
 #include "SvgExport.h"
 #include <SvgWriter.h>
-
+//#include <SvgCustomSavingContext.h>
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
 
@@ -69,8 +69,8 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
 
     const KarbonDocument &data = karbonPart->document();
     SvgWriter writer(data.layers(), data.pageSize());
-    if (!writer.save(m_chain->outputFile(), true))
-        return KoFilter::CreationError;
+      
+  //  SvgCustomSavingContext *savingContext = new SvgCustomSavingContext();
     //For stage, will be removed from here
     QString header("<?xml version=\"1.0\" standalone=\"no\"?>");
     header.arg("\n").arg("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ");
@@ -80,10 +80,14 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     header.arg(" xmlns:sozi=\"http://sozi.baierouge.fr\"");
     header.arg(" width=\"").setNum(data.pageSize().width()).arg("pt\"");
     header.arg(" height=\"").setNum(data.pageSize().height()).arg("pt\">");
+    
     writer.setHeader(header);
+    //writer.setSavingContext(savingContext);
+    
+    if (!writer.save(m_chain->outputFile(), true))
+        return KoFilter::CreationError;
     
     
-
     return KoFilter::OK;
 }
 

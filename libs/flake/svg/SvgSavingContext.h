@@ -35,19 +35,25 @@ class FLAKE_EXPORT SvgSavingContext
 {
 public:
     /// Creates a new svg saving context on the specified output device
-    SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages = true);
+    SvgSavingContext();
 
     /// Virtual destructor
     virtual ~SvgSavingContext();
+    /// Initializes the saving context with the output device
 
+    bool initialize(QIODevice &outputDevice, bool saveInlineImages = true);
+
+    /// Finalizes the context, saves data to the output device
+    virtual bool finalize();
+
+    //Returns the output device to write buffer data to
+    QIODevice &outputDevice();
+    
     /// Provides access to the style writer
     KoXmlWriter &styleWriter();
 
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();
-
-    /// Provides access to the aniamtion properties writer
-    KoXmlWriter &animationPropertiesWriter();
     
     /// Create a unqiue id from the specified base text
     QString createUID(const QString &base);
