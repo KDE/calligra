@@ -2100,7 +2100,6 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         const int n = cellElement.attributeNS(KoXmlNS::table, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
         // KSpread so limit the number of repeated columns.
-        // FIXME POSSIBLE DATA LOSS!
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
         columnMaximal = qMax(numberColumns, columnMaximal);
 
