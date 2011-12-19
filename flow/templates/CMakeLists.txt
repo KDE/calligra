@@ -1,1 +1,5 @@
-add_subdirectory( basic )
+add_subdirectory( Basic )
+add_subdirectory( Business )
+add_subdirectory( Engineering )
+add_subdirectory( Flowchart )
+add_subdirectory( Network )
