@@ -86,7 +86,13 @@ void ImportTableWizard::back() {
 }
 
 void ImportTableWizard::next() {
-    if (currentPage() == m_importingPageItem) {
+    if (currentPage() == m_srcConnPageItem) {
+      if (fileBasedSrcSelected()) {
+          setAppropriate(m_srcDBPageItem, false);
+      } else {  
+          setAppropriate(m_srcDBPageItem, true);
+      }
+    } else if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
             return;
