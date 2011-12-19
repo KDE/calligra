@@ -547,8 +547,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeColumns(int position,
         if (it.key() - number >= position)
             map.insert(it.key() - number, true);
     }
-    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
-        d->usedColumns.remove(it.key());
+    for (QMap<int, bool>::iterator it = begin; it != end; )
+        it = d->usedColumns.erase(it);
     d->usedColumns.unite(map);
     // process the tree
     QList< QPair<QRectF, SharedSubStyle> > undoData;
