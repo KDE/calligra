@@ -28,6 +28,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
+#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -135,6 +136,7 @@ private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
     KoTextAnchor *anchorForSelectedFrame(bool create);
+    void changeAnchorType(KoTextAnchor* anchor, KoTextAnchor::AnchorType type);
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties

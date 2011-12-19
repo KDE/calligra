@@ -140,6 +140,12 @@ public:
         return m_anchor ? m_anchor->anchorType() : KoTextAnchor::AnchorPage;
     }
 
+    void setAnchor(KoTextAnchor *anchor) {
+        m_anchor = anchor;
+    }
+
+    KoTextAnchor *anchor() const { return m_anchor; }
+
     /**
      * Returns the list of copy-shapes, see @a KWCopyShape , that
      * are copies of this KWFrame.
