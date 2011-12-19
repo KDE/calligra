@@ -326,9 +326,11 @@ void ImportTableWizard::arriveTableSelectPage()
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
-        if (!m_migrateDriver->connectSource())
+        if (!m_migrateDriver->connectSource()) {
+            kDebug() << "unable to connect to database";
             return;
-
+        }
+        
         QStringList tableNames;
         m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
