@@ -100,6 +100,7 @@ void AbstractRegionCommand::redo()
     if (!m_sheet) { m_success = false; return; }
 #endif
 
+    m_success = true;
     bool successfully = true;
     successfully = preProcessing();
     if (!successfully) {
