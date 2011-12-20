@@ -86,10 +86,19 @@ bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
 
 void AbstractRegionCommand::redo()
 {
+    //sebsauer; follwing conditions and warning makes no sense cause we would crash
+    //later on cause m_sheet is direct accessed without NULL-check. So, let's add
+    //some asserts to check for the m_sheet=NULL case to be able to fix it if we
+    //can reproduce the situation.
+#if 0
     if (!m_sheet) {
         kWarning() << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
         << "Manipulating all sheets of the region." << endl;
     }
+#else
+    Q_ASSERT(m_sheet);
+    if (!m_sheet) { m_success = false; return; }
+#endif
 
     bool successfully = true;
     successfully = preProcessing();
@@ -129,6 +138,10 @@ void AbstractRegionCommand::undo()
 
 bool AbstractRegionCommand::isApproved() const
 {
+    //sebsauer; same as in AbstractRegionCommand::redo
+    Q_ASSERT(m_sheet);
+    if (!m_sheet) return false;
+
     const QList<Element *> elements = cells();
     const int begin = m_reverse ? elements.count() - 1 : 0;
     const int end = m_reverse ? -1 : elements.count();
@@ -160,6 +173,10 @@ bool AbstractRegionCommand::isApproved() const
 
 bool AbstractRegionCommand::mainProcessing()
 {
+    //sebsauer; same as in AbstractRegionCommand::redo
+    Q_ASSERT(m_sheet);
+    if (!m_sheet) return false;
+
     bool successfully = true;
     const QList<Element *> elements = cells();
     const int begin = m_reverse ? elements.count() - 1 : 0;
