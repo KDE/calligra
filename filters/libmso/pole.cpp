@@ -34,7 +34,7 @@
 #include <list>
 #include <string>
 #include <vector>
-
+#include <ios>       // for std::hex
 #include <string.h>
 
 #include <QList>
