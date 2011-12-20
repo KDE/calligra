@@ -113,7 +113,10 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
-    //TODO: use the client->isPlaceholder function
+    // TODO: Use client->isPlaceholder - might require an update of the
+    // placeholderAllowed function in the PPT filter.  Trying to save as many
+    // shapes into draw:text-box at the moment, becasue vertical allignment in
+    // draw:custom-shape does not work properly (bug 288047).
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
     } else {

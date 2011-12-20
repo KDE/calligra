@@ -92,11 +92,22 @@ public:
          * Also add host application specific attributes to the draw element.
          **/
         virtual void addTextStyles(
-            const quint16 msospt,
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
             KoGenStyle& style,
             Writer& out) = 0;
+
+        /**
+         * Convert the OfficeArtCOLORREF to a QColor.  This conversion requires
+         * color scheme information.
+         **/
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+
+        /**
+         *
+         */
+        virtual QString formatPos(qreal v) = 0;
+
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
@@ -108,14 +119,6 @@ public:
          * @param spid identifier of the master shape.
          **/
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
-
-        /**
-         * Convert the OfficeArtCOLORREF to a QColor.
-         * This conversion requires color scheme information.
-         **/
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
-
-        virtual QString formatPos(qreal v) = 0;
 
         quint16 m_currentShapeType;
 

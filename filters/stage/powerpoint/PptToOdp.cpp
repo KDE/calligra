@@ -20,6 +20,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include "PowerPointImport.h"
 #include "PptToOdp.h"
 #include "globalobjectcollectors.h"
@@ -211,10 +212,9 @@ getText(const TextContainer* tc)
  * DrawClient
  * ************************************************
  */
-class PptToOdp::DrawClient : public ODrawToOdf::Client {
+class PptToOdp::DrawClient : public ODrawToOdf::Client
+{
 private:
-    PptToOdp* const ppttoodp;
-
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
     QRectF getReserveRect(void);
     QString getPicturePath(const quint32 pib);
@@ -229,8 +229,7 @@ private:
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
             const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
-    void addTextStyles(const quint16 msospt,
-                       const MSO::OfficeArtClientTextBox* clientTextbox,
+    void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                        const MSO::OfficeArtClientData* clientData,
                        KoGenStyle& style, Writer& out);
 
@@ -247,7 +246,13 @@ private:
     */
     bool placeholderAllowed(const MSO::PlaceholderAtom* pa) const;
 
-    struct DrawClientData {
+    bool isPlaceholder(const MSO::OfficeArtClientData* cd) const;
+
+    /**
+     * PPT client specific data.
+     */
+    struct DrawClientData
+    {
         const MSO::MasterOrSlideContainer* masterSlide;
         const MSO::SlideContainer* presSlide;
         const MSO::NotesContainer* notesMasterSlide;
@@ -257,7 +262,10 @@ private:
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
                           notesSlide(0), slideTexts(0) {};
     };
+
     DrawClientData dc_data[1];
+
+    PptToOdp* const ppttoodp;
 
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
@@ -274,8 +282,6 @@ public:
         dc_data->notesSlide = nc;
         dc_data->slideTexts = stc;
     }
-
-    bool isPlaceholder(const MSO::OfficeArtClientData* cd) const;
 };
 
 bool PptToOdp::DrawClient::isPlaceholder(const MSO::OfficeArtClientData* cd) const
@@ -455,11 +461,15 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 }
 
 void PptToOdp::DrawClient::addTextStyles(
-        const quint16 msospt,
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
         KoGenStyle& style, Writer& out)
 {
+    // content.xml - As soon the content or graphic-style of a placeholder
+    // changed, make it a normal shape to be ODF compliant.
+    //
+    // TODO: check if the graphic-style changed compared to the parent
+
     const PptOfficeArtClientData* cd = 0;
     if (clientData) {
         cd = clientData->anon.get<PptOfficeArtClientData>();
@@ -469,14 +479,9 @@ void PptToOdp::DrawClient::addTextStyles(
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
 
-    //NOTE: [content.xml] As soon the content or graphic-style of a placeholder
-    //changed, make it a normal shape to be ODF compliant.
-    //
-    //TODO: check if the graphic-style changed compared to the parent
-
     bool potentialPlaceholder = false;
 
-    if (msospt == msosptRectangle) {
+    if (m_currentShapeType == msosptRectangle) {
         potentialPlaceholder = true;
     }
 

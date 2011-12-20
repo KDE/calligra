@@ -41,11 +41,12 @@ public:
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
     virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out);
-    virtual void addTextStyles(const quint16 msospt, const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
-    virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-    virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
+
+    virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+    virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
 
     void setStyleManager(KoStyleManager* styleManager);
     KoStyleManager* styleManager() const;
