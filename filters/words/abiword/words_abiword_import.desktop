@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта документов AbiWord в Words
 Name[sv]=Words-importfilter för Abiword
 Name[uk]=Фільтр імпорту AbiWord для Words
 Name[x-test]=xxWords AbiWord Import Filterxx
+Name[zh_CN]=Words AbiWord 导入过滤器
 Name[zh_TW]=Words AbiWord 匯入過濾程式
 X-KDE-Export=application/x-words
 X-KDE-Import=application/x-abiword

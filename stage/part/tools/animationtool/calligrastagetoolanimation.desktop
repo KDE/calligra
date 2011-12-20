@@ -26,6 +26,8 @@ Name[nl]=Animatie-hulpmiddel
 Name[pl]=Narzędzie animacji
 Name[pt]=Ferramenta de Animação
 Name[pt_BR]=Ferramenta de Animação
+Name[ru]=Инструмент анимации
+Name[sk]=Animačný nástroj
 Name[sl]=Orodje za animacijo
 Name[sv]=Animeringsverktyg
 Name[tr]=Canlandırma Aracı
@@ -37,6 +39,6 @@ Name[zh_TW]=動畫工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-Library=calligrastagetoolanimation
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4
 

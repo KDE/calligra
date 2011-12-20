@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1092,11 +1092,6 @@ KexiFormView::setRedoEnabled(bool enabled)
 QSize
 KexiFormView::preferredSizeHint(const QSize& otherSize)
 {
-    if (window()->neverSaved()) {
-        //ignore otherSize if possible
-//  return KexiView::preferredSizeHint( (window() && window()->mdiParent()) ? QSize(10000,10000) : otherSize);
-    }
-
     return (m_dbform->size()
             + QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3 / 2 : 10,
                     m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3 / 2 : 10))
@@ -1118,6 +1113,24 @@ KexiFormView::resizeEvent(QResizeEvent *e)
         m_delayedFormContentsResizeOnShow--;
         m_dbform->resize(e->size() - QSize(30, 30));
     }
+}
+
+void KexiFormView::contextMenuEvent(QContextMenuEvent *e)
+{
+    // kDebug() << form()->selectedWidget() << form()->widget() << e->reason();
+    if (form()->selectedWidget()
+        && form()->selectedWidget() == form()->widget()
+        && e->reason() == QContextMenuEvent::Keyboard)
+    {
+        // Outer form area received context key.
+        // Redirect the event to top-level form widget.
+        // It will be received in Container::eventFilter().
+        e->accept();
+        QContextMenuEvent me(QContextMenuEvent::Keyboard, QPoint(-1, -1));
+        QApplication::sendEvent(form()->widget(), &me);
+        return;
+    }
+    KexiView::contextMenuEvent(e);
 }
 
 void
@@ -1409,17 +1422,6 @@ void KexiFormView::updateActions(bool activated)
   KexiDataAwareView::updateActions(activated);
   updateActionsInternal();
 }
-
-/*
-void KexiFormView::parentDialogDetached()
-{
-  m_dbform->updateTabStopsOrder(form());
-}
-
-void KexiFormView::parentDialogAttached(KMdiChildFrm *)
-{
-  m_dbform->updateTabStopsOrder(form());
-}*/
 
 void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname)
 {

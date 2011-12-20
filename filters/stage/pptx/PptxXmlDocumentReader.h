@@ -90,7 +90,7 @@ protected:
     QVector<QString> defaultTextColors;
     QVector<QString> defaultLatinFonts;
 
-    enum ColorReadingState {rprState, buClrState};
+    enum ColorReadingState {defRPrState, buClrState};
     ColorReadingState m_colorState;
 
 private:

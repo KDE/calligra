@@ -53,7 +53,7 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setStretchLastSection( false );
+    setStretchLastSection( true );
     
     DocumentItemModel *m = new DocumentItemModel();
     setModel( m );
@@ -68,6 +68,8 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     setDropIndicatorShown( true );
     
     connect( selectionModel(), SIGNAL( selectionChanged ( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
+
+    setColumnHidden( DocumentModel::Property_Status, true ); // not used atm
 }
 
 Document *DocumentTreeView::currentDocument() const

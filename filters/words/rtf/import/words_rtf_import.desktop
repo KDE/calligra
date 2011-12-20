@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта документов RTF в Words
 Name[sv]=Words RTF-importfilter
 Name[uk]=Фільтр експорту RTF для Words
 Name[x-test]=xxWords RTF Import Filterxx
+Name[zh_CN]=Words RTF 导入过滤器
 Name[zh_TW]=Words RTF 匯入過濾程式
 X-KDE-Import=application/rtf
 X-KDE-Weight=1

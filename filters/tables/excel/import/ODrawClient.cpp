@@ -21,15 +21,21 @@
 #include <qdebug.h>
 #include <QColor>
 #include <KoXmlWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeSavingContext.h>
+#include <KoTextWriter.h>
+#include <KoStyleManager.h>
+#include <KoTextDocument.h>
+
 #include "sheet.h"
 #include "workbook.h"
 
-#ifndef __GNUC__ 
+#ifndef __GNUC__
   #define __PRETTY_FUNCTION__ __FUNCTION__
 #endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
 
 ODrawClient::ODrawClient(Swinder::Sheet* sheet)
-    : m_sheet(sheet)
+    : m_sheet(sheet), m_zIndex(0), m_styleManager(0)
 {
 }
 
@@ -111,8 +117,23 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 
 QString ODrawClient::getPicturePath(const quint32 pib)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    Q_UNUSED(pib);
+    quint32 offset = 0;
+    if (!m_sheet->workbook()->officeArtDggContainer()) {
+        return QString();
+    }
+
+    QByteArray rgbUid = getRgbUid(*m_sheet->workbook()->officeArtDggContainer(), pib, offset);
+
+    QString fileName;
+    if (rgbUid.isEmpty()) {
+        qDebug() << "Object in blipStore with pib: " << pib << "was not found.";
+    }else {
+        fileName = m_sheet->workbook()->pictureName(rgbUid);
+    }
+
+    if (!fileName.isEmpty()){
+        return "Pictures/" + fileName;
+    }
     return QString();
 }
 
@@ -131,26 +152,39 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
                                     const MSO::OfficeArtClientData &o, Writer &out)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
-    foreach (const QString& line, lines) {
-        out.xml.startElement("text:p", false);
-        int pos = 0;
-        while (pos < line.length()) {
-            int idx = line.indexOf(QRegExp("[^ ]"), pos);
-            if (idx == -1) idx = line.length();
-            int cnt = idx - pos;
-            if (cnt > 1) {
-                out.xml.startElement("text:s");
-                out.xml.addAttribute("text:c", cnt);
-                out.xml.endElement();
-                pos += cnt; cnt = 0;
+    if (m_shapeText.m_doc) { // rich-text
+        KoTextDocument doc(m_shapeText.m_doc);
+        Q_ASSERT(!doc.styleManager());
+        Q_ASSERT(m_styleManager);
+        doc.setStyleManager(m_styleManager);
+
+        KoEmbeddedDocumentSaver embeddedSaver;
+        KoShapeSavingContext context(out.xml, out.styles, embeddedSaver);
+        KoTextWriter textWriter(context);
+        textWriter.write(m_shapeText.m_doc.data(), 0);
+
+        doc.setStyleManager(0);
+    } else { // plain-text
+        QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
+        foreach (const QString& line, lines) {
+            out.xml.startElement("text:p", false);
+            int pos = 0;
+            while (pos < line.length()) {
+                int idx = line.indexOf(QRegExp("[^ ]"), pos);
+                if (idx == -1) idx = line.length();
+                int cnt = idx - pos;
+                if (cnt > 1) {
+                    out.xml.startElement("text:s");
+                    out.xml.addAttribute("text:c", cnt);
+                    out.xml.endElement();
+                    pos += cnt; cnt = 0;
+                }
+                int endPos = qMax(line.length()-1, line.indexOf(' ', pos+cnt));
+                out.xml.addTextNode(line.mid(pos, endPos - pos + 1));
+                pos = endPos + 1;
             }
-            int endPos = qMax(line.length()-1, line.indexOf(' ', pos+cnt));
-            out.xml.addTextNode(line.mid(pos, endPos - pos + 1));
-            pos = endPos + 1;
+            out.xml.endElement();
         }
-        out.xml.endElement();
     }
 }
 
@@ -196,26 +230,14 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     return style;
 }
 
-void ODrawClient::addTextStyles(const quint16 msospt,
-                                const MSO::OfficeArtClientTextBox *clientTextbox,
+void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox,
                                 const MSO::OfficeArtClientData *clientData,
                                 KoGenStyle &style, Writer &out)
 {
-    Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
-}
 
-const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
-{
-    return m_sheet->workbook()->officeArtDggContainer();
-}
-
-const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
-{
-    //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
-    return sp;
+    setZIndexAttribute(out);
 }
 
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
@@ -231,7 +253,35 @@ QString ODrawClient::formatPos(qreal v)
     return QString::number(v, 'f', 11) + "pt";
 }
 
+const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
+{
+    return m_sheet->workbook()->officeArtDggContainer();
+}
+
+const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
+{
+    //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
+    MSO::OfficeArtSpContainer* sp = NULL;
+    return sp;
+}
+
 void ODrawClient::setShapeText(const Swinder::TxORecord &text)
 {
     m_shapeText = text;
+}
+
+void ODrawClient::setZIndexAttribute(Writer& out)
+{
+    out.xml.addAttribute("draw:z-index", m_zIndex);
+    m_zIndex++;
+}
+
+void ODrawClient::setStyleManager(KoStyleManager* styleManager)
+{
+    m_styleManager = styleManager;
+}
+
+KoStyleManager* ODrawClient::styleManager() const
+{
+    return m_styleManager;
 }

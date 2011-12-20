@@ -1442,7 +1442,8 @@ void Sheet::loadRowNodes(const KoXmlElement& parent,
                             QHash<QString, QRegion>& rowStyleRegions,
                             QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles
+                            const Styles& autoStyles,
+                            QList<ShapeLoadingData>& shapeData
                             )
 {
     KoXmlNode node = parent.firstChild();
@@ -1452,11 +1453,11 @@ void Sheet::loadRowNodes(const KoXmlElement& parent,
             if (elem.localName() == "table-row") {
                 int columnMaximal = loadRowFormat(elem, rowIndex, tableContext,
                                                         rowStyleRegions, cellStyleRegions,
-                                                        columnStyles, autoStyles);
+                                                        columnStyles, autoStyles, shapeData);
                 // allow the row to define more columns then defined via table-column
                 maxColumn = qMax(maxColumn, columnMaximal);
             } else if (elem.localName() == "table-row-group") {
-                loadRowNodes(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                loadRowNodes(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
             }
         }
         node = node.nextSibling();
@@ -1621,6 +1622,9 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     QHash<QString, QRegion> columnStyleRegions;
     IntervalMap<QString> columnStyles;
 
+    // List of shapes that need to have their size recalculated after loading is complete
+    QList<ShapeLoadingData> shapeData;
+
     int rowIndex = 1;
     int indexCol = 1;
     int maxColumn = 1;
@@ -1653,13 +1657,13 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 } else if (rowElement.localName() == "table-header-rows") {
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
-                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                 } else if (rowElement.localName() == "table-row-group") {
-                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                 } else if (rowElement.localName() == "table-row") {
                     //kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
-                                  rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
+                                  rowStyleRegions, cellStyleRegions, columnStyles, autoStyles, shapeData);
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     //kDebug(36003) << " table-row found :index row after" << rowIndex;
@@ -1685,6 +1689,18 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
 
         int count = map()->increaseLoadedRowsCounter();
         if (updater && count >= 0) updater->setProgress(count);
+    }
+
+    // now recalculate the size for embedded shapes that had sizes specified relative to a bottom-right corner cell
+    foreach (const ShapeLoadingData& sd, shapeData) {
+        // subtract offset because the accumulated width and height we calculate below starts
+        // at the top-left corner of this cell, but the shape can have an offset to that corner
+        QSizeF size = QSizeF( sd.endPoint.x() - sd.offset.x(), sd.endPoint.y() - sd.offset.y());
+        for (int col = sd.startCell.x(); col < sd.endCell.firstRange().left(); ++col)
+            size += QSizeF(columnFormat(col)->width(), 0.0);
+        if (sd.endCell.firstRange().top() > sd.startCell.y())
+            size += QSizeF(0.0, rowFormats()->totalRowHeight(sd.startCell.y(), sd.endCell.firstRange().top() - 1));
+        sd.shape->setSize(size);
     }
 
     QList<QPair<QRegion, Style> > styleRegions;
@@ -1978,7 +1994,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           QHash<QString, QRegion>& rowStyleRegions,
                           QHash<QString, QRegion>& cellStyleRegions,
                           const IntervalMap<QString>& columnStyles,
-                          const Styles& autoStyles)
+                          const Styles& autoStyles,
+                          QList<ShapeLoadingData>& shapeData)
 {
     static const QString sStyleName             = QString::fromLatin1("style-name");
     static const QString sNumberRowsRepeated    = QString::fromLatin1("number-rows-repeated");
@@ -2083,7 +2100,6 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         const int n = cellElement.attributeNS(KoXmlNS::table, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
         // KSpread so limit the number of repeated columns.
-        // FIXME POSSIBLE DATA LOSS!
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
         columnMaximal = qMax(numberColumns, columnMaximal);
 
@@ -2100,7 +2116,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
             cellStyleName = columnStyles.get(columnIndex);
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName);
+        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
         if (!cell.comment().isEmpty())
             cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());
@@ -2162,34 +2178,70 @@ QRect Sheet::usedArea(bool onlyContent) const
     return QRect(1, 1, maxCols, maxRows);
 }
 
-bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tableContext) const
+inline int compareCellInRow(const Cell &cell1, const Cell &cell2, int maxCols)
 {
+    if (cell1.isNull() != cell2.isNull())
+        return 0;
+    if (cell1.isNull())
+        return 2;
+    if (maxCols >= 0 && cell1.column() > maxCols)
+        return 3;
+    if (cell1.column() != cell2.column())
+        return 0;
+    if (!cell1.compareData(cell2))
+        return 0;
+    return 1;
+}
+
+inline bool compareCellsInRows(CellStorage *cellStorage, int row1, int row2, int maxCols)
+{
+    Cell cell1 = cellStorage->firstInRow(row1);
+    Cell cell2 = cellStorage->firstInRow(row2);
+    while (true) {
+        int r = compareCellInRow(cell1, cell2, maxCols);
+        if (r == 0)
+            return false;
+        if (r != 1)
+            break;
+        cell1 = cellStorage->nextInRow(cell1.column(), cell1.row());
+        cell2 = cellStorage->nextInRow(cell2.column(), cell2.row());
+    }
+    return true;
+}
+
+bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& tableContext) const
+{
+#if 0
     if (!d->rows.rowsAreEqual(row1, row2)) {
-//         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
         return false;
     }
     if (tableContext.rowHasCellAnchoredShapes(this, row1) != tableContext.rowHasCellAnchoredShapes(this, row2)) {
         return false;
     }
-    Cell cell1 = cellStorage()->firstInRow(row1);
-    Cell cell2 = cellStorage()->firstInRow(row2);
-    if (cell1.isNull() != cell2.isNull())
+    return compareCellsInRows(cellStorage(), row1, row2, maxCols);
+#else
+    // Optimized comparision by using the RowRepeatStorage to compare the content
+    // rather then an expensive loop like compareCellsInRows.
+    int row1repeated = cellStorage()->rowRepeat(row1);
+    Q_ASSERT( row2 > row1 );
+    if (row2 - row1 >= row1repeated) {
         return false;
-    while (!cell1.isNull()) {
-        if (cell1.column() != cell2.column())
-            return false;
-        if (cell1.column() > maxCols)
-            break;
-        if (!cell1.compareData(cell2)) {
-//             kDebug(36003) <<"\t Cell at column" << col <<" in row" << row2 <<" differs from the one in row" << row1;
-            return false;
-        }
-        cell1 = cellStorage()->nextInRow(cell1.column(), cell1.row());
-        cell2 = cellStorage()->nextInRow(cell2.column(), cell2.row());
-        if (cell1.isNull() != cell2.isNull())
-            return false;
     }
+
+    // The RowRepeatStorage does not take to-cell anchored shapes into account
+    // so we need to check for them explicit.
+    if (tableContext.rowHasCellAnchoredShapes(this, row1) != tableContext.rowHasCellAnchoredShapes(this, row2)) {
+        return false;
+    }
+
+    // Some sanity-checks to be sure our RowRepeatStorage works as expected.
+    Q_ASSERT_X( d->rows.rowsAreEqual(row1, row2), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+    //Q_ASSERT_X( compareCellsInRows(cellStorage(), row1, row2, maxCols), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+    Q_ASSERT_X( compareCellInRow(cellStorage()->lastInRow(row1), cellStorage()->lastInRow(row2), -1), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
+
+    // If we reached that point then the both rows are equal.
     return true;
+#endif
 }
 
 void Sheet::saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const
@@ -2574,6 +2626,11 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, tableContext);
     if (tableContext.rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
+    // Take the actual used area into account so we also catch shapes that are
+    // anchored after any content.
+    QRect r = usedArea(false);
+    maxRows = qMax(maxRows, r.bottom());
+    maxCols = qMax(maxCols, r.right());
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMin(KS_colMax, qMax(1, maxCols));
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
@@ -2686,13 +2743,16 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
-        int repeated = cellStorage()->rowRepeat(i);
+        // We cannot use cellStorage()->rowRepeat(i) here cause the RowRepeatStorage only knows
+        // about the content but not about the shapes anchored to a cell. So, we need to check
+        // for them here to be sure to catch them even when the content in the cell is repeated.
+        int repeated = 1;
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
-            int j = i + repeated;
+            int j = i + 1;
 
             // search for
             //   next non-empty row
@@ -2709,7 +2769,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                     if (!d->rows.isDefaultRow(j) || !tableContext.rowDefaultStyles.value(j).isDefault())
                         break;
                     // otherwise, jump to the next
-                    j += cellStorage()->rowRepeat(j);
+                    ++j;
                     continue;
                 }
 
@@ -2719,7 +2779,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 if (style != tableContext.rowDefaultStyles.value(j))
                     break;
                 // otherwise, process the next
-                j += cellStorage()->rowRepeat(j);
+                ++j;
             }
             repeated = j - i;
 
@@ -2766,9 +2826,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             else if (d->rows.isFiltered(i)) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
-            int j = i + repeated;
+            int j = i + 1;
             while (j <= maxRows && compareRows(i, j, maxCols, tableContext)) {
-                j += cellStorage()->rowRepeat(j);
+                j++;
+                repeated++;
             }
             repeated = j - i;
             if (repeated > 1) {

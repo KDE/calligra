@@ -29,6 +29,7 @@
 
 class KoStore;
 
+
 namespace MSO {
     class OfficeArtDggContainer;
 }
@@ -38,6 +39,7 @@ namespace Swinder
 
 class Sheet;
 class Format;
+class FormatFont;
 
 class Workbook : public QObject
 {
@@ -90,6 +92,7 @@ public:
     Sheet* sheet(unsigned index);
 
     enum PropertyType {
+        PIDSI_CODEPAGE = 0x01,
         PIDSI_TITLE = 0x02,
         PIDSI_SUBJECT = 0x03,
         PIDSI_AUTHOR = 0x04,
@@ -102,7 +105,7 @@ public:
         PIDSI_LASTPRINTED_DTM = 0x0b,
         PIDSI_CREATE_DTM = 0x0c,
         PIDSI_LASTSAVED_DTM = 0x0d,
-        PIDSI_APPNAME = 0x12,
+        PIDSI_APPNAME = 0x12
     };
 
     bool hasProperty(PropertyType type) const;
@@ -115,6 +118,7 @@ public:
     QList<QRect> filterRanges(unsigned sheet) const;
     QList<QRect> filterRanges(const Sheet* sheet) const;
     void addFilterRange(unsigned sheet, const QRect& range);
+    void addFilterRange(const QString& sheet, const QRect& range);
 
     int activeTab() const;
     void setActiveTab(int tab);
@@ -132,10 +136,16 @@ public:
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
 
+    void setPictureNames(const QMap<QByteArray, QString> pictureNames);
+    QString pictureName(const QByteArray& uid) const;
+
     void setColorTable(const QList<QColor>& colorTable);
     QList< QColor > colorTable() const;
     QColor customColor(unsigned index) const;
     QColor color(unsigned index) const;
+
+    FormatFont font(unsigned index) const;
+    void setFont(unsigned index, const FormatFont &font);
 
     enum Version {
         Excel95,

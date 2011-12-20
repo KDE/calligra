@@ -45,7 +45,7 @@ Node::Node(Node *parent)
     //kDebug()<<"("<<this<<")";
     m_parent = parent;
     init();
-    m_id = QString(); // Not mapped
+    m_id.clear(); // Not mapped
 }
 
 Node::Node(const Node &node, Node *parent) 
@@ -97,13 +97,15 @@ Node::~Node() {
     if (m_shutdownAccount)
         m_shutdownAccount->removeShutdown(*this);
 
-    foreach (long key, m_schedules.keys()) {
-        delete m_schedules.take(key);
+    foreach (Schedule *s, m_schedules) {
+        delete s;
     }
+    m_schedules.clear();
     m_parent = 0; //safety
 }
 
 void Node::init() {
+    m_documents.node = this;
     m_currentSchedule = 0;
     m_name="";
     m_constraint = Node::ASAP;
@@ -1270,6 +1272,27 @@ void Node::slotStandardWorktimeChanged( StandardWorktime* )
         m_estimate->m_expectedCached = false;
         m_estimate->m_optimisticCached = false;
         m_estimate->m_pessimisticCached = false;
+    }
+}
+
+void Node::emitDocumentAdded( Node *node, Document *doc, int idx )
+{
+    if ( m_parent ) {
+        m_parent->emitDocumentAdded( node, doc, idx );
+    }
+}
+
+void Node::emitDocumentRemoved( Node *node, Document *doc, int idx )
+{
+    if ( m_parent ) {
+        m_parent->emitDocumentRemoved( node, doc, idx );
+    }
+}
+
+void Node::emitDocumentChanged( Node *node, Document *doc, int idx )
+{
+    if ( m_parent ) {
+        m_parent->emitDocumentChanged( node, doc, idx );
     }
 }
 

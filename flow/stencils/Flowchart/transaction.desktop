@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=Transaction File
+Name[it]=File di transazione
 Name[nb]=Transaksjonsfil
 Name[nl]=Transactiebestand
 Name[pl]=Plik transakcji
 Name[pt]=Ficheiro de Transacção
 Name[pt_BR]=Arquivo de transação
+Name[ru]=Файл транзакций
 Name[sv]=Transaktionsfil
 Name[uk]=Файл передачі
 Name[x-test]=xxTransaction Filexx

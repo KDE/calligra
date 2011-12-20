@@ -18,6 +18,7 @@ Name[ru]=Фильтр импорта файлов HTML в Words
 Name[sv]=Words HTML-importfilter
 Name[uk]=Фільтр імпорту HTML для Words
 Name[x-test]=xxWords HTML Import Filterxx
+Name[zh_CN]=Words HTML 导入过滤器
 Name[zh_TW]=Words HTML 匯入過濾程式
 X-KDE-Export=application/x-words
 X-KDE-Import=text/html

@@ -52,7 +52,7 @@ VacationList::isVacation(time_t date) const
     return false;
 }
 
-const QString&
+QString
 VacationList::vacationName(time_t date) const
 {
     for (VacationList::Iterator vli(*this);  vli.hasNext();) {
@@ -60,7 +60,7 @@ VacationList::vacationName(time_t date) const
         if (v->contains(date))
             return v->getName();
     }
-    return QString::null;
+    return QString();
 }
 
 } // namespace TJ

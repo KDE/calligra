@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=IAD router
 Name[bg]=Маршрутизатор IAD
-Name[ca]=Enrutador IAD
+Name[ca]=Encaminador IAD
 Name[et]=IAD marsruuter
 Name[it]=Router IAD
 Name[nb]=IAD-ruter
@@ -10,7 +10,9 @@ Name[nl]=IAD-router
 Name[pl]=IAD router
 Name[pt]=Encaminhador IAD
 Name[pt_BR]=Roteador IAD
+Name[ru]=Маршрутизатор IAD
 Name[sv]=IAD-router
 Name[uk]=Маршрутизатор IAD
 Name[x-test]=xxIAD routerxx
+Name[zh_CN]=IAD 路由器
 Name[zh_TW]=IAD 路由器

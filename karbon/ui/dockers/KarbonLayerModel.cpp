@@ -141,28 +141,6 @@ QModelIndex KarbonLayerModel::parent(const QModelIndex &child) const
         return QModelIndex();
 
     return parentIndexFromShape(childShape);
-
-    // check if child shape is a layer, and return invalid model index if it is
-    KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>(childShape);
-    if (childlayer)
-        return QModelIndex();
-
-    // get the children's parent shape
-    KoShapeContainer *parentShape = childShape->parent();
-    if (! parentShape)
-        return QModelIndex();
-
-    // check if the parent is a layer
-    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>(parentShape);
-    if (parentLayer)
-        return createIndex(m_document->layers().indexOf(parentLayer), 0, parentShape);
-
-    // get the grandparent to determine the row of the parent shape
-    KoShapeContainer *grandParentShape = parentShape->parent();
-    if (! grandParentShape)
-        return QModelIndex();
-
-    return createIndex(indexFromChild(grandParentShape, parentShape), 0, parentShape);
 }
 
 QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
@@ -279,7 +257,7 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
 KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape) const
 {
     PropertyList l;
-    l << Property(i18nc("Visibility state of the shape", "Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
+    l << Property(i18nc("Visibility state of the shape", "Visible"), SmallIcon("layer-visible-on"), SmallIcon("layer-visible-off"), shape->isVisible());
     l << Property(i18nc("Lock state of the shape", "Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     l << Property(i18nc("The z-index of the shape", "zIndex"), QString("%1").arg(shape->zIndex()));
     l << Property(i18nc("The opacity of the shape", "Opacity"), QString("%1").arg(1.0 - shape->transparency()));

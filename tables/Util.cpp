@@ -48,9 +48,11 @@ int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
     const int offset = 'a' - 'A';
     int counterColumn = 0;
     const uint totalLength = labelText.length();
-    uint labelTextLength;
-    for (labelTextLength = 0; labelTextLength < totalLength; labelTextLength++) {
+    uint labelTextLength = 0;
+    for ( ; labelTextLength < totalLength; labelTextLength++) {
         const char c = labelText[labelTextLength].toLatin1();
+        if (labelTextLength == 0 && c == '$')
+            continue; // eat an absolute reference char that could be at the beginning only
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
             break;
     }
@@ -71,15 +73,65 @@ int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
 
 int Calligra::Tables::Util::decodeRowLabelText(const QString &labelText)
 {
-    QRegExp rx("([A-Za-z]+)([0-9]+)");
+    QRegExp rx("(|\\$)([A-Za-z]+)(|\\$)([0-9]+)");
     if(rx.exactMatch(labelText))
-        return rx.cap(2).toInt();
+        return rx.cap(4).toInt();
     return 0;
 }
 
 QString Calligra::Tables::Util::encodeColumnLabelText(int column)
 {
     return Cell::columnName(column);
+}
+
+bool Calligra::Tables::Util::isCellReference(const QString &text, int startPos)
+{
+    int length = text.length();
+    if (length < 1 || startPos >= length)
+        return false;
+
+    const QChar *data = text.constData();
+
+    if (startPos > 0) {
+        data += startPos;
+    }
+
+    if (*data == QChar('$', 0)) {
+        ++data;
+    }
+
+    bool letterFound = false;
+    while (1) {
+        if (data->isNull()) {
+            return false;
+        }
+
+        ushort c = data->unicode();
+        if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z'))
+            break;
+
+        letterFound = true;
+        ++data;
+    }
+
+    if (!letterFound) {
+        return false;
+    }
+
+    if (*data == QChar('$', 0)) {
+        ++data;
+    }
+
+    bool numberFound = false;
+    while (!data->isNull()) {
+        ushort c = data->unicode();
+        if (c < '0' || c > '9')
+            break;
+        numberFound = true;
+        ++data;
+    }
+
+    return numberFound && data->isNull(); // we found the number and reached end
 }
 
 QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
@@ -354,7 +406,7 @@ bool Calligra::Tables::Util::localReferenceAnchor(const QString &_ref)
 }
 
 
-QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const KLocale* locale, QString namespacePrefix)
+QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const KLocale *locale, const QString &namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -367,169 +419,176 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
     // use locale settings
     QString decimal = locale ? locale->decimalSymbol() : ".";
 
-    QString result;
-    QString reference;
+    const QChar *data = expression.constData();
+    const QChar *start = data;
 
-    int i = 0;
-    if ((!expression.isEmpty()) && (expression[0] == '=')) {
-        result = '=';
-        ++i;
+    if (data->isNull()) {
+        return QString();
     }
 
-    // main loop
-    while (i < expression.length()) {
+    int length = expression.length() * 2;
+    QString result(length, QChar());
+    result.reserve(length);
+    QChar * out = result.data();
+    QChar * outStart = result.data();
+
+    if (*data == QChar('=', 0)) {
+        *out = *data;
+        ++data;
+        ++out;
+    }
+
+    const QChar *pos = data;
+    while (!data->isNull()) {
         switch (state) {
         case Start: {
-            // check for number
-            if (expression[i].isDigit())
+            if (data->isDigit()) { // check for number
                 state = InNumber;
-
-            // a string?
-            else if (expression[i] == '"') {
-                state = InString;
-                result.append(expression[i++]);
+                *out++ = *data++;
             }
-
-            // decimal dot ?
-            else if (expression[i] == '.')
-                state = InNumber;
-
-            // beginning with alphanumeric ?
-            // could be identifier, cell, range, or function...
-            else if (isIdentifier(expression[i]))
+            else if (isIdentifier(*data)) {
+                // beginning with alphanumeric ?
+                // could be identifier, cell, range, or function...
                 state = InIdentifier;
-
-            // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
-            else if (expression[i].unicode() == '[') {
-                ++i;
-                state = InReference;
-                // NOTE Stefan: As long as Calligra::Tables does not support fixed sheets eat the dollar sign.
-                if (expression[i] == '$') ++i;
+                int i = data - start;
+                const static QString errorTypeReplacement("ERRORTYPE");
+                const static QString legacyNormsdistReplacement("LEGACYNORMSDIST");
+                const static QString legacyNormsinvReplacement("LEGACYNORMSINV");
+                const static QString multipleOperations("MULTIPLE.OPERATIONS");
+                if (expression.midRef(i,10).compare(QLatin1String("ERROR.TYPE")) == 0) {
+                    // replace it
+                    int outPos = out - outStart;
+                    result.replace(outPos, 9, errorTypeReplacement);
+                    data += 10; // number of characters in "ERROR.TYPE"
+                    out += 9;
+                }
+                else if (expression.midRef(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
+                    if (expression.midRef(i + 12, 4).compare(QLatin1String("DIST")) == 0) {
+                        // replace it
+                        int outPos = out - outStart;
+                        result.replace(outPos, 15, legacyNormsdistReplacement);
+                        data += 16; // number of characters in "LEGACY.NORMSDIST"
+                        out += 15;
+                    }
+                    else if (expression.midRef(i + 12, 3).compare(QLatin1String("INV")) == 0) {
+                        // replace it
+                        int outPos = out - outStart;
+                        result.replace(outPos, 14, legacyNormsinvReplacement);
+                        data += 15; // number of characters in "LEGACY.NORMSINV"
+                        out += 14;
+                    }
+                }
+                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !isIdentifier(expression[i+5])) {
+                    int outPos = out - outStart;
+                    result.replace(outPos, 19, multipleOperations);
+                    data += 5;
+                    out += 19;
+                }
+                else if (expression.midRef(i, 3).compare(QLatin1String("NEG")) == 0) {
+                    *out = QChar('-', 0);
+                    data += 3;
+                    ++out;
+                }
             }
-
-            // look for operator match
             else {
-                int op;
-                QString s;
-
-                // check for two-chars operator, such as '<=', '>=', etc
-                s.append(expression[i]);
-                if (i + 1 < expression.length())
-                    s.append(expression[i+1]);
-                op = matchOperator(s);
-
-                // check for one-char operator, such as '+', ';', etc
-                if (op == Token::InvalidOp) {
-                    s = QString(expression[i]);
-                    op = matchOperator(s);
-                }
-
-                // any matched operator ?
-                if (op == Token::Equal)
-                    result.append("==");
-                else
-                    result.append(s);
-                if (op != Token::InvalidOp) {
-                    int len = s.length();
-                    i += len;
-                } else {
-                    ++i;
-                    state = Start;
-                }
-            }
-            break;
-        }
-        case InReference: {
-            if (expression[i] == ']') {
-                result.append(Region::loadOdf(reference));
-                reference.clear();
-                state = Start;
-            } else if (expression[i] == '\'') {
-                reference.append('\'');
-                state = InSheetName;
-            } else
-                reference.append(expression[i]);
-            ++i;
-            break;
-        }
-        case InSheetName: {
-            reference.append(expression[i]);
-            if (expression[i] == '\'') {
-                // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
-                    ++i; // eat it
-                else // the end
+                switch (data->unicode()) {
+                case '"': // a string ?
+                    state = InString;
+                    *out++ = *data++;
+                    break;
+                case '.': // decimal dot ?
+                    state = InNumber;
+                    *out = decimal[0];
+                    ++out;
+                    ++data;
+                    break;
+                case '[': // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
                     state = InReference;
+                    ++data;
+                    // NOTE: As long as Calligra::Tables does not support fixed sheets eat the dollar sign.
+                    if (*data == QChar('$', 0)) {
+                        ++data;
+                    }
+                    pos = data;
+                    break;
+                default:
+                    const QChar *operatorStart = data;
+                    if (!parseOperator(data, out)) {
+                        *out++ = *data++;
+                    }
+                    else if (*operatorStart == QChar('=', 0) && data - operatorStart == 1) { // only one =
+                        *out++ = QChar('=', 0);
+                    }
+                    break;
+                }
             }
-            ++i;
-            break;
-        }
-        case InNumber: {
-            // consume as long as it's digit
-            if (expression[i].isDigit())
-                result.append(expression[i++]);
-            // convert '.' to decimal separator
-            else if (expression[i] == '.') {
-                result.append(decimal);
-                ++i;
+        }   break;
+        case InNumber:
+            if (data->isDigit()) {
+                *out++ = *data++;
             }
-            // exponent ?
-            else if (expression[i].toUpper() == 'E') {
-                result.append('E');
-                ++i;
+            else if (*data == QChar('.', 0)) {
+                const QChar *decimalChar = decimal.constData();
+                while (!decimalChar->isNull()) {
+                    *out++ = *decimalChar++;
+                }
+                ++data;
             }
-            // we're done with integer number
-            else
-                state = Start;
-            break;
-        }
-        case InString: {
-            // consume until "
-            if (expression[i] != '"')
-                result.append(expression[i++]);
-            // we're done
+            else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
+                *out++ = QChar('E', 0);
+                ++data;
+            }
             else {
-                result.append(expression[i]);
-                ++i;
                 state = Start;
             }
+
             break;
-        }
+        case InString:
+            if (*data == QChar('"', 0)) {
+                state = Start;
+            }
+            *out++ = *data++;
+            break;
         case InIdentifier: {
-            // handle problematic functions
-            if (expression.mid(i).startsWith("ERROR.TYPE")) {
-                // replace it
-                result.append("ERRORTYPE");
-                i += 10; // number of characters in "ERROR.TYPE"
-            } else if (expression.mid(i).startsWith("LEGACY.NORMSDIST")) {
-                // replace it
-                result.append("LEGACYNORMSDIST");
-                i += 16; // number of characters in "LEGACY.NORMSDIST"
-            } else if (expression.mid(i).startsWith("LEGACY.NORMSINV")) {
-                // replace it
-                result.append("LEGACYNORMSINV");
-                i += 15; // number of characters in "LEGACY.NORMSINV"
-            } else if (namespacePrefix == "oooc:" && expression.mid(i).startsWith("TABLE") && !isIdentifier(expression[i+5])) {
-                result.append("MULTIPLE.OPERATIONS");
-                i += 5;
-            } else if (expression.mid(i).startsWith("NEG") && i+3 < expression.length() && !isIdentifier(expression[i+3])) {
-                result.append("-");
-                i += 3;
+            if (isIdentifier(*data) || data->isDigit()) {
+                *out++ = *data++;
             }
-
-
-            // consume as long as alpha, dollar sign, underscore, or digit
-            if (isIdentifier(expression[i])  || expression[i].isDigit())
-                result.append(expression[i++]);
-            // we're done
-            else
+            else {
                 state = Start;
+            }
+        }   break;
+        case InReference:
+            switch (data->unicode()) {
+            case ']':
+                Region::loadOdf(pos, data, out);
+                pos = data;
+                state = Start;
+                break;
+            case '\'':
+                state = InSheetName;
+                break;
+            default:
+                break;
+            }
+            ++data;
             break;
-        }
-        default:
+        case InSheetName:
+            if (*data == QChar('\'', 0)) {
+                ++data;
+                if (!data->isNull() && *data == QChar('\'', 0)) {
+                    ++data;
+                }
+                else {
+                    state = InReference;
+                }
+            }
+            else {
+                ++data;
+            }
             break;
         }
     }
+    result.resize(out - outStart);
     return result;
 }
 
@@ -609,13 +668,18 @@ static bool isCellnameCharacter(const QChar &c)
 static void replaceFormulaReference(int referencedRow, int referencedColumn, int thisRow, int thisColumn, QString &result, int cellReferenceStart, int cellReferenceLength)
 {
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
-    QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
+    QRegExp rx("(|\\$)[A-Za-z]+(|\\$)[0-9]+");
     if (rx.exactMatch(ref)) {
-        const int c = Calligra::Tables::Util::decodeColumnLabelText(ref) + thisColumn - referencedColumn;
-        const int r = Calligra::Tables::Util::decodeRowLabelText(ref) + thisRow - referencedRow;
+        int c = Calligra::Tables::Util::decodeColumnLabelText(ref);
+        int r = Calligra::Tables::Util::decodeRowLabelText(ref);
+        if (rx.cap(1) != "$") // absolute or relative column?
+            c += thisColumn - referencedColumn;
+        if (rx.cap(2) != "$") // absolute or relative row?
+            r += thisRow - referencedRow;
         result = result.replace(cellReferenceStart,
                                 cellReferenceLength,
-                                Calligra::Tables::Util::encodeColumnLabelText(c) + QString::number(r) );
+                                rx.cap(1) + Calligra::Tables::Util::encodeColumnLabelText(c) +
+                                rx.cap(2) + QString::number(r) );
     }
 }
 
@@ -657,6 +721,7 @@ QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, i
                     replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, i - cellReferenceStart);
                 }
                 state = InStart;
+                --i; // decrement again to handle the current char in the InStart-switch.
             }
             break;
         };
@@ -671,22 +736,35 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();
-    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
-    state = Start;
+    enum { InStart, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName, InCellReference } state;
+    state = InStart;
+    int cellReferenceStart = 0;
+    int sheetOrAreaNameDelimiterCount = 0;
     QString result = formula.startsWith('=') ? formula : '=' + formula;
     for(int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
-        case Start:
+        case InStart:
             if(ch == '(')
                 state = InArguments;
             break;
         case InArguments:
             if (ch == '"')
                 state = InString;
-            else if (ch.unicode() == '\'')
+            else if (ch.unicode() == '\'') {
+                sheetOrAreaNameDelimiterCount = 1;
+                for(int j = i + 1; j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'')
+                        break;
+                    ++sheetOrAreaNameDelimiterCount;
+                }
+                if (sheetOrAreaNameDelimiterCount >= 2)
+                    result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
                 state = InSheetOrAreaName;
-            else if (ch == ',')
+            } else if (isCellnameCharacter(ch)) {
+                state = InCellReference;
+                cellReferenceStart = i;
+            } else if (ch == ',')
                 result[i] = ';'; // replace argument delimiter
             else if (ch == '(' && !result[i-1].isLetterOrNumber())
                 state = InParenthesizedArgument;
@@ -704,8 +782,47 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
                 state = InArguments;
             break;
         case InSheetOrAreaName:
-            if (ch == '\'')
+            Q_ASSERT( i >= 1 );
+            if (ch == '\'' && result[i - 1].unicode() != '\\') {
+                int count = 1;
+                for(int j = i + 1; count < sheetOrAreaNameDelimiterCount && j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'')
+                        break;
+                    ++count;
+                }
+                if (count == sheetOrAreaNameDelimiterCount) {
+                    if (sheetOrAreaNameDelimiterCount >= 2)
+                        result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
+                    state = InArguments;
+                } else {
+                    result.insert(i, '\'');
+                    ++i;
+                }
+            }
+            break;
+        case InCellReference:
+            if (!isCellnameCharacter(ch)) {
+                if (ch != '(') /* skip formula-names */ {
+                    // Excel is able to use only the column-name to define a column
+                    // where all rows are selected. Since that is not supproted in
+                    // ODF we add to such definitions the minimum/maximum row-number.
+                    // So, something like "A:B" would become "A$1:B$65536". Note that
+                    // such whole column-definitions are only allowed for ranges like
+                    // "A:B" but not for single column definitions like "A" or "B".
+                    const QString ref = result.mid(qMax(0, cellReferenceStart - 1), i - cellReferenceStart + 2);
+                    QRegExp rxStart(".*(|\\$)[A-Za-z]+\\:");
+                    QRegExp rxEnd("\\:(|\\$)[A-Za-z]+(|(|\\$)[0-9]+).*");
+                    if (rxEnd.exactMatch(ref) && rxEnd.cap(2).isEmpty()) {
+                        result.insert(i, "$65536");
+                        i += 6;
+                    } else if (rxStart.exactMatch(ref)) {
+                        result.insert(i, "$1");
+                        i += 2;
+                    }
+                }
                 state = InArguments;
+                --i; // decrement again to handle the current char in the InArguments-switch.
+            }
             break;
         };
     };

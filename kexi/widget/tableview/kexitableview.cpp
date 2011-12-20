@@ -82,8 +82,8 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
     //set defaults
     if (qApp) {
         baseColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
-        textColor = QPalette::Text;
-        borderColor = QColor(200, 200, 200);
+        textColor = KColorScheme(QPalette::Active, KColorScheme::View).foreground().color()/*QPalette::Base*/;
+        borderColor = KColorScheme(QPalette::Active, KColorScheme::View).shade(KColorScheme::LightShade);
         emptyAreaColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
         recordHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 33, 66);
         recordMouseOverHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 10, 90);

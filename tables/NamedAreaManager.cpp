@@ -79,6 +79,7 @@ NamedAreaManager::~NamedAreaManager()
 void NamedAreaManager::insert(const Region& region, const QString& name)
 {
     // NOTE Stefan: Only contiguous regions are supported (OpenDocument compatibility).
+    Q_ASSERT(!name.isEmpty());
     NamedArea namedArea;
     namedArea.range = region.lastRange();
     namedArea.sheet = region.lastSheet();
@@ -151,6 +152,7 @@ void NamedAreaManager::regionChanged(const Region& region)
         sheet = (*it)->sheet();
         namedAreas = sheet->cellStorage()->namedAreas(Region((*it)->rect(), sheet));
         for (int j = 0; j < namedAreas.count(); ++j) {
+            Q_ASSERT(d->namedAreas.contains(namedAreas[j].second));
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
             emit namedAreaModified(namedAreas[j].second);
         }
@@ -165,6 +167,7 @@ void NamedAreaManager::updateAllNamedAreas()
     for (int i = 0; i < sheets.count(); ++i) {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
         for (int j = 0; j < namedAreas.count(); ++j) {
+            Q_ASSERT(d->namedAreas.contains(namedAreas[j].second));
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
             emit namedAreaModified(namedAreas[j].second);
         }

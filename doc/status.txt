@@ -21,7 +21,7 @@ feature-complete manuals.
   how they present it. A good theft is better than a bad idea, after all...
 
 The list of maintainers should be kept up-to-date at the Calligra "get
-involved" documentation page: http://calligra-suite.org/getinvolved/doc-writers.php
+involved" documentation page: http://calligra.org/getinvolved/doc-writers.php
 
 --------------------------------------------------------------------------------
 

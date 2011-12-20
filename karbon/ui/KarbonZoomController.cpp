@@ -61,8 +61,8 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
 
     d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), this);
     d->action->setSpecialButtons(KoZoomAction::ZoomToSelection | KoZoomAction::ZoomToAll);
-    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
+    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(setZoom(KoZoomMode::Mode,qreal)));
     connect(d->action, SIGNAL(zoomedToSelection()),
             this, SIGNAL(zoomedToSelection()));
     connect(d->action, SIGNAL(zoomedToAll()),
@@ -75,13 +75,13 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     d->canvas = dynamic_cast<KarbonCanvas*>(d->canvasController->canvas());
     d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
 
-    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(setAvailableSize()));
-    connect(d->canvasController->proxyObject, SIGNAL(zoomBy(const qreal)), this, SLOT(requestZoomBy(const qreal)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(setAvailableSize()));
+    connect(d->canvasController->proxyObject, SIGNAL(zoomBy(qreal)), this, SLOT(requestZoomBy(qreal)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
+            d->canvas, SLOT(setDocumentOffset(QPoint)));
 
-    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
-            this, SLOT(resourceChanged(int, const QVariant &)));
+    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)),
+            this, SLOT(resourceChanged(int,QVariant)));
 }
 
 KarbonZoomController::~KarbonZoomController()

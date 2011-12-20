@@ -86,17 +86,28 @@ public:
             Writer& out) = 0;
 
         /**
-         * Add text properties to the style.
-         * Host application specific style properties are added. These
-         * properties are attributes to the elements style:paragraph-properties
-         * or style:text-properties.
+         * Add host application specific formatting properties for text and
+         * paragraphs to the style of the draw element.  These properties are
+         * attributes to style:paragraph-properties or style:text-properties.
+         * Also add host application specific attributes to the draw element.
          **/
         virtual void addTextStyles(
-            const quint16 msospt,
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
             KoGenStyle& style,
             Writer& out) = 0;
+
+        /**
+         * Convert the OfficeArtCOLORREF to a QColor.  This conversion requires
+         * color scheme information.
+         **/
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+
+        /**
+         *
+         */
+        virtual QString formatPos(qreal v) = 0;
+
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
@@ -109,14 +120,10 @@ public:
          **/
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
-        /**
-         * Convert the OfficeArtCOLORREF to a QColor.
-         * This conversion requires color scheme information.
-         **/
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+        quint16 m_currentShapeType;
 
-        virtual QString formatPos(qreal v) = 0;
-    };
+    }; //End class Client
+
 private:
     Client* const client;
 
@@ -313,6 +320,7 @@ private:
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
     void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
+
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);

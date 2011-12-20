@@ -45,7 +45,7 @@
 #include "kis_node.h"
 #include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
-
+#include "kis_default_bounds.h"
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_repeat_iterators_pixel.h"
@@ -154,20 +154,21 @@ private:
 };
 
 
-class KisPaintDevice::Private
+struct KisPaintDevice::Private
 {
 
 public:
 
     Private(KisPaintDevice *paintDevice)
-        : cache(paintDevice),
-          x(0),
-          y(0)
+        : defaultBounds(new KisDefaultBounds)
+        , cache(paintDevice)
+        , x(0)
+        , y(0)
     {
     }
 
     KisNodeWSP parent;
-    KisDefaultBoundsSP defaultBounds;
+    KisDefaultBounds * defaultBounds;
     PaintDeviceCache cache;
     qint32 x;
     qint32 y;
@@ -182,7 +183,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds * defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -202,7 +203,7 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBoundsSP defaultBounds,
+                          KisDefaultBounds * defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
@@ -329,13 +330,20 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBoundsSP defaultBounds)
+void KisPaintDevice::setDefaultBounds(KisDefaultBounds * defaultBounds)
 {
+    if (!defaultBounds) {
+        defaultBounds = new KisDefaultBounds();
+    }
+    if (!defaultBounds->parent()) {
+        defaultBounds->moveToThread(QThread::currentThread());
+        defaultBounds->setParent(this);
+    }
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBoundsSP KisPaintDevice::defaultBounds() const
+KisDefaultBounds * KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
@@ -646,7 +654,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     }
 }
 
-void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName,
+void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfile *profile,
                                        qint32 offsetX, qint32 offsetY)
 {
     QImage image = _image;
@@ -655,12 +663,12 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
         image = image.convertToFormat(QImage::Format_ARGB32);
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
-    if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
+    if (!profile && colorSpace()->id() == "RGBA") {
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
     } else {
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
+                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
                 ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height());
 
         writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
@@ -669,7 +677,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
     m_d->cache.invalidate();
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile) const
 {
     qint32 x1;
     qint32 y1;

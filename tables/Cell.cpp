@@ -161,9 +161,9 @@ KLocale* Cell::locale() const
 bool Cell::isDefault() const
 {
     // check each stored attribute
-    if (value() != Value())
+    if (!value().isEmpty())
         return false;
-    if (formula() != Formula())
+    if (formula() != Formula::empty())
         return false;
     if (!link().isEmpty())
         return false;
@@ -432,21 +432,30 @@ void Cell::setRawUserInput(const QString& string)
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::displayText() const
+QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
 {
     if (isNull())
         return QString();
 
     QString string;
-    const Style style = effectiveStyle();
+    const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if (isFormula() && sheet()->getShowFormula() && !(sheet()->isProtected() && style.hideFormula())) {
+    if ( isFormula() && !(sheet()->isProtected() && style.hideFormula()) &&
+         ( (showFormula && *showFormula) || (!showFormula && sheet()->getShowFormula()) ) )
+    {
         string = userInput();
+        if (showFormula)
+            *showFormula = true;
     } else if (!isEmpty()) {
-        string = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
+        Value theValue = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
-                 style.postfix(), style.currency().symbol()).asString();
+                 style.postfix(), style.currency().symbol(),
+                 style.customFormat(), style.thousandsSep());
+        if (v) *v = theValue;
+        string = theValue.asString();
+        if (showFormula)
+            *showFormula = false;
     }
     return string;
 }
@@ -644,7 +653,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
         }
         }
     }
-    kDebug() << result;
+    //kDebug() << result;
     return result;
 }
 
@@ -846,7 +855,7 @@ void Cell::parseUserInput(const QString& text)
     if (!sheet()->isLoading()) {
         Validity validity = this->validity();
         if (!validity.testValidity(this)) {
-            kDebug() << "Validation failed";
+            kDebug(36003) << "Validation failed";
             //reapply old value if action == stop
             setFormula(oldFormula);
             setUserInput(oldUserInput);
@@ -1213,7 +1222,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         QSharedPointer<QTextDocument> doc = richText();
         if (doc) {
             QTextCharFormat format = style().asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoEmbeddedDocumentSaver embeddedSaver;
             KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
@@ -1329,7 +1338,9 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     };
 }
 
-bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
+bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
+            const Styles& autoStyles, const QString& cellStyleName,
+            QList<ShapeLoadingData>& shapeData)
 {
     static const QString sFormula           = QString::fromLatin1("formula");
     static const QString sValidationName    = QString::fromLatin1("validation-name");
@@ -1610,7 +1621,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             setComment(comment);
     }
 
-    loadOdfObjects(element, tableContext);
+    loadOdfObjects(element, tableContext, shapeData);
 
     return true;
 }
@@ -1649,48 +1660,116 @@ static bool findDrawElements(const KoXmlElement& parent)
     return false;
 }
 
+QString loadOdfCellTextNodes(const KoXmlElement& element, int *textFragmentCount, int *lineCount, bool *hasRichText, bool *stripLeadingSpace)
+{
+    QString cellText;
+    bool countedOwnFragments = false;
+    bool prevWasText = false;
+    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        if (n.isText()) {
+            prevWasText = true;
+            QString t = KoTextLoader::normalizeWhitespace(n.toText().data(), *stripLeadingSpace);
+            if (!t.isEmpty()) {
+                *stripLeadingSpace = t[t.length() - 1].isSpace();
+                cellText += t;
+                if (!countedOwnFragments) {
+                    // We only count the number of different parent elements which have text. That is
+                    // so cause different parent-elements may mean different styles which means
+                    // rich-text while the same parent element means the same style so we can easily
+                    // put them together into one string.
+                    countedOwnFragments = true;
+                    ++(*textFragmentCount);
+                }
+            }
+        } else {
+            KoXmlElement e = n.toElement();
+            if (!e.isNull()) {
+                if (prevWasText && !cellText.isEmpty() && cellText[cellText.length() - 1].isSpace()) {
+                    // A trailing space of the cellText collected so far needs to be preserved when
+                    // more text-nodes within the same parent follow but if an element like e.g.
+                    // text:s follows then a trailing space needs to be removed.
+                    cellText.chop(1);
+                }
+                prevWasText = false;
+
+                // We can optimize some elements like text:s (space), text:tab (tabulator) and
+                // text:line-break (new-line) to not produce rich-text but add the equivalent
+                // for them in plain-text.
+                const bool isTextNs = e.namespaceURI() == KoXmlNS::text;
+                if (isTextNs && e.localName() == "s") {
+                    const int howmany = qMax(1, e.attributeNS(KoXmlNS::text, "c", QString()).toInt());
+                    cellText += QString().fill(32, howmany);
+                } else if (isTextNs && e.localName() == "tab") {
+                    cellText += '\t';
+                } else if (isTextNs && e.localName() == "line-break") {
+                    cellText += '\n';
+                    ++(*lineCount);
+                } else if (isTextNs && e.localName() == "span") {
+                    // Nested span-elements means recursive evaluation.
+                    cellText += loadOdfCellTextNodes(e, textFragmentCount, lineCount, hasRichText, stripLeadingSpace);
+                } else if (!isTextNs ||
+                              ( e.localName() != "annotation" &&
+                                e.localName() != "bookmark" &&
+                                e.localName() != "meta" &&
+                                e.localName() != "tag" )) {
+                    // Seems we have an element we cannot easily translate to a string what
+                    // means it's all rich-text now.
+                    *hasRichText = true;
+                }
+            }
+        }
+    }
+    return cellText;
+}
+
 void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
     QString cellText;
 
-    bool multipleTextParagraphsFound = false;
-    bool hasRichText = KoTextLoader::containsRichText(parent);
+    int lineCount = 0;
+    bool hasRichText = false;
+    bool stripLeadingSpace = true;
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
                 textParagraphElement.namespaceURI() == KoXmlNS::text) {
 
-            // our text, could contain formating for value or result of formula
-            if (cellText.isEmpty()) {
-                cellText = textParagraphElement.text();
-            } else {
-                cellText += '\n' + textParagraphElement.text();
-                multipleTextParagraphsFound = true;
-            }
-
             // the text:a link could be located within a text:span element
             KoXmlElement textA = namedItemNSWithSpan(textParagraphElement, KoXmlNS::text, "a");
-            if (!textA.isNull()) {
-                if (textA.hasAttributeNS(KoXmlNS::xlink, "href")) {
-                    QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
-                    cellText = textA.text();
-                    setUserInput(cellText);
-                    hasRichText = false;
-                    // The value will be set later in loadOdf().
-                    if ((!link.isEmpty()) && (link[0] == '#'))
-                        link = link.remove(0, 1);
-                    setLink(link);
-                }
+            if (!textA.isNull() && textA.hasAttributeNS(KoXmlNS::xlink, "href")) {
+                QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
+                cellText = textA.text();
+                setUserInput(cellText);
+                hasRichText = false;
+                lineCount = 0;
+                // The value will be set later in loadOdf().
+                if ((!link.isEmpty()) && (link[0] == '#'))
+                    link = link.remove(0, 1);
+                setLink(link);
+                // Abort here cause we can handle only either a link in a cell or (rich-)text but not both.
+                break;
             }
+
+            if (!cellText.isNull())
+                cellText += '\n';
+
+            ++lineCount;
+            int textFragmentCount = 0;
+
+            // Our text could contain formating for value or result of formula or a mix of
+            // multiple text:span elements with text-nodes and line-break's.
+            cellText += loadOdfCellTextNodes(textParagraphElement, &textFragmentCount, &lineCount, &hasRichText, &stripLeadingSpace);
+
+            // If we got text from multiple different sources (e.g. from the text:p and a
+            // child text:span) then we have very likely rich-text.
+            if (!hasRichText)
+                hasRichText = textFragmentCount >= 2;
         }
     }
 
     if (!cellText.isNull()) {
-        setUserInput(cellText);
-        // The value will be set later in loadOdf().
-
         if (hasRichText && !findDrawElements(parent)) {
             // for now we don't support richtext and embedded shapes in the same cell;
             // this is because they would currently be loaded twice, once by the KoTextLoader
@@ -1708,29 +1787,32 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             }
 
             QTextCharFormat format = style.asCharFormat();
-            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+            ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
-            KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);
             KoTextDocument(doc.data()).setStyleManager(sheet()->map()->textStyleManager());
 
+            Q_ASSERT(tableContext.shapeContext);
+            KoTextLoader loader(*tableContext.shapeContext);
             QTextCursor cursor(doc.data());
             loader.loadBody(parent, cursor);
 
             setUserInput(doc->toPlainText());
             setRichText(doc);
+        } else {
+            setUserInput(cellText);
         }
     }
 
-    //Enable word wrapping if multiple lines of text have been found.
-    if (multipleTextParagraphsFound) {
+    // enable word wrapping if multiple lines of text have been found.
+    if (lineCount >= 2) {
         Style newStyle;
         newStyle.setWrapText(true);
         setStyle(newStyle);
     }
 }
 
-void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableContext)
+void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableContext, QList<ShapeLoadingData>& shapeData)
 {
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,
@@ -1750,16 +1832,36 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        loadOdfObject(element, *tableContext.shapeContext);
+        if (element.localName() == "a") {
+            // It may the case that the object(s) are embedded into a hyperlink so actions are done on
+            // clicking it/them but since we do not supported objects-with-hyperlinks yet we just fetch
+            // the inner elements and use them to at least create and show the objects (see bug 249862).
+            KoXmlElement e;
+            forEachElement(e, element) {
+                if (e.namespaceURI() != KoXmlNS::draw)
+                    continue;
+                ShapeLoadingData data = loadOdfObject(e, *tableContext.shapeContext);
+                if (data.shape) {
+                    shapeData.append(data);
+                }
+            }
+        } else {
+            ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
+            if (data.shape) {
+                shapeData.append(data);
+            }
+        }
     }
 }
 
-void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
+ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
 {
+    ShapeLoadingData data;
+    data.shape = 0;
     KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
-        kDebug(36003) << "Unable to load shape.";
-        return;
+        kDebug(36003) << "Unable to load shape with localName=" << element.localName();
+        return data;
     }
 
     d->sheet->addShape(shape);
@@ -1783,23 +1885,29 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
             !shape->hasAdditionalAttribute("table:end-x") ||
             !shape->hasAdditionalAttribute("table:end-y")) {
         kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
-        return;
+        return data;
     }
 
     Region endCell(Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
                    d->sheet->map(), d->sheet);
     if (!endCell.isValid() || !endCell.isSingular())
-        return;
+        return data;
 
     QString string = shape->additionalAttribute("table:end-x");
     if (string.isNull())
-        return;
+        return data;
     double endX = KoUnit::parseValue(string);
 
     string = shape->additionalAttribute("table:end-y");
     if (string.isNull())
-        return;
+        return data;
     double endY = KoUnit::parseValue(string);
+
+    data.shape = shape;
+    data.startCell = QPoint(column(), row());
+    data.offset = QPointF(offsetX, offsetY);
+    data.endCell = endCell;
+    data.endPoint = QPointF(endX, endY);
 
     // The column dimensions are already the final ones, but not the row dimensions.
     // The default height is used for the not yet loaded rows.
@@ -1812,6 +1920,8 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
     if (endCell.firstRange().top() > this->row())
         size += QSizeF(0.0, d->sheet->rowFormats()->totalRowHeight(this->row(), endCell.firstRange().top() - 1));
     shape->setSize(size);
+
+    return data;
 }
 
 bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,

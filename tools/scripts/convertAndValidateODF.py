@@ -6,7 +6,7 @@
 # Author: unknown
 # Maintainer: Hanna Skott
 #
-# This file contains a script that converts documents to ODF format using koconverter
+# This file contains a script that converts documents to ODF format using calligraconverter
 # it also validates the content of the resulting ODF file against RelaxNG XML using jing.
 #
 # EXAMPLE of use: $ ./convertAndValidateODF.py validate_or_not file_directory filename
@@ -24,7 +24,7 @@ def convertAndValidateFilesInDir(dir):
 		for name in files:
 			singleFileConvertAndValidate(name, root)
 
-#This function converts a file using koconverter and then tries to validate the resulting ODF file against RelaxNG using jing
+#This function converts a file using calligraconverter and then tries to validate the resulting ODF file against RelaxNG using jing
 def singleFileConvertAndValidate(filename, validate):
 	
 	filepath = filename
@@ -43,7 +43,7 @@ def singleFileConvertAndValidate(filename, validate):
                     # Do the conversion
                     args = [applicationname, "--roundtrip-filename", convertedfile, filepath]
                 else:
-                    args = ["koconverter", "--batch", filepath, convertedfile]
+                    args = ["calligraconverter", "--batch", filepath, convertedfile]
                     
                 print args
                 fnull = open(os.devnull, 'w')
@@ -166,8 +166,8 @@ schemas = {
 		"OpenDocument-manifest-schema-v1.0-os.rng"],
 	"1.1": ["OpenDocument-schema-v1.1.rng",
 		"OpenDocument-manifest-schema-v1.1.rng"],
-	"1.2": ["OpenDocument-v1.2-cd05-schema-calligra.rng",
-		"OpenDocument-v1.2-cd05-manifest-schema.rng"]
+	"1.2": ["OpenDocument-v1.2-cs01-schema-calligra.rng",
+		"OpenDocument-v1.2-cs01-manifest-schema.rng"]
 }
 
 class jingodfvalidator:

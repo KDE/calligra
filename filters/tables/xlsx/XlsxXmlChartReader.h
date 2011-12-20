@@ -51,8 +51,8 @@ public:
     XlsxXmlChartReader(KoOdfWriters *writers);
     virtual ~XlsxXmlChartReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
-    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString = QString());
-    QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, QString format);
+    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString = QString());
+    QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, KoGenStyle::Type formatType);
 protected:
     KoFilter::ConversionStatus read_txPr();
     KoFilter::ConversionStatus read_plotArea();
@@ -66,6 +66,7 @@ protected:
 
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
+    KoFilter::ConversionStatus read_ofPieChart();
     KoFilter::ConversionStatus read_doughnutChart();
     KoFilter::ConversionStatus read_areaChart();
     KoFilter::ConversionStatus read_area3DChart();
@@ -113,14 +114,20 @@ protected:
     KoFilter::ConversionStatus read_idx();
     KoFilter::ConversionStatus read_explosion();
     KoFilter::ConversionStatus read_strRef();
+    KoFilter::ConversionStatus read_multiLvlStrRef();
+    KoFilter::ConversionStatus read_multiLvlStrCache();
+    KoFilter::ConversionStatus read_lvl();
     KoFilter::ConversionStatus read_numRef();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_ptCount();
     KoFilter::ConversionStatus read_numLit();
     KoFilter::ConversionStatus read_strCache();
+    KoFilter::ConversionStatus read_marker();
     KoFilter::ConversionStatus read_serMarker();
 
 private:
+
+    void read_showDataLabel();
 
     enum ReadTxContext{ Title, None };
     enum ReadAreaContext{ PlotArea, ChartArea };
@@ -131,6 +138,7 @@ private:
     bool m_autoTitleDeleted;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
+    bool m_serMarkerDefined;
 
     class Private;
     Private * const d;

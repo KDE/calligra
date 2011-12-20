@@ -12,7 +12,9 @@ if(NOT TINY)
 
     if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
         add_subdirectory( html )
-        add_subdirectory( latex )
+        if (QT3SUPPORT)
+            add_subdirectory( latex )
+        endif (QT3SUPPORT)
     endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
 endif(NOT TINY)
 

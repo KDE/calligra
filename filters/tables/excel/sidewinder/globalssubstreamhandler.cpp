@@ -59,12 +59,9 @@ public:
     // table of font
     std::vector<FontRecord> fontTable;
 
-    // mapping from font index to Swinder::FormatFont
-    std::map<unsigned, FormatFont> fontCache;
-
     // table of format
     std::map<unsigned, QString> formatsTable;
-    
+
     // cache of formats
     std::map<unsigned, int> formatCache;
 
@@ -74,9 +71,6 @@ public:
 
     // table of Xformat
     std::vector<XFRecord> xfTable;
-
-    // table blib items
-    QList< MsoDrawingBlibItem* > drawingTable;
 
     // list of chart sheets
     QList< Sheet* > chartSheets;
@@ -94,7 +88,6 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
 {
     delete d->decryption;
-    qDeleteAll(d->drawingTable);
     delete d;
 }
 
@@ -222,29 +215,6 @@ QString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
         return d->externNameTable[index];
     std::cerr << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
     return QString();
-}
-
-FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
-{
-    // speed-up trick: check in the cache first
-    FormatFont font = d->fontCache[index];
-    if (font.isNull() && index < fontCount()) {
-        FontRecord fr = fontRecord(index);
-        font.setFontSize(fr.height() / 20.0);
-        font.setFontFamily(fr.fontName());
-        font.setColor(d->workbook->color(fr.colorIndex()));
-        font.setBold(fr.fontWeight() > 500);
-        font.setItalic(fr.isItalic());
-        font.setStrikeout(fr.isStrikeout());
-        font.setSubscript(fr.escapement() == FontRecord::Subscript);
-        font.setSuperscript(fr.escapement() == FontRecord::Superscript);
-        font.setUnderline(fr.underline() != FontRecord::None);
-
-        // put in the cache for further use
-        d->fontCache[index] = font;
-    }
-
-    return font;
 }
 
 // convert border style, e.g MediumDashed to a Pen
@@ -412,7 +382,7 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 
     format.setValueFormat(valueFormat);
 
-    format.setFont(convertedFont(xf.fontIndex()));
+    format.setFont(d->workbook->font(xf.fontIndex()));
 
     FormatAlignment alignment;
     switch (xf.horizontalAlignment()) {
@@ -678,8 +648,21 @@ void GlobalsSubStreamHandler::handleFont(FontRecord* record)
     d->fontTable.push_back(*record);
 
     // font #4 is never used, so add a dummy one
-    if (d->fontTable.size() == 4)
+    if (d->fontTable.size() == 4) {
         d->fontTable.push_back(FontRecord(d->workbook));
+    } else {
+        FormatFont font;
+        font.setFontSize(record->height() / 20.0);
+        font.setFontFamily(record->fontName());
+        font.setColor(d->workbook->color(record->colorIndex()));
+        font.setBold(record->fontWeight() > 500);
+        font.setItalic(record->isItalic());
+        font.setStrikeout(record->isStrikeout());
+        font.setSubscript(record->escapement() == FontRecord::Subscript);
+        font.setSuperscript(record->escapement() == FontRecord::Superscript);
+        font.setUnderline(record->underline() != FontRecord::None);
+        d->workbook->setFont(d->fontTable.size() - 1, font);
+    }
 }
 
 void GlobalsSubStreamHandler::handleFormat(FormatRecord* record)
@@ -700,7 +683,11 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
             if (record->definedName() == "_FilterDatabase") {
                 if (record->m_formula.id() == FormulaToken::Area3d) {
                     std::pair<unsigned, QRect> area = record->m_formula.filterArea3d();
-                    d->workbook->addFilterRange(area.first, area.second);
+                    QString sheetName = "Error";
+                    if (area.first < d->externSheetTable.size()) {
+                        sheetName = d->externSheetTable[area.first];
+                    }
+                    d->workbook->addFilterRange(sheetName, area.second);
                 }
             }
         } else {
@@ -737,7 +724,7 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
         std::map<unsigned, unsigned> formatRunsRaw = record->formatRunsAt(i);
         std::map<unsigned, FormatFont> formatRuns;
         for (std::map<unsigned, unsigned>::iterator it = formatRunsRaw.begin(); it != formatRunsRaw.end(); ++it) {
-            formatRuns[it->first] = convertedFont(it->second);
+            formatRuns[it->first] = d->workbook->font(it->second);
         }
         d->formatRunsTable.push_back(formatRuns);
     }
@@ -776,19 +763,19 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 {
     if (!record) return;
     printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
-    Q_ASSERT(d->drawingTable.size() == 0); // if this asserts then multiple MsoDrawingGroupRecord can exist what we need to handle!
-    d->drawingTable = record->blibItems();
+
+    static int validMsoDrawingGroups = 0;
+    // if this pass then multiple MsoDrawingGroupRecord can exist what we need to handle!
+    if (validMsoDrawingGroups > 0) {
+        std::cerr << "Warning: multiple valid MsoDrawingGroupRecord exists : " << validMsoDrawingGroups << std::endl;
+    }
+    validMsoDrawingGroups++;
+
+    d->workbook->setPictureNames(record->pictureNames());
     d->workbook->setOfficeArtDggContainer(record->dggContainer());
+
 }
 
-MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
-{
-    if (pid < 1 || pid > uint(d->drawingTable.size())) {
-        std::cerr << "GlobalsSubStreamHandler::drawing: Invalid index=" << (pid - 1) << std::endl;
-        return 0;
-    }
-    return d->drawingTable.at(pid - 1);
-}
 
 QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
 {

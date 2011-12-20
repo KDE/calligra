@@ -39,7 +39,7 @@ public:
     void add(const QString& name, const Interval& i);
     void add(VacationInterval* vi);
     bool isVacation(time_t date) const;
-    const QString& vacationName(time_t date) const;
+    QString vacationName(time_t date) const;
 
 protected:
 //     virtual int compareItems(QCollection::Item i1, QCollection::Item i2);

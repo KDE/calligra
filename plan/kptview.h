@@ -89,11 +89,6 @@ class ConfigDialog : public KConfigDialog
 public:
     ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
 
-    KPageWidgetItem* addPage( QWidget *page, const QString &itemName,
-                const QString &pixmapName=QString(),
-                const QString &header=QString(),
-                bool manage=true );
-
 protected slots:
     /// Return true if any widget has changed
     virtual bool hasChanged();
@@ -121,6 +116,12 @@ protected slots:
     * Example use: User clicks Defaults button in a configure dialog.
     */
     virtual void updateWidgetsDefault();
+
+  /**
+   * Returns whether the current state of the dialog is
+   * the same as the default configuration.
+   */
+  virtual bool isDefault();
 
 private:
     KConfigSkeleton *m_config;
@@ -160,6 +161,8 @@ public:
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
+    /// Returns the default category information like standard name and tooltip for category type @p type
+    ViewInfo defaultCategoryInfo( const QString type ) const;
 
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );

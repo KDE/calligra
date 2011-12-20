@@ -55,12 +55,11 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-
+#include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <k3command.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
@@ -139,22 +138,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, const QString& name, KConfigSkeleton
     : KConfigDialog( parent, name, config ),
     m_config( config )
 {
+    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged() ) );
 }
-
-KPageWidgetItem *ConfigDialog::addPage(QWidget *page, const QString &itemName, const QString &pixmapName, const QString &header, bool manage)
-{
-    if ( page ) {
-        QRegExp kcfg( "kcfg_*" );
-        foreach ( KRichTextWidget *w, page->findChildren<KRichTextWidget*>( kcfg ) ) {
-            KConfigSkeletonItem *citem = m_config->findItem( w->objectName().mid(5) );
-            if ( citem ) {
-                connect(w, SIGNAL(textChanged()), this, SLOT(updateButtons()));
-            }
-        }
-    }
-    return KConfigDialog::addPage( page, itemName, pixmapName, header, manage );
-}
-
 
 bool ConfigDialog::hasChanged()
 {
@@ -171,6 +156,18 @@ bool ConfigDialog::hasChanged()
 void ConfigDialog::updateSettings()
 {
     bool changed = false;
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            item->setProperty( QVariant( w->toHtml() ) );
+            changed = true;
+        }
+    }
     if ( changed ) {
         m_config->writeConfig();
     }
@@ -178,12 +175,32 @@ void ConfigDialog::updateSettings()
 
 void ConfigDialog::updateWidgets()
 {
-    kDebug()<<sender();
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            w->setHtml( item->property().toString() );
+        }
+    }
 }
 
 void ConfigDialog::updateWidgetsDefault()
 {
-    kDebug()<<sender();
+    bool usedefault = m_config->useDefaults( true );
+    updateWidgets();
+    m_config->useDefaults( usedefault );
+}
+
+bool ConfigDialog::isDefault()
+{
+    bool bUseDefaults = m_config->useDefaults(true);
+    bool result = !hasChanged();
+    m_config->useDefaults(bUseDefaults);
+    return result;
 }
 
 //------------------------------------
@@ -316,7 +333,7 @@ View::View( Part* part, QWidget* parent )
 
     // ------ Help
     actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
-    actionCollection()->addAction("kplato_introduction", actionIntroduction );
+    actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup
@@ -466,7 +483,7 @@ void View::createViews()
                 QString cn = e.attribute( "name" );
                 QString ct = e.attribute( "tag" );
                 if ( cn.isEmpty() ) {
-                    cn = i18n( ct.toLocal8Bit() );
+                    cn = defaultCategoryInfo( ct ).name;
                 }
                 cat = m_viewlist->addCategory( ct, cn );
                 KoXmlNode n1 = e.firstChild();
@@ -501,7 +518,8 @@ void View::createViews()
     } else {
         kDebug()<<"Default";
         ViewListItem *cat;
-        cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
+        QString ct = "Editors";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createCalendarEditor( cat, "CalendarEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -517,7 +535,8 @@ void View::createViews()
 
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
+        ct = "Views";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -529,7 +548,8 @@ void View::createViews()
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Execution", i18nc( "Project execution views", "Execution" ) );
+        ct = "Execution";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -541,7 +561,8 @@ void View::createViews()
 
         createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
+        ct = "Reports";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -605,12 +626,7 @@ void View::slotUpdateViewInfo( ViewListItem *itm )
     if ( itm->type() == ViewListItem::ItemType_SubView ) {
         itm->setViewInfo( defaultViewInfo( itm->viewType() ) );
     } else if ( itm->type() == ViewListItem::ItemType_Category ) {
-        ViewInfo vi;
-        if ( itm->tag() == "Editors" ) {
-            vi.name = i18n( "Editors" );
-        } else if ( itm->tag() == "Views" ) {
-            vi.name = i18n( "Views" );
-        }
+        ViewInfo vi = defaultCategoryInfo( itm->tag() );
         itm->setViewInfo( vi );
     }
 }
@@ -678,6 +694,21 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
+    }
+    return vi;
+}
+
+ViewInfo View::defaultCategoryInfo( const QString type ) const
+{
+    ViewInfo vi;
+    if ( type == "Editors" ) {
+        vi.name = i18n( "Editors" );
+    } else if ( type == "Views" ) {
+        vi.name = i18n( "Views" );
+    } else if ( type == "Execution" ) {
+        vi.name = i18nc( "Project execution views", "Execution" );
+    } else if ( type == "Reports" ) {
+        vi.name = i18n( "Reports" );
     }
     return vi;
 }
@@ -1173,6 +1204,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     connect( v, SIGNAL( mailWorkpackage( Node*, Resource* ) ), SLOT( slotMailWorkpackage( Node*, Resource* ) ) );
     connect( v, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ), SLOT( slotMailWorkpackages( QList<Node*>&, Resource* ) ) );
 
+    connect(v, SIGNAL(checkForWorkPackages()), getPart(), SLOT(checkForWorkPackages()));
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -1311,6 +1343,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );

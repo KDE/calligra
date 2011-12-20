@@ -19,6 +19,8 @@
  */
 #include "kis_scratch_pad.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QMutex>
 
 #include <KoColorSpace.h>
@@ -74,23 +76,6 @@ private:
     QMutex m_lock;
 };
 
-
-class KisScratchPadDefaultBounds : public KisDefaultBounds
-{
-public:
-
-    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
-        : m_scratchPad(scratchPad)
-    {
-    }
-
-    QRect bounds() const {
-        return m_scratchPad->imageBounds();
-    }
-
-private:
-    KisScratchPad *m_scratchPad;
-};
 
 
 KisScratchPad::KisScratchPad(QWidget *parent)
@@ -329,7 +314,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 {
     m_resourceProvider = resourceProvider;
     KisConfig cfg;
-    setDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
@@ -386,7 +371,7 @@ void KisScratchPad::paintPresetImage()
                                               Qt::SmoothTransformation);
 
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
-    device->convertFromQImage(scaledImage, "");
+    device->convertFromQImage(scaledImage, 0);
 
     KisPainter painter(paintDevice);
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);

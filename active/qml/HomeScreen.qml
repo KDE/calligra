@@ -151,7 +151,7 @@ Image {
         },
         State {
             name: "showTextDocs"
-            PropertyChanges { target: recentFiles; typeFilter: "OpenDocumentTextDocument"; }
+            PropertyChanges { target: recentFiles; typeFilter: "PaginatedTextDocument"; }
         },
         State {
             name: "showSpreadsheets"

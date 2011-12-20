@@ -2,11 +2,13 @@
 Name=vcommand
 Name[ca]=vcommand
 Name[el]=vcommand
+Name[it]=vcommand
 Name[nb]=loddrett kommando
 Name[nl]=vcommand
 Name[pl]=v_polecenie
 Name[pt]=comando-v
 Name[pt_BR]=comando-v
+Name[ru]=vcommand
 Name[sv]=vertikalt kommando
 Name[uk]=Керівний механізм реле (вертикально)
 Name[x-test]=xxvcommandxx

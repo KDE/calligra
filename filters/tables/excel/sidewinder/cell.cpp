@@ -97,7 +97,6 @@ QString Cell::columnLabel() const
     return columnLabel(column());
 }
 
-// FIXME be careful for integer overflow
 QString Cell::columnLabel(unsigned column)
 {
     QString str;
@@ -111,6 +110,13 @@ QString Cell::columnLabel(unsigned column)
         str = QString(QChar('A' + (c % 26))) + str;
 
     return str;
+}
+
+// provide safety for overflows if an integer is explicit casted to an unsigned
+QString Cell::columnLabel(int column)
+{
+    //Q_ASSERT(column >= 0);
+    return columnLabel(unsigned(qMax(0, column)));
 }
 
 Value Cell::value() const
@@ -230,21 +236,6 @@ void Cell::setNote(const QString &n)
     d->note = n;
 }
 
-QList<PictureObject*> Cell::pictures() const
-{
-    return d->sheet->pictures(d->column, d->row);
-}
-
-void Cell::setPictures(const QList<PictureObject*>& pics)
-{
-    d->sheet->setPictures(d->column, d->row, pics);
-}
-
-void Cell::addPicture(PictureObject* picture)
-{
-    d->sheet->addPicture(d->column, d->row, picture);
-}
-
 QList<ChartObject*> Cell::charts() const
 {
     return d->sheet->charts(d->column, d->row);
@@ -280,22 +271,6 @@ bool Cell::operator==(const Cell &other) const
 
     if (note() != other.note()) return false;
 
-    if (pictures().size() != other.pictures().size()) return false;
-    for(int i = pictures().size() - 1; i >= 0; --i) {
-        PictureObject* p1 = pictures()[i];
-        PictureObject* p2 = other.pictures()[i];
-        if(p1->id() != p2->id()) return false;
-        if(p1->fileName() != p2->fileName()) return false;
-        if(p1->m_colL != p2->m_colL) return false;
-        if(p1->m_dxL != p2->m_dxL) return false;
-        if(p1->m_rwT != p2->m_rwT) return false;
-        if(p1->m_dyT != p2->m_dyT) return false;
-        if(p1->m_colR != p2->m_colR) return false;
-        if(p1->m_dxR != p2->m_dxR) return false;
-        if(p1->m_rwB != p2->m_rwB) return false;
-        if(p1->m_dyB != p2->m_dyB) return false;
-    }
-
     if (charts().size() != other.charts().size()) return false;
     for(int i = charts().size() - 1; i >= 0; --i) {
         ChartObject* c1 = charts()[i];
@@ -309,7 +284,7 @@ bool Cell::operator==(const Cell &other) const
         OfficeArtObject* o2 = other.drawObjects()[i];
         if(*o1 != *o2) return false;
     }
-    
+
     return true;
 }
 

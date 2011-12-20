@@ -119,8 +119,13 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
         }
         processedMergedCells.insert(cell);
         // take the coordinate of the master cell
-        for (int c = cell.column(); c < col; ++c)
-            coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            for (int c = cell.column()+1; c <= col; ++c)
+                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+        } else {
+            for (int c = cell.column(); c < col; ++c)
+                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
     }
@@ -158,8 +163,13 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
         }
         processedObscuredCells.insert(cell);
         // take the coordinate of the obscuring cell
-        for (int c = cell.column(); c < col; ++c)
-            coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            for (int c = cell.column()+1; c <= col; ++c)
+                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+        } else {
+            for (int c = cell.column(); c < col; ++c)
+                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+        }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
         // use the CellView of the obscuring cell
@@ -229,16 +239,18 @@ const CellView& SheetView::cellView(int col, int row)
 #ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
-    if (!d->cache.contains(QPoint(col, row))) {
-        CellView *v = createCellView(col, row);
+    CellView *v = d->cache.object(QPoint(col, row));
+    if (!v) {
+        v = createCellView(col, row);
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
 #ifdef CALLIGRA_TABLES_MT
-    CellView v = *d->cache.object(QPoint(col, row));
-    return v;
+    // create a copy as long as the mutex is locked
+    CellView cellViewCopy = *v;
+    return cellViewCopy;
 #else
-    return *d->cache.object(QPoint(col, row));
+    return *v;
 #endif
 }
 
