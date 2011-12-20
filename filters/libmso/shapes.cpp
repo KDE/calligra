@@ -113,6 +113,7 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
+    //TODO: use the client->isPlaceholder function
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
     } else {
@@ -447,7 +448,14 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
     quint16 shapeType = o.shapeProp.rh.recInstance;
+    client->m_currentShapeType = o.shapeProp.rh.recInstance;
+
     switch (shapeType) {
     case msosptNotPrimitive:
         processNotPrimitive(o, out);
@@ -960,7 +968,12 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
-    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
+    if (o.clientData && client->onlyClientData(*o.clientData)) {
         client->processClientData(o.clientTextbox.data(), *o.clientData, out);
     } else if (o.clientTextbox) {
         client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);

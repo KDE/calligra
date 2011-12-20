@@ -70,46 +70,13 @@ namespace
         return format(v) + '%';
     }
 
-/**
- * Return the bounding rectangle for this object.
- **/
-QRect
-getRect(const PptOfficeArtClientAnchor &a)
-{
-    if (a.rect1) {
-        const SmallRectStruct &r = *a.rect1;
-        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-    } else {
-        const RectStruct &r = *a.rect2;
-        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-    }
-}
-
-QString
-getText(const TextContainer* tc)
-{
-    if (!tc) return QString();
-
-    QString ret;
-    if (tc->text.is<TextCharsAtom>()) {
-        const QVector<quint16> textChars(tc->text.get<TextCharsAtom>()->textChars);
-        ret = QString::fromUtf16(textChars.data(), textChars.size());
-    } else if (tc->text.is<TextBytesAtom>()) {
-        // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
-        const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
-        ret = QString::fromAscii(textChars, textChars.size());
-    }
-    return ret;
-}
-
-/* The placementId is mapped to one of
-   "chart", "date-time", "footer", "graphic", "handout", "header", "notes",
-   "object", "orgchart", "outline", "page", "page-number", "subtitle", "table",
-   "text" or "title" */
-/* Note: we use 'outline' for  PT_MasterBody, PT_Body and PT_VerticalBody types
-   to be compatible with OpenOffice. OpenOffice <= 3.2 does not render lists
-   properly if the presentation class is not 'outline', 'subtitle', or 'notes'.
-   */
+// The placementId is mapped to one of: "chart", "date-time", "footer",
+// "graphic", "handout", "header", "notes", "object", "orgchart", "outline",
+// "page", "page-number", "subtitle", "table", "text" or "title"
+//
+// NOTE: we use 'outline' for PT_MasterBody, PT_Body and PT_VerticalBody types
+// to be compatible with OpenOffice. OpenOffice <= 3.2 does not render lists
+// properly if the presentation class is not 'outline', 'subtitle', or 'notes'.
 const char*
 getPresentationClass(const PlaceholderAtom* p)
 {
@@ -181,6 +148,61 @@ getMasterStyle(const QMap<int, QString>& map, int texttype) {
     return QString();
 }
 
+const MSO::OfficeArtSpContainer*
+getMasterShape(const MSO::MasterOrSlideContainer* m)
+{
+    if (!m) {
+        return 0;
+    }
+
+    const SlideContainer* sc = m->anon.get<SlideContainer>();
+    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+    const OfficeArtSpContainer* scp = 0;
+    if (sc) {
+        if (sc->drawing.OfficeArtDg.shape) {
+            scp = sc->drawing.OfficeArtDg.shape.data();
+        }
+    } else if (mm) {
+        if (mm->drawing.OfficeArtDg.shape) {
+            scp = mm->drawing.OfficeArtDg.shape.data();
+        }
+    }
+    return scp;
+}
+
+/**
+ * Return the bounding rectangle for this object.
+ **/
+QRect
+getRect(const PptOfficeArtClientAnchor &a)
+{
+    if (a.rect1) {
+        const SmallRectStruct &r = *a.rect1;
+        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    } else {
+        const RectStruct &r = *a.rect2;
+        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    }
+}
+
+QString
+getText(const TextContainer* tc)
+{
+    if (!tc) return QString();
+
+    QString ret;
+    if (tc->text.is<TextCharsAtom>()) {
+        const QVector<quint16> textChars(tc->text.get<TextCharsAtom>()->textChars);
+        ret = QString::fromUtf16(textChars.data(), textChars.size());
+    } else if (tc->text.is<TextBytesAtom>()) {
+        // each item represents the low byte of a UTF-16 Unicode character
+        // whose high byte is 0x00
+        const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
+        ret = QString::fromAscii(textChars, textChars.size());
+    }
+    return ret;
+}
+
 } //namespace (anonymous)
 
 
@@ -218,11 +240,11 @@ private:
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
 
-    /**
-     * Check if a placeholder is valid and allowed by the slide layout.
-     * @param PlaceholderAtom
-     * @return 1 - allowed, 0 - forbidden
-     */
+   /**
+    * Check if a placeholder is valid and allowed by the slide layout.
+    * @param PlaceholderAtom
+    * @return 1 - allowed, 0 - forbidden
+    */
     bool placeholderAllowed(const MSO::PlaceholderAtom* pa) const;
 
     struct DrawClientData {
@@ -239,6 +261,7 @@ private:
 
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
+
     void setDrawClientData(const MSO::MasterOrSlideContainer* mc,
                            const MSO::SlideContainer* sc,
                            const MSO::NotesContainer* nmc,
@@ -251,7 +274,22 @@ public:
         dc_data->notesSlide = nc;
         dc_data->slideTexts = stc;
     }
+
+    bool isPlaceholder(const MSO::OfficeArtClientData* cd) const;
 };
+
+bool PptToOdp::DrawClient::isPlaceholder(const MSO::OfficeArtClientData* cd) const
+{
+    if (!cd) {
+        return false;
+    }
+    const PptOfficeArtClientData* pcd = cd->anon.get<PptOfficeArtClientData>();
+    if (pcd && pcd->placeholderAtom &&
+        placeholderAllowed(pcd->placeholderAtom.data())) {
+        return true;
+    }
+    return false;
+}
 
 QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
 {
@@ -306,13 +344,26 @@ void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* 
             pa->position < dc_data->slideTexts->atoms.size())
         {
             textContainer = &dc_data->slideTexts->atoms[pa->position];
-            ppttoodp->processTextForBody(out, &o, textContainer, textRuler);
+            ppttoodp->processTextForBody(out, &o, textContainer, textRuler, isPlaceholder(&o));
         }
     }
 }
 void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                                 const MSO::OfficeArtClientData* cd, Writer& out)
 {
+    // NOTE: Workaround!  Only in case of a textshape the placeholder flag does
+    // hide the placeholder text => Ignoring the placeholder text in case of
+    // other shapes on master slides.
+
+    if (ppttoodp->m_processingMasters) {
+        if (isPlaceholder(cd)) {
+            if (!((m_currentShapeType == msosptTextBox) ||
+		  (m_currentShapeType == msosptRectangle))) {
+                return;
+            }
+        }
+    }
+
     const PptOfficeArtClientTextBox* tb = ct.anon.get<PptOfficeArtClientTextBox>();
     if (tb) {
         const MSO::TextContainer* textContainer = 0;
@@ -325,7 +376,7 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
                 textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
 	    }
         }
-        ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
+        ppttoodp->processTextForBody(out, cd, textContainer, textRuler, isPlaceholder(cd));
     }
 }
 
@@ -357,13 +408,8 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
     quint32 textType = ppttoodp->getTextType(tb, cd);
-    bool isPlaceholder = false;
-    if ( (cd && cd->placeholderAtom) &&
-          placeholderAllowed(cd->placeholderAtom.data()) )
-    {
-        isPlaceholder = true;
-    }
-    if (isPlaceholder) { // type is presentation
+
+    if (isPlaceholder(clientData)) { // type is presentation
         bool canBeParentStyle = false;
         if ( (textType != 99) && out.stylesxml && dc_data->masterSlide) {
             canBeParentStyle = true;
@@ -428,13 +474,8 @@ void PptToOdp::DrawClient::addTextStyles(
     //
     //TODO: check if the graphic-style changed compared to the parent
 
-    bool isPlaceholder = false;
     bool potentialPlaceholder = false;
-    if ( (cd && cd->placeholderAtom) &&
-          placeholderAllowed(cd->placeholderAtom.data()) )
-    {
-        isPlaceholder = true;
-    }
+
     if (msospt == msosptRectangle) {
         potentialPlaceholder = true;
     }
@@ -442,7 +483,7 @@ void PptToOdp::DrawClient::addTextStyles(
     if (out.stylesxml) {
         //get the main master slide's MasterOrSlideContainer
         const MasterOrSlideContainer* m = 0;
-        if (dc_data->masterSlide && isPlaceholder) {
+        if (dc_data->masterSlide && isPlaceholder(clientData)) {
             m = dc_data->masterSlide;
             while (m->anon.is<SlideContainer>()) {
                 m = ppttoodp->p->getMaster(m->anon.get<SlideContainer>());
@@ -455,13 +496,13 @@ void PptToOdp::DrawClient::addTextStyles(
         ppttoodp->defineTextProperties(style, cf, 0, 0, 0);
     }
 #ifdef DISABLE_PLACEHOLDER_BORDER
-    if (isPlaceholder) {
+    if (isPlaceholder(clientData)) {
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
         //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     }
 #endif
     const QString styleName = out.styles.insert(style);
-    if (isPlaceholder) {
+    if (isPlaceholder(clientData)) {
         out.xml.addAttribute("presentation:style-name", styleName);
         QString className = getPresentationClass(cd->placeholderAtom.data());
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
@@ -482,7 +523,7 @@ void PptToOdp::DrawClient::addTextStyles(
     }
     quint32 textType = ppttoodp->getTextType(tb, cd);
     bool canBeParentStyle = false;
-    if (isPlaceholder && (textType != 99) && out.stylesxml && dc_data->masterSlide) {
+    if (isPlaceholder(clientData) && (textType != 99) && out.stylesxml && dc_data->masterSlide) {
         canBeParentStyle = true;
     }
     if (canBeParentStyle) {
@@ -1443,6 +1484,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style,
     defineListStyle(style, indentLevel, info);
 }
 
+namespace
+{
 QChar
 getBulletChar(const PptTextPFRun& pf)
 {
@@ -1496,6 +1539,8 @@ bulletSizeToSizeString(qint16 value)
     }
     return ret;
 }
+} //namespace
+
 void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
                                const ListStyleInput& i)
 {
@@ -1737,22 +1782,7 @@ void PptToOdp::defineMasterStyles(KoGenStyles& styles)
     }
     m_currentMaster = NULL;
 }
-const MSO::OfficeArtSpContainer*
-getMasterShape(const MSO::MasterOrSlideContainer* m) {
-    const SlideContainer* sc = m->anon.get<SlideContainer>();
-    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-    const OfficeArtSpContainer* scp = 0;
-    if (sc) {
-        if (sc->drawing.OfficeArtDg.shape) {
-            scp = sc->drawing.OfficeArtDg.shape.data();
-        }
-    } else if (mm) {
-        if (mm->drawing.OfficeArtDg.shape) {
-            scp = mm->drawing.OfficeArtDg.shape.data();
-        }
-    }
-    return scp;
-}
+
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     DrawClient drawclient(this);
@@ -1902,7 +1932,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
        After that, style:page-layout and automatic styles are defined
 
        -> office:master-styles
-       And lastly, the master slides are defined
+       At last, the master slides are defined
     */
     /*
        collect all the global objects into
@@ -2621,7 +2651,8 @@ PptToOdp::processParagraph(Writer& out,
 } //end processParagraph()
 
 int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* clientData,
-                                 const MSO::TextContainer* tc, const MSO::TextRuler* tr)
+                                 const MSO::TextContainer* tc, const MSO::TextRuler* tr,
+                                 const bool isPlaceholder)
 {
     /* Text in a textcontainer is divided into sections.
        The sections occur on different levels:
@@ -2640,23 +2671,15 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
        TextCFRuns correspond to text:span elements as do
     */
 
-    if (!tc) {
-        qDebug() << "MISSING TextContainer, big mess-up!";
-        return -1;
-    }
-
     // If this is not a placeholder shape, then do not inherit text style from
     // master styles.
     //
     // NOTE: If slideFlags/fMasterScheme == true, master's color scheme MUST be
     // used.  Common shapes should not refer to a color scheme.
-    bool isPlaceholder = false;
-    if (clientData) {
-        const PptOfficeArtClientData* cd
-                    = clientData->anon.get<PptOfficeArtClientData>();
-        if (cd && cd->placeholderAtom) {
-            isPlaceholder = true;
-        }
+
+    if (!tc) {
+        qDebug() << "MISSING TextContainer, big mess-up!";
+        return -1;
     }
 
 #ifdef DEBUG_PPTTOODP
@@ -2704,7 +2727,8 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // loop over all the '\r' delimited lines
     while (pos < text.length()) {
         end = text.indexOf(lineend, pos);
-        processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
+        processParagraph(out, levels, clientData, tc, tr,
+                         isPlaceholder,
                          text, pos, end);
         pos = end + 1;
     }

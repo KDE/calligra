@@ -117,7 +117,10 @@ public:
 
         virtual QString formatPos(qreal v) = 0;
 
-    };
+        quint16 m_currentShapeType;
+
+    }; //End class Client
+
 private:
     Client* const client;
 
@@ -314,6 +317,7 @@ private:
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
     void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
+
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
