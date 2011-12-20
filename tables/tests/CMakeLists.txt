@@ -28,6 +28,12 @@ target_link_libraries(TestFormula calligratablescommon ${QT_QTCORE_LIBRARY} ${QT
 
 ########### next target ###############
 
+set(TestUtil_SRCS TestUtil.cpp)
+kde4_add_unit_test(TestUtil TESTNAME kspread-Util  ${TestUtil_SRCS})
+target_link_libraries(TestUtil calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestOpenFormula_SRCS TestOpenFormula.cpp)
 kde4_add_unit_test(TestOpenFormula TESTNAME kspread-OpenFormula  ${TestOpenFormula_SRCS})
 target_link_libraries(TestOpenFormula calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})

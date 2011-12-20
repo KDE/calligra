@@ -24,6 +24,7 @@ include_directories(
 
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
 )
 
 #add_subdirectory( tests )

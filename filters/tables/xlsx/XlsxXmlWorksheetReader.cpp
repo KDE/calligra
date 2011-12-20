@@ -100,7 +100,8 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import,
     QMap<QString, QString> _oleReplacements,
-    QMap<QString, QString> _oleBeginFrames)
+    QMap<QString, QString> _oleBeginFrames,
+    QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
@@ -116,6 +117,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , file(_file)
         , oleReplacements(_oleReplacements)
         , oleFrameBegins(_oleBeginFrames)
+        , autoFilters(autoFilters)
 {
 }
 
@@ -764,44 +766,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
 
     body->endElement(); // table:table
 
-    if (!m_context->autoFilters.isEmpty()) {
-        body->startElement("table:database-ranges");
-        int index = 0;
-        while (index < m_context->autoFilters.size()) {
-            body->startElement("table:database-range");
-            body->addAttribute("table:target-range-address", m_context->autoFilters.at(index).area);
-            body->addAttribute("table:display-filter-buttons", "true");
-            body->addAttribute("table:name", QString("%1_%2").arg(m_context->worksheetName).arg(index));
-            QString type = m_context->autoFilters.at(index).type;
-            int filterConditionSize = m_context->autoFilters.at(index).filterConditions.size();
-            if (filterConditionSize > 0) {
-                if (type == "and") {
-                    body->startElement("table:filter-and");
-                }
-                else if (type == "or") {
-                    body->startElement("table:filter-or");
-                }
-                else {
-                    body->startElement("table:filter");
-                }
-                int conditionIndex = 0;
-                while (conditionIndex < filterConditionSize) {
-                    body->startElement("table:filter-condition");
-                    body->addAttribute("table:field-number", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).field);
-                    body->addAttribute("table:value", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).value);
-                    body->addAttribute("table:operator", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).opField);
-                    body->endElement(); // table:filter-condition
-                    ++conditionIndex;
-                }
-                body->endElement(); // table:filter | table:filter-or | table:filter-and
-            }
-            body->endElement(); // table:database-range
-            ++index;
-        }
-
-        body->endElement(); // table:database-ranges
-    }
-
     if (m_context->firstRoundOfReading) {
         body = oldBody;
     }
@@ -1196,7 +1160,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     READ_EPILOGUE
 }
 
-QString XlsxXmlWorksheetReader::processRowStyle(double height)
+QString XlsxXmlWorksheetReader::processRowStyle(qreal height)
 {
     if (height == -1.0) {
         height = m_context->sheet->m_defaultRowHeight;
@@ -2075,7 +2039,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
         ref.insert(colon + 1, sheetName);
     }
 
-    XlsxXmlWorksheetReaderContext::AutoFilter autoFilter;
+    XlsxXmlDocumentReaderContext::AutoFilter autoFilter;
     autoFilter.area = ref;
     m_context->autoFilters.push_back(autoFilter);
 

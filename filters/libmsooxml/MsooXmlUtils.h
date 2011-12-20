@@ -392,12 +392,14 @@ MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const 
     bool flipH, bool flipV);
 
 //! A helper allowing to buffer xml streams and writing them back later
-/*! This class is useful when information that has to be written in advance is based
-    on XML elements parsed later. In such case the information cannot be saved in one pass.
-    Example of this is paragraphs style name: is should be written to style:name attribute but
-    relevant XML elements (that we use for building the style) are appearing later.
-    So we first output created XML to a buffer, then save the parent element with the style name
-    and use KoXmlWriter::addCompleteElement() to redirect the buffer contents as a subelement.
+/*! This class is useful when information that has to be written in advance is
+    based on XML elements parsed later.  In such case the information cannot be
+    saved in one pass.  Example of this is paragraphs style name: is should be
+    written to style:name attribute but relevant XML elements (that we use for
+    building the style) are appearing later.  So we first output created XML to
+    a buffer, then save the parent element with the style name and use
+    KoXmlWriter::addCompleteElement() to redirect the buffer contents as a
+    subelement.
 
      Example use:
      @code
@@ -412,9 +414,11 @@ MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const 
      body->addAttribute("text:style-name", currentTextStyleName);
      body->addTextSpan(text);
      body->endElement();
-     // We are done with the buffered body writer, now release it and restore the original body writer.
-     // This inserts all the XML buffered by buf into the original body writer
-     // (internally using KoXmlWriter::addCompleteElement()).
+
+     // We are done with the buffered body writer, now release it and restore
+     // the original body writer.  This inserts all the XML buffered by buf
+     // into the original body writer (using KoXmlWriter::addCompleteElement()).
+
      body = buf.releaseWriter();
      @endcode */
 class MSOOXML_EXPORT XmlWriteBuffer

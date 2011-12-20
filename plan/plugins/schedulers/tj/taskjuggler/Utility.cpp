@@ -2,6 +2,7 @@
  * Utility.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -869,7 +870,7 @@ date2time(const QString& date)
         return 0;
     }
 
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1 };
 #else
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1, 0, 0 };
@@ -909,7 +910,7 @@ time2qdate(time_t t)
 time_t
 qdate2time(const QDate& d)
 {
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { 0, 0, 0, d.day(), d.month() - 1, d.year() - 1900,
                     0, 0, -1 };
 #else

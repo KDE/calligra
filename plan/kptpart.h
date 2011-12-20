@@ -165,6 +165,8 @@ protected slots:
     void insertFileCompleted();
     void insertFileCancelled( const QString& );
 
+    void workPackageMergeDialogFinished( int result );
+
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
 

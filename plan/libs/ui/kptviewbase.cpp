@@ -1196,14 +1196,21 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                 }
             }
         } else {
+            QMap<int, int > m; // QMap<destination, column>
             for ( int i = 0; i < h->count(); ++i ) {
-                QString n = map.key( i );
-                if ( ! n.isEmpty() ) {
-                    int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
-                    if ( col >= 0 && col < h->count() ) {
-                        header()->moveSection( h->visualIndex( col ), i );
-                    }
+                QString n = e.attribute( s.arg( i ) );
+                if ( n.isEmpty() ) {
+                    continue;
                 }
+                int col = map.keyToValue( n.toUtf8() );
+                if ( col >= 0 && col < h->count() ) {
+                    m.insert( i, col );
+                }
+            }
+            for ( QMap<int, int>::const_iterator it = m.constBegin(); it != m.constEnd(); ++it ) {
+                QString n = e.attribute( s.arg( it.key() ) );
+                int current = h->visualIndex( it.value() );
+                header()->moveSection( current, it.key() );
             }
         }
     }
@@ -1790,18 +1797,18 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
     //kDebug();
     QList<int> lst1;
     QList<int> lst2;
-    KoXmlElement e = element.namedItem( "master" ).toElement();
+    KoXmlElement e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( map, e );
-    }
-    e = element.namedItem( "slave" ).toElement();
-    if ( ! e.isNull() ) {
-        m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         } else {
             setStretchFactors();
         }
+        m_rightview->loadContext( map, e );
+    }
+    e = element.namedItem( "master" ).toElement();
+    if ( ! e.isNull() ) {
+        m_leftview->loadContext( map, e );
     }
     return true;
 }

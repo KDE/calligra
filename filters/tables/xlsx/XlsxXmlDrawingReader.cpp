@@ -126,13 +126,13 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
     }
 }
 
-KoXmlWriter* XlsxDrawingObject::pictureElement()
+KoXmlWriter* XlsxDrawingObject::pictureWriter()
 {
     if (m_type == Unknown) {
         setPicture(new XlsxXmlEmbeddedPicture());
     }
     Q_ASSERT(m_picture);
-    return m_picture->pictureElement();
+    return m_picture->pictureWriter();
 }
 
 
@@ -531,34 +531,34 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
     return KoFilter::OK;
 }
 
-XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture():m_pictureElement(0)
+XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture():m_pictureWriter(0)
 {
     m_pictureBuffer.open(QIODevice::ReadWrite);
 }
 
 XlsxXmlEmbeddedPicture::~XlsxXmlEmbeddedPicture()
 {
-    delete m_pictureElement;
+    delete m_pictureWriter;
 }
 
 
-KoXmlWriter* XlsxXmlEmbeddedPicture::pictureElement()
+KoXmlWriter* XlsxXmlEmbeddedPicture::pictureWriter()
 {
-    if (!m_pictureElement) {
-        m_pictureElement = new KoXmlWriter(&m_pictureBuffer);
+    if (!m_pictureWriter) {
+        m_pictureWriter = new KoXmlWriter(&m_pictureBuffer);
     }
-    return m_pictureElement;
+    return m_pictureWriter;
 }
 
 
 bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all needed attributes to .ods
 {
-    Q_ASSERT(m_pictureElement);
-    if (!m_pictureElement || !m_pictureElement->device()->size()){
+    Q_ASSERT(m_pictureWriter);
+    if (!m_pictureWriter || !m_pictureWriter->device()->size()){
         return false;
     }
 
-    xmlWriter->addCompleteElement(m_pictureElement->device());
+    xmlWriter->addCompleteElement(m_pictureWriter->device());
     return true;
 }
 

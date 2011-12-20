@@ -359,8 +359,8 @@ Resource::~Resource() {
         removeId(); // only remove myself (I may be just a working copy)
     }
     removeRequests();
-    foreach (long key, m_schedules.keys()) {
-        delete m_schedules.take(key);
+    foreach ( Schedule *s, m_schedules ) {
+        delete s;
     }
     clearExternalAppointments();
     if (cost.account) {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,8 +39,10 @@ K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, "sqlite3")
 class KexiDB::SQLiteDriverPrivate
 {
 public:
-    SQLiteDriverPrivate() {
+    SQLiteDriverPrivate() : collate(" COLLATE ''")
+    {
     }
+    QString collate;
 };
 
 //PgSqlDB::PgSqlDB(QObject *parent, const char *name, const QStringList &)
@@ -137,6 +139,11 @@ QByteArray SQLiteDriver::drv_escapeIdentifier(const QByteArray& str) const
 AdminTools* SQLiteDriver::drv_createAdminTools() const
 {
     return new SQLiteAdminTools();
+}
+
+QString SQLiteDriver::collationSQL() const
+{
+    return dp->collate;
 }
 
 #include "sqlitedriver.moc"

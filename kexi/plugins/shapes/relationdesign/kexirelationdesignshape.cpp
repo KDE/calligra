@@ -30,6 +30,7 @@
 #include <KoShapeBackground.h>
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
 
 KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra.org/kexirelationdesign", "shape")
 {
