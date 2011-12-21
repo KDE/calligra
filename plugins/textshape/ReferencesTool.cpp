@@ -132,8 +132,10 @@ void ReferencesTool::createActions()
     action = new KAction(i18n("Insert Bibliography"),this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertBibliography()));
 
+    action = new KAction(i18n("Insert Custom Bibliography"), this);
+    addAction("insert_custom_bibliography", action);
+    action->setToolTip(i18n("Insert a custom Bibliography into the document."));
     action = new KAction(i18n("Configure"),this);
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
@@ -186,8 +188,9 @@ void ReferencesTool::insertCitation()
     new CitationInsertionDialog(textEditor(), m_scbw);
 }
 
-void ReferencesTool::insertBibliography()
+void ReferencesTool::insertCustomBibliography(KoBibliographyInfo *defaultTemplate)
 {
+    Q_UNUSED(defaultTemplate);
     new InsertBibliographyDialog(textEditor(), m_scbw);
 }
 
