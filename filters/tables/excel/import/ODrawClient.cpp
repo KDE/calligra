@@ -230,28 +230,14 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     return style;
 }
 
-void ODrawClient::addTextStyles(const quint16 msospt,
-                                const MSO::OfficeArtClientTextBox *clientTextbox,
+void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox,
                                 const MSO::OfficeArtClientData *clientData,
                                 KoGenStyle &style, Writer &out)
 {
-    Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 
     setZIndexAttribute(out);
-}
-
-const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
-{
-    return m_sheet->workbook()->officeArtDggContainer();
-}
-
-const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
-{
-    //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
-    return sp;
 }
 
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
@@ -265,6 +251,18 @@ QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 QString ODrawClient::formatPos(qreal v)
 {
     return QString::number(v, 'f', 11) + "pt";
+}
+
+const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
+{
+    return m_sheet->workbook()->officeArtDggContainer();
+}
+
+const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
+{
+    //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
+    MSO::OfficeArtSpContainer* sp = NULL;
+    return sp;
 }
 
 void ODrawClient::setShapeText(const Swinder::TxORecord &text)

@@ -2698,7 +2698,7 @@ NOT USED ATM
     if (!schedulingDone)
     {
         warningMessage(i18nc("info/plain", "Task has not been marked completed.\n"
-                          "It is scheduled to last from %2 to %3.\n"
+                          "It is scheduled to last from %1 to %2.\n"
                           "This might be a bug in the scheduler.",
                      formatTime(start), formatTime(end + 1)));
         return false;

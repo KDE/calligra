@@ -87,11 +87,6 @@ Task::~Task() {
     while (!m_childProxyRelations.isEmpty()) {
         delete m_childProxyRelations.takeFirst();
     }
-    while (!m_schedules.isEmpty()) {
-        foreach (long k, m_schedules.uniqueKeys()) {
-            delete m_schedules.take(k);
-        }
-    }
 }
 
 int Task::type() const {
@@ -3642,8 +3637,8 @@ void WorkPackage::clear()
 {
     //m_task = 0;
     m_manager = 0;
-    m_ownerName = QString();
-    m_ownerId = QString();
+    m_ownerName.clear();
+    m_ownerId.clear();
     m_transmitionStatus = TS_None;
     m_transmitionTime = DateTime();
     m_log.clear();

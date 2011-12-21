@@ -1646,7 +1646,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         body->startElement("draw:text-box"); // CASE #P436
     }
 
-    body = listBuf.releaseWriter();
+    // NOTE: Workaround!  Only in case of a textshape the placeholder flag does
+    // hide the placeholder text => Ignoring the placeholder text in case of
+    // other shapes (Unspecified presentation shapes are fine).
+    if (!createTextBox && !d->phType.isEmpty() &&
+        (m_context->type == SlideMaster || m_context->type == SlideLayout))
+    {
+        listBuf.clear();
+    } else {
+        body = listBuf.releaseWriter();
+    }
 
     if (createTextBox) {
         body->endElement(); // draw:text-box

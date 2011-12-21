@@ -1109,7 +1109,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
                 bool boxCreated = false;
                 if (m_contentType == "rect" || m_contentType.isEmpty() ||
-                    unsupportedPredefinedShape()) {
+                    unsupportedPredefinedShape())
+                {
                     body->startElement("draw:text-box"); // CASE #P436
                     boxCreated = true;
                 }
@@ -1128,6 +1129,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     generateFrameSp();
 
     (void)drawFrameBuf.releaseWriter();
+
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP

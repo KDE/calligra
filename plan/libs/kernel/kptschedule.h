@@ -65,7 +65,7 @@ class KPLATOKERNEL_EXPORT Schedule
 {
 public:
     //NOTE: Must match Effort::Use atm.
-    enum Type { Expected = 0,   //Effort::Use_Expected
+    enum Type { Expected = 0   //Effort::Use_Expected
               };
 
     Schedule();

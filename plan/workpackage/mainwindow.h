@@ -41,9 +41,6 @@
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
-namespace std { }
-using namespace std;
-
 namespace KParts {
     class PartManager;
 }

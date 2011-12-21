@@ -1832,9 +1832,24 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
-        if (data.shape) {
-            shapeData.append(data);
+        if (element.localName() == "a") {
+            // It may the case that the object(s) are embedded into a hyperlink so actions are done on
+            // clicking it/them but since we do not supported objects-with-hyperlinks yet we just fetch
+            // the inner elements and use them to at least create and show the objects (see bug 249862).
+            KoXmlElement e;
+            forEachElement(e, element) {
+                if (e.namespaceURI() != KoXmlNS::draw)
+                    continue;
+                ShapeLoadingData data = loadOdfObject(e, *tableContext.shapeContext);
+                if (data.shape) {
+                    shapeData.append(data);
+                }
+            }
+        } else {
+            ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
+            if (data.shape) {
+                shapeData.append(data);
+            }
         }
     }
 }
@@ -1845,7 +1860,7 @@ ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoading
     data.shape = 0;
     KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
-        kDebug(36003) << "Unable to load shape.";
+        kDebug(36003) << "Unable to load shape with localName=" << element.localName();
         return data;
     }
 
