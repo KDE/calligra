@@ -391,7 +391,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     , m_context(0)
     , m_currentSeries(0)
     , m_currentShapeProperties(0)
-    , m_autoTitleDeleted(false)
+    , m_autoTitleDeleted(true)
     , m_readTxContext( None )
     , m_areaContext( ChartArea )
     , m_serMarkerDefined(false)
@@ -453,7 +453,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
-                m_autoTitleDeleted = val.toInt();
+                m_autoTitleDeleted = MSOOXML::Utils::convertBooleanAttr(val, true);
             }
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(style))) {
                 const QXmlStreamAttributes attrs(attributes());
