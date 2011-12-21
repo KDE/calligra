@@ -251,17 +251,11 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
-            answers.insert(cite->identifier(),cite);
-            //TO DO: use sort key(s) from bib conf. instead cite->identifier()
+            answers.insert(cite->identifier(), cite);
         }
     }
     return answers;
 }
-
-/*static bool isBefore( KoInlineCite *o1, KoInlineCite *o2)
-{
-    return o1->posInDocument() < o2->posInDocument();
-}*/
 
 QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
 {
@@ -286,7 +280,7 @@ QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool d
         }
         block = block.next();
     }
-    //qSort(answers.begin(), answers.end(), isBefore);
+
     return answers;
 }
 
