@@ -447,8 +447,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styles, mainStyles ) );
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
-    //foreach(Charting::Text* t, chart()->m_texts) {
-    bodyWriter->startElement( "chart:title" );
+    if ( !chart()->m_title.isEmpty() ) {
+        bodyWriter->startElement( "chart:title" );
         /* TODO we can't determine this because by default we need to center the title,
         in order to center it we need to know the textbox size, and to do that we need
         the used font metrics.
@@ -466,13 +466,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //NOTE don't load width or height, the record MUST be ignored and determined by the application
         //see [MS-XLS] p. 362
 
-      if ( !chart()->m_title.isEmpty() ) {
-          bodyWriter->startElement( "text:p" );
-          bodyWriter->addTextNode( chart()->m_title );
-          bodyWriter->endElement(); // text:p
-      }
-      bodyWriter->endElement(); // chart:title
-    //}
+        bodyWriter->startElement( "text:p" );
+        bodyWriter->addTextNode( chart()->m_title );
+        bodyWriter->endElement(); // text:p
+        bodyWriter->endElement(); // chart:title
+    }
 
     if (chart()->m_legend) {
         bodyWriter->startElement("chart:legend");
