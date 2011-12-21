@@ -204,11 +204,11 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
             std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
         } else {
             m_sheet = globals->chartSheets().takeFirst();
-#if 0
             m_chartObject = new ChartObject(m_chartObject->id());
             m_chart = m_chartObject->m_chart;
             Q_ASSERT(m_chart);
             m_currentObj = m_chart;
+#if 0
 #if 0
             DrawingObject* drawing = new DrawingObject;
             drawing->m_properties[DrawingObject::pid] = m_chartObject->id();
@@ -220,11 +220,11 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
             m_chartObject->m_colL = m_chartObject->m_dxL = m_chartObject->m_rwT = m_chartObject->m_dyT = m_chartObject->m_dxR = m_chartObject->m_dyB = 0;
             m_chartObject->m_colR = 10; m_chartObject->m_rwB = 30; //FIXME use sheet "fullscreen" rather then hardcode
 #endif
-            Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
-            cell->addChart(m_chartObject);
 #else
             std::cerr << "ChartSubStreamHandler: FIXME" << std::endl;
 #endif
+            Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
+            cell->addChart(m_chartObject);
         }
     }
 }
