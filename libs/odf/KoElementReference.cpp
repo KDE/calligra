@@ -27,10 +27,10 @@ KoElementReference::KoElementReference()
 {
 }
 
-KoElementReference::KoElementReference(const QString &xmlid)
+KoElementReference::KoElementReference(const QString &prefix)
     : d(new KoElementReferenceData)
 {
-    d->xmlid = xmlid;
+    d->xmlid = prefix + "-" + d->xmlid;
 }
 
 KoElementReference::KoElementReference(const KoElementReference &other)
@@ -56,17 +56,24 @@ bool KoElementReference::operator!=(const KoElementReference &other)
     return !(*this == other);
 }
 
-void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOptions saveOptions) const
+void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) const
 {
-    if (saveOptions & XMLID)
-        writer->addAttribute("xml:id", d->xmlid);
+    if (d->xmlid.isNull()) return;
+
+    writer->addAttribute("xml:id", d->xmlid);
     if (saveOptions & DRAWID)
         writer->addAttribute("draw:id", d->xmlid);
     if (saveOptions & TEXTID)
         writer->addAttribute("text:id", d->xmlid);
 }
 
-static KoElementReference loadOdf(const KoXmlElement &element)
+QString KoElementReference::toString() const
+{
+    return d->xmlid;
+}
+
+
+KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
     QString xmlid;
 
@@ -80,9 +87,7 @@ static KoElementReference loadOdf(const KoXmlElement &element)
         xmlid = element.attribute("text:id");
     }
 
-    KoElementReference ref(xmlid);
+    d->xmlid = xmlid;
 
-    return ref;
+    return *this;
 }
-
-

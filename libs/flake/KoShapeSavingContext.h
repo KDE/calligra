@@ -56,7 +56,8 @@ public:
          */
         PresentationShape = 1,
         /**
-         * Save the draw:id used for referencing the shape.
+         * Save the draw:id used for referencing the shape. If draw:id is saved, xml:id is also
+         * saved.
          * See OpenDocument 9.2.15 Common Drawing Shape Attributes / ID
          */
         DrawId = 2,

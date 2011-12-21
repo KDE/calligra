@@ -48,6 +48,7 @@
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
+#include <KoElementReference.h>
 #include <KoSnapData.h>
 
 #include <KoXmlReader.h>
@@ -1346,11 +1347,10 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfId) {
-        if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
-            QString id = element.attributeNS(KoXmlNS::draw, "id");
-            if (!id.isNull()) {
-                context.addShapeId(this, id);
-            }
+        KoElementReference ref;
+        QString id = ref.loadOdf(element).toString();
+        if (!id.isNull()) {
+            context.addShapeId(this, id);
         }
     }
 
@@ -1536,7 +1536,8 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         if (child.localName() != "glue-point")
             continue;
 
-        const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
+        KoElementReference ref;
+        const QString id = ref.loadOdf(child).toString();
         const int index = id.toInt();
         if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
             kWarning(30006) << "glue-point with no or invalid id";

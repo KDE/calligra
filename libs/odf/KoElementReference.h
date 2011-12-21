@@ -24,8 +24,8 @@
 #include <QSharedData>
 #include <QUuid>
 
-class KoXmlWriter;
-class KoXmlElement;
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 #include "koodf_export.h"
 
@@ -72,7 +72,7 @@ public:
     Q_DECLARE_FLAGS(SaveOptions, SaveOption)
 
     KoElementReference();
-    KoElementReference(const QString &xmlid);
+    KoElementReference(const QString &prefix);
     KoElementReference(const KoElementReference &other);
     KoElementReference &operator=(const KoElementReference &rhs);
     bool operator==(const KoElementReference &other);
@@ -91,22 +91,26 @@ public:
      *    priority.
      * @return a new element reference
      */
-    static KoElementReference loadOdf(const KoXmlElement &element);
+    KoElementReference loadOdf(const KoXmlElement &element);
 
     /**
      * @brief saveOdf saves this element reference into the currently open element in the xml writer.
      * @param writer the writer we save to
-     * @param saveOptions determins which attributes we save.
+     * @param saveOptions determins which attributes we save. We always save the xml:id.
      */
-    void saveOdf(KoXmlWriter *writer, SaveOptions saveOptions) const;
+    void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XMLID) const;
+
+
+    /**
+     * @brief toString creates a QString from the element reference
+     * @return a string that represents the element. Can be used in maps etc.
+     */
+    QString toString() const;
 
 
 private:
 
-
-
     QSharedDataPointer<KoElementReferenceData> d;
-
 };
 
  Q_DECLARE_OPERATORS_FOR_FLAGS(KoElementReference::SaveOptions)

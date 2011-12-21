@@ -63,7 +63,7 @@ void KoSimpleOdtCheckBox::createStyle(KoGenStyles &coll)
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
     gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
-    
+
     QPen pen;
     qreal weight = checkBox()->lineStyle().weight;
     if (weight < 1.0) {
@@ -81,6 +81,7 @@ void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("xml:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
@@ -167,7 +168,7 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
         }
     }
     painter.end();
-    
+
     KoStoreDevice device(store);
     bool ok = image.save(&device, "PNG");
     if (ok) {
