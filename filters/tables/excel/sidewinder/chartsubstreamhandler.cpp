@@ -236,7 +236,8 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
         if (!m_chart->m_texts.isEmpty()) {
             // If defined direct within the chart using a ObjectLinkRecord then we use that as title.
             m_chart->m_title = m_chart->m_texts.first()->m_text;
-        } else if (m_chart->m_series.count() == 1) {
+        }
+        if (m_chart->m_title.isEmpty() && m_chart->m_series.count() == 1) {
             // Else we are using the same logic that is used in the 2007 filter and fetch the title
             // from the series collection of TextRecord's.
             Charting::Series* series = m_chart->m_series.first();
