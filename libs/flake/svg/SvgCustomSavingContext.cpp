@@ -1,5 +1,6 @@
 #include "SvgCustomSavingContext.h"
 #include <KoXmlWriter.h>
+#include <QDebug>
 
 SvgCustomSavingContext::SvgCustomSavingContext()
 {
@@ -19,8 +20,7 @@ KoXmlWriter& SvgCustomSavingContext::animationPropertiesWriter()
 
 bool SvgCustomSavingContext::finalize()
 {
-    //QIODevice output = outputDevice();
-    
+    qDebug() << "custom";
     SvgSavingContext::finalize();
     outputDevice().write("\n");
     outputDevice().write(m_animationPropertiesBuffer.data());

@@ -96,20 +96,20 @@ bool SvgWriter::save(QIODevice &outputDevice)
 
     QTextStream svgStream(&outputDevice);
     if(m_svgHeader.isEmpty()){
-    // standard header:
-    svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
-    svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
-    svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
-
-    // add some PR.  one line is more than enough.
-    svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
-    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    svgStream << " width=\"" << m_pageSize.width() << "pt\"";
-    svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
-    }
-    else{
-      svgStream << m_svgHeader;
-    }
+	  // standard header:
+	  svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
+	  svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
+	  svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
+	  // add some PR. one line is more than enough.
+	  svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
+	  svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
+	  svgStream << " width=\"" << m_pageSize.width() << "pt\"";
+	  svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
+	  }
+	  else {
+	    svgStream << m_svgHeader;
+      }
+      
     SvgSavingContext *savingContext = 0;
     
     if(!m_savingContext){
@@ -120,7 +120,6 @@ bool SvgWriter::save(QIODevice &outputDevice)
 	     }
     
     if (savingContext->initialize(outputDevice, m_writeInlineImages)) {
-
         // top level shapes
         foreach(KoShape *shape, m_toplevelShapes) {
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);

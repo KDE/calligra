@@ -36,6 +36,8 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 
+#include <QDebug>
+
 class SvgSavingContext::Private
 {
 public:
@@ -88,6 +90,7 @@ bool SvgSavingContext::initialize(QIODevice &outputDevice, bool saveInlineImages
 
 bool SvgSavingContext::finalize()
 {
+  qDebug() << "non-custom";
     if(!d->output)
         return false;
 

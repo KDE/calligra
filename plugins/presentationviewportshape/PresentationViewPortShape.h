@@ -69,7 +69,7 @@ public:
      * And saves it into this frame.
      */
     void parseAnimationProperties(const KoXmlElement& e); 
-    bool saveAnimationAttributes(SvgSavingContext *context);
+    bool saveAnimationAttributes(SvgSavingContext& context);
     
     QString toString();//TODO:Needed?
     void setRefId(const QString& refid);//TODO:Redundant?

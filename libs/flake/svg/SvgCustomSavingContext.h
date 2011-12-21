@@ -2,12 +2,12 @@
 #define SVGCUSTOMSAVINGCONTEXT_H
 
 #include <QtCore/QBuffer>
-
+#include "flake_export.h"
 #include "SvgSavingContext.h"
 
 class KoXmlWriter;
 
-class SvgCustomSavingContext : public SvgSavingContext
+class FLAKE_EXPORT SvgCustomSavingContext : public SvgSavingContext
 {
 public:
     SvgCustomSavingContext();

@@ -226,14 +226,14 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().endElement();
     
     //Save animation attributes
-    saveAnimationAttributes(&context);
+    saveAnimationAttributes(context);
     qDebug () << "PVPShape::saveSvg()" << endl;
     return true;
 }
 
-bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext *savingContext)
+bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& savingContext)
 {
-   /* SvgCustomSavingContext *context = dynamic_cast<SvgCustomSavingContext*>(savingContext);
+    SvgCustomSavingContext *context = dynamic_cast<SvgCustomSavingContext*>(&savingContext);
     context->animationPropertiesWriter().startElement("sozi:frame");
     context->animationPropertiesWriter().addAttribute("sozi:title", m_animationAttributes[PresentationViewPortShape::title]);
     context->animationPropertiesWriter().addAttribute("sozi:refid", m_animationAttributes[PresentationViewPortShape::refid]);
@@ -246,7 +246,7 @@ bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext *saving
     context->animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
     
     context->animationPropertiesWriter().endElement();
-   */
+   
     return true;
 }
 
