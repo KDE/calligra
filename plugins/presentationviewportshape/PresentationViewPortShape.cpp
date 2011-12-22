@@ -217,8 +217,8 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", attribute("refid"));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
-    //SvgStyleWriter::saveSvgStyle(this, context);
-
+    context.shapeWriter().addAttribute("style", "fill:none");
+    
     const QSizeF size = this->size();
     context.shapeWriter().addAttributePt("width", size.width());
     context.shapeWriter().addAttributePt("height", size.height());
@@ -244,7 +244,7 @@ bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& saving
     context->animationPropertiesWriter().addAttribute("sozi:timeout-ms", m_animationAttributes[PresentationViewPortShape::timeoutMs]);
     context->animationPropertiesWriter().addAttribute("sozi:transition-zoom-percent", m_animationAttributes[PresentationViewPortShape::transitionZoomPercent]);
     context->animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
-    
+    context->animationPropertiesWriter().addAttribute("sozi:sequence", m_animationAttributes[PresentationViewPortShape::sequence]);
     context->animationPropertiesWriter().endElement();
    
     return true;
