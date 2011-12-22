@@ -219,6 +219,10 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("style", "fill:none");
     
+    QPointF position = this->position();
+    context.shapeWriter().addAttribute("x", position.x());
+    context.shapeWriter().addAttribute("y", position.y());
+    
     const QSizeF size = this->size();
     context.shapeWriter().addAttributePt("width", size.width());
     context.shapeWriter().addAttributePt("height", size.height());
