@@ -806,7 +806,7 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), i18nc( "qtundo-format", "Modify resource name" ) ) );
+            emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource name" ) ) );
             return true;
     }
     return false;
@@ -819,7 +819,7 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceGroupNameCmd( res, value.toString(), i18nc( "qtundo-format", "Modify resourcegroup name" ) ) );
+            emit executeCommand( new ModifyResourceGroupNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resourcegroup name" ) ) );
             return true;
     }
     return false;
@@ -860,7 +860,7 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
             if ( v == res->type() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceTypeCmd( res, v, i18nc( "qtundo-format", "Modify resource type" ) ) );
+            emit executeCommand( new ModifyResourceTypeCmd( res, v, i18nc( "(qtundo-format)", "Modify resource type" ) ) );
             return true;
         }
     }
@@ -881,7 +881,7 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
             if ( v == res->type() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, i18nc( "qtundo-format", "Modify resourcegroup type" ) ) );
+            emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, i18nc( "(qtundo-format)", "Modify resourcegroup type" ) ) );
             return true;
         }
     }
@@ -895,7 +895,7 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
             if ( value.toString() == res->initials() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceInitialsCmd( res, value.toString(), i18nc( "qtundo-format", "Modify resource initials" ) ) );
+            emit executeCommand( new ModifyResourceInitialsCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource initials" ) ) );
             return true;
     }
     return false;
@@ -908,7 +908,7 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
             if ( value.toString() == res->email() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceEmailCmd( res, value.toString(), i18nc( "qtundo-format", "Modify resource email" ) ) );
+            emit executeCommand( new ModifyResourceEmailCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource email" ) ) );
             return true;
     }
     return false;
@@ -929,7 +929,7 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
             if ( c == res->calendar( true ) ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceCalendarCmd( res, c, i18nc( "qtundo-format", "Modify resource calendar" ) ) );
+            emit executeCommand( new ModifyResourceCalendarCmd( res, c, i18nc( "(qtundo-format)", "Modify resource calendar" ) ) );
             return true;
         }
     }
@@ -944,7 +944,7 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
             if ( value.toInt() == res->units() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceUnitsCmd( res, value.toInt(), i18nc( "qtundo-format", "Modify resource available units" ) ) );
+            emit executeCommand( new ModifyResourceUnitsCmd( res, value.toInt(), i18nc( "(qtundo-format)", "Modify resource available units" ) ) );
             return true;
     }
     return false;
@@ -957,7 +957,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
             if ( value.toDateTime() == res->availableFrom() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), i18nc( "qtundo-format", "Modify resource available from" ) ) );
+            emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), i18nc( "(qtundo-format)", "Modify resource available from" ) ) );
             return true;
     }
     return false;
@@ -970,7 +970,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
             if ( value.toDateTime() == res->availableUntil() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), i18nc( "qtundo-format", "Modify resource available until" ) ) );
+            emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), i18nc( "(qtundo-format)", "Modify resource available until" ) ) );
             return true;
     }
     return false;
@@ -983,7 +983,7 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
             if ( value.toDouble() == res->normalRate() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), i18nc( "qtundo-format", "Modify resource normal rate" ) ) );
+            emit executeCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), i18nc( "(qtundo-format)", "Modify resource normal rate" ) ) );
             return true;
     }
     return false;
@@ -996,7 +996,7 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
             if ( value.toDouble() == res->overtimeRate() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), i18nc( "qtundo-format", "Modify resource overtime rate" ) ) );
+            emit executeCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), i18nc( "(qtundo-format)", "Modify resource overtime rate" ) ) );
             return true;
     }
     return false;
