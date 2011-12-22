@@ -213,7 +213,7 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
       return false;//??
     
     context.shapeWriter().startElement("rect");
-    context.shapeWriter().addAttribute("calligra:viewport", "yes");
+    context.shapeWriter().addAttribute("sozi:viewport", "yes");
     context.shapeWriter().addAttribute("id", attribute("refid"));
     context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
@@ -227,7 +227,7 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
     
     //Save animation attributes
     saveAnimationAttributes(context);
-    qDebug () << "PVPShape::saveSvg()" << endl;
+    
     return true;
 }
 
@@ -253,7 +253,7 @@ bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& saving
 bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
   
-  if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "yes"))//FIXME:Is hasattribute check required at all?
+  if(element.hasAttribute("sozi:viewport") && (element.attribute("sozi:viewport") == "yes"))//FIXME:Is hasattribute check required at all?
   {  
   //qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
