@@ -2890,7 +2890,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         if (m_rot != 0) {
             qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
             QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                 .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
             m_placeholderElWriter->addAttribute("draw:transform", rotString);

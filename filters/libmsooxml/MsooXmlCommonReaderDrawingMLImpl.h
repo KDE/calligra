@@ -239,7 +239,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_rot != 0) {
         // m_rot is in 1/60,000th of a degree
         qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                             .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
         body->addAttribute("draw:transform", rotString);
@@ -876,7 +876,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
                 y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
@@ -890,7 +894,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                // handle flipping of lines, logical XOR here
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
                 y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
@@ -920,7 +930,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             } else {
                 // m_rot is in 1/60,000th of a degree
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+
+                // text-box vertical flipping is done with rotation by +180 degrees
+                // mirror/flip flag is not available in odf for text-box
+                if (m_contentType == "rect" && m_flipV) {
+                    MSOOXML::Utils::rotateString(m_rot + (180 * 60000), m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                         .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
                 body->addAttribute("draw:transform", rotString);
@@ -2895,8 +2913,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             ELSE_WRONG_FORMAT
         }
     }
-
-    kDebug() << "svg:x" << m_svgX << "svg:y" << m_svgY << "svg:width" << m_svgWidth << "svg:height" << m_svgHeight << "rotation" << m_rot;
 
     READ_EPILOGUE
 }
