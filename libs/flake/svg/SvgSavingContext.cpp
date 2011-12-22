@@ -81,6 +81,7 @@ SvgSavingContext::~SvgSavingContext()
 {
     delete d;
 }
+
 bool SvgSavingContext::initialize(QIODevice &outputDevice, bool saveInlineImages)
 {
     d->output = &outputDevice;
@@ -90,7 +91,6 @@ bool SvgSavingContext::initialize(QIODevice &outputDevice, bool saveInlineImages
 
 bool SvgSavingContext::finalize()
 {
-  qDebug() << "non-custom";
     if(!d->output)
         return false;
 

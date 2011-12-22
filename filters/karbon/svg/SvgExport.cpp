@@ -69,29 +69,27 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
 
     const KarbonDocument &data = karbonPart->document();
     SvgWriter writer(data.layers(), data.pageSize());
+    
+    {
     QString width;
     QString height;
+    
     width.setNum(data.pageSize().width());
     height.setNum(data.pageSize().height());
+    
     //For stage, will be removed from here
-    QString header("<?xml version=\"1.0\" standalone=\"no\"?>");
-    header.append("\n").append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ");
-    header.append("http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
-    header.append("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->");//Has to be changed to stage
-    header.append("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
-    header.append(" xmlns:sozi=\"http://sozi.baierouge.fr\"");
-    header.append(" width=\"").append(width).append("pt\"");
-    header.append(" height=\"").append(height).append("pt\">");
+    QString header("<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sozi=\"http://sozi.baierouge.fr\"");
+    header.append(" width=\"%1pt\" height=\"%2pt\">").arg(width).arg(height);
+        
+    writer.setHeader(header);
     
-    //writer.setHeader(header);
-    
-   SvgCustomSavingContext *savingContext = new SvgCustomSavingContext();
+    SvgCustomSavingContext *savingContext = new SvgCustomSavingContext();
     writer.setSavingContext(*savingContext);
+    }
     
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
-    
-    
+        
     return KoFilter::OK;
 }
 

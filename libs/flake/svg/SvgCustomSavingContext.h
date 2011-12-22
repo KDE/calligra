@@ -20,6 +20,8 @@ public:
     virtual ~SvgCustomSavingContext();
     
 private:
+    //Writes the javascript for animation to the animationPropertiesWriter
+    bool saveScript();
     QBuffer m_animationPropertiesBuffer;
     KoXmlWriter *m_animationPropertiesWriter;
     

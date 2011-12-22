@@ -51,6 +51,7 @@
 #include <QtCore/QBuffer>
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgGenerator>
+#include "SvgCustomSavingContext.h"
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
@@ -107,7 +108,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
 	  svgStream << " height=\"" << m_pageSize.height() << "pt\">" << endl;
 	  }
 	  else {
-	    svgStream << m_svgHeader;
+	  svgStream << m_svgHeader << endl;
       }
       
     SvgSavingContext *savingContext = 0;
@@ -118,7 +119,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
          else{ 
 	    savingContext = m_savingContext; 
 	     }
-    
+         
     if (savingContext->initialize(outputDevice, m_writeInlineImages)) {
         // top level shapes
         foreach(KoShape *shape, m_toplevelShapes) {
@@ -139,6 +140,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     if(savingContext != m_savingContext){ 
        delete savingContext; 
         }
+        
     // end tag:
     svgStream << endl << "</svg>" << endl;
 
@@ -211,13 +213,11 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().endElement();
-    qDebug() <<"SvgWriter::savePath()" << endl;
-}
+    }
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
- qDebug() << "SvgWriter::saveGeneric()" << endl;;
-  const QRectF bbox = shape->boundingRect();
+    const QRectF bbox = shape->boundingRect();
 
     // prepare a transparent image, make it twice as big as the original size
     QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
