@@ -2420,7 +2420,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     d->workbook = workbook;
     d->globals = new GlobalsSubStreamHandler(workbook, streamVersion);
     d->handlerStack.clear();
-    bool MsoDrawingRecordWorkaround = false;
+    bool useMsoDrawingRecordWorkaround = false;
 
     while (stream->tell() < stream_size) {
         const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
@@ -2442,8 +2442,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         unsigned long type = readU16(buffer);
 
         // Work around a known bug in Excel. See below for a more detailed description of the problem.
-        if (MsoDrawingRecordWorkaround) {
-            MsoDrawingRecordWorkaround = false;
+        if (useMsoDrawingRecordWorkaround) {
+            useMsoDrawingRecordWorkaround = false;
             type = MsoDrawingRecord::id;
         }
 
@@ -2486,10 +2486,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                 // a similar problem exists with TxO/Continue records, but there it is
                 // harder to find out which Continue records are part of the TxO and which
                 // are part of the MsoDrawing record
-                if (type == ObjRecord::id) {
-                    MsoDrawingRecordWorkaround = true;
-                    break;
-                } else if (type == TxORecord::id) {
+                if (type == ObjRecord::id || type == TxORecord::id) {
                     unsigned long saved_pos_2 = stream->tell();
                     bool isMsoDrawingRecord = false;
                     bytes_read = stream->read(small_buffer, 8);
@@ -2511,7 +2508,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     }
                     stream->seek(saved_pos_2);
                     if (isMsoDrawingRecord) {
-                        MsoDrawingRecordWorkaround = true;
+                        useMsoDrawingRecordWorkaround = true;
                         break;
                     }
                 }
