@@ -768,6 +768,19 @@ QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
                 result[i] = ';'; // replace argument delimiter
             else if (ch == '(' && !result[i-1].isLetterOrNumber())
                 state = InParenthesizedArgument;
+            else if (ch == ' ') {
+                // check if it might be an intersection operator
+                // for it to be an intersection operator the next non-space char must be a cell-name-character or '
+                int firstNonSpace = i+1;
+                while (firstNonSpace < result.length() && result[firstNonSpace] == ' ') {
+                    firstNonSpace++;
+                }
+                bool isIntersection = firstNonSpace < result.length() && (result[firstNonSpace].isLetter() || result[firstNonSpace] == '$' || result[firstNonSpace] == '\'');
+                if (isIntersection) {
+                    result[i] = '!';
+                    i = firstNonSpace-1;
+                }
+            }
             break;
         case InParenthesizedArgument:
             if (ch == ',')

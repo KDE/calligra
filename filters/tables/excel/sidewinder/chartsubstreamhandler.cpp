@@ -203,8 +203,8 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
         if (globals->chartSheets().isEmpty()) {
             std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
         } else {
-            m_sheet = globals->chartSheets().takeFirst();
 #if 0
+            m_sheet = globals->chartSheets().takeFirst();
             m_chartObject = new ChartObject(m_chartObject->id());
             m_chart = m_chartObject->m_chart;
             Q_ASSERT(m_chart);
@@ -231,6 +231,21 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
 
 ChartSubStreamHandler::~ChartSubStreamHandler()
 {
+    // Set the chart's title once everything is done.
+    if (m_chart && m_chart->m_title.isEmpty()) {
+        if (!m_chart->m_texts.isEmpty()) {
+            // If defined direct within the chart using a ObjectLinkRecord then we use that as title.
+            m_chart->m_title = m_chart->m_texts.first()->m_text;
+        }
+        if (m_chart->m_title.isEmpty() && m_chart->m_series.count() == 1) {
+            // Else we are using the same logic that is used in the 2007 filter and fetch the title
+            // from the series collection of TextRecord's.
+            Charting::Series* series = m_chart->m_series.first();
+            if (!series->m_texts.isEmpty() )
+                m_chart->m_title = series->m_texts.first()->m_text;
+        }
+    }
+
     delete m_internalDataCache;
     RecordRegistry::unregisterRecordClass(BRAIRecord::id);
 }

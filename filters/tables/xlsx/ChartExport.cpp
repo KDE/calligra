@@ -447,8 +447,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styles, mainStyles ) );
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
-    //foreach(Charting::Text* t, chart()->m_texts) {
-    bodyWriter->startElement( "chart:title" );
+    if ( !chart()->m_title.isEmpty() ) {
+        bodyWriter->startElement( "chart:title" );
         /* TODO we can't determine this because by default we need to center the title,
         in order to center it we need to know the textbox size, and to do that we need
         the used font metrics.
@@ -466,13 +466,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //NOTE don't load width or height, the record MUST be ignored and determined by the application
         //see [MS-XLS] p. 362
 
-      if ( !chart()->m_title.isEmpty() ) {
-          bodyWriter->startElement( "text:p" );
-          bodyWriter->addTextNode( chart()->m_title );
-          bodyWriter->endElement(); // text:p
-      }
-      bodyWriter->endElement(); // chart:title
-    //}
+        bodyWriter->startElement( "text:p" );
+        bodyWriter->addTextNode( chart()->m_title );
+        bodyWriter->endElement(); // text:p
+        bodyWriter->endElement(); // chart:title
+    }
 
     if (chart()->m_legend) {
         bodyWriter->startElement("chart:legend");
@@ -932,67 +930,67 @@ void ChartExport::addDataThemeToStyle( KoGenStyle& style, int dataNumber, int ma
     const int fadepatternFive[] = { 7, 15, 23, 31, 39, 47 };
     const int fadepatternSix[] = { 8, 16, 24, 32, 40, 48 };
     QVector< const int* > fadePatterns; fadePatterns << fadepatternOne << fadepatternTwo << fadepatternThree << fadepatternFour << fadepatternFive << fadepatternSix;
-    
+
     const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
     const int rounds = dataNumber / 6;
     const int maxRounds = maxNumData / 6 + 1;
     QColor seriesColor;
-    if ( std::find( patternTwoIndexes, patternTwoIndexes + 6, chart()->m_style ) != patternTwoIndexes + 6 )
-    {
+    if ( std::find( patternTwoIndexes, patternTwoIndexes + 6, chart()->m_style ) != patternTwoIndexes + 6 ) {
         const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( ( dataNumber % 6 ) + 1 );
-        
         const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
-        seriesColor = colorScheme.value( themeColorString )->value();
-        if ( rounds > 1 )
-            seriesColor = tintColor( seriesColor, tintFactor );        
-    }
-    else if ( std::find( patternOneIndexes, patternOneIndexes + 5, chart()->m_style ) != patternOneIndexes + 5 )
-    {
+        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
+        if ( colorSchemeItem ) {
+            seriesColor = colorSchemeItem->value();
+            if ( rounds > 1 )
+                seriesColor = tintColor( seriesColor, tintFactor );
+        }
+    } else if ( std::find( patternOneIndexes, patternOneIndexes + 5, chart()->m_style ) != patternOneIndexes + 5 ) {
         const QString themeColorString = QString::fromLatin1( "dk1" );
-        seriesColor = colorScheme.value( themeColorString )->value();
-        const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
-        seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
-        const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
-        if ( rounds > 1 )
-            seriesColor = tintColor( seriesColor, tintFactor );
-    }
-    else if ( std::find( patternFourIndexes, patternFourIndexes + 5, chart()->m_style ) != patternFourIndexes + 5 )
-    {
+        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
+        if ( colorSchemeItem ) {
+            seriesColor = colorSchemeItem->value();
+            const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
+            seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
+            const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
+            if ( rounds > 1 )
+                seriesColor = tintColor( seriesColor, tintFactor );
+        }
+    } else if ( std::find( patternFourIndexes, patternFourIndexes + 5, chart()->m_style ) != patternFourIndexes + 5 ) {
         const QString themeColorString = QString::fromLatin1( "dk1" );
-        seriesColor = colorScheme.value( themeColorString )->value();
-        const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
-        seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
-        const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
-        if ( rounds > 1 )
-            seriesColor = tintColor( seriesColor, tintFactor );
-    }
-    else
-    {
-        for ( int i = 0; i < fadePatterns.count(); ++i )
-        {
-            if ( std::find( fadePatterns[ i ], fadePatterns[ i ] + 6, chart()->m_style ) != fadePatterns[ i ] + 6 )
-            {
+        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
+        if ( colorSchemeItem ) {
+            seriesColor = colorSchemeItem->value();
+            const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
+            seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
+            const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
+            if ( rounds > 1 )
+                seriesColor = tintColor( seriesColor, tintFactor );
+        }
+    } else {
+        for ( int i = 0; i < fadePatterns.count(); ++i ) {
+            if ( std::find( fadePatterns[ i ], fadePatterns[ i ] + 6, chart()->m_style ) != fadePatterns[ i ] + 6 ) {
                 const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( i + 1 );
-                seriesColor = colorScheme.value( themeColorString )->value();
-                qreal fadeValue = calculateFade( dataNumber, maxNumData ) / 100.0;
-                if ( fadeValue > 0.0 )
-                    seriesColor = tintColor( seriesColor, 1 - fadeValue );
-                else
-                    seriesColor = shadeColor( seriesColor, 1 + fadeValue );
-                
+                MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
+                if ( colorSchemeItem ) {
+                    seriesColor = colorSchemeItem->value();
+                    qreal fadeValue = calculateFade( dataNumber, maxNumData ) / 100.0;
+                    if ( fadeValue > 0.0 )
+                        seriesColor = tintColor( seriesColor, 1 - fadeValue );
+                    else
+                        seriesColor = shadeColor( seriesColor, 1 + fadeValue );
+                }
             }
         }
     }
-    style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-    style.addProperty( "draw:fill-color", seriesColor.name(), KoGenStyle::GraphicType );
-    if ( strokes )
-    {
-        style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );      
-        style.addProperty( "svg:stroke-color", seriesColor.name(), KoGenStyle::GraphicType );
-    }
-    else
-    {
-        style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );      
+    if ( seriesColor.isValid() ) {
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-color", seriesColor.name(), KoGenStyle::GraphicType );
+        if ( strokes ) {
+            style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );
+            style.addProperty( "svg:stroke-color", seriesColor.name(), KoGenStyle::GraphicType );
+        } else {
+            style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
+        }
     }
 }
 
