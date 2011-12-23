@@ -2969,10 +2969,8 @@ void View::slotCurrencyConfigFinished( int result )
 QString View::standardTaskStatusReport() const
 {
     QString s;
-    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"Plan\" >";
-    s += "<data-source select-from=\"taskstatus\" >";
-    s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
-    s += "</data-source>";
+    s = "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >";
+    s += "<data-source select-from=\"taskstatus\" ></data-source>";
     s += "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >";
     s += "<report:title>" + i18n( "Report" ) + "</report:title>";
     s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
@@ -3057,7 +3055,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:detail>";
     s += "</report:body>";
     s += "</report:content>";
-    s += "</kplatoreportdefinition>";
+    s += "</planreportdefinition>";
     return s;
 }
 
