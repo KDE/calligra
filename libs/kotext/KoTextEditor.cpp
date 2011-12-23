@@ -25,8 +25,10 @@
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoInlineNote.h"
+#include "KoInlineCite.h"
+#include "BibliographyGenerator.h"
 #include <KoOdf.h>
-#include <KoInlineNote.h>
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
@@ -55,7 +57,7 @@
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ChangeListCommand.h"
 #include "commands/DeleteCommand.h"
-#include "KoInlineCite.h"
+
 #include <KoTextLayoutScheduler.h>
 
 #include <KLocale>
@@ -1839,6 +1841,8 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
+
+    new BibliographyGenerator(bibDocument, block(), newBibInfo);
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
