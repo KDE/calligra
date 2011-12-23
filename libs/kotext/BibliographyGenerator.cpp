@@ -192,3 +192,38 @@ void BibliographyGenerator::generate()
     }
     cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }
+
+QMap<QString, BibliographyEntryTemplate> BibliographyGenerator::defaultBibliographyEntryTemplates()
+{
+    QMap<QString, BibliographyEntryTemplate> entryTemplates;
+    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+        BibliographyEntryTemplate bibEntryTemplate;
+
+        //Now creating default IndexEntries for all BibliographyEntryTemplates
+        IndexEntryBibliography *identifier = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *author = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *title = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *year = new IndexEntryBibliography(QString());
+        IndexEntrySpan *firstSpan = new IndexEntrySpan(QString());
+        IndexEntrySpan *otherSpan = new IndexEntrySpan(QString());
+
+        identifier->dataField = "identifier";
+        author->dataField = "author";
+        title->dataField = "title";
+        year->dataField = "year";
+        firstSpan->text = ":";
+        otherSpan->text = ",";
+
+        bibEntryTemplate.bibliographyType = bibType;
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(identifier));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(firstSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(author));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(title));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(year));
+
+        entryTemplates[bibType] = bibEntryTemplate;
+    }
+    return entryTemplates;
+}

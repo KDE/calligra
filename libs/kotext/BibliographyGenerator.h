@@ -39,6 +39,8 @@ public:
     explicit BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo);
     virtual ~BibliographyGenerator();
 
+    static QMap<QString, BibliographyEntryTemplate> defaultBibliographyEntryTemplates();
+
 public slots:
     void generate();
 

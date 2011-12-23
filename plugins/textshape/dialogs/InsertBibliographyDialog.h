@@ -35,7 +35,6 @@ class InsertBibliographyDialog : public QDialog
     Q_OBJECT
 public:
     explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
-    QMap<QString, BibliographyEntryTemplate> defaultEntryTemplates();
 
 public slots:
     void insert();

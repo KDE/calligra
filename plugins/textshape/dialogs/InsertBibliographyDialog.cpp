@@ -43,24 +43,15 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 
     dialog.addedFields->clear();
     dialog.availableFields->clear();
-    m_bibInfo->m_entryTemplate = defaultEntryTemplates();
+    m_bibInfo->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
     dialog.bibTypes->setCurrentRow(0,QItemSelectionModel::Select);
     show();
 }
 
 void InsertBibliographyDialog::insert()
 {
-    m_editor->insertBibliography(new KoBibliographyInfo());
-
-    m_editor->movePosition(QTextCursor::Left);
-    KoBibliographyInfo *bibInfo = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument = m_editor->block().blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
-    m_editor->movePosition(QTextCursor::Right);
-
-    bibInfo->setEntryTemplates(m_bibInfo->m_entryTemplate);
-    bibInfo->m_indexTitleTemplate.text = dialog.title->text();
-
-    new BibliographyGenerator(bibDocument, m_editor->block(), bibInfo);
+    m_bibInfo->m_indexTitleTemplate.text = dialog.title->text();
+    m_editor->insertBibliography(m_bibInfo);
 }
 
 void InsertBibliographyDialog::updateFields()
@@ -140,39 +131,4 @@ void InsertBibliographyDialog::removeTabStop()
     if (row != -1 && dialog.addedFields->takeItem(row)->text() == "Tab stop") {
         dialog.addedFields->removeItemWidget(dialog.addedFields->takeItem(row));
     }*/
-}
-
-QMap<QString, BibliographyEntryTemplate> InsertBibliographyDialog::defaultEntryTemplates()
-{
-    QMap<QString, BibliographyEntryTemplate> entryTemplates;
-    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
-        BibliographyEntryTemplate bibEntryTemplate;
-
-        //Now creating default IndexEntries for all BibliographyEntryTemplates
-        IndexEntryBibliography *identifier = new IndexEntryBibliography(QString());
-        IndexEntryBibliography *author = new IndexEntryBibliography(QString());
-        IndexEntryBibliography *title = new IndexEntryBibliography(QString());
-        IndexEntryBibliography *year = new IndexEntryBibliography(QString());
-        IndexEntrySpan *firstSpan = new IndexEntrySpan(QString());
-        IndexEntrySpan *otherSpan = new IndexEntrySpan(QString());
-
-        identifier->dataField = "identifier";
-        author->dataField = "author";
-        title->dataField = "title";
-        year->dataField = "year";
-        firstSpan->text = ":";
-        otherSpan->text = ",";
-
-        bibEntryTemplate.bibliographyType = bibType;
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(identifier));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(firstSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(author));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(title));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(year));
-
-        entryTemplates[bibType] = bibEntryTemplate;
-    }
-    return entryTemplates;
 }
