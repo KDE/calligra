@@ -59,7 +59,10 @@ public:
 
     QModelIndex addRow();
     QMap<QString, const Resource*> freeResources() const;
-    
+
+    void setReadOnly( bool ro ) { m_readonly = ro; }
+    bool readOnly() const { return m_readonly; }
+
 signals:
     void rowInserted( const QModelIndex& );
     void changed();
@@ -75,6 +78,7 @@ private:
     QStringList m_headers;
     QList<const Resource*> m_resourcelist;
     QMap<QString, const Resource*> m_editlist;
+    bool m_readonly;
 };
 
 class KPLATOUI_EXPORT UsedEffortEditor : public QTableView
@@ -88,7 +92,9 @@ public:
     void addResource();
     
     bool hasFreeResources() const;
-    
+
+    UsedEffortItemModel *model() const { return static_cast<UsedEffortItemModel*>( QTableView::model() ); }
+
 signals:
     void changed();
     void resourceAdded();
@@ -131,6 +137,7 @@ public:
     QModelIndex addRow();
     void removeRow( int row );
 
+    /// These falgs are in addition to flags return from QAbstractItemModel::flags()
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
     
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }

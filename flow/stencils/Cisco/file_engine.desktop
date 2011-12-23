@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=File Engine
 Name[el]=Μηχανή flake
+Name[it]=Motore file
 Name[nb]=Filmotor
 Name[nl]=Opberg-engine
 Name[pl]=Silnik plikowy
 Name[pt]=Motor de Ficheiros
 Name[pt_BR]=Motor de arquivos
+Name[ru]=Система управления файлами
 Name[sv]=Filutrustning
 Name[uk]=Система керування файлами
 Name[x-test]=xxFile Enginexx

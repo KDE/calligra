@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,17 +19,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KEXI_ABOU_DATA_
-#define _KEXI_ABOU_DATA_
+#ifndef _KEXI_ABOUT_DATA_
+#define _KEXI_ABOUT_DATA_
 
 #include <KAboutData>
 #include <kexi_export.h>
 
-namespace Kexi
+class KEXICORE_EXPORT KexiAboutData : public KAboutData
 {
-
-KEXICORE_EXPORT KAboutData* createAboutData();
-
-}
+public:
+    KexiAboutData();
+private:
+    Q_DISABLE_COPY(KexiAboutData)
+};
 
 #endif

@@ -39,6 +39,7 @@ namespace Swinder
 
 class Sheet;
 class Format;
+class FormatFont;
 
 class Workbook : public QObject
 {
@@ -104,7 +105,7 @@ public:
         PIDSI_LASTPRINTED_DTM = 0x0b,
         PIDSI_CREATE_DTM = 0x0c,
         PIDSI_LASTSAVED_DTM = 0x0d,
-        PIDSI_APPNAME = 0x12,
+        PIDSI_APPNAME = 0x12
     };
 
     bool hasProperty(PropertyType type) const;
@@ -117,6 +118,7 @@ public:
     QList<QRect> filterRanges(unsigned sheet) const;
     QList<QRect> filterRanges(const Sheet* sheet) const;
     void addFilterRange(unsigned sheet, const QRect& range);
+    void addFilterRange(const QString& sheet, const QRect& range);
 
     int activeTab() const;
     void setActiveTab(int tab);
@@ -141,6 +143,9 @@ public:
     QList< QColor > colorTable() const;
     QColor customColor(unsigned index) const;
     QColor color(unsigned index) const;
+
+    FormatFont font(unsigned index) const;
+    void setFont(unsigned index, const FormatFont &font);
 
     enum Version {
         Excel95,

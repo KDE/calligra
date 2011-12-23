@@ -130,8 +130,12 @@ public:
     WorkPackageSettings &settings() { return m_settings; }
     void setSettings( const WorkPackageSettings &settings );
 
+    QMap<const Document*, KUrl> newDocuments() const { return m_newdocs; }
+    void removeNewDocument( const Document *doc ) { m_newdocs.remove( doc ); }
+
 signals:
     void modified( bool );
+    void saveWorkPackage( WorkPackage* );
 
 public slots:
     void setModified( bool on ) { m_modified = on; }
@@ -146,11 +150,14 @@ protected:
 
     bool saveToStream( QIODevice * dev );
 
+    void openNewDocument( const Document *doc, KoStore *store );
+
 protected:
     Project *m_project;
     QString m_filePath;
     bool m_fromProjectStore;
     QList<DocumentChild*> m_childdocs;
+    QMap<const Document*, KUrl> m_newdocs; // new documents that does not exists in the project store (yet)
 
     bool m_modified;
 

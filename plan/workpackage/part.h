@@ -104,7 +104,7 @@ public:
     void setType( int type ) { m_type = type; }
     
     bool saveToStore( KoStore *store );
-    
+
 signals:
     void modified( bool );
     void fileModified( bool );
@@ -210,6 +210,7 @@ public:
     bool saveFile();
 
     KUndo2QStack *undoStack() const { return m_undostack; }
+    int commandIndex() const { return m_undostack->index(); }
 
 public slots:
     /**
@@ -219,7 +220,8 @@ public slots:
     virtual void setDocumentClean(bool clean);
 
     virtual void setModified( bool mod );
-
+    void saveModifiedWorkPackages();
+    void saveWorkPackage( WorkPackage *wp );
     void addCommand( KUndo2Command *cmd );
 
     void viewWorkpackageDocument( Document *doc );

@@ -45,7 +45,7 @@ Node::Node(Node *parent)
     //kDebug()<<"("<<this<<")";
     m_parent = parent;
     init();
-    m_id = QString(); // Not mapped
+    m_id.clear(); // Not mapped
 }
 
 Node::Node(const Node &node, Node *parent) 
@@ -97,9 +97,10 @@ Node::~Node() {
     if (m_shutdownAccount)
         m_shutdownAccount->removeShutdown(*this);
 
-    foreach (long key, m_schedules.keys()) {
-        delete m_schedules.take(key);
+    foreach (Schedule *s, m_schedules) {
+        delete s;
     }
+    m_schedules.clear();
     m_parent = 0; //safety
 }
 

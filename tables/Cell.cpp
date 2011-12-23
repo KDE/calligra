@@ -161,9 +161,9 @@ KLocale* Cell::locale() const
 bool Cell::isDefault() const
 {
     // check each stored attribute
-    if (value() != Value())
+    if (!value().isEmpty())
         return false;
-    if (formula() != Formula())
+    if (formula() != Formula::empty())
         return false;
     if (!link().isEmpty())
         return false;
@@ -1660,48 +1660,116 @@ static bool findDrawElements(const KoXmlElement& parent)
     return false;
 }
 
+QString loadOdfCellTextNodes(const KoXmlElement& element, int *textFragmentCount, int *lineCount, bool *hasRichText, bool *stripLeadingSpace)
+{
+    QString cellText;
+    bool countedOwnFragments = false;
+    bool prevWasText = false;
+    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        if (n.isText()) {
+            prevWasText = true;
+            QString t = KoTextLoader::normalizeWhitespace(n.toText().data(), *stripLeadingSpace);
+            if (!t.isEmpty()) {
+                *stripLeadingSpace = t[t.length() - 1].isSpace();
+                cellText += t;
+                if (!countedOwnFragments) {
+                    // We only count the number of different parent elements which have text. That is
+                    // so cause different parent-elements may mean different styles which means
+                    // rich-text while the same parent element means the same style so we can easily
+                    // put them together into one string.
+                    countedOwnFragments = true;
+                    ++(*textFragmentCount);
+                }
+            }
+        } else {
+            KoXmlElement e = n.toElement();
+            if (!e.isNull()) {
+                if (prevWasText && !cellText.isEmpty() && cellText[cellText.length() - 1].isSpace()) {
+                    // A trailing space of the cellText collected so far needs to be preserved when
+                    // more text-nodes within the same parent follow but if an element like e.g.
+                    // text:s follows then a trailing space needs to be removed.
+                    cellText.chop(1);
+                }
+                prevWasText = false;
+
+                // We can optimize some elements like text:s (space), text:tab (tabulator) and
+                // text:line-break (new-line) to not produce rich-text but add the equivalent
+                // for them in plain-text.
+                const bool isTextNs = e.namespaceURI() == KoXmlNS::text;
+                if (isTextNs && e.localName() == "s") {
+                    const int howmany = qMax(1, e.attributeNS(KoXmlNS::text, "c", QString()).toInt());
+                    cellText += QString().fill(32, howmany);
+                } else if (isTextNs && e.localName() == "tab") {
+                    cellText += '\t';
+                } else if (isTextNs && e.localName() == "line-break") {
+                    cellText += '\n';
+                    ++(*lineCount);
+                } else if (isTextNs && e.localName() == "span") {
+                    // Nested span-elements means recursive evaluation.
+                    cellText += loadOdfCellTextNodes(e, textFragmentCount, lineCount, hasRichText, stripLeadingSpace);
+                } else if (!isTextNs ||
+                              ( e.localName() != "annotation" &&
+                                e.localName() != "bookmark" &&
+                                e.localName() != "meta" &&
+                                e.localName() != "tag" )) {
+                    // Seems we have an element we cannot easily translate to a string what
+                    // means it's all rich-text now.
+                    *hasRichText = true;
+                }
+            }
+        }
+    }
+    return cellText;
+}
+
 void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
     QString cellText;
 
-    bool multipleTextParagraphsFound = false;
-    bool hasRichText = KoTextLoader::containsRichText(parent);
+    int lineCount = 0;
+    bool hasRichText = false;
+    bool stripLeadingSpace = true;
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
                 textParagraphElement.namespaceURI() == KoXmlNS::text) {
 
-            // our text, could contain formating for value or result of formula
-            if (cellText.isEmpty()) {
-                cellText = textParagraphElement.text();
-            } else {
-                cellText += '\n' + textParagraphElement.text();
-                multipleTextParagraphsFound = true;
-            }
-
             // the text:a link could be located within a text:span element
             KoXmlElement textA = namedItemNSWithSpan(textParagraphElement, KoXmlNS::text, "a");
-            if (!textA.isNull()) {
-                if (textA.hasAttributeNS(KoXmlNS::xlink, "href")) {
-                    QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
-                    cellText = textA.text();
-                    setUserInput(cellText);
-                    hasRichText = false;
-                    // The value will be set later in loadOdf().
-                    if ((!link.isEmpty()) && (link[0] == '#'))
-                        link = link.remove(0, 1);
-                    setLink(link);
-                }
+            if (!textA.isNull() && textA.hasAttributeNS(KoXmlNS::xlink, "href")) {
+                QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
+                cellText = textA.text();
+                setUserInput(cellText);
+                hasRichText = false;
+                lineCount = 0;
+                // The value will be set later in loadOdf().
+                if ((!link.isEmpty()) && (link[0] == '#'))
+                    link = link.remove(0, 1);
+                setLink(link);
+                // Abort here cause we can handle only either a link in a cell or (rich-)text but not both.
+                break;
             }
+
+            if (!cellText.isNull())
+                cellText += '\n';
+
+            ++lineCount;
+            int textFragmentCount = 0;
+
+            // Our text could contain formating for value or result of formula or a mix of
+            // multiple text:span elements with text-nodes and line-break's.
+            cellText += loadOdfCellTextNodes(textParagraphElement, &textFragmentCount, &lineCount, &hasRichText, &stripLeadingSpace);
+
+            // If we got text from multiple different sources (e.g. from the text:p and a
+            // child text:span) then we have very likely rich-text.
+            if (!hasRichText)
+                hasRichText = textFragmentCount >= 2;
         }
     }
 
     if (!cellText.isNull()) {
-        setUserInput(cellText);
-        // The value will be set later in loadOdf().
-
         if (hasRichText && !findDrawElements(parent)) {
             // for now we don't support richtext and embedded shapes in the same cell;
             // this is because they would currently be loaded twice, once by the KoTextLoader
@@ -1721,20 +1789,23 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             QTextCharFormat format = style.asCharFormat();
             ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
-            KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);
             KoTextDocument(doc.data()).setStyleManager(sheet()->map()->textStyleManager());
 
+            Q_ASSERT(tableContext.shapeContext);
+            KoTextLoader loader(*tableContext.shapeContext);
             QTextCursor cursor(doc.data());
             loader.loadBody(parent, cursor);
 
             setUserInput(doc->toPlainText());
             setRichText(doc);
+        } else {
+            setUserInput(cellText);
         }
     }
 
-    //Enable word wrapping if multiple lines of text have been found.
-    if (multipleTextParagraphsFound) {
+    // enable word wrapping if multiple lines of text have been found.
+    if (lineCount >= 2) {
         Style newStyle;
         newStyle.setWrapText(true);
         setStyle(newStyle);
@@ -1761,9 +1832,24 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
-        if (data.shape) {
-            shapeData.append(data);
+        if (element.localName() == "a") {
+            // It may the case that the object(s) are embedded into a hyperlink so actions are done on
+            // clicking it/them but since we do not supported objects-with-hyperlinks yet we just fetch
+            // the inner elements and use them to at least create and show the objects (see bug 249862).
+            KoXmlElement e;
+            forEachElement(e, element) {
+                if (e.namespaceURI() != KoXmlNS::draw)
+                    continue;
+                ShapeLoadingData data = loadOdfObject(e, *tableContext.shapeContext);
+                if (data.shape) {
+                    shapeData.append(data);
+                }
+            }
+        } else {
+            ShapeLoadingData data = loadOdfObject(element, *tableContext.shapeContext);
+            if (data.shape) {
+                shapeData.append(data);
+            }
         }
     }
 }
@@ -1774,7 +1860,7 @@ ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoading
     data.shape = 0;
     KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
-        kDebug(36003) << "Unable to load shape.";
+        kDebug(36003) << "Unable to load shape with localName=" << element.localName();
         return data;
     }
 

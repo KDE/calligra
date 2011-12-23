@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Wavelength router
-Name[ca]=Wavelength router
+Name[ca]=Encaminador Wavelength
 Name[de]=Wavelength-Router
 Name[el]=Δρομολογητής μήκους κύματος
 Name[et]=Lainepikkuse marsruuter
@@ -9,6 +9,7 @@ Name[nds]=Bülgenläng-Nettweger
 Name[pl]=Router długości fali
 Name[pt]=Encaminhador comprimento onda
 Name[pt_BR]=Roteador de comprimento de onda
+Name[ru]=Маршрутизатор Wavelenght
 Name[sv]=Våglängdsrouter
 Name[uk]=Бездротовий маршрутизатор
 Name[x-test]=xxWavelength routerxx

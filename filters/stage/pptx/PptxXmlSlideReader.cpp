@@ -1646,7 +1646,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         body->startElement("draw:text-box"); // CASE #P436
     }
 
-    body = listBuf.releaseWriter();
+    // NOTE: Workaround!  Only in case of a textshape the placeholder flag does
+    // hide the placeholder text => Ignoring the placeholder text in case of
+    // other shapes (Unspecified presentation shapes are fine).
+    if (!createTextBox && !d->phType.isEmpty() &&
+        (m_context->type == SlideMaster || m_context->type == SlideLayout))
+    {
+        listBuf.clear();
+    } else {
+        body = listBuf.releaseWriter();
+    }
 
     if (createTextBox) {
         body->endElement(); // draw:text-box
@@ -2881,7 +2890,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         if (m_rot != 0) {
             qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
             QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                 .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
             m_placeholderElWriter->addAttribute("draw:transform", rotString);

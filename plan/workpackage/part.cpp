@@ -181,7 +181,11 @@ bool DocumentChild::setDoc( const Document *doc )
     }
     m_doc = doc;
     KUrl url;
-    if ( doc->sendAs() == Document::SendAs_Copy ) {
+    if ( parentPackage()->newDocuments().contains( doc ) ) {
+        url = parentPackage()->newDocuments().value( doc );
+        Q_ASSERT( url.isValid() );
+        parentPackage()->removeNewDocument( doc );
+    } else if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc );
         if ( url.url().isEmpty() ) {
             KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
@@ -259,7 +263,7 @@ bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
         args = KRun::processDesktopExec( *service, files );
     } else {
         KUrl::List list;
-        KOpenWithDialog dlg( list, i18n("Edit with:"), QString::null, 0 );
+        KOpenWithDialog dlg( list, i18n("Edit with:"), QString(), 0 );
         if ( dlg.exec() == QDialog::Accepted ){
             args << dlg.text();
         }
@@ -407,6 +411,7 @@ bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
     connect( wp->project(), SIGNAL( changed() ), wp, SLOT( projectChanged() ) );
     connect ( wp, SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
     emit workPackageAdded( wp, indexOf( wp ) );
+    connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));
     return true;
 }
 
@@ -713,7 +718,7 @@ WorkPackage *Part::findWorkPackage( const Node *node ) const
 
 bool Part::editWorkpackageDocument( const Document *doc )
 {
-    kDebug()<<doc<<doc->url();
+    //kDebug()<<doc<<doc->url();
     // start in any suitable application
     return editOtherDocument( doc );
 }
@@ -772,22 +777,12 @@ bool Part::viewDocument( const KUrl &filename )
 
 void Part::setDocumentClean( bool clean )
 {
+    kDebug()<<clean;
+    setModified( ! clean );
     if ( ! clean ) {
-        return setModified( ! clean );
+        saveModifiedWorkPackages();
+        return;
     }
-    bool mod = false;
-    foreach ( WorkPackage *wp, m_packageMap ) {
-        foreach( DocumentChild *ch, wp->childDocs() ) {
-            if ( ch->isModified() || ch->isFileModified() ) {
-                mod = true;
-                break;
-            }
-        }
-        if ( mod == true ) {
-            break;
-        }
-    }
-    setModified( mod );
 }
 
 void Part::setModified( bool mod )
@@ -799,6 +794,21 @@ void Part::setModified( bool mod )
 bool Part::saveAs( const KUrl &/*url*/ )
 {
     return false;
+}
+
+void Part::saveModifiedWorkPackages()
+{
+    foreach ( WorkPackage *wp, m_packageMap ) {
+        if ( wp->isModified() ) {
+            saveWorkPackage( wp );
+        }
+    }
+    m_undostack->setClean();
+}
+
+void Part::saveWorkPackage( WorkPackage *wp )
+{
+    wp->saveToProjects( this );
 }
 
 bool Part::saveWorkPackages( bool silent )

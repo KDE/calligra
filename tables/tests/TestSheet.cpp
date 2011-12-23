@@ -18,6 +18,9 @@
 */
 #include "TestSheet.h"
 
+#include <QPainter>
+
+#include <KoViewConverter.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>

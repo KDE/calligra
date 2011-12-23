@@ -348,7 +348,18 @@ private:
     int processTextForBody(Writer& out,
                            const MSO::OfficeArtClientData* cd,
                            const MSO::TextContainer* tc,
-                           const MSO::TextRuler* tr);
+                           const MSO::TextRuler* tr,
+                           const bool isPlaceholder);
+
+    /**
+     * Add a text:list-item into a newly created text:list with corresponding
+     * number of levels and set automatic numbering related attributes.
+     */
+    void addListElement(KoXmlWriter& out,
+                        const QString& listStyle,
+                        QStack<QString>& levels,
+                        quint16 level,
+                        const PptTextPFRun &pf);
 
     /**
      * Process a span or the smallest run of text having it's own formatting.
@@ -643,10 +654,17 @@ private:
     MasterStyles masterPresentationStyles;
     QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
-    bool m_isList; //true - processing a list, false - processing a paragraph
-    QMap<quint16, bool> m_continueNumbering; //true - continue numbered list, false - restart numbering
-    quint16 m_previousListLevel;
     quint16 m_firstChunkFontSize;
+
+    bool m_isList; //true - processing a list, false - processing a paragraph
+    quint16 m_previousListLevel;
+
+    // true - continue numbered list, false - restart numbering
+    QMap<quint16, bool> m_continueListNumbering;
+
+    // Map of level keys and xml:id values of text:list elements to continue
+    // automatic numbering.
+    QMap<quint16, QString> m_lvlXmlIdMap;
 
     /**
     * @brief An usedDeclaration.

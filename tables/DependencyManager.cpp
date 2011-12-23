@@ -550,7 +550,7 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
     int inAreasCall = 0;
     Region providingRegion;
     for (int i = 0; i < tokens.count(); i++) {
-        const Token token = tokens[i];
+        const Token &token = tokens[i];
 
         if (inAreasCall) {
             if (token.isOperator() && token.asOperator() == Token::LeftPar)

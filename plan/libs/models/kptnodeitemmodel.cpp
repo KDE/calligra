@@ -205,7 +205,7 @@ QVariant NodeModel::type( const Node *node, int role ) const
         case Qt::EditRole:
             return node->type();
         case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
+            return (int)(Qt::AlignLeft|Qt::AlignVCenter);
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

@@ -24,6 +24,7 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#include <QTime>
 #include <math.h>
 
 #ifndef M_PI
@@ -69,6 +70,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_insideTable = false;
+    qsrand(QTime::currentTime().msec());
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
@@ -161,6 +163,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_flipV = false;
     m_rot = 0;
 
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    KoXmlWriter *tempBodyHolder = 0;
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
+        tempBodyHolder = body;
+        body = m_currentDrawingObject->pictureWriter();
+    }
+#endif
+
 #ifndef DOCXXMLDOCREADER_CPP
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -193,6 +203,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
 
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    if (m_context->m_groupDepthCounter == 0) {
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            // use relative position to the cell's top-left corner
+            m_svgX = f.m_colOff;
+            m_svgY = f.m_rowOff;
+
+            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                QString endCellAddress = m_currentDrawingObject->toCellAddress();
+                QString end_x = EMU_TO_CM_STRING(f.m_colOff);
+                QString end_y = EMU_TO_CM_STRING(f.m_rowOff);
+
+                body->addAttribute("table:end-cell-address", endCellAddress);
+                body->addAttribute("table:end-x", end_x); //cm
+                body->addAttribute("table:end-y", end_y); //cm
+            }
+        }
+    }
+#endif
+
     if (m_rot == 0) {
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -207,7 +239,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_rot != 0) {
         // m_rot is in 1/60,000th of a degree
         qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                             .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
         body->addAttribute("draw:transform", rotString);
@@ -260,6 +292,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
 #endif
+
+#ifdef XLSXXMLDRAWINGREADER_CPP
+    // If we anchored to cell, we save odf to different buffer that body operates on
+    // Here we restore the original body buffer for next drawing which might be anchored
+    // to sheet
+    if ( m_currentDrawingObject->isAnchoredToCell() && (m_context->m_groupDepthCounter == 0)) {
+        body = tempBodyHolder;
+    }
+#endif
+
 
 #ifndef DOCXXMLDOCREADER_CPP
     popCurrentDrawStyle();
@@ -473,7 +515,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
         // to write after the child elements are generated
         body = drawFrameBuf.setWriter(body);
-
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter++;
+#endif
         while (!atEnd()) {
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
@@ -484,13 +528,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                 ELSE_TRY_READ_IF(sp)
                 ELSE_TRY_READ_IF(grpSpPr)
                 ELSE_TRY_READ_IF(cxnSp)
-    #ifdef PPTXXMLSLIDEREADER_CPP
+#ifdef PPTXXMLSLIDEREADER_CPP
                 ELSE_TRY_READ_IF(graphicFrame)
-    #endif
+#endif
                 SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
             }
         }
+#ifdef XLSXXMLDRAWINGREADER_CPP
+        m_context->m_groupDepthCounter--;
+#endif
     }
 
     body = drawFrameBuf.originalWriter();
@@ -829,7 +876,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
                 y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
@@ -843,7 +894,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                // handle flipping of lines, logical XOR here
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
                 y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
@@ -873,7 +930,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             } else {
                 // m_rot is in 1/60,000th of a degree
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+
+                // text-box vertical flipping is done with rotation by +180 degrees
+                // mirror/flip flag is not available in odf for text-box
+                if (m_contentType == "rect" && m_flipV) {
+                    MSOOXML::Utils::rotateString(m_rot + (180 * 60000), m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                         .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
                 body->addAttribute("draw:transform", rotString);
@@ -890,6 +955,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_customPath);
+                if (!m_textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", m_textareas);
+                }
                 body->addCompleteElement(m_customEquations.toUtf8());
                 body->endElement(); // draw:enhanced-geometry
             }
@@ -903,6 +971,12 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+
+                QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
+                if (!textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", textareas);
+                }
+
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
                 if (m_contentAvLstExists) {
@@ -1053,7 +1127,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
                 bool boxCreated = false;
                 if (m_contentType == "rect" || m_contentType.isEmpty() ||
-                    unsupportedPredefinedShape()) {
+                    unsupportedPredefinedShape())
+                {
                     body->startElement("draw:text-box"); // CASE #P436
                     boxCreated = true;
                 }
@@ -1072,6 +1147,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     generateFrameSp();
 
     (void)drawFrameBuf.releaseWriter();
+
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1179,6 +1255,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     m_contentAvLstExists = false;
     m_customPath = QString();
     m_customEquations = QString();
+    m_textareas = QString();
 
     while (!atEnd()) {
         readNext();
@@ -1263,12 +1340,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
-#if defined(XLSXXMLDRAWINGREADER_CPP)
-extern QString columnName(uint column);
-//extern int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43);
-//extern int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75);
-#endif
-
 #undef CURRENT_EL
 #define CURRENT_EL chart
 //! chart handler (Charting diagrams)
@@ -1299,8 +1370,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
             hasStart = true;
             if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                QString sheet = chart->m_sheetName.isEmpty() ? QString() : chart->m_sheetName + '.';
-                chartexport->m_endCellAddress = sheet + columnName(f.m_col) + QString::number(f.m_row);
+                chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
                 //chartexport->m_end_x = f.m_colOff;
                 //chartexport->m_end_y = f.m_rowOff;
                 chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
@@ -1924,10 +1994,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Update Automatic Numbering info
     //---------------------------------------------
     if (m_currentBulletProperties.m_type != MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
-        m_continueListNumbering[m_currentListLevel] = false;
+        QList<quint16> levels = m_continueListNumbering.keys();
+        for (quint16 i = 0; i < levels.size(); i++) {
+            if (levels[i] >= m_currentListLevel) {
+                m_continueListNumbering.remove(levels[i]);
+                m_lvlXmlIdMap.remove(levels[i]);
+            }
+        }
     }
-    if (m_prevListLevel > m_currentListLevel) {
-        m_continueListNumbering[m_prevListLevel] = false;
+    if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+        if (m_prevListLevel > m_currentListLevel) {
+            QList<quint16> levels = m_continueListNumbering.keys();
+            for (quint16 i = 0; i < levels.size(); i++) {
+                if (levels[i] > m_currentListLevel) {
+                    m_continueListNumbering.remove(levels[i]);
+                    m_lvlXmlIdMap.remove(levels[i]);
+                }
+            }
+        }
     }
 
     //---------------------------------------------
@@ -1967,12 +2051,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             body->startElement("text:list");
             body->addAttribute("text:style-name", listStyleName);
             m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
+
             //continue numbering if applicable
             if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
+
+                QString xmlId = QString("lvl%1").arg(m_currentListLevel);
+                xmlId.append(QString("_%1").arg(qrand()));
+                body->addAttribute("xml:id", xmlId);
+
                 if (m_continueListNumbering.contains(m_currentListLevel) &&
                     m_continueListNumbering[m_currentListLevel]) {
-                    body->addAttribute("text:continue-numbering", "true");
+                    body->addAttribute("text:continue-list", m_lvlXmlIdMap[m_currentListLevel]);
                 }
+                m_lvlXmlIdMap[m_currentListLevel] = xmlId;
             }
             body->startElement("text:list-item");
             for (int i = 1; i < m_currentListLevel; i++) {
@@ -2758,6 +2849,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
                 m_customPath = handler.handle_pathLst(this);
                 m_customEquations += handler.pathEquationsCreated();
             }
+            else if (name() == "rect") {
+                m_textareas = handler.handle_rect(this);
+            }
 
         }
     }
@@ -2819,8 +2913,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             ELSE_WRONG_FORMAT
         }
     }
-
-    kDebug() << "svg:x" << m_svgX << "svg:y" << m_svgY << "svg:width" << m_svgWidth << "svg:height" << m_svgHeight << "rotation" << m_rot;
 
     READ_EPILOGUE
 }

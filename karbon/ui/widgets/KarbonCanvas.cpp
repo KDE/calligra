@@ -224,9 +224,10 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
                 menu.addAction(action);
             }
             menu.exec(e->globalPos());
-            e->setAccepted(true);
         }
     }
+
+    e->setAccepted(true);
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)

@@ -69,17 +69,19 @@ public:
 
     void enableWidgets();
 
+    QSize sizeHint() const;
+
 signals:
     void changed( bool );
 
 public slots:
     void slotChanged();
-    void optionChanged( int id );
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
     void slotStartTimeChanged( const QDateTime &dt );
     void slotFinishTimeChanged( const QDateTime &dt );
+    void slotAddEntry();
     void slotEntryChanged();
     void slotSelectionChanged( const QItemSelection &sel );
 
@@ -122,6 +124,8 @@ public:
 protected:
     virtual QVariant actualEffort( int row, int role ) const;
 
+private:
+    bool m_calculate; // opens for calculating used-/remaining effort
 };
 
 }  //KPlatoWork namespace

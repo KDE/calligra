@@ -229,6 +229,7 @@ void TestTextFunctions::testSUBSTITUTE()
     CHECK_EVAL("SUBSTITUTE(\"\";\"\";\"ab\")", Value(""));
     CHECK_EVAL("SUBSTITUTE(\"Hello\"; \"H\"; \"J\"; 0)", Value::errorVALUE());
     CHECK_EVAL("SUBSTITUTE(\"Hello\"; \"H\"; \"J\"; 1)", Value("Jello"));
+    CHECK_EVAL("SUBSTITUTE(\"fo\"\"o\";\"o\";\"a\")", Value("fa\"a"));
 }
 
 void TestTextFunctions::testT()

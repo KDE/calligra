@@ -38,6 +38,7 @@
 #include <KoShapeLayer.h>
 
 #include <KoGenChanges.h>
+#include <changetracker/KoChangeTracker.h>
 #include <KoTextSharedSavingData.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoVariableManager.h>
@@ -213,6 +214,14 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoGenStyles mainStyles;
 
     KoGenChanges changes;
+
+    KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+
+    if (!changeTracker || !changeTracker->recordChanges()) {
+        changes.setTrackChanges(false);
+    } else {
+        changes.setTrackChanges(true);
+    }
 
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
 

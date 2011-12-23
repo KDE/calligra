@@ -31,8 +31,9 @@
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 
+#include "XlsxXmlDocumentReader.h"
+
 class XlsxXmlWorksheetReaderContext;
-class XlsxXmlDocumentReaderContext;
 class XlsxComments;
 class XlsxStyles;
 class XlsxImport;
@@ -107,10 +108,15 @@ protected:
 
 private:
     void init();
+    ///Column width measured as the number of characters of the maximum digit width of the
+    ///numbers 0, 1, 2,..., 9 as rendered in the normal style's font...
+    /// @return column width in cm
+    QString computeColumnWidth(qreal widthNumber) const;
+
+    QString processRowStyle(qreal height = -1.0);
 
     void showWarningAboutWorksheetSize();
     void saveColumnStyle(const QString& widthString);
-    QString processRowStyle(const QString& heightString = QString());
     void appendTableColumns(int columns, const QString& width = QString());
     void appendTableCells(int cells);
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
@@ -146,7 +152,8 @@ public:
         MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import,
         QMap<QString, QString> _oleReplacements,
-        QMap<QString, QString> _oleBeginFrames);
+        QMap<QString, QString> _oleBeginFrames,
+        QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters);
 
     virtual ~XlsxXmlWorksheetReaderContext();
 
@@ -167,22 +174,8 @@ public:
     QMap<QString, QString> oleReplacements;
     QMap<QString, QString> oleFrameBegins;
 
-    struct AutoFilterCondition {
-        QString field;
-        QString value;
-        QString opField;
-    };
-
-    struct AutoFilter {
-        QString type; // empty, -and, -or
-        QString area;
-        QString field;
-        QVector<AutoFilterCondition> filterConditions;
-    };
-
-    QVector<XlsxXmlWorksheetReaderContext::AutoFilter> autoFilters;
-
-    AutoFilterCondition currentFilterCondition;
+    XlsxXmlDocumentReaderContext::AutoFilterCondition currentFilterCondition;
+    QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters;
 
     bool firstRoundOfReading;
 

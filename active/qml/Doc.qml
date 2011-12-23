@@ -42,15 +42,15 @@ Item {
         }
     }
 
-    function toggleEdit() {
-        if (docFlickable.visible) {
-            docFlickable.visible = false;
-            canvas.z = 1
-        } else {
-            docFlickable.visible = true;
-            canvas.z = -1
-        }
-    }
+//     function toggleEdit() {
+//         if (docFlickable.visible) {
+//             docFlickable.visible = false;
+//             canvas.z = 1
+//         } else {
+//             docFlickable.visible = true;
+//             canvas.z = -1
+//         }
+//     }
 
     CanvasController {
         id: canvas
@@ -63,20 +63,31 @@ Item {
 
         Component.onCompleted: documentLoaded.connect(initToolbar)
         onDocumentLoaded: docRootRect.documentLoaded()
+
+        //searchString: findToolbar.searchString
     }
 
-    Button {
-        id: editModeButton
-        drawBackground: false
-        imageSource: "qrc:///images/document-edit.png"
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        height: 64
-        width: 64
-        z: 30
-
-        onClicked: toggleEdit();
-    }
+//     Button {
+//         id: editModeButton
+//         drawBackground: false
+//         imageSource: "qrc:///images/document-edit.png"
+//         anchors.left: parent.left
+//         anchors.bottom: parent.bottom
+//         height: 64
+//         width: 64
+//         z: 30
+// 
+//         onClicked: toggleEdit();
+//     }
+// 
+//     FindToolbar {
+//         id: findToolbar
+//         height: 32
+//
+//         anchors.left: parent.left
+//         anchors.right: parent.right
+//         anchors.bottom: parent.bottom
+//     }
 
     MouseArea {
         id: flickableMouseArea

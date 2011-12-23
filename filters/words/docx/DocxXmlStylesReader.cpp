@@ -193,6 +193,10 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
         m_currentTextStyle.addProperty("style:use-window-font-color", "true");
     }
 
+    if (!m_currentTextStyle.property("fo:font-size").isEmpty()) {
+        m_context->m_defaultFontSizePt = m_currentTextStyle.property("fo:font-size");
+    }
+
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     if (m_currentParagraphStyle.property("fo:line-height").isEmpty() &&
@@ -389,52 +393,52 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             else if (name() == "rPr") {
                 if (type == "table") {
                     m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
-                    m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                    if (m_currentStyleProperties == 0) {
-                        m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                    m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                    if (m_currentTableStyleProperties == 0) {
+                        m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                     }
                 }
                 TRY_READ(rPr)
                 if (type == "table") {
-                    m_currentStyleProperties->textStyle = m_currentTextStyle;
-                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
-                    m_currentStyleProperties = 0;
+                    m_currentTableStyleProperties->textStyle = m_currentTextStyle;
+                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
+                    m_currentTableStyleProperties = 0;
                 }
             }
             else if (name() == "pPr") {
                 if (type == "table") {
                     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
-                    m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                    if (m_currentStyleProperties == 0) {
-                        m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                    m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                    if (m_currentTableStyleProperties == 0) {
+                        m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                     }
                 }
                 TRY_READ(pPr)
                 if (type == "table") {
-                    m_currentStyleProperties->paragraphStyle = m_currentParagraphStyle;
-                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
-                    m_currentStyleProperties = 0;
+                    m_currentTableStyleProperties->paragraphStyle = m_currentParagraphStyle;
+                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
+                    m_currentTableStyleProperties = 0;
                 }
             }
             else if (name() == "tblPr") {
-                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                if (m_currentStyleProperties == 0) {
-                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentTableStyleProperties == 0) {
+                    m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 }
                 m_tableMainStyle = KoTblStyle::create();
                 TRY_READ(tblPr)
                 m_currentStyle->mainStyle = m_tableMainStyle;
-                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
-                m_currentStyleProperties = 0;
+                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
+                m_currentTableStyleProperties = 0;
             }
             else if (name() == "tcPr") {
-                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
-                if (m_currentStyleProperties == 0) {
-                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentTableStyleProperties == 0) {
+                    m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
                 }
                 TRY_READ(tcPr)
-                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
-                m_currentStyleProperties = 0;
+                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
+                m_currentTableStyleProperties = 0;
             }
             ELSE_TRY_READ_IF(tblStylePr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
@@ -502,7 +506,23 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
 #undef CURRENT_EL
 #define CURRENT_EL tblStylePr
-//! tbleStylePr (table style handler)
+//! tblStylePr  (Style Conditional Table Formatting Properties)
+/*! ECMA-376, 17.7.6.6, p.731
+
+  This element specifies a set of formatting properties which shall be
+  conditionally applied to the parts of a table which match the requirement
+  specified on the type attribute.
+
+  Parent elements:
+  - [done] style (§17.7.4.17)
+
+  Child elements:
+  - [done] pPr (Table Style Conditional Formatting Paragraph Properties) §17.7.6.1
+  - [done] rPr (Table Style Conditional Formatting Run Properties) §17.7.6.2
+  - [done] tblPr (Table Style Conditional Formatting Table Properties) §17.7.6.3
+  - [done] tcPr (Table Style Conditional Formatting Table Cell Properties) §17.7.6.8
+  - trPr (Table Style Conditional Formatting Table Row Properties) §17.7.6.10
+ */
 KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 {
     READ_PROLOGUE
@@ -510,7 +530,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 
     READ_ATTR(type)
 
-    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+    m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
@@ -521,60 +541,75 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
             TRY_READ_IF(tcPr)
             ELSE_TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(pPr)
+            ELSE_TRY_READ_IF(tblPr)
+            //TODO: Add trPr and test for regressions!
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    m_currentStyleProperties->textStyle = m_currentTextStyle;
-    m_currentStyleProperties->paragraphStyle = m_currentParagraphStyle;
+    m_currentTableStyleProperties->textStyle = m_currentTextStyle;
+    m_currentTableStyleProperties->paragraphStyle = m_currentParagraphStyle;
 
     if (type == "firstRow") {
-        // In docx predefined styles for first row, even though it may define insideV to be 0 and bottom
-        // border to have something, it in reality wishes insideV to also contain the bottom data
-        if (m_currentStyleProperties->insideH.innerPen.widthF() == 0) {
-            m_currentStyleProperties->insideH = m_currentStyleProperties->bottom;
+        // In docx predefined styles for first row, even though it may define
+        // insideV to be 0 and bottom border to have something, it in reality
+        // wishes insideV to also contain the bottom data
+//         if (m_currentTableStyleProperties->insideH.innerPen.widthF() == 0) {
+//             m_currentTableStyleProperties->insideH = m_currentTableStyleProperties->bottom;
+//         }
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
         }
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstRow, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstRow, m_currentTableStyleProperties);
     }
     else if (type == "lastRow") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastRow, m_currentStyleProperties);
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableRow;
+        }
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastRow, m_currentTableStyleProperties);
     }
     else if (type == "band1Horz") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band1Horizontal, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band1Horizontal, m_currentTableStyleProperties);
     }
     else if (type == "band2Horz") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Horizontal, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Horizontal, m_currentTableStyleProperties);
     }
     else if (type == "band1Vert") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band1Vertical, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band1Vertical, m_currentTableStyleProperties);
     }
     else if (type == "band2Vert") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Vertical, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::Band2Vertical, m_currentTableStyleProperties);
     }
     else if (type == "firstCol") {
-        if (m_currentStyleProperties->insideV.innerPen.widthF() == 0) {
-            m_currentStyleProperties->insideV = m_currentStyleProperties->right;
+//         if (m_currentTableStyleProperties->insideV.innerPen.widthF() == 0) {
+//             m_currentTableStyleProperties->insideV = m_currentTableStyleProperties->right;
+//         }
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
         }
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstCol, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::FirstCol, m_currentTableStyleProperties);
     }
     else if (type == "lastCol") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastCol, m_currentStyleProperties);
+        if (m_currentTableStyleProperties->target == MSOOXML::TableStyleProperties::Table) {
+            m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableColumn;
+        }
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::LastCol, m_currentTableStyleProperties);
     }
     else if (type == "nwCell") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NwCell, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NwCell, m_currentTableStyleProperties);
     }
     else if (type == "neCell") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NeCell, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::NeCell, m_currentTableStyleProperties);
     }
     else if (type == "swCell") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SwCell, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SwCell, m_currentTableStyleProperties);
     }
     else if (type == "seCell") {
-        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SeCell, m_currentStyleProperties);
+        m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::SeCell, m_currentTableStyleProperties);
     }
 
-    m_currentStyleProperties = 0;
+    m_currentTableStyleProperties = 0;
 
     READ_EPILOGUE
 }

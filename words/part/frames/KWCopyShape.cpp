@@ -91,11 +91,20 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
                 KWPage originalpage = m_pageManager->page(shape);
                 Q_ASSERT(originalpage.isValid());
                 KoTextLayoutRootArea *area = data->rootArea();
-                if (area)
+                bool wasBlockChanges = false;
+                if (area) {
+                    // We need to block documentChanged() signals emitted cause for example page-variables
+                    // may change there content to result in us marking root-areas dirty for relayout else
+                    // we could end in an infinite relayout ping-pong.
+                    wasBlockChanges = area->documentLayout()->changesBlocked();
+                    area->documentLayout()->setBlockChanges(true);
                     area->setPage(new KWPage(copypage));
+                }
                 shape->paint(painter, converter, paintcontext);
-                if (area)
+                if (area) {
                     area->setPage(new KWPage(originalpage));
+                    area->documentLayout()->setBlockChanges(wasBlockChanges);
+                }
             }
             painter.restore();
             if (shape->border()) {

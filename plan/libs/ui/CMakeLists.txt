@@ -24,6 +24,7 @@ include_directories(
 
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
 )
 
 #add_subdirectory( tests )
@@ -93,7 +94,7 @@ set(kplatoui_LIB_SRCS
     kptresourceassignmentview.cpp
     kptperformancetablewidget.cpp
     kptresourceallocationeditor.cpp
-
+    kptworkpackagemergedialog.cpp
     kptrecalculatedialog.cpp
 
     kpthtmlview.cpp
@@ -138,7 +139,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptresourceassignmentview.ui
     kpttaskstatusviewsettingspanel.ui
     kptperformancestatusviewsettingspanel.ui
-
+    kptworkpackagemergepanel.ui
     kptrecalculatedialog.ui
 
     locale/localemon.ui

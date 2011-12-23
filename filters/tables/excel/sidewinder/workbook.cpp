@@ -43,6 +43,7 @@ public:
     QList<QColor> colorTable;
     Version version;
     QMap<QByteArray, QString> pictureNames; // uid, filename
+    std::map<unsigned, FormatFont> fonts; // mapping from font index to Swinder::FormatFont
 };
 
 Workbook::Workbook(KoStore* store)
@@ -164,6 +165,20 @@ void Workbook::addFilterRange(unsigned sheet, const QRect& range)
     d->filterRanges[sheet].push_back(range);
 }
 
+void Workbook::addFilterRange(const QString &sheet, const QRect &range)
+{
+    int idx = -1;
+    for (unsigned i = 0; i < d->sheets.size(); i++) {
+        if (d->sheets[i]->name() == sheet) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx >= 0) {
+        addFilterRange(idx, range);
+    }
+}
+
 int Workbook::activeTab() const
 {
     return d->activeTab;
@@ -275,6 +290,16 @@ QColor Workbook::color(unsigned index) const
     }
 
     return color;
+}
+
+FormatFont Workbook::font(unsigned index) const
+{
+    return d->fonts[index];
+}
+
+void Workbook::setFont(unsigned index, const FormatFont &font)
+{
+    d->fonts[index] = font;
 }
 
 Workbook::Version Workbook::version() const

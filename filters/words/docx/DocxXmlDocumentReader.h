@@ -105,6 +105,9 @@ protected:
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_del();
+    KoFilter::ConversionStatus read_ins();
+    KoFilter::ConversionStatus read_delText();
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_ptab();
     KoFilter::ConversionStatus read_tabs();
@@ -155,6 +158,7 @@ protected:
     KoFilter::ConversionStatus read_bdr();
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
+    KoFilter::ConversionStatus read_tblPrEx();
     KoFilter::ConversionStatus read_tblGrid();
     KoFilter::ConversionStatus read_gridCol();
     KoFilter::ConversionStatus read_tr();
@@ -248,12 +252,12 @@ protected:
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
     KoTable* m_table;
-    QString m_currentTableStyle;
+    QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
-    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
     QString m_currentTableStyleBase;
 
@@ -365,6 +369,10 @@ private:
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
 
+    //processing the ins/del element (Inserted/Deleted Run Content)
+    enum ChangeTrackingState { InsertedRunContent, DeletedRunContent };
+    QStack<ChangeTrackingState> m_changeTrackingState;
+
     // ************************************************
     //  State
     // ************************************************
@@ -426,6 +434,8 @@ public:
     // The map contains abstractNumId of the abstract numbering definition that
     // is inherited by a numbering definition instance identified by numId (key).
     QMap<QString, QString> m_abstractNumIDs;
+
+    QString m_defaultFontSizePt;
 
 private:
 };

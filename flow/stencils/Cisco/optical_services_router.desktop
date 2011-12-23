@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Optical Services Router
 Name[bg]=Маршрутизатор за оптични услуги
-Name[ca]=Enrutador òptic de serveis
+Name[ca]=Encaminador òptic de serveis
 Name[el]=Δρομολογητής οπτικών υπηρεσιών
 Name[et]=Optiliste teenuste marsruuter
 Name[nb]=Ruter for optiske tjenester
@@ -10,6 +10,7 @@ Name[nl]=Services-router met glasvezel
 Name[pl]=Router usług optycznych
 Name[pt]=Encaminhamento Serviços Ópticos
 Name[pt_BR]=Roteador de serviços óticos
+Name[ru]=Маршрутизатор оптического транспорта
 Name[sv]=Optisk tjänstrouter
 Name[uk]=Маршрутизатор оптичних служб
 Name[x-test]=xxOptical Services Routerxx

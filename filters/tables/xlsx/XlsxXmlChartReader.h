@@ -51,8 +51,8 @@ public:
     XlsxXmlChartReader(KoOdfWriters *writers);
     virtual ~XlsxXmlChartReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
-    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString = QString());
-    QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, QString format);
+    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString = QString());
+    QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, KoGenStyle::Type formatType);
 protected:
     KoFilter::ConversionStatus read_txPr();
     KoFilter::ConversionStatus read_plotArea();
@@ -66,6 +66,7 @@ protected:
 
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
+    KoFilter::ConversionStatus read_ofPieChart();
     KoFilter::ConversionStatus read_doughnutChart();
     KoFilter::ConversionStatus read_areaChart();
     KoFilter::ConversionStatus read_area3DChart();
@@ -134,7 +135,6 @@ private:
     Charting::Series *m_currentSeries;
     Charting::ShapeProperties* m_currentShapeProperties;
     QString m_cellRangeAddress;
-    bool m_autoTitleDeleted;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
     bool m_serMarkerDefined;
