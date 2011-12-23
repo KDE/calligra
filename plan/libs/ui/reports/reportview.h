@@ -116,9 +116,6 @@ public slots:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
-    /// refresh display
-    void refresh();
-
     QMap<QString, QAbstractItemModel*> reportModels() const;
     void setReportModels( const QMap<QString, QAbstractItemModel*> &map );
 
@@ -128,6 +125,10 @@ public slots:
 
 signals:
     void editReportDesign( ReportView *view );
+
+public slots:
+    /// refresh display
+    void slotRefreshView();
 
 protected:
     void setupGui();

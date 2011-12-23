@@ -334,7 +334,7 @@ void RectStorage<T>::remove(const Region& region, const T& data)
     }
     const Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        // insert data
+        // remove data
         m_tree.remove((*it)->rect(), data);
         regionChanged((*it)->rect());
     }

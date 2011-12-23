@@ -53,14 +53,10 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_tblStylePr();
 
-    void createDefaultStyle(KoGenStyle::Type type, const char* family);
     QMap<QByteArray, KoGenStyle*> m_defaultStyles;
+    void createDefaultStyle(KoGenStyle::Type type, const char* family);
 
     QString m_name; //!< set by read_name()
-
-    // Styles which are applied to all styles
-    KoGenStyle m_defaultTextStyle;
-    KoGenStyle m_defaultParagraphStyle;
 
     MSOOXML::DrawingTableStyle* m_currentStyle;
 

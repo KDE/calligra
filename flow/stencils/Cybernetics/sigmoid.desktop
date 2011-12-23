@@ -2,11 +2,13 @@
 Name=sigmoid
 Name[ca]=sigmoid
 Name[el]=σιγμοειδής
+Name[it]=sigmoide
 Name[nb]=sigmoid
 Name[nl]=sigmoid
 Name[pl]=sigmoid
 Name[pt]=sigmóide
 Name[pt_BR]=sigmoide
+Name[ru]=Сигмовидная
 Name[sv]=sigmoid
 Name[uk]=Сігмоїд-характеристика
 Name[x-test]=xxsigmoidxx

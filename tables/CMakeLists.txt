@@ -364,6 +364,7 @@ install( FILES
     Sheet.h
     Style.h
     Value.h
+    ValueCalc.h
     ValueConverter.h
     ValueStorage.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)

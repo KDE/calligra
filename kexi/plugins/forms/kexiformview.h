@@ -195,9 +195,7 @@ protected:
         virtual void moveToFirstRecordRequested();
         virtual void addNewRecordRequested();*/
 
-    /*! Called after loading the form contents (before showing it).
-     Also called when the form window (KexiWindow) is detached
-     (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
+    /*! Called after loading the form contents (before showing it). */
     void updateTabStopsOrder();
 
     /*! @internal */

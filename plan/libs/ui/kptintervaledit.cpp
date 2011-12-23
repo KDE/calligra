@@ -63,7 +63,7 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
 
     intervalList->setRootIsDecorated( false );
     intervalList->setSortingEnabled( true );
-    intervalList->sortByColumn( 0, Qt::Ascending );
+    intervalList->sortByColumn( 0, Qt::AscendingOrder );
     
     bAddInterval->setIcon( KIcon( "list-add" ) );
     bRemoveInterval->setIcon( KIcon( "list-remove" ) );

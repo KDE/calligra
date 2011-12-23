@@ -37,7 +37,7 @@ public:
     CompareView(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, QWidget *parent = 0);
     virtual ~CompareView();
 
-    void update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2);
+    void update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, const QImage &forcedDeltaView);
 
     static QImage difference(const QImage &image1, const QImage &image2);
 

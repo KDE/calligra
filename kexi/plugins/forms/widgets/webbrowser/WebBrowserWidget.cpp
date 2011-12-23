@@ -75,10 +75,6 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
   
 };
   
-WebBrowserWidget::WebBrowserWidget()  
-{
-}
-
 WebBrowserWidget::~WebBrowserWidget()	
 {
 

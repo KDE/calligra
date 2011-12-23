@@ -87,11 +87,6 @@ Task::~Task() {
     while (!m_childProxyRelations.isEmpty()) {
         delete m_childProxyRelations.takeFirst();
     }
-    while (!m_schedules.isEmpty()) {
-        foreach (long k, m_schedules.uniqueKeys()) {
-            delete m_schedules.take(k);
-        }
-    }
 }
 
 int Task::type() const {
@@ -2968,7 +2963,7 @@ Duration Completion::actualEffort() const
     if ( m_entrymode == EnterEffortPerResource ) {
         foreach( const UsedEffort *ue, m_usedEffort ) {
             foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
-                eff += ue->actualEffortMap()[ d ]->effort();
+                eff += ue->actualEffortMap()[ d ].effort();
             }
         }
     } else if ( ! m_entries.isEmpty() ) {
@@ -2983,11 +2978,8 @@ Duration Completion::actualEffort( const Resource *resource, const QDate &date )
     if ( ue == 0 ) {
         return Duration::zeroDuration;
     }
-    UsedEffort::ActualEffort *ae = ue->effort( date );
-    if ( ae == 0 ) {
-        return Duration::zeroDuration;
-    }
-    return ae->effort();
+    UsedEffort::ActualEffort ae = ue->effort( date );
+    return ae.effort();
 }
 
 Duration Completion::actualEffort( const QDate &date ) const
@@ -2996,7 +2988,7 @@ Duration Completion::actualEffort( const QDate &date ) const
     if ( m_entrymode == EnterEffortPerResource ) {
         foreach( const UsedEffort *ue, m_usedEffort ) {
             if ( ue && ue->actualEffortMap().contains( date ) ) {
-                eff += ue->actualEffortMap().value( date )->effort();
+                eff += ue->actualEffortMap().value( date ).effort();
             }
         }
     } else {
@@ -3186,9 +3178,9 @@ double Completion::actualCost( const QDate &date ) const
         double nc = r->normalRate();
         double oc = r->overtimeRate();
         if ( m_usedEffort[ r ]->actualEffortMap().contains( date ) ) {
-            UsedEffort::ActualEffort *a = m_usedEffort[ r ]->effort( date );
-            c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
-            c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+            UsedEffort::ActualEffort a = m_usedEffort[ r ]->effort( date );
+            c += a.normalEffort().toDouble( Duration::Unit_h ) * nc;
+            c += a.overtimeEffort().toDouble( Duration::Unit_h ) * oc;
         }
     }
     return c;
@@ -3203,9 +3195,9 @@ double Completion::actualCost( const Resource *resource ) const
     double c = 0.0;
     double nc = resource->normalRate();
     double oc = resource->overtimeRate();
-    foreach ( const UsedEffort::ActualEffort *a, ue->actualEffortMap() ) {
-        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
-        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    foreach ( const UsedEffort::ActualEffort &a, ue->actualEffortMap() ) {
+        c += a.normalEffort().toDouble( Duration::Unit_h ) * nc;
+        c += a.overtimeEffort().toDouble( Duration::Unit_h ) * oc;
     }
     return c;
 }
@@ -3225,12 +3217,9 @@ double Completion::actualCost( const Resource *resource, const QDate &date ) con
     if ( ue == 0 ) {
         return 0.0;
     }
-    UsedEffort::ActualEffort *a = ue->actualEffortMap().value( date );
-    if ( a == 0 ) {
-        return 0.0;
-    }
-    double c = a->normalEffort().toDouble( Duration::Unit_h ) * resource->normalRate();
-    c += a->overtimeEffort().toDouble( Duration::Unit_h ) * resource->overtimeRate();
+    UsedEffort::ActualEffort a = ue->actualEffortMap().value( date );
+    double c = a.normalEffort().toDouble( Duration::Unit_h ) * resource->normalRate();
+    c += a.overtimeEffort().toDouble( Duration::Unit_h ) * resource->overtimeRate();
     return c;
 }
 
@@ -3241,49 +3230,44 @@ EffortCostMap Completion::actualEffortCost( long int id, KPlato::EffortCostCalcu
     if ( ! isStarted() ) {
         return map;
     }
-    QList< const QMap<QDate, UsedEffort::ActualEffort*>* > lst;
+    QList< QMap<QDate, UsedEffort::ActualEffort> > lst;
     QList< double > rate;
     QDate start, end;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         //kDebug()<<m_node->name()<<r->name();
-        const QMap<QDate, UsedEffort::ActualEffort*> &m = usedEffort( r )->actualEffortMap();
-        if ( m.isEmpty() ) {
+        lst << usedEffort( r )->actualEffortMap();
+        if ( lst.last().isEmpty() ) {
+            lst.takeLast();
             continue;
         }
         if ( r->type() == Resource::Type_Material ) {
             if ( type == ECCT_All ) {
-                lst.append( &m );
                 rate.append( r->normalRate() );
             } else if ( type == ECCT_EffortWork ) {
-                lst.append( &m );
                 rate.append( 0.0 );
             } else {
+                lst.takeLast();
                 continue;
             }
         } else {
-            lst.append( &m );
             rate.append( r->normalRate() );
         }
-        if ( ! start.isValid() || start > m.keys().first() ) {
-            start = m.keys().first();
+        if ( ! start.isValid() || start > lst.last().keys().first() ) {
+            start = lst.last().keys().first();
         }
-        if ( ! end.isValid() || end < m.keys().last() ) {
-            end = m.keys().last();
+        if ( ! end.isValid() || end < lst.last().keys().last() ) {
+            end = lst.last().keys().last();
         }
     }
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
             for ( int i = 0; i < lst.count(); ++i ) {
-                UsedEffort::ActualEffort *a = lst.at( i )->value( d );
-                if ( a == 0 ) {
-                    continue;
-                }
-                double nc = rate.at( i );
-                Duration eff = a->normalEffort();
+                UsedEffort::ActualEffort a = lst.at( i ).value( d );
+                double nc = rate.value( i );
+                Duration eff = a.normalEffort();
                 double cost = eff.toDouble( Duration::Unit_h ) * nc;
                 c.add( eff, cost );
-                //kDebug()<<m_node->name()<<d<<eff.toDouble(Duration::Unit_h)<<nc<<cost<<"->"<<c.effort().toDouble(Duration::Unit_h)<<c.cost();
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
@@ -3451,17 +3435,16 @@ Completion::UsedEffort::UsedEffort( const UsedEffort &e )
 
 Completion::UsedEffort::~UsedEffort()
 {
-    qDeleteAll( m_actual );
 }
 
 void Completion::UsedEffort::mergeEffort( const Completion::UsedEffort &value )
 {
     foreach ( const QDate &d, value.actualEffortMap().keys() ) {
-        setEffort( d, new ActualEffort( *( value.actualEffortMap()[ d ] ) ) );
+        setEffort( d, value.actualEffortMap()[ d ] );
     }
 }
 
-void Completion::UsedEffort::setEffort( const QDate &date, ActualEffort *value )
+void Completion::UsedEffort::setEffort( const QDate &date, const ActualEffort &value )
 {
     m_actual.insert( date, value );
 }
@@ -3473,7 +3456,7 @@ Duration Completion::UsedEffort::effortTo( const QDate &date ) const
         if ( d > date ) {
             break;
         }
-        eff += m_actual[ d ]->effort();
+        eff += m_actual[ d ].effort();
     }
     return eff;
 }
@@ -3481,8 +3464,8 @@ Duration Completion::UsedEffort::effortTo( const QDate &date ) const
 Duration Completion::UsedEffort::effort() const
 {
     Duration eff;
-    foreach ( const ActualEffort *e, m_actual ) {
-        eff += e->effort();
+    foreach ( const ActualEffort &e, m_actual ) {
+        eff += e.effort();
     }
     return eff;
 }
@@ -3500,9 +3483,9 @@ bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
             if (e.tagName() == "actual-effort") {
                 QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
                 if ( date.isValid() ) {
-                    ActualEffort *a = new ActualEffort();
-                    a->setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
-                    a->setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                    ActualEffort a;
+                    a.setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
+                    a.setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
                     setEffort( date, a );
                 }
             }
@@ -3517,13 +3500,10 @@ void Completion::UsedEffort::saveXML(QDomElement &element ) const
     }
     DateUsedEffortMap::ConstIterator i = m_actual.constBegin();
     for ( ; i != m_actual.constEnd(); ++i ) {
-        if ( i.value() == 0 ) {
-            continue;
-        }
         QDomElement el = element.ownerDocument().createElement("actual-effort");
         element.appendChild( el );
-        el.setAttribute( "overtime-effort", i.value()->overtimeEffort().toString() );
-        el.setAttribute( "normal-effort", i.value()->normalEffort().toString() );
+        el.setAttribute( "overtime-effort", i.value().overtimeEffort().toString() );
+        el.setAttribute( "normal-effort", i.value().normalEffort().toString() );
         el.setAttribute( "date", i.key().toString( Qt::ISODate ) );
     }
 }
@@ -3657,8 +3637,8 @@ void WorkPackage::clear()
 {
     //m_task = 0;
     m_manager = 0;
-    m_ownerName = QString();
-    m_ownerId = QString();
+    m_ownerName.clear();
+    m_ownerId.clear();
     m_transmitionStatus = TS_None;
     m_transmitionTime = DateTime();
     m_log.clear();
@@ -3672,7 +3652,6 @@ void WorkPackage::clear()
 WorkPackageSettings::WorkPackageSettings()
     : usedEffort( true ),
     progress( false ),
-    remainingEffort( false ),
     documents( true )
 {
 }
@@ -3683,7 +3662,6 @@ void WorkPackageSettings::saveXML( QDomElement &element ) const
     element.appendChild( el );
     el.setAttribute( "used-effort", usedEffort );
     el.setAttribute( "progress", progress );
-    el.setAttribute( "remaining-effort", remainingEffort );
     el.setAttribute( "documents", documents );
 }
 
@@ -3691,7 +3669,6 @@ bool WorkPackageSettings::loadXML( const KoXmlElement &element )
 {
     usedEffort = (bool)element.attribute( "used-effort" ).toInt();
     progress = (bool)element.attribute( "progress" ).toInt();
-    remainingEffort = (bool)element.attribute( "remaining-effort" ).toInt();
     documents = (bool)element.attribute( "documents" ).toInt();
     return true;
 }
@@ -3700,7 +3677,6 @@ bool WorkPackageSettings::operator==( const WorkPackageSettings &s ) const
 {
     return usedEffort == s.usedEffort &&
             progress == s.progress &&
-            remainingEffort == s.remainingEffort &&
             documents == s.documents;
 }
 
@@ -3739,10 +3715,17 @@ void Completion::printDebug(const QByteArray& _indent) const {
         qDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
     }
 }
-
 #endif
 
 
 }  //KPlato namespace
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug operator<<( QDebug dbg, const KPlato::Completion::UsedEffort::ActualEffort &ae )
+{
+    dbg << QString( "%1" ).arg( ae.normalEffort().toDouble( KPlato::Duration::Unit_h ), 1 );
+    return dbg;
+}
+#endif
 
 #include "kpttask.moc"

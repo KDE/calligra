@@ -503,7 +503,7 @@ void KexiDB::connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData&
 int KexiDB::rowCount(Connection &conn, const QString& sql)
 {
     int count = -1; //will be changed only on success of querySingleNumber()
-    QString selectSql(QString::fromLatin1("SELECT COUNT() FROM (") + sql + ")");
+    QString selectSql(QString::fromLatin1("SELECT COUNT() FROM (") + sql + ") AS kexidb__subquery");
     conn.querySingleNumber(selectSql, count);
     return count;
 }
@@ -534,7 +534,7 @@ int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
     int count = -1; //will be changed only on success of querySingleNumber()
     querySchema.connection()->querySingleNumber(
         QString::fromLatin1("SELECT COUNT(*) FROM (")
-        + querySchema.connection()->selectStatement(querySchema) + ")",
+        + querySchema.connection()->selectStatement(querySchema) + ") AS kexidb__subquery",
         count
     );
     return count;

@@ -364,8 +364,8 @@ public:
         // TODO: error checking
         writeTextInternal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writeTextInternal("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD words 1.3//EN\" "
-                          "\"http://www.calligra-suite.org/DTD/words-1.3.dtd\">");
-        writeTextInternal("<DOC xmlns=\"http://www.calligra-suite.org/DTD/words\" "
+                          "\"http://www.calligra.org/DTD/words-1.3.dtd\">");
+        writeTextInternal("<DOC xmlns=\"http://www.calligra.org/DTD/words\" "
                           "mime=\"application/x-words\" "
                           "syntaxVersion=\"3\" editor=\"Words\">");
 

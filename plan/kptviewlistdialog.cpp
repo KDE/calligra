@@ -53,6 +53,9 @@ ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *p
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
+
+    // HACK: the dialog does not resize to reasonable size
+    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListDialog::slotViewListItemRemoved( ViewListItem * )
@@ -93,10 +96,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "ResourceAppointmentsGanttView"
             << "AccountsView"
             << "ProjectStatusView"
-            << "PerformanceStatusView";
-    /* Deactivate for calligra 2.0
-            << "Tasks by Resources";
-    */
+            << "PerformanceStatusView"
+            << "ReportView";
     QStringList lst;
     lst << i18n( "Resource Editor" )
             << i18n( "Task Editor" )
@@ -114,10 +115,9 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Resource Assignments (Gantt)" )
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
-            << i18n( "Tasks Performance Chart" );
-    /* Deactivate for calligra 2.0
-            << i18n( "Tasks by Resources" );
-    */
+            << i18n( "Tasks Performance Chart" )
+            << i18n( "Report" );
+
     widget.viewtype->addItems( lst );
 
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
@@ -262,6 +262,9 @@ bool AddViewPanel::ok()
         case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
+        case 17: { // Report view
+            v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
         default:
             kError()<<"Unknown view type!";
             break;
@@ -294,6 +297,9 @@ ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewLi
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
+
+    // HACK: the dialog does not resize to reasonable size
+    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListEditViewDialog::slotViewListItemRemoved( ViewListItem * )
@@ -317,30 +323,31 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     widget.viewname->setText( item->text( 0 ) );
     widget.tooltip->setText( item->toolTip( 0 ) );
 
-    QList<ViewListItem*> lst = m_viewlist.categories();
-    if ( ! lst.isEmpty() ) {
-        int idx = 0;
-        for ( int i = 0; i < lst.count(); ++i ) {
-            ViewListItem *citem = lst[ i ];
-            widget.category->addItem( citem->text( 0 ), QVariant::fromValue( (void*)citem ) );
-            if ( citem == item->parent() ) {
-                idx = i;
-                fillAfter( citem );
-            }
-        }
-        widget.category->setCurrentIndex( idx );
+    foreach ( ViewListItem *item, m_viewlist.categories() ) {
+        m_categories.insert( item->text( 0 ), item );
     }
+    widget.category->addItems( m_categories.keys() );
+    ViewListItem *curr = m_viewlist.currentCategory();
+    if ( curr ) {
+        widget.category->setCurrentIndex( m_categories.values().indexOf( curr ) );
+    }
+    categoryChanged();
 
     connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
-    connect( widget.category, SIGNAL( currentIndexChanged( int ) ), SLOT( categoryChanged( int ) ) );
+    connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
 }
 
 bool EditViewPanel::ok()
 {
-    ViewListItem *cat = static_cast<ViewListItem*>( widget.category->itemData( widget.category->currentIndex() ).value<void*>() );
+    QString n = widget.category->currentText();
+    ViewListItem *curr = m_categories.value( n );
+    QString c = curr == 0 ? n : curr->tag();
+
+    ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
+        kWarning()<<"No category";
         return false;
     }
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
@@ -350,7 +357,7 @@ bool EditViewPanel::ok()
         m_item->setToolTip( 0, widget.tooltip->text() );
     }
     m_viewlist.removeViewListItem( m_item );
-    int index = widget.insertAfter->currentIndex();
+    int index = qMin( widget.insertAfter->currentIndex(), cat->childCount() );
     m_viewlist.addViewListItem( m_item, cat, index );
 
     return true;
@@ -362,30 +369,30 @@ void EditViewPanel::changed()
     emit enableButtonOk( ! disable );
 }
 
-void EditViewPanel::categoryChanged( int index )
+void EditViewPanel::categoryChanged()
 {
-    kDebug();
-    ViewListItem *cat = static_cast<ViewListItem*>( widget.category->itemData( index ).value<void*>() );
-    fillAfter( cat );
+    kDebug()<<widget.category->currentText();
+    fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void EditViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug();
+    kDebug()<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
-        int idx = 0;
+//        int idx = 0;
         for ( int i = 0; i < cat->childCount(); ++i ) {
             ViewListItem *itm = static_cast<ViewListItem*>( cat->child( i ) );
-            if ( m_item == itm ) {
-                idx = i;
-            } else {
-                widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
+            widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
+        }
+        if ( cat == m_viewlist.currentCategory() ) {
+            ViewListItem *v = m_viewlist.currentItem();
+            if ( v && v->type() != ViewListItem::ItemType_Category ) {
+                widget.insertAfter->setCurrentIndex( cat->indexOfChild( v ) + 1 );
             }
         }
-        widget.insertAfter->setCurrentIndex( idx );
     }
 }
 
@@ -407,6 +414,9 @@ ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
+
+    // HACK: the dialog does not resize to reasonable size
+    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListEditCategoryDialog::slotViewListItemRemoved( ViewListItem * )
@@ -442,13 +452,14 @@ bool EditCategoryPanel::ok()
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
         m_item->setText( 0, widget.viewname->text() );
     }
-    if ( widget.tooltip->text() == m_item->toolTip( 0 ) ) {
+    if ( widget.tooltip->text() != m_item->toolTip( 0 ) ) {
         m_item->setToolTip( 0, widget.tooltip->text() );
     }
+    bool ex = m_item->isExpanded();
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
     m_viewlist.addViewListItem( m_item, 0, index );
-
+    m_item->setExpanded( ex );
     return true;
 }
 
@@ -495,6 +506,9 @@ ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewli
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
+
+    // HACK: the dialog does not resize to reasonable size
+    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListReportsDialog::slotViewListItemRemoved( ViewListItem * )

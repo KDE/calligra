@@ -86,7 +86,7 @@ private slots:
     void testPRICEMAT();
     void testPV();
     void testPV_ANNUITY(); // no ODF test available
-//   void testRATE();       // to be implemented
+    void testRATE();
     void testRECEIVED();
     void testRRI();
     void testSLN();

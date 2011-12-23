@@ -2,11 +2,13 @@
 Name=vrelay
 Name[ca]=vrelay
 Name[el]=vrelay
+Name[it]=vrelay
 Name[nb]=rele loddr
 Name[nl]=vrelais
 Name[pl]=v_przkaźnik
 Name[pt]=relé-v
 Name[pt_BR]=relé-v
+Name[ru]=v-реле
 Name[sv]=vertikalt relä
 Name[uk]=Реле (вертикально)
 Name[x-test]=xxvrelayxx

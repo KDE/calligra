@@ -88,7 +88,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
         return;
 
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->dependencyManager()->depths();
+    QMap<Cell, int> depths = map->dependencyManager()->depths();
 
     // create the cell map ordered by depth
     QSet<Cell> cells;
@@ -103,7 +103,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
 void RecalcManager::Private::cellsToCalculate(Sheet* sheet)
 {
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->dependencyManager()->depths();
+    QMap<Cell, int> depths = map->dependencyManager()->depths();
 
     // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
     //              beginning with the top left; ending with the bottom right.
@@ -211,7 +211,11 @@ void RecalcManager::addSheet(Sheet *sheet)
 {
     // Manages also the revival of a deleted sheet.
     Q_UNUSED(sheet);
-    recalcMap(); // FIXME Stefan: Implement a more elegant solution.
+
+    // sebsauer: not recalc everytime on loading - bug 284325
+    if (!d->map->isLoading()) {
+        recalcMap(); // FIXME Stefan: Implement a more elegant solution.
+    }
 }
 
 void RecalcManager::removeSheet(Sheet *sheet)

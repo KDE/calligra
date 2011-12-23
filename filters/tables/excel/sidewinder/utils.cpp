@@ -27,6 +27,43 @@
 namespace Swinder
 {
 
+// Returns A for 1, B for 2, C for 3, etc.
+QString columnName(uint column)
+{
+    QString s;
+    unsigned digits = 1;
+    unsigned offset = 0;
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+        offset += limit;
+    for (unsigned col = column - offset; digits; --digits, col /= 26)
+        s.prepend(QChar('A' + (col % 26)));
+    return s;
+}
+
+QString encodeSheetName(const QString& name)
+{
+    QString sheetName = name;
+    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    return sheetName;
+}
+
+QString encodeAddress(const QString& sheetName, uint column, uint row)
+{
+    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
+}
+
+QString encodeAddress(const QString& sheetName, const QRect &rect)
+{
+    int startColumn = rect.left();
+    int startRow = rect.top();
+    int endColumn = rect.right();
+    int endRow = rect.bottom();
+    if (rect.width() == 1 && rect.height() == 1)
+        return encodeAddress(sheetName, startColumn, startRow);
+    return QString("%1.%2%3:%4%5").arg(encodeSheetName(sheetName)).arg(columnName(startColumn)).arg(startRow+1).arg(columnName(endColumn)).arg(endRow+1);
+}
+
 QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);

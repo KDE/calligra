@@ -49,6 +49,21 @@ public:
     const XlsxComments* comments;
     const XlsxStyles* styles;
     QString file, path;
+
+    struct AutoFilterCondition {
+        QString field;
+        QString value;
+        QString opField;
+    };
+
+    struct AutoFilter {
+        QString type; // empty, -and, -or
+        QString area;
+        QString field;
+        QVector<AutoFilterCondition> filterConditions;
+    };
+
+    QVector<XlsxXmlDocumentReaderContext::AutoFilter> autoFilters;
 };
 
 //! A class reading MSOOXML XLSX markup - workbook.xml part.

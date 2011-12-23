@@ -29,8 +29,6 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
 )
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 add_subdirectory( libs )
 
 add_subdirectory( templates )
@@ -73,7 +71,6 @@ set(planprivate_LIB_SRCS
 
     about/aboutpage.cpp
 
-    kptpackage.cpp
     KPlatoXmlLoader.cpp
 )
 
@@ -93,7 +90,7 @@ kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
+target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} komain)
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

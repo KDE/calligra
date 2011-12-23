@@ -150,7 +150,8 @@ KexiContextMessageWidget::KexiContextMessageWidget(
  : KMessageWidget()
  , d(new Private)
 {
-    init(0, layout, context, KexiContextMessage(message));
+    KexiContextMessage contextMessage(message);
+    init(0, layout, context, contextMessage);
 }
 
 void KexiContextMessageWidget::init(

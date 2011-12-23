@@ -801,6 +801,14 @@
 </record>
 
 <record name="AttachedLabel" id="0x100c">
+  <field name="fShowValue" type="bool" size="1" />
+  <field name="fShowPercent" type="bool" size="1" />
+  <field name="fShowLabelAndPerc" type="bool" size="1" />
+  <field name="unused" type="unsigned" size="1" />
+  <field name="fShowLabel" type="bool" size="1" />
+  <field name="fShowBubbleSizes" type="bool" size="1" />
+  <field name="fShowSeriesName" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="9" />
 </record>
 
 <record name="ChartFormat" id="0x1014">
@@ -830,6 +838,10 @@
 </record>
 
 <record name="SeriesList" id="0x1016">
+  <field name="cser" type="unsigned" size="16" />
+  <array length="cser">
+    <field name="rgiser" type="unsigned" size="16" />
+  </array>
 </record>
 
 <record name="Bar" id="0x1017">
@@ -1044,6 +1056,7 @@
 </record>
 
 <record name="AxisParent" id="0x1041">
+  <field name="iax" type="unsigned" size="16" />
 </record>
 
 <record name="LegendException" id="0x1043">
@@ -1065,6 +1078,7 @@
 </record>
 
 <record name="AxesUsed" id="0x1046">
+  <field name="cAxes" type="unsigned"   size="16" />
 </record>
 
 
@@ -1475,6 +1489,10 @@
 <record name="CompressPictures" id="0x089b">
 </record>
 
+<record name="FilterMode" id="0x009b">
+  <!-- empty record -->
+</record>
+
 <record name="AutoFilter" id="0x009e">
   <field name="entry"           type="unsigned" size="16" />
   <field name="join"            type="unsigned" size="2">
@@ -1490,6 +1508,55 @@
   </field>
   <field name="topPercentage"   type="bool"     size="1" />
   <field name="topNCount"       type="unsigned" size="9" />
+
+  <array length="2">
+    <field name="valueType"     type="unsigned" size="8">
+      <enum name="UndefinedType"    value="0x00" />
+      <enum name="RkNumber"         value="0x02" />
+      <enum name="XNumber"          value="0x04" />
+      <enum name="String"           value="0x06" />
+      <enum name="BoolErr"          value="0x08" />
+      <enum name="Blanks"           value="0x0c" />
+      <enum name="NonBlanks"        value="0x0e" />
+    </field>
+    <field name="operation"     type="unsigned" size="8">
+      <enum name="Less"     value="1" />
+      <enum name="Equal"    value="2" />
+      <enum name="LEqual"   value="3" />
+      <enum name="Greater"  value="4" />
+      <enum name="NotEqual" value="5" />
+      <enum name="GEqual"   value="6" />
+    </field>
+    <choose>
+      <option predicate="valueType(i) == RkNumber">
+        <field name="rkValue"   type="unsigned" size="32" />
+        <field name="reserved"                  size="32" />
+      </option>
+      <option predicate="valueType(i) == XNumber">
+        <field name="floatValue"type="float" size="64" />
+      </option>
+      <option predicate="valueType(i) == String">
+        <field name="reserved"                  size="32"/>
+        <field name="charCount" type="unsigned" size="8" />
+        <field name="fCompare"  type="bool"     size="8" />
+        <field name="reserved"                  size="16" />
+      </option>
+      <option predicate="valueType(i) == BoolErr">
+        <field name="boolErrValue"  type="unsigned" size="8" />
+        <field name="isError"       type="bool"     size="8" />
+        <field name="reserved"                      size="48" />
+      </option>
+      <option>
+        <field name="value"     type="blob" size="64" />
+      </option>
+    </choose>
+  </array>
+
+  <array length="2">
+    <if predicate="valueType(i) == String">
+      <field name="string" type="unicodestring" length="charCount(i)" />
+    </if>
+  </array>
 </record>
 
 <record name="AutoFilter12" id="0x087e">

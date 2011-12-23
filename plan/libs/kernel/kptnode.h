@@ -496,6 +496,10 @@ public:
     
     const Documents &documents() const { return m_documents; }
     Documents &documents() { return m_documents; }
+
+    virtual void emitDocumentAdded( Node *node, Document *doc, int idx );
+    virtual void emitDocumentRemoved( Node *node, Document *doc, int idx );
+    virtual void emitDocumentChanged( Node *node, Document *doc, int idx );
     
 public:
     // These shouldn't be available to other than those who inherits
@@ -575,7 +579,7 @@ public:
     
     virtual void changed() { changed( this ); }
     Duration getmDurationForward(){ return this->m_durationForward;}
-    
+
 public slots:
     void slotStandardWorktimeChanged( StandardWorktime* );
 

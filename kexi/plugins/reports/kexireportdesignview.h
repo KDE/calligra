@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
-* Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2007-2009 by Adam Pigg <adam@piggz.co.uk>
+* Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -43,6 +44,9 @@ public:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
     void triggerAction(const QString &);
+
+signals:
+    void itemInserted(const QString& entity);
 
 private:
     KoReportDesigner *m_reportDesigner;

@@ -15,6 +15,7 @@ Name[ru]=Компонент векторных рисунков Calligra
 Name[sv]=Calligra skalbar grafikkomponent
 Name[uk]=Компонент векторної графіки Calligra
 Name[x-test]=xxCalligra Scalable Graphics Componentxx
+Name[zh_CN]=Calligra 可缩放图像组件
 Name[zh_TW]=Calligra 可縮放圖片元件
 X-KDE-Library=karbonpart
 MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;

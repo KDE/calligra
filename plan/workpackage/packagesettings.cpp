@@ -62,7 +62,6 @@ PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
 
     connect( ui_usedEffort, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
     connect( ui_progress, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
-    connect( ui_remainingEffort, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
     connect( ui_documents, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
 }
 
@@ -85,7 +84,6 @@ WorkPackageSettings PackageSettingsPanel::settings() const
     WorkPackageSettings s;
     s.usedEffort = ui_usedEffort->checkState() == Qt::Checked;
     s.progress = ui_progress->checkState() == Qt::Checked;
-    s.remainingEffort = ui_remainingEffort->checkState() == Qt::Checked;
     s.documents = ui_documents->checkState() == Qt::Checked;
     return s;
 }
@@ -94,7 +92,6 @@ void PackageSettingsPanel::setSettings( const WorkPackageSettings &s )
 {
     ui_usedEffort->setCheckState( s.usedEffort ? Qt::Checked : Qt::Unchecked );
     ui_progress->setCheckState( s.progress ? Qt::Checked : Qt::Unchecked );
-    ui_remainingEffort->setCheckState( s.remainingEffort ? Qt::Checked : Qt::Unchecked );
     ui_documents->setCheckState( s.documents ? Qt::Checked : Qt::Unchecked );
 }
 

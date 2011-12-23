@@ -2,10 +2,12 @@
 Name=source voltage
 Name[ca]=font de voltatge
 Name[el]=τάση πηγής
+Name[it]=sorgente di tensione
 Name[nb]=kildespenning
 Name[pl]=napięcie źródłowe
 Name[pt]=tensão fonte
 Name[pt_BR]=tensão de fonte
+Name[ru]=Источник напряжения
 Name[sv]=källa spänning
 Name[uk]=Джерело напруги
 Name[x-test]=xxsource voltagexx

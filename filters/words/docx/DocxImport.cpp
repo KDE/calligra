@@ -196,17 +196,24 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     reportProgress(15);
 
-    // Main document context, to which we collect footnotes, endnotes, comments, numbering, tablestyles
+    // Main document context, to which we collect footnotes, endnotes,
+    // comments, numbering, tablestyles
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
 
     // 3. parse styles
     {
-        // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
+        // get styles path from document's relationships, not from content
+        // types; typically returns /word/styles.xml
+        //
         // ECMA-376, 11.3.12 Style Definitions Part, p. 65
-        // An instance of this part type contains the definition for a set of styles used by this document.
-        // A package shall contain at most two Style Definitions parts. One instance of that part shall be
-        // the target of an implicit relationship from the Main Document (§11.3.10) part, and the other shall
-        // be the target of an implicit relationship in from the Glossary Document (§11.3.8) part.
+        //
+        // An instance of this part type contains the definition for a set of
+        // styles used by this document.  A package shall contain at most two
+        // Style Definitions parts.  One instance of that part shall be the
+        // target of an implicit relationship from the Main Document (§11.3.10)
+        // part, and the other shall be the target of an implicit relationship
+        // in from the Glossary Document (§11.3.8) part.
+
         const QString stylesPathAndFile(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/styles"));
         DocxXmlStylesReader stylesReader(writers);
@@ -219,6 +226,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 stylesPathAndFile, &stylesReader, writers, errorMessage, &context) )
 
             mainContext.m_tableStyles = context.m_tableStyles;
+            mainContext.m_namedDefaultStyles = context.m_namedDefaultStyles;
+            mainContext.m_defaultFontSizePt = context.m_defaultFontSizePt;
         }
     }
 
@@ -237,11 +246,12 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             numberingPathAndFile, &numberingReader, writers, errorMessage, &numberingContext) )
     }
     mainContext.m_bulletStyles = numberingContext.m_bulletStyles;
+    mainContext.m_abstractNumIDs = numberingContext.m_abstractNumIDs;
 
     reportProgress(30);
 
-    // 5. parse footnotes
     {
+	// 5. parse footnotes
         const QString footnotePathAndFile(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/footnotes"));
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
@@ -252,15 +262,16 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, footnotePath, footnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
+            context.m_abstractNumIDs = mainContext.m_abstractNumIDs;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
             mainContext.m_footnotes = context.m_footnotes;
         }
+        reportProgress(35);
 
-    reportProgress(35);
-
-    // 6. parse comments
+        // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
         DocxXmlCommentReader commentReader(writers);
@@ -270,17 +281,18 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, commentPath, commentFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            //TODO: m_abstractNumIDs and m_namedDefaultStyles might be needed
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
             mainContext.m_comments = context.m_comments;
         }
 
-    reportProgress(40);
+        reportProgress(40);
 
-    // 7. parse endnotes
+        // 7. parse endnotes
         const QString endnotePathAndFile(relationships->targetForType(documentPath, documentFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/endnotes"));
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/endnotes"));
         DocxXmlEndnoteReader endnoteReader(writers);
         if (!endnotePathAndFile.isEmpty()) {
             QString endnotePath, endnoteFile;
@@ -288,22 +300,22 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             DocxXmlDocumentReaderContext context(*this, endnotePath, endnoteFile, *relationships, &themes);
             context.m_tableStyles = mainContext.m_tableStyles;
             context.m_bulletStyles = mainContext.m_bulletStyles;
+            context.m_namedDefaultStyles = mainContext.m_namedDefaultStyles;
+            context.m_abstractNumIDs = mainContext.m_abstractNumIDs;
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )
             mainContext.m_endnotes = context.m_endnotes;
         }
+        reportProgress(45);
 
-    reportProgress(45);
-
-    // 8. parse document
+        // 8. parse document
+        // Some of the templates MIGHT be defined in numberingreader.
         DocxXmlDocumentReader documentReader(writers);
-        // It is possible that some of the templates are defined in numberingreader
-        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;;
+        documentReader.m_definedShapeTypes = numberingReader.m_definedShapeTypes;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
-
     reportProgress(100);
 
     return KoFilter::OK;

@@ -18,9 +18,10 @@
 */
 
 #include "kptdocuments.h"
-#include "KoXmlReader.h"
+#include "kptnode.h"
 #include "kptxmlloaderobject.h"
 
+#include "KoXmlReader.h"
 #include <KoStore.h>
 
 #include "qdom.h"
@@ -33,16 +34,18 @@ namespace KPlato
 Document::Document()
     : m_type( Type_None ),
     m_url( KUrl() ),
-    m_sendAs( SendAs_None )
+    m_sendAs( SendAs_None ),
+    parent ( 0 )
 {
     //kDebug()<<this;
 }
 
 Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
     : m_type( type ),
-    m_url( url ),
-    m_sendAs( sendAs )
+    m_sendAs( sendAs ),
+    parent ( 0 )
 {
+    setUrl( url );
     //kDebug()<<this;
 }
 
@@ -53,7 +56,8 @@ Document::~Document()
 
 bool Document::operator==( const Document &doc ) const
 {
-    bool res = ( m_url == doc.url() && 
+    bool res = ( m_url == doc.url() &&
+                 m_name == doc.m_name &&
                  m_type == doc.type() && 
                  m_status == doc.status() &&
                  m_sendAs == doc.sendAs() 
@@ -63,7 +67,7 @@ bool Document::operator==( const Document &doc ) const
 
 bool Document::isValid() const
 {
-    return m_url.url().isEmpty();
+    return m_url.isValid();
 }
 
 QStringList Document::typeList( bool trans )
@@ -92,10 +96,64 @@ QString Document::sendAsToString( Document::SendAs snd, bool trans )
     return sendAsList( trans ).at( snd );
 }
 
+void Document::setName( const QString &name )
+{
+    if ( m_name != name ) {
+        m_name = name;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setType( Type type )
+{
+    if ( type != m_type ) {
+        m_type = type;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setSendAs( SendAs snd )
+{
+    if ( m_sendAs != snd ) {
+        m_sendAs = snd;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setUrl( const KUrl &url )
+{
+    if ( m_url != url ) {
+        m_url = url;
+        if ( m_name.isEmpty() ) {
+            m_name = url.fileName();
+        }
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
+void Document::setStatus( const QString &sts )
+{
+    if ( m_status != sts ) {
+        m_status = sts;
+        if ( parent ) {
+            parent->documentChanged( this );
+        }
+    }
+}
+
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
     m_url = KUrl( element.attribute( "url" ) );
+    m_name = element.attribute( "name", m_url.fileName() );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );
     m_sendAs = ( SendAs )( element.attribute( "sendas" ).toInt() );
@@ -105,6 +163,7 @@ bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 void Document::save(QDomElement &element) const
 {
     element.setAttribute("url", m_url.url() );
+    element.setAttribute("name", m_name );
     element.setAttribute("type", m_type );
     element.setAttribute("status", m_status );
     element.setAttribute("sendas", m_sendAs );
@@ -112,11 +171,13 @@ void Document::save(QDomElement &element) const
 
 //----------------
 Documents::Documents()
+    : node( 0 )
 {
     //kDebug()<<this;
 }
 
 Documents::Documents( const Documents &docs )
+    : node( 0 )
 {
     //kDebug()<<this;
     foreach ( Document *doc, docs.documents() ) {
@@ -155,17 +216,28 @@ void Documents::addDocument( Document *doc )
 {
     Q_ASSERT( doc );
     m_docs.append( doc );
+    doc->parent = this;
+    if ( node ) {
+        node->emitDocumentAdded( node, doc, m_docs.count() - 1 );
+    }
 }
 
 void Documents::addDocument( const KUrl &url, Document::Type type )
 {
-    m_docs.append( new Document( url, type ) );
+    addDocument( new Document( url, type ) );
 }
 
 Document *Documents::takeDocument( int index )
 {
     if ( index >= 0 && index < m_docs.count() ) {
-        return m_docs.takeAt( index );
+        Document *doc = m_docs.takeAt( index );
+        if ( doc ) {
+            doc->parent = 0;
+            if ( node ) {
+                node->emitDocumentRemoved( node, doc, index );
+            }
+        }
+        return doc;
     }
     return 0;
 }
@@ -173,7 +245,16 @@ Document *Documents::takeDocument( int index )
 Document *Documents::takeDocument( Document *doc )
 {
     Q_ASSERT( m_docs.contains( doc ) );
-    return takeDocument( m_docs.indexOf( doc ) );
+    int idx = m_docs.indexOf( doc );
+    if ( idx >= 0 ) {
+        takeDocument( idx );
+        doc->parent = 0;
+        if ( node ) {
+            node->emitDocumentRemoved( node, doc, idx );
+        }
+        return doc;
+    }
+    return 0;
 }
 
 Document *Documents::findDocument( const Document *doc ) const
@@ -241,6 +322,13 @@ void Documents::saveToStore( KoStore *store ) const
             store->addLocalFile( path, doc->url().fileName() );
 
         }
+    }
+}
+
+void Documents::documentChanged( Document *doc )
+{
+    if ( node ) {
+        node->emitDocumentChanged( node, doc, indexOf( doc ) );
     }
 }
 

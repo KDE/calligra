@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,7 +59,10 @@ public:
 
     QModelIndex addRow();
     QMap<QString, const Resource*> freeResources() const;
-    
+
+    void setReadOnly( bool ro ) { m_readonly = ro; }
+    bool readOnly() const { return m_readonly; }
+
 signals:
     void rowInserted( const QModelIndex& );
     void changed();
@@ -75,6 +78,7 @@ private:
     QStringList m_headers;
     QList<const Resource*> m_resourcelist;
     QMap<QString, const Resource*> m_editlist;
+    bool m_readonly;
 };
 
 class KPLATOUI_EXPORT UsedEffortEditor : public QTableView
@@ -88,7 +92,9 @@ public:
     void addResource();
     
     bool hasFreeResources() const;
-    
+
+    UsedEffortItemModel *model() const { return static_cast<UsedEffortItemModel*>( QTableView::model() ); }
+
 signals:
     void changed();
     void resourceAdded();
@@ -102,7 +108,15 @@ class KPLATOUI_EXPORT CompletionEntryItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    CompletionEntryItemModel( QWidget *parent );
+    enum Properties {
+            Property_Date,            /// Date of entry
+            Property_Completion,      /// % Completed
+            Property_UsedEffort,      /// Used Effort
+            Property_RemainingEffort, /// Remaining Effort
+            Property_PlannedEffort    /// Planned Effort
+    };
+
+    CompletionEntryItemModel( QObject *parent = 0 );
     
     void setTask( Task *t );
     
@@ -123,12 +137,14 @@ public:
     QModelIndex addRow();
     void removeRow( int row );
 
+    /// These falgs are in addition to flags return from QAbstractItemModel::flags()
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
     
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
 
 signals:
     void rowInserted( const QDate& );
+    void rowRemoved( const QDate& );
     void changed();
     
 public slots:
@@ -141,7 +157,7 @@ protected:
     QVariant date ( int row, int role = Qt::DisplayRole ) const;
     QVariant percentFinished ( int row, int role ) const;
     QVariant remainingEffort ( int row, int role ) const;
-    QVariant actualEffort ( int row, int role ) const;
+    virtual QVariant actualEffort ( int row, int role ) const;
     QVariant plannedEffort ( int row, int role ) const;
 
     void removeEntry( const QDate date );
@@ -150,7 +166,7 @@ protected:
     
     QList<qint64> scales() const;
     
-private:
+protected:
     Task *m_node;
     Project *m_project;
     ScheduleManager *m_manager;
@@ -158,7 +174,7 @@ private:
     QList<QDate> m_dates;
     QStringList m_headers;
     QList<QDate> m_datelist;
-    Qt::ItemFlags m_flags[5];
+    QList<Qt::ItemFlags> m_flags;
 };
 
 class KPLATOUI_EXPORT CompletionEntryEditor : public QTableView
@@ -169,10 +185,12 @@ public:
     void setCompletion( Completion *completion );
     
     CompletionEntryItemModel *model() const { return static_cast<CompletionEntryItemModel*>( QTableView::model() ); }
+    void setCompletionModel( CompletionEntryItemModel *m );
 
 signals:
     void changed();
     void rowInserted( const QDate );
+    void rowRemoved( const QDate );
     void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:

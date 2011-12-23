@@ -39,7 +39,7 @@ TODO Form editor:
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - clicking too many time on undo CRASHES
  - fix syncing form geometry with properties in the propeditor
- - show Spring element and autofield widget for 2.3
+ - show Spring element and autofield widget
  - disable 'assign action' when no button is selected
  - port 'assign action' dialog to QColumnView
  - disable mouse-over highlighting effect for buttons and check boxes
@@ -92,7 +92,8 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-STARTUP
+TODO:
+Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
 ===================== Kexi 2.4  =====================
@@ -102,7 +103,114 @@ TODO:
 *Add Ctrl+Return shortcut to opening in design mode from navigator
 *Add Ctrl+Shift+Return shortcut to opening in texts mode from navigator
 
+TODO:
+Startup
+*before opening check if database has been already opened and if so, activate the window instead of opening second instance; D-Bus iface needed
+*inform other instances of Kexi that database was opened so they can update last-modified property of the Recently opened projects; D-Bus iface needed
+
+TODO: go with FF implementation:
+http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
+TODO: use right-hand tab button for window list as in FF
+
+
+TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
+
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+TODO: Widgets [code] fix memory leak introduced in KexiFieldComboBox::setTableOrQuery()
+
+TODO: kexidb collation: Add Alphanum collation (code at http://www.davekoelle.com/alphanum.html)
+TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::localeAwareCompare; http://labs.qt.nokia.com/2011/06/14/string-collation-with-locales/
+*ICU enabled in libsqlite3 on debian in 3.6.11-1 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=494987 but then disabled in 3.6.14.2-1
+
+2011-12-16..20
+KexiDB
+*Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+BUG:278411
+TODO: port to Predicate
+
+2011-12-14
+General
+*Fix crash when loading kexi part information without main window
+**detected by tests/newapi
+Core
+*remove memory leak in code opening project
+KexiDB
+*avoid 'invalid read' in code for inserting records into tables
+TODO: port to Predicate
+
+2011-12-10..11
+General
+*[code] fix KexiUtils::replaceColors()
+Table View
+*Make Kexi obey color scheme selection for KDE
+**Table view color support improved for dark schemes
+CCBUG:279694
+Main Window
+*Add Calligra branding to the Kexi Menu
+**Clicking on the logo opens the calligra.org web site
+*Make menu and logo look OK for black color schemes
+Forms
+*Do not create inline editing command when inserting, this fixes possible crash in undo/redo
+*[code] Fix connection to inlineEditorDeleted()
+TODO: clicking on form should exit from inline editing mode
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 5 (2.3.85) ~~~~~~~~~~~~~~~~
+
+2011-12-07
+General
+*[code] properly delete Kexi's "about data" structure, simplify the API, remove CUSTOM version ifdefs
+Query Designer
+*Fix crash when selecting sort order in a query field
+**[code] Properly update current row pointer after row insert
+*Fix crash when selecting sort order without query field specified
+BUG:255304
+*[code] Split KexiQueryDesignerGuiEditor::slotBeforeCellChanged to functions per column
+
+2011-12-02
+General
+*fix build with gcc 4.2.1 under OpenBSD
+BUG:288085
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:283888
+*After inserting element, respective toolbox action is deselected
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:285583
+*After inserting element, respective toolbox action is deselected
+
+2011-11-27..29
+Main Window
+*set close buttons on view tabs always visible
+*remove main area borders for cleaner GUI
+*remove MainWindow.HoverCloseButtonForTabs setting
+*[code] remove old code related to KDE3's KMDI
+*[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
+
+2011-11-26
+Startup
+*Do not display connection dialog when opening .kexis file that define database name
+*Welcome view: when clicked on a database open it in a new Kexi instance if another database is already opened in the current instance
+
+2011-11-23..24
+Startup
+*Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
+Main Window
+BUG:282651
+*fix build of search line edit for msvc
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~
+
+2011-11-16
+Widgets
+*QCommandLinkButton have fonts size hardcoded what breaks accessibility
+**Reported at https://bugreports.qt.nokia.com/browse/QTBUG-3255 but still not fixed
+**Resolved by forking the class because no workaround is possible
 
 2011-11-02..06
 Forms
@@ -152,11 +260,6 @@ Documentation
 2011-10-12
 Main Window
 *Simplified background below menu to make it flicker less
-
-2011-10-11
-Code
-*[code] Moved kexi/migration/spreadsheet/ plugin to plugins/kexi/ as it also depends on Tables
-*[code] Moved kexi/shapes/ to kexi/plugins/shapes/ to simplify dir structure
 
 2011-10-12
 Main Window
@@ -1639,7 +1742,7 @@ Forms
 --added static self()
 --is initialized by KexiFormPart
 -See Also:
- http://wiki.calligra-suite.org/index.php?title=Kexi/Porting#Forms_Refactoring
+ http://wiki.calligra.org/index.php?title=Kexi/Porting#Forms_Refactoring
 
 2009-01-11
 KexiDB

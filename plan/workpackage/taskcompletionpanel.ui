@@ -7,9 +7,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
-    <height>272</height>
+    <width>620</width>
+    <height>267</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
@@ -71,30 +77,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Edit Mode:</string>
-        </property>
-        <property name="buddy">
-         <cstring>editmode</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="KComboBox" name="editmode">
-        <item>
-         <property name="text">
-          <string>Calculate</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Manual entry</string>
-         </property>
-        </item>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -134,17 +116,15 @@
      <property name="tabKeyNavigation">
       <bool>false</bool>
      </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
   <customwidget>
    <class>KPlato::CompletionEntryEditor</class>
    <extends>QTableView</extends>
@@ -156,7 +136,6 @@
   <tabstop>startTime</tabstop>
   <tabstop>finished</tabstop>
   <tabstop>finishTime</tabstop>
-  <tabstop>editmode</tabstop>
   <tabstop>addEntryBtn</tabstop>
   <tabstop>removeEntryBtn</tabstop>
   <tabstop>entryTable</tabstop>

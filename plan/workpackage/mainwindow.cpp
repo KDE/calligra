@@ -89,8 +89,8 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
  
     KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
-    
-    KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
+
+//     KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
 
     QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
     a->setEnabled( false );
@@ -111,6 +111,16 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
 {
     kDebug();
+}
+
+void KPlatoWork_MainWindow::setCaption( const QString & )
+{
+    KParts::MainWindow::setCaption( QString() );
+}
+
+void KPlatoWork_MainWindow::setCaption( const QString &, bool modified )
+{
+    KParts::MainWindow::setCaption( QString(), modified );
 }
 
 bool KPlatoWork_MainWindow::openDocument(const KUrl & url)

@@ -30,6 +30,7 @@
 
 #include "calligra_tables_export.h"
 #include "Cell.h"
+#include "Value.h"
 
 #define CALLIGRA_TABLES_INLINE_ARRAYS
 
@@ -40,7 +41,6 @@ namespace Calligra
 namespace Tables
 {
 class Sheet;
-class Value;
 typedef QHash<Cell, Cell> CellIndirection;
 
 /**
@@ -119,7 +119,7 @@ public:
      * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
      * etc.
      */
-    QString text() const {
+    const QString& text() const {
         return m_text;
     }
 
@@ -427,6 +427,18 @@ QTextStream& operator<<(QTextStream& ts, Formula formula);
  * e.g. "*" yields Operator::Asterisk, and so on
  */
 Token::Op matchOperator(const QString& text);
+
+/**
+ * helper function to parse operator
+ *
+ * If a operator is found the data and out pointer are advanced by the number
+ * of chars the operators consits of.
+ * @param data pointer into the input string 
+ * @param out pointer into the out string, The out string needs to be big enough
+ * 
+ * @returns true if a operator was found, false otherwise.
+ */
+bool parseOperator(const QChar *&data, QChar *&out);
 
 /**
  * helper function: return true for valid identifier character

@@ -2,6 +2,7 @@
  * Resource.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -1099,7 +1100,7 @@ Resource::getPIDs(int sc, const Interval& period, const Task* task,
             continue;
         if ((!task || task == b->getTask() ||
              b->getTask()->isDescendantOf(task)) &&
-            pids.findIndex(b->getTask()->getProjectId()) == -1)
+            pids.indexOf(b->getTask()->getProjectId()) == -1)
         {
             pids.append(b->getTask()->getProjectId());
         }

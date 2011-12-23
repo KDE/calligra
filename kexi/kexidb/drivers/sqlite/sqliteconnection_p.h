@@ -37,6 +37,10 @@ public:
     //! stores last result's message
     virtual void storeResult();
 
+    bool extensionsLoadingEnabled() const;
+
+    void setExtensionsLoadingEnabled(bool set);
+
     sqlite3 *data;
     bool data_owned; //!< true if data pointer should be freed on destruction
     QString errmsg; //<! server-specific message of last operation
@@ -45,6 +49,9 @@ public:
 
     QByteArray temp_st;
     const char *result_name;
+
+private:
+    bool m_extensionsLoadingEnabled;
 };
 
 }
