@@ -19,6 +19,7 @@
 
 #include "BibliographyTemplate.h"
 
+#include <BibliographyGenerator.h>
 #include <KoBibliographyInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -45,6 +46,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
         firstTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         firstTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
+    firstTemplate->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
 
     KoBibliographyInfo *secondTemplate = new KoBibliographyInfo();
     secondTemplate->m_indexTitleTemplate.text = "References";
@@ -56,6 +58,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
         secondTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         secondTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
+    secondTemplate->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
 
     predefinedTemplates.append(firstTemplate);
     predefinedTemplates.append(secondTemplate);
