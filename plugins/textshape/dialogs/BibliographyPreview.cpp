@@ -82,8 +82,6 @@ void BibliographyPreview::updatePreview(KoBibliographyInfo *newbibInfo)
     QTextDocument *bibDocument = new QTextDocument(this);
     KoTextDocument(bibDocument).setStyleManager(m_styleManager);
     KoBibliographyInfo *info = newbibInfo->clone();
-   // info->m_indexTitleTemplate.text = newbibInfo->m_indexTitleTemplate.text;
-   // info->m_useOutlineLevel = newbibInfo->m_useOutlineLevel;
 
     bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
     bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument) );
@@ -102,26 +100,21 @@ void BibliographyPreview::updatePreview(KoBibliographyInfo *newbibInfo)
     textCharFormat.setFontPointSize(16);
     textCharFormat.setFontWeight(QFont::Bold);
 
-    //the brush is set to the background colour so that the actual text block(Heading 1,Heading 1.1 etc.) does not appear in the preview
-    textCharFormat.setProperty(QTextCharFormat::ForegroundBrush, QBrush(Qt::white));
+    textCharFormat.setProperty(QTextCharFormat::ForegroundBrush, QBrush(Qt::black));
     cursor.setCharFormat(textCharFormat);
 
-    cursor.insertBlock(bibFormat);
     cursor.movePosition(QTextCursor::End,QTextCursor::MoveAnchor);
 
-    //insert text for different heading styles
     QTextBlockFormat titleBlockFormat;
     cursor.insertBlock(titleBlockFormat,textCharFormat);
-    cursor.insertText("Bibliography");
+    cursor.insertText(info->m_indexTitleTemplate.text);
 
     textCharFormat.setFontPointSize(12);
     textCharFormat.setFontWeight(QFont::Normal);
     QTextBlockFormat blockFormat;
     cursor.insertBlock(blockFormat,textCharFormat);
     cursor.insertBlock(blockFormat,textCharFormat);
-    cursor.insertText("KQR03: KDE e.v. quarterly report, 2011,KDE e.v.,http://ev.kde.org/reports/ev-quarterly-2011_Q3.pdf");
-
-    qDebug() << "\n\n\t\tDoc written.";
+    cursor.insertText("CIT01: Title, Author, Organisation, URL");
 
     KoTextDocument(m_textShape->textShapeData()->document()).setStyleManager(m_styleManager);
 
@@ -158,8 +151,6 @@ void BibliographyPreview::finishedPreviewLayout()
         KoShapePaintingContext paintContext; //FIXME
         m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
-    m_pm->save(QString("/home/smit/temp/pix.png"),"PNG");
-    qDebug() << "\n\t\t preview generated";
     emit pixmapGenerated();
     update();
 }
