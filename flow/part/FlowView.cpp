@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <KConfigGroup>
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -55,6 +56,12 @@ FlowDocument* FlowView::document() const
 
 void FlowView::initializeGUI()
 {
+    KConfigGroup group( KGlobal::config(), "flow" );
+    if ( !group.hasKey( "PaintGridInBackground" ) ) {
+        group.writeEntry( "PaintGridInBackground", "true" );
+    }
+    bool flag = group.readEntry("PaintGridInBackground", flag);
+    kopaCanvas()->setPaintGridInBackground(flag);
 }
 
 void FlowView::initializeActions()
