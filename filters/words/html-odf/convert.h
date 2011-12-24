@@ -27,7 +27,7 @@
 class Conversion
 {
 public:
-    void convert(const QString &inputFileName, QFile *outputFile);
+    void convert(const QString &inputFileName, QFile *outputFile, const QString& resourcesPath);
 };
 
 

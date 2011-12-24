@@ -1,5 +1,6 @@
 /* This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
+   Copyright (C) 2012 Stuart Dickson <stuart@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -32,9 +33,8 @@
 #include "convert.h"
 #include <QFile>
 
-void Conversion::convert(const QString& inputFileName, QFile* outputFile)
+void Conversion::convert(const QString& inputFileName, QFile* outputFile, const QString& resourcesPath)
 {
-
     QByteArray contall("<?xml version='1.0' encoding='UTF-8'?>");
     contall.append("<office:document xmlns:office='urn:oasis:names:tc:opendocument:xmlns:office:1.0'>");
 
@@ -60,12 +60,16 @@ void Conversion::convert(const QString& inputFileName, QFile* outputFile)
     QFile temp1(KStandardDirs::locate("data","words/html-odf/converter.xsl"));
     temp1.open(QIODevice::ReadOnly);
 
+    
+    // Temporary step to output the concatenated file to test validation etc.
 
     QXmlQuery myQuery(QXmlQuery::XSLT20);
+    myQuery.bindVariable(QString("html-odf-resourcesPath"), QVariant(resourcesPath));
     myQuery.setFocus(contall);
     myQuery.setQuery(temp1.readAll());
     myQuery.evaluateTo(outputFile);
 
+    
     temp1.close();
     contall.clear();
     met.clear();
