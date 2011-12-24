@@ -1,6 +1,7 @@
 /* This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
    Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
+   Copyright (C) 2012 Stuart Dickson <stuart@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -48,6 +49,9 @@
 
 #include <iostream>
 
+#include "ManifestParser.h"
+//#include <kexi/migration/mdb/src/mdbtools/include/mdbtools.h>
+
 K_PLUGIN_FACTORY(HTMLOdfExportFactory, registerPlugin<HTMLOdfExport>();)
 K_EXPORT_PLUGIN(HTMLOdfExportFactory("calligrafilters"))
 
@@ -89,13 +93,19 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         out.close();
         return KoFilter::FileNotFound;
     }
-    Conversion c1;
-    c1.convert(inputFile, &out);
+    
     QFileInfo base(outputFile);
     QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
     QString directory=base.absolutePath();
     QDir dir(outputFile);
     dir.mkdir(filenamewithoutext);
+    
+    
+    // TODO: Provide feedback for errors occuring during QXmlQuery conversion
+    Conversion c1;
+    c1.convert(inputFile, &out, filenamewithoutext+"/");
+    
+
     QString stylesheet=filenamewithoutext+"/style.css";
     QFile css(stylesheet);
     if (!css.open(QIODevice::WriteOnly)){
@@ -103,7 +113,36 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         css.close();
         return KoFilter::FileNotFound;
     }
+            
+    QByteArray manifest;
+    KoStore* storecont = KoStore::createStore(inputFile, KoStore::Read);
+    storecont->extractFile("META-INF/manifest.xml",manifest);
+    
+    // parse manifest for 
+    //  <manifest:file-entry manifest:media-type="image/png" manifest:full-path="Pictures/image1.png"/>
+    // This is within the manifest root
+    ManifestParser manifestParser;
+    QXmlInputSource source;
+    source.setData( manifest );
+    QXmlSimpleReader reader;
+    reader.setContentHandler( &manifestParser );
+    reader.parse( source );
 
+    QString sourceImage;
+    QString destImage;
+    QString outputPath;
+    // Extract each file
+    for (int i = 0; i < manifestParser.m_fileList.size(); ++i) {
+        sourceImage = manifestParser.m_fileList[i];
+        destImage = filenamewithoutext + "/" + manifestParser.m_fileList[i];
+        
+        // Create the target directory
+        outputPath = filenamewithoutext+"/"+sourceImage.left(sourceImage.lastIndexOf('/'));
+        dir.mkpath(outputPath);
+        
+        storecont->extractFile(sourceImage,destImage);
+    }
+    
     out.close();
     css.close();
 

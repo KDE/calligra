@@ -3,6 +3,7 @@
 This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
    Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
+   Copyright (C) 2011 Stuart Dickson <stuart@kogmbh.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -49,6 +50,8 @@ This file is part of the Calligra project
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="2.0">
 
+    <xsl:output method="xhtml"/>
+
 
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="param_no_css"/>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="param_css_only"/>
@@ -78,12 +81,8 @@ This file is part of the Calligra project
             <xsl:apply-templates select="office:document-content"/>
         </body>
     </html>
-        </xsl:template>
+    </xsl:template>
 
-
-        
-    
-    
     <xsl:template match="office:document-meta">
         <xsl:apply-templates/>
     </xsl:template>
@@ -100,7 +99,9 @@ This file is part of the Calligra project
         <xsl:comment>office:metadata end</xsl:comment>
     </xsl:template>
     <xsl:template match="dc:title">
-        <title><xsl:apply-templates/></title>
+        <xsl:if test="current()!=''">
+            <xsl:element name="title"><xsl:apply-templates/></xsl:element>            
+        </xsl:if>
     </xsl:template>
     <xsl:template match="dc:language">
         <meta http-equiv="content-language" content="{current()}"/>
@@ -188,8 +189,6 @@ This file is part of the Calligra project
         {
             margin: 1em;
         }
-    
-   
     </xsl:template>
     
     <xsl:template match="office:document-styles">
@@ -220,32 +219,24 @@ This file is part of the Calligra project
         <xsl:text><!-- office:master-styles end --></xsl:text>
     </xsl:template>
     
-    
-    
-    
-     
-    
-    
-    
-    
+<!-- Some interesting behaviour with style:header and style:footer nested inside style:master-page.
+     Initial (incorrect) behaviour was to expand header/footer elements within <head><style> element, when they should
+     be set to the beginning and end of the document,
+-->
     
     <xsl:template match="style:default-style">
-            
             <xsl:text>p{</xsl:text>
-            <xsl:text>}</xsl:text>
-            
+            <xsl:text>}</xsl:text>       
     </xsl:template>
 
-    <xsl:template match="office:styles/style:style">
-        
-            <xsl:text>.</xsl:text><xsl:value-of select="@style:family"></xsl:value-of><xsl:text>_</xsl:text>
-            <xsl:value-of select="@style:name"></xsl:value-of>
-            <xsl:text>
-                    {</xsl:text>
-            <xsl:apply-templates/>
-            <xsl:text>}
-            </xsl:text>
-              
+    <xsl:template match="office:styles/style:style">     
+        <xsl:text>.</xsl:text><xsl:value-of select="@style:family"></xsl:value-of><xsl:text>_</xsl:text>
+        <xsl:value-of select="@style:name"></xsl:value-of>
+        <xsl:text>
+                {</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>}
+        </xsl:text>
     </xsl:template>
     
     <xsl:template match="office:styles/style:paragraph-properties">
@@ -262,42 +253,115 @@ This file is part of the Calligra project
         <xsl:text> font-family:</xsl:text>
         <xsl:value-of select="@fo:font-family"></xsl:value-of><xsl:text>; </xsl:text>
         <xsl:text> font-style:</xsl:text>
-        <xsl:value-of select="@fo:font-style"></xsl:value-of><xsl:text>; </xsl:text>
-        
+        <xsl:value-of select="@fo:font-style"></xsl:value-of><xsl:text>; </xsl:text>        
     </xsl:template>
-    
-    
-    
-    
- <xsl:template match="office:document-content">
 
- <xsl:apply-templates/>
- </xsl:template> 
+    <xsl:template match="office:document-content">
+    <xsl:apply-templates/>
+    </xsl:template> 
     
-  <xsl:template match="text:p">
-  <p><xsl:apply-templates/></p>
+    <xsl:template match="text:p">
+    <xsl:element name="p"><xsl:apply-templates/></xsl:element>
+    </xsl:template>
+
+    <xsl:template match="text:span[@text:style-name='T1']">
+    <xsl:element name="strong"><xsl:apply-templates/></xsl:element>
+    </xsl:template>
+
+    <xsl:template match="text:span">
+    <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="table:table-columns">
+    <xsl:apply-templates />
+    </xsl:template>
+
+    <xsl:template match="table:table-header-rows">
+        <xsl:element name="thead">
+        <xsl:for-each select="table:table-row">
+            <xsl:element name="tr">
+            <xsl:apply-templates mode="table_header" />
+            </xsl:element>
+        </xsl:for-each>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="table:table-row">
+        <xsl:element name="tr">
+        <xsl:apply-templates />
+        </xsl:element>
+    </xsl:template>
+
+<!--
+  <xsl:template match="table:table-row" mode="table_header">
+    <tr>
+    <xsl:apply-templates />
+    </tr>
+  </xsl:template>
+-->
+
+ <!--
+  <xsl:template match="table:covered-table-cell" mode="table_header">
+  <th>
+  <xsl:apply-templates select="text:p"/>
+  </th>
   </xsl:template>
 
-  <xsl:template match="text:span[@text:style-name='T1']">
-  <b><xsl:apply-templates/></b>
+  <xsl:template match="table:covered-table-cell">
+  <td>
+  <xsl:apply-templates select="text:p"/>
+  </td>
   </xsl:template>
+-->
+  <xsl:template match="table:table-cell" mode="table_header">
+  <th colspan="{@table:number-columns-spanned}" 
+      rowspan="{@table:number-rows-spanned}">
+  <xsl:apply-templates select="text:p"/>
+  </th>
+  </xsl:template>
+
+  <xsl:template match="table:table-cell">
+  <td colspan="{@table:number-columns-spanned}" 
+      rowspan="{@table:number-rows-spanned}">
+  <xsl:apply-templates select="text:p"/>
+  </td>
+  </xsl:template>
+
 
   <xsl:template match="table:table">
-  <table border = "1">
- 
+  <table border="1">
+  <xsl:apply-templates />
+<!--
+      <xsl:for-each select="table:table-header-rows">
+	<xsl:for-each select="table:table-row">
+	<tr>
+	<xsl:apply-templates />
+	</tr>
+	</xsl:for-each>
+      </xsl:for-each>
       <xsl:for-each select="table:table-row">
       <tr>
-      <xsl:for-each select="table:table-cell">
-      <td>
-      <xsl:value-of select="text:p"/>
-      </td>
-      </xsl:for-each>
+      <xsl:apply-templates />
       </tr>
       </xsl:for-each>
-
+  -->
   </table>
   </xsl:template>
   
+
+
+ <xsl:template match="draw:frame">
+ <xsl:apply-templates/>
+ </xsl:template> 
+
+  <xsl:template match="draw:image">
+    <img src="{$html-odf-resourcesPath}/{@xlink:href}" />
+  </xsl:template>
+  
+
+
+
+
 </xsl:stylesheet>
 
 
