@@ -11,6 +11,7 @@ target_link_libraries(pdfimport komain)
 install(TARGETS pdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
+
 ########### install files ###############
 
 install( FILES  words_pdf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
