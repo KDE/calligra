@@ -933,10 +933,13 @@
 <record name="CrtLayout12" id="0x89D">
 </record>
 
-<record name="CrtMlFrt" id="0x89E">
-</record>
-
 <record name="CatLab" id="0x856">
+  <field name="rt" type="unsigned" size="16" />
+  <field name="grbitFrt" type="unsigned" size="16" />
+  <field name="wOffset" type="unsigned" size="16" />
+  <field name="at" type="unsigned" size="16" />
+  <field name="cAutoCatLabelReal" type="unsigned" size="1" />
+  <field name="reserved" type="unsigned" size="15" />
 </record>
 
 <record name="AxisLine" id="0x1021">
@@ -1092,7 +1095,8 @@
 <record name="SerAuxTrend" id="0x104b">
 </record>
 
-<record name="IFmtRecord" id="0x104e">
+<record name="IFmt" id="0x104e">
+    <field name="ifmt" type="unsigned" size="16" />
 </record>
 
 <record name="Pos" id="0x104f">
