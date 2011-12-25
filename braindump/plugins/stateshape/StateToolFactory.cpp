@@ -42,4 +42,3 @@ KoToolBase* StateToolFactory::createTool(KoCanvasBase * canvas)
     return new StateTool(canvas);
 }
 
-#include "StateToolFactory.moc"

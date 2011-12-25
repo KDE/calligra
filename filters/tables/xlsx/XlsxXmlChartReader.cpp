@@ -391,10 +391,10 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     , m_context(0)
     , m_currentSeries(0)
     , m_currentShapeProperties(0)
-    , m_autoTitleDeleted(false)
     , m_readTxContext( None )
     , m_areaContext( ChartArea )
     , m_serMarkerDefined(false)
+    , m_autoTitleDeleted(true)
     , d ( new Private( ) )
 {
 }
@@ -453,7 +453,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
-                m_autoTitleDeleted = val.toInt();
+                m_autoTitleDeleted = MSOOXML::Utils::convertBooleanAttr(val, true);
             }
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(style))) {
                 const QXmlStreamAttributes attrs(attributes());
@@ -462,6 +462,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
             }
         }
     }
+
+    if (!m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty())
+        m_context->m_chart->m_title = "Chart Title";
 
     // static is fine here cause we only need to take care that that number is unique in the
     // exported ODS file and do not take if the number is continuous or whatever.
@@ -611,6 +614,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
                 axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
             }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(numFmt) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                axis->m_numberFormat = attrs.value("formatCode").toString();
+            }
         }
     }
     READ_EPILOGUE
@@ -728,14 +735,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if(!m_autoTitleDeleted)
-                if (QUALIFIED_NAME_IS(tx)) {
-                    TRY_READ(chartText_Tx)
-                }
+            if(QUALIFIED_NAME_IS(tx)) {
+                TRY_READ(chartText_Tx)
+            }
         }
     }
-    if ( m_context->m_chart->m_title.isEmpty() )
-        m_context->m_chart->m_title = "Chart Title";
     m_readTxContext = None;
     READ_EPILOGUE
 }
@@ -1173,6 +1177,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(dLbl)
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(numFmt) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                m_currentSeries->m_numberFormat = attrs.value("formatCode").toString();
+            }
             read_showDataLabel();
         }
     }
@@ -2103,10 +2111,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart_Ser()
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempPieSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
 
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-        && !tempPieSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-    )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempPieSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempPieSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
+
     m_currentSeries->m_labelCell = tempPieSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_valuesCellRangeAddress = tempPieSeriesData->m_val.writeRefToInternalTable(this);
@@ -2184,10 +2191,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
         }
     }
 
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
+
     // set data ranges and write data to internal table    
     m_currentSeries->m_labelCell = tempBubbleSeriesData->m_tx.writeRefToInternalTable(this);
 
@@ -2273,10 +2279,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         }
     }
 
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
+
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
 
@@ -2352,9 +2357,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
@@ -2423,9 +2426,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
@@ -2491,9 +2492,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
@@ -2567,9 +2566,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
-    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
-            && !tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
-        )
+    if ( !m_autoTitleDeleted && m_context->m_chart->m_title.isEmpty() && m_context->m_chart->m_series.count() == 1 && !tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty() )
         m_context->m_chart->m_title = tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table

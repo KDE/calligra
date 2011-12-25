@@ -22,11 +22,14 @@
 #include "chartsubstreamhandler.h"
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
+#include "xmltk.h"
 
 #include <QRegExp>
 #include <QDebug>
 
 #include <XlsxUtils.h>
+
+#include <sstream>
 
 namespace Swinder {
 
@@ -79,7 +82,49 @@ private:
     WorksheetSubStreamHandler* m_worksheetHandler;
 };
 
+class CrtMlFrtRecord : public Record
+{
+public:
+    static const unsigned int id;
+    unsigned int rtti() const { return this->id; }
+    virtual const char* name() const { return "CrtMlFrt"; }
+    static Record *createRecord(Workbook *book, void *arg) { return new CrtMlFrtRecord(book, arg); }
+    CrtMlFrtRecord(Swinder::Workbook *book, void *arg) : Record(book), m_handler(static_cast<ChartSubStreamHandler*>(arg)), m_xmlTkParent(0) {
+        m_worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(m_handler->parentHandler());
+    }
+    virtual ~CrtMlFrtRecord() { qDeleteAll(m_tokens); }
+    unsigned xmlTkParent() const { return m_xmlTkParent; }
+    const QList<XmlTk*>& tokens() const { return m_tokens; }
+    virtual void dump(std::ostream& out) const {
+        QStringList tokens;
+        foreach(XmlTk* t, m_tokens)
+            tokens.append( QString("%1 %2 %3").arg(t->m_xmlTkTag, 0, 16).arg(t->type()).arg(t->value()) );
+        out << qPrintable(QString("[%1]").arg(tokens.join(", ")));
+    }
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) {
+        if (size < 20) {
+            setIsValid(false);
+            return;
+        }
+        unsigned rt = readU16(data);
+        unsigned grbitFrt = readU16(data + 2);
+        unsigned cb = readU32(data + 12);
+        unsigned recordVersion = readU8(data + 16);
+        m_xmlTkParent = readU16(data + 18);
+
+        qDeleteAll(m_tokens);
+        m_tokens = parseXmlTkChain(data + 20, size - 20);
+    }
+
+private:
+    ChartSubStreamHandler* m_handler;
+    WorksheetSubStreamHandler* m_worksheetHandler;
+    unsigned m_xmlTkParent;
+    QList<XmlTk*> m_tokens;
+};
+
 const unsigned BRAIRecord::id = 0x1051;
+const unsigned CrtMlFrtRecord::id = 0x89E;
 
 } // namespace Swinder
 
@@ -171,6 +216,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
     , m_disableAutoMarker( false )
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
+    RecordRegistry::registerRecordClass(CrtMlFrtRecord::id, CrtMlFrtRecord::createRecord, this);
 
     WorksheetSubStreamHandler* worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(parentHandler);
     if (worksheetHandler) {
@@ -203,8 +249,8 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
         if (globals->chartSheets().isEmpty()) {
             std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
         } else {
-            m_sheet = globals->chartSheets().takeFirst();
 #if 0
+            m_sheet = globals->chartSheets().takeFirst();
             m_chartObject = new ChartObject(m_chartObject->id());
             m_chart = m_chartObject->m_chart;
             Q_ASSERT(m_chart);
@@ -231,8 +277,24 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
 
 ChartSubStreamHandler::~ChartSubStreamHandler()
 {
+    // Set the chart's title once everything is done.
+    if (m_chart && m_chart->m_title.isEmpty()) {
+        if (!m_chart->m_texts.isEmpty()) {
+            // If defined direct within the chart using a ObjectLinkRecord then we use that as title.
+            m_chart->m_title = m_chart->m_texts.first()->m_text;
+        }
+        if (m_chart->m_title.isEmpty() && m_chart->m_series.count() == 1) {
+            // Else we are using the same logic that is used in the 2007 filter and fetch the title
+            // from the series collection of TextRecord's.
+            Charting::Series* series = m_chart->m_series.first();
+            if (!series->m_texts.isEmpty() )
+                m_chart->m_title = series->m_texts.first()->m_text;
+        }
+    }
+
     delete m_internalDataCache;
     RecordRegistry::unregisterRecordClass(BRAIRecord::id);
+    RecordRegistry::unregisterRecordClass(CrtMlFrtRecord::id);
 }
 
 std::string whitespaces(int number)
@@ -351,6 +413,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleAxis(static_cast<AxisRecord*>(record));
     else if (type == AxisLineRecord::id)
         handleAxisLine(static_cast<AxisLineRecord*>(record));
+    else if (type == CatLabRecord::id)
+        handleCatLab(static_cast<CatLabRecord*>(record));
     else if (type == ValueRangeRecord::id)
         handleValueRange(static_cast<ValueRangeRecord*>(record));
     else if (type == TickRecord::id)
@@ -369,6 +433,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleXF(static_cast<XFRecord*>(record));
     else if (type == LabelRecord::id)
         handleLabel(static_cast<LabelRecord*>(record));
+    else if (type == IFmtRecord::id)
+        handleIFmt(static_cast<IFmtRecord*>(record));
+    else if (type == CrtMlFrtRecord::id)
+        handleCrtMlFrt(static_cast<CrtMlFrtRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -1125,6 +1193,33 @@ void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
     m_axisId = record->identifier();
 }
 
+// This record specifies the attributes of the axis label.
+// * wOffset: Specifies the distance between the axis and axis label. It contains the
+//   offset as a percentage of the default distance. The default distance is equal to 1/3 the
+//   height of the font calculated in pixels. MUST be a value greater than or equal to 0 (0%)
+//   and less than or equal to 1000 (1000%).
+// * at: An unsigned integer that specifies the alignment of the axis label. MUST be
+//   a value from the following table:
+//   * 0x0001: Top-aligned if the trot field of the Text record of the axis is not equal to 0.
+//     Left-aligned if the iReadingOrder field of the Text record of the axis specifies left
+//     to-right reading order; otherwise, right-aligned.
+//   * 0x0002: Center-alignment
+//   * 0x0003: Bottom-aligned if the trot field of the Text record of the axis is not equal to 0.
+//     Right-aligned if the iReadingOrder field of the Text record of the axis specifies
+//     left-to-right reading order; otherwise, left-aligned.
+// * cAutoCatLabelReal: Specifies whether the number of categories (3).
+//   between axis labels is set to the default value. MUST be a value from the following table:
+//   * 0: The value is set to catLabel field as specified by CatSerRange record.
+//   * 1: The value is set to the default value. The number of category (3) labels is
+//     automatically calculated by the application based on the data in the chart.
+void ChartSubStreamHandler::handleCatLab(CatLabRecord* record)
+{
+    if (!record) return;
+    void handleCatLab(CatLabRecord* record);
+    DEBUG << "wOffset=" << record->wOffset() << " at=" << record->at() << " cAutoCatLabelReal=" << record->cAutoCatLabelReal() << std::endl;
+    //TODO
+}
+
 // Type of data contained in the Number records following.
 void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 {
@@ -1290,5 +1385,29 @@ void ChartSubStreamHandler::handleLabel(LabelRecord *record)
 {
     if (!record) return;
     DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " label=" << record->label().toUtf8().constData() << std::endl;
+    //TODO
+}
+
+// This record specifies the number format to use for the text on an axis.
+void ChartSubStreamHandler::handleIFmt(IFmtRecord *record)
+{
+    if (!record) return;
+    //Q_ASSERT(record->ifmt() >= 0x00A4 && record->ifmt() <= 0x0188);
+    const Format *f = globals()->convertedFormat(record->ifmt());
+    if (!f) return;
+    DEBUG << "ifmt=" << record->ifmt() << " valueFormat=" << qPrintable(f->valueFormat()) << std::endl;
+//     if (!f->valueFormat().isEmpty() && f->valueFormat() != "General") {
+//         Q_ASSERT(false);
+//     }
+    //TODO
+}
+
+void ChartSubStreamHandler::handleCrtMlFrt(CrtMlFrtRecord *record)
+{
+    if (!record) return;
+    std::stringstream out;
+        record->dump(out);
+    DEBUG << "xmlTkParent=" << QString::number(record->xmlTkParent(), 16) << " tokens=" << out.str() << std::endl;
+
     //TODO
 }
