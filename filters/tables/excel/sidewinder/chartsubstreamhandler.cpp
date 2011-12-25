@@ -1396,9 +1396,9 @@ void ChartSubStreamHandler::handleIFmt(IFmtRecord *record)
     const Format *f = globals()->convertedFormat(record->ifmt());
     if (!f) return;
     DEBUG << "ifmt=" << record->ifmt() << " valueFormat=" << qPrintable(f->valueFormat()) << std::endl;
-    if (!f->valueFormat().isEmpty() && f->valueFormat() != "General") {
-        Q_ASSERT(false);
-    }
+//     if (!f->valueFormat().isEmpty() && f->valueFormat() != "General") {
+//         Q_ASSERT(false);
+//     }
     //TODO
 }
 
