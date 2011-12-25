@@ -430,7 +430,7 @@ QString OrderByColumn::debugString() const
 QString OrderByColumn::toSQLString(bool includeTableName, Driver *drv, int identifierEscaping) const
 {
     const QString orderString(m_ascending ? "" : " DESC");
-    QString fieldName, tableName;
+    QString fieldName, tableName, collationString;
     if (m_column) {
         if (m_pos > -1)
             return QString::number(m_pos + 1) + orderString;
@@ -445,8 +445,11 @@ QString OrderByColumn::toSQLString(bool includeTableName, Driver *drv, int ident
             if (drv)
                 fieldName = drv->escapeIdentifier(fieldName, identifierEscaping);
         }
+        if (m_column->field->isTextType()) {
+            collationString = drv->collationSQL();
+        }
     } else {
-        if (includeTableName) {
+        if (m_field && includeTableName) {
             tableName = m_field->table()->name();
             if (drv)
                 tableName = drv->escapeIdentifier(tableName, identifierEscaping);
@@ -455,8 +458,11 @@ QString OrderByColumn::toSQLString(bool includeTableName, Driver *drv, int ident
         fieldName = m_field ? m_field->name() : "??"/*error*/;
         if (drv)
             fieldName = drv->escapeIdentifier(fieldName, identifierEscaping);
+        if (m_field && m_field->isTextType()) {
+            collationString = drv->collationSQL();
+        }
     }
-    return tableName + fieldName + orderString;
+    return tableName + fieldName + orderString + collationString;
 }
 
 //=======================================

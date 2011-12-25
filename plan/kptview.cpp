@@ -483,7 +483,7 @@ void View::createViews()
                 QString cn = e.attribute( "name" );
                 QString ct = e.attribute( "tag" );
                 if ( cn.isEmpty() ) {
-                    cn = i18n( ct.toLocal8Bit() );
+                    cn = defaultCategoryInfo( ct ).name;
                 }
                 cat = m_viewlist->addCategory( ct, cn );
                 KoXmlNode n1 = e.firstChild();
@@ -518,7 +518,8 @@ void View::createViews()
     } else {
         kDebug()<<"Default";
         ViewListItem *cat;
-        cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
+        QString ct = "Editors";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createCalendarEditor( cat, "CalendarEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -534,7 +535,8 @@ void View::createViews()
 
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
+        ct = "Views";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -546,7 +548,8 @@ void View::createViews()
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Execution", i18nc( "Project execution views", "Execution" ) );
+        ct = "Execution";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -558,7 +561,8 @@ void View::createViews()
 
         createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
+        ct = "Reports";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -622,12 +626,7 @@ void View::slotUpdateViewInfo( ViewListItem *itm )
     if ( itm->type() == ViewListItem::ItemType_SubView ) {
         itm->setViewInfo( defaultViewInfo( itm->viewType() ) );
     } else if ( itm->type() == ViewListItem::ItemType_Category ) {
-        ViewInfo vi;
-        if ( itm->tag() == "Editors" ) {
-            vi.name = i18n( "Editors" );
-        } else if ( itm->tag() == "Views" ) {
-            vi.name = i18n( "Views" );
-        }
+        ViewInfo vi = defaultCategoryInfo( itm->tag() );
         itm->setViewInfo( vi );
     }
 }
@@ -695,6 +694,21 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
+    }
+    return vi;
+}
+
+ViewInfo View::defaultCategoryInfo( const QString type ) const
+{
+    ViewInfo vi;
+    if ( type == "Editors" ) {
+        vi.name = i18n( "Editors" );
+    } else if ( type == "Views" ) {
+        vi.name = i18n( "Views" );
+    } else if ( type == "Execution" ) {
+        vi.name = i18nc( "Project execution views", "Execution" );
+    } else if ( type == "Reports" ) {
+        vi.name = i18n( "Reports" );
     }
     return vi;
 }
@@ -2955,10 +2969,8 @@ void View::slotCurrencyConfigFinished( int result )
 QString View::standardTaskStatusReport() const
 {
     QString s;
-    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"Plan\" >";
-    s += "<data-source select-from=\"taskstatus\" >";
-    s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
-    s += "</data-source>";
+    s = "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >";
+    s += "<data-source select-from=\"taskstatus\" ></data-source>";
     s += "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >";
     s += "<report:title>" + i18n( "Report" ) + "</report:title>";
     s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
@@ -3043,7 +3055,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:detail>";
     s += "</report:body>";
     s += "</report:content>";
-    s += "</kplatoreportdefinition>";
+    s += "</planreportdefinition>";
     return s;
 }
 

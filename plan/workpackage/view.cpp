@@ -385,7 +385,7 @@ void View::slotSendPackage()
     QString cc;
     QString bcc;
     QString subject = i18n( "Work Package: %1", node->name() );
-    QString body = node->description();
+    QString body = node->projectNode()->name();
     QString messageFile;
 
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );

@@ -17,7 +17,6 @@ set(kexidb_sqlite3driver_PART_SRCS
    sqlitealter.cpp
 )
 
-
 kde4_add_plugin(kexidb_sqlite3driver ${kexidb_sqlite3driver_PART_SRCS})
 
 target_link_libraries(kexidb_sqlite3driver ${KDE4_KPARTS_LIBS} ${SQLITE_LIBRARIES} kexidb kexiutils )
@@ -28,3 +27,5 @@ install(TARGETS kexidb_sqlite3driver  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kexidb_sqlite3driver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+add_subdirectory(icu)

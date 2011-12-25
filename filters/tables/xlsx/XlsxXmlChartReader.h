@@ -135,10 +135,10 @@ private:
     Charting::Series *m_currentSeries;
     Charting::ShapeProperties* m_currentShapeProperties;
     QString m_cellRangeAddress;
-    bool m_autoTitleDeleted;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
     bool m_serMarkerDefined;
+    bool m_autoTitleDeleted;
 
     class Private;
     Private * const d;

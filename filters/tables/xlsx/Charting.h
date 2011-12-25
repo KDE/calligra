@@ -280,6 +280,8 @@ namespace Charting
 
         LineFormat m_format;
 
+        QString m_numberFormat;
+
         Axis(Type type) : Obj(), m_type(type) {}
         virtual ~Axis() {}
     };
@@ -385,7 +387,7 @@ namespace Charting
         /// marker type
         MarkerType m_markerType;
         ShapeProperties* spPr;
-
+        QString m_numberFormat;
         explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataLabelValues(false), m_showDataLabelPercent(false), m_showDataLabelCategory(false), m_showDataLabelSeries(false), m_markerType(NoMarker),spPr(0) {}
         virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_dataPoints); qDeleteAll(m_datasetFormat); delete spPr; }
     };
