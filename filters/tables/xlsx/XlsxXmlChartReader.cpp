@@ -614,6 +614,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
                 axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
             }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(numFmt) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                axis->m_numberFormat = attrs.value("formatCode").toString();
+            }
         }
     }
     READ_EPILOGUE
@@ -1173,6 +1177,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(dLbl)
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(numFmt) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                m_currentSeries->m_numberFormat = attrs.value("formatCode").toString();
+            }
             read_showDataLabel();
         }
     }
