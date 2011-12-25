@@ -31,7 +31,6 @@ enum XmlTkTags {
     XmlTkBaseTimeUnitFrt = 0x005F,
     XmlTkColorMappingOverride = 0x0034,
     XmlTkDispBlanksAsFrt = 0x0066,
-    XmlTkEnd = 0x01, // including XmlTkEndSurface
     XmlTkFloorThicknessFrt = 0x0036,
     XmlTkFormatCodeFrt = 0x0064,
     XmlTkHeightPercent = 0x0065,
@@ -149,19 +148,29 @@ private:
     unsigned m_cbBlob;
 };
 
-class XmlTkHeader : public XmlTk {
+class XmlTkBegin : public XmlTk {
 public:
     virtual QString value() const { return QString(); }
-    virtual QString type() const { return "header"; }
+    virtual QString type() const { return "begin"; }
     virtual unsigned size() const { return 4; }
-    XmlTkHeader(const unsigned char* data) : XmlTk(data) {}
+    XmlTkBegin(const unsigned char* data) : XmlTk(data) {}
+};
+
+class XmlTkEnd : public XmlTk {
+public:
+    virtual QString value() const { return QString(); }
+    virtual QString type() const { return "end"; }
+    virtual unsigned size() const { return 4; }
+    XmlTkEnd(const unsigned char* data) : XmlTk(data) {}
 };
 
 XmlTk* parseXmlTk(const unsigned char* data) {
     unsigned drType = readU8(data);
     switch (drType) {
         case 0x00:
-            return new XmlTkHeader(data);
+            return new XmlTkBegin(data);
+        case 0x01:
+            return new XmlTkEnd(data);
         case 0x02:
             return new XmlTkBool(data);
         case 0x03:
