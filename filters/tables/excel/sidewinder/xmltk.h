@@ -175,7 +175,7 @@ XmlTk* parseXmlTk(const unsigned char* data) {
         case 0x07:
             return new XmlTkBlob(data);
         default:
-            Q_ASSERT_X(false, __FUNCTION__, qPrintable(QString("Unhandled drType=%1").arg(drType, 0, 16)));
+            std::cout << "Error in " << __FUNCTION__ << ": Unhandled drType " << qPrintable(QString::number(drType, 16)) << std::endl;
             break;
     }
     return 0;
