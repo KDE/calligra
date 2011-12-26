@@ -170,6 +170,7 @@ private slots:
     /** Item context bar actions */
     void contextBarDuplicateSlide();
     void contextBarDeleteSlide();
+    void contextBarStartSlideshow();
 
     /** Rename current slide on Slides Sorter View */
     void renameCurrentSlide();

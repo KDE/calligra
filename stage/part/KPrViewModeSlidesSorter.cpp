@@ -177,11 +177,12 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     new KoViewItemContextBar(m_customSlideShowView);
     QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
     QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"),QString("edit-delete"));
-
+    QToolButton *startPresentation = m_slidesSorterItemContextBar->addContextButton(i18n("Start Slideshow"),QString("view-presentation"));
 
     //setup signals for item context bar buttons
     connect(duplicateButton, SIGNAL(clicked()), this, SLOT(contextBarDuplicateSlide()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(contextBarDeleteSlide()));
+    connect(startPresentation, SIGNAL(clicked()), this, SLOT(contextBarStartSlideshow()));
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -751,4 +752,14 @@ void KPrViewModeSlidesSorter::contextBarDeleteSlide()
         slides.append(page);
     }
     m_slidesSorterModel->removeSlides(slides);
+}
+
+void KPrViewModeSlidesSorter::contextBarStartSlideshow()
+{
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    updateActivePage(page);
+    KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
+    if (kPrview) {
+       kPrview->startPresentation();
+    }
 }

@@ -164,16 +164,22 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
     // SelectionOnlyContextBar mode
     const int posX = 0;
     const int posY = CONTEXTBAR_MARGIN;
+    int numButtons = 0;
     m_ContextBar->move(rect.topLeft() + QPoint(posX, posY));
     //Hide buttons if item is too small
     for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
-        if (rect.width() > ((i+1)*m_ToggleSelectionButton->width())) {
+        if ((rect.width() - 4*CONTEXTBAR_MARGIN) > ((i+1)*m_ToggleSelectionButton->width())) {
             m_contextBarButtons.at(i)->setVisible(true);
+            numButtons++;
             continue;
         }
         m_contextBarButtons.at(i)->setVisible(false);
     }
     m_ContextBar->adjustSize();
+    if (numButtons > 0) {
+        const int centerX = (rect.width() - m_ContextBar->rect().width()) / 2;
+        m_ContextBar->move(rect.topLeft() + QPoint(centerX, posY));
+    }
     m_ContextBar->show();
 }
 
