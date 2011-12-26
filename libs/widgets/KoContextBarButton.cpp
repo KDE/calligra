@@ -42,18 +42,13 @@ const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 120;
 /** Radius of ContextBarButtons */
 const int CONTEXTBAR_RADIUS = 50;
 
-
-struct KoContextBarButtonPrivate {
-};
-
-
 KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 : QToolButton(parent)
 , m_isHovered(false)
 , m_leftMouseButtonPressed(false)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
-, d(new KoContextBarButtonPrivate) {
+{
 	const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
 	setIconSize(QSize(size, size));
 	setAutoRaise(true);
@@ -62,7 +57,6 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 
 
 KoContextBarButton::~KoContextBarButton() {
-	delete d;
 }
 
 
