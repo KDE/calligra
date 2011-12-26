@@ -58,7 +58,6 @@ private:
         bool m_leftMouseButtonPressed;
         int m_fadingValue;
         QTimeLine *m_fadingTimeLine;
-        KoContextBarButtonPrivate* const d;
 };
 
 #endif /* KOCONTEXTBARBUTTON_H */
