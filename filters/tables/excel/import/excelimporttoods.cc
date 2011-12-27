@@ -1113,6 +1113,7 @@ QString extractConditional(const QString &_text)
     return text;
 }
 
+#if 0
 // Currency or accounting format.
 // "$"* #,##0.0000_
 // [$EUR]\ #,##0.00"
@@ -1146,6 +1147,7 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
 
     return false;
 }
+#endif
 
 // Checks if the as argument passed formatstring defines a date-format or not.
 bool ExcelImport::Private::isDateFormat(const QString& valueFormat)
@@ -1156,11 +1158,13 @@ bool ExcelImport::Private::isDateFormat(const QString& valueFormat)
     return style.type() == KoGenStyle::NumericDateStyle;
 }
 
+#if 0
 static QByteArray convertCurrency(double currency, const QString& valueFormat)
 {
     Q_UNUSED(valueFormat);
     return QByteArray::number(currency, 'g', 15);
 }
+#endif
 
 static QString convertDate(double serialNo, const QString& valueFormat)
 {
@@ -1227,6 +1231,8 @@ QString currencyValue(const QString &value)
 // Processes a cell within a sheet.
 void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter)
 {
+        Q_UNUSED(store);
+
     if (!cell) return;
     if (!xmlWriter) return;
 
