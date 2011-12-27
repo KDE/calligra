@@ -1783,8 +1783,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 {
     KoGenStyle& style = valueFormatCache[valueFormat];
     if (style.isEmpty()) {
-        NumberFormatParser::setStyles( styles );
-        style = NumberFormatParser::parse( valueFormat );
+        style = NumberFormatParser::parse( valueFormat, styles );
     }
     if( style.type() == KoGenStyle::ParagraphAutoStyle ) {
         return QString();

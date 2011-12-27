@@ -35,8 +35,6 @@
 #include <QtGui/QColor>
 #include <QtGui/QPalette>
 
-KoGenStyles* NumberFormatParser::styles = 0;
-
 QColor NumberFormatParser::color(const QString& name)
 {
     if (name.toUpper().startsWith(QLatin1String("COLOR"))) {
@@ -51,11 +49,6 @@ QColor NumberFormatParser::color(const QString& name)
 QLocale NumberFormatParser::locale(int langid)
 {
     return MSOOXML::Utils::localeForLangId(langid);
-}
-
-void NumberFormatParser::setStyles(KoGenStyles* styles)
-{
-    NumberFormatParser::styles = styles;
 }
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \
@@ -131,7 +124,7 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
-KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Type type)
+KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* styles, KoGenStyle::Type type)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -491,14 +484,17 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
             buffer.close();
 
             // conditional style with the current format
-            KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
-            result.addAttribute("style:volatile", "true");
-            const QString styleName = NumberFormatParser::styles->insert(result, "N");
+            if (styles) {
+                KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
+                result.addAttribute("style:volatile", "true");
+                const QString styleName = styles->insert(result, "N");
+                conditions.insertMulti(condition, styleName);
+            }
+            condition.clear();
+
             // start a new style
             buffer.setData(QByteArray());
             buffer.open(QIODevice::WriteOnly);
-            conditions.insertMulti(condition, styleName);
-            condition.clear();
         }
         break;
 
@@ -545,15 +541,20 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
     }
 
     if (!condition.isEmpty()) {
+        buffer.close();
+
         // conditional style with the current format
-        KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
-        result.addAttribute("style:volatile", "true");
-        const QString styleName = NumberFormatParser::styles->insert(result, "N");
+        if (styles) {
+            KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
+            result.addAttribute("style:volatile", "true");
+            const QString styleName = styles->insert(result, "N");
+            conditions.insertMulti(condition, styleName);
+        }
+        condition.clear();
+
         // start a new style
         buffer.setData(QByteArray());
         buffer.open(QIODevice::WriteOnly);
-        conditions.insertMulti(condition, styleName);
-        condition.clear();
     }
 
     // if conditions w/o explicit expressions where added, we create the expressions

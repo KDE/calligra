@@ -115,11 +115,8 @@ QString Cat::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
     if (m_numRef.m_numCache.m_ptCount != 0) {
         KoGenStyle::Type formatType = KoGenStyle::NumericNumberStyle;
         if (!m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General") {
-            KoGenStyles dummyStyles;
-            NumberFormatParser::setStyles(&dummyStyles);
             KoGenStyle style = NumberFormatParser::parse(m_numRef.m_numCache.formatCode);
             formatType = style.type();
-            NumberFormatParser::setStyles(0);
         }
         chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, formatType, m_numRef.m_numCache.formatCode );
         return m_numRef.m_f;
