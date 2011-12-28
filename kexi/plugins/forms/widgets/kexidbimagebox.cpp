@@ -438,11 +438,12 @@ void KexiDBImageBox::handlePasteAction()
     if (isReadOnly() || (!designMode() && !hasFocus()))
         return;
     QPixmap pm(qApp->clipboard()->pixmap(QClipboard::Clipboard));
-// if (!pm.isNull())
-//  setValueInternal(pm, true);
     if (dataSource().isEmpty()) {
         //static mode
-        setData(KexiBLOBBuffer::self()->insertPixmap(pm));
+        KexiBLOBBuffer::Handle h = KexiBLOBBuffer::self()->insertPixmap(pm);
+        if (!h)
+            return;
+        setData(h);
     } else {
         //db-aware mode
         m_pixmap = pm;
@@ -733,6 +734,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         const QRect internalRect(QPoint(0, 0), internalSize);
         if (m_currentScaledPixmap.isNull() || internalRect != m_currentRect) {
             m_currentRect = internalRect;
+            m_currentPixmapPos = QPoint(0, 0);
             m_currentScaledPixmap = KexiUtils::scaledPixmap(
                 margins, m_currentRect, pixmap(), m_currentPixmapPos, m_alignment,
                 m_scaledContents, m_keepAspectRatio,
@@ -800,8 +802,8 @@ void KexiDBImageBox::updatePixmap()
 void KexiDBImageBox::setAlignment(Qt::Alignment alignment)
 {
     m_alignment = alignment;
-    if (!m_scaledContents || m_keepAspectRatio)
-        repaint();
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    repaint();
 }
 
 void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
@@ -810,6 +812,7 @@ void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
         return;
     m_insideSetData = true;
     m_data = handle;
+    m_currentScaledPixmap = QPixmap(); // clear cache
     emit idChanged(handle.id());
     m_insideSetData = false;
     update();
