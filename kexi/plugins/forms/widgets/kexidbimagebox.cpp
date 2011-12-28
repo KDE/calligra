@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <qpixmap.h>
 #include <QStyle>
 #include <QStyleOptionFocusRect>
+#include <QStyleOptionFrameV3>
 #include <qclipboard.h>
 #include <qtooltip.h>
 #include <qimage.h>
@@ -112,7 +113,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
-    setFrameColor(Qt::black);
+    setFrameColor(palette().color(QPalette::Foreground));
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
@@ -651,10 +652,32 @@ QSize KexiDBImageBox::sizeHint() const
 
 int KexiDBImageBox::realLineWidth() const
 {
-    if (frameShape() == QFrame::Box
-            && (frameShadow() == QFrame::Sunken || frameShadow() == QFrame::Raised)) {
-        return 2 * lineWidth();
-    } else {
+    switch (frameShape()) {
+    case QFrame::NoFrame:
+        // shadow, line, midline unused
+        return 0;
+    case QFrame::Box:
+        switch (frameShadow()) {
+        case QFrame::Plain:
+            // midline unused
+            return lineWidth();
+        default: // sunken, raised:
+            return 2 * lineWidth() + midLineWidth();
+        }
+        break;
+    case QFrame::Panel:
+        // shadow, midline unused
+        return lineWidth();
+    case QFrame::WinPanel:
+        // shadow, line, midline unused
+        return 2;
+    case QFrame::StyledPanel: {
+        // shadow, line, midline unused
+        QStyleOptionFrameV3 option;
+        option.initFrom(this);
+        return style()->pixelMetric(QStyle::PM_DefaultFrameWidth, &option, this);
+    }
+    default:
         return lineWidth();
     }
 }
@@ -823,7 +846,8 @@ void KexiDBImageBox::resizeEvent(QResizeEvent * e)
     KexiFrame::resizeEvent(e);
     if (m_chooser) {
         QSize s(m_chooser->sizeHint());
-        QSize margin(realLineWidth(), realLineWidth());
+        const int _realLineWidth = realLineWidth();
+        QSize margin(_realLineWidth, _realLineWidth);
         s.setHeight(height() - 2*margin.height());
         s = s.boundedTo(size() - 2 * margin);
         m_chooser->resize(s);
@@ -867,12 +891,6 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 // else if (ke->modifiers() == Qt::ControlButton && KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() == (ke->key()|Qt::CTRL)) {
 // }
     return false;
-}
-
-void KexiDBImageBox::setLineWidth(int width)
-{
-//    m_lineWidthChanged = true;
-    KexiFrame::setLineWidth(width);
 }
 
 void KexiDBImageBox::setPalette(const QPalette &pal)
@@ -956,6 +974,34 @@ void KexiDBImageBox::setFocusPolicy(Qt::FocusPolicy policy)
 {
     m_focusPolicyInternal = policy;
     KexiFrame::setFocusPolicy(focusPolicy());   //set modified policy
+}
+
+void KexiDBImageBox::setFrameShape(QFrame::Shape s)
+{
+    KexiFrame::setFrameShape(s);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setFrameShadow(QFrame::Shadow s)
+{
+    KexiFrame::setFrameShadow(s);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setLineWidth(int w)
+{
+    KexiFrame::setLineWidth(w);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setMidLineWidth(int w)
+{
+    KexiFrame::setMidLineWidth(w);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
 }
 
 #include "kexidbimagebox.moc"
