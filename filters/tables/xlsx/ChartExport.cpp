@@ -18,6 +18,7 @@
  */
 
 #include "ChartExport.h"
+#include "NumberFormatParser.h"
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -556,17 +557,25 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
         //TODO handle series-axis
-        KoGenStyle axisstyle(KoGenStyle::ChartAutoStyle, "chart");
         if(axis->m_type == Charting::Axis::SeriesAxis) continue;
 
         bodyWriter->startElement("chart:axis");
+
+        KoGenStyle axisstyle(KoGenStyle::ChartAutoStyle, "chart");
+
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
 
         QColor labelColor = labelFontColor();
         if (labelColor.isValid())
             axisstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
 
+        if (!axis->m_numberFormat.isEmpty()) {
+            const KoGenStyle style = NumberFormatParser::parse( axis->m_numberFormat, &styles );
+            axisstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
+        }
+
         bodyWriter->addAttribute( "chart:style-name", styles.insert( axisstyle, "ch" ) );
+
         switch(axis->m_type) {
             case Charting::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "y");
@@ -723,6 +732,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             seriesstyle.addProperty( "chart:data-label-text", "true", KoGenStyle::ChartType );
         }
         //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
+
+        if (!series->m_numberFormat.isEmpty()) {
+            const KoGenStyle style = NumberFormatParser::parse( series->m_numberFormat, &styles );
+            seriesstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
+        }
 
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 

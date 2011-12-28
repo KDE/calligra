@@ -1276,7 +1276,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #endif
                 TRY_READ(solidFill)
                 if (m_currentColor != QColor()) {
-                    // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                    // We must set the color immediately, otherwise
+                    // currentColor may be modified by eg. ln
                     m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
                     m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
                     m_currentColor = QColor();

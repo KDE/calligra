@@ -2220,6 +2220,8 @@ bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& table
     }
     return compareCellsInRows(cellStorage(), row1, row2, maxCols);
 #else
+    Q_UNUSED(maxCols);
+
     // Optimized comparision by using the RowRepeatStorage to compare the content
     // rather then an expensive loop like compareCellsInRows.
     int row1repeated = cellStorage()->rowRepeat(row1);
