@@ -100,7 +100,7 @@
         <item>
          <widget class="QLabel" name="ui_plannedLabel">
           <property name="text">
-           <string>Planned effort</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -127,14 +127,14 @@
              <item>
               <widget class="QLabel" name="ui_labelResource">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="ui_plannedResource">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -159,14 +159,14 @@
              <item>
               <widget class="QLabel" name="ui_labelTask">
                <property name="text">
-                <string>TEST</string>
+                <string/>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="ui_plannedTask">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
