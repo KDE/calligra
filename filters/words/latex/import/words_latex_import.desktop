@@ -7,6 +7,7 @@ X-KDE-Weight=1
 ImportDescription=LATEX
 Name=Words Latex Import Filter
 Name[bg]=Филтър за внасяне от Latex в Words
+Name[ca]=Filtre d'importació Latex per al Words
 Name[cs]=Importní filtr formátu LaTeX pro Words
 Name[da]=LaTeX-importfilter til Words
 Name[de]=Words LaTeX-Importfilter

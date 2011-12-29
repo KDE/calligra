@@ -2,6 +2,7 @@
 Type=Service
 Name=Words Microsoft Write Import Filter
 Name[bg]=Филтър за внасяне от Microsoft Write в Words
+Name[ca]=Filtre d'importació Microsoft Write per al Words
 Name[cs]=Importní filtr Microsoft Write pro Words
 Name[da]=Microsoft Write-importfilter til Words
 Name[de]=Words MS-Write-Importfilter
