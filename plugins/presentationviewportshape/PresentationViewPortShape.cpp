@@ -108,7 +108,7 @@ int PresentationViewPortShape::transitionProfileIndex(const QString& profile)
 void PresentationViewPortShape::initializeAnimationProperties()
 {
     //Initializing the map with default values of all attributes
-    m_animationAttributes.insert(PresentationViewPortShape::title, "No title");
+    m_animationAttributes.insert(PresentationViewPortShape::title, "Untitled");
     m_animationAttributes.insert(PresentationViewPortShape::refid, "null");
     m_animationAttributes.insert(PresentationViewPortShape::transitionProfile, "linear");
     m_animationAttributes.insert(PresentationViewPortShape::hide, "true");
