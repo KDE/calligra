@@ -3323,7 +3323,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
-    body->startElement("draw:frame");
+    if (m_context->graphicObjectIsGroup) {
+        body->startElement("draw:g");
+    } else {
+        body->startElement("draw:frame");
+    }
 
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");

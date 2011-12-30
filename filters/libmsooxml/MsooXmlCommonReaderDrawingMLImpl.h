@@ -528,7 +528,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                 ELSE_TRY_READ_IF(sp)
                 ELSE_TRY_READ_IF(grpSpPr)
                 ELSE_TRY_READ_IF(cxnSp)
-#ifdef PPTXXMLSLIDEREADER_CPP
+#if defined PPTXXMLSLIDEREADER_CPP || defined XLSXXMLDRAWINGREADER_CPP
                 ELSE_TRY_READ_IF(graphicFrame)
 #endif
                 SKIP_UNKNOWN
@@ -1361,15 +1361,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
-        chartexport->setSheetReplacement( false );
-        if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+        chartexport->setSheetReplacement(false);
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
             //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
             chartexport->m_x = EMU_TO_POINT(f.m_colOff);
             chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
             hasStart = true;
-            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
                 chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
                 //chartexport->m_end_x = f.m_colOff;
@@ -1423,9 +1423,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
 #undef CURRENT_EL
 #define CURRENT_EL relIds
-//! DrawingML diagram handler
-/*!
-@todo documentation
+//! relIds (Explicit Relationships to Diagram Parts)
+/*! ECMA-376, 21.4, p.3936
+
+  This element specifies the relationship IDs used to explicitly reference each
+  of the four constituent parts of a DrawingML diagram:
+
+  Diagram Colors (cs attribute)
+  Diagram Data (dm attribute)
+  Diagram Layout Definition (lo attribute)
+  Diagram Style (qs attribute)
+
+  ----------
+  DrawingML - Diagrams
+  ECMA-376, 21.4, p.3936
+
+  A DrawingML diagram allows the definition of diagrams using DrawingML objects
+  and constructs. This namespace defines the contents of a DrawingML diagram.
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 {
@@ -1446,26 +1460,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
             }
         }
 
-        //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
-        const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
-        const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
-        //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+/*         const QString colorsfile = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs); */
+        const QString datafile = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+        const QString layoutfile = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+/*         const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs); */
         QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
 
         // first read the data-model
         MSOOXML::MsooXmlDiagramReader dataReader(this);
         const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
         if (dataReaderResult != KoFilter::OK) {
-        raiseError(dataReader.errorString());
-        return dataReaderResult;
+            raiseError(dataReader.errorString());
+            return dataReaderResult;
         }
 
         // then read the layout definition
         MSOOXML::MsooXmlDiagramReader layoutReader(this);
         const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
         if (layoutReaderResult != KoFilter::OK) {
-        raiseError(layoutReader.errorString());
-        return layoutReaderResult;
+            raiseError(layoutReader.errorString());
+            return layoutReaderResult;
+        }
+
+        if (context->shapeListSize() > 1) {
+            m_context->graphicObjectIsGroup = true;
         }
 
         // and finally start the process that will produce the ODF
@@ -2357,14 +2375,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     m_currentTextStyle.removeProperty("style:text-underline-style");
     m_currentTextStyle.removeProperty("style:text-underline-width");
 
-    // The fo:font-size is applied to both the start of a new line and to the
+    // The fo:font-size is applied to both the start of a new line and the
     // end of the current line during layout, which affects line-height
-    // calculation.  Avoid using the application default font-size!
-    //
-    // NOTE: If the default text style does not specify the font-size, then
-    // overlapping of text occures, because the absolute line-height is
-    // calculated from the MAX font-size defined explicitly by any of the
-    // <text:span> elements.  Then application default font-size applies.
+    // calculation and results in overlapping.  Avoid use of the application
+    // default font-size and font-size of the default text/paragraph style!
     m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
 
     body->startElement("text:span");
@@ -3511,11 +3525,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //! graphic handler (Graphic Object)
 /*! ECMA-376, 20.1.2.2.16, p.3037.
 
- This element specifies the existence of a single graphic object.
- Document authors should refer to this element when they wish to persist
- a graphical object of some kind. The specification for this graphical
- object is provided entirely by the document author and referenced within
- the graphicData child element.
+ This element specifies the existence of a single graphic object.  Document
+ authors should refer to this element when they wish to persist a graphical
+ object of some kind. The specification for this graphical object is provided
+ entirely by the document author and referenced within the graphicData child
+ element.
 
  Parent elements:
  - [done] anchor (§20.4.2.3)
@@ -3566,14 +3580,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 {
     READ_PROLOGUE
+
+    // TODO: Is it possible to have a group of graphic objects in a chart?
+    // It's possible in case of a diagram.
+    m_context->graphicObjectIsGroup = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-            ELSE_TRY_READ_IF_NS(c, chart) // Charting diagram
-            ELSE_TRY_READ_IF_NS(dgm, relIds) // DrawingML diagram
+            // Charting diagram
+            ELSE_TRY_READ_IF_NS(c, chart)
+            // DrawingML diagram
+            ELSE_TRY_READ_IF_NS(dgm, relIds)
 #endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
@@ -3589,7 +3610,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_EPILOGUE
 }
 
-#define MSOOXML_CURRENT_NS "a" // note: osed only for blipFill namespace is parametrized, can be a or p
+// NOTE: osed only for blipFill namespace is parametrized, can be a or p
+#define MSOOXML_CURRENT_NS "a"
+
 #undef CURRENT_EL
 #define CURRENT_EL blipFill
 //! blipFill handler (Picture Fill)
