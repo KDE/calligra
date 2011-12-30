@@ -71,7 +71,6 @@ public:
     void parseAnimationProperties(const KoXmlElement& e); 
     bool saveAnimationAttributes(SvgSavingContext& context);
     
-    QString toString();//TODO:Needed?
     void setRefId(const QString& refid);//TODO:Redundant?
     
     //int sequence();//TODO:Needed?
@@ -90,6 +89,7 @@ public:
     static const QString timeoutMs;
     static const QString hide;
     static const QString clip;
+    static const QString ns;
     
     
 private:     

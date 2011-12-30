@@ -49,11 +49,17 @@ void PresentationViewPortConfigWidget::updateWidget()
 {
     PresentationViewPortShape* currShape = m_tool->currentShape();
    
-    m_widget.sequence->setValue((currShape->attribute("sequence")).toInt());
-    m_widget.duration->setValue((currShape->attribute("transition-duration-ms").toInt()));
-    m_widget.zoom->setValue((currShape->attribute("transition-zoom-percent")).toInt());
+    QString attributeValue(currShape->attribute(PresentationViewPortShape::sequence));
+    m_widget.sequence->setValue(attributeValue.toInt());
     
-    int index = currShape->transitionProfileIndex(currShape->attribute("transition-profile"));
+    attributeValue = currShape->attribute(PresentationViewPortShape::transitionDurationMs);
+    m_widget.duration->setValue(attributeValue.toInt());
+    
+    attributeValue = currShape->attribute(PresentationViewPortShape::transitionZoomPercent);
+    m_widget.zoom->setValue(attributeValue.toInt());
+    
+    attributeValue = currShape->attribute(PresentationViewPortShape::transitionProfile);
+    int index = currShape->transitionProfileIndex(attributeValue);
     m_widget.transitionProfile->setCurrentIndex(index);
     
     if(currShape->attribute("clip") == "true")
@@ -67,9 +73,9 @@ void PresentationViewPortConfigWidget::updateWidget()
     else
       m_widget.timeoutenable->setCheckState(Qt::Unchecked);
     
-    m_widget.timeoutms->setValue((currShape->attribute("timeout-ms")).toInt());
-    m_widget.title->setText(currShape->attribute("title"));
+    attributeValue = currShape->attribute(PresentationViewPortShape::timeoutMs);
+    m_widget.timeoutms->setValue(attributeValue.toInt());
     
-  
+    m_widget.title->setText(currShape->attribute("title"));
 }
 

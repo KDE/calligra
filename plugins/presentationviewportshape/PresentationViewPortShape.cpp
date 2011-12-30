@@ -43,9 +43,9 @@ const QString PresentationViewPortShape::timeoutMs("timeout-ms");
 const QString PresentationViewPortShape::hide("hide");
 const QString PresentationViewPortShape::clip("clip");
 const QString PresentationViewPortShape::sequence("sequence");
+const QString PresentationViewPortShape::ns("sozi:");
 
-
-PresentationViewPortShape::PresentationViewPortShape() : m_ns("sozi")
+PresentationViewPortShape::PresentationViewPortShape()
 {
     setShapeId(PresentationViewPortShapeId);
     setName("ViewPort");//TODO remove this?
@@ -125,26 +125,6 @@ void PresentationViewPortShape::setRefId(const QString& refId)
 {
     m_animationAttributes["refid"] = refId;
 }
-
-QString PresentationViewPortShape::toString()
-{
-    unsigned indent = 1;
-    QString stream;
-            
-   PresentationViewPortShapeUtil::printIndentation(stream, indent++);
-    stream.append("<calligra:frame");
-    stream.append("\n");
-    
-    foreach(QString key, m_animationAttributes.keys()){
-      PresentationViewPortShapeUtil::printIndentation(stream, indent);
-      stream.append(m_ns + ":").append(key).append("=\"").append(m_animationAttributes.value(key)).append("\"");
-      stream.append("\n");
-    }
-    stream.append("/>\n");
-    
-    return stream;
-}
-
 
 void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
