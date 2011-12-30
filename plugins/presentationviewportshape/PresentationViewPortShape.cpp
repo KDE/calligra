@@ -81,9 +81,9 @@ bool PresentationViewPortShape::setAttribute(const QString& attrName, const QStr
 void PresentationViewPortShape::parseAnimationProperties(const KoXmlElement& e)
 {
     foreach(QString key, m_animationAttributes.keys()){
-      if(e.hasAttribute(key))
-      	m_animationAttributes.insert(key, "sozi:" + e.attribute(key));
-	}
+      if(e.hasAttribute(QString("sozi:").append(key)))
+	m_animationAttributes[key] = e.attribute(QString("sozi:").append(key));
+    }
 }
 
 void PresentationViewPortShape::initializeTransitionProfiles()
@@ -255,21 +255,22 @@ bool PresentationViewPortShape::loadSvg(const KoXmlElement &element, SvgLoadingC
   
   if(element.hasAttribute("sozi:viewport") && (element.attribute("sozi:viewport") == "yes"))//FIXME:Is hasattribute check required at all?
   {  
-  //qDebug() << "PVPShape found with rect id = " << element.attribute("id") << endl; 
-    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
-    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
     const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
     const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height"));
     
     setSize(QSizeF(w, h));
-    setPosition(QPointF(x, y));
     if (w == 0.0 || h == 0.0)
         setVisible(false);
 
     return true;
   }
-  else if(element.localName() == "sozi:frame"){
-    PresentationViewPortShape *shape = dynamic_cast<PresentationViewPortShape*>(context.shapeById(element.attribute("id")));
+  else if(element.tagName() == "sozi:frame"){
+    QString frameRefid(element.attribute(QString("sozi:").append("refid")));
+    PresentationViewPortShape *shape = dynamic_cast<PresentationViewPortShape*>(context.shapeById(frameRefid));
+    if(!shape){
+      qDebug() << "Corresponding pvp shape not found" <<  endl;
+      return false;
+    }
     shape->parseAnimationProperties(element);
     return false;   
   }

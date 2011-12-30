@@ -33,21 +33,19 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
     : KoShapeFactoryBase("PresentationViewPortShape", i18n("PresentationViewPort"))
 {	
     setToolTip(i18n("A Presentation View Port"));
-    setIcon("rectangle-shape");
+    setIcon("rectangle-shape");//TODO New icon needed shaped like [ ]
     setLoadingPriority(2);
     
     QList<QPair<QString, QStringList> > elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
-    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("calligra:frame")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("sozi:frame")));
     setXmlElements(elementNamesList);
 
 }
 
 KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
 {
-  //qDebug () << "PVPFactory::createDefaultShape()";
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
-    qDebug() << "new PVP shape created";
     viewport->setShapeId(PresentationViewPortShapeId);
     
     return viewport;

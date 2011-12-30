@@ -319,7 +319,7 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
 
     context.shapeWriter().endElement();
-    qDebug () << "RectangleShape::saveSvg()" << endl;
+    
     return true;
 }
 
