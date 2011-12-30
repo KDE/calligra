@@ -112,7 +112,7 @@ void PresentationViewPortShape::initializeAnimationProperties()
     m_animationAttributes.insert(PresentationViewPortShape::refid, "null");
     m_animationAttributes.insert(PresentationViewPortShape::transitionProfile, "linear");
     m_animationAttributes.insert(PresentationViewPortShape::hide, "true");
-    m_animationAttributes.insert(PresentationViewPortShape::clip, "true");
+    m_animationAttributes.insert(PresentationViewPortShape::clip, "false");
     m_animationAttributes.insert(PresentationViewPortShape::timeoutEnable, "false");
     m_animationAttributes.insert(PresentationViewPortShape::sequence, QString("%1").arg(0));
     m_animationAttributes.insert(PresentationViewPortShape::transitionZoomPercent, QString("%1").arg(1));
@@ -219,10 +219,6 @@ bool PresentationViewPortShape::saveSvg(SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("style", "fill:none");
     
-    QPointF position = this->position();
-    context.shapeWriter().addAttribute("x", position.x());
-    context.shapeWriter().addAttribute("y", position.y());
-    
     const QSizeF size = this->size();
     context.shapeWriter().addAttributePt("width", size.width());
     context.shapeWriter().addAttributePt("height", size.height());
@@ -247,7 +243,7 @@ bool PresentationViewPortShape::saveAnimationAttributes(SvgSavingContext& saving
     context->animationPropertiesWriter().addAttribute("sozi:timeout-enable", m_animationAttributes[PresentationViewPortShape::timeoutEnable]);
     context->animationPropertiesWriter().addAttribute("sozi:timeout-ms", m_animationAttributes[PresentationViewPortShape::timeoutMs]);
     context->animationPropertiesWriter().addAttribute("sozi:transition-zoom-percent", m_animationAttributes[PresentationViewPortShape::transitionZoomPercent]);
-    context->animationPropertiesWriter().addAttribute("sozi:transition-timeout-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
+    context->animationPropertiesWriter().addAttribute("sozi:transition-duration-ms", m_animationAttributes[PresentationViewPortShape::transitionDurationMs]);
     context->animationPropertiesWriter().addAttribute("sozi:sequence", m_animationAttributes[PresentationViewPortShape::sequence]);
     context->animationPropertiesWriter().endElement();
    
