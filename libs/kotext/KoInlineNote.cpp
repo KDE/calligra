@@ -197,11 +197,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             return false;
         }
 
-        // notes are marked with text:id or xml:id, but that id actually isn't used internally
-        // in Calligra.
-        KoElementReference ref;
-        ref.loadOdf(element);
-
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
@@ -240,11 +235,6 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         } else {
             writer->addAttribute("text:note-class", "endnote");
         }
-
-        // save a unique id.
-        KoElementReference ref;
-        qDebug() << "note id" << ref.toString();
-        ref.saveOdf(writer, KoElementReference::TEXTID);
 
         writer->startElement("text:note-citation", false);
         if (!autoNumbering()) {
