@@ -35,6 +35,7 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <QMap>
+#include <QUuid>
 
 class KoShapeSavingContextPrivate {
 public:
@@ -83,7 +84,7 @@ KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &
         KoEmbeddedDocumentSaver &embeddedSaver)
     : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
 {
-    // by default allow saving of draw:id
+    // by default allow saving of draw:id + xml:id
     addOption(KoShapeSavingContext::DrawId);
 }
 
@@ -143,7 +144,7 @@ QString KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
     QMap<const KoShape *, QString>::iterator it(d->drawIds.find(shape));
     if (it == d->drawIds.end()) {
         if (insert == true) {
-            it = d->drawIds.insert(shape, QString("shape%1").arg(++d->drawId));
+            it = d->drawIds.insert(shape, QString("shape-%1-%2").arg(++d->drawId).arg(QUuid::createUuid()));
         } else {
             return QString();
         }
@@ -162,7 +163,7 @@ QString KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool inse
     QMap<const QTextBlockUserData*, QString>::iterator it(d->subIds.find(subItem));
     if (it == d->subIds.end()) {
         if (insert == true) {
-            it = d->subIds.insert(subItem, QString("subitem%1").arg(++d->subId));
+            it = d->subIds.insert(subItem, QString("subitem-%1-%2").arg(++d->subId).arg(QUuid::createUuid()));
         } else {
             return QString();
         }
