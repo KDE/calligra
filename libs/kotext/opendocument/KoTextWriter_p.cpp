@@ -702,11 +702,14 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
-    if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
-        // text:id is deprecated. if present, it must have the same value as
-        // xml:id
-        writer->addAttribute("xml:id", context.subId(blockData));
-        writer->addAttribute("text:id", context.subId(blockData));
+    if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        if (blockData->saveXmlID()) {
+            // text:id is deprecated. if present, it must have the same value as
+            // xml:id. We only save the id's if the textblockdata is usef for
+            // animation.
+            writer->addAttribute("xml:id", context.subId(blockData));
+            writer->addAttribute("text:id", context.subId(blockData));
+        }
     }
 
     if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
