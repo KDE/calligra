@@ -1745,7 +1745,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     TRY_READ_ATTR(anchor)
 
     if (!link_target.isEmpty() || !anchor.isEmpty()) {
-        body->startElement("text:a");
+        body->startElement("text:a", false);
         body->addAttribute("xlink:type", "simple");
         closeTag = true;
         if (!anchor.isEmpty())
@@ -2659,7 +2659,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     }
     if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
         if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->startElement("text:a");
+            body->startElement("text:a", false);
             body->addAttribute("xlink:type", "simple");
             if (m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());

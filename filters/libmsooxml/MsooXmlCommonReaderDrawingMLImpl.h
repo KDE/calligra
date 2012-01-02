@@ -2274,7 +2274,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     body = rBuf.originalWriter();
 
     if (m_hyperLink) {
-        body->startElement("text:a");
+        body->startElement("text:a", false);
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
@@ -2381,7 +2381,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     // default font-size and font-size of the default text/paragraph style!
     m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
 
-    body->startElement("text:span");
+    body->startElement("text:span", false);
     body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
     body->startElement("text:line-break");
     body->endElement(); //text:line-break
