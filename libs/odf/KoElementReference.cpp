@@ -61,6 +61,7 @@ void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) co
     if (d->xmlid.isNull()) return;
 
     writer->addAttribute("xml:id", d->xmlid);
+
     if (saveOptions & DRAWID)
         writer->addAttribute("draw:id", d->xmlid);
     if (saveOptions & TEXTID)
