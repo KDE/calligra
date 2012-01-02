@@ -141,12 +141,12 @@ public:
     ShapeSavingOptions options() const;
 
     /**
-     * @brief Get the draw id for a shape
+     * @brief Get the xml:id for a shape
      *
-     * The draw:id is unique for all shapes.
+     * The xml:id is globally unique.
      *
-     * @param shape for which the draw id should be returned
-     * @param insert if true a new draw id will be generated if there is non yet
+     * @param shape for which the xml id should be returned
+     * @param insert if true a new xml id will be generated if there is none yet
      *
      * @return the draw id for the shape or and empty string if it was not found
      */
@@ -163,9 +163,9 @@ public:
     void clearDrawIds();
 
     /**
-     * @brief Get the text id for a sub-item
+     * @brief Get the xml:id for a sub-item
      *
-     * The text:id is unique for all sub-item.
+     * The xml:id is globally unique..
      *
      * @param subitem for which the sub-item id should be returned
      * @param insert if true a new sub-item id will be generated if there is non yet
@@ -257,7 +257,7 @@ public:
      */
     KoSharedSavingData *sharedData(const QString &id) const;
 
-    /*
+    /**
      * Add an offset that will be applied to the shape position when saved
      *
      * This is needed e.g. for shapes anchored to a text shape as the position is
