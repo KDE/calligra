@@ -21,6 +21,9 @@
 
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
+#include <KoXmlNS.h>
+
+#include <QDebug>
 
 KoElementReference::KoElementReference()
     : d(new KoElementReferenceData())
@@ -62,10 +65,12 @@ void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) co
 
     writer->addAttribute("xml:id", d->xmlid);
 
-    if (saveOptions & DRAWID)
+    if (saveOptions & DRAWID) {
         writer->addAttribute("draw:id", d->xmlid);
-    if (saveOptions & TEXTID)
+    }
+    if (saveOptions & TEXTID) {
         writer->addAttribute("text:id", d->xmlid);
+    }
 }
 
 QString KoElementReference::toString() const
@@ -78,14 +83,14 @@ KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
     QString xmlid;
 
-    if (element.hasAttribute("xml:id")) {
-        xmlid = element.attribute("xml:id");
+    if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
+        xmlid = element.attributeNS(KoXmlNS::xml, "id");
     }
-    else if (element.hasAttribute("draw:id")) {
-        xmlid = element.attribute("draw:id");
+    else if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
+        xmlid = element.attributeNS(KoXmlNS::draw, "id");
     }
-    else if (element.hasAttribute("text:id")) {
-        xmlid = element.attribute("text:id");
+    else if (element.hasAttributeNS(KoXmlNS::text, "id")) {
+        xmlid = element.attributeNS(KoXmlNS::text, "id");
     }
 
     d->xmlid = xmlid;
