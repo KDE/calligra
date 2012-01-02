@@ -20,6 +20,7 @@
 
 #include "KoGenChanges.h"
 #include <KoXmlWriter.h>
+#include <KoElementReference.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
@@ -46,10 +47,6 @@ public:
 
     /// style definition -> name
     QMap<KoGenChange, QString>  changeMap;
-
-    /// Map with the change name as key.
-    /// This map is mainly used to check for name uniqueness
-    QSet<QString> changeNames;
 
     /// List of styles (used to preserve ordering)
     QList<NamedChange> changeArray;
@@ -91,7 +88,6 @@ QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const K
         }
     }
     changeName = makeUniqueName(changeName);
-    changeNames.insert(changeName);
     QMap<KoGenChange, QString>::iterator it = changeMap.insert(change, changeName);
     NamedChange s;
     s.change = &it.key();
@@ -108,15 +104,8 @@ QMap<KoGenChange, QString> KoGenChanges::changes() const
 
 QString KoGenChanges::Private::makeUniqueName(const QString& base) const
 {
-    if (!changeNames.contains(base))
-        return base;
-    int num = 1;
-    QString name;
-    do {
-        name = base;
-        name += QString::number(num++);
-    } while (changeNames.contains(name));
-    return name;
+    KoElementReference ref(base);
+    return ref.toString();
 }
 
 const KoGenChange* KoGenChanges::change(const QString& name) const
