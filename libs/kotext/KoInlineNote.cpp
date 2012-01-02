@@ -30,6 +30,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoGenStyles.h>
 #include <KoStyleManager.h>
+#include <KoElementReference.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -54,7 +55,6 @@ public:
 
     QTextFrame *textFrame;
     QString label;
-    QString id;
     QString author;
     QDateTime date;
     bool autoNumbering;
@@ -101,11 +101,6 @@ void KoInlineNote::setAutoNumber(int autoNumber)
     }
 }
 
-void KoInlineNote::setId(const QString &id)
-{
-    d->id = id;
-}
-
 QTextFrame *KoInlineNote::textFrame() const
 {
     return d->textFrame;
@@ -114,11 +109,6 @@ QTextFrame *KoInlineNote::textFrame() const
 QString KoInlineNote::label() const
 {
     return d->label;
-}
-
-QString KoInlineNote::id() const
-{
-    return d->id;
 }
 
 bool KoInlineNote::autoNumbering() const
@@ -207,7 +197,11 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             return false;
         }
 
-        d->id = element.attributeNS(KoXmlNS::text, "id");
+        // notes are marked with text:id or xml:id, but that id actually isn't used internally
+        // in Calligra.
+        KoElementReference ref;
+        ref.loadOdf(element);
+
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
@@ -246,7 +240,12 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         } else {
             writer->addAttribute("text:note-class", "endnote");
         }
-        writer->addAttribute("text:id", d->id);
+
+        // save a unique id.
+        KoElementReference ref;
+        qDebug() << "note id" << ref.toString();
+        ref.saveOdf(writer, KoElementReference::TEXTID);
+
         writer->startElement("text:note-citation", false);
         if (!autoNumbering()) {
             writer->addAttribute("text:label", d->label);
