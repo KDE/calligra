@@ -28,6 +28,7 @@
 
 #include <QComboBox>
 
+#include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -71,6 +72,9 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     //kDebug();
     setupUi(this);
 
+    addEntryBtn->setIcon( KIcon( "list-add" ) );
+    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+
     CompletionEntryItemModel *m = new CompletionEntryItemModel( this );
     entryTable->setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     entryTable->setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
@@ -98,9 +102,31 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     enableWidgets();
     started->setFocus();
     
-    entryTable->model()->setManager( sm );
-    entryTable->model()->setTask( task );
-    entryTable->setCompletion( &m_completion );
+    m->setManager( sm );
+    m->setTask( task );
+    Resource *r = p.project()->findResource( task->workPackage().ownerId() );
+    m->setSource( r, task );
+
+    entryTable->horizontalHeader()->swapSections( CompletionEntryItemModel::Property_PlannedEffort, CompletionEntryItemModel::Property_ActualAccumulated );
+
+    //FIXME when string freeze is lifted
+    Duration pr = task->plannedEffort( r );
+    Duration tr = task->plannedEffort();
+    if ( pr == tr ) {
+        ui_plannedFrame->hide();
+    } else {
+        ui_plannedLabel->setText( m->headerData( CompletionEntryItemModel::Property_PlannedEffort, Qt::Horizontal ).toString() );
+        ui_labelResource->setText( r->name() );
+        ui_plannedResource->setText( pr.format() );
+
+        ui_labelTask->setText( Node::typeToString( Node::Type_Task, true ) );
+        ui_plannedTask->setText( tr.format() );
+    }
+
+    if ( m->rowCount() > 0 ) {
+        QModelIndex idx = m->index( m->rowCount() -1, 0 );
+        entryTable->scrollTo( idx );
+    }
 
     connect( addEntryBtn, SIGNAL( clicked() ), this, SLOT( slotAddEntry() ) );
     connect( removeEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( removeEntry() ) );
@@ -285,11 +311,20 @@ void TaskCompletionPanel::slotEditmodeChanged( int index )
 //-------------------
 CompletionEntryItemModel::CompletionEntryItemModel( QObject *parent )
     : KPlato::CompletionEntryItemModel( parent ),
-    m_calculate( false )
+    m_calculate( false ),
+    m_resource( 0 ),
+    m_task( 0 )
 {
     // FIXME after string freeze is lifted
     CostBreakdownItemModel m;
     m_headers << m.headerData( 2, Qt::Horizontal ).toString();
+}
+
+void CompletionEntryItemModel::setSource( Resource *resource, Task *task )
+{
+    m_resource = resource;
+    m_task = task;
+    setCompletion( &(task->completion()) );
 }
 
 int CompletionEntryItemModel::columnCount( const QModelIndex& ) const
@@ -343,7 +378,16 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
 
 QVariant CompletionEntryItemModel::data( const QModelIndex &idx, int role ) const
 {
-    if ( idx.column() == Property_ActualAccumulated ) {
+    if ( idx.column() == Property_PlannedEffort && m_resource ) {
+        switch ( role ) {
+            case Qt::DisplayRole: {
+                    Duration v = m_task->plannedEffortTo( m_resource, date( idx.row() ).toDate() );
+                    return v.format();
+                }
+            default:
+                return QVariant();
+        }
+    } else if ( idx.column() == Property_ActualAccumulated ) {
         switch ( role ) {
             case Qt::DisplayRole: {
                     Duration v;

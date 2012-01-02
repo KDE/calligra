@@ -3,6 +3,8 @@ Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Map Browser Plugin for Kexi Forms
+Name[ca]=Connector de navegador de mapes per a formularis del Kexi
+Name[et]=Kexi vormide kaardibrauseri plugin
 Name[it]=Estensione di navigazione mappe per i moduli di Kexi
 Name[nb]=Kartleser-programtillegg for Kexi-former
 Name[pt]='Plugin' de Navegação por Mapas para os Formulários do Kexi

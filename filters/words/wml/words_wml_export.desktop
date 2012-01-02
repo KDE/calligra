@@ -2,6 +2,7 @@
 Type=Service
 Name=Words WML Export Filter
 Name[bg]=Филтър за изнасяне от Words в WML
+Name[ca]=Filtre d'exportació WML per al Words
 Name[cs]=Exportní filtr formátu WML pro Words
 Name[da]=WML-eksportfilter til Words
 Name[de]=Words WML-Exportfilter

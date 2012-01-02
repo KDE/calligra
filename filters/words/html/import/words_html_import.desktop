@@ -2,6 +2,7 @@
 Type=Service
 Name=Words HTML Import Filter
 Name[bg]=Филтър за внасяне от HTML в Words
+Name[ca]=Filtre d'importació HTML per al Words
 Name[cs]=Importní filtr HTML pro Words
 Name[da]=HTML-importfilter til Words
 Name[de]=Words HTML-Importfilter

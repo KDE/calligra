@@ -570,8 +570,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             axisstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
 
         if (!axis->m_numberFormat.isEmpty()) {
-            //NumberFormatParser::setStyles( &styles );
-            const KoGenStyle style = NumberFormatParser::parse( axis->m_numberFormat );
+            const KoGenStyle style = NumberFormatParser::parse( axis->m_numberFormat, &styles );
             axisstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
         }
 
@@ -735,8 +734,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
 
         if (!series->m_numberFormat.isEmpty()) {
-            //NumberFormatParser::setStyles( &styles );
-            const KoGenStyle style = NumberFormatParser::parse( series->m_numberFormat );
+            const KoGenStyle style = NumberFormatParser::parse( series->m_numberFormat, &styles );
             seriesstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
         }
 

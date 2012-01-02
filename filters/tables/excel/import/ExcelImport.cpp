@@ -1398,12 +1398,11 @@ void ExcelImport::Private::processNumberFormats()
     static const QString sNoStyle = QString::fromLatin1("NOSTYLE");
     QHash<QString, QString> dataStyleMap;
 
-    NumberFormatParser::setStyles(dataStyles);
     for (int i = 0; i < workbook->formatCount(); i++) {
         Format* f = workbook->format(i);
         QString& styleName = dataStyleMap[f->valueFormat()];
         if (styleName.isEmpty()) {
-            KoGenStyle s = NumberFormatParser::parse(f->valueFormat());
+            KoGenStyle s = NumberFormatParser::parse(f->valueFormat(), dataStyles);
             if (s.type() != KoGenStyle::ParagraphAutoStyle) {
                 styleName = dataStyles->insert(s, "N");
             } else {
