@@ -1362,7 +1362,9 @@ void OOWriterWorker::processFootnote(const VariableData& variable)
         if (flag) {
             *m_streamOut << "<text:footnote text:id=\"ft";
             *m_streamOut << (++m_footnoteNumber);
-            *m_streamOut << "\">";
+            *m_streamOut << "\" xml:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";"
             *m_streamOut << "<text:footnote-citation>" << escapeOOText(value) << "</text:footnote-citation>";
             *m_streamOut << "<text:footnote-body>\n";
 
@@ -1372,6 +1374,8 @@ void OOWriterWorker::processFootnote(const VariableData& variable)
             *m_streamOut << "</text:footnote>";
         } else {
             *m_streamOut << "<text:endnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\" xml:id=\"ft";
             *m_streamOut << (++m_footnoteNumber);
             *m_streamOut << "\">";
             *m_streamOut << "<text:endnote-citation>" << escapeOOText(value) << "</text:endnote-citation>";
