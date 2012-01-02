@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ class KEXI_DB_EXPORT QuerySchemaParameterValueListIterator
 {
 public:
     QuerySchemaParameterValueListIterator(
-        Driver& driver, const QList<QVariant>& params);
+        const Driver* driver, const QList<QVariant>& params);
     ~QuerySchemaParameterValueListIterator();
 
     //! \return previous value

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "connection.h"
 #include "connectiondata.h"
 #include "admin.h"
+#include "utils.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -222,21 +223,22 @@ bool Driver::isSystemObjectName(const QString& n) const
 
 bool Driver::isKexiDBSystemObjectName(const QString& n)
 {
-    QString lcName = n.toLower();
-    if (!lcName.startsWith("kexi__"))
+    if (!n.startsWith(QLatin1String("kexi__"), Qt::CaseInsensitive))
         return false;
-    const QStringList list(Connection::kexiDBSystemTableNames());
-    return list.indexOf(lcName) != -1;
+    return Connection::kexiDBSystemTableNames().contains(n, Qt::CaseInsensitive);
 }
 
 bool Driver::isSystemFieldName(const QString& n) const
 {
-    if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.toLower() == beh->ROW_ID_FIELD_NAME.toLower())
+    if (!beh->ROW_ID_FIELD_NAME.isEmpty()
+        && 0 == n.compare(beh->ROW_ID_FIELD_NAME, Qt::CaseInsensitive))
+    {
         return true;
+    }
     return drv_isSystemFieldName(n);
 }
 
-QString Driver::valueToSQL(uint ftype, const QVariant& v) const
+static QString valueToSQLInternal(const KexiDB::Driver *driver, uint ftype, const QVariant& v)
 {
     if (v.isNull())
         return "NULL";
@@ -244,7 +246,7 @@ QString Driver::valueToSQL(uint ftype, const QVariant& v) const
     case Field::Text:
     case Field::LongText: {
         QString s = v.toString();
-        return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
+        return driver ? driver->escapeString(s) : KexiDB::escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
     }
     case Field::Byte:
     case Field::ShortInteger:
@@ -268,13 +270,17 @@ QString Driver::valueToSQL(uint ftype, const QVariant& v) const
     case Field::Date:
         return QString("\'") + v.toDate().toString(Qt::ISODate) + "\'";
     case Field::DateTime:
-        return dateTimeToSQL(v.toDateTime());
+        return driver ? driver->dateTimeToSQL(v.toDateTime())
+                      : KexiDB::dateTimeToSQL(v.toDateTime());
     case Field::BLOB: {
         if (v.toByteArray().isEmpty())
             return QString::fromLatin1("NULL");
-        if (v.type() == QVariant::String)
-            return escapeBLOB(v.toString().toUtf8());
-        return escapeBLOB(v.toByteArray());
+        if (v.type() == QVariant::String) {
+            return driver ? driver->escapeBLOB(v.toString().toUtf8())
+                          : KexiDB::escapeBLOB(v.toString().toUtf8(), KexiDB::BLOBEscape0xHex);
+        }
+        return driver ? driver->escapeBLOB(v.toByteArray())
+                      : KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscape0xHex);
     }
     case Field::InvalidType:
         return "!INVALIDTYPE!";
@@ -283,6 +289,11 @@ QString Driver::valueToSQL(uint ftype, const QVariant& v) const
         return QString();
     }
     return QString();
+}
+
+QString Driver::valueToSQL(uint ftype, const QVariant& v) const
+{
+    return valueToSQLInternal(this, ftype, v);
 }
 
 QVariant Driver::propertyValue(const QByteArray& propName) const
@@ -304,12 +315,16 @@ QList<QByteArray> Driver::propertyNames() const
 
 QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-    QByteArray cstr(str.toLatin1());
+    const QByteArray cstr(str.toLatin1());
     return QString(escapeIdentifier(cstr, options));
 }
 
 QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
 {
+    if (options & EscapeKexi) {
+        return KexiDB::escapeIdentifier(str, options);
+    }
+
     bool needOuterQuotes = false;
 
 // Need to use quotes if ...
@@ -330,13 +345,10 @@ QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
         needOuterQuotes = true;
 
 // ... or if the identifier has a space in it...
-    else if (str.indexOf(' ') != -1)
+    else if (str.contains(' '))
         needOuterQuotes = true;
 
-    if (needOuterQuotes && (options & EscapeKexi)) {
-        const char quote = '"';
-        return quote + QByteArray(str).replace(quote, "\"\"") + quote;
-    } else if (needOuterQuotes) {
+    if (needOuterQuotes) {
         const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.toLatin1();
         return quote + drv_escapeIdentifier(str) + quote;
     } else {
@@ -361,6 +373,49 @@ K_GLOBAL_STATIC_WITH_ARGS(KexiUtils::StaticSetOfStrings, KexiDB_kexiSQLKeywords,
 KEXI_DB_EXPORT bool KexiDB::isKexiSQLKeyword(const QByteArray& word)
 {
     return KexiDB_kexiSQLKeywords->contains(word);
+}
+
+KEXI_DB_EXPORT QString KexiDB::escapeString(const QString& str)
+{
+    return QLatin1String("'") + QString(str).replace('\'', "''") + QLatin1String("'");
+}
+
+KEXI_DB_EXPORT QString KexiDB::escapeIdentifier(const QString& str, int options)
+{
+    const QByteArray cstr(str.toLatin1());
+    return QString(escapeIdentifier(cstr, options));
+}
+
+KEXI_DB_EXPORT QByteArray KexiDB::escapeIdentifier(const QByteArray& str, int options)
+{
+    if ((options & KexiDB::Driver::EscapeDriver)) {
+        kWarning() << "Driver escaping not supported by KexiDB::escapeIdentifier(), will fallback to Kexi escaping.";
+    }
+
+    bool needOuterQuotes = false;
+// Need to use quotes if ...
+// ... we have been told to, or ...
+    if (options & KexiDB::Driver::EscapeAlways)
+        needOuterQuotes = true;
+
+// ... or if it's a keyword in Kexi's SQL dialect,
+    else if (KexiDB::isKexiSQLKeyword(str))
+        needOuterQuotes = true;
+
+// ... or if the identifier has a space in it...
+    else if (str.contains(' '))
+        needOuterQuotes = true;
+
+    if (needOuterQuotes) {
+        const char quote = '"';
+        return quote + QByteArray(str).replace(quote, "\"\"") + quote;
+    }
+    return str;
+}
+
+KEXI_DB_EXPORT QString KexiDB::valueToSQL(uint ftype, const QVariant& v)
+{
+    return valueToSQLInternal(0, ftype, v);
 }
 
 #include "driver.moc"
