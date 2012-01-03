@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -165,7 +165,7 @@ namespace KPlato
     QString ToolTip::documentUrl() { return i18nc( "@info:tooltip", "The url of the document" ); }
     QString ToolTip::documentType() { return i18nc( "@info:tooltip", "The type of the document" ); }
     QString ToolTip::documentStatus() { return i18nc( "@info:tooltip", "The status of the document" ); }
-    QString ToolTip::documentSendAs() { return i18nc( "@info:tooltip", "Defines how this document is send" ); }
+    QString ToolTip::documentSendAs() { return i18nc( "@info:tooltip", "Defines how this document is sent" ); }
 
     QString ToolTip::calendarName() { return i18nc( "@info:tooltip", "The name of the calendar" ); }
     QString ToolTip::calendarTimeZone() { return i18nc( "@info:tooltip", "The timezone of the calendar" ); }
@@ -175,6 +175,9 @@ namespace KPlato
     QString ToolTip::relationType() { return i18nc( "@info:tooltip", "The type of relation" ); }
     QString ToolTip::relationLag() { return i18nc( "@info:tooltip", "The relations time lag" ); }
 
+
+    // Work around string freeze
+    QString UndoText::removeDocument() { return i18nc( "(qtundo-format)", "Remove document" ); }
 
 } //namespace KPlato
 

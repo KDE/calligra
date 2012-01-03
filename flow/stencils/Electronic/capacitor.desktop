@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=capacitor
 Name[bg]=кондензатор
+Name[ca]=capacitador
 Name[cs]=kondenzátor
 Name[de]=Kondensator
 Name[el]=πυκνωτής
@@ -12,6 +13,7 @@ Name[nl]=condensator
 Name[pl]=kondensator
 Name[pt]=condensador
 Name[pt_BR]=capacitor
+Name[ru]=Конденсатор
 Name[sv]=kondensator
 Name[uk]=Конденсатор
 Name[x-test]=xxcapacitorxx

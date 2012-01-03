@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -76,12 +76,8 @@ Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
             case NodeActualFinish:
             case NodeCompleted:
             case NodeRemainingEffort:
-                flags |= Qt::ItemIsEditable;
-                break;
             case NodeActualEffort:
-                if ( t->completion().entrymode() == Completion::EnterEffortPerTask || t->completion().entrymode() == Completion::EnterEffortPerResource ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             default: break;
         }
@@ -124,6 +120,32 @@ void TaskWorkPackageModel::slotNodeChanged( Node *node )
     emit dataChanged( createIndex( row, 0, node->parentNode() ), createIndex( row, columnCount()-1, node->parentNode() ) );
 }
 
+void TaskWorkPackageModel::slotDocumentAdded( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        beginInsertRows( parent, row, row );
+        endInsertRows();
+    }
+}
+
+void TaskWorkPackageModel::slotDocumentRemoved( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        beginRemoveRows( parent, row, row );
+        endRemoveRows();
+    }
+}
+
+void TaskWorkPackageModel::slotDocumentChanged( Node *node, Document */*doc*/, int row )
+{
+    QModelIndex parent = indexForNode( node );
+    if ( parent.isValid() ) {
+        emit dataChanged( index( row, 0, parent ), index( row, columnCount( parent ), parent ) );
+    }
+}
+
 void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
 {
     beginInsertRows( QModelIndex(), row, row );
@@ -137,6 +159,10 @@ void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
 
         connect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+
+        connect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
+        connect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
+        connect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
     }
 }
 
@@ -152,6 +178,10 @@ void TaskWorkPackageModel::removeWorkPackage( WorkPackage *package, int row )
 
         disconnect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+
+        disconnect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
+        disconnect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
+        disconnect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
     }
     endRemoveRows();
 }
@@ -252,6 +282,38 @@ QVariant TaskWorkPackageModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
+QVariant TaskWorkPackageModel::actualStart( Node *n, int role ) const
+{
+    QVariant v = m_nodemodel.startedTime( n, role );
+    if ( role == Qt::EditRole && ! v.toDateTime().isValid() ) {
+        v = QDateTime::currentDateTime();
+    }
+    return v;
+}
+
+QVariant TaskWorkPackageModel::actualFinish( Node *n, int role ) const
+{
+    QVariant v = m_nodemodel.finishedTime( n, role );
+    if ( role == Qt::EditRole && ! v.toDateTime().isValid() ) {
+        v = QDateTime::currentDateTime();
+    }
+    return v;
+}
+
+QVariant TaskWorkPackageModel::plannedEffort( Node *n, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+            Duration v = n->plannedEffort( CURRENTSCHEDULE, ECCT_EffortWork );
+            return v.format();
+        }
+        default:
+            break;
+    }
+    return QVariant();
+}
+
 QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 {
     switch ( column ) {
@@ -267,12 +329,12 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 
         // Completion
         case NodeCompleted: return m_nodemodel.data( n, NodeModel::NodeCompleted, role );
-        case NodePlannedEffort: return m_nodemodel.data( n, NodeModel::NodePlannedEffort, role );
         case NodeActualEffort: return m_nodemodel.data( n, NodeModel::NodeActualEffort, role );
         case NodeRemainingEffort: return m_nodemodel.data( n, NodeModel::NodeRemainingEffort, role );
-        case NodeActualStart: return m_nodemodel.data( n, NodeModel::NodeActualStart, role );
+        case NodePlannedEffort: return plannedEffort( n, role );
+        case NodeActualStart: return actualStart( n, role );
         case NodeStarted: return m_nodemodel.data( n, NodeModel::NodeStarted, role );
-        case NodeActualFinish: return m_nodemodel.data( n, NodeModel::NodeActualFinish, role );
+        case NodeActualFinish: return actualFinish( n, role );
         case NodeFinished: return m_nodemodel.data( n, NodeModel::NodeFinished, role );
         case NodeStatusNote: return m_nodemodel.data( n, NodeModel::NodeStatusNote, role );
 
@@ -289,13 +351,20 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role ) const
 {
     //kDebug()<<doc->url().fileName()<<column<<role;
-    if ( role != Qt::DisplayRole ) {
-        return QVariant();
-    }
-    switch ( column ) {
-        case 0: return doc->url().fileName();
-        default:
-            return "";
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case NodeName: return doc->name();
+            case NodeType: return doc->typeToString( doc->type(), true );
+            case NodeStatusNote: return doc->status();
+            default:
+                return "";
+        }
+    } else if ( role == Qt::ToolTipRole ) {
+        switch ( column ) {
+            case NodeName: return doc->typeToString( doc->type(), true );
+            default:
+                break;
+        }
     }
     return QVariant();
 }
@@ -307,8 +376,8 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
     }
     if ( node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
-        QDateTime dt = QDateTime::currentDateTime();
-        QDate date = dt.date();
+        QDate date = qMax( c.entryDate(), QDate::currentDate() );
+        QDateTime dt( date, QTime::currentTime() );
         // xgettext: no-c-format
         MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
         if ( ! c.isStarted() ) {
@@ -320,8 +389,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
         }
+        bool newentry = c.entryDate() < date;
         emit executeCommand( m ); // also adds a new entry if necessary
-        if ( c.entrymode() == Completion::EnterCompleted ) {
+        if ( newentry ) {
+            // new entry so calculate used/remaining based on completion
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
             kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
@@ -329,6 +400,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             cmd->execute();
             m->addCommand( cmd );
             cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        } else if ( c.isFinished() && c.remainingEffort() != 0 ) {
+            ModifyCompletionRemainingEffortCmd *cmd = new ModifyCompletionRemainingEffortCmd( c, date, Duration::zeroDuration );
             cmd->execute();
             m->addCommand( cmd );
         }
@@ -419,8 +494,15 @@ bool TaskWorkPackageModel::setFinishedTime( Node *node, const QVariant &value, i
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
-                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
-                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    QDate lastdate = t->completion().entryDate();
+                    if ( ! lastdate.isValid() || lastdate < value.toDate() ) {
+                        Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                        m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    } else {
+                        Completion::Entry *e = new Completion::Entry( *( t->completion().entry( lastdate ) ) );
+                        e->percentFinished = 100;
+                        m->addCommand( new ModifyCompletionEntryCmd( t->completion(), lastdate, e ) );
+                    }
                 }
             }
             m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
@@ -476,9 +558,9 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
 
         // Completion
         case NodeCompleted: return i18n( "Completion" );
-        case NodePlannedEffort: return i18n( "Planned Effort" );
         case NodeActualEffort: return i18n( "Actual Effort" );
         case NodeRemainingEffort: return i18n( "Remaining Effort" );
+        case NodePlannedEffort: return i18n( "Planned Effort" );
         case NodeActualStart: return i18n( "Actual Start" );
         case NodeStarted: return i18n( "Started" );
         case NodeActualFinish: return i18n( "Actual Finish" );
@@ -565,6 +647,8 @@ QAbstractItemDelegate *TaskWorkPackageModel::createDelegate( int column, QWidget
         case NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
         case NodeActualEffort: return new DurationSpinBoxDelegate( parent );
+        case NodeActualStart: return new DateTimeCalendarDelegate( parent );
+        case NodeActualFinish: return new DateTimeCalendarDelegate( parent );
 
         default: break;
     }

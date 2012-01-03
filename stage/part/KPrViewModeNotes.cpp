@@ -147,14 +147,14 @@ void KPrViewModeNotes::wheelEvent(QWheelEvent *event, const QPointF &point)
 void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
     Q_UNUSED( previousViewMode );
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, true);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(true));
     m_view->setActionEnabled( KoPAView::AllActions, false );
     updateActivePage( m_view->activePage() );
 }
 
 void KPrViewModeNotes::deactivate()
 {
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, 0);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     m_view->setActionEnabled( KoPAView::AllActions, true );
     m_view->doUpdateActivePage(m_view->activePage());
 }
@@ -199,7 +199,7 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     // we need to make sue to switch to the default tool so that the text tool does notice the selection chane
     KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    // we need to set the focus to the text tool again so that we can start typing 
+    // we need to set the focus to the text tool again so that we can start typing
     // otherwise you need to click on the shape again
     m_canvas->canvasWidget() ? canvas()->canvasWidget()->setFocus() : canvas()->canvasItem()->setFocus();
     KoToolManager::instance()->switchToolRequested(tool);

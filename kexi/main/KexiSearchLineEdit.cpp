@@ -25,7 +25,7 @@
 #include <KIcon>
 #include <KDebug>
 
-#include <kexiutils/completer/qcompleter.h>
+#include <kexiutils/completer/KexiCompleter.h>
 #include <QShortcut>
 #include <QKeySequence>
 #include <QTreeView>
@@ -154,10 +154,10 @@ void KexiSearchLineEditCompleterPopupModel::addSearchableModel(KexiSearchableMod
 
 // ----
 
-class KexiSearchLineEditCompleter : public KexiUtils::QCompleter
+class KexiSearchLineEditCompleter : public KexiCompleter
 {
 public:
-    KexiSearchLineEditCompleter(QObject *parent = 0) : KexiUtils::QCompleter(parent) {
+    KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
     }
 
     virtual QString pathFromIndex(const QModelIndex &index) const {
@@ -233,7 +233,7 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 class KexiSearchLineEditPopupItemDelegate : public QStyledItemDelegate
 {
 public:
-    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiUtils::QCompleter *completer) 
+    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer) 
      : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
     {
     }
@@ -333,7 +333,7 @@ protected:
             v4->text.clear();
         }
     }
-    KexiUtils::QCompleter *m_completer;
+    KexiCompleter *m_completer;
 };
 
 // ----
@@ -349,9 +349,9 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     d->completer->setSubstringCompletion(true);
     d->completer->setMaxVisibleItems(12);
     // Use unsorted model, sorting is handled in the source model itself.
-    // Moreover, sorting QCompleter::CaseInsensitivelySortedModel breaks
+    // Moreover, sorting KexiCompleter::CaseInsensitivelySortedModel breaks
     // filtering so only table names are displayed.
-    d->completer->setModelSorting(KexiUtils::QCompleter::UnsortedModel);
+    d->completer->setModelSorting(KexiCompleter::UnsortedModel);
     
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
@@ -429,7 +429,7 @@ QPair<QModelIndex, KexiSearchableModel*> KexiSearchLineEdit::mapCompletionIndexT
 
 void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
 {
-    if (d->completer->completionMode() != KexiUtils::QCompleter::InlineCompletion) {
+    if (d->completer->completionMode() != KexiCompleter::InlineCompletion) {
         setText(newText);
     }
     else {
@@ -521,9 +521,9 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 
     //kDebug() << event->key() << (QWidget*)d->previouslyFocusedWidget;
 
-    KexiUtils::QCompleter::CompletionMode completionMode = d->completer->completionMode();
-    if ((completionMode == KexiUtils::QCompleter::PopupCompletion
-            || completionMode == KexiUtils::QCompleter::UnfilteredPopupCompletion)
+    KexiCompleter::CompletionMode completionMode = d->completer->completionMode();
+    if ((completionMode == KexiCompleter::PopupCompletion
+            || completionMode == KexiCompleter::UnfilteredPopupCompletion)
         && d->completer->popup()
         && d->completer->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
@@ -541,7 +541,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         default:
             break; // normal key processing
         }
-    } else if (completionMode == KexiUtils::QCompleter::InlineCompletion) {
+    } else if (completionMode == KexiCompleter::InlineCompletion) {
         switch (event->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
@@ -639,9 +639,12 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     if (event == QKeySequence::MoveToNextChar) {
 #if defined(Q_WS_WIN)
         if (hasSelectedText()
-            && d->completer->completionMode() == KexiUtils::QCompleter::InlineCompletion)
+            && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
-            moveCursor(selectionEnd(), false);
+            int selEnd = selectionEnd();
+            if (selEnd >= 0) {
+                setCursorPosition(selEnd);
+            }
             event->accept();
             return;
         }
@@ -650,9 +653,12 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     else if (event == QKeySequence::MoveToPreviousChar) {
 #if defined(Q_WS_WIN)
         if (hasSelectedText()
-            && d->completer->completionMode() == KexiUtils::QCompleter::InlineCompletion)
+            && d->completer->completionMode() == KexiCompleter::InlineCompletion)
         {
-            moveCursor(selectionStart(), false);
+            int selStart = selectionStart();
+            if (selStart >= 0) {
+                setCursorPosition(selStart);
+            }
             event->accept();
             return;
         }
@@ -751,7 +757,7 @@ void KexiSearchLineEdit::complete(int key)
         return;
 
     QString text = this->text();
-    if (d->completer->completionMode() == KexiUtils::QCompleter::InlineCompletion) {
+    if (d->completer->completionMode() == KexiCompleter::InlineCompletion) {
         if (key == Qt::Key_Backspace)
             return;
         int n = 0;

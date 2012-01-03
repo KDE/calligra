@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Content Switch module
 Name[bg]=Модул за комутиране на съдържание
+Name[ca]=Mòdul de commutació de continguts
 Name[el]=Content Switch module
 Name[et]=Sisukommutaatori moodul
 Name[it]=Modulo content switch
@@ -10,7 +11,9 @@ Name[nl]=Content Switch module
 Name[pl]=Moduł przełączania treści
 Name[pt]=Módulos do Comutador Conteúdos
 Name[pt_BR]=Módulo de comutador de conteúdo
+Name[ru]=Модуль коммутатора содержимого
 Name[sv]=Innehållsväxelmodul
 Name[uk]=Модуль комутатора даних
 Name[x-test]=xxContent Switch modulexx
+Name[zh_CN]=内容交换模块
 Name[zh_TW]=內容交換模組

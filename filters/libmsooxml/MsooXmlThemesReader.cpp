@@ -119,15 +119,17 @@ QColor DrawingMLColorSchemeSystemItem::value() const
         return lastColor;
     }
 
+    //TODO: use the style:use-window-font-color attribute
+
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
-    if (   systemColor == QLatin1String("windowText")
-        || systemColor == QLatin1String("menuText"))
+    if ( systemColor == QLatin1String("windowText") ||
+         systemColor == QLatin1String("menuText"))
     {
         return QPalette().color(QPalette::Active, QPalette::WindowText);
     }
-    else if (    systemColor == QLatin1String("window")
-              || systemColor == QLatin1String("menu")
-              || systemColor == QLatin1String("menuBar"))
+    else if ( systemColor == QLatin1String("window") ||
+              systemColor == QLatin1String("menu") ||
+              systemColor == QLatin1String("menuBar"))
     {
         return QPalette().color(QPalette::Active, QPalette::Window);
     }
@@ -782,12 +784,12 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
 
     READ_ATTR_WITHOUT_NS(lastClr)
     color.get()->lastColor = Utils::ST_HexColorRGB_to_QColor(lastClr);
-    //kDebug() << "lastClr:" << color.get()->lastColor;
+//     kDebug() << "lastClr:" << color.get()->lastColor.name();
 
-    // System color value. This color is based upon the value that this color currently has
-    // within the system on which the document is being viewed.
+    // System color value. This color is based upon the value that this color
+    // currently has within the system on which the document is being viewed.
     READ_ATTR_WITHOUT_NS_INTO(val, color.get()->systemColor)
-    //kDebug() << "val:" << color.get()->systemColor;
+//     kDebug() << "val:" << color.get()->systemColor;
 
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN

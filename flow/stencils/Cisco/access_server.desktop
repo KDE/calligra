@@ -2,12 +2,14 @@
 Name=Access server
 Name[ca]=Servidor d'accés
 Name[el]=Εξυπηρετητής πρόσβασης
+Name[it]=Server di accesso
 Name[nb]=Aksesstjener
 Name[nds]=Togriep-Server
 Name[nl]=Access-server
 Name[pl]=Serwer dostępowy
 Name[pt]=Servidor de acesso
 Name[pt_BR]=Servidor de acesso
+Name[ru]=Сервер Доступа
 Name[sv]=Åtkomstserver
 Name[uk]=Сервер доступу
 Name[x-test]=xxAccess serverxx

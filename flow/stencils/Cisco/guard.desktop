@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Guard
+Name[ca]=Defensa
 Name[el]=Φρουρός
 Name[it]=Guard
 Name[nb]=Vakt
@@ -7,6 +8,7 @@ Name[nl]=Bewaker
 Name[pl]=Ochrona
 Name[pt]=Guarda
 Name[pt_BR]=Guarda
+Name[ru]=Хранитель
 Name[sv]=Vakt
 Name[uk]=Охоронець
 Name[x-test]=xxGuardxx

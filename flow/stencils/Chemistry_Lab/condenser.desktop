@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=condenser
+Name[ca]=condensador
 Name[el]=condenser
 Name[it]=condensatore
 Name[nb]=kondensator
@@ -7,6 +8,7 @@ Name[nl]=condenser
 Name[pl]=chłodnica
 Name[pt]=condensador
 Name[pt_BR]=condensador
+Name[ru]=Конденсор
 Name[sv]=kylare
 Name[uk]=Холодильник
 Name[x-test]=xxcondenserxx

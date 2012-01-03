@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Router in building
 Name[bg]=Маршрутизатор в сграда
-Name[ca]=Enrutador amb edifici
+Name[ca]=Encaminador en edifici
 Name[el]=Δρομολογητής σε κτήριο
 Name[et]=Marsruuter hoones
 Name[it]=Edificio con router
@@ -10,7 +10,9 @@ Name[nds]=Nettweger binnen Gebüüd
 Name[pl]=Router w budynku
 Name[pt]=Encaminhador em edifício
 Name[pt_BR]=Roteador em edifício
+Name[ru]=Маршрутизатор в здании
 Name[sv]=Router i byggnad
 Name[uk]=Маршрутизатор в будівлі
 Name[x-test]=xxRouter in buildingxx
+Name[zh_CN]=楼宇路由器
 Name[zh_TW]=建築內的路由

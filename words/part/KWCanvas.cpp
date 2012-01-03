@@ -90,8 +90,8 @@ void KWCanvas::mousePressEvent(QMouseEvent *e)
     m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-        e->setAccepted(true);
     }
+    e->setAccepted(true);
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
@@ -130,6 +130,16 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

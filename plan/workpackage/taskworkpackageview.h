@@ -61,16 +61,22 @@ public:
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    TaskWorkPackageModel *model() const;
+    TaskWorkPackageModel *itemModel() const;
     
     Project *project() const;
     void setProject( Project *project );
-    
+
+    Document *currentDocument() const;
+    Node *currentNode() const;
     QList<Node*> selectedNodes() const;
+
+signals:
+    void sectionsMoved();
 
 protected slots:
     void slotActivated( const QModelIndex index );
-    
+    void setSortOrder( int col, Qt::SortOrder order );
+
 protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
@@ -84,7 +90,7 @@ public:
     
     void setupGui();
 
-    TaskWorkPackageModel *model() const { return m_view->model(); }
+    TaskWorkPackageModel *itemModel() const { return m_view->itemModel(); }
     
     virtual void updateReadWrite( bool readwrite );
     Node *currentNode() const;
@@ -92,9 +98,9 @@ public:
     QList<Node*> selectedNodes() const;
     
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext();
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext();
 
     KoPrintJob *createPrintJob();
     
@@ -107,6 +113,7 @@ public slots:
 
 protected slots:
     virtual void slotOptions();
+    void sectionsMoved();
 
 protected:
     void updateActionsEnabled( bool on );

@@ -35,7 +35,6 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qtooltip.h>
-#include <q3widgetstack.h>
 #include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
@@ -114,7 +113,6 @@ public:
     KPageWidget* templatesWidget;
     QListView *templatesWidget_IconListView;//helper
 
-    Q3WidgetStack *viewBlankTempl;
     KexiStartupDialogTemplatesPage *viewTemplates;
     //TemplatesPage *viewBusinessTempl;
 

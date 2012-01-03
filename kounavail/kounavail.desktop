@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Unavailable Calligra Document
 Name[bg]=Неналичен документ на Calligra
+Name[ca]=Document Calligra no disponible
 Name[cs]=Nedostupný dokument Calligra
 Name[da]=Utilgængeligt Calligra-dokument
 Name[de]=Nicht verfügbares Calligra-Dokument
@@ -15,6 +16,7 @@ Name[ru]=Недоступный документ Calligra
 Name[sv]=Otillgängligt Calligra-dokument
 Name[uk]=Недоступний документ Calligra
 Name[x-test]=xxUnavailable Calligra Documentxx
+Name[zh_CN]=不可用的 Calligra 文档
 Name[zh_TW]=無法取得的 Calligra 文件
 X-KDE-Library=kounavailpart
 Type=Service

@@ -4,7 +4,7 @@
 a KPresenter document (XML).
 
 Magicpoint's homepage: http://www.mew.org/mgp/
-KPresenter's homepage: http://www.calligra-suite.org/kpresenter
+KPresenter's homepage: http://www.calligra.org/kpresenter
 
 This is free software, released under GPL v2.
 Author: Lukas Tinkl <lukas@kde.org>, 2002
@@ -339,8 +339,8 @@ class MgpImporter:
     fileOut: path to the output file, or sys.stdout if omitted
     """
     doctype=implementation.createDocumentType("DOC", "-//KDE//DTD kpresenter 1.2//EN",
-                                              "http://www.calligra-suite.org/DTD/kpresenter-1.2.dtd")
-    self.document=implementation.createDocument("http://www.calligra-suite.org/DTD/kpresenter", "DOC", doctype)
+                                              "http://www.calligra.org/DTD/kpresenter-1.2.dtd")
+    self.document=implementation.createDocument("http://www.calligra.org/DTD/kpresenter", "DOC", doctype)
     
     rootElem=self.document.documentElement                #the root "DOC" element
     rootElem.setAttribute("mime", "application/x-kpresenter")

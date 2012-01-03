@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Plotter
 Name[bg]=Плотер
+Name[ca]=Traçador
 Name[de]=Plotter
 Name[el]=Σχεδιαστής
 Name[es]=Plotter
@@ -11,6 +12,7 @@ Name[nds]=Bagenschriever
 Name[pl]=Plotter
 Name[pt]='Plotter'
 Name[pt_BR]=Plotadora
+Name[ru]=Плоттер
 Name[sv]=Kurvritare
 Name[uk]=Плотер
 Name[x-test]=xxPlotterxx

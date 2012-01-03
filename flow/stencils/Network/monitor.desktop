@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=A Workstation Monitor
 Name[bg]=Монитор на работна станция
+Name[ca]=Un monitor d'estació de treball
 Name[de]=Workstation-Monitor
 Name[el]=Οθόνη σταθμού εργασίας
 Name[es]=Un monitor de estación de trabajo
@@ -10,6 +11,7 @@ Name[nb]=En arbeidsstasjons-skjerm
 Name[pl]=Monitor stacji roboczej
 Name[pt]=Monitor Computador
 Name[pt_BR]=Monitor de computador
+Name[ru]=Монитор рабочей станции
 Name[sv]=En arbetsstationsskärm
 Name[uk]=Монітор робочої станції
 Name[x-test]=xxA Workstation Monitorxx

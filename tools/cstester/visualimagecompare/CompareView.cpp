@@ -39,7 +39,7 @@ CompareView::CompareView(const QImage &image1, const QImage &image2, const QStri
 , m_image2(image2)
 {
     init();
-    update(image1, image2, name1, name2);
+    update(image1, image2, name1, name2, QImage());
 }
 
 CompareView::~CompareView()
@@ -58,8 +58,8 @@ void CompareView::init()
     m_image1Label = new QLabel();
     m_image2Label = new QLabel();
     m_stack = new QStackedWidget();
-    int i1 = m_stack->addWidget(m_image1Label);
-    int i2 = m_stack->addWidget(m_image2Label);
+    m_stack->addWidget(m_image1Label);
+    m_stack->addWidget(m_image2Label);
     layout->addWidget(m_stack, 1, 0);
 
     m_diffLabel = new QLabel(this);
@@ -68,12 +68,15 @@ void CompareView::init()
     setLayout(layout);
 }
 
-void CompareView::update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2)
+void CompareView::update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, const QImage &forcedDeltaView)
 {
     m_image1 = image1;
     m_image2 = image2;
-    m_diff = difference(image1, image2);
-
+    if (forcedDeltaView.isNull()) {
+        m_diff = difference(image1, image2);
+    } else {
+        m_diff = forcedDeltaView;
+    }
     m_tabBar->setTabText(0, name1);
     m_tabBar->setTabText(1, name2);
     m_image1Label->setPixmap(QPixmap::fromImage(image1));

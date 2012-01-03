@@ -18,13 +18,38 @@
 */
 #include "TestSheet.h"
 
+#include <QPainter>
+
+#include <KoViewConverter.h>
+#include <KoShape.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
 #include <Sheet.h>
+#include <CellStorage.h>
+#include <OdfSavingContext.h>
 
 #include <qtest_kde.h>
 
 using namespace Calligra::Tables;
+
+class MockShape : public KoShape
+{
+public:
+    MockShape() : KoShape() {}
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
+    }
+    virtual void saveOdf(KoShapeSavingContext &) const {}
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+        return true;
+    }
+};
 
 void SheetTest::init()
 {
@@ -133,6 +158,34 @@ void SheetTest::testDocumentToCellCoordinates()
     QFETCH(QRect, result);
 
     QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
+}
+
+// test if embedded objects are propare taken into account (tests for bug 287997)
+void SheetTest::testCompareRows()
+{
+    CellStorage* storage = m_sheet->cellStorage();
+    storage->insertRows(1, 15);
+
+    QBuffer buf;
+    buf.open(QIODevice::ReadWrite);
+    KoXmlWriter xmlWriter(&buf);
+    KoGenStyles mainStyles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext shapeContext(xmlWriter, mainStyles, embeddedSaver);
+    OdfSavingContext tableContext(shapeContext);
+
+    MockShape shape;
+    tableContext.insertCellAnchoredShape(m_sheet, 20, 5, &shape);
+
+    QCOMPARE(m_sheet->compareRows(12,19,1024,tableContext), true);
+    QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
+    QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
+
+    storage->insertRows(1, 15);
+
+    QCOMPARE(m_sheet->compareRows(12,19,1024,tableContext), true);
+    QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
+    QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
 }
 
 QTEST_KDEMAIN(SheetTest, GUI)

@@ -127,13 +127,11 @@ WordsGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientT
 }
 
 void
-WordsGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
-                                                const MSO::OfficeArtClientTextBox* clientTextbox,
+WordsGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
                                                 KoGenStyle& style,
                                                 Writer& out)
 {
-    Q_UNUSED(msospt);
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
 
@@ -183,7 +181,6 @@ WordsGraphicsHandler::DrawClient::formatPos(qreal v)
 
 //NOTE: OfficeArtClientData.clientdata (4 bytes): An integer that SHOULD be
 //ignored.  [MS-DOC] — v20100926
-
 bool
 WordsGraphicsHandler::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
 {

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Square Wave
+Name[ca]=Ona quadrada
 Name[cs]=Obdélníková vlna
 Name[de]=Rechteckwelle
 Name[it]=Onda quadra
@@ -9,6 +10,7 @@ Name[nl]=Blokgolf
 Name[pl]=Fala prostokątna
 Name[pt]=Onda Quadrada
 Name[pt_BR]=Onda quadrada
+Name[ru]=Волна в виде меандра
 Name[sv]=Fyrkantsvåg
 Name[uk]=Квадратний сигнал
 Name[x-test]=xxSquare Wavexx

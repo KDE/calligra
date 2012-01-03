@@ -2,6 +2,7 @@
 Type=Service
 Name=Words HTML Export Filter
 Name[bg]=Филтър за изнасяне от Words в HTML
+Name[ca]=Filtre d'exportació HTML per al Words
 Name[cs]=Exportní filtr HTML pro Words
 Name[da]=HTML-eksportfilter til Words
 Name[de]=Words HTML-Exportfilter
@@ -18,6 +19,7 @@ Name[ru]=Фильтр экспорта документов Words в HTML
 Name[sv]=Words HTML-exportfilter
 Name[uk]=Фільтр експорту HTML для Words
 Name[x-test]=xxWords HTML Export Filterxx
+Name[zh_CN]=Words HTML 导出过滤器
 Name[zh_TW]=Words HTML 匯出過濾程式
 X-KDE-Import=application/x-words
 X-KDE-Weight=1

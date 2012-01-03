@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Voice router
 Name[bg]=Гласов маршрутизатор
-Name[ca]=Enrutador de veu
+Name[ca]=Encaminador de veu
 Name[de]=Voice-Router
 Name[el]=Δρομολογητής φωνής
 Name[et]=Helimarsruuter
@@ -12,7 +12,9 @@ Name[nl]=Voice router
 Name[pl]=Router dźwięku
 Name[pt]=Encaminhador voz
 Name[pt_BR]=Roteador de voz
+Name[ru]=Голосовой маршрутизатор
 Name[sv]=Röstrouter
 Name[uk]=Голосовий маршрутизатор
 Name[x-test]=xxVoice routerxx
+Name[zh_CN]=语音路由器
 Name[zh_TW]=聲音路由器

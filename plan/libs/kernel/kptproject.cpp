@@ -1384,9 +1384,9 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     if ( emitSignal ) {
         emit nodeAdded( task );
         emit changed();
-    }
-    if ( p != this && p->numChildren() == 1 ) {
-        emit nodeChanged( p );
+        if ( p != this && p->numChildren() == 1 ) {
+            emit nodeChanged( p );
+        }
     }
     return true;
 }
@@ -1406,10 +1406,9 @@ void Project::takeTask( Node *node, bool emitSignal )
     if ( emitSignal ) {
         emit nodeRemoved( node );
         emit changed();
-    }
-    //kDebug()<<node->name()<<"removed";
-    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
-        emit nodeChanged( parent );
+        if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+            emit nodeChanged( parent );
+        }
     }
 }
 
@@ -2175,6 +2174,21 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
         m_standardWorktime->setProject( this );
         emit standardWorktimeChanged( worktime );
     }
+}
+
+void Project::emitDocumentAdded( Node *node , Document *doc , int index )
+{
+    emit documentAdded( node, doc, index );
+}
+
+void Project::emitDocumentRemoved( Node *node , Document *doc , int index )
+{
+    emit documentRemoved( node, doc, index );
+}
+
+void Project::emitDocumentChanged( Node *node , Document *doc , int index )
+{
+    emit documentChanged( node, doc, index );
 }
 
 bool Project::linkExists( const Node *par, const Node *child ) const

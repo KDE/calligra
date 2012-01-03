@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ampermeter
 Name[bg]=амперметър
+Name[ca]=amperímetre
 Name[el]=αμπερόμετρο
 Name[et]=ampermeeter
 Name[it]=amperometro
@@ -10,6 +11,7 @@ Name[nl]=ampermeter
 Name[pl]=amperomierz
 Name[pt]=amperímetro
 Name[pt_BR]=amperímetro
+Name[ru]=амперметр
 Name[sv]=amperemätare
 Name[uk]=Амперметр
 Name[x-test]=xxampermeterxx

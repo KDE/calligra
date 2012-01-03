@@ -71,6 +71,7 @@
 #include <QModelIndex>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QActionGroup>
 
 namespace KPlato
 {
@@ -158,7 +159,7 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     connect(m_pageSelector->ui_last, SIGNAL(clicked()), this, SLOT(lastPage()));
     connect(m_pageSelector->ui_selector, SIGNAL(valueChanged(int)), SLOT(renderPage(int)));
 
-    refresh();
+    slotRefreshView();
 }
 
 QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *project, ScheduleManager *manager, QObject *parent ) const
@@ -424,7 +425,7 @@ void ReportView::setupGui()
 void ReportView::setGuiActive( bool active ) // virtual slot
 {
     if ( active ) {
-        refresh();
+        slotRefreshView();
     }
     ViewBase::setGuiActive( active );
 }
@@ -440,8 +441,12 @@ void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map 
     m_modelmap = map;
 }
 
-void ReportView::refresh()
+void ReportView::slotRefreshView()
 {
+    if ( ! isVisible() ) {
+        kDebug()<<"Not visible";
+        return;
+    }
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
@@ -488,6 +493,9 @@ ReportData *ReportView::createReportData( const QString &type )
         static_cast<ChartReportData*>( r )->cbs = ( type == "costbreakdown" ? true : false );
     } else {
         r = new ReportData();
+        if ( type == "tasks" || type == "taskstatus" ) {
+            r->setColumnRole( NodeModel::NodeDescription, Qt::EditRole );
+        }
     }
     r->setModel( m_modelmap.value( type ) );
     r->setProject( project() );
@@ -501,7 +509,7 @@ ReportData *ReportView::createReportData( const QString &type )
 bool ReportView::loadXML( const QDomDocument &doc )
 {
     m_design = doc;
-    refresh();
+    slotRefreshView();
     return true;
 }
 
@@ -517,7 +525,7 @@ bool ReportView::loadContext( const KoXmlElement &context )
         m_design = QDomDocument( "context" );
         m_design.appendChild( e );
     } else kDebug()<<"Invalid context xml";
-    refresh();
+    slotRefreshView();
     return true;
 }
 
@@ -760,6 +768,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
 
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
 
     populateToolbar( tb );
 }
@@ -811,7 +820,8 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
-
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+    
     populateToolbar( tb );
 }
 
@@ -836,8 +846,20 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     tb->addSeparator();
 
-    foreach( QAction *a, m_designer->actions(this) ) {
-        if ( a->objectName() == "report:image" || a->objectName() == "report:shape" ) {
+    m_actionGroup = new QActionGroup(tb);
+    // allow only the following item types, there is not appropriate data for others
+    QStringList itemtypes;
+    itemtypes << "report:label"
+        << "report:field"
+        << "report:text"
+        << "report:check"
+        << "report:line"
+        << "report:chart"
+        << "report:web"
+        << ""; //separator
+    foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
+        if ( ! itemtypes.contains( a->objectName() ) ) {
+            m_actionGroup->removeAction( a );
             continue;
         }
         tb->addAction( a );
@@ -853,8 +875,15 @@ void ReportDesignPanel::slotPropertySetChanged()
 }
 
 void ReportDesignPanel::slotInsertAction()
-{
+{   
     emit insertItem( sender()->objectName() );
+}
+
+void ReportDesignPanel::slotItemInserted(const QString &) 
+{
+    if (m_actionGroup->checkedAction())  {
+        m_actionGroup->checkedAction()->setChecked(false);
+    }    
 }
 
 void ReportDesignPanel::setReportData( const QString &tag )

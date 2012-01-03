@@ -255,13 +255,22 @@ private:
     // ************************************************
     //  List
     // ************************************************
-    QString m_listSuffixes[9];     // The suffix for every list level seen so far
-    QString m_listStyleName;       // track the name of the list style
-    int m_previousListDepth;        // tells us which list level we're on (-1 if not in a list)
-    int m_previousListID;           // tracks the ID of the current list - 0 if not a list
+    QString m_listSuffixes[9]; // the suffix for every list level seen so far
+    QString m_listStyleName;   // track the name of the list style
+    int m_currentListLevel; // tells us which list level we're on (-1 if not in a list)
+    int m_currentListID;    // tracks the ID of the current list - 0 if not a list
 
     QStack <KoXmlWriter*> m_usedListWriters;
-    QMap<int, QPair<QString, QList<quint8> > > m_previousLists; //information about already processed lists
+
+    //information about already processed lists
+    QMap<int, QPair<QString, QList<quint8> > > m_previousLists;
+
+    // Map of listID keys and listLevel/continue-list pairs
+    QMap<int, QPair<quint8, bool> > m_continueListNum;
+
+    // Map of listId.level keys and xml:id values of text:list elements to
+    // continue automatic numbering.
+    QMap<QString, QString> m_numIdXmlIdMap;
 
     // ************************************************
     //  State

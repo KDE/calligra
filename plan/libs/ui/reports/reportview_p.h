@@ -28,6 +28,7 @@
 #include <QSplitter>
 #include <QStandardItemModel>
 #include <QMap>
+#include <qaction.h>
 
 class KoReportData;
 class ORPreRender;
@@ -41,6 +42,7 @@ class KToolBar;
 
 class QScrollArea;
 class QDomElement;
+class QActionGroup;
 
 namespace KPlato
 {
@@ -61,6 +63,7 @@ public:
     QMap<QString, QAbstractItemModel*> m_modelmap;
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
+    QActionGroup *m_actionGroup;
 
     QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
 
@@ -75,11 +78,14 @@ public slots:
     void createReportData( const QString &type, ReportData *rd );
     
     void setModified() { m_modified = true; }
-
+    void slotItemInserted(const QString &item);
+    
 protected:
     ReportData *createReportData( const QString &type );
     void populateToolbar( KToolBar *tb );
 
+private:
+    
 };
 
 

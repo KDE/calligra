@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=kettle
+Name[ca]=bullidor
 Name[de]=Kessel
 Name[es]=tetera
 Name[nb]=kjele
@@ -7,6 +8,7 @@ Name[nl]=ketel
 Name[pl]=kociołek
 Name[pt]=tigela
 Name[pt_BR]=tigela
+Name[ru]=Чайник
 Name[sv]=panna
 Name[uk]=Нагрівач Kettle
 Name[x-test]=xxkettlexx

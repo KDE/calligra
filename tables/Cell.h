@@ -71,6 +71,7 @@ class OdfSavingContext;
 class Sheet;
 class Validity;
 class Value;
+class CellTest;
 
 /**
  * An accessor to the actual cell data.
@@ -197,7 +198,7 @@ public:
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString displayText() const;
+    QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
 
     /**
      * \return the comment associated with this cell
@@ -620,6 +621,8 @@ protected:
 public:
     ShapeLoadingData loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
+    friend class CellTest;
+
     class Private;
     QSharedDataPointer<Private> d;
 

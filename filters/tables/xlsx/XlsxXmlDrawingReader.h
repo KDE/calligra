@@ -81,11 +81,40 @@ class XlsxDrawingObject {
         void setDiagram(MSOOXML::MsooXmlDiagramReaderContext* diagram) { m_type = Diagram; m_diagram = diagram; }
         KoXmlWriter* setShape(XlsxShape* shape);
         void save(KoXmlWriter* xmlWriter);
-    private:
-        QRect positionRect() const;
-        QString cellAddress(const QString &sheetname, int row, int column) const;
+
+        KoXmlWriter * pictureWriter();
+
+
+        /**
+         * @return true if drawing object is anchored to cell
+         * Presence of FromAnchor position is tested
+         */
+        bool isAnchoredToCell() const;
+
+        /**
+         * @return From anchor cell address
+         * @see toCellAddress()
+         */
+
         QString fromCellAddress() const;
+        /**
+         * @return End anchor cell address, in format like Sheetname.A5,
+         * empty string if no ToAnchor position is available
+         *
+         */
         QString toCellAddress() const;
+
+private:
+        QRect positionRect() const;
+        /**
+        * Computes the cell address name in xlsx documents
+        *
+        * @return For sheetname "Sheet" and row 0, column 0 returns "Sheet.A1",
+        * for row 0, column 1 "Sheet.B1" etc.
+        * for row 1, column 0 "Sheet.A2" etc.
+        */
+        QString cellAddress(const QString &sheetname, int row, int column) const;
+
         KoXmlWriter* m_shapeBody;
 };
 
@@ -102,6 +131,7 @@ public:
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     Sheet* sheet;
+    quint32 m_groupDepthCounter; // How deep we currently are
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
@@ -141,16 +171,29 @@ private:
 };
 
 // This class is used for storing information about embedded pictures.
-// It is filled in XlsxXmlDrawingReader.cpp, some processing is done on it in XlsxXmlWorksheetReader.cpp.
+// It's saving service is used in XlsxXmlDrawingReader.cpp, it's created in MsooXmlCommonReaderDrawingMLImpl.h
 class XlsxXmlEmbeddedPicture
 {
 public:
     XlsxXmlEmbeddedPicture();
+    ~XlsxXmlEmbeddedPicture();
 
-    bool saveXml(KoXmlWriter *xmlWriter);   // save the .xml part of the picture (the picture itself isn't stored here)
-    void setImageXml(const QString imageXml);
+    /**
+     * Use this pointer for KoXmlWriter for writing odf representing
+     * the image anchored/embedded to element like cell.
+     * The ownership of this pointer belong to XlsxXmlEmbeddedPicture class.
+     * */
+    KoXmlWriter * pictureWriter();
 
-    QString m_imageXml;                               // draw:image of the image
+    /**
+     * Save the .xml part of the picture (the picture itself isn't stored here)
+     * @return true if saving was sucessful
+     * */
+    bool saveXml(KoXmlWriter *xmlWriter);
+
+private:
+    KoXmlWriter * m_pictureWriter;
+    QBuffer m_pictureBuffer;
 };
 
 #endif

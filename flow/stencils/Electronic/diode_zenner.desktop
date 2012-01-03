@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=diode zener
 Name[bg]=ценеров диод
+Name[ca]=diode zener
 Name[cs]=Zenerova dioda
 Name[el]=δίοδος zener
 Name[es]=diodo zener
@@ -12,6 +13,7 @@ Name[nl]=diode zener
 Name[pl]=dioda zenera
 Name[pt]=díodo zener
 Name[pt_BR]=diodo zener
+Name[ru]=Зенеровский диод
 Name[sv]=diod Zener
 Name[uk]=Стабілітрон
 Name[x-test]=xxdiode zenerxx

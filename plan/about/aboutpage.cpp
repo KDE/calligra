@@ -94,7 +94,7 @@ QString KPlatoAboutPage::intro()
     .arg( i18n( 
         "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
         "<p>You can find more information in the <a href=\"help:plan\">documentation</a> "
-        "or online at <a href=\"http://www.calligra-suite.org/plan\">http://www.calligra-suite.org/plan</a></p>"
+        "or online at <a href=\"http://www.calligra.org/plan\">http://www.calligra.org/plan</a></p>"
         ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( i18n( "Next: Tips" ) )
@@ -182,7 +182,7 @@ QString KPlatoAboutPage::tutorial1()
             "Select the task editor <em>Editors->Tasks</em>:"
             "<ul>"
             "<li>Create a task by selecting <em>Add Task</em> in the toolbar.</li>"
-            "<li>Set <em>Estimate Type</em> to <em>Duration</em>.</li>"
+            "<li>Set <em>Type</em> to <em>Duration</em>.</li>"
             "<li>Set <em>Estimate</em> to <em>8 hours</em>.</li>"
             "<li>Set <em>Constraint</em> to <em>As Soon As Possible</em>.</li>"
             "</ul>"
@@ -201,9 +201,9 @@ QString KPlatoAboutPage::tutorial1()
 
 QString KPlatoAboutPage::tutorial2()
 {
-    DateTime dt = m_project->startTime();
+    DateTime dt = m_project->constraintStartTime();
     if ( m_project->defaultCalendar() ) {
-        dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->endTime() );
+        dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->constraintEndTime() );
     }
     return tutorial(
         i18n("Allocate a resource to the task."),
@@ -212,7 +212,7 @@ QString KPlatoAboutPage::tutorial2()
             "<ul>"
             "<li>Enter a name (e.g. 'John') in the <em>Allocation</em> column."
             " (Plan will automatically create a resource with name 'John' under resource group 'Resources'.</li>"
-            "<li>Set <em>Estimate Type</em> to <em>Effort</em>.</li>"
+            "<li>Set <em>Type</em> to <em>Effort</em>.</li>"
             "</ul>"
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."

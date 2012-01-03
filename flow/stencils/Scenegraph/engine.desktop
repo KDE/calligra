@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=engine
 Name[bg]=двигател
+Name[ca]=motor
 Name[cs]=motor
 Name[el]=μηχανή
 Name[et]=mootor
@@ -10,6 +11,7 @@ Name[nds]=Motor
 Name[pl]=silnik
 Name[pt]=motor
 Name[pt_BR]=motor
+Name[ru]=Движок
 Name[sv]=motor
 Name[uk]=Двигун
 Name[x-test]=xxenginexx

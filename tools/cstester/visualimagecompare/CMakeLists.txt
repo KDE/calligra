@@ -1,5 +1,12 @@
+macro_optional_find_package(Poppler)
+
+if (POPPLER_FOUND)
+    add_definitions(-DHAS_POPPLER)
+endif (POPPLER_FOUND)
+
 include_directories(
     ${QT_INCLUDES}
+    ${POPPLER_INCLUDE_DIR}
 )
 
 set(visualimagecompare_SRCS
@@ -11,7 +18,7 @@ set(visualimagecompare_SRCS
 
 kde4_add_executable(visualimagecompare ${visualimagecompare_SRCS})
 
-target_link_libraries(visualimagecompare ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
 

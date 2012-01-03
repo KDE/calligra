@@ -31,8 +31,8 @@ const qreal Zero = 10e-12;
     by Philip J. Schneider
     from "Graphics Gems", Academic Press, 1990
 
-    http://www.acm.org/pubs/tog/GraphicsGems/gems/FitCurves.c
-    http://www.acm.org/pubs/tog/GraphicsGems/gems/README
+    http://tog.acm.org/resources/GraphicsGems/gems/FitCurves.c
+    http://tog.acm.org/resources/GraphicsGems/gems/README
 */
 
 class FitVector {

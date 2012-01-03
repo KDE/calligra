@@ -38,7 +38,7 @@ KAboutData * newAboutData()
                                            KAboutData::License_GPL,
                                            ki18n("(c) 2007-2011, The Plan Team"),
                                            KLocalizedString(),
-                                           "http://www.calligra-suite.org/plan/" );
+                                           "http://www.calligra.org/plan/" );
     
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
 

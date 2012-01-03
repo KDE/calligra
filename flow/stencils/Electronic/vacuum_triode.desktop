@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=vacuum triode
+Name[ca]=triode de buit
 Name[de]=Vakuum-Triiode
 Name[el]=τρίοδος κενού
 Name[it]=triodo a vuoto
@@ -8,6 +9,7 @@ Name[nl]=vacuum triode
 Name[pl]=trioda próżniowa
 Name[pt]=tríodo vácuo
 Name[pt_BR]=triodo de vácuo
+Name[ru]=Вакуумный триод
 Name[sv]=vakuumtriod
 Name[uk]=Вакуумний тріод
 Name[x-test]=xxvacuum triodexx
