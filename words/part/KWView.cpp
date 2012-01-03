@@ -856,85 +856,84 @@ void KWView::editSemanticStylesheets()
 #endif
 }
 
-KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
+KWFrame* KWView::findClosestFrame(KoShape *shape) const
 {
-    QList<KWFrame*> frames = selectedFrames();
-
-    if (!frames.isEmpty()) {
-        KWFrame *frame = frames.first();
-
-        if (!frame->anchor() && create) {
-            KoTextAnchor *anchor = new KoTextAnchor(frame->shape());
-            frame->setAnchor(anchor);
-        }
+    KWFrame *result = 0;
+    int      area   = 0;
+    QRectF   br     = shape->boundingRect();
+    
+    // now find the frame that is closest to the frame we want to inline.
+    foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
+        QRectF intersection  = br.intersected(frame->shape()->boundingRect());
+        int    intersectArea = qRound(intersection.width() * intersection.height());
         
-        return frame->anchor();
+        if (intersectArea > area) {
+            result = frame;
+            area   = intersectArea;
+        } else if (result == 0) {
+            // TODO check distance between frames or something.
+        }
     }
 
-    return 0;
+    return result;
+}
+
+KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
+{
+    Q_ASSERT(kwdocument()->mainFrameSet());
     
-//     Q_ASSERT(kwdocument()->mainFrameSet());
-//     KoSelection *selection = canvasBase()->shapeManager()->selection();
-// 
-//     KoShape *targetShape = 0;
-//     foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
-//         if (shape->isGeometryProtected())
-//             continue;
-//         targetShape = shape;
-//         break; // TODO group before...
-//     }
-//     if (targetShape == 0) {
-//         kDebug(32001) << "bailing out...no shape to anchor";
-//         return 0;
-//     }
-// 
-//     //try and find out if targetShape is already anchored
-//     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-//     foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
-//         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-//         if (anchor && anchor->shape() == targetShape) {
-//             return anchor;
-//         }
-//     }
-// 
-//     if (create) {
-//         selection->deselectAll();
-//         KWFrame *frameForAnchor = 0;
-//         int area = 0;
-//         QRectF br = targetShape->boundingRect();
-//         // now find the frame that is closest to the frame we want to inline.
-//         foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
-//             QRectF intersection = br.intersected(frame->shape()->boundingRect());
-//             int intersectArea = qRound(intersection.width() * intersection.height());
-//             if (intersectArea > area) {
-//                 frameForAnchor = frame;
-//                 area = intersectArea;
-//             } else if (frameForAnchor == 0) {
-//                 // TODO check distance between frames or something.
-//             }
-//         }
-// 
-//         if (frameForAnchor == 0) {/* can't happen later on... */
-//             kDebug(32001) << "bailing out...no shape to anchor to";
-//             return 0;
-//         }
-// 
-// 
-//         QPointF absPos = targetShape->absolutePosition();
-//         targetShape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
-//         targetShape->setAbsolutePosition(absPos);
-// 
-//         KoTextAnchor *anchor = new KoTextAnchor(targetShape);
-// 
-//         selection->select(frameForAnchor->shape());
-// 
-//         KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-//         Q_ASSERT(editor);
-// 
-//         editor->insertInlineObject(anchor);
-//         return anchor;
-//     }
-//     return 0;
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
+    KoShape     *shape     = 0;
+    
+    foreach (KoShape *s, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+        if (s->isGeometryProtected())
+            continue;
+        
+        shape = s;
+        break; // TODO group before...
+    }
+    
+    if (shape == 0) {
+        kDebug(32001) << "bailing out...no shape to anchor";
+        return 0;
+    }
+
+    // try and find out if shape is already anchored
+    KoInlineTextObjectManager *manager = m_document->inlineTextObjectManager();
+    
+    foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
+        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
+        if (anchor && anchor->shape() == shape) {
+            return anchor;
+        }
+    }
+
+    if (create) {
+        selection->deselectAll();
+        KWFrame *frameForAnchor = findClosestFrame(shape);
+        
+        if (frameForAnchor == 0) {/* can't happen later on... */
+            kDebug(32001) << "bailing out...no shape to anchor to";
+            return 0;
+        }
+        
+        QPointF absPos = shape->absolutePosition();
+        shape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
+        shape->setAbsolutePosition(absPos);
+        
+        KoTextAnchor *anchor = new KoTextAnchor(shape);
+        frameForShape(shape)->setAnchor(anchor);
+        
+        selection->select(frameForAnchor->shape());
+        
+        KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+        Q_ASSERT(editor);
+        
+        editor->insertInlineObject(anchor);
+        return anchor;
+    }
+    
+    return 0;
 }
 
 void KWView::anchorAsChar()
@@ -942,9 +941,8 @@ void KWView::anchorAsChar()
     KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
     if (anchor) {
-        changeAnchorType(anchor, KoTextAnchor::AnchorAsCharacter);
-//         anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
-//         anchor->shape()->notifyChanged();
+        anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
+        anchor->shape()->notifyChanged();
     }
 }
 
@@ -953,20 +951,18 @@ void KWView::anchorToChar()
     KoTextAnchor *anchor = anchorForSelectedFrame(true);
 
     if (anchor) {
-        changeAnchorType(anchor, KoTextAnchor::AnchorToCharacter);
-//         anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
-//         anchor->shape()->notifyChanged();
+        anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
+        anchor->shape()->notifyChanged();
     }
 }
 
 void KWView::anchorToParagraph()
 {
     KoTextAnchor *anchor = anchorForSelectedFrame(true);
-    
+
     if (anchor) {
-        changeAnchorType(anchor, KoTextAnchor::AnchorParagraph);
-//         anchor->setAnchorType(KoTextAnchor::AnchorParagraph);
-//         anchor->shape()->notifyChanged();
+        anchor->setAnchorType(KoTextAnchor::AnchorParagraph);
+        anchor->shape()->notifyChanged();
     }
 }
 
@@ -975,53 +971,8 @@ void KWView::anchorToPage()
     KoTextAnchor *anchor = anchorForSelectedFrame(false);
 
     if (anchor) {
-        changeAnchorType(anchor, KoTextAnchor::AnchorPage);
-//         m_document->inlineTextObjectManager()->removeInlineObject(anchor);
-//         anchor->setAnchorType(KoTextAnchor::AnchorPage);
-//         anchor->shape()->notifyChanged();
-    }
-}
-
-void KWView::changeAnchorType(KoTextAnchor* anchor, KoTextAnchor::AnchorType type)
-{
-    if (type == KoTextAnchor::AnchorPage) {
         m_document->inlineTextObjectManager()->removeInlineObject(anchor);
-        anchor->setAnchorType(type);
-        anchor->shape()->notifyChanged();
-    }
-    else {
-        KWFrame *frameForAnchor = 0;
-        KoShape *shape          = anchor->shape();
-        int      area           = 0;
-        QRectF   br             = shape->boundingRect();
-        // now find the frame that is closest to the frame we want to inline.
-        foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
-            QRectF intersection = br.intersected(frame->shape()->boundingRect());
-            int intersectArea = qRound(intersection.width() * intersection.height());
-            if (intersectArea > area) {
-                frameForAnchor = frame;
-                area = intersectArea;
-            } else if (frameForAnchor == 0) {
-                // TODO check distance between frames or something.
-            }
-        }
-        
-//         if (frameForAnchor == 0) {/* can't happen later on... */
-//             kDebug(32001) << "bailing out...no shape to anchor to";
-//             return;
-//         }
-        
-        QPointF absPos = shape->absolutePosition();
-        shape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
-        shape->setAbsolutePosition(absPos);
-        
-        canvasBase()->shapeManager()->selection()->select(frameForAnchor->shape());
-        
-        KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-        Q_ASSERT(editor);
-        editor->insertInlineObject(anchor);
-        
-        anchor->setAnchorType(type);
+        anchor->setAnchorType(KoTextAnchor::AnchorPage);
         anchor->shape()->notifyChanged();
     }
 }

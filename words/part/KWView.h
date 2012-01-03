@@ -136,7 +136,9 @@ private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
     KoTextAnchor *anchorForSelectedFrame(bool create);
-    void changeAnchorType(KoTextAnchor* anchor, KoTextAnchor::AnchorType type);
+    /// loops over the selected shapes and returns the frames that go with them.
+    QList<KWFrame*> selectedFrames() const;
+    KWFrame *findClosestFrame(KoShape *shape) const;
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -213,10 +215,6 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
-private:
-
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
 
 private:
     KWGui *m_gui;
