@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1133,7 +1133,7 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
     KexiDB::Connection::SelectStatementOptions options;
     options.identifierEscaping = KexiDB::Driver::EscapeKexi | KexiDB::Driver::EscapeAsNecessary;
     options.addVisibleLookupColumns = false;
-    QString sqlText = d->conn->selectStatement(*temp->query(), options);
+    QString sqlText = KexiDB::selectStatement(0, *temp->query(), options);
     if (!storeDataBlock(sqlText, "sql")) {
         return false;
     }

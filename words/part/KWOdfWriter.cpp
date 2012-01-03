@@ -40,6 +40,8 @@
 #include <KoGenChanges.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoTextSharedSavingData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoVariableManager.h>
 
 #include <KoStoreDevice.h>
 #include <KoDocumentRdfBase.h>
@@ -224,8 +226,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
 
     // Save the named styles
-    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    styleManager->saveOdf(context);
+    if (KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>()) {
+        styleManager->saveOdf(context);
+    }
 
     // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
@@ -237,6 +240,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);

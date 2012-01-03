@@ -493,6 +493,9 @@ ReportData *ReportView::createReportData( const QString &type )
         static_cast<ChartReportData*>( r )->cbs = ( type == "costbreakdown" ? true : false );
     } else {
         r = new ReportData();
+        if ( type == "tasks" || type == "taskstatus" ) {
+            r->setColumnRole( NodeModel::NodeDescription, Qt::EditRole );
+        }
     }
     r->setModel( m_modelmap.value( type ) );
     r->setProject( project() );
@@ -852,6 +855,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
         << "report:check"
         << "report:line"
         << "report:chart"
+        << "report:web"
         << ""; //separator
     foreach( QAction *a, m_designer->actions(m_actionGroup) ) {
         if ( ! itemtypes.contains( a->objectName() ) ) {

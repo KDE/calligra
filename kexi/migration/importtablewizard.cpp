@@ -86,14 +86,20 @@ void ImportTableWizard::back() {
 }
 
 void ImportTableWizard::next() {
-    if (currentPage() == m_importingPageItem) {
+    if (currentPage() == m_srcConnPageItem) {
+      if (fileBasedSrcSelected()) {
+          setAppropriate(m_srcDBPageItem, false);
+      } else {  
+          setAppropriate(m_srcDBPageItem, true);
+      }
+    } else if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
             return;
         }
     } else if (currentPage() == m_alterTablePageItem) {
       if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
-            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue", i18n("Object name exists")));
+            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue.", i18n("Object Name Exists")));
             return;
       }
     }  
@@ -320,9 +326,11 @@ void ImportTableWizard::arriveTableSelectPage()
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
-        if (!m_migrateDriver->connectSource())
+        if (!m_migrateDriver->connectSource()) {
+            kDebug() << "unable to connect to database";
             return;
-
+        }
+        
         QStringList tableNames;
         m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {

@@ -122,13 +122,12 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                         return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>"
-                            "Constraint type: %5<nl/>"
-                            "Constraint time: %6<nl/>"
-                            "Negative float: %7 h",
+                            "Status: %3<nl/>"
+                            "Constraint type: %4<nl/>"
+                            "Constraint time: %5<nl/>"
+                            "Negative float: %6 h",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraintStart, Qt::DisplayRole ).toString(),
@@ -140,13 +139,12 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                         return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>"
-                            "Constraint type: %5<nl/>"
-                            "Constraint time: %6<nl/>"
-                            "Negative float: %7 h",
+                            "Status: %3<nl/>"
+                            "Constraint type: %4<nl/>"
+                            "Constraint time: %5<nl/>"
+                            "Negative float: %6 h",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraintEnd, Qt::DisplayRole ).toString(),
@@ -157,10 +155,9 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                     return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>",
+                            "Status: %3<nl/>",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString()
                                 );
             }

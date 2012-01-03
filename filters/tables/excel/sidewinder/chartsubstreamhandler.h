@@ -45,6 +45,7 @@ class GlobalsSubStreamHandler;
 class WorksheetSubStreamHandler;
 
 class BRAIRecord;
+class CrtMlFrtRecord;
 
 // The chart substream can be either embedded into a worksheet or define an own sheet.
 class ChartSubStreamHandler : public SubStreamHandler
@@ -131,6 +132,7 @@ private:
     void handleSurf(SurfRecord *);
     void handleAxis(AxisRecord* record);
     void handleAxisLine(AxisLineRecord* record);
+    void handleCatLab(CatLabRecord* record);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);
@@ -146,6 +148,8 @@ private:
     void handleDataLabelExtContents(DataLabelExtContentsRecord *);
     void handleXF(XFRecord *);
     void handleLabel(LabelRecord *);
+    void handleIFmt(IFmtRecord *);
+    void handleCrtMlFrt(CrtMlFrtRecord *);
 };
 
 } // namespace Swinder

@@ -217,7 +217,7 @@ bool PqxxMigrate::drv_connect()
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());
         return true;
     } catch (const std::exception &e) {
-        //kDebug() << "PqxxMigrate::drv_connect:exception - " << e.what();
+        kDebug() << "PqxxMigrate::drv_connect:exception - " << e.what();
     } catch (...) {
         kDebug() << "PqxxMigrate::drv_connect:exception(...)??";
     }

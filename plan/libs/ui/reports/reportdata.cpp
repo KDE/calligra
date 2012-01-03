@@ -43,6 +43,11 @@ ReportData::~ReportData()
 {
 }
 
+void ReportData::setColumnRole( int column, int role )
+{
+    m_columnroles[ column ] = role;
+}
+
 bool ReportData::open()
 {
     ItemModelBase *m = itemModel();
@@ -93,7 +98,8 @@ QVariant ReportData::value ( unsigned int i ) const {
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
-    QVariant value = m_model.index( at(), i ).data();
+    int role = m_columnroles.contains( i ) ? m_columnroles[ i ] : Qt::DisplayRole;
+    QVariant value = m_model.index( at(), i ).data( role );
     return value;
 }
 

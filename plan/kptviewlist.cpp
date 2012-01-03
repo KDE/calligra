@@ -180,11 +180,15 @@ void ViewListItem::save( QDomElement &element ) const
 {
     element.setAttribute( "itemtype", type() );
     element.setAttribute( "tag", tag() );
-    element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
-    element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
 
     if ( type() == ItemType_SubView ) {
         element.setAttribute( "viewtype", viewType() );
+        element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
+        element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
+    } else if ( type() == ItemType_Category ) {
+        kDebug()<<text(0)<<m_viewinfo.name;
+        element.setAttribute( "name", text( 0 ) == m_viewinfo.name ? "" : text( 0 ) );
+        element.setAttribute( "tooltip", toolTip( 0 ).isEmpty() ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
     }
 }
 

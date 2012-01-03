@@ -39,7 +39,7 @@ TODO Form editor:
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - clicking too many time on undo CRASHES
  - fix syncing form geometry with properties in the propeditor
- - show Spring element and autofield widget for 2.3
+ - show Spring element and autofield widget
  - disable 'assign action' when no button is selected
  - port 'assign action' dialog to QColumnView
  - disable mouse-over highlighting effect for buttons and check boxes
@@ -117,9 +117,48 @@ TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4 Beta 5 (2.3.85) ~~~~~~~~~~~~~~~~
-
 TODO: Widgets [code] fix memory leak introduced in KexiFieldComboBox::setTableOrQuery()
+
+TODO: kexidb collation: Add Alphanum collation (code at http://www.davekoelle.com/alphanum.html)
+TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::localeAwareCompare; http://labs.qt.nokia.com/2011/06/14/string-collation-with-locales/
+*ICU enabled in libsqlite3 on debian in 3.6.11-1 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=494987 but then disabled in 3.6.14.2-1
+
+2012-01-01
+KexiDB
+*Query SQL generated in the Query Designer should be of KEXISQL type
+BUG:290354
+TODO: port to Predicate
+
+2011-12-26..28
+Forms
+*Fixed bug: Image box does not store image pasted to it in design time
+BUG:289545
+*Fixed bug: Changing Horizontal Alignment in image box has no effect unless user resizes it or reopens the form
+BUG:289544
+*Fixed bug: Invalid image geometry within the Image Box form widget when frame properties change
+BUG:289990
+
+TODO: add int margin property to the Image Box
+TODO: add qreal rotation property to the Image Box
+TODO: add scale rotation property to the Image Box
+TODO: add int transparency property to the Image Box
+TODO: add effect property to the Image Box, see QGraphicsEffects
+
+2011-12-16..20
+KexiDB
+*Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+BUG:278411
+TODO: port to Predicate
+
+2011-12-14
+General
+*Fix crash when loading kexi part information without main window
+**detected by tests/newapi
+Core
+*remove memory leak in code opening project
+KexiDB
+*avoid 'invalid read' in code for inserting records into tables
+TODO: port to Predicate
 
 2011-12-10..11
 General
@@ -136,6 +175,8 @@ Forms
 *Do not create inline editing command when inserting, this fixes possible crash in undo/redo
 *[code] Fix connection to inlineEditorDeleted()
 TODO: clicking on form should exit from inline editing mode
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 5 (2.3.85) ~~~~~~~~~~~~~~~~
 
 2011-12-07
 General

@@ -52,7 +52,7 @@ public:
             CodeDef() {}
             CodeDef(QString c, QString s) { code = c; separator = s; }
             ~CodeDef() {}
-            void clear() { code = separator = QString(); }
+            void clear() { code.clear(); separator.clear(); }
             bool isEmpty() { return code.isEmpty(); }
             QString code;
             QString separator;

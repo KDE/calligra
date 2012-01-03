@@ -283,8 +283,11 @@ private:
     void inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
 
     void init();
+
     class Private;
     Private* const d;
+
+    bool m_showSlideLayoutShapes;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>

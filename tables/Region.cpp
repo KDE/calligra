@@ -169,8 +169,9 @@ Region::Region(const Region& list)
 {
     d = new Private();
     d->map = list.d->map;
-
+#if QT_VERSION >= 0x040700
     d->cells.reserve(list.d->cells.size());
+#endif
     ConstIterator end(list.d->cells.constEnd());
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
