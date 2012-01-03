@@ -46,7 +46,6 @@
 #include <KRichTextWidget>
 
 #include <kdganttglobal.h>
-#include <QtGui>
 #include <math.h>
 
 namespace KPlato
