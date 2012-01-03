@@ -751,7 +751,6 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             if (x == m_textquote) {
                 state = S_QUOTED_FIELD;
             } else if (x == delimiter) {
-                setText(row - m_startline, column, field, inGUI);
                 field.clear();
                 if ((ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
