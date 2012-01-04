@@ -179,6 +179,7 @@ inline bool checkQImage(const QImage &image, const QString &testName,
                         const QString &prefix, const QString &name,
                         int fuzzy = 0)
 {
+    Q_UNUSED(fuzzy);
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
 
@@ -264,7 +265,7 @@ public:
 
     }
 
-    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
+    virtual void requestProjectionUpdate(KisNode */*node*/, const QRect& /*rect*/) {
 
     }
 
