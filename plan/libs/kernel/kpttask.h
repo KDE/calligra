@@ -415,12 +415,18 @@ public:
      */
     virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
+    /// Returns the total planned effort for @p reosurce on this task (or subtasks)
+    virtual Duration plannedEffort( const Resource *resource, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
     virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    /// Returns the total planned effort for @p resource on this task (or subtasks) on date
+    virtual Duration plannedEffort( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    /// Returns the planned effort for @p resource up to and including date
+    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const;

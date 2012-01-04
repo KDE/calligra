@@ -64,7 +64,7 @@ public:
     BorderMap() {
         insert(QString(), KoBorder::BorderNone);
         insert("nil", KoBorder::BorderNone);
-        insert("none", KoBorder::BorderNone);
+        insert("none", KoBorder::BorderSolid);
         insert("single", KoBorder::BorderSolid);
         insert("thick", KoBorder::BorderSolid); //FIXME find a better representation
         insert("double", KoBorder::BorderDouble);
@@ -1745,7 +1745,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     TRY_READ_ATTR(anchor)
 
     if (!link_target.isEmpty() || !anchor.isEmpty()) {
-        body->startElement("text:a");
+        body->startElement("text:a", false);
         body->addAttribute("xlink:type", "simple");
         closeTag = true;
         if (!anchor.isEmpty())
@@ -2659,7 +2659,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     }
     if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
         if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->startElement("text:a");
+            body->startElement("text:a", false);
             body->addAttribute("xlink:type", "simple");
             if (m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
@@ -3323,7 +3323,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
-    body->startElement("draw:frame");
+    if (m_context->graphicObjectIsGroup) {
+        body->startElement("draw:g");
+    } else {
+        body->startElement("draw:frame");
+    }
 
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");
@@ -3453,7 +3457,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     else {
         // m_rot is in 1/60,000th of a degree
         qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                             .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
         body->addAttribute("draw:transform", rotString);
@@ -4570,7 +4574,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
     delete body;
     body = oldBody;
- 
+
     elementWriter.endElement(); // style-tab-stops
 
     QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());
@@ -5292,6 +5296,8 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
+    QPair<int, int> spans;
+
     for(int row = 0; row < rowCount; ++row ) {
 #ifdef DOCXXML_DEBUG_TABLES
         kDebug() << "----- [ROW" << row +1 << "] ----------";
@@ -5300,7 +5306,9 @@ void DocxXmlDocumentReader::defineTableStyles()
 #ifdef DOCXXML_DEBUG_TABLES
             kDebug() << "----- [COLUMN" << column +1 << "] ----------";
 #endif
-            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            spans.first = m_table->cellAt(row, column)->rowSpan();
+            spans.second = m_table->cellAt(row, column)->columnSpan();
+            KoCellStyle::Ptr style = styleConverter.style(row, column, spans);
             if (m_moveToStylesXml) {
                 style->setAutoStyleInStylesDotXml(true);
             }
@@ -6082,6 +6090,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
             SKIP_UNKNOWN
         }
     }
+    m_currentTableStyleProperties->target = MSOOXML::TableStyleProperties::TableCell;
 
     READ_EPILOGUE
 }
@@ -6107,8 +6116,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
+        int span = 0;
+        STRING_TO_INT(val, span, "gridSpan");
         KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
-        cell->setColumnSpan(val.toInt());
+        cell->setColumnSpan(span);
     }
 
     readNext();

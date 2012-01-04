@@ -213,7 +213,9 @@ void View::print( QPrinter &/*printer*/, QPrintDialog &/*printDialog*/ )
 
 void View::slotSelectionChanged()
 {
-    actionRemoveSelectedPackages->setEnabled( ! currentView()->selectedNodes().isEmpty() );
+    bool enable = ! currentView()->selectedNodes().isEmpty();
+    actionRemoveSelectedPackages->setEnabled( enable );
+    actionRemoveCurrentPackage->setEnabled( enable );
 }
 
 void View::slotEditCut()
@@ -383,7 +385,7 @@ void View::slotSendPackage()
     QString cc;
     QString bcc;
     QString subject = i18n( "Work Package: %1", node->name() );
-    QString body = node->description();
+    QString body = node->projectNode()->name();
     QString messageFile;
 
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );

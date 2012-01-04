@@ -22,6 +22,8 @@
 #include <ODrawToOdf.h>
 #include <excel.h>
 
+class KoStyleManager;
+
 namespace Swinder {
     class Sheet;
 }
@@ -39,11 +41,15 @@ public:
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
     virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
     virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out);
-    virtual void addTextStyles(const quint16 msospt, const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
-    virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-    virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
+
+    virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+    virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+
+    void setStyleManager(KoStyleManager* styleManager);
+    KoStyleManager* styleManager() const;
 
     void setZIndexAttribute(Writer& out);
 
@@ -51,10 +57,12 @@ public:
     quint32 zIndex() const { return m_zIndex; }
 
     void setShapeText(const Swinder::TxORecord& text);
+
 private:
     Swinder::Sheet* m_sheet;
     Swinder::TxORecord m_shapeText;
     quint32 m_zIndex;
+    KoStyleManager* m_styleManager;
 };
 
 #endif // ODRAWCLIENT_H

@@ -46,7 +46,6 @@
 #include <KRichTextWidget>
 
 #include <kdganttglobal.h>
-#include <QtGui>
 #include <math.h>
 
 namespace KPlato
@@ -205,7 +204,7 @@ QVariant NodeModel::type( const Node *node, int role ) const
         case Qt::EditRole:
             return node->type();
         case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
+            return (int)(Qt::AlignLeft|Qt::AlignVCenter);
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -3058,6 +3057,20 @@ void NodeItemModel::slotNodeRemoved( Node *node )
     m_node = 0;
 }
 
+void NodeItemModel::slotNodeToBeMoved( Node *node )
+{
+    kDebug();
+    slotNodeToBeRemoved( node );
+}
+
+void NodeItemModel::slotNodeMoved( Node *node )
+{
+    kDebug();
+    slotNodeRemoved( node );
+    slotNodeToBeInserted( node->parentNode(), node->parentNode()->indexOf( node ) );
+    slotNodeInserted( node );
+}
+
 void NodeItemModel::slotLayoutChanged()
 {
     //kDebug()<<node->name();
@@ -3092,8 +3105,8 @@ void NodeItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -3109,8 +3122,8 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -3896,9 +3909,9 @@ void GeneralNodeItemModel::setModus( int modus )
     foreach ( Node *n, m_project->allNodes() ) {
         m_objects << new Object( n );
         if ( m_modus & WorkPackage ) {
-            connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+/*            connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
             connect( n, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-            connect( n, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
+            connect( n, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );*/
             for ( int i = 0; i < static_cast<Task*>( n )->workPackageLogCount(); ++i ) {
                 m_objects << new Object( n, Object::Type_WorkPackage, i );
             }
@@ -3920,6 +3933,7 @@ void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
     }
     if ( m_modus & Flat ) {
         int pos = nodeObjects().count();
+        kDebug()<<pos;
         beginInsertRows( QModelIndex(), pos, pos );
         return;
     }
@@ -3932,10 +3946,11 @@ void GeneralNodeItemModel::slotNodeInserted( Node *node )
         return NodeItemModel::slotNodeInserted( node );
     }
     m_objects << new Object( node );
-    connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-    connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-    connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
+//     connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+//     connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
+//     connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
 
+    kDebug()<<node<<"at row"<<m_objects.count()-1;
     endInsertRows();
 }
 
@@ -3948,9 +3963,9 @@ void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
     int row = m_objects.indexOf( obj );
     if ( row >= 0 ) {
         if ( m_modus & WorkPackage ) {
-            disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+/*            disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
             disconnect( node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
-            disconnect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
+            disconnect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );*/
         }
         QModelIndex idx = index( node );
         beginRemoveRows( parent( idx ), idx.row(), idx.row() );
@@ -3999,6 +4014,27 @@ void GeneralNodeItemModel::slotNodeRemoved( Node *node )
         return NodeItemModel::slotNodeRemoved( node );
     }
     // Do nothing!!
+}
+
+void GeneralNodeItemModel::slotNodeToBeMoved( Node *node )
+{
+    if ( m_modus == 0 ) {
+        NodeItemModel::slotNodeToBeMoved( node );
+    } else {
+        slotNodeToBeRemoved( node );
+    }
+}
+
+void GeneralNodeItemModel::slotNodeMoved( Node *node )
+{
+    kDebug()<<node<<m_modus;
+    if ( m_modus == 0 ) {
+        NodeItemModel::slotNodeMoved( node );
+    } else {
+        slotNodeRemoved( node );
+        slotNodeToBeInserted( node, node->parentNode()->indexOf( node )  );
+        slotNodeInserted( node );
+    }
 }
 
 void GeneralNodeItemModel::slotWbsDefinitionChanged()

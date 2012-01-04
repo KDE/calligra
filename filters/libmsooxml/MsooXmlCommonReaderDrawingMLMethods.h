@@ -145,6 +145,7 @@ KoFilter::ConversionStatus read_scrgbClr();
 
 QString m_customPath;
 QString m_customEquations;
+QString m_textareas;
 KoFilter::ConversionStatus read_custGeom();
 
 qreal m_currentShadeLevel;

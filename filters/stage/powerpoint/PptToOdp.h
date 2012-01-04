@@ -348,7 +348,8 @@ private:
     int processTextForBody(Writer& out,
                            const MSO::OfficeArtClientData* cd,
                            const MSO::TextContainer* tc,
-                           const MSO::TextRuler* tr);
+                           const MSO::TextRuler* tr,
+                           const bool isPlaceholder);
 
     /**
      * Add a text:list-item into a newly created text:list with corresponding

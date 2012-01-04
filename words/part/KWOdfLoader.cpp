@@ -44,6 +44,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KoVariableManager.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -107,6 +109,11 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
+
+    // Load user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->loadOdf(body);
+    }
 
     // Load all styles before the corresponding paragraphs try to use them!
     KWOdfSharedLoadingData *sharedData = new KWOdfSharedLoadingData(this);

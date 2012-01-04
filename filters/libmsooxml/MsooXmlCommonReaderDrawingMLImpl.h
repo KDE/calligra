@@ -239,7 +239,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_rot != 0) {
         // m_rot is in 1/60,000th of a degree
         qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                             .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
         body->addAttribute("draw:transform", rotString);
@@ -528,7 +528,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                 ELSE_TRY_READ_IF(sp)
                 ELSE_TRY_READ_IF(grpSpPr)
                 ELSE_TRY_READ_IF(cxnSp)
-#ifdef PPTXXMLSLIDEREADER_CPP
+#if defined PPTXXMLSLIDEREADER_CPP || defined XLSXXMLDRAWINGREADER_CPP
                 ELSE_TRY_READ_IF(graphicFrame)
 #endif
                 SKIP_UNKNOWN
@@ -876,7 +876,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
                 y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
@@ -890,7 +894,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
             if (m_rot != 0) {
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                // handle flipping of lines, logical XOR here
+                if (m_flipH ^ m_flipV) {
+                    MSOOXML::Utils::rotateString(-m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 //! @todo, in case of connector, these should maybe be reversed?
                 x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
                 y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
@@ -920,7 +930,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             } else {
                 // m_rot is in 1/60,000th of a degree
                 qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+
+                // text-box vertical flipping is done with rotation by +180 degrees
+                // mirror/flip flag is not available in odf for text-box
+                if (m_contentType == "rect" && m_flipV) {
+                    MSOOXML::Utils::rotateString(m_rot + (180 * 60000), m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                } else {
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                }
+
                 QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                         .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
                 body->addAttribute("draw:transform", rotString);
@@ -937,6 +955,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_customPath);
+                if (!m_textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", m_textareas);
+                }
                 body->addCompleteElement(m_customEquations.toUtf8());
                 body->endElement(); // draw:enhanced-geometry
             }
@@ -950,6 +971,12 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+
+                QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
+                if (!textareas.isEmpty()) {
+                    body->addAttribute("draw:text-areas", textareas);
+                }
+
                 QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
                 // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
                 if (m_contentAvLstExists) {
@@ -1100,7 +1127,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
                 bool boxCreated = false;
                 if (m_contentType == "rect" || m_contentType.isEmpty() ||
-                    unsupportedPredefinedShape()) {
+                    unsupportedPredefinedShape())
+                {
                     body->startElement("draw:text-box"); // CASE #P436
                     boxCreated = true;
                 }
@@ -1119,6 +1147,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     generateFrameSp();
 
     (void)drawFrameBuf.releaseWriter();
+
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1226,6 +1255,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     m_contentAvLstExists = false;
     m_customPath = QString();
     m_customEquations = QString();
+    m_textareas = QString();
 
     while (!atEnd()) {
         readNext();
@@ -1246,7 +1276,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #endif
                 TRY_READ(solidFill)
                 if (m_currentColor != QColor()) {
-                    // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                    // We must set the color immediately, otherwise
+                    // currentColor may be modified by eg. ln
                     m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
                     m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
                     m_currentColor = QColor();
@@ -1330,15 +1361,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
-        chartexport->setSheetReplacement( false );
-        if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+        chartexport->setSheetReplacement(false);
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
             //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
             chartexport->m_x = EMU_TO_POINT(f.m_colOff);
             chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
             hasStart = true;
-            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
                 chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
                 //chartexport->m_end_x = f.m_colOff;
@@ -1392,9 +1423,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
 #undef CURRENT_EL
 #define CURRENT_EL relIds
-//! DrawingML diagram handler
-/*!
-@todo documentation
+//! relIds (Explicit Relationships to Diagram Parts)
+/*! ECMA-376, 21.4, p.3936
+
+  This element specifies the relationship IDs used to explicitly reference each
+  of the four constituent parts of a DrawingML diagram:
+
+  Diagram Colors (cs attribute)
+  Diagram Data (dm attribute)
+  Diagram Layout Definition (lo attribute)
+  Diagram Style (qs attribute)
+
+  ----------
+  DrawingML - Diagrams
+  ECMA-376, 21.4, p.3936
+
+  A DrawingML diagram allows the definition of diagrams using DrawingML objects
+  and constructs. This namespace defines the contents of a DrawingML diagram.
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 {
@@ -1415,26 +1460,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
             }
         }
 
-        //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
-        const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
-        const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
-        //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+/*         const QString colorsfile = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs); */
+        const QString datafile = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+        const QString layoutfile = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+/*         const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs); */
         QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
 
         // first read the data-model
         MSOOXML::MsooXmlDiagramReader dataReader(this);
         const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
         if (dataReaderResult != KoFilter::OK) {
-        raiseError(dataReader.errorString());
-        return dataReaderResult;
+            raiseError(dataReader.errorString());
+            return dataReaderResult;
         }
 
         // then read the layout definition
         MSOOXML::MsooXmlDiagramReader layoutReader(this);
         const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
         if (layoutReaderResult != KoFilter::OK) {
-        raiseError(layoutReader.errorString());
-        return layoutReaderResult;
+            raiseError(layoutReader.errorString());
+            return layoutReaderResult;
+        }
+
+        if (context->shapeListSize() > 1) {
+            m_context->graphicObjectIsGroup = true;
         }
 
         // and finally start the process that will produce the ODF
@@ -2225,7 +2274,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     body = rBuf.originalWriter();
 
     if (m_hyperLink) {
-        body->startElement("text:a");
+        body->startElement("text:a", false);
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
@@ -2326,17 +2375,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     m_currentTextStyle.removeProperty("style:text-underline-style");
     m_currentTextStyle.removeProperty("style:text-underline-width");
 
-    // The fo:font-size is applied to both the start of a new line and to the
+    // The fo:font-size is applied to both the start of a new line and the
     // end of the current line during layout, which affects line-height
-    // calculation.  Avoid using the application default font-size!
-    //
-    // NOTE: If the default text style does not specify the font-size, then
-    // overlapping of text occures, because the absolute line-height is
-    // calculated from the MAX font-size defined explicitly by any of the
-    // <text:span> elements.  Then application default font-size applies.
+    // calculation and results in overlapping.  Avoid use of the application
+    // default font-size and font-size of the default text/paragraph style!
     m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
 
-    body->startElement("text:span");
+    body->startElement("text:span", false);
     body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
     body->startElement("text:line-break");
     body->endElement(); //text:line-break
@@ -2819,6 +2864,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
                 m_customPath = handler.handle_pathLst(this);
                 m_customEquations += handler.pathEquationsCreated();
             }
+            else if (name() == "rect") {
+                m_textareas = handler.handle_rect(this);
+            }
 
         }
     }
@@ -2880,8 +2928,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             ELSE_WRONG_FORMAT
         }
     }
-
-    kDebug() << "svg:x" << m_svgX << "svg:y" << m_svgY << "svg:width" << m_svgWidth << "svg:height" << m_svgHeight << "rotation" << m_rot;
 
     READ_EPILOGUE
 }
@@ -3479,11 +3525,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //! graphic handler (Graphic Object)
 /*! ECMA-376, 20.1.2.2.16, p.3037.
 
- This element specifies the existence of a single graphic object.
- Document authors should refer to this element when they wish to persist
- a graphical object of some kind. The specification for this graphical
- object is provided entirely by the document author and referenced within
- the graphicData child element.
+ This element specifies the existence of a single graphic object.  Document
+ authors should refer to this element when they wish to persist a graphical
+ object of some kind. The specification for this graphical object is provided
+ entirely by the document author and referenced within the graphicData child
+ element.
 
  Parent elements:
  - [done] anchor (§20.4.2.3)
@@ -3534,14 +3580,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 {
     READ_PROLOGUE
+
+    // TODO: Is it possible to have a group of graphic objects in a chart?
+    // It's possible in case of a diagram.
+    m_context->graphicObjectIsGroup = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-            ELSE_TRY_READ_IF_NS(c, chart) // Charting diagram
-            ELSE_TRY_READ_IF_NS(dgm, relIds) // DrawingML diagram
+            // Charting diagram
+            ELSE_TRY_READ_IF_NS(c, chart)
+            // DrawingML diagram
+            ELSE_TRY_READ_IF_NS(dgm, relIds)
 #endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
@@ -3557,7 +3610,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_EPILOGUE
 }
 
-#define MSOOXML_CURRENT_NS "a" // note: osed only for blipFill namespace is parametrized, can be a or p
+// NOTE: osed only for blipFill namespace is parametrized, can be a or p
+#define MSOOXML_CURRENT_NS "a"
+
 #undef CURRENT_EL
 #define CURRENT_EL blipFill
 //! blipFill handler (Picture Fill)

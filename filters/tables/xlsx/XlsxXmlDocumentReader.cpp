@@ -234,6 +234,45 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
         }
     }
 
+    if (!m_context->autoFilters.isEmpty()) {
+        body->startElement("table:database-ranges");
+        int index = 0;
+        while (index < m_context->autoFilters.size()) {
+            body->startElement("table:database-range");
+            body->addAttribute("table:target-range-address", m_context->autoFilters.at(index).area);
+            body->addAttribute("table:display-filter-buttons", "true");
+            body->addAttribute("table:name", QString("excel-database-%1").arg(index));
+            QString type = m_context->autoFilters.at(index).type;
+            int filterConditionSize = m_context->autoFilters.at(index).filterConditions.size();
+            if (filterConditionSize > 0) {
+                if (type == "and") {
+                    body->startElement("table:filter-and");
+                }
+                else if (type == "or") {
+                    body->startElement("table:filter-or");
+                }
+                else {
+                    body->startElement("table:filter");
+                }
+                int conditionIndex = 0;
+                while (conditionIndex < filterConditionSize) {
+                    body->startElement("table:filter-condition");
+                    body->addAttribute("table:field-number", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).field);
+                    body->addAttribute("table:value", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).value);
+                    body->addAttribute("table:operator", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).opField);
+                    body->endElement(); // table:filter-condition
+                    ++conditionIndex;
+                }
+                body->endElement(); // table:filter | table:filter-or | table:filter-and
+            }
+            body->endElement(); // table:database-range
+            ++index;
+        }
+
+        body->endElement(); // table:database-ranges
+    }
+
+
     READ_EPILOGUE
 }
 
@@ -295,7 +334,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
                                           *m_context->styles,
                                           *m_context->relationships, m_context->import,
                                           vmlreader.content(),
-                                          vmlreader.frames());
+                                          vmlreader.frames(),
+                                          m_context->autoFilters);
     // Due to some information being available only in the later part of the document, we have to read twice
     // In the first round we get the later information and in 2nd round we read the rest and use the information
     context.firstRoundOfReading = true;

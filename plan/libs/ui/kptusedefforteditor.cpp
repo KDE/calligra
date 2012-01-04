@@ -24,6 +24,7 @@
 #include <QCheckBox>
 #include <QDate>
 #include <QTableWidget>
+#include <QHeaderView>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -613,14 +614,14 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
     //kDebug();
     switch ( role ) {
         case Qt::EditRole: {
-            if ( idx.column() == 0 ) {
+            if ( idx.column() == Property_Date ) {
                 QDate od = date( idx.row() ).toDate();
                 removeEntry( od );
                 addEntry( value.toDate() );
                 // emit dataChanged( idx, idx );
                 return true;
             }
-            if ( idx.column() == 1 ) {
+            if ( idx.column() == Property_Completion ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -635,7 +636,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 emit dataChanged( idx, createIndex( idx.row(), 3 ) );
                 return true;
             }
-            if ( idx.column() == 2 ) {
+            if ( idx.column() == Property_UsedEffort ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -650,7 +651,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 emit dataChanged( idx, idx );
                 return true;
             }
-            if ( idx.column() == 3 ) {
+            if ( idx.column() == Property_RemainingEffort ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -729,11 +730,11 @@ void CompletionEntryItemModel::setCompletion( Completion *completion )
 void CompletionEntryItemModel::refresh()
 {
     m_datelist.clear();
-    m_flags[ 2 ] = 0;
+    m_flags[ Property_UsedEffort ] = Qt::NoItemFlags;
     if ( m_completion ) {
         m_datelist = m_completion->entries().keys();
         if ( m_completion->entrymode() == Completion::EnterEffortPerTask ) {
-            m_flags[ 2 ] = Qt::ItemIsEditable;
+            m_flags[ Property_UsedEffort ] = Qt::ItemIsEditable;
         }
     }
     kDebug()<<m_datelist<<endl;
@@ -804,6 +805,8 @@ void CompletionEntryItemModel::addEntry( const QDate date )
 CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     : QTableView( parent )
 {
+    verticalHeader()->hide();
+
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
     setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
@@ -832,7 +835,6 @@ void CompletionEntryEditor::setCompletionModel( CompletionEntryItemModel *m )
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
 {
-    kDebug()<<endl;
     model()->setCompletion( completion );
 }
 
@@ -841,11 +843,12 @@ void CompletionEntryEditor::addEntry()
     kDebug()<<endl;
     QModelIndex i = model()->addRow();
     if ( i.isValid() ) {
-        model()->setFlags( i.column(), model()->flags( i ) | Qt::ItemIsEditable );
+        model()->setFlags( i.column(), Qt::ItemIsEditable );
         setCurrentIndex( i );
         emit selectionChanged( QItemSelection(), QItemSelection() ); //hmmm, control removeEntryBtn
+        scrollTo( i );
         edit( i );
-        model()->setFlags( i.column(), model()->flags( i ) & ~Qt::ItemIsEditable );
+        model()->setFlags( i.column(), Qt::NoItemFlags );
     }
 }
 

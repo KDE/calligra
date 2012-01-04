@@ -36,6 +36,9 @@
 #include <QFile>
 #include <QTextCodec>
 #include <QtEndian>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
 
 #include <pole.h>
 #include "swinder.h"
@@ -1658,7 +1661,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
         startPict += 4 + cbFmla;
     } else {
-        //const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
+        //const unsigned long ifntEmpty = readU16(startPict); // FontIndex
         startPict += 2;
         const unsigned *endOffset = continuePositions;
         while (data + *endOffset <= startPict && *endOffset < size) endOffset++;
@@ -1673,8 +1676,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     // XLUnicodeStringNoCch
     m_text = QString();
+    unsigned k = 1;
     if(fHighByte) {
-        for (unsigned k = 1; startPict + k + 1 < endPict; k += 2) {
+        for (; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
             if (!zc) break;
             if (!QChar(zc).isPrint() && zc != 10) {
@@ -1684,7 +1688,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
             m_text.append(QChar(zc));
         }
     } else {
-        for (unsigned k = 1; startPict + k < endPict; k += 1) {
+        for (; startPict + k < endPict; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
             if (!uc) break;
             if (!QChar(uc).isPrint() && uc != 10) {
@@ -1692,6 +1696,56 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
                 break;
             }
             m_text.append(QChar(uc));
+        }
+    }
+
+    m_doc.clear();
+
+    // Now look for TxORun structures that specify the formatting run information for the TxO record.
+    int ToXRunsPositionIndex = 0;
+    do {
+        unsigned pos = continuePositions[ToXRunsPositionIndex];
+        if (pos + 8 > size) {
+            ToXRunsPositionIndex = 0;
+            break; // not found
+        }
+        if (pos >= k) {
+            break; // we have it
+        }
+        ++ToXRunsPositionIndex;
+    } while(true);
+    if (ToXRunsPositionIndex > 0) {
+        m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
+        m_doc->setPlainText(m_text);
+        QTextCursor cursor(m_doc.data());
+        //cursor.setVisualNavigation(true);
+        QTextCharFormat format;
+        unsigned pos = continuePositions[ToXRunsPositionIndex];
+        for(;pos + 8 <= size; pos += 8) { // now walk through the array of Run records
+            const unsigned ich = readU16(data + pos);
+            const unsigned ifnt = readU16(data + pos + 2);
+
+            if (format.isValid()) {
+                cursor.setPosition(ich, QTextCursor::KeepAnchor);
+                cursor.setCharFormat(format);
+                cursor.setPosition(ich, QTextCursor::MoveAnchor);
+            }
+
+            if (ich >= unsigned(m_text.length())) {
+                break;
+            }
+
+            FormatFont font = m_workbook->font(ifnt);
+            Q_ASSERT(!font.isNull());
+            format.setFontFamily(font.fontFamily());
+            format.setFontPointSize(font.fontSize());
+            format.setForeground(QBrush(font.color()));
+            format.setFontWeight(font.bold() ? QFont::Bold : QFont::Normal);
+            format.setFontItalic(font.italic());
+            format.setFontUnderline(font.underline());
+            format.setFontStrikeOut(font.strikeout());
+            //TODO font.subscript()
+            //TODO font.superscript()
         }
     }
 
@@ -2366,7 +2420,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     d->workbook = workbook;
     d->globals = new GlobalsSubStreamHandler(workbook, streamVersion);
     d->handlerStack.clear();
-    unsigned long lastType = 0;
+    bool useMsoDrawingRecordWorkaround = false;
 
     while (stream->tell() < stream_size) {
         const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
@@ -2386,12 +2440,10 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         if (bytes_read != 4) break;
 
         unsigned long type = readU16(buffer);
-        // if the previous record is an Obj record, than the Continue record
-        // was supposed to be a MsoDrawingRecord (known bug in MS Excel...)
-        // a similar problem exists with TxO/Continue records, but there it is
-        // harder to find out which Continue records are part of the TxO and which
-        // are part of the MsoDrawing record
-        if (type == 0x3C && lastType == ObjRecord::id) {
+
+        // Work around a known bug in Excel. See below for a more detailed description of the problem.
+        if (useMsoDrawingRecordWorkaround) {
+            useMsoDrawingRecordWorkaround = false;
             type = MsoDrawingRecord::id;
         }
 
@@ -2423,9 +2475,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
-
-            if(next_type == MsoDrawingRecord::id || next_type == MsoDrawingGroupRecord::id) {
-                if(type != next_type)
+            if(next_type == MsoDrawingGroupRecord::id) {
+                if (type != MsoDrawingGroupRecord::id)
                     break;
             } else if(next_type == 0x3C) {
                 // 0x3C are continues records which are always just merged...
@@ -2435,8 +2486,31 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                 // a similar problem exists with TxO/Continue records, but there it is
                 // harder to find out which Continue records are part of the TxO and which
                 // are part of the MsoDrawing record
-                if (type == ObjRecord::id) {
-                    break;
+                if (type == ObjRecord::id || type == TxORecord::id) {
+                    unsigned long saved_pos_2 = stream->tell();
+                    bool isMsoDrawingRecord = false;
+                    bytes_read = stream->read(small_buffer, 8);
+                    if (bytes_read == 8) {
+                        QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(small_buffer), 8);
+                        QBuffer buff(&byteArr);
+                        buff.open(QIODevice::ReadOnly);
+                        LEInputStream in(&buff);
+                        MSO::OfficeArtRecordHeader rh;
+                        parseOfficeArtRecordHeader(in, rh);
+                        isMsoDrawingRecord =
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0xF002) || // OfficeArtDgContainer
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0x0F004) || // OfficeArtSpContainer
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0x0F003) || // OfficeArtSpgrContainer
+                            (rh.recVer == 0x2 && rh.recInstance <= 202 && rh.recType == 0x0F00A && rh.recLen == 8) || // OfficeArtFSP
+                            (rh.recVer == 0x1 && rh.recInstance == 0x0 && rh.recType == 0x0F009 && rh.recLen == 0x10) || // OfficeArtFSPGR
+                            (rh.recVer == 0x0 && rh.recInstance == 0x0 && rh.recType == 0xF010 && (rh.recLen == 0x8 || rh.recLen == 0x12)) || // XlsOfficeArtClientAnchor
+                            (rh.recVer == 0x0 && rh.recInstance == 0x0 && rh.recType == 0xF011 && rh.recLen == 0); // XlsOfficeArtClientData
+                    }
+                    stream->seek(saved_pos_2);
+                    if (isMsoDrawingRecord) {
+                        useMsoDrawingRecordWorkaround = true;
+                        break;
+                    }
                 }
             } else {
                 break; // and abort merging of records
@@ -2474,9 +2548,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // restore position in stream to the beginning of the next record
         stream->seek(saved_pos);
 
-        // remember type of previous record
-        lastType = type;
-
         // skip record type 0, this is just for filler
         if (type == 0) continue;
 
@@ -2489,7 +2560,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
             std::cout << std::dec;
             std::cout << " (" << type << ")";
-            std::cout << std::endl;
             std::cout << std::endl;
 //#endif
         } else {

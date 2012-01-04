@@ -2,6 +2,7 @@
 Type=Application
 Name=Calligra
 Name[bg]=Calligra
+Name[ca]=Calligra
 Name[cs]=Calligra
 Name[da]=Calligra
 Name[de]=Calligra
@@ -20,6 +21,7 @@ Name[uk]=Calligra
 Name[x-test]=xxCalligraxx
 Name[zh_CN]=Calligra
 Name[zh_TW]=Calligra
+Exec=khelpcenter help:/calligra
 NoDisplay=true
 X-DocPath=calligra/index.html
 Categories=Qt;KDE;Office;

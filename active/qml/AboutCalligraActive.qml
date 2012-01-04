@@ -23,12 +23,12 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicslayouts 4.7 as GraphicsLayouts
 
-Item {
+Rectangle {
     PlasmaCore.Theme {
         id: theme
     }
 
-    anchors.margins: 20
+    color: "white"
 
     Button {
         id: back
@@ -45,21 +45,21 @@ Item {
 
     Column {
         anchors.fill: parent
-        anchors.topMargin: 20
+        anchors.margins: 40
         spacing: 80
 
-//         Image {
-//             id: calligra_logo
-//             source: "qrc:///images/calligra-logo.png"
-//             anchors.horizontalCenter: parent.horizontalCenter
-//         }
-
-        Text {
+        Image {
             id: calligra_logo
-            text: "Calligra"
+            source: "qrc:///images/calligra-logo.png"
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 80
         }
+
+//         Text {
+//             id: calligra_logo
+//             text: "Calligra"
+//             anchors.horizontalCenter: parent.horizontalCenter
+//             font.pointSize: 80
+//         }
 
         Text {
             id: description

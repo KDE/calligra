@@ -31,7 +31,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-
+#include <KIcon>
 #include <kdebug.h>
 
 #include "kpttask.h"
@@ -233,7 +233,10 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
       m_lastIsNextYear( false )
 {
     setupUi(this);
-    
+
+    addEntryBtn->setIcon( KIcon( "list-add" ) );
+    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+
     connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
     removeEntryBtn->setEnabled( false );
 
@@ -338,9 +341,12 @@ void TaskProgressPanelImpl::enableWidgets() {
     startTime->setEnabled(started->isChecked() && !finished->isChecked());
 
     addEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
-    removeEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
-    for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
-        entryTable->model()->setFlags( i, 0 );
+    removeEntryBtn->setEnabled( ! entryTable->selectionModel()->selectedIndexes().isEmpty() && started->isChecked() && ! finished->isChecked() );
+
+    if ( finished->isChecked() ) {
+        for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
+            entryTable->model()->setFlags( i, Qt::NoItemFlags );
+        }
     }
 
     resourceTable->model()->setReadOnly( ( ! started->isChecked() ) || finished->isChecked() || m_completion.entrymode() != Completion::EnterEffortPerResource );
@@ -429,7 +435,7 @@ void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
 
 void TaskProgressPanelImpl::slotSelectionChanged( const QItemSelection &sel )
 {
-    removeEntryBtn->setEnabled( !sel.isEmpty() );
+    removeEntryBtn->setEnabled( ! sel.isEmpty() && started->isChecked() && ! finished->isChecked() );
 }
 
 }  //KPlato namespace

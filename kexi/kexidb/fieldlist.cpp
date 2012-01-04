@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -237,7 +237,7 @@ QStringList FieldList::names() const
 }
 
 //static
-QString FieldList::sqlFieldsList(Field::List* list, Driver *driver,
+QString FieldList::sqlFieldsList(Field::List* list, const Driver *driver,
                                  const QString& separator, const QString& tableAlias, int drvEscaping)
 {
     if (!list)
@@ -246,17 +246,20 @@ QString FieldList::sqlFieldsList(Field::List* list, Driver *driver,
     result.reserve(256);
     bool start = true;
     const QString tableAliasAndDot(tableAlias.isEmpty() ? QString() : (tableAlias + "."));
+    int kexiEscaping = drvEscaping | Driver::EscapeDriver;
+    kexiEscaping ^= Driver::EscapeDriver;
+    kexiEscaping |= Driver::EscapeKexi;
     foreach(Field *f, *list) {
         if (!start)
             result += separator;
         else
             start = false;
-        result += (tableAliasAndDot + driver->escapeIdentifier(f->name(), drvEscaping));
+        result += (tableAliasAndDot + escapeIdentifier(driver, f->name(), drvEscaping));
     }
     return result;
 }
 
-QString FieldList::sqlFieldsList(Driver *driver,
+QString FieldList::sqlFieldsList(const Driver *driver,
                                  const QString& separator, const QString& tableAlias, int drvEscaping)
 {
     if (!m_sqlFields.isEmpty())

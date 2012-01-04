@@ -29,12 +29,14 @@
 #include <KWPage.h>
 #include <QDeclarativeItem>
 
+class KoFindText;
 class KWPage;
 class PAView;
 class KoDocument;
 class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
+class KoFindMatch;
 
 class CanvasController : public QDeclarativeItem, KoCanvasController
 {
@@ -47,6 +49,7 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY(CADocumentInfo::DocumentType documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
+    Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 public:
 
@@ -86,6 +89,8 @@ public:
     void setCameraX(int cameraX);
     void setCameraY(int cameraY);
     int loadProgress() const;
+    QString searchString() const;
+    void setSearchString(const QString &string);
 
 public slots:
     void openDocument(const QString &path);
@@ -101,6 +106,9 @@ public slots:
 
 private slots:
     void processLoadProgress(int value);
+    void updateCanvasItem();
+    void findMatchFound(const KoFindMatch& match);
+    void findNoMatchFound();
 
 private:
     KoZoomHandler *m_zoomHandler;
@@ -115,10 +123,11 @@ private:
     PAView *m_paView;
     KWPage m_currentTextDocPage;
     int m_loadProgress;
+    QString m_searchString;
+    KoFindText *m_find;
 
     void loadSettings();
     void saveSettings();
-    void updateCanvasItem();
     inline void updateDocumentSizeForActiveSheet();
 
 protected:
@@ -135,6 +144,7 @@ signals:
     void documentTypeChanged();
     void documentLoaded();
     void loadProgressChanged();
+    void searchStringChanged();
 };
 
 #endif // CANVASCONTROLLER_H

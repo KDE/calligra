@@ -20,6 +20,7 @@
 #define FUNCTOR_H
 
 #include "wv2_export.h"
+#include "parser9x.h"
 namespace wvWare
 {
     /**

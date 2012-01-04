@@ -327,11 +327,9 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_i()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-
     TRY_READ_ATTR_WITHOUT_NS(val)
-    if (val == "1") {
-        m_currentTextStyleProperties->setFontItalic(true);
-    }
+    const bool italic = MSOOXML::Utils::convertBooleanAttr(val, true);
+    m_currentTextStyleProperties->setFontItalic(italic);
 
     readNext();
     READ_EPILOGUE
@@ -388,9 +386,8 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_b()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(val)
-    if (val == "1") {
-        m_currentTextStyleProperties->setFontWeight(QFont::Bold);
-    }
+    const bool bold = MSOOXML::Utils::convertBooleanAttr(val, true);
+    m_currentTextStyleProperties->setFontWeight(bold ? QFont::Bold : QFont::Normal);
 
     readNext();
     READ_EPILOGUE

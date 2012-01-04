@@ -76,12 +76,8 @@ Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
             case NodeActualFinish:
             case NodeCompleted:
             case NodeRemainingEffort:
-                flags |= Qt::ItemIsEditable;
-                break;
             case NodeActualEffort:
-                if ( t->completion().entrymode() == Completion::EnterEffortPerTask || t->completion().entrymode() == Completion::EnterEffortPerResource ) {
-                    flags |= Qt::ItemIsEditable;
-                }
+                flags |= Qt::ItemIsEditable;
                 break;
             default: break;
         }
@@ -355,13 +351,20 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role ) const
 {
     //kDebug()<<doc->url().fileName()<<column<<role;
-    if ( role != Qt::DisplayRole ) {
-        return QVariant();
-    }
-    switch ( column ) {
-        case NodeName: return doc->name();
-        default:
-            return "";
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case NodeName: return doc->name();
+            case NodeType: return doc->typeToString( doc->type(), true );
+            case NodeStatusNote: return doc->status();
+            default:
+                return "";
+        }
+    } else if ( role == Qt::ToolTipRole ) {
+        switch ( column ) {
+            case NodeName: return doc->typeToString( doc->type(), true );
+            default:
+                break;
+        }
     }
     return QVariant();
 }
@@ -373,8 +376,8 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
     }
     if ( node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
-        QDateTime dt = QDateTime::currentDateTime();
-        QDate date = dt.date();
+        QDate date = qMax( c.entryDate(), QDate::currentDate() );
+        QDateTime dt( date, QTime::currentTime() );
         // xgettext: no-c-format
         MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
         if ( ! c.isStarted() ) {
@@ -386,8 +389,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
         }
+        bool newentry = c.entryDate() < date;
         emit executeCommand( m ); // also adds a new entry if necessary
-        if ( c.entrymode() == Completion::EnterCompleted ) {
+        if ( newentry ) {
+            // new entry so calculate used/remaining based on completion
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
             kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
@@ -395,6 +400,10 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             cmd->execute();
             m->addCommand( cmd );
             cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        } else if ( c.isFinished() && c.remainingEffort() != 0 ) {
+            ModifyCompletionRemainingEffortCmd *cmd = new ModifyCompletionRemainingEffortCmd( c, date, Duration::zeroDuration );
             cmd->execute();
             m->addCommand( cmd );
         }
@@ -485,8 +494,15 @@ bool TaskWorkPackageModel::setFinishedTime( Node *node, const QVariant &value, i
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
-                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
-                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    QDate lastdate = t->completion().entryDate();
+                    if ( ! lastdate.isValid() || lastdate < value.toDate() ) {
+                        Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                        m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                    } else {
+                        Completion::Entry *e = new Completion::Entry( *( t->completion().entry( lastdate ) ) );
+                        e->percentFinished = 100;
+                        m->addCommand( new ModifyCompletionEntryCmd( t->completion(), lastdate, e ) );
+                    }
                 }
             }
             m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );

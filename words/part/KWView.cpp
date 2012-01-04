@@ -346,7 +346,7 @@ void KWView::setupActions()
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, false);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
 
@@ -355,7 +355,7 @@ void KWView::setupActions()
     actionCollection()->addAction("view_formattingchars", action);
 
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, false);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(false));
     action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
@@ -364,7 +364,7 @@ void KWView::setupActions()
     action->setCheckable(true);
     actionCollection()->addAction("view_tableborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, false);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(false));
     action->setChecked(m_document->config().showTableBorders()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
@@ -807,14 +807,14 @@ void KWView::toggleViewFrameBorders(bool on)
 
 void KWView::setShowFormattingChars(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, on);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(on));
     m_canvas->update();
     m_document->config().setShowFormattingChars(on);
 }
 
 void KWView::setShowTableBorders(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, on);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(on));
     m_canvas->update();
     m_document->config().setShowTableBorders(on);
 }

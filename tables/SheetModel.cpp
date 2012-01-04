@@ -263,9 +263,13 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
         // TODO
 //         storage->setMatrix(region, value.value<bool>());
         break;
-    case NamedAreaRole:
-        storage->emitInsertNamedArea(region, value.toString());
-            break;
+    case NamedAreaRole: {
+        QString namedAreaName = value.toString();
+        if (namedAreaName.isEmpty())
+            return false;
+        storage->emitInsertNamedArea(region, namedAreaName);
+        break;
+    }
     case SourceRangeRole:
         storage->setBinding(region, value.value<Binding>());
         break;

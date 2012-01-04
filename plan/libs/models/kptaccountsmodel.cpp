@@ -327,7 +327,7 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                emit executeCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
+                emit executeCommand( new RenameAccountCmd( a, value.toString(), i18nc( "(qtundo-format)", "Modify account name" ) ) );
             }
             return true;
         case Qt::CheckStateRole: {
@@ -357,7 +357,7 @@ bool AccountItemModel::setDescription( Account *a, const QVariant &value, int ro
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->description() ) {
-                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), "Modify account description" ) );
+                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), i18nc( "(qtundo-format)", "Modify account description" ) ) );
             }
             return true;
     }
