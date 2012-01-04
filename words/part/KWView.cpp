@@ -897,10 +897,10 @@ KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
         kDebug(32001) << "bailing out...no shape to anchor";
         return 0;
     }
-
+    
     // try and find out if shape is already anchored
     KoInlineTextObjectManager *manager = m_document->inlineTextObjectManager();
-    
+
     foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
         if (anchor && anchor->shape() == shape) {
@@ -921,8 +921,13 @@ KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
         shape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
         shape->setAbsolutePosition(absPos);
         
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        frameForShape(shape)->setAnchor(anchor);
+        KWFrame      *frame  = frameForShape(shape);
+        KoTextAnchor *anchor = frame->anchor();
+        
+        if (!anchor) {
+            anchor = new KoTextAnchor(shape);
+            frame->setAnchor(anchor);
+        }
         
         selection->select(frameForAnchor->shape());
         
