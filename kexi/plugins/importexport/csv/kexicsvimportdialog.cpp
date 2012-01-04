@@ -763,6 +763,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     }
                 }
                 nextRow = true;
+                if (ignoreDups && lastCharDelimiter) {
+                    // we're ignoring repeated delimiters so remove any extra trailing delimiters
+                    --column;
+                }
                 maxColumn = qMax(maxColumn, column);
                 column = 1;
             } else {
