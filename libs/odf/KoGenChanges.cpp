@@ -137,7 +137,8 @@ void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
    }
 
     for (; it != changesList.constEnd() ; ++it) {
-        it.key().writeChange(xmlWriter, it.value());
+        KoGenChange change = it.key();
+        change.writeChange(xmlWriter, it.value());
     }
 
     xmlWriter->endElement(); // text:tracked-changes
