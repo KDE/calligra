@@ -156,7 +156,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     QTextList *currentList = fromcursor.currentList();
 
     // NOTE even better would be if we create a new table/list out of multiple selected
-    // tablecells/listitems thta contain only the selected cells/items. But following
+    // tablecells/listitems that contain only the selected cells/items. But following
     // at least enables copying a whole list/table while still being able to copy/paste
     // only parts of the text within a list/table (see also bug 275990).
     if (currentTable || currentList) {
