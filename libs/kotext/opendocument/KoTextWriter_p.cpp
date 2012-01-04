@@ -411,7 +411,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         changeStack.push(returnChangeId);
     }
 
-    while(changeHistory.size()) {
+    while (changeHistory.size()) {
         int changeId = changeHistory.pop();
         if (changeTracker->isDuplicateChangeId(changeId)) {
             changeId = changeTracker->originalChangeId(changeId);
@@ -420,7 +420,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
             writer->startElement("delta:removed-content", false);
             writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
-        }else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-with-content");
         } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange && elementType == KoTextWriter::Private::Span) {
@@ -662,6 +662,8 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
 
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
+
+
     QTextCursor cursor(block);
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);

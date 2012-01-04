@@ -113,6 +113,6 @@ private:
     QSharedDataPointer<KoElementReferenceData> d;
 };
 
- Q_DECLARE_OPERATORS_FOR_FLAGS(KoElementReference::SaveOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoElementReference::SaveOptions)
 
 #endif // KOELEMENTREFERENCE_H
