@@ -42,8 +42,8 @@ public:
     ~KoGenChanges();
 
     /**
-     * Look up a change in the collection, inserting it if necessary.
-     * This assigns a name to the change and returns it.
+     * Look up a change in the collection, inserting it if necessary. If the change already
+     * exists, return the existing name. If not, assign a name to the change and returns it.
      *
      * @param change the change to look up.
      * @param name proposed internal name for the change. It will be modified to be guaranteed unique.
