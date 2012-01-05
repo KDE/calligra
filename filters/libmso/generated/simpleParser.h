@@ -4979,17 +4979,18 @@ public:
 };
 class TextClientDataSubContainerOrAtom : public StreamOffset {
 public:
-    class choice948925432 : public QSharedPointer<StreamOffset> {
+    class choice4230039514 : public QSharedPointer<StreamOffset> {
     public:
-        choice948925432() {}
-        explicit choice948925432(OutlineTextRefAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice948925432(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice948925432(TextRulerAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice4230039514() {}
+        explicit choice4230039514(OutlineTextRefAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4230039514(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4230039514(TextRulerAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4230039514(MouseClickTextInfo* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice948925432 anon;
+    choice4230039514 anon;
     TextClientDataSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class TextPFRun : public StreamOffset {
@@ -5566,6 +5567,7 @@ public:
     QSharedPointer<OfficeArtClientTextBox> clientTextbox;
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
+    QSharedPointer<OfficeArtFOPT> shapePrimaryOptions2;
     QSharedPointer<UnknownTextContainerChild> unknown;
     OfficeArtSpContainer(void* /*dummy*/ = 0) {}
 };

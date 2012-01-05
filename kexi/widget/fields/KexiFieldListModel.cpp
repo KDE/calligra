@@ -51,7 +51,7 @@ KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*o
 
 KexiFieldListModel::~KexiFieldListModel()
 {
-
+    delete d;
 }
 
 void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
