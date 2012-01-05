@@ -1282,6 +1282,7 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotFilePrint()
 {
+#ifndef Q_OS_ANDROID
     if (!rootView())
         return;
     KoPrintJob *printJob = rootView()->createPrintJob();
@@ -1297,6 +1298,7 @@ void KoMainWindow::slotFilePrint()
     else
         delete printJob;
     delete printDialog;
+#endif
 }
 
 void KoMainWindow::slotFilePrintPreview()
