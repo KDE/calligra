@@ -21,7 +21,9 @@
 #include "KoApplication.h"
 
 #include "KoGlobal.h"
+#ifndef Q_OS_ANDROID
 #include "KoApplicationAdaptor.h"
+#endif
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDocument.h"
@@ -42,7 +44,10 @@
 #include <krecentdirs.h>
 #endif
 
+#ifndef Q_OS_ANDROID
 #include <QtDBus/QtDBus>
+#endif
+#include <QDir>
 #include <QFile>
 #include <QSplashScreen>
 #include <QSysInfo>
@@ -73,8 +78,10 @@ KoApplication::KoApplication()
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
+#ifndef Q_OS_ANDROID
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
+#endif
 
     m_starting = true;
 #ifdef Q_WS_WIN

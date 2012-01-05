@@ -24,7 +24,9 @@
 #include "KoDocument.h"
 #include "KoDocument_p.h"
 
+#ifndef Q_OS_ANDROID
 #include "KoDocumentAdaptor.h"
+#endif
 #include "KoGlobal.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -71,7 +73,9 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QPainter>
 #include <QtCore/QTimer>
+#ifndef Q_OS_ANDROID
 #include <QtDBus/QDBusConnection>
+#endif
 #include <QtGui/QLayout>
 #include <QtGui/QApplication>
 #include <QtGui/QPrinter>
@@ -345,9 +349,10 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->bSingleViewMode = singleViewMode;
 
     setObjectName(newObjectName());
+#ifndef Q_OS_ANDROID
     new KoDocumentAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-
+#endif
 
     // the parent setting *always* overrides! (Simon)
     if (parent) {
