@@ -17,7 +17,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrDocument.cpp
      KPrDeclarations.cpp
      KPrView.cpp
-     KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
@@ -56,7 +55,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrPresentationHighlightStrategy.cpp
      KPrPresentationBlackStrategy.cpp
      KPrPresentationStrategyBase.cpp
-     KPrPresentationToolAdaptor.cpp
      KPrPresentationToolEventForwarder.cpp
      KPrPresentationDrawStrategy.cpp
      KPrPageSelectStrategyBase.cpp
@@ -131,6 +129,12 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
    )
+if(NOT ANDROID)
+   set( calligrastageprivate_LIB_SRCS ${calligrestageprivate_LIB_SRCS}
+       KPrViewAdaptor.cpp
+       KPrPresentationToolAdaptor.cpp
+   )
+endif(NOT ANDROID)
 
 kde4_add_ui_files(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
