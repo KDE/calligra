@@ -56,7 +56,6 @@
   <!-- Code for horizontal line is broken
   <Action name="insert_horizontal_line"/>
   -->
-  <Action name="insert_page"/>
   <Separator/>
   <!-- Inside the text, more -->
   <Action name="insert_footendnote"/>
