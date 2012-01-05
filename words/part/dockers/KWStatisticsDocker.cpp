@@ -23,6 +23,7 @@
 #include "KWCanvas.h"
 #include "dialogs/KWStatistics.h"
 
+
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>

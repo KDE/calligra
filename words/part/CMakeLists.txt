@@ -47,6 +47,7 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
     dialogs/KWStatistics.cpp
+    dialogs/quickpopupmenu.cpp
     dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
@@ -80,6 +81,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
     dialogs/KWStatistics.ui
+    dialogs/quickpopupmenu.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
