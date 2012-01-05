@@ -24,6 +24,7 @@
 #include <QByteArray>
 #include <QClipboard>
 #include <QMimeData>
+
 #include <QString>
 
 #include <kdebug.h>
@@ -111,7 +112,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-    changes.saveOdfChanges(contentWriter);
+    changes.saveOdfChanges(contentWriter, false);
 
     odfStore.closeContentWriter();
 

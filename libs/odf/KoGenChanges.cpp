@@ -35,10 +35,8 @@ class KoGenChanges::Private
 public:
     Private(KoGenChanges *q)
        : q(q)
-       , trackChanges(false)
     { }
 
-    QString makeUniqueName(const QString &base) const;
 
     struct NamedChange {
         const KoGenChange* change; ///< @note owned by the collection
@@ -50,10 +48,10 @@ public:
 
     /// List of styles (used to preserve ordering)
     QList<NamedChange> changeArray;
-    QMap<KoGenChange, QString> ::iterator insertChange(const KoGenChange &change, const QString &name);
+
+    QMap<KoGenChange, QString> ::iterator insertChange(const KoGenChange &change);
 
     KoGenChanges *q;
-    bool trackChanges;
 };
 
 KoGenChanges::KoGenChanges()
@@ -66,18 +64,19 @@ KoGenChanges::~KoGenChanges()
     delete d;
 }
 
-QString KoGenChanges::insert(const KoGenChange& change, const QString& name)
+QString KoGenChanges::insert(const KoGenChange& change)
 {
     QMap<KoGenChange, QString> ::iterator it = d->changeMap.find(change);
     if (it == d->changeMap.end()) {
-        it = d->insertChange(change, name);
+        it = d->insertChange(change);
     }
     return it.value();
 }
 
-QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const KoGenChange &change, const QString &name)
+QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const KoGenChange &change)
 {
-    QString changeName(name);
+
+    QString changeName;
     if (changeName.isEmpty()) {
         switch (change.type()) {
         case KoGenChange::InsertChange: changeName = 'I'; break;
@@ -87,7 +86,9 @@ QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const K
             changeName = 'C';
         }
     }
-    changeName = makeUniqueName(changeName);
+    KoElementReference ref(changeName);
+    changeName = ref.toString();
+
     QMap<KoGenChange, QString>::iterator it = changeMap.insert(change, changeName);
     NamedChange s;
     s.change = &it.key();
@@ -97,46 +98,18 @@ QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const K
     return it;
 }
 
-QMap<KoGenChange, QString> KoGenChanges::changes() const
+void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter, bool trackChanges) const
 {
-    return d->changeMap;
-}
+    QMap<KoGenChange, QString>::const_iterator it = d->changeMap.constBegin();
 
-QString KoGenChanges::Private::makeUniqueName(const QString& base) const
-{
-    KoElementReference ref(base);
-    return ref.toString();
-}
-
-const KoGenChange* KoGenChanges::change(const QString& name) const
-{
-    QList<KoGenChanges::Private::NamedChange>::const_iterator it = d->changeArray.constBegin();
-    const QList<KoGenChanges::Private::NamedChange>::const_iterator end = d->changeArray.constEnd();
-    for (; it != end ; ++it) {
-        if ((*it).name == name)
-            return (*it).change;
-    }
-    return 0;
-}
-
-void KoGenChanges::setTrackChanges(bool track)
-{
-    d->trackChanges = track;
-}
-
-void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
-{
-    QMap<KoGenChange, QString> changesList = changes();
-    QMap<KoGenChange, QString>::const_iterator it = changesList.constBegin();
-
-    if ((it != changesList.constEnd()) && (it.key().changeFormat() == KoGenChange::DELTAXML)) {
+    if ((it != d->changeMap.constEnd()) && (it.key().changeFormat() == KoGenChange::DELTAXML)) {
         xmlWriter->startElement("delta:tracked-changes");
     } else {
         xmlWriter->startElement("text:tracked-changes");
-        xmlWriter->addAttribute("track-changes", d->trackChanges);
+        xmlWriter->addAttribute("track-changes", trackChanges);
    }
 
-    for (; it != changesList.constEnd() ; ++it) {
+    for (; it != d->changeMap.constEnd() ; ++it) {
         KoGenChange change = it.key();
         change.writeChange(xmlWriter, it.value());
     }
