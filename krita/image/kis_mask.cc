@@ -125,7 +125,8 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
         m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
-        m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+        m_d->selection->createPixelSelection();
+        m_d->selection->selectionPaintDevice()->setDefaultPixel(&newDefaultPixel);
     }
     m_d->selection->updateProjection();
 }
@@ -147,7 +148,8 @@ KisSelectionSP KisMask::selection() const
                                               parentLayer->image()));
 
             quint8 newDefaultPixel = MAX_SELECTED;
-            m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+            m_d->selection->createPixelSelection();
+            m_d->selection->selectionPaintDevice()->setDefaultPixel(&newDefaultPixel);
         }
         else {
             m_d->selection = new KisSelection();
@@ -160,7 +162,8 @@ KisSelectionSP KisMask::selection() const
 
 KisPaintDeviceSP KisMask::paintDevice() const
 {
-    return selection()->getOrCreatePixelSelection();
+    selection()->createPixelSelection();
+    return selection()->selectionPaintDevice();
 }
 
 void KisMask::setSelection(KisSelectionSP selection)
@@ -175,7 +178,8 @@ void KisMask::setSelection(KisSelectionSP selection)
 void KisMask::select(const QRect & rc, quint8 selectedness)
 {
     KisSelectionSP sel = selection();
-    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
+    sel->createPixelSelection();
+    KisSelectionComponent *psel = sel->pixelSelection();
     psel->select(rc, selectedness);
     sel->updateProjection(rc);
 }

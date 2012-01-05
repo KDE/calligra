@@ -57,7 +57,8 @@ void KisAdjustmentLayerTest::testSetSelection()
     Q_ASSERT(f);
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
-    sel->getOrCreatePixelSelection()->select(QRect(10, 10, 200, 200), 128);
+    sel->createPixelSelection();
+    sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
     KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
     QCOMPARE(sel->selectedExactRect(), l1->selection()->selectedExactRect());
 }
@@ -72,12 +73,14 @@ void KisAdjustmentLayerTest::testInverted()
     Q_ASSERT(kfc);
 
     KisSelectionSP sel2 = new KisSelection();
-    sel2->getOrCreatePixelSelection()->invert();
+    sel2->createPixelSelection();
+    sel2->pixelSelection()->invert();
     KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc, sel2);
     QCOMPARE(sel2->selectedExactRect(), l2->selection()->selectedExactRect());
 
     KisSelectionSP sel3 = new KisSelection();
-    sel3->getOrCreatePixelSelection()->select(QRect(50, -10, 800, 30), 128);
+    sel3->createPixelSelection();
+    sel3->pixelSelection()->select(QRect(50, -10, 800, 30), 128);
     l2->setSelection(sel3);
 
 }

@@ -118,11 +118,10 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-        selectByColor(dev, tmpSel, c.data(), m_fuzziness);
-
+        KisPixelSelection tmpSel;
+        selectByColor(dev, &tmpSel, c.data(), m_fuzziness);
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
-        helper.selectPixelSelection(tmpSel, m_selectAction);
+        helper.selectPixelSelection(&tmpSel, m_selectAction);
 
         QApplication::restoreOverrideCursor();
     }

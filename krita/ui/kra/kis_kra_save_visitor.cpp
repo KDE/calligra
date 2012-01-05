@@ -218,8 +218,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
         return false;
     }
     if (selection->hasPixelSelection()) {
-        KisPaintDeviceSP dev = selection->pixelSelection();
-
+        KisPaintDeviceSP dev = selection->selectionPaintDevice();
         savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION));
     }
     if (selection->hasShapeSelection()) {

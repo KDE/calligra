@@ -33,6 +33,7 @@
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
+#include "kis_selection_component.h"
 
 /**
  * Routines that are useful for writing efficient tests

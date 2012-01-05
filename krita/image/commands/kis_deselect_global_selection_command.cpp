@@ -44,7 +44,8 @@ void KisDeselectGlobalSelectionCommand::redo()
     if (!m_newSelection) {
         m_image->setGlobalSelection();
         m_newSelection = m_image->globalSelection();
-        m_newSelection->getOrCreatePixelSelection()->select(m_image->bounds());
+        m_newSelection->createPixelSelection();
+        m_newSelection->pixelSelection()->select(m_image->bounds());
         m_newSelection->setDeselected(true);
     } else
         m_image->setGlobalSelection(m_newSelection);

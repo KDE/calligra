@@ -119,7 +119,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
         if (m_store->open(location)) {
 
             KisSelectionSP selection = KisSelectionSP(new KisSelection());
-            KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+            KisPaintDeviceSP pixelSelection = selection->getOrCreateSelectionPaintDevice();
             if (!pixelSelection->read(m_store)) {
                 pixelSelection->disconnect();
             } else {
@@ -152,7 +152,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     if (m_syntaxVersion == 1) {
         QString location = getLocation(layer, ".selection");
         KisSelectionSP selection = new KisSelection();
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPaintDeviceSP pixelSelection = selection->getOrCreateSelectionPaintDevice();
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
         layer->setSelection(selection);
     } else if (m_syntaxVersion == 2) {
@@ -345,7 +345,7 @@ KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
     // Pixel selection
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
     if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPaintDeviceSP pixelSelection = selection->getOrCreateSelectionPaintDevice();
         loadPaintDevice(pixelSelection, pixelSelectionLocation);
     }
 

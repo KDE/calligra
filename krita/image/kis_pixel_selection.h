@@ -26,9 +26,9 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_selection_component.h"
-#include "kis_selection.h"
 #include <krita_export.h>
 
+class KisSelection;
 
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
@@ -52,9 +52,11 @@ public:
 
     virtual ~KisPixelSelection();
 
-    KisSelectionComponent* clone(KisSelection*);
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const;
+// KisSelectionComponent implementation
+public:
+
+    KisSelectionComponent* clone(KisSelection*);
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -69,20 +71,9 @@ public:
     void invert();
 
     /**
-     * Set the specified rect to MIN_SELECTED.
-     */
-    void clear(const QRect & r);
-
-    /**
-     * Reset the entire selection. The selectedRect and selectedExactRect
-     * will be empty. The selection will be completely deselected.
-     */
-    void clear();
-
-    /**
      * Apply a selection to the selection using the specified selection mode
      */
-    void applySelection(KisPixelSelectionSP selection, SelectionAction action);
+    void applySelection(KisSelectionComponent *selection, SelectionAction action);
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
@@ -107,6 +98,24 @@ public:
 
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
+
+
+// KisPaintDevice overrides
+public:
+
+    /**
+     * Set the specified rect to MIN_SELECTED.
+     */
+    void clear(const QRect & r);
+
+    /**
+     * Reset the entire selection. The selectedRect and selectedExactRect
+     * will be empty. The selection will be completely deselected.
+     */
+    void clear();
+
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const;
+
 
 private:
     /**

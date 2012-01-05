@@ -143,9 +143,9 @@ QVector<QPolygon> KisSelection::outline() const
     return m_d->getProjection()->outline();
 }
 
-KisPixelSelectionSP KisSelection::pixelSelection() const
+KisSelectionComponent *KisSelection::pixelSelection() const
 {
-    return m_d->pixelSelection;
+    return m_d->pixelSelection.data();
 }
 
 KisSelectionComponent* KisSelection::shapeSelection() const
@@ -153,9 +153,24 @@ KisSelectionComponent* KisSelection::shapeSelection() const
     return m_d->shapeSelection;
 }
 
-void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
+void KisSelection::setPixelSelection(KisSelectionComponent *pixelSelection)
 {
-    m_d->pixelSelection = pixelSelection;
+    if (dynamic_cast<KisPixelSelection*>(pixelSelection)) {
+        m_d->pixelSelection = static_cast<KisPixelSelection*>(pixelSelection);
+    }
+}
+
+KisPaintDeviceSP KisSelection::selectionPaintDevice() const
+{
+    return m_d->pixelSelection;
+}
+
+KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice() const
+{
+    if (!m_d->pixelSelection) {
+        m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
+    }
+    return m_d->pixelSelection;
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
@@ -163,13 +178,11 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
     m_d->shapeSelection = shapeSelection;
 }
 
-KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
+void KisSelection::createPixelSelection()
 {
     if (!m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
     }
-
-    return m_d->pixelSelection;
 }
 
 KisPaintDeviceSP KisSelection::projection() const

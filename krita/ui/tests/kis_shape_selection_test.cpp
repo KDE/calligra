@@ -40,13 +40,14 @@ void KisShapeSelectionTest::testAddChild()
     KisSelectionSP selection = new KisSelection();
     QVERIFY(selection->hasPixelSelection() == false);
     QVERIFY(selection->hasShapeSelection() == false);
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    selection->createPixelSelection();
+    KisSelectionComponent *pixelSelection = selection->pixelSelection();
 
     pixelSelection->select(QRect(0, 0, 100, 100));
     // Selection is using the pixel selection as datamanager so no projection update
     // needed
 
-    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->selectionPaintDevice(), 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
     QRect rect(50, 50, 100, 100);
@@ -67,7 +68,7 @@ void KisShapeSelectionTest::testAddChild()
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
-    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->selectionPaintDevice(), 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 150, 150));
 
     selection->updateProjection();

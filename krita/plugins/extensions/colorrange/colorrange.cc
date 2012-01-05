@@ -104,11 +104,11 @@ void ColorRange::selectOpaque()
     
     qint32 x, y, w, h;
     device->exactBounds(x, y, w, h);
-    const KoColorSpace * cs = device->colorSpace();
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    const KoColorSpace *cs = device->colorSpace();
+    KisPixelSelection tmpSel;
 
     KisHLineConstIterator deviter = device->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = tmpSel ->createHLineIterator(x, y, w);
+    KisHLineIterator selIter = tmpSel.createHLineIterator(x, y, w);
 
     for (int row = y; row < h + y; ++row) {
         while (!deviter.isDone()) {
@@ -121,7 +121,8 @@ void ColorRange::selectOpaque()
         selIter.nextRow();
     }
 
-    helper.selectPixelSelection(tmpSel, SELECTION_ADD);
+    helper.selectPixelSelection(&tmpSel, SELECTION_ADD);
+
 }
 
 #include "colorrange.moc"

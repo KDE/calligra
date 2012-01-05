@@ -52,7 +52,7 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 {
 }
 
-void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
+void KisSelectionToolHelper::selectPixelSelection(KisSelectionComponent *temporarySelection, SelectionAction action)
 {
     KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
@@ -64,24 +64,26 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
     KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
 
-    KisPixelSelectionSP pixelSelection = m_layer->selection()->getOrCreatePixelSelection();
+    KisSelectionSP selection = m_layer->selection();
+    selection->createPixelSelection();
+    KisSelectionComponent *pixelSelection = selection->pixelSelection();
 
     if (!hasSelection && action == SELECTION_SUBTRACT) {
         pixelSelection->invert();
     }
 
-    pixelSelection->applySelection(selection, action);
+    pixelSelection->applySelection(temporarySelection, action);
 
     QRect dirtyRect = m_image->bounds();
     if (hasSelection && action != SELECTION_REPLACE && action != SELECTION_INTERSECT) {
-        dirtyRect = selection->selectedRect();
+        dirtyRect = temporarySelection->selectedRect();
     }
-    m_layer->selection()->updateProjection(dirtyRect);
+    selection->updateProjection(dirtyRect);
 
     transaction.commit(undoAdapter);
     undoAdapter->endMacro();
 
-    pixelSelection->setDirty(dirtyRect);
+    selection->selectionPaintDevice()->setDirty(dirtyRect);
     m_canvas->view()->selectionManager()->selectionChanged();
 }
 

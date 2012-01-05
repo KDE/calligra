@@ -133,7 +133,8 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     QCOMPARE(src->exactBounds(), QRect(0, 0, 20, 20));
 
     KisSelectionSP selection = new KisSelection();
-    selection->getOrCreatePixelSelection()->select(QRect(10, 10, 20, 20));
+    selection->createPixelSelection();
+    selection->pixelSelection()->select(QRect(10, 10, 20, 20));
     selection->updateProjection();
     QCOMPARE(selection->selectedExactRect(), QRect(10, 10, 20, 20));
 
@@ -186,7 +187,7 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
 
     QCOMPARE(TestUtil::alphaDevicePixel(psel, 13, 13), MIN_SELECTED);
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(psel);
+    sel->setPixelSelection(psel.data());
     KisPainter painter(dst);
     painter.setSelection(sel);
     painter.bitBlt(0, 0, src, 0, 0, 30, 30);
@@ -226,7 +227,8 @@ void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs
     QCOMPARE(src->exactBounds(), QRect(0, 0, 30, 30));
 
     KisSelectionSP sel = new KisSelection();
-    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
+    sel->createPixelSelection();
+    KisSelectionComponent *psel = sel->pixelSelection();
     psel->select(QRect(10, 10, 20, 20));
     psel->invert();
     sel->updateProjection();
@@ -254,7 +256,7 @@ void KisPainterTest::testSelectionBltSelection()
     Selection->select(QRect(10, 10, 20, 20));
     QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection);
+    sel->setPixelSelection(Selection.data());
     sel->updateProjection();
     KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
@@ -306,7 +308,7 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     QCOMPARE(TestUtil::alphaDevicePixel(Selection, 13, 13), MIN_SELECTED);
 
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection);
+    sel->setPixelSelection(Selection.data());
     sel->updateProjection();
 
     KisPixelSelectionSP dst = new KisPixelSelection();
@@ -387,7 +389,7 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     selection->select(QRect(25, 25, 100, 100));
 
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(selection);
+    sel->setPixelSelection(selection.data());
     sel->updateProjection();
 
     const KoCompositeOp* op = cs->compositeOp(COMPOSITE_ERASE);
@@ -432,7 +434,8 @@ void KisPainterTest::checkPerformance()
     quint8 p = 128;
     src->fill(0, 0, 10000, 5000, &p);
     KisSelectionSP sel = new KisSelection();
-    sel->getOrCreatePixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
+    sel->createPixelSelection();
+    sel->pixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
     sel->updateProjection();
 
     QTime t;

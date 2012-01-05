@@ -266,10 +266,13 @@ void DlgColorRange::slotSelectClicked()
     m_view->activeDevice()->exactBounds(x, y, w, h);
     const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(),
+                                                                              m_view->image()));
+    selection->createPixelSelection();
+    KisPaintDeviceSP tmpSelectionDevice = selection->selectionPaintDevice();
 
     KisHLineConstIterator hiter = m_view->activeDevice()->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = selection->getOrCreatePixelSelection()->createHLineIterator(x, y, w);
+    KisHLineIterator selIter = tmpSelectionDevice->createHLineIterator(x, y, w);
 
     for (int row = y; row < h - y; ++row) {
         while (!hiter.isDone()) {

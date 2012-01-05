@@ -35,8 +35,10 @@ KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisN
         node = node->parent();
     }
 
-    if (m_layer->selection())
-        m_selTransaction = new KisTransactionData(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
+    if (m_layer->selection()) {
+        m_layer->selection()->createPixelSelection();
+        m_selTransaction = new KisTransactionData(name, KisPaintDeviceSP(m_layer->selection()->selectionPaintDevice().data()));
+    }
 }
 
 KisSelectedTransactionData::~KisSelectedTransactionData()

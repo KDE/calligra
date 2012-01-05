@@ -36,9 +36,6 @@ enum SelectionAction {
     SELECTION_INTERSECT
 };
 
-#include "kis_pixel_selection.h"
-
-
 class KisSelectionComponent;
 
 /**
@@ -81,16 +78,47 @@ public:
      */
     virtual ~KisSelection();
 
-    bool hasPixelSelection() const;
-    bool hasShapeSelection() const;
-
     QVector<QPolygon> outline() const;
 
     /**
-     * return the pixel selection component of this selection or zero
+     * @return true if there is a pixel selection component
+     */
+    bool hasPixelSelection() const;
+
+    /**
+     * Create a pixel selection component in this selection, if there isn't one already.
+     */
+    void createPixelSelection();
+
+    /**
+     * Return the pixel selection component of this selection or zero
      * if hasPixelSelection() returns false.
      */
-    KisPixelSelectionSP pixelSelection() const;
+    KisSelectionComponent *pixelSelection() const;
+
+    /**
+     * @brief setPixelSelection replaces the current pixel selection with
+     *   the given pixel selection component.
+     * @param pixelSelection
+     */
+    void setPixelSelection(KisSelectionComponent* pixelSelection);
+
+    /**
+     * @brief selectionPaintDevice returns the paint device associated with the
+     *    current pixel selection component. Note: clients should assume that the
+     *    selectedness is determined by the premultiplied grayscale value of a
+     *    given pixel.
+     * @return
+     */
+    KisPaintDeviceSP selectionPaintDevice() const;
+
+    KisPaintDeviceSP getOrCreateSelectionPaintDevice() const;
+
+
+    /**
+     * @return true if there is a shape selection component
+     */
+    bool hasShapeSelection() const;
 
     /**
      * return the vector selection component of this selection or zero
@@ -98,15 +126,12 @@ public:
      */
     KisSelectionComponent* shapeSelection() const;
 
-    void setPixelSelection(KisPixelSelectionSP pixelSelection);
-    void setShapeSelection(KisSelectionComponent* shapeSelection);
-
     /**
-     * Return the pixel selection associated with this selection or
-     * create a new one if there is currently no pixel selection
-     * component in this selection.
+     * @brief setShapeSelection replaces the current shape selection with
+     *   the given shape selection component.
+     * @param pixelSelection
      */
-    KisPixelSelectionSP getOrCreatePixelSelection();
+    void setShapeSelection(KisSelectionComponent* shapeSelection);
 
     /**
      * Returns the projection of the selection. It may be the same

@@ -22,26 +22,24 @@
 
 #include <KoUpdater.h>
 
+#include "commands_new/kis_node_move_command2.h"
+#include "generator/kis_generator_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_clone_layer.h"
+#include "kis_external_layer_iface.h"
+#include "kis_filter_mask.h"
+#include "kis_group_layer.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_selection.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_clone_layer.h"
-#include "kis_adjustment_layer.h"
-#include "generator/kis_generator_layer.h"
-
-#include "kis_transparency_mask.h"
-#include "kis_filter_mask.h"
-#include "kis_selection_mask.h"
-
-#include "kis_external_layer_iface.h"
-
 #include "kis_paint_device.h"
+#include "kis_paint_layer.h"
+#include "kis_selection_component.h"
+#include "kis_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_transaction.h"
-#include "kis_undo_adapter.h"
 #include "kis_transform_worker.h"
-#include "commands_new/kis_node_move_command2.h"
+#include "kis_transparency_mask.h"
+#include "kis_undo_adapter.h"
 
 
 KisTransformProcessingVisitor::
@@ -172,7 +170,7 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
 void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
     if(selection->hasPixelSelection()) {
-        transformPaintDevice(selection->pixelSelection(), adapter, helper);
+        transformPaintDevice(selection->selectionPaintDevice(), adapter, helper);
     }
 
     if (selection->hasShapeSelection()) {

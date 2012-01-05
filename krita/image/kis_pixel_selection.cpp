@@ -93,21 +93,24 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
     }
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
+void KisPixelSelection::applySelection(KisSelectionComponent *selection, SelectionAction action)
 {
+    KisPixelSelection *pixelSelection = dynamic_cast<KisPixelSelection*>(selection);
+    if (!pixelSelection) return;
+
     switch (action) {
     case SELECTION_REPLACE:
         clear();
-        addSelection(selection);
+        addSelection(pixelSelection);
         break;
     case SELECTION_ADD:
-        addSelection(selection);
+        addSelection(pixelSelection);
         break;
     case SELECTION_SUBTRACT:
-        subtractSelection(selection);
+        subtractSelection(pixelSelection);
         break;
     case SELECTION_INTERSECT:
-        intersectSelection(selection);
+        intersectSelection(pixelSelection);
         break;
     default:
         break;

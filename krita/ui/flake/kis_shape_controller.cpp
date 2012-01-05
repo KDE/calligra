@@ -33,6 +33,10 @@
 #include <KoPathShape.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCanvasController.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextShapeData.h>
+#include <KoDocumentResourceManager.h>
+#include <KoDataCenterBase.h>
 
 #include "kis_node_manager.h"
 #include "kis_shape_selection.h"
@@ -51,13 +55,9 @@
 #include "kis_shape_layer.h"
 #include "kis_view2.h"
 #include "kis_node.h"
-
-#include <KoTextDocumentLayout.h>
-#include <KoTextShapeData.h>
-#include <KoDocumentResourceManager.h>
-#include <KoDataCenterBase.h>
-#include <commands/kis_image_layer_add_command.h>
-#include <kis_undo_adapter.h>
+#include "kis_selection_component.h"
+#include "kis_undo_adapter.h"
+#include "commands/kis_image_layer_add_command.h"
 
 
 struct KisShapeController::Private

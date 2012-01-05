@@ -20,13 +20,7 @@
 
 #include <krita_export.h>
 
-class QRect;
-class QTransform;
-class KUndo2Command;
-class KisSelection;
-class KisPixelSelection;
-
-#include "kis_types.h"
+#include "kis_selection.h"
 
 class KRITAIMAGE_EXPORT KisSelectionComponent
 {
@@ -39,21 +33,19 @@ public:
     virtual void renderToProjection(KisPaintDeviceSP projection) = 0;
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
 
-    virtual void moveX(qint32 x) { Q_UNUSED(x); }
-    virtual void moveY(qint32 y) { Q_UNUSED(y); }
+// API used mainly in KisShapeSelection
 
-    virtual KUndo2Command* transform(const QTransform &transform) {
-        Q_UNUSED(transform);
-        return 0;
-    }
+    virtual void moveX(qint32 /*x*/) {}
+    virtual void moveY(qint32 /*y*/) {}
 
-    /// api used for now mailin in KisPixelSelection
+    virtual KUndo2Command* transform(const QTransform &/*transform*/) { return 0; }
+
+// API used for now mainly in KisPixelSelection
 
     /**
      * Fill the specified rect with the specified selectedness.
      */
-    virtual void select(const QRect & r, quint8 selectedness = MAX_SELECTED) { Q_UNUSED(r); Q_UNUSED(selectedness); }
-
+    virtual void select(const QRect & /*r*/, quint8 /*selectedness*/ = MAX_SELECTED) {}
 
     /**
      * Invert the total selection. This will also invert the default value
@@ -65,29 +57,28 @@ public:
     /**
      * Apply a selection to the selection using the specified selection mode
      */
-    virtual void applySelection(KisPixelSelectionSP selection, SelectionAction action) { Q_UNUSED(selection); Q_UNUSED(action); }
+    virtual void applySelection(KisSelectionComponent */*selection*/, SelectionAction /*action*/) {}
 
     /// Tests if the the rect is totally outside the selection
-    virtual bool isTotallyUnselected(const QRect & r) const { Q_UNUSED(r); }
+    virtual bool isTotallyUnselected(const QRect &/*r*/) const { return true; }
 
     /**
      * Rough, but fastish way of determining the area
      * of the tiles used by the selection.
      */
-    virtual QRect selectedRect() const {}
+    virtual QRect selectedRect() const { return QRect(); }
 
     /**
      * Slow, but exact way of determining the rectangle
      * that encloses the selection.
      */
-    virtual QRect selectedExactRect() const {}
+    virtual QRect selectedExactRect() const { return QRect(); }
 
     /**
      * @brief outline returns the outline of the current selection
      * @return a vector of polygons that can be used to draw the outline
      */
-    virtual QVector<QPolygon> outline() const {}
-
+    virtual QVector<QPolygon> outline() const { return QVector<QPolygon>(); }
 
 };
 

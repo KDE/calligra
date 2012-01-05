@@ -214,7 +214,7 @@ void ImageSize::slotSelectionScale()
 
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection->getOrCreatePixelSelection(),
+        KisTransformWorker worker(selection->getOrCreateSelectionPaintDevice(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,

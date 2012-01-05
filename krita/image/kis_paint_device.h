@@ -50,8 +50,6 @@ class KoColorProfile;
 class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
-class KisSelectionComponent;
-
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 

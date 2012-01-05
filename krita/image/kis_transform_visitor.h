@@ -169,7 +169,7 @@ private:
         if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
             KisSelectionTransaction transaction(QString(), m_image, selection);
 
-            KisPaintDeviceSP dev = selection->getOrCreatePixelSelection().data();
+            KisPaintDeviceSP dev = selection->getOrCreateSelectionPaintDevice().data();
             KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
             tw.run();
 

@@ -82,7 +82,8 @@ void KisPixelSelectionTest::testInvertWithImage()
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
     
     image->setGlobalSelection();
-    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    image->globalSelection()->createPixelSelection();
+    KisSelectionComponent *selection = image->globalSelection()->pixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 200, 200));
@@ -149,7 +150,7 @@ void KisPixelSelectionTest::testAddSelection()
     KisPixelSelectionSP sel2 = new KisPixelSelection();
     sel1->select(QRect(0, 0, 50, 50));
     sel2->select(QRect(25, 0, 50, 50));
-    sel1->applySelection(sel2, SELECTION_ADD);
+    sel1->applySelection(sel2.data(), SELECTION_ADD);
     QCOMPARE(sel1->selectedExactRect(), QRect(0, 0, 75, 50));
 }
 
@@ -159,7 +160,7 @@ void KisPixelSelectionTest::testSubtractSelection()
     KisPixelSelectionSP sel2 = new KisPixelSelection();
     sel1->select(QRect(0, 0, 50, 50));
     sel2->select(QRect(25, 0, 50, 50));
-    sel1->applySelection(sel2, SELECTION_SUBTRACT);
+    sel1->applySelection(sel2.data(), SELECTION_SUBTRACT);
     QCOMPARE(sel1->selectedExactRect(), QRect(0, 0, 25, 50));
 }
 
@@ -169,7 +170,7 @@ void KisPixelSelectionTest::testIntersectSelection()
     KisPixelSelectionSP sel2 = new KisPixelSelection();
     sel1->select(QRect(0, 0, 50, 50));
     sel2->select(QRect(25, 0, 50, 50));
-    sel1->applySelection(sel2, SELECTION_INTERSECT);
+    sel1->applySelection(sel2.data(), SELECTION_INTERSECT);
     QCOMPARE(sel1->selectedExactRect(), QRect(25, 0, 25, 50));
 }
 
@@ -196,7 +197,8 @@ void KisPixelSelectionTest::testExactRectWithImage()
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
     image->setGlobalSelection();
-    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    image->globalSelection()->createPixelSelection();
+    KisSelectionComponent *selection = image->globalSelection()->pixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }

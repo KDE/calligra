@@ -1926,7 +1926,8 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
     if (selection) {
         QRect r = selection->selectedExactRect();
         m_origSelection = new KisSelection();
-        KisPixelSelectionSP origPixelSelection = new KisPixelSelection(*selection->getOrCreatePixelSelection().data());
+        selection->createPixelSelection();
+        KisSelectionComponent *origPixelSelection = selection->pixelSelection()->clone(m_origSelection.data());
         m_origSelection->setPixelSelection(origPixelSelection);
         r.getRect(&x, &y, &w, &h);
 
@@ -2101,15 +2102,6 @@ void KisToolTransform::applyTransform()
     // This mementoes the current state of the active device.
     ApplyTransformCmd transaction(this, m_currentArgs.mode(), currentNode());
 
-    ////Copy the original state back
-    //QRect rc = m_origDevice->extent();
-    //rc = rc.normalized();
-    //currentNode()->paintDevice()->clear();
-    //KisPainter gc(currentNode()->paintDevice());
-    //gc.setCompositeOp(COMPOSITE_COPY);
-    //gc.bitBlt(rc.topLeft(), m_origDevice, rc);
-    //gc.end();
-
     // Also restore the original pixel selection (the shape selection will also be restored : see below)
     if (m_origSelection && !m_origSelection->isDeselected()) {
         if (currentSelection()) {
@@ -2117,23 +2109,14 @@ void KisToolTransform::applyTransform()
             // copy the pixel selection
             QRect rc = m_origSelection->selectedRect();
             rc = rc.normalized();
-            currentSelection()->getOrCreatePixelSelection()->clear();
-            KisPainter sgc(KisPaintDeviceSP(currentSelection()->getOrCreatePixelSelection()));
+            currentSelection()->createPixelSelection();
+            KisPaintDeviceSP pixelSelection = currentSelection()->selectionPaintDevice();
+            pixelSelection->clear();
+            KisPainter sgc(pixelSelection);
             sgc.setCompositeOp(COMPOSITE_COPY);
             //sgc.setProgress(restorePixSelection);
-            sgc.bitBlt(rc.topLeft(), m_origSelection->getOrCreatePixelSelection(), rc);
+            sgc.bitBlt(rc.topLeft(), m_origSelection->getOrCreateSelectionPaintDevice(), rc);
             sgc.end();
-
-            //if (m_origSelection->hasShapeSelection()) {
-                //    KisShapeSelection* origShapeSelection = static_cast<KisShapeSelection*>(m_origSelection->shapeSelection());
-                //    if (currentSelection()->hasShapeSelection()) {
-                //        KisShapeSelection* currentShapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
-                //        m_previousShapeSelection = static_cast<KisShapeSelection*>(currentShapeSelection->clone(currentSelection().data()));
-                //    } else
-                //        m_previousShapeSelection = static_cast<KisShapeSelection*>(origShapeSelection->clone(m_origSelection.data()));
-
-                //    currentSelection()->setShapeSelection(origShapeSelection->clone(m_origSelection.data()));
-                //}
         }
     } else if (currentSelection())
         currentSelection()->clear();
@@ -2192,13 +2175,14 @@ void KisToolTransform::applyTransform()
         // we use a temporary device to apply the transformation
         // and then copy it back to the current device
 
-        KisPixelSelectionSP pixelSelection = currentSelection()->getOrCreatePixelSelection();
-        QRect pixelSelectRect = pixelSelection->selectedExactRect();
+        currentSelection()->createPixelSelection();
 
-        KisPaintDeviceSP tmpDevice2 = new KisPaintDevice(pixelSelection->colorSpace());
+        QRect pixelSelectRect = currentSelection()->pixelSelection()->selectedExactRect();
+
+        KisPaintDeviceSP tmpDevice2 = new KisPaintDevice(currentSelection()->selectionPaintDevice()->colorSpace());
         KisPainter gc2(tmpDevice2, currentSelection());
         gc2.setProgress(copyPixSelection);
-        gc2.bitBlt(pixelSelectRect.topLeft(), pixelSelection, pixelSelectRect);
+        gc2.bitBlt(pixelSelectRect.topLeft(), currentSelection()->selectionPaintDevice(), pixelSelectRect);
         gc2.end();
 
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
@@ -2211,46 +2195,22 @@ void KisToolTransform::applyTransform()
             perspectiveSelectionWorker.run();
         }
 
-        pixelSelection->clear();
+        currentSelection()->selectionPaintDevice()->clear();
 
         QRect tmpRc2 = tmpDevice2->exactBounds();
-        KisPainter painter2(pixelSelection);
+        KisPainter painter2(currentSelection()->selectionPaintDevice());
         painter2.setProgress(copyBackPixSelection);
         painter2.bitBlt(tmpRc2.topLeft(), tmpDevice2, tmpRc2);
         painter2.end();
 
-        // Shape selection not transformed yet
-        //if (m_origSelection->hasShapeSelection() && currentSelection()->hasShapeSelection() && m_previousShapeSelection) {
-        //    KisShapeSelection* origShapeSelection = static_cast<KisShapeSelection*>(m_origSelection->shapeSelection());
-        //    QList<KoShape *> origShapes = origShapeSelection->shapeManager()->shapes();
-        //    KisShapeSelection* currentShapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
-        //    QList<KoShape *> currentShapes = currentShapeSelection->shapeManager()->shapes();
-        //    QList<KoShape *> previousShapes = m_previousShapeSelection->shapeManager()->shapes();
-        //    QList<QTransform> m_oldMatrixList;
-        //    QList<QTransform> m_newMatrixList;
-        //    for (int i = 0; i < origShapes.size(); ++i) {
-        //        KoShape *origShape = origShapes.at(i);
-        //        QTransform origMatrix = origShape->transformation();
-        //        QTransform previousMatrix = previousShapes.at(i)->transformation();
-
-        //        QPointF center = origMatrix.map(QPointF(0.5 * origShape->size().width(), 0.5 * origShape->size().height()));
-        //        QTransform rotateMatrix;
-        //        rotateMatrix.translate(center.x(), center.y());
-        //        rotateMatrix.rotate(180. * m_a / M_PI);
-        //        rotateMatrix.translate(-center.x(), -center.y());
-
-        //        m_oldMatrixList << previousMatrix;
-        //        m_newMatrixList << origMatrix * rotateMatrix; // we apply the rotation on the original matrix
-        //    }
-        //    KoShapeTransformCommand* cmd = new KoShapeTransformCommand(currentShapes, m_oldMatrixList, m_newMatrixList, transaction.undoCommand());
-        //    cmd->redo();
-        //}
-    } else {
+    }
+    else {
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
             KoUpdaterPtr transformPixels = updater->startSubtask(40);
             KisWarpTransformWorker worker(m_currentArgs.warpType(), currentNode()->paintDevice(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha(), transformPixels);
             worker.run();
-        } else {
+        }
+        else {
             KoUpdaterPtr transformPixels = updater->startSubtask(40);
             KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
             KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);

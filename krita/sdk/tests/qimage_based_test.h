@@ -76,8 +76,9 @@ protected:
         Q_ASSERT(configuration);
 
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+        blur1->selection()->createPixelSelection();
         blur1->selection()->clear();
-        blur1->selection()->getOrCreatePixelSelection()->select(blurRect);
+        blur1->selection()->pixelSelection()->select(blurRect);
         blur1->setX(blurShift.x());
         blur1->setY(blurShift.y());
 
@@ -86,8 +87,9 @@ protected:
 
         KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
         transparencyMask1->setName("tmask1");
+        blur1->selection()->createPixelSelection();
         transparencyMask1->selection()->clear();
-        transparencyMask1->selection()->getOrCreatePixelSelection()->select(transpRect);
+        blur1->selection()->pixelSelection()->select(transpRect);
 
         KisCloneLayerSP cloneLayer1 =
             new KisCloneLayer(paintLayer1, image, "clone1", OPACITY_OPAQUE_U8);
@@ -106,7 +108,8 @@ protected:
         QRect selectionRect(40,40,300,300);
 
         KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        selection->createPixelSelection();
+        KisSelectionComponent *pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 
         KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, selection);

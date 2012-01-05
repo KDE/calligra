@@ -23,6 +23,8 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 
+#include <QRect>
+
 class KUndo2Command;
 class KoShape;
 class KisCanvas2;
@@ -37,7 +39,12 @@ public:
     KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name);
     virtual ~KisSelectionToolHelper();
 
-    void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
+    /**
+     * @brief selectPixelSelection applies the given selection to the active selection.
+     * @param temporarySelection the temporary selection
+     * @param action determine whether the selection will replace, add or substract
+     */
+    void selectPixelSelection(KisSelectionComponent* temporarySelection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
 
 private:

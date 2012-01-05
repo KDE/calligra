@@ -86,10 +86,9 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 {
     // XXX: we may also need to have a possibility of getting the vector
     // part of selection here
-
     KisSelectionSP selection;
-    return m_activeMask && (selection = m_activeMask->selection()) ?
-           selection->getOrCreatePixelSelection() : 0;
+        return m_activeMask && (selection = m_activeMask->selection()) ?
+           selection->getOrCreateSelectionPaintDevice() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)
@@ -288,7 +287,7 @@ void KisMaskManager::mirrorMaskX()
     // XXX_NODE: we should also mirror the shape-based part of the selection!
     if (!m_activeMask) return;
 
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
+    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreateSelectionPaintDevice();
     if (!dev) return;
 
     KisTransaction transaction(i18n("Mirror Mask X"), dev);
@@ -310,7 +309,7 @@ void KisMaskManager::mirrorMaskY()
     // XXX_NODE: we should also mirror the shape-based part of the selection!
     if (!m_activeMask) return;
 
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
+    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreateSelectionPaintDevice();
     if (!dev) return;
 
     KisTransaction transaction(i18n("Mirror Layer Y"), dev);

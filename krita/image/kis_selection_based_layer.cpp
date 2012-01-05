@@ -82,7 +82,8 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection();
-    m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
+    m_d->selection->createPixelSelection();
+    m_d->selection->pixelSelection()->select(image()->bounds());
     m_d->selection->updateProjection();
 }
 
@@ -102,11 +103,12 @@ KisPaintDeviceSP KisSelectionBasedLayer::original() const
 {
     return m_d->paintDevice;
 }
+
 KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 {
-    return m_d->selection->getOrCreatePixelSelection();
+    m_d->selection->createPixelSelection();
+    return m_d->selection->selectionPaintDevice();
 }
-
 
 bool KisSelectionBasedLayer::needProjection() const
 {
@@ -130,8 +132,10 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
              * FIXME: check whether it's faster than usual bitBlt'ing
              */
             tempSelection = new KisSelection(*tempSelection);
+            tempSelection->createPixelSelection();
 
-            KisPainter gc2(tempSelection->getOrCreatePixelSelection());
+            KisPainter gc2(tempSelection->selectionPaintDevice());
+
             gc2.setOpacity(temporaryOpacity());
             gc2.setCompositeOp(temporaryCompositeOp());
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);

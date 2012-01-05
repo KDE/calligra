@@ -45,6 +45,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
+#include <KoColorModelStandardIds.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_node_manager.h"
@@ -510,7 +511,8 @@ void KisSelectionManager::selectAll()
     KisSelectionSP selection = image->globalSelection();
 
     KisSelectionTransaction transaction(QString(), image, selection);
-    selection->getOrCreatePixelSelection()->select(image->bounds());
+    selection->createPixelSelection();
+    selection->pixelSelection()->select(image->bounds());
     transaction.commit(undoAdapter);
 
     undoAdapter->endMacro();
@@ -632,21 +634,30 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
     KisSelectionSP selection = m_view->selection();
     if (!selection) return;
 
-    KisUndoAdapter *undoAdapter = m_view->undoAdapter();
-    undoAdapter->beginMacro(filter->name());
+    selection->createPixelSelection();
+    KisPixelSelection *mergedSelection = dynamic_cast<KisPixelSelection*>(selection->pixelSelection());
 
-    KisSelectionTransaction transaction("", image, selection);
+    // XXX: these old filters can only handle old-style selections!
+    if (mergedSelection && mergedSelection->colorSpace()->colorModelId() == AlphaColorModelID) {
 
-    KisPixelSelectionSP mergedSelection = selection->getOrCreatePixelSelection();
-    QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
-    filter->process(mergedSelection, processingRect);
+    
+        KisUndoAdapter *undoAdapter = m_view->undoAdapter();
+        undoAdapter->beginMacro(filter->name());
 
-    transaction.commit(image->undoAdapter());
+        KisSelectionTransaction transaction(filter->name(), image, selection);
 
-    undoAdapter->endMacro();
+        QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
 
-    selection->setDirty(processingRect);
-    selectionChanged();
+        filter->process(mergedSelection, processingRect);
+
+        transaction.commit(image->undoAdapter());
+	
+        undoAdapter->endMacro();
+
+	
+        selection->setDirty(processingRect);
+        selectionChanged();
+    }
 }
 
 void KisSelectionManager::invert()
