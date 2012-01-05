@@ -25,7 +25,6 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include <ui_KWStatisticsDocker.h>
-#include<ui_quickpopupmenu.h>
 #include "dialogs/quickpopupmenu.h"
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
@@ -35,13 +34,6 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTimer>
-#include<QDialog>
-
-//THE MENU SUBCLASS FOR THE POPUP
-class QDialog;
-class QuickPopupMenu;
-
-
 
 KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
@@ -65,8 +57,6 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_timer->setInterval(2000); // make the interval configurable?
     m_timer->setSingleShot(true);
     widgetDocker.setupUi(this);
-    my_menu.setupUi(this);
-
 
     m_menu = new QuickPopupMenu(widgetDocker.preferences);
     widgetDocker.preferences->setMenu(m_menu);

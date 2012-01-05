@@ -177,8 +177,6 @@ private slots:
     void anchorToPage();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
-    /// displays the KWStatisticsDialog
-    void showStatisticsDialog();
     /// shows or hides the rulers
     void showRulers(bool visible);
     /// creates a copy of the current frame

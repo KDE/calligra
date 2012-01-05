@@ -64,7 +64,6 @@ private:
 private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
-    Ui::QuickPopupMenu my_menu;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;

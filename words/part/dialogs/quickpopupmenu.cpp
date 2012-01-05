@@ -1,17 +1,14 @@
 #include "quickpopupmenu.h"
 #include "ui_quickpopupmenu.h"
 
-#include<QMenu>
-#include<QWidget>
-class QMenu;
-class QWidget;
+#include <QMenu>
 
-QuickPopupMenu::QuickPopupMenu(QToolButton *button, QWidget * parent) :
-    QMenu(parent)
-
+QuickPopupMenu::QuickPopupMenu(QToolButton *button, QWidget *parent)
+    : QMenu(parent)
 {
-    QWidget *popup = new QWidget(this);
+    Ui::QuickPopupMenu *w = new Ui::QuickPopupMenu();
 
+    w->setupUi(this);
 }
 
 

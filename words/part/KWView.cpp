@@ -34,7 +34,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
-#include "dialogs/KWStatisticsDialog.h"
 #include "dialogs/KWPrintingDialog.h"
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
@@ -422,12 +421,6 @@ void KWView::setupActions()
     new KoCopyController(canvasBase(), action);
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
-
-    action  = new KAction(i18n("Statistics"), this);
-    actionCollection()->addAction("file_statistics", action);
-    action->setToolTip(i18n("Sentence, word and letter counts for this document"));
-    action->setWhatsThis(i18n("Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score.</p>"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showStatisticsDialog()));
 
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
@@ -955,14 +948,6 @@ void KWView::anchorToPage()
         m_document->inlineTextObjectManager()->removeInlineObject(anchor);
         anchor->shape()->notifyChanged();
     }
-}
-
-
-void KWView::showStatisticsDialog()
-{
-    KWStatisticsDialog *dia = new KWStatisticsDialog(this);
-    dia->exec();
-    delete dia;
 }
 
 void KWView::showRulers(bool visible)

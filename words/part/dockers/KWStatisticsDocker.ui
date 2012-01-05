@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>319</width>
-    <height>274</height>
+    <height>248</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -29,33 +29,48 @@
      <property name="text">
       <string/>
      </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="Words">
      <property name="text">
-      <string>Words</string>
+      <string>Words:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="Sentences">
      <property name="text">
-      <string>Sentences</string>
+      <string>Sentences:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="Syllables">
      <property name="text">
-      <string>Syllables</string>
+      <string>Syllables:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="Lines">
      <property name="text">
-      <string>Lines</string>
+      <string>Lines:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -80,21 +95,30 @@
    <item row="4" column="0">
     <widget class="QLabel" name="spaces">
      <property name="text">
-      <string>Chars. with Spaces</string>
+      <string>Characters with Spaces:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="nospaces">
      <property name="text">
-      <string>Chars. without spaces</string>
+      <string>Characters without Spaces:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="cjkchars">
      <property name="text">
-      <string>East Asian Characters</string>
+      <string>East Asian Characters:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -104,22 +128,12 @@
    <item row="7" column="0">
     <widget class="QLabel" name="flesch">
      <property name="text">
-      <string>Flesch Reading Ease</string>
+      <string>Flesch Reading Ease:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-   </item>
-   <item row="12" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="12" column="1">
     <widget class="QToolButton" name="preferences">
