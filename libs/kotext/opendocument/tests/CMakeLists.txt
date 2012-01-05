@@ -19,7 +19,7 @@ target_link_libraries(TestLoading kotext ${QT_QTTEST_LIBRARY}  ${QT_QTSCRIPT_LIB
 ########### next target ###############
 
 set(normalizeWhiteSpace_SRCS tst_normalizeWhiteSpace.cpp)
-kde4_add_executable(normalizeWhiteSpace ${normalizeWhiteSpace_SRCS})
+kde4_add_unit_test(normalizeWhiteSpace TESTNAME kotext-opendocument-normalizeWhiteSpace ${normalizeWhiteSpace_SRCS})
 target_link_libraries(normalizeWhiteSpace kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
