@@ -59,7 +59,7 @@ public:
     void setDisplayChanges(bool enabled);
     bool displayChanges() const;
 
-    /// XXX: these three are called "getXXX" but does change the state of the change tracker
+    /// XXX: these three are called "getXXX" but do change the state of the change tracker
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
     int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
