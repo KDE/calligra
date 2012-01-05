@@ -19,7 +19,9 @@
 
 #include "KPrSoundEventAction.h"
 
+#ifndef Q_OS_ANDROID
 #include <phonon/mediaobject.h>
+#endif
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -91,6 +93,7 @@ void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
 
 void KPrSoundEventAction::start()
 {
+#ifndef Q_OS_ANDROID
     if ( m_soundData ) {
         finish();
         m_media = Phonon::createPlayer( Phonon::MusicCategory,
@@ -98,14 +101,17 @@ void KPrSoundEventAction::start()
         connect( m_media, SIGNAL( finished() ), this, SLOT( finished() ) );
         m_media->play();
     }
+#endif
 }
 
 void KPrSoundEventAction::finish()
 {
+#ifndef Q_OS_ANDROID
     if ( m_media ) {
         m_media->stop();
         finished();
     }
+#endif
 }
 
 void KPrSoundEventAction::setSoundData( KPrSoundData * soundData )
@@ -121,8 +127,10 @@ KPrSoundData * KPrSoundEventAction::soundData() const
 
 void KPrSoundEventAction::finished()
 {
+#ifndef Q_OS_ANDROID
     delete m_media;
     m_media = 0;
+#endif
 }
 
 #include <KPrSoundEventAction.moc>
