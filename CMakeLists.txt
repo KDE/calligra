@@ -19,7 +19,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 set(GENERIC_CALLIGRA_LIB_VERSION "9.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "9")
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 #
 # WARNING: don't change the SHOULD_BUILD_app if an application
