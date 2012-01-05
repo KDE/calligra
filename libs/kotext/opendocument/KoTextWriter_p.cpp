@@ -212,28 +212,10 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
     return listStyles;
 }
 
-void KoTextWriter::Private::saveChange(int changeId)
+void KoTextWriter::Private::saveAllChanges()
 {
     if (!changeTracker) return;
-
-    if(changeTransTable.value(changeId).length())
-        return;
-
-    if ((changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) &&
-         (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2)) {
-        return;
-    }
-
-    KoGenChange change;
-    if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
-        change.setChangeFormat(KoGenChange::ODF_1_2);
-    } else {
-        change.setChangeFormat(KoGenChange::DELTAXML);
-    }
-
-    changeTracker->saveInlineChange(changeId, change);
-    QString changeName = sharedData->genChanges().insert(change);
-    changeTransTable.insert(changeId, changeName);
+    changeTransTable = changeTracker->saveInlineChanges(changeTransTable, sharedData->genChanges());
 }
 
 //---------------------------- PRIVATE -----------------------------------------------------------

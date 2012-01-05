@@ -337,6 +337,34 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
     return true;
 }
 
+QMap<int, QString> KoChangeTracker::saveInlineChanges(QMap<int, QString> changeTransTable, KoGenChanges &genChanges)
+{
+    foreach (int changeId, d->changes.keys()) {
+
+        // return if the id we find in the changetranstable already has a length.
+        if (changeTransTable.value(changeId).length()) {
+            continue;
+        }
+
+        if ((elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) &&
+                (saveFormat() == KoChangeTracker::ODF_1_2)) {
+            continue;
+        }
+
+        KoGenChange change;
+        if (saveFormat() == KoChangeTracker::ODF_1_2) {
+            change.setChangeFormat(KoGenChange::ODF_1_2);
+        } else {
+            change.setChangeFormat(KoGenChange::DELTAXML);
+        }
+
+        saveInlineChange(changeId, change);
+        QString changeName = genChanges.insert(change);
+        changeTransTable.insert(changeId, changeName);
+    }
+    return changeTransTable;
+}
+
 void KoChangeTracker::setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation)
 {
     d->changeInformation.insert(formatChangeId, formatInformation);
@@ -435,17 +463,6 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
           deleteVector << element;
           numAppendedItems++;
         }
-    }
-
-    return numAppendedItems;
-}
-
-int KoChangeTracker::allChangeIds(QVector<int>& changesVector) const
-{
-    int numAppendedItems = 0;
-    foreach(int changeId, d->changes.keys()) {
-        changesVector << changeId;
-        numAppendedItems++;
     }
 
     return numAppendedItems;

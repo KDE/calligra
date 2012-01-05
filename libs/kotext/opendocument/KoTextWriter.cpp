@@ -139,13 +139,8 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
 
-    QVector<int> changesVector;
-    if (d->changeTracker) {
-        d->changeTracker->allChangeIds(changesVector);
-    }
-    foreach (int changeId, changesVector) {
-        d->saveChange(changeId);
-    }
+    d->saveAllChanges();
+
 
     QTextBlock fromblock = document->findBlock(from);
     QTextBlock toblock = document->findBlock(to);

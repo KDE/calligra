@@ -140,7 +140,7 @@ public:
                      QTextTable *currentTable = 0,
                      QTextList *currentList = 0);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
-    void saveChange(int changeId);
+    void saveAllChanges();
 
 private:
 
