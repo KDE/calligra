@@ -145,7 +145,7 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(PNG REQUIRED)
+find_package(PNG)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
@@ -485,10 +485,10 @@ if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, png
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT PNG_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT PNG_FOUND)
 
 ### Plan: kdepimlibs
 if(NOT KdepimLibs_FOUND)
