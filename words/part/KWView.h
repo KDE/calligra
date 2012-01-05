@@ -135,10 +135,9 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    KoTextAnchor *anchorForSelectedFrame(bool create);
     /// loops over the selected shapes and returns the frames that go with them.
     QList<KWFrame*> selectedFrames() const;
-    KWFrame *findClosestFrame(KoShape *shape) const;
+    KoShape *getSelectedShape() const;
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties

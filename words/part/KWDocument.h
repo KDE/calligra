@@ -178,6 +178,13 @@ public:
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
+    /// find the frame closest to the given shape or return 0
+    KWFrame *findClosestFrame(KoShape *shape) const;
+    
+    KoTextAnchor *getAnchorOfShape(KoShape *shape, bool create) const;
+
+    KWFrame *getFrameOfShape(KoShape *shape) const;
+
 public slots:
     /**
      * Relayout the pages or frames within the framesets.
