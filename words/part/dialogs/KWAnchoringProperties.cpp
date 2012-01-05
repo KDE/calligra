@@ -138,36 +138,24 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
+    
     KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
-
-    foreach (KWFrame *frame, frames) {
-        KoTextAnchor *anchor = 0;
-        //try and find out if targetShape is already anchored
-        foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
-            anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-            if (anchor && anchor->shape() == frame->shape()) {
-                break;
-            }
-        }
-        if (anchor) {
-            m_anchors.append(anchor);
-        } else {
-            m_anchors.append(0);
-        }
-    }
 
     GuiHelper::State anchorTypeHelper = GuiHelper::Unset;
     GuiHelper::State vertHelper = GuiHelper::Unset;
     GuiHelper::State horizHelper = GuiHelper::Unset;
     KoTextAnchor::AnchorType anchorType = KoTextAnchor::AnchorPage;
+    
     m_vertPos = -1;
     m_horizPos = -1;
     m_vertRel = -1;
     m_horizRel = -1;
     QPointF offset;
-    foreach (KoTextAnchor *anchor, m_anchors) {
-        KoTextAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() :
-        KoTextAnchor::AnchorPage;
+
+    foreach (KWFrame *frame, frames) {
+        KoTextAnchor *anchor = frame->anchor();
+        KoTextAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoTextAnchor::AnchorPage;
+        
         // FIXME these should fetch correct values if anchor == 0
         int vertPosOfFrame = anchor ? anchor->verticalPos() : KoTextAnchor::VFromTop;
         int horizPosOfFrame = anchor ? anchor->horizontalPos() : KoTextAnchor::HFromLeft;
@@ -471,19 +459,31 @@ void KWAnchoringProperties::save()
         m_state->markFrameUsed();
         m_frames.append(frame);
     }
+
+    KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
+    
     foreach (KWFrame *frame, m_frames) {
-        bool needRelayout = false;
         if (m_anchorTypeGroup->checkedId() != -1) {
-            KoTextAnchor::AnchorType type = static_cast<KoTextAnchor::AnchorType>(m_anchorTypeGroup->checkedId());
-            //TODO fetch anchor
-            /*
-            if (frame->shape()->textRunAroundSide() != type) {
-                frame->shape()->setTextRunAroundSide(type);
-                needRelayout = true;
-            }*/
+            KoTextAnchor::AnchorType type   = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
+            KoTextAnchor            *anchor = 0;
+
+            if (type != KoTextAnchor::AnchorPage) {
+                anchor = m_state->document()->getAnchorOfShape(frame->shape(), true);
+            }
+            else {
+                anchor = m_state->document()->getAnchorOfShape(frame->shape(), false);
+                m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
+            }
+
+            if (anchor) {
+                anchor->setAnchorType(KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId()));
+                anchor->setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
+                anchor->setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
+                anchor->setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
+                anchor->setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
+                anchor->shape()->notifyChanged();
+            }
         }
-        if (needRelayout)
-            frame->shape()->notifyChanged();
     }
     m_state->removeUser();
 }
