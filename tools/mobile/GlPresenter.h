@@ -26,12 +26,12 @@
 #define GLPRESENTER_H
 
 #include "GlWidget.h"
-#include <QDBusInterface>
 
 namespace Ui
 {
 class GLPresenter;
 }
+class QDBusInterface;
 
 class GLPresenter : public QWidget
 {

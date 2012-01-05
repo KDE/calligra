@@ -35,7 +35,9 @@
 #include "NotifyDialog.h"
 #include "AboutDialog.h"
 #include "PresentationTool.h"
+#ifndef Q_OS_ANDROID
 #include "MainWindowAdaptor.h"
+#endif
 #include "FoExternalEditor.h"
 #include "FoImageSelectionWidget.h"
 #ifdef HAVE_OPENGL
@@ -61,7 +63,9 @@
 #include <QTextCursor>
 #include <QPair>
 #include <QMenuBar>
+#ifdef Q_WS_X11
 #include <QX11Info>
+#endif
 #include <QShortcut>
 #include <QProcess>
 #include <QAction>
@@ -125,8 +129,10 @@
 #include <tables/part/View.h>
 #include <tables/Sheet.h>
 
+#ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#endif
 //#define Q_WS_MAEMO_5 1
 
 #define FORMATRAME_XCORDINATE_VALUE 465
@@ -211,7 +217,9 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     m_fsPPTForwardButton = 0;
     m_fsPPTDrawPenButton = 0;
     m_fsPPTDrawHighlightButton = 0;
+#ifndef Q_OS_ANDROID
     m_dbus = new MainWindowAdaptor(this);
+#endif
     m_panningCount = 0;
     m_pressed = false;
     m_digitalSignatureDialog = 0;
@@ -235,7 +243,9 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     setSplashScreen(aSplash);
     m_ui->setupUi(m_mainWindow);
 
+#ifndef Q_OS_ANDROID
     QDBusConnection::sessionBus().registerObject("/presentation/view", m_mainWindow);
+#endif
     m_shortcutForVirtualKeyBoard = new QShortcut(QKeySequence(("Ctrl+K")), m_mainWindow);
     Q_CHECK_PTR(m_shortcutForVirtualKeyBoard);
     m_shortcutForVirtualKeyBoard->setEnabled(true);
@@ -1918,7 +1928,7 @@ bool ApplicationController::openDocuments(const KoAbstractApplicationOpenDocumen
 void ApplicationController::closeDocument()
 {
     KoAbstractApplicationController::closeDocument();
-
+#ifndef Q_OS_ANDROID
     if (m_digitalSignatureDialog && documentType() == TextDocument) {
         disconnect(m_ui->actionDigitalSignature,SIGNAL(triggered()),this,SLOT(showDigitalSignatureInfo()));
         QMenuBar* menu = m_mainWindow->menuBar();
@@ -1926,6 +1936,7 @@ void ApplicationController::closeDocument()
         delete m_digitalSignatureDialog;
         m_digitalSignatureDialog = 0;
     }
+#endif
     switch (documentType()) {
     case PresentationDocument:
         if (m_presentationTool) {
@@ -3249,10 +3260,12 @@ void ApplicationController::glPresenterSet(int a , int b)
 
 void ApplicationController::showDigitalSignatureInfo()
 {
+#ifndef Q_OS_ANDROID
     if (m_digitalSignatureDialog) {
         m_digitalSignatureDialog->initializeDialog();
         m_digitalSignatureDialog->exec();
     }
+#endif
 }
 
 void ApplicationController::enableSelectTool()
@@ -3453,6 +3466,7 @@ void ApplicationController::showUiBeforeDocumentOpening(bool isNewDocument)
     default:;
     }
 
+#ifndef Q_OS_ANDROID
    if (documentType() == TextDocument && !isNewDocument) {
        m_digitalSignatureDialog = new DigitalSignatureDialog(documentFileName());
         if (m_digitalSignatureDialog->verifySignature()){
@@ -3462,7 +3476,7 @@ void ApplicationController::showUiBeforeDocumentOpening(bool isNewDocument)
                     this, SLOT(showDigitalSignatureInfo()));
         }
    }
-
+#endif
     raiseWindow();
 }
 

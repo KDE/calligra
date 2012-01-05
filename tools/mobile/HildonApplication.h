@@ -36,7 +36,9 @@ class HildonApplication : public QApplication
     Q_OBJECT
 public:
     HildonApplication(int& argc, char** argv);
+#ifdef Q_WS_X11
     bool x11EventFilter(XEvent* event);
+#endif
 signals:
     void showApplicationMenu();
     void openDocument(const QString &fileName);

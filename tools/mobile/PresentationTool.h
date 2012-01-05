@@ -28,7 +28,9 @@
 
 #include "MainWindow.h"
 #include "KoCanvasControllerWidget.h"
+#ifndef Q_OS_ANDROID
 #include "PresentationToolAdaptor.h"
+#endif
 
 #include <QPoint>
 
@@ -92,7 +94,9 @@ private :
     QPoint lastPoint;
     QPoint endPoint;
 
+#ifndef Q_OS_ANDROID
     PresentationToolAdaptor *m_dbus;
+#endif
 
     /*!
      * Draw a line to a particular point

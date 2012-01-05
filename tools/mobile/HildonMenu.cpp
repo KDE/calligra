@@ -34,8 +34,10 @@
 #include <QMenuBar>
 #include <QMainWindow>
 
+#ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#endif
 
 HildonMenu::HildonMenu(QMainWindow* parent)
         : QDialog(parent), m_row(0), m_col(0)
@@ -48,6 +50,7 @@ HildonMenu::HildonMenu(QMainWindow* parent)
     top *= 2;
     m_layout->setContentsMargins(left, top, right, bottom);
 
+#ifdef Q_WS_X11
     Atom window_type = XInternAtom(QX11Info::display(),
                                    "_NET_WM_WINDOW_TYPE",
                                    False);
@@ -56,6 +59,7 @@ HildonMenu::HildonMenu(QMainWindow* parent)
                                      False);
     XChangeProperty(QX11Info::display(), winId(), window_type, XA_ATOM, 32,
                     PropModeReplace, (unsigned char *) &hildonwinType, 1);
+#endif
 
     QMenuBar* menu = parent->menuBar();
     foreach(QAction* action, menu->actions())

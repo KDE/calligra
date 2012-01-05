@@ -33,7 +33,9 @@
 #include "NotifyDialog.h"
 #include "AboutDialog.h"
 #include "PresentationTool.h"
+#ifndef Q_OS_ANDROID
 #include "MainWindowAdaptor.h"
+#endif
 #include "FoExternalEditor.h"
 #include "FoImageSelectionWidget.h"
 #ifdef HAVE_OPENGL

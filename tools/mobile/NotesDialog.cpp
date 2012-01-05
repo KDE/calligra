@@ -18,9 +18,11 @@
  */
 
 #include "NotesDialog.h"
+#ifndef Q_OS_ANDROID
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
+#endif
 #include <QProcess>
 #include <QWidget>
 #include <QToolButton>
@@ -121,12 +123,14 @@ void NotesDialog::showNotesDialog(int page)
 
     slidePreview->setPixmap(thumbnailList.at(currentPage).scaled(220,150));
 
+#ifndef Q_OS_ANDROID
     QDBusConnection bus = QDBusConnection::sessionBus();
 qDebug()<<"view number="<<viewNumber<<"\n";
     QDBusInterface *interface = new QDBusInterface("com.nokia.CalligraMobile-"+QString::number(getpid()), "/view_"+QString::number(viewNumber), "org.kde.calligra.presentation.view");
 
     QString m_notesHtml = (QDBusReply<QString>)interface->call("pageNotes", currentPage, "html");
     pageNotesTextEdit->setHtml(m_notesHtml);
+#endif
 
     currentPage=page-1;
     previewButtonList.at(currentPage)->setCheckable(true);

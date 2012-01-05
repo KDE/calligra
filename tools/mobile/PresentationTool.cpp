@@ -27,7 +27,9 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QPen>
+#ifndef Q_OS_ANDROID
 #include <QDBusConnection>
+#endif
 
 #include <KoView.h>
 
@@ -39,10 +41,14 @@ PresentationTool::PresentationTool(MainWindow * window, KoCanvasControllerWidget
     m_window(window),
     m_penToolActivated(false),
     m_highlightToolActivated(false),
-    scribbling(false),
-    m_dbus( new PresentationToolAdaptor( this ) )
+    scribbling(false)
+#ifndef Q_OS_ANDROID
+    , m_dbus( new PresentationToolAdaptor( this ) )
+#endif
 {
+#ifndef Q_OS_ANDROID
     QDBusConnection::sessionBus().registerObject("/presentation/tool", this);
+#endif
     lastPoint.setX(0);
     lastPoint.setY(0);
 }

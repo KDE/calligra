@@ -24,9 +24,12 @@
 
 #include "MainWindow.h"
 #include "Splash.h"
+#ifndef Q_OS_ANDROID
 #include "DBusAdaptor.h"
+#endif
 #include "HildonApplication.h"
 #include <KoAbstractApplicationController.h>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
@@ -68,7 +71,9 @@ int main(int argc, char *argv[])
     a.processEvents();
     MainWindow w(s);
 
+#ifndef Q_OS_ANDROID
     DBusAdaptor adaptor(&a);
+#endif
     QObject::connect(&a, SIGNAL(openDocument(const QString &)),
                      w.controller(), SLOT(openDocument(const QString &)));
     QObject::connect(&a, SIGNAL(showApplicationMenu()),

@@ -28,8 +28,10 @@
 #include <mce/dbus-names.h>
 #endif
 
+#ifndef Q_OS_ANDROID
 #include <QDBusMessage>
 #include <QDebug>
+#endif
 
 GLPresenter::GLPresenter(QWidget *parent, int stl, int st, QList <QPixmap> p)
     : QWidget(parent)

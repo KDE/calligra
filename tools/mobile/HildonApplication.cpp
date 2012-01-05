@@ -23,14 +23,17 @@
  */
 
 #include "HildonApplication.h"
+#ifdef Q_WS_X11
 #include <QX11Info>
 #include <X11/Xlib.h>
+#endif
 
 HildonApplication::HildonApplication(int& argc, char** argv)
         : QApplication(argc, argv)
 {
 }
 
+#ifdef Q_WS_X11
 bool HildonApplication::x11EventFilter(XEvent* event)
 {
     if (event->type == ClientMessage && event->xclient.format == 32
@@ -43,3 +46,5 @@ bool HildonApplication::x11EventFilter(XEvent* event)
     }
     return false;
 }
+#endif
+

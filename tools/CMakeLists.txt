@@ -28,12 +28,9 @@ macro_optional_find_package(OpenSSL) # calligra mobile uses ssl directly
 macro_log_feature(OPENSSL_FOUND "OpenSSL" "A toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) protocols" "http://openssl.org" FALSE "" 
 "Calligra Mobile uses OpenSSL for digital signatures")
 
-# TODO why build koabstraction and f-office only on X11?
-if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
-    if(SHOULD_BUILD_KOABSTRACTION)
-        macro_optional_add_subdirectory(koabstraction)
-    endif(SHOULD_BUILD_KOABSTRACTION)
-    if(Q_WS_X11 AND SHOULD_BUILD_MOBILE)
-        macro_optional_add_subdirectory(mobile)
-    endif(Q_WS_X11 AND SHOULD_BUILD_MOBILE)
-endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
+if(SHOULD_BUILD_KOABSTRACTION)
+    macro_optional_add_subdirectory(koabstraction)
+endif(SHOULD_BUILD_KOABSTRACTION)
+if(SHOULD_BUILD_MOBILE)
+    macro_optional_add_subdirectory(mobile)
+endif(SHOULD_BUILD_MOBILE)

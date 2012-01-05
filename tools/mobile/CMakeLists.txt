@@ -13,7 +13,7 @@ SET(QT_USE_QTMAEMO5 TRUE)
 SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
 
-find_package(LibXml2 REQUIRED) # f-office uses xml2 directly
+find_package(LibXml2) # f-office uses xml2 directly
 
 include_directories(
     ${CMAKE_BINARY_DIR}
@@ -23,9 +23,11 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/tables/part
     ${CMAKE_SOURCE_DIR}/tables
-    ${LIBXML2_INCLUDE_DIR}
     ${KDE4_INCLUDES}
 )
+if(LIBXML2_FOUND)
+   include_directories(${LIBXML2_INCLUDE_DIR})
+endif()
 
 SET(CalligraMobile_RCCS CalligraMobile.qrc)
 QT4_ADD_RESOURCES(CalligraMobile_RCC_SRCS ${CalligraMobile_RCCS})
@@ -43,7 +45,6 @@ set(CalligraMobileMocSrc_SRCS
     HildonApplication.h 
     Splash.h 
     NotifyDialog.h 
-    DBusAdaptor.h 
     PresentationTool.h 
     AboutDialog.h 
     CollabDialog.h 
@@ -51,14 +52,11 @@ set(CalligraMobileMocSrc_SRCS
     CollabServer.h 
     CollabClient.h  
     PreviewDialog.h 
-    MainWindowAdaptor.h 
-    PresentationToolAdaptor.h 
     NotesDialog.h 
     PreviewButton.h 
     SlidingMotionDialog.h 
     FoExternalEditor.h 
     #TODO re-add FoCellEditor.h 
-    DigitalSignatureDialog.h
     FoImageSelectionWidget.h
     ConfirmationDialog.h
     FileChooserDialog.h
@@ -69,9 +67,21 @@ set(CalligraMobileMocSrc_SRCS
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.h
 )
 
-if(QT_QTOPENGL_FOUND)
+if(OPENSSL_FOUND AND LIBXML2_FOUND)
+  list(APPEND CalligraMobileMocSrc_SRCS DigitalSignatureDialog.h)
+endif()
+
+if(NOT ANDROID)
+  list(APPEND CalligraMobileMocSrc_SRCS
+    DBusAdaptor.h 
+    MainWindowAdaptor.h 
+    PresentationToolAdaptor.h 
+  )
+endif()
+
+if(QT_QTOPENGL_FOUND AND NOT ANDROID)
   list(APPEND CalligraMobileMocSrc_SRCS GlWidget.h GlPresenter.h)
-endif(QT_QTOPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND AND NOT ANDROID)
 
 kde4_add_ui_files(CalligraMobileUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
 
@@ -91,7 +101,6 @@ set(CalligraMobile_SRCS
     Splash.cpp 
     NotifyDialog.cpp 
     PresentationTool.cpp 
-    DBusAdaptor.cpp 
     AboutDialog.cpp 
     CollabDialog.cpp
     Collaborate.cpp 
@@ -99,14 +108,11 @@ set(CalligraMobile_SRCS
     CollabClient.cpp 
     FlowLayout.cpp 
     PreviewDialog.cpp 
-    MainWindowAdaptor.cpp 
-    PresentationToolAdaptor.cpp 
     NotesDialog.cpp
     PreviewButton.cpp 
     SlidingMotionDialog.cpp 
     FoExternalEditor.cpp 
     #TODO re-add FoCellEditor.cpp
-    DigitalSignatureDialog.cpp
     FoImageSelectionWidget.cpp
     FileChooserDialog.cpp
     ${CalligraMobileUiSrc}
@@ -119,19 +125,34 @@ set(CalligraMobile_SRCS
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.cpp
 )
 
-if(QT_QTOPENGL_FOUND)
+if(OPENSSL_FOUND AND LIBXML2_FOUND)
+    list(APPEND CalligraMobile_SRCS
+        DigitalSignatureDialog.cpp
+    )
+endif()
+
+if(NOT ANDROID)
+    list(APPEND CalligraMobile_SRCS
+        DBusAdaptor.cpp 
+        MainWindowAdaptor.cpp 
+        PresentationToolAdaptor.cpp 
+    )
+endif()
+
+if(QT_QTOPENGL_FOUND AND NOT ANDROID)
     list(APPEND CalligraMobile_SRCS
         GlWidget.cpp
         GlPresenter.cpp
     )
-endif(QT_QTOPENGL_FOUND)
+endif(QT_QTOPENGL_FOUND AND NOT ANDROID)
 
-add_executable(calligramobile ${CalligraMobile_SRCS})
+if(ANDROID)
+  add_library(calligramobile SHARED ${CalligraMobile_SRCS})
+else(ANDROID)
+  add_executable(calligramobile ${CalligraMobile_SRCS})
+endif(ANDROID)
 
 target_link_libraries(calligramobile
-    ${LIBXML2_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    ${X11_X11_LIB}
     ${QT_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTNETWORK_LIBRARIES}
@@ -142,7 +163,20 @@ target_link_libraries(calligramobile
     calligratablescommon
 )
 
-if (QT_QTOPENGL_FOUND)
+if(Q_WS_X11)
+    target_link_libraries(calligramobile
+        ${X11_X11_LIB}
+    )
+endif()
+
+if(OPENSSL_FOUND AND LIBXML2_FOUND)
+    target_link_libraries(calligramobile
+        ${LIBXML2_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+    )
+endif()
+
+if (QT_QTOPENGL_FOUND AND NOT ANDROID)
     target_link_libraries(calligramobile
         ${QT_QTOPENGL_LIBRARY}
         ${OPENGL_LIBRARIES}
@@ -156,7 +190,7 @@ if(QT_QMAEMO5_LIBRARY)
     )
 endif(QT_QMAEMO5_LIBRARY)
 
-install(TARGETS calligramobile RUNTIME DESTINATION bin)
+install(TARGETS calligramobile RUNTIME DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES calligramobile.desktop DESTINATION share/applications/hildon)
 install(FILES images/178x200/calligramobile.png DESTINATION share/icons/hicolor/178x200/apps)
 install(FILES images/64x64/calligramobile.png DESTINATION share/icons/hicolor/64x64/apps)

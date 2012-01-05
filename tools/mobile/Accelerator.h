@@ -28,7 +28,9 @@
 #include <QObject>
 #include <QtDebug>
 #include <QTimer>
+#ifdef Q_WS_MAEMO_5
 #include <QtDBus>
+#endif
 #include <QVBoxLayout>
 #include <QBitArray>
 #include <QPushButton>

@@ -25,8 +25,10 @@
 #include "Accelerator.h"
 #include "MainWindow.h"
 #include "Common.h"
+#ifndef Q_OS_ANDROID
 #include <QtDBus/QDBusMessage>
 #include <QDBusReply>
+#endif
 #include <QDialog>
 
 enum  scrollingAttributes  { stateFix,scrollUp,scrollDown,scrollLeft,scrollRight,toggleScrollTransition };

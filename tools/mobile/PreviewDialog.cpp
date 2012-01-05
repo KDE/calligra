@@ -40,9 +40,11 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 #include <QProgressDialog>
+#ifndef Q_OS_ANDROID
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
+#endif
 
 #include "FlowLayout.h"
 #include "PreviewDialog.h"
