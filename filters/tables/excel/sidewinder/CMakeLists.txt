@@ -7,8 +7,12 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/tables # for PointStorage.h
 )
 
-kde4_add_executable(recordsxml2cpp recordsxml2cpp.cpp)
-target_link_libraries(recordsxml2cpp ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
+if(NOT CMAKE_CROSSCOMPILING) 
+  kde4_add_executable(recordsxml2cpp recordsxml2cpp.cpp)
+  target_link_libraries(recordsxml2cpp ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
+
+  export(TARGETS recordsxml2cpp FILE ${CMAKE_BINARY_DIR}/ImportRecordsXml2CppExecutable.cmake )
+endif(NOT CMAKE_CROSSCOMPILING) 
 
 add_custom_command(
     OUTPUT records.cpp
