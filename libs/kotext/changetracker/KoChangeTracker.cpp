@@ -136,16 +136,6 @@ void KoChangeTracker::setSaveFormat(ChangeSaveFormat saveFormat)
 {
     d->changeSaveFormat = saveFormat;
 }
-int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId) const
-{
-    Q_UNUSED(title)
-    Q_UNUSED(type)
-    Q_UNUSED(selection)
-    Q_UNUSED(newFormat)
-    Q_UNUSED(prevCharChangeId)
-    Q_UNUSED(nextCharChangeId)
-    return 0;
-}
 
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
 {

@@ -59,9 +59,6 @@ public:
     void setDisplayChanges(bool enabled);
     bool displayChanges() const;
 
-    /// returns the changeId of the changeElement registered for the given change. This may be an already existing changeId, if the change could be merged.
-    int getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat &newFormat, int prevCharChangeId, int nextCharChangeId) const;
-
     /// XXX: these three are called "getXXX" but does change the state of the change tracker
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
