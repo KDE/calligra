@@ -79,7 +79,9 @@
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kicon.h>
+#ifndef Q_OS_ANDROID
 #include <knotifyconfigwidget.h>
+#endif
 
 // Calligra includes
 #include <KoGlobal.h>
@@ -159,8 +161,10 @@
 #include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
+#ifndef Q_OS_ANDROID
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
+#endif
 
 using namespace Calligra::Tables;
 
@@ -607,7 +611,9 @@ View::View(QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
+#ifndef Q_OS_ANDROID
     new ViewAdaptor(this);
+#endif
     d->canvas->setFocus();
 }
 
@@ -1600,7 +1606,9 @@ void View::showTabBar(bool enable)
 
 void View::optionsNotifications()
 {
+#ifndef Q_OS_ANDROID
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void View::preference()

@@ -103,9 +103,11 @@
 #include "BindingModel.h"
 
 // D-Bus
+#ifndef Q_OS_ANDROID
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
 #include <QtDBus/QtDBus>
+#endif
 
 // chart shape
 #include "plugins/chartshape/ChartShape.h"
@@ -150,9 +152,10 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         , dd(new Private)
 {
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+#ifndef Q_OS_ANDROID
     new MapAdaptor(d->map);
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
-
+#endif
 
     // Init chart shape factory with KSpread's specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
@@ -609,12 +612,14 @@ bool Doc::configLoadFromFile() const
 
 void Doc::sheetAdded(Sheet* sheet)
 {
+#ifndef Q_OS_ANDROID
     new SheetAdaptor(sheet);
     QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
     if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
         dbusPath.prepend('/' + sheet->parent()->objectName());
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
+#endif
 }
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
