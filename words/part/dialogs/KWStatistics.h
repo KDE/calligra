@@ -20,16 +20,27 @@
 #ifndef KWSTATISTICS_H
 #define KWSTATISTICS_H
 
+
 #include <ui_KWStatistics.h>
 #include <ui_KWStatisticsDocker.h>
-
+#include<ui_quickpopupmenu.h>
+#include<QToolButton>
 #include <QWidget>
+#include<QDialog>
+#include <QtGui/QVBoxLayout>
+#include<QCheckBox>
+#include<QMenu>
 
 class QTimer;
 class QTextDocument;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;
+class QWidget;
+class QToolButton;
+class QVBoxLayout;
+class QCheckBox;
+class QMenu;
 
 class KWStatistics : public QWidget
 {
@@ -38,12 +49,14 @@ public:
     KWStatistics(KoCanvasResourceManager *provider, KWDocument *m_document,
                  KoSelection *selection = 0, QWidget *parent = 0);
 
-private slots:
-
-    void updateData();
     void updateDataUi();
-    void setAutoUpdate(int);
-    void selectionChanged();
+
+public slots:
+
+//void choose_pref();
+void updateData();
+void setAutoUpdate(int);
+void selectionChanged();
 
 private:
     int countCJKChars(const QString &text);
@@ -51,11 +64,16 @@ private:
 private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
+    Ui::QuickPopupMenu my_menu;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;
     QTextDocument *m_textDocument;
     QTimer *m_timer;
+    QWidget  * popup;
+    QVBoxLayout *v_layout;
+    QCheckBox *words,*sentences,*paragraphs;
+    QMenu *m_menu;
 
     long m_charsWithSpace;
     long m_charsWithoutSpace;
@@ -65,9 +83,9 @@ private:
     long m_syllables;
     long m_paragraphs;
     long m_cjkChars;
-
     bool m_autoUpdate;
     bool m_showInDocker;
+    bool ischecked;
 };
 
 #endif

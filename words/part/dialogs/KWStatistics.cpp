@@ -18,12 +18,15 @@
  */
 
 #include "KWStatistics.h"
+
 #include "Words.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
-
+#include <ui_KWStatisticsDocker.h>
+#include<ui_quickpopupmenu.h>
+#include "dialogs/quickpopupmenu.h"
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
@@ -32,6 +35,13 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTimer>
+#include<QDialog>
+
+//THE MENU SUBCLASS FOR THE POPUP
+class QDialog;
+class QuickPopupMenu;
+
+
 
 KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
@@ -55,12 +65,16 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_timer->setInterval(2000); // make the interval configurable?
     m_timer->setSingleShot(true);
     widgetDocker.setupUi(this);
-    widgetDocker.refresh->setIcon(KIcon("view-refresh"));
+    my_menu.setupUi(this);
 
-    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
-    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
-    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+
+    m_menu = new QuickPopupMenu(widgetDocker.preferences);
+    widgetDocker.preferences->setMenu(m_menu);
+    widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
+
+   connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu ()));
+//    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
 void KWStatistics::updateData()
@@ -88,18 +102,18 @@ void KWStatistics::updateData()
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
     << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
-    bool footEnd = m_showInDocker ? !widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
+ //   bool footEnd = m_showInDocker ? !widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
-        if (m_showInDocker && (!(footEnd ||
-                                 (tfs->textFrameSetType() == Words::MainTextFrameSet ||
-                                  tfs->textFrameSetType() == Words::OtherTextFrameSet))))
-            continue;
-        else if (!(footEnd || (tfs->textFrameSetType() == Words::MainTextFrameSet ||
-                               tfs->textFrameSetType() == Words::OtherTextFrameSet)))
-            continue;
+ //       if (m_showInDocker && (!(footEnd ||
+   //                              (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+   //                               tfs->textFrameSetType() == Words::OtherTextFrameSet))))
+     //       continue;
+    //    else if (!(footEnd || (tfs->textFrameSetType() == Words::MainTextFrameSet ||
+      //                         tfs->textFrameSetType() == Words::OtherTextFrameSet)))
+        //    continue;
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
@@ -199,31 +213,38 @@ void KWStatistics::updateDataUi()
     QString flesch = KGlobal::locale()->formatNumber(flesch_score);
 
     if (m_showInDocker) {
-        int currentIndex = widgetDocker.statistics->currentIndex();
-        QString newText;
-        if (currentIndex == 0)
-            newText = KGlobal::locale()->formatNumber(m_words, 0);
-        else if (currentIndex == 1)
-            newText = KGlobal::locale()->formatNumber(m_sentences, 0);
-        else if (currentIndex == 2)
-            newText = KGlobal::locale()->formatNumber(m_syllables, 0);
-        else if (currentIndex == 3)
-            newText = KGlobal::locale()->formatNumber(m_lines, 0);
-        else if (currentIndex == 4)
-            newText = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
-        else if (currentIndex == 5)
-            newText = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
-        else if (currentIndex == 6)
-            newText = KGlobal::locale()->formatNumber(m_cjkChars, 0);
-        else if (currentIndex == 7)
-            newText = flesch;
 
-        int top, bottom, left, right;
-        widgetDocker.count->getTextMargins(&left, &top, &right, &bottom);
-        const int minWidth = widgetDocker.count->fontMetrics().width(newText);
-        widgetDocker.count->setMinimumSize(10 + minWidth + left + right, widgetDocker.count->minimumSize().height());
-        widgetDocker.count->setText(newText);
-    } else {
+        QString newText[8];
+     //   connect(widgetDocker.preferences,SIGNAL(clicked()),this,SLOT(choose_pref()));
+
+         newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
+         widgetDocker.count_words->setText(newText[0]);
+
+         newText[1] = KGlobal::locale()->formatNumber(m_sentences, 0);
+          widgetDocker.count_sentences->setText(newText[1]);
+
+         newText[2] = KGlobal::locale()->formatNumber(m_syllables, 0);
+         widgetDocker.count_syllables->setText(newText[2]);
+
+         newText[3] = KGlobal::locale()->formatNumber(m_lines, 0);
+         widgetDocker.count_lines->setText(newText[3]);
+
+         newText[4] = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
+         widgetDocker.count_spaces->setText(newText[4]);
+
+         newText[5] = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
+         widgetDocker.count_nospaces->setText(newText[5]);
+
+         newText[6] = KGlobal::locale()->formatNumber(m_cjkChars, 0);
+         widgetDocker.count_cjkchars->setText(newText[6]);
+
+         newText[7] = flesch;
+         widgetDocker.count_flesch->setText(newText[7]);
+
+        int top, bottom, left, right;(newText);
+    }
+
+    else {
         // tab 1
         widget.pages->setText(
             KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPageCount), 0));
@@ -235,7 +256,7 @@ void KWStatistics::updateDataUi()
             KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentTableCount), 0));
 
         // tab 2
-        widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
+        /*widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
         widget.sentences->setText(KGlobal::locale()->formatNumber(m_sentences, 0));
         widget.syllables->setText(KGlobal::locale()->formatNumber(m_syllables, 0));
         widget.lines->setText(KGlobal::locale()->formatNumber(m_lines, 0));
@@ -244,7 +265,7 @@ void KWStatistics::updateDataUi()
         widget.cjkChars->setText(KGlobal::locale()->formatNumber(m_cjkChars, 0));
         if (m_words < 200)   // a kind of warning if too few words:
             flesch = i18n("approximately %1", flesch);
-        widget.flesch->setText(flesch);
+        widget.flesch->setText(flesch);*/
     }
 }
 
@@ -258,8 +279,8 @@ void KWStatistics::setAutoUpdate(int state)
         m_autoUpdate = false;
         disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }
-    if (m_showInDocker)
-        widgetDocker.refresh->setVisible(!m_autoUpdate);
+ //   if (m_showInDocker)
+    //    widgetDocker.refresh->setVisible(!m_autoUpdate);
 }
 
 void KWStatistics::selectionChanged()
