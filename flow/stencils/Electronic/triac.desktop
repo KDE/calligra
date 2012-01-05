@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=triac
+Name[ca]=triac
 Name[cs]=triak
 Name[el]=triac
 Name[it]=triac
@@ -9,6 +10,7 @@ Name[nl]=triac
 Name[pl]=triak
 Name[pt]=triac
 Name[pt_BR]=triac
+Name[ru]=Симистор
 Name[sv]=triac
 Name[uk]=Симістор
 Name[x-test]=xxtriacxx

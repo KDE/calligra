@@ -44,6 +44,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KoVariableManager.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -105,26 +107,13 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(20);
 
-    // TODO check versions and mimetypes etc.
-
-    bool hasMainText = false;
-    KoXmlElement childElem;
-    forEachElement(childElem, body) {
-        if (childElem.namespaceURI() == KoXmlNS::text
-                && childElem.localName() != "page-sequence"
-                && childElem.localName() != "tracked-changes") {
-            hasMainText = true;
-            break;
-        }
-        if (childElem.namespaceURI() == KoXmlNS::table
-                && childElem.localName() == "table") {
-            hasMainText = true;
-            break;
-        }
-    }
-
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
+
+    // Load user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->loadOdf(body);
+    }
 
     // Load all styles before the corresponding paragraphs try to use them!
     KWOdfSharedLoadingData *sharedData = new KWOdfSharedLoadingData(this);
@@ -135,7 +124,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(40);
 
-    loadMasterPageStyles(sc, hasMainText);
+    loadMasterPageStyles(sc);
 
     // add page background frame set
     KWFrameSet *pageBackgroundFrameSet = new KWFrameSet(Words::BackgroundFrameSet);
@@ -209,12 +198,10 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (updater) updater->setProgress(50);
 
     KoTextShapeData textShapeData;
-    if (hasMainText) {
-        KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, Words::MainTextFrameSet);
-        mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
-        m_document->addFrameSet(mainFs);
-        textShapeData.setDocument(mainFs->document(), false);
-    }
+    KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, Words::MainTextFrameSet);
+    mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
+    m_document->addFrameSet(mainFs);
+    textShapeData.setDocument(mainFs->document(), false);
 
     if (updater) updater->setProgress(60);
 
@@ -277,7 +264,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis(settings);
 }
 
-void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasMainText)
+void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context)
 {
     kDebug(32001) << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
     kDebug(32001) << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
@@ -304,7 +291,6 @@ void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasM
             loadHeaderFooter(context, masterPage, *masterNode, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, LoadFooter);
         }
-        masterPage.setHasMainTextFrame(hasMainText);
         if (!alreadyExists)
             m_document->pageManager()->addPageStyle(masterPage);
     }

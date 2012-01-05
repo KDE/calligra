@@ -339,6 +339,7 @@ public:
     static bool isValid(const QRect& rect);
 
     static QString loadOdf(const QString& expression);
+    static void loadOdf(const QChar *&data, const QChar *&end, QChar *&out);
     static QString saveOdf(const QString& expression);
 
     QString saveOdf() const;

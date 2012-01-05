@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=stirplate-front
+Name[ca]=placaremenat-front
 Name[el]=stirplate-front
 Name[it]=agitatore-magnetico-fronte
 Name[nb]=magnetstav-frontal
@@ -7,6 +8,7 @@ Name[nl]=roerplaat-voorzijde
 Name[pl]=mieszadło-magnetyczne-przód
 Name[pt]=prato-batedor-frente
 Name[pt_BR]=prato batedor (frente)
+Name[ru]=Размешиватель (спереди)
 Name[sv]=omrörare-framsida
 Name[uk]=Плита для перемішування (спереду)
 Name[x-test]=xxstirplate-frontxx

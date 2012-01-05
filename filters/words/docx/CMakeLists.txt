@@ -21,6 +21,7 @@ set(docximport_PART_SRCS
     DocxImport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(docximport ${docximport_PART_SRCS})

@@ -1000,59 +1000,62 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("style:num-format", "1");
 
     DrawStyle ds = m_graphicsHandler->getBgDrawStyle();
-    switch (ds.fillType()) {
-    case msofillSolid:
-    {
-        // PptToOdp::toQColor helper function can be used instead of this conversion
-        MSO::OfficeArtCOLORREF clr = ds.fillColor();
-        QColor color(clr.red, clr.green, clr.blue);
-        QString tmp = color.name();
-        pageLayoutStyle->addProperty("fo:background-color", tmp);
+    if (ds.fFilled()) {
+        switch (ds.fillType()) {
+        case msofillSolid:
+        {
+            // PptToOdp::toQColor helper function can be used instead of this conversion
+            MSO::OfficeArtCOLORREF clr = ds.fillColor();
+            QColor color(clr.red, clr.green, clr.blue);
+            QString tmp = color.name();
+            pageLayoutStyle->addProperty("fo:background-color", tmp);
 
-        //update the background-color information if required
-        if (tmp != currentBgColor()) {
-            updateBgColor(tmp);
+            //update the background-color information if required
+            if (tmp != currentBgColor()) {
+                updateBgColor(tmp);
+            }
+            break;
         }
-        break;
-    }
-    //TODO:
-//     case msofillShade:
-//     case msofillShadeCenter:
-//     case msofillShadeShape:
-//     case msofillShadeScale:
-//     case msofillShadeTitle:
+        //TODO:
+//         case msofillShade:
+//         case msofillShadeCenter:
+//         case msofillShadeShape:
+//         case msofillShadeScale:
+//         case msofillShadeTitle:
 //
-    //TODO:
-//     case msofillPattern:
-//     case msofillTexture:
+        //TODO:
+//         case msofillPattern:
+//         case msofillTexture:
 //
-    case msofillPicture:
-    {
-        // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
-        // only picture in OfficeArtBStoreContainer is handled now
-        QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
+        case msofillPicture:
+        {
+            // picture can be stored in OfficeArtBStoreContainer or in
+            // fillBlip_complex if complex = true only picture in
+            // OfficeArtBStoreContainer is handled now
+            QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
 
-        if (!filePath.isEmpty()) {
-            QBuffer buffer;
-            KoXmlWriter bkgImageWriter(&buffer);
+            if (!filePath.isEmpty()) {
+                QBuffer buffer;
+                KoXmlWriter bkgImageWriter(&buffer);
 
-            bkgImageWriter.startElement("style:background-image");
-            bkgImageWriter.addAttribute("xlink:href", filePath);
-            bkgImageWriter.addAttribute("xlink:type", "simple");
-            bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
-            bkgImageWriter.endElement(); //style:background-image
+                bkgImageWriter.startElement("style:background-image");
+                bkgImageWriter.addAttribute("xlink:href", filePath);
+                bkgImageWriter.addAttribute("xlink:type", "simple");
+                bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
+                bkgImageWriter.endElement(); //style:background-image
 
-            QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
+                QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
                                          ((QBuffer*)bkgImageWriter.device())->buffer().size());
 
-            pageLayoutStyle->addChildElement("0", contents);
+                pageLayoutStyle->addChildElement("0", contents);
+            }
+        break;
         }
-        break;
-    }
-    //TODO:
-//     case msofillBackground:
-    default:
-        break;
+        //TODO:
+//         case msofillBackground:
+        default:
+            break;
+        }
     }
 
     // NOTE: margin-top and margin-bottom are updated in slotSectionFound based

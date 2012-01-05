@@ -126,7 +126,7 @@ install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
 
 kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 

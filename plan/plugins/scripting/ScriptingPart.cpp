@@ -75,8 +75,8 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& arg
     , d(new Private())
 {
     setComponentData(KPlatoScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data","kplato/kpartplugins/scripting.rc"), true);
-    kDebug(planScriptingDebugArea()) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
+    setXMLFile(KStandardDirs::locate("data","plan/kpartplugins/scripting.rc"), true);
+    kDebug(planScriptingDebugArea()) <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }
 

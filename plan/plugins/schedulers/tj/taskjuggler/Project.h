@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -389,7 +390,7 @@ public:
      * Returns the name of the first vacation that the given date falls into.
      * If no vacation is found QString::Null is returned.
      */
-    const QString& vacationName(time_t vd) const
+    QString vacationName(time_t vd) const
     {
         return vacationList.vacationName(vd);
     }

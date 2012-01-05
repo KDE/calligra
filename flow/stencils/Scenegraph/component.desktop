@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=component
+Name[ca]=component
 Name[cs]=komponenta
 Name[da]=komponent
 Name[el]=συστατικό
@@ -12,6 +13,7 @@ Name[nl]=component
 Name[pl]=składnik
 Name[pt]=componente
 Name[pt_BR]=componente
+Name[ru]=Компонент
 Name[sv]=komponent
 Name[uk]=Компонент
 Name[x-test]=xxcomponentxx

@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007
  *               by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -14,6 +15,8 @@
 #include "TjMessageHandler.h"
 #include "taskjuggler.h"
 #include "Utility.h"
+
+#include <qdebug.h>
 
 namespace TJ
 {
@@ -37,9 +40,9 @@ TjMessageHandler::warningMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qWarning("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qWarning("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printWarning(msg, file, line);
@@ -63,9 +66,9 @@ TjMessageHandler::errorMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qWarning("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qWarning("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printError(msg, file, line);
@@ -78,9 +81,9 @@ TjMessageHandler::fatalMessage(const QString& msg, const QString& file, int
     if (consoleMode)
     {
         if (file.isEmpty())
-            qFatal("%s", msg.latin1());
+            qWarning()<<msg;
         else
-            qFatal("%s:%d: %s", file.latin1(), line, msg.latin1());
+            qWarning()<<file<<":"<<line<<":"<<msg;
     }
     else
         printFatal(msg, file, line);

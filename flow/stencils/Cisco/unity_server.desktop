@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Unity server
 Name[bg]=Съвместен сървър
+Name[ca]=Servidor Unity
 Name[de]=Unity-Server
 Name[el]=Εξυπηρετητής Unity
 Name[et]=Unity server
@@ -11,6 +12,7 @@ Name[nl]=Unity-server
 Name[pl]=Serwer Unity
 Name[pt]=Servidor Unity
 Name[pt_BR]=Servidor Unity
+Name[ru]=Серверный модуль
 Name[sv]=Unity-server
 Name[uk]=Сервер Unity
 Name[x-test]=xxUnity serverxx

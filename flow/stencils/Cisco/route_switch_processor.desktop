@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Route Switch Processor
 Name[bg]=Процесор за комутиране на маршрути
+Name[ca]=Processador de commutació de rutes
 Name[el]=Επεξεργαστής δρομολόγησης
 Name[et]=Marsruuter-kommutaatori protsessor
 Name[nb]=Rute-svitsj-prosessor
@@ -8,7 +9,9 @@ Name[nds]=Nettweeg-Ümschaltperzesser
 Name[pl]=Procesor przełączania trasy
 Name[pt]=Processador Comutação Redes
 Name[pt_BR]=Processador de comutação de rotas
+Name[ru]=Обработчик переключения маршрутизации
 Name[sv]=Linjeväxelprocessor
 Name[uk]=Процесор комутації маршрутів
 Name[x-test]=xxRoute Switch Processorxx
+Name[zh_CN]=路由交换机处理器
 Name[zh_TW]=路由交換處理器

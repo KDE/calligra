@@ -17,7 +17,20 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="_2" columnstretch="0">
      <item row="0" column="0">
-      <widget class="KexiCommandLinkButton" name="btn_import"/>
+      <widget class="KexiCommandLinkButton" name="btn_import">
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="shortcut">
+        <string notr="true"/>
+       </property>
+       <property name="description">
+        <string notr="true"/>
+       </property>
+       <property name="arrowVisible" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

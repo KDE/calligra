@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -727,8 +727,26 @@ Container::eventFilter(QObject *s, QEvent *e)
         m_moving = 0; // clear this otherwise mouse dragging outside
                       // of the popup menu would drag the selected widget(s) randomly
 //kDebug() << "-----------" << s;
-        d->form->createContextMenu(static_cast<QWidget*>(s), this, cme->pos(), Form::FormContextMenuTarget);
-        return true;
+        // target widget is the same as selected widget if this is context key event
+        QWidget *widgetTarget = cme->reason() == QContextMenuEvent::Mouse
+                ? static_cast<QWidget*>(s) : d->form->selectedWidget();
+        if (widgetTarget) {
+            // target widget is the same as selected widget if this is context key event
+            QPoint pos;
+            if (cme->reason() == QContextMenuEvent::Mouse) {
+                pos = cme->pos();
+            }
+            else {
+                if (widgetTarget == topLevelWidget()) {
+                    pos = QPoint(20, 20);
+                }
+                else {
+                    pos = QPoint(widgetTarget->width() / 2, widgetTarget->height() / 2);
+                }
+            }
+            d->form->createContextMenu(widgetTarget, this, pos, Form::FormContextMenuTarget);
+            return true;
+        }
     }
     case QEvent::Enter:
     case QEvent::Leave:

@@ -26,6 +26,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QUuid>
+#include <QtCore/QRect>
 #include <QtEndian>
 
 namespace Swinder
@@ -41,6 +42,15 @@ static const uint minimumRowCount = 32768;
 // not be handled by the consumer application anyway cause they reached the applications limited.
 static const uint maximalColumnCount = 32768;
 static const uint maximalRowCount = 65536;
+
+// Returns A for 1, B for 2, C for 3, etc.
+QString columnName(uint column);
+// Returns the escaped sheet-name.
+QString encodeSheetName(const QString& name);
+// Returns an encoded cell-address like e.g. "Sheet1!A1".
+QString encodeAddress(const QString& sheetName, uint column, uint row);
+// Returns an encoded cell-range like e.g. "Sheet1!A1:B2".
+QString encodeAddress(const QString& sheetName, const QRect &rect);
 
 class Workbook;
 class XlsRecordOutputStream;
@@ -113,6 +123,38 @@ static inline double readFloat64(const void*p)
     memcpy(&num, &val, sizeof num);
     return num;
 }
+
+// RK value is special encoded integer or floating-point
+// see any documentation of Excel file format for detail description
+static inline void decodeRK(unsigned rkvalue, bool& isInteger,
+                            int& i, double& f)
+{
+    double factor = (rkvalue & 0x01) ? 0.01 : 1;
+    if (rkvalue & 0x02) {
+        // FIXME check that int is 32 bits ?
+        isInteger = true;
+        i = *((int*) & rkvalue) >> 2;
+        if (rkvalue & 0x01) {
+            if (i % 100 == 0) {
+                i /= 100;
+            } else {
+                isInteger = false;
+                f = i * 0.01;
+            }
+        }
+    } else {
+        // TODO ensure double takes 8 bytes
+        isInteger = false;
+        rkvalue = qFromLittleEndian<quint32>(rkvalue);
+        unsigned char* s = (unsigned char*) & rkvalue;
+        unsigned char* r = (unsigned char*) & f;
+        r[0] = r[1] = r[2] = r[3] = 0;
+        r[4] = s[0] & 0xfc;
+        r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+        f *= factor;
+    }
+}
+
 
 /**
  * Supported Excel document version.

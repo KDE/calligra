@@ -27,6 +27,7 @@
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 
+#include "calligraversion.h"
 #include <KoDocument.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
@@ -614,7 +615,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
 {
     TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1151,6 +1152,7 @@ QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     //kDebug()<<objectName();
+    header()->setStretchLastSection( (bool)( element.attribute( "stretch-last-column", "1" ).toInt() ) );
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         if ( ! map.isValid() ) {
@@ -1194,14 +1196,21 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                 }
             }
         } else {
+            QMap<int, int > m; // QMap<destination, column>
             for ( int i = 0; i < h->count(); ++i ) {
-                QString n = map.key( i );
-                if ( ! n.isEmpty() ) {
-                    int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
-                    if ( col >= 0 && col < h->count() ) {
-                        header()->moveSection( h->visualIndex( col ), i );
-                    }
+                QString n = e.attribute( s.arg( i ) );
+                if ( n.isEmpty() ) {
+                    continue;
                 }
+                int col = map.keyToValue( n.toUtf8() );
+                if ( col >= 0 && col < h->count() ) {
+                    m.insert( i, col );
+                }
+            }
+            for ( QMap<int, int>::const_iterator it = m.constBegin(); it != m.constEnd(); ++it ) {
+                QString n = e.attribute( s.arg( it.key() ) );
+                int current = h->visualIndex( it.value() );
+                header()->moveSection( current, it.key() );
             }
         }
     }
@@ -1211,6 +1220,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
     //kDebug()<<objectName();
+    element.setAttribute( "stretch-last-column", header()->stretchLastSection() );
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
@@ -1451,7 +1461,7 @@ DoubleTreeViewBase::~DoubleTreeViewBase()
 KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
 {
     DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1787,18 +1797,18 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
     //kDebug();
     QList<int> lst1;
     QList<int> lst2;
-    KoXmlElement e = element.namedItem( "master" ).toElement();
+    KoXmlElement e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( map, e );
-    }
-    e = element.namedItem( "slave" ).toElement();
-    if ( ! e.isNull() ) {
-        m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         } else {
             setStretchFactors();
         }
+        m_rightview->loadContext( map, e );
+    }
+    e = element.namedItem( "master" ).toElement();
+    if ( ! e.isNull() ) {
+        m_leftview->loadContext( map, e );
     }
     return true;
 }

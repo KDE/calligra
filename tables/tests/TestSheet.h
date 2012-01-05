@@ -43,6 +43,9 @@ private Q_SLOTS:
 
     void testDocumentToCellCoordinates_data();
     void testDocumentToCellCoordinates();
+
+    void testCompareRows();
+
 private:
     Sheet* m_sheet;
     Doc* m_doc;

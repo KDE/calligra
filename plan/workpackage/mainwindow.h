@@ -41,9 +41,6 @@
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
-namespace std { }
-using namespace std;
-
 namespace KParts {
     class PartManager;
 }
@@ -89,6 +86,8 @@ signals:
 
 public slots:
     virtual void slotFileClose();
+    virtual void setCaption( const QString &text );
+    virtual void setCaption( const QString &text, bool modified );
 
 protected slots:
     virtual bool queryClose();

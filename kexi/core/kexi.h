@@ -34,12 +34,12 @@
 #include <kmessagebox.h>
 
 class QLabel;
-class KAboutData;
+class KexiAboutData;
 class KexiRecentProjects;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {

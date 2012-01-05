@@ -39,9 +39,9 @@ class QProgressBar;
 class QHBoxLayout;
 class QUrl;
 
-class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget, 
-                                               public KexiFormDataItemInterface,
-                                               public KFormDesigner::FormWidgetInterface
+class WebBrowserWidget : public QWidget,
+                         public KexiFormDataItemInterface,
+                         public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT																		
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -56,9 +56,8 @@ class KEXIFORMUTILS_EXPORT WebBrowserWidget :  public QWidget,
     
      
 public:
-    WebBrowserWidget();    
+    WebBrowserWidget(QWidget *parent = 0);
     ~WebBrowserWidget();
-    WebBrowserWidget(QWidget *parent=0);
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();

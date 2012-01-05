@@ -294,7 +294,7 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
             const int col = d->usedColumns[i];
             tableContext.columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
         }
-        for (int i = 0; i < d->usedColumns.count(); ++i) {
+        for (int i = 0; i < d->usedRow.count(); ++i) {
             const int row = d->usedRow[i];
             tableContext.rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
         }
@@ -460,8 +460,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, in
         if (it.key() + number <= KS_rowMax)
             map.insert(it.key() + number, true);
     }
-    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
-        d->usedRows.remove(it.key());
+    for (QMap<int, bool>::iterator it = begin; it != end; )
+        it = d->usedRows.erase(it);
     d->usedRows.unite(map);
     // process the tree
     QList< QPair<QRectF, SharedSubStyle> > undoData;
@@ -491,8 +491,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertColumns(int position,
         if (it.key() + number <= KS_colMax)
             map.insert(it.key() + number, true);
     }
-    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
-        d->usedColumns.remove(it.key());
+    for (QMap<int, bool>::iterator it = begin; it != end; )
+        it = d->usedColumns.erase(it);
     d->usedColumns.unite(map);
     // process the tree
     QList< QPair<QRectF, SharedSubStyle> > undoData;
@@ -519,8 +519,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeRows(int position, in
         if (it.key() - number >= position)
             map.insert(it.key() - number, true);
     }
-    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
-        d->usedRows.remove(it.key());
+    for (QMap<int, bool>::iterator it = begin; it != end; )
+        it = d->usedRows.erase(it);
     d->usedRows.unite(map);
     // process the tree
     QList< QPair<QRectF, SharedSubStyle> > undoData;
@@ -547,8 +547,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeColumns(int position,
         if (it.key() - number >= position)
             map.insert(it.key() - number, true);
     }
-    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
-        d->usedColumns.remove(it.key());
+    for (QMap<int, bool>::iterator it = begin; it != end; )
+        it = d->usedColumns.erase(it);
     d->usedColumns.unite(map);
     // process the tree
     QList< QPair<QRectF, SharedSubStyle> > undoData;

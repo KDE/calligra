@@ -23,10 +23,6 @@ Group: MainWindow
 # Percentage property editor's width
 -RightDockPosition [integer: 0..100]
 
-# True if "hover close button" should be available for tabs in the main window.
-# Only affects IDEAl user unterface mode.
--HoverCloseButtonForTabs [boolean] (default: false)
-
 Group: PropertyEditor
 -FontSize [integer]
 
@@ -44,6 +40,12 @@ Group: General
 #especially useful for SQL-related messages
 #default=true for advanced Kexi mode
 NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
+
+# True if internal debugger window should be displayed with Kexi.
+# The window shows database operations and enables extra actions like 'Show Form UI Code'
+# in the Form Designer.
+# Only available when KEXI_DEBUG_GUI build option is enabled.
+-ShowInternalDebugger [boolean] (default: false)
 
 Group: Recent Dirs
 -lastVisitedImagePath [stringlist] # used for open/save dialogs for image files

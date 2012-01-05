@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Olympic
+Name[ca]=Olímpica
 Name[da]=Olympisk
 Name[et]=Olümpia
+Name[it]=Olimpica
 Name[nb]=Olympisk
 Name[pl]=Olympic
 Name[pt]=Olímpica
@@ -10,4 +12,5 @@ Name[ru]=Олимпийский
 Name[sv]=Olympiska flaggan
 Name[uk]=Олімпійський прапор
 Name[x-test]=xxOlympicxx
+Name[zh_CN]=奥林匹克
 Name[zh_TW]=奧林匹克

@@ -219,12 +219,13 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
 {
     kDebug() << itemsPartClass << ".";
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+    KexiMainWindowIface::global()->addSearchableModel(m_model);
     
     m_list->expandAll();
     if (itemsPartClass.isEmpty()) {
-	m_list->setRootIsDecorated(true);
+        m_list->setRootIsDecorated(true);
     } else {
-      m_list->setRootIsDecorated(false);
+        m_list->setRootIsDecorated(false);
     }
 }
 

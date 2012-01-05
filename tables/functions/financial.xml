@@ -1142,6 +1142,43 @@
                </Help>
            </Function>
 
+           <!-- sebsauer; uncomment following once Calligra 2.4 is released
+
+           <Function>
+               <Name>RATE</Name>
+               <Type>Float</Type>
+               <Parameter>
+                   <Comment>Payment period</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Regular payments</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Present value</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Future value</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Type</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Guess</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Help>
+                   <Text>The RATE() function computes the constant interest rate per period of an investment.</Text>
+                   <Syntax>RATE(nper;pmt;pv;fv;type;guess)</Syntax>
+                   <Example>RATE(4*12;-200;8000) equals 0.007701472</Example>
+               </Help>
+           </Function>
+           -->
+
            <Function>
                <Name>RECEIVED</Name>
                <Type>Float</Type>

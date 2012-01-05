@@ -42,10 +42,10 @@
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
-#include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
+#include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoTextAnchor.h>
@@ -531,23 +531,20 @@ void KWDocument::initEmpty()
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
-    KoCharacterStyle *character = parag->characterStyle();
-    character->setFontPointSize(20);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(20);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 2"));
-    character = parag->characterStyle();
-    character->setFontPointSize(16);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(16);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 3"));
-    character = parag->characterStyle();
-    character->setFontPointSize(12);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();

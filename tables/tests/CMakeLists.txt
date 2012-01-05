@@ -4,6 +4,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/tables  ${EIGEN2_INCLUDE_DIR} ${KOMAIN_
 
 ########### Core Functionality ###############
 
+set(TestCell_SRCS TestCell.cpp)
+kde4_add_unit_test(TestCell TESTNAME kspread-Cell ${TestCell_SRCS})
+target_link_libraries(TestCell calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestCellStorage_SRCS TestCellStorage.cpp)
 kde4_add_unit_test(TestCellStorage TESTNAME kspread-CellStorage  ${TestCellStorage_SRCS})
 target_link_libraries(TestCellStorage calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
@@ -19,6 +25,12 @@ target_link_libraries(TestDependencies calligratablescommon ${QT_QTCORE_LIBRARY}
 set(TestFormula_SRCS TestFormula.cpp)
 kde4_add_unit_test(TestFormula TESTNAME kspread-Formula  ${TestFormula_SRCS})
 target_link_libraries(TestFormula calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestUtil_SRCS TestUtil.cpp)
+kde4_add_unit_test(TestUtil TESTNAME kspread-Util  ${TestUtil_SRCS})
+target_link_libraries(TestUtil calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -166,6 +178,12 @@ target_link_libraries(TestRowRepeatStorage calligratablescommon ${QT_QTCORE_LIBR
 set(TestRowFormatStorage_SRCS TestRowFormatStorage.cpp)
 kde4_add_unit_test(TestRowFormatStorage TESTNAME kspread-RowFormatStorage ${TestRowFormatStorage_SRCS})
 target_link_libraries(TestRowFormatStorage calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestDatabaseFilter_SRCS TestDatabaseFilter.cpp)
+kde4_add_unit_test(TestDatabaseFilter TESTNAME kspread-Database-Filter ${TestDatabaseFilter_SRCS})
+target_link_libraries(TestDatabaseFilter calligratablesodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### Benchmarks ###############
 

@@ -38,7 +38,10 @@
 #include <KoShapeLayer.h>
 
 #include <KoGenChanges.h>
+#include <changetracker/KoChangeTracker.h>
 #include <KoTextSharedSavingData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoVariableManager.h>
 
 #include <KoStoreDevice.h>
 #include <KoDocumentRdfBase.h>
@@ -212,11 +215,20 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoGenChanges changes;
 
+    KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+
+    if (!changeTracker || !changeTracker->recordChanges()) {
+        changes.setTrackChanges(false);
+    } else {
+        changes.setTrackChanges(true);
+    }
+
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
 
     // Save the named styles
-    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    styleManager->saveOdf(context);
+    if (KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>()) {
+        styleManager->saveOdf(context);
+    }
 
     // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
@@ -228,6 +240,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -394,6 +411,14 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
     settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan(doc.paraTableSpacingAtStart() ? "true" : "false");
+    settingsWriter->endElement();
+
+    // OOo requires this config item to display files saved by wors correctly.
+    // If true, then the fo:text-indent attribute will be ignored.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
 
     settingsWriter->endElement(); // config:config-item-set

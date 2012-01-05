@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=condenser-green
+Name[ca]=condensador-verd
 Name[el]=condenser-green
 Name[it]=condensatore-verde
 Name[nb]=kondensator-grønn
@@ -7,6 +8,7 @@ Name[nl]=condenser-groen
 Name[pl]=chłodnica-zielony
 Name[pt]=condensador-verde
 Name[pt_BR]=condensador verde
+Name[ru]=Конденсор (зелёный)
 Name[sv]=kylare-grön
 Name[uk]=Холодильник (зелений)
 Name[x-test]=xxcondenser-greenxx

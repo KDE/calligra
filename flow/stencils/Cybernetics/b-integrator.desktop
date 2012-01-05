@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=b-integrator
+Name[ca]=integrado-b
 Name[el]=b-integrator
+Name[it]=b-integrator
 Name[nb]=b-integrator
 Name[nl]=b-integrator
 Name[pl]=b-całkowanie
 Name[pt]=integrador-b
 Name[pt_BR]=integrador-b
+Name[ru]=b-интегратор
 Name[sv]=b-integrator
 Name[uk]=Інтегратор (вхід знизу)
 Name[x-test]=xxb-integratorxx

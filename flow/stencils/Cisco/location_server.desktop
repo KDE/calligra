@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Location server
+Name[ca]=Servidor de localització
 Name[el]=Εξυπηρετητής τοποθεσίας
+Name[it]=Location server
 Name[nb]=Lokasjonstjener
 Name[nl]=Locatieserver
 Name[pl]=Serwer położenia
 Name[pt]=Servidor de localização
 Name[pt_BR]=Servidor de localização
+Name[ru]=Сервер расположения
 Name[sv]=Platsserver
 Name[uk]=Сервер розташування
 Name[x-test]=xxLocation serverxx
+Name[zh_CN]=位置服务器
 Name[zh_TW]=位置伺服器

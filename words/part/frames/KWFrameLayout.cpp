@@ -159,40 +159,36 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     }
 
     // create main text frame. All columns of them.
-    if (page.pageStyle().hasMainTextFrame()) {
-        int columns = page.pageStyle().columns().columns;
-        Q_ASSERT(columns >= 1);
-        KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
-        QRectF rect(QPointF(0, page.offsetInDocument()),
-                    QSizeF(page.width(), page.height()));
-
+    int columns = page.pageStyle().columns().columns;
+    Q_ASSERT(columns >= 1);
+    KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
+    QRectF rect(QPointF(0, page.offsetInDocument()), QSizeF(page.width(), page.height()));
 #if 0
         if (page.pageSide() == KWPage::PageSpread)
             rect.setWidth(rect.width() / 2);
 #endif
-        kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columns=" << columns;
-        foreach (KWFrame *frame, framesInPage(rect)) {
-            if (frame->frameSet() == fs) {
-                columns--;
-                if (columns < 0) {
-                    kDebug(32001) << "Deleting KWFrame from MainTextFrame";
-                    fs->removeFrame(frame);
-                    delete frame->shape();
-                }
+    kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columns=" << columns;
+    foreach (KWFrame *frame, framesInPage(rect)) {
+        if (frame->frameSet() == fs) {
+            columns--;
+            if (columns < 0) {
+                kDebug(32001) << "Deleting KWFrame from MainTextFrame";
+                fs->removeFrame(frame);
+                delete frame->shape();
             }
         }
-
-        qreal colwidth = page.pageStyle().pageLayout().width / columns;
-        qreal colheight = page.pageStyle().pageLayout().height;
-        //for (--columns; columns >= 0; --columns) {
-        for (int c = 0; c < columns; ++c) {
-            kDebug(32001) << "Creating KWFrame for MainTextFrame";
-            KoShape * shape = createTextShape(page);
-            shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
-            shape->setSize(QSizeF(colwidth, colheight));
-            new KWFrame(shape, fs);
-        }
     }
+    qreal colwidth = page.pageStyle().pageLayout().width / columns;
+    qreal colheight = page.pageStyle().pageLayout().height;
+    //for (--columns; columns >= 0; --columns) {
+    for (int c = 0; c < columns; ++c) {
+        kDebug(32001) << "Creating KWFrame for MainTextFrame";
+        KoShape * shape = createTextShape(page);
+        shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
+        shape->setSize(QSizeF(colwidth, colheight));
+        new KWFrame(shape, fs);
+    }
+
 #if 0
     if (page.pageSide() == KWPage::PageSpread) {
 
@@ -359,7 +355,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                             - layout.leftPadding - layout.rightPadding;
 
     KWPageStyle pageStyle = page.pageStyle();
-    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns : 0;
+    const int columns = pageStyle.columns().columns;
     int columnsCount = columns;
     int columnIndex = 0;
     KWFrame **main;
@@ -371,7 +367,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     QList<KWFrame *> frames = framesInPage(pageRect);
 
-    kDebug(32001) << "pageNumber=" << pageNumber << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frameCount=" << frames.count();
+    kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << pageStyle.columns().columns << "frameCount=" << frames.count();
     foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
         switch (frame->frameSet()->type()) {

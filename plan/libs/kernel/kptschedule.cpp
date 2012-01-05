@@ -553,6 +553,17 @@ EffortCostMap Schedule::plannedEffortCostPrDay( const Resource *resource, const 
     return ec;
 }
 
+Duration Schedule::plannedEffort( const Resource *resource, EffortCostCalculationType type ) const
+{
+    //kDebug();
+    Duration eff;
+    QListIterator<Appointment*> it( m_appointments );
+    while ( it.hasNext() ) {
+        eff += it.next() ->plannedEffort( resource, type );
+    }
+    return eff;
+}
+
 Duration Schedule::plannedEffort( EffortCostCalculationType type ) const
 {
     //kDebug();
@@ -575,6 +586,17 @@ Duration Schedule::plannedEffort( const QDate &date, EffortCostCalculationType t
     return eff;
 }
 
+Duration Schedule::plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type ) const
+{
+    //kDebug();
+    Duration eff;
+    QListIterator<Appointment*> it( m_appointments );
+    while ( it.hasNext() ) {
+        eff += it.next() ->plannedEffort( resource, date, type );
+    }
+    return eff;
+}
+
 Duration Schedule::plannedEffortTo( const QDate &date, EffortCostCalculationType type ) const
 {
     //kDebug();
@@ -582,6 +604,17 @@ Duration Schedule::plannedEffortTo( const QDate &date, EffortCostCalculationType
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
         eff += it.next() ->plannedEffortTo( date, type );
+    }
+    return eff;
+}
+
+Duration Schedule::plannedEffortTo(  const Resource *resource, const QDate &date, EffortCostCalculationType type ) const
+{
+    //kDebug();
+    Duration eff;
+    QListIterator<Appointment*> it( m_appointments );
+    while ( it.hasNext() ) {
+        eff += it.next() ->plannedEffortTo( resource, date, type );
     }
     return eff;
 }

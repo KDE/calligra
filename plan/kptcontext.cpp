@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005, 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005, 2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,22 +70,27 @@ bool Context::load( const KoXmlDocument &document ) {
         kError() << "No mime type specified!";
 //        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
-    } else if ( value != "application/x-vnd.kde.kplato" ) {
-        kError() << "Unknown mime type " << value;
+    } else if ( value != "application/x-vnd.kde.plan" ) {
+        if ( value == "application/x-vnd.kde.kplato" ) {
+            // accept, since we forgot to change kplato to plan for so long...
+        } else {
+            kError() << "Unknown mime type " << value;
 //        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
-        return false;
+            return false;
+        }
     }
-    QString m_syntaxVersion = elm.attribute( "version", "0.0" );
+/*    QString m_syntaxVersion = elm.attribute( "version", "0.0" );
     if ( m_syntaxVersion > "0.0" ) {
-/*        int ret = KMessageBox::warningContinueCancel(
+        int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
-                               "Opening it in this version of KPlato will lose some information.", m_syntaxVersion ),
+                               "Opening it in this version of Plan will lose some information.", m_syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             setErrorMessage( "USER_CANCELED" );
             return false;
-        }*/
+        }
     }
+*/
 /*
 #ifdef KOXML_USE_QDOM
     int numNodes = elm.childNodes().count();
@@ -108,15 +113,15 @@ bool Context::load( const KoXmlDocument &document ) {
 }
 
 QDomDocument Context::save( const View *view ) const {
-    QDomDocument document( "kplato.context" );
+    QDomDocument document( "plan.context" );
 
     document.appendChild( document.createProcessingInstruction(
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "context" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
     doc.setAttribute( "version", 0.0 );
     document.appendChild( doc );
 

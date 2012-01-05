@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=condenser-black
+Name[ca]=condensador-negre
 Name[el]=condenser-black
 Name[it]=condensatore-nero
 Name[nb]=kondensator-svart
@@ -7,6 +8,7 @@ Name[nl]=condenser-zwart
 Name[pl]=chłodnica-czarna
 Name[pt]=condensador-preto
 Name[pt_BR]=condensador preto
+Name[ru]=Конденсор (чёрный)
 Name[sv]=kylare-svart
 Name[uk]=Холодильник (чорний)
 Name[x-test]=xxcondenser-blackxx

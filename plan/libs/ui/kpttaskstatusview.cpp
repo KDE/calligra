@@ -47,6 +47,7 @@
 #include <QItemSelection>
 #include <QApplication>
 #include <QResizeEvent>
+#include <QTimer>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -470,7 +471,6 @@ void ProjectStatusView::setupGui()
 
 void ProjectStatusView::slotOptions()
 {
-    kDebug();
     ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -555,13 +555,21 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     dateEdit->setDate( QDate::currentDate() );
     connect(dateEdit, SIGNAL(dateChanged(const QDate &)), SLOT(slotUpdate()));
 #endif
+    QAbstractItemModel *m = ui_performancetable->model();
+    m->setHeaderData( 0, Qt::Horizontal, ToolTip::nodeBCWS(), Qt::ToolTipRole );
+    m->setHeaderData( 1, Qt::Horizontal, ToolTip::nodeBCWP(), Qt::ToolTipRole );
+    m->setHeaderData( 2, Qt::Horizontal, ToolTip::nodeACWP(), Qt::ToolTipRole );
+    m->setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ), Qt::ToolTipRole );
+    m->setHeaderData( 4, Qt::Horizontal, ToolTip::nodePerformanceIndex(), Qt::ToolTipRole );
 
-    labelBCWS->setToolTip( ToolTip::nodeBCWS() );
-    labelBCWP->setToolTip( ToolTip::nodeBCWP() );
-    labelACWP->setToolTip( ToolTip::nodeACWP() );
-
-    labelCPI->setToolTip( i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ) );
-    labelSPI->setToolTip( ToolTip::nodePerformanceIndex() );
+    for ( int r = 0; r < ui_performancetable->verticalHeader()->count(); ++r ) {
+        for ( int c = 0; c < ui_performancetable->horizontalHeader()->count(); ++c ) {
+            QTableWidgetItem *itm = ui_performancetable->item( r, c );
+            Q_ASSERT( itm );
+            itm->setFlags( Qt::ItemIsEnabled );
+            kDebug()<<itm<<itm->flags();
+        }
+    }
 
     BackgroundAttributes backgroundAttrs( ui_chart->backgroundAttributes() );
     backgroundAttrs.setVisible( true );
@@ -606,6 +614,8 @@ void PerformanceStatusBase::setChartInfo( const PerformanceChartInfo &info )
 
 void PerformanceStatusBase::refreshChart()
 {
+    valuesFrame->resize( QSize() );
+
     // NOTE: Force grid/axis recalculation, couldn't find a better way :(
     QResizeEvent event( ui_chart->size(), QSize() );
     QApplication::sendEvent( ui_chart, &event );
@@ -743,22 +753,24 @@ void PerformanceStatusBase::setupChart()
 
 void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 {
-    labelEffort->setVisible( visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
+/*    labelEffort->setVisible( visible );
     bcwsEffort->setVisible( visible );
     bcwpEffort->setVisible( visible );
     acwpEffort->setVisible( visible );
     spiEffort->setVisible( visible );
-    cpiEffort->setVisible( visible );
+    cpiEffort->setVisible( visible );*/
 }
 
 void PerformanceStatusBase::setCostValuesVisible( bool visible )
 {
-    labelCost->setVisible( visible );
+    ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
+/*    labelCost->setVisible( visible );
     bcwsCost->setVisible( visible );
     bcwpCost->setVisible( visible );
     acwpCost->setVisible( visible );
     spiCost->setVisible( visible );
-    cpiCost->setVisible( visible );
+    cpiCost->setVisible( visible );*/
 }
 
 void PerformanceStatusBase::setupChart( ChartContents &cc )
@@ -920,14 +932,16 @@ void PerformanceStatusBase::drawValues()
 #ifdef KPLATODEBUG
     date = dateEdit->date();
 #endif
+    QAbstractItemModel *m = ui_performancetable->model();
 
     const EffortCostMap &budget = m_chartmodel.bcwp();
     const EffortCostMap &actual = m_chartmodel.acwp();
 
+    // cost based
     double bc = budget.costTo( date );
-    bcwsCost->setText( locale->formatMoney( bc ) );
-    bcwpCost->setText( locale->formatMoney( budget.bcwpCost( date ) ) );
-    acwpCost->setText( locale->formatMoney( actual.costTo( date ) ) );
+    m->setData( m->index( 0, 0 ), locale->formatMoney( bc ) );
+    m->setData( m->index( 0, 1 ), locale->formatMoney( budget.bcwpCost( date ) ) );
+    m->setData( m->index( 0, 2 ), locale->formatMoney( actual.costTo( date ) ) );
 
     double spi_ = 0.0;
     if ( bc > 0.0 ) {
@@ -937,24 +951,29 @@ void PerformanceStatusBase::drawValues()
     if ( actual.costTo( date ) > 0.0 ) {
         cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
     }
-    spiCost->setText( locale->formatNumber( spi_ ) );
-    cpiCost->setText( locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 0, 3 ), locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 0, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
+    m->setData( m->index( 0, 4 ), locale->formatNumber( spi_ ) );
+    m->setData( m->index( 0, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
 
+    // effort based
     double bh = budget.hoursTo( date );
-    bcwsEffort->setText( locale->formatNumber( bh ) );
-    bcwpEffort->setText( locale->formatNumber( budget.bcwpEffort( date ) ) );
-    acwpEffort->setText( locale->formatNumber( actual.hoursTo( date ) ) );
+    m->setData( m->index( 1, 0 ), locale->formatNumber( bh, 1 ) );
+    m->setData( m->index( 1, 1 ), locale->formatNumber( budget.bcwpEffort( date ), 1 ) );
+    m->setData( m->index( 1, 2 ), locale->formatNumber( actual.hoursTo( date ), 1 ) );
 
     spi_ = 0.0;
     if ( bh > 0.0 ) {
         spi_ = budget.bcwpEffort( date ) / bh;
     }
     cpi_ = 0.0;
-    if ( actual.costTo( date ) > 0.0 ) {
-        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
+    if ( actual.effortTo( date ) > 0.0 ) {
+        cpi_ = budget.bcwpEffort( date ) / actual.hoursTo( date );
     }
-    spiEffort->setText( locale->formatNumber( spi_ ) );
-    cpiEffort->setText( locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 1, 3 ), locale->formatNumber( cpi_ ) );
+    m->setData( m->index( 1, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
+    m->setData( m->index( 1, 4 ), locale->formatNumber( spi_ ) );
+    m->setData( m->index( 1, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
 }
 
 
@@ -1016,6 +1035,8 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     addWidget( m_chart );
 
     connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+
+    QTimer::singleShot( 0, this, SLOT(resizeSplitters()) );
 }
 
 void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, const QItemSelection& )
@@ -1077,6 +1098,25 @@ void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
 KoPrintJob *PerformanceStatusTreeView::createPrintJob( ViewBase *view )
 {
     return m_chart->createPrintJob( view );
+}
+
+// hackish way to get resonable initial splitter sizes
+void PerformanceStatusTreeView::resizeSplitters()
+{
+    int x1 = sizes().value( 0 );
+    int x2 = sizes().value( 1 );
+    if ( x1 == 0 && x2 == 0 ) {
+        // not shown yet, try later
+        QTimer::singleShot( 100, this, SLOT(resizeSplitters()) );
+        return;
+    }
+    if ( x1 == 0 || x2 == 0 ) {
+        // one is hidden, do nothing
+        return;
+    }
+    int tot = x1 + x2;
+    x1 = qMax( x1, qMin( ( tot ) / 2, 150 ) );
+    setSizes( QList<int>() << x1 << ( tot - x1 ) );
 }
 
 //-----------------------------------

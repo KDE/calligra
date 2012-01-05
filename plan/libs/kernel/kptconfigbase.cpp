@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QBrush>
 #include <QColor>
+#include <QFontMetrics>
 
 namespace KPlato
 {

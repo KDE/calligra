@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qbuffer.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QHash>
 
@@ -162,6 +161,17 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
     return *m_pixmap;
 }
 
+/*! @return Extension for QPixmap::save() from @a mimeType.
+    @todo default PNG ok? */
+static QString formatFromMimeType(const QString& mimeType, const QString& defaultType = "PNG")
+{
+    const KMimeType::Ptr mime = KMimeType::mimeType(mimeType);
+    if (mime.isNull()) {
+        return defaultType;
+    }
+    return mime->mainExtension().mid(1); // without '.'
+}
+
 QByteArray KexiBLOBBuffer::Item::data() const
 {
     if (!m_data->isEmpty())
@@ -174,8 +184,15 @@ QByteArray KexiBLOBBuffer::Item::data() const
         //convert pixmap to byte array
         //(do it only on demand)
         QBuffer buffer(m_data);
-        buffer.open(QIODevice::WriteOnly);
-        m_pixmap->save(&buffer, mimeType.isEmpty() ? "PNG"/*! @todo default? */ : mimeType.toLatin1());
+        if (!buffer.open(QIODevice::WriteOnly)) {
+            //! @todo err msg
+            kWarning() << "!QBuffer::open()";
+        }
+        if (!m_pixmap->save(&buffer, formatFromMimeType(mimeType).toLatin1()))
+        {
+            //! @todo err msg
+            kWarning() << "!QPixmap::save()";
+        }
     }
     return *m_data;
 }

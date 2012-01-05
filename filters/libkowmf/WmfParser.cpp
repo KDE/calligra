@@ -1039,9 +1039,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                         stream >> arg;
                         if (dibToBmp(bmpSrc, stream, (size - 5) * 2)) {
-                            // FIXME: Do we unnecessarily take a detour over a QPixmap here?
-                            handle->image = QPixmap::fromImage(bmpSrc);
-                            handle->brush.setTexture(handle->image);
+                            handle->image = bmpSrc;
+                            handle->brush.setTextureImage(handle->image);
                         } else {
                             kDebug(31000) << "WmfParser::dibCreatePatternBrush : incorrect DIB image";
                         }

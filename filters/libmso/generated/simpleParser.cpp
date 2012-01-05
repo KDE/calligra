@@ -10375,17 +10375,21 @@ void MSO::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDat
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0xF9E)&&(_choice.recLen == 4))) {
-        _s.anon = TextClientDataSubContainerOrAtom::choice948925432(new OutlineTextRefAtom(&_s));
+    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xF9E)&&(_choice.recLen == 4))) {
+        _s.anon = TextClientDataSubContainerOrAtom::choice4230039514(new OutlineTextRefAtom(&_s));
         parseOutlineTextRefAtom(in, *(OutlineTextRefAtom*)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2 || _choice.recInstance == 3 || _choice.recInstance == 4 || _choice.recInstance == 5)&&(_choice.recType == 0xF9F)&&(_choice.recLen == 4))) {
-        _s.anon = TextClientDataSubContainerOrAtom::choice948925432(new TextContainer(&_s));
+    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2 || _choice.recInstance == 3 || _choice.recInstance == 4 || _choice.recInstance == 5)&&(_choice.recType == 0xF9F)&&(_choice.recLen == 4))) {
+        _s.anon = TextClientDataSubContainerOrAtom::choice4230039514(new TextContainer(&_s));
         parseTextContainer(in, *(TextContainer*)_s.anon.data());
     }
-    if (startPos == in.getPosition()) {
-        _s.anon = TextClientDataSubContainerOrAtom::choice948925432(new TextRulerAtom(&_s));
+    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFA6))) {
+        _s.anon = TextClientDataSubContainerOrAtom::choice4230039514(new TextRulerAtom(&_s));
         parseTextRulerAtom(in, *(TextRulerAtom*)_s.anon.data());
+    }
+    if (startPos == in.getPosition()) {
+        _s.anon = TextClientDataSubContainerOrAtom::choice4230039514(new MouseClickTextInfo(&_s));
+        parseMouseClickTextInfo(in, *(MouseClickTextInfo*)_s.anon.data());
     }
 }
 void MSO::parseTextPFRun(LEInputStream& in, TextPFRun& _s) {
@@ -13126,6 +13130,28 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
             in.rewind(_m);
         } catch(EOFException _e) {
             _s.shapeTertiaryOptions2.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    try {
+        OfficeArtRecordHeader _optionCheck(&_s);
+        parseOfficeArtRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0x3)&&(_optionCheck.recType == 0x0F00B);
+    } catch(EOFException _e) {
+        _possiblyPresent = false;
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.shapePrimaryOptions2 = QSharedPointer<OfficeArtFOPT>(new OfficeArtFOPT(&_s));
+            parseOfficeArtFOPT(in, *_s.shapePrimaryOptions2.data());
+        } catch(IncorrectValueException _e) {
+            _s.shapePrimaryOptions2.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.shapePrimaryOptions2.clear();
             in.rewind(_m);
         }
     }

@@ -1293,6 +1293,11 @@ void TaskWorkPackageView::setGuiActive( bool activate )
     }
 }
 
+void TaskWorkPackageView::slotRefreshView()
+{
+    emit checkForWorkPackages();
+}
+
 void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
     kDebug()<<curr.row()<<","<<curr.column();
@@ -1410,7 +1415,7 @@ void TaskWorkPackageView::slotMailWorkpackage()
     QList<Node*> lst = selectedNodes();
     if ( ! lst.isEmpty() ) {
         // TODO find a better way to log to avoid undo/redo
-        m_cmd = new MacroCommand( "Log Send Workpackages" );
+        m_cmd = new MacroCommand( i18nc( "(qtundo-format)", "Log Send Workpackage" ) );
         WorkPackageSendDialog *dlg = new WorkPackageSendDialog( lst, scheduleManager(), this );
         connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ) );
 

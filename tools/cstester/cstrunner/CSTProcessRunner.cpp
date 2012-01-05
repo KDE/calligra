@@ -31,6 +31,10 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
 : m_resultDir(resultDir)
 , m_concurrentProcesses(concurrentProcesses)
 {
+    if (!QDir::current().exists(resultDir)) {
+        qWarning() << "Creating result directory " << resultDir;
+        QDir::current().mkdir(resultDir);
+    }
     QDir docDir(documentDir);
     QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
     foreach(const QFileInfo &entry, list) {
@@ -57,6 +61,19 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
     QProcess *process = qobject_cast<QProcess *>(sender());
     if (process) {
         QString &document = m_processes[process];
+
+        if (process->exitStatus() != QProcess::NormalExit) {
+            qWarning() << "Process exited with errors";
+            if (process->error() == QProcess::FailedToStart) {
+                qWarning() << "It did not even start !";
+                if (!document.isEmpty()) {
+                    qWarning() << "Check for your path : does it contain " << PROGRAM;
+                } else {
+                    qWarning() << "Check for your path : does it contain cstmd5gen.sh";
+                }
+            }
+        }
+
         if (!document.isEmpty()) {
             qDebug() << "finished:" << process << document << exitCode << exitStatus;
             if (exitCode != 0) {

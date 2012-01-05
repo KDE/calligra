@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Car
 Name[bg]=Кола
+Name[ca]=Cotxe
 Name[cs]=Auto
 Name[el]=Car
 Name[es]=Coche
@@ -12,7 +13,9 @@ Name[nl]=Auto
 Name[pl]=Pojazd
 Name[pt]=Carro
 Name[pt_BR]=Carro
+Name[ru]=Машина
 Name[sv]=Bil
 Name[uk]=Машина
 Name[x-test]=xxCarxx
+Name[zh_CN]=车
 Name[zh_TW]=車

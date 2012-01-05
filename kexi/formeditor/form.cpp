@@ -2581,7 +2581,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QPoint pos;
     switch (target) {
     case FormContextMenuTarget: {
-        pos = container->widget()->mapToGlobal(w->pos() + menuPos);
+        pos = w->mapToGlobal(menuPos);
         d->insertionPoint = menuPos;
         break;
     }
@@ -2592,6 +2592,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     }
 
+    //kDebug() << w << container->widget() << "menuPos=" << menuPos << "pos=" << pos;
     QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
@@ -3467,7 +3468,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
 
         connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(textedit, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     } else {
         KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
@@ -3481,7 +3482,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         editor->selectAll();
         connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }
     d->inlineEditor->installEventFilter(this);
     d->inlineEditor->setFont(args.widget->font());
@@ -3529,7 +3530,11 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->editedWidgetClass = args.classname;
     d->originalInlineText = args.text;
 
-    changeInlineTextInternal(args.text); // to update size of the widget
+    d->slotPropertyChangedEnabled = false;
+    InlineTextEditingCommand command( // to update size of the widget
+        *this, selectedWidget(), d->editedWidgetClass, args.text);
+    command.execute();
+    d->slotPropertyChangedEnabled = true;
 }
 
 //moved from WidgetFactory
@@ -3760,7 +3765,15 @@ void Form::resetInlineEditor()
         }
     }
     if (ed) {
-        changeInlineTextInternal(inlineEditorText());
+        d->slotPropertyChangedEnabled = false;
+        InlineTextEditingCommand command(
+            *this, selectedWidget(), d->editedWidgetClass, inlineEditorText());
+        command.execute();
+        d->slotPropertyChangedEnabled = true;
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    if (ed) {
         disconnect(ed, 0, this, 0);
         ed->deleteLater();
     }
@@ -3774,8 +3787,6 @@ void Form::resetInlineEditor()
     if (handles) {
         handles->setEditingMode(false);
     }
-    d->inlineEditor = 0;
-    d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
 //2.0    setInlineEditor(widget, 0);
 //2.0    setWidget(0, 0);

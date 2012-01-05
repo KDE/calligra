@@ -1,15 +1,17 @@
 [Desktop Entry]
 Name=Node Center
+Name[ca]=Centre de nodes
 Name[de]=Knotenzentrum
 Name[el]=Κέντρο κόμβου
 Name[et]=Sõlme keskus
+Name[it]=Centro del nodo
 Name[nb]=Nodesenter
 Name[nl]=Geleding centrum
 Name[pl]=Centrum węzła
 Name[pt]=Centro do Nó
 Name[pt_BR]=Centro Nodal
+Name[ru]=Центр узлов
 Name[sv]=Nodcentral
 Name[uk]=Центр вузла
 Name[x-test]=xxNode Centerxx
-Name[zh_CN]=节点中心
 Name[zh_TW]=節點中心

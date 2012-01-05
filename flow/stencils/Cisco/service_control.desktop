@@ -2,11 +2,14 @@
 Name=Service Control
 Name[ca]=Control de servei
 Name[el]=Service Control
+Name[it]=Controllo di servizio
 Name[nb]=Tjenestestyring
 Name[pl]=Kontrola usługi
 Name[pt]=Controlo de Serviços
 Name[pt_BR]=Controle de serviço
+Name[ru]=Обслуживающая точка
 Name[sv]=Tjänststyrning
 Name[uk]=Точка обслуговування
 Name[x-test]=xxService Controlxx
+Name[zh_CN]=服务控制
 Name[zh_TW]=服務控制

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Ground
 Name[bg]=Заземяване
+Name[ca]=Terre
 Name[cs]=Zem
 Name[de]=Masse
 Name[el]=Γείωση
@@ -11,6 +12,7 @@ Name[nl]=Aarde
 Name[pl]=Uziemienie
 Name[pt]=Terra
 Name[pt_BR]=Terreno
+Name[ru]=Земля
 Name[sv]=Jord
 Name[uk]=Земля
 Name[x-test]=xxGroundxx

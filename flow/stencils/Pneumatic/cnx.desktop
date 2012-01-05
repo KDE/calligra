@@ -1,13 +1,16 @@
 [Desktop Entry]
 Name=connpoint
 Name[bg]=точка на свързване
+Name[ca]=connpoint
 Name[cs]=Access
 Name[el]=connpoint
 Name[et]=ühenduspunkt
+Name[it]=connpoint
 Name[nb]=kobl.punkt
 Name[pl]=puntkpołączenia
 Name[pt]=ponto-ligação
 Name[pt_BR]=ponto de conexão
+Name[ru]=точка соединения
 Name[sv]=anslutningspunkt
 Name[uk]=Точка з’єднання
 Name[x-test]=xxconnpointxx
