@@ -1625,10 +1625,21 @@ void KexiCSVImportDialog::accept()
     project->addStoredItem(part->info(), partItemForSavedTable);
 
     QDialog::accept();
-    KMessageBox::information(this,
-                             i18n("Data has been successfully imported to table \"%1\".",
-                                  m_destinationTableSchema->name()));
+    msgboxResult = KMessageBox::questionYesNo(this,
+                       i18n("Data has been successfully imported to table \"%1\".",
+                            m_destinationTableSchema->name()),
+//! @todo 2.5 add title "Successfull import"
+                       QString(),
+//! @todo 2.5 change to "Open Imported Table"
+                       KStandardGuiItem::open(),
+                       KStandardGuiItem::close());
+
     parentWidget()->raise();
+    if (msgboxResult == KMessageBox::Yes) {
+        bool openingCancelled;
+        KexiMainWindowIface::global()->openObject(partItemForSavedTable,
+                                                  Kexi::DataViewMode, openingCancelled);
+    }
     m_conn = 0;
 }
 
