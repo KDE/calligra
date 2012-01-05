@@ -238,17 +238,6 @@ void KoTextWriter::Private::saveChange(int changeId)
 
 //---------------------------- PRIVATE -----------------------------------------------------------
 
-void KoTextWriter::Private::saveChange(QTextCharFormat format)
-{
-    if (!changeTracker /*&& changeTracker->isEnabled()*/)
-        return;//The change tracker exist and we are allowed to save tracked changes
-
-    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-    if (changeId) { //There is a tracked change
-        saveChange(changeId);
-    }
-}
-
 void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 {
     if (!changeTracker /*&& changeTracker->isEnabled()*/)

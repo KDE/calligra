@@ -156,7 +156,6 @@ private:
         TableCell
     };
 
-    void saveChange(QTextCharFormat format);
 
     void saveODF12Change(QTextCharFormat format);
     QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
