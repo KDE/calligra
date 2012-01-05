@@ -68,7 +68,9 @@ void KWFrameDialog::okClicked()
 {
     if (m_frameConnectSelector)
         m_frameConnectSelector->save();
+    
     m_generalFrameProperties->save();
+    m_anchoringProperties->save();
     m_runAroundProperties->save();
 }
 

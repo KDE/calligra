@@ -28,6 +28,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
+#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -134,7 +135,9 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    KoTextAnchor *anchorForSelectedFrame(bool create);
+    /// loops over the selected shapes and returns the frames that go with them.
+    QList<KWFrame*> selectedFrames() const;
+    KoShape *getSelectedShape() const;
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -211,10 +214,6 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
-private:
-
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
 
 private:
     KWGui *m_gui;

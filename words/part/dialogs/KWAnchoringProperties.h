@@ -71,7 +71,7 @@ private:
     QButtonGroup *m_vertPosGroup;
     QButtonGroup *m_horizPosGroup;
     QList<KWFrame*> m_frames;
-    QList<KoTextAnchor *> m_anchors;
+//     QList<KoTextAnchor *> m_anchors;
     KoShape *m_shape;
     int m_anchorType;
     int m_vertPos;

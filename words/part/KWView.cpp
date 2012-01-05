@@ -42,10 +42,12 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
+#include "commands/KWShapeCreateCommand.h"
 #include <KoShapeReorderCommand.h>
 #include "ui_KWInsertImage.h"
 
 // calligra libs includes
+#include <KoShapeCreateCommand.h>
 #include <calligraversion.h>
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
@@ -54,7 +56,6 @@
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
-#include <KoShapeCreateCommand.h>
 #include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
@@ -103,27 +104,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <KParts/PartManager>
-
-static KWFrame *frameForShape(KoShape *shape)
-{
-    while (shape) {
-        KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
-        if (answer)
-            return answer;
-        if (shape->parent() == 0)
-            break;
-        shape = shape->parent();
-    }
-
-    KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (answer == 0) { // this may be a clipping shape containing the frame-shape
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-        if (container && container->shapeCount() == 1) {
-            answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
-        }
-    }
-    return answer;
-}
 
 KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
@@ -614,11 +594,24 @@ QList<KWFrame*> KWView::selectedFrames() const
 {
     QList<KWFrame*> frames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes()) {
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         Q_ASSERT(frame);
         frames.append(frame);
     }
     return frames;
+}
+
+KoShape* KWView::getSelectedShape() const
+{
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
+    
+    foreach (KoShape *s, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+        if (s->isGeometryProtected())
+            continue;
+        return s;
+    }
+
+    return 0;
 }
 
 // -------------------- Actions -----------------------
@@ -661,7 +654,7 @@ void KWView::addBookmark()
     shape = selection->firstSelectedShape();
     if (shape == 0) return; // no shape selected
 
-    KWFrame *frame = frameForShape(shape);
+    KWFrame *frame = kwdocument()->getFrameOfShape(shape);
     Q_ASSERT(frame);
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
     if (fs == 0) return;
@@ -761,7 +754,7 @@ void KWView::editDeleteFrame()
 {
     QList<KoShape*> frames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
             if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
@@ -856,107 +849,62 @@ void KWView::editSemanticStylesheets()
 #endif
 }
 
-KoTextAnchor *KWView::anchorForSelectedFrame(bool create)
-{
-    Q_ASSERT(kwdocument()->mainFrameSet());
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-
-    KoShape *targetShape = 0;
-    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (shape->isGeometryProtected())
-            continue;
-        targetShape = shape;
-        break; // TODO group before...
-    }
-    if (targetShape == 0) {
-        kDebug(32001) << "bailing out...no shape to anchor";
-        return 0;
-    }
-
-    //try and find out if targetShape is already anchored
-    KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-        if (anchor && anchor->shape() == targetShape) {
-            return anchor;
-        }
-    }
-
-    if (create) {
-        selection->deselectAll();
-        KWFrame *frameForAnchor = 0;
-        int area = 0;
-        QRectF br = targetShape->boundingRect();
-        // now find the frame that is closest to the frame we want to inline.
-        foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
-            QRectF intersection = br.intersected(frame->shape()->boundingRect());
-            int intersectArea = qRound(intersection.width() * intersection.height());
-            if (intersectArea > area) {
-                frameForAnchor = frame;
-                area = intersectArea;
-            } else if (frameForAnchor == 0) {
-                // TODO check distance between frames or something.
-            }
-        }
-
-        if (frameForAnchor == 0) {/* can't happen later on... */
-            kDebug(32001) << "bailing out...no shape to anchor to";
-            return 0;
-        }
-
-
-        QPointF absPos = targetShape->absolutePosition();
-        targetShape->setParent(static_cast<KoShapeContainer*>(frameForAnchor->shape()));
-        targetShape->setAbsolutePosition(absPos);
-
-        KoTextAnchor *anchor = new KoTextAnchor(targetShape);
-
-        selection->select(frameForAnchor->shape());
-
-        KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-        Q_ASSERT(editor);
-
-        editor->insertInlineObject(anchor);
-        return anchor;
-    }
-    return 0;
-}
-
 void KWView::anchorAsChar()
 {
-    KoTextAnchor *anchor = anchorForSelectedFrame(true);
+    KoShape *shape = getSelectedShape();
 
-    if (anchor) {
-        anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
-        anchor->shape()->notifyChanged();
+    if (shape) {
+        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
+
+        if (anchor) {
+            anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
+            anchor->shape()->notifyChanged();
+        }
     }
 }
 
 void KWView::anchorToChar()
 {
-    KoTextAnchor *anchor = anchorForSelectedFrame(true);
-
-    if (anchor) {
-        anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
-        anchor->shape()->notifyChanged();
+    KoShape *shape = getSelectedShape();
+    
+    if (shape) {
+        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
+        
+        if (anchor) {
+            anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
+            anchor->shape()->notifyChanged();
+        }
     }
 }
 
 void KWView::anchorToParagraph()
 {
-    anchorToChar(); //FIXME library code doesn't support this fully yet so just do char
+    KoShape *shape = getSelectedShape();
+    
+    if (shape) {
+        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
+        
+        if (anchor) {
+            anchor->setAnchorType(KoTextAnchor::AnchorParagraph);
+            anchor->shape()->notifyChanged();
+        }
+    }
 }
 
 void KWView::anchorToPage()
 {
-    KoTextAnchor *anchor = anchorForSelectedFrame(false);
-
-    if (anchor) {
-        m_document->inlineTextObjectManager()->removeInlineObject(anchor);
-        anchor->shape()->notifyChanged();
+    KoShape *shape = getSelectedShape();
+    
+    if (shape) {
+        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, false);
+        
+        if (anchor) {
+            m_document->inlineTextObjectManager()->removeInlineObject(anchor);
+            anchor->setAnchorType(KoTextAnchor::AnchorPage);
+            anchor->shape()->notifyChanged();
+        }
     }
 }
-
 
 void KWView::showStatisticsDialog()
 {
@@ -1045,7 +993,7 @@ void KWView::createFrameClipping()
 {
     QSet<KWFrame *> clipFrames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent() == 0)
             clipFrames << frame;
@@ -1060,7 +1008,7 @@ void KWView::removeFrameClipping()
 {
     QSet<KWFrame *> unClipFrames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent())
             unClipFrames << frame;
@@ -1104,7 +1052,7 @@ void KWView::selectionChanged()
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
         setCurrentPage(m_document->pageManager()->page(shape));
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (fs)
             m_actionAddBookmark->setEnabled(true);
@@ -1118,7 +1066,7 @@ void KWView::selectionChanged()
     if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
 
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
+        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
         Q_ASSERT(frame);
         QVariant variant;
         variant.setValue<void*>(frame);
@@ -1442,7 +1390,8 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             shape->setTextRunAroundThreshold(threshold);
         }
 
-        double distance = uiInsertImage.distance->value();
+        KoTextAnchor *anchor   = 0;
+        double        distance = uiInsertImage.distance->value();
         shape->setTextRunAroundDistance(distance);
 
         // only if we have a text shape, we will anchor to the text inside.
@@ -1450,7 +1399,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
             // Create the anchor
             QTextDocument *qdoc = textShapeData->document();
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
+            anchor = new KoTextAnchor(shape);
 
             // anchor
             // XXX: What about: HFrame, HFrameContent, HFrameEndMargin, HFrameStartMargin?
@@ -1520,18 +1469,18 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
             selection->select(shape);
             m_canvas->addCommand(macro);
 
+            kwdocument()->getFrameOfShape(shape)->setAnchor(anchor);
         }
         else {
             shape->setPosition(pos);
             pos += QPointF(25,25); // increase the position for each shape we insert so the
                                    // user can see them all.
-            // add the shape floating, like in stage
-            KUndo2Command *cmd = m_canvas->shapeController()->addShapeDirect(shape);
-            if (cmd) {
-                KoSelection *selection = m_canvas->shapeManager()->selection();
-                selection->deselectAll();
-                selection->select(shape);
-            }
+
+            // create the undo step.
+            KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
+            KoSelection *selection = m_canvas->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
             m_canvas->addCommand(cmd);
         }
     }
