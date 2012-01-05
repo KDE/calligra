@@ -55,8 +55,8 @@ public:
     QString insert(const KoGenChange &change, const QString &name = QString());
 
     /**
-     * Return the entire collection of styles
-     * Use this for saving the styles
+     * Return the entire collection of changes
+     * Use this for saving the changes
      */
     QMap<KoGenChange, QString> changes() const;
 
