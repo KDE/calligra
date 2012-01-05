@@ -120,11 +120,15 @@ SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-SET (interfaces_DIR_SRCS
-    interfaces/MapAdaptor.cpp
-    interfaces/SheetAdaptor.cpp
-    interfaces/ViewAdaptor.cpp
-    )
+IF(ANDROID)
+   SET (interface_DIR_SRCS "")
+ELSE(ANDROID)
+   SET (interfaces_DIR_SRCS
+       interfaces/MapAdaptor.cpp
+       interfaces/SheetAdaptor.cpp
+       interfaces/ViewAdaptor.cpp
+       )
+ENDIF(ANDROID)
 
 SET (part_DIR_SRCS
     part/CanvasBase.cpp
@@ -279,10 +283,12 @@ target_link_libraries(calligratablescommon
     komain
     calligratablesodf
     ${QT_QTSQL_LIBRARY}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
+if(NOT ANDROID)
+    target_link_libraries(calligratablescommon ${KDE4_KNOTIFYCONFIG_LIBS} )
+endif()
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligratablescommon ${KDE4_KCMUTILS_LIBS} )
 else()
