@@ -363,34 +363,6 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 #endif
 
-    KActionMenu *anchorActionMenu = new KActionMenu(i18n("Anchor"), this);
-    QActionGroup *anchoringActionGroup = new QActionGroup(this);
-    anchoringActionGroup->setExclusive(true);
-    action = new KToggleAction(i18n("As Character"), this);
-    action->setToolTip(i18n("Anchor the current shape as a character in the text"));
-    anchorActionMenu->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
-    action->setActionGroup(anchoringActionGroup);
-
-    action = new KToggleAction(i18n("To Character"), this);
-    action->setToolTip(i18n("Anchor the current shape to the character at the current position"));
-    anchorActionMenu->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(anchorToChar()));
-    action->setActionGroup(anchoringActionGroup);
-
-    action = new KToggleAction(i18n("To Paragraph"), this);
-    action->setToolTip(i18n("Anchor the current shape to current paragraph"));
-    anchorActionMenu->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(anchorToParagraph()));
-    action->setActionGroup(anchoringActionGroup);
-
-    action = new KToggleAction(i18n("To Page"), this);
-    action->setToolTip(i18n("Anchor the current shape to current page"));
-    anchorActionMenu->addAction(action);
-    connect(action, SIGNAL(triggered()), this, SLOT(anchorToPage()));
-    action->setActionGroup(anchoringActionGroup);
-    actionCollection()->addAction("anchor", anchorActionMenu);
-
     action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
@@ -594,17 +566,17 @@ QList<KWFrame*> KWView::selectedFrames() const
 {
     QList<KWFrame*> frames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes()) {
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         Q_ASSERT(frame);
         frames.append(frame);
     }
     return frames;
 }
 
-KoShape* KWView::getSelectedShape() const
+KoShape* KWView::selectedShape() const
 {
     KoSelection *selection = canvasBase()->shapeManager()->selection();
-    
+
     foreach (KoShape *s, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         if (s->isGeometryProtected())
             continue;
@@ -618,7 +590,7 @@ KoShape* KWView::getSelectedShape() const
 
 void KWView::editFrameProperties()
 {
-    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
+    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -654,7 +626,7 @@ void KWView::addBookmark()
     shape = selection->firstSelectedShape();
     if (shape == 0) return; // no shape selected
 
-    KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+    KWFrame *frame = kwdocument()->frameOfShape(shape);
     Q_ASSERT(frame);
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
     if (fs == 0) return;
@@ -754,7 +726,7 @@ void KWView::editDeleteFrame()
 {
     QList<KoShape*> frames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
             if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
@@ -849,63 +821,6 @@ void KWView::editSemanticStylesheets()
 #endif
 }
 
-void KWView::anchorAsChar()
-{
-    KoShape *shape = getSelectedShape();
-
-    if (shape) {
-        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
-
-        if (anchor) {
-            anchor->setAnchorType(KoTextAnchor::AnchorAsCharacter);
-            anchor->shape()->notifyChanged();
-        }
-    }
-}
-
-void KWView::anchorToChar()
-{
-    KoShape *shape = getSelectedShape();
-    
-    if (shape) {
-        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
-        
-        if (anchor) {
-            anchor->setAnchorType(KoTextAnchor::AnchorToCharacter);
-            anchor->shape()->notifyChanged();
-        }
-    }
-}
-
-void KWView::anchorToParagraph()
-{
-    KoShape *shape = getSelectedShape();
-    
-    if (shape) {
-        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, true);
-        
-        if (anchor) {
-            anchor->setAnchorType(KoTextAnchor::AnchorParagraph);
-            anchor->shape()->notifyChanged();
-        }
-    }
-}
-
-void KWView::anchorToPage()
-{
-    KoShape *shape = getSelectedShape();
-    
-    if (shape) {
-        KoTextAnchor *anchor = kwdocument()->getAnchorOfShape(shape, false);
-        
-        if (anchor) {
-            m_document->inlineTextObjectManager()->removeInlineObject(anchor);
-            anchor->setAnchorType(KoTextAnchor::AnchorPage);
-            anchor->shape()->notifyChanged();
-        }
-    }
-}
-
 void KWView::showStatisticsDialog()
 {
     KWStatisticsDialog *dia = new KWStatisticsDialog(this);
@@ -993,7 +908,7 @@ void KWView::createFrameClipping()
 {
     QSet<KWFrame *> clipFrames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent() == 0)
             clipFrames << frame;
@@ -1008,7 +923,7 @@ void KWView::removeFrameClipping()
 {
     QSet<KWFrame *> unClipFrames;
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent())
             unClipFrames << frame;
@@ -1052,7 +967,7 @@ void KWView::selectionChanged()
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
         setCurrentPage(m_document->pageManager()->page(shape));
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (fs)
             m_actionAddBookmark->setEnabled(true);
@@ -1066,7 +981,7 @@ void KWView::selectionChanged()
     if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
 
     foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->getFrameOfShape(shape);
+        KWFrame *frame = kwdocument()->frameOfShape(shape);
         Q_ASSERT(frame);
         QVariant variant;
         variant.setValue<void*>(frame);
@@ -1335,7 +1250,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         // hard-coded constants.
         qreal pageWidth = currentPage().width();
         qreal pageHeight = currentPage().height();
-        
+
         if (shape->size().width() > (pageWidth * 0.8) || shape->size().height() > pageHeight) {
             QSizeF sz = shape->size();
             sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
@@ -1357,7 +1272,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         anchor->setHorizontalRel(KoTextAnchor::HPage);
         anchor->setVerticalRel(KoTextAnchor::VPage);
         shape->setPosition(pos);
-        
+
         pos += QPointF(25,25); // increase the position for each shape we insert so the
                                // user can see them all.
 

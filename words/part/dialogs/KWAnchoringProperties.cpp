@@ -25,6 +25,9 @@
 
 #include <KoTextAnchor.h>
 #include <KoInlineTextObjectManager.h>
+#include <commands/ChangeAnchorPropertiesCommand.h>
+
+#include <kundo2command.h>
 
 #include <QComboBox>
 
@@ -132,20 +135,28 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     m_horizPosGroup->addButton(widget.rHOffset);
     m_horizPosGroup->setId(widget.rHOffset, KoTextAnchor::HFromLeft);
     connect(m_horizPosGroup, SIGNAL(buttonClicked(int)), this, SLOT(horizPosChanged(int)));
+
+    connect(widget.cTopArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cVCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cRightArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cVOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+
+    connect(widget.cLeftArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cHCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cRightArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cHOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
 }
 
 void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
-    
-    KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
 
     GuiHelper::State anchorTypeHelper = GuiHelper::Unset;
     GuiHelper::State vertHelper = GuiHelper::Unset;
     GuiHelper::State horizHelper = GuiHelper::Unset;
     KoTextAnchor::AnchorType anchorType = KoTextAnchor::AnchorPage;
-    
+
     m_vertPos = -1;
     m_horizPos = -1;
     m_vertRel = -1;
@@ -155,7 +166,7 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
     foreach (KWFrame *frame, frames) {
         KoTextAnchor *anchor = frame->anchor();
         KoTextAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoTextAnchor::AnchorPage;
-        
+
         // FIXME these should fetch correct values if anchor == 0
         int vertPosOfFrame = anchor ? anchor->verticalPos() : KoTextAnchor::VFromTop;
         int horizPosOfFrame = anchor ? anchor->horizontalPos() : KoTextAnchor::HFromLeft;
@@ -298,6 +309,14 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
     m_vertPos = vertPos;
 }
 
+void KWAnchoringProperties::vertRelChanged(int index)
+{
+    if (m_anchorType == -1) {
+        return; //we should already be disabled
+    }
+    m_vertRel = vertRels[m_anchorType][index];
+}
+
 void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
 {
     if (m_anchorType == -1) {
@@ -377,6 +396,15 @@ void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
     m_horizPos = horizPos;
 }
 
+void KWAnchoringProperties::horizRelChanged(int index)
+{
+    if (m_anchorType == -1) {
+        return; //we should already be disabled
+    }
+    m_horizRel = horizRels[m_anchorType][index];
+}
+
+
 void KWAnchoringProperties::anchorTypeChanged(int type)
 {
     KoTextAnchor::AnchorType anchorType = KoTextAnchor::AnchorType(type);
@@ -409,6 +437,7 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
     horizRelStrings[12] = i18n("Left paragraph border"); // KoTextAnchor::HParagraphStartMargin
 
 
+    m_anchorType = -1;
     widget.cTopArea->clear();
     widget.cVCenterArea->clear();
     widget.cBottomArea->clear();
@@ -451,6 +480,11 @@ void KWAnchoringProperties::open(KoShape *shape)
 
 void KWAnchoringProperties::save()
 {
+    save(0);
+}
+
+void KWAnchoringProperties::save(KUndo2Command *macro)
+{
     if (m_frames.count() == 0) {
         KWFrame *frame = m_state->frame();
         if (frame == 0 && m_shape)
@@ -461,22 +495,33 @@ void KWAnchoringProperties::save()
     }
 
     KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
-    
+
     foreach (KWFrame *frame, m_frames) {
         if (m_anchorTypeGroup->checkedId() != -1) {
-            KoTextAnchor::AnchorType type   = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
-            KoTextAnchor            *anchor = 0;
+            KoTextAnchor::AnchorType type = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
+            KoTextAnchor *anchor = 0;
 
             if (type != KoTextAnchor::AnchorPage) {
-                anchor = m_state->document()->getAnchorOfShape(frame->shape(), true);
+                anchor = m_state->document()->anchorOfShape(frame->shape(), true);
             }
             else {
-                anchor = m_state->document()->getAnchorOfShape(frame->shape(), false);
+                anchor = m_state->document()->anchorOfShape(frame->shape(), true);
                 m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
             }
 
-            if (anchor) {
-                anchor->setAnchorType(KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId()));
+            if (macro) {
+                // create the actual undo step.
+                KoTextAnchor anchorProperties(0);
+                anchorProperties.setAnchorType(type);
+                anchorProperties.setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
+                anchorProperties.setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
+                anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
+                anchorProperties.setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
+
+                new ChangeAnchorPropertiesCommand(anchor, &anchorProperties, macro);
+            } else {
+                // no macro, then this is on creation and no undo step wanted.
+                anchor->setAnchorType(type);
                 anchor->setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
                 anchor->setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
                 anchor->setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));

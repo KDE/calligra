@@ -180,10 +180,10 @@ public:
 
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
-    
-    KoTextAnchor *getAnchorOfShape(KoShape *shape, bool create) const;
 
-    KWFrame *getFrameOfShape(KoShape *shape) const;
+    KoTextAnchor *anchorOfShape(KoShape *shape, bool create) const;
+
+    KWFrame *frameOfShape(KoShape *shape) const;
 
 public slots:
     /**

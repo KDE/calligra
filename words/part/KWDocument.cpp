@@ -825,12 +825,12 @@ KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
     KWFrame *result = 0;
     int      area   = 0;
     QRectF   br     = shape->boundingRect();
-    
+
     // now find the frame that is closest to the frame we want to inline.
     foreach (KWFrame *frame, mainFrameSet()->frames()) {
         QRectF intersection  = br.intersected(frame->shape()->boundingRect());
         int    intersectArea = qRound(intersection.width() * intersection.height());
-        
+
         if (intersectArea > area) {
             result = frame;
             area   = intersectArea;
@@ -838,15 +838,15 @@ KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
             // TODO check distance between frames or something.
         }
     }
-    
+
     return result;
 }
 
-KoTextAnchor* KWDocument::getAnchorOfShape(KoShape *shape, bool create) const
+KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape, bool create) const
 {
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
-    
+
     // try and find out if shape is already anchored    
     foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
@@ -854,10 +854,10 @@ KoTextAnchor* KWDocument::getAnchorOfShape(KoShape *shape, bool create) const
             return anchor;
         }
     }
-    
+
     if (create) {
         KWFrame *targetFrame = findClosestFrame(shape);
-        
+
         if (targetFrame == 0) {/* can't happen later on... */
             kDebug(32001) << "bailing out...no shape to anchor to";
             return 0;
@@ -867,28 +867,28 @@ KoTextAnchor* KWDocument::getAnchorOfShape(KoShape *shape, bool create) const
 
         if (!textData)
             return 0;
-        
+
         QPointF absPos = shape->absolutePosition();
         shape->setParent(static_cast<KoShapeContainer*>(targetFrame->shape()));
         shape->setAbsolutePosition(absPos);
-        
-        KWFrame      *frame  = getFrameOfShape(shape);
+
+        KWFrame *frame = frameOfShape(shape);
         KoTextAnchor *anchor = frame->anchor();
-        
+
         if (!anchor) {
             anchor = new KoTextAnchor(shape);
             frame->setAnchor(anchor);
         }
-        
+
         KoTextEditor editor(textData->document());
         editor.insertInlineObject(anchor);
         return anchor;
     }
-    
+
     return 0;
 }
 
-KWFrame *KWDocument::getFrameOfShape(KoShape* shape) const
+KWFrame *KWDocument::frameOfShape(KoShape* shape) const
 {
     while (shape) {
         KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
@@ -898,7 +898,7 @@ KWFrame *KWDocument::getFrameOfShape(KoShape* shape) const
             break;
         shape = shape->parent();
     }
-    
+
     KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
     if (answer == 0) { // this may be a clipping shape containing the frame-shape
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
@@ -906,7 +906,7 @@ KWFrame *KWDocument::getFrameOfShape(KoShape* shape) const
             answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
         }
     }
-    
+
     return answer;
 }
 

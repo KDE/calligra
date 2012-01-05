@@ -47,6 +47,8 @@ public:
     void open(KoShape *shape);
     /// reimplemented
     void save();
+    /// save but add to undo command if command != 0
+    void save(KUndo2Command *command);
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
@@ -56,7 +58,9 @@ public:
 private slots:
     void anchorTypeChanged(int anchorType);
     void vertPosChanged(int verticalAlign, QPointF offset = QPointF());
+    void vertRelChanged(int index);
     void horizPosChanged(int horizontalAlign, QPointF offset = QPointF());
+    void horizRelChanged(int index);
 
 private:
     static const int vertRels[4][20];

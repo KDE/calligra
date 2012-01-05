@@ -20,16 +20,20 @@
 
 #include "KWFrameDialog.h"
 
+#include <kundo2command.h>
+
 #include "KWShapeConfigFactory.h"
 #include "KWFrameConnectSelector.h"
 #include "KWRunAroundProperties.h"
 #include "KWGeneralFrameProperties.h"
 #include "KWAnchoringProperties.h"
+#include "KWCanvas.h"
 #include "frames/KWFrame.h"
 
-KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
-        : KPageDialog(parent),
-        m_frameConnectSelector(0)
+KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, KWCanvas *canvas)
+        : KPageDialog(canvas)
+        , m_frameConnectSelector(0)
+        , m_canvas(canvas)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
@@ -68,10 +72,15 @@ void KWFrameDialog::okClicked()
 {
     if (m_frameConnectSelector)
         m_frameConnectSelector->save();
-    
+
+    // create the master command
+    KUndo2Command *macro = new KUndo2Command(i18nc("(qtundo-format)", "Change Shape Properties"));
+
     m_generalFrameProperties->save();
-    m_anchoringProperties->save();
+    m_anchoringProperties->save(macro);
     m_runAroundProperties->save();
+
+    m_canvas->addCommand(macro);
 }
 
 void KWFrameDialog::cancelClicked()
