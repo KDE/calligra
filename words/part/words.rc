@@ -5,6 +5,7 @@
   <Separator/>
   <Action name="file_statistics" group="file_infos"/>
  </Menu>
+
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
@@ -17,9 +18,6 @@
   <Action name="edit_selectallframes"/>
   <Action name="edit_selectcurrentframe"/>
   <Action name="edit_delete"/>
-  <!--
-  <Action name="delete_page"/>
-  -->
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_findnext"/>
@@ -27,6 +25,7 @@
   <Action name="edit_replace"/>
   <Action name="select_bookmark"/>
  </Menu>
+
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
   <!-- Menu name="view_displaymodes"><text>&amp;Display Mode</text>
@@ -49,31 +48,21 @@
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
  </Menu>
- <Menu name="insert"><text context="Insert menu">&amp;Insert</text>
-  <!-- Inside the text, simple things (e.g. one char) -->
-  <Action name="insert_specialchar"/>
-  <Action name="insert_framebreak"/>
-  <!-- Code for horizontal line is broken
-  <Action name="insert_horizontal_line"/>
-  -->
-  <Separator/>
-  <!-- Inside the text, more -->
-  <Action name="insert_footendnote"/>
-  <Action name="insert_contents"/>
-  <Action name="insert_variable"/> <!-- menu -->
-  <Menu name="semantic_object_menu"><text>Semantic Object</text>
-    <Action name="insert_semanticobject_ref"/>
-    <Action name="insert_semanticobject_new"/> <!-- menu -->
-  </Menu>
-  <Action name="insert_expression"/> <!-- menu -->
-  <Action name="insert_link"/>
-  <Action name="insert_comment"/>
-  <Action name="insert_file"/>
-  <Action name="add_bookmark"/>
-  <Separator/>
-  <!-- Frames - the order matches the order of the keybindings -->
-  <Action name="insert_table"/>
+ 
+ <!--
+ <Menu name="semantic"><text">Semantics</text>
+  <Action name="insert_semanticobject_ref"/>
+  <Action name="insert_semanticobject_new"/>
+  <Action name="edit_semantic_stylesheets"/>
  </Menu>
+ -->
+ 
+ <!-- leftovers from insert menu - to be moved to texttool
+  <Action name="insert_framebreak"/>
+  <Action name="insert_link"/>
+  <Action name="add_bookmark"/>
+ -->
+
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="text_default"/>
   <Action name="format_font"/>
@@ -85,11 +74,11 @@
   <Action name="create_style"/>
   <Separator/>
   <Action name="format_page"/>
-  <Action name="edit_semantic_stylesheets"/>
   <Separator/>
   <Action name="format_header"/>
   <Action name="format_footer"/>
  </Menu>
+
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
@@ -110,6 +99,7 @@
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
+
 <ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>

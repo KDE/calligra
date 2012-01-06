@@ -41,7 +41,6 @@ class KoZoomController;
 class KoFindText;
 class KoRdfSemanticItem;
 class KoTextAnchor;
-class KActionMenu;
 
 class KToggleAction;
 /**
@@ -111,7 +110,6 @@ public:
 
 public slots:
     void offsetInDocumentMoved(int yOffset);
-    void variableChanged();
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
@@ -235,8 +233,6 @@ private:
     KToggleAction *m_actionViewHeader;
     KToggleAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
-
-    KActionMenu* m_actionMenu;
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
