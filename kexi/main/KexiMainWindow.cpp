@@ -1716,7 +1716,7 @@ tristate KexiMainWindow::closeProject()
     d->tabbedToolBar->hideTab("create");
     d->tabbedToolBar->hideTab("data");
     d->tabbedToolBar->hideTab("external");
-    //d->tabbedToolBar->hideTab("tools");
+    d->tabbedToolBar->hideTab("tools");
     d->tabbedToolBar->hideTab("form");
     d->tabbedToolBar->hideTab("report");
     return true;
