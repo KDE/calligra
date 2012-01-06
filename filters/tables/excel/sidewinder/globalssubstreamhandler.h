@@ -76,8 +76,6 @@ public:
     unsigned fontCount() const;//
     FontRecord fontRecord(unsigned index) const;  //
 
-    FormatFont convertedFont(unsigned index) const;
-
     unsigned xformatCount() const;//
     XFRecord xformat(unsigned index) const;  //
 

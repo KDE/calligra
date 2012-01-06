@@ -1745,7 +1745,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     TRY_READ_ATTR(anchor)
 
     if (!link_target.isEmpty() || !anchor.isEmpty()) {
-        body->startElement("text:a");
+        body->startElement("text:a", false);
         body->addAttribute("xlink:type", "simple");
         closeTag = true;
         if (!anchor.isEmpty())
@@ -2659,7 +2659,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     }
     if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
         if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->startElement("text:a");
+            body->startElement("text:a", false);
             body->addAttribute("xlink:type", "simple");
             if (m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
@@ -3323,7 +3323,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
-    body->startElement("draw:frame");
+    if (m_context->graphicObjectIsGroup) {
+        body->startElement("draw:g");
+    } else {
+        body->startElement("draw:frame");
+    }
 
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");
@@ -3453,7 +3457,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     else {
         // m_rot is in 1/60,000th of a degree
         qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                             .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
         body->addAttribute("draw:transform", rotString);
@@ -4570,7 +4574,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
     delete body;
     body = oldBody;
- 
+
     elementWriter.endElement(); // style-tab-stops
 
     QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());

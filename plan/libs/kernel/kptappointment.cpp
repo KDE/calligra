@@ -740,6 +740,14 @@ void Appointment::saveXML(QDomElement &element) const {
 }
 
 // Returns the total planned effort for this appointment
+Duration Appointment::plannedEffort( const Resource *resource, EffortCostCalculationType type) const {
+    if ( m_resource->resource() != resource ) {
+        return Duration::zeroDuration;
+    }
+    return plannedEffort( type );
+}
+
+// Returns the total planned effort for this appointment
 Duration Appointment::plannedEffort(EffortCostCalculationType type) const {
     Duration d;
     if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
@@ -762,6 +770,14 @@ Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType
     return d;
 }
 
+// Returns the planned effort on the date
+Duration Appointment::plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type ) const {
+    if ( resource != m_resource->resource() ) {
+        return Duration::zeroDuration;
+    }
+    return plannedEffort( date, type );
+}
+
 // Returns the planned effort upto and including the date
 Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationType type) const {
     Duration d;
@@ -773,6 +789,14 @@ Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationTy
     }
     //kDebug()<<date<<d.toString();
     return d;
+}
+
+// Returns the planned effort upto and including the date
+Duration Appointment::plannedEffortTo( const Resource *resource, const QDate& date, EffortCostCalculationType type ) const {
+    if ( resource != m_resource->resource() ) {
+        return Duration::zeroDuration;
+    }
+    return plannedEffortTo( date, type );
 }
 
 EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, EffortCostCalculationType type) const {

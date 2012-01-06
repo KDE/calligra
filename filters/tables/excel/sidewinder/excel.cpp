@@ -2420,7 +2420,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     d->workbook = workbook;
     d->globals = new GlobalsSubStreamHandler(workbook, streamVersion);
     d->handlerStack.clear();
-    unsigned long lastType = 0;
+    bool useMsoDrawingRecordWorkaround = false;
 
     while (stream->tell() < stream_size) {
         const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
@@ -2440,12 +2440,10 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         if (bytes_read != 4) break;
 
         unsigned long type = readU16(buffer);
-        // if the previous record is an Obj record, than the Continue record
-        // was supposed to be a MsoDrawingRecord (known bug in MS Excel...)
-        // a similar problem exists with TxO/Continue records, but there it is
-        // harder to find out which Continue records are part of the TxO and which
-        // are part of the MsoDrawing record
-        if (type == 0x3C && lastType == ObjRecord::id) {
+
+        // Work around a known bug in Excel. See below for a more detailed description of the problem.
+        if (useMsoDrawingRecordWorkaround) {
+            useMsoDrawingRecordWorkaround = false;
             type = MsoDrawingRecord::id;
         }
 
@@ -2477,9 +2475,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
-
-            if(next_type == MsoDrawingRecord::id || next_type == MsoDrawingGroupRecord::id) {
-                if(type != next_type)
+            if(next_type == MsoDrawingGroupRecord::id) {
+                if (type != MsoDrawingGroupRecord::id)
                     break;
             } else if(next_type == 0x3C) {
                 // 0x3C are continues records which are always just merged...
@@ -2489,8 +2486,31 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                 // a similar problem exists with TxO/Continue records, but there it is
                 // harder to find out which Continue records are part of the TxO and which
                 // are part of the MsoDrawing record
-                if (type == ObjRecord::id) {
-                    break;
+                if (type == ObjRecord::id || type == TxORecord::id) {
+                    unsigned long saved_pos_2 = stream->tell();
+                    bool isMsoDrawingRecord = false;
+                    bytes_read = stream->read(small_buffer, 8);
+                    if (bytes_read == 8) {
+                        QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(small_buffer), 8);
+                        QBuffer buff(&byteArr);
+                        buff.open(QIODevice::ReadOnly);
+                        LEInputStream in(&buff);
+                        MSO::OfficeArtRecordHeader rh;
+                        parseOfficeArtRecordHeader(in, rh);
+                        isMsoDrawingRecord =
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0xF002) || // OfficeArtDgContainer
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0x0F004) || // OfficeArtSpContainer
+                            (rh.recVer == 0xF && rh.recInstance == 0x0 && rh.recType == 0x0F003) || // OfficeArtSpgrContainer
+                            (rh.recVer == 0x2 && rh.recInstance <= 202 && rh.recType == 0x0F00A && rh.recLen == 8) || // OfficeArtFSP
+                            (rh.recVer == 0x1 && rh.recInstance == 0x0 && rh.recType == 0x0F009 && rh.recLen == 0x10) || // OfficeArtFSPGR
+                            (rh.recVer == 0x0 && rh.recInstance == 0x0 && rh.recType == 0xF010 && (rh.recLen == 0x8 || rh.recLen == 0x12)) || // XlsOfficeArtClientAnchor
+                            (rh.recVer == 0x0 && rh.recInstance == 0x0 && rh.recType == 0xF011 && rh.recLen == 0); // XlsOfficeArtClientData
+                    }
+                    stream->seek(saved_pos_2);
+                    if (isMsoDrawingRecord) {
+                        useMsoDrawingRecordWorkaround = true;
+                        break;
+                    }
                 }
             } else {
                 break; // and abort merging of records
@@ -2528,9 +2548,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // restore position in stream to the beginning of the next record
         stream->seek(saved_pos);
 
-        // remember type of previous record
-        lastType = type;
-
         // skip record type 0, this is just for filler
         if (type == 0) continue;
 
@@ -2543,7 +2560,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
             std::cout << std::dec;
             std::cout << " (" << type << ")";
-            std::cout << std::endl;
             std::cout << std::endl;
 //#endif
         } else {

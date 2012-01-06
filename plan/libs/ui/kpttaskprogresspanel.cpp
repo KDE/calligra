@@ -31,7 +31,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-
+#include <KIcon>
 #include <kdebug.h>
 
 #include "kpttask.h"
@@ -233,7 +233,10 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
       m_lastIsNextYear( false )
 {
     setupUi(this);
-    
+
+    addEntryBtn->setIcon( KIcon( "list-add" ) );
+    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+
     connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
     removeEntryBtn->setEnabled( false );
 
@@ -338,7 +341,8 @@ void TaskProgressPanelImpl::enableWidgets() {
     startTime->setEnabled(started->isChecked() && !finished->isChecked());
 
     addEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
-    removeEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
+    removeEntryBtn->setEnabled( ! entryTable->selectionModel()->selectedIndexes().isEmpty() && started->isChecked() && ! finished->isChecked() );
+
     if ( finished->isChecked() ) {
         for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
             entryTable->model()->setFlags( i, Qt::NoItemFlags );

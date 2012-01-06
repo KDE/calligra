@@ -138,6 +138,7 @@ private:
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
     bool m_serMarkerDefined;
+    bool m_autoTitleDeleted;
 
     class Private;
     Private * const d;
