@@ -1377,11 +1377,13 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
-    d->tabbedToolBar->showTab("create");
+    d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
     d->tabbedToolBar->showTab("data");
     d->tabbedToolBar->showTab("external");
-    d->tabbedToolBar->showTab("form");
-    d->tabbedToolBar->showTab("report");
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    //d->tabbedToolBar->showTab("form");
+    //d->tabbedToolBar->showTab("report");
     return true;
 }
 
@@ -3115,7 +3117,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     }
 
     const int window_id = window->id(); //remember now, because removeObject() can destruct partitem object
-
+    const QString window_partClass = window->partItem()->partClass();
     if (remove_on_closing) {
         //we won't save this object, and it was never saved -remove it
         if (!removeObject(window->partItem(), true)) {
@@ -3206,6 +3208,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
+    closeTab(window_partClass);
     return true;
 }
 
@@ -3388,7 +3391,18 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
+    
     if (viewMode == Kexi::DesignViewMode) {
+        kDebug() << "PART CLASS: " << item->partClass();
+        switch (d->prj->idForClass(item->partClass())) {
+        case KexiPart::FormObjectType: 
+            d->tabbedToolBar->showTab("form");
+            break;
+        case KexiPart::ReportObjectType: 
+            d->tabbedToolBar->showTab("report");
+            break;
+        default: ;
+        }
         setDesignTabIfNeeded(item->partClass());
     }
     return window;
@@ -4433,5 +4447,18 @@ void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
     }  
 }
 
+void KexiMainWindow::closeTab(const QString &partClass)
+{
+    kDebug() << "CLOSE OBJECT";
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->hideTab("form");
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->hideTab("report");
+        break;
+    default:;
+    }
+}
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

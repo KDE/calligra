@@ -72,6 +72,7 @@ protected:
 
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
+
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
@@ -216,6 +217,9 @@ public:
     
     //! Sets currently visible tab when switching to design view, according to object type opened.
     virtual void setDesignTabIfNeeded(const QString &partClass);
+    
+    //! Hides tabs when they are closed (depending on class)
+    virtual void closeTab(const QString &partClass);
 
 public slots:
     /*! Implemented for KexiMainWindow */
