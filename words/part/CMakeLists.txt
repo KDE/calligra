@@ -52,7 +52,6 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
-    dialogs/KWInsertPageDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -64,6 +63,7 @@ set(wordsprivate_LIB_SRCS
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
+    commands/KWShapeCreateCommand.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -84,7 +84,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/quickpopupmenu.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
-    dialogs/KWInsertPageDialog.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
 )
