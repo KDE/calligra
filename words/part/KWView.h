@@ -28,6 +28,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
+#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -132,7 +133,9 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    KoTextAnchor *anchorForSelectedFrame(bool create);
+    /// loops over the selected shapes and returns the frames that go with them.
+    QList<KWFrame*> selectedFrames() const;
+    KoShape *selectedShape() const;
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -165,14 +168,6 @@ private slots:
     void sendToBack();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
-    /// anchor the current shape "as-char"
-    void anchorAsChar();
-    /// anchor the current shape "to-char"
-    void anchorToChar();
-    /// anchor the current shape "to-paragraph"
-    void anchorToParagraph();
-    /// anchor the current shape "to-page"
-    void anchorToPage();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -203,10 +198,6 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
-private:
-
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
 
 private:
     KWGui *m_gui;
