@@ -188,6 +188,26 @@ void KWDocument::removeShape(KoShape *shape)
     }
 }
 
+void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
+{
+    QMap<KoTextEditor *, QList<KoTextAnchor *> > anchors;
+    foreach (KoShape *shape, shapes) {
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        if (frame && frame->shape()) {
+            KoTextAnchor *anchor = frame->anchor();
+            const QTextDocument *document = anchor ? anchor->document(): 0;
+            if (document) {
+                KoTextEditor *editor = KoTextDocument(document).textEditor();
+                anchors[editor].append(anchor);
+            }
+        }
+    }
+    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.begin());
+    for (; it != anchors.end(); ++it) {
+        it.key()->removeAnchors(it.value(), command);
+    }
+}
+
 void KWDocument::paintContent(QPainter &, const QRect &)
 {
 }
@@ -437,6 +457,7 @@ void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+
     removeFrameFromViews(frame);
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;

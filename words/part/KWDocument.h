@@ -65,9 +65,11 @@ public:
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
-    void addShape(KoShape *shape);
+    virtual void addShape(KoShape *shape);
     /// reimplemented from KoShapeBasedDocumentBase
-    void removeShape(KoShape *shape);
+    virtual void removeShape(KoShape *shape);
+    // reimplemented from KoShapeBasedDocumentBase
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
     void addShape(KoShape *shape, KoTextAnchor *anchor);
 
