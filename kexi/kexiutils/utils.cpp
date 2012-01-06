@@ -411,11 +411,11 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
+    pos = rect.topLeft() + QPoint(margins.left, margins.top);
     if (scaledContents) {
         if (keepAspectRatio) {
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
-            pos = rect.topLeft();
             if (img.width() < w) {
 //                int hAlign = QApplication::horizontalAlignment(alignment);
                 if (alignment & Qt::AlignRight)
@@ -449,7 +449,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //                p2.begin(&pixmapBuffer);
                 //, p.device());
 //                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
-                pos = rect.topLeft();
                 pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
                 if (p) {
                     p->drawPixmap(pos, pixmap);

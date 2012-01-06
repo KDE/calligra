@@ -2,6 +2,7 @@
 Type=Service
 Name=Words SGML DocBook Export Filter
 Name[bg]=Филтър за изнасяне от Words в SGML DocBook
+Name[ca]=Filtre d'exportació SGML DocBook per al Words
 Name[cs]=Exportní filtr SGML Docbook pro Words
 Name[da]=SGML DocBook-eksportfilter til Words
 Name[de]=Words SGML-DocBook-Exportfilter

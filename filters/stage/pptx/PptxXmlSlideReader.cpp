@@ -1713,13 +1713,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
   container in which to be displayed on the slide surface.
 
   Parent Elements:
-    - [done] grpSp (§4.4.1.19); spTree (§4.4.1.42)
+  - [done] grpSp (§4.4.1.19)
+  - [done] spTree (§4.4.1.42)
 
   Child Elements:
-    - extLst (Extension List with Modification Flag) (§4.2.4)
-    - [done] graphic (Graphic Object) (§5.1.2.1.16)
-    - [done] nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
-    - [done] xfrm (2D Transform for Graphic Frame)
+  - extLst (Extension List with Modification Flag) (§4.2.4)
+  - [done] graphic (Graphic Object) (§5.1.2.1.16)
+  - [done] nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
+  - [done] xfrm (2D Transform for Graphic Frame)
 */
 KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 {
@@ -1746,7 +1747,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     }
 
     body = buffer.originalWriter();
-    body->startElement("draw:frame");
+
+    if (m_context->graphicObjectIsGroup) {
+        body->startElement("draw:g");
+    } else {
+        body->startElement("draw:frame");
+    }
 
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
@@ -1765,7 +1771,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     (void)buffer.releaseWriter();
 
-    body->endElement(); // draw:frame
+    body->endElement(); //draw:g/draw:frame
 
     READ_EPILOGUE
 }

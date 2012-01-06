@@ -556,6 +556,23 @@ EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate 
 }
 
 // Returns the total planned effort for this task (or subtasks)
+Duration Task::plannedEffort( const Resource *resource, long id, EffortCostCalculationType typ ) const {
+   //kDebug();
+    Duration eff;
+    if (type() == Node::Type_Summarytask) {
+        foreach (const Node *n, childNodeIterator()) {
+            eff += n->plannedEffort( resource, id, typ );
+        }
+        return eff;
+    }
+    Schedule *s = schedule( id );
+    if ( s ) {
+        eff = s->plannedEffort( resource, typ );
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks)
 Duration Task::plannedEffort( long id, EffortCostCalculationType typ ) const {
    //kDebug();
     Duration eff;
@@ -568,6 +585,23 @@ Duration Task::plannedEffort( long id, EffortCostCalculationType typ ) const {
     Schedule *s = schedule( id );
     if ( s ) {
         eff = s->plannedEffort( typ );
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) on date
+Duration Task::plannedEffort( const Resource *resource, const QDate &date, long id, EffortCostCalculationType typ ) const {
+   //kDebug();
+    Duration eff;
+    if (type() == Node::Type_Summarytask) {
+        foreach (const Node *n, childNodeIterator()) {
+            eff += n->plannedEffort( resource, date, id, typ );
+        }
+        return eff;
+    }
+    Schedule *s = schedule( id );
+    if ( s ) {
+        eff = s->plannedEffort( resource, date, typ );
     }
     return eff;
 }
@@ -602,6 +636,23 @@ Duration Task::plannedEffortTo( const QDate &date, long id, EffortCostCalculatio
     Schedule *s = schedule( id );
     if ( s ) {
         eff = s->plannedEffortTo( date, typ );
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) upto and including date
+Duration Task::plannedEffortTo( const Resource *resource, const QDate &date, long id, EffortCostCalculationType typ ) const {
+    //kDebug();
+    Duration eff;
+    if (type() == Node::Type_Summarytask) {
+        foreach (const Node *n, childNodeIterator()) {
+            eff += n->plannedEffortTo( resource, date, id, typ );
+        }
+        return eff;
+    }
+    Schedule *s = schedule( id );
+    if ( s ) {
+        eff = s->plannedEffortTo( resource, date, typ );
     }
     return eff;
 }

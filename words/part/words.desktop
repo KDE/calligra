@@ -2,6 +2,7 @@
 Type=Application
 Name=Calligra Words
 Name[bg]=Calligra Words
+Name[ca]=Words del Calligra
 Name[cs]=Calligra Words
 Name[da]=Calligra Words
 Name[de]=Calligra Words
@@ -65,6 +66,7 @@ GenericName[zh_CN]=字处理
 GenericName[zh_TW]=文書處理器
 Comment=Write documents
 Comment[bg]=Писане на документи
+Comment[ca]=Escriviu documents
 Comment[cs]=Zapsat dokumenty
 Comment[da]=Skriv dokumenter
 Comment[de]=Dokumente verfassen
