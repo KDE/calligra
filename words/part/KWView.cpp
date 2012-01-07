@@ -195,10 +195,6 @@ void KWView::updateReadWrite(bool readWrite)
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
-    m_actionRaiseFrame->setEnabled(readWrite);
-    m_actionLowerFrame->setEnabled(readWrite);
-    m_actionBringToFront->setEnabled(readWrite);
-    m_actionSendBackward->setEnabled(readWrite);
     m_actionAddBookmark->setEnabled(readWrite);
     QAction *action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
@@ -263,45 +259,6 @@ void KWView::setupActions()
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
     connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
-    m_actionRaiseFrame  = new KAction(KIcon("raise"), i18n("Raise Shape"), this);
-    actionCollection()->addAction("raiseframe", m_actionRaiseFrame);
-    m_actionRaiseFrame->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
-    m_actionRaiseFrame->setToolTip(i18n("Raise the currently selected shape so that it appears above "
-                                        "all the other shape"));
-    m_actionRaiseFrame->setWhatsThis(i18n("Raise the currently selected shape so that it appears "
-                                          "above all the other shapes. This is only useful if shapes overlap each other. If multiple "
-                                          "shapes are selected they are all raised in turn."));
-    connect(m_actionRaiseFrame, SIGNAL(triggered()), this, SLOT(raiseFrame()));
-
-    m_actionLowerFrame  = new KAction(KIcon("lower"), i18n("Lower Shape"), this);
-    actionCollection()->addAction("lowerframe", m_actionLowerFrame);
-    m_actionLowerFrame->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_L));
-    m_actionLowerFrame->setToolTip(i18n("Lower the currently selected shape so that it disappears under "
-                                        "any shape that overlaps it"));
-    m_actionLowerFrame->setWhatsThis(i18n("Lower the currently selected shape so that it disappears under "
-                                          "any shape that overlaps it. If multiple shape are selected they are all lowered in turn."));
-    connect(m_actionLowerFrame, SIGNAL(triggered()), this, SLOT(lowerFrame()));
-
-    m_actionBringToFront = new KAction(KIcon("bring_forward"), i18n("Bring to Front"), this);
-    actionCollection()->addAction("bring_tofront_frame", m_actionBringToFront);
-    connect(m_actionBringToFront, SIGNAL(triggered()), this, SLOT(bringToFront()));
-
-    m_actionSendBackward = new KAction(KIcon("send_backward"), i18n("Send to Back"), this);
-    actionCollection()->addAction("send_toback_frame", m_actionSendBackward);
-    connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT(sendToBack()));
-
-#ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
-        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
-        actionCollection()->addAction("insert_semanticobject_ref", createRef);
-        KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
-        actionCollection()->addAction("insert_semanticobject_new", subMenu);
-        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
-            subMenu->addAction(action);
-        }
-    }
-#endif
-
     m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
@@ -354,7 +311,18 @@ void KWView::setupActions()
     action->setToolTip(i18n("Modify and add semantic stylesheets"));
     action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
+
+    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
+        actionCollection()->addAction("insert_semanticobject_ref", createRef);
+        KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
+        actionCollection()->addAction("insert_semanticobject_new", subMenu);
+        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
+            subMenu->addAction(action);
+        }
+    }
 #endif
+
 
     action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
@@ -421,7 +389,6 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-    // -------------- Insert menu
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
@@ -444,52 +411,9 @@ void KWView::setupActions()
 
         //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
-        // -------------- View menu
-
-        if (!m_doc->isEmbedded()) {
-
-            QActionGroup *viewModeActionGroup = new QActionGroup(this);
-            viewModeActionGroup->setExclusive(true);
-            m_actionViewTextMode = new KToggleAction(i18n("Text Mode"), 0,
-                    this, SLOT(viewTextMode()),
-                    actionCollection(), "view_textmode");
-            m_actionViewTextMode->setToolTip(i18n("Only show the text of the document"));
-            m_actionViewTextMode->setWhatsThis(i18n("Do not show any pictures, formatting or layout. Words will display only the text for editing."));
-
-            m_actionViewTextMode->setActionGroup(viewModeActionGroup);
-            m_actionViewPageMode = new KToggleAction(i18n("Page Mode"), 0,
-                    this, SLOT(viewPageMode()),
-                    actionCollection(), "view_pagemode");
-            m_actionViewPageMode->setWhatsThis(i18n("Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode."));
-            m_actionViewPageMode->setToolTip(i18n("Switch to page editing mode"));
-
-            m_actionViewPageMode->setActionGroup(viewModeActionGroup);
-            m_actionViewPageMode->setChecked(true);
-            m_actionViewPreviewMode = new KToggleAction(i18n("Preview Mode"), 0,
-                    this, SLOT(viewPreviewMode()),
-                    actionCollection(), "view_previewmode");
-            m_actionViewPreviewMode->setWhatsThis(i18n("Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized."));
-            m_actionViewPreviewMode->setToolTip(i18n("Zoom out to a multiple page view"));
-
-            m_actionViewPreviewMode->setActionGroup(viewModeActionGroup);
-        }
-        else // no viewmode switching when embedded; at least "Page" makes no sense
-        {
-            m_actionViewTextMode = 0;
-            m_actionViewPageMode = 0;
-            m_actionViewPreviewMode = 0;
-        }
-
         m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
                 this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
                 actionCollection(), "custom_vars");
-
-        m_actionEditPersonnalExpr=new KAction(i18n("Edit Personal Expressions..."), 0,
-                this, SLOT(editPersonalExpr()),
-                actionCollection(), "personal_expr");
-        m_actionEditPersonnalExpr->setToolTip(i18n("Add or change one or more personal expressions"));
-        m_actionEditPersonnalExpr->setWhatsThis(i18n("Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document."));
-
 
         m_actionConfigureHeaderFooter=new KAction(i18n("Configure Header/Footer..."), 0,
                 this, SLOT(configureHeaderFooter()),
@@ -520,11 +444,6 @@ void KWView::setupActions()
         m_actionCreateStyleFromSelection->setToolTip(i18n("Create a new style based on the currently selected text"));
         m_actionCreateStyleFromSelection->setWhatsThis(i18n("Create a new style based on the currently selected text.")); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
 
-        m_actionSavePicture= new KAction(i18n("Save Picture As..."), 0,
-                this, SLOT(savePicture()),
-                actionCollection(), "save_picture");
-        m_actionSavePicture->setToolTip(i18n("Save the picture in a separate file"));
-        m_actionSavePicture->setWhatsThis(i18n("Save the picture in the currently selected frame in a separate file, outside the Words document."));
 
         m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
                 this, SLOT(addBookmark()),
@@ -703,22 +622,6 @@ void KWView::deleteBookmark(const QString &name)
     #warning FIXME: port to textlayout-rework
 #endif
 #endif
-}
-
-void KWView::editDeleteFrame()
-{
-    QList<KoShape*> frames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        if (frame) {
-            KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-            if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
-                continue; // can't delete auto-generated frames
-        }
-        frames.append(shape);
-    }
-    KUndo2Command *cmd = canvasBase()->shapeController()->removeShapes(frames);
-    m_document->addCommand(cmd);
 }
 
 void KWView::toggleHeader()
@@ -1111,32 +1014,6 @@ void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QStrin
     KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
 #endif
-}
-
-void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
-{
-    // TODO we should not allow any shapes to fall behind the main text frame.
-    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
-                        canvasBase->shapeManager(), direction);
-    if (cmd)
-        document->addCommand(cmd);
-}
-
-
-void KWView::raiseFrame() {
-    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::RaiseShape);
-}
-
-void KWView::lowerFrame() {
-    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::LowerShape);
-}
-
-void KWView::bringToFront() {
-    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::BringToFront);
-}
-
-void KWView::sendToBack() {
-    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::SendToBack);
 }
 
 void KWView::findMatchFound(KoFindMatch match)
