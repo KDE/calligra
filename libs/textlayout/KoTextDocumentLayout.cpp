@@ -585,11 +585,22 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
+    FrameIterator *passFootNoteCursorToNext = 0;
+    KoInlineNote *passContinuedNoteToNext = 0;
+    int footNoteAutoCount = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
+
+        rootArea->setFootNoteCountInDoc(footNoteAutoCount);
+        if (passFootNoteCursorToNext) {
+            rootArea->inheritFootNoteFromPrevious(passFootNoteCursorToNext, passContinuedNoteToNext);
+            passFootNoteCursorToNext = 0;
+            passContinuedNoteToNext = 0;
+        }
+
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -613,6 +624,11 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             bool finished;
             FrameIterator *tmpPosition = 0;
+            footNoteAutoCount += rootArea->footNoteAutoCount();
+            if (rootArea->footNoteCursorToNext()) {
+                passFootNoteCursorToNext = rootArea->footNoteCursorToNext();
+                passContinuedNoteToNext = rootArea->continuedNoteToNext();
+            }
             do {
                 d->foundAnchors.clear();
                 delete tmpPosition;
@@ -681,6 +697,13 @@ bool KoTextDocumentLayout::doLayout()
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
+            rootArea->setFootNoteCountInDoc(footNoteAutoCount);
+            if (passFootNoteCursorToNext) {
+                rootArea->inheritFootNoteFromPrevious(passFootNoteCursorToNext, passContinuedNoteToNext);
+                passFootNoteCursorToNext = 0;
+                passContinuedNoteToNext = 0;
+            }
+
             d->rootAreaList.append(rootArea);
             QSizeF size = d->provider->suggestSize(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
@@ -691,6 +714,11 @@ bool KoTextDocumentLayout::doLayout()
 
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
+            footNoteAutoCount += rootArea->footNoteAutoCount();
+            if (rootArea->footNoteCursorToNext()) {
+                passFootNoteCursorToNext = rootArea->footNoteCursorToNext();
+                passContinuedNoteToNext = rootArea->continuedNoteToNext();
+            }
             do {
                 d->foundAnchors.clear();
                 delete tmpPosition;

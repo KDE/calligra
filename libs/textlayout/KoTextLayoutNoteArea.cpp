@@ -33,6 +33,7 @@ public:
     KoInlineNote *note;
     QTextLayout *textLayout;
     qreal labelIndent;
+    bool isContinuedArea;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -43,6 +44,7 @@ KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea 
     Q_ASSERT(parent);
 
     d->note = note;
+    d->isContinuedArea = false;
 }
 
 KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
@@ -64,7 +66,14 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     } else if (d->note->type() == KoInlineNote::Endnote) {
         notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
-    QString label = d->note->label();
+
+    QString label;
+    if (d->isContinuedArea)
+    {
+        label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
+    } else {
+        label = d->note->label();
+    }
     label.prepend(notesConfig->numberFormat().prefix());
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();
@@ -97,4 +106,9 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->labelIndent += pStyle.leftMargin();
 
     return KoTextLayoutArea::layout(cursor);
+}
+
+void KoTextLayoutNoteArea::setAsContinuedArea(bool isContinuedArea)
+{
+    d->isContinuedArea = isContinuedArea;
 }
