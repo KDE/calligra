@@ -138,7 +138,7 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
 
     connect(widget.cTopArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
     connect(widget.cVCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
-    connect(widget.cRightArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cBottomArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
     connect(widget.cVOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
 
     connect(widget.cLeftArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
@@ -514,6 +514,7 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
                 offset.setX(widget.sHOffset->value());
             }
             if (m_vertPos == KoTextAnchor::VFromTop) {
+                qDebug()<<"changing y"<<widget.sVOffset->value();
                 offset.setY(widget.sVOffset->value());
             }
 
