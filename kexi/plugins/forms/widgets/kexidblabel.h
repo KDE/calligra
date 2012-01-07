@@ -91,7 +91,7 @@ public:
     //! used to catch setIndent(), etc.
     virtual bool setProperty(const char * name, const QVariant & value);
 
-    virtual const QColor& frameColor() const;
+    virtual QColor frameColor() const;
 
 //  const QColor & paletteForegroundColor() const;
 

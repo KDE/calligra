@@ -2,12 +2,14 @@
 Type=Service
 Name=Words Microsoft Write Export Filter
 Name[bg]=Филтър за изнасяне от Words в Microsoft Write
+Name[ca]=Filtre d'exportació Microsoft Write per al Words
 Name[cs]=Exportní filtr formátu MS Write pro Words
 Name[da]=Microsoft Write-eksportfilter til Words
 Name[de]=Words MS-Write-Exportfilter
 Name[es]=Filtro de Words de exportación a Microsoft Write
 Name[et]=Wordsi Microsoft Write'i ekspordifilter
 Name[it]=Filtro di esportazione Microsoft Write per Words
+Name[kk]=Words -> Microsoft Write экспорт сүзгісі
 Name[nb]=Microsoft Write-eksportfilter for Words
 Name[nds]="Microsoft Write"-Exportfilter för Words
 Name[nl]=Microsoft Write-exportfilter voor Words

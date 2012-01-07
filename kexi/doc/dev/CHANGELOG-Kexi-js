@@ -115,13 +115,57 @@ TODO: use right-hand tab button for window list as in FF
 
 TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
 
-~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
 TODO: Widgets [code] fix memory leak introduced in KexiFieldComboBox::setTableOrQuery()
 
 TODO: kexidb collation: Add Alphanum collation (code at http://www.davekoelle.com/alphanum.html)
 TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::localeAwareCompare; http://labs.qt.nokia.com/2011/06/14/string-collation-with-locales/
 *ICU enabled in libsqlite3 on debian in 3.6.11-1 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=494987 but then disabled in 3.6.14.2-1
+
+~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 6 (2.3.86) ~~~~~~~~~~~~~~~~
+
+2012-01-05
+Main Window
+*Simple User Feedback Agent introduced
+TODO: disable by default, inform and ask user for help
+
+See sample code at http://lxr.kde.org/source/kde/kde-runtime/drkonqi/bugzillalib.cpp
+See sample code at http://lxr.kde.org/source/extragear/network/choqok/microblogs/twitter/twittermicroblog.cpp
+
+2012-01-03..04
+CSV Import
+*Fixed bug: import to table in Kexi ignores "Ignore multiple delimiters" setting
+BUG:160237
+*Fixed bug: ignore any trailing delimiters if "Ignore multiple delimiters" option is on, so empty extra column is not added
+BUG:290645
+*Ask for opening the imported table
+TODO 2.5: add message box title "Successfull import"
+TODO 2.5: change standard "Open" btn to "Open Imported Table"
+
+2012-01-01
+KexiDB
+*Query SQL generated in the Query Designer should be of KEXISQL type
+BUG:290354
+TODO: port to Predicate
+
+2011-12-26..28
+Forms
+*Fixed bug: Image box does not store image pasted to it in design time
+BUG:289545
+*Fixed bug: Changing Horizontal Alignment in image box has no effect unless user resizes it or reopens the form
+BUG:289544
+*Fixed bug: Invalid image geometry within the Image Box form widget when frame properties change
+BUG:289990
+
+TODO: add int margin property to the Image Box
+TODO: add qreal rotation property to the Image Box
+TODO: add scale rotation property to the Image Box
+TODO: add int transparency property to the Image Box
+TODO: add effect property to the Image Box, see QGraphicsEffects
 
 2011-12-16..20
 KexiDB

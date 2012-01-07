@@ -413,122 +413,51 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 #undef CURRENT_EL
 #define CURRENT_EL graphicFrame
 //! graphicFrame
-/*!
-  This element specifies the existence of a graphics frame. This frame contains a graphic that was generated
-  by an external source and needs a container in which to be displayed on the slide surface.
+/*! ECMA-376, 20.5.2.16, p. 3524
+  This element describes a single graphical object frame for a spreadsheet
+  which contains a graphical object.
 
   Parent Elements:
-    - grpSp (§4.4.1.19); spTree (§4.4.1.42)
+  - [done] absoluteAnchor (§20.5.2.1)
+  - [done] grpSp (§20.5.2.17)
+  - [done] oneCellAnchor (§20.5.2.24)
+  - [done] twoCellAnchor (§20.5.2.33)
+
   Child Elements:
-    - extLst (Extension List with Modification Flag) (§4.2.4)
-    - graphic (Graphic Object) (§5.1.2.1.16)
-    - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
-    - xfrm (2D Transform for Graphic Frame)
+  - [done] graphic (Graphic Object) (§5.1.2.1.16)
+  - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
+  - xfrm (2D Transform for Graphic Frame)
 */
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 {
     READ_PROLOGUE
+
+    //TODO: Create a graphic style for the frame.
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "a:graphic") {
-                read_graphic2();
-            }
+            TRY_READ_IF_NS(a, graphic)
+            SKIP_UNKNOWN
         }
     }
+
+    body = buffer.originalWriter();
+
+    if (m_context->graphicObjectIsGroup) {
+        body->startElement("draw:g");
+    } else {
+        body->startElement("draw:frame");
+    }
+
+    buffer.releaseWriter();
+    body->endElement(); //draw:g/draw:frame
+
     READ_EPILOGUE
-}
-
-#define blipFill_NS "a"
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "a"
-
-#undef CURRENT_EL
-#define CURRENT_EL graphic
-//! graphic handler (Graphic Object)
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphic2()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            if (qualifiedName() == "a:graphicData") {
-                read_graphicData2();
-            }
-        }
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL graphicData
-//! graphicData handler (Graphic Object Data)
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            TRY_READ_IF_NS(pic, pic)
-            else if (qualifiedName() == "c:chart") {
-                read_chart();
-            }
-            else if (qualifiedName() == QLatin1String("dgm:relIds")) {
-                read_diagram(); // DrawingML diagram
-            }
-        }
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL diagram
-//! 5.9 DrawingML - Diagrams
-/*!
-A DrawingML diagram allows the definition of diagrams using DrawingML objects and constructs. This
-namespace defines the contents of a DrawingML diagram.
-*/
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
-{
-    const QXmlStreamAttributes attrs(attributes());
-
-    TRY_READ_ATTR_WITH_NS(r, cs) // colors
-    TRY_READ_ATTR_WITH_NS(r, dm) // data
-    TRY_READ_ATTR_WITH_NS(r, lo) // layout
-    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
-
-    //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
-    const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
-    const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
-    //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
-
-    //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
-
-    //KoStore* storeout = m_context->import->outputStore();
-    QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
-
-    // first read the data-model
-    MSOOXML::MsooXmlDiagramReader dataReader(this);
-    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
-    if (dataReaderResult != KoFilter::OK) {
-       raiseError(dataReader.errorString());
-       return dataReaderResult;
-    }
-
-    // then read the layout definition
-    MSOOXML::MsooXmlDiagramReader layoutReader(this);
-    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
-    if (layoutReaderResult != KoFilter::OK) {
-       raiseError(layoutReader.errorString());
-       return layoutReaderResult;
-    }
-
-    m_currentDrawingObject->setDiagram(context.take());
-
-    return KoFilter::OK;
 }
 
 XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture():m_pictureWriter(0)
@@ -563,12 +492,14 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
 }
 
 
+#define blipFill_NS "a"
+
 // in PPTX we do not have pPr, so p@text:style-name should be added earlier
 //#define SETUP_PARA_STYLE_IN_READ_P
-#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#include <MsooXmlCommonReaderImpl.h> // adds a:p, a:pPr, a:t, a:r, etc.
 #define DRAWINGML_NS "a"
 #define DRAWINGML_PIC_NS "xdr" // DrawingML/Picture
 #define DRAWINGML_TXBODY_NS "xdr" // DrawingML/Picture
 #define XLSXXMLDRAWINGREADER_CPP
-#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
-//#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl
+#include <MsooXmlCommonReaderDrawingMLImpl.h> // adds p:pic, etc.
+//#include <MsooXmlDrawingReaderTableImpl.h>  // adds a:tbl

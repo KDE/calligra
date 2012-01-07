@@ -2,12 +2,14 @@
 Type=Service
 Name=Words WML Import Filter
 Name[bg]=Филтър за внасяне от WML в Words
+Name[ca]=Filtre d'importació WML per al Words
 Name[cs]=Importní filtr formátu WML pro Words
 Name[da]=WML-importfilter til Words
 Name[de]=Words WML-Importfilter
 Name[es]=Filtro de Words de importación de WML
 Name[et]=Wordsi WML-i impordifilter
 Name[it]=Filtro di importazione WML per Words
+Name[kk]=WML -> Words импорт сүзгісі
 Name[nb]=WML-importfilter for Words
 Name[nds]=WML-Importfilter för Words
 Name[nl]=WML-importfilter voor Words

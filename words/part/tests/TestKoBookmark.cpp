@@ -60,6 +60,7 @@ void TestKoBookmark::testInsertion()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText("1bla bla bla");

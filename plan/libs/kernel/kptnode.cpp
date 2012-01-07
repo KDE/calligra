@@ -1220,6 +1220,33 @@ void Node::changed(Node *node) {
         m_parent->changed(node);
 }
 
+Duration Node::plannedEffort( const Resource *resource, long id, EffortCostCalculationType type ) const
+{
+    Duration e;
+    foreach ( Node *n, m_nodes ) {
+        e += n->plannedEffort( resource, id, type );
+    }
+    return e;
+}
+
+Duration Node::plannedEffort( const Resource *resource, const QDate &date, long id, EffortCostCalculationType type ) const
+{
+    Duration e;
+    foreach ( Node *n, m_nodes ) {
+        e += n->plannedEffort( resource, date, id, type );
+    }
+    return e;
+}
+
+Duration Node::plannedEffortTo( const Resource *resource, const QDate &date, long id, EffortCostCalculationType type ) const
+{
+    Duration e;
+    foreach ( Node *n, m_nodes ) {
+        e += n->plannedEffortTo( resource, date, id, type );
+    }
+    return e;
+}
+
 EffortCost Node::plannedCost( long id, EffortCostCalculationType type ) const
 {
     EffortCost ec;

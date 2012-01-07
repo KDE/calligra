@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -159,7 +159,7 @@ public:
      of "tablename.fieldname" (but only if fieldname is not a name of alias).
      \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
     QString toSQLString(bool includeTableName = true,
-                        Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
+                        const Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
 
 protected:
     //! Column to sort
@@ -270,7 +270,7 @@ public:
      of "tablename.fieldname".
      \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
     QString toSQLString(bool includeTableNames = true,
-                        Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
+                        const Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
 };
 
 //! @short KexiDB::QuerySchema provides information about database query
@@ -763,11 +763,11 @@ public:
      This method is similar to FieldList::sqlFieldsList() it just uses
      QueryColumnInfo::List instead of Field::List.
     */
-    static QString sqlColumnsList(QueryColumnInfo::List* infolist, Driver *driver);
+    static QString sqlColumnsList(QueryColumnInfo::List* infolist, const Driver *driver);
 
     /*! \return cached sql list created using sqlColumnsList() on a list returned
      by autoIncrementFields(). */
-    QString autoIncrementSQLFieldsList(Driver *driver);
+    QString autoIncrementSQLFieldsList(const Driver *driver);
 
     /*! Sets a WHERE expression \a exp. It will be owned by this query,
      so you can forget about it. Previously set WHERE expression will be deleted.
