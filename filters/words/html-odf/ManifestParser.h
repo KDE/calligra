@@ -22,20 +22,24 @@
 
 #include "qxml.h"
 
-
+/* Parses an odt's manifest.xml file, storing a list of files of supported filetypes.
+ 
+   Currently this includes:
+        image/png
+*/
 class ManifestParser : public QXmlDefaultHandler
 {
 public:    
     bool startDocument();
     bool endElement( const QString&, const QString&, const QString &name );
     bool startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs );
-    
-    
-    QStringList m_fileList;
-    
+  
+    const QStringList& fileList();
+  
 protected:
     QString     m_currentType;
     QString     m_currentPath;
+    QStringList m_fileList;
 };
 
 #endif
