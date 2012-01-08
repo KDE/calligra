@@ -33,13 +33,13 @@
   <keyword>database</keyword>
 </keywordset>
 </bookinfo>
-<!--userbase <timestamp>2011-10-23T08:11:58Z</timestamp>-->
+<!--userbase <timestamp>2012-01-08T14:10:42Z</timestamp>-->
 
 <!--userbase-content-->
-<chapter id="introduction"><title>Introduction</title>
+<chapter id="introduction"><title>Introduction</title> 
 <para>&kexi; is a database management application. It can be used for creating databases, inserting data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries and forms - are stored in the database, making it easy to share data and design.
 </para>
-<para>&kexi; is part of the &calligra; productivity suite for the K Desktop Environment.
+<para>&kexi; is part of the &calligra; productivity suite for KDE.
 </para>
 <para>In addition to storing your &kexi; databases in files, &kexi; can also store your data on a database server. Using a database server allows you to share your database with other people, and also allows more than one person to use the database at one time. The following database servers are supported by &kexi;:
 </para>
@@ -47,29 +47,29 @@
 <listitem><para><ulink url="http://www.mysql.com/">MySQL</ulink></para></listitem>
 <listitem><para><ulink url="http://www.postgresql.org/">PostgreSQL</ulink></para></listitem>
 </itemizedlist>
-<para>More information about &kexi; can be found at the &kexi; <ulink url="http://www.calligra-suite.org/kexi/">page on the &calligra; website</ulink>, and on the <ulink url="http://www.kexi-project.org/about.html">website for Kexi itself</ulink>.
+<para>More information about &kexi; can be found at the &kexi; <ulink url="http://www.calligra-suite.org/kexi/">page on the Calligra website</ulink>, and on the <ulink url="http://www.kexi-project.org/about.html">website for Kexi itself</ulink>.
 </para>
 <para>If you have any questions about &kexi;, there are two mailing lists you can use. The &kexi; user mailing list can be used to ask questions about using &kexi; or about the &kexi; project. The &kexi; development mailing list can be used to ask questions about the development of &kexi;. Further information on how to subscribe to these lists, together with a few other ways of making contact with &kexi; developers, can be found  <ulink url="http://www.kexi-project.org/support.html">here</ulink>.
 </para>
 <para><note><para>This handbook for &kexi; 2.4 is meant to be based on the &kexi; Handbook <ulink url="http://docs.kde.org/stable/en/koffice/kexi/index.html">for Kexi 1.1</ulink>.Please coordinate any effort with Jarosław Staniek, email: kexi at kde.org</para></note>
 </para>
 </chapter>
-<chapter id="kexi-basics"><title>Kexi Basics</title>
+<chapter id="kexi-basics"><title>Kexi Basics</title> 
 <itemizedlist>
-<listitem><para><link linkend="kexi-databases">Kexi Databases</link></para></listitem>
-<listitem><para><link linkend="creating-a-new-database-file">Creating a New Database File</link></para></listitem>
-<listitem><para><link linkend="the-kexi-main-window">The Kexi Main Window</link><itemizedlist>
-<listitem><para><link linkend="main-application-elements">Main application elements</link></para></listitem>
+<listitem><para><link linkend="kexi-databases">Kexi Databases</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="creating-a-new-database-file">Creating a New Database File</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-kexi-main-window">The Kexi Main Window</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="main-application-elements">Main application elements</link>&nbsp;</para></listitem>
 </itemizedlist>
 </para></listitem>
-<listitem><para><link linkend="opening-an-existing-kexi-database-file">Opening an existing Kexi database file</link><itemizedlist>
-<listitem><para><link linkend="opening-a-database-file-in-the-open-existing-project-dialog">Opening a database file in the Open Existing Project dialog</link></para></listitem>
-<listitem><para><link linkend="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon">Opening an existing Kexi database file by clicking on .kexi file's icon</link></para></listitem>
+<listitem><para><link linkend="opening-an-existing-kexi-database-file">Opening an existing Kexi database file</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="opening-a-database-file-in-the-open-existing-project-dialog">Opening a database file in the Open Existing Project dialog</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon">Opening an existing Kexi database file by clicking on .kexi file's icon</link>&nbsp;</para></listitem>
 </itemizedlist>
 </para></listitem>
-<listitem><para><link linkend="using-built-in-help">Using built-in help</link></para></listitem>
+<listitem><para><link linkend="using-built-in-help">Using built-in help</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="kexi-databases"><title>Kexi Databases</title>
+<sect1 id="kexi-databases"><title>Kexi Databases</title> 
 <para>Many applications such as <trademark class="registered">OpenOffice.org</trademark>, <trademark class="registered">LibreOffice</trademark> or <application>&Microsoft; Excel</application> create files which are called documents. &kexi; creates files too, but we refer to them as &kexi; database files, or simple database files here.
 </para>
 <para>In addition to storing your databases in database files, &kexi; can also use databases on database servers, which is why we refer to them as database files, and not simply as databases.
@@ -79,7 +79,7 @@
 <para><note><para>&kexi; database files usually have the extension <filename>.kexi</filename></para></note>
 </para>
 </sect1>
-<sect1 id="creating-a-new-database-file"><title>Creating a New Database File</title>
+<sect1 id="creating-a-new-database-file"><title>Creating a New Database File</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -129,7 +129,7 @@
 </itemizedlist>
 </note></para>
 </sect1>
-<sect1 id="the-kexi-main-window"><title>The Kexi Main Window</title>
+<sect1 id="the-kexi-main-window"><title>The Kexi Main Window</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -147,9 +147,9 @@
 </para>
 <para>The <guilabel>Project Navigator</guilabel> and <guilabel>Properties Editor</guilabel> are shown in panes on each side of the child window. These can be resized or hidden as required. A pane can be hidden by clicking the small cross at the top of the pane (just below the toolbar).
 </para>
-<para>Database objects (tables, queries, &etc;) listed in the <guilabel>Project Navigator</guilabel> can opened by clicking (or double-clicking, depending upon your global KDE settings) on their names.
+<para>Database objects (tables, queries, &etc;) listed in the <guilabel>Project Navigator</guilabel> can be opened by clicking (or double-clicking, depending upon your global KDE settings) on their names.
 </para>
-<sect2 id="main-application-elements"><title>Main application elements</title>
+<sect2 id="main-application-elements"><title>Main application elements</title> 
 <para>Main elements of &kexi; application's window are:
 </para>
 <variablelist>
@@ -175,7 +175,7 @@
   </varlistentry>
 </variablelist>
 </sect2>
-<sect2 id="tabbed-toolbar"><title>Tabbed Toolbar</title>
+<sect2 id="tabbed-toolbar"><title>Tabbed Toolbar</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -201,7 +201,7 @@
 <listitem><para>Create widgets on your Reports</para></listitem>
 </itemizedlist>
 </sect2>
-<sect2 id="project-navigator-pane"><title>Project Navigator pane</title>
+<sect2 id="project-navigator-pane"><title>Project Navigator pane</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -226,7 +226,7 @@
 <para><note><para>Even though your operating system or window manager may be set up to handle single clicks instead of double clicks, &kexi; uses double clicks in <guilabel>Project Navigator</guilabel> to avoid accidentally opening large datasets or executing queries.</para></note>
 </para>
 </sect2>
-<sect2 id="opened-database-objects-area---tabbed-windows"><title>Opened database objects area / Tabbed Windows</title>
+<sect2 id="opened-database-objects-area---tabbed-windows"><title>Opened database objects area / Tabbed Windows</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -247,7 +247,7 @@
 <para><note><para>Sometime later on there will be an option to detach tabs, creating somewhat something similar to an MDI interface. That could be useful for custom solutions or multiple displays.</para></note>
 </para>
 </sect2>
-<sect2 id="property-editor-pane"><title>Property Editor pane</title>
+<sect2 id="property-editor-pane"><title>Property Editor pane</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -290,14 +290,14 @@
 </itemizedlist>
 </sect2>
 </sect1>
-<sect1 id="opening-an-existing-kexi-database-file"><title>Opening an existing Kexi database file</title>
+<sect1 id="opening-an-existing-kexi-database-file"><title>Opening an existing Kexi database file</title> 
 <para>To open an existing &kexi; database file:
 </para>
 <itemizedlist>
 <listitem><para>select it in the <guilabel>Open Existing Project</guilabel> dialog; or</para></listitem>
 <listitem><para>open it by clicking on the <filename>.kexi</filename> file icon.</para></listitem>
 </itemizedlist>
-<sect2 id="opening-a-database-file-in-the-open-existing-project-dialog"><title>Opening a database file in the Open Existing Project dialog</title>
+<sect2 id="opening-a-database-file-in-the-open-existing-project-dialog"><title>Opening a database file in the Open Existing Project dialog</title> 
 <itemizedlist>
 <listitem><para>Run &kexi;. You should see the <guilabel>Choose Project</guilabel> startup dialog. Choose <guilabel>Open Existing Project</guilabel> tab. You will see the following dialog:</para></listitem>
 <listitem><para>From <guilabel>Current location</guilabel> drop down box, pick a folder containing a file you are looking for.</para></listitem>
@@ -312,7 +312,7 @@
 <listitem><para>If you have selected a connection data file (with <filename>.kexic</filename> extension) or a shortcut to a project on database server file (with <filename>.kexis</filename> extension), &kexi; will display appropriate dialogs.</para></listitem>
 </itemizedlist>
 </sect2>
-<sect2 id="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon"><title>Opening an existing Kexi database file by clicking on .kexi file's icon</title>
+<sect2 id="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon"><title>Opening an existing Kexi database file by clicking on .kexi file's icon</title> 
 <itemizedlist>
 <listitem><para>Click file's icon using your file manager or desktop. &kexi; will open this database project automatically.</para></listitem>
 </itemizedlist>
@@ -322,7 +322,7 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="using-built-in-help"><title>Using built-in help</title>
+<sect1 id="using-built-in-help"><title>Using built-in help</title> 
 <para>The following ways to get built-in help in &kexi; are available:
 </para>
 <variablelist>
@@ -339,32 +339,32 @@
 </variablelist>
 </sect1>
 </chapter>
-<chapter id="building-simple-databases"><title>Building Simple Databases</title>
+<chapter id="building-simple-databases"><title>Building Simple Databases</title> 
 <itemizedlist>
-<listitem><para><link linkend="building-simple-databases">Introduction</link></para></listitem>
-<listitem><para><link linkend="designing-database-tables">Designing Database Tables</link><itemizedlist>
-<listitem><para><link linkend="the-table-designer-window">The Table Designer window</link></para></listitem>
+<listitem><para><link linkend="building-simple-databases">Introduction</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-database-tables">Designing Database Tables</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="the-table-designer-window">The Table Designer window</link>&nbsp;</para></listitem>
 </itemizedlist>
 </para></listitem>
-<listitem><para><link linkend="entering-data-into-tables">Entering Data Into Tables</link></para></listitem>
-<listitem><para><link linkend="designing-database-queries">Designing Database Queries</link></para></listitem>
-<listitem><para><link linkend="designing-forms">Designing Forms</link><itemizedlist>
-<listitem><para><link linkend="most-important-terms">Most important terms</link></para></listitem>
-<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link></para></listitem>
-<listitem><para><link linkend="working-with-form-design">Working with form design</link></para></listitem>
-<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link></para></listitem>
-<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link></para></listitem>
-<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link></para></listitem>
-<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link></para></listitem>
-<listitem><para><link linkend="actions">Actions</link></para></listitem>
-<listitem><para><link linkend="widget-layouts">Widget layouts</link></para></listitem>
-<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link></para></listitem>
-<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link></para></listitem>
+<listitem><para><link linkend="entering-data-into-tables">Entering Data Into Tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-database-queries">Designing Database Queries</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-forms">Designing Forms</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="most-important-terms">Most important terms</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="working-with-form-design">Working with form design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="actions">Actions</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="widget-layouts">Widget layouts</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link>&nbsp;</para></listitem>
 </itemizedlist>
 </para></listitem>
-<listitem><para><link linkend="entering-data-using-forms">Entering Data Using Forms</link></para></listitem>
+<listitem><para><link linkend="entering-data-using-forms">Entering Data Using Forms</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="introduction0"><title>Introduction</title>
+<sect1 id="introduction0"><title>Introduction</title> 
 <para>To learn the basics of &kexi;, you could build a simple database utilizing most elementary &kexi;'s features. To make things simpler, advanced database design topics will not be covered here.
 </para>
 <para>Start by creating a new empty Phone Book.
@@ -379,15 +379,15 @@
 <listitem><para>Use forms to enter data. Read the section called <link linkend="entering-data-using-forms">Entering Data Using Forms</link>.</para></listitem>
 </orderedlist>
 </sect1>
-<sect1 id="designing-database-tables"><title>Designing Database Tables</title>
+<sect1 id="designing-database-tables"><title>Designing Database Tables</title> 
 <para>First, there will be two tables added to your database: <replaceable>persons</replaceable> and <replaceable>phone_numbers</replaceable>. These are exactly the same tables as described in chapter <link linkend="database-and-spreadsheet">Database and Spreadsheet</link>. A layout for <replaceable>Persons</replaceable> can be found in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> in that chapter.
 </para>
 <orderedlist>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem></menuchoice> from the menubar. You can also use the button <guilabel>Create object: table</guilabel> on the Project Navigator's toolbar.</para></listitem>
 <listitem><para>The Table Designer's window will appear. Looking at the top of designer's window you will notice that &kexi; proposed you a generic name like template for the new table. The table design is not saved yet so you will be able to assign more proper name later. Moreover, because of the same reason, the table name is not yet visible in the <guilabel>Project Navigator</guilabel>.</para></listitem>
 </orderedlist>
-<sect2 id="the-table-designer-window"><title>The Table Designer window</title>
-<sect3 id="table-designer-window-consists-of-following-columns-"><title>Table Designer window consists of following columns:</title>
+<sect2 id="the-table-designer-window"><title>The Table Designer window</title> 
+<sect3 id="table-designer-window-consists-of-following-columns-"><title>Table Designer window consists of following columns:</title> 
 <itemizedlist>
 <listitem><para><guilabel>PK</guilabel> - Primary Key.</para></listitem>
 <listitem><para><guilabel>Field Caption</guilabel> - caption of the field which will be displayed during data entering.</para></listitem>
@@ -397,7 +397,7 @@
 <para>In the Table designer window, every row corresponds to a single table field. You can recognize you are in design mode because the <guilabel>Switch to design view</guilabel> button is toggled on within the main &kexi; toolbar.
 </para>
 </sect3>
-<sect3 id="procedure-3-3--designing-the-persons-table"><title>Procedure 3.3. Designing the Persons table</title>
+<sect3 id="procedure-3-3--designing-the-persons-table"><title>Procedure 3.3. Designing the Persons table</title> 
 <para>In the first row click on the cell in the <guilabel>Field Caption</guilabel> column and enter <replaceable>Name</replaceable> as field caption.
 </para>
 <para><guilabel>Notes about field names and captions</guilabel>
@@ -439,7 +439,7 @@
 </sect3>
 </sect2>
 </sect1>
-<sect1 id="entering-data-into-tables"><title>Entering Data Into Tables</title>
+<sect1 id="entering-data-into-tables"><title>Entering Data Into Tables</title> 
 <para>You have designed the two tables <replaceable>Persons</replaceable> and <replaceable>phone_numbers</replaceable>. None of them contain any data yet. You can enter some, and in this chapter you will learn how to do this fast and effectively.
 </para>
 <para>Start with the persons table. Open it in <guilabel>Data View</guilabel> using the Project Navigator's context menu. The current cell is marked with (usually black) thicker border, a cell cursor. The contents of the cell, if present, are highlighted with a different color. The current row, &ie; the one you have placed your rectangular cursor in, is marked on the left hand with an arrow symbol.
@@ -450,7 +450,7 @@
 </para>
 <para>Inserting new rows and entering data for them in &kexi; is different from the way of doing this in spreadsheets. To enter data for a new row, you need to use the arrow keys or mouse, to move your cursor to the special empty last row marked with a plus sign. Place your cursor in the (second) name column and enter a person's name. Also enter surname, street, house number and city. When done, move the cell cursor to the last empty row either by using the <keycap>Down</keycap> key or by clicking in the last row with the mouse to append a new row.
 </para>
-<sect2 id="details-about-actions-available-while-entering-data-into-tables"><title>Details About Actions Available While Entering Data Into Tables</title>
+<sect2 id="details-about-actions-available-while-entering-data-into-tables"><title>Details About Actions Available While Entering Data Into Tables</title> 
 <itemizedlist>
 <listitem><para>As soon as you enter the first character, the current row is being edited. A pencil symbol appears on the left side of the data table.</para></listitem>
 <listitem><para>Double clicking a cell with the left mouse button or pressing &Enter; or the <keycap>F2</keycap> key also starts editing of the current row.</para></listitem>
@@ -462,7 +462,7 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="designing-database-queries"><title>Designing Database Queries</title>
+<sect1 id="designing-database-queries"><title>Designing Database Queries</title> 
 <para>A database's primary purpose is to store and help extract information you are looking for. Unlike databases written on a paper sheets, &kexi; database allows you to specify more search criteria. Results are returned faster even for large data sets. All this is a power of databases, however to be able to perform effective queries in your database, you need to learn how to tell the database what you are looking for.
 </para>
 <para>With database queries you can limit data coming from a table to a predefined set of rows and columns as well as dynamically join data coming from multiple tables.
@@ -478,21 +478,21 @@
 <listitem><para>Save the query design for later use by clicking the Save button on the toolbar. You can also use <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> from the menubar or press the <keycombo>&Ctrl;<keycap>S</keycap></keycombo> keys. Because the query design has not been saved yet, you will be asked to specify a name for it. Enter <replaceable>Contacts</replaceable> text in the caption field and click the <guilabel>OK</guilabel> button.</para></listitem>
 </orderedlist>
 </sect1>
-<sect1 id="designing-forms"><title>Designing Forms</title>
+<sect1 id="designing-forms"><title>Designing Forms</title> 
 <itemizedlist>
-<listitem><para><link linkend="most-important-terms">Most important terms</link></para></listitem>
-<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link></para></listitem>
-<listitem><para><link linkend="working-with-form-design">Working with form design</link></para></listitem>
-<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link></para></listitem>
-<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link></para></listitem>
-<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link></para></listitem>
-<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link></para></listitem>
-<listitem><para><link linkend="actions">Actions</link></para></listitem>
-<listitem><para><link linkend="widget-layouts">Widget layouts</link></para></listitem>
-<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link></para></listitem>
-<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link></para></listitem>
+<listitem><para><link linkend="most-important-terms">Most important terms</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="working-with-form-design">Working with form design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="actions">Actions</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="widget-layouts">Widget layouts</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect2 id="most-important-terms"><title>Most important terms</title>
+<sect2 id="most-important-terms"><title>Most important terms</title> 
 <itemizedlist>
 <listitem><para>Widgets displaying information, &eg; a text box or an image box. Each widget of this type can be bound to a data source field (a table or a query column). Therefore, such widgets are called in short form fields.</para></listitem>
 <listitem><para>Widgets able to perform a specified action, &eg; a push button that can close the current form. Within other applications this widget type is sometimes called form control because it can perform previously defined action of controlling your database application's behavior.</para></listitem>
@@ -531,7 +531,7 @@
   </varlistentry>
 </variablelist>
 </sect2>
-<sect2 id="forms-versus-tables"><title>Forms versus tables</title>
+<sect2 id="forms-versus-tables"><title>Forms versus tables</title> 
 <para>In chapter <link linkend="entering-data-into-tables">Entering Data Into Tables</link> you learned about how to enter data directly into tables using their data sheet view. However, in many cases forms are better suited for data entry:
 </para>
 <itemizedlist>
@@ -542,7 +542,7 @@
 <para>In data sheet view displaying multi-row data text fields or images is as easy as within forms.
 </para>
 </sect2>
-<sect2 id="working-with-form-design"><title>Working with form design</title>
+<sect2 id="working-with-form-design"><title>Working with form design</title> 
 <para>As with table or query design, you are able to use <guilabel>Data View</guilabel> and <guilabel>Design View</guilabel>. Form designing is performed in <guilabel>Design View</guilabel>. We will often refer to the form design window as to <guilabel>Form Designer</guilabel>.
 </para>
 <orderedlist>
@@ -577,7 +577,7 @@
 <listitem><para>The <guilabel>Format</guilabel> toolbar used to format form's elements (&eg; adjusting widget's size, grouping). Formatting commands are also available in the <guilabel>Format</guilabel> menu.</para></listitem>
 </itemizedlist>
 </sect2>
-<sect2 id="using-the-widgets-tab"><title>Using the Widgets tab</title>
+<sect2 id="using-the-widgets-tab"><title>Using the Widgets tab</title> 
 <para>The <guilabel>Widgets</guilabel> tab in the <guilabel>Property</guilabel> pane provides a list of form widgets and their hierarchy. Each widget is presented within the hierarchy beside other widgets being on the same level (the same parent container). Child widgets (inside containers) are presented using indented names.
 </para>
 <para>Each widget has displayed its name and type. The type has also an icon displayed - the same as the one displayed on the toolbar used while form designing is performed.
@@ -591,7 +591,7 @@
 <para>Giving widgets reasonable names can be useful but is not mandatory. Note that widget's name is a property that is not visible to the user of your form. Users will only see a widget text, provided by <guilabel>Text</guilabel> property or similar.
 </para>
 </sect2>
-<sect2 id="inserting-widgets---text-fields"><title>Inserting widgets - text fields</title>
+<sect2 id="inserting-widgets---text-fields"><title>Inserting widgets - text fields</title> 
 <para>Let's create a form providing information about persons, &ie; a form connected it with <replaceable>Persons</replaceable> table.
 </para>
 <para>If the form being designed should present data obtained from the database, you need to place appropriate fields on it. To do this, use the buttons on the <guilabel>Widgets</guilabel> toolbar. Each button corresponds to a single widget type.
@@ -611,7 +611,7 @@
 </itemizedlist>
 </note></para>
 </sect2>
-<sect2 id="assigning-data-sources"><title>Assigning data sources</title>
+<sect2 id="assigning-data-sources"><title>Assigning data sources</title> 
 <para>The fields you inserted have no data source assigned yet, so these are not able to display information from the database. To assign data source, use the <guilabel>Data Source</guilabel> tab of the <guilabel>Property</guilabel> pane.
 </para>
 <para>The very first step is to specify the form's data source, &ie; a place the displayed data will be fetched from. As mentioned above, you will use table persons as a data source for your new form.
@@ -639,13 +639,13 @@
 </itemizedlist>
 </note></para>
 </sect2>
-<sect2 id="inserting-text-labels"><title>Inserting text labels</title>
+<sect2 id="inserting-text-labels"><title>Inserting text labels</title> 
 <para>To make it easier for the form's user to identify the meaning of every field widget, these should have added text labels with appropriate titles. To create text labels the <guilabel>Label</guilabel> widget is used.
 </para>
 <para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable> and <replaceable>Street</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and and increase the font size using <menuchoice><guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem></menuchoice> menu command.
 </para>
 </sect2>
-<sect2 id="actions"><title>Actions</title>
+<sect2 id="actions"><title>Actions</title> 
 <para>An Action is a single activity isolated in the application, available for the user to execute. It can also be executed automatically as a reaction for a given event (&eg; after opening a form).
 </para>
 <para><guilabel>Assigning actions to form buttons</guilabel>
@@ -659,8 +659,8 @@
 <listitem><para>Select the existing button widget by clicking on it or put a new button widget onto the form. If you inserted a new button, enter its title and press &Enter; key.</para></listitem>
 <listitem><para>Click the button widget with the right mouse button to display the context menu.</para></listitem>
 <listitem><para>From the context menu select <guilabel>Assign action...</guilabel> command.</para></listitem>
-<listitem><para>An <guilabel>Assigning Action to Command Button</guilabel> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <guilabel>Action type</guilabel> drop down list has the <guilabel>No</guilabel> type item selected.</para></listitem>
-<listitem><para>From the <guilabel>Action</guilabel> type drop down list select <guilabel>Application</guilabel> item. Available application-wide actions will be listed.</para></listitem>
+<listitem><para>An <guilabel>Assigning Action to Command Button</guilabel> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <guilabel>Action type</guilabel> drop down list has the <guilabel>No type</guilabel> item selected.</para></listitem>
+<listitem><para>From the <guilabel>Action type</guilabel> drop down list select <guilabel>Application</guilabel> item. Available application-wide actions will be listed.</para></listitem>
 <listitem><para>Select one of the actions on the list (&eg; <guilabel>Delete Row</guilabel>).</para></listitem>
 <listitem><para>Click the <guilabel>OK</guilabel> button or press the &Enter; key to accept your selection.</para></listitem>
 </orderedlist>
@@ -668,12 +668,12 @@
 </para>
 <para><note>
 <itemizedlist>
-<listitem><para>To remove an action assignment, select <guilabel>No</guilabel> type item from the <guilabel>Action type</guilabel> drop down list of the <guilabel>Assigning Action to Command Button</guilabel> dialog window.</para></listitem>
+<listitem><para>To remove an action assignment, select <guilabel>No type</guilabel> item from the <guilabel>Action type</guilabel> drop down list of the <guilabel>Assigning Action to Command Button</guilabel> dialog window.</para></listitem>
 <listitem><para>Actions only work in the form's data view. Not every action's assignment is reasonable. For example, the <guilabel>Font...</guilabel> action is available in data view, but only if you have a widget selected in the <guilabel>Design View</guilabel>. If you make changes to the font settings the changes are applied to the text of that selected widget.</para></listitem>
 </itemizedlist>
 </note></para>
 </sect2>
-<sect2 id="widget-layouts"><title>Widget layouts</title>
+<sect2 id="widget-layouts"><title>Widget layouts</title> 
 <para>In most cases form widgets should be conveniently arranged and aligned. Positioning, aligning and resizing widgets by hand is not easy and these parameters are not adjusted when the user resizes the form. In fact the situation is even worse because you cannot assume a given form requires a given space because users have different font sizes and display resolutions.
 </para>
 <para>Using special tool called widget layouts can help to automatically lay out the form widgets. Widget layout is an action of grouping two or more widgets so these are well positioned and have appropriate sizes.
@@ -704,7 +704,7 @@
      </listitem>
   </varlistentry>
 </variablelist>
-<sect3 id="springs-in-widget-layouts"><title>Springs in widget layouts</title>
+<sect3 id="springs-in-widget-layouts"><title>Springs in widget layouts</title> 
 <para>A spring in widget layouts is a special, invisible element allowing to adjust widget's position and size within layouts. Such a spring stretches or squeezes a widget on the right, top, bottom or left hand, so it can have desired size and position.
 </para>
 <para>To use a spring:
@@ -716,7 +716,7 @@
 <para>To make springs work you need to create a global widget layout, &ie; a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
 </para>
 </sect3>
-<sect3 id="removing-widget-layouts"><title>Removing widget layouts</title>
+<sect3 id="removing-widget-layouts"><title>Removing widget layouts</title> 
 <para>To remove widget layout without removing widgets, perform one of these actions:
 </para>
 <itemizedlist>
@@ -726,7 +726,7 @@
 <para><note><para>Removing widget layout using the Break Layout command will not remove widgets contained in the layout. If you want to remove the widgets as well, just select the layout by clicking on its border and press <keycap>Delete</keycap> key or use <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice> menu command or context menu command.</para></note>
 </para>
 </sect3>
-<sect3 id="size-policies-for-widgets-within-a-layout"><title>Size policies for widgets within a layout</title>
+<sect3 id="size-policies-for-widgets-within-a-layout"><title>Size policies for widgets within a layout</title> 
 <para>Instead of setting a fixed size for your widgets, in &kexi; you can choose between various widget's size policies. A size policy is a flexible strategy for controlling how a widget is stretched (or shrunk) depending on other neighbouring widgets and space available within the form.
 </para>
 <para>After putting widgets into a layout, typically each widget gets a proportional (<guilabel>Preferred</guilabel>) size policy. These widgets will be automatically resized with preferred settings, depending on their type and size of the entire layout itself. For example, three buttons put into the horizontal layout will be resized to fit their visible text.
@@ -758,7 +758,7 @@
   </varlistentry>
 </variablelist>
 </sect3>
-<sect3 id="values-of-size-policies"><title>Values of size policies</title>
+<sect3 id="values-of-size-policies"><title>Values of size policies</title> 
 <para>The following values are available in the drop down list for <guilabel>Horizontal Size Policy</guilabel> and <guilabel>Vertical Size Policy</guilabel> properties visible in the <guilabel>Property Editor</guilabel>:
 </para>
 <variablelist>
@@ -803,12 +803,12 @@
 <para>The most frequently used size policies are <guilabel>Preferred</guilabel>, <guilabel>Minimum</guilabel> and <guilabel>Maximum</guilabel>.
 </para>
 </sect3>
-<sect3 id="vertical-and-horizontal-stretch"><title>Vertical and horizontal stretch</title>
+<sect3 id="vertical-and-horizontal-stretch"><title>Vertical and horizontal stretch</title> 
 <para>The <guilabel>Vertical Stretch</guilabel> and <guilabel>Horizontal Stretch</guilabel> properties accept integer values greater than or equal to 0. These properties allow to fine-tune the behavior of size policies. The default value for the properties is 0. A higher value of the stretch means that the widget will be expanded more than widgets for which a lower stretch value is set.
 </para>
 </sect3>
 </sect2>
-<sect2 id="setting-widgets-size-and-position-by-hand"><title>Setting widgets size and position by hand</title>
+<sect2 id="setting-widgets-size-and-position-by-hand"><title>Setting widgets size and position by hand</title> 
 <para>In case when your form has no main layout set for auto-positioning and auto-resizing its widgets, you will probably want to modify the position and size of widgets so the form can look cleaner and be easier to use. The &kexi; form designer simplifies this task by offering the following groups of commands:
 </para>
 <itemizedlist>
@@ -879,7 +879,7 @@
 <para>There are also additional commands available: <guilabel>Bring Widget to Front</guilabel> (&ie; above all other widgets) and <guilabel>Send Widget to Back</guilabel> (&ie; below all other widgets). These two commands are rarely used, as it is not common to place one widget on top of an other (except when a container widget contains other widget inside). Also note that clicking a widget with a mouse button is enough to bring the widget to front.
 </para>
 </sect2>
-<sect2 id="setting-the-tab-order"><title>Setting the tab order</title>
+<sect2 id="setting-the-tab-order"><title>Setting the tab order</title> 
 <para>A widget's focus determines that widget's activity available using keyboard. Focus is related to widgets displayed in the form's data view. Exactly one form widget can have focus at the same time. The most frequent use of focus is text entry (when a given text field is active, &ie; it is focused). An other example is a button widget - when focused, it is possible to “press” it using the &Enter; or <keycap>Space</keycap> key instead of a mouse button.
 </para>
 <para>There are a few methods of making the widgets active (moving the focus to the widget): clicking with a mouse button, rotating the mouse wheel over the widget, or using the &Tab; key. The latter method is often used because of its speed and convenience for users. Availability of the focusing methods is controlled by <guilabel>Focus Policy</guilabel> property of a given widget.
@@ -894,7 +894,7 @@
 <listitem><para>To change tab order, either:<itemizedlist>
 <listitem><para>Click a selected widget name in the widgets list and drag it to a desired position (up or down) using the mouse.</para></listitem>
 <listitem><para>Click a selected widget name on the widgets list and use <guilabel>Move Up</guilabel> or <guilabel>Move Down</guilabel> buttons, to move the widgets to a desired position.</para></listitem>
-<listitem><para>Click the <guilabel>Handle</guilabel> tab order automatically check box to set the automatic tab order for the form. If this option has been switched on, any changes made to the list of widgets by hand are not taken into account - &kexi; will be handling the tab orders on its own. The automatic ordering means that the top-left widget will be focused first (or the top-right if your operating system uses right-to-left layout), and the order comes from the left to right (from the right to left, respectively) and from the top to bottom.</para></listitem>
+<listitem><para>Click the <guilabel>Handle tab order automatically</guilabel> check box to set the automatic tab order for the form. If this option has been switched on, any changes made to the list of widgets by hand are not taken into account - &kexi; will be handling the tab orders on its own. The automatic ordering means that the top-left widget will be focused first (or the top-right if your operating system uses right-to-left layout), and the order comes from the left to right (from the right to left, respectively) and from the top to bottom.</para></listitem>
 </itemizedlist>
 </para></listitem>
 </orderedlist>
@@ -902,18 +902,18 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="entering-data-using-forms"><title>Entering Data Using Forms</title>
+<sect1 id="entering-data-using-forms"><title>Entering Data Using Forms</title> 
 <para>Data entering and editing is usually the task of the user of the database application. The designer of the database should check the form in terms of valid data entry, and see whether the form works as expected.
 </para>
 <para>To test your form, switch to its data view. A single database row (record) of data will be displayed and a text cursor will be set inside the first data field. You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>OK</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
 </para>
 </sect1>
 </chapter>
-<chapter id="configuring-kexi"><title>Configuring Kexi</title>
+<chapter id="configuring-kexi"><title>Configuring Kexi</title> 
 <itemizedlist>
-<listitem><para><link linkend="docking-and-undocking-side-panels">Docking and undocking side panels</link></para></listitem>
+<listitem><para><link linkend="docking-and-undocking-side-panels">Docking and undocking side panels</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="docking-and-undocking-side-panels"><title>Docking and undocking side panels</title>
+<sect1 id="docking-and-undocking-side-panels"><title>Docking and undocking side panels</title> 
 <para>The <guilabel>Project Navigator</guilabel> and <guilabel>Properties Editor</guilabel> side panels may be undocked by either:
 </para>
 <itemizedlist>
@@ -930,17 +930,17 @@
 </para>
 </sect1>
 </chapter>
-<chapter id="command-reference"><title>Command Reference</title>
+<chapter id="command-reference"><title>Command Reference</title> 
 <itemizedlist>
-<listitem><para><link linkend="the-kexi-tab">The Kexi Tab</link></para></listitem>
-<listitem><para><link linkend="the-create-tab">The Create Tab</link></para></listitem>
-<listitem><para><link linkend="the-data-tab">The Data Tab</link></para></listitem>
-<listitem><para><link linkend="the-external-data-tab">The External Data Tab</link></para></listitem>
-<listitem><para><link linkend="the-tools-tab">The Tools Tab</link></para></listitem>
-<listitem><para><link linkend="the-form-design-tab">The Form Design Tab</link></para></listitem>
-<listitem><para><link linkend="the-report-design-tab">The Report Design Tab</link></para></listitem>
+<listitem><para><link linkend="the-kexi-tab">The Kexi Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-create-tab">The Create Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-data-tab">The Data Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-external-data-tab">The External Data Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-tools-tab">The Tools Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-form-design-tab">The Form Design Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-report-design-tab">The Report Design Tab</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="the-kexi-tab"><title>The Kexi Tab</title>
+<sect1 id="the-kexi-tab"><title>The Kexi Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -993,7 +993,7 @@
   </varlistentry>
 </variablelist>
 </sect1>
-<sect1 id="the-create-tab"><title>The Create Tab</title>
+<sect1 id="the-create-tab"><title>The Create Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1037,7 +1037,7 @@
   </varlistentry>
 </variablelist>
 </sect1>
-<sect1 id="the-data-tab"><title>The Data Tab</title>
+<sect1 id="the-data-tab"><title>The Data Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1081,7 +1081,7 @@
   </varlistentry>
 </variablelist>
 </sect1>
-<sect1 id="the-external-data-tab"><title>The External Data Tab</title>
+<sect1 id="the-external-data-tab"><title>The External Data Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1117,7 +1117,7 @@
 <para><note><para>The table has to be open, in order to be able to export data from it to a file.</para></note>
 </para>
 </sect1>
-<sect1 id="the-tools-tab"><title>The Tools Tab</title>
+<sect1 id="the-tools-tab"><title>The Tools Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1148,7 +1148,7 @@
 <para><note><para>You should regularly compact your database to keep it in good shape, especially after extensive records operations (mass add, delete)</para></note>
 </para>
 </sect1>
-<sect1 id="the-form-design-tab"><title>The Form Design Tab</title>
+<sect1 id="the-form-design-tab"><title>The Form Design Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1191,7 +1191,7 @@
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Text Editor</guilabel></emphasis></term>
     <listitem>
-    <para>A <guilabel>Text Box</guilabel> is a multiline container for data contained in your table.</para>
+    <para>A <guilabel>Text Editor</guilabel> is a multiline container for data contained in your table.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Button</guilabel></emphasis></term>
@@ -1241,7 +1241,7 @@
   </varlistentry>
 </variablelist>
 </sect1>
-<sect1 id="the-report-design-tab"><title>The Report Design Tab</title>
+<sect1 id="the-report-design-tab"><title>The Report Design Tab</title> 
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1311,15 +1311,15 @@
 </variablelist>
 </sect1>
 </chapter>
-<chapter id="appendix-a--introduction-to-databases"><title>Appendix A. Introduction to Databases</title>
+<chapter id="appendix-a--introduction-to-databases"><title>Appendix A. Introduction to Databases</title> 
 <itemizedlist>
-<listitem><para><link linkend="what-is-a-database">What Is a Database?</link></para></listitem>
-<listitem><para><link linkend="database-and-spreadsheet">Database and Spreadsheet</link></para></listitem>
-<listitem><para><link linkend="database-design">Database Design</link></para></listitem>
-<listitem><para><link linkend="who-needs-a-database">Who Needs a Database?</link></para></listitem>
-<listitem><para><link linkend="database-creation-software">Database Creation Software</link></para></listitem>
+<listitem><para><link linkend="what-is-a-database">What Is a Database?</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-and-spreadsheet">Database and Spreadsheet</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-design">Database Design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="who-needs-a-database">Who Needs a Database?</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-creation-software">Database Creation Software</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="what-is-a-database"><title>What Is a Database?</title>
+<sect1 id="what-is-a-database"><title>What Is a Database?</title> 
 <para>You can define a database as a collection of data on one topic. It is organised in a way allowing to easily browse the information, make changes or add new items.
 </para>
 <para>Look at this diagram for one of the above examples: a simple phone book.
@@ -1380,12 +1380,12 @@
 <para><note><para>Check content at https://www.zoho.com/creator/database-software-vs-spreadsheet.html</para></note>
 </para>
 </sect1>
-<sect1 id="database-and-spreadsheet"><title>Database and Spreadsheet</title>
+<sect1 id="database-and-spreadsheet"><title>Database and Spreadsheet</title> 
 <para>It is very likely that you have already used spreadsheet applications like <guilabel>Calligra Tables</guilabel>, <guilabel>LibreOffice Calc</guilabel> or <application>&Microsoft; Excel</application>. If so, you will probably wonder: since both spreadsheets and databases have tables, why should I use the latter?
 </para>
 <para>While comparing spreadsheets and databases you may encounter the following issues which you will later see in greater detail.
 </para>
-<sect2 id="how-is-a-database-different-from-a-spreadsheet"><title>How Is a Database Different From a Spreadsheet?</title>
+<sect2 id="how-is-a-database-different-from-a-spreadsheet"><title>How Is a Database Different From a Spreadsheet?</title> 
 <para>Gradually exceeding the capacity of a mobile phone, expand your table <replaceable>Contacts</replaceable> adding a column (field) Address. Add more telephone numbers (office, home) for each person and add surnames to names. To make it simpler we assume the following:
 </para>
 <itemizedlist>
@@ -1465,13 +1465,13 @@
 <para>Such a table can be made both in a spreadsheet and in a database. Using a spreadsheet is very easy, of course. What problems do we encounter at this stage?
 </para>
 </sect2>
-<sect2 id="referential-data-integrity"><title>Referential data integrity</title>
+<sect2 id="referential-data-integrity"><title>Referential data integrity</title> 
 <para>Suppose you are using a spreadsheet and you need to change the address of at least one person. You have a small problem: you often have to change the address in many rows. For example, Joan takes three rows. A real problem will arise if you forget to change one of the rows - the address assigned to this person will be ambiguous, hence your data loses integrity.
 </para>
 <para>Moreover there is no simple way of deleting a chosen person from the table since you have to remember about deleting all rows related to him or her.
 </para>
 </sect2>
-<sect2 id="data-redundancy"><title>Data redundancy</title>
+<sect2 id="data-redundancy"><title>Data redundancy</title> 
 <para>This is directly connected to the previous problem. In fields Name and surname and Address the same data is entered many times. This is typical of a spreadsheets' ineffective way of storing data because the database grows unnecessarily, thus requiring more computer resources (larger size of data and slower access).
 </para>
 <para>How can you solve these problems with a database? You can split information into smaller chunks by creating an additional table Persons with only two columns: Name and surname and Address:
@@ -1509,7 +1509,7 @@
 <para>Each row in the table Persons corresponds to a single person. Table <replaceable>Contacts</replaceable> is from now on a relation to the table <replaceable>Persons</replaceable>.
 </para>
 </sect2>
-<sect2 id="data-integrity-and-validity"><title>Data integrity and validity</title>
+<sect2 id="data-integrity-and-validity"><title>Data integrity and validity</title> 
 <para>Note the way data is entered in the fields <guilabel>Name and surname</guilabel> and <guilabel>Address</guilabel>. People entering data can be fallible, sometimes even negligent. In our sample data we have both different sequence of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and many more ways of entering the same address. Surely you can think of many other ways.
 </para>
 <para>The above problem shows that &eg; when searching the telephone number of a person whose address is <quote>Western Gate 1, Warsaw</quote> you will not get a full result. You will get only one row instead of three. Moreover You will also not find all the telephone numbers searching for the value <quote>Joan Smith</quote> in the field <guilabel>Name and surname</guilabel>, because <quote>Smith Joan</quote> will not fit to <quote>Joan Smith</quote>.
@@ -1599,7 +1599,7 @@
 <para>Thanks to introducing the condition required field we can be sure that the entered data is complete. In case of other tables you may of course allow omitting certain fields while entering data.
 </para>
 </sect2>
-<sect2 id="limiting-data-view"><title>Limiting data view</title>
+<sect2 id="limiting-data-view"><title>Limiting data view</title> 
 <para>A spreadsheet displays all rows and columns of the table which is bothersome in case of very large data sheets. You may of course filter and sort rows in spreadsheets, however you must be extra careful while doing so. Spreadsheet users are in risk of forgetting that their data view has been filtered what can lead to mistakes. For example, while calculating sums you may think you have 100 rows of data while in fact there are 20 rows more hidden.
 </para>
 <para>If you want to work on a small subset of data, &eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such <quote>manual</quote> editing may cause data loss or incorrect calculations.
@@ -1669,7 +1669,7 @@
 <para>Let's assume that the newly introduced column Income contains confidential data. How can you share &eg; contact details of the persons with your coworkers but without revealing their income? It is possible if you share only a query and not the whole table. The query could select all columns except for the column Income. In database world such a query is often known as a view.
 </para>
 </sect2>
-<sect2 id="performance-and-capacity"><title>Performance and capacity</title>
+<sect2 id="performance-and-capacity"><title>Performance and capacity</title> 
 <para>Your computer is probably quite fast, however you will easily see that it doesn't help with slow, large spreadsheets. Their low efficiency is first of all due to lack of indexes accelerating the process of data search (databases do offer them). Moreover if you use things like system clipboard, even copying data may become troublesome with time.
 </para>
 <para>Spreadsheets containing large data sets may take ages to open. A spreadsheet loads lots of data to the computer's memory while opening. Most of the data loaded are probably useless/unnecessary for you at the moment. Databases unlike spreadsheets load data from computer storage only when needed.
@@ -1683,23 +1683,23 @@
 <para>Together with <link linkend="limiting-data-view">Limiting data view</link> described in the previous paragraph these qualities constitute the advantage of databases.
 </para>
 </sect2>
-<sect2 id="data-entry"><title>Data entry</title>
+<sect2 id="data-entry"><title>Data entry</title> 
 <para>The latest editions of applications for creating spreadsheets enable you to design data-entry forms. Such forms are most useful if your data cannot be conveniently displayed in tabular view, &eg; if the text occupies too many rows or if all the columns do not fit on the screen.
 </para>
 <para>In this case the very way the spreadsheet works is problematic. Fields for data entry are placed loosely within the spreadsheet and very often are not secure against the user's (intentional or accidental) intervention.
 </para>
 </sect2>
-<sect2 id="reports"><title>Reports</title>
+<sect2 id="reports"><title>Reports</title> 
 <para>Databases enable grouping, limiting and summing up data in a form of a report. Spreadsheets are usually printed in a form of small tables without fully automatic control over page divisions and the layout of fields.
 </para>
 </sect2>
-<sect2 id="programming"><title>Programming</title>
+<sect2 id="programming"><title>Programming</title> 
 <para>Applications for creating databases often contain full programming languages. Newer spreadsheets have this capability too, however calculations come down to modifying the spreadsheet's fields and simple data copying, regardless of the relevance and integrity rules mentioned in previous paragraphs.
 </para>
 <para>Data processing within a spreadsheet is usually done via a graphical user's interface which may slow down the data processing speed. Databases are capable of working in background, outside of graphical interfaces.
 </para>
 </sect2>
-<sect2 id="multiuse"><title>Multiuse</title>
+<sect2 id="multiuse"><title>Multiuse</title> 
 <para>It is hard to imagine a multiuse of one spreadsheet. Even if it is technically possible in the case of the latest applications, it requires a lot of discipline, attention and knowledge from the users, and these cannot be guaranteed.
 </para>
 <para>A classical way to sharing data saved in a spreadsheet with other person is to send a file as a whole (usually using e-mail) or providing a spreadsheet file in a computer network. This way of work is ineffective for larger groups of people - data that could be needed in a particular time may be currently locked by another person.
@@ -1707,7 +1707,7 @@
 <para>On the other hand, databases have been designed mainly with multiuser access in mind. Even for the simplest version locking at a particular table row's level is possible, which enables easy sharing of table data.
 </para>
 </sect2>
-<sect2 id="security"><title>Security</title>
+<sect2 id="security"><title>Security</title> 
 <para>Securing a spreadsheet or its particular sections with a password is only symbolic activity. After providing a spreadsheet file in a computer network, every person being able to copy the file can try to break the password. It is sometimes not so hard as the password is stored in the same file as the spreadsheet.
 </para>
 <para>Features for edit locking or copy locking of a spreadsheet (or its part) is equally easy to break.
@@ -1718,21 +1718,21 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="database-design"><title>Database Design</title>
+<sect1 id="database-design"><title>Database Design</title> 
 <para>Database design needs careful planning. Note that <replaceable>Contacts</replaceable> table redesign proposed in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> can generate problems when the table is filled with data. For example, renaming a field is a simple task, but splitting the <replaceable>Address</replaceable> field into separate fields requires careful and tedious work.
 </para>
 <para>To avoid such situations, rethink your database project before you create it in your computer, and before you and others will start to use it. Thus, by investing some time initially, you will most probably save your time on everyday use.
 </para>
 </sect1>
-<sect1 id="who-needs-a-database"><title>Who Needs a Database?</title>
-<sect2 id="stick-to-spreadsheets-if-"><title>Stick to spreadsheets if:</title>
+<sect1 id="who-needs-a-database"><title>Who Needs a Database?</title> 
+<sect2 id="stick-to-spreadsheets-if-"><title>Stick to spreadsheets if:</title> 
 <itemizedlist>
 <listitem><para>Your needs are limited and your data will never grow to large volumes (can you actually forecast that now?)</para></listitem>
 <listitem><para>You are unable to acquire the methodology of database construction. You may however consider either outsourcing this task to someone else or using simpler tools.</para></listitem>
 <listitem><para>You use complicated spreadsheets and you lack time or money to switch to databases. Think or ask someone whether this does not lead down a blind alley. Don't count on magical tools that would change your spreadsheet (regardless how well made) into a database.</para></listitem>
 </itemizedlist>
 </sect2>
-<sect2 id="consider-using-databases-if-"><title>Consider using databases if:</title>
+<sect2 id="consider-using-databases-if-"><title>Consider using databases if:</title> 
 <itemizedlist>
 <listitem><para>Your data collection expands every week.</para></listitem>
 <listitem><para>You often create new spreadsheets, copy within these and you feel that this work is getting more and more tedious. In this case the effort of switching to databases easily pays off.</para></listitem>
@@ -1740,7 +1740,7 @@
 </itemizedlist>
 </sect2>
 </sect1>
-<sect1 id="database-creation-software"><title>Database Creation Software</title>
+<sect1 id="database-creation-software"><title>Database Creation Software</title> 
 <para>So far you have learnt the general characteristics of databases without going into much detail about specific applications for designing them.
 </para>
 <para>The first databases were built together with large mainframe computers in the 60s, &eg; IBM System/360. Those were not the days of PCs, therefore these databases required a highly specialized personnel. Although the old computers' hardware was unreliable, they were immeasurably slower and had less storage capacity, one feature of databases still remains most attractive: the data access by many users through a network.
@@ -1756,15 +1756,15 @@
 <listitem><para><ulink url="http://msdn.microsoft.com/vfoxpro/productinfo/overview">FoxPro</ulink> - an application similar to DBase (early 90s). After being taken over by Microsoft, graphic user interfaces were introduced and therefore it is used for creating databases on PCs. This product is still offered, though seems a bit obsolete.</para></listitem>
 <listitem><para><ulink url="http://office.microsoft.com/access/">Microsoft Access</ulink> - an application for databases (data and graphic interface design) with many simplifications, therefore suitable for beginners, designed in the late 80s, based on 16-Bit Architecture. This product is offered and widely used till today, especially by small companies, where efficiency and multiuser requirements are not very demanding.</para></listitem>
 <listitem><para><ulink url="http://www.filemaker.com">FileMaker</ulink> - popular application similar to MS Access in simplicity, operating on Windows and Macintosh platforms, offered since 1985.</para></listitem>
-<listitem><para><ulink url="http://www.calligra-suite.org/kexi">Kexi</ulink> - a multiplatform application (&UNIX;/&Linux;, Windows, Mac OS X) designed in 2003, developed according to OpenSource principles, part of the global K Desktop Environment project, &ie; graphic environment for &UNIX;/&Linux; systems. A significant contributor to Kexi's development is the OpenOffice Poland company.</para></listitem>
+<listitem><para><ulink url="http://www.calligra-suite.org/kexi">Kexi</ulink> - a multiplatform application (&UNIX;/&Linux;, Windows, &MacOS; X) designed in 2003, developed according to OpenSource principles, part of the global K Desktop Environment project, &ie; graphic environment for &UNIX;/&Linux; systems. A significant contributor to Kexi's development is the OpenOffice Poland company.</para></listitem>
 </itemizedlist>
 </sect1>
 </chapter>
-<chapter id="appendix-b--comparing-kexi-to-other-database-applications"><title>Appendix B. Comparing Kexi to other database applications</title>
+<chapter id="appendix-b--comparing-kexi-to-other-database-applications"><title>Appendix B. Comparing Kexi to other database applications</title> 
 <itemizedlist>
-<listitem><para><link linkend="data-types">Data types</link></para></listitem>
+<listitem><para><link linkend="data-types">Data types</link>&nbsp;</para></listitem>
 </itemizedlist>
-<sect1 id="data-types"><title>Data types</title>
+<sect1 id="data-types"><title>Data types</title> 
 <para>Although different database applications tend to provide similar functionality, they often use different terminology. For your convenience, this appendix shows how the terminology used in &kexi; corresponds to that used by other database applications. Thus, this chapter may be useful when migrating databases from one application to another.
 </para>
 <para>The table below shows how the data types in &kexi; correspond to data types in other database applications.
@@ -3081,7 +3081,7 @@
 </para>
 </sect1>
 </chapter>
-<chapter id="credits-and-license"><title>Credits and License</title>
+<chapter id="credits-and-license"><title>Credits and License</title> 
 <para>&kexi; Copyright 2002-2011 The Kexi Team
 </para>
 <para>Kexi Developers:
@@ -3102,6 +3102,8 @@
 <listitem><para>Till Busch (till bux.at)</para></listitem>
 </itemizedlist>
 <para>Documentation by Martin A. Ellis (martin.ellis kdemail.net), Jaroslaw Staniek (staniek kde.org) with contributions from Anne-Marie Mahfouf, Raphael Langerhorst, Michal Kubicki and Aron Stansvik.
+</para>
+<para>This documentation is licensed under the terms of the <ulink url="http://docs.kde.org/stable/common/fdl-license.html">GNU Free Documentation License</ulink>.
 </para>
 <para>This program is licensed under the terms of the <ulink url="http://docs.kde.org/stable/common/lgpl-license.html">GNU Lesser General Public License</ulink>.
 </para>
