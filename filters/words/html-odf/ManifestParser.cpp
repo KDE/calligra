@@ -21,21 +21,18 @@
 
 
 
-bool ManifestParser::startDocument()
-{ 
+bool ManifestParser::startDocument() { 
     m_currentType = "";
     m_currentPath = "";
     return true; 
 }
-bool ManifestParser::endElement( const QString&, const QString&, const QString &name )
-{
+bool ManifestParser::endElement( const QString&, const QString&, const QString &name ) {
     m_currentType = "";
     m_currentPath = "";
     return true;
 }
 
-bool ManifestParser::startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs )
-{
+bool ManifestParser::startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs ) {
     if( name == "manifest:file-entry" )
     {
         QString attrName;
@@ -61,4 +58,8 @@ bool ManifestParser::startElement( const QString&, const QString&, const QString
     }
     
     return true;
+}
+
+const QStringList& ManifestParser::fileList() {
+    return m_fileList;
 }

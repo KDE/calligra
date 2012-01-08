@@ -132,9 +132,10 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     QString destImage;
     QString outputPath;
     // Extract each file
-    for (int i = 0; i < manifestParser.m_fileList.size(); ++i) {
-        sourceImage = manifestParser.m_fileList[i];
-        destImage = filenamewithoutext + "/" + manifestParser.m_fileList[i];
+    QStringListIterator fileListIt = QStringListIterator(manifestParser.fileList());
+    while (fileListIt.hasNext()) {
+        sourceImage = fileListIt.next();
+        destImage = filenamewithoutext + "/" + sourceImage;
         
         // Create the target directory
         outputPath = filenamewithoutext+"/"+sourceImage.left(sourceImage.lastIndexOf('/'));
