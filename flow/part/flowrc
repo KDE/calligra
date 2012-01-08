@@ -3,4 +3,5 @@ State=AAAA/wAAAAD9AAAAAwAAAAAAAADnAAACnfwCAAAABPsAAAAkAEYAbABvAHcAUwBoAGEAcABlAE
 
 [Grid]
 ShowGrid=true
+Color=230,230,230
 PaintGridInBackground=true
