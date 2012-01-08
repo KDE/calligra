@@ -6,3 +6,61 @@ The works have been assigned to Dimitrios T Tanis, email: jtanis@tanisfood.gr.
 
 Tutorials, etc. are welcome!
 Please coordinate the work Jarosław Staniek, email: staniek@kde.org.
+
+The document in this folder is automatically converted identical copy of UserBase pages.
+
+Please do not edit it!
+
+How-to on the export from UserBase can be found here:
+
+http://userbase.kde.org/How_To_Convert_a_UserBase_Manual_to_Docbook
+
+The list of UserBase pages to export:
+
+Kexi/Handbook/Introduction
+Kexi/Handbook/Kexi Basics
+Kexi/Handbook/Kexi Basics/Kexi Databases
+Kexi/Handbook/Kexi Basics/Creating a New Database File
+Kexi/Handbook/Kexi Basics/The Kexi Main Window
+Kexi/Handbook/Kexi Basics/Opening an existing Kexi database file
+Kexi/Handbook/Kexi Basics/Opening an existing Kexi database file/Opening a database file in the Open Existing Project dialog
+Kexi/Handbook/Kexi Basics/Opening an existing Kexi database file/Opening an existing Kexi database file by clicking on .kexi file's icon
+Kexi/Handbook/Kexi Basics/Using built-in help
+Kexi/Handbook/Building Simple Databases
+Kexi/Handbook/Building Simple Databases/Designing Database Tables
+Kexi/Handbook/Building Simple Databases/Designing Database Tables/The Table Designer window
+Kexi/Handbook/Building Simple Databases/Entering Data Into Tables
+Kexi/Handbook/Building Simple Databases/Designing Database Queries
+Kexi/Handbook/Building Simple Databases/Designing Forms
+Kexi/Handbook/Building Simple Databases/Designing Forms/Most important terms
+Kexi/Handbook/Building Simple Databases/Designing Forms/Forms versus tables
+Kexi/Handbook/Building Simple Databases/Designing Forms/Working with form design
+Kexi/Handbook/Building Simple Databases/Designing Forms/Using the Widgets tab
+Kexi/Handbook/Building Simple Databases/Designing Forms/Inserting widgets - text fields
+Kexi/Handbook/Building Simple Databases/Designing Forms/Assigning data sources
+Kexi/Handbook/Building Simple Databases/Designing Forms/Inserting text labels
+Kexi/Handbook/Building Simple Databases/Designing Forms/Actions
+Kexi/Handbook/Building Simple Databases/Designing Forms/Widget layouts
+Kexi/Handbook/Building Simple Databases/Designing Forms/Setting widgets size and position by hand
+Kexi/Handbook/Building Simple Databases/Designing Forms/Setting the tab order
+Kexi/Handbook/Building Simple Databases/Entering Data Using Forms
+Kexi/Handbook/Configuring Kexi
+Kexi/Handbook/Configuring Kexi/Docking and undocking side panels
+Kexi/Handbook/Command Reference
+Kexi/Handbook/Command Reference/The Kexi Tab
+Kexi/Handbook/Command Reference/The Create Tab
+Kexi/Handbook/Command Reference/The Data Tab
+Kexi/Handbook/Command Reference/The External Data Tab
+Kexi/Handbook/Command Reference/The Tools Tab
+Kexi/Handbook/Command Reference/The Form Design Tab
+Kexi/Handbook/Command Reference/The Report Design Tab
+Kexi/Handbook/Appendix A. Introduction to Databases
+Kexi/Handbook/Introduction to Databases/What Is a Database?
+Kexi/Handbook/Introduction to Databases/Database and Spreadsheet
+Kexi/Handbook/Introduction to Databases/Database Design
+Kexi/Handbook/Introduction to Databases/Who Needs a Database?
+Kexi/Handbook/Introduction to Databases/Database Creation Software
+Kexi/Handbook/Appendix B. Comparing Kexi to other database applications
+Kexi/Handbook/Comparing Kexi to other database applications/Data types
+Kexi/Handbook/Appendix C. Reserved words for SQL
+Kexi/Handbook/Credits and License

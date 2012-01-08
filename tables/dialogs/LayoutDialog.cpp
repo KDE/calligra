@@ -829,7 +829,7 @@ void CellFormatDialog::slotApply()
     // We need to create a command that would act as macro,
     // but which would also ensure that updates are not painted until everything
     // is updated properly ...
-    KUndo2Command* macroCommand = new KUndo2Command("Change Format");
+    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Change Format"));
 
     if (isMerged != positionPage->getMergedCellState()) {
         MergeCommand* command = new MergeCommand(macroCommand);
