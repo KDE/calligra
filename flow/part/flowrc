@@ -5,3 +5,6 @@ State=AAAA/wAAAAD9AAAAAwAAAAAAAADnAAACnfwCAAAABPsAAAAkAEYAbABvAHcAUwBoAGEAcABlAE
 ShowGrid=true
 Color=230,230,230
 PaintGridInBackground=true
+
+[KoPageApp/DocumentStructureDocker]
+ViewMode=Detailed
