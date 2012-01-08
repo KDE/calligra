@@ -514,7 +514,6 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
                 offset.setX(widget.sHOffset->value());
             }
             if (m_vertPos == KoTextAnchor::VFromTop) {
-                qDebug()<<"changing y"<<widget.sVOffset->value();
                 offset.setY(widget.sVOffset->value());
             }
 
