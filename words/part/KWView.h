@@ -150,22 +150,12 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// delete the currently selected frame(s)
-    void editDeleteFrame();
     /// enable/disable document headers
     void toggleHeader();
     /// enable/disable document footers
     void toggleFooter();
     /// snap to grid
     void toggleSnapToGrid();
-    /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame();
-    /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame();
-    /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront();
-    /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// called if the zoom changed

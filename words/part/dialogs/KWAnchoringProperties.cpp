@@ -138,7 +138,7 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
 
     connect(widget.cTopArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
     connect(widget.cVCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
-    connect(widget.cRightArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cBottomArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
     connect(widget.cVOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
 
     connect(widget.cLeftArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
@@ -509,10 +509,19 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
                 m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
             }
 
+            QPointF offset = anchor->offset();
+            if (m_horizPos == KoTextAnchor::HFromLeft) {
+                offset.setX(widget.sHOffset->value());
+            }
+            if (m_vertPos == KoTextAnchor::VFromTop) {
+                offset.setY(widget.sVOffset->value());
+            }
+
             if (macro) {
                 // create the actual undo step.
                 KoTextAnchor anchorProperties(0);
                 anchorProperties.setAnchorType(type);
+                anchorProperties.setOffset(offset);
                 anchorProperties.setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
                 anchorProperties.setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
                 anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
@@ -522,6 +531,7 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
             } else {
                 // no macro, then this is on creation and no undo step wanted.
                 anchor->setAnchorType(type);
+                anchor->setOffset(offset);
                 anchor->setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
                 anchor->setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
                 anchor->setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
