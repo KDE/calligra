@@ -523,6 +523,10 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             first = false;
         }
         delete[] points;
+
+        // We need to store the content rect so layout can place it's anchored shapes
+        // correctly
+        page.setContentRect(QRectF(QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[3]), QSizeF(textWidth ,resultingPositions[4] - resultingPositions[3])));
     }
     if (endnote) {
         endnote->shape()->setPosition(

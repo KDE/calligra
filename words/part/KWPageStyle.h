@@ -154,41 +154,6 @@ public:
      */
     void setFooterDistance(qreal distance);
 
-    /// return the distance between the footnote and the main frame.
-    qreal footnoteDistance() const;
-    /**
-     * Set the distance between the footnote and the main frame.
-     * @param distance the distance
-     */
-    void setFootnoteDistance(qreal distance);
-    /// return the distance between the main text frame and the end notes frame.
-    qreal endNoteDistance() const;
-    /**
-     * Set the distance between the main text frame and the end notes frame.
-     * @param distance the distance
-     */
-    void setEndNoteDistance(qreal distance);
-
-    /// return the line length of the foot note separator line, in percent of the pagewidth
-    int footNoteSeparatorLineLength() const;
-    /// set the line length of the foot note separator line, in percent of the pagewidth
-    void setFootNoteSeparatorLineLength(int length);
-
-    /// return the thickness of the line (in pt) drawn above the foot notes
-    qreal footNoteSeparatorLineWidth() const;
-    /// set the thickness of the line (in pt) drawn above the foot notes
-    void setFootNoteSeparatorLineWidth(qreal width);
-
-    /// return the pen style used to draw the foot note separator line
-    Qt::PenStyle footNoteSeparatorLineType() const;
-    /// set the pen style used to draw the foot note separator line
-    void setFootNoteSeparatorLineType(Qt::PenStyle type);
-
-    /// return the position on the page for the foot note separator line
-    Words::FootNoteSeparatorLinePos footNoteSeparatorLinePosition() const;
-    /// set the position on the page for the foot note separator line
-    void setFootNoteSeparatorLinePosition(Words::FootNoteSeparatorLinePos position);
-
     /// initialize to default settings
     void clear();
 
