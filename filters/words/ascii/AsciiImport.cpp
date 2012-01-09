@@ -135,10 +135,6 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         }
     }
 
-    QTextStream stream(&in);
-    Q_ASSERT(codec);
-    stream.setCodec(codec);
-
     int paragraphStrategy = 0;
     if (!m_chain->manager()->getBatchMode()) {
         QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
@@ -208,6 +204,10 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     ((KoCharacterStyle*)p)->applyStyle(charFormat);
     cursor.setCharFormat(charFormat);
 #endif
+
+    QTextStream stream(&in);
+    Q_ASSERT(codec);
+    stream.setCodec(codec);
 
     switch (paragraphStrategy) {
     case 1: { // Sentence: Line-break at the end of a sentence.
