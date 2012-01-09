@@ -1110,7 +1110,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
         shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
 
-        QTextDocument *qdoc   = textShapeData ? textShapeData->document() : 0;
+        //QTextDocument *qdoc   = textShapeData ? textShapeData->document() : 0;
         KoTextAnchor  *anchor = new KoTextAnchor(shape);
         anchor->setAnchorType(KoTextAnchor::AnchorPage);
         anchor->setHorizontalPos(KoTextAnchor::HFromLeft);

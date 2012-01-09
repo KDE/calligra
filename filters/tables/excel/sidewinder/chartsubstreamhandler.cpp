@@ -106,10 +106,10 @@ public:
             setIsValid(false);
             return;
         }
-        unsigned rt = readU16(data);
-        unsigned grbitFrt = readU16(data + 2);
-        unsigned cb = readU32(data + 12);
-        unsigned recordVersion = readU8(data + 16);
+        //unsigned rt = readU16(data);
+        //unsigned grbitFrt = readU16(data + 2);
+        //unsigned cb = readU32(data + 12);
+        //unsigned recordVersion = readU8(data + 16);
         m_xmlTkParent = readU16(data + 18);
 
         qDeleteAll(m_tokens);
