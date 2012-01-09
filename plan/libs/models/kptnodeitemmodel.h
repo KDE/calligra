@@ -321,6 +321,9 @@ public:
     
     bool projectShown() const { return m_projectshown; }
 
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 signals:
     void nodeInserted( Node *node );
     void projectShownChanged( bool );
