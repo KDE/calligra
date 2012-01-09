@@ -290,6 +290,9 @@ public:
     bool setData( const QModelIndex &index, const QVariant &value, int role );
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int /*column*/ ) const { return Qt::DisplayRole; }
+
 signals:
     /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( KUndo2Command* );

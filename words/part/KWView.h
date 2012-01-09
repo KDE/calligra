@@ -188,6 +188,8 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
+    /// user wants to past data from the clipboard
+    void pasteRequested();
 
 private:
     KWGui *m_gui;

@@ -1,4 +1,7 @@
 add_subdirectory(calligra)
+if(BUILD_kexi)
+    add_subdirectory(kexi)
+endif(BUILD_kexi)
 if(BUILD_stage)
     add_subdirectory(stage)
 endif(BUILD_stage)

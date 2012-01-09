@@ -336,6 +336,11 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
+    // connect to the paste action here because the KoPasteController only calls
+    // the paste method of the current active tool.
+    // so we are connecting here to be able to alway paste images to the docoment.
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(pasteRequested()));
+
     action  = new KAction(i18n("Statistics"), this);
     actionCollection()->addAction("file_statistics", action);
     action->setToolTip(i18n("Sentence, word and letter counts for this document"));
@@ -489,6 +494,17 @@ KoShape* KWView::selectedShape() const
 }
 
 // -------------------- Actions -----------------------
+
+void KWView::pasteRequested()
+{
+    QImage img = QApplication::clipboard()->image();
+
+    if (!img.isNull()) {
+        QList<QImage> images;
+        images.append(img);
+        addImages(images, canvas()->mapFromGlobal(QCursor::pos()));
+    }
+}
 
 void KWView::editFrameProperties()
 {

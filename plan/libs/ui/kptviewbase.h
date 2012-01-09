@@ -366,6 +366,8 @@ public:
     
     QModelIndex firstVisibleIndex( const QModelIndex &idx ) const;
 
+    ItemModelBase *itemModel() const;
+
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );

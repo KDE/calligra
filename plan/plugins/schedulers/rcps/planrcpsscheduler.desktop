@@ -33,6 +33,7 @@ Name[zh_CN]=RCPS 调度器
 Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Constrained Project Scheduler
 Comment[ca]=Recurs de conflictes de planificador de projectes basat en la genètica
+Comment[ca@valencia]=Recurs de conflictes de planificador de projectes basat en la genètica
 Comment[da]=Genetikbaseret projektskemalægning med begrænsede ressourcer
 Comment[el]=Χρονοπρογραμματιστής έργων με περιορισμένους πόρους με βάση τη Γενετική
 Comment[en_GB]=Genetics based Resource Constrained Project Scheduler

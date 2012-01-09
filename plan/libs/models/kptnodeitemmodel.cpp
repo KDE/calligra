@@ -3866,6 +3866,25 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
     return QModelIndex();
 }
 
+int NodeItemModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
+}
 
 //----------------------------
 class GeneralNodeItemModel::Object
