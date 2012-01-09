@@ -3,6 +3,7 @@ Type=Service
 Name=Words HTML Export Filter
 Name[bg]=Филтър за изнасяне от Words в HTML
 Name[ca]=Filtre d'exportació HTML per al Words
+Name[ca@valencia]=Filtre d'exportació HTML per al Words
 Name[cs]=Exportní filtr HTML pro Words
 Name[da]=HTML-eksportfilter til Words
 Name[de]=Words HTML-Exportfilter

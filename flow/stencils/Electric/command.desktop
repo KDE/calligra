@@ -2,6 +2,7 @@
 Name=command
 Name[bg]=команда
 Name[ca]=command
+Name[ca@valencia]=command
 Name[cs]=příkaz
 Name[el]=εντολή
 Name[it]=comando
