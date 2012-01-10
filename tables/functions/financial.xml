@@ -1142,7 +1142,7 @@
                </Help>
            </Function>
 
-           <!-- sebsauer; uncomment following once Calligra 2.4 is released
+           <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
 
            <Function>
                <Name>RATE</Name>
