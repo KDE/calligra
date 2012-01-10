@@ -304,6 +304,36 @@
        </Help>
    </Function>
 
+   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
+   <Function>
+       <Name>OFFSET</Name>
+       <Type>Reference</Type>
+       <Parameter>
+           <Comment>Reference or range</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Number of rows to offset</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Number of columns to offset</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Height of the offset range (optionl)</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Width of the offset range (optional)</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Modifies a reference's position and dimension.</Text>
+           <Syntax>OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer newHeight; Integer newWidth)</Syntax>
+       </Help>
+   </Function>
+   -->
 </Group>
 
 </KSpreadFunctions>
