@@ -332,17 +332,22 @@ void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* 
 {
     const TextContainer* textContainer = 0;
     const TextRuler* textRuler = 0;
+
     if (ct) {
-        const PptOfficeArtClientTextBox* tb = ct->anon.get<PptOfficeArtClientTextBox>();
-        if (tb) {
+        if (ct->anon.is<PptOfficeArtClientTextBox>()) {
+            const PptOfficeArtClientTextBox* tb = ct->anon.get<PptOfficeArtClientTextBox>();
             foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
-                if (tc.anon.is<TextRulerAtom>()) {
-                    textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
-                    break;
+                if (tc.anon.is<OutlineAtom>()) {
+                    const OutlineAtom* outlineAtom = tc.anon.get<OutlineAtom>();
+                    if (outlineAtom->textRulerAtom) {
+                        textRuler = &outlineAtom->textRulerAtom->textRuler;
+                        break;
+                    }
                 }
-	    }
+            }
         }
     }
+
     const PptOfficeArtClientData* pcd = o.anon.get<PptOfficeArtClientData>();
     if (pcd && pcd->placeholderAtom && dc_data->slideTexts) {
         const PlaceholderAtom* pa = pcd->placeholderAtom.data();
@@ -378,9 +383,10 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
         foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
             if (tc.anon.is<TextContainer>()) {
                 textContainer = tc.anon.get<TextContainer>();
-            } else if (tc.anon.is<TextRulerAtom>()) {
-                textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
-	    }
+                if (textContainer->textRulerAtom) {
+                    textRuler = &textContainer->textRulerAtom->textRuler;
+                }
+            }
         }
         ppttoodp->processTextForBody(out, cd, textContainer, textRuler, isPlaceholder(cd));
     }

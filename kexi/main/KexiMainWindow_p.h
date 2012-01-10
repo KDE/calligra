@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@
 #include <QKeyEvent>
 #include <KTabWidget>
 #include "KexiSearchLineEdit.h"
+#include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
 
@@ -1009,13 +1010,18 @@ void KexiTabbedToolBar::Private::hideTab(const QString& name)
 
 void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
+    //kDebug() << "name:" << name;
+    //kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
+    //kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
     if (q->indexOf(toolbarsForName.value(name)) == -1) {
         int h = 0;
-        for (int i = 0; i < (toolbarsIndexForName.value(name) + lowestIndex); i++) {
+        // count h = invisible tabs before this
+        for (int i = lowestIndex; i < toolbarsIndexForName.value(name); i++) {
             if (!toolbarsVisibleForIndex.at(i))
                 h++;
         }
-        q->insertTab((toolbarsIndexForName.value(name) - h + lowestIndex), toolbarsForName.value(name), toolbarsCaptionForName.value(name));
+        q->insertTab(toolbarsIndexForName.value(name) - h,
+                     toolbarsForName.value(name), toolbarsCaptionForName.value(name));
         toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = true;
     }
 }
@@ -2035,6 +2041,8 @@ private:
     //todo(threads) QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts
 #endif
     KexiFindDialog *m_findDialog;
+    
+    KexiUserFeedbackAgent userFeedback;
 };
 
 #endif

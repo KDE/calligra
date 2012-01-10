@@ -1,0 +1,3117 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY calligra "Calligra">
+]>
+<book lang="&language;">
+<bookinfo>
+<title>The &kexi; Handbook</title>
+<authorgroup>
+<author>
+<personname>
+      <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/Kexi/Handbook/Introduction">Kexi/Handbook</ulink> page.</firstname>
+<surname></surname>
+</personname>
+      </author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+      </authorgroup>
+<legalnotice>&FDLNotice;</legalnotice>
+<date>2011-10-20</date>
+      <releaseinfo>2.4</releaseinfo>
+<abstract>
+  <para>
+    &kexi; is the application for creating databases and for data management
+    in the &calligra; productivity suite.
+  </para>
+</abstract>
+
+<!-- Keywords -->
+<keywordset>
+  <keyword>KDE</keyword>
+  <keyword>Calligra</keyword>
+  <keyword>Kexi</keyword>
+  <keyword>database</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp>2012-01-08T14:10:42Z</timestamp>-->
+
+<!--userbase-content-->
+<chapter id="introduction"><title>Introduction</title> 
+<para>&kexi; is a database management application. It can be used for creating databases, inserting data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries and forms - are stored in the database, making it easy to share data and design.
+</para>
+<para>&kexi; is part of the &calligra; productivity suite for KDE.
+</para>
+<para>In addition to storing your &kexi; databases in files, &kexi; can also store your data on a database server. Using a database server allows you to share your database with other people, and also allows more than one person to use the database at one time. The following database servers are supported by &kexi;:
+</para>
+<itemizedlist>
+<listitem><para><ulink url="http://www.mysql.com/">MySQL</ulink></para></listitem>
+<listitem><para><ulink url="http://www.postgresql.org/">PostgreSQL</ulink></para></listitem>
+</itemizedlist>
+<para>More information about &kexi; can be found at the &kexi; <ulink url="http://www.calligra-suite.org/kexi/">page on the Calligra website</ulink>, and on the <ulink url="http://www.kexi-project.org/about.html">website for Kexi itself</ulink>.
+</para>
+<para>If you have any questions about &kexi;, there are two mailing lists you can use. The &kexi; user mailing list can be used to ask questions about using &kexi; or about the &kexi; project. The &kexi; development mailing list can be used to ask questions about the development of &kexi;. Further information on how to subscribe to these lists, together with a few other ways of making contact with &kexi; developers, can be found  <ulink url="http://www.kexi-project.org/support.html">here</ulink>.
+</para>
+<para><note><para>This handbook for &kexi; 2.4 is meant to be based on the &kexi; Handbook <ulink url="http://docs.kde.org/stable/en/koffice/kexi/index.html">for Kexi 1.1</ulink>.Please coordinate any effort with Jarosław Staniek, email: kexi at kde.org</para></note>
+</para>
+</chapter>
+<chapter id="kexi-basics"><title>Kexi Basics</title> 
+<itemizedlist>
+<listitem><para><link linkend="kexi-databases">Kexi Databases</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="creating-a-new-database-file">Creating a New Database File</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-kexi-main-window">The Kexi Main Window</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="main-application-elements">Main application elements</link>&nbsp;</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para><link linkend="opening-an-existing-kexi-database-file">Opening an existing Kexi database file</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="opening-a-database-file-in-the-open-existing-project-dialog">Opening a database file in the Open Existing Project dialog</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon">Opening an existing Kexi database file by clicking on .kexi file's icon</link>&nbsp;</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para><link linkend="using-built-in-help">Using built-in help</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="kexi-databases"><title>Kexi Databases</title> 
+<para>Many applications such as <trademark class="registered">OpenOffice.org</trademark>, <trademark class="registered">LibreOffice</trademark> or <application>&Microsoft; Excel</application> create files which are called documents. &kexi; creates files too, but we refer to them as &kexi; database files, or simple database files here.
+</para>
+<para>In addition to storing your databases in database files, &kexi; can also use databases on database servers, which is why we refer to them as database files, and not simply as databases.
+</para>
+<para>The term &kexi; project, or simply project is also used to refer to a &kexi; database, regardless of whether it is stored in a file or on a database server.
+</para>
+<para><note><para>&kexi; database files usually have the extension <filename>.kexi</filename></para></note>
+</para>
+</sect1>
+<sect1 id="creating-a-new-database-file"><title>Creating a New Database File</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="newproject.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<orderedlist>
+<listitem><para>Run &kexi;, or if it is already running, use <menuchoice><guimenu>Kexi</guimenu><guimenuitem>New... (Ctrl+N)</guimenuitem></menuchoice>.</para></listitem>
+<listitem><para>On the <guilabel>New Project</guilabel> page, under <guilabel>Blank Projects</guilabel> section, choose <guilabel>Blank Database</guilabel>.
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="projectstorage.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot></para></listitem>
+<listitem><para>On the <guilabel>Storage Method</guilabel> page, click <keycap>File</keycap>.
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="projectfilename.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot></para></listitem>
+<listitem><para>On the <guilabel>Project Title &amp; Filename</guilabel>, define a title and the filename for the project.</para></listitem>
+<listitem><para>Click <guilabel>Next</guilabel> to create the project.</para></listitem>
+</orderedlist>
+<para><note>
+<itemizedlist>
+<listitem><para>When you change the project title, the proposed filename automatically changes accordingly.</para></listitem>
+<listitem><para>You can use the file browser to choose a folder where you would like to save your database file.</para></listitem>
+</itemizedlist>
+</note></para>
+</sect1>
+<sect1 id="the-kexi-main-window"><title>The Kexi Main Window</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_mainwindow.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>The <guilabel>Tabbed Toolbar</guilabel> on the top gives access to common actions and commands.
+</para>
+<para>The <guilabel>Project Navigator</guilabel> and <guilabel>Properties Editor</guilabel> are shown in panes on each side of the child window. These can be resized or hidden as required. A pane can be hidden by clicking the small cross at the top of the pane (just below the toolbar).
+</para>
+<para>Database objects (tables, queries, &etc;) listed in the <guilabel>Project Navigator</guilabel> can be opened by clicking (or double-clicking, depending upon your global KDE settings) on their names.
+</para>
+<sect2 id="main-application-elements"><title>Main application elements</title> 
+<para>Main elements of &kexi; application's window are:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">Tabbed Toolbar</emphasis></term>
+    <listitem>
+    <para>Contains available commands for the application. You will find detailed description of any of the commands in the appendix.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Project Navigator pane</emphasis></term>
+    <listitem>
+    <para>Contains a list of any object (tables, queries, forms, ...) created within the currently opened database project. The navigator also contains small toolbar with most usable commands related to the database objects.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Opened Database Objects Area / Tabbed Windows</emphasis></term>
+    <listitem>
+    <para>A central area of the application taking most of the screen space. For IDEAl user interface mode it contains switchable tabs with windows that are always maximized. For Childframe user interface mode it contains floating windows.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Property Editor pane</emphasis></term>
+    <listitem>
+    <para>Contains a list of properties of currently activated database object. For certain objects (&eg; form's widgets) it can have several tabs.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect2>
+<sect2 id="tabbed-toolbar"><title>Tabbed Toolbar</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_tabbedtoolbar.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>The toolbar is the place that gives you access to most &kexi; commands and actions.
+</para>
+<para>Using the the actions found in the different tabs on the toolbar you can:
+</para>
+<itemizedlist>
+<listitem><para>Create / Open / Close Kexi projects</para></listitem>
+<listitem><para>Create Database objects</para></listitem>
+<listitem><para>Import / Export Data</para></listitem>
+<listitem><para>Create widgets on your Forms</para></listitem>
+<listitem><para>Create widgets on your Reports</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-navigator-pane"><title>Project Navigator pane</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_projectnavigator.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>The <guilabel>Project Navigator</guilabel> pane is one of the most frequently used elements of the &kexi; main window. The pane contains a list of all objects created within the currently opened Kexi database project. The objects are split into groups: tables, queries, forms, reports and scripts.
+</para>
+<para>The Project Navigator pane also contains a small toolbar for most frequently used commands (from left to right): <guilabel>Open</guilabel> selected object, <guilabel>Design</guilabel> selected object, and <guilabel>Delete</guilabel> selected object.
+</para>
+<para>For each object on the list a context menu is available using the right mouse button.
+</para>
+<para>Double clicking with the left mouse button on the object's name on the list opens the object in <guilabel>Data View</guilabel>. If the object's window was already opened, the action just activates the window without switching it's view mode.
+</para>
+<para><note><para>Even though your operating system or window manager may be set up to handle single clicks instead of double clicks, &kexi; uses double clicks in <guilabel>Project Navigator</guilabel> to avoid accidentally opening large datasets or executing queries.</para></note>
+</para>
+</sect2>
+<sect2 id="opened-database-objects-area---tabbed-windows"><title>Opened database objects area / Tabbed Windows</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_windowtabs.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>Whenever you double click an object in the project navigator, it opens in the <guilabel>Opened database objects area</guilabel>. Each window has its own tab in &kexi;.
+</para>
+<para>You can rearrange the tabs by drag and drop and close them using the close tab button located at the far right of the tab strip.
+</para>
+<para><note><para>Sometime later on there will be an option to detach tabs, creating somewhat something similar to an MDI interface. That could be useful for custom solutions or multiple displays.</para></note>
+</para>
+</sect2>
+<sect2 id="property-editor-pane"><title>Property Editor pane</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_propertyeditor.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>In the <guilabel>Property Editor</guilabel> pane you can change properties of the object displayed in the active window. Depending on the context, the pane is consisted of one or more tabs. The first, always visible tab, <guilabel>Properties</guilabel>, contains the list of available properties.
+</para>
+<para>Rules for using the <guilabel>Property Editor</guilabel>:
+</para>
+<itemizedlist>
+<listitem><para>Each row contains a single property.</para></listitem>
+<listitem><para>You can use the mouse or the keyboard to change values of particular properties.</para></listitem>
+<listitem><para>Most frequently used types of property values are:<itemizedlist>
+<listitem><para>a number; you can enter the value directly or increase or decrease its value by clicking with the left mouse button on the arrows.</para></listitem>
+<listitem><para>text</para></listitem>
+<listitem><para>drop down list of values</para></listitem>
+<listitem><para>Yes/No; you can toggle the value by clicking on the button; Yes (true) means that the button is toggled on, No (false) means that the button is toggled off.</para></listitem>
+</itemizedlist>
+</para></listitem>
+</itemizedlist><para><note>
+<itemizedlist>
+<listitem><para>There is no need to confirm a changed value: changes are visible immediately after moving to a different row of the Property Editor's list or by pressing the &Enter; key.</para></listitem>
+<listitem><para>Names of the recently changed properties that not yet were stored in the database are marked with bold text.</para></listitem>
+<listitem><para>After changing the value of a property, a special <guilabel>Undo changes</guilabel> button appears on the right side of the Property Editor's list. By clicking it you can revert the value of the property to the original value that was loaded from the database upon opening the database object. The button is only visible when the property is actually highlighted.</para></listitem>
+</itemizedlist>
+</note></para>
+<para>The <guilabel>Property Editor</guilabel> pane is empty if:
+</para>
+<itemizedlist>
+<listitem><para>no single database object's window is opened, or</para></listitem>
+<listitem><para>the active database object's window does not offer properties; it is usually the case when it is opened in <guilabel>Data View</guilabel> instead of <guilabel>Design View</guilabel>.</para></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="opening-an-existing-kexi-database-file"><title>Opening an existing Kexi database file</title> 
+<para>To open an existing &kexi; database file:
+</para>
+<itemizedlist>
+<listitem><para>select it in the <guilabel>Open Existing Project</guilabel> dialog; or</para></listitem>
+<listitem><para>open it by clicking on the <filename>.kexi</filename> file icon.</para></listitem>
+</itemizedlist>
+<sect2 id="opening-a-database-file-in-the-open-existing-project-dialog"><title>Opening a database file in the Open Existing Project dialog</title> 
+<itemizedlist>
+<listitem><para>Run &kexi;. You should see the <guilabel>Choose Project</guilabel> startup dialog. Choose <guilabel>Open Existing Project</guilabel> tab. You will see the following dialog:</para></listitem>
+<listitem><para>From <guilabel>Current location</guilabel> drop down box, pick a folder containing a file you are looking for.</para></listitem>
+<listitem><para>You can either pick a file or enter its name in the <guilabel>Location:</guilabel> box.</para></listitem>
+<listitem><para>Click <guilabel>OK</guilabel>.</para></listitem>
+</itemizedlist>
+<para><guilabel>Notes</guilabel>
+</para>
+<itemizedlist>
+<listitem><para>By default the <guilabel>Filter:</guilabel> drop down list has <guilabel>Kexi Database File-Based Project</guilabel> selected. In case the file you are looking for has an other extension, you can change the selection of the <guilabel>Filter:</guilabel> drop down list to <guilabel>All Files</guilabel> to display all available files (regardless of an extension).</para></listitem>
+<listitem><para>If you have selected a file of an external type, like a <guilabel>MS Access</guilabel> <filename>.mdb</filename> file, &kexi; will provide you with the option to import the file.</para></listitem>
+<listitem><para>If you have selected a connection data file (with <filename>.kexic</filename> extension) or a shortcut to a project on database server file (with <filename>.kexis</filename> extension), &kexi; will display appropriate dialogs.</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="opening-an-existing-kexi-database-file-by-clicking-on--kexi-files-icon"><title>Opening an existing Kexi database file by clicking on .kexi file's icon</title> 
+<itemizedlist>
+<listitem><para>Click file's icon using your file manager or desktop. &kexi; will open this database project automatically.</para></listitem>
+</itemizedlist>
+<para><guilabel>Notes</guilabel>
+</para>
+<para>Note about database files accessed remotely. You may want to open a database file that is located on a remote source (&eg; a web or FTP server or a MS Windows network share). K Desktop Environment allows you to open files from remote sources directly in applications and to save changes back to the source, but this is not the case with database files. By clicking on a database file located on a remote source, a copy of the file will be downloaded to a temporary directory on your computer and all your changes will be made to this local file. The remote original of the file will remain unchanged, so it's recommended to copy (download) the file to your computer first, then open the file and copy it back to the remote source if you want to make it up to date.
+</para>
+</sect2>
+</sect1>
+<sect1 id="using-built-in-help"><title>Using built-in help</title> 
+<para>The following ways to get built-in help in &kexi; are available:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">The Handbook in form of electronic document.</emphasis></term>
+    <listitem>
+    <para>The Handbook is available by pressing <keycap>F1</keycap> key or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>Kexi Handbook</guimenuitem></menuchoice> from the menubar.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><emphasis>What's This?</emphasis> hints.</emphasis></term>
+    <listitem>
+    <para>Select <menuchoice><guimenu>Help</guimenu><guimenuitem>What's This?</guimenuitem></menuchoice> from the menu bar and click on an area of the application to get hints about it.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+<chapter id="building-simple-databases"><title>Building Simple Databases</title> 
+<itemizedlist>
+<listitem><para><link linkend="building-simple-databases">Introduction</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-database-tables">Designing Database Tables</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="the-table-designer-window">The Table Designer window</link>&nbsp;</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para><link linkend="entering-data-into-tables">Entering Data Into Tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-database-queries">Designing Database Queries</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="designing-forms">Designing Forms</link>&nbsp;<itemizedlist>
+<listitem><para><link linkend="most-important-terms">Most important terms</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="working-with-form-design">Working with form design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="actions">Actions</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="widget-layouts">Widget layouts</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link>&nbsp;</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para><link linkend="entering-data-using-forms">Entering Data Using Forms</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="introduction0"><title>Introduction</title> 
+<para>To learn the basics of &kexi;, you could build a simple database utilizing most elementary &kexi;'s features. To make things simpler, advanced database design topics will not be covered here.
+</para>
+<para>Start by creating a new empty Phone Book.
+</para>
+<para>Having a new empty database project, perform the following steps:
+</para>
+<orderedlist>
+<listitem><para>Design database tables. Read the section called <link linkend="designing-database-tables">Designing Database Tables</link>.</para></listitem>
+<listitem><para>Enter data into tables. Read the section called <link linkend="entering-data-into-tables">Entering Data Into Tables</link>.</para></listitem>
+<listitem><para>Design database queries. Read the section called <link linkend="designing-database-queries">Designing Database Queries</link>.</para></listitem>
+<listitem><para>Design forms. Read the section called <link linkend="designing-forms">Designing Forms</link>.</para></listitem>
+<listitem><para>Use forms to enter data. Read the section called <link linkend="entering-data-using-forms">Entering Data Using Forms</link>.</para></listitem>
+</orderedlist>
+</sect1>
+<sect1 id="designing-database-tables"><title>Designing Database Tables</title> 
+<para>First, there will be two tables added to your database: <replaceable>persons</replaceable> and <replaceable>phone_numbers</replaceable>. These are exactly the same tables as described in chapter <link linkend="database-and-spreadsheet">Database and Spreadsheet</link>. A layout for <replaceable>Persons</replaceable> can be found in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> in that chapter.
+</para>
+<orderedlist>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem></menuchoice> from the menubar. You can also use the button <guilabel>Create object: table</guilabel> on the Project Navigator's toolbar.</para></listitem>
+<listitem><para>The Table Designer's window will appear. Looking at the top of designer's window you will notice that &kexi; proposed you a generic name like template for the new table. The table design is not saved yet so you will be able to assign more proper name later. Moreover, because of the same reason, the table name is not yet visible in the <guilabel>Project Navigator</guilabel>.</para></listitem>
+</orderedlist>
+<sect2 id="the-table-designer-window"><title>The Table Designer window</title> 
+<sect3 id="table-designer-window-consists-of-following-columns-"><title>Table Designer window consists of following columns:</title> 
+<itemizedlist>
+<listitem><para><guilabel>PK</guilabel> - Primary Key.</para></listitem>
+<listitem><para><guilabel>Field Caption</guilabel> - caption of the field which will be displayed during data entering.</para></listitem>
+<listitem><para><guilabel>Data Type</guilabel> - a combo box containing a list of data types, allowing to set a main rule for entered data for a given field. For example, when an integer number data type is set for a field, a database user will not able to enter letter characters into this field.</para></listitem>
+<listitem><para><guilabel>Comments</guilabel> - you can enter here any information useful for understanding what the given field is provided for. This additional text will be saved within the table design and only visible in design mode.</para></listitem>
+</itemizedlist>
+<para>In the Table designer window, every row corresponds to a single table field. You can recognize you are in design mode because the <guilabel>Switch to design view</guilabel> button is toggled on within the main &kexi; toolbar.
+</para>
+</sect3>
+<sect3 id="procedure-3-3--designing-the-persons-table"><title>Procedure 3.3. Designing the Persons table</title> 
+<para>In the first row click on the cell in the <guilabel>Field Caption</guilabel> column and enter <replaceable>Name</replaceable> as field caption.
+</para>
+<para><guilabel>Notes about field names and captions</guilabel>
+</para>
+<itemizedlist>
+<listitem><para>Every table field must have a name and a caption, these cannot be empty.</para></listitem>
+<listitem><para>Field name is a word used by the database, usually not visible for users of the database application. The name may not contain special (national) characters (like ±, ¶, Ü) or space characters. The name must only contain roman letters, numbers and underscore sign <quote>_</quote>. Use the latter instead of spaces or dashes.</para></listitem>
+<listitem><para>Field names must be started with a letter or underscore sign <quote>_</quote>, never with a number.</para></listitem>
+<listitem><para>It does not matter whether you are using small or capital letters. For &kexi; the database name <replaceable>Persons</replaceable> is the same as <replaceable>persons</replaceable>.</para></listitem>
+<listitem><para>Field caption, on the other hand, allows you to enter any letters and special characters. It will be displayed for users of the database application.</para></listitem>
+</itemizedlist>
+<para>In a similar way, enter the following fields into the table design:
+</para>
+<itemizedlist>
+<listitem><para><replaceable>surname</replaceable></para></listitem>
+<listitem><para><replaceable>street</replaceable></para></listitem>
+<listitem><para><replaceable>house_number</replaceable></para></listitem>
+<listitem><para><replaceable>city</replaceable></para></listitem>
+</itemizedlist>
+<para>All the above fields, except <replaceable>house_number</replaceable>, are of type text. Change <replaceable>house_number</replaceable> field's type to integer number. To do this, click on a cell in the <guilabel>Data Type</guilabel> column, <replaceable>house_number</replaceable> row and then click on drop down list's button (you can also press <keycap>F4</keycap> or <keycombo>&Alt;<keycap>Down</keycap></keycombo>. The list of data types will appear. Select the <guilabel>Integer</guilabel> number type.
+</para>
+<para>From now on, the <replaceable>house_number</replaceable> field only accepts numbers.
+</para>
+<para>Persons table design is ready. Click <guilabel>Switch to data view</guilabel> button on the toolbar to finish designing and switch to <guilabel>Data View</guilabel> for the table. This allows you entering data into the table.
+</para>
+<para>As the design is not yet saved in the database, the <guilabel>Save Object As</guilabel> dialog window appears. You need to specify the name for the new table.
+</para>
+<para>&kexi; offers a generic name like <guilabel>Table1</guilabel>. To change the name, enter <replaceable>Persons</replaceable> into the <guilabel>Caption</guilabel> field and press the &Enter; key or click the <keycap>OK</keycap> button. The <guilabel>Caption</guilabel> field will be used to display the table to database end-users, &eg; as a form. Unlike the name, the caption can contain any characters including spaces and special characters.
+</para>
+<para>Note that filling the <guilabel>Caption</guilabel> field automatically fills the Name field. For your convenience the rule for using only letters, numbers and the <quote>_</quote> character is kept. You can alter the contents of the Name field if you want to.
+</para>
+<orderedlist>
+<listitem><para>You are asked about an agreement for automatic adding of primary key to the table. Click <guilabel>Add primary key</guilabel> button to continue.</para></listitem>
+<listitem><para>The <guilabel>Persons</guilabel> table has been created and opened in <guilabel>Data View</guilabel>. Its name appears in the <guilabel>Project Navigator</guilabel> pane.</para></listitem>
+<listitem><para>Create the <replaceable>phone_numbers</replaceable> table, in a similar way as persons table.</para></listitem>
+<listitem><para>Create a person field of type <guilabel>Integer</guilabel> number and phone of type <guilabel>Text</guilabel>. Do not use a number type here because phone numbers can have many different forms and prefixes.</para></listitem>
+<listitem><para>Click <guilabel>Switch to data view</guilabel> button on the toolbar and enter <replaceable>Phones</replaceable> caption for the table. As for your previous table, allow &kexi; to automatically create a primary key.</para></listitem>
+</orderedlist>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="entering-data-into-tables"><title>Entering Data Into Tables</title> 
+<para>You have designed the two tables <replaceable>Persons</replaceable> and <replaceable>phone_numbers</replaceable>. None of them contain any data yet. You can enter some, and in this chapter you will learn how to do this fast and effectively.
+</para>
+<para>Start with the persons table. Open it in <guilabel>Data View</guilabel> using the Project Navigator's context menu. The current cell is marked with (usually black) thicker border, a cell cursor. The contents of the cell, if present, are highlighted with a different color. The current row, &ie; the one you have placed your rectangular cursor in, is marked on the left hand with an arrow symbol.
+</para>
+<para>You can navigate through table cells using the arrow keys, <keycap>Page Down</keycap>, <keycap>Page Down</keycap>, <keycap>Home</keycap>, <keycap>End</keycap> keys; you can also click with the mouse in a cell to select it.
+</para>
+<para>Initially, after opening the table <replaceable>Persons</replaceable>, the cursor is placed in the id column. The column has autonumber property defined, marked with blue (autonumber) text in the last row. It means you do not have to enter values there by hand when entering data for a new row because the cell will be filled automatically with successive numbers.
+</para>
+<para>Inserting new rows and entering data for them in &kexi; is different from the way of doing this in spreadsheets. To enter data for a new row, you need to use the arrow keys or mouse, to move your cursor to the special empty last row marked with a plus sign. Place your cursor in the (second) name column and enter a person's name. Also enter surname, street, house number and city. When done, move the cell cursor to the last empty row either by using the <keycap>Down</keycap> key or by clicking in the last row with the mouse to append a new row.
+</para>
+<sect2 id="details-about-actions-available-while-entering-data-into-tables"><title>Details About Actions Available While Entering Data Into Tables</title> 
+<itemizedlist>
+<listitem><para>As soon as you enter the first character, the current row is being edited. A pencil symbol appears on the left side of the data table.</para></listitem>
+<listitem><para>Double clicking a cell with the left mouse button or pressing &Enter; or the <keycap>F2</keycap> key also starts editing of the current row.</para></listitem>
+<listitem><para>Pressing the &Esc; key when the contents of a cell is edited cancels changes made to this cell. However, the pencil symbol will not disappear because you can still move to a different cell of the edited row to change its contents. To cancel changes made to the entire edited row, press the &Esc; key again.</para></listitem>
+<listitem><para>Instead of pressing the &Esc; key, you can click the <guilabel>Cancel</guilabel> toolbar button or select <menuchoice><guimenu>Data</guimenu><guimenuitem>Cancel Row Changes</guimenuitem></menuchoice> from the menubar.</para></listitem>
+<listitem><para>Click the <keycombo>&Shift;&Enter;</keycombo> keys to accept changes made to all cells in the currently edited row. You can also click <guilabel>OK</guilabel> toolbar button or select <menuchoice><guimenu>Data</guimenu><guimenuitem>Save Row</guimenuitem></menuchoice> from the menubar.</para></listitem>
+</itemizedlist>
+<para>Fill the <replaceable>phone_numbers</replaceable> table with data. In the persons column you need to provide a number of the person existing in the persons table.
+</para>
+</sect2>
+</sect1>
+<sect1 id="designing-database-queries"><title>Designing Database Queries</title> 
+<para>A database's primary purpose is to store and help extract information you are looking for. Unlike databases written on a paper sheets, &kexi; database allows you to specify more search criteria. Results are returned faster even for large data sets. All this is a power of databases, however to be able to perform effective queries in your database, you need to learn how to tell the database what you are looking for.
+</para>
+<para>With database queries you can limit data coming from a table to a predefined set of rows and columns as well as dynamically join data coming from multiple tables.
+</para>
+<para>To see how queries work in practice you will create a contacts query joining data from two tables: <replaceable>persons</replaceable> and <replaceable>phone_numbers</replaceable> (designed <link linkend="designing-database-tables">here</link> and filled with data <link linkend="entering-data-into-tables">here</link>).
+</para>
+<orderedlist>
+<listitem><para>Create a new empty query by selecting <menuchoice><guimenu>Insert</guimenu><guimenuitem>Query...</guimenuitem></menuchoice> from the menubar. The design window will appear. The window is split into two areas: query relationships at the top and query columns below.</para></listitem>
+<listitem><para>Select the table persons in the drop down list <guilabel>Table:</guilabel> located at the top of the window and click the <guilabel>Add</guilabel> button. A graphical representation of the table will appear in the relations area. Do the same for the phone_numbers table to insert it too, as in the figure below.</para></listitem>
+<listitem><para>Add query relationship using mouse drag &amp; drop technique: click the field id in the table persons table, drag it and drop into the person field of the <replaceable>phone_numbers</replaceable> table. This will join both fields by creating a new relationship.</para></listitem>
+<listitem><para>Double-click the name field in the persons table, to add the field as a query column. In a similar way, add <replaceable>surname</replaceable>, <replaceable>street</replaceable>, <replaceable>house_number</replaceable>, <replaceable>city</replaceable> fields from the persons table and phone from the <replaceable>phone_numbers</replaceable> table.</para></listitem>
+<listitem><para>Query design is now ready for testing. Click the <guilabel>Switch to data view</guilabel> button on the toolbar, to switch from design to viewing the data provided as query results.</para></listitem>
+<listitem><para>Save the query design for later use by clicking the Save button on the toolbar. You can also use <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> from the menubar or press the <keycombo>&Ctrl;<keycap>S</keycap></keycombo> keys. Because the query design has not been saved yet, you will be asked to specify a name for it. Enter <replaceable>Contacts</replaceable> text in the caption field and click the <guilabel>OK</guilabel> button.</para></listitem>
+</orderedlist>
+</sect1>
+<sect1 id="designing-forms"><title>Designing Forms</title> 
+<itemizedlist>
+<listitem><para><link linkend="most-important-terms">Most important terms</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="forms-versus-tables">Forms versus tables</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="working-with-form-design">Working with form design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="using-the-widgets-tab">Using the Widgets tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-widgets---text-fields">Inserting widgets - text fields</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="assigning-data-sources">Assigning data sources</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="inserting-text-labels">Inserting text labels</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="actions">Actions</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="widget-layouts">Widget layouts</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-widgets-size-and-position-by-hand">Setting widgets size and position by hand</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="setting-the-tab-order">Setting the tab order</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect2 id="most-important-terms"><title>Most important terms</title> 
+<itemizedlist>
+<listitem><para>Widgets displaying information, &eg; a text box or an image box. Each widget of this type can be bound to a data source field (a table or a query column). Therefore, such widgets are called in short form fields.</para></listitem>
+<listitem><para>Widgets able to perform a specified action, &eg; a push button that can close the current form. Within other applications this widget type is sometimes called form control because it can perform previously defined action of controlling your database application's behavior.</para></listitem>
+<listitem><para>Other widgets allowing to enrich a form's appearance, &eg; a “line widget” can visually separate two form areas.</para></listitem>
+</itemizedlist>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">Form</emphasis></term>
+    <listitem>
+    <para>A window provided for easy data entry and presentation on the computer screen.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Form's data source</emphasis></term>
+    <listitem>
+    <para>Database table or query providing data displayed in the form. The data source is needed because forms itself are only tools for displaying and entering data, while tables and queries are the source of data. New, empty forms have no data source assigned, so they are not displaying any data from your database unless you assign a data source to them.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Form field</emphasis></term>
+    <listitem>
+    <para>Direct equivalent of a column in a table or query. Most frequently used are fields for displaying text and numbers. Entering a new value or changing the existing value of such a field causes a change in the bound table or query column (after accepting the change).</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Form design</emphasis></term>
+    <listitem>
+    <para>Tasks you are performing to define the appearance and functions of the form. To do this, you need to provide data source, insert form fields of various types and place them at the appropriate location.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Form widget</emphasis></term>
+    <listitem>
+    <para>Form's element. Main widget types are:</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Container widget</emphasis></term>
+    <listitem>
+    <para>A widget that can contain other widgets within its area. For example, frame widget or tab widget are containers. The form's surface itself is a container as well. A command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widgets can be inserted inside a container, so nesting is possible.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect2>
+<sect2 id="forms-versus-tables"><title>Forms versus tables</title> 
+<para>In chapter <link linkend="entering-data-into-tables">Entering Data Into Tables</link> you learned about how to enter data directly into tables using their data sheet view. However, in many cases forms are better suited for data entry:
+</para>
+<itemizedlist>
+<listitem><para>A table can contain too many columns to display them on your screen. A form can display such a data using multiple rows.</para></listitem>
+<listitem><para>A form allows to visually split data fields into logical groups, thus increasing readability. Labels with additional information can be inserted to give users more hints on how to use the form or what given data fields mean.</para></listitem>
+<listitem><para>Command buttons can be used within forms for commonly used commands so users can use forms in a similar way as a standalone applications they know.</para></listitem>
+</itemizedlist>
+<para>In data sheet view displaying multi-row data text fields or images is as easy as within forms.
+</para>
+</sect2>
+<sect2 id="working-with-form-design"><title>Working with form design</title> 
+<para>As with table or query design, you are able to use <guilabel>Data View</guilabel> and <guilabel>Design View</guilabel>. Form designing is performed in <guilabel>Design View</guilabel>. We will often refer to the form design window as to <guilabel>Form Designer</guilabel>.
+</para>
+<orderedlist>
+<listitem><para>To create a new empty form, select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Form</guimenuitem></menuchoice> from the Menubar. Optionally, you can use  <guilabel>New Form</guilabel> command from drop-down button on the Project Navigator's toolbar or <guilabel>Create Object: Form</guilabel> command from the context menu.</para></listitem>
+<listitem><para>A new frame will appear, you can resize the form by moving the borders. The form is covered with a grid which simplifies accurate positioning of the widgets.</para></listitem>
+</orderedlist>
+<para>As with table design, <guilabel>Form Designer</guilabel> provides <guilabel>Property</guilabel> pane. To save some space on the screen, the pane has three tabs related to the currently selected form:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">The Properties tab</emphasis></term>
+    <listitem>
+    <para>Contains a list of properties for the currently selected widget.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">The Data source tab</emphasis></term>
+    <listitem>
+    <para>Contains properties related specifically to the data source of the currently selected widget or the form itself.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">The Widgets tab</emphasis></term>
+    <listitem>
+    <para>Contains a hierarchy of all widgets of the form. The list simplifies widgets lookup by name and navigation between them.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para>There is information about currently selected widget's name and type displayed on the first and second tab.
+</para>
+<para>Additional toolbars are also available:
+</para>
+<itemizedlist>
+<listitem><para>The <guilabel>Widgets</guilabel> toolbar used for inserting new widgets into the form.</para></listitem>
+<listitem><para>The <guilabel>Format</guilabel> toolbar used to format form's elements (&eg; adjusting widget's size, grouping). Formatting commands are also available in the <guilabel>Format</guilabel> menu.</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="using-the-widgets-tab"><title>Using the Widgets tab</title> 
+<para>The <guilabel>Widgets</guilabel> tab in the <guilabel>Property</guilabel> pane provides a list of form widgets and their hierarchy. Each widget is presented within the hierarchy beside other widgets being on the same level (the same parent container). Child widgets (inside containers) are presented using indented names.
+</para>
+<para>Each widget has displayed its name and type. The type has also an icon displayed - the same as the one displayed on the toolbar used while form designing is performed.
+</para>
+<para><note>
+<itemizedlist>
+<listitem><para>Changing the current selection on the list causes appropriate selection on the designed form. This allows for easier widget lookup by name and easier navigation. For example, it is possible to select a widget by name, and then switch to the Properties tab to change the widget's properties.</para></listitem>
+<listitem><para>Keeping the &Ctrl; key pressed while an item on the widgets list is being selected allows to select multiple widgets at a time. Keeping the &Shift; key pressed allows to select entire lists of widgets.</para></listitem>
+</itemizedlist>
+</note></para>
+<para>Giving widgets reasonable names can be useful but is not mandatory. Note that widget's name is a property that is not visible to the user of your form. Users will only see a widget text, provided by <guilabel>Text</guilabel> property or similar.
+</para>
+</sect2>
+<sect2 id="inserting-widgets---text-fields"><title>Inserting widgets - text fields</title> 
+<para>Let's create a form providing information about persons, &ie; a form connected it with <replaceable>Persons</replaceable> table.
+</para>
+<para>If the form being designed should present data obtained from the database, you need to place appropriate fields on it. To do this, use the buttons on the <guilabel>Widgets</guilabel> toolbar. Each button corresponds to a single widget type.
+</para>
+<orderedlist>
+<listitem><para>Click <guilabel>Text Box</guilabel> button on the <guilabel>Widgets</guilabel> toolbar.</para></listitem>
+<listitem><para>Click on the form surface with the left mouse button. A new text box widget will be placed in the point where you clicked. Before you release you can drag your mouse to specify a desired size for the widget.</para></listitem>
+<listitem><para>If needed, move the inserted widget using drag &amp; drop to a desired position. You can resize the widget afterwards by dragging one of the small boxes appearing near its corners. Note that the boxes are only visible when the widget is selected. If you select another widget or the form surface, the boxes disappear.</para></listitem>
+<listitem><para>Click the <guilabel>Text Box</guilabel> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three text boxes inserted in your form. For sake of simplicity we will limit ourselves to three data fields.</para></listitem>
+</orderedlist>
+<para><note>
+<itemizedlist>
+<listitem><para>There is a context menu available in form's design mode, activated by a right mouse button click the desired widget or the form's surface. The menu offers commands like <guilabel>Cut</guilabel>, <guilabel>Copy</guilabel>, <guilabel>Paste</guilabel>, <guilabel>Delete</guilabel> and other, more complex. Many of the commands are also provided in the menubar, usually <guilabel>Edit</guilabel>. Keyboard shortcuts are also available for these commands. Some of the commands are only available for certain types of widgets.</para></listitem>
+<listitem><para>The commands <guilabel>Cut</guilabel>, <guilabel>Copy</guilabel> and <guilabel>Paste</guilabel> makes it possible to move or copy widgets between forms, even between separate database projects.</para></listitem>
+<listitem><para>Holding the &Ctrl; key down while clicking a widget allows to select multiple widgets.</para></listitem>
+<listitem><para>Instead of using <guilabel>Copy</guilabel> and <guilabel>Paste</guilabel> commands, to duplicate a widget within the same form you can hold down the &Ctrl; key while moving the widget. After the &Ctrl; key is released, the dragged widget will not be moved but copied in the new location.</para></listitem>
+</itemizedlist>
+</note></para>
+</sect2>
+<sect2 id="assigning-data-sources"><title>Assigning data sources</title> 
+<para>The fields you inserted have no data source assigned yet, so these are not able to display information from the database. To assign data source, use the <guilabel>Data Source</guilabel> tab of the <guilabel>Property</guilabel> pane.
+</para>
+<para>The very first step is to specify the form's data source, &ie; a place the displayed data will be fetched from. As mentioned above, you will use table persons as a data source for your new form.
+</para>
+<orderedlist>
+<listitem><para>Click on the form's surface, as you will alter its properties.</para></listitem>
+<listitem><para>Switch to the <guilabel>Data Source</guilabel> tab and enter persons table name in the <guilabel>Form's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
+</orderedlist>
+<para>You have assigned form's data source. Now you need to do specify widget's data source.
+</para>
+<orderedlist>
+<listitem><para>Click the first text field widget at the top of the form.</para></listitem>
+<listitem><para>In the <guilabel>Data Source</guilabel> tab of the property pane enter field name name in the <guilabel>Widget's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
+<listitem><para>Click on next text field widget and enter surname as the data source.</para></listitem>
+<listitem><para>Enter data sources for street, house_number and city text fields in a similar way.</para></listitem>
+</orderedlist>
+<para>You can now save the form's design (this is not mandatory to test the form in action). To save, click the <guilabel>Save object changes</guilabel> toolbar button or use the <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> (<keycombo>&Ctrl;<keycap>S</keycap></keycombo>) menu command. Upon saving you will be asked for entering the form's name. Enter <replaceable>Persons</replaceable> as caption and click the <guilabel>OK</guilabel> button. The form's name will be filled automatically.
+</para>
+<para>This is the right moment for testing your form. Click the <guilabel>Switch to data view</guilabel> toolbar button. Unless you made a mistake while entering data sources, you should see form's fields filled with data from the persons table.
+</para>
+<para><note>
+<itemizedlist>
+<listitem><para>If you want to remove widget's data source assignment for a form widget, you can use <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.</para></listitem>
+<listitem><para>Use the <guilabel>Go to selected form's data source</guilabel> button to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
+</itemizedlist>
+</note></para>
+</sect2>
+<sect2 id="inserting-text-labels"><title>Inserting text labels</title> 
+<para>To make it easier for the form's user to identify the meaning of every field widget, these should have added text labels with appropriate titles. To create text labels the <guilabel>Label</guilabel> widget is used.
+</para>
+<para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable> and <replaceable>Street</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and and increase the font size using <menuchoice><guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem></menuchoice> menu command.
+</para>
+</sect2>
+<sect2 id="actions"><title>Actions</title> 
+<para>An Action is a single activity isolated in the application, available for the user to execute. It can also be executed automatically as a reaction for a given event (&eg; after opening a form).
+</para>
+<para><guilabel>Assigning actions to form buttons</guilabel>
+</para>
+<para>Many actions can be assigned to form button. The assigned action is executed after button is clicked.
+</para>
+<para>To assign action:
+</para>
+<orderedlist>
+<listitem><para>Switch to form's <guilabel>Design View</guilabel> if you have not done yet.</para></listitem>
+<listitem><para>Select the existing button widget by clicking on it or put a new button widget onto the form. If you inserted a new button, enter its title and press &Enter; key.</para></listitem>
+<listitem><para>Click the button widget with the right mouse button to display the context menu.</para></listitem>
+<listitem><para>From the context menu select <guilabel>Assign action...</guilabel> command.</para></listitem>
+<listitem><para>An <guilabel>Assigning Action to Command Button</guilabel> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <guilabel>Action type</guilabel> drop down list has the <guilabel>No type</guilabel> item selected.</para></listitem>
+<listitem><para>From the <guilabel>Action type</guilabel> drop down list select <guilabel>Application</guilabel> item. Available application-wide actions will be listed.</para></listitem>
+<listitem><para>Select one of the actions on the list (&eg; <guilabel>Delete Row</guilabel>).</para></listitem>
+<listitem><para>Click the <guilabel>OK</guilabel> button or press the &Enter; key to accept your selection.</para></listitem>
+</orderedlist>
+<para>After switching to the form's data view you can try whether the action works. For example, if you assigned <guilabel>Delete Row</guilabel> action, clicking the button, the current database row will be deleted, similarly to executing <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete Row</guimenuitem></menuchoice> (<keycombo>&Ctrl;<keycap>Delete</keycap></keycombo>) menu command (depending on your settings you may be asked to confirm the removal).
+</para>
+<para><note>
+<itemizedlist>
+<listitem><para>To remove an action assignment, select <guilabel>No type</guilabel> item from the <guilabel>Action type</guilabel> drop down list of the <guilabel>Assigning Action to Command Button</guilabel> dialog window.</para></listitem>
+<listitem><para>Actions only work in the form's data view. Not every action's assignment is reasonable. For example, the <guilabel>Font...</guilabel> action is available in data view, but only if you have a widget selected in the <guilabel>Design View</guilabel>. If you make changes to the font settings the changes are applied to the text of that selected widget.</para></listitem>
+</itemizedlist>
+</note></para>
+</sect2>
+<sect2 id="widget-layouts"><title>Widget layouts</title> 
+<para>In most cases form widgets should be conveniently arranged and aligned. Positioning, aligning and resizing widgets by hand is not easy and these parameters are not adjusted when the user resizes the form. In fact the situation is even worse because you cannot assume a given form requires a given space because users have different font sizes and display resolutions.
+</para>
+<para>Using special tool called widget layouts can help to automatically lay out the form widgets. Widget layout is an action of grouping two or more widgets so these are well positioned and have appropriate sizes.
+</para>
+<para>Using layout in a form improves alignment. Moreover, its space is better used. Text fields are closer to each other, spacing is constant.
+</para>
+<para>There are two methods to create widget layout.
+</para>
+<itemizedlist>
+<listitem><para>Select two or more widgets that should be placed in a common layout, and select one of the layout types from the context menu item <guilabel>Layout Widgets</guilabel>.</para></listitem>
+<listitem><para>Click a container widget (or a form surface itself), where widgets are inserted and select one of the layout types from the context menu item <guilabel>Layout Widgets</guilabel>. All widgets existing within the container or within the form, being on the same level will be put into a single common layout.</para></listitem>
+</itemizedlist>
+<para>In each of these cases you can also use <menuchoice><guimenu>Format</guimenu><guimenuitem>Layout Widgets</guimenuitem></menuchoice> menu.
+</para>
+<para>Widget layout is presented in the design view using a blue, green or red box drawn with a broken line. This line is displayed only in the form's design view.
+</para>
+<para>Besides the grid type, there are other widget layout types.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">vertical</emphasis></term>
+    <listitem>
+    <para>Vertical widget layout</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">horizontal</emphasis></term>
+    <listitem>
+    <para>Horizontal widget layout</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<sect3 id="springs-in-widget-layouts"><title>Springs in widget layouts</title> 
+<para>A spring in widget layouts is a special, invisible element allowing to adjust widget's position and size within layouts. Such a spring stretches or squeezes a widget on the right, top, bottom or left hand, so it can have desired size and position.
+</para>
+<para>To use a spring:
+</para>
+<orderedlist>
+<listitem><para>Select spring icon on the <guilabel>Widgets</guilabel> toolbar.</para></listitem>
+<listitem><para>Click on a selected point of the form to insert the spring.</para></listitem>
+</orderedlist>
+<para>To make springs work you need to create a global widget layout, &ie; a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
+</para>
+</sect3>
+<sect3 id="removing-widget-layouts"><title>Removing widget layouts</title> 
+<para>To remove widget layout without removing widgets, perform one of these actions:
+</para>
+<itemizedlist>
+<listitem><para>Click with the right mouse button on the layout's border and select <guilabel>Break Layout</guilabel> command from the context menu.</para></listitem>
+<listitem><para>Click with the left mouse button on the layout's border and select <menuchoice><guimenu>Format</guimenu><guimenuitem>Break Layout</guimenuitem></menuchoice> menu command.</para></listitem>
+</itemizedlist>
+<para><note><para>Removing widget layout using the Break Layout command will not remove widgets contained in the layout. If you want to remove the widgets as well, just select the layout by clicking on its border and press <keycap>Delete</keycap> key or use <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice> menu command or context menu command.</para></note>
+</para>
+</sect3>
+<sect3 id="size-policies-for-widgets-within-a-layout"><title>Size policies for widgets within a layout</title> 
+<para>Instead of setting a fixed size for your widgets, in &kexi; you can choose between various widget's size policies. A size policy is a flexible strategy for controlling how a widget is stretched (or shrunk) depending on other neighbouring widgets and space available within the form.
+</para>
+<para>After putting widgets into a layout, typically each widget gets a proportional (<guilabel>Preferred</guilabel>) size policy. These widgets will be automatically resized with preferred settings, depending on their type and size of the entire layout itself. For example, three buttons put into the horizontal layout will be resized to fit their visible text.
+</para>
+<para>For each widget inserted into the form, there are settings for size policy available in the <guilabel>Property Editor</guilabel>. The settings are presented as a group of properties called <guilabel>Size Policy</guilabel>.
+</para>
+<para>This group of properties contains:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">Horizontal Size Policy</emphasis></term>
+    <listitem>
+    <para>defining horizontal size of the widget,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Vertical Size Policy</emphasis></term>
+    <listitem>
+    <para>defining vertical size of the widget,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Horizontal Stretch</emphasis></term>
+    <listitem>
+    <para>defining strength of activity of the Horizontal Size Policy,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Vertical Stretch</emphasis></term>
+    <listitem>
+    <para>defining strength of activity of the Vertical Size Policy</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect3>
+<sect3 id="values-of-size-policies"><title>Values of size policies</title> 
+<para>The following values are available in the drop down list for <guilabel>Horizontal Size Policy</guilabel> and <guilabel>Vertical Size Policy</guilabel> properties visible in the <guilabel>Property Editor</guilabel>:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">Fixed</emphasis></term>
+    <listitem>
+    <para>this value means that the widget cannot be automatically resized; it should maintain the constant size defined at design time (width or height),</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Minimum</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is set as minimal allowed, it is sufficient and there is no need for expanding the widget, but the widget will be expanded if needed. This type of policy can be used to force the widget to be expanded to the whole width or height, especially if you set a stretch value greater than 0.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Maximum</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is set as maximum allowed and can be decreased without breaking the widget's usability and readability if other widgets need more space,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Preferred</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is the best and preferred; the widget can be shrunk or expanded however and it will stay readable,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Expanding</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is reasonable but the widget can be also shrunk; it can be expanded as well to take as much space as possible,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Minimum Expanding</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is allowed; it can be expanded to take as much space as possible,</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Ignored</emphasis></term>
+    <listitem>
+    <para>this value means that the original size of the widget is ignored; the widget can be expanded to take as much space as possible but other widgets usually will not allow for that</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para>Different widget types have various default size policies; for example, button widgets have default size policy set to <guilabel>Minimum</guilabel> (in both directions), while text field widgets have vertical size policy set to <guilabel>Fixed</guilabel>.
+</para>
+<para>The most frequently used size policies are <guilabel>Preferred</guilabel>, <guilabel>Minimum</guilabel> and <guilabel>Maximum</guilabel>.
+</para>
+</sect3>
+<sect3 id="vertical-and-horizontal-stretch"><title>Vertical and horizontal stretch</title> 
+<para>The <guilabel>Vertical Stretch</guilabel> and <guilabel>Horizontal Stretch</guilabel> properties accept integer values greater than or equal to 0. These properties allow to fine-tune the behavior of size policies. The default value for the properties is 0. A higher value of the stretch means that the widget will be expanded more than widgets for which a lower stretch value is set.
+</para>
+</sect3>
+</sect2>
+<sect2 id="setting-widgets-size-and-position-by-hand"><title>Setting widgets size and position by hand</title> 
+<para>In case when your form has no main layout set for auto-positioning and auto-resizing its widgets, you will probably want to modify the position and size of widgets so the form can look cleaner and be easier to use. The &kexi; form designer simplifies this task by offering the following groups of commands:
+</para>
+<itemizedlist>
+<listitem><para>Adjusting sizes of selected widgets. The commands are available in the <menuchoice><guimenu>Format</guimenu><guimenuitem>Adjust Widgets Size</guimenuitem></menuchoice> submenu of the menubar and in the <guilabel>Adjust Widgets Size</guilabel> submenu of the context menu. The toolbar's drop down button <guilabel>Adjust Widgets Size</guilabel> is also available.</para></listitem>
+</itemizedlist>
+<itemizedlist>
+<listitem><para>Aligning positions of the selected widgets. The commands are available in the <menuchoice><guimenu>Format</guimenu><guimenuitem>Align Widgets Position</guimenuitem></menuchoice> submenu of the menubar and in the <guilabel>Align Widgets Position</guilabel> submenu of the context menu. The toolbar's drop down button <guilabel>Align Widgets Position</guilabel> is also available.</para></listitem>
+</itemizedlist>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">To Fit</emphasis></term>
+    <listitem>
+    <para>The size of the selected widgets will be altered so each widget will be resized to its preferred size and its contents; for example, a text label's size will be changed to fit its text. The position of the widgets will not be changed.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Grid</emphasis></term>
+    <listitem>
+    <para>The size of the selected widgets will be altered so each widget's corner will be placed on the form's (or other container's) grid point. The widget's position can be slightly altered.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Shortest</emphasis></term>
+    <listitem>
+    <para>The height of the selected widgets will be altered so that each of them will have the same height as the shortest one. The position of the widgets will not be changed.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Tallest</emphasis></term>
+    <listitem>
+    <para>The height of the selected widgets will be altered so that each of them will have the same height as the tallest one. The position of the widgets will not be changed.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Narrowest</emphasis></term>
+    <listitem>
+    <para>The width of the selected widgets will be altered so that each of them will have the same height as the narrowest one. The position of the widgets will not be changed.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Widest</emphasis></term>
+    <listitem>
+    <para>The width of the selected widgets will be altered so that each of them will have the same height as the widest one. The position of the widgets will not be changed.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Left</emphasis></term>
+    <listitem>
+    <para>All the selected widgets' left positions will be moved to the position of the leftmost widget's left edge.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Right</emphasis></term>
+    <listitem>
+    <para>All the selected widgets' right positions will be moved to the position of the rightmost widget's right edge.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Top</emphasis></term>
+    <listitem>
+    <para>All the selected widgets' top positions will be moved to the position of the uppermost widget's upper edge.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Bottom</emphasis></term>
+    <listitem>
+    <para>All the selected widgets' bottom positions will be moved to the position of the bottommost widget's bottom edge.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">To Grid</emphasis></term>
+    <listitem>
+    <para>All the selected widgets' top-left corners will be moved so that they are positioned in the nearest grid point.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para>None of the above commands resizes the widgets.
+</para>
+<para>There are also additional commands available: <guilabel>Bring Widget to Front</guilabel> (&ie; above all other widgets) and <guilabel>Send Widget to Back</guilabel> (&ie; below all other widgets). These two commands are rarely used, as it is not common to place one widget on top of an other (except when a container widget contains other widget inside). Also note that clicking a widget with a mouse button is enough to bring the widget to front.
+</para>
+</sect2>
+<sect2 id="setting-the-tab-order"><title>Setting the tab order</title> 
+<para>A widget's focus determines that widget's activity available using keyboard. Focus is related to widgets displayed in the form's data view. Exactly one form widget can have focus at the same time. The most frequent use of focus is text entry (when a given text field is active, &ie; it is focused). An other example is a button widget - when focused, it is possible to “press” it using the &Enter; or <keycap>Space</keycap> key instead of a mouse button.
+</para>
+<para>There are a few methods of making the widgets active (moving the focus to the widget): clicking with a mouse button, rotating the mouse wheel over the widget, or using the &Tab; key. The latter method is often used because of its speed and convenience for users. Availability of the focusing methods is controlled by <guilabel>Focus Policy</guilabel> property of a given widget.
+</para>
+<para>There is a relationship between focusing (activating) widgets using &Tab; key and tab order setting of a form. After pressing the &Tab; key, the next widget should be focused, so the form should know about the tab order.
+</para>
+<para>To alter tab order for a form's widget:
+</para>
+<orderedlist>
+<listitem><para>Switch to design view of the form.</para></listitem>
+<listitem><para>Execute <menuchoice><guimenu>Edit</guimenu><guimenuitem>Edit Tab Order...</guimenuitem></menuchoice> menu command. The <guilabel>Edit Tab Order</guilabel> dialog will appear with settings for this form.The window contains a list with two columns: the first column displays widget names, the second - types of the widgets. To make it easier to recognize meaning of the names and types for the user, icons related to the types are also displayed. The list contains only widgets having focus policy allowing to use the &Tab; key. The window allows you to change the tab order or set the automatic tab order.</para></listitem>
+<listitem><para>To change tab order, either:<itemizedlist>
+<listitem><para>Click a selected widget name in the widgets list and drag it to a desired position (up or down) using the mouse.</para></listitem>
+<listitem><para>Click a selected widget name on the widgets list and use <guilabel>Move Up</guilabel> or <guilabel>Move Down</guilabel> buttons, to move the widgets to a desired position.</para></listitem>
+<listitem><para>Click the <guilabel>Handle tab order automatically</guilabel> check box to set the automatic tab order for the form. If this option has been switched on, any changes made to the list of widgets by hand are not taken into account - &kexi; will be handling the tab orders on its own. The automatic ordering means that the top-left widget will be focused first (or the top-right if your operating system uses right-to-left layout), and the order comes from the left to right (from the right to left, respectively) and from the top to bottom.</para></listitem>
+</itemizedlist>
+</para></listitem>
+</orderedlist>
+<para>Click the <guilabel>OK</guilabel> button to accept the changes or <guilabel>Cancel</guilabel> button to dismiss the changes.
+</para>
+</sect2>
+</sect1>
+<sect1 id="entering-data-using-forms"><title>Entering Data Using Forms</title> 
+<para>Data entering and editing is usually the task of the user of the database application. The designer of the database should check the form in terms of valid data entry, and see whether the form works as expected.
+</para>
+<para>To test your form, switch to its data view. A single database row (record) of data will be displayed and a text cursor will be set inside the first data field. You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>OK</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
+</para>
+</sect1>
+</chapter>
+<chapter id="configuring-kexi"><title>Configuring Kexi</title> 
+<itemizedlist>
+<listitem><para><link linkend="docking-and-undocking-side-panels">Docking and undocking side panels</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="docking-and-undocking-side-panels"><title>Docking and undocking side panels</title> 
+<para>The <guilabel>Project Navigator</guilabel> and <guilabel>Properties Editor</guilabel> side panels may be undocked by either:
+</para>
+<itemizedlist>
+<listitem><para>Double-clicking on the 'grip' bar at the top of the panel; or</para></listitem>
+<listitem><para>Clicking once on the diamond button at the top of the panel, next to the x.</para></listitem>
+</itemizedlist>
+<para>Once undocked, panel windows may be docked into the main window again similarly to undocking:
+</para>
+<itemizedlist>
+<listitem><para>Double-clicking on the 'grip' bar at the top of the window; or</para></listitem>
+<listitem><para>Clicking once on the diamond button at the top of the panel, next to the x.</para></listitem>
+</itemizedlist>
+<para><tip><para>When undocking a panel, &kexi; remembers the last docked position so when you dock the panel again it will be placed at the location it was last docked.</para></tip>
+</para>
+</sect1>
+</chapter>
+<chapter id="command-reference"><title>Command Reference</title> 
+<itemizedlist>
+<listitem><para><link linkend="the-kexi-tab">The Kexi Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-create-tab">The Create Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-data-tab">The Data Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-external-data-tab">The External Data Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-tools-tab">The Tools Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-form-design-tab">The Form Design Tab</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="the-report-design-tab">The Report Design Tab</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="the-kexi-tab"><title>The Kexi Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_kexi_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>The &kexi; tab is the place where you interact with &kexi;'s projects.
+</para>
+<para>Selecting an action will open a screen right next to the menu, offering options about the action you chose.
+</para>
+<para>The options offered are:
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Welcome</guilabel></emphasis></term>
+    <listitem>
+    <para>Here you can select to open a project you recently worked on.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Open</guilabel></emphasis></term>
+    <listitem>
+    <para>Here you can select to open a &kexi; Project whether stored in a <guilabel>File</guilabel> or a <guilabel>Database Server</guilabel>.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Close</guilabel></emphasis></term>
+    <listitem>
+    <para>This action closes the &kexi; project you have currently open.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>New</guilabel></emphasis></term>
+    <listitem>
+    <para>Here you can follow the wizard to create a new &kexi; Project.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Import, Export or Send...</guilabel></emphasis></term>
+    <listitem>
+    <para>Here you can follow the wizard to Import existing data to the currently open &kexi; Project.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Quit</guilabel></emphasis></term>
+    <listitem>
+    <para>Closes &kexi;.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+<sect1 id="the-create-tab"><title>The Create Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_create_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the <guilabel>Create</guilabel> tab you can create objects that will be added to your project.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Table</guilabel></emphasis></term>
+    <listitem>
+    <para>Selecting <guilabel>Table</guilabel> will take you to the <guilabel>Table Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add field definitions to your table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Query</guilabel></emphasis></term>
+    <listitem>
+    <para>Selecting <guilabel>Query</guilabel> will take you to the <guilabel>Query Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to design a Query to get custom results from your tables in your Project.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Form</guilabel></emphasis></term>
+    <listitem>
+    <para>Selecting <guilabel>Form</guilabel> will take you to the <guilabel>Form Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add widgets to your Form.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Report</guilabel></emphasis></term>
+    <listitem>
+    <para>Selecting <guilabel>Report</guilabel> will take you to the <guilabel>Report Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add widgets to your Report.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Script</guilabel></emphasis></term>
+    <listitem>
+    <para>Selecting <guilabel>Script</guilabel> will take you to the <guilabel>Script Editor</guilabel> to allow you to add custom code for your project and / or objects.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+<sect1 id="the-data-tab"><title>The Data Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_data_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the <guilabel>Data</guilabel> Tab you can manipulate data in your tables or widgets in your objects (forms, reports, etc)
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Cut</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Cut</guilabel>, places the data/widget on the clipboard and removes it from it's current position.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Copy</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Copy</guilabel>, places the data/widget on the clipboard without removing it from it's current position.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Paste</guilabel></emphasis></term>
+    <listitem>
+    <para>Paste, places the data/widget found on the clipboard to the table/object accordingly.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Paste Special</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Paste Special</guilabel>, is used to place arbitrary data found on the clipboard to a table, in a way that is predictable so as to be correctly added according to the table's definition.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Find</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Find</guilabel>, opens the find dialog so as to search for specific text in the database data.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+<sect1 id="the-external-data-tab"><title>The External Data Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_external_data_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the External Data Tab you can you can import data from other sources into your &kexi; project.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Import Data From File</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Import Data From File</guilabel>, displays a dialog that allows you to import data from CSV or plain text files to a new table in your project.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Import Tables</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Import Tables</guilabel>, opens the <guilabel>Table Importing Wizard</guilabel> that allows you to import data either from a <filename>fods</filename>, <filename>mdb</filename>, <filename>ods</filename>, <filename>tsv</filename> file or from another database server, to a new table in your project.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Export Data to File</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Export Data to File</guilabel>, displays a dialog that allows you to export the current tables data to a plain text or CSV file.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para><note><para>The table has to be open, in order to be able to export data from it to a file.</para></note>
+</para>
+</sect1>
+<sect1 id="the-tools-tab"><title>The Tools Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_tools_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the <guilabel>Tools</guilabel> tab you can you can manipulate your projects.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Import Database</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Import Database</guilabel>, opens the <guilabel>Database Importing Wizard</guilabel> that allows to import complete data from an <filename>mdb</filename> file or another database server.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Compact Database</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Compact Database</guilabel>, checks for minor error in the database and reduces the database's size.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para><note><para>You should regularly compact your database to keep it in good shape, especially after extensive records operations (mass add, delete)</para></note>
+</para>
+</sect1>
+<sect1 id="the-form-design-tab"><title>The Form Design Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_form_design_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the <guilabel>Form Design</guilabel> tab you can you select widgets to add to your form.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Pointer</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Pointer</guilabel>, switches to the widget selection mode.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+<para><note><para>Selecting any widget, will switch to the widget add mode. Then you can click anywhere on the form to place the widget.</para></note>
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold"><guilabel>Label</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Label</guilabel> widget displays predefined information on a form. Usually it is used as a caption next to other data-aware widgets.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Image Box</guilabel></emphasis></term>
+    <listitem>
+    <para>An <guilabel>Image Box</guilabel> holds an image, bound to a field in a table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Text Box</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Text Box</guilabel> is a single line container for data contained in your table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Text Editor</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Text Editor</guilabel> is a multiline container for data contained in your table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Button</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Button</guilabel> allows you to define actions to be executed upon clicking on it.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Combo Box</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Combo Box</guilabel> displays a list of options to choose from.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Check Box</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Check Box</guilabel> holds two or three states of data (&eg; On/Off)</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Line</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Frame</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Frame</guilabel> is used as a container for other widgets.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Group Box</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Group Box</guilabel> is used to group other widgets and control their state.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Tab Widget</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Tab Widget</guilabel> is used as a container for other widgets and can have many pages that contain different widgets.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Web Browser</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Web Browser</guilabel> is a widget that allows to display a web page inside the form.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Assign Action</guilabel></emphasis></term>
+    <listitem>
+    <para><guilabel>Assign Action</guilabel> is used to assign an action to be executed when an event occurs (&eg; clicking on a button).</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+<sect1 id="the-report-design-tab"><title>The Report Design Tab</title> 
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_report_design_tab.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>From the <guilabel>Report Design</guilabel> tab you can you select widgets to add to your report.
+</para>
+<variablelist>
+  <varlistentry><term><emphasis role="bold">Label</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Label</guilabel> widget displays predefined information on a report. Usually it is used as a caption next to other data-aware widgets.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Field</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Field</guilabel> widget is a single line container for data contained in your table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Text</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Text</guilabel> widget is a multi line container for data contained in your table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Image</emphasis></term>
+    <listitem>
+    <para>An <guilabel>Image</guilabel> widget holds an image, bound to a field in a table.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Check</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Check</guilabel> widget holds two or three states of data (&eg; On/Off)</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Line</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Shape</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Shape</guilabel> widget is used to add special shape visuals to your report.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Chart</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Chart</guilabel> widget is used to add a visual representation of your data presented on a graph.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Web</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Web Widget</guilabel> is used to provide a minimal web browser component and print information from a local or web site on a report.</para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold">Barcode</emphasis></term>
+    <listitem>
+    <para>A <guilabel>Barcode</guilabel> widget is used to create a barcode to be printed on a report, from data held in a field.</para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+<chapter id="appendix-a--introduction-to-databases"><title>Appendix A. Introduction to Databases</title> 
+<itemizedlist>
+<listitem><para><link linkend="what-is-a-database">What Is a Database?</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-and-spreadsheet">Database and Spreadsheet</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-design">Database Design</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="who-needs-a-database">Who Needs a Database?</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="database-creation-software">Database Creation Software</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="what-is-a-database"><title>What Is a Database?</title> 
+<para>You can define a database as a collection of data on one topic. It is organised in a way allowing to easily browse the information, make changes or add new items.
+</para>
+<para>Look at this diagram for one of the above examples: a simple phone book.
+</para>
+
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="contact-example.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para>The above picture shows a set of two contacts each of which is presented on a separate card. It appears that such a card can constitute a single row in a table:
+</para>
+<para>
+<table>
+  <title><emphasis>Contacts table</emphasis></title>
+  <tgroup cols="2">
+  <thead>
+  <row>
+    <entry><guilabel>Name</guilabel></entry>
+    <entry><guilabel>Tel No.</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Joan</para>
+    </entry>
+    <entry>
+    <para>699 23 43 12</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Adam</para>
+    </entry>
+    <entry>
+    <para>711 19 77 21</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+<para>Terms and definitions: A single data which constitutes a part of a greater collection can be called a <emphasis>row</emphasis> or more professionally a <emphasis>record</emphasis>. The collection is normally called a <emphasis>table</emphasis>. Moreover, the most natural name for the table is one describing the data it offers/stores which is Contacts. Furthermore, each row in the table consists of columns often also called <emphasis>fields</emphasis>. In the table <replaceable>Contacts</replaceable> there are two columns (fields): <guilabel>Name</guilabel> and <guilabel>Tel No.</guilabel>.
+</para>
+<para>For simple uses a single table can make up a database. Many people consider these two equivalent. As you will see, for real databases we usually need more than one table.
+</para>
+<para>To sum up, you have already got a simple database with one table <replaceable>Contacts</replaceable>.
+</para>
+<para><note><para>Check content at https://www.zoho.com/creator/database-software-vs-spreadsheet.html</para></note>
+</para>
+</sect1>
+<sect1 id="database-and-spreadsheet"><title>Database and Spreadsheet</title> 
+<para>It is very likely that you have already used spreadsheet applications like <guilabel>Calligra Tables</guilabel>, <guilabel>LibreOffice Calc</guilabel> or <application>&Microsoft; Excel</application>. If so, you will probably wonder: since both spreadsheets and databases have tables, why should I use the latter?
+</para>
+<para>While comparing spreadsheets and databases you may encounter the following issues which you will later see in greater detail.
+</para>
+<sect2 id="how-is-a-database-different-from-a-spreadsheet"><title>How Is a Database Different From a Spreadsheet?</title> 
+<para>Gradually exceeding the capacity of a mobile phone, expand your table <replaceable>Contacts</replaceable> adding a column (field) Address. Add more telephone numbers (office, home) for each person and add surnames to names. To make it simpler we assume the following:
+</para>
+<itemizedlist>
+<listitem><para>The table is limited to two people (obviously, there could be hundreds and thousands of them in a real database)</para></listitem>
+<listitem><para>There are no two persons with the same name and surname</para></listitem>
+</itemizedlist>
+<para>
+<table>
+  <title><emphasis>Contacts table</emphasis></title>
+  <tgroup cols="3">
+  <thead>
+  <row>
+    <entry><guilabel>Name and surname</guilabel></entry>
+    <entry><guilabel>Tel</guilabel></entry>
+    <entry><guilabel>Address</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Joan Smith</para>
+    </entry>
+    <entry>
+    <para>699 23 43 12</para>
+    </entry>
+    <entry>
+    <para>Western Gate 1, Warsaw</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Adam Willson</para>
+    </entry>
+    <entry>
+    <para>711 19 77 21</para>
+    </entry>
+    <entry>
+    <para>London, Frogs Drive 5</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Joan Smith</para>
+    </entry>
+    <entry>
+    <para>110 98 98 00</para>
+    </entry>
+    <entry>
+    <para>Western Gate 1</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Smith Joan</para>
+    </entry>
+    <entry>
+    <para>312 43 42 22</para>
+    </entry>
+    <entry>
+    <para>Warsaw, Western Gate 1</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>ADAM Willson</para>
+    </entry>
+    <entry>
+    <para>231 83 02 04</para>
+    </entry>
+    <entry>
+    <para>Frogs Drive 5, London</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+<para>Such a table can be made both in a spreadsheet and in a database. Using a spreadsheet is very easy, of course. What problems do we encounter at this stage?
+</para>
+</sect2>
+<sect2 id="referential-data-integrity"><title>Referential data integrity</title> 
+<para>Suppose you are using a spreadsheet and you need to change the address of at least one person. You have a small problem: you often have to change the address in many rows. For example, Joan takes three rows. A real problem will arise if you forget to change one of the rows - the address assigned to this person will be ambiguous, hence your data loses integrity.
+</para>
+<para>Moreover there is no simple way of deleting a chosen person from the table since you have to remember about deleting all rows related to him or her.
+</para>
+</sect2>
+<sect2 id="data-redundancy"><title>Data redundancy</title> 
+<para>This is directly connected to the previous problem. In fields Name and surname and Address the same data is entered many times. This is typical of a spreadsheets' ineffective way of storing data because the database grows unnecessarily, thus requiring more computer resources (larger size of data and slower access).
+</para>
+<para>How can you solve these problems with a database? You can split information into smaller chunks by creating an additional table Persons with only two columns: Name and surname and Address:
+</para>
+<para>
+<table>
+  <title><emphasis>Persons table</emphasis></title>
+  <tgroup cols="2">
+  <thead>
+  <row>
+    <entry><guilabel>Name and surname</guilabel></entry>
+    <entry><guilabel>Address</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Joan Smith</para>
+    </entry>
+    <entry>
+    <para>Western Gate 1, Warsaw</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Adam Willson</para>
+    </entry>
+    <entry>
+    <para>Frogs Drive 5, London</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+<para>Each row in the table Persons corresponds to a single person. Table <replaceable>Contacts</replaceable> is from now on a relation to the table <replaceable>Persons</replaceable>.
+</para>
+</sect2>
+<sect2 id="data-integrity-and-validity"><title>Data integrity and validity</title> 
+<para>Note the way data is entered in the fields <guilabel>Name and surname</guilabel> and <guilabel>Address</guilabel>. People entering data can be fallible, sometimes even negligent. In our sample data we have both different sequence of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and many more ways of entering the same address. Surely you can think of many other ways.
+</para>
+<para>The above problem shows that &eg; when searching the telephone number of a person whose address is <quote>Western Gate 1, Warsaw</quote> you will not get a full result. You will get only one row instead of three. Moreover You will also not find all the telephone numbers searching for the value <quote>Joan Smith</quote> in the field <guilabel>Name and surname</guilabel>, because <quote>Smith Joan</quote> will not fit to <quote>Joan Smith</quote>.
+</para>
+<para>How can you solve these problems using a database? You can do this by changing the design of the table <replaceable>Persons</replaceable> by:
+</para>
+<orderedlist>
+<listitem><para>Dividing data in the field <guilabel>Name and surname</guilabel> into two separate fields: <guilabel>Name</guilabel> and <guilabel>Surname</guilabel>.</para></listitem>
+<listitem><para>Dividing data in the field <guilabel>Address</guilabel> into three separate fields: <guilabel>Street</guilabel>, <guilabel>House number</guilabel> and <guilabel>City</guilabel>.</para></listitem>
+<listitem><para>Guaranteeing data correctness: by ensuring that no fields are empty, &eg; you must always enter house number.</para></listitem>
+</orderedlist>
+<para>A modified table looks something like this:
+</para>
+<para>
+<table>
+  <title><emphasis>Persons table</emphasis></title>
+  <tgroup cols="5">
+  <thead>
+  <row>
+    <entry><guilabel>Name</guilabel></entry>
+    <entry><guilabel>Surname</guilabel></entry>
+    <entry><guilabel>Street</guilabel></entry>
+    <entry><guilabel>House number</guilabel></entry>
+    <entry><guilabel>City</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Joan</para>
+    </entry>
+    <entry>
+    <para>Smith</para>
+    </entry>
+    <entry>
+    <para>Western Gate</para>
+    </entry>
+    <entry>
+    <para>1</para>
+    </entry>
+    <entry>
+    <para>Warsaw</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Adam</para>
+    </entry>
+    <entry>
+    <para>Willson</para>
+    </entry>
+    <entry>
+    <para>Frogs Drive</para>
+    </entry>
+    <entry>
+    <para>5</para>
+    </entry>
+    <entry>
+    <para>London</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para><emphasis>Conditions</emphasis></para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>required field</para>
+    </entry>
+    <entry>
+    <para>required field</para>
+    </entry>
+    <entry>
+    <para>required field</para>
+    </entry>
+    <entry>
+    <para>required field</para>
+    </entry>
+    <entry>
+    <para>required field</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+<para>Thanks to introducing the condition required field we can be sure that the entered data is complete. In case of other tables you may of course allow omitting certain fields while entering data.
+</para>
+</sect2>
+<sect2 id="limiting-data-view"><title>Limiting data view</title> 
+<para>A spreadsheet displays all rows and columns of the table which is bothersome in case of very large data sheets. You may of course filter and sort rows in spreadsheets, however you must be extra careful while doing so. Spreadsheet users are in risk of forgetting that their data view has been filtered what can lead to mistakes. For example, while calculating sums you may think you have 100 rows of data while in fact there are 20 rows more hidden.
+</para>
+<para>If you want to work on a small subset of data, &eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such <quote>manual</quote> editing may cause data loss or incorrect calculations.
+</para>
+<para>To limit the data view database applications offer queries, forms and reports.
+</para>
+<para>A very practical way of limiting is the following extended version of the previously described table Persons:
+</para>
+<para>
+<table>
+  <title><emphasis>Persons table</emphasis></title>
+  <tgroup cols="6">
+  <thead>
+  <row>
+    <entry><guilabel>Name</guilabel></entry>
+    <entry><guilabel>Surname</guilabel></entry>
+    <entry><guilabel>Street</guilabel></entry>
+    <entry><guilabel>House number</guilabel></entry>
+    <entry><guilabel>City</guilabel></entry>
+    <entry><guilabel>Income</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Joan</para>
+    </entry>
+    <entry>
+    <para>Smith</para>
+    </entry>
+    <entry>
+    <para>Western Gate</para>
+    </entry>
+    <entry>
+    <para>1</para>
+    </entry>
+    <entry>
+    <para>Warsaw</para>
+    </entry>
+    <entry>
+    <para>2300</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Adam</para>
+    </entry>
+    <entry>
+    <para>Willson</para>
+    </entry>
+    <entry>
+    <para>Frogs Drive</para>
+    </entry>
+    <entry>
+    <para>5</para>
+    </entry>
+    <entry>
+    <para>London</para>
+    </entry>
+    <entry>
+    <para>1900</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+<para>Let's assume that the newly introduced column Income contains confidential data. How can you share &eg; contact details of the persons with your coworkers but without revealing their income? It is possible if you share only a query and not the whole table. The query could select all columns except for the column Income. In database world such a query is often known as a view.
+</para>
+</sect2>
+<sect2 id="performance-and-capacity"><title>Performance and capacity</title> 
+<para>Your computer is probably quite fast, however you will easily see that it doesn't help with slow, large spreadsheets. Their low efficiency is first of all due to lack of indexes accelerating the process of data search (databases do offer them). Moreover if you use things like system clipboard, even copying data may become troublesome with time.
+</para>
+<para>Spreadsheets containing large data sets may take ages to open. A spreadsheet loads lots of data to the computer's memory while opening. Most of the data loaded are probably useless/unnecessary for you at the moment. Databases unlike spreadsheets load data from computer storage only when needed.
+</para>
+<para>In most cases you will not have to worry how the database stores its data. This means that unlike spreadsheets, databases do not care about:
+</para>
+<itemizedlist>
+<listitem><para>The sequence of rows since you can order the rows according to your needs. Moreover, you can view the same data in many views with different orders.</para></listitem>
+<listitem><para>The same goes for columns (fields) of the table.</para></listitem>
+</itemizedlist>
+<para>Together with <link linkend="limiting-data-view">Limiting data view</link> described in the previous paragraph these qualities constitute the advantage of databases.
+</para>
+</sect2>
+<sect2 id="data-entry"><title>Data entry</title> 
+<para>The latest editions of applications for creating spreadsheets enable you to design data-entry forms. Such forms are most useful if your data cannot be conveniently displayed in tabular view, &eg; if the text occupies too many rows or if all the columns do not fit on the screen.
+</para>
+<para>In this case the very way the spreadsheet works is problematic. Fields for data entry are placed loosely within the spreadsheet and very often are not secure against the user's (intentional or accidental) intervention.
+</para>
+</sect2>
+<sect2 id="reports"><title>Reports</title> 
+<para>Databases enable grouping, limiting and summing up data in a form of a report. Spreadsheets are usually printed in a form of small tables without fully automatic control over page divisions and the layout of fields.
+</para>
+</sect2>
+<sect2 id="programming"><title>Programming</title> 
+<para>Applications for creating databases often contain full programming languages. Newer spreadsheets have this capability too, however calculations come down to modifying the spreadsheet's fields and simple data copying, regardless of the relevance and integrity rules mentioned in previous paragraphs.
+</para>
+<para>Data processing within a spreadsheet is usually done via a graphical user's interface which may slow down the data processing speed. Databases are capable of working in background, outside of graphical interfaces.
+</para>
+</sect2>
+<sect2 id="multiuse"><title>Multiuse</title> 
+<para>It is hard to imagine a multiuse of one spreadsheet. Even if it is technically possible in the case of the latest applications, it requires a lot of discipline, attention and knowledge from the users, and these cannot be guaranteed.
+</para>
+<para>A classical way to sharing data saved in a spreadsheet with other person is to send a file as a whole (usually using e-mail) or providing a spreadsheet file in a computer network. This way of work is ineffective for larger groups of people - data that could be needed in a particular time may be currently locked by another person.
+</para>
+<para>On the other hand, databases have been designed mainly with multiuser access in mind. Even for the simplest version locking at a particular table row's level is possible, which enables easy sharing of table data.
+</para>
+</sect2>
+<sect2 id="security"><title>Security</title> 
+<para>Securing a spreadsheet or its particular sections with a password is only symbolic activity. After providing a spreadsheet file in a computer network, every person being able to copy the file can try to break the password. It is sometimes not so hard as the password is stored in the same file as the spreadsheet.
+</para>
+<para>Features for edit locking or copy locking of a spreadsheet (or its part) is equally easy to break.
+</para>
+<para>Databases (except these saved in a file instead of a server) do not need to be available in a single file. You're accessing them using a computer network, usually by providing a user name and a password. You are gaining access only to these areas (tables, forms or even selected rows and columns) which were assigned to you by setting appropriate access rights.
+</para>
+<para>Access rights can affect ability of data editing or only data reading. If any data is not available to you, it will not be even sent to your computer, so there is no possibility of making a copy of the data in such easy way as in case of spreadsheet files.
+</para>
+</sect2>
+</sect1>
+<sect1 id="database-design"><title>Database Design</title> 
+<para>Database design needs careful planning. Note that <replaceable>Contacts</replaceable> table redesign proposed in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> can generate problems when the table is filled with data. For example, renaming a field is a simple task, but splitting the <replaceable>Address</replaceable> field into separate fields requires careful and tedious work.
+</para>
+<para>To avoid such situations, rethink your database project before you create it in your computer, and before you and others will start to use it. Thus, by investing some time initially, you will most probably save your time on everyday use.
+</para>
+</sect1>
+<sect1 id="who-needs-a-database"><title>Who Needs a Database?</title> 
+<sect2 id="stick-to-spreadsheets-if-"><title>Stick to spreadsheets if:</title> 
+<itemizedlist>
+<listitem><para>Your needs are limited and your data will never grow to large volumes (can you actually forecast that now?)</para></listitem>
+<listitem><para>You are unable to acquire the methodology of database construction. You may however consider either outsourcing this task to someone else or using simpler tools.</para></listitem>
+<listitem><para>You use complicated spreadsheets and you lack time or money to switch to databases. Think or ask someone whether this does not lead down a blind alley. Don't count on magical tools that would change your spreadsheet (regardless how well made) into a database.</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="consider-using-databases-if-"><title>Consider using databases if:</title> 
+<itemizedlist>
+<listitem><para>Your data collection expands every week.</para></listitem>
+<listitem><para>You often create new spreadsheets, copy within these and you feel that this work is getting more and more tedious. In this case the effort of switching to databases easily pays off.</para></listitem>
+<listitem><para>You create reports and statements for which the table view of a spreadsheet is not suitable. You can then consider switch to using a database with form views.</para></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="database-creation-software"><title>Database Creation Software</title> 
+<para>So far you have learnt the general characteristics of databases without going into much detail about specific applications for designing them.
+</para>
+<para>The first databases were built together with large mainframe computers in the 60s, &eg; IBM System/360. Those were not the days of PCs, therefore these databases required a highly specialized personnel. Although the old computers' hardware was unreliable, they were immeasurably slower and had less storage capacity, one feature of databases still remains most attractive: the data access by many users through a network.
+</para>
+<para>In the 70s scientists formed the theory of relational databases (terms like: table, record, column (field) and relationality and many others). On the basis of this theory IBM DB2 and Oracle databases were created, which have been developed and used till today. In the late 70s the first PCs were constructed. Their users could (gradually) utilize many types of applications, including those for database construction.
+</para>
+<para>When it comes to large databases in companies, the situation hasn't changed: they still require powerful computers or computer complexes called clusters. This goes, however, beyond the topic of this manual.
+</para>
+<para>In the area of <quote>accessible</quote> databases with graphic user interface for PCs you can choose from the following:
+</para>
+<itemizedlist>
+<listitem><para><ulink url="http://www.dbase.com">DBase</ulink> - a tool for databases operation for DOS popular in the 80s. Files in DBase format are still used in some specific cases due to their simplicity.</para></listitem>
+<listitem><para><ulink url="http://msdn.microsoft.com/vfoxpro/productinfo/overview">FoxPro</ulink> - an application similar to DBase (early 90s). After being taken over by Microsoft, graphic user interfaces were introduced and therefore it is used for creating databases on PCs. This product is still offered, though seems a bit obsolete.</para></listitem>
+<listitem><para><ulink url="http://office.microsoft.com/access/">Microsoft Access</ulink> - an application for databases (data and graphic interface design) with many simplifications, therefore suitable for beginners, designed in the late 80s, based on 16-Bit Architecture. This product is offered and widely used till today, especially by small companies, where efficiency and multiuser requirements are not very demanding.</para></listitem>
+<listitem><para><ulink url="http://www.filemaker.com">FileMaker</ulink> - popular application similar to MS Access in simplicity, operating on Windows and Macintosh platforms, offered since 1985.</para></listitem>
+<listitem><para><ulink url="http://www.calligra-suite.org/kexi">Kexi</ulink> - a multiplatform application (&UNIX;/&Linux;, Windows, &MacOS; X) designed in 2003, developed according to OpenSource principles, part of the global K Desktop Environment project, &ie; graphic environment for &UNIX;/&Linux; systems. A significant contributor to Kexi's development is the OpenOffice Poland company.</para></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<chapter id="appendix-b--comparing-kexi-to-other-database-applications"><title>Appendix B. Comparing Kexi to other database applications</title> 
+<itemizedlist>
+<listitem><para><link linkend="data-types">Data types</link>&nbsp;</para></listitem>
+</itemizedlist>
+<sect1 id="data-types"><title>Data types</title> 
+<para>Although different database applications tend to provide similar functionality, they often use different terminology. For your convenience, this appendix shows how the terminology used in &kexi; corresponds to that used by other database applications. Thus, this chapter may be useful when migrating databases from one application to another.
+</para>
+<para>The table below shows how the data types in &kexi; correspond to data types in other database applications.
+</para>
+<para>Some of the data types listed here are sub-types of other types. For example, the <guilabel>Long text</guilabel> type is a sub-type of the <guilabel>Text</guilabel> type. To use a sub-type in &kexi;, you should select the corresponding basic type (in this case, <guilabel>Text</guilabel>) in the table designer, and then select the sub-type using the <guilabel>Subtype</guilabel> setting in the <guilabel>Properties Editor</guilabel>.
+</para>
+<para>
+<table>
+  <title><emphasis>Comparison of data types used in Kexi and other database applications</emphasis></title>
+  <tgroup cols="4">
+  <thead>
+  <row>
+    <entry>&kexi;</entry>
+    <entry><guilabel>MS Access</guilabel></entry>
+    <entry><guilabel>dBase/FoxPro</guilabel></entry>
+    <entry><guilabel>Paradox</guilabel></entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>
+    <para>Text (Text)</para>
+    </entry>
+    <entry>
+    <para>Text</para>
+    </entry>
+    <entry>
+    <para>Character</para>
+    </entry>
+    <entry>
+    <para>Alphanumeric</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Long text (Long text)</para>
+    </entry>
+    <entry>
+    <para>Memo</para>
+    </entry>
+    <entry>
+    <para>Memo</para>
+    </entry>
+    <entry>
+    <para>Memo</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Date/Time (Date/Time)</para>
+    </entry>
+    <entry>
+    <para>Date, Time</para>
+    </entry>
+    <entry>
+    <para>Date</para>
+    </entry>
+    <entry>
+    <para>DateTime</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Integer Number (Integer Number)</para>
+    </entry>
+    <entry>
+    <para>Number (Integer)</para>
+    </entry>
+    <entry>
+    <para>Numeric</para>
+    </entry>
+    <entry>
+    <para>Integer</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Big Integer Number (Big Integer Number)</para>
+    </entry>
+    <entry>
+    <para>Long Integer</para>
+    </entry>
+    <entry>
+    <para>Numeric</para>
+    </entry>
+    <entry>
+    <para>Long Integer</para>
+    </entry>
+  </row>
+  <row>
+    <entry>
+    <para>Floating Point Number (Floating Point Number)</para>
+    </entry>
+    <entry>
+    <para>Single/Double precision number</para>
+    </entry>
+    <entry>
+    <para>Float</para>
+    </entry>
+    <entry>
+    <para>Number</para></entry>
+  </row>
+  </tbody>
+  </tgroup>
+</table>
+</para>
+</sect1>
+</chapter>
+<chapter id="reserved-words-for-sql"><title>Reserved words for SQL</title> 
+<para>The following lists contain words that are used internally by &kexi; when dealing with data sources.
+</para>
+<para><warning><para>When designing your database you should do your best to avoid using these reserved words because otherwise you might end up having problems with your database file or even corrupt it.</para></warning>
+</para>
+<para><tip><para>If you still want to use reserved words enclose them with double quotation marks <quote></quote>.</para></tip>
+</para>
+<sect1 id="kexi-sql-reserved-words"><title>Kexi SQL Reserved words</title> 
+<para>This list contains keywords that are reserved for use in Kexi SQL:
+</para>
+<itemizedlist>
+<listitem><para>AFTER</para></listitem>
+<listitem><para>ALL</para></listitem>
+<listitem><para>ASC</para></listitem>
+<listitem><para>BEFORE</para></listitem>
+<listitem><para>BEGIN</para></listitem>
+<listitem><para>BETWEEN</para></listitem>
+<listitem><para>BY</para></listitem>
+<listitem><para>CASCADE</para></listitem>
+<listitem><para>CASE</para></listitem>
+<listitem><para>CHECK</para></listitem>
+<listitem><para>COLLATE</para></listitem>
+<listitem><para>COMMIT</para></listitem>
+<listitem><para>CONSTRAINT</para></listitem>
+<listitem><para>CROSS</para></listitem>
+<listitem><para>DATABASE</para></listitem>
+<listitem><para>DEFAULT</para></listitem>
+<listitem><para>DELETE</para></listitem>
+<listitem><para>DESC</para></listitem>
+<listitem><para>DISTINCT</para></listitem>
+<listitem><para>DROP</para></listitem>
+<listitem><para>END</para></listitem>
+<listitem><para>ELSE</para></listitem>
+<listitem><para>EXPLAIN</para></listitem>
+<listitem><para>FOR</para></listitem>
+<listitem><para>FOREIGN</para></listitem>
+<listitem><para>FULL</para></listitem>
+<listitem><para>GROUP</para></listitem>
+<listitem><para>HAVING</para></listitem>
+<listitem><para>IGNORE</para></listitem>
+<listitem><para>INDEX</para></listitem>
+<listitem><para>INNER</para></listitem>
+<listitem><para>INSERT</para></listitem>
+<listitem><para>INTO</para></listitem>
+<listitem><para>KEY</para></listitem>
+<listitem><para>LIMIT</para></listitem>
+<listitem><para>MATCH</para></listitem>
+<listitem><para>NATURAL</para></listitem>
+<listitem><para>OFFSET</para></listitem>
+<listitem><para>ORDER</para></listitem>
+<listitem><para>OUTER</para></listitem>
+<listitem><para>PRIMARY</para></listitem>
+<listitem><para>REFERENCES</para></listitem>
+<listitem><para>REPLACE</para></listitem>
+<listitem><para>RESTRICT</para></listitem>
+<listitem><para>ROLLBACK</para></listitem>
+<listitem><para>ROW</para></listitem>
+<listitem><para>SET</para></listitem>
+<listitem><para>TEMPORARY</para></listitem>
+<listitem><para>THEN</para></listitem>
+<listitem><para>TRANSACTION</para></listitem>
+<listitem><para>UNION</para></listitem>
+<listitem><para>UNIQUE</para></listitem>
+<listitem><para>UPDATE</para></listitem>
+<listitem><para>USING</para></listitem>
+<listitem><para>VALUES</para></listitem>
+<listitem><para>WHEN</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-sqlite-driver-reserved-words"><title>Kexi SQLite Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi SQLite Driver:
+</para>
+<itemizedlist>
+<listitem><para>ABORT</para></listitem>
+<listitem><para>ATTACH</para></listitem>
+<listitem><para>CLUSTER</para></listitem>
+<listitem><para>CONFLICT</para></listitem>
+<listitem><para>DEFERRED</para></listitem>
+<listitem><para>DEFERRABLE</para></listitem>
+<listitem><para>DETACH</para></listitem>
+<listitem><para>EACH</para></listitem>
+<listitem><para>EXCEPT</para></listitem>
+<listitem><para>FAIL</para></listitem>
+<listitem><para>GLOB</para></listitem>
+<listitem><para>IMMEDIATE</para></listitem>
+<listitem><para>INITIALLY</para></listitem>
+<listitem><para>INSTEAD</para></listitem>
+<listitem><para>INTERSECT</para></listitem>
+<listitem><para>ISNULL</para></listitem>
+<listitem><para>NOTNULL</para></listitem>
+<listitem><para>OF</para></listitem>
+<listitem><para>PRAGMA</para></listitem>
+<listitem><para>RAISE</para></listitem>
+<listitem><para>STATEMENT</para></listitem>
+<listitem><para>TEMP</para></listitem>
+<listitem><para>TRIGGER</para></listitem>
+<listitem><para>VACUUM</para></listitem>
+<listitem><para>VIEW</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-mysql-driver-reserved-words"><title>Kexi MySQL Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi MySQL Driver:
+</para>
+<itemizedlist>
+<listitem><para>ACTION</para></listitem>
+<listitem><para>ADD</para></listitem>
+<listitem><para>AGAINST</para></listitem>
+<listitem><para>AGGREGATE</para></listitem>
+<listitem><para>ALTER</para></listitem>
+<listitem><para>ANALYZE</para></listitem>
+<listitem><para>ANY</para></listitem>
+<listitem><para>ASCII</para></listitem>
+<listitem><para>AUTO_INCREMENT</para></listitem>
+<listitem><para>AVG</para></listitem>
+<listitem><para>AVG_ROW_LENGTH</para></listitem>
+<listitem><para>BACKUP</para></listitem>
+<listitem><para>BDB</para></listitem>
+<listitem><para>BERKELEYDB</para></listitem>
+<listitem><para>BIGINT</para></listitem>
+<listitem><para>BINARY</para></listitem>
+<listitem><para>BINLOG</para></listitem>
+<listitem><para>BIT</para></listitem>
+<listitem><para>BLOB</para></listitem>
+<listitem><para>BOOL</para></listitem>
+<listitem><para>BOOLEAN</para></listitem>
+<listitem><para>BOTH</para></listitem>
+<listitem><para>BTREE</para></listitem>
+<listitem><para>BYTE</para></listitem>
+<listitem><para>CACHE</para></listitem>
+<listitem><para>CHANGE</para></listitem>
+<listitem><para>CHANGED</para></listitem>
+<listitem><para>CHAR</para></listitem>
+<listitem><para>CHARACTER</para></listitem>
+<listitem><para>CHARSET</para></listitem>
+<listitem><para>CHECKSUM</para></listitem>
+<listitem><para>CIPHER</para></listitem>
+<listitem><para>CLIENT</para></listitem>
+<listitem><para>CLOSE</para></listitem>
+<listitem><para>COLLATION</para></listitem>
+<listitem><para>COLUMN</para></listitem>
+<listitem><para>COLUMNS</para></listitem>
+<listitem><para>COMMENT</para></listitem>
+<listitem><para>COMMITTED</para></listitem>
+<listitem><para>COMPRESSED</para></listitem>
+<listitem><para>CONCURRENT</para></listitem>
+<listitem><para>CONVERT</para></listitem>
+<listitem><para>CUBE</para></listitem>
+<listitem><para>CURRENT_DATE</para></listitem>
+<listitem><para>CURRENT_TIME</para></listitem>
+<listitem><para>CURRENT_TIMESTAMP</para></listitem>
+<listitem><para>CURRENT_USER</para></listitem>
+<listitem><para>DATA</para></listitem>
+<listitem><para>DATABASES</para></listitem>
+<listitem><para>DATE</para></listitem>
+<listitem><para>DATETIME</para></listitem>
+<listitem><para>DAY</para></listitem>
+<listitem><para>DAY_HOUR</para></listitem>
+<listitem><para>DAY_MICROSECOND</para></listitem>
+<listitem><para>DAY_MINUTE</para></listitem>
+<listitem><para>DAY_SECOND</para></listitem>
+<listitem><para>DEALLOCATE</para></listitem>
+<listitem><para>DEC</para></listitem>
+<listitem><para>DECIMAL</para></listitem>
+<listitem><para>DELAYED</para></listitem>
+<listitem><para>DELAY_KEY_WRITE</para></listitem>
+<listitem><para>DESCRIBE</para></listitem>
+<listitem><para>DES_KEY_FILE</para></listitem>
+<listitem><para>DIRECTORY</para></listitem>
+<listitem><para>DISABLE</para></listitem>
+<listitem><para>DISCARD</para></listitem>
+<listitem><para>DISTINCTROW</para></listitem>
+<listitem><para>DIV</para></listitem>
+<listitem><para>DO</para></listitem>
+<listitem><para>DOUBLE</para></listitem>
+<listitem><para>DUAL</para></listitem>
+<listitem><para>DUMPFILE</para></listitem>
+<listitem><para>DUPLICATE</para></listitem>
+<listitem><para>DYNAMIC</para></listitem>
+<listitem><para>ENABLE</para></listitem>
+<listitem><para>ENCLOSED</para></listitem>
+<listitem><para>ENGINE</para></listitem>
+<listitem><para>ENGINES</para></listitem>
+<listitem><para>ENUM</para></listitem>
+<listitem><para>ERRORS</para></listitem>
+<listitem><para>ESCAPE</para></listitem>
+<listitem><para>ESCAPED</para></listitem>
+<listitem><para>EVENTS</para></listitem>
+<listitem><para>EXECUTE</para></listitem>
+<listitem><para>EXISTS</para></listitem>
+<listitem><para>EXPANSION</para></listitem>
+<listitem><para>EXTENDED</para></listitem>
+<listitem><para>FALSE</para></listitem>
+<listitem><para>FAST</para></listitem>
+<listitem><para>FIELDS</para></listitem>
+<listitem><para>FILE</para></listitem>
+<listitem><para>FIRST</para></listitem>
+<listitem><para>FIXED</para></listitem>
+<listitem><para>FLOAT</para></listitem>
+<listitem><para>FLOAT4</para></listitem>
+<listitem><para>FLOAT8</para></listitem>
+<listitem><para>FLUSH</para></listitem>
+<listitem><para>FORCE</para></listitem>
+<listitem><para>FULLTEXT</para></listitem>
+<listitem><para>FUNCTION</para></listitem>
+<listitem><para>GEOMETRY</para></listitem>
+<listitem><para>GEOMETRYCOLLECTION</para></listitem>
+<listitem><para>GET_FORMAT</para></listitem>
+<listitem><para>GLOBAL</para></listitem>
+<listitem><para>GRANT</para></listitem>
+<listitem><para>GRANTS</para></listitem>
+<listitem><para>HANDLER</para></listitem>
+<listitem><para>HASH</para></listitem>
+<listitem><para>HELP</para></listitem>
+<listitem><para>HIGH_PRIORITY</para></listitem>
+<listitem><para>HOSTS</para></listitem>
+<listitem><para>HOUR</para></listitem>
+<listitem><para>HOUR_MICROSECOND</para></listitem>
+<listitem><para>HOUR_MINUTE</para></listitem>
+<listitem><para>HOUR_SECOND</para></listitem>
+<listitem><para>IDENTIFIED</para></listitem>
+<listitem><para>IF</para></listitem>
+<listitem><para>IMPORT</para></listitem>
+<listitem><para>INDEXES</para></listitem>
+<listitem><para>INFILE</para></listitem>
+<listitem><para>INNOBASE</para></listitem>
+<listitem><para>INNODB</para></listitem>
+<listitem><para>INSERT_METHOD</para></listitem>
+<listitem><para>INT</para></listitem>
+<listitem><para>INT1</para></listitem>
+<listitem><para>INT2</para></listitem>
+<listitem><para>INT3</para></listitem>
+<listitem><para>INT4</para></listitem>
+<listitem><para>INT8</para></listitem>
+<listitem><para>INTERVAL</para></listitem>
+<listitem><para>IO_THREAD</para></listitem>
+<listitem><para>ISOLATION</para></listitem>
+<listitem><para>ISSUER</para></listitem>
+<listitem><para>KEYS</para></listitem>
+<listitem><para>KILL</para></listitem>
+<listitem><para>LAST</para></listitem>
+<listitem><para>LEADING</para></listitem>
+<listitem><para>LEAVES</para></listitem>
+<listitem><para>LEVEL</para></listitem>
+<listitem><para>LINES</para></listitem>
+<listitem><para>LINESTRING</para></listitem>
+<listitem><para>LOAD</para></listitem>
+<listitem><para>LOCAL</para></listitem>
+<listitem><para>LOCALTIME</para></listitem>
+<listitem><para>LOCALTIMESTAMP</para></listitem>
+<listitem><para>LOCK</para></listitem>
+<listitem><para>LOCKS</para></listitem>
+<listitem><para>LOGS</para></listitem>
+<listitem><para>LONG</para></listitem>
+<listitem><para>LONGBLOB</para></listitem>
+<listitem><para>LONGTEXT</para></listitem>
+<listitem><para>LOW_PRIORITY</para></listitem>
+<listitem><para>MASTER</para></listitem>
+<listitem><para>MASTER_CONNECT_RETRY</para></listitem>
+<listitem><para>MASTER_HOST</para></listitem>
+<listitem><para>MASTER_LOG_FILE</para></listitem>
+<listitem><para>MASTER_LOG_POS</para></listitem>
+<listitem><para>MASTER_PASSWORD</para></listitem>
+<listitem><para>MASTER_PORT</para></listitem>
+<listitem><para>MASTER_SERVER_ID</para></listitem>
+<listitem><para>MASTER_SSL</para></listitem>
+<listitem><para>MASTER_SSL_CA</para></listitem>
+<listitem><para>MASTER_SSL_CAPATH</para></listitem>
+<listitem><para>MASTER_SSL_CERT</para></listitem>
+<listitem><para>MASTER_SSL_CIPHER</para></listitem>
+<listitem><para>MASTER_SSL_KEY</para></listitem>
+<listitem><para>MASTER_USER</para></listitem>
+<listitem><para>MAX_CONNECTIONS_PER_HOUR</para></listitem>
+<listitem><para>MAX_QUERIES_PER_HOUR</para></listitem>
+<listitem><para>MAX_ROWS</para></listitem>
+<listitem><para>MAX_UPDATES_PER_HOUR</para></listitem>
+<listitem><para>MEDIUM</para></listitem>
+<listitem><para>MEDIUMBLOB</para></listitem>
+<listitem><para>MEDIUMINT</para></listitem>
+<listitem><para>MEDIUMTEXT</para></listitem>
+<listitem><para>MICROSECOND</para></listitem>
+<listitem><para>MIDDLEINT</para></listitem>
+<listitem><para>MINUTE</para></listitem>
+<listitem><para>MINUTE_MICROSECOND</para></listitem>
+<listitem><para>MINUTE_SECOND</para></listitem>
+<listitem><para>MIN_ROWS</para></listitem>
+<listitem><para>MOD</para></listitem>
+<listitem><para>MODE</para></listitem>
+<listitem><para>MODIFY</para></listitem>
+<listitem><para>MONTH</para></listitem>
+<listitem><para>MULTILINESTRING</para></listitem>
+<listitem><para>MULTIPOINT</para></listitem>
+<listitem><para>MULTIPOLYGON</para></listitem>
+<listitem><para>NAMES</para></listitem>
+<listitem><para>NATIONAL</para></listitem>
+<listitem><para>NDB</para></listitem>
+<listitem><para>NDBCLUSTER</para></listitem>
+<listitem><para>NCHAR</para></listitem>
+<listitem><para>NEW</para></listitem>
+<listitem><para>NEXT</para></listitem>
+<listitem><para>NO</para></listitem>
+<listitem><para>NONE</para></listitem>
+<listitem><para>NO_WRITE_TO_BINLOG</para></listitem>
+<listitem><para>NUMERIC</para></listitem>
+<listitem><para>NVARCHAR</para></listitem>
+<listitem><para>OLD_PASSWORD</para></listitem>
+<listitem><para>ONE_SHOT</para></listitem>
+<listitem><para>OPEN</para></listitem>
+<listitem><para>OPTIMIZE</para></listitem>
+<listitem><para>OPTION</para></listitem>
+<listitem><para>OPTIONALLY</para></listitem>
+<listitem><para>OUTFILE</para></listitem>
+<listitem><para>PACK_KEYS</para></listitem>
+<listitem><para>PARTIAL</para></listitem>
+<listitem><para>PASSWORD</para></listitem>
+<listitem><para>POINT</para></listitem>
+<listitem><para>POLYGON</para></listitem>
+<listitem><para>PRECISION</para></listitem>
+<listitem><para>PREPARE</para></listitem>
+<listitem><para>PREV</para></listitem>
+<listitem><para>PRIVILEGES</para></listitem>
+<listitem><para>PROCEDURE</para></listitem>
+<listitem><para>PROCESS</para></listitem>
+<listitem><para>PROCESSLIST</para></listitem>
+<listitem><para>PURGE</para></listitem>
+<listitem><para>QUERY</para></listitem>
+<listitem><para>QUICK</para></listitem>
+<listitem><para>RAID0</para></listitem>
+<listitem><para>RAID_CHUNKS</para></listitem>
+<listitem><para>RAID_CHUNKSIZE</para></listitem>
+<listitem><para>RAID_TYPE</para></listitem>
+<listitem><para>READ</para></listitem>
+<listitem><para>REAL</para></listitem>
+<listitem><para>REGEXP</para></listitem>
+<listitem><para>RELAY_LOG_FILE</para></listitem>
+<listitem><para>RELAY_LOG_POS</para></listitem>
+<listitem><para>RELAY_THREAD</para></listitem>
+<listitem><para>RELOAD</para></listitem>
+<listitem><para>RENAME</para></listitem>
+<listitem><para>REPAIR</para></listitem>
+<listitem><para>REPEATABLE</para></listitem>
+<listitem><para>REPLICATION</para></listitem>
+<listitem><para>REQUIRE</para></listitem>
+<listitem><para>RESET</para></listitem>
+<listitem><para>RESTORE</para></listitem>
+<listitem><para>RETURNS</para></listitem>
+<listitem><para>REVOKE</para></listitem>
+<listitem><para>RLIKE</para></listitem>
+<listitem><para>ROLLUP</para></listitem>
+<listitem><para>ROWS</para></listitem>
+<listitem><para>ROW_FORMAT</para></listitem>
+<listitem><para>RTREE</para></listitem>
+<listitem><para>SAVEPOINT</para></listitem>
+<listitem><para>SECOND</para></listitem>
+<listitem><para>SECOND_MICROSECOND</para></listitem>
+<listitem><para>SEPARATOR</para></listitem>
+<listitem><para>SERIAL</para></listitem>
+<listitem><para>SERIALIZABLE</para></listitem>
+<listitem><para>SESSION</para></listitem>
+<listitem><para>SHARE</para></listitem>
+<listitem><para>SHOW</para></listitem>
+<listitem><para>SHUTDOWN</para></listitem>
+<listitem><para>SIGNED</para></listitem>
+<listitem><para>SIMPLE</para></listitem>
+<listitem><para>SLAVE</para></listitem>
+<listitem><para>SMALLINT</para></listitem>
+<listitem><para>SOME</para></listitem>
+<listitem><para>SONAME</para></listitem>
+<listitem><para>SOUNDS</para></listitem>
+<listitem><para>SPATIAL</para></listitem>
+<listitem><para>SQL_BIG_RESULT</para></listitem>
+<listitem><para>SQL_BUFFER_RESULT</para></listitem>
+<listitem><para>SQL_CACHE</para></listitem>
+<listitem><para>SQL_CALC_FOUND_ROWS</para></listitem>
+<listitem><para>SQL_NO_CACHE</para></listitem>
+<listitem><para>SQL_SMALL_RESULT</para></listitem>
+<listitem><para>SQL_THREAD</para></listitem>
+<listitem><para>SSL</para></listitem>
+<listitem><para>START</para></listitem>
+<listitem><para>STARTING</para></listitem>
+<listitem><para>STATUS</para></listitem>
+<listitem><para>STOP</para></listitem>
+<listitem><para>STORAGE</para></listitem>
+<listitem><para>STRAIGHT_JOIN</para></listitem>
+<listitem><para>STRING</para></listitem>
+<listitem><para>STRIPED</para></listitem>
+<listitem><para>SUBJECT</para></listitem>
+<listitem><para>SUPER</para></listitem>
+<listitem><para>TABLES</para></listitem>
+<listitem><para>TABLESPACE</para></listitem>
+<listitem><para>TERMINATED</para></listitem>
+<listitem><para>TEXT</para></listitem>
+<listitem><para>TIME</para></listitem>
+<listitem><para>TIMESTAMP</para></listitem>
+<listitem><para>TINYBLOB</para></listitem>
+<listitem><para>TINYINT</para></listitem>
+<listitem><para>TINYTEXT</para></listitem>
+<listitem><para>TRAILING</para></listitem>
+<listitem><para>TRUE</para></listitem>
+<listitem><para>TRUNCATE</para></listitem>
+<listitem><para>TYPE</para></listitem>
+<listitem><para>TYPES</para></listitem>
+<listitem><para>UNCOMMITTED</para></listitem>
+<listitem><para>UNICODE</para></listitem>
+<listitem><para>UNLOCK</para></listitem>
+<listitem><para>UNSIGNED</para></listitem>
+<listitem><para>UNTIL</para></listitem>
+<listitem><para>USAGE</para></listitem>
+<listitem><para>USE</para></listitem>
+<listitem><para>USER</para></listitem>
+<listitem><para>USER_RESOURCES</para></listitem>
+<listitem><para>USE_FRM</para></listitem>
+<listitem><para>UTC_DATE</para></listitem>
+<listitem><para>UTC_TIME</para></listitem>
+<listitem><para>UTC_TIMESTAMP</para></listitem>
+<listitem><para>VALUE</para></listitem>
+<listitem><para>VARBINARY</para></listitem>
+<listitem><para>VARCHAR</para></listitem>
+<listitem><para>VARCHARACTER</para></listitem>
+<listitem><para>VARIABLES</para></listitem>
+<listitem><para>VARYING</para></listitem>
+<listitem><para>WARNINGS</para></listitem>
+<listitem><para>WITH</para></listitem>
+<listitem><para>WORK</para></listitem>
+<listitem><para>WRITE</para></listitem>
+<listitem><para>X509</para></listitem>
+<listitem><para>YEAR</para></listitem>
+<listitem><para>YEAR_MONTH</para></listitem>
+<listitem><para>ZEROFILL</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-postgresql-driver-reserved-words"><title>Kexi PostgreSQL Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi pqxx Driver:
+</para>
+<itemizedlist>
+<listitem><para>ABORT</para></listitem>
+<listitem><para>ABSOLUTE</para></listitem>
+<listitem><para>ACCESS</para></listitem>
+<listitem><para>ACTION</para></listitem>
+<listitem><para>ADD</para></listitem>
+<listitem><para>AGGREGATE</para></listitem>
+<listitem><para>ALTER</para></listitem>
+<listitem><para>ANALYSE</para></listitem>
+<listitem><para>ANALYZE</para></listitem>
+<listitem><para>ANY</para></listitem>
+<listitem><para>ARRAY</para></listitem>
+<listitem><para>ASSERTION</para></listitem>
+<listitem><para>ASSIGNMENT</para></listitem>
+<listitem><para>AT</para></listitem>
+<listitem><para>AUTHORIZATION</para></listitem>
+<listitem><para>BACKWARD</para></listitem>
+<listitem><para>BIGINT</para></listitem>
+<listitem><para>BINARY</para></listitem>
+<listitem><para>BIT</para></listitem>
+<listitem><para>BOOLEAN</para></listitem>
+<listitem><para>BOTH</para></listitem>
+<listitem><para>CACHE</para></listitem>
+<listitem><para>CALLED</para></listitem>
+<listitem><para>CAST</para></listitem>
+<listitem><para>CHAIN</para></listitem>
+<listitem><para>CHAR</para></listitem>
+<listitem><para>CHARACTER</para></listitem>
+<listitem><para>CHARACTERISTICS</para></listitem>
+<listitem><para>CHECKPOINT</para></listitem>
+<listitem><para>CLASS</para></listitem>
+<listitem><para>CLOSE</para></listitem>
+<listitem><para>CLUSTER</para></listitem>
+<listitem><para>COALESCE</para></listitem>
+<listitem><para>COLUMN</para></listitem>
+<listitem><para>COMMENT</para></listitem>
+<listitem><para>COMMITTED</para></listitem>
+<listitem><para>CONSTRAINTS</para></listitem>
+<listitem><para>CONVERSION</para></listitem>
+<listitem><para>CONVERT</para></listitem>
+<listitem><para>COPY</para></listitem>
+<listitem><para>CREATEDB</para></listitem>
+<listitem><para>CREATEUSER</para></listitem>
+<listitem><para>CURRENT_DATE</para></listitem>
+<listitem><para>CURRENT_TIME</para></listitem>
+<listitem><para>CURRENT_TIMESTAMP</para></listitem>
+<listitem><para>CURRENT_USER</para></listitem>
+<listitem><para>CURSOR</para></listitem>
+<listitem><para>CYCLE</para></listitem>
+<listitem><para>DAY</para></listitem>
+<listitem><para>DEALLOCATE</para></listitem>
+<listitem><para>DEC</para></listitem>
+<listitem><para>DECIMAL</para></listitem>
+<listitem><para>DECLARE</para></listitem>
+<listitem><para>DEFAULTS</para></listitem>
+<listitem><para>DEFERRABLE</para></listitem>
+<listitem><para>DEFERRED</para></listitem>
+<listitem><para>DEFINER</para></listitem>
+<listitem><para>DELIMITER</para></listitem>
+<listitem><para>DELIMITERS</para></listitem>
+<listitem><para>DO</para></listitem>
+<listitem><para>DOMAIN</para></listitem>
+<listitem><para>DOUBLE</para></listitem>
+<listitem><para>EACH</para></listitem>
+<listitem><para>ENCODING</para></listitem>
+<listitem><para>ENCRYPTED</para></listitem>
+<listitem><para>ESCAPE</para></listitem>
+<listitem><para>EXCEPT</para></listitem>
+<listitem><para>EXCLUDING</para></listitem>
+<listitem><para>EXCLUSIVE</para></listitem>
+<listitem><para>EXECUTE</para></listitem>
+<listitem><para>EXISTS</para></listitem>
+<listitem><para>EXTERNAL</para></listitem>
+<listitem><para>EXTRACT</para></listitem>
+<listitem><para>FALSE</para></listitem>
+<listitem><para>FETCH</para></listitem>
+<listitem><para>FIRST</para></listitem>
+<listitem><para>FLOAT</para></listitem>
+<listitem><para>FORCE</para></listitem>
+<listitem><para>FORWARD</para></listitem>
+<listitem><para>FREEZE</para></listitem>
+<listitem><para>FUNCTION</para></listitem>
+<listitem><para>GLOBAL</para></listitem>
+<listitem><para>GRANT</para></listitem>
+<listitem><para>HANDLER</para></listitem>
+<listitem><para>HOLD</para></listitem>
+<listitem><para>HOUR</para></listitem>
+<listitem><para>ILIKE</para></listitem>
+<listitem><para>IMMEDIATE</para></listitem>
+<listitem><para>IMMUTABLE</para></listitem>
+<listitem><para>IMPLICIT</para></listitem>
+<listitem><para>INCLUDING</para></listitem>
+<listitem><para>INCREMENT</para></listitem>
+<listitem><para>INHERITS</para></listitem>
+<listitem><para>INITIALLY</para></listitem>
+<listitem><para>INOUT</para></listitem>
+<listitem><para>INPUT</para></listitem>
+<listitem><para>INSENSITIVE</para></listitem>
+<listitem><para>INSTEAD</para></listitem>
+<listitem><para>INT</para></listitem>
+<listitem><para>INTERSECT</para></listitem>
+<listitem><para>INTERVAL</para></listitem>
+<listitem><para>INVOKER</para></listitem>
+<listitem><para>ISNULL</para></listitem>
+<listitem><para>ISOLATION</para></listitem>
+<listitem><para>LANCOMPILER</para></listitem>
+<listitem><para>LANGUAGE</para></listitem>
+<listitem><para>LAST</para></listitem>
+<listitem><para>LEADING</para></listitem>
+<listitem><para>LEVEL</para></listitem>
+<listitem><para>LISTEN</para></listitem>
+<listitem><para>LOAD</para></listitem>
+<listitem><para>LOCAL</para></listitem>
+<listitem><para>LOCALTIME</para></listitem>
+<listitem><para>LOCALTIMESTAMP</para></listitem>
+<listitem><para>LOCATION</para></listitem>
+<listitem><para>LOCK</para></listitem>
+<listitem><para>MAXVALUE</para></listitem>
+<listitem><para>MINUTE</para></listitem>
+<listitem><para>MINVALUE</para></listitem>
+<listitem><para>MODE</para></listitem>
+<listitem><para>MONTH</para></listitem>
+<listitem><para>MOVE</para></listitem>
+<listitem><para>NAMES</para></listitem>
+<listitem><para>NATIONAL</para></listitem>
+<listitem><para>NCHAR</para></listitem>
+<listitem><para>NEW</para></listitem>
+<listitem><para>NEXT</para></listitem>
+<listitem><para>NO</para></listitem>
+<listitem><para>NOCREATEDB</para></listitem>
+<listitem><para>NOCREATEUSER</para></listitem>
+<listitem><para>NONE</para></listitem>
+<listitem><para>NOTHING</para></listitem>
+<listitem><para>NOTIFY</para></listitem>
+<listitem><para>NOTNULL</para></listitem>
+<listitem><para>NULLIF</para></listitem>
+<listitem><para>NUMERIC</para></listitem>
+<listitem><para>OF</para></listitem>
+<listitem><para>OFF</para></listitem>
+<listitem><para>OIDS</para></listitem>
+<listitem><para>OLD</para></listitem>
+<listitem><para>ONLY</para></listitem>
+<listitem><para>OPERATOR</para></listitem>
+<listitem><para>OPTION</para></listitem>
+<listitem><para>OUT</para></listitem>
+<listitem><para>OVERLAPS</para></listitem>
+<listitem><para>OVERLAY</para></listitem>
+<listitem><para>OWNER</para></listitem>
+<listitem><para>PARTIAL</para></listitem>
+<listitem><para>PASSWORD</para></listitem>
+<listitem><para>PATH</para></listitem>
+<listitem><para>PENDANT</para></listitem>
+<listitem><para>PLACING</para></listitem>
+<listitem><para>POSITION</para></listitem>
+<listitem><para>PRECISION</para></listitem>
+<listitem><para>PREPARE</para></listitem>
+<listitem><para>PRESERVE</para></listitem>
+<listitem><para>PRIOR</para></listitem>
+<listitem><para>PRIVILEGES</para></listitem>
+<listitem><para>PROCEDURAL</para></listitem>
+<listitem><para>PROCEDURE</para></listitem>
+<listitem><para>READ</para></listitem>
+<listitem><para>REAL</para></listitem>
+<listitem><para>RECHECK</para></listitem>
+<listitem><para>REINDEX</para></listitem>
+<listitem><para>RELATIVE</para></listitem>
+<listitem><para>RENAME</para></listitem>
+<listitem><para>RESET</para></listitem>
+<listitem><para>RESTART</para></listitem>
+<listitem><para>RETURNS</para></listitem>
+<listitem><para>REVOKE</para></listitem>
+<listitem><para>ROWS</para></listitem>
+<listitem><para>RULE</para></listitem>
+<listitem><para>SCHEMA</para></listitem>
+<listitem><para>SCROLL</para></listitem>
+<listitem><para>SECOND</para></listitem>
+<listitem><para>SECURITY</para></listitem>
+<listitem><para>SEQUENCE</para></listitem>
+<listitem><para>SERIALIZABLE</para></listitem>
+<listitem><para>SESSION</para></listitem>
+<listitem><para>SESSION_USER</para></listitem>
+<listitem><para>SETOF</para></listitem>
+<listitem><para>SHARE</para></listitem>
+<listitem><para>SHOW</para></listitem>
+<listitem><para>SIMPLE</para></listitem>
+<listitem><para>SMALLINT</para></listitem>
+<listitem><para>SOME</para></listitem>
+<listitem><para>STABLE</para></listitem>
+<listitem><para>START</para></listitem>
+<listitem><para>STATEMENT</para></listitem>
+<listitem><para>STATISTICS</para></listitem>
+<listitem><para>STDIN</para></listitem>
+<listitem><para>STDOUT</para></listitem>
+<listitem><para>STORAGE</para></listitem>
+<listitem><para>STRICT</para></listitem>
+<listitem><para>SUBSTRING</para></listitem>
+<listitem><para>SYSID</para></listitem>
+<listitem><para>TEMP</para></listitem>
+<listitem><para>TEMPLATE</para></listitem>
+<listitem><para>TIME</para></listitem>
+<listitem><para>TIMESTAMP</para></listitem>
+<listitem><para>TOAST</para></listitem>
+<listitem><para>TRAILING</para></listitem>
+<listitem><para>TREAT</para></listitem>
+<listitem><para>TRIGGER</para></listitem>
+<listitem><para>TRIM</para></listitem>
+<listitem><para>TRUE</para></listitem>
+<listitem><para>TRUNCATE</para></listitem>
+<listitem><para>TRUSTED</para></listitem>
+<listitem><para>TYPE</para></listitem>
+<listitem><para>UNENCRYPTED</para></listitem>
+<listitem><para>UNKNOWN</para></listitem>
+<listitem><para>UNLISTEN</para></listitem>
+<listitem><para>UNTIL</para></listitem>
+<listitem><para>USAGE</para></listitem>
+<listitem><para>USER</para></listitem>
+<listitem><para>VACUUM</para></listitem>
+<listitem><para>VALID</para></listitem>
+<listitem><para>VALIDATOR</para></listitem>
+<listitem><para>VARCHAR</para></listitem>
+<listitem><para>VARYING</para></listitem>
+<listitem><para>VERBOSE</para></listitem>
+<listitem><para>VERSION</para></listitem>
+<listitem><para>VIEW</para></listitem>
+<listitem><para>VOLATILE</para></listitem>
+<listitem><para>WITH</para></listitem>
+<listitem><para>WITHOUT</para></listitem>
+<listitem><para>WORK</para></listitem>
+<listitem><para>WRITE</para></listitem>
+<listitem><para>YEAR</para></listitem>
+<listitem><para>ZONE</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-oracle-driver-reserved-words"><title>Kexi Oracle Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi Oracle Driver:
+</para>
+<itemizedlist>
+<listitem><para>ADMIN</para></listitem>
+<listitem><para>CURSOR</para></listitem>
+<listitem><para>DATE</para></listitem>
+<listitem><para>FOUND</para></listitem>
+<listitem><para>MOUNT</para></listitem>
+<listitem><para>AFTER</para></listitem>
+<listitem><para>CYCLE</para></listitem>
+<listitem><para>FUNCTION</para></listitem>
+<listitem><para>NEXT</para></listitem>
+<listitem><para>ALLOCATE</para></listitem>
+<listitem><para>DATABASE</para></listitem>
+<listitem><para>GO</para></listitem>
+<listitem><para>NEW</para></listitem>
+<listitem><para>ANALYZE</para></listitem>
+<listitem><para>DATAFILE</para></listitem>
+<listitem><para>GOTO</para></listitem>
+<listitem><para>NOARCHIVELOG</para></listitem>
+<listitem><para>ARCHIVE</para></listitem>
+<listitem><para>DBA</para></listitem>
+<listitem><para>GROUPS</para></listitem>
+<listitem><para>NOCACHE</para></listitem>
+<listitem><para>ARCHIVELOG</para></listitem>
+<listitem><para>DEC</para></listitem>
+<listitem><para>INCLUDING</para></listitem>
+<listitem><para>NOCYCLE</para></listitem>
+<listitem><para>AUTHORIZATION</para></listitem>
+<listitem><para>DECLARE</para></listitem>
+<listitem><para>INDICATOR</para></listitem>
+<listitem><para>NOMAXVALUE</para></listitem>
+<listitem><para>AVG</para></listitem>
+<listitem><para>DISABLE</para></listitem>
+<listitem><para>INITRANS</para></listitem>
+<listitem><para>NOMINVALUE</para></listitem>
+<listitem><para>BACKUP</para></listitem>
+<listitem><para>DISMOUNT</para></listitem>
+<listitem><para>INSTANCE</para></listitem>
+<listitem><para>NONE</para></listitem>
+<listitem><para>BEGIN</para></listitem>
+<listitem><para>DOUBLE</para></listitem>
+<listitem><para>INT</para></listitem>
+<listitem><para>NOORDER</para></listitem>
+<listitem><para>BECOME</para></listitem>
+<listitem><para>DUMP</para></listitem>
+<listitem><para>KEY</para></listitem>
+<listitem><para>NORESETLOGS</para></listitem>
+<listitem><para>BEFORE</para></listitem>
+<listitem><para>EACH</para></listitem>
+<listitem><para>LANGUAGE</para></listitem>
+<listitem><para>NORMAL</para></listitem>
+<listitem><para>BLOCK</para></listitem>
+<listitem><para>ENABLE</para></listitem>
+<listitem><para>LAYER</para></listitem>
+<listitem><para>NOSORT</para></listitem>
+<listitem><para>BODY</para></listitem>
+<listitem><para>END</para></listitem>
+<listitem><para>LINK</para></listitem>
+<listitem><para>NUMERIC</para></listitem>
+<listitem><para>CACHE</para></listitem>
+<listitem><para>ESCAPE</para></listitem>
+<listitem><para>LISTS</para></listitem>
+<listitem><para>OFF</para></listitem>
+<listitem><para>CANCEL</para></listitem>
+<listitem><para>EVENTS</para></listitem>
+<listitem><para>LOGFILE</para></listitem>
+<listitem><para>OLD</para></listitem>
+<listitem><para>CASCADE</para></listitem>
+<listitem><para>EXCEPT</para></listitem>
+<listitem><para>MANAGE</para></listitem>
+<listitem><para>ONLY</para></listitem>
+<listitem><para>CHANGE</para></listitem>
+<listitem><para>EXCEPTIONS</para></listitem>
+<listitem><para>MANUAL</para></listitem>
+<listitem><para>OPEN</para></listitem>
+<listitem><para>CHARACTER</para></listitem>
+<listitem><para>EXEC</para></listitem>
+<listitem><para>MAX</para></listitem>
+<listitem><para>OPTIMAL</para></listitem>
+<listitem><para>CHECKPOINT</para></listitem>
+<listitem><para>EXPLAIN</para></listitem>
+<listitem><para>MAXDATAFILES</para></listitem>
+<listitem><para>OWN</para></listitem>
+<listitem><para>CLOSE</para></listitem>
+<listitem><para>EXECUTE</para></listitem>
+<listitem><para>MAXINSTANCES</para></listitem>
+<listitem><para>PACKAGE</para></listitem>
+<listitem><para>COBOL</para></listitem>
+<listitem><para>EXTENT</para></listitem>
+<listitem><para>MAXLOGFILES</para></listitem>
+<listitem><para>PARALLEL</para></listitem>
+<listitem><para>COMMIT</para></listitem>
+<listitem><para>EXTERNALLY</para></listitem>
+<listitem><para>MAXLOGHISTORY</para></listitem>
+<listitem><para>PCTINCREASE</para></listitem>
+<listitem><para>COMPILE</para></listitem>
+<listitem><para>FETCH</para></listitem>
+<listitem><para>MAXLOGMEMBERS</para></listitem>
+<listitem><para>PCTUSED</para></listitem>
+<listitem><para>CONSTRAINT</para></listitem>
+<listitem><para>FLUSH</para></listitem>
+<listitem><para>MAXTRANS</para></listitem>
+<listitem><para>PLAN</para></listitem>
+<listitem><para>CONSTRAINTS</para></listitem>
+<listitem><para>FREELIST</para></listitem>
+<listitem><para>MAXVALUE</para></listitem>
+<listitem><para>PLI</para></listitem>
+<listitem><para>CONTENTS</para></listitem>
+<listitem><para>FREELISTS</para></listitem>
+<listitem><para>MIN</para></listitem>
+<listitem><para>PRECISION</para></listitem>
+<listitem><para>CONTINUE</para></listitem>
+<listitem><para>FORCE</para></listitem>
+<listitem><para>MINEXTENTS</para></listitem>
+<listitem><para>PRIMARY</para></listitem>
+<listitem><para>CONTROLFILE</para></listitem>
+<listitem><para>FOREIGN</para></listitem>
+<listitem><para>MINVALUE</para></listitem>
+<listitem><para>PRIVATE</para></listitem>
+<listitem><para>COUNT</para></listitem>
+<listitem><para>FORTRAN</para></listitem>
+<listitem><para>MODULE</para></listitem>
+<listitem><para>PROCEDURE</para></listitem>
+<listitem><para>PROFILE</para></listitem>
+<listitem><para>SAVEPOINT</para></listitem>
+<listitem><para>SQLSTATE</para></listitem>
+<listitem><para>TRACING</para></listitem>
+<listitem><para>QUOTA</para></listitem>
+<listitem><para>SCHEMA</para></listitem>
+<listitem><para>STATEMENT_ID</para></listitem>
+<listitem><para>TRANSACTION</para></listitem>
+<listitem><para>READ</para></listitem>
+<listitem><para>SCN</para></listitem>
+<listitem><para>STATISTICS</para></listitem>
+<listitem><para>TRIGGERS</para></listitem>
+<listitem><para>REAL</para></listitem>
+<listitem><para>SECTION</para></listitem>
+<listitem><para>STOP</para></listitem>
+<listitem><para>TRUNCATE</para></listitem>
+<listitem><para>RECOVER</para></listitem>
+<listitem><para>SEGMENT</para></listitem>
+<listitem><para>STORAGE</para></listitem>
+<listitem><para>UNDER</para></listitem>
+<listitem><para>REFERENCES</para></listitem>
+<listitem><para>SEQUENCE</para></listitem>
+<listitem><para>SUM</para></listitem>
+<listitem><para>UNLIMITED</para></listitem>
+<listitem><para>REFERENCING</para></listitem>
+<listitem><para>SHARED</para></listitem>
+<listitem><para>SWITCH</para></listitem>
+<listitem><para>UNTIL</para></listitem>
+<listitem><para>RESETLOGS</para></listitem>
+<listitem><para>SNAPSHOT</para></listitem>
+<listitem><para>SYSTEM</para></listitem>
+<listitem><para>USE</para></listitem>
+<listitem><para>RESTRICTED</para></listitem>
+<listitem><para>SOME</para></listitem>
+<listitem><para>TABLES</para></listitem>
+<listitem><para>USING</para></listitem>
+<listitem><para>REUSE</para></listitem>
+<listitem><para>SORT</para></listitem>
+<listitem><para>TABLESPACE</para></listitem>
+<listitem><para>WHEN</para></listitem>
+<listitem><para>ROLE</para></listitem>
+<listitem><para>SQL</para></listitem>
+<listitem><para>TEMPORARY</para></listitem>
+<listitem><para>WRITE</para></listitem>
+<listitem><para>ROLES</para></listitem>
+<listitem><para>SQLCODE</para></listitem>
+<listitem><para>THREAD</para></listitem>
+<listitem><para>WORK</para></listitem>
+<listitem><para>ROLLBACK</para></listitem>
+<listitem><para>SQLERROR</para></listitem>
+<listitem><para>TIME</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-sybase-driver-reserved-words"><title>Kexi Sybase Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi Sybase Driver:
+</para>
+<itemizedlist>
+<listitem><para>ACTION</para></listitem>
+<listitem><para>ADD</para></listitem>
+<listitem><para>AGAINST</para></listitem>
+<listitem><para>AGGREGATE</para></listitem>
+<listitem><para>ALTER</para></listitem>
+<listitem><para>ANALYZE</para></listitem>
+<listitem><para>ANY</para></listitem>
+<listitem><para>ASCII</para></listitem>
+<listitem><para>AUTOINCREMENT</para></listitem>
+<listitem><para>AVG</para></listitem>
+<listitem><para>AVG_ROW_LENGTH</para></listitem>
+<listitem><para>BACKUP</para></listitem>
+<listitem><para>BDB</para></listitem>
+<listitem><para>BERKELEYDB</para></listitem>
+<listitem><para>BIGINT</para></listitem>
+<listitem><para>BINARY</para></listitem>
+<listitem><para>BINLOG</para></listitem>
+<listitem><para>BIT</para></listitem>
+<listitem><para>BLOB</para></listitem>
+<listitem><para>BOOL</para></listitem>
+<listitem><para>BOOLEAN</para></listitem>
+<listitem><para>BOTH</para></listitem>
+<listitem><para>BTREE</para></listitem>
+<listitem><para>BYTE</para></listitem>
+<listitem><para>CACHE</para></listitem>
+<listitem><para>CHANGE</para></listitem>
+<listitem><para>CHANGED</para></listitem>
+<listitem><para>CHAR</para></listitem>
+<listitem><para>CHARACTER</para></listitem>
+<listitem><para>CHARSET</para></listitem>
+<listitem><para>CHECKSUM</para></listitem>
+<listitem><para>CIPHER</para></listitem>
+<listitem><para>CLIENT</para></listitem>
+<listitem><para>CLOSE</para></listitem>
+<listitem><para>COLLATION</para></listitem>
+<listitem><para>COLUMN</para></listitem>
+<listitem><para>COLUMNS</para></listitem>
+<listitem><para>COMMENT</para></listitem>
+<listitem><para>COMMITTED</para></listitem>
+<listitem><para>COMPRESSED</para></listitem>
+<listitem><para>CONCURRENT</para></listitem>
+<listitem><para>CONVERT</para></listitem>
+<listitem><para>CUBE</para></listitem>
+<listitem><para>CURRENT_DATE</para></listitem>
+<listitem><para>CURRENT_TIME</para></listitem>
+<listitem><para>CURRENT_TIMESTAMP</para></listitem>
+<listitem><para>CURRENT_USER</para></listitem>
+<listitem><para>DATA</para></listitem>
+<listitem><para>DATABASES</para></listitem>
+<listitem><para>DATE</para></listitem>
+<listitem><para>DATETIME</para></listitem>
+<listitem><para>DAY</para></listitem>
+<listitem><para>DAY_HOUR</para></listitem>
+<listitem><para>DAY_MICROSECOND</para></listitem>
+<listitem><para>DAY_MINUTE</para></listitem>
+<listitem><para>DAY_SECOND</para></listitem>
+<listitem><para>DEALLOCATE</para></listitem>
+<listitem><para>DEC</para></listitem>
+<listitem><para>DECIMAL</para></listitem>
+<listitem><para>DELAYED</para></listitem>
+<listitem><para>DELAY_KEY_WRITE</para></listitem>
+<listitem><para>DESCRIBE</para></listitem>
+<listitem><para>DES_KEY_FILE</para></listitem>
+<listitem><para>DIRECTORY</para></listitem>
+<listitem><para>DISABLE</para></listitem>
+<listitem><para>DISCARD</para></listitem>
+<listitem><para>DISTINCTROW</para></listitem>
+<listitem><para>DIV</para></listitem>
+<listitem><para>DO</para></listitem>
+<listitem><para>DOUBLE</para></listitem>
+<listitem><para>DUAL</para></listitem>
+<listitem><para>DUMPFILE</para></listitem>
+<listitem><para>DUPLICATE</para></listitem>
+<listitem><para>DYNAMIC</para></listitem>
+<listitem><para>ENABLE</para></listitem>
+<listitem><para>ENCLOSED</para></listitem>
+<listitem><para>ENGINE</para></listitem>
+<listitem><para>ENGINES</para></listitem>
+<listitem><para>ENUM</para></listitem>
+<listitem><para>ERRORS</para></listitem>
+<listitem><para>ESCAPE</para></listitem>
+<listitem><para>ESCAPED</para></listitem>
+<listitem><para>EVENTS</para></listitem>
+<listitem><para>EXECUTE</para></listitem>
+<listitem><para>EXISTS</para></listitem>
+<listitem><para>EXPANSION</para></listitem>
+<listitem><para>EXTENDED</para></listitem>
+<listitem><para>FALSE</para></listitem>
+<listitem><para>FAST</para></listitem>
+<listitem><para>FIELDS</para></listitem>
+<listitem><para>FILE</para></listitem>
+<listitem><para>FIRST</para></listitem>
+<listitem><para>FIXED</para></listitem>
+<listitem><para>FLOAT</para></listitem>
+<listitem><para>FLOAT4</para></listitem>
+<listitem><para>FLOAT8</para></listitem>
+<listitem><para>FLUSH</para></listitem>
+<listitem><para>FORCE</para></listitem>
+<listitem><para>FULLTEXT</para></listitem>
+<listitem><para>FUNCTION</para></listitem>
+<listitem><para>GEOMETRY</para></listitem>
+<listitem><para>GEOMETRYCOLLECTION</para></listitem>
+<listitem><para>GET_FORMAT</para></listitem>
+<listitem><para>GLOBAL</para></listitem>
+<listitem><para>GRANT</para></listitem>
+<listitem><para>GRANTS</para></listitem>
+<listitem><para>HANDLER</para></listitem>
+<listitem><para>HASH</para></listitem>
+<listitem><para>HELP</para></listitem>
+<listitem><para>HIGH_PRIORITY</para></listitem>
+<listitem><para>HOSTS</para></listitem>
+<listitem><para>HOUR</para></listitem>
+<listitem><para>HOUR_MICROSECOND</para></listitem>
+<listitem><para>HOUR_MINUTE</para></listitem>
+<listitem><para>HOUR_SECOND</para></listitem>
+<listitem><para>IDENTIFIED</para></listitem>
+<listitem><para>IF</para></listitem>
+<listitem><para>IMPORT</para></listitem>
+<listitem><para>INDEXES</para></listitem>
+<listitem><para>INFILE</para></listitem>
+<listitem><para>INNOBASE</para></listitem>
+<listitem><para>INNODB</para></listitem>
+<listitem><para>INSERT_METHOD</para></listitem>
+<listitem><para>INT</para></listitem>
+<listitem><para>INT1</para></listitem>
+<listitem><para>INT2</para></listitem>
+<listitem><para>INT3</para></listitem>
+<listitem><para>INT4</para></listitem>
+<listitem><para>INT8</para></listitem>
+<listitem><para>INTERVAL</para></listitem>
+<listitem><para>IO_THREAD</para></listitem>
+<listitem><para>ISOLATION</para></listitem>
+<listitem><para>ISSUER</para></listitem>
+<listitem><para>KEYS</para></listitem>
+<listitem><para>KILL</para></listitem>
+<listitem><para>LAST</para></listitem>
+<listitem><para>LEADING</para></listitem>
+<listitem><para>LEAVES</para></listitem>
+<listitem><para>LEVEL</para></listitem>
+<listitem><para>LINES</para></listitem>
+<listitem><para>LINESTRING</para></listitem>
+<listitem><para>LOAD</para></listitem>
+<listitem><para>LOCAL</para></listitem>
+<listitem><para>LOCALTIME</para></listitem>
+<listitem><para>LOCALTIMESTAMP</para></listitem>
+<listitem><para>LOCK</para></listitem>
+<listitem><para>LOCKS</para></listitem>
+<listitem><para>LOGS</para></listitem>
+<listitem><para>LONG</para></listitem>
+<listitem><para>LONGBLOB</para></listitem>
+<listitem><para>LONGTEXT</para></listitem>
+<listitem><para>LOW_PRIORITY</para></listitem>
+<listitem><para>MASTER</para></listitem>
+<listitem><para>MASTER_CONNECT_RETRY</para></listitem>
+<listitem><para>MASTER_HOST</para></listitem>
+<listitem><para>MASTER_LOG_FILE</para></listitem>
+<listitem><para>MASTER_LOG_POS</para></listitem>
+<listitem><para>MASTER_PASSWORD</para></listitem>
+<listitem><para>MASTER_PORT</para></listitem>
+<listitem><para>MASTER_SERVER_ID</para></listitem>
+<listitem><para>MASTER_SSL</para></listitem>
+<listitem><para>MASTER_SSL_CA</para></listitem>
+<listitem><para>MASTER_SSL_CAPATH</para></listitem>
+<listitem><para>MASTER_SSL_CERT</para></listitem>
+<listitem><para>MASTER_SSL_CIPHER</para></listitem>
+<listitem><para>MASTER_SSL_KEY</para></listitem>
+<listitem><para>MASTER_USER</para></listitem>
+<listitem><para>MAX_CONNECTIONS_PER_HOUR</para></listitem>
+<listitem><para>MAX_QUERIES_PER_HOUR</para></listitem>
+<listitem><para>MAX_ROWS</para></listitem>
+<listitem><para>MAX_UPDATES_PER_HOUR</para></listitem>
+<listitem><para>MEDIUM</para></listitem>
+<listitem><para>MEDIUMBLOB</para></listitem>
+<listitem><para>MEDIUMINT</para></listitem>
+<listitem><para>MEDIUMTEXT</para></listitem>
+<listitem><para>MICROSECOND</para></listitem>
+<listitem><para>MIDDLEINT</para></listitem>
+<listitem><para>MINUTE</para></listitem>
+<listitem><para>MINUTE_MICROSECOND</para></listitem>
+<listitem><para>MINUTE_SECOND</para></listitem>
+<listitem><para>MIN_ROWS</para></listitem>
+<listitem><para>MOD</para></listitem>
+<listitem><para>MODE</para></listitem>
+<listitem><para>MODIFY</para></listitem>
+<listitem><para>MONTH</para></listitem>
+<listitem><para>MULTILINESTRING</para></listitem>
+<listitem><para>MULTIPOINT</para></listitem>
+<listitem><para>MULTIPOLYGON</para></listitem>
+<listitem><para>NAMES</para></listitem>
+<listitem><para>NATIONAL</para></listitem>
+<listitem><para>NDB</para></listitem>
+<listitem><para>NDBCLUSTER</para></listitem>
+<listitem><para>NCHAR</para></listitem>
+<listitem><para>NEW</para></listitem>
+<listitem><para>NEXT</para></listitem>
+<listitem><para>NO</para></listitem>
+<listitem><para>NONE</para></listitem>
+<listitem><para>NO_WRITE_TO_BINLOG</para></listitem>
+<listitem><para>NUMERIC</para></listitem>
+<listitem><para>NVARCHAR</para></listitem>
+<listitem><para>OLD_PASSWORD</para></listitem>
+<listitem><para>ONE_SHOT</para></listitem>
+<listitem><para>OPEN</para></listitem>
+<listitem><para>OPTIMIZE</para></listitem>
+<listitem><para>OPTION</para></listitem>
+<listitem><para>OPTIONALLY</para></listitem>
+<listitem><para>OUTFILE</para></listitem>
+<listitem><para>PACK_KEYS</para></listitem>
+<listitem><para>PARTIAL</para></listitem>
+<listitem><para>PASSWORD</para></listitem>
+<listitem><para>POINT</para></listitem>
+<listitem><para>POLYGON</para></listitem>
+<listitem><para>PRECISION</para></listitem>
+<listitem><para>PREPARE</para></listitem>
+<listitem><para>PREV</para></listitem>
+<listitem><para>PRIVILEGES</para></listitem>
+<listitem><para>PROCEDURE</para></listitem>
+<listitem><para>PROCESS</para></listitem>
+<listitem><para>PROCESSLIST</para></listitem>
+<listitem><para>PURGE</para></listitem>
+<listitem><para>QUERY</para></listitem>
+<listitem><para>QUICK</para></listitem>
+<listitem><para>RAID0</para></listitem>
+<listitem><para>RAID_CHUNKS</para></listitem>
+<listitem><para>RAID_CHUNKSIZE</para></listitem>
+<listitem><para>RAID_TYPE</para></listitem>
+<listitem><para>READ</para></listitem>
+<listitem><para>REAL</para></listitem>
+<listitem><para>REGEXP</para></listitem>
+<listitem><para>RELAY_LOG_FILE</para></listitem>
+<listitem><para>RELAY_LOG_POS</para></listitem>
+<listitem><para>RELAY_THREAD</para></listitem>
+<listitem><para>RELOAD</para></listitem>
+<listitem><para>RENAME</para></listitem>
+<listitem><para>REPAIR</para></listitem>
+<listitem><para>REPEATABLE</para></listitem>
+<listitem><para>REPLICATION</para></listitem>
+<listitem><para>REQUIRE</para></listitem>
+<listitem><para>RESET</para></listitem>
+<listitem><para>RESTORE</para></listitem>
+<listitem><para>RETURNS</para></listitem>
+<listitem><para>REVOKE</para></listitem>
+<listitem><para>RLIKE</para></listitem>
+<listitem><para>ROLLUP</para></listitem>
+<listitem><para>ROWS</para></listitem>
+<listitem><para>ROW_FORMAT</para></listitem>
+<listitem><para>RTREE</para></listitem>
+<listitem><para>SAVEPOINT</para></listitem>
+<listitem><para>SECOND</para></listitem>
+<listitem><para>SECOND_MICROSECOND</para></listitem>
+<listitem><para>SEPARATOR</para></listitem>
+<listitem><para>SERIAL</para></listitem>
+<listitem><para>SERIALIZABLE</para></listitem>
+<listitem><para>SESSION</para></listitem>
+<listitem><para>SHARE</para></listitem>
+<listitem><para>SHOW</para></listitem>
+<listitem><para>SHUTDOWN</para></listitem>
+<listitem><para>SIGNED</para></listitem>
+<listitem><para>SIMPLE</para></listitem>
+<listitem><para>SLAVE</para></listitem>
+<listitem><para>SMALLINT</para></listitem>
+<listitem><para>SOME</para></listitem>
+<listitem><para>SONAME</para></listitem>
+<listitem><para>SOUNDS</para></listitem>
+<listitem><para>SPATIAL</para></listitem>
+<listitem><para>SQL_BIG_RESULT</para></listitem>
+<listitem><para>SQL_BUFFER_RESULT</para></listitem>
+<listitem><para>SQL_CACHE</para></listitem>
+<listitem><para>SQL_CALC_FOUND_ROWS</para></listitem>
+<listitem><para>SQL_NO_CACHE</para></listitem>
+<listitem><para>SQL_SMALL_RESULT</para></listitem>
+<listitem><para>SQL_THREAD</para></listitem>
+<listitem><para>SSL</para></listitem>
+<listitem><para>START</para></listitem>
+<listitem><para>STARTING</para></listitem>
+<listitem><para>STATUS</para></listitem>
+<listitem><para>STOP</para></listitem>
+<listitem><para>STORAGE</para></listitem>
+<listitem><para>STRAIGHT_JOIN</para></listitem>
+<listitem><para>STRING</para></listitem>
+<listitem><para>STRIPED</para></listitem>
+<listitem><para>SUBJECT</para></listitem>
+<listitem><para>SUPER</para></listitem>
+<listitem><para>TABLES</para></listitem>
+<listitem><para>TABLESPACE</para></listitem>
+<listitem><para>TERMINATED</para></listitem>
+<listitem><para>TEXT</para></listitem>
+<listitem><para>TIME</para></listitem>
+<listitem><para>TIMESTAMP</para></listitem>
+<listitem><para>TINYBLOB</para></listitem>
+<listitem><para>TINYINT</para></listitem>
+<listitem><para>TINYTEXT</para></listitem>
+<listitem><para>TRAILING</para></listitem>
+<listitem><para>TRUE</para></listitem>
+<listitem><para>TRUNCATE</para></listitem>
+<listitem><para>TYPE</para></listitem>
+<listitem><para>TYPES</para></listitem>
+<listitem><para>UNCOMMITTED</para></listitem>
+<listitem><para>UNICODE</para></listitem>
+<listitem><para>UNLOCK</para></listitem>
+<listitem><para>UNSIGNED</para></listitem>
+<listitem><para>UNTIL</para></listitem>
+<listitem><para>USAGE</para></listitem>
+<listitem><para>USE</para></listitem>
+<listitem><para>USER</para></listitem>
+<listitem><para>USER_RESOURCES</para></listitem>
+<listitem><para>USE_FRM</para></listitem>
+<listitem><para>UTC_DATE</para></listitem>
+<listitem><para>UTC_TIME</para></listitem>
+<listitem><para>UTC_TIMESTAMP</para></listitem>
+<listitem><para>VALUE</para></listitem>
+<listitem><para>VARBINARY</para></listitem>
+<listitem><para>VARCHAR</para></listitem>
+<listitem><para>VARCHARACTER</para></listitem>
+<listitem><para>VARIABLES</para></listitem>
+<listitem><para>VARYING</para></listitem>
+<listitem><para>WARNINGS</para></listitem>
+<listitem><para>WITH</para></listitem>
+<listitem><para>WORK</para></listitem>
+<listitem><para>WRITE</para></listitem>
+<listitem><para>X509</para></listitem>
+<listitem><para>YEAR</para></listitem>
+<listitem><para>YEAR_MONTH</para></listitem>
+<listitem><para>ZEROFILL</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="kexi-xbase-driver-reserved-words"><title>Kexi xBase Driver Reserved words</title> 
+<para>This list contains keywords that are reserved for use by Kexi xBase Driver:
+</para>
+<itemizedlist>
+<listitem><para>ABORT</para></listitem>
+<listitem><para>ATTACH</para></listitem>
+<listitem><para>CLUSTER</para></listitem>
+<listitem><para>CONFLICT</para></listitem>
+<listitem><para>DEFERRED</para></listitem>
+<listitem><para>DEFERRABLE</para></listitem>
+<listitem><para>DETACH</para></listitem>
+<listitem><para>EACH</para></listitem>
+<listitem><para>EXCEPT</para></listitem>
+<listitem><para>FAIL</para></listitem>
+<listitem><para>GLOB</para></listitem>
+<listitem><para>IMMEDIATE</para></listitem>
+<listitem><para>INITIALLY</para></listitem>
+<listitem><para>INSTEAD</para></listitem>
+<listitem><para>INTERSECT</para></listitem>
+<listitem><para>ISNULL</para></listitem>
+<listitem><para>NOTNULL</para></listitem>
+<listitem><para>OF</para></listitem>
+<listitem><para>PRAGMA</para></listitem>
+<listitem><para>RAISE</para></listitem>
+<listitem><para>STATEMENT</para></listitem>
+<listitem><para>TEMP</para></listitem>
+<listitem><para>TRIGGER</para></listitem>
+<listitem><para>VACUUM</para></listitem>
+<listitem><para>VIEW</para></listitem>
+</itemizedlist>
+<para><note><para>Reserved words are kept separate for each driver so that they can also be used as reference.</para></note>
+</para>
+</sect1>
+</chapter>
+<chapter id="credits-and-license"><title>Credits and License</title> 
+<para>&kexi; Copyright 2002-2011 The Kexi Team
+</para>
+<para>Kexi Developers:
+</para>
+<itemizedlist>
+<listitem><para>Jaroslaw Staniek (staniek kde.org)</para></listitem>
+<listitem><para>OpenOffice Polska, LLC (info openoffice.com.pl)</para></listitem>
+<listitem><para>Lucijan Busch (lucijan kde.org)</para></listitem>
+<listitem><para>Cedric Pasteur (cedric.pasteur free.fr)</para></listitem>
+<listitem><para>Adam Pigg (adam piggz.fsnet.co.uk)</para></listitem>
+<listitem><para>Martin Ellis (martin.ellis kdemail.net)</para></listitem>
+<listitem><para>Sebastian Sauer (mail dipe.org)</para></listitem>
+<listitem><para>Christian Nitschkowski (segfault_ii web.de)</para></listitem>
+<listitem><para>Peter Simonsson (psn linux.se)</para></listitem>
+<listitem><para>Joseph Wenninger (jowenn kde.org)</para></listitem>
+<listitem><para>Seth Kurzenberg (seth cql.com)</para></listitem>
+<listitem><para>Laurent Montel (montel kde.org)</para></listitem>
+<listitem><para>Till Busch (till bux.at)</para></listitem>
+</itemizedlist>
+<para>Documentation by Martin A. Ellis (martin.ellis kdemail.net), Jaroslaw Staniek (staniek kde.org) with contributions from Anne-Marie Mahfouf, Raphael Langerhorst, Michal Kubicki and Aron Stansvik.
+</para>
+<para>This documentation is licensed under the terms of the <ulink url="http://docs.kde.org/stable/common/fdl-license.html">GNU Free Documentation License</ulink>.
+</para>
+<para>This program is licensed under the terms of the <ulink url="http://docs.kde.org/stable/common/lgpl-license.html">GNU Lesser General Public License</ulink>.
+</para>
+
+<!--userbase-content-->
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->      
+&underFDL;
+</chapter>
+&documentation.index;
+</book>

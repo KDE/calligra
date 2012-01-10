@@ -131,6 +131,8 @@ public:
     QModelIndex insertGroup( ResourceGroup *g );
     QModelIndex insertResource( ResourceGroup *g, Resource *r, Resource *after = 0 );
 
+    virtual int sortRole( int column ) const;
+
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );

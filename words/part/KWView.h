@@ -28,6 +28,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
+#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -41,7 +42,6 @@ class KoZoomController;
 class KoFindText;
 class KoRdfSemanticItem;
 class KoTextAnchor;
-class KActionMenu;
 
 class KToggleAction;
 /**
@@ -111,7 +111,6 @@ public:
 
 public slots:
     void offsetInDocumentMoved(int yOffset);
-    void variableChanged();
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
@@ -134,7 +133,9 @@ protected:
 private:
     void setupActions();
     virtual KoPrintJob *createPrintJob();
-    KoTextAnchor *anchorForSelectedFrame(bool create);
+    /// loops over the selected shapes and returns the frames that go with them.
+    QList<KWFrame*> selectedFrames() const;
+    KoShape *selectedShape() const;
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
@@ -149,32 +150,14 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// delete the currently selected frame(s)
-    void editDeleteFrame();
     /// enable/disable document headers
     void toggleHeader();
     /// enable/disable document footers
     void toggleFooter();
     /// snap to grid
     void toggleSnapToGrid();
-    /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame();
-    /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame();
-    /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront();
-    /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
-    /// anchor the current shape "as-char"
-    void anchorAsChar();
-    /// anchor the current shape "to-char"
-    void anchorToChar();
-    /// anchor the current shape "to-paragraph"
-    void anchorToParagraph();
-    /// anchor the current shape "to-page"
-    void anchorToPage();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -185,10 +168,6 @@ private slots:
     void createLinkedFrame();
     /// shows or hides the status bar
     void showStatusBar(bool);
-    /// delete the current page
-    void deletePage();
-    /// insert a new page
-    void insertPage();
     /// selects all frames
     void editSelectAllFrames();
     /// calls delete on the active tool
@@ -198,8 +177,6 @@ private slots:
     /// unwrap the selected frames into a clipping shape container.
     void removeFrameClipping();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
-    void handleDeletePageAction();
-    /// set the status of the show-statusbar action to reflect the current setting.
     void updateStatusBarAction();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
@@ -211,10 +188,8 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
-private:
-
-    /// loops over the selected shapes and returns the frames that go with them.
-    QList<KWFrame*> selectedFrames() const;
+    /// user wants to past data from the clipboard
+    void pasteRequested();
 
 private:
     KWGui *m_gui;
@@ -241,8 +216,6 @@ private:
     KToggleAction *m_actionViewHeader;
     KToggleAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
-
-    KActionMenu* m_actionMenu;
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
