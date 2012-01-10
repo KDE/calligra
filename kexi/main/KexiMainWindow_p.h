@@ -1380,6 +1380,8 @@ protected:
     virtual bool queryExit();
 protected slots:
     void slotCurrentTabIndexChanged(int index);
+signals:
+    void currentTabIndexChanged(int index);
 
 private:
     void setupCentralWidget();
@@ -1434,6 +1436,7 @@ void KexiMainWidget::slotCurrentTabIndexChanged(int index)
     if (m_mainWindow)
         m_mainWindow->activeWindowChanged(cont->window, (KexiWindow*)m_previouslyActiveWindow);
     m_previouslyActiveWindow = cont->window;
+    emit currentTabIndexChanged(index);
 }
 
 //------------------------------------------
