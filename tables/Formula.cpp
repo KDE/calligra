@@ -841,7 +841,13 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             break;
         case InSheetOrAreaName:
             // consume until '
-            if (*data != QChar('\'', 0)) {
+            if (data->isNull()) {
+                parseError = true;
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Unknown, '\'' + token + '\'', tokenStart - start));
+                state = Start;
+            }
+            else if (*data != QChar('\'', 0)) {
                 *out++ = *data++;
             }
             else {
