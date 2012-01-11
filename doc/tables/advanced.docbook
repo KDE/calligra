@@ -280,7 +280,7 @@ the previous one.</para>
 <mousebutton>right</mousebutton> clicking on the tab and selecting 
 <guimenuitem>Rename Sheet...</guimenuitem></para>
 <para>To remove a sheet from the document use the <guimenuitem>Remove Sheet
-</guimenuitem> option in the contextmenu 
+</guimenuitem> option in the context menu 
 that pops up when you <mousebutton>right</mousebutton> click on the tab 
 for the sheet you want to remove.</para>
 <para>Other entries in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
@@ -334,7 +334,7 @@ chart to appear, there is no need to be too accurate at this stage as the
 chart size can easily be changed at any time. When you release the mouse 
 button a <guilabel>Chart Options</guilabel> dialog box will appear.</para>
 <para>The data area is already prefilled with the selected cell range.
-Select the first row and column als labels, check <guilabel>Data set in rows</guilabel>
+Select the first row and column as labels, check <guilabel>Data set in rows</guilabel>
 and click the <guibutton>OK</guibutton> button. The Dialog will vanish and you 
 will see the chart embedded into the worksheet.</para>
 <para>Now select <guibutton>Chart Editing Tool</guibutton> from the <guilabel>Tools</guilabel> 
@@ -367,8 +367,8 @@ chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. The chart <interface>
-Tools Options</interface> should appear in the docker. You can then 
+click twice within the chart area. The chart <interface>Tools
+Options</interface> should appear in the docker. You can then 
 use these tools to change the chart.</para>
 </sect1>
 

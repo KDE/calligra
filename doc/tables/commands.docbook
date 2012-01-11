@@ -520,7 +520,7 @@ the spreadsheet. Range from 33% to 500%.
 <sect1 id="gomenu">
 <title>The Go Menu</title>
 <para>In this menu you find actions to navigate between the sheets of the currently 
-opened spreadshead and the <guimenuitem>Goto Cell</guimenuitem> action to jump to a single 
+opened spreadsheet and the <guimenuitem>Goto Cell</guimenuitem> action to jump to a single 
 cell or to select a range of cells.</para>
 </sect1>
 
