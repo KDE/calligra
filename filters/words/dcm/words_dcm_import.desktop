@@ -3,6 +3,7 @@ Type=Service
 Name=Words DICOM Structured Report Import Filter
 Name[bg]=Филтър за внасяне от структурен отчет DICOM в Words
 Name[ca]=Filtre d'importació d'informes estructurats DICOM per al Words
+Name[ca@valencia]=Filtre d'importació d'informes estructurats DICOM per al Words
 Name[cs]=Importní filtr formátu Strukturované zprávy DICOM pro Words
 Name[da]=Importfilter til DICOM-strukturerede  rapporter til Words
 Name[de]=Words DICOM-Strukturreport-Importfilter

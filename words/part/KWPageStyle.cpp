@@ -43,18 +43,11 @@ KWPageStylePrivate::~KWPageStylePrivate()
 
 void KWPageStylePrivate::clear()
 {
-    // defaults
-    footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    footNoteSeparatorLineWidth = 0.5; // like in OOo
-    footNoteSeparatorLineType = Qt::SolidLine;
-
     displayName.clear();
     headerDistance = 10; // ~3mm
     footerDistance = 10;
     headerMinimumHeight = 0;
     footerMinimumHeight = 0;
-    footNoteDistance = 10;
-    endNoteDistance = 10;
     headers = Words::HFTypeNone;
     footers = Words::HFTypeNone;
     pageUsage = KWPageStyle::AllPages;
@@ -192,66 +185,6 @@ qreal KWPageStyle::footerDistance() const
 void KWPageStyle::setFooterDistance(qreal distance)
 {
     d->footerDistance = distance;
-}
-
-qreal KWPageStyle::footnoteDistance() const
-{
-    return d->footNoteDistance;
-}
-
-void KWPageStyle::setFootnoteDistance(qreal distance)
-{
-    d->footNoteDistance = distance;
-}
-
-qreal KWPageStyle::endNoteDistance() const
-{
-    return d->endNoteDistance;
-}
-
-void KWPageStyle::setEndNoteDistance(qreal distance)
-{
-    d->endNoteDistance = distance;
-}
-
-int KWPageStyle::footNoteSeparatorLineLength() const
-{
-    return d->footNoteSeparatorLineLength;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineLength(int length)
-{
-    d->footNoteSeparatorLineLength = length;
-}
-
-qreal KWPageStyle::footNoteSeparatorLineWidth() const
-{
-    return d->footNoteSeparatorLineWidth;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineWidth(qreal width)
-{
-    d->footNoteSeparatorLineWidth = width;
-}
-
-Qt::PenStyle KWPageStyle::footNoteSeparatorLineType() const
-{
-    return d->footNoteSeparatorLineType;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineType(Qt::PenStyle type)
-{
-    d->footNoteSeparatorLineType = type;
-}
-
-Words::FootNoteSeparatorLinePos KWPageStyle::footNoteSeparatorLinePosition() const
-{
-    return d->footNoteSeparatorLinePos;
-}
-
-void KWPageStyle::setFootNoteSeparatorLinePosition(Words::FootNoteSeparatorLinePos position)
-{
-    d->footNoteSeparatorLinePos = position;
 }
 
 void KWPageStyle::clear()

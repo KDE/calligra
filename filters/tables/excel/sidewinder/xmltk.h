@@ -192,7 +192,7 @@ XmlTk* parseXmlTk(const unsigned char* data) {
 
 QList<XmlTk*> parseXmlTkChain(const unsigned char* data, int size) {
     QList<XmlTk*> tokens;
-    for (unsigned p = 0; p + 4 < size;) {
+    for (int p = 0; p + 4 < size;) {
         XmlTk *t = parseXmlTk(data + p);
         if (!t) break;
         tokens.append(t);

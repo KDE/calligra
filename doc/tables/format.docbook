@@ -31,8 +31,8 @@
 <!--<title>Fonts, Text, Borders and Colors</title>-->
 <title>Cell Format</title>
 <para>To change the format and appearance of selected cell(s), row(s) or column(s) use
-the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format
-</guimenu> menu or from the <mousebutton>right</mousebutton> mouse button popup
+the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format</guimenu> 
+menu or from the <mousebutton>right</mousebutton> mouse button popup
 menu.</para>
 <para>
 <mediaobject>
@@ -69,13 +69,13 @@ allows you to see the effect of the new format.
 row or column and calling the <guilabel>Cell Format</guilabel> dialog with the &RMB;.</para>
 <note><para>You can increase the precision decimal for any number in <guilabel>Generic</guilabel>,
 <guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
-<guilabel>Scientific</guilabel> formats using the <guiicon>Increase decimal
+<guilabel>Scientific</guilabel> formats using the <guiicon>Increase 
 precision</guiicon> icon in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="increasedecimal.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
 <para>You can decrease the precision decimal for any number in <guilabel>Generic</guilabel>, 
 <guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
-<guilabel>Scientific</guilabel> formats using the <guiicon>Decrease decimal precision</guiicon> icon
+<guilabel>Scientific</guilabel> formats using the <guiicon>Decrease precision</guiicon> icon
 in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="decreasedecimal.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
@@ -83,9 +83,9 @@ in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <variablelist>
 <varlistentry>
 <term><guilabel>Generic</guilabel></term>
-<listitem><para>This is the default format and &kspread; autodetects the
+<listitem><para>This is the default format and &tables; autodetects the
 actual
-data type depending on the current cell data. By default, &kspread; right
+data type depending on the current cell data. By default, &tables; right
 justifies numbers, dates and times within a cell and left justifies anything
 else.</para>
 <para>If the <guilabel>Generic</guilabel> format does not suit you, you can change to a specific
@@ -95,8 +95,7 @@ format among the choices below.</para>
 <varlistentry>
 <term><guilabel>Number</guilabel></term>
 <listitem><para>The number notation uses the notation you globally choose in
-&kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
-Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Numbers</guimenuitem></menuchoice>.
+&systemsettings; in <menuchoice><guimenu>Locale</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Numbers</guimenuitem></menuchoice>.
 Numbers are right justified by default.</para>
 </listitem>
 </varlistentry>
@@ -117,14 +116,13 @@ Toolbar: <inlinemediaobject><imageobject>
 <varlistentry>
 <term><guilabel>Money</guilabel></term>
 <listitem><para>The <guilabel>Money</guilabel> format converts your number into money notation using
-the settings globally fixed in &kcontrolcenter; in <menuchoice><guimenu>Regional
-&amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
+the settings globally fixed in &systemsettings; in <menuchoice><guimenu>Locale</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
 currency symbol will be displayed and the precision will be the one set in
 &kcontrolcenter;.</para>
-<para>You can also use the <guiicon>Currency</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
+<para>You can also use the <guiicon>Money Format</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
 cell formatting to look like your current currency:
 <inlinemediaobject><imageobject>
-<imagedata fileref="currency.png" format="PNG"/>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
 </listitem>
 </varlistentry>
@@ -154,9 +152,9 @@ fraction.</para>
 <varlistentry>
 <term><guilabel>Date format</guilabel></term>
 <listitem><para>To enter a date, you should enter it in one of the formats set
-in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
-Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Time &amp;
-Dates</guimenuitem></menuchoice>. There are two formats set here: the date format
+in &systemsettings; in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
 December 1899 (which is 0) with the number of days NN added. For example if you
@@ -183,7 +181,7 @@ Language</guisubmenu><guimenuitem>Time
 dialog box you can set how the time should be displayed by choosing one of the
 available time format options. The default format is the system format set in
 &kcontrolcenter;. When the number in the cell does not make sense as a time,
-&kspread; will display 00:00 in the global format you have in
+&tables; will display 00:00 in the global format you have in
 &kcontrolcenter;.</para>
 </listitem>
 </varlistentry>
@@ -349,23 +347,21 @@ clockwise.</para>
 <varlistentry>
 <term><guilabel>Merge Cells</guilabel></term>
 <listitem><para>When checked, this has the same effect
-as <menuchoice><guimenu>Data</guimenu><guimenuitem>Merge
+as <menuchoice><guimenu>Format</guimenu><guimenuitem>Merge
 Cells</guimenuitem></menuchoice>. You need to have at least two
 consecutive cells selected. Those consecutive cells are then merged into a
 bigger one.</para>
 <para>When a merged cell is selected and when you uncheck this, then all cells
 come back to their original size as before the merging. It has the same effect
-as <menuchoice><guimenu>Data</guimenu><guimenuitem>Dissociate
+as <menuchoice><guimenu>Format</guimenu><guimenuitem>Dissociate
 Cells</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Indent</guilabel></term>
 <listitem><para>Set the amount of indent that will be used in the cell when you
-choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Increase
-Indent</guimenuitem></menuchoice> or
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Decrease
-Indent</guimenuitem></menuchoice> menus.</para>
+choose the <guilabel>Increase Indent</guilabel>/<guilabel>Decrease Indent</guilabel> 
+actions from the toolbar. These actions are not enabled by default in the toolbar.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -443,7 +439,7 @@ formula. This also needs to enable sheet protection to work.
 You can hide the cell content with <guilabel>Hide all</guilabel> and again this needs sheet
 protection.
 You can learn more about all these settings in the <link
-linkend="protection">Advanced &kspread; chapter, Protection
+linkend="protection">Advanced &tables; chapter, Protection
 section</link>.</para>
 <variablelist>
 <varlistentry>
@@ -452,16 +448,6 @@ section</link>.</para>
 protected which means that changing the <guilabel>Hide all</guilabel>
 attribute of a cell has no effect unless the sheet is protected. Whether the
 cell itself is protected or not does not matter.</para>
-<para>
-<mediaobject>
-<imageobject>
-<imagedata fileref="cellformat7.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>Hide all.</phrase>
-</textobject>
-</mediaobject>
-</para>
 <para>When <guilabel>Hide all</guilabel> is selected, <guilabel>Protected</guilabel> 
 and <guilabel>Hide formula</guilabel> are disabled as when the
 sheet is protected <guilabel>Hide all</guilabel> hides the cell content and the
@@ -500,34 +486,34 @@ that the cell text will always be printed by default.</para>
 <sect1 id="conditional">
 <title>Conditional Cell Attributes</title>
 <para>You can make the appearance of a cell change according to the value it 
-contains, useful perhaps if you are using &kspread; to keep track of your 
+contains, useful perhaps if you are using &tables; to keep track of your 
 household expenses and want to highlight any item greater than, say, one 
 thousand dollars.</para>
-<para>To do this select the cell(s) then choose <guimenuitem>Conditional Cell 
-Attributes...</guimenuitem> from the <guimenu>Edit</guimenu> menu. This will 
-bring up the <guilabel>Conditional Cell Attributes</guilabel> dialog box where 
+<para>To do this select the cell(s) then choose <guimenuitem>Conditional  
+Styles...</guimenuitem> from the <guimenu>Format</guimenu> menu. This will 
+bring up the <guilabel>Conditional Styles</guilabel> dialog box where 
 you can make the font type and color of a cell change when the value meets 
 one or more conditions. Note that the second and third conditions only apply 
 if the previous condition(s) are not met.</para>
 <para>Use <menuchoice><guisubmenu>Clear</guisubmenu><guimenuitem>Conditional 
-Cell Attributes</guimenuitem></menuchoice> from the <guimenu>Edit</guimenu> 
+Styles</guimenuitem></menuchoice> from the <guimenu>Edit</guimenu> 
 menu to clear any conditional attributes from selected cells.</para>
 </sect1>
 
 <sect1 id="cellsize">
 <title>Changing Cell Sizes</title>
-<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format
-</guilabel> dialog lets you alter the size of the selected cell(s). Note that 
+<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format</guilabel> 
+dialog lets you alter the size of the selected cell(s). Note that 
 changing the height of a single cell will change the height for all cells in 
 that row, similarly changing the width will affect the entire column.</para>
 <para>You can also select the row(s) or column(s) to be changed then select 
-<guimenuitem>Resize Row...</guimenuitem> or <guimenuitem>Resize Column...
-</guimenuitem> from the <mousebutton>right</mousebutton> mouse button pop up 
-menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row
-</guisubmenu></menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
+<guimenuitem>Resize Row...</guimenuitem> or <guimenuitem>Resize Column...</guimenuitem> 
+from the <mousebutton>right</mousebutton> mouse button pop up 
+menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row</guisubmenu>
+</menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
 Column</guisubmenu></menuchoice> menu.</para>
 <para>If you move the mouse cursor so that its tip is over the line between 
-two of the row numbers at the left of &kspread;'s window the cursor will 
+two of the row numbers at the left of &tables;'s window the cursor will 
 change to show two parallel lines each with a short arrow headed line coming 
 from it. When the cursor is in this state you can hold the <mousebutton>left
 </mousebutton> mouse button down and drag the border between the two rows, 
@@ -556,9 +542,9 @@ Row</guisubmenu><guimenuitem>Equalize Row</guimenuitem></menuchoice> or
 <para>It is often convenient to have one cell that spreads across two or more 
 columns or down more than one row. This can be done by merging two or more 
 cells into one. Select the cells to be merged than choose <menuchoice><guimenu>
-Data</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
+Format</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
 <para>To reverse this process, select the merged cell then choose <guimenuitem>
-Dissociate Cells</guimenuitem> from the <guimenu>Data</guimenu> menu.</para>
+Dissociate Cells</guimenuitem> from the <guimenu>Format</guimenu> menu.</para>
 </sect1>
 
 <sect1 id="hiding">
@@ -566,7 +552,7 @@ Dissociate Cells</guimenuitem> from the <guimenu>Data</guimenu> menu.</para>
 <para>A finished spreadsheet can often be made to look more attractive by 
 hiding the cells containing intermediate calculations so that only the 
 important data input and result areas are shown.</para>
-<para>In &kspread; you can hide selected rows or columns by 
+<para>In &tables; you can hide selected rows or columns by 
 using the <guimenuitem>Hide Rows</guimenuitem> and <guimenuitem>Hide 
 Columns</guimenuitem> options from the <menuchoice><guimenu>Format</guimenu>
 <guisubmenu>Row</guisubmenu></menuchoice>, <menuchoice><guimenu>Format
@@ -577,11 +563,10 @@ are not displayed on the screen or included in a print out.</para>
 accidental change.</para>
 <para>To un-hide a row or column select <menuchoice><guisubmenu>Row
 </guisubmenu><guimenuitem>Show Rows...</guimenuitem></menuchoice> or 
-<menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...
-</guimenuitem></menuchoice> from the <guimenu>Format</guimenu>
+<menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...</guimenuitem>
+</menuchoice> from the <guimenu>Format</guimenu>
 menu. In the dialog box which appears, you can select any number of
-rows to show (use <keycombo action="simul">&Ctrl;</keycombo> + click to select
-multiple rows or columns).</para>
+rows to show.</para>
 </sect1>
 
 <sect1 id="sheet-properties">
@@ -660,13 +645,13 @@ see the page borders if you want to print your sheet.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Show formula</guilabel></term>
-<listitem><para>If this box is checked &kspread; will display the actual
+<listitem><para>If this box is checked &tables; will display the actual
 formulae in cells rather than the results.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Show formula indicator</guilabel></term>
-<listitem><para>If this box is checked &kspread; will display a small blue
+<listitem><para>If this box is checked &tables; will display a small blue
 triangle at the bottom left corner of cells containing formulae. This is useful
 if you want to protect cells with formulae.</para>
 </listitem>

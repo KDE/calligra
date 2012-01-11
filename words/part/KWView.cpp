@@ -336,6 +336,11 @@ void KWView::setupActions()
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
+    // connect to the paste action here because the KoPasteController only calls
+    // the paste method of the current active tool.
+    // so we are connecting here to be able to alway paste images to the docoment.
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(pasteRequested()));
+
     action  = new KAction(i18n("Statistics"), this);
     actionCollection()->addAction("file_statistics", action);
     action->setToolTip(i18n("Sentence, word and letter counts for this document"));
@@ -489,6 +494,17 @@ KoShape* KWView::selectedShape() const
 }
 
 // -------------------- Actions -----------------------
+
+void KWView::pasteRequested()
+{
+    QImage img = QApplication::clipboard()->image();
+
+    if (!img.isNull()) {
+        QList<QImage> images;
+        images.append(img);
+        addImages(images, canvas()->mapFromGlobal(QCursor::pos()));
+    }
+}
 
 void KWView::editFrameProperties()
 {
@@ -1042,32 +1058,16 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    QPointF pos(0, 0);
+    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - KWView::pos());
+    pos.setX(qMax(qreal(0), pos.x()));
+    pos.setY(qMax(qreal(0), pos.y()));
 
-    /* TODO: find out how to convert the position correctly
-    // get position from event and convert to document coordinates
-    QPointF pos = m_canvas->viewConverter()->viewToDocument(insertAt) +
-        m_canvas->documentOffset() - m_canvas->documentOrigin();
-    //*/
-    
     // create a factory
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
-    
+
     if (!factory) {
         kWarning(30003) << "No picture shape found, cannot drop images.";
         return;
-    }
-
-    // get the textshape at this point
-    QList<KoShape*> possibleTextShapes = canvasBase()->shapeManager()->shapesAt(QRectF(pos.x() - 10, pos.y() -10, 20, 20));
-    KoTextShapeData *textShapeData = 0;
-    
-    foreach (KoShape* shape, possibleTextShapes) {
-        KoShapeUserData *userData = shape->userData();
-        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
-            // We've found the top-level text shape.
-            break;
-        }
     }
 
     foreach(const QImage image, imageList) {
@@ -1094,8 +1094,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
         shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
 
-        QTextDocument *qdoc   = textShapeData ? textShapeData->document() : 0;
-        KoTextAnchor  *anchor = new KoTextAnchor(shape);
+        KoTextAnchor *anchor = new KoTextAnchor(shape);
         anchor->setAnchorType(KoTextAnchor::AnchorPage);
         anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
         anchor->setVerticalPos(KoTextAnchor::VFromTop);

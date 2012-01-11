@@ -3,6 +3,7 @@ Type=Service
 Name=Words HancomWord Import Filter
 Name[bg]=Филтър за внасяне от HancomWord в Words
 Name[ca]=Filtre d'importació HancomWord per al Words
+Name[ca@valencia]=Filtre d'importació HancomWord per al Words
 Name[cs]=Importní filtr HancomWord pro Words
 Name[da]=HancomWord-importfilter til Words
 Name[de]=Words HancomWord-Importfilter

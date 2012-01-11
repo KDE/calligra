@@ -14,7 +14,7 @@
 <title>Command Reference</title>
 
 <sect1 id="filemenu">
-<title>The <guimenu>File</guimenu> Menu</title>
+<title>The File Menu</title>
 <para>
 <variablelist>
 <varlistentry>
@@ -64,7 +64,8 @@ from a combo box of recently used files.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Save the document with a new name or format.</action>
+<listitem><para><action>Save and change the current document to a new name or format.
+If you want to keep the name and format of the document use <guimenuitem>Export...</guimenuitem></action>
 </para></listitem>
 </varlistentry>
 
@@ -76,14 +77,36 @@ from a combo box of recently used files.</para></listitem>
 <listitem><para><action>Reloads the document.</action>
 </para></listitem>
 </varlistentry>
-
+<!--
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Versions</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>FIXME define different versions of the document + open them in new windows</action>
+</para></listitem>
+</varlistentry>
+-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Import other documents.</action>
-</para></listitem>
+</para>
+<para>Tables of data are often held in text files with the values in a
+line being separated by a comma, space, tab or other character,
+for example <emphasis>123, 456, 789, abcd, efgh</emphasis>. Such files
+are commonly called <quote><acronym>CSV</acronym></quote> (Comma Separated
+Values) files, even though the separating character may not be a comma.</para>
+<para>If you ask &tables; to open a text file it assumes that the file is
+in <acronym>CSV</acronym> format and launches a dialog box that allows you to
+specify the delimiter (separating character) used by the file, and shows how
+the data items will be placed into different spreadsheet cells.</para>
+<para>Other options in this dialog box let you define the <guilabel>Format
+</guilabel> of the spreadsheet cells, whether text quote characters should be
+removed, and whether the first line(s) of the file should be ignored.</para>
+</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -110,7 +133,7 @@ The document does not become the exported file.
 <guimenu>File</guimenu>
 <guimenuitem>Create Template From Document...</guimenuitem>
 </menuchoice></term>
-<listitem><para>Create a &kspread; <link linkend="templates">template</link>
+<listitem><para>Create a &tables; <link linkend="templates">template</link>
 based on this document.
 </para></listitem>
 </varlistentry>
@@ -134,7 +157,16 @@ based on this document.
 <listitem><para><action>View the document as it will be printed.</action></para>
 </listitem>
 </varlistentry>
-
+<!--
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export as PDF...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>FIXME</action></para>
+</listitem>
+</varlistentry>
+-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
@@ -153,7 +185,7 @@ author.</action></para>
 <guimenu>File</guimenu>
 <guimenuitem>Close</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Close the current document but leave &kspread; running.
+<listitem><para><action>Close the current document but leave &tables; running.
 </action></para></listitem>
 </varlistentry>
 <varlistentry>
@@ -165,7 +197,7 @@ author.</action></para>
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quit</action> &kspread;.</para></listitem>
+<listitem><para><action>Quit</action> &tables;.</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -173,7 +205,7 @@ author.</action></para>
 </sect1>
 
 <sect1 id="editmenu">
-<title>The <guimenu>Edit</guimenu> Menu</title>
+<title>The Edit Menu</title>
 <para>
 <variablelist>
 
@@ -274,7 +306,19 @@ If the fill direction is Left then the first item-set is the last column of the
 selection.
 </para></listitem>
 </varlistentry>
-
+<!--
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>FIXME</action>
+</para></listitem>
+</varlistentry>
+-->
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -328,10 +372,9 @@ selection.
 <guimenu>Edit</guimenu>
 <guisubmenu>Clear</guisubmenu>
 </menuchoice></term>
-<listitem><para><action>Clear <guimenuitem>Text</guimenuitem>, 
-<guimenuitem>Comment</guimenuitem>, <guimenuitem>Validity</guimenuitem> or 
-<guimenuitem>Conditional Cell 
-Attributes</guimenuitem> from selected cell(s).</action>
+<listitem><para><action>Clear <guimenuitem>All</guimenuitem> or <guimenuitem>Contents</guimenuitem>, 
+<guimenuitem>Comment</guimenuitem>, <guimenuitem>Conditional Styles</guimenuitem>, 
+<guimenuitem>Link</guimenuitem> or <guimenuitem>Validity</guimenuitem> from selected cell(s).</action>
 </para></listitem>
 </varlistentry>
 
@@ -340,19 +383,11 @@ Attributes</guimenuitem> from selected cell(s).</action>
 <guimenu>Edit</guimenu>
 <guimenuitem>Delete</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Delete everything from selected cell(s).</action>
+<listitem><para><action>Delete <guimenuitem>Cells</guimenuitem>, <guimenuitem>Columns</guimenuitem>, 
+<guimenuitem>Rows</guimenuitem> or <guimenuitem>Sheet</guimenuitem>.</action>
 </para></listitem>
 </varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Remove Link</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Remove the link while leave the displayed text.</action>
-</para></listitem>
-</varlistentry>
-
+<!--
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
@@ -362,21 +397,11 @@ Attributes</guimenuitem> from selected cell(s).</action>
 </para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Validity...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Set or modify the error checking criteria and error 
-alert message for selected cell(s).</action> See <link linkend="validcheck">
-Validity Checking</link> for more details.
-</para></listitem>
-</varlistentry>
-
+-->
 <varlistentry>
 <term><menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo>
+<keycap>F2</keycap>
 </shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Modify Cell</guimenuitem>
@@ -384,22 +409,13 @@ Validity Checking</link> for more details.
 <listitem><para><action>To modify selected cell in-situ.</action>
 </para></listitem>
 </varlistentry>
-<!--
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Transform Object...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Rotate, scale or move the selected object.</action>
-</para></listitem>
-</varlistentry>
--->
+
 </variablelist>
 </para>
 </sect1>
 
 <sect1 id="viewmenu">
-<title>The <guimenu>View</guimenu> Menu</title>
+<title>The View Menu</title>
 <para>
 <variablelist>
 
@@ -408,11 +424,11 @@ Validity Checking</link> for more details.
 <guimenu>View</guimenu>
 <guimenuitem>New View</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open a new instance of &kspread;
+<listitem><para><action>Open a new instance of &tables;
 with the same document.</action>
 </para></listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -421,7 +437,7 @@ with the same document.</action>
 <guimenu>View</guimenu>
 <guimenuitem>Close All Views</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Close all open instances of &kspread;</action>
+<listitem><para><action>Close all open instances of &tables;</action>
 </para></listitem>
 </varlistentry>
 
@@ -458,14 +474,14 @@ contains two or more views)
 <guimenu>View</guimenu>
 <guimenuitem>Goto Cell...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Change &kspread;'s focus to show defined cell.</action>
+<listitem><para><action>Change &tables;'s focus to show defined cell.</action>
 </para></listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show/Hide Page Borders</guimenuitem>
+<guimenuitem>Page Borders</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggle marking of printed page borders in the sheet 
 with red lines.
@@ -484,6 +500,7 @@ is shown in the upper right corner of the cell.
 </para></listitem>
 </varlistentry>
 -->
+<!--FIXME missing Zoom In Zoom Out-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
@@ -494,14 +511,21 @@ the spreadsheet. Range from 33% to 500%.
 </action>
 </para></listitem>
 </varlistentry>
+<!--FIXME Full Screen Mode-->
 
 </variablelist>
 </para>
 </sect1>
 
+<sect1 id="gomenu">
+<title>The Go Menu</title>
+<para>In this menu you find actions to navigate between the sheets of the currently 
+opened spreadsheet and the <guimenuitem>Goto Cell</guimenuitem> action to jump to a single 
+cell or to select a range of cells.</para>
+</sect1>
 
 <sect1 id="insertmenu">
-<title>The <guimenu>Insert</guimenu> Menu</title>
+<title>The Insert Menu</title>
 <para>
 <variablelist>
 
@@ -517,10 +541,9 @@ the spreadsheet. Range from 33% to 500%.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guisubmenu>Cell Comment</guisubmenu>
+<guisubmenu>Comment</guisubmenu>
 </menuchoice></term>
-<listitem><para><action><guimenuitem>Add/Modify Comment...</guimenuitem> or 
-<guimenuitem>Remove Comment</guimenuitem>.</action>
+<listitem><para>Add or modify a comment.
 </para></listitem>
 </varlistentry>
 
@@ -563,7 +586,8 @@ See the section
 <listitem><para><action>Insert a special character into the selected cell.</action>
 </para></listitem>
 </varlistentry>
-
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
@@ -592,7 +616,7 @@ See the section
 to insert a picture.
 </para></listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
@@ -610,7 +634,7 @@ External Data</link> for more details.
 </sect1>
 
 <sect1 id="formatmenu">
-<title>The <guimenu>Format</guimenu> Menu</title>
+<title>The Format Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -624,111 +648,6 @@ External Data</link> for more details.
 <listitem><para><action>Format selected cell(s).</action> See the 
 <link linkend="formatspread">Spreadsheet Formatting</link> section for more 
 details.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Properties</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens a dialog</action> to change the properties of 
-an inserted object or picture.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Change Angle...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Change angle of displayed text in selected cell(s).
-</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Decrease Indent</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the left.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Increase Indent</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the right.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Increase Precision</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Increase displayed precision of numbers in selected 
-cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Decrease Precision</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Decrease displayed precision of numbers in selected 
-cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Adjust Row &amp; Column</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Set row and column sizes to show selected cell(s)
-properly.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guisubmenu>Row</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>Resize, equalize, hide or show row(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guisubmenu>Column</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>Resize, equalize, hide or show column(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guisubmenu>Sheet</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>Remove, hide, show worksheet or configure
-advanced sheet properties.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>AutoFormat...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Autoformat the selected cells: a dialog let you choose betwen two proposed formats.</action>
 </para></listitem>
 </varlistentry>
 
@@ -765,6 +684,72 @@ To manage styles use <menuchoice>
 </menuchoice>
 </para></listitem>
 </varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>AutoFormat...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Autoformat the selected cells: a dialog let you choose betwen two proposed formats.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Merge Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merge selected cells.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Dissociate Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Dissociate (split apart) previously merged cells.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Adjust Row &amp; Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set row and column sizes to show selected cell(s)
+properly.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Row</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Resize, equalize, hide or show row(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Column</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Resize, equalize, hide or show column(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Hide, show worksheet or configure
+advanced sheet properties.</action>
+</para></listitem>
+</varlistentry>
 
 <varlistentry>
 <term><menuchoice>
@@ -784,11 +769,12 @@ To manage styles use <menuchoice>
 </para></listitem>
 </varlistentry>
 
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
 </variablelist></para>
 </sect1>
 
 <sect1 id="datamenu">
-<title>The <guimenu>Data</guimenu> Menu</title>
+<title>The Data Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -800,7 +786,7 @@ To manage styles use <menuchoice>
 <link linkend="sort">Sorting Data</link> for more details.
 </para></listitem>
 </varlistentry>
-
+<!--FIXME missing Filter-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
@@ -814,87 +800,25 @@ item into a different cell in the row.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>G</keycap></keycombo>
+</shortcut>
 <guimenu>Data</guimenu>
-<guimenuitem>Insert Columns</guimenuitem>
+<guimenuitem>Named Areas...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert new column(s) at left of selected column(s).
-</action>
+<listitem><para><action>Open</action> the <guilabel>Named Areas</guilabel> dialog 
+to select, add, edit and remove named areas. See the section 
+<link linkend="namedareas">Named Cells and Areas</link> for further details.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Insert Rows</guimenuitem>
+<guimenuitem>Consolidate...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert new row(s) above selected row(s).
-</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Delete Columns</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Delete selected column(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Delete Rows</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Delete selected row(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Insert Cells...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Insert new cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Remove Cells...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Remove selected cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Merge Cells</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Merge selected cells.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Dissociate Cells</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Dissociate (split apart) previously merged cells.
-</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Show Area...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Change &kspread;'s focus to show a previously
-named area.</action> See the section <link linkend="namedareas">Named Cells 
-and Areas</link> for further details.
+<listitem><para><action>Consolidate data.</action> See the section 
+<link linkend="consolidate">Consolidating Data</link> for more details.
 </para></listitem>
 </varlistentry>
 
@@ -911,6 +835,17 @@ database.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
+<guimenuitem>Validity...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set or modify the error checking criteria and error 
+alert message for selected cell(s).</action> See <link linkend="validcheck">
+Validity Checking</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
 <guimenuitem>Goal Seek...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open the Goal Seek dialog box</action>. See
@@ -918,21 +853,11 @@ database.</action>
 </para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Consolidate...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Consolidate data.</action> See the section 
-<link linkend="consolidate">Consolidating Data</link> for more details.
-</para></listitem>
-</varlistentry>
-
 </variablelist></para>
 </sect1>
 
 <sect1 id="toolsmenu">
-<title>The <guimenu>Tools</guimenu> Menu</title>
+<title>The Tools Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -950,7 +875,7 @@ database.</action>
 <guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or amend the special series of words recognized 
-by &kspread;.</action>
+by &tables;.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1001,7 +926,7 @@ is protected.</action>
 <listitem><para><action>Recalculate all sheets.</action>
 </para></listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
@@ -1009,6 +934,16 @@ is protected.</action>
 </menuchoice></term>
 <listitem><para><action>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
 </action>
+</para></listitem>
+</varlistentry>
+-->
+  <!-- FIXME missing Execute Script File -->
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guisubmenu>Scripts</guisubmenu>
+</menuchoice></term>
+<listitem><para>Here you can execute the script <guilabel>Export to HTML File</guilabel> or start the <guilabel>Script Editor</guilabel>.
 </para></listitem>
 </varlistentry>
 
@@ -1021,26 +956,40 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guisubmenu>Scripts</guisubmenu>
-</menuchoice></term>
-<listitem><para>Here you can execute the script <guilabel>Export to HTML File</guilabel> or start the <guilabel>Script Editor</guilabel>.
-</para></listitem>
-</varlistentry>
-
 </variablelist></para>
 </sect1>
 
 <sect1 id="settingsmenu">
-<title>The <guimenu>Settings</guimenu> Menu</title>
+<title>The Settings Menu</title>
 <para><variablelist>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show/Hide Status Bar</guimenuitem>
+<guisubmenu>Toolbars Shown</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Show or hide the toolbars: <guilabel>File</guilabel>,
+<guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, <guilabel>Font</guilabel>,
+<guilabel>Format</guilabel> and <guilabel>Color/Border</guilabel>.</action>
+</para></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Dockers</guimenuitem>
+</menuchoice></term>
+<listitem><para>FIXME
+</para></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Status Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Status Bar.</action>
 The Status Bar shows additional information for selected items and
@@ -1051,7 +1000,7 @@ instant calculations of the selected cells.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show/Hide Tab Bar</guimenuitem>
+<guimenuitem>Tab Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Tab Bar.</action>
 All Sheets of the current Document can be accessed through the Tab Bar.
@@ -1061,30 +1010,9 @@ All Sheets of the current Document can be accessed through the Tab Bar.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show/Hide Formula Bar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show or hide the Formula Bar.</action>
-The Formula Bar can be used to edit the content of the selected cell.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>Show or hide the toolbars: <guilabel>File</guilabel>,
-<guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
-<guilabel>Format</guilabel> and <guilabel>Color/Border</guilabel>.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
 <guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Configure the keyboard shortcuts used by &kspread;.
+<listitem><para><action>Configure the keyboard shortcuts used by &tables;.
 </action> See the section on <link linkend="configshort">configuring shortcuts
 </link> for more details.
 
@@ -1105,10 +1033,10 @@ information.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure &kspread;...</guimenuitem>
+<guimenuitem>Configure &tables;...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>General &kspread; configuration.</action> See the 
-section on <link linkend="configdialog">&kspread; configuration</link> for 
+<listitem><para><action>General &tables; configuration.</action> See the 
+section on <link linkend="configdialog">&tables; configuration</link> for 
 more details.
 </para></listitem>
 </varlistentry>
@@ -1118,7 +1046,7 @@ more details.
 </sect1>
 
 <sect1 id="helpmenu">
-<title>The <guimenu>Help</guimenu> Menu</title>
+<title>The Help Menu</title>
 
 &help.menu.documentation;
 
@@ -1135,7 +1063,7 @@ row(s) or column(s).
 <varlistentry>
 <term><menuchoice>
 <shortcut>
-<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
+<keycombo action="simul">&Ctrl;&Alt;<keycap>F</keycap></keycombo>
 </shortcut>
 <guimenuitem>Cell Format...</guimenuitem>
 </menuchoice></term>
@@ -1203,7 +1131,7 @@ previous cell(s) to make room.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Delete</guimenuitem>
+<guimenuitem>All</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Delete contents of selected cell(s).</action>
 </para></listitem>
@@ -1280,7 +1208,7 @@ existing cell(s) to make room.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Remove Cells...</guimenuitem>
+<guimenuitem>Delete Cells...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Remove selected cell(s), moving other cell(s) to 
 occupy the space left by the removed cell(s).</action>
@@ -1359,7 +1287,7 @@ includes the hidden columns.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Add/Modify Comment...</guimenuitem>
+<guimenuitem>Comment...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify a comment to the selected cell.</action>
 </para></listitem>
@@ -1373,7 +1301,7 @@ includes the hidden columns.</action>
 cell of the current selection of cells into the selected cell.</action>
 </para></listitem>
 </varlistentry>
-
+<!-- not in 2.4.0
 <varlistentry>
 <term><menuchoice>
 <guimenuitem>Show Related Words</guimenuitem>
@@ -1381,16 +1309,23 @@ cell of the current selection of cells into the selected cell.</action>
 <listitem><para><action>Opens the <guilabel>Related Words</guilabel> dialog box.</action> 
 </para></listitem>
 </varlistentry>
-
+-->
 </variablelist></para>
 </sect1>
 
 <sect1 id="othershort">
 <title>Other Shortcuts</title>
-<para>This section describes those &kspread; shortcut keys used for operations 
+<para>This section describes those &tables; shortcut keys used for operations 
 that do not appear in any of the menus.</para>
 
 <variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul">&Ctrl;<keycap>H</keycap></keycombo>
+</term>
+<listitem><para>Toggle the display of the dockers.</para></listitem>
+</varlistentry>
 
 <varlistentry>
 <term>
@@ -1451,13 +1386,13 @@ start or end of that block of unoccupied cells in the current row or column.
 
 <varlistentry>
 <term>
-<keysym>F4</keysym>
+<keycap>F4</keycap>
 </term>
 <listitem><para><action>Change cell reference</action> between normal and 
 <link linkend="absolute">absolute reference</link> types.
 </para></listitem>
 </varlistentry>
-
+<!-- does not work in 2.4.0
 <varlistentry>
 <term>
 <keycombo action="simul">&Ctrl;<keysym>&amp;</keysym></keycombo>
@@ -1521,7 +1456,7 @@ midnight.
 normal Number format</action>.
 </para></listitem>
 </varlistentry>
-
+-->
 </variablelist>
 
 </sect1>
