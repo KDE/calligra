@@ -23,6 +23,7 @@
 
 #include <ui_KWStatistics.h>
 #include <ui_KWStatisticsDocker.h>
+#include "dialogs/quickpopupmenu.h"
 #include<ui_quickpopupmenu.h>
 #include<QToolButton>
 #include <QWidget>
@@ -41,6 +42,7 @@ class QToolButton;
 class QVBoxLayout;
 class QCheckBox;
 class QMenu;
+class QuickPopupMenu;
 
 class KWStatistics : public QWidget
 {
@@ -58,12 +60,14 @@ void updateData();
 void setAutoUpdate(int);
 void selectionChanged();
 
-private:
-    int countCJKChars(const QString &text);
+signals:
+void wordsDisplayChanged(int state);
 
 private:
-    Ui::KWStatistics widget;
+int countCJKChars(const QString &text);
+ Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
+//    Ui::QuickPopupmenu my_menu;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;
@@ -72,7 +76,7 @@ private:
     QWidget  * popup;
     QVBoxLayout *v_layout;
     QCheckBox *words,*sentences,*paragraphs;
-    QMenu *m_menu;
+    QuickPopupMenu *m_menu;
 
     long m_charsWithSpace;
     long m_charsWithoutSpace;

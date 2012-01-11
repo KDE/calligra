@@ -57,14 +57,15 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_timer->setInterval(2000); // make the interval configurable?
     m_timer->setSingleShot(true);
     widgetDocker.setupUi(this);
+  //   my_menu.setupUi(this);
 
     m_menu = new QuickPopupMenu(widgetDocker.preferences);
     widgetDocker.preferences->setMenu(m_menu);
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
+  connect(m_menu,SIGNAL(wordsDisplayChanged(int)));
+    // connect(m_menu,SIGNAL(stateChanged(int)),widgetDocker.Words,SLOT(wordsDisplayChanged(int)));
+    //  connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu ()));
 
-   connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu ()));
-//    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
 void KWStatistics::updateData()
@@ -317,3 +318,7 @@ int KWStatistics::countCJKChars(const QString &text)
     return count;
 }
 
+void KWStatistics::wordsDisplayChanged(int state)
+{if (state==Qt::Checked)
+        widgetDocker.Words->hide();
+}
