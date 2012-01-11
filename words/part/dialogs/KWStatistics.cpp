@@ -63,14 +63,9 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
 
     connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu()));
-    connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChange(int)));
+    connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
 //    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-}
-
-void KWStatistics::wordsDisplayChange(int state)
-{
-    qDebug()<<"do something"<<state;
 }
 
 void KWStatistics::updateData()
@@ -97,8 +92,6 @@ void KWStatistics::updateData()
     QStringList add_syl_regexp;
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
     << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
-
- //   bool footEnd = m_showInDocker ? !widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -239,30 +232,6 @@ void KWStatistics::updateDataUi()
 
         int top, bottom, left, right;(newText);
     }
-
-    else {
-        // tab 1
-        widget.pages->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPageCount), 0));
-        widget.frames->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentFrameSetCount), 0));
-        widget.pictures->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentPictureCount), 0));
-        widget.tables->setText(
-            KGlobal::locale()->formatNumber(m_resourceManager->intResource(Words::CurrentTableCount), 0));
-
-        // tab 2
-        /*widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
-        widget.sentences->setText(KGlobal::locale()->formatNumber(m_sentences, 0));
-        widget.syllables->setText(KGlobal::locale()->formatNumber(m_syllables, 0));
-        widget.lines->setText(KGlobal::locale()->formatNumber(m_lines, 0));
-        widget.characters->setText(KGlobal::locale()->formatNumber(m_charsWithSpace, 0));
-        widget.characters2->setText(KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0));
-        widget.cjkChars->setText(KGlobal::locale()->formatNumber(m_cjkChars, 0));
-        if (m_words < 200)   // a kind of warning if too few words:
-            flesch = i18n("approximately %1", flesch);
-        widget.flesch->setText(flesch);*/
-    }
 }
 
 void KWStatistics::setAutoUpdate(int state)
@@ -323,3 +292,16 @@ int KWStatistics::countCJKChars(const QString &text)
     return count;
 }
 
+void KWStatistics::wordsDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Words->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Words->hide();
+        break;
+    default:
+        break;
+    }
+}
