@@ -217,7 +217,7 @@ public:
     virtual KToolBar *toolBar(const QString& name) const;
 
     //! Shows design tab when switching between objects or views.
-    virtual void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
+    void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
 
     //! Sets currently visible tab when switching to design view, according to object type opened.
     virtual void setDesignTabIfNeeded(const QString &partClass);

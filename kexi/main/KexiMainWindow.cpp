@@ -4469,8 +4469,11 @@ void KexiMainWindow::closeTab(const QString &partClass)
 
 void KexiMainWindow::showTabIfNeeded()
 {
-    if (currentWindow()) 
+    if (currentWindow()) {
         showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+    } else {
+        closeTab("");
+    }
 }
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"
