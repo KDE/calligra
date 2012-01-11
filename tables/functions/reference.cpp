@@ -502,8 +502,14 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
     //const int colNew = args.count() >= 5 ? calc->conv()->asInteger(args[4]).asInteger() : -1;
     //if (colNew == 0 || rowNew == 0) return Value::errorVALUE();
 
-    const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
-    const Calligra::Tables::Region region(rect, e->sheet);
+    // Doesn't take references to other sheets into account
+    //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
+    //const Calligra::Tables::Region region(rect, e->sheet);
+
+    if (e->regions.isEmpty())
+        return Value::errorVALUE();
+
+    const Calligra::Tables::Region &region = e->regions[0];
 
     if (!region.isValid() /* || !region.isSingular() */)
         return Value::errorVALUE();

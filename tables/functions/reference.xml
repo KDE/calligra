@@ -321,7 +321,7 @@
            <Type>Int</Type>
        </Parameter>
        <Parameter>
-           <Comment>Height of the offset range (optionl)</Comment>
+           <Comment>Height of the offset range (optional)</Comment>
            <Type>Int</Type>
        </Parameter>
        <Parameter>
