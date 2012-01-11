@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Calligra Tables
 Name[ca]=Taules del Calligra
+Name[ca@valencia]=Taules del Calligra
 Name[cs]=Calligra Tables
 Name[da]=Calligra Tables
 Name[de]=Calligra Tables
 Name[el]=Πίνακες Calligra
 Name[en_GB]=Calligra Tables
 Name[et]=Calligra Tables
+Name[fi]=Calligra Tables
 Name[it]=Tables di Calligra
 Name[nb]=Calligratabeller
 Name[nds]=Calligra-Tables
@@ -32,6 +34,7 @@ GenericName[el]=Φύλλο εργασίας
 GenericName[en_GB]=Spreadsheet
 GenericName[es]=Hoja de cálculo
 GenericName[et]=Tabelitöötlus
+GenericName[fi]=Taulukkolaskentaohjelma
 GenericName[fr]=Tableur
 GenericName[fy]=Spreadsheet
 GenericName[ga]=Scarbhileog
