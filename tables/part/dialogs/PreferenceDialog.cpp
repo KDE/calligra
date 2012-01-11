@@ -294,7 +294,7 @@ PreferenceDialog::PreferenceDialog(View* view)
         , d(new Private)
 {
     setObjectName(QLatin1String("PreferenceDialog"));
-    setCaption(i18n("Configure KSpread"));
+    setCaption(i18n("Configure"));
     setFaceType(List);
     setButtons(Ok | Cancel | Default | Reset);
     setDefaultButton(Ok);
