@@ -64,7 +64,14 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
 
     connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu()));
     connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
-//    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));
+    connect(m_menu, SIGNAL(linesDisplayChange(int)), this, SLOT(linesDisplayChanged(int)));
+    connect(m_menu, SIGNAL(syllablesDisplayChange(int)), this, SLOT(syllablesDisplayChanged(int)));
+    connect(m_menu, SIGNAL(charspaceDisplayChange(int)), this, SLOT(charspaceDisplayChanged(int)));
+    connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
+    connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
+    connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
+    //    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
@@ -203,9 +210,7 @@ void KWStatistics::updateDataUi()
 
     if (m_showInDocker) {
 
-        QString newText[8];
-     //   connect(widgetDocker.preferences,SIGNAL(clicked()),this,SLOT(choose_pref()));
-
+         QString newText[8];
          newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
          widgetDocker.count_words->setText(newText[0]);
 
@@ -297,9 +302,118 @@ void KWStatistics::wordsDisplayChanged(int state)
     switch (state) {
     case Qt::Checked:
         widgetDocker.Words->show();
+        widgetDocker.count_words->show();
         break;
     case Qt::Unchecked:
         widgetDocker.Words->hide();
+        widgetDocker.count_words->hide();
+        break;
+    default:
+        break;
+    }
+}
+
+void KWStatistics::sentencesDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Sentences->show();
+        widgetDocker.count_sentences->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Sentences->hide();
+        widgetDocker.count_sentences->hide();
+        break;
+    default:
+        break;
+    }
+}
+
+void KWStatistics::linesDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Lines->show();
+        widgetDocker.count_lines->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Lines->hide();
+        widgetDocker.count_lines->hide();
+        break;
+    default:
+        break;
+    }
+}
+void KWStatistics::syllablesDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Syllables->show();
+        widgetDocker.count_syllables->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Syllables->hide();
+        widgetDocker.count_syllables->hide();
+        break;
+    default:
+        break;
+    }
+}
+void KWStatistics::charspaceDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.spaces->show();
+        widgetDocker.count_spaces->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.spaces->hide();
+        widgetDocker.count_spaces->hide();
+        break;
+    default:
+        break;
+    }
+}
+void KWStatistics::charnospaceDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.nospaces->show();
+        widgetDocker.count_nospaces->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.nospaces->hide();
+        widgetDocker.count_nospaces->hide();
+        break;
+    default:
+        break;
+    }
+}
+void KWStatistics::eastDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Cjkchars->show();
+        widgetDocker.count_cjkchars->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Cjkchars->hide();
+        widgetDocker.count_cjkchars->hide();
+        break;
+    default:
+        break;
+    }
+}
+void KWStatistics::fleschDisplayChanged(int state)
+{
+    switch (state) {
+    case Qt::Checked:
+        widgetDocker.Flesch->show();
+        widgetDocker.count_flesch->show();
+        break;
+    case Qt::Unchecked:
+        widgetDocker.Flesch->hide();
+        widgetDocker.count_flesch->hide();
         break;
     default:
         break;

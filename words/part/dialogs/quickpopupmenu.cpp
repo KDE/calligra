@@ -28,7 +28,23 @@ QuickPopupMenu::QuickPopupMenu(QWidget *parent)
     Ui::QuickPopupMenu *w = new Ui::QuickPopupMenu();
 
     w->setupUi(this);
-    connect(w->checkBox, SIGNAL(stateChanged(int)), this, SIGNAL(wordsDisplayChange(int)));
+
+    w->check_words->setCheckState(Qt::Checked);
+    w->check_sentences->setCheckState(Qt::Checked);
+    w->check_lines->setCheckState(Qt::Checked);
+    w->check_syllables->setCheckState(Qt::Checked);
+    w->check_charspace->setCheckState(Qt::Checked);
+    w->check_charnospace->setCheckState(Qt::Checked);
+    w->check_east->setCheckState(Qt::Checked);
+    w->check_flesch->setCheckState(Qt::Checked);
+    connect(w->check_words, SIGNAL(stateChanged(int)), this, SIGNAL(wordsDisplayChange(int)));
+    connect(w->check_sentences, SIGNAL(stateChanged(int)), this, SIGNAL(sentencesDisplayChange(int)));
+    connect(w->check_syllables, SIGNAL(stateChanged(int)), this, SIGNAL(syllablesDisplayChange(int)));
+    connect(w->check_lines, SIGNAL(stateChanged(int)), this, SIGNAL(linesDisplayChange(int)));
+    connect(w->check_charspace, SIGNAL(stateChanged(int)), this, SIGNAL(charspaceDisplayChange(int)));
+    connect(w->check_charnospace, SIGNAL(stateChanged(int)), this, SIGNAL(charnospaceDisplayChange(int)));
+    connect(w->check_east, SIGNAL(stateChanged(int)), this, SIGNAL(eastDisplayChange(int)));
+    connect(w->check_flesch, SIGNAL(stateChanged(int)), this, SIGNAL(fleschDisplayChange(int)));
 }
 
 

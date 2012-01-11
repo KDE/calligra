@@ -39,6 +39,13 @@ public:
 
 signals:
     void wordsDisplayChange(int);
+    void sentencesDisplayChange(int);
+    void syllablesDisplayChange(int);
+    void linesDisplayChange(int);
+    void charspaceDisplayChange(int);
+    void charnospaceDisplayChange(int);
+    void eastDisplayChange(int);
+    void fleschDisplayChange(int);
 };
 
 #endif // QUICKPOPUPMENU_H

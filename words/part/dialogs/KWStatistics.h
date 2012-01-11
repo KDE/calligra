@@ -55,6 +55,13 @@ public:
 
 public slots:
     void wordsDisplayChanged(int);
+    void sentencesDisplayChanged(int);
+    void linesDisplayChanged(int);
+    void syllablesDisplayChanged(int);
+    void charspaceDisplayChanged(int);
+    void charnospaceDisplayChanged(int);
+    void eastDisplayChanged(int);
+    void fleschDisplayChanged(int);
     void updateData();
     void setAutoUpdate(int);
     void selectionChanged();

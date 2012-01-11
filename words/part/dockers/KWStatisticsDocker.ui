@@ -113,7 +113,7 @@
     </widget>
    </item>
    <item row="6" column="0">
-    <widget class="QLabel" name="cjkchars">
+    <widget class="QLabel" name="Cjkchars">
      <property name="text">
       <string>East Asian Characters:</string>
      </property>
@@ -126,7 +126,7 @@
     <widget class="QLineEdit" name="count_flesch"/>
    </item>
    <item row="7" column="0">
-    <widget class="QLabel" name="flesch">
+    <widget class="QLabel" name="Flesch">
      <property name="text">
       <string>Flesch Reading Ease:</string>
      </property>
