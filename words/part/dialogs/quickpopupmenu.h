@@ -14,12 +14,14 @@ namespace Ui {
 }
 
 class QuickPopupMenu : public QMenu
-
 {
+    Q_OBJECT
 public:
-            QuickPopupMenu(QToolButton *button, QWidget * parent = 0);
-           virtual QSize sizeHint() const;
+    QuickPopupMenu(QToolButton *button, QWidget * parent = 0);
+    virtual QSize sizeHint() const;
 
+signals:
+    void wordsDisplayChange(int);
 };
 
 #endif // QUICKPOPUPMENU_H

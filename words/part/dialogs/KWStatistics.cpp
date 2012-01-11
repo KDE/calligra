@@ -62,9 +62,15 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     widgetDocker.preferences->setMenu(m_menu);
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
 
-   connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu ()));
+    connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu()));
+    connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChange(int)));
 //    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+}
+
+void KWStatistics::wordsDisplayChange(int state)
+{
+    qDebug()<<"do something"<<state;
 }
 
 void KWStatistics::updateData()

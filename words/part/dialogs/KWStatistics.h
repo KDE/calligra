@@ -53,7 +53,7 @@ public:
 
 public slots:
 
-//void choose_pref();
+void wordsDisplayChange(int);
 void updateData();
 void setAutoUpdate(int);
 void selectionChanged();
