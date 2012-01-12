@@ -122,11 +122,11 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
             if (m_selectionMode == PIXEL_SELECTION) {
 
-                KisPixelSelection tmpSel;
+                KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
-                KisPainter painter(&tmpSel);
+                KisPainter painter(tmpSel->paintDevice());
                 painter.setBounds(currentImage()->bounds());
-                painter.setPaintColor(KoColor(Qt::black, tmpSel.colorSpace()));
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->paintDevice()->colorSpace()));
                 painter.setGradient(currentGradient());
                 painter.setPattern(currentPattern());
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -134,10 +134,10 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setOpacity(OPACITY_OPAQUE_U8);
                 painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-                painter.setCompositeOp(tmpSel.colorSpace()->compositeOp(COMPOSITE_OVER));
+                painter.setCompositeOp(tmpSel->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER));
                 painter.paintPolygon(m_points);
 
-                helper.selectPixelSelection(&tmpSel, m_selectAction);
+                helper.selectPixelSelection(tmpSel, m_selectAction);
             } else {
 
                 KoPathShape* path = new KoPathShape();

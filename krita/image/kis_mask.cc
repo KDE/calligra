@@ -179,7 +179,7 @@ void KisMask::select(const QRect & rc, quint8 selectedness)
 {
     KisSelectionSP sel = selection();
     sel->createPixelSelection();
-    KisSelectionComponent *psel = sel->pixelSelection();
+    KisSelectionComponentSP psel = sel->pixelSelection();
     psel->select(rc, selectedness);
     sel->updateProjection(rc);
 }

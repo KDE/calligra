@@ -20,16 +20,38 @@
 
 #include <krita_export.h>
 
-#include "kis_selection.h"
+#include "kis_global.h"
 #include "kis_shared.h"
+#include "kis_types.h"
+
+class KisSelection;
+
+enum SelectionMode {
+    PIXEL_SELECTION,
+    SHAPE_PROTECTION
+};
+
+enum SelectionAction {
+    SELECTION_REPLACE,
+    SELECTION_ADD,
+    SELECTION_SUBTRACT,
+    SELECTION_INTERSECT
+};
 
 class KRITAIMAGE_EXPORT KisSelectionComponent : public KisShared
 {
 public:
-    KisSelectionComponent() {}
+    KisSelectionComponent()
+        : KisShared()
+    {}
+
     virtual ~KisSelectionComponent() {}
 
-    virtual KisSelectionComponent* clone(KisSelection* selection) = 0;
+    KisSelectionComponent(const KisSelectionComponent &/*rhs*/)
+        : KisShared()
+    {}
+
+    virtual KisSelectionComponentSP clone(KisSelection* selection) = 0;
 
     virtual void renderToProjection(KisPaintDeviceSP projection) = 0;
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
@@ -58,7 +80,7 @@ public:
     /**
      * Apply a selection to the selection using the specified selection mode
      */
-    virtual void applySelection(KisSelectionComponent */*selection*/, SelectionAction /*action*/) {}
+    virtual void applySelection(KisSelectionComponentSP /*selection*/, SelectionAction /*action*/) {}
 
     /// Tests if the the rect is totally outside the selection
     virtual bool isTotallyUnselected(const QRect &/*r*/) const { return true; }
@@ -82,7 +104,5 @@ public:
     virtual QVector<QPolygon> outline() const { return QVector<QPolygon>(); }
 
 };
-
-typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
 #endif

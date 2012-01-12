@@ -258,7 +258,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
             return shapeLayer->shapeManager();
         }
         if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
-            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
+            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection().data())->shapeManager();
             return m;
 
         }

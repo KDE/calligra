@@ -55,7 +55,7 @@ public:
 
     KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection);
 
-    KisSelectionComponent* clone(KisSelection* selection);
+    KisSelectionComponentSP clone(KisSelection* selection);
 
     bool saveSelection(KoStore * store) const;
 

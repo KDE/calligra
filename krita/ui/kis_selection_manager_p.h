@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <kis_pixel_selection.h>
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define RINT(x) floor ((x) + 0.5)
@@ -124,7 +126,7 @@ public:
 
 
         // load top of image
-        pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
+        pixelSelection->paintDevice()->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
 
         buf[0][0]         = buf[0][1];
         buf[0][width + 1] = buf[0][width];
@@ -133,7 +135,7 @@ public:
 
         for (qint32 y = 0; y < height; y++) {
             if (y + 1 < height) {
-                pixelSelection->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
+                pixelSelection->paintDevice()->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
 
                 buf[2][0]         = buf[2][1];
                 buf[2][width + 1] = buf[2][width];
@@ -153,7 +155,7 @@ public:
                 out[x] = min;
             }
 
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, width, 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, width, 1);
             rotatePointers(buf, 3);
         }
 
@@ -186,7 +188,7 @@ public:
 
 
         // load top of image
-        pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
+        pixelSelection->paintDevice()->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
 
         buf[0][0]         = buf[0][1];
         buf[0][width + 1] = buf[0][width];
@@ -195,7 +197,7 @@ public:
 
         for (qint32 y = 0; y < height; y++) {
             if (y + 1 < height) {
-                pixelSelection->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
+                pixelSelection->paintDevice()->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
 
                 buf[2][0]         = buf[2][1];
                 buf[2][width + 1] = buf[2][width];
@@ -215,7 +217,7 @@ public:
                 out[x] = max;
             }
 
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, width, 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, width, 1);
             rotatePointers(buf, 3);
         }
 
@@ -256,24 +258,24 @@ public:
 
             quint8* transition = new quint8[rect.width()];
 
-            pixelSelection->readBytes(source[0], rect.x(), rect.y(), rect.width(), 1);
+            pixelSelection->paintDevice()->readBytes(source[0], rect.x(), rect.y(), rect.width(), 1);
             memcpy(source[1], source[0], rect.width());
             if (rect.height() > 1)
-                pixelSelection->readBytes(source[2], rect.x(), rect.y() + 1, rect.width(), 1);
+                pixelSelection->paintDevice()->readBytes(source[2], rect.x(), rect.y() + 1, rect.width(), 1);
             else
                 memcpy(source[2], source[1], rect.width());
 
             computeTransition(transition, source, rect.width());
-            pixelSelection->writeBytes(transition, rect.x(), rect.y(), rect.width(), 1);
+            pixelSelection->paintDevice()->writeBytes(transition, rect.x(), rect.y(), rect.width(), 1);
 
             for (qint32 y = 1; y < rect.height(); y++) {
                 rotatePointers(source, 3);
                 if (y + 1 < rect.height())
-                    pixelSelection->readBytes(source[2], rect.x(), rect.y() + y + 1, rect.width(), 1);
+                    pixelSelection->paintDevice()->readBytes(source[2], rect.x(), rect.y() + y + 1, rect.width(), 1);
                 else
                     memcpy(source[2], source[1], rect.width());
                 computeTransition(transition, source, rect.width());
-                pixelSelection->writeBytes(transition, rect.x(), rect.y() + y, rect.width(), 1);
+                pixelSelection->paintDevice()->writeBytes(transition, rect.x(), rect.y() + y, rect.width(), 1);
             }
 
             for (qint32 i = 0; i < 3; i++)
@@ -335,17 +337,17 @@ public:
                 density[-x][-y] = a;
             }
         }
-        pixelSelection->readBytes(buf[0], rect.x(), rect.y(), rect.width(), 1);
+        pixelSelection->paintDevice()->readBytes(buf[0], rect.x(), rect.y(), rect.width(), 1);
         memcpy(buf[1], buf[0], rect.width());
         if (rect.height() > 1)
-            pixelSelection->readBytes(buf[2], rect.x(), rect.y() + 1, rect.width(), 1);
+            pixelSelection->paintDevice()->readBytes(buf[2], rect.x(), rect.y() + 1, rect.width(), 1);
         else
             memcpy(buf[2], buf[1], rect.width());
         computeTransition(transition[1], buf, rect.width());
 
         for (qint32 y = 1; y < m_yRadius && y + 1 < rect.height(); y++) { // set up top of image
             rotatePointers(buf, 3);
-            pixelSelection->readBytes(buf[2], rect.x(), rect.y() + y + 1, rect.width(), 1);
+            pixelSelection->paintDevice()->readBytes(buf[2], rect.x(), rect.y() + y + 1, rect.width(), 1);
             computeTransition(transition[y + 1], buf, rect.width());
         }
         for (qint32 x = 0; x < rect.width(); x++) { // set up max[] for top of image
@@ -360,7 +362,7 @@ public:
             rotatePointers(buf, 3);
             rotatePointers(transition, m_yRadius + 1);
             if (y < rect.height() - (m_yRadius + 1)) {
-                pixelSelection->readBytes(buf[2], rect.x(), rect.y() + y + m_yRadius + 1, rect.width(), 1);
+                pixelSelection->paintDevice()->readBytes(buf[2], rect.x(), rect.y() + y + m_yRadius + 1, rect.width(), 1);
                 computeTransition(transition[m_yRadius], buf, rect.width());
             } else
                 memcpy(transition[m_yRadius], transition[m_yRadius - 1], rect.width());
@@ -418,7 +420,7 @@ public:
                     last_index = m_xRadius;
                 }
             }
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
         }
         delete [] out;
 
@@ -479,14 +481,14 @@ public:
         KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(gaussianMatrix, 0, gaussianMatrix.sum());
         KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(gaussianMatrix.transpose(), 0, gaussianMatrix.sum());
 
-        KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->colorSpace());
+        KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->paintDevice()->colorSpace());
         KisConvolutionPainter horizPainter(interm);
         horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true, false, false));
-        horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
+        horizPainter.applyMatrix(kernelHoriz, pixelSelection->paintDevice(), rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
         horizPainter.end();
 
-        KisConvolutionPainter verticalPainter(pixelSelection);
-        verticalPainter.setChannelFlags(pixelSelection->colorSpace()->channelFlags(false, true, false, false));
+        KisConvolutionPainter verticalPainter(pixelSelection->paintDevice());
+        verticalPainter.setChannelFlags(pixelSelection->paintDevice()->colorSpace()->channelFlags(false, true, false, false));
         verticalPainter.applyMatrix(kernelVertical, interm, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
         verticalPainter.end();
     }
@@ -553,7 +555,7 @@ public:
 
         memset(buf[0], 0, rect.width());
         for (qint32 i = 0; i < m_yRadius && i < rect.height(); i++) { // load top of image
-            pixelSelection->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
+            pixelSelection->paintDevice()->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
         }
 
         for (qint32 x = 0; x < rect.width() ; x++) { // set up max for top of image
@@ -567,7 +569,7 @@ public:
         for (qint32 y = 0; y < rect.height(); y++) {
             rotatePointers(buf, m_yRadius + 1);
             if (y < rect.height() - (m_yRadius))
-                pixelSelection->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
+                pixelSelection->paintDevice()->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
             else
                 memset(buf[m_yRadius], 0, rect.width());
             for (qint32 x = 0; x < rect.width(); x++) { /* update max array */
@@ -603,7 +605,7 @@ public:
                     out[x] = last_max;
                 }
             }
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
         }
         /* undo the offsets to the pointers so we can free the malloced memmory */
         circ -= m_xRadius;
@@ -697,7 +699,7 @@ public:
         circ += m_xRadius;
 
         for (qint32 i = 0; i < m_yRadius && i < rect.height(); i++) // load top of image
-            pixelSelection->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
+            pixelSelection->paintDevice()->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
 
         if (m_edgeLock)
             memcpy(buf[0], buf[1], rect.width());
@@ -714,7 +716,7 @@ public:
         for (qint32 y = 0; y < rect.height(); y++) {
             rotatePointers(buf, m_yRadius + 1);
             if (y < rect.height() - m_yRadius)
-                pixelSelection->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
+                pixelSelection->paintDevice()->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
             else if (m_edgeLock)
                 memcpy(buf[m_yRadius], buf[m_yRadius - 1], rect.width());
             else
@@ -754,7 +756,7 @@ public:
                     out[x] = last_max;
                 }
             }
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
         }
 
         // undo the offsets to the pointers so we can free the malloced memmory
@@ -800,7 +802,7 @@ public:
 
 
         // load top of image
-        pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
+        pixelSelection->paintDevice()->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
 
         buf[0][0]         = buf[0][1];
         buf[0][width + 1] = buf[0][width];
@@ -809,7 +811,7 @@ public:
 
         for (qint32 y = 0; y < height; y++) {
             if (y + 1 < height) {
-                pixelSelection->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
+                pixelSelection->paintDevice()->readBytes(buf[2] + 1, rect.x(), rect.y() + y + 1, width, 1);
 
                 buf[2][0]         = buf[2][1];
                 buf[2][width + 1] = buf[2][width];
@@ -825,7 +827,7 @@ public:
                 out[x] = value / 9;
             }
 
-            pixelSelection->writeBytes(out, rect.x(), rect.y() + y, width, 1);
+            pixelSelection->paintDevice()->writeBytes(out, rect.x(), rect.y() + y, width, 1);
             rotatePointers(buf, 3);
         }
 

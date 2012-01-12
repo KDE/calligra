@@ -58,7 +58,7 @@ public:
 // KisSelectionComponent implementation
 public:
 
-    KisSelectionComponent* clone(KisSelection*);
+    KisSelectionComponentSP clone(KisSelection*);
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -75,7 +75,7 @@ public:
     /**
      * Apply a selection to the selection using the specified selection mode
      */
-    void applySelection(KisSelectionComponent *selection, SelectionAction action);
+    void applySelection(KisSelectionComponentSP selection, SelectionAction action);
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
@@ -135,10 +135,6 @@ private:
      */
     void intersectSelection(KisPixelSelectionSP selection);
 
-private:
-    // We don't want these methods to be used on selections:
-    using KisPaintDevice::extent;
-    using KisPaintDevice::exactBounds;
 
 private:
 

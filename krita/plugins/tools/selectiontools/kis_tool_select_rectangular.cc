@@ -87,9 +87,9 @@ void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
     if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
 
         if (rc.width() > 0 && rc.height() > 0) {
-            KisPixelSelection tmpSel;
-            tmpSel.select(rc);
-            helper.selectPixelSelection(&tmpSel, m_selectingTool->m_selectAction);
+            KisPixelSelectionSP tmpSel = new KisPixelSelection();
+            tmpSel->select(rc);
+            helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
         }
     } else {
         QRectF documentRect = convertToPt(rect);

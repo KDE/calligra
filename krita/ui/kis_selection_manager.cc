@@ -635,10 +635,11 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
     if (!selection) return;
 
     selection->createPixelSelection();
-    KisPixelSelection *mergedSelection = dynamic_cast<KisPixelSelection*>(selection->pixelSelection());
+    KisSelectionComponentSP mergedSelection = selection->pixelSelection();
+    KisPaintDeviceSP mergedSelectionPaintDevice = selection->selectionPaintDevice();
 
     // XXX: these old filters can only handle old-style selections!
-    if (mergedSelection && mergedSelection->colorSpace()->colorModelId() == AlphaColorModelID) {
+    if (mergedSelection && mergedSelectionPaintDevice->colorSpace()->colorModelId() == AlphaColorModelID) {
 
     
         KisUndoAdapter *undoAdapter = m_view->undoAdapter();
@@ -648,7 +649,7 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
 
         QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
 
-        filter->process(mergedSelection, processingRect);
+        filter->process(static_cast<KisPixelSelection*>(mergedSelection.data()), processingRect);
 
         transaction.commit(image->undoAdapter());
 	

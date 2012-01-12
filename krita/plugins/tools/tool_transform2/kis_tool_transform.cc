@@ -1927,7 +1927,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         QRect r = selection->selectedExactRect();
         m_origSelection = new KisSelection();
         selection->createPixelSelection();
-        KisSelectionComponent *origPixelSelection = selection->pixelSelection()->clone(m_origSelection.data());
+        KisSelectionComponentSP origPixelSelection = selection->pixelSelection()->clone(m_origSelection.data());
         m_origSelection->setPixelSelection(origPixelSelection);
         r.getRect(&x, &y, &w, &h);
 

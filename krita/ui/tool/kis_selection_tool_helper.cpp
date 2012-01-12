@@ -52,7 +52,7 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 {
 }
 
-void KisSelectionToolHelper::selectPixelSelection(KisSelectionComponent *temporarySelection, SelectionAction action)
+void KisSelectionToolHelper::selectPixelSelection(KisSelectionComponentSP temporarySelection, SelectionAction action)
 {
     KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
@@ -66,7 +66,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisSelectionComponent *tempora
 
     KisSelectionSP selection = m_layer->selection();
     selection->createPixelSelection();
-    KisSelectionComponent *pixelSelection = selection->pixelSelection();
+    KisSelectionComponentSP pixelSelection = selection->pixelSelection();
 
     if (!hasSelection && action == SELECTION_SUBTRACT) {
         pixelSelection->invert();

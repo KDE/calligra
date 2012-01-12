@@ -109,7 +109,7 @@ protected:
 
         KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
         selection->createPixelSelection();
-        KisSelectionComponent *pixelSelection = selection->pixelSelection();
+        KisSelectionComponentSP pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 
         KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, selection);

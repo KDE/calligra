@@ -71,7 +71,7 @@ void KisSelectionTest::testSelectionActions()
 
     pixelSelection->select(QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    KisPixelSelectionSP tmpSel = new KisPixelSelection();
     tmpSel->select(QRect(10, 0, 20, 20));
 
     pixelSelection->applySelection(tmpSel.data(), SELECTION_ADD);
@@ -149,7 +149,7 @@ void KisSelectionTest::testUpdatePixelSelection()
 {
     KisSelectionSP selection = new KisSelection();
     selection->createPixelSelection();
-    KisSelectionComponent *pSel = selection->pixelSelection();
+    KisSelectionComponentSP pSel = selection->pixelSelection();
 
     pSel->select(QRect(0, 0, 348, 212));
     QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect(0, 0, 348, 212));

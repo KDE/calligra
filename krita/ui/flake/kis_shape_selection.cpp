@@ -106,7 +106,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     }
 }
 
-KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
+KisSelectionComponentSP KisShapeSelection::clone(KisSelection* selection)
 {
     return new KisShapeSelection(*this, selection);
 }

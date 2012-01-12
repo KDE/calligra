@@ -44,7 +44,7 @@ public:
      * @param temporarySelection the temporary selection
      * @param action determine whether the selection will replace, add or substract
      */
-    void selectPixelSelection(KisSelectionComponent* temporarySelection, SelectionAction action);
+    void selectPixelSelection(KisSelectionComponentSP temporarySelection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
 
 private:

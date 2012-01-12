@@ -23,20 +23,8 @@
 #include "kis_types.h"
 #include "krita_export.h"
 #include "kis_paint_device.h"
+#include "kis_selection_component.h"
 
-enum SelectionMode {
-    PIXEL_SELECTION,
-    SHAPE_PROTECTION
-};
-
-enum SelectionAction {
-    SELECTION_REPLACE,
-    SELECTION_ADD,
-    SELECTION_SUBTRACT,
-    SELECTION_INTERSECT
-};
-
-class KisSelectionComponent;
 
 /**
  * KisSelection is a composite object. It may contain an instance
@@ -94,14 +82,14 @@ public:
      * Return the pixel selection component of this selection or zero
      * if hasPixelSelection() returns false.
      */
-    KisSelectionComponent *pixelSelection() const;
+    KisSelectionComponentSP pixelSelection() const;
 
     /**
      * @brief setPixelSelection replaces the current pixel selection with
      *   the given pixel selection component.
      * @param pixelSelection
      */
-    void setPixelSelection(KisSelectionComponent* pixelSelection);
+    void setPixelSelection(KisSelectionComponentSP pixelSelection);
 
     /**
      * @brief selectionPaintDevice returns the paint device associated with the
@@ -124,14 +112,14 @@ public:
      * return the vector selection component of this selection or zero
      * if hasShapeSelection() returns false.
      */
-    KisSelectionComponent* shapeSelection() const;
+    KisSelectionComponentSP shapeSelection() const;
 
     /**
      * @brief setShapeSelection replaces the current shape selection with
      *   the given shape selection component.
      * @param pixelSelection
      */
-    void setShapeSelection(KisSelectionComponent* shapeSelection);
+    void setShapeSelection(KisSelectionComponentSP shapeSelection);
 
     /**
      * Returns the projection of the selection. It may be the same

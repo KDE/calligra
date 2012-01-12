@@ -198,11 +198,11 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
 
     if (m_selectionMode == PIXEL_SELECTION) {
 
-        KisPixelSelection tmpSel;
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
-        KisPainter painter(&tmpSel);
+        KisPainter painter(tmpSel->paintDevice());
         painter.setBounds(currentImage()->bounds());
-        painter.setPaintColor(KoColor(Qt::black, tmpSel.colorSpace()));
+        painter.setPaintColor(KoColor(Qt::black, tmpSel->paintDevice()->colorSpace()));
         painter.setGradient(currentGradient());
         painter.setPattern(currentPattern());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -210,11 +210,11 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
         painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
-        painter.setCompositeOp(tmpSel.colorSpace()->compositeOp(COMPOSITE_OVER));
+        painter.setCompositeOp(tmpSel->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         painter.fillPainterPath(selection);
 
-        helper.selectPixelSelection(&tmpSel, m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_selectAction);
 
         resetSelection();
     }

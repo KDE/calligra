@@ -77,11 +77,11 @@ void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
 
     if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
 
-        KisPixelSelection tmpSel;
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
-        KisPainter painter(&tmpSel);
+        KisPainter painter(tmpSel->paintDevice());
         painter.setBounds(currentImage()->bounds());
-        painter.setPaintColor(KoColor(Qt::black, tmpSel.colorSpace()));
+        painter.setPaintColor(KoColor(Qt::black, tmpSel->paintDevice()->colorSpace()));
         painter.setGradient(m_selectingTool->currentGradient());
         painter.setPattern(m_selectingTool->currentPattern());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -89,11 +89,11 @@ void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
         painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());
         painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setPaintOpPreset(m_selectingTool->currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
-        painter.setCompositeOp(tmpSel.colorSpace()->compositeOp(COMPOSITE_OVER));
+        painter.setCompositeOp(tmpSel->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         painter.paintEllipse(rect);
 
-        helper.selectPixelSelection(&tmpSel, m_selectingTool->m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
     }
     else {
 

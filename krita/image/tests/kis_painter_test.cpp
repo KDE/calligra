@@ -185,7 +185,7 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
 
     QCOMPARE(psel->selectedExactRect(), QRect(10, 10, 20, 20));
 
-    QCOMPARE(TestUtil::alphaDevicePixel(psel, 13, 13), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(psel->paintDevice(), 13, 13), MIN_SELECTED);
     KisSelectionSP sel = new KisSelection();
     sel->setPixelSelection(psel.data());
     KisPainter painter(dst);
@@ -228,7 +228,7 @@ void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs
 
     KisSelectionSP sel = new KisSelection();
     sel->createPixelSelection();
-    KisSelectionComponent *psel = sel->pixelSelection();
+    KisSelectionComponentSP psel = sel->pixelSelection();
     psel->select(QRect(10, 10, 20, 20));
     psel->invert();
     sel->updateProjection();
@@ -252,21 +252,21 @@ void KisPainterTest::testSelectionBltSelection()
     src->select(QRect(0, 0, 20, 20));
     QCOMPARE(src->selectedExactRect(), QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP Selection = new KisPixelSelection();
-    Selection->select(QRect(10, 10, 20, 20));
-    QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    selection->select(QRect(10, 10, 20, 20));
+    QCOMPARE(selection->selectedExactRect(), QRect(10, 10, 20, 20));
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection.data());
+    sel->setPixelSelection(selection.data());
     sel->updateProjection();
     KisPixelSelectionSP dst = new KisPixelSelection();
-    KisPainter painter(dst);
+    KisPainter painter(dst->paintDevice());
     painter.setSelection(sel);
-    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
+    painter.bitBlt(0, 0, src->paintDevice(), 0, 0, 30, 30);
     painter.end();
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
 
-    KisRectConstIteratorPixel it = dst->createRectConstIterator(10, 10, 10, 10);
+    KisRectConstIteratorPixel it = dst->paintDevice()->createRectConstIterator(10, 10, 10, 10);
     while (!it.isDone()) {
         // These are selections, so only one channel and it should
         // be totally selected
@@ -301,24 +301,24 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     src->select(QRect(0, 0, 20, 20));
     QCOMPARE(src->selectedExactRect(), QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP Selection = new KisPixelSelection();
-    Selection->select(QRect(10, 15, 20, 15));
-    Selection->select(QRect(15, 10, 15, 5));
-    QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
-    QCOMPARE(TestUtil::alphaDevicePixel(Selection, 13, 13), MIN_SELECTED);
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    selection->select(QRect(10, 15, 20, 15));
+    selection->select(QRect(15, 10, 15, 5));
+    QCOMPARE(selection->selectedExactRect(), QRect(10, 10, 20, 20));
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 13, 13), MIN_SELECTED);
 
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection.data());
+    sel->setPixelSelection(selection);
     sel->updateProjection();
 
     KisPixelSelectionSP dst = new KisPixelSelection();
-    KisPainter painter(dst);
+    KisPainter painter(dst->paintDevice());
     painter.setSelection(sel);
-    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
+    painter.bitBlt(0, 0, src->paintDevice(), 0, 0, 30, 30);
     painter.end();
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
-    QCOMPARE(TestUtil::alphaDevicePixel(dst, 13, 13), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(dst->paintDevice(), 13, 13), MIN_SELECTED);
 }
 
 void KisPainterTest::testSelectionBitBltFixedSelection()

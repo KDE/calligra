@@ -49,17 +49,17 @@ void KisPixelSelectionTest::testCreation()
     selection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
-    selection->setDirty(QRect(10, 10, 10, 10));
+    selection->paintDevice()->setDirty(QRect(10, 10, 10, 10));
 }
 
 void KisPixelSelectionTest::testSetSelected()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
-    QVERIFY(TestUtil::alphaDevicePixel(selection, 1, 1) == MIN_SELECTED);
-    TestUtil::alphaDeviceSetPixel(selection, 1, 1, MAX_SELECTED);
-    QVERIFY(TestUtil::alphaDevicePixel(selection, 1, 1) == MAX_SELECTED);
-    TestUtil::alphaDeviceSetPixel(selection, 1, 1, 128);
-    QVERIFY(TestUtil::alphaDevicePixel(selection, 1, 1) == 128);
+    QVERIFY(TestUtil::alphaDevicePixel(selection->paintDevice(), 1, 1) == MIN_SELECTED);
+    TestUtil::alphaDeviceSetPixel(selection->paintDevice(), 1, 1, MAX_SELECTED);
+    QVERIFY(TestUtil::alphaDevicePixel(selection->paintDevice(), 1, 1) == MAX_SELECTED);
+    TestUtil::alphaDeviceSetPixel(selection->paintDevice(), 1, 1, 128);
+    QVERIFY(TestUtil::alphaDevicePixel(selection->paintDevice(), 1, 1) == 128);
 }
 
 void KisPixelSelectionTest::testInvert()
@@ -70,8 +70,8 @@ void KisPixelSelectionTest::testInvert()
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
 
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 20, 20), MAX_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 6, 6), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 20, 20), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 6, 6), MIN_SELECTED);
     QCOMPARE(selection->selectedExactRect(), defaultBounds.bounds());
     QCOMPARE(selection->selectedRect(), defaultBounds.bounds());
 }
@@ -83,7 +83,7 @@ void KisPixelSelectionTest::testInvertWithImage()
     
     image->setGlobalSelection();
     image->globalSelection()->createPixelSelection();
-    KisSelectionComponent *selection = image->globalSelection()->pixelSelection();
+    KisSelectionComponentSP selection = image->globalSelection()->pixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 200, 200));
@@ -100,12 +100,12 @@ void KisPixelSelectionTest::testClear()
     selection->clear(QRect(5, 5, 200, 200));
 
 
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 0, 0), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 5, 5), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 10, 10), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 204, 204), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 205, 205), MAX_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 250, 250), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 0, 0), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 5, 5), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 10, 10), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 204, 204), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 205, 205), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 250, 250), MAX_SELECTED);
 
     // everything deselected
     selection->clear();
@@ -114,12 +114,12 @@ void KisPixelSelectionTest::testClear()
     // deselect a certain area
     selection->clear(QRect(5, 5, 200, 200));
 
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 0, 0), MAX_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 5, 5), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 10, 10), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 204, 204), MIN_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 205, 205), MAX_SELECTED);
-    QCOMPARE(TestUtil::alphaDevicePixel(selection, 250, 250), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 0, 0), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 5, 5), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 10, 10), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 204, 204), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 205, 205), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), 250, 250), MAX_SELECTED);
 }
 
 void KisPixelSelectionTest::testSelect()
@@ -128,7 +128,7 @@ void KisPixelSelectionTest::testSelect()
     selection->select(QRect(0, 0, 512, 441));
     for (int i = 0; i < 441; ++i) {
         for (int j = 0; j < 512; ++j) {
-            QCOMPARE(TestUtil::alphaDevicePixel(selection, j, i), MAX_SELECTED);
+            QCOMPARE(TestUtil::alphaDevicePixel(selection->paintDevice(), j, i), MAX_SELECTED);
         }
     }
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 512, 441));
@@ -198,7 +198,7 @@ void KisPixelSelectionTest::testExactRectWithImage()
 
     image->setGlobalSelection();
     image->globalSelection()->createPixelSelection();
-    KisSelectionComponent *selection = image->globalSelection()->pixelSelection();
+    KisSelectionComponentSP selection = image->globalSelection()->pixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }
@@ -210,7 +210,7 @@ void KisPixelSelectionTest::testUndo()
     KisPixelSelectionSP psel = new KisPixelSelection();
 
     {
-        KisTransaction transaction("", psel);
+        KisTransaction transaction("", psel->paintDevice());
         psel->select(QRect(50, 50, 100, 100));
         transaction.end();
     }
@@ -218,7 +218,7 @@ void KisPixelSelectionTest::testUndo()
     QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 100, 100));
 
     {
-        KisTransaction transaction("", psel);
+        KisTransaction transaction("", psel->paintDevice());
         psel->select(QRect(150, 50, 100, 100));
         transaction.end();
     }
@@ -226,8 +226,8 @@ void KisPixelSelectionTest::testUndo()
     QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 200, 100));
 
     {
-        KisTransaction transaction("", psel);
-        psel->crop(QRect(75, 75, 10, 10));
+        KisTransaction transaction("", psel->paintDevice());
+        psel->paintDevice()->crop(QRect(75, 75, 10, 10));
         transaction.revert();
     }
 

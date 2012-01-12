@@ -20,6 +20,8 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 
+#include <QPolygon>
+
 struct KisConstProcessingInformation::Private {
     Private() : device(0), selection(0) {}
     KisPaintDeviceSP device;

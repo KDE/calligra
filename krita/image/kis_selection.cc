@@ -38,7 +38,7 @@ struct KisSelection::Private {
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
-    KisSelectionComponent* shapeSelection;
+    KisSelectionComponentSP shapeSelection;
 
     KisPixelSelectionSP getProjection()
     {
@@ -143,20 +143,20 @@ QVector<QPolygon> KisSelection::outline() const
     return m_d->getProjection()->outline();
 }
 
-KisSelectionComponent *KisSelection::pixelSelection() const
+KisSelectionComponentSP KisSelection::pixelSelection() const
 {
-    return m_d->pixelSelection.data();
+    return m_d->pixelSelection;
 }
 
-KisSelectionComponent* KisSelection::shapeSelection() const
+KisSelectionComponentSP KisSelection::shapeSelection() const
 {
     return m_d->shapeSelection;
 }
 
-void KisSelection::setPixelSelection(KisSelectionComponent *pixelSelection)
+void KisSelection::setPixelSelection(KisSelectionComponentSP pixelSelection)
 {
-    if (dynamic_cast<KisPixelSelection*>(pixelSelection)) {
-        m_d->pixelSelection = static_cast<KisPixelSelection*>(pixelSelection);
+    if (dynamic_cast<KisPixelSelection*>(pixelSelection.data())) {
+        m_d->pixelSelection = static_cast<KisPixelSelection*>(pixelSelection.data());
     }
 }
 
@@ -173,7 +173,7 @@ KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice() const
     return m_d->pixelSelection->paintDevice();
 }
 
-void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
+void KisSelection::setShapeSelection(KisSelectionComponentSP shapeSelection)
 {
     m_d->shapeSelection = shapeSelection;
 }
@@ -199,7 +199,7 @@ void KisSelection::updateProjection(const QRect &rc)
 
     if(m_d->pixelSelection) {
         if(*(m_d->pixelSelection->paintDevice()->defaultPixel()) !=
-           *(currentProjection->defaultPixel())) {
+           *(currentProjection->paintDevice()->defaultPixel())) {
 
             quint8 defPixel = *(m_d->pixelSelection->paintDevice()->defaultPixel());
             currentProjection->paintDevice()->setDefaultPixel(&defPixel);
@@ -278,21 +278,21 @@ QRect KisSelection::selectedExactRect() const
 
 qint32 KisSelection::x() const
 {
-    return m_d->getProjection()->x();
+    return m_d->getProjection()->paintDevice()->x();
 }
 
 qint32 KisSelection::y() const
 {
-    return m_d->getProjection()->y();
+    return m_d->getProjection()->paintDevice()->y();
 }
 
 void KisSelection::setX(qint32 x)
 {
     KisPixelSelectionSP currentProjection = m_d->getProjection();
-    qint32 delta = x - currentProjection->x();
-    currentProjection->setX(x);
+    qint32 delta = x - currentProjection->paintDevice()->x();
+    currentProjection->paintDevice()->setX(x);
     if (m_d->pixelSelection) {
-        m_d->pixelSelection->setX(x);
+        m_d->pixelSelection->paintDevice()->setX(x);
     }
     if (m_d->shapeSelection) {
         m_d->shapeSelection->moveX(delta);
@@ -302,10 +302,10 @@ void KisSelection::setX(qint32 x)
 void KisSelection::setY(qint32 y)
 {
     KisPixelSelectionSP currentProjection = m_d->getProjection();
-    qint32 delta = y - currentProjection->y();
-    currentProjection->setY(y);
+    qint32 delta = y - currentProjection->paintDevice()->y();
+    currentProjection->paintDevice()->setY(y);
     if (m_d->pixelSelection) {
-        m_d->pixelSelection->setY(y);
+        m_d->pixelSelection->paintDevice()->setY(y);
     }
     if (m_d->shapeSelection) {
         m_d->shapeSelection->moveY(delta);
@@ -317,9 +317,9 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
     m_d->defaultBounds = bounds;
 
-    m_d->getProjection()->setDefaultBounds(bounds);
+    m_d->getProjection()->paintDevice()->setDefaultBounds(bounds);
     if(m_d->pixelSelection) {
-        m_d->pixelSelection->setDefaultBounds(bounds);
+        m_d->pixelSelection->paintDevice()->setDefaultBounds(bounds);
     }
 }
 
@@ -340,7 +340,7 @@ void KisSelection::clear()
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
-    KisHLineConstIteratorPixel iter = m_d->getProjection()->createHLineConstIterator(x, y, 1);
+    KisHLineConstIteratorPixel iter = m_d->getProjection()->paintDevice()->createHLineConstIterator(x, y, 1);
 
     const quint8 *pix = iter.rawData();
 

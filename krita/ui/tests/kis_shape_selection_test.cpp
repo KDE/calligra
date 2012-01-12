@@ -41,7 +41,7 @@ void KisShapeSelectionTest::testAddChild()
     QVERIFY(selection->hasPixelSelection() == false);
     QVERIFY(selection->hasShapeSelection() == false);
     selection->createPixelSelection();
-    KisSelectionComponent *pixelSelection = selection->pixelSelection();
+    KisSelectionComponentSP pixelSelection = selection->pixelSelection();
 
     pixelSelection->select(QRect(0, 0, 100, 100));
     // Selection is using the pixel selection as datamanager so no projection update

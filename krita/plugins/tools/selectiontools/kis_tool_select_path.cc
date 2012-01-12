@@ -185,22 +185,22 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
 
     if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
 
-        KisPixelSelection tmpSel;
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
-        KisPainter painter(&tmpSel);
+        KisPainter painter(tmpSel->paintDevice());
         painter.setBounds(m_selectingTool->currentImage()->bounds());
-        painter.setPaintColor(KoColor(Qt::black, tmpSel.colorSpace()));
+        painter.setPaintColor(KoColor(Qt::black, tmpSel->paintDevice()->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setOpacity(OPACITY_OPAQUE_U8);
-        painter.setCompositeOp(tmpSel.colorSpace()->compositeOp(COMPOSITE_OVER));
+        painter.setCompositeOp(tmpSel->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         QTransform matrix;
         matrix.scale(image->xRes(), image->yRes());
         matrix.translate(pathShape->position().x(), pathShape->position().y());
         painter.fillPainterPath(matrix.map(pathShape->outline()));
 
-        helper.selectPixelSelection(&tmpSel, m_selectingTool->m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
 
         delete pathShape;
     } else {

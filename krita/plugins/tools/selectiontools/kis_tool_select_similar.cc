@@ -59,13 +59,10 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     const KoColorSpace * cs = dev->colorSpace();
 
     KisHLineConstIterator hiter = dev->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = selection->createHLineIterator(x, y, w);
+    KisHLineIterator selIter = selection->paintDevice()->createHLineIterator(x, y, w);
 
     for (int row = y; row < y + h; ++row) {
         while (!hiter.isDone()) {
-            //if (dev->colorSpace()->hasAlpha())
-            //    opacity = dev->colorSpace()->alpha(hiter.rawData());
-
             quint8 match = cs->difference(c, hiter.rawData());
 
             if (match <= fuzziness) {
@@ -118,10 +115,10 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        KisPixelSelection tmpSel;
-        selectByColor(dev, &tmpSel, c.data(), m_fuzziness);
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
+        selectByColor(dev, tmpSel, c.data(), m_fuzziness);
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
-        helper.selectPixelSelection(&tmpSel, m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_selectAction);
 
         QApplication::restoreOverrideCursor();
     }
