@@ -50,7 +50,8 @@ void debugXml(const QString & pos, const KoXmlElement &element)
     QByteArray array;
     QDomDocument doc;
     QTextStream st(&array);
-    st << element.asQDomNode(doc);
+    KoXml::asQDomElement( doc, element);
+    st << doc.documentElement();
     kDebug() << pos << array;
 }
 
