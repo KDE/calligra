@@ -124,7 +124,6 @@ KisSelection &KisSelection::operator=(const KisSelection &rhs)
 
 KisSelection::~KisSelection()
 {
-    delete m_d->shapeSelection;
     delete m_d;
 }
 

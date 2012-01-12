@@ -64,7 +64,7 @@ void KisShapeSelectionTest::testAddChild()
     shape->close();
     shape->normalize();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(image, selection);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(image, selection);
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
