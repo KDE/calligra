@@ -55,9 +55,11 @@ kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 target_link_libraries(kopageapp komain textlayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
+if(NOT ANDROID)
 set_target_properties(kopageapp PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES

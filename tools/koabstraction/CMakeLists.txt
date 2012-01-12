@@ -36,9 +36,11 @@ target_link_libraries(koabstraction LINK_INTERFACE_LIBRARIES
     ${QT_LIBRARIES}
 )
 
+if(NOT ANDROID)
 set_target_properties(koabstraction PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS koabstraction ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

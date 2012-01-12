@@ -230,9 +230,11 @@ if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
 endif(HAVE_OPENGL)
 
+if(NOT ANDROID)
 set_target_properties(flake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 
 ########### install files ###############
 

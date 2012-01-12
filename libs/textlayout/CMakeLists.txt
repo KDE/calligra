@@ -36,9 +36,11 @@ kde4_add_library(textlayout SHARED ${textlayout_LIB_SRCS})
 target_link_libraries(textlayout kotext)
 target_link_libraries(textlayout LINK_INTERFACE_LIBRARIES kotext)
 
+if(NOT ANDROID)
 set_target_properties(textlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

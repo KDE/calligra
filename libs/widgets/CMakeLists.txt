@@ -85,9 +85,11 @@ endif(NEPOMUK)
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 
+if(NOT ANDROID)
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -71,9 +71,11 @@ if( QCA2_FOUND )
     target_link_libraries(koodf ${QCA2_LIBRARIES})
 endif( QCA2_FOUND )
 
+if(NOT ANDROID)
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 

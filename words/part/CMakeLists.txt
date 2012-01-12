@@ -101,9 +101,11 @@ if( Soprano_FOUND )
 endif( Soprano_FOUND )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
+if(NOT ANDROID)
 set_target_properties(wordsprivate
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### WordsPart Library ###############

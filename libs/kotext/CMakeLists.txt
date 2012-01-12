@@ -129,10 +129,12 @@ if( FREETYPE_FOUND )
     target_link_libraries(kotext ${FREETYPE_LIBRARIES})
 endif( FREETYPE_FOUND )
 
-
+if(NOT ANDROID)
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
+
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

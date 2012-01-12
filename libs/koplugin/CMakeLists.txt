@@ -9,8 +9,10 @@ kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})
 target_link_libraries(koplugin ${KDE4_KDECORE_LIBS})
 target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS})
 
+if(NOT ANDROID)
 set_target_properties(koplugin PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
+endif(NOT ANDROID)
 install(TARGETS koplugin ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
