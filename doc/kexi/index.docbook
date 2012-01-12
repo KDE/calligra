@@ -298,7 +298,7 @@
 </sect2>
 </sect1>
 <sect1 id="opening-an-existing-kexi-database-file"><title>Opening an existing Kexi database file</title> 
-<para>Ther are two ways to open an existing &kexi; database file:
+<para>There are two ways to open an existing &kexi; database file:
 </para>
 <sect2 id="opening-a-database-file-in-the-open-existing-project-dialog"><title>Opening a database file in the Open Project dialog</title> 
 <itemizedlist>
@@ -437,7 +437,7 @@
 <listitem><para><replaceable>house_number</replaceable></para></listitem>
 <listitem><para><replaceable>city</replaceable></para></listitem>
 </itemizedlist>
-<para>All the above fields, except <replaceable>house_number</replaceable>, are of type text. Change <replaceable>house_number</replaceable> field's type to integer number. To do this, click on a cell in the <guilabel>Data Type</guilabel> column, <replaceable>house_number</replaceable> row and then click on drop down list's button or press <keycap>F4</keycap>. The list of data types will appear. You can also use the arrow keys <keysym>Up</keysym> to select another typ. Select the <guilabel>Integer Number</guilabel> type.
+<para>All the above fields, except <replaceable>house_number</replaceable>, are of type text. Change <replaceable>house_number</replaceable> field's type to integer number. To do this, click on a cell in the <guilabel>Data Type</guilabel> column, <replaceable>house_number</replaceable> row and then click on drop down list's button or press <keycap>F4</keycap>. The list of data types will appear. You can also use the arrow keys <keysym>Up</keysym> and <keysym>Down</keysym> to select another type. Select the <guilabel>Integer Number</guilabel> type.
 </para>
 <para>From now on, the <replaceable>house_number</replaceable> field only accepts numbers.
 </para>
@@ -670,7 +670,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
 <sect2 id="inserting-text-labels"><title>Inserting text labels</title> 
 <para>To make it easier for the form's user to identify the meaning of every field widget, these should have added text labels with appropriate titles. To create text labels the <guilabel>Label</guilabel> widget is used.
 </para>
-<para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable> and <replaceable>Street</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and and increase the font size using <guilabel>Font</guilabel> in the <guilabel>Properties</guilabel> tab.
+<para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable> and <replaceable>Street</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and increase the font size using <guilabel>Font</guilabel> in the <guilabel>Properties</guilabel> tab.
 </para>
 </sect2>
 <sect2 id="actions"><title>Actions</title> 
