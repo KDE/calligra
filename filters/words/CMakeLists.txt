@@ -29,12 +29,12 @@ IF( HAVE_SYS_ICONV_H )
   SET( ICONV_COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} "-DHAVE_SYS_ICONV_H" )
 ENDIF( HAVE_SYS_ICONV_H )
 
-TRY_RUN( MODERN_ICONV_RUN MODERN_ICONV_COMPILE
-         ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp
-         ${CMAKE_SOURCE_DIR}/cmake/TestModernIconv.c
-         CMAKE_FLAGS "-DLINK_LIBRARIES:STRING=${ICONV_LIBRARIES}"
-                     "-DINCLUDE_DIRECTORIES:STRING=${ICONV_INCLUDE_DIR}"
-         COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} )
+#TRY_RUN( MODERN_ICONV_RUN MODERN_ICONV_COMPILE
+#         ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp
+#         ${CMAKE_SOURCE_DIR}/cmake/TestModernIconv.c
+#         CMAKE_FLAGS "-DLINK_LIBRARIES:STRING=${ICONV_LIBRARIES}"
+#                     "-DINCLUDE_DIRECTORIES:STRING=${ICONV_INCLUDE_DIR}"
+#         COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} )
 
 IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
   MESSAGE( STATUS "wv2 depends on a modern iconv installation, supporting UNICODELITTLE and" )
@@ -90,6 +90,6 @@ endif (NOT TINY)
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
-add_subdirectory(msword-odf)
+#add_subdirectory(msword-odf)
 
 add_subdirectory( docx )
