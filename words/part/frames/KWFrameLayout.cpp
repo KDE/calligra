@@ -401,17 +401,17 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case Words::OddPagesHeaderTextFrameSet:
         case Words::EvenPagesHeaderTextFrameSet: {
             header = frame;
-            minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight());
             minimumHeight[2] = pageStyle.headerDistance();
-            requestedHeight[1] = qMax(pageStyle.headerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
+            minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight() - pageStyle.headerDistance());
+            requestedHeight[1] = qMax(minimumHeight[1], textFrameSet->frames().first()->minimumFrameHeight());
             break;
         }
         case Words::OddPagesFooterTextFrameSet:
         case Words::EvenPagesFooterTextFrameSet: {
             footer = frame;
-            minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight());
             minimumHeight[4] = pageStyle.footerDistance();
-            requestedHeight[5] = qMax(pageStyle.footerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
+            minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight() - pageStyle.footerDistance());
+            requestedHeight[5] = qMax(minimumHeight[5], textFrameSet->frames().first()->minimumFrameHeight());
             break;
         }
         case Words::MainTextFrameSet: {

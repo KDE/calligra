@@ -46,14 +46,16 @@ void KWPageStylePrivate::clear()
     displayName.clear();
     headerDistance = 10; // ~3mm
     footerDistance = 10;
-    headerMinimumHeight = 0;
-    footerMinimumHeight = 0;
+    headerMinimumHeight = 10; // includes spacing
+    footerMinimumHeight = 10; // includes spacing
     headers = Words::HFTypeNone;
     footers = Words::HFTypeNone;
     pageUsage = KWPageStyle::AllPages;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
     direction = KoText::AutoDirection;
+    headerDynamicSpacing = false;
+    footerDynamicSpacing = false;
 
     if (fullPageBackground && !fullPageBackground->deref()) {
         delete fullPageBackground;
