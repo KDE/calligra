@@ -89,7 +89,7 @@ public:
     KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
-    virtual ~KisPaintDevice();
+    ~KisPaintDevice();
 
 protected:
     /**
@@ -108,12 +108,12 @@ public:
     /**
      * Write the pixels of this paint device into the specified file store.
      */
-    virtual bool write(KoStore *store);
+    bool write(KoStore *store);
 
     /**
      * Fill this paint device with the pixels from the specified file store.
      */
-    virtual bool read(KoStore *store);
+    bool read(KoStore *store);
 
 public:
 
@@ -126,7 +126,7 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
      /**
      * the default bounds rect of the paint device
@@ -136,12 +136,12 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    virtual void move(qint32 x, qint32 y);
+    void move(qint32 x, qint32 y);
 
     /**
      * Convenience method for the above
      */
-    virtual void move(const QPoint& pt);
+    void move(const QPoint& pt);
 
     /**
      * The X offset of the paint device
@@ -156,12 +156,12 @@ public:
     /**
      * set the X offset of the paint device
      */
-    virtual void setX(qint32 x);
+    void setX(qint32 x);
 
     /**
      * set the Y offset of the paint device
      */
-    virtual void setY(qint32 y);
+    void setY(qint32 y);
 
     /**
      * Retrieve the bounds of the paint device. The size is not exact,
@@ -173,7 +173,7 @@ public:
      * rect is united with the defaultBounds()->bounds() value
      * (the size of the image, usually).
      */
-    virtual QRect extent() const;
+    QRect extent() const;
 
     /// Convience method for the above
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
@@ -194,7 +194,7 @@ public:
      * </ul>
      * \see calculateExactBounds()
      */
-    virtual QRect exactBounds() const;
+    QRect exactBounds() const;
 
     /// Convience method for the above
     KDE_DEPRECATED void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
@@ -204,7 +204,7 @@ public:
      * For tiled data manager, it region will consist of a number
      * of rects each corresponding to a tile.
      */
-    virtual QRegion region() const;
+    QRegion region() const;
 
     /**
      * Cut the paint device down to the specified rect. If the crop
@@ -219,7 +219,7 @@ public:
      * Complete erase the current paint device. Its size will become 0. This
      * does not take the selection into account.
      */
-    virtual void clear();
+    void clear();
 
     /**
      * Clear the given rectangle to transparent black. The paint device will expand to
@@ -402,7 +402,7 @@ public:
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
      * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
+    void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -415,7 +415,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -425,7 +425,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile) const;
+    QImage convertToQImage(const KoColorProfile *  dstProfile) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -438,7 +438,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -450,12 +450,12 @@ public:
      * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
+    QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
+    QImage createThumbnail(qint32 maxw, qint32 maxh);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -520,12 +520,12 @@ public:
     /**
      * Return the number of bytes a pixel takes.
      */
-    virtual quint32 pixelSize() const;
+    quint32 pixelSize() const;
 
     /**
      * Return the number of channels a pixel takes
      */
-    virtual quint32 channelCount() const;
+    quint32 channelCount() const;
 
 public:
 
@@ -533,21 +533,21 @@ public:
      * Add the specified rect to the parent layer's set of dirty rects
      * (if there is a parent layer)
      */
-    virtual void setDirty(const QRect & rc);
+    void setDirty(const QRect & rc);
 
     /**
      *  Add the specified region to the parent layer's dirty region
      *  (if there is a parent layer)
      */
-    virtual void setDirty(const QRegion & region);
+    void setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
      *  as parent layer.
      */
-    virtual void setDirty();
+    void setDirty();
 
-    virtual void setDirty(const QVector<QRect> rects);
+    void setDirty(const QVector<QRect> rects);
 
 public:
 
