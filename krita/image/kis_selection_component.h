@@ -21,8 +21,9 @@
 #include <krita_export.h>
 
 #include "kis_selection.h"
+#include "kis_shared.h"
 
-class KRITAIMAGE_EXPORT KisSelectionComponent
+class KRITAIMAGE_EXPORT KisSelectionComponent : public KisShared
 {
 public:
     KisSelectionComponent() {}
@@ -81,5 +82,7 @@ public:
     virtual QVector<QPolygon> outline() const { return QVector<QPolygon>(); }
 
 };
+
+typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
 #endif
