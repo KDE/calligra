@@ -515,15 +515,14 @@ bool ReportView::loadXML( const QDomDocument &doc )
 
 bool ReportView::loadContext( const KoXmlElement &context )
 {
-    QDomDocument doc( "context" );
-    QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "planreportdefinition" );
+    KoXmlElement e = context.namedItem( "planreportdefinition" ).toElement();
     if ( e.isNull() ) {
-        // try to handle old definition
-        e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
+         e = context.namedItem( "kplatoreportdefinition" ).toElement();
     }
     if ( ! e.isNull() ) {
-        m_design = QDomDocument( "context" );
-        m_design.appendChild( e );
+        QDomDocument doc( "context" );
+        KoXml::asQDomElement( doc, e );
+        m_design = doc;
     } else kDebug()<<"Invalid context xml";
     slotRefreshView();
     return true;
