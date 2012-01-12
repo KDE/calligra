@@ -2375,12 +2375,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     m_currentTextStyle.removeProperty("style:text-underline-style");
     m_currentTextStyle.removeProperty("style:text-underline-width");
 
-    // The fo:font-size is applied to both the start of a new line and the
-    // end of the current line during layout, which affects line-height
-    // calculation and results in overlapping.  Avoid use of the application
-    // default font-size and font-size of the default text/paragraph style!
-    m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
-
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
     body->startElement("text:line-break");
