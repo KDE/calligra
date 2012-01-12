@@ -224,15 +224,18 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.setAutoStyleInStylesDotXml(true);
     pageLayout.addAttribute("style:page-usage", "all");
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter writer(&buffer);
-
     if (d->columns.columns > 1) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:columns");
         writer.addAttribute("fo:column-count", d->columns.columns);
         writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        pageLayout.addChildElement("columnsEnzo", contentElement);
     }
 
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
@@ -246,32 +249,40 @@ KoGenStyle KWPageStyle::saveOdf() const
 
     // TODO save background
 
-    QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-    pageLayout.addChildElement("columnsEnzo", contentElement);
 
-// the header/footer-style should be saved as a child of the style:page-layout; but using the
-// addChildElement its instead saved as a child of style:page-layout-properties  I can't follow why...
-// so lets disable this until I figure out how to save this in the right position in the tree.
-#if 0
     if (headerPolicy() != Words::HFTypeNone) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:header-style");
         writer.startElement("style:header-footer-properties");
-        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:min-height", headerMinimumHeight());
         writer.addAttributePt("fo:margin-bottom", headerDistance());
         // TODO there are quite some more properties we want to at least preserve between load and save
         writer.endElement();
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        // the 1_ 2_ is needed to get the correct order
+        pageLayout.addStyleChildElement("1_headerStyle", contentElement);
     }
     if (footerPolicy() != Words::HFTypeNone) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:footer-style");
         writer.startElement("style:header-footer-properties");
-        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:min-height", footerMinimumHeight());
         writer.addAttributePt("fo:margin-top", footerDistance());
         // TODO there are quite some more properties we want to at least preserve between load and save
         writer.endElement();
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        pageLayout.addStyleChildElement("2_footerStyle", contentElement);
     }
-#endif
 
     // TODO see how we should save margins if we use the 'closest to binding' stuff.
 
