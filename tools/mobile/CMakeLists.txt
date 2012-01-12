@@ -131,7 +131,11 @@ if(OPENSSL_FOUND AND LIBXML2_FOUND)
     )
 endif()
 
-if(NOT ANDROID)
+if(ANDROID)
+    list(APPEND CalligraMobile_SRCS
+        qtmain_android.cpp
+    )
+else()
     list(APPEND CalligraMobile_SRCS
         DBusAdaptor.cpp 
         MainWindowAdaptor.cpp 
@@ -153,7 +157,6 @@ else(ANDROID)
 endif(ANDROID)
 
 target_link_libraries(calligramobile
-    ${QT_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTNETWORK_LIBRARIES}
     koabstraction
@@ -167,6 +170,10 @@ if(Q_WS_X11)
     target_link_libraries(calligramobile
         ${X11_X11_LIB}
     )
+endif()
+
+if(ANDROID)
+    target_link_libraries(calligramobile log)
 endif()
 
 if(OPENSSL_FOUND AND LIBXML2_FOUND)
