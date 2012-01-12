@@ -45,7 +45,10 @@ if(QCA2_FOUND)
    target_link_libraries(msooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
-set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+if(NOT ANDROID)
+   set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+endif(NOT ANDROID)
+   
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 find_package(SharedMimeInfo)
