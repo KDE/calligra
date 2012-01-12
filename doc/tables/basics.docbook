@@ -313,9 +313,9 @@ to insert complete copied row(s) or column(s) into the worksheet.</para>
 row(s) or column(s) without affecting anything else.</para>
 
 <para>To delete everything in the selected cell(s), row(s) or column(s), 
-including comments and special formatting, use <keycombo action="simul">
-&Shift;<keysym>Del</keysym></keycombo> or choose the <guimenuitem>Delete</guimenuitem> 
-option from the <guimenu>Edit</guimenu> menu or from the pop 
+including comments and special formatting, choose the <guimenuitem>All</guimenuitem> 
+option from the <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu></menuchoice> 
+menu or from the pop 
 up menu you get when you <mousebutton>right</mousebutton> click on a selection.
 </para>
 <para>To remove selected row(s) or column(s) completely, use the  
@@ -597,8 +597,8 @@ printed then choosing <guimenuitem>Define Print Range</guimenuitem> from the
 </menuchoice> sub menu.</para>
 <para>&tables; will print as many pages as are necessary to include all
 items in the current worksheet. You can quickly see how a worksheet will be
-spilt into separate pages for printing by checking the <menuchoice><guimenu>
-View</guimenu>
+spilt into separate pages for printing by checking the <menuchoice>
+<guimenu>View</guimenu>
 <guimenuitem>Page Borders</guimenuitem></menuchoice> box. The boundaries
 of each printed page will then be marked by colored lines in the
 worksheet.</para>

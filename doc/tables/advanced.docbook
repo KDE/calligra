@@ -265,15 +265,10 @@ number of blank worksheets. The number of sheets it creates is determined
 by the selected template.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
 </menuchoice> will add another sheet to the document.</para>
-<para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
-</guilabel> page of &tables;'s configuration dialog box is checked a small 
-tab will be shown near the bottom left of &tables;'s window for each sheet. 
-<mousebutton>Left</mousebutton> click on one of these tabs to see that sheet.
-</para>
 <para>You can also switch between worksheets by using the 
-<keycombo action="simul">&Ctrl;<keysym>PageDown</keysym></keycombo> 
+<keycombo action="simul">&Ctrl;<keysym>PgDown</keysym></keycombo> 
 to move to the next sheet, 
-<keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
+<keycombo action="simul">&Ctrl;<keysym>PgUp</keysym></keycombo> to move to 
 the previous one.</para>
 <para>Worksheets are given the default names of <emphasis>Sheet1</emphasis>, 
 <emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
