@@ -34,7 +34,7 @@ class KisSelection;
  * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  */
-class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSelectionComponent
+class KRITAIMAGE_EXPORT KisPixelSelection : public KisSelectionComponent
 {
 
 public:
@@ -52,6 +52,8 @@ public:
 
     virtual ~KisPixelSelection();
 
+
+    KisPaintDeviceSP paintDevice() const;
 
 // KisSelectionComponent implementation
 public:

@@ -39,12 +39,13 @@
 #include "kis_outline_generator.h"
 
 struct KisPixelSelection::Private {
+    KisPaintDeviceSP paintDevice;
 };
 
 KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
-        : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
-        , m_d(new Private)
+        :  m_d(new Private)
 {
+    m_d->paintDevice = new KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds);
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
@@ -52,6 +53,11 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {
+}
+
+KisPaintDeviceSP KisPixelSelection::paintDevice() const
+{
+    return m_d->paintDevice;
 }
 
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
@@ -66,14 +72,12 @@ KisPixelSelection::~KisPixelSelection()
 
 KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
 {
-    KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, selection, rect);
+    KisPaintDeviceSP dev = m_d->paintDevice->createThumbnailDevice(w, h, selection, rect);
 
     QRect bounds = dev->exactBounds();
     KisHLineIteratorPixel it = dev->createHLineIterator(bounds.x(), bounds.y(), bounds.width());
 
     for (int y2 = bounds.y(); y2 < bounds.height() + bounds.y(); ++y2) {
-
         while (!it.isDone()) {
             *(it.rawData()) = MAX_SELECTED - *(it.rawData());
             ++it;
@@ -87,7 +91,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
 {
     QRect r = rc.normalized();
     if (r.width() > 0 && r.height() > 0) {
-        KisFillPainter painter(KisPaintDeviceSP(this));
+        KisFillPainter painter(m_d->paintDevice);
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
     }
@@ -120,7 +124,7 @@ void KisPixelSelection::applySelection(KisSelectionComponent *selection, Selecti
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorPixel dst = m_d->paintDevice->createHLineIterator(r.x(), r.y(), r.width());
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
@@ -140,7 +144,7 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorPixel dst = m_d->paintDevice->createHLineIterator(r.x(), r.y(), r.width());
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
@@ -161,7 +165,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect().united(selectedRect());
 
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorPixel dst = m_d->paintDevice->createHLineIterator(r.x(), r.y(), r.width());
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
@@ -178,7 +182,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 void KisPixelSelection::clear(const QRect & r)
 {
     if (*defaultPixel() != MIN_SELECTED) {
-        KisFillPainter painter(KisPaintDeviceSP(this));
+        KisFillPainter painter(m_d->paintDevice);
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
     } else {
@@ -189,29 +193,29 @@ void KisPixelSelection::clear(const QRect & r)
 void KisPixelSelection::clear()
 {
     quint8 defPixel = MIN_SELECTED;
-    setDefaultPixel(&defPixel);
-    KisPaintDevice::clear();
+    m_d->paintDevice->setDefaultPixel(&defPixel);
+    m_d->paintDevice->clear();
 }
 
 void KisPixelSelection::invert()
 {
     // Region is needed here (not exactBounds or extent), because
     // unselected but existing pixels need to be inverted too
-    QRect rc = region().boundingRect();
+    QRect rc = m_d->paintDevice->region().boundingRect();
 
-    KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
+    KisRectIterator it = m_d->paintDevice->createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
     while (! it.isDone()) {
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
 
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
-    setDefaultPixel(&defPixel);
+    m_d->paintDevice->setDefaultPixel(&defPixel);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
-    if (*defaultPixel() != MIN_SELECTED)
+    if (*m_d->paintDevice->defaultPixel() != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -251,7 +255,7 @@ void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QR
     if (updateRect.isValid()) {
         KisPainter painter(projection);
         painter.setCompositeOp(COMPOSITE_COPY);
-        painter.bitBlt(updateRect.topLeft(), KisPaintDeviceSP(this), updateRect);
+        painter.bitBlt(updateRect.topLeft(), m_d->paintDevice, updateRect);
         painter.end();
     }
 }
