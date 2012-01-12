@@ -98,16 +98,30 @@ void LindenmayerBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * 
 
 void LindenmayerBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
+    if(m_firstDab) {
+        m_firstDab = false;
+        m_leafs.append(new KisLindenmayerLetter(Eigen::Vector2f(x, y), Eigen::Vector2f(0, 1)));
+    }
+
+    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
+
+    for(int i=m_leafs.size()-1; i>=0; i--) {
+        m_leafs.at(i)->grow(0.1, m_leafs);
+    }
+
+    foreach (KisLindenmayerLetter* leaf, m_leafs) {
+        paintParticle(accessor, dev->colorSpace(), leaf->position(), color, 1);
+    }
+
     m_inkColor = color;
     m_counter++;
 
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
 
-    paintParticle(accessor, dev->colorSpace(), QPointF(x, y), color, 1);
-    paintParticle(accessor, dev->colorSpace(), QPointF(x, y+m_counter), color, 1);
+    //paintParticle(accessor, dev->colorSpace(), QPointF(x, y), color, 1);
+    //paintParticle(accessor, dev->colorSpace(), QPointF(x, y+m_counter), color, 1);
 
 
+//    qint32 pixelSize = dev->colorSpace()->pixelSize();
 //    qreal result;
 //    if (m_properties->inkDepletion){
 //        //count decrementing of saturation and opacity

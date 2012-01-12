@@ -4,6 +4,7 @@ set(kritalindenmayerpaintop_PART_SRCS
     kis_lindenmayerop_option.cpp
     kis_lindenmayer_paintop_settings.cpp
     kis_lindenmayer_paintop_settings_widget.cpp
+    kis_lindenmayer_letter.cpp
     lindenmayer_brush.cpp	
     )
 

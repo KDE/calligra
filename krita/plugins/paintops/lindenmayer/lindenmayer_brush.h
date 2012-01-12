@@ -25,6 +25,7 @@
 
 #include "kis_lindenmayerop_option.h"
 #include "kis_paint_device.h"
+#include "kis_lindenmayer_letter.h"
 
 class LindenmayerBrush
 {
@@ -46,7 +47,7 @@ private:
     int m_saturationId;
 
     bool m_firstDab;
-    QList<
+    QList<KisLindenmayerLetter*> m_leafs;
 
 };
 
