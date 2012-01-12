@@ -438,7 +438,7 @@ If you check the <guilabel>First row contains column headers</guilabel> or
 <guilabel>First column contains row headers</guilabel> box data in the 
 first row or column will not be included in the sort operation.</para>
 <para>The rows or columns are sorted in the specified order, which can be changed
-using the <guibutton>Move Up</guibutton> an <guibutton>Move Down</guibutton> buttons. 
+using the <guibutton>Move Up</guibutton> and <guibutton>Move Down</guibutton> buttons. 
 Using the example in the above screenshot, choosing column B as the first key and 
 column C as the second would sort the data by country and, for each country, 
 by height.</para>
