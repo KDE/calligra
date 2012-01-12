@@ -289,12 +289,6 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
     Q_ASSERT(fastBitBltPossible(src));
 }
 
-void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)
-{
-    prepareClone(src);
-    fastBitBlt(src, rect);
-}
-
 void KisPaintDevice::makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect)
 {
     prepareClone(src);

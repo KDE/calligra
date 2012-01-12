@@ -264,14 +264,6 @@ public:
     /**
      * Make this device to become a clone of \a src. It will have the same
      * x,y shifts, colorspace and will share pixels inside \a rect.
-     * After calling this function:
-     * (this->extent() >= this->exactBounds() == rect).
-     */
-    void makeCloneFrom(KisPaintDeviceSP src, const QRect &rect);
-
-    /**
-     * Make this device to become a clone of \a src. It will have the same
-     * x,y shifts, colorspace and will share pixels inside \a rect.
      * Be careful, this function will copy *at least* \a rect
      * of pixels. Actual copy area will be a bigger - it will
      * be aligned by tiles borders. So after calling this function:

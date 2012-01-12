@@ -152,8 +152,6 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     KisPainter copier(device);
     copier.bitBlt(outputArea.x(), outputArea.y(), bumpmapPaintDevice,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
-    //device->prepareClone(bumpmapPaintDevice);
-    //device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
     
     delete leaker;
     if (progressUpdater) progressUpdater->setProgress(100);
