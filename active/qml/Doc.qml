@@ -64,7 +64,7 @@ Item {
         Component.onCompleted: documentLoaded.connect(initToolbar)
         onDocumentLoaded: docRootRect.documentLoaded()
 
-        //searchString: findToolbar.searchString
+        searchString: findToolbar.searchString
     }
 
 //     Button {
@@ -80,14 +80,19 @@ Item {
 //         onClicked: toggleEdit();
 //     }
 // 
-//     FindToolbar {
-//         id: findToolbar
-//         height: 32
-//
-//         anchors.left: parent.left
-//         anchors.right: parent.right
-//         anchors.bottom: parent.bottom
-//     }
+    FindToolbar {
+        id: findToolbar
+        height: 32
+        z: 2
+        visible: (canvas.documentType == CADocumentInfo.TextDocument)
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        onFindNextRequested: canvas.findNext();
+        onFindPreviousRequested: canvas.findPrevious();
+    }
 
     MouseArea {
         id: flickableMouseArea

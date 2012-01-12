@@ -56,6 +56,7 @@
 #include <QtCore/QFileInfo>
 #include <KoFindText.h>
 #include <KoShapeManager.h>
+#include <KoResourceManager_p.h>
 
 /*!
 * extensions
@@ -691,15 +692,28 @@ void CanvasController::findMatchFound(const KoFindMatch &match)
     if (m_documentType != CADocumentInfo::TextDocument) {
         return;
     }
+
     QTextCursor cursor = match.location().value<QTextCursor>();
-    cursor.position();
     KWDocument *doc = qobject_cast<KWDocument*>(m_doc);
-    doc;
+    canvas()->canvasItem()->update();
+
+    canvas()->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
 void CanvasController::findNoMatchFound()
 {
     kDebug() << "FIND NO MATCH";
+}
+
+void CanvasController::findNext()
+{
+    m_find->findNext();
+}
+
+void CanvasController::findPrevious()
+{
+    m_find->findPrevious();
 }
 
 #include "CanvasController.moc"
