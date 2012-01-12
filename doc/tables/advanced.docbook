@@ -47,8 +47,8 @@ start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10,
 <para>&tables; also recognizes some special <quote>series</quote> such as
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
 (note the capitalization) then Drag and Copy it down. To see what special series 
-are available, and perhaps create your own, select <menuchoice><guimenu>Tools
-</guimenu><guimenuitem>Custom Lists...</guimenuitem></menuchoice> .</para>
+are available, and perhaps create your own, select <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>Custom Lists...</guimenuitem></menuchoice></para>
 
 <para>If you select a cell and choose <guimenuitem>Series...</guimenuitem> 
 from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series</guilabel> 
@@ -367,8 +367,8 @@ chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. The chart <interface>Tools
-Options</interface> should appear in the docker. You can then 
+click twice within the chart area. The chart <interface>Tools Options</interface> 
+should appear in the docker. You can then 
 use these tools to change the chart.</para>
 </sect1>
 
@@ -465,7 +465,7 @@ Handbook.</para>
 <para>Protecting the document means that without the password a user cannot add
 or delete sheets. Document protection does not protect cells.</para>
 <para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document...</guimenuitem></menuchoice>.
+Document...</guimenuitem></menuchoice>
 A dialog appears asking you for a password. The <guilabel>Password:</guilabel> strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure your password.</para>
