@@ -38,6 +38,7 @@
 #include "Region.h"
 #include "Cell.h"
 #include "Formula.h"
+#include "CellStorage.h"
 
 #include <KoDocument.h>
 
@@ -53,6 +54,7 @@ Value func_isdate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_iserr(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_iserror(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_islogical(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isna(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isnottext(valVector args, ValueCalc *calc, FuncExtra *);
@@ -96,6 +98,9 @@ InformationModule::InformationModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("ISEVEN", func_iseven);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN");
+    add(f);
+    f = new Function("ISFORMULA", func_isformula);
+    f->setNeedsExtra(true);
     add(f);
     f = new Function("ISLOGICAL", func_islogical);
     add(f);
@@ -295,6 +300,16 @@ Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
     if (args[0].isError())
         return args[0];
     return Value(calc->isEven(args[0]));
+}
+
+// Function: ISFORMULA
+Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    const Calligra::Tables::Region &region = e->regions[0];
+    QPoint p = region.firstRange().topLeft();
+    CellStorage *s = region.firstSheet()->cellStorage();
+    Formula formula = s->formula(p.x(), p.y());
+    return Value(formula.isValid());
 }
 
 // Function: ISERR

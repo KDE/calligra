@@ -77,6 +77,11 @@ void TestInformationFunctions::initTestCase()
      storage->setValue(1,30, Value( 2048 ) );
      storage->setValue(1,31, Value( 4096 ) );
 
+     // B1:B2
+     Formula formula(sheet);
+     formula.setExpression("=SUM(A19:A31)");
+     storage->setFormula(2,1, formula);
+     storage->setFormula(2,2, Formula::empty());
 
      // B3:B17
     storage->setValue(2, 3, Value("7"));
@@ -351,16 +356,12 @@ void TestInformationFunctions::testISEVEN()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN(2.5)", Value(true)); // alternate function name
 }
 
-/*
 void TestInformationFunctions::testISFORMULA()
 {
-    CHECK_EVAL( "ISFORMULA(B5)", Value( true  ) ); // Simple formulas that produce Number are still formulas
-    CHECK_EVAL( "ISFORMULA(B3)", Value( true  ) ); // Simple formulas that produce Text are still formulas
-    CHECK_EVAL( "ISFORMULA(C5)", Value( false ) ); // Cell constants are not formulas
-    CHECK_EVAL( "ISFORMULA(C7)", Value( false ) ); // Cell constants are not formulas, even if they are dates
-    CHECK_EVAL( "ISFORMULA(B9)", Value( true  ) ); // Formulas that return an error are still formulas
+    CHECK_EVAL( "ISFORMULA(B1)", Value( true  ) ); // B1 contains a simple SUM formula
+    CHECK_EVAL( "ISFORMULA(B2)", Value( false ) ); // Empty formula means no formula
+    CHECK_EVAL( "ISFORMULA(B3)", Value( false ) ); // Cell constants are not formulas
 }
-*/
 
 void TestInformationFunctions::testISLOGICAL()
 {

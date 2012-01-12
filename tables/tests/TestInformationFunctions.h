@@ -55,7 +55,7 @@ private slots:
     void testISERR();
     void testISERROR();
     void testISEVEN();
-    // void testISFORMULA();   // to be implemented
+    void testISFORMULA();
     void testISLOGICAL();
     void testISNONTEXT();
     void testISNA();
