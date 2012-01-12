@@ -106,6 +106,10 @@ target_link_libraries(
     pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${EXTRA_LIBRARIES}
 )
 
+if(ANDROID)
+  target_link_libraries(pigmentcms /home/marijn/android/necessitas/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/lib/gcc/arm-linux-androideabi/4.4.3/libgcc.a /home/marijn/tmp/_arm_fixunssfsi.o)
+endif(ANDROID)
+
 if(NOT ANDROID)
 set_target_properties(pigmentcms PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
