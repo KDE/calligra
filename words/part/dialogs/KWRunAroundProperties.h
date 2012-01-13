@@ -44,6 +44,8 @@ public:
     void open(KoShape *shape);
     /// reimplemented
     void save();
+    /// save but add to undo command if command != 0
+    void save(KUndo2Command *command);
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
