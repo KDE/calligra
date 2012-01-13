@@ -57,7 +57,7 @@ static const struct {
     { "style:header" },
     { "style:header-left" },
     { "style:footer" },
-    { "stype:footer-left" }
+    { "style:footer-left" }
 };
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet *fs)
