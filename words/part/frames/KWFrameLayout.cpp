@@ -404,6 +404,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             minimumHeight[2] = pageStyle.headerDistance();
             minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight() - pageStyle.headerDistance());
             requestedHeight[1] = qMax(minimumHeight[1], textFrameSet->frames().first()->minimumFrameHeight());
+            if (pageStyle.headerDynamicSpacing()) {
+                minimumHeight[2] = qMax((qreal)0, minimumHeight[1] - requestedHeight[1]);
+            }
             break;
         }
         case Words::OddPagesFooterTextFrameSet:
@@ -412,6 +415,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             minimumHeight[4] = pageStyle.footerDistance();
             minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight() - pageStyle.footerDistance());
             requestedHeight[5] = qMax(minimumHeight[5], textFrameSet->frames().first()->minimumFrameHeight());
+            if (pageStyle.headerDynamicSpacing()) {
+                minimumHeight[4] = qMax((qreal)0, minimumHeight[5] - requestedHeight[5]);
+            }
             break;
         }
         case Words::MainTextFrameSet: {
