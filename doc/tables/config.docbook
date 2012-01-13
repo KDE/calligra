@@ -40,7 +40,7 @@ shortcut, for example <keycombo action="simul">
 
 <sect1 id="configtoolbars">
 <title>Toolbars</title>
-<para>&tables; has five toolbars: <guilabel>File</guilabel>, 
+<para>&tables; has six toolbars: <guilabel>File</guilabel>, 
 <guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
 <guilabel>Format</guilabel>, <guilabel>Font</guilabel> and <guilabel>Color/Border</guilabel>.
 each of which may or may not be shown depending on the choices made in the 

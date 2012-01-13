@@ -36,8 +36,8 @@ which allow you to change many aspects of &tables;'s operation.</para>
 <term><guilabel>Cursor movement after pressing Enter:</guilabel></term>
 <listitem><para>Select whether pressing the &Enter; 
 key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
-<guilabel>Right</guilabel>, <guilabel>Left</guilabel> or <guilabel>Down, 
-First Column</guilabel> as determined by the setting in this drop down selection box.
+<guilabel>Right</guilabel>, <guilabel>Left</guilabel>, <guilabel>Down, 
+First Column</guilabel> or <guilabel>None</guilabel> as determined by the setting in this drop down selection box.
 </para></listitem>
 </varlistentry>
 

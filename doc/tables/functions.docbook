@@ -5,19 +5,19 @@
 <title>Supported Functions</title>
 <para>This chapter holds a brief overview of all supported functions in the following groups:</para>
 <simplelist>
-<member><link linkend="Bit-Operations">Bit Operations</link></member>
-<member><link linkend="Engineering">Engineering</link></member>
-<member><link linkend="Lookup---Reference">Lookup &amp; Reference</link></member>
-<member><link linkend="Financial">Financial</link></member>
-<member><link linkend="Statistical">Statistical</link></member>
-<member><link linkend="Conversion">Conversion</link></member>
-<member><link linkend="Information">Information</link></member>
-<member><link linkend="Text">Text</link></member>
-<member><link linkend="Database">Database</link></member>
-<member><link linkend="Logical">Logical</link></member>
-<member><link linkend="Trigonometric">Trigonometric</link></member>
-<member><link linkend="Date---Time">Date &amp; Time</link></member>
-<member><link linkend="Math">Math</link></member>
+<member><link linkend="Bit-Operations">Bit Operations</link>&nbsp;</member>
+<member><link linkend="Engineering">Engineering</link>&nbsp;</member>
+<member><link linkend="Lookup---Reference">Lookup &amp; Reference</link>&nbsp;</member>
+<member><link linkend="Financial">Financial</link>&nbsp;</member>
+<member><link linkend="Statistical">Statistical</link>&nbsp;</member>
+<member><link linkend="Conversion">Conversion</link>&nbsp;</member>
+<member><link linkend="Information">Information</link>&nbsp;</member>
+<member><link linkend="Text">Text</link>&nbsp;</member>
+<member><link linkend="Database">Database</link>&nbsp;</member>
+<member><link linkend="Logical">Logical</link>&nbsp;</member>
+<member><link linkend="Trigonometric">Trigonometric</link>&nbsp;</member>
+<member><link linkend="Date---Time">Date &amp; Time</link>&nbsp;</member>
+<member><link linkend="Math">Math</link>&nbsp;</member>
 </simplelist>
 <!--
 <para>OpenFormula groups (small, medium, and large, more)? Which are supported by Tables?</para>
@@ -44,7 +44,7 @@
 <listitem><para>BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 is binary 1010; and 1100 "anded" with 1010 is 1000, which is integer 8).</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BITOR">BITOR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BITOR">BITOR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -64,7 +64,7 @@
 <seglistitem><seg>Amount to left shift by</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BITLSHIFT">BITLSHIFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BITLSHIFT">BITLSHIFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -84,7 +84,7 @@
 <seglistitem><seg>Amount to right shift by</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BITLSHIFT">BITLSHIFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BITLSHIFT">BITLSHIFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -107,7 +107,7 @@
 <listitem><para>BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 is binary 1010; and 1100 "ored" with 1010 is 1110, which is integer 14).</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BITAND">BITAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BITAND">BITAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -130,7 +130,7 @@
 <listitem><para>BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 is binary 1010; and 1100 "xored" with 1010 is 0110, which is integer 6).</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BITAND">BITAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BITAND">BITAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -177,7 +177,7 @@
 <listitem><para>BESSELI(0.7;3) returns 0.007367374</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BESSELJ">BESSELJ</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BESSELJ">BESSELJ</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -200,7 +200,7 @@
 <listitem><para>BESSELJ(0.89;3) returns 0.013974004</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -223,7 +223,7 @@
 <listitem><para>BESSELK(3;9) returns 397.95880</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -246,7 +246,7 @@
 <listitem><para>BESSELY(4;2) equals 0.215903595</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BESSELI">BESSELI</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -302,7 +302,7 @@
 <listitem><para>ERF(0.4) equals 0.42839236</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ERFC">ERFC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ERFC">ERFC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -325,7 +325,7 @@
 <listitem><para>ERFC(0.4) equals 0.57160764</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ERF">ERF</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ERF">ERF</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1223,7 +1223,7 @@
 <listitem><para>COLUMN(A1) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COLUMNS">COLUMNS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COLUMNS">COLUMNS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1245,7 +1245,7 @@
 <listitem><para>COLUMNS(A1:C3) returns 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COLUMN">COLUMN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COLUMN">COLUMN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1308,7 +1308,7 @@
 <listitem><para>ROW(A1) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROWS">ROWS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROWS">ROWS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1330,7 +1330,7 @@
 <listitem><para>ROWS(A1:C3) returns 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROW">ROW</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROW">ROW</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1460,7 +1460,7 @@
 <listitem><para>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1; 1000; 2; 0) returns 16,944</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ACCRINTM">ACCRINTM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ACCRINTM">ACCRINTM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1486,7 +1486,7 @@
 <listitem><para>ACCRINTM("2/28/2001"; "8/31/2001"; 0.1; 100) returns 5.0278</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ACCRINT">ACCRINT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ACCRINT">ACCRINT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1511,7 +1511,7 @@
 <listitem><para>AMORDEGRC( 1000; "2006-02-01"; "2006-12-31"; 10; 0; 0.1; 1 ) returns 228</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="AMORLINC">AMORLINC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="AMORLINC">AMORLINC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1535,7 +1535,7 @@
 <listitem><para>AMORLINC( 1000; "2004-02-01"; "2004-12-31"; 10; 0; 0.1; 1 ) returns 91.256831</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="AMORDEGRC">AMORDEGRC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="AMORDEGRC">AMORDEGRC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1627,7 +1627,7 @@
 <listitem><para>CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -3562,187023</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="IPMT">IPMT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="IPMT">IPMT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1654,7 +1654,7 @@
 <listitem><para>CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="PPMT">PPMT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="PPMT">PPMT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1680,7 +1680,7 @@
 <listitem><para>DB(8000;400;6;3) equals 1158.40</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DDB">DDB</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DDB">DDB</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1706,7 +1706,7 @@
 <listitem><para>DDB(75000;1;60;12;2) returns 1721.81</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SLN">SLN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SLN">SLN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1732,7 +1732,7 @@
 <listitem><para>DISC("2/28/2001"; "8/31/2001"; 12; 14) returns 0.2841</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="YEARFRAC">YEARFRAC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="YEARFRAC">YEARFRAC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1755,7 +1755,7 @@
 <listitem><para>DOLLARDE(1.02; 16) - stands for 1 and 2/16 - returns 1.125</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DOLLARFR">DOLLARFR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DOLLARFR">DOLLARFR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1778,7 +1778,7 @@
 <listitem><para>DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DOLLARDE">DOLLARDE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DOLLARDE">DOLLARDE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1802,7 +1802,7 @@
 <listitem><para>DURATION(0.1; 1000; 2000) returns 7.27</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FV">FV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FV">FV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1829,7 +1829,7 @@
 <listitem><para>DURATION_ADD( "1998-01-01"; "2006-01-01"; 0.08; 0.09; 2; 1 ) returns 5.9937749555</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MDURATION">MDURATION</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MDURATION">MDURATION</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1852,7 +1852,7 @@
 <listitem><para>EFFECT(0.08;12) equals 0.083</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EFFECTIVE">EFFECTIVE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EFFECTIVE">EFFECTIVE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1872,7 +1872,7 @@
 <seglistitem><seg>Periods</seg><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EFFECT">EFFECT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EFFECT">EFFECT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1894,7 +1894,7 @@
 <listitem><para>EURO("DEM") equals 1.95583</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EUROCONVERT">EUROCONVERT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EUROCONVERT">EUROCONVERT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1918,7 +1918,7 @@
 <listitem><para>EUROCONVERT(1; "EUR"; "DEM") equals 1.95583</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EURO">EURO</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EURO">EURO</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -1942,7 +1942,7 @@
 <listitem><para>FV(1000;0.08;2) equals 1166.40</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="PV">PV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="PV">PV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2021,7 +2021,7 @@
 <listitem><para>IPMT(0.1;3;3;8000) equals -292.45</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="PPMT">PPMT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="PPMT">PPMT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2041,7 +2041,7 @@
 <seglistitem><seg>Guess</seg><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="XIRR">XIRR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="XIRR">XIRR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2070,7 +2070,7 @@
 <listitem><para>ISPMT(0.1; 1; 3; 8000000) equals -533333</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="PV">PV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="PV">PV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2120,7 +2120,7 @@
 <listitem><para>MDURATION("2004-02-01"; "2004-05-31"; 0.08; 0.09; 2; 0) returns 0.316321106</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DURATION">DURATION</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DURATION">DURATION</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2144,7 +2144,7 @@
 <listitem><para>MIRR({100;200;-50;300;-200}, 5%, 6%) equals 34.2823387842%</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="IRR">IRR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="IRR">IRR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2167,7 +2167,7 @@
 <listitem><para>NOMINAL(0.08;12) equals 0.0772</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EFFECT">EFFECT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EFFECT">EFFECT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2193,7 +2193,7 @@
 <listitem><para>NPER(0.1; -100; 1000) equals 11</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FV">FV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FV">FV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2219,7 +2219,7 @@
 <listitem><para>NPV(100%;4;5;7) = 4.125</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FV">FV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FV">FV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2274,7 +2274,7 @@
 <listitem><para>ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2) returns 4.997775351</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ODDLPRICE">ODDLPRICE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ODDLPRICE">ODDLPRICE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2300,7 +2300,7 @@
 <listitem><para>PMT(0.1; 4; 10000) equals -3154.71</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="NPER">NPER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="NPER">NPER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2333,7 +2333,7 @@
 <listitem><para>PPMT(0.0875;1;36;5000;8000;1) equals -18.48</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="IPMT">IPMT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="IPMT">IPMT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2452,7 +2452,7 @@
 <listitem><para>RRI(1;100;200) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FV">FV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FV">FV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2477,7 +2477,7 @@
 
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SYD">SYD</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SYD">SYD</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2502,7 +2502,7 @@
 <listitem><para>SYD(5000; 200; 5; 2) equals 1280</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SLN">SLN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SLN">SLN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2526,7 +2526,7 @@
 <listitem><para>TBILLEQ("2/28/2001"; "8/31/2001"; 0.1) returns 0.1068</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TBILLPRICE">TBILLPRICE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TBILLPRICE">TBILLPRICE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2550,7 +2550,7 @@
 <listitem><para>TBILLPRICE("2/28/2001"; "8/31/2001"; 0.05) returns 97.4444</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TBILLEQ">TBILLEQ</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TBILLEQ">TBILLEQ</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2574,7 +2574,7 @@
 <listitem><para>TBILLYIELD("2/28/2001"; "8/31/2001"; 600) returns -1.63</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TBILLEQ">TBILLEQ</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TBILLEQ">TBILLEQ</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2621,7 +2621,7 @@
 <listitem><para>XIRR(B1:B4;C1:C4) Suppose B1:B4 contains -20000, 4000, 12000, 8000 while C1:C4 contains "=DATE(2000;1;1)", "=DATE(2000;6;1)", "=DATE(2000;12;30)", "=DATE(2001;3;1)" returns 0.2115964</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="IRR">IRR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="IRR">IRR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2645,7 +2645,7 @@
 <listitem><para>XNPV(5%;B1:B4;C1:C4) suppose B1:B4 contains -20000, 4000, 12000, 8000 while C1:C4 contains "=DATE(2000;1;1)", "=DATE(2000;6;1)", "=DATE(2000;12;30)", "=DATE(2001;3;1)" returns 2907.83187</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="NPV">NPV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="NPV">NPV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -2937,7 +2937,7 @@
 <listitem><para>CORREL(A1:A3; B1:B3)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="PEARSON">PEARSON</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="PEARSON">PEARSON</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3196,7 +3196,7 @@
 <listitem><para>GEOMEAN(A1:A5)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="HARMEAN">HARMEAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="HARMEAN">HARMEAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3222,7 +3222,7 @@
 <listitem><para>HARMEAN(A1:A5)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="GEOMEAN">GEOMEAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="GEOMEAN">GEOMEAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3287,7 +3287,7 @@
 <listitem><para>KURT(A1:A5)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="KURTP">KURTP</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="KURTP">KURTP</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3313,7 +3313,7 @@
 <listitem><para>KURTP(A1:A5)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="KURT">KURT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="KURT">KURT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3571,7 +3571,7 @@
 <listitem><para>PEARSON(A1:A3; B1:B3)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CORREL">CORREL</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CORREL">CORREL</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3631,7 +3631,7 @@
 <seglistitem><seg>The percentile value between 0 and 1, inclusive.</seg><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MEDIAN">MEDIAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MEDIAN">MEDIAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3740,7 +3740,7 @@
 <listitem><para>SKEW(11.4; 17.3; 21.3; 25.9; 40.1) returns 0.9768</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SKEWP">SKEWP</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SKEWP">SKEWP</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3765,7 +3765,7 @@
 <listitem><para>SKEWP(11.4; 17.3; 21.3; 25.9; 40.1) returns 0.6552</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SKEW">SKEW</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SKEW">SKEW</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3849,7 +3849,7 @@
 <listitem><para>STDEV(6;7;8) equals 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="STDEVP">STDEVP</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="STDEVP">STDEVP</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3875,7 +3875,7 @@
 <listitem><para>STDEVA(6; 7; A1; 8) equals 1, if A1 is empty</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="STDEV">STDEV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="STDEV">STDEV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3901,7 +3901,7 @@
 <listitem><para>STDEVP(6;7;8) equals 0.816497...</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="STDEV">STDEV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="STDEV">STDEV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -3927,7 +3927,7 @@
 <listitem><para>STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="STDEV">STDEV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="STDEV">STDEV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4123,7 +4123,7 @@
 <listitem><para>VAR(12;5;7) equals 13</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="VARIANCE">VARIANCE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="VARIANCE">VARIANCE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4149,7 +4149,7 @@
 <listitem><para>VARA(12;5;7) equals 13</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="VAR">VAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="VAR">VAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4175,7 +4175,7 @@
 <listitem><para>VARIANCE(12;5;7) equals 13</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="VAR">VAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="VAR">VAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4201,7 +4201,7 @@
 <listitem><para>VARP(12;5;7) equals 8.666...</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="VAR">VAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="VAR">VAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4227,7 +4227,7 @@
 <listitem><para>VARPA(12;5;7) equals 8.666...</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="VAR">VAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="VAR">VAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4402,7 +4402,7 @@
 <listitem><para>INT2BOOL(1) returns true</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="BOOL2INT">BOOL2INT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="BOOL2INT">BOOL2INT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4424,7 +4424,7 @@
 <listitem><para>BOOL2INT(True) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="INT2BOOL">INT2BOOL</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="INT2BOOL">INT2BOOL</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4446,7 +4446,7 @@
 <listitem><para>NUM2STRING(10) returns "10"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="STRING">STRING</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="STRING">STRING</link>&nbsp;</member></simplelist></listitem>
 
 </varlistentry>
 </variablelist>
@@ -4466,7 +4466,7 @@
 <seglistitem><seg>Number to convert into string</seg><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="NUM2STRING">NUM2STRING</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="NUM2STRING">NUM2STRING</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4527,7 +4527,7 @@
 <listitem><para>POLR(12;12) returns 16.9705</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="POLA">POLA</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="POLA">POLA</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4550,7 +4550,7 @@
 <listitem><para>POLA(12;12) returns 0.78539816</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="POLR">POLR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="POLR">POLR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4573,7 +4573,7 @@
 <listitem><para>CARX(12;1.5707) returns 0.00115592</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CARY">CARY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CARY">CARY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4636,7 +4636,7 @@
 <listitem><para>CARY(12;1.5707) returns 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CARX">CARX</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CARX">CARX</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4659,7 +4659,7 @@
 <listitem><para>ROMAN(99) returns "XCIX"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ARABIC">ARABIC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ARABIC">ARABIC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4681,7 +4681,7 @@
 <listitem><para>ARABIC("IV") returns 4</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROMAN">ROMAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROMAN">ROMAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4817,7 +4817,7 @@
 <listitem><para>ISNUMBER(12) returns True</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISNUM">ISNUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISNUM">ISNUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4839,7 +4839,7 @@
 <listitem><para>ISNUM(12) returns True</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISNUMBER">ISNUMBER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISNUMBER">ISNUMBER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4937,7 +4937,7 @@
 <listitem><para>ISNONTEXT(12) returns True</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISNOTTEXT">ISNOTTEXT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISNOTTEXT">ISNOTTEXT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -4960,7 +4960,7 @@
 <listitem><para>ISNOTTEXT(12) returns True</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISNONTEXT">ISNONTEXT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISNONTEXT">ISNONTEXT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5017,7 +5017,7 @@
 <seglistitem><seg>Any value</seg><seg>Any kind of value</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISERROR">ISERROR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISERROR">ISERROR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5036,7 +5036,7 @@
 <seglistitem><seg>Any value</seg><seg>Any kind of value</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISERR">ISERR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISERR">ISERR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5055,7 +5055,7 @@
 <seglistitem><seg>Any value</seg><seg>Any kind of value</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISERR">ISERR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISERR">ISERR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5073,7 +5073,7 @@
 <listitem><para></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISNA">ISNA</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISNA">ISNA</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5176,7 +5176,7 @@
 <listitem><para>SUBSTITUTE("Cost Data";"Cost";"Sales") returns "Sales Data"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="REPLACE">REPLACE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="REPLACE">REPLACE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5202,7 +5202,7 @@
 <listitem><para>SEARCH("e";"Statements";6) returns 7</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FIND">FIND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FIND">FIND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5225,7 +5225,7 @@
 <seglistitem><seg>Specified byte position to start the search</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FINDB">FINDB</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FINDB">FINDB</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5306,7 +5306,7 @@
 <listitem><para>COMPARE("Calligra"; "Calligra"; true) returns 0</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EXACT">EXACT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EXACT">EXACT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5329,7 +5329,7 @@
 <listitem><para>EXACT("Calligra";"Calligra") returns True</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COMPARE">COMPARE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COMPARE">COMPARE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5354,7 +5354,7 @@
 <listitem><para>REPLACE("abcdefghijk";6;5;"-") returns "abcde-k"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FIND">FIND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FIND">FIND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5376,7 +5376,7 @@
 <seglistitem><seg>The text that will replace characters in old text</seg><seg>Text</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FINDB">FINDB</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FINDB">FINDB</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5402,7 +5402,7 @@
 <listitem><para>FIND("Cal";"Calligra") returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FINDB">FINDB</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FINDB">FINDB</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5424,7 +5424,7 @@
 <seglistitem><seg>Specifies byte position to start the search</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FIND">FIND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FIND">FIND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5449,7 +5449,7 @@
 <listitem><para>MID("Calligra";2;3) returns "all"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LEFT">LEFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LEFT">LEFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5470,7 +5470,7 @@
 <seglistitem><seg>Byte Length</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LEFT">LEFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LEFT">LEFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5492,7 +5492,7 @@
 <listitem><para>LEN("hello") returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LENB">LENB</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LENB">LENB</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5573,7 +5573,7 @@
 <listitem><para>RIGHT("hello";2) returns "lo"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LEFT">LEFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LEFT">LEFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5593,7 +5593,7 @@
 <seglistitem><seg>Byte Length</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LEFT">LEFT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LEFT">LEFT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5616,7 +5616,7 @@
 <listitem><para>LEFT("hello";2) returns "he"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RIGHT">RIGHT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RIGHT">RIGHT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5636,7 +5636,7 @@
 <seglistitem><seg>Byte Length</seg><seg>Whole number (like 1, 132, 2344)</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RIGHT">RIGHT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RIGHT">RIGHT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5698,7 +5698,7 @@
 <listitem><para>TOGGLE("hello") returns "HELLO"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="UPPER">UPPER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="UPPER">UPPER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5739,7 +5739,7 @@
 <listitem><para>SLEEK("This is   some  text ") returns "Thisissometext"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TRIM">TRIM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TRIM">TRIM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5761,7 +5761,7 @@
 <listitem><para>UPPER("hello") returns "HELLO"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LOWER">LOWER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LOWER">LOWER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5783,7 +5783,7 @@
 <listitem><para>LOWER("hello") returns "hello"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="UPPER">UPPER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="UPPER">UPPER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5805,7 +5805,7 @@
 <listitem><para>CHAR(65) returns "A"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CODE">CODE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CODE">CODE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5827,7 +5827,7 @@
 <listitem><para>CODE("KDE") returns 75</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CHAR">CHAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CHAR">CHAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5913,7 +5913,7 @@
 <listitem><para>UNICODE("KDE") returns 75</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="UNICHAR">UNICHAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="UNICHAR">UNICHAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5936,7 +5936,7 @@
 <listitem><para>UNICHAR(65) returns "A"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="UNICODE">UNICODE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="UNICODE">UNICODE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5955,7 +5955,7 @@
 <seglistitem><seg>Full width characters</seg><seg>Text</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="JIS">JIS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="JIS">JIS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -5974,7 +5974,7 @@
 <seglistitem><seg>Half-width characters</seg><seg>Text</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ASC">ASC</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ASC">ASC</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6062,7 +6062,7 @@
 <listitem><para>DCOUNT(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DCOUNTA">DCOUNTA</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DCOUNTA">DCOUNTA</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6086,7 +6086,7 @@
 <listitem><para>DCOUNTA(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DCOUNT">DCOUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DCOUNT">DCOUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6131,7 +6131,7 @@
 <listitem><para>DMAX(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DMIN">DMIN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DMIN">DMIN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6155,7 +6155,7 @@
 <listitem><para>DMIN(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DMAX">DMAX</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DMAX">DMAX</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6200,7 +6200,7 @@
 <listitem><para>DSTDEV(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DSTDEVP">DSTDEVP</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DSTDEVP">DSTDEVP</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6224,7 +6224,7 @@
 <listitem><para>DSTDEVP(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DSTDEV">DSTDEV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DSTDEV">DSTDEV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6248,7 +6248,7 @@
 <listitem><para>DVAR(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DVARP">DVARP</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DVARP">DVARP</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6272,7 +6272,7 @@
 <listitem><para>DVARP(A1:C5; "Salary"; A9:A11)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DVAR">DVAR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DVAR">DVAR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6295,7 +6295,7 @@
 </sect3>
 
 </sect2><sect2 id="Logical">
-<title> </title>
+<title>Logical</title>
 
 <sect3 id="FALSE">
 <title>FALSE</title>
@@ -6490,7 +6490,7 @@
 </sect3>
 
 </sect2><sect2 id="Trigonometric">
-<title> </title>
+<title>Trigonometric</title>
 
 <sect3 id="COS">
 <title>COS</title>
@@ -6509,7 +6509,7 @@
 <listitem><para>COS(0) equals 1.0</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SIN">SIN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SIN">SIN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6550,7 +6550,7 @@
 <listitem><para>SIN(0) equals 0</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COS">COS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COS">COS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6572,7 +6572,7 @@
 <listitem><para>TAN(0.7) equals 0.84228838</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ATAN">ATAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ATAN">ATAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6594,7 +6594,7 @@
 <listitem><para>ACOS(0.8) equals 0.6435011</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COS">COS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COS">COS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6616,7 +6616,7 @@
 <listitem><para>ASIN(0.8) equals 0.92729522</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SIN">SIN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SIN">SIN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6638,7 +6638,7 @@
 <listitem><para>ATAN(0.8) equals 0.67474094</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TAN">TAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TAN">TAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6660,7 +6660,7 @@
 <listitem><para>COSH(0.8) equals 1.33743495</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ACOSH">ACOSH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ACOSH">ACOSH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6682,7 +6682,7 @@
 <listitem><para>SINH(0.8) equals 0.88810598</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ASINH">ASINH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ASINH">ASINH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6704,7 +6704,7 @@
 <listitem><para>TANH(0.8) equals 0.66403677</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ATANH">ATANH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ATANH">ATANH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6726,7 +6726,7 @@
 <listitem><para>ACOSH(5) equals 2.29243167</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COSH">COSH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COSH">COSH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6748,7 +6748,7 @@
 <listitem><para>ASINH(0.8) equals 0.73266826</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SINH">SINH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SINH">SINH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6770,7 +6770,7 @@
 <listitem><para>ATANH(0.8) equals 1.09861229</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TANH">TANH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TANH">TANH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6793,7 +6793,7 @@
 <listitem><para>ATAN2(0.5;1.0) equals 1.107149</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ATAN">ATAN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ATAN">ATAN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6815,7 +6815,7 @@
 <listitem><para>DEGREES(0.78) equals 44.69</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RADIANS">RADIANS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RADIANS">RADIANS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6837,7 +6837,7 @@
 <listitem><para>RADIANS(75) equals 1.308</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DEGREES">DEGREES</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DEGREES">DEGREES</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6958,7 +6958,7 @@
 <listitem><para>WEEKDAY("2002-02-22"; 2) returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DAYNAME">DAYNAME</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DAYNAME">DAYNAME</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -6982,7 +6982,7 @@
 <listitem><para>DAYS360("2/22/2002"; "4/21/2002"; FALSE) returns 59</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DAYS">DAYS</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DAYS">DAYS</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7004,7 +7004,7 @@
 <listitem><para>TIMEVALUE("10:05:02") returns 0.42</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DATEVALUE">DATEVALUE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DATEVALUE">DATEVALUE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7026,7 +7026,7 @@
 <listitem><para>DATEVALUE("2/22/2002") returns 37309</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="TIMEVALUE">TIMEVALUE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="TIMEVALUE">TIMEVALUE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7049,7 +7049,7 @@
 <listitem><para>EDATE("2/22/2002"; 3) returns "5/22/2002"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DATE">DATE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DATE">DATE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7072,7 +7072,7 @@
 <listitem><para>EOMONTH("2/22/2002"; 3) returns "5/31/2002"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EDATE">EDATE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EDATE">EDATE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7094,7 +7094,7 @@
 <listitem><para>YEAR("2/22/2002") returns 2002</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DAY">DAY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DAY">DAY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7116,7 +7116,7 @@
 <listitem><para>MONTH("2/22/2002") returns 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DAY">DAY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DAY">DAY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7138,7 +7138,7 @@
 <listitem><para>DAY("2/22/2002") returns 22</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MONTH">MONTH</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MONTH">MONTH</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7160,7 +7160,7 @@
 <listitem><para>HOUR("22:10:12") returns 22</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MINUTE">MINUTE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MINUTE">MINUTE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7182,7 +7182,7 @@
 <listitem><para>MINUTE("22:10:12") returns 10</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="HOUR">HOUR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="HOUR">HOUR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7204,7 +7204,7 @@
 <listitem><para>SECOND("22:10:12") returns 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="HOUR">HOUR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="HOUR">HOUR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7507,7 +7507,7 @@
 <listitem><para>DAYNAME(1) returns Monday (if the week starts on Monday)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="WEEKDAY">WEEKDAY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="WEEKDAY">WEEKDAY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7547,7 +7547,7 @@
 <listitem><para>CURRENTDATE() returns "Saturday 13 April 2002"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7568,7 +7568,7 @@
 <listitem><para>TODAY() returns "Saturday 13 April 2002"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7589,7 +7589,7 @@
 <listitem><para>NOW() returns "Saturday 13 April 2002 19:12:01"</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CURRENTTIME">CURRENTTIME</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7666,7 +7666,7 @@
 <listitem><para>ISOWEEKNUM(A1) returns 51 when A1 is "21st of Dec".</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="WEEKNUM">WEEKNUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="WEEKNUM">WEEKNUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7689,7 +7689,7 @@
 <listitem><para>WEEKNUM(A1; 1) returns 11 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Sunday (1, this is the default if Method is omitted.)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ISOWEEKNUM">ISOWEEKNUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ISOWEEKNUM">ISOWEEKNUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7840,7 +7840,7 @@
 <listitem><para>If A1:A5 contains 7, 24, 23, 56 and 9:</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="AVERAGE">AVERAGE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="AVERAGE">AVERAGE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7885,7 +7885,7 @@
 <listitem><para>LCM(6;4) returns 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="GCD">GCD</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="GCD">GCD</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7909,7 +7909,7 @@
 <listitem><para>GCD(6;4) returns 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LCM">LCM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LCM">LCM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7951,7 +7951,7 @@
 <listitem><para>POWER(1.2;3.4) equals 1.8572</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="POW">POW</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="POW">POW</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7974,7 +7974,7 @@
 <listitem><para>POW(1.2;3.4) equals 1.8572</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="POWER">POWER</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="POWER">POWER</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -7996,7 +7996,7 @@
 <listitem><para>EVEN(1.2) returns 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ODD">ODD</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ODD">ODD</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8019,7 +8019,7 @@
 <listitem><para>TRUNC(1.2) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROUND">ROUND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROUND">ROUND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8041,7 +8041,7 @@
 <listitem><para>ODD(1.2) returns 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="EVEN">EVEN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="EVEN">EVEN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8063,7 +8063,7 @@
 <listitem><para>GAMMA(1) returns 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FACT">FACT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FACT">FACT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8086,7 +8086,7 @@
 <listitem><para>MOD(12;5) returns 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DIV">DIV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DIV">DIV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8146,7 +8146,7 @@
 <listitem><para>COUNT(-5;"KSpread";2) returns 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNTA">COUNTA</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNTA">COUNTA</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8168,7 +8168,7 @@
 <listitem><para>COUNTA(-5;"KSpread";2) returns 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8190,7 +8190,7 @@
 <listitem><para>COUNTBLANK(A1:B5)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8213,7 +8213,7 @@
 <listitem><para>COUNTIF(A2:A3;"14") returns 1 if A2 is -4 and A3 is 14</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8273,7 +8273,7 @@
 <listitem><para>SUM(12;5;7) equals 24</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SUMA">SUMA</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SUMA">SUMA</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8295,7 +8295,7 @@
 <listitem><para>SUMA(12;5; 7) equals 24</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SUM">SUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SUM">SUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8319,7 +8319,7 @@
 <listitem><para>SUMIF(A1:A4;">1") sums all values in range A1:A4 which match >1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SUM">SUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SUM">SUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8341,7 +8341,7 @@
 <listitem><para>PRODUCT(3;5;7) equals 105</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MULTIPLY">MULTIPLY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MULTIPLY">MULTIPLY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8363,7 +8363,7 @@
 <listitem><para>KPRODUCT(3;5;7) equals 105</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="G_PRODUCT">G_PRODUCT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="G_PRODUCT">G_PRODUCT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8382,7 +8382,7 @@
 <seglistitem><seg>Values</seg><seg>FLOAT</seg></seglistitem></segmentedlist></para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="KPRODUCT">KPRODUCT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="KPRODUCT">KPRODUCT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8404,7 +8404,7 @@
 <listitem><para>DIV(20;2;2) returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MULTIPLY">MULTIPLY</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MULTIPLY">MULTIPLY</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8427,7 +8427,7 @@
 <listitem><para>SUMSQ(12;5;7) equals 218</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SUM">SUM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SUM">SUM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8449,7 +8449,7 @@
 <listitem><para>MAX(12;5; 7) returns 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8471,7 +8471,7 @@
 <listitem><para>MAXA(12;5; 7) returns 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8493,7 +8493,7 @@
 <listitem><para>MIN(12;5; 7) returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8515,7 +8515,7 @@
 <listitem><para>MINA(12;5; 7) returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="COUNT">COUNT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="COUNT">COUNT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8537,7 +8537,7 @@
 <listitem><para>MULTIPLY(12;5;7) equals 420</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="DIV">DIV</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="DIV">DIV</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8579,7 +8579,7 @@
 <listitem><para>SQRT(9) equals 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="IMSQRT">IMSQRT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="IMSQRT">IMSQRT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8620,7 +8620,7 @@
 <listitem><para>LN(0.8) equals -0.22314355</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LOG">LOG</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LOG">LOG</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8643,7 +8643,7 @@
 <listitem><para>LOGn(12;10) equals 1.07918125</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LOG">LOG</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LOG">LOG</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8666,7 +8666,7 @@
 <listitem><para>ROOTN(9;2) equals 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SQRT">SQRT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SQRT">SQRT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8688,7 +8688,7 @@
 <listitem><para>CUR(27) equals 3</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="SQRT">SQRT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="SQRT">SQRT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8710,7 +8710,7 @@
 <listitem><para>LOG(0.8) equals -0.09691001</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LN">LN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LN">LN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8732,7 +8732,7 @@
 <listitem><para>LOG10(10) equals 1.</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LN">LN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LN">LN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8754,7 +8754,7 @@
 <listitem><para>LOG2(0.8) equals -0.32192809</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LN">LN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LN">LN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8776,7 +8776,7 @@
 <listitem><para>EXP(9) equals 8 103.08392758</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="LN">LN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="LN">LN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8798,7 +8798,7 @@
 <listitem><para>CEIL(12.5) equals 13</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CEILING">CEILING</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CEILING">CEILING</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8822,7 +8822,7 @@
 <listitem><para>CEILING(12.5) equals 13</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CEIL">CEIL</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CEIL">CEIL</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8852,7 +8852,7 @@
 <listitem><para>FLOOR(12.5) equals 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="CEIL">CEIL</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="CEIL">CEIL</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8893,7 +8893,7 @@
 <listitem><para>INT(12.55) equals 12</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="FLOOR">FLOOR</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="FLOOR">FLOOR</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8914,7 +8914,7 @@
 <listitem><para>RAND() equals for example 0.78309922...</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RANDBETWEEN">RANDBETWEEN</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RANDBETWEEN">RANDBETWEEN</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 
 </variablelist>
@@ -8937,7 +8937,7 @@
 <listitem><para>RANDEXP(0.88)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8960,7 +8960,7 @@
 <listitem><para>RANDPOISSON(4)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -8983,7 +8983,7 @@
 <listitem><para>RANDBINOM(4)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9006,7 +9006,7 @@
 <listitem><para>RANDNEGBINOM(4)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9029,7 +9029,7 @@
 <listitem><para>RANDBERNOULLI(0.45)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9052,7 +9052,7 @@
 <listitem><para>RANDNORM(0; 1)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9075,7 +9075,7 @@
 <listitem><para>RANDBETWEEN(12;78) equals for example 61.0811...</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="RAND">RAND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="RAND">RAND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9098,7 +9098,7 @@
 <listitem><para>MROUND(1.252; 0.5) equals 1.5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROUND">ROUND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROUND">ROUND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9121,7 +9121,7 @@
 <listitem><para>ROUND(1.252;2) equals 1.25</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MROUND">MROUND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MROUND">MROUND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9144,7 +9144,7 @@
 <listitem><para>ROUNDUP(1.252) equals 2</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROUND">ROUND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROUND">ROUND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9167,7 +9167,7 @@
 <listitem><para>ROUNDDOWN(1.252) equals 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="ROUND">ROUND</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="ROUND">ROUND</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9209,7 +9209,7 @@
 <listitem><para>QUOTIENT(21;4) returns 5</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="INT">INT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="INT">INT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9231,7 +9231,7 @@
 <listitem><para>MDETERM(A1:C3)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MMULT">MMULT</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MMULT">MMULT</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9254,7 +9254,7 @@
 <listitem><para>MMULT(A1:C3)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MDETERM">MDETERM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MDETERM">MDETERM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9278,7 +9278,7 @@
 <listitem><para>MINVERSE(A1:C3)</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MDETERM">MDETERM</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MDETERM">MDETERM</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>
@@ -9300,7 +9300,7 @@
 <listitem><para>MUNIT(3) creates a 3x3 unity matrix</para></listitem>
 </varlistentry>
 <varlistentry><term>Related Functions</term>
-<listitem><simplelist><member><link linkend="MINVERSE">MINVERSE</link></member></simplelist></listitem>
+<listitem><simplelist><member><link linkend="MINVERSE">MINVERSE</link>&nbsp;</member></simplelist></listitem>
 </varlistentry>
 </variablelist>
 </sect3>

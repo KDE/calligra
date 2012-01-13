@@ -78,7 +78,7 @@ void KWFrameDialog::okClicked()
 
     m_generalFrameProperties->save();
     m_anchoringProperties->save(macro);
-    m_runAroundProperties->save();
+    m_runAroundProperties->save(macro);
 
     m_canvas->addCommand(macro);
 }

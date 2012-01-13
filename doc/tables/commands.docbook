@@ -103,8 +103,8 @@ Values) files, even though the separating character may not be a comma.</para>
 in <acronym>CSV</acronym> format and launches a dialog box that allows you to
 specify the delimiter (separating character) used by the file, and shows how
 the data items will be placed into different spreadsheet cells.</para>
-<para>Other options in this dialog box let you define the <guilabel>Format
-</guilabel> of the spreadsheet cells, whether text quote characters should be
+<para>Other options in this dialog box let you define the <guilabel>Format</guilabel> 
+of the spreadsheet cells, whether text quote characters should be
 removed, and whether the first line(s) of the file should be ignored.</para>
 </listitem>
 </varlistentry>
@@ -520,7 +520,7 @@ the spreadsheet. Range from 33% to 500%.
 <sect1 id="gomenu">
 <title>The Go Menu</title>
 <para>In this menu you find actions to navigate between the sheets of the currently 
-opened spreadshead and the <guimenuitem>Goto Cell</guimenuitem> action to jump to a single 
+opened spreadsheet and the <guimenuitem>Goto Cell</guimenuitem> action to jump to a single 
 cell or to select a range of cells.</para>
 </sect1>
 
@@ -807,7 +807,7 @@ item into a different cell in the row.
 <guimenuitem>Named Areas...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open</action> the <guilabel>Named Areas</guilabel> dialog 
-to select, add edit and remove  named areas. See the section 
+to select, add, edit and remove named areas. See the section 
 <link linkend="namedareas">Named Cells and Areas</link> for further details.
 </para></listitem>
 </varlistentry>
