@@ -21,7 +21,7 @@
 #include "KWStatisticsDocker.h"
 
 #include "KWCanvas.h"
-#include "dialogs/KWStatistics.h"
+#include "dockers/KWStatistics.h"
 
 
 #include <KoToolManager.h>

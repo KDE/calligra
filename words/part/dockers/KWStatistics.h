@@ -23,25 +23,20 @@
 
 #include <ui_KWStatistics.h>
 #include <ui_KWStatisticsDocker.h>
-#include "dialogs/StatisticsPreferencesPopup.h"
-#include<ui_StatisticsPreferencesPopup.h>
-#include<QToolButton>
+#include "dockers/StatisticsPreferencesPopup.h"
+#include <ui_StatisticsPreferencesPopup.h>
+#include <QToolButton>
 #include <QWidget>
-#include<QDialog>
+#include <QDialog>
 #include <QtGui/QVBoxLayout>
-#include<QCheckBox>
-#include<QMenu>
+#include <QCheckBox>
+#include <QMenu>
 
 class QTimer;
 class QTextDocument;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;
-class QWidget;
-class QToolButton;
-class QVBoxLayout;
-class QCheckBox;
-class QMenu;
 class StatisticsPreferencesPopup;
 
 class KWStatistics : public QWidget

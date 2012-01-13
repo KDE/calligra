@@ -62,7 +62,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="spaces">
      <property name="text">
-      <string>Characters with Spaces:</string>
+      <string>Characters (including spaces):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -72,7 +72,7 @@
    <item row="7" column="0">
     <widget class="QLabel" name="nospaces">
      <property name="text">
-      <string>Characters without Spaces:</string>
+      <string>Characters (excluding spaces):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -82,7 +82,7 @@
    <item row="8" column="0">
     <widget class="QLabel" name="Cjkchars">
      <property name="text">
-      <string>East Asian Characters:</string>
+      <string>East Asian characters:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

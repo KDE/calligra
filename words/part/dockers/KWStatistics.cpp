@@ -25,7 +25,7 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include <ui_KWStatisticsDocker.h>
-#include "dialogs/StatisticsPreferencesPopup.h"
+#include "dockers/StatisticsPreferencesPopup.h"
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
