@@ -597,7 +597,7 @@ printed then choosing <guimenuitem>Define Print Range</guimenuitem> from the
 </menuchoice> sub menu.</para>
 <para>&tables; will print as many pages as are necessary to include all
 items in the current worksheet. You can quickly see how a worksheet will be
-spilt into separate pages for printing by checking the <menuchoice>
+split into separate pages for printing by checking the <menuchoice>
 <guimenu>View</guimenu>
 <guimenuitem>Page Borders</guimenuitem></menuchoice> box. The boundaries
 of each printed page will then be marked by colored lines in the
