@@ -23,8 +23,8 @@
 
 #include <ui_KWStatistics.h>
 #include <ui_KWStatisticsDocker.h>
-#include "dialogs/quickpopupmenu.h"
-#include<ui_quickpopupmenu.h>
+#include "dialogs/StatisticsPreferencesPopup.h"
+#include<ui_StatisticsPreferencesPopup.h>
 #include<QToolButton>
 #include <QWidget>
 #include<QDialog>
@@ -42,7 +42,7 @@ class QToolButton;
 class QVBoxLayout;
 class QCheckBox;
 class QMenu;
-class QuickPopupMenu;
+class StatisticsPreferencesPopup;
 
 class KWStatistics : public QWidget
 {
@@ -65,6 +65,7 @@ public slots:
     void updateData();
     void setAutoUpdate(int);
     void selectionChanged();
+    void on_refresh();
 
 private:
     int countCJKChars(const QString &text);
@@ -75,7 +76,7 @@ private:
     KWDocument *m_document;
     QTextDocument *m_textDocument;
     QTimer *m_timer;
-    QuickPopupMenu *m_menu;
+    StatisticsPreferencesPopup *m_menu;
 
     long m_charsWithSpace;
     long m_charsWithoutSpace;

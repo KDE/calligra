@@ -25,7 +25,7 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include <ui_KWStatisticsDocker.h>
-#include "dialogs/quickpopupmenu.h"
+#include "dialogs/StatisticsPreferencesPopup.h"
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
@@ -58,7 +58,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_timer->setSingleShot(true);
     widgetDocker.setupUi(this);
 
-    m_menu = new QuickPopupMenu(widgetDocker.preferences);
+    m_menu = new StatisticsPreferencesPopup(widgetDocker.preferences);
     widgetDocker.preferences->setMenu(m_menu);
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
 
@@ -73,7 +73,10 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
     //    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+    connect(widgetDocker.refresh,SIGNAL(clicked()),this,SLOT(on_refresh()));
+
 }
+
 
 void KWStatistics::updateData()
 {
@@ -103,13 +106,7 @@ void KWStatistics::updateData()
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
- //       if (m_showInDocker && (!(footEnd ||
-   //                              (tfs->textFrameSetType() == Words::MainTextFrameSet ||
-   //                               tfs->textFrameSetType() == Words::OtherTextFrameSet))))
-     //       continue;
-    //    else if (!(footEnd || (tfs->textFrameSetType() == Words::MainTextFrameSet ||
-      //                         tfs->textFrameSetType() == Words::OtherTextFrameSet)))
-        //    continue;
+
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
@@ -196,19 +193,20 @@ void KWStatistics::updateData()
         }
     }
 
-    if (m_showInDocker)
-        updateDataUi();
+
 }
 
 void KWStatistics::updateDataUi()
 {
+    updateData();
+
     // calculate Flesch reading ease score:
     float flesch_score = 0;
     if (m_words > 0 && m_sentences > 0)
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     QString flesch = KGlobal::locale()->formatNumber(flesch_score);
 
-    if (m_showInDocker) {
+
 
          QString newText[8];
          newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
@@ -235,8 +233,7 @@ void KWStatistics::updateDataUi()
          newText[7] = flesch;
          widgetDocker.count_flesch->setText(newText[7]);
 
-        int top, bottom, left, right;(newText);
-    }
+
 }
 
 void KWStatistics::setAutoUpdate(int state)
@@ -249,8 +246,7 @@ void KWStatistics::setAutoUpdate(int state)
         m_autoUpdate = false;
         disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }
- //   if (m_showInDocker)
-    //    widgetDocker.refresh->setVisible(!m_autoUpdate);
+
 }
 
 void KWStatistics::selectionChanged()
@@ -418,4 +414,8 @@ void KWStatistics::fleschDisplayChanged(int state)
     default:
         break;
     }
+}
+
+void KWStatistics::on_refresh()
+{   updateDataUi();
 }

@@ -7,44 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>319</width>
-    <height>248</height>
+    <height>388</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="13" column="0" rowspan="0" colspan="3">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>1</width>
-       <height>1</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="count_words">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="readOnly">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="Words">
-     <property name="text">
-      <string>Words:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="Sentences">
      <property name="text">
       <string>Sentences:</string>
@@ -54,7 +21,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="Syllables">
      <property name="text">
       <string>Syllables:</string>
@@ -64,7 +31,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="Lines">
      <property name="text">
       <string>Lines:</string>
@@ -74,25 +41,25 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="3" column="1">
     <widget class="QLineEdit" name="count_sentences"/>
    </item>
-   <item row="2" column="1">
+   <item row="4" column="1">
     <widget class="QLineEdit" name="count_syllables"/>
    </item>
-   <item row="3" column="1">
+   <item row="5" column="1">
     <widget class="QLineEdit" name="count_lines"/>
    </item>
-   <item row="4" column="1">
+   <item row="6" column="1">
     <widget class="QLineEdit" name="count_spaces"/>
    </item>
-   <item row="5" column="1">
+   <item row="7" column="1">
     <widget class="QLineEdit" name="count_nospaces"/>
    </item>
-   <item row="6" column="1">
+   <item row="8" column="1">
     <widget class="QLineEdit" name="count_cjkchars"/>
    </item>
-   <item row="4" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="spaces">
      <property name="text">
       <string>Characters with Spaces:</string>
@@ -102,7 +69,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="nospaces">
      <property name="text">
       <string>Characters without Spaces:</string>
@@ -112,7 +79,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="Cjkchars">
      <property name="text">
       <string>East Asian Characters:</string>
@@ -122,10 +89,10 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="9" column="1">
     <widget class="QLineEdit" name="count_flesch"/>
    </item>
-   <item row="7" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="Flesch">
      <property name="text">
       <string>Flesch Reading Ease:</string>
@@ -135,10 +102,37 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="2" column="0">
+    <widget class="QLabel" name="Words">
+     <property name="text">
+      <string>Words:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="count_words">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="2">
     <widget class="QToolButton" name="preferences">
      <property name="text">
       <string>Preferences</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QToolButton" name="refresh">
+     <property name="text">
+      <string>Refresh</string>
      </property>
     </widget>
    </item>
