@@ -567,10 +567,10 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words:
             }
         } break;
         case KWPageStyle::LeftPages:
-            *origin = Words::EvenPagesHeaderTextFrameSet;
+            *origin = header ? Words::EvenPagesHeaderTextFrameSet : Words::EvenPagesFooterTextFrameSet;
             break;
         case KWPageStyle::RightPages:
-            *origin = Words::OddPagesHeaderTextFrameSet;
+            *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
             break;
     }
     return true;
