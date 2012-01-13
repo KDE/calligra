@@ -21,7 +21,15 @@
 
 #include "CADocumentController.h"
 
-CADocumentController::CADocumentController()
+class CADocumentController::Private
+{
+public:
+    QString documentUri;
+};
+
+CADocumentController::CADocumentController(QObject* parent)
+    : QObject(parent)
+    , d(new Private())
 {
 
 }
@@ -29,6 +37,16 @@ CADocumentController::CADocumentController()
 CADocumentController::~CADocumentController()
 {
 
+}
+
+QString CADocumentController::documentUri() const
+{
+    return d->documentUri;
+}
+
+void CADocumentController::setDocumentUri(const QString& uri)
+{
+    d->documentUri = uri;
 }
 
 #include "CADocumentController.moc"

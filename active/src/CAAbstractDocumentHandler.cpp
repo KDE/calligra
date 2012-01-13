@@ -21,7 +21,19 @@
 
 #include "CAAbstractDocumentHandler.h"
 
-CAAbstractDocumentHandler::CAAbstractDocumentHandler()
+class CAAbstractDocumentHandler::Private
+{
+public:
+    Private()
+    {
+        canvasItem = 0;
+    }
+    QGraphicsItem *canvasItem;
+};
+
+CAAbstractDocumentHandler::CAAbstractDocumentHandler(QObject* parent)
+    : QObject(parent)
+    , d(new Private())
 {
 
 }
@@ -29,6 +41,16 @@ CAAbstractDocumentHandler::CAAbstractDocumentHandler()
 CAAbstractDocumentHandler::~CAAbstractDocumentHandler()
 {
 
+}
+
+QGraphicsItem* CAAbstractDocumentHandler::canvasItem() const
+{
+    return d->canvasItem;
+}
+
+void CAAbstractDocumentHandler::setCanvasItem(QGraphicsItem* canvasItem)
+{
+    d->canvasItem = canvasItem;
 }
 
 #include "CAAbstractDocumentHandler.moc"

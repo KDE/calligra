@@ -25,14 +25,27 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
+class KoDocument;
+class QGraphicsItem;
+
 class CAAbstractDocumentHandler : public QObject
 {
-
+    Q_OBJECT
 public:
-    CAAbstractDocumentHandler();
+    explicit CAAbstractDocumentHandler(QObject* parent = 0);
     virtual ~CAAbstractDocumentHandler();
 
     virtual QStringList supportedMimetypes() = 0;
+    virtual bool loadDocument(const QString &uri) = 0;
+
+    QGraphicsItem* canvasItem() const;
+    void setCanvasItem(QGraphicsItem* canvasItem);
+
+protected:
+    class Private;
+    Private * const d;
+
+    virtual KoDocument* document() = 0;
 };
 
 #endif // CAABSTRACTDOCUMENTHANDLER_H
