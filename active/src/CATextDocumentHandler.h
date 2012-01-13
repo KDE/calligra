@@ -26,12 +26,18 @@
 
 class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
-
+    Q_OBJECT
 public:
-    CATextDocumentHandler();
+    explicit CATextDocumentHandler(QObject* parent = 0);
     virtual ~CATextDocumentHandler();
 
     virtual QStringList supportedMimetypes();
+    virtual bool loadDocument(const QString &uri);
+    virtual KoDocument* document();
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // CATEXTDOCUMENTHANDLER_H

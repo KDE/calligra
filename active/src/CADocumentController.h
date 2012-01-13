@@ -26,10 +26,22 @@
 
 class CADocumentController : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
 
 public:
-    CADocumentController();
+    explicit CADocumentController(QObject* parent = 0);
     virtual ~CADocumentController();
+
+    void setDocumentUri(const QString &uri);
+    QString documentUri() const;
+
+signals:
+    void documentUriChanged();
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // CADOCUMENTCONTROLLER_H
