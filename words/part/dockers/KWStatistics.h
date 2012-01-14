@@ -60,7 +60,6 @@ public slots:
     void updateData();
     void setAutoUpdate(int);
     void selectionChanged();
-    void on_refresh();
 
 private:
     int countCJKChars(const QString &text);

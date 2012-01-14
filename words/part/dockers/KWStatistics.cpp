@@ -71,9 +71,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
     connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
     connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
-    //    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    //    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-    connect(widgetDocker.refresh,SIGNAL(clicked()),this,SLOT(on_refresh()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 
 }
 
@@ -192,13 +190,13 @@ void KWStatistics::updateData()
             }
         }
     }
-
+updateDataUi();
 
 }
 
 void KWStatistics::updateDataUi()
 {
-    updateData();
+
 
     // calculate Flesch reading ease score:
     float flesch_score = 0;
@@ -416,6 +414,4 @@ void KWStatistics::fleschDisplayChanged(int state)
     }
 }
 
-void KWStatistics::on_refresh()
-{   updateDataUi();
-}
+
