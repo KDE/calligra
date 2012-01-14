@@ -20,9 +20,11 @@
 
 #include "kis_selection.h"
 
+#include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
+
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
-
 #include "kis_default_bounds.h"
 
 struct KisSelection::Private {
@@ -42,11 +44,13 @@ struct KisSelection::Private {
 
     KisPixelSelectionSP getProjection()
     {
-        if (pixelSelection && !shapeSelection) {
+        if (pixelSelection
+                && !shapeSelection
+                && pixelSelection->paintDevice()->colorSpace()->colorModelId() == AlphaColorModelID) {
             return pixelSelection;
         }
         else {
-            if(!projection) {
+            if (!projection) {
                 projection = new KisPixelSelection(defaultBounds);
             }
             return projection;
@@ -159,12 +163,12 @@ void KisSelection::setPixelSelection(KisSelectionComponentSP pixelSelection)
     }
 }
 
-KisPaintDeviceSP KisSelection::selectionPaintDevice() const
+KisPaintDeviceSP KisSelection::selectionPaintDevice(MaskType maskType) const
 {
     return m_d->pixelSelection->paintDevice();
 }
 
-KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice() const
+KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice(MaskType maskType) const
 {
     if (!m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
