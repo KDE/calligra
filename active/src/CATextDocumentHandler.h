@@ -32,7 +32,7 @@ public:
     virtual ~CATextDocumentHandler();
 
     virtual QStringList supportedMimetypes();
-    virtual bool openDocument (const QString &uri);
+    virtual bool openDocument (const QString& uri);
     virtual KoDocument* document();
 
 public slots:
@@ -40,7 +40,7 @@ public slots:
 
 private:
     class Private;
-    Private * const d;
+    Private* const d;
 };
 
 #endif // CATEXTDOCUMENTHANDLER_H

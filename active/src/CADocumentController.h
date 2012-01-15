@@ -29,18 +29,18 @@ class CanvasController;
 class CADocumentController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
-    Q_PROPERTY(CanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
+    Q_PROPERTY (QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
+    Q_PROPERTY (CanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
 
 public:
-    explicit CADocumentController(QObject* parent = 0);
+    explicit CADocumentController (QObject* parent = 0);
     virtual ~CADocumentController();
 
-    void setDocumentUri(const QString &uri);
+    void setDocumentUri (const QString& uri);
     QString documentUri() const;
 
     CanvasController* canvasController() const;
-    void setCanvasController(CanvasController* canvasController);
+    void setCanvasController (CanvasController* canvasController);
 
 signals:
     void documentUriChanged();
@@ -52,7 +52,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private* const d;
 };
 
 #endif // CADOCUMENTCONTROLLER_H

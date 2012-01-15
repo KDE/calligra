@@ -40,17 +40,16 @@
 class CATextDocumentHandler::Private
 {
 public:
-    Private()
-    {
+    Private() {
         document = 0;
     }
-    KWDocument *document;
+    KWDocument* document;
     KWPage currentTextDocPage;
 };
 
-CATextDocumentHandler::CATextDocumentHandler(CADocumentController* documentController)
-    : CAAbstractDocumentHandler(documentController)
-    , d(new Private())
+CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
+    : CAAbstractDocumentHandler (documentController)
+    , d (new Private())
 {
 
 }
@@ -70,8 +69,8 @@ QStringList CATextDocumentHandler::supportedMimetypes()
 bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;
-    QString mimetype = KMimeType::findByPath(uri)->name();
-    KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
+    QString mimetype = KMimeType::findByPath (uri)->name();
+    KoDocument* doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument> (mimetype, 0, 0, QString(),
                       QVariantList(), &error);
 
     if (!doc) {
@@ -80,41 +79,41 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     }
 
     kDebug() << "Trying to open the document";
-    d->document = static_cast<KWDocument*>(doc);
-    d->document->openUrl(KUrl(uri));
+    d->document = static_cast<KWDocument*> (doc);
+    d->document->openUrl (KUrl (uri));
 
-    setCanvas(dynamic_cast<KoCanvasBase*>(doc->canvasItem()));
+    setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
     kDebug() << "CONTROLLER " << documentController()->canvasController();
-    KoToolManager::instance()->addController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()));
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvas());
+    KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
+    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
 
     if (!kwCanvasItem) {
         kDebug() << "Failed to get KWCanvasItem";
         return false;
     }
 
-    KoZoomHandler *zoomHandler = static_cast<KoZoomHandler*>(kwCanvasItem->viewConverter());
-    documentController()->canvasController()->setZoomHandler(zoomHandler);
-    KoZoomController *zoomController =
-        new KoZoomController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()),
-                             zoomHandler, doc->actionCollection());
-    documentController()->canvasController()->setZoomController(zoomController);
+    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (kwCanvasItem->viewConverter());
+    documentController()->canvasController()->setZoomHandler (zoomHandler);
+    KoZoomController* zoomController =
+        new KoZoomController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()),
+                              zoomHandler, doc->actionCollection());
+    documentController()->canvasController()->setZoomController (zoomController);
     d->currentTextDocPage = d->document->pageManager()->begin();
-    zoomController->setPageSize(d->currentTextDocPage.rect().size());
-    zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+    zoomController->setPageSize (d->currentTextDocPage.rect().size());
+    zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     if (kwCanvasItem) {
         kwCanvasItem->updateSize();
 
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect(kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
+        connect (kwCanvasItem, SIGNAL (documentSize (QSizeF)), zoomController, SLOT (setDocumentSize (QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect(documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(const QPoint&)),
-                kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
+        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL (moveDocumentOffset (const QPoint&)),
+                 kwCanvasItem, SLOT (setDocumentOffset (QPoint)));
         kwCanvasItem->updateSize();
     }
 
-    connect(documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
+    connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
     return true;
 }
@@ -126,7 +125,7 @@ KoDocument* CATextDocumentHandler::document()
 
 void CATextDocumentHandler::updateCanvas()
 {
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvas());
+    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
     kwCanvasItem->update();
 }
 

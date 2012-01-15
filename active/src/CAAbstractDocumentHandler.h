@@ -36,21 +36,21 @@ class CAAbstractDocumentHandler : public QObject
     Q_OBJECT
 
 public:
-    explicit CAAbstractDocumentHandler(CADocumentController* documentController);
+    explicit CAAbstractDocumentHandler (CADocumentController* documentController);
     virtual ~CAAbstractDocumentHandler();
 
     virtual QStringList supportedMimetypes() = 0;
-    virtual bool openDocument(const QString &uri) = 0;
+    virtual bool openDocument (const QString& uri) = 0;
 
-    bool canOpenDocument(const QString &uri);
+    bool canOpenDocument (const QString& uri);
     KoCanvasBase* canvas() const;
 
 protected:
     class Private;
-    Private * const d;
+    Private* const d;
 
     virtual KoDocument* document() = 0;
-    void setCanvas(KoCanvasBase* canvas);
+    void setCanvas (KoCanvasBase* canvas);
     CADocumentController* documentController() const;
 };
 
