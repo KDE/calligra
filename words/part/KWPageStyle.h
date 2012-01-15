@@ -130,6 +130,12 @@ public:
      */
     void setHeaderDistance(qreal distance);
 
+    /// return if a growing header eats the distance first.
+    bool headerDynamicSpacing() const;
+
+    /// set if a growing header eats the distance first.
+    void setHeaderDynamicSpacing(bool dynamic);
+
     /// return the minimum header height.
     qreal headerMinimumHeight() const;
     /**
@@ -153,6 +159,12 @@ public:
      * @param distance the distance
      */
     void setFooterDistance(qreal distance);
+
+    /// return if a growing footer eats the distance first.
+    bool footerDynamicSpacing() const;
+
+    /// set if a growing footer eats the distance first.
+    void setFooterDynamicSpacing(bool dynamic);
 
     /// initialize to default settings
     void clear();

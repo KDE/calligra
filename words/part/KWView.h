@@ -150,18 +150,16 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// enable/disable document headers
-    void toggleHeader();
-    /// enable/disable document footers
-    void toggleFooter();
+    /// enable document headers
+    void enableHeader();
+    /// enable document footers
+    void enableFooter();
     /// snap to grid
     void toggleSnapToGrid();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
-    /// displays the KWStatisticsDialog
-    void showStatisticsDialog();
     /// shows or hides the rulers
     void showRulers(bool visible);
     /// creates a copy of the current frame
@@ -213,8 +211,8 @@ private:
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;
     KToggleAction *m_actionFormatStrikeOut;
-    KToggleAction *m_actionViewHeader;
-    KToggleAction *m_actionViewFooter;
+    KAction *m_actionViewHeader;
+    KAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
 
     bool m_snapToGrid;

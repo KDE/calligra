@@ -103,6 +103,8 @@ public slots:
     void nextSlide();
     void previousSlide();
     void zoomToFit();
+    void findNext();
+    void findPrevious();
 
 private slots:
     void processLoadProgress(int value);
