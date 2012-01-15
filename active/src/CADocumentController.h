@@ -24,10 +24,13 @@
 
 #include <QtCore/QObject>
 
+class CanvasController;
+
 class CADocumentController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
+    Q_PROPERTY(CanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
 
 public:
     explicit CADocumentController(QObject* parent = 0);
@@ -36,8 +39,16 @@ public:
     void setDocumentUri(const QString &uri);
     QString documentUri() const;
 
+    CanvasController* canvasController() const;
+    void setCanvasController(CanvasController* canvasController);
+
 signals:
     void documentUriChanged();
+    void canvasControllerChanged();
+    void documentOpened();
+
+protected:
+    bool loadDocument();
 
 private:
     class Private;

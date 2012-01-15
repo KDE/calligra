@@ -25,118 +25,145 @@ import CalligraActive 1.0
 Item {
     id: docRootRect
     signal documentLoaded
-    property alias loadProgress: canvas.loadProgress
+    //property alias loadProgress: canvas.loadProgress
     clip: true
 
     function openDocument(path) {
-        canvas.openDocument(path);
+        docDocumentController.documentUri = path;
     }
 
-    function initToolbar() {
-        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
-            toolbarLoader.source = "SpreadsheetToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
-            toolbarLoader.source = "WordsToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.Presentation) {
-            toolbarLoader.source = "PresentationToolbar.qml";
-        }
+    CADocumentController {
+        id: docDocumentController
+        canvasController: docCanvasController
+        onDocumentOpened: docRootRect.documentLoaded()
     }
-
-//     function toggleEdit() {
-//         if (docFlickable.visible) {
-//             docFlickable.visible = false;
-//             canvas.z = 1
-//         } else {
-//             docFlickable.visible = true;
-//             canvas.z = -1
-//         }
-//     }
 
     CanvasController {
-        id: canvas
+        id: docCanvasController
 
         anchors.fill: parent
         z: -1
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
-
-        Component.onCompleted: documentLoaded.connect(initToolbar)
-        onDocumentLoaded: docRootRect.documentLoaded()
-
-        searchString: findToolbar.searchString
     }
+}
 
-//     Button {
-//         id: editModeButton
-//         drawBackground: false
-//         imageSource: "qrc:///images/document-edit.png"
-//         anchors.left: parent.left
-//         anchors.bottom: parent.bottom
-//         height: 64
-//         width: 64
-//         z: 30
+// Item {
+//     id: docRootRect
+//     signal documentLoaded
+//     property alias loadProgress: canvas.loadProgress
+//     clip: true
 // 
-//         onClicked: toggleEdit();
+//     function openDocument(path) {
+//         canvas.openDocument(path);
 //     }
 // 
-    FindToolbar {
-        id: findToolbar
-        height: 32
-        z: 2
-        visible: (canvas.documentType == CADocumentInfo.TextDocument)
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        onFindNextRequested: canvas.findNext();
-        onFindPreviousRequested: canvas.findPrevious();
-    }
-
-    MouseArea {
-        id: flickableMouseArea
-        anchors.fill: parent
-        drag.filterChildren: true
-
-        Flickable {
-            id: docFlickable
-            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
-
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-        }
-
-        Loader {
-            id: toolbarLoader
-            property bool containsMouse: false
-
-            anchors.fill: parent
-            opacity: 0
-        }
-
-        Connections {
-            target: toolbarLoader.item
-            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
-        }
-    }
-
-    states : [
-        State {
-            name: "toolbarShown";
-            when: (flickableMouseArea.pressed || toolbarLoader.containsMouse) && !docFlickable.moving
-            PropertyChanges { target: toolbarLoader; opacity: 1 }
-        }
-    ]
-
-    transitions : [
-        Transition {
-            from: "toolbarShown"
-            SequentialAnimation {
-                PauseAnimation { duration: 2000 }
-                NumberAnimation {
-                    target: toolbarLoader; properties: "opacity"; duration: 3000
-                }
-            }
-        }
-    ]
-}
+//     function initToolbar() {
+//         if (canvas.documentType == CADocumentInfo.Spreadsheet) {
+//             toolbarLoader.source = "SpreadsheetToolbar.qml";
+//         } else if (canvas.documentType == CADocumentInfo.TextDocument) {
+//             toolbarLoader.source = "WordsToolbar.qml";
+//         } else if (canvas.documentType == CADocumentInfo.Presentation) {
+//             toolbarLoader.source = "PresentationToolbar.qml";
+//         }
+//     }
+// 
+// //     function toggleEdit() {
+// //         if (docFlickable.visible) {
+// //             docFlickable.visible = false;
+// //             canvas.z = 1
+// //         } else {
+// //             docFlickable.visible = true;
+// //             canvas.z = -1
+// //         }
+// //     }
+// 
+//     CanvasController {
+//         id: canvas
+// 
+//         anchors.fill: parent
+//         z: -1
+// 
+//         cameraX: docFlickable.contentX
+//         cameraY: docFlickable.contentY
+// 
+//         Component.onCompleted: documentLoaded.connect(initToolbar)
+//         onDocumentLoaded: docRootRect.documentLoaded()
+// 
+//         searchString: findToolbar.searchString
+//     }
+// 
+// //     Button {
+// //         id: editModeButton
+// //         drawBackground: false
+// //         imageSource: "qrc:///images/document-edit.png"
+// //         anchors.left: parent.left
+// //         anchors.bottom: parent.bottom
+// //         height: 64
+// //         width: 64
+// //         z: 30
+// // 
+// //         onClicked: toggleEdit();
+// //     }
+// // 
+//     FindToolbar {
+//         id: findToolbar
+//         height: 32
+//         z: 2
+//         visible: (canvas.documentType == CADocumentInfo.TextDocument)
+// 
+//         anchors.left: parent.left
+//         anchors.right: parent.right
+//         anchors.bottom: parent.bottom
+// 
+//         onFindNextRequested: canvas.findNext();
+//         onFindPreviousRequested: canvas.findPrevious();
+//     }
+// 
+//     MouseArea {
+//         id: flickableMouseArea
+//         anchors.fill: parent
+//         drag.filterChildren: true
+// 
+//         Flickable {
+//             id: docFlickable
+//             x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
+// 
+//             contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+//         }
+// 
+//         Loader {
+//             id: toolbarLoader
+//             property bool containsMouse: false
+// 
+//             anchors.fill: parent
+//             opacity: 0
+//         }
+// 
+//         Connections {
+//             target: toolbarLoader.item
+//             onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
+//         }
+//     }
+// 
+//     states : [
+//         State {
+//             name: "toolbarShown";
+//             when: (flickableMouseArea.pressed || toolbarLoader.containsMouse) && !docFlickable.moving
+//             PropertyChanges { target: toolbarLoader; opacity: 1 }
+//         }
+//     ]
+// 
+//     transitions : [
+//         Transition {
+//             from: "toolbarShown"
+//             SequentialAnimation {
+//                 PauseAnimation { duration: 2000 }
+//                 NumberAnimation {
+//                     target: toolbarLoader; properties: "opacity"; duration: 3000
+//                 }
+//             }
+//         }
+//     ]
+// }

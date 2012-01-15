@@ -21,17 +21,24 @@
 
 #include "CADocumentController.h"
 
+#include "CATextDocumentHandler.h"
+#include "CanvasController.h"
+
+#include <QDebug>
+
 class CADocumentController::Private
 {
 public:
     QString documentUri;
+    CanvasController *canvasController;
+    QList<CAAbstractDocumentHandler*> documentHandlers;
 };
 
 CADocumentController::CADocumentController(QObject* parent)
     : QObject(parent)
     , d(new Private())
 {
-
+    d->documentHandlers.append(new CATextDocumentHandler(this));
 }
 
 CADocumentController::~CADocumentController()
@@ -47,6 +54,33 @@ QString CADocumentController::documentUri() const
 void CADocumentController::setDocumentUri(const QString& uri)
 {
     d->documentUri = uri;
+    emit documentUriChanged();
+    loadDocument();
+    emit documentOpened();
+}
+
+CanvasController* CADocumentController::canvasController() const
+{
+    return d->canvasController;
+}
+
+void CADocumentController::setCanvasController(CanvasController* canvasController)
+{
+    d->canvasController = canvasController;
+    emit canvasControllerChanged();
+}
+
+bool CADocumentController::loadDocument()
+{
+    Q_FOREACH (CAAbstractDocumentHandler *handler, d->documentHandlers) {
+        if (handler->canOpenDocument(documentUri())) {
+            if (handler->openDocument(documentUri())) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 #include "CADocumentController.moc"

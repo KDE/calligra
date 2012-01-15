@@ -20,13 +20,18 @@
  */
 
 #include "CATextDocumentHandler.h"
+#include "CADocumentController.h"
+#include "CanvasController.h"
 
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
+#include <KoCanvasController.h>
 
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
+#include <KoFindText.h>
+#include <KoCanvasBase.h>
 
 #include <KMimeType>
 #include <KMimeTypeTrader>
@@ -45,8 +50,8 @@ public:
     KWPage currentTextDocPage;
 };
 
-CATextDocumentHandler::CATextDocumentHandler(QObject* parent)
-    : CAAbstractDocumentHandler(parent)
+CATextDocumentHandler::CATextDocumentHandler(CADocumentController* documentController)
+    : CAAbstractDocumentHandler(documentController)
     , d(new Private())
 {
 
@@ -54,7 +59,7 @@ CATextDocumentHandler::CATextDocumentHandler(QObject* parent)
 
 CATextDocumentHandler::~CATextDocumentHandler()
 {
-
+    delete d;
 }
 
 QStringList CATextDocumentHandler::supportedMimetypes()
@@ -64,7 +69,7 @@ QStringList CATextDocumentHandler::supportedMimetypes()
     return supportedTypes;
 }
 
-bool CATextDocumentHandler::loadDocument(const QString& uri)
+bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath(uri)->name();
@@ -80,16 +85,19 @@ bool CATextDocumentHandler::loadDocument(const QString& uri)
     d->document = static_cast<KWDocument*>(doc);
     d->document->openUrl(KUrl(uri));
 
-    setCanvasItem(doc->canvasItem());
-    //KoToolManager::instance()->addController(this);
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvasItem());
+    setCanvas(dynamic_cast<KoCanvasBase*>(doc->canvasItem()));
+    kDebug() << "CONTROLLER " << documentController()->canvasController();
+    KoToolManager::instance()->addController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()));
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvas());
 
     if (!kwCanvasItem) {
         kDebug() << "Failed to get KWCanvasItem";
+        return false;
     }
 
     d->zoomHandler = static_cast<KoZoomHandler*>(kwCanvasItem->viewConverter());
-    //d->zoomController = new KoZoomController(this, d->zoomHandler, doc->actionCollection());
+    d->zoomController = new KoZoomController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()),
+                                             d->zoomHandler, doc->actionCollection());
     d->currentTextDocPage = d->document->pageManager()->begin();
     d->zoomController->setPageSize(d->currentTextDocPage.rect().size());
     d->zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
@@ -104,10 +112,6 @@ bool CATextDocumentHandler::loadDocument(const QString& uri)
         kwCanvasItem->updateSize();
     }
 
-//     QList<QTextDocument*> texts;
-//     KoFindText::findTextInShapes(m_canvasItem->shapeManager()->shapes(), texts);
-//     m_find->addDocuments(texts);
-
     return true;
 }
 
@@ -117,3 +121,4 @@ KoDocument* CATextDocumentHandler::document()
 }
 
 #include "CATextDocumentHandler.moc"
+
