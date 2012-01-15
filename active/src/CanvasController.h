@@ -38,7 +38,7 @@ class KoZoomController;
 class KoZoomHandler;
 class KoFindMatch;
 
-class CanvasController : public QDeclarativeItem, KoCanvasController
+class CanvasController : public QDeclarativeItem, public KoCanvasController
 {
     Q_OBJECT
 
@@ -49,7 +49,7 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY(CADocumentInfo::DocumentType documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
-    Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+    Q_PROPERTY(CanvasController* canvasController READ canvasController CONSTANT)
 
 public:
 
@@ -89,33 +89,23 @@ public:
     void setCameraX(int cameraX);
     void setCameraY(int cameraY);
     int loadProgress() const;
-    QString searchString() const;
-    void setSearchString(const QString &string);
+    CanvasController* canvasController();
 
 public slots:
-    void openDocument(const QString &path);
     void scrollDown();
     void scrollUp();
     void tellZoomControllerToSetDocumentSize(QSize size);
     void centerToCamera();
-    void nextSheet();
-    void previousSheet();
-    void nextSlide();
-    void previousSlide();
     void zoomToFit();
-    void findNext();
-    void findPrevious();
 
 private slots:
     void processLoadProgress(int value);
     void updateCanvasItem();
-    void findMatchFound(const KoFindMatch& match);
-    void findNoMatchFound();
 
 private:
     KoZoomHandler *m_zoomHandler;
     KoZoomController *m_zoomController;
-    KoCanvasBase * m_canvasItem;
+    KoCanvasBase * m_canvas;
     QPoint m_currentPoint;
     CADocumentInfo::DocumentType m_documentType;
     QSizeF m_documentSize;

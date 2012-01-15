@@ -28,11 +28,11 @@ class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
 public:
-    explicit CATextDocumentHandler(QObject* parent = 0);
+    explicit CATextDocumentHandler (CADocumentController* documentController);
     virtual ~CATextDocumentHandler();
 
     virtual QStringList supportedMimetypes();
-    virtual bool loadDocument(const QString &uri);
+    virtual bool openDocument (const QString &uri);
     virtual KoDocument* document();
 
 private:

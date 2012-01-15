@@ -27,25 +27,31 @@
 
 class KoDocument;
 class QGraphicsItem;
+class KoCanvasController;
+class KoCanvasBase;
+class CADocumentController;
 
 class CAAbstractDocumentHandler : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit CAAbstractDocumentHandler(QObject* parent = 0);
+    explicit CAAbstractDocumentHandler(CADocumentController* documentController);
     virtual ~CAAbstractDocumentHandler();
 
     virtual QStringList supportedMimetypes() = 0;
-    virtual bool loadDocument(const QString &uri) = 0;
+    virtual bool openDocument(const QString &uri) = 0;
 
-    QGraphicsItem* canvasItem() const;
-    void setCanvasItem(QGraphicsItem* canvasItem);
+    bool canOpenDocument(const QString &uri);
+    KoCanvasBase* canvas() const;
 
 protected:
     class Private;
     Private * const d;
 
     virtual KoDocument* document() = 0;
+    void setCanvas(KoCanvasBase* canvas);
+    CADocumentController* documentController() const;
 };
 
 #endif // CAABSTRACTDOCUMENTHANDLER_H

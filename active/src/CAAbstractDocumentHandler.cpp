@@ -20,37 +20,51 @@
  */
 
 #include "CAAbstractDocumentHandler.h"
+#include "CADocumentController.h"
+#include "CanvasController.h"
+
+#include <KoCanvasController.h>
+#include <KoCanvasBase.h>
+
+#include <KMimeType>
 
 class CAAbstractDocumentHandler::Private
 {
 public:
-    Private()
-    {
-        canvasItem = 0;
+    Private() {
     }
-    QGraphicsItem *canvasItem;
 };
 
-CAAbstractDocumentHandler::CAAbstractDocumentHandler(QObject* parent)
-    : QObject(parent)
-    , d(new Private())
+CAAbstractDocumentHandler::CAAbstractDocumentHandler (CADocumentController* documentController)
+    : QObject (documentController)
+    , d (new Private())
 {
 
+}
+
+CADocumentController* CAAbstractDocumentHandler::documentController() const
+{
+    return qobject_cast<CADocumentController*>(parent());
 }
 
 CAAbstractDocumentHandler::~CAAbstractDocumentHandler()
 {
-
+    delete d;
 }
 
-QGraphicsItem* CAAbstractDocumentHandler::canvasItem() const
+KoCanvasBase* CAAbstractDocumentHandler::canvas() const
 {
-    return d->canvasItem;
+    return documentController()->canvasController()->canvas();
 }
 
-void CAAbstractDocumentHandler::setCanvasItem(QGraphicsItem* canvasItem)
+void CAAbstractDocumentHandler::setCanvas (KoCanvasBase* canvas)
 {
-    d->canvasItem = canvasItem;
+    documentController()->canvasController()->setCanvas(canvas);
+}
+
+bool CAAbstractDocumentHandler::canOpenDocument (const QString& uri)
+{
+    return supportedMimetypes().contains(KMimeType::findByUrl(uri)->name());
 }
 
 #include "CAAbstractDocumentHandler.moc"
