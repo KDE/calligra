@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
- *
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -23,6 +23,7 @@
 
 #include <ui_KWStatistics.h>
 #include <ui_KWStatisticsDocker.h>
+#include<kglobal.h>
 #include "dockers/StatisticsPreferencesPopup.h"
 #include <ui_StatisticsPreferencesPopup.h>
 #include <QToolButton>
@@ -38,6 +39,7 @@ class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
+class KConfigGroup;
 
 class KWStatistics : public QWidget
 {
@@ -58,7 +60,6 @@ public slots:
     void eastDisplayChanged(int);
     void fleschDisplayChanged(int);
     void updateData();
-    void setAutoUpdate(int);
     void selectionChanged();
 
 private:
@@ -82,6 +83,6 @@ private:
     long m_cjkChars;
     bool m_autoUpdate;
     bool m_showInDocker;
-};
+   };
 
 #endif

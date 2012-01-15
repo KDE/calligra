@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
- *
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -70,10 +70,32 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
     connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
     connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
-
-
-}
-
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    bool visible = cfgGroup.readEntry("WordsVisible", true);
+    widgetDocker.Words->setVisible(visible);
+    widgetDocker.count_words->setVisible(visible);
+    visible = cfgGroup.readEntry("SentencesVisible", true);
+    widgetDocker.Sentences->setVisible(visible);
+    widgetDocker.count_sentences->setVisible(visible);
+    visible = cfgGroup.readEntry("SyllablesVisible", true);
+    widgetDocker.Syllables->setVisible(visible);
+    widgetDocker.count_syllables->setVisible(visible);
+    visible = cfgGroup.readEntry("LinesVisible", true);
+    widgetDocker.Lines->setVisible(visible);
+    widgetDocker.count_lines->setVisible(visible);
+    visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
+    widgetDocker.Cjkchars->setVisible(visible);
+    widgetDocker.count_cjkchars->setVisible(visible);
+    visible = cfgGroup.readEntry("FleschVisible", true);
+    widgetDocker.Flesch->setVisible(visible);
+    widgetDocker.count_flesch->setVisible(visible);
+    visible = cfgGroup.readEntry("CharspacesVisible", true);
+    widgetDocker.spaces->setVisible(visible);
+    widgetDocker.count_spaces->setVisible(visible);
+    visible = cfgGroup.readEntry("CharnospacesVisible", true);
+    widgetDocker.nospaces->setVisible(visible);
+    widgetDocker.count_nospaces->setVisible(visible);
+   }
 
 void KWStatistics::updateData()
 {
@@ -233,18 +255,6 @@ void KWStatistics::updateDataUi()
 
 }
 
-void KWStatistics::setAutoUpdate(int state)
-{
-    if (state == Qt::Checked) {
-        m_autoUpdate = true;
-        connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
-        updateData();
-    } else {
-        m_autoUpdate = false;
-        disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
-    }
-
-}
 
 void KWStatistics::selectionChanged()
 {
@@ -291,15 +301,19 @@ int KWStatistics::countCJKChars(const QString &text)
 }
 
 void KWStatistics::wordsDisplayChanged(int state)
-{
+{   KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Words->show();
         widgetDocker.count_words->show();
+        cfgGroup.writeEntry("WordsVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Words->hide();
         widgetDocker.count_words->hide();
+        cfgGroup.writeEntry("WordsVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -308,14 +322,17 @@ void KWStatistics::wordsDisplayChanged(int state)
 
 void KWStatistics::sentencesDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Sentences->show();
         widgetDocker.count_sentences->show();
+        cfgGroup.writeEntry("SentencesVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.Sentences->hide();
         widgetDocker.count_sentences->hide();
+        cfgGroup.writeEntry("SentencesVisible",false);
         break;
     default:
         break;
@@ -324,14 +341,17 @@ void KWStatistics::sentencesDisplayChanged(int state)
 
 void KWStatistics::linesDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Lines->show();
         widgetDocker.count_lines->show();
+        cfgGroup.writeEntry("LinesVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.Lines->hide();
         widgetDocker.count_lines->hide();
+        cfgGroup.writeEntry("LinesVisible",false);
         break;
     default:
         break;
@@ -339,14 +359,17 @@ void KWStatistics::linesDisplayChanged(int state)
 }
 void KWStatistics::syllablesDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Syllables->show();
         widgetDocker.count_syllables->show();
+        cfgGroup.writeEntry("SyllablesVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.Syllables->hide();
         widgetDocker.count_syllables->hide();
+        cfgGroup.writeEntry("SyllablesVisible",false);
         break;
     default:
         break;
@@ -354,29 +377,36 @@ void KWStatistics::syllablesDisplayChanged(int state)
 }
 void KWStatistics::charspaceDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.spaces->show();
         widgetDocker.count_spaces->show();
+        cfgGroup.writeEntry("CharspacesVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.spaces->hide();
         widgetDocker.count_spaces->hide();
+        cfgGroup.writeEntry("CharspacesVisible",false);
         break;
     default:
         break;
     }
 }
+
 void KWStatistics::charnospaceDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.nospaces->show();
         widgetDocker.count_nospaces->show();
+        cfgGroup.writeEntry("CharnospacesVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.nospaces->hide();
         widgetDocker.count_nospaces->hide();
+        cfgGroup.writeEntry("CharnospacesVisible",false);
         break;
     default:
         break;
@@ -384,14 +414,17 @@ void KWStatistics::charnospaceDisplayChanged(int state)
 }
 void KWStatistics::eastDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Cjkchars->show();
         widgetDocker.count_cjkchars->show();
+        cfgGroup.writeEntry("EastAsianCharactersVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.Cjkchars->hide();
         widgetDocker.count_cjkchars->hide();
+        cfgGroup.writeEntry("EastAsianCharactersVisible",false);
         break;
     default:
         break;
@@ -399,14 +432,17 @@ void KWStatistics::eastDisplayChanged(int state)
 }
 void KWStatistics::fleschDisplayChanged(int state)
 {
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         widgetDocker.Flesch->show();
         widgetDocker.count_flesch->show();
+        cfgGroup.writeEntry("FleschVisible",true);
         break;
     case Qt::Unchecked:
         widgetDocker.Flesch->hide();
         widgetDocker.count_flesch->hide();
+        cfgGroup.writeEntry("FleschVisible",false);
         break;
     default:
         break;
