@@ -33,6 +33,7 @@
 
 KWStatisticsDocker::KWStatisticsDocker()
 {
+    m_canvasReset = false;
     setWindowTitle(i18n("Statistics"));
 }
 
@@ -45,12 +46,12 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 
     KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
 
-    if (!canvas) {
-        delete widget();
-    }
-
     QWidget *wdg = widget();
-    delete wdg;
+    if (wdg) {
+        delete wdg;
+        m_canvasReset = true;
+    } else
+        m_canvasReset = false;
 
     KWStatistics *statistics = new KWStatistics(canvas->resourceManager(),
                                                 canvas->document(),
@@ -62,7 +63,10 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 
 void KWStatisticsDocker::unsetCanvas()
 {
-    delete widget();
+    if (!m_canvasReset) {
+        delete widget();
+        setWidget(0);
+    }
 }
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
