@@ -45,8 +45,6 @@ public:
         document = 0;
     }
     KWDocument *document;
-    KoZoomHandler *zoomHandler;
-    KoZoomController *zoomController;
     KWPage currentTextDocPage;
 };
 
@@ -95,22 +93,28 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         return false;
     }
 
-    d->zoomHandler = static_cast<KoZoomHandler*>(kwCanvasItem->viewConverter());
-    d->zoomController = new KoZoomController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()),
-                                             d->zoomHandler, doc->actionCollection());
+    KoZoomHandler *zoomHandler = static_cast<KoZoomHandler*>(kwCanvasItem->viewConverter());
+    documentController()->canvasController()->setZoomHandler(zoomHandler);
+    KoZoomController *zoomController =
+        new KoZoomController(dynamic_cast<KoCanvasController*>(documentController()->canvasController()),
+                             zoomHandler, doc->actionCollection());
+    documentController()->canvasController()->setZoomController(zoomController);
     d->currentTextDocPage = d->document->pageManager()->begin();
-    d->zoomController->setPageSize(d->currentTextDocPage.rect().size());
-    d->zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+    zoomController->setPageSize(d->currentTextDocPage.rect().size());
+    zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     if (kwCanvasItem) {
         kwCanvasItem->updateSize();
 
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect(kwCanvasItem, SIGNAL(documentSize(QSizeF)), d->zoomController, SLOT(setDocumentSize(QSizeF)));
+        connect(kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        //connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvasItem, SLOT(setDocumentOffset(QPoint)));
+        connect(documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(const QPoint&)),
+                kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
         kwCanvasItem->updateSize();
     }
+
+    connect(documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     return true;
 }
@@ -118,6 +122,12 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 KoDocument* CATextDocumentHandler::document()
 {
     return d->document;
+}
+
+void CATextDocumentHandler::updateCanvas()
+{
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvas());
+    kwCanvasItem->update();
 }
 
 #include "CATextDocumentHandler.moc"

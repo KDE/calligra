@@ -170,6 +170,11 @@ KoCanvasBase* CanvasController::canvas() const
     return m_canvas;
 }
 
+KoCanvasControllerProxyObject* CanvasController::canvasControllerProxyObject()
+{
+    return proxyObject;
+}
+
 void CanvasController::setCanvas(KoCanvasBase* canvas)
 {
     QGraphicsWidget *widget = canvas->canvasItem();
@@ -284,7 +289,7 @@ void CanvasController::centerToCamera()
         proxyObject->emitMoveDocumentOffset(m_currentPoint);
     }
 
-    updateCanvasItem();
+    updateCanvas();
 }
 
 void CanvasController::loadSettings()
@@ -351,8 +356,10 @@ void CanvasController::zoomToFit()
     emit docWidthChanged();
 }
 
-void CanvasController::updateCanvasItem()
+void CanvasController::updateCanvas()
 {
+    emit needCanvasUpdate();
+
     if (m_canvas) {
         switch (m_documentType) {
             case CADocumentInfo::TextDocument:
@@ -411,6 +418,26 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
         zoomToFit();
     }
     QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
+}
+
+KoZoomController* CanvasController::zoomController()
+{
+    return m_zoomController;
+}
+
+KoZoomHandler* CanvasController::zoomHandler()
+{
+    return m_zoomHandler;
+}
+
+void CanvasController::setZoomController (KoZoomController* zoomController)
+{
+    m_zoomController = zoomController;
+}
+
+void CanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
+{
+    m_zoomHandler = zoomHandler;
 }
 
 #include "CanvasController.moc"
