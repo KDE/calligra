@@ -35,8 +35,6 @@
 #include <QtGui/QColor>
 #include <QtGui/QPalette>
 
-KoGenStyles* NumberFormatParser::styles = 0;
-
 QColor NumberFormatParser::color(const QString& name)
 {
     if (name.toUpper().startsWith(QLatin1String("COLOR"))) {
@@ -51,11 +49,6 @@ QColor NumberFormatParser::color(const QString& name)
 QLocale NumberFormatParser::locale(int langid)
 {
     return MSOOXML::Utils::localeForLangId(langid);
-}
-
-void NumberFormatParser::setStyles(KoGenStyles* styles)
-{
-    NumberFormatParser::styles = styles;
 }
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \
@@ -131,7 +124,7 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
-KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Type type)
+KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* styles, KoGenStyle::Type type)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -140,6 +133,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
     QString plainText;
     QMap< QString, QString > conditions;
     QString condition;
+    bool hasConditions = false;
 
     // this is for the month vs. minutes-context
     bool justHadHours = false;
@@ -491,14 +485,18 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
             buffer.close();
 
             // conditional style with the current format
-            KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
-            result.addAttribute("style:volatile", "true");
-            const QString styleName = NumberFormatParser::styles->insert(result, "N");
+            if (styles) {
+                KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
+                result.addAttribute("style:volatile", "true");
+                const QString styleName = styles->insert(result, "N");
+                conditions.insertMulti(condition, styleName);
+            }
+            hasConditions = true;
+            condition.clear();
+
             // start a new style
             buffer.setData(QByteArray());
             buffer.open(QIODevice::WriteOnly);
-            conditions.insertMulti(condition, styleName);
-            condition.clear();
         }
         break;
 
@@ -545,15 +543,21 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
     }
 
     if (!condition.isEmpty()) {
+        buffer.close();
+
         // conditional style with the current format
-        KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
-        result.addAttribute("style:volatile", "true");
-        const QString styleName = NumberFormatParser::styles->insert(result, "N");
+        if (styles) {
+            KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
+            result.addAttribute("style:volatile", "true");
+            const QString styleName = styles->insert(result, "N");
+            conditions.insertMulti(condition, styleName);
+        }
+        hasConditions = true;
+        condition.clear();
+
         // start a new style
         buffer.setData(QByteArray());
         buffer.open(QIODevice::WriteOnly);
-        conditions.insertMulti(condition, styleName);
-        condition.clear();
     }
 
     // if conditions w/o explicit expressions where added, we create the expressions
@@ -580,7 +584,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Ty
     buffer.close();
 
     // conditional style with the current format
-    return styleFromTypeAndBuffer(conditions.isEmpty() ? type : KoGenStyle::NumericTextStyle, buffer);
+    return styleFromTypeAndBuffer(hasConditions ? KoGenStyle::NumericTextStyle : type, buffer);
 }
 
 bool NumberFormatParser::isDateFormat(const QString& numberFormat)

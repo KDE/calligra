@@ -2,6 +2,7 @@
 Name=PBX
 Name[bg]=PBX
 Name[ca]=PBX
+Name[ca@valencia]=PBX
 Name[el]=PBX
 Name[et]=PBX
 Name[it]=PBX
@@ -11,7 +12,9 @@ Name[nl]=PBX
 Name[pl]=PBX
 Name[pt]=PBX
 Name[pt_BR]=PBX
+Name[ru]=PBX
 Name[sv]=Publik telefoni
 Name[uk]=PBX
 Name[x-test]=xxPBXxx
+Name[zh_CN]=专用小交换机
 Name[zh_TW]=PBX

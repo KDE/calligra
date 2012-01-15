@@ -2,6 +2,7 @@
 Name=Decision
 Name[bg]=Решение
 Name[ca]=Decisió
+Name[ca@valencia]=Decisió
 Name[el]=Απόφαση
 Name[es]=Decisión
 Name[et]=Otsus
@@ -12,7 +13,9 @@ Name[nl]=Beslissing
 Name[pl]=Decyzja
 Name[pt]=Decisão
 Name[pt_BR]=Decisão
+Name[ru]=Решение
 Name[sv]=Beslut
 Name[uk]=Рішення
 Name[x-test]=xxDecisionxx
+Name[zh_CN]=决定
 Name[zh_TW]=決定

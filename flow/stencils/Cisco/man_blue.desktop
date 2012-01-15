@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Man blue
 Name[ca]=Home blau
+Name[ca@valencia]=Home blau
 Name[el]=Άνδρας μπλε
 Name[et]=Sinine mees
 Name[it]=Uomo blu
@@ -10,7 +11,9 @@ Name[nl]=Blauwe man
 Name[pl]=Mężczyzna niebieski
 Name[pt]=Homem azul
 Name[pt_BR]=Homem azul
+Name[ru]=Человек синего цвета
 Name[sv]=Man blå
 Name[uk]=Чоловік (синім)
 Name[x-test]=xxMan bluexx
+Name[zh_CN]=男性(蓝色)
 Name[zh_TW]=男人（藍）

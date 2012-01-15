@@ -207,17 +207,6 @@ void WordsGraphicsHandler::init()
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
 
-    //Provide the backgroud color information to the Document
-    DrawStyle ds = getBgDrawStyle();
-    if (ds.fFilled()) {
-        MSO::OfficeArtCOLORREF fc = ds.fillColor();
-        QColor color = QColor(fc.red, fc.green, fc.blue);
-        QString tmp = color.name();
-        if (tmp != m_document->currentBgColor()) {
-            m_document->updateBgColor(tmp);
-        }
-    }
-
     const OfficeArtBStoreContainer* blipStore = 0;
     blipStore = m_officeArtDggContainer.blipStore.data();
 
@@ -235,11 +224,6 @@ void WordsGraphicsHandler::init()
     }
 }
 
-void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
-{
-    emit textBoxFound(index, stylesxml);
-}
-
 DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
@@ -247,6 +231,11 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
         shape = (m_pOfficeArtBodyDgContainer->shape).data();
     }
     return DrawStyle(&m_officeArtDggContainer, 0, shape);
+}
+
+void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
+{
+    emit textBoxFound(index, stylesxml);
 }
 
 void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
@@ -472,7 +461,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         }
         PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
         const wvWare::Word97::FSPA* spa = it.current();
-	Q_ASSERT(m_pSpa == spa);
+    Q_ASSERT(m_pSpa == spa);
         return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
     }
     else if (o.childAnchor) {
@@ -497,7 +486,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             out.setRect(oldCoords);
             //process shape information for the group
             out.setGroupRectangle(*sp->shapeGroup);
-	}
+    }
     }
 
     //create graphic style for the group shape
@@ -736,10 +725,10 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
-	//containers.  Not parsing Blip store because MD4 digests in
-	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
-	//picture path association.
+    //Parse content of the Delay stream by using offsets from OfficeArtFBSE
+    //containers.  Not parsing Blip store because MD4 digests in
+    //OfficeArtFBSE happen to be out-dated, which complicates the pib to
+    //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
@@ -828,6 +817,10 @@ void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, *styles);
     styles->insert(style);
+
+    MSO::OfficeArtCOLORREF fc = ds.fillColor();
+    QColor color = QColor(fc.red, fc.green, fc.blue);
+    m_document->updateBgColor(color.name());
 }
 
 void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)

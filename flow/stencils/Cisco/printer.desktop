@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Printer
 Name[bg]=Принтер
+Name[ca]=Impressora
+Name[ca@valencia]=Impressora
 Name[cs]=Tiskárna
 Name[el]=Εκτυπωτής
 Name[es]=Impresora
@@ -12,6 +14,7 @@ Name[nl]=Printer
 Name[pl]=Drukarka
 Name[pt]=Impressora
 Name[pt_BR]=Impressora
+Name[ru]=Принтер
 Name[sv]=Skrivare
 Name[ug]=پرىنتېر
 Name[uk]=Принтер

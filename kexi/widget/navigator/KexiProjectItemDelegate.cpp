@@ -18,6 +18,7 @@
 */
 
 #include "KexiProjectItemDelegate.h"
+#include "KexiProjectModel.h"
 #include <kexiutils/identifier.h>
 #include <QLineEdit>
 
@@ -35,6 +36,18 @@ KexiProjectItemDelegate::KexiProjectItemDelegate(QObject *parent)
 KexiProjectItemDelegate::~KexiProjectItemDelegate()
 {
     delete d;
+}
+
+void KexiProjectItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                    const QModelIndex &index) const
+{
+    const KexiProjectModel* model = qobject_cast<const KexiProjectModel*>(index.model());
+    QPersistentModelIndex highlighted = model->itemWithSearchHighlight();
+    QStyleOptionViewItem newOption(option);
+    if (highlighted.isValid() && highlighted == index) {
+        newOption.state |= QStyle::State_MouseOver;
+    }
+    QStyledItemDelegate::paint(painter, newOption, index);
 }
 
 QWidget* KexiProjectItemDelegate::createEditor(

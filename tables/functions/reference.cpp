@@ -50,6 +50,7 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_match(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_multiple_operations(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_offset(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
@@ -105,6 +106,10 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setNeedsExtra(true);
   add(f);
     f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
+    f->setParamCount(3, 5);
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("OFFSET", func_offset);
     f->setParamCount(3, 5);
     f->setNeedsExtra(true);
     add(f);
@@ -483,6 +488,38 @@ Value func_multiple_operations(valVector args, ValueCalc *, FuncExtra *e)
     }
 
     return formula.eval(cellIndirections);
+}
+
+//
+// Function: OFFSET
+//
+Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    const int rowPlus = calc->conv()->asInteger(args[1]).asInteger();
+    const int colPlus = calc->conv()->asInteger(args[2]).asInteger();
+
+    //const int rowNew = args.count() >= 4 ? calc->conv()->asInteger(args[3]).asInteger() : -1;
+    //const int colNew = args.count() >= 5 ? calc->conv()->asInteger(args[4]).asInteger() : -1;
+    //if (colNew == 0 || rowNew == 0) return Value::errorVALUE();
+
+    // Doesn't take references to other sheets into account
+    //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
+    //const Calligra::Tables::Region region(rect, e->sheet);
+
+    if (e->regions.isEmpty())
+        return Value::errorVALUE();
+
+    const Calligra::Tables::Region &region = e->regions[0];
+
+    if (!region.isValid() /* || !region.isSingular() */)
+        return Value::errorVALUE();
+
+    QPoint p = region.firstRange().topLeft() + QPoint(colPlus, rowPlus);
+    const Cell cell(region.firstSheet(), p);
+    if (!cell.isNull())
+        return cell.value();
+
+    return Value::errorVALUE();
 }
 
 //

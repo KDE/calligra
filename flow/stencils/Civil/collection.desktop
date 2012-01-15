@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Civil
 Name[bg]=Граждански
+Name[ca]=Civil
+Name[ca@valencia]=Civil
 Name[el]=Civil
 Name[et]=Ehitus
 Name[it]=Civile
@@ -9,8 +11,10 @@ Name[nl]=Civiel
 Name[pl]=Inżynieria
 Name[pt]=Civil
 Name[pt_BR]=Civil
+Name[ru]=Гражданское
 Name[sv]=Väg och vatten
 Name[uk]=Будівництво
 Name[x-test]=xxCivilxx
+Name[zh_CN]=民用
 Name[zh_TW]=Civil
 X-KDE-DirType=odg-collection

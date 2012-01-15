@@ -2,6 +2,7 @@
 Name=Wireless Connectivity
 Name[bg]=Безжична свързаност
 Name[ca]=Connectivitat sense fils
+Name[ca@valencia]=Connectivitat sense fils
 Name[el]=Συνδεσιμότητα ασύρματης επικοινωνίας
 Name[et]=Juhtmeta ühendus
 Name[it]=Connettività wireless
@@ -10,7 +11,9 @@ Name[nl]=Draadloze verbinding
 Name[pl]=Połączenie bezprzewodowe
 Name[pt]=Conectividade Sem-Fios
 Name[pt_BR]=Conectividade sem fio
+Name[ru]=Беспроводное подключение
 Name[sv]=Trådlös anslutning
 Name[uk]=Можливість бездротового з'єднання
 Name[x-test]=xxWireless Connectivityxx
+Name[zh_CN]=无线网络连通性
 Name[zh_TW]=無線連線

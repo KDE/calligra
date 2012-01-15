@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=FC Storage
 Name[bg]=Хранилище FC
+Name[ca]=Emmagatzement FC
+Name[ca@valencia]=Emmagatzement FC
 Name[de]=FC-Speicher
 Name[el]=FC Storage
 Name[et]=FC salvesti
@@ -11,7 +13,9 @@ Name[nl]=FC-storage
 Name[pl]=Magazyn FC
 Name[pt]=Armazenamento FC
 Name[pt_BR]=Armazenamento FC
+Name[ru]=Хранилище FC
 Name[sv]=Fiberkanallagring
 Name[uk]=Сховище FC
 Name[x-test]=xxFC Storagexx
+Name[zh_CN]=FC 存储器
 Name[zh_TW]=FC 儲存裝置

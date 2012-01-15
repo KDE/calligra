@@ -83,6 +83,7 @@ class Validity;
 class ValidityStorage;
 class ValueStorage;
 class View;
+class SheetTest;
 template<typename T> class IntervalMap;
 
 /**
@@ -836,7 +837,8 @@ protected:
                             QHash<QString, QRegion>& rowStyleRegions,
                             QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles);
+                            const Styles& autoStyles,
+                            QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument
@@ -846,7 +848,8 @@ protected:
                        QHash<QString, QRegion>& rowStyleRegions,
                        QHash<QString, QRegion>& cellStyleRegions,
                        const IntervalMap<QString>& columnStyles,
-                       const Styles& autoStyles);
+                       const Styles& autoStyles,
+                       QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument
@@ -912,7 +915,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    bool compareRows(int row1, int row2, int & maxCols, OdfSavingContext& tableContext) const;
+    bool compareRows(int row1, int row2, int maxCols, OdfSavingContext& tableContext) const;
 
     /**
      * \ingroup OpenDocument
@@ -960,6 +963,8 @@ private:
 
     // disable assignment operator
     void operator=(const Sheet& other);
+
+    friend class SheetTest;
 
     class Private;
     Private * const d;

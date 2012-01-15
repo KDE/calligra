@@ -71,6 +71,19 @@ CALLIGRA_TABLES_ODF_EXPORT int decodeRowLabelText(const QString &labelText);
 CALLIGRA_TABLES_ODF_EXPORT QString encodeColumnLabelText(int column);
 
 /**
+ * Returns true if the given text is a cell-reference.
+ *
+ * This is an optimized version of QRegExp("^(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$")
+ * to check if the given string is a cell-reference like $A$1 or D17. Note
+ * that this will return false for cell-ranges like A1:B2 or cell-references
+ * given with sheet-name like Sheet1:A1.
+ *
+ * @param text The text to check
+ * @param startPos The position in the string where we should start to check
+ */
+CALLIGRA_TABLES_ODF_EXPORT bool isCellReference(const QString &text, int startPos = 0);
+
+/**
  * Generate and return the ODF formula for this cell (\p thisRow, \p thisColumn) based on the formula in the
  * defined cell (\p referencedRow, \p referencedColumn ).
  */
@@ -140,7 +153,7 @@ QPen decodePen(const QString &str);
  * \note Use Region::loadOdf() for plain cell references.
  */
 // TODO check visibility
-CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
+CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
 
 /**
  * \ingroup OpenDocument

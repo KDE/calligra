@@ -2,14 +2,17 @@
 Name=Manual Input
 Name[bg]=Ръчно въвеждане
 Name[ca]=Introducció manual
+Name[ca@valencia]=Introducció manual
 Name[el]=Χειροκίνητη είσοδος
 Name[es]=Entrada manual
 Name[et]=Käsitsisisestus
+Name[it]=Inserimento manuale
 Name[nb]=Manuelle inndata
 Name[nl]=Handmatige invoer
 Name[pl]=Ręczne wejście
 Name[pt]=Entrada Manual
 Name[pt_BR]=Entrada manual
+Name[ru]=Ручной ввод
 Name[sv]=Manuell inmatning
 Name[uk]=Ручний ввід
 Name[x-test]=xxManual Inputxx

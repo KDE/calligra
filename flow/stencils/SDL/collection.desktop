@@ -2,6 +2,7 @@
 Name=SDL
 Name[bg]=SDL
 Name[ca]=SDL
+Name[ca@valencia]=SDL
 Name[cs]=SDL
 Name[de]=SDL
 Name[el]=SDL
@@ -14,6 +15,7 @@ Name[nl]=SDL
 Name[pl]=SDL
 Name[pt]=SDL
 Name[pt_BR]=SDL
+Name[ru]=SDL
 Name[sv]=SDL
 Name[ug]=SDL
 Name[uk]=SDL

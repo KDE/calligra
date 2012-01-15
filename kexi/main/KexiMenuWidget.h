@@ -164,6 +164,7 @@ protected:
 #endif
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent *);
     void paintEvent(QPaintEvent *);
     void actionEvent(QActionEvent *);

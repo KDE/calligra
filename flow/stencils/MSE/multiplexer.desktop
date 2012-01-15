@@ -2,6 +2,7 @@
 Name=Multiplexer
 Name[bg]=Мултиплексор
 Name[ca]=Multiplexador
+Name[ca@valencia]=Multiplexador
 Name[de]=Multiplexer
 Name[el]=Πολυπλέκτης
 Name[es]=Multiplexador
@@ -12,6 +13,7 @@ Name[nl]=Multiplexer
 Name[pl]=Multiplekser
 Name[pt]=Multiplexador
 Name[pt_BR]=Multiplexador
+Name[ru]=Мультиплексор
 Name[sv]=Multiplexor
 Name[uk]=Мультиплексор
 Name[x-test]=xxMultiplexerxx

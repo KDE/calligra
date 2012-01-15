@@ -35,7 +35,7 @@ public:
     virtual ~KPrShapeManagerDisplayMasterStrategy();
 
     /// reimplemented
-    virtual void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint );
+    virtual void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
 private:
     KPrPageSelectStrategyBase *m_strategy;

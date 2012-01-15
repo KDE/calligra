@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@
 #include <KGlobalSettings>
 #include <KAction>
 #include <KDialog>
+#include <KColorScheme>
 
 using namespace KexiUtils;
 
@@ -103,7 +104,7 @@ WaitCursorRemover::~WaitCursorRemover()
 
 //--------------------------------------------------------------------------------
 
-QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
+QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, const char* objName)
 {
     if (!o)
         return 0;
@@ -410,11 +411,11 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
+    pos = rect.topLeft() + QPoint(margins.left, margins.top);
     if (scaledContents) {
         if (keepAspectRatio) {
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
-            pos = rect.topLeft();
             if (img.width() < w) {
 //                int hAlign = QApplication::horizontalAlignment(alignment);
                 if (alignment & Qt::AlignRight)
@@ -448,7 +449,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //                p2.begin(&pixmapBuffer);
                 //, p.device());
 //                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
-                pos = rect.topLeft();
                 pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
                 if (p) {
                     p->drawPixmap(pos, pixmap);
@@ -713,17 +713,25 @@ void KexiUtils::setMargins(QLayout *layout, int value)
     layout->setContentsMargins(value, value, value, value);
 }
 
-QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
 {
-    QPixmap dest(original);
-    {
-        QPainter p(&dest);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        QPixmap colorize(original.size());
-        colorize.fill(color);
-        p.drawPixmap(0, 0, colorize);
-    }
-    return dest;
+    Q_ASSERT(original);
+    QImage dest(original->toImage());
+    replaceColors(&dest, color);
+    *original = QPixmap::fromImage(dest);
+}
+
+void KexiUtils::replaceColors(QImage* original, const QColor& color)
+{
+    Q_ASSERT(original);
+    QPainter p(original);
+    p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    p.fillRect(original->rect(), color);
+}
+
+bool KexiUtils::isLightColorScheme()
+{
+    return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
 }
 
 //---------------------

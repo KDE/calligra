@@ -2,6 +2,8 @@
 Name=Microphone
 Name[bg]=Микрофон
 Name[ca]=Micròfon
+Name[ca@valencia]=Micròfon
+Name[cs]=Mikrofon
 Name[el]=Μικρόφωνο
 Name[es]=Micrófono
 Name[et]=Mikrofon
@@ -12,6 +14,7 @@ Name[nl]=Microfoon
 Name[pl]=Mikrofon
 Name[pt]=Microfone
 Name[pt_BR]=Microfone
+Name[ru]=Микрофон
 Name[sv]=mikrofon
 Name[ug]=مىكروفون
 Name[uk]=Мікрофон

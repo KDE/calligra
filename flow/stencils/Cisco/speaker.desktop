@@ -2,6 +2,8 @@
 Name=Speaker
 Name[bg]=Тонколона
 Name[ca]=Altaveu
+Name[ca@valencia]=Altaveu
+Name[cs]=Reproduktor
 Name[el]=Ηχείο
 Name[et]=Valjuhääldi
 Name[it]=Altoparlante
@@ -11,6 +13,7 @@ Name[nl]=Speaker
 Name[pl]=Głośnik
 Name[pt]=Altifalante
 Name[pt_BR]=Alto-falante
+Name[ru]=Динамик
 Name[sv]=Högtalare
 Name[ug]=ياڭراتقۇ
 Name[uk]=Гучномовець

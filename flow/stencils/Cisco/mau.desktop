@@ -2,6 +2,7 @@
 Name=MAU
 Name[bg]=MAU
 Name[ca]=MAU
+Name[ca@valencia]=MAU
 Name[el]=MAU
 Name[et]=MAU
 Name[it]=MAU
@@ -11,7 +12,9 @@ Name[nl]=MAU
 Name[pl]=MAU
 Name[pt]=MAU
 Name[pt_BR]=MAU
+Name[ru]=MAU
 Name[sv]=MAU
 Name[uk]=MAU
 Name[x-test]=xxMAUxx
+Name[zh_CN]=MAU
 Name[zh_TW]=MAU

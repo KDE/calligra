@@ -2,6 +2,7 @@
 Name=Wireless Transport
 Name[bg]=Безжичен пренос
 Name[ca]=Transport sense fils
+Name[ca@valencia]=Transport sense fils
 Name[el]=Ασύρματη μεταφορά
 Name[et]=Juhtmeta side
 Name[it]=Trasporto wireless
@@ -11,7 +12,9 @@ Name[nl]=Draadloos transport
 Name[pl]=Bezprzewodowe przesyłanie
 Name[pt]=Transporte Sem-Fios
 Name[pt_BR]=Transporte sem fio
+Name[ru]=Беспроводной транспорт
 Name[sv]=Trådlös överföring
 Name[uk]=Бездротова передача
 Name[x-test]=xxWireless Transportxx
+Name[zh_CN]=无线网络传输
 Name[zh_TW]=無線傳輸

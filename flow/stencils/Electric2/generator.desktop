@@ -1,15 +1,19 @@
 [Desktop Entry]
 Name=generator
 Name[bg]=генератор
+Name[ca]=generador
+Name[ca@valencia]=generador
 Name[cs]=generátor
 Name[de]=Generator
 Name[el]=γεννήτρια
-Name[et]=generaator
+Name[et]=Generaator
+Name[it]=generatore
 Name[nb]=generator
 Name[nl]=generator
 Name[pl]=generator
 Name[pt]=gerador
 Name[pt_BR]=gerador
+Name[ru]=генератор
 Name[sv]=generator
 Name[uk]=Генератор
 Name[x-test]=xxgeneratorxx

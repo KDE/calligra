@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Input Transducer
 Name[ca]=Introducció de transductor
+Name[ca@valencia]=Introducció de transductor
+Name[et]=Sisendi tõlgendaja
+Name[it]=Trasduttore di ingresso
 Name[nb]=Inngangsomvandler
 Name[nl]=Input transducer
 Name[pl]=Wejściowy transduktor
 Name[pt]=Transdutor Entrada
 Name[pt_BR]=Transdutor de entrada
+Name[ru]=Преобразователь ввода
 Name[sv]=Ingångsomvandlare
 Name[uk]=Перетворювач входу
 Name[x-test]=xxInput Transducerxx

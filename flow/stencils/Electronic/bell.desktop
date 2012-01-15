@@ -2,12 +2,17 @@
 Name=bell
 Name[bg]=звънец
 Name[ca]=campana
+Name[ca@valencia]=campana
+Name[cs]=zvonek
+Name[et]=Kell
+Name[it]=bell
 Name[nb]=klokke
 Name[nds]=Pingel
 Name[nl]=bel
 Name[pl]=dzwonek
 Name[pt]=campainha
 Name[pt_BR]=campainha
+Name[ru]=Звонок
 Name[sv]=ringklocka
 Name[uk]=Дзвінок
 Name[x-test]=xxbellxx

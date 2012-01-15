@@ -43,6 +43,7 @@
 #include "Condition.h"
 #include "Global.h"
 #include "Format.h"
+#include "OdfLoadingContext.h"
 
 #include "database/Database.h"
 
@@ -70,6 +71,7 @@ class OdfSavingContext;
 class Sheet;
 class Validity;
 class Value;
+class CellTest;
 
 /**
  * An accessor to the actual cell data.
@@ -196,7 +198,7 @@ public:
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString displayText() const;
+    QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
 
     /**
      * \return the comment associated with this cell
@@ -367,7 +369,9 @@ public:
      * @param element An OASIS XML element
      * @param tableContext The loading context assoiated with the XML element
      */
-    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
+    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
+        const Styles& autoStyles, const QString& cellStyleName,
+        QList<ShapeLoadingData>& shapeData);
 
     /**
      * \ingroup OpenDocument
@@ -607,7 +611,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext);
+    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext, QList<ShapeLoadingData>& shapeData);
 
 
     /**
@@ -615,8 +619,10 @@ protected:
      */
     void saveOdfAnnotation(KoXmlWriter &xmlwriter);
 public:
-    void loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
+    ShapeLoadingData loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
+    friend class CellTest;
+
     class Private;
     QSharedDataPointer<Private> d;
 

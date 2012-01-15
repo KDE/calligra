@@ -27,6 +27,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptresource.h"
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptschedulerplugin.h"
@@ -551,46 +552,6 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
     return false;
 }
 
-QVariant ScheduleItemModel::calculateAll( const QModelIndex &index, int role ) const
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return QVariant();
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            return sm->calculateAll();
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return sm->calculateAll() ? i18n( "All" ) : i18n( "Expected only" );
-        case Role::EnumList:
-            return QStringList() << i18n( "Expected only" ) << i18n( "All" );
-        case Role::EnumListValue:
-            return sm->calculateAll() ? 1 : 0;
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVariant &value, int role )
-{
-    ScheduleManager *sm = manager ( index );
-    if ( sm == 0 ) {
-        return false;
-    }
-    switch ( role ) {
-        case Qt::EditRole:
-            //FIXME remove?
-            emit executeCommand( new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify schedule calculate" ) );
-            return true;
-    }
-    return false;
-}
-
 QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) const
 {
     if ( m_project == 0 ) {
@@ -812,7 +773,6 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleDirection: result = schedulingDirection( index, role ); break;
         case ScheduleModel::ScheduleOverbooking: result = allowOverbooking( index, role ); break;
         case ScheduleModel::ScheduleDistribution: result = usePert( index, role ); break;
-//        case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
@@ -1107,9 +1067,31 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
     }
     lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
     QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
-    item->setData( log.severity );
+    item->setData( log.severity, SeverityRole );
     lst.append( item );
     lst.append( new QStandardItem( log.message ) );
+    foreach ( QStandardItem *itm, lst ) {
+            if ( log.resource ) {
+                itm->setData( log.resource->id(), IdentityRole );
+            } else if ( log.node ) {
+                itm->setData( log.node->id(), IdentityRole );
+            }
+            switch ( log.severity ) {
+            case Schedule::Log::Type_Debug:
+                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Info:
+                break;
+            case Schedule::Log::Type_Warning:
+                itm->setData( Qt::blue, Qt::ForegroundRole );
+                break;
+            case Schedule::Log::Type_Error:
+                itm->setData( Qt::red, Qt::ForegroundRole );
+                break;
+            default:
+                break;
+        }
+    }
     appendRow( lst );
 //     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
@@ -1130,6 +1112,12 @@ void ScheduleLogItemModel::refresh()
     foreach ( const Schedule::Log &l, m_schedule->logs() ) {
         addLogEntry( l, i++ );
     }
+}
+
+QString ScheduleLogItemModel::identity( const QModelIndex &idx ) const
+{
+    QStandardItem *itm = itemFromIndex( idx );
+    return itm ? itm->data( IdentityRole ).toString() : QString();
 }
 
 void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )

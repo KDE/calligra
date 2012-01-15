@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=SSL Terminator
 Name[ca]=SSL Terminator
+Name[ca@valencia]=SSL Terminator
+Name[et]=SSL-terminaator
 Name[it]=Terminatore SSL
 Name[nb]=SSL-terminator
 Name[nds]=SSL-Terminator
@@ -8,7 +10,9 @@ Name[nl]=SSL Terminator
 Name[pl]=Zakończenie SSL
 Name[pt]=Terminação SSL
 Name[pt_BR]=Terminador SSL
+Name[ru]=Динамик
 Name[sv]=SSL-terminering
 Name[uk]=Термінатор SSL
 Name[x-test]=xxSSL Terminatorxx
+Name[zh_CN]=SSL 终端器
 Name[zh_TW]=SSL 終端器

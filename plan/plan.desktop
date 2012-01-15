@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Plan
+Name[ca]=Plan
+Name[ca@valencia]=Plan
+Name[cs]=Plan
 Name[da]=Plan
 Name[de]=Plan
 Name[el]=Plan
 Name[es]=Plan
 Name[et]=Plan
+Name[hu]=Plan
 Name[it]=Plan
 Name[nb]=Plan
 Name[nds]=Plan
@@ -17,7 +21,7 @@ Name[sv]=Plan
 Name[ug]=ئېقىم يۈرۈشلۈك پىلانى
 Name[uk]=Plan
 Name[x-test]=xxPlanxx
-Name[zh_CN]=计划
+Name[zh_CN]=Plan
 Name[zh_TW]=Plan
 GenericName=Project Management
 GenericName[bg]=Управление на проекти

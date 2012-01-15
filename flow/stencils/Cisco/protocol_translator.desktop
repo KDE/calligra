@@ -2,6 +2,7 @@
 Name=Protocol Translator
 Name[bg]=Преобразувател на протокол
 Name[ca]=Traductor de protocol
+Name[ca@valencia]=Traductor de protocol
 Name[el]=Μεταφραστής πρωτοκόλλου
 Name[et]=Protokolli translaator
 Name[it]=Traduttore di protocollo
@@ -11,7 +12,9 @@ Name[nl]=Protocol Translator
 Name[pl]=Tłumacz protokołów
 Name[pt]=Tradutor de Protocolos
 Name[pt_BR]=Tradutor de Protocolos
+Name[ru]=Преобразователь протокола
 Name[sv]=Protokollöversättare
 Name[uk]=Транслятор протоколу
 Name[x-test]=xxProtocol Translatorxx
+Name[zh_CN]=协议翻译器
 Name[zh_TW]=協定翻譯器

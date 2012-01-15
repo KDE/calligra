@@ -35,7 +35,7 @@
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
-#include <QPixmap>
+#include <QImage>
 #include <QTimer>
 
 #include "CSThumbProviderStage.h"
@@ -109,7 +109,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     return saveAs;
 }
 
-QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
+QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     CSThumbProvider *tp = 0;
 
@@ -128,13 +128,13 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
     }
 #endif
 
-    return tp->createThumbnails(thumbSize);
+    return tp ? tp->createThumbnails(thumbSize) : QList<QImage>();
 }
 
-void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
+void saveThumbnails(const QList<QImage> &thumbnails, const QString &dir)
 {
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         // it is not possible to use QString("%1/thumb_%2.png").arg(dir).arg(++i);
         // as dir can contain % values which then might or might not be overwritten by the second arg
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
@@ -142,7 +142,7 @@ void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
     }
 }
 
-void saveThumbnails(const QFileInfo &file, const QList<QPixmap> &thumbnails, const QString &outdir)
+void saveThumbnails(const QFileInfo &file, const QList<QImage> &thumbnails, const QString &outdir)
 {
     QDir dir(outdir);
     QString checkSubDir(file.fileName() + ".check");
@@ -150,11 +150,11 @@ void saveThumbnails(const QFileInfo &file, const QList<QPixmap> &thumbnails, con
     saveThumbnails(thumbnails, outdir + '/' + checkSubDir);
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool verbose)
+bool checkThumbnails(const QList<QImage> &thumbnails, const QString &dir, bool verbose)
 {
     bool success = true;
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
 
         QByteArray ba;
@@ -179,16 +179,16 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool 
     return success;
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QList<QPixmap> &others, bool verbose)
+bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &others, bool verbose)
 {
     bool success = true;
     if (thumbnails.size() != others.size()) {
         qDebug() << "Check failed: number of pages different" << thumbnails.size() << "!=" << others.size();
         return false;
     }
-    int i = 0;
-    QList<QPixmap>::const_iterator it(thumbnails.constBegin());
-    QList<QPixmap>::const_iterator oIt(others.constBegin());
+    int i = 1;
+    QList<QImage>::const_iterator it(thumbnails.constBegin());
+    QList<QImage>::const_iterator oIt(others.constBegin());
 
     for (; it != thumbnails.constEnd(); ++it, ++oIt, ++i) {
         QByteArray ba;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
             exit(2);
         }
 
-        QList<QPixmap> thumbnails(createThumbnails(document, QSize(800,800)));
+        QList<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
 
         qDebug() << "created" << thumbnails.size() << "thumbnails";
         if (create) {
@@ -333,9 +333,10 @@ int main(int argc, char *argv[])
             QFileInfo rFile(rFilename);
             qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
             document = openFile(rFile.absoluteFilePath());
-            QList<QPixmap> others(createThumbnails(document, QSize(800,800)));
+            QList<QImage> others(createThumbnails(document, QSize(800,800)));
             if (args->isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
+                saveThumbnails(file, thumbnails, outDir + "/before");
             }
             if (checkThumbnails(thumbnails, others, verbose)) {
                 ++successful;

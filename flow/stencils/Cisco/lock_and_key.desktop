@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Lock and Key
 Name[ca]=Lock and Key
+Name[ca@valencia]=Lock and Key
 Name[el]=Κλειδαριά και κλειδί
+Name[et]=Lukk ja võti
 Name[it]=Lucchetto e chiave
 Name[nb]=Lås og nøkkel
 Name[nds]=Slott un Slötel
@@ -9,7 +11,9 @@ Name[nl]=Slot en sleutel
 Name[pl]=Blokada i Klucz
 Name[pt]=Cadeado e Chave
 Name[pt_BR]=Cadeado e chave
+Name[ru]=Ключ и замок
 Name[sv]=Lås och nyckel
 Name[uk]=Замок і ключ
 Name[x-test]=xxLock and Keyxx
+Name[zh_CN]=锁和钥匙
 Name[zh_TW]=鎖與鑰匙

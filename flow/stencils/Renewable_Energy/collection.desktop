@@ -2,6 +2,7 @@
 Name=Renewable Energy
 Name[bg]=Възобновима енергия
 Name[ca]=Energia renovable
+Name[ca@valencia]=Energia renovable
 Name[el]=Ανανεώσιμη ενέργεια
 Name[et]=Taaskasutatav energia
 Name[it]=Energia rinnovabile
@@ -9,6 +10,7 @@ Name[nb]=Fornybar energi
 Name[pl]=Odnawialna energia
 Name[pt]=Energia Renovável
 Name[pt_BR]=Energia renovável
+Name[ru]=Возобновляемые источники энергии
 Name[sv]=Förnyelsebar energi
 Name[uk]=Відновлювальні джерела енергії
 Name[x-test]=xxRenewable Energyxx

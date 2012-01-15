@@ -2,6 +2,8 @@
 Name=IP
 Name[bg]=IP
 Name[ca]=IP
+Name[ca@valencia]=IP
+Name[cs]=IP
 Name[el]=IP
 Name[et]=IP
 Name[it]=IP
@@ -11,6 +13,7 @@ Name[nl]=IP
 Name[pl]=IP
 Name[pt]=IP
 Name[pt_BR]=IP
+Name[ru]=IP
 Name[sv]=IP
 Name[ug]=IP
 Name[uk]=IP

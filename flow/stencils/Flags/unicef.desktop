@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=UNICEF
 Name[bg]=УНИЦЕФ
+Name[ca]=UNICEF
+Name[ca@valencia]=UNICEF
 Name[cs]=UNICEF
 Name[da]=UNICEF
 Name[de]=UNICEF
@@ -8,6 +10,7 @@ Name[et]=UNICEF
 Name[it]=UNICEF
 Name[nb]=UNICEF
 Name[nds]=UNICEF
+Name[nl]=UNICEF
 Name[pl]=UNICEF
 Name[pt]=UNICEF
 Name[pt_BR]=UNICEF
@@ -15,4 +18,5 @@ Name[ru]=ЮНИСЕФ
 Name[sv]=UNICEF
 Name[uk]=ЮНІСЕФ
 Name[x-test]=xxUNICEFxx
+Name[zh_CN]=联合国儿童基金会
 Name[zh_TW]=聯合國兒童基金會

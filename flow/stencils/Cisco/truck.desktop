@@ -2,6 +2,7 @@
 Name=Truck
 Name[bg]=Камион
 Name[ca]=Truck
+Name[ca@valencia]=Truck
 Name[de]=LKW
 Name[el]=Φορτηγό
 Name[et]=Veoauto
@@ -11,7 +12,9 @@ Name[nl]=Vrachtwagen
 Name[pl]=Ciężarówka
 Name[pt]=Camião
 Name[pt_BR]=Caminhão
+Name[ru]=Грузовик
 Name[sv]=Lastbil
 Name[uk]=Вантажівка
 Name[x-test]=xxTruckxx
+Name[zh_CN]=卡车
 Name[zh_TW]=卡車

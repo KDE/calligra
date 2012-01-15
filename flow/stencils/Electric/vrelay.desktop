@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=vrelay
 Name[ca]=vrelay
+Name[ca@valencia]=vrelay
 Name[el]=vrelay
+Name[et]=Vertikaalne relee
+Name[it]=relé-v
 Name[nb]=rele loddr
 Name[nl]=vrelais
 Name[pl]=v_przkaźnik
 Name[pt]=relé-v
 Name[pt_BR]=relé-v
+Name[ru]=v-реле
 Name[sv]=vertikalt relä
 Name[uk]=Реле (вертикально)
 Name[x-test]=xxvrelayxx

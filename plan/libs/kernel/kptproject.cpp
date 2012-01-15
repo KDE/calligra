@@ -229,22 +229,10 @@ void Project::calculate( ScheduleManager &sm )
         incProgress();
         calculate( sm.expected(), sm.recalculateFrom() );
     } else {
-        if ( sm.optimistic() ) {
-            maxprogress += nodes * 3;
-        }
-        if ( sm.pessimistic() ) {
-            maxprogress += nodes * 3;
-        }
         emit maxProgress( maxprogress );
         sm.setMaxProgress( maxprogress );
         calculate( sm.expected() );
         emit scheduleChanged( sm.expected() );
-        if ( sm.optimistic() ) {
-            calculate( sm.optimistic() );
-        }
-        if ( sm.pessimistic() ) {
-            calculate( sm.pessimistic() );
-        }
         setCurrentSchedule( sm.expected()->id() );
     }
     emit sigProgress( maxprogress );
@@ -1396,9 +1384,9 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     if ( emitSignal ) {
         emit nodeAdded( task );
         emit changed();
-    }
-    if ( p != this && p->numChildren() == 1 ) {
-        emit nodeChanged( p );
+        if ( p != this && p->numChildren() == 1 ) {
+            emit nodeChanged( p );
+        }
     }
     return true;
 }
@@ -1418,10 +1406,9 @@ void Project::takeTask( Node *node, bool emitSignal )
     if ( emitSignal ) {
         emit nodeRemoved( node );
         emit changed();
-    }
-    //kDebug()<<node->name()<<"removed";
-    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
-        emit nodeChanged( parent );
+        if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+            emit nodeChanged( parent );
+        }
     }
 }
 
@@ -2042,10 +2029,12 @@ double Project::bcwp( const QDate &date, long id ) const
         plannedCompleted = plan.costTo( date );
         budgetedCompleted = budgetedCostPerformed( date, id );
     }
-    double percentageCompletion = budgetedCompleted / budgetAtCompletion;
-    
-    double c = budgetAtCompletion * percentageCompletion; //??
-    kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    double c = 0.0;
+    if ( budgetAtCompletion > 0.0 ) {
+        double percentageCompletion = budgetedCompleted / budgetAtCompletion;
+        c = budgetAtCompletion * percentageCompletion; //??
+        kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    }
     return c;
 }
 
@@ -2185,6 +2174,21 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
         m_standardWorktime->setProject( this );
         emit standardWorktimeChanged( worktime );
     }
+}
+
+void Project::emitDocumentAdded( Node *node , Document *doc , int index )
+{
+    emit documentAdded( node, doc, index );
+}
+
+void Project::emitDocumentRemoved( Node *node , Document *doc , int index )
+{
+    emit documentRemoved( node, doc, index );
+}
+
+void Project::emitDocumentChanged( Node *node , Document *doc , int index )
+{
+    emit documentChanged( node, doc, index );
 }
 
 bool Project::linkExists( const Node *par, const Node *child ) const

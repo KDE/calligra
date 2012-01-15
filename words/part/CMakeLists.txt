@@ -51,8 +51,6 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
-    dialogs/KWInsertPageDialog.cpp
-    dialogs/KWInsertInlineNoteDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -64,6 +62,7 @@ set(wordsprivate_LIB_SRCS
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
+    commands/KWShapeCreateCommand.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -83,8 +82,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
-    dialogs/KWInsertPageDialog.ui
-    dialogs/KWInsertInlineNoteDialog.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
 )
@@ -126,7 +123,7 @@ install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
 
 kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 

@@ -42,10 +42,10 @@
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
-#include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
+#include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoTextAnchor.h>
@@ -141,17 +141,22 @@ KWDocument::~KWDocument()
 // any call coming in here is due to the undo/redo framework, pasting or for nested frames
 void KWDocument::addShape(KoShape *shape)
 {
+    addShape(shape, 0);
+}
+
+void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
+{
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     kDebug(32001) << "shape=" << shape << "frame=" << frame;
     if (frame == 0) {
         if (shape->shapeId() == TextShape_SHAPEID) {
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
             tfs->setName("Text");
-            frame = new KWFrame(shape, tfs);
+            frame = new KWFrame(shape, tfs, anchor);
         } else {
             KWFrameSet *fs = new KWFrameSet();
             fs->setName(shape->shapeId());
-            frame = new KWFrame(shape, fs);
+            frame = new KWFrame(shape, fs, anchor);
         }
     }
     Q_ASSERT(frame->frameSet());
@@ -167,7 +172,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
+    qDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -180,6 +185,26 @@ void KWDocument::removeShape(KoShape *shape)
             KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
             canvas->shapeManager()->remove(shape);
         }
+    }
+}
+
+void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
+{
+    QMap<KoTextEditor *, QList<KoTextAnchor *> > anchors;
+    foreach (KoShape *shape, shapes) {
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        if (frame && frame->shape()) {
+            KoTextAnchor *anchor = frame->anchor();
+            const QTextDocument *document = anchor ? anchor->document(): 0;
+            if (document) {
+                KoTextEditor *editor = KoTextDocument(document).textEditor();
+                anchors[editor].append(anchor);
+            }
+        }
+    }
+    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.begin());
+    for (; it != anchors.end(); ++it) {
+        it.key()->removeAnchors(it.value(), command);
     }
 }
 
@@ -432,6 +457,7 @@ void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+
     removeFrameFromViews(frame);
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
@@ -531,23 +557,20 @@ void KWDocument::initEmpty()
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
-    KoCharacterStyle *character = parag->characterStyle();
-    character->setFontPointSize(20);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(20);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 2"));
-    character = parag->characterStyle();
-    character->setFontPointSize(16);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(16);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 3"));
-    character = parag->characterStyle();
-    character->setFontPointSize(12);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
@@ -817,3 +840,99 @@ void KWDocument::saveConfig()
     interface.writeEntry("ResolutionX", gridData().gridX());
     interface.writeEntry("ResolutionY", gridData().gridY());
 }
+
+KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
+{
+    KWFrame *result = 0;
+    int      area   = 0;
+    QRectF   br     = shape->boundingRect();
+
+    // now find the frame that is closest to the frame we want to inline.
+    foreach (KWFrame *frame, mainFrameSet()->frames()) {
+        QRectF intersection  = br.intersected(frame->shape()->boundingRect());
+        int    intersectArea = qRound(intersection.width() * intersection.height());
+
+        if (intersectArea > area) {
+            result = frame;
+            area   = intersectArea;
+        } else if (result == 0) {
+            // TODO check distance between frames or something.
+        }
+    }
+
+    return result;
+}
+
+KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
+{
+    Q_ASSERT(mainFrameSet());
+    Q_ASSERT(shape);
+
+    // try and find out if shape is already anchored    
+    foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
+        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
+        if (anchor && anchor->shape() == shape) {
+            return anchor;
+        }
+    }
+
+    KWFrame *frame = frameOfShape(shape);
+    KoTextAnchor *anchor = frame->anchor();
+
+    if (!anchor) {
+        anchor = new KoTextAnchor(shape);
+        anchor->setAnchorType(KoTextAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
+        anchor->setVerticalPos(KoTextAnchor::VFromTop);
+        frame->setAnchor(anchor);
+    }
+
+    return anchor;
+}
+
+bool KWDocument::insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent)
+{
+    KWFrame *targetFrame = findClosestFrame(anchor->shape());
+
+    if (targetFrame == 0) {/* can't happen later on... */
+        kDebug(32001) << "bailing out...no shape to anchor to";
+        return false;
+    }
+
+    KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(targetFrame->shape()->userData());
+
+    if (!textData)
+        return false;
+
+    QPointF absPos =  anchor->shape()->absolutePosition();
+    anchor->shape()->setParent(static_cast<KoShapeContainer*>(targetFrame->shape()));
+    anchor->shape()->setAbsolutePosition(absPos);
+
+    KoTextEditor editor(textData->document());
+    editor.insertInlineObject(anchor, parent);
+    return true;
+}
+
+
+KWFrame *KWDocument::frameOfShape(KoShape* shape) const
+{
+    while (shape) {
+        KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+        if (answer)
+            return answer;
+        if (shape->parent() == 0)
+            break;
+        shape = shape->parent();
+    }
+
+    KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+    if (answer == 0) { // this may be a clipping shape containing the frame-shape
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container && container->shapeCount() == 1) {
+            answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
+        }
+    }
+
+    return answer;
+}
+

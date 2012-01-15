@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=diode schottky
 Name[ca]=diode schottky
+Name[ca@valencia]=diode schottky
 Name[el]=δίοδος schottky
+Name[et]=Schottky diood
 Name[it]=diodo schottky
 Name[nb]=schottkydiode
 Name[nds]=Schottky-Diood
@@ -9,6 +11,7 @@ Name[nl]=diode schottky
 Name[pl]=dioda shottkiego
 Name[pt]=díodo Schottky
 Name[pt_BR]=diodo Schottky
+Name[ru]=Диод Шоттки
 Name[sv]=diod Schottky
 Name[uk]=Діод Шоткі
 Name[x-test]=xxdiode schottkyxx

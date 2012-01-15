@@ -2,6 +2,7 @@
 Name=IP Phone
 Name[bg]=IP-телефон
 Name[ca]=IP Phone
+Name[ca@valencia]=IP Phone
 Name[el]=IP τηλέφωνο
 Name[et]=IP-telefon
 Name[it]=Telefono IP
@@ -11,7 +12,9 @@ Name[nl]=IP telefoon
 Name[pl]=Telefon IP
 Name[pt]=Telefone IP
 Name[pt_BR]=Telefone IP
+Name[ru]=IP-телефон
 Name[sv]=Internet-telefon
 Name[uk]=IP-телефон
 Name[x-test]=xxIP Phonexx
+Name[zh_CN]=IP 电话
 Name[zh_TW]=IP 電話

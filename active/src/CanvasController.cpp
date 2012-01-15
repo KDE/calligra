@@ -54,6 +54,9 @@
 #include <QtGui/QGraphicsWidget>
 #include <QtCore/QSettings>
 #include <QtCore/QFileInfo>
+#include <KoFindText.h>
+#include <KoShapeManager.h>
+#include <KoResourceManager_p.h>
 
 /*!
 * extensions
@@ -73,13 +76,19 @@ const QString EXT_XLS("xls");
 const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
-    : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
-      m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
+    : QDeclarativeItem(parent), KoCanvasController(0), m_zoomHandler(0), m_zoomController(0), 
+      m_canvasItem(0), m_currentPoint(QPoint(0,0)), m_documentType(CADocumentInfo::Undefined),
       m_documentSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setClip(true);
     loadSettings();
+
+    QList<QTextDocument*> texts;
+    m_find = new KoFindText(texts, this);
+    connect(m_find, SIGNAL(updateCanvas()), SLOT(updateCanvasItem()));
+    connect(m_find, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect(m_find, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 void CanvasController::openDocument(const QString& path)
@@ -107,7 +116,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
-        prDocument->openUrl(KUrl::fromPathOrUrl(path));
+        prDocument->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
         if (!m_canvasItem) {
@@ -142,7 +151,7 @@ void CanvasController::openDocument(const QString& path)
         emit documentTypeChanged();
 
         Calligra::Tables::Doc *tablesDoc = static_cast<Calligra::Tables::Doc*>(m_doc);
-        tablesDoc->openUrl(KUrl::fromPathOrUrl(path));
+        tablesDoc->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (!m_canvasItem) {
@@ -176,7 +185,7 @@ void CanvasController::openDocument(const QString& path)
 
         kDebug() << "Trying to open the document";
         KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
-        kwDoc->openUrl(KUrl::fromPathOrUrl(path));
+        kwDoc->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
         if (!m_canvasItem) {
@@ -209,6 +218,10 @@ void CanvasController::openDocument(const QString& path)
         }
 
         setCanvas(m_canvasItem);
+
+        QList<QTextDocument*> texts;
+        KoFindText::findTextInShapes(m_canvasItem->shapeManager()->shapes(), texts);
+        m_find->addDocuments(texts);
     }
 
     kDebug() << "Requesting tool activation";
@@ -280,7 +293,6 @@ void CanvasController::setPreferredCenter(const QPoint& viewPoint)
 
 void CanvasController::recenterPreferred()
 {
-    kDebug() << "BLEH";
 }
 
 void CanvasController::zoomTo(const QRect& rect)
@@ -305,7 +317,8 @@ void CanvasController::zoomIn(const QPoint& center)
 
 void CanvasController::ensureVisible(KoShape* shape)
 {
-    kDebug() << shape;
+    setCameraX(shape->position().x());
+    setCameraY(shape->position().y());
 }
 
 void CanvasController::ensureVisible(const QRectF& rect, bool smooth)
@@ -603,7 +616,7 @@ void CanvasController::updateCanvasItem()
 {
     if (m_canvasItem) {
         switch (m_documentType) {
-        case CADocumentInfo::TextDocument:
+            case CADocumentInfo::TextDocument:
             dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
             break;
         case CADocumentInfo::Spreadsheet:
@@ -654,6 +667,53 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
         zoomToFit();
     }
     QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
+}
+
+QString CanvasController::searchString() const
+{
+    return m_searchString;
+}
+
+void CanvasController::setSearchString(const QString& string)
+{
+    m_searchString = string;
+
+    if (m_documentType == CADocumentInfo::TextDocument) {
+        if (m_find) {
+            m_find->find(m_searchString);
+        }
+    }
+
+    emit searchStringChanged();
+}
+
+void CanvasController::findMatchFound(const KoFindMatch &match)
+{
+    if (m_documentType != CADocumentInfo::TextDocument) {
+        return;
+    }
+
+    QTextCursor cursor = match.location().value<QTextCursor>();
+    KWDocument *doc = qobject_cast<KWDocument*>(m_doc);
+    canvas()->canvasItem()->update();
+
+    canvas()->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
+}
+
+void CanvasController::findNoMatchFound()
+{
+    kDebug() << "FIND NO MATCH";
+}
+
+void CanvasController::findNext()
+{
+    m_find->findNext();
+}
+
+void CanvasController::findPrevious()
+{
+    m_find->findPrevious();
 }
 
 #include "CanvasController.moc"

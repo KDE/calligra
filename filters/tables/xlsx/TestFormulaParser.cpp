@@ -44,6 +44,9 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("string")
         << "LEFT(\" Some   ~text \",3)"
         << "=LEFT(\" Some   ~text \";3)";
+    QTest::newRow("condition")
+        << "IF(A15<$B$6*$B$4,A15+1,\"\")"
+        << "=IF(A15<$B$6*$B$4;A15+1;\"\")";
     QTest::newRow("union operator")
         << "AREAS((A1:A3,B3:C5))"
         << "=AREAS((A1:A3~B3:C5))";
@@ -56,9 +59,27 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("whitespace in normal arguments")
         << "IF(A1=A2, 2, \" IF(1,2) \")"
         << "=IF(A1=A2; 2; \" IF(1,2) \")";
+    QTest::newRow("multiple whitespace in normal arguments")
+        << "IF(A1=A2 ,   2  , \" IF(1,2) \")"
+        << "=IF(A1=A2 ;   2  ; \" IF(1,2) \")";
     QTest::newRow("mixing union and intersection")
         << "AREAS((A1:C5 B2:B3,C2:C3))"
         << "=AREAS((A1:C5!B2:B3~C2:C3))";
+    QTest::newRow("absolute positions")
+        << "AREAS(($A$1:$A$3,$B3:C$5))"
+        << "=AREAS(($A$1:$A$3~$B3:C$5))";
+    QTest::newRow("whole column")
+        << "IF(A=B,A:B,2)"
+        << "=IF(A=B;A$1:B$65536;2)";
+    QTest::newRow("Sheetname")
+        << "=IF('Sheet 1'!A1,''Sheet '1''!A2,'''Sheet 1'''!A3"
+        << "=IF('Sheet 1'!A1;'Sheet ''1'!A2;'Sheet 1'!A3";
+    QTest::newRow("intersection operator without extra parenthesis")
+        << "AREAS(B2:D4 B2)"
+        << "=AREAS(B2:D4!B2)";
+    QTest::newRow("intersection operator without extra parenthesis, extra whitespace")
+        << "AREAS(B2:D4    B2)"
+        << "=AREAS(B2:D4!   B2)";
 }
 
 void TestFormulaParser::testConvertFormula()

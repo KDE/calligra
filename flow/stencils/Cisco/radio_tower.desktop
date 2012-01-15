@@ -2,6 +2,7 @@
 Name=Radio Tower
 Name[bg]=Радиокула
 Name[ca]=Torre de ràdio
+Name[ca@valencia]=Torre de ràdio
 Name[el]=Ραδιοφωνικός πύργος
 Name[et]=Raadiotorn
 Name[it]=Ponte radio
@@ -11,7 +12,9 @@ Name[nl]=Radio Tower
 Name[pl]=Wieża radiowa
 Name[pt]=Torre Rádio
 Name[pt_BR]=Torre de rádio
+Name[ru]=Радиовышка
 Name[sv]=Radiotorn
 Name[uk]=Радіовежа
 Name[x-test]=xxRadio Towerxx
+Name[zh_CN]=无线电塔
 Name[zh_TW]=電波塔

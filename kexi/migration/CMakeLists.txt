@@ -8,10 +8,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 
 add_subdirectory(txt)
 
-if (SHOULD_BUILD_TABLES)
-  macro_optional_add_subdirectory(kspread)
-endif (SHOULD_BUILD_TABLES)
-
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL Migration driver")
 IF (MYSQL_FOUND)
@@ -74,7 +70,6 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

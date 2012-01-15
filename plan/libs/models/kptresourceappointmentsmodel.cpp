@@ -1328,6 +1328,18 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
     return QVariant();
 }
 
+int ResourceAppointmentsRowModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case ResourceAppointmentsRowModel::StartTime:
+        case ResourceAppointmentsRowModel::EndTime:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
+}
+
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<( QDebug dbg, KPlato::ObjectType t)
 {

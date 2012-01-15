@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=And Operator
+Name[ca]=Operador I
+Name[ca@valencia]=Operador I
 Name[de]=Und-Operator
 Name[el]=Τελεστής and
+Name[et]=Ja-tehe
 Name[it]=Operatore AND
 Name[nb]=And-operator
 Name[nl]=Operator And
 Name[pl]=Operator And
 Name[pt]=Operador E
 Name[pt_BR]=Operador E
+Name[ru]=Оператор «И»
 Name[sv]=Och-operator
 Name[uk]=Оператор «І»
 Name[x-test]=xxAnd Operatorxx

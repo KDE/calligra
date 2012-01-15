@@ -2,6 +2,7 @@
 Name=Vertical Pump
 Name[bg]=Вертикална помпа
 Name[ca]=Bomba vertical
+Name[ca@valencia]=Bomba vertical
 Name[de]=Senkrechte Pumpe
 Name[el]=Κατακόρυφη αντλία
 Name[et]=Vertikaalne pump
@@ -12,7 +13,9 @@ Name[nl]=Verticale pomp
 Name[pl]=Pompa pionowa
 Name[pt]=Bomba Vertical
 Name[pt_BR]=Bomba vertical
+Name[ru]=Вертикальный насос
 Name[sv]=Vertikal pump
 Name[uk]=Вертикальний насос
 Name[x-test]=xxVertical Pumpxx
+Name[zh_CN]=垂直泵
 Name[zh_TW]=垂直幫浦

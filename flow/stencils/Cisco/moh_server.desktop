@@ -2,6 +2,7 @@
 Name=MoH server (Music on Hold)
 Name[bg]=Сървър MoH (Music on Hold)
 Name[ca]=MoH server (Music on Hold)
+Name[ca@valencia]=MoH server (Music on Hold)
 Name[el]=MoH server (Music on Hold)
 Name[et]=MoH server (Music on Hold)
 Name[it]=Server MoH (Musica d'attesa)
@@ -10,7 +11,9 @@ Name[nl]=MoH server (Music on Hold)
 Name[pl]=Serwer MoH (Muzyka i Przechowalnia)
 Name[pt]=Servidor MoH (Música em Espera)
 Name[pt_BR]=Servidor MoH (música em espera)
+Name[ru]=MoH сервер (музыка во время задержки)
 Name[sv]=Musikserver (väntande musik)
 Name[uk]=Сервер MoH (Music on Hold)
 Name[x-test]=xxMoH server (Music on Hold)xx
+Name[zh_CN]=MoH 服务(Music on Hold)
 Name[zh_TW]=MoH 伺服器（音樂）

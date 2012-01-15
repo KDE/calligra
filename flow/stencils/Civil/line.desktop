@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Reference Line
 Name[bg]=Указателна линия
+Name[ca]=Línia de referència
+Name[ca@valencia]=Línia de referència
 Name[de]=Bezugslinie
 Name[el]=Γραμμή αναφοράς
 Name[et]=Reeper
@@ -11,6 +13,7 @@ Name[nl]=Referentielijn
 Name[pl]=Linia odniesienia
 Name[pt]=Linha de Referência
 Name[pt_BR]=Linha de referência
+Name[ru]=Базовая линия
 Name[sv]=Horisontell avgränsningslinje
 Name[uk]=Лінія відліку
 Name[x-test]=xxReference Linexx

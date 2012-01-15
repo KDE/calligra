@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=IBM mainframe with FEP
 Name[ca]=Unitat principal IBM amb FEP
+Name[ca@valencia]=Unitat principal IBM amb FEP
 Name[et]=IBM terminal FEP-iga
 Name[it]=IBM mainframe con FEP
 Name[nb]=IBM stormaskin med FEP
@@ -8,7 +9,9 @@ Name[nl]=IBM mainframe met FEP
 Name[pl]=IBM mainframe with FEP
 Name[pt]=Servidor principal IBM com FEP
 Name[pt_BR]=Servidor principal IBM com FEP
+Name[ru]=Мэйнфрейм IBM с FEP
 Name[sv]=IBM-stordator med FEP
 Name[uk]=Мейнфрейм IBM з FEP
 Name[x-test]=xxIBM mainframe with FEPxx
+Name[zh_CN]=带 FEP 的 IBM 大型机
 Name[zh_TW]=IBM 主框架（含 FEP）

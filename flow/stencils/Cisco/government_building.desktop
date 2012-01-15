@@ -2,6 +2,7 @@
 Name=Government Building
 Name[bg]=Правителствена сграда
 Name[ca]=Edifici governamental
+Name[ca@valencia]=Edifici governamental
 Name[de]=Regierungsgebäude
 Name[el]=Κυβερνητικό κτήριο
 Name[et]=Valitsushoone
@@ -12,7 +13,9 @@ Name[nl]=Overheidsgebouw
 Name[pl]=Rządowa budowla
 Name[pt]=Edifício Governamental
 Name[pt_BR]=Edifício governamental
+Name[ru]=Правительственное здание
 Name[sv]=Statlig byggnad
 Name[uk]=Урядова будівля
 Name[x-test]=xxGovernment Buildingxx
+Name[zh_CN]=政府建筑
 Name[zh_TW]=政府建築

@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=port inout
 Name[ca]=port inout
+Name[ca@valencia]=port inout
 Name[el]=θύρα εισόδου-εξόδου
+Name[et]=Port sisse-välja
+Name[it]=port inout
 Name[nb]=inn-utgang
 Name[nl]=port inout
 Name[pl]=port we/wy
 Name[pt]=porta entrada-saída
 Name[pt_BR]=porta de entrada e saída
+Name[ru]=Двусторонний порт
 Name[sv]=port in-ut
 Name[uk]=Вхідний/Вихідний порт
 Name[x-test]=xxport inoutxx

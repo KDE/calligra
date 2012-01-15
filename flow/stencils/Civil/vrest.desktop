@@ -2,6 +2,7 @@
 Name=Vertical Rest
 Name[bg]=Вертикален остатък
 Name[ca]=Descans vertical
+Name[ca@valencia]=Descans vertical
 Name[de]=Senkrechte Stütze
 Name[et]=Vertikaalne rest
 Name[it]=Resto verticale
@@ -11,7 +12,9 @@ Name[nl]=Verticale steun
 Name[pl]=Podpora pionowa
 Name[pt]=Descanso Vertical
 Name[pt_BR]=Descanso vertical
+Name[ru]=Вертикальная опора
 Name[sv]=Vertikalt stöd
 Name[uk]=Вертикальна опора
 Name[x-test]=xxVertical Restxx
+Name[zh_CN]=垂直平衡
 Name[zh_TW]=垂直支架

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Vatican
 Name[bg]=Ватикана
+Name[ca]=Vaticà
+Name[ca@valencia]=Vaticà
 Name[cs]=Vatikán
 Name[da]=Vatikanstaten
 Name[de]=Vatikan
@@ -8,6 +10,7 @@ Name[et]=Vatikan
 Name[it]=Vaticano
 Name[nb]=Vatikanstaten
 Name[nds]=Vatikaan
+Name[nl]=Vaticaan
 Name[pl]=Watykan
 Name[pt]=Vaticano
 Name[pt_BR]=Vaticano
@@ -16,4 +19,5 @@ Name[sv]=Vatikanstaten
 Name[ug]=ۋاتىكان
 Name[uk]=Ватикан
 Name[x-test]=xxVaticanxx
+Name[zh_CN]=梵蒂冈
 Name[zh_TW]=梵蒂岡

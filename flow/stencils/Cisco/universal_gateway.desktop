@@ -2,6 +2,7 @@
 Name=Universal Gateway
 Name[bg]=Универсален шлюз
 Name[ca]=Passarel·la universal
+Name[ca@valencia]=Passarel·la universal
 Name[de]=Universelles Gateway
 Name[el]=Καθολική πύλη
 Name[et]=Universaalne lüüs
@@ -12,7 +13,9 @@ Name[nl]=Universal Gateway
 Name[pl]=Bramka uniwersalna
 Name[pt]='Gateway' Universal
 Name[pt_BR]=Gateway universal
+Name[ru]=Универсальный шлюз
 Name[sv]=Universell förmedlingsnod
 Name[uk]=Універсальний шлюз
 Name[x-test]=xxUniversal Gatewayxx
+Name[zh_CN]=通用的网关
 Name[zh_TW]=通用閘道器

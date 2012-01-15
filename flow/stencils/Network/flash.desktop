@@ -2,6 +2,8 @@
 Name=WAN Connection
 Name[bg]=Връзка WAN
 Name[ca]=Connexió WAN
+Name[ca@valencia]=Connexió WAN
+Name[cs]=WAN připojení
 Name[de]=WAN-Verbindung
 Name[el]=Σύνδεση WAN
 Name[es]=Conexión WAN
@@ -12,6 +14,7 @@ Name[nl]=WAN-verbinding
 Name[pl]=Połączenie WAN
 Name[pt]=Ligação WAN
 Name[pt_BR]=Conexão WAN
+Name[ru]=WAN-соединение
 Name[sv]=Anslutning till fjärrnätverk
 Name[uk]=З'єднання WAN
 Name[x-test]=xxWAN Connectionxx

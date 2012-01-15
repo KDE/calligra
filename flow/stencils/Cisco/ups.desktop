@@ -2,6 +2,8 @@
 Name=UPS
 Name[bg]=Непрекъсваемо токозахранване
 Name[ca]=UPS
+Name[ca@valencia]=UPS
+Name[cs]=UPS
 Name[de]=USV
 Name[el]=UPS
 Name[et]=UPS
@@ -11,6 +13,7 @@ Name[nl]=UPS
 Name[pl]=UPS
 Name[pt]=UPS
 Name[pt_BR]=UPS
+Name[ru]=ИБП
 Name[sv]=Avbrottsfri kraft
 Name[ug]=UPS
 Name[uk]=UPS

@@ -2,6 +2,7 @@
 Name=TokenRing
 Name[bg]=TokenRing
 Name[ca]=TokenRing
+Name[ca@valencia]=TokenRing
 Name[de]=TokenRing
 Name[el]=TokenRing
 Name[et]=Lubaring
@@ -12,7 +13,9 @@ Name[nl]=TokenRing
 Name[pl]=TokenRing
 Name[pt]=Anél Token-Ring
 Name[pt_BR]=TokenRing
+Name[ru]=TokenRing
 Name[sv]=Token ring
 Name[uk]=TokenRing
 Name[x-test]=xxTokenRingxx
+Name[zh_CN]=令牌环
 Name[zh_TW]=記號環網路

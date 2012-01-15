@@ -27,13 +27,13 @@
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeLayer.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoPASavingContext.h>
-
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
@@ -44,9 +44,7 @@ class ShapeLoaderHelper : public KoShape
 public:
     ShapeLoaderHelper() { }
 
-    virtual void paint( QPainter &, const KoViewConverter & ) { }
-
-    virtual void paintDecorations( QPainter &, const KoViewConverter &, const KoCanvasBase * ) { }
+    virtual void paint( QPainter &, const KoViewConverter &, KoShapePaintingContext &) { }
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
     {
@@ -159,10 +157,11 @@ bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
     return true;
 }
 
-void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
 }
 
 KoPageLayout & KPrNotes::pageLayout()
@@ -196,6 +195,12 @@ bool KPrNotes::displayMasterBackground()
 
 void KPrNotes::setDisplayMasterBackground( bool )
 {
+}
+
+QImage KPrNotes::thumbImage(const QSize&)
+{
+    Q_ASSERT( 0 );
+    return QImage();
 }
 
 QPixmap KPrNotes::generateThumbnail( const QSize& )

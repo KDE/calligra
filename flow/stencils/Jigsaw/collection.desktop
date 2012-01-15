@@ -2,14 +2,17 @@
 Name=Jigsaw
 Name[bg]=Пъзел
 Name[ca]=Trencaclosques
+Name[ca@valencia]=Trencaclosques
 Name[cs]=Puzzle
 Name[et]=Pusle
+Name[it]=Puzzle
 Name[nb]=Puslespill
 Name[nds]=Pussel
 Name[nl]=Puzzel
 Name[pl]=Jigsaw
 Name[pt]='Puzzle'
 Name[pt_BR]=Quebra-cabeça
+Name[ru]=Пазл
 Name[sv]=Pussel
 Name[uk]=Складанка
 Name[x-test]=xxJigsawxx

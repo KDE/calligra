@@ -34,6 +34,8 @@ using namespace Calligra::Tables;
 Value func_and(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_false(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_if(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_iferror(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ifna(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nand(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nor(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_not(valVector args, ValueCalc *calc, FuncExtra *);
@@ -81,6 +83,12 @@ LogicModule::LogicModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("IF", func_if);
     f->setParamCount(2, 3);
+    add(f);
+    f = new Function("IFERROR", func_iferror);
+    f->setParamCount(2);
+    add(f);
+    f = new Function("IFNA", func_ifna);
+    f->setParamCount(2);
     add(f);
 }
 
@@ -186,6 +194,28 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
         // only two arguments
         return Value(false);
     }
+}
+
+
+//
+// Function: IFERROR
+//
+Value func_iferror(valVector args, ValueCalc *, FuncExtra *)
+{
+    if (args[0].isError())
+        return args[1];
+    return args[0];
+}
+
+
+//
+// Function: IFNA
+//
+Value func_ifna(valVector args, ValueCalc *, FuncExtra *)
+{
+    if (args[0] == Value::errorNA())
+        return args[1];
+    return args[0];
 }
 
 

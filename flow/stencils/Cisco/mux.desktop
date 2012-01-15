@@ -2,6 +2,7 @@
 Name=MUX
 Name[bg]=MUX
 Name[ca]=MUX
+Name[ca@valencia]=MUX
 Name[el]=MUX
 Name[et]=MUX
 Name[it]=MUX
@@ -11,7 +12,9 @@ Name[nl]=MUX
 Name[pl]=MUX
 Name[pt]=MUX
 Name[pt_BR]=MUX
+Name[ru]=MUX
 Name[sv]=Multiplexer
 Name[uk]=MUX
 Name[x-test]=xxMUXxx
+Name[zh_CN]=MUX
 Name[zh_TW]=MUX

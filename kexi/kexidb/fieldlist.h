@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -160,13 +160,14 @@ public:
      queries with joins, where fields have to be spicified without ambiguity.
      See @ref Connection::selectStatement() for example use.
      \a drvEscaping can be used to alter default escaping type.
+     \a driver is used for escaping identifiers, if 0, Kexi escaping is used.
     */
-    QString sqlFieldsList(Driver *driver, const QString& separator = QString::fromLatin1(","),
+    QString sqlFieldsList(const Driver *driver, const QString& separator = QString::fromLatin1(","),
                           const QString& tableAlias = QString(),
                           int drvEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary);
 
     /*! Like above, but this is convenient static function, so you can pass any \a list here. */
-    static QString sqlFieldsList(Field::List* list, Driver *driver,
+    static QString sqlFieldsList(Field::List* list, const Driver *driver,
                                  const QString& separator = QString::fromLatin1(","), const QString& tableAlias = QString(),
                                  int drvEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary);
 

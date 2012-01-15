@@ -2,12 +2,16 @@
 Name=General Computer (Tower)
 Name[bg]=Обикновен компютър (изправен)
 Name[ca]=Ordinador general (torre)
+Name[ca@valencia]=Ordinador general (torre)
 Name[el]=Υπολογιστής γενικής χρήσης (πύργος)
 Name[et]=Tavaline arvuti (tower)
+Name[it]=Computer generico (torre)
 Name[nb]=Generell datamaskin (tårn)
+Name[nl]=Algemene computer (tower)
 Name[pl]=Ogólny komputer (Wieża)
 Name[pt]=Computador Geral (Torre)
 Name[pt_BR]=Computador genérico (Torre)
+Name[ru]=Компьютер-башня
 Name[sv]=Allmän dator (torn)
 Name[uk]=Типовий комп’ютер (корпус «башта»)
 Name[x-test]=xxGeneral Computer (Tower)xx

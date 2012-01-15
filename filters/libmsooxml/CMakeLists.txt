@@ -33,6 +33,7 @@ set(msooxml_LIB_SRCS
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/NumberFormatParser.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )

@@ -41,7 +41,7 @@ FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
     button->setDefaultAction(m_actionStopColor);
     setLayout(g);
 
-    connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(colorChanged()));
+    connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged()));
 }
 
 bool FloodEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

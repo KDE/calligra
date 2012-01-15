@@ -2,6 +2,7 @@
 Name=Horizontal Pump
 Name[bg]=Хоризонтална помпа
 Name[ca]=Bomba horitzontal
+Name[ca@valencia]=Bomba horitzontal
 Name[de]=Waagerechte Pumpe
 Name[et]=Horisontaalne pump
 Name[it]=Pompa orizzontale
@@ -11,7 +12,9 @@ Name[nl]=Horizontale pomp
 Name[pl]=Pompa pozioma
 Name[pt]=Bomba Horizontal
 Name[pt_BR]=Bomba horizontal
+Name[ru]=Горизонтальный насос
 Name[sv]=Horisontell pump
 Name[uk]=Насос (горизонтально)
 Name[x-test]=xxHorizontal Pumpxx
+Name[zh_CN]=水平泵
 Name[zh_TW]=水平幫浦

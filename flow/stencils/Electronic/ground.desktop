@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=ground
 Name[bg]=заземяване
+Name[ca]=terre
+Name[ca@valencia]=terre
 Name[cs]=zem
 Name[el]=γείωση
+Name[et]=Maaühendus
 Name[it]=terra
 Name[nb]=jord
 Name[nl]=aarde
 Name[pl]=uziemienie
 Name[pt]=terra
 Name[pt_BR]=terra
+Name[ru]=Земля
 Name[sv]=jord
 Name[uk]=Земля
 Name[x-test]=xxgroundxx

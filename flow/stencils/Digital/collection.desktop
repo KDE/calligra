@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Digital
+Name[ca]=Digital
+Name[ca@valencia]=Digital
+Name[cs]=Digital
 Name[el]=Ψηφιακό
 Name[es]=Digital
 Name[et]=Digitaal
@@ -9,6 +12,7 @@ Name[nl]=Digitaal
 Name[pl]=Cyfrowy
 Name[pt]=Digital
 Name[pt_BR]=Digital
+Name[ru]=Цифровой
 Name[sv]=Digitalt
 Name[uk]=Обробка цифрових даних
 Name[x-test]=xxDigitalxx

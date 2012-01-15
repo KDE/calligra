@@ -180,11 +180,15 @@ void ViewListItem::save( QDomElement &element ) const
 {
     element.setAttribute( "itemtype", type() );
     element.setAttribute( "tag", tag() );
-    element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
-    element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
 
     if ( type() == ItemType_SubView ) {
         element.setAttribute( "viewtype", viewType() );
+        element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
+        element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
+    } else if ( type() == ItemType_Category ) {
+        kDebug()<<text(0)<<m_viewinfo.name;
+        element.setAttribute( "name", text( 0 ) == m_viewinfo.name ? "" : text( 0 ) );
+        element.setAttribute( "tooltip", toolTip( 0 ).isEmpty() ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
     }
 }
 
@@ -206,6 +210,8 @@ ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
     setItemDelegate( new ViewCategoryDelegate( this, this ) );
     setItemsExpandable( true );
     setSelectionMode( QAbstractItemView::SingleSelection );
+
+    setDragDropMode( QAbstractItemView::InternalMove );
 
     //setContextMenuPolicy( Qt::ActionsContextMenu );
 
@@ -278,6 +284,39 @@ void ViewListTreeWidget::save( QDomElement &element ) const
 
 // </Code mostly nicked from qt designer ;)>
 
+void ViewListTreeWidget::startDrag( Qt::DropActions supportedActions )
+{
+    QModelIndexList indexes = selectedIndexes();
+    if ( indexes.count() == 1 ) {
+        ViewListItem *item = static_cast<ViewListItem*>( itemFromIndex( indexes.at( 0 ) ) );
+        Q_ASSERT( item );
+        QTreeWidgetItem *root = invisibleRootItem();
+        int count = root->childCount();
+        if ( item && item->type() == ViewListItem::ItemType_Category ) {
+            root->setFlags( root->flags() | Qt::ItemIsDropEnabled );
+            for ( int i = 0; i < count; ++i ) {
+                QTreeWidgetItem * ch = root->child( i );
+                ch->setFlags( ch->flags() & ~Qt::ItemIsDropEnabled );
+            }
+        } else if ( item ) {
+            root->setFlags( root->flags() & ~Qt::ItemIsDropEnabled );
+            for ( int i = 0; i < count; ++i ) {
+                QTreeWidgetItem * ch = root->child( i );
+                ch->setFlags( ch->flags() | Qt::ItemIsDropEnabled );
+            }
+        }
+    }
+    QTreeWidget::startDrag( supportedActions );
+}
+
+void ViewListTreeWidget::dropEvent( QDropEvent *event )
+{
+    QTreeWidget::dropEvent( event );
+    if ( event->isAccepted() ) {
+        emit modified();
+    }
+}
+
 ViewListItem *ViewListTreeWidget::findCategory( const QString &cat )
 {
     QTreeWidgetItem * item;
@@ -315,6 +354,7 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
     setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
     m_viewlist->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    connect(m_viewlist, SIGNAL(modified()), this, SIGNAL(modified()));
 
     m_currentSchedule = new KComboBox( this );
     m_model.setFlat( true );
@@ -430,7 +470,7 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
     if ( !icon.isEmpty() ) {
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     }
-    item->setFlags( item->flags() | Qt::ItemIsEditable );
+    item->setFlags( ( item->flags() | Qt::ItemIsEditable ) & ~Qt::ItemIsDropEnabled );
     insertViewListItem( item, category, index );
 
     connect(view, SIGNAL(optionsModified()), SLOT(setModified()));

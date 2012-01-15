@@ -2,6 +2,7 @@
 Name=IPTV content manager
 Name[bg]=Управление на съдържание IPTV
 Name[ca]=IPTV content manager
+Name[ca@valencia]=IPTV content manager
 Name[el]=Διαχειριστής περιεχομένου IPTV
 Name[et]=IPTV sisuhaldur
 Name[it]=Gestore contenuti IPTV
@@ -11,7 +12,9 @@ Name[nl]=IPTV contentmanager
 Name[pl]=Menadżer treści IPTV
 Name[pt]=Gestor conteúdos IPTV
 Name[pt_BR]=Gerenciador de conteúdos IPTV
+Name[ru]=Менеджер содержимого IPTV
 Name[sv]=Innehållshantering för Internet-tv
 Name[uk]=Керування даними інтернет-ТБ
 Name[x-test]=xxIPTV content managerxx
+Name[zh_CN]=IPTV 内容管理器
 Name[zh_TW]=IPTV 內容管理員

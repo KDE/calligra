@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=port in
 Name[ca]=port in
+Name[ca@valencia]=port in
 Name[el]=θύρα εισόδου
+Name[et]=Port sisse
+Name[it]=port in
 Name[nb]=inngang
 Name[nl]=port in
 Name[pl]=port we
 Name[pt]=porta entrada
 Name[pt_BR]=porta de entrada
+Name[ru]=Входящий порт
 Name[sv]=port in
 Name[uk]=Вхідний порт
 Name[x-test]=xxport inxx

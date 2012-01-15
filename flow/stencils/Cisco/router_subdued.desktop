@@ -1,14 +1,17 @@
 [Desktop Entry]
 Name=Router subdued
-Name[ca]=Enrutador suavitzat
+Name[ca]=Encaminador suavitzat
+Name[ca@valencia]=Encaminador suavitzat
 Name[el]=Δρομολογητής υποτονικός
-Name[it]=Router dismesso
+Name[et]=Toonita marsruuter
 Name[nb]=Ruter dempet
 Name[nl]=Ondergeschikte router
 Name[pl]=Router podległy
 Name[pt]=Encaminhador ultrapassado
 Name[pt_BR]=Roteador ultrapassado
+Name[ru]=Маршрутизатор приглушённый
 Name[sv]=Router diskret
 Name[uk]=Маршрутизатор (притлумлено)
 Name[x-test]=xxRouter subduedxx
+Name[zh_CN]=路由器(柔和)
 Name[zh_TW]=Router subdued

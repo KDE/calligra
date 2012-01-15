@@ -2,6 +2,7 @@
 Name=Motor
 Name[bg]=Двигател
 Name[ca]=Motor
+Name[ca@valencia]=Motor
 Name[de]=Motor
 Name[el]=Κινητήρας
 Name[et]=Mootor
@@ -12,7 +13,9 @@ Name[nl]=Motor
 Name[pl]=Silnik
 Name[pt]=Motor
 Name[pt_BR]=Motor
+Name[ru]=Двигатель
 Name[sv]=Motor
 Name[uk]=Двигун
 Name[x-test]=xxMotorxx
+Name[zh_CN]=马达
 Name[zh_TW]=馬達

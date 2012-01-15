@@ -2,6 +2,8 @@
 Name=Hub
 Name[bg]=Хъб
 Name[ca]=Concentrador
+Name[ca@valencia]=Concentrador
+Name[cs]=Rozbočovač
 Name[et]=Jaotur
 Name[it]=Hub
 Name[nb]=Nettnav
@@ -10,6 +12,7 @@ Name[nl]=Hub
 Name[pl]=Hub
 Name[pt]=Concentrador
 Name[pt_BR]=Concentrador
+Name[ru]=Повторитель
 Name[sv]=Nätnav
 Name[uk]=Концентратор
 Name[x-test]=xxHubxx

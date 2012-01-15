@@ -33,6 +33,7 @@ class Section :  public SectionGroup
 public:
     Section(RootSection* _rootSection);
     Section(const Section& _rhs);
+    virtual ~Section();
 public:
     SectionContainer* sectionContainer();
     const QString& name() const;

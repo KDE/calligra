@@ -2,6 +2,7 @@
 Name=STP
 Name[bg]=STP
 Name[ca]=STP
+Name[ca@valencia]=STP
 Name[de]=STP
 Name[el]=STP
 Name[et]=STP
@@ -12,7 +13,9 @@ Name[nl]=STP
 Name[pl]=STP
 Name[pt]=STP
 Name[pt_BR]=STP
+Name[ru]=STP
 Name[sv]=Signalöverföringspunkt
 Name[uk]=STP
 Name[x-test]=xxSTPxx
+Name[zh_CN]=STP
 Name[zh_TW]=STP

@@ -2,6 +2,7 @@
 Name=ICM
 Name[bg]=ICM
 Name[ca]=ICM
+Name[ca@valencia]=ICM
 Name[el]=ICM
 Name[et]=ICM
 Name[it]=ICM
@@ -11,7 +12,9 @@ Name[nl]=ICM
 Name[pl]=ICM
 Name[pt]=ICM
 Name[pt_BR]=ICM
+Name[ru]=ICM
 Name[sv]=ICM
 Name[uk]=ICM
 Name[x-test]=xxICMxx
+Name[zh_CN]=ICM
 Name[zh_TW]=ICM

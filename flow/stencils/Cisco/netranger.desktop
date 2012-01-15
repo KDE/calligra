@@ -2,6 +2,7 @@
 Name=NetRanger
 Name[bg]=NetRanger
 Name[ca]=NetRanger
+Name[ca@valencia]=NetRanger
 Name[el]=NetRanger
 Name[et]=NetRanger
 Name[it]=NetRanger
@@ -11,7 +12,9 @@ Name[nl]=NetRanger
 Name[pl]=NetRanger
 Name[pt]=NetRanger
 Name[pt_BR]=NetRanger
+Name[ru]=NetRanger
 Name[sv]=Nätvaktare
 Name[uk]=NetRanger
 Name[x-test]=xxNetRangerxx
+Name[zh_CN]=NetRanger
 Name[zh_TW]=NetRanger

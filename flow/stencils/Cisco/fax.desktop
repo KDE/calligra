@@ -2,6 +2,8 @@
 Name=Fax
 Name[bg]=Факс
 Name[ca]=Fax
+Name[ca@valencia]=Fax
+Name[cs]=Fax
 Name[de]=Fax
 Name[el]=Φαξ
 Name[es]=Fax
@@ -13,6 +15,7 @@ Name[nl]=Fax
 Name[pl]=Fax
 Name[pt]=Fax
 Name[pt_BR]=Fax
+Name[ru]=Факс
 Name[sv]=Telefax
 Name[ug]=فاكىس
 Name[uk]=Факс

@@ -3,25 +3,12 @@ macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http:
 
 # check whether we can compile wv2
 
-macro_optional_find_package(GObject)
-macro_log_feature(GOBJECT_FOUND "GObject" "GObject" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
-
-macro_optional_find_package(GLIB2)
-macro_log_feature(GLIB2_FOUND "Glib2" "Glib2" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
-
-macro_optional_find_package(LIBGSF)
-macro_log_feature(LIBGSF_FOUND "libgsf" "LibGSF" "ftp://ftp.gnome.org/pub/GNOME/sources/libgsf" FALSE "" "Required by the msword .doc filter")
-
 macro_optional_find_package(Iconv)
 macro_log_feature(ICONV_FOUND "Iconv" "Iconv" "http://www.gnu.org/software/libiconv/" FALSE "" "Required by the msword .doc filter")
 IF( ICONV_FOUND )
     SET( HAVE_ICONV_H 1 )
     SET( ICONV_REQUIRES_CONST ${ICONV_SECOND_ARGUMENT_IS_CONST} )
 ENDIF( ICONV_FOUND )
-
-#
-# Iconv checks for wv2
-# 
 
 INCLUDE( CheckIncludeFile )
 
@@ -71,43 +58,38 @@ if (NOT TINY)
     macro_optional_find_package(WPD)
     macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
     
-    add_subdirectory( abiword )
-    add_subdirectory( amipro )
-    add_subdirectory( applixword )
-    add_subdirectory( docbook )
     add_subdirectory( html-odf )
 
-    #html FIXME: export dialog is Qt 3 version ui file
-    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-        add_subdirectory( html )
+    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 #        if (TARGET kowmf)
 #            add_subdirectory( mswrite )
 #        endif (TARGET kowmf)
-        add_subdirectory( kword1.3 )
-        add_subdirectory( hancomword )
-        message(STATUS "When latex is reactivated (if?) also port it to GraphicsMagick, to make life easy for Isaac.")
-        #add_subdirectory( latex )
-    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-
-    add_subdirectory( oowriter )
-    add_subdirectory( palmdoc )
-    add_subdirectory( wml )
+        add_subdirectory( amipro )
+        add_subdirectory( applixword )
+        add_subdirectory( docbook )
+	    add_subdirectory( html )
+	    add_subdirectory( kword1.3 )
+	    add_subdirectory( hancomword )
+	    add_subdirectory( oowriter )
+        add_subdirectory( palmdoc )
+	    add_subdirectory( wml )
+        add_subdirectory( abiword )
+	    #add_subdirectory( latex )
+        if(WPD_FOUND)
+    	    add_subdirectory( wordperfect )
+        endif(WPD_FOUND)
+    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 
     if(DCMTK_FOUND)
     	add_subdirectory( dcm )
     endif(DCMTK_FOUND)
 
-    if(WPD_FOUND)
-    	add_subdirectory( wordperfect )
-    endif(WPD_FOUND)
     
 endif (NOT TINY)
 
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
-if(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
-	add_subdirectory(msword-odf)
-endif(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
+add_subdirectory(msword-odf)
 
 add_subdirectory( docx )

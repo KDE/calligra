@@ -93,7 +93,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("page_next")->setText(i18n("Next Slide"));
     actionCollection()->action("page_first")->setText(i18n("First Slide"));
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
-    actionCollection()->action("configure")->setText(i18n("Configure KPresenter..."));
+    actionCollection()->action("configure")->setText(i18n("Configure Stage..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
                                                    new KPrPageSelectStrategyActive( kopaCanvas() ) ) );

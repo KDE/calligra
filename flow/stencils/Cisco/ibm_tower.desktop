@@ -2,6 +2,7 @@
 Name=IBM Tower
 Name[bg]=Кула IBM
 Name[ca]=IBM Tower
+Name[ca@valencia]=IBM Tower
 Name[el]=IBM Tower
 Name[et]=IBM Tower
 Name[it]=IBM Torre
@@ -11,7 +12,9 @@ Name[nl]=IBM tower
 Name[pl]=IBM Tower
 Name[pt]=Torre IBM
 Name[pt_BR]=Torre IBM
+Name[ru]=Компьютер-башня IBM
 Name[sv]=IBM-torn
 Name[uk]=Комп’ютер IBM у корпусі «башта»
 Name[x-test]=xxIBM Towerxx
+Name[zh_CN]=IBM Tower
 Name[zh_TW]=IBM Tower

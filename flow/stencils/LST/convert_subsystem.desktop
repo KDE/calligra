@@ -1,13 +1,18 @@
 [Desktop Entry]
 Name=Converter
+Name[ca]=Convertidor
+Name[ca@valencia]=Convertidor
 Name[cs]=Převodník
 Name[el]=Μετατροπέας
 Name[es]=Conversor
+Name[et]=Teisendaja
 Name[it]=Convertitore
 Name[nb]=Omformer
+Name[nl]=Converter
 Name[pl]=Konwerter
 Name[pt]=Conversor
 Name[pt_BR]=Conversor
+Name[ru]=Конвертер
 Name[sv]=Konverterare
 Name[uk]=Підсистема перетворення
 Name[x-test]=xxConverterxx

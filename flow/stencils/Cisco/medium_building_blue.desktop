@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Medium Building blue
 Name[ca]=Edifici mitjà blau
+Name[ca@valencia]=Edifici mitjà blau
 Name[el]=Μεσαίου μεγέθους κτήριο μπλε
 Name[et]=Sinine keskmine hoone
 Name[it]=Edificio medio blu
@@ -9,7 +10,9 @@ Name[nl]=Gemiddeld blauw gebouw
 Name[pl]=Średni budynek niebieski
 Name[pt]=Edifício Médio azul
 Name[pt_BR]=Edifício médio azul
+Name[ru]=Среднее строение синее
 Name[sv]=Medelstor byggnad blå
 Name[uk]=Середня будівля (синім)
 Name[x-test]=xxMedium Building bluexx
+Name[zh_CN]=中型建筑(蓝色)
 Name[zh_TW]=中等建築（藍）

@@ -222,7 +222,7 @@
            <Type>Boolean</Type>
        </Parameter>
        <Help>
-           <Text>Look for a matching value in the first row of the given table, and return the value of the indicated row.</Text>
+           <Text>Look for a matching value in the first row of the given table, and return the value of the indicated row.</Text>
            <Text>Looks up the 'lookup value' in the first row of the 'data source'. If a value matches, the value in the 'row' and the column, the value was found in, is returned. If 'sorted' is true (default), the first row is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
            <Syntax>HLOOKUP(Lookup value; data source; Row; Sorted)</Syntax>
        </Help>
@@ -304,6 +304,36 @@
        </Help>
    </Function>
 
+   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
+   <Function>
+       <Name>OFFSET</Name>
+       <Type>Reference</Type>
+       <Parameter>
+           <Comment>Reference or range</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Number of rows to offset</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Number of columns to offset</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Height of the offset range (optional)</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Width of the offset range (optional)</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Modifies a reference's position and dimension.</Text>
+           <Syntax>OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer newHeight; Integer newWidth)</Syntax>
+       </Help>
+   </Function>
+   -->
 </Group>
 
 </KSpreadFunctions>

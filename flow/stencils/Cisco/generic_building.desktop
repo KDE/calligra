@@ -2,6 +2,7 @@
 Name=Generic Building
 Name[bg]=Обикновена сграда
 Name[ca]=Edifici genèric
+Name[ca@valencia]=Edifici genèric
 Name[de]=Generisches Gebäude
 Name[el]=Κτήριο γενικής χρήσης
 Name[et]=Tavaline hoone
@@ -12,7 +13,9 @@ Name[nl]=Generiek gebouw
 Name[pl]=Zwykła budowla
 Name[pt]=Edifício Genérico
 Name[pt_BR]=Edifício genérico
+Name[ru]=Обычное строение
 Name[sv]=Generell byggnad
 Name[uk]=Узагальнена будівля
 Name[x-test]=xxGeneric Buildingxx
+Name[zh_CN]=普通建筑
 Name[zh_TW]=一般建築

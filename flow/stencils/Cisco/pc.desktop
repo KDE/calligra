@@ -2,6 +2,8 @@
 Name=PC
 Name[bg]=Компютър
 Name[ca]=PC
+Name[ca@valencia]=PC
+Name[cs]=PC
 Name[el]=PC
 Name[et]=PC
 Name[it]=PC
@@ -11,6 +13,7 @@ Name[nl]=PC
 Name[pl]=PC
 Name[pt]=PC
 Name[pt_BR]=PC
+Name[ru]=ПК
 Name[sv]=Persondator
 Name[uk]=ПК
 Name[x-test]=xxPCxx

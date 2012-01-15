@@ -20,6 +20,7 @@
 #include "RightToLeftPaintingStrategy.h"
 
 #include <QPainter>
+#include <QGraphicsWidget>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -49,10 +50,11 @@ RightToLeftPaintingStrategy::~RightToLeftPaintingStrategy()
 }
 
 void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
-                                        const KoViewConverter &converter, bool forPrint)
+                                        const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     painter.save();
-    const double width = d->canvas->canvasWidget()->width();
+    const double width = d->canvas->canvasWidget() ? d->canvas->canvasWidget()->width() :
+                         d->canvas->canvasItem() ? d->canvas->canvasItem()->size().width() : 0;
 //    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
     painter.translate(/*-2 * offsetX*/ + width, 0);
 //     painter.scale(-1, 1);
@@ -60,7 +62,7 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
     if (shapeManager()) {
-        shapeManager()->paintShape(shape, painter, converter, forPrint);
+        shapeManager()->paintShape(shape, painter, converter, paintContext);
     }
 
     painter.restore();  // for the matrix

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=STB (set top box)
 Name[ca]=STB (set top box)
+Name[ca@valencia]=STB (set top box)
 Name[el]=STB (set top box)
 Name[et]=STB (teleriboks)
 Name[it]=STB (set top box)
@@ -9,7 +10,9 @@ Name[nl]=STB (set top box)
 Name[pl]=STB (ustaw górne pole)
 Name[pt]=STB (caixa 'set top')
 Name[pt_BR]=STB (set top box - caixa de 'set top')
+Name[ru]=STB (модуль установки)
 Name[sv]=Digitalbox
 Name[uk]=STB (модуль встановлення)
 Name[x-test]=xxSTB (set top box)xx
+Name[zh_CN]=STB (机顶盒)
 Name[zh_TW]=機上盒

@@ -1,13 +1,16 @@
 [Desktop Entry]
 Name=reg h
 Name[ca]=reg h
+Name[ca@valencia]=reg h
 Name[el]=reg h
+Name[et]=Horisontaalne register
 Name[it]=reg h
 Name[nb]=reg vannr
 Name[nl]=reg h
 Name[pl]=reg h
 Name[pt]=reg h
 Name[pt_BR]=reg h
+Name[ru]=reg h
 Name[sv]=reg h
 Name[uk]=Регістр (горизонтально)
 Name[x-test]=xxreg hxx

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Network Management
 Name[bg]=Управление на мрежа
+Name[ca]=Gestió de xarxes
+Name[ca@valencia]=Gestió de xarxes
 Name[cs]=Správa sítě
 Name[el]=Διαχείριση δικτύου
 Name[es]=Gestión de red
@@ -12,6 +14,7 @@ Name[nl]=Netwerkbeheer
 Name[pl]=Zarządzanie siecią
 Name[pt]=Gestão de Rede
 Name[pt_BR]=Gerenciamento de redes
+Name[ru]=Управление сетью
 Name[sv]=Nätverkshantering
 Name[ug]=تور باشقۇرۇش
 Name[uk]=Керування мережею

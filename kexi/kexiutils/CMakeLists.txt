@@ -2,6 +2,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
 
 include_directories( 
   ${CMAKE_SOURCE_DIR}/kexi 
+  ${CMAKE_CURRENT_SOURCE_DIR}/completer
   ${KDE4_INCLUDES}
 )
 
@@ -20,10 +21,13 @@ set(kexiutils_LIB_SRCS
   KexiContextMessage.cpp
   KexiTitleLabel.cpp
   KexiLinkWidget.cpp
+  KexiLinkButton.cpp
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
+  
+  completer/KexiCompleter.cpp
 )
 
 IF (KEXI_MOBILE)

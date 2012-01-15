@@ -62,7 +62,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
     m_colorBar->setOrientation(orientation);
     connect(m_prevButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollBackward()));
     connect(m_nextButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollForward()));
-    connect(m_colorBar, SIGNAL(colorSelected(const KoColor&)), this, SIGNAL(colorSelected(const KoColor&)));
+    connect(m_colorBar, SIGNAL(colorSelected(KoColor)), this, SIGNAL(colorSelected(KoColor)));
     connect(m_colorBar, SIGNAL(scrollOffsetChanged()), this, SLOT(updateButtons()));
     connect(m_choosePalette, SIGNAL(clicked()), this, SLOT(selectPalette()));
 
@@ -173,13 +173,13 @@ void KarbonPaletteBarWidget::selectPalette()
         if (selectedIndex) {
             selectedColorSet = dynamic_cast<KoColorSet*>(resources.at(selectedIndex-1));
         } else {
-            updateDocumentColors();
             selectedColorSet = &m_documentColors;
         }
         if (selectedColorSet) {
             m_colorBar->setPalette(selectedColorSet);
             KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
             paletteGroup.writeEntry("LastPalette", selectedColorSet->name());
+            updateDocumentColors();
         }
     }
 }

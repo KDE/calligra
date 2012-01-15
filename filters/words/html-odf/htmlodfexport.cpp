@@ -35,6 +35,7 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -52,7 +53,7 @@ K_EXPORT_PLUGIN(HTMLOdfExportFactory("calligrafilters"))
 
 
 HTMLOdfExport::HTMLOdfExport(QObject* parent, const QVariantList&) :
-KoFilter(parent), m_dialog(new ExportDialog())
+    KoFilter(parent), m_dialog(new ExportDialog())
 {
 }
 
@@ -74,33 +75,37 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
-    if (m_dialog->exec() == QDialog::Rejected)
-        return KoFilter::UserCancelled;
+
+    if (!m_chain->manager()->getBatchMode() ) {
+        if (m_dialog->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
+    }
 
     // Create output files
     QFile out(outputFile);
-        if (!out.open(QIODevice::WriteOnly)) {
-            kError(30501) << "Unable to open output file!";
-            out.close();
-            return KoFilter::FileNotFound;
-        }
-        Conversion c1;
-        c1.convert(inputFile, &out);
-        QFileInfo base(outputFile);
-        QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
-        QString directory=base.absolutePath();
-        QDir dir(outputFile);
-        dir.mkdir(filenamewithoutext);
-        QString stylesheet=filenamewithoutext+"/style.css";
-        QFile css(stylesheet);
-        if (!css.open(QIODevice::WriteOnly)){
-            kError(30501) << "Unable to open stylesheet!";
-            css.close();
-            return KoFilter::FileNotFound;
-        }
+    if (!out.open(QIODevice::WriteOnly)) {
+        kError(30501) << "Unable to open output file!";
+        out.close();
+        return KoFilter::FileNotFound;
+    }
+    Conversion c1;
+    c1.convert(inputFile, &out);
+    QFileInfo base(outputFile);
+    QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
+    QString directory=base.absolutePath();
+    QDir dir(outputFile);
+    dir.mkdir(filenamewithoutext);
+    QString stylesheet=filenamewithoutext+"/style.css";
+    QFile css(stylesheet);
+    if (!css.open(QIODevice::WriteOnly)){
+        kError(30501) << "Unable to open stylesheet!";
+        css.close();
+        return KoFilter::FileNotFound;
+    }
 
-       out.close();
-       css.close();
+    out.close();
+    css.close();
 
 
 

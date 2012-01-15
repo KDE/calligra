@@ -162,8 +162,9 @@ void Canvas::mousePressEvent(QMouseEvent *event)
 
     if(!event->isAccepted() && event->button() == Qt::RightButton) {
         showContextMenu(event->globalPos(), toolProxy()->popupActionList());
-        event->setAccepted(true);
     }
+
+    event->setAccepted(true);
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -239,6 +240,12 @@ void Canvas::updateInputMethodInfo()
 
 QVariant Canvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

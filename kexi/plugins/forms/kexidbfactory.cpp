@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3scrollview.h>
+//#include <q3scrollview.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qstyle.h>

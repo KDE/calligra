@@ -130,6 +130,8 @@ void TestLogicFunctions::testIF()
     CHECK_EVAL("IF(A1==2.5;2;4)", Value(4));
     CHECK_EVAL("IF(A1==TRUE();2;4)", Value(4));
     CHECK_EVAL("IF(A1==\"BAD\";2;4)", Value(4));
+    // from an excel binary document. seems it produces an parse error
+    CHECK_EVAL("IF(#-1#0#<>\"\";\"x \"&#-1#0#&#-30#0#;\"\")", Value::errorPARSE());
 }
 
 void TestLogicFunctions::testNOT()

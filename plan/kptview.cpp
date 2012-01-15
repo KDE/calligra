@@ -55,12 +55,11 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-
+#include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <k3command.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
@@ -135,6 +134,76 @@ namespace KPlato
 {
 
 //-------------------------------
+ConfigDialog::ConfigDialog(QWidget *parent, const QString& name, KConfigSkeleton *config )
+    : KConfigDialog( parent, name, config ),
+    m_config( config )
+{
+    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged() ) );
+}
+
+bool ConfigDialog::hasChanged()
+{
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if (  ! item->isEqual( w->toHtml() ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ConfigDialog::updateSettings()
+{
+    bool changed = false;
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            item->setProperty( QVariant( w->toHtml() ) );
+            changed = true;
+        }
+    }
+    if ( changed ) {
+        m_config->writeConfig();
+    }
+}
+
+void ConfigDialog::updateWidgets()
+{
+    QRegExp kcfg( "kcfg_*" );
+    foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
+        KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
+        if ( ! item ) {
+            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            continue;
+        }
+        if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
+            w->setHtml( item->property().toString() );
+        }
+    }
+}
+
+void ConfigDialog::updateWidgetsDefault()
+{
+    bool usedefault = m_config->useDefaults( true );
+    updateWidgets();
+    m_config->useDefaults( usedefault );
+}
+
+bool ConfigDialog::isDefault()
+{
+    bool bUseDefaults = m_config->useDefaults(true);
+    bool result = !hasChanged();
+    m_config->useDefaults(bUseDefaults);
+    return result;
+}
+
+//------------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected ),
@@ -264,7 +333,7 @@ View::View( Part* part, QWidget* parent )
 
     // ------ Help
     actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
-    actionCollection()->addAction("kplato_introduction", actionIntroduction );
+    actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup
@@ -326,18 +395,10 @@ View::View( Part* part, QWidget* parent )
 
 #endif
 
-    m_progress = 0;
     m_estlabel = new QLabel( "", 0 );
     if ( statusBar() ) {
         addStatusBarItem( m_estlabel, 0, true );
-        //m_progress = new QProgressBar();
-        //addStatusBarItem( m_progress, 0, true );
-        //m_progress->hide();
     }
-    m_progressBarTimer.setSingleShot( true );
-    connect( &m_progressBarTimer, SIGNAL( timeout() ), this, SLOT( removeProgressBarItems() ) );
-
-    connect( &getProject(), SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), this, SLOT(slotCalculationStarted(Project*, ScheduleManager*)));
 
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
@@ -422,7 +483,7 @@ void View::createViews()
                 QString cn = e.attribute( "name" );
                 QString ct = e.attribute( "tag" );
                 if ( cn.isEmpty() ) {
-                    cn = i18n( ct.toLocal8Bit() );
+                    cn = defaultCategoryInfo( ct ).name;
                 }
                 cat = m_viewlist->addCategory( ct, cn );
                 KoXmlNode n1 = e.firstChild();
@@ -457,7 +518,8 @@ void View::createViews()
     } else {
         kDebug()<<"Default";
         ViewListItem *cat;
-        cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
+        QString ct = "Editors";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createCalendarEditor( cat, "CalendarEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -473,7 +535,8 @@ void View::createViews()
 
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
+        ct = "Views";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -485,7 +548,8 @@ void View::createViews()
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Execution", i18nc( "Project execution views", "Execution" ) );
+        ct = "Execution";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
 
         createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -497,7 +561,8 @@ void View::createViews()
 
         createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
+        ct = "Reports";
+        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -561,12 +626,7 @@ void View::slotUpdateViewInfo( ViewListItem *itm )
     if ( itm->type() == ViewListItem::ItemType_SubView ) {
         itm->setViewInfo( defaultViewInfo( itm->viewType() ) );
     } else if ( itm->type() == ViewListItem::ItemType_Category ) {
-        ViewInfo vi;
-        if ( itm->tag() == "Editors" ) {
-            vi.name = i18n( "Editors" );
-        } else if ( itm->tag() == "Views" ) {
-            vi.name = i18n( "Views" );
-        }
+        ViewInfo vi = defaultCategoryInfo( itm->tag() );
         itm->setViewInfo( vi );
     }
 }
@@ -634,6 +694,21 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
+    }
+    return vi;
+}
+
+ViewInfo View::defaultCategoryInfo( const QString type ) const
+{
+    ViewInfo vi;
+    if ( type == "Editors" ) {
+        vi.name = i18n( "Editors" );
+    } else if ( type == "Views" ) {
+        vi.name = i18n( "Views" );
+    } else if ( type == "Execution" ) {
+        vi.name = i18nc( "Project execution views", "Execution" );
+    } else if ( type == "Reports" ) {
+        vi.name = i18n( "Reports" );
     }
     return vi;
 }
@@ -870,6 +945,9 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
 
     connect( handler, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect(handler, SIGNAL(editNode(Node*)), this, SLOT(slotOpenNode(Node*)));
+    connect(handler, SIGNAL(editResource(Resource*)), this, SLOT(slotEditResource(Resource*)));
 
     handler->draw( getProject() );
     handler->updateReadWrite( m_readWrite );
@@ -1126,6 +1204,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     connect( v, SIGNAL( mailWorkpackage( Node*, Resource* ) ), SLOT( slotMailWorkpackage( Node*, Resource* ) ) );
     connect( v, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ), SLOT( slotMailWorkpackages( QList<Node*>&, Resource* ) ) );
 
+    connect(v, SIGNAL(checkForWorkPackages()), getPart(), SLOT(checkForWorkPackages()));
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -1264,6 +1343,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -1381,12 +1461,13 @@ void View::slotProjectWorktimeFinished( int result )
 }
 
 void View::slotSelectionChanged( ScheduleManager *sm ) {
-    kDebug();
+    kDebug()<<sm;
     if ( sm == 0 ) {
         return;
     }
     int idx = m_scheduleActions.values().indexOf( sm->expected() );
     if ( idx < 0 ) {
+        kDebug()<<sm<<"could not find schedule"<<sm->expected();
         return;
     }
     QAction *a = m_scheduleActions.keys().at( idx );
@@ -1435,8 +1516,8 @@ void View::slotScheduleAdded( const MainSchedule *sch )
     if ( sch->type() != Schedule::Expected ) {
         return; // Only view expected
     }
-    MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+    MainSchedule *s = const_cast<MainSchedule*>( sch );
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1455,7 +1536,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
+//     kDebug()<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1469,7 +1550,7 @@ void View::slotScheduleChanged( MainSchedule *sch )
 QAction *View::addScheduleAction( Schedule *sch )
 {
     QAction *act = 0;
-    if ( ! sch->isDeleted() ) {
+    if ( ! sch->isDeleted() && sch->isScheduled() ) {
         QString n = sch->name();
         act = new KToggleAction( n, this);
         actionCollection()->addAction(n, act );
@@ -1490,7 +1571,9 @@ void View::slotViewSchedule( QAction *act )
         sm = sch->manager();
     }
     setLabel( sm );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     emit currentScheduleManagerChanged( sm );
+    QApplication::restoreOverrideCursor();
 }
 
 void View::slotActionDestroyed( QObject *o )
@@ -1531,10 +1614,6 @@ void View::slotPlugScheduleActions()
     slotViewSchedule( ca );
 }
 
-void View::slotProgressChanged( int )
-{
-}
-
 void View::slotProjectCalculated( ScheduleManager *sm )
 {
     // we only get here if current schedule was calculated
@@ -1552,78 +1631,12 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         // the parent must be scheduled
         return;
     }
-    if ( m_progressBarTimer.isActive() ) {
-        m_progressBarTimer.stop();
-        removeProgressBarItems();
-    }
-//    m_calculationcommands.insert( sm, cmd );
-
-    if ( m_progressBarTimer.isActive() ) {
-        m_progressBarTimer.stop();
-        removeProgressBarItems();
-    }
-//    removeStatusBarItem( m_estlabel );
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-//    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
-//    addStatusBarItem( m_text, 0, true );
-    m_progress = new QProgressBar();
-    m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
-//    addStatusBarItem( m_progress, 0, true );
-
-    connect( project, SIGNAL( maxProgress( int ) ), this, SLOT( slotMaxProgress( int ) ) );
-    connect( project, SIGNAL( sigProgress( int ) ), this, SLOT( slotSetProgress( int ) ) );
-    connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
-
     CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "(qtundo-format) @info:status 1=schedule name", "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     slotUpdate();
-}
-
-void View::slotMaxProgress( int p )
-{
-    if ( m_progress ) {
-        m_progress->setMaximum( p );
-    }
-}
-void View::slotSetProgress( int p )
-{
-    if ( m_progress ) {
-        m_progress->setValue( p );
-    }
-}
-
-void View::slotCalculationStarted( Project */*project*/, ScheduleManager */*sm */)
-{
-}
-
-void View::slotCalculationFinished( Project *project, ScheduleManager *sm )
-{
-    switch ( sm->calculationResult() ) {
-        case ScheduleManager::CalculationStopped:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation stopped", sm->name() ) );
-            break;
-        case ScheduleManager::CalculationCanceled:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation canceled", sm->name() ) );
-            break;
-        case ScheduleManager::CalculationError:
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation error", sm->name() ) );
-            break;
-        default: {
-            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation done", sm->name() ) );
-            // if multiple views open, only the view that started calculation has a cmd
-            break;
-        }
-    }
-    if ( m_progress ) {
-        //m_progressBarTimer.start( 2000 );
-    }
-
-    disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
-    disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
-    disconnect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
-    disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
 }
 
 void View::slotRemoveCommands()
@@ -1632,17 +1645,6 @@ void View::slotRemoveCommands()
         m_undocommands.last()->undo();
         delete m_undocommands.takeLast();
     }
-}
-
-void View::removeProgressBarItems()
-{
-    removeStatusBarItem( m_progress );
-    removeStatusBarItem( m_text );
-    addStatusBarItem( m_estlabel, 0, true );
-    delete m_progress;
-    m_progress = 0;
-    delete m_text;
-    m_text = 0;
 }
 
 void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
@@ -1826,12 +1828,10 @@ void View::slotConfigure()
     if( KConfigDialog::showDialog("Plan Settings") ) {
         return;
     }
-    KConfigDialog *dialog = new KConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
+    ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "planwork" );
-/*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
-    connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();
 
 }
@@ -2388,11 +2388,15 @@ void View::slotDeleteRelation()
 void View::slotEditResource()
 {
     //kDebug();
-    Resource * r = currentResource();
-    if ( r == 0 ) {
+    slotEditResource( currentResource() );
+}
+
+void View::slotEditResource( Resource *resource )
+{
+    if ( resource == 0 ) {
         return ;
     }
-    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
+    ResourceDialog *dia = new ResourceDialog( getProject(), resource, this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotEditResourceFinished(int)));
     dia->show();
     dia->raise();
@@ -2711,6 +2715,7 @@ void View::slotCreateViewFinished( int )
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     if ( prev && prev->type() == ViewListItem::ItemType_Category && m_viewlist->previousViewItem() ) {
         // A view is shown anyway...
         ViewBase *v = qobject_cast<ViewBase*>( m_viewlist->previousViewItem()->view() );
@@ -2735,8 +2740,8 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         if ( v ) {
             v->setGuiActive( true );
         }
-        return;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 QWidget *View::canvas() const
@@ -2964,10 +2969,8 @@ void View::slotCurrencyConfigFinished( int result )
 QString View::standardTaskStatusReport() const
 {
     QString s;
-    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"Plan\" >";
-    s += "<data-source select-from=\"taskstatus\" >";
-    s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
-    s += "</data-source>";
+    s = "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >";
+    s += "<data-source select-from=\"taskstatus\" ></data-source>";
     s += "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >";
     s += "<report:title>" + i18n( "Report" ) + "</report:title>";
     s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
@@ -3052,7 +3055,7 @@ QString View::standardTaskStatusReport() const
     s += "</report:detail>";
     s += "</report:body>";
     s += "</report:content>";
-    s += "</kplatoreportdefinition>";
+    s += "</planreportdefinition>";
     return s;
 }
 

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Optics
 Name[ca]=Òptica
+Name[ca@valencia]=Òptica
 Name[de]=Optik
 Name[el]=Οπτική
 Name[et]=Optika
@@ -9,6 +10,7 @@ Name[nb]=Optikk
 Name[pl]=Optyka
 Name[pt]=Óptica
 Name[pt_BR]=Ótica
+Name[ru]=Оптика
 Name[sv]=Optik
 Name[uk]=Оптика
 Name[x-test]=xxOpticsxx

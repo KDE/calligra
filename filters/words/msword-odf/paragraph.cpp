@@ -340,7 +340,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         }
         // relative vertical position of the anchor
         QString anchor = Conversion::getVerticalRel(pap.pcVert);
-	if (!anchor.isEmpty()) {
+        if (!anchor.isEmpty()) {
             gs.addProperty("style:vertical-rel", anchor, gt);
         }
         // relative horizontal position of the anchor
@@ -1119,7 +1119,7 @@ const char* getStrokeValue(const uint brcType)
     case 0x19: //threeDEngrave
     case 0x1A: //outset
     case 0x1B: //inset
-	return "solid";
+    return "solid";
     default:
         return "none";
     }
@@ -1149,7 +1149,7 @@ const char* getTextUnderlineStyle(const uint kul)
     case kulDottedHeavy:
         return "dotted";
     case kulThick:
-	return "solid";
+    return "solid";
     case kulDash:
     case kulDashHeavy:
         return "dash";

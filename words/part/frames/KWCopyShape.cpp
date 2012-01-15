@@ -57,7 +57,7 @@ KWCopyShape::~KWCopyShape()
     kDebug(32001) << "originalShape=" << m_original;
 }
 
-void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
+void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_ASSERT(m_original);
 
@@ -83,7 +83,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
             }
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (data == 0) {
-                shape->paint(painter, converter);
+                shape->paint(painter, converter, paintcontext);
             }
             else {
                 // Since the rootArea is shared between the copyShape and the originalShape we need to
@@ -91,11 +91,20 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 KWPage originalpage = m_pageManager->page(shape);
                 Q_ASSERT(originalpage.isValid());
                 KoTextLayoutRootArea *area = data->rootArea();
-                if (area)
+                bool wasBlockChanges = false;
+                if (area) {
+                    // We need to block documentChanged() signals emitted cause for example page-variables
+                    // may change there content to result in us marking root-areas dirty for relayout else
+                    // we could end in an infinite relayout ping-pong.
+                    wasBlockChanges = area->documentLayout()->changesBlocked();
+                    area->documentLayout()->setBlockChanges(true);
                     area->setPage(new KWPage(copypage));
-                shape->paint(painter, converter);
-                if (area)
+                }
+                shape->paint(painter, converter, paintcontext);
+                if (area) {
                     area->setPage(new KWPage(originalpage));
+                    area->documentLayout()->setBlockChanges(wasBlockChanges);
+                }
             }
             painter.restore();
             if (shape->border()) {
@@ -108,18 +117,12 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     } else {
         //paint the original shape
         painter.save();
-        m_original->paint(painter, converter);
+        m_original->paint(painter, converter, paintcontext);
         painter.restore();
         if (m_original->border()) {
             m_original->border()->paint(m_original, painter, converter);
         }
     }
-}
-
-void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
-{
-    Q_ASSERT(m_original);
-    m_original->paintDecorations(painter, converter, canvas);
 }
 
 QPainterPath KWCopyShape::outline() const

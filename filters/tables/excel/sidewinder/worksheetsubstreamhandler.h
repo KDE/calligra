@@ -75,6 +75,7 @@ class VerticalPageBreaksRecord;
 class HorizontalPageBreaksRecord;
 class CondFmtRecord;
 class CFRecord;
+class AutoFilterRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
@@ -140,6 +141,7 @@ private:
     void handleHorizontalPageBreaksRecord(Swinder::HorizontalPageBreaksRecord* record);
     void handleCondFmtRecord(Swinder::CondFmtRecord* record);
     void handleCFRecord(Swinder::CFRecord* record);
+    void handleAutoFilterRecord(Swinder::AutoFilterRecord* record);
 
     class Private;
     Private * const d;

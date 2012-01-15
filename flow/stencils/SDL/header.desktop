@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=Function Header
 Name[bg]=Заглавна част на функция
+Name[ca]=Funció Capçalera
+Name[ca@valencia]=Funció Capçalera
 Name[el]=Header συνάρτησης
 Name[es]=Cabecera de función
 Name[et]=Funktsiooni päis
+Name[it]=Intestazione funzione
 Name[nb]=Funksjonshode
 Name[nds]=Funkschoonkopp
 Name[pl]=Nagłówek funkcji
 Name[pt]=Cabeçalho Função
 Name[pt_BR]=Cabeçalho de função
+Name[ru]=Заголовок функции
 Name[sv]=Funktionshuvud
 Name[uk]=Заголовок функції
 Name[x-test]=xxFunction Headerxx

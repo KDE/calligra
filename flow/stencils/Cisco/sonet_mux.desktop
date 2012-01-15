@@ -2,6 +2,7 @@
 Name=SONET MUX
 Name[bg]=SONET MUX
 Name[ca]=SONET MUX
+Name[ca@valencia]=SONET MUX
 Name[el]=SONET MUX
 Name[et]=SONET MUX
 Name[it]=SONET MUX
@@ -10,7 +11,9 @@ Name[nl]=SONET MUX
 Name[pl]=SONET MUX
 Name[pt]=MUX SONET
 Name[pt_BR]=MUX SONET
+Name[ru]=Переключатель SONET
 Name[sv]=SONET-multiplexer
 Name[uk]=SONET MUX
 Name[x-test]=xxSONET MUXxx
+Name[zh_CN]=SONET MUX
 Name[zh_TW]=SONET MUX

@@ -77,21 +77,6 @@
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
 
-/*#ifdef Q_WS_WIN
-#include <krecentdirs.h>
-#include <windows.h>
-#endif*/
-
-#if 0
-#include <kspread_cell.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_undo.h>
-#include <kspread_view.h>
-#include <kglobal.h>
-#include <q3tl.h>
-#endif
-
 #define _IMPORT_ICON KIcon("table") /*todo: change to "file_import" or so*/
 #define _TEXT_TYPE 0
 //#define _NUMBER_TYPE 1
@@ -766,7 +751,6 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             if (x == m_textquote) {
                 state = S_QUOTED_FIELD;
             } else if (x == delimiter) {
-                setText(row - m_startline, column, field, inGUI);
                 field.clear();
                 if ((ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
@@ -779,6 +763,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     }
                 }
                 nextRow = true;
+                if (ignoreDups && lastCharDelimiter) {
+                    // we're ignoring repeated delimiters so remove any extra trailing delimiters
+                    --column;
+                }
                 maxColumn = qMax(maxColumn, column);
                 column = 1;
             } else {
@@ -1637,10 +1625,21 @@ void KexiCSVImportDialog::accept()
     project->addStoredItem(part->info(), partItemForSavedTable);
 
     QDialog::accept();
-    KMessageBox::information(this,
-                             i18n("Data has been successfully imported to table \"%1\".",
-                                  m_destinationTableSchema->name()));
+    msgboxResult = KMessageBox::questionYesNo(this,
+                       i18n("Data has been successfully imported to table \"%1\".",
+                            m_destinationTableSchema->name()),
+//! @todo 2.5 add title "Successfull import"
+                       QString(),
+//! @todo 2.5 change to "Open Imported Table"
+                       KStandardGuiItem::open(),
+                       KStandardGuiItem::close());
+
     parentWidget()->raise();
+    if (msgboxResult == KMessageBox::Yes) {
+        bool openingCancelled;
+        KexiMainWindowIface::global()->openObject(partItemForSavedTable,
+                                                  Kexi::DataViewMode, openingCancelled);
+    }
     m_conn = 0;
 }
 

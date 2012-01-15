@@ -2,6 +2,7 @@
 Name=Programmable Switch
 Name[bg]=Програмируем комутатор
 Name[ca]=Enrutador programable
+Name[ca@valencia]=Enrutador programable
 Name[el]=Programmable Switch
 Name[et]=Programmeeritav kommutaator
 Name[it]=Switch programmabile
@@ -11,7 +12,9 @@ Name[nl]=Programmeerbare switch
 Name[pl]=Przełącznik programowalny
 Name[pt]=Comutador Programável
 Name[pt_BR]=Comutador programável
+Name[ru]=Программируемый коммутатор
 Name[sv]=Programmerbar växel
 Name[uk]=Програмований комутатор
 Name[x-test]=xxProgrammable Switchxx
+Name[zh_CN]=可编程路由器
 Name[zh_TW]=可程式交換器

@@ -2,6 +2,7 @@
 Name=PIX Firewall
 Name[bg]=Защитна стена PIX
 Name[ca]=Tallafocs PIX
+Name[ca@valencia]=Tallafocs PIX
 Name[el]=PIX Firewall
 Name[et]=PIX tulemüür
 Name[it]=Firewall PIX
@@ -11,7 +12,9 @@ Name[nl]=PIX firewall
 Name[pl]=Zapora ogniowa PIX
 Name[pt]='Firewall' PIX
 Name[pt_BR]=Firewall PIX
+Name[ru]=Защитный экран PIX
 Name[sv]=PIX-brandvägg
 Name[uk]=Брандмауер PIX
 Name[x-test]=xxPIX Firewallxx
+Name[zh_CN]=PIX 防火墙
 Name[zh_TW]=PIX 防火牆

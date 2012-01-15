@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Extruder
 Name[ca]=Extrusor
+Name[ca@valencia]=Extrusor
+Name[et]=Väljastaja
+Name[it]=Estrusore
 Name[nb]=Extruder
 Name[nl]=Extruder
 Name[pl]=Wyciskarka
 Name[pt]=Extrusão
 Name[pt_BR]=Extrusão
+Name[ru]=Экструдер
 Name[sv]=Extruder
 Name[uk]=Підсистема видобування
 Name[x-test]=xxExtruderxx

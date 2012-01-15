@@ -1,15 +1,19 @@
 [Desktop Entry]
 Name=Firewall Service Module
 Name[ca]=Mòdul de serveis del tallafocs
+Name[ca@valencia]=Mòdul de serveis del tallafocs
 Name[el]=Άρθρωμα υπηρεσίας τείχους προστασίας
 Name[et]=Tulemüüri teenuse moodul
+Name[it]=Modulo di servizio firewall
 Name[nb]=Brannmur tjenestemodul
 Name[nds]=Nettdiek-Deenstmoduul
 Name[nl]=Firewall Service Module
 Name[pl]=Moduł usługi zapory ogniowej
 Name[pt]=Módulo Serviço 'Firewall'
 Name[pt_BR]=Módulo de serviço de Firewall
+Name[ru]=Модуль обслуживания защитного экрана
 Name[sv]=Servicemodul för brandvägg
 Name[uk]=Модуль служби брандмауера
 Name[x-test]=xxFirewall Service Modulexx
+Name[zh_CN]=防火墙服务模块
 Name[zh_TW]=防火牆服務模組

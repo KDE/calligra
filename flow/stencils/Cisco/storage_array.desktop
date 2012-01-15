@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=Storage array
 Name[bg]=Масив хранилища
+Name[ca]=MAtriu d'emmagatzement
+Name[ca@valencia]=MAtriu d'emmagatzement
 Name[el]=Αποθηκευτική διάταξη
 Name[et]=Salvestusmassiiv
+Name[it]=Storage array
 Name[nb]=Lagringsmatrise
 Name[nds]=Spiekerfeld
+Name[nl]=Storage-array
 Name[pl]=Macierz przechowywania
 Name[pt]=Bloco armazenamento
 Name[pt_BR]=Conjunto de armazenamento
+Name[ru]=Массив данных
 Name[sv]=Lagringssamling
 Name[uk]=Масив даних
 Name[x-test]=xxStorage arrayxx
+Name[zh_CN]=存储阵列
 Name[zh_TW]=儲存矩陣

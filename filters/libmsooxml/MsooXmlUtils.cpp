@@ -4,8 +4,8 @@
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
- *
  * Contact: Suresh Chande suresh.chande@nokia.com
+ * Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
  *
  * Utils::columnName() based on Cell::columnName() from calligra/kspread/Utils.cpp:
  * Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
@@ -929,6 +929,61 @@ QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modul
     return color;
 }
 
+MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+{
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+
+    if (tint > 0) {
+        red = tint * red + (1 - tint) * 255;
+        green = tint * green + (1 - tint) * 255;
+        blue = tint * blue + (1 - tint) * 255;
+    }
+    if (shade > 0) {
+        red = shade * red;
+        green = shade * green;
+        blue = shade * blue;
+    }
+
+    // FIXME: This calculation for sure is incorrect,
+    // According to MS forums, RGB should first be converted to linear RGB
+    // Then to HSL and then multiply saturation value by satMod
+    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
+    // ADD INFO: MS document does not say that when calculating TINT and SHADE
+    // That whether one should use normal RGB or linear RGB, check it!
+
+
+    // This method is used temporarily, it seems to produce visually better results than the lower one.
+    if (satMod > 0) {
+        QColor temp = QColor(red, green, blue);
+        qreal saturationFromFull = 1.0 - temp.saturationF();
+        temp = QColor::fromHsvF(temp.hueF(), temp.saturationF() + saturationFromFull / 10 * satMod, temp.valueF());
+        red = temp.red();
+        green = temp.green();
+        blue = temp.blue();
+    }
+
+    /*
+    if (satMod > 0) {
+        red = red * satMod;
+        green = green * satMod;
+        blue = blue * satMod;
+        if (red > 255) {
+            red = 255;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+    }
+    */
+
+    color = QColor(red, green, blue);
+}
+
 class ST_PlaceholderType_to_ODFMapping : public QHash<QByteArray, QByteArray>
 {
 public:
@@ -1084,14 +1139,9 @@ public:
     }
 };
 
-void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
-    bool flipH, bool flipV)
+void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff)
 {
     angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)/ (qreal)60000.0;
-    // Angle seems to be negative if one of the flips is active
-    if ((flipH && !flipV) || (!flipH && flipV)) {
-        angle = -angle;
-    }
     //position change is calculated based on the fact that center point stays in the same location
     // Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
     // Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2
@@ -1313,7 +1363,7 @@ MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
 {
     // a positive decimal number immediately following by a unit identifier.
-    qreal number;
+    qreal number(0.0);
     QString unit;
     if (!splitNumberAndUnit(value, &number, &unit))
         return QString();
@@ -1338,11 +1388,30 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 // </units> -------------------
 
-Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
-    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
+Utils::ParagraphBulletProperties::ParagraphBulletProperties()
 {
+    clear();
+}
+
+void Utils::ParagraphBulletProperties::clear()
+{
+    m_level = -1;
+    m_type = ParagraphBulletProperties::DefaultType;
+    m_startValue = "1"; //ECMA-376, p.4575
+    m_bulletFont = UNUSED;
+    m_bulletChar = UNUSED;
+    m_numFormat = UNUSED;
+    m_prefix = UNUSED;
+    m_suffix = UNUSED;
+    m_align = UNUSED;
+    m_indent = UNUSED;
+    m_margin = UNUSED;
+    m_picturePath = UNUSED;
+    m_bulletColor = UNUSED;
+    m_followingChar = UNUSED;
+    m_bulletRelativeSize = UNUSED;
+    m_bulletSize = UNUSED;
+    m_startOverride = false;
 }
 
 bool Utils::ParagraphBulletProperties::isEmpty() const
@@ -1353,31 +1422,9 @@ bool Utils::ParagraphBulletProperties::isEmpty() const
     return false;
 }
 
-void Utils::ParagraphBulletProperties::clear()
-{
-    m_startValue = UNUSED;
-    m_type = ParagraphBulletProperties::DefaultType;
-    m_bulletFont = UNUSED;
-    m_bulletChar = UNUSED;
-    m_numFormat = UNUSED;
-    m_suffix = UNUSED;
-    m_align = UNUSED;
-    m_indent = UNUSED;
-    m_margin = UNUSED;
-    m_picturePath = UNUSED;
-    m_bulletSize = QSize();
-    m_bulletColor = UNUSED;
-    m_bulletRelativeSize = "100"; // by default bullet follows text size
-}
-
 void Utils::ParagraphBulletProperties::setAlign(const QString& align)
 {
     m_align = align;
-}
-
-void Utils::ParagraphBulletProperties::setBulletRelativeSize(int size)
-{
-    m_bulletRelativeSize = QString("%1").arg(size);
 }
 
 void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
@@ -1423,9 +1470,14 @@ void Utils::ParagraphBulletProperties::setPicturePath(const QString& picturePath
     m_type = ParagraphBulletProperties::PictureType;
 }
 
-void Utils::ParagraphBulletProperties::setBulletSize(const QSize& size)
+void Utils::ParagraphBulletProperties::setBulletRelativeSize(const int size)
 {
-    m_bulletSize = size;
+    m_bulletRelativeSize = QString("%1").arg(size);
+}
+
+void Utils::ParagraphBulletProperties::setBulletSizePt(const qreal size)
+{
+    m_bulletSize = QString("%1").arg(size);
 }
 
 void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
@@ -1436,6 +1488,52 @@ void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
 void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
 {
     m_bulletColor = bulletColor;
+}
+
+void Utils::ParagraphBulletProperties::setFollowingChar(const QString& followingChar)
+{
+    m_followingChar = followingChar;
+}
+
+void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
+{
+    m_textStyle = textStyle;
+
+    //m_bulletFont
+    if (!(m_textStyle.property("fo:font-family")).isEmpty()) {
+        m_bulletFont = m_textStyle.property("fo:font-family");
+    }
+    if (!(m_textStyle.property("style:font-name")).isEmpty()) {
+        m_bulletFont = m_textStyle.property("style:font-name");
+    }
+    //m_bulletColor
+    if (!(m_textStyle.property("fo:color")).isEmpty()) {
+        m_bulletColor = m_textStyle.property("fo:color");
+    }
+    //m_bulletRelativeSize
+    //m_bulletSize
+    if (!m_textStyle.property("fo:font-size").isEmpty()) {
+        QString bulletSize = m_textStyle.property("fo:font-size");
+        if (bulletSize.endsWith("%")) {
+            bulletSize.chop(1);
+            m_bulletRelativeSize = bulletSize;
+        } else if (bulletSize.endsWith("pt")) {
+            bulletSize.chop(2);
+            m_bulletSize = bulletSize;
+        } else {
+            kDebug() << "Unit of font-size NOT supported!";
+        }
+    }
+}
+
+void Utils::ParagraphBulletProperties::setStartOverride(const bool startOverride)
+{
+    m_startOverride = startOverride;
+}
+
+QString Utils::ParagraphBulletProperties::startValue() const
+{
+    return m_startValue;
 }
 
 QString Utils::ParagraphBulletProperties::bulletColor() const
@@ -1468,11 +1566,37 @@ QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
     return m_bulletRelativeSize;
 }
 
+QString Utils::ParagraphBulletProperties::bulletSizePt() const
+{
+    return m_bulletSize;
+}
+
+QString Utils::ParagraphBulletProperties::followingChar() const
+{
+    return m_followingChar;
+}
+
+KoGenStyle Utils::ParagraphBulletProperties::textStyle() const
+{
+    return m_textStyle;
+}
+
+bool Utils::ParagraphBulletProperties::startOverride() const
+{
+    return m_startOverride;
+}
+
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
     // This function is intented for helping to inherit some values from other properties
+    if (m_level == -1) {
+        m_level = properties.m_level;
+    }
     if (properties.m_type != ParagraphBulletProperties::DefaultType) {
         m_type = properties.m_type;
+    }
+    if (properties.m_startValue != "1") {
+        m_startValue = properties.m_startValue;
     }
     if (properties.m_bulletFont != UNUSED) {
         m_bulletFont = properties.m_bulletFont;
@@ -1482,6 +1606,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     }
     if (properties.m_numFormat != UNUSED) {
         m_numFormat = properties.m_numFormat;
+    }
+    if (properties.m_prefix != UNUSED) {
+        m_prefix = properties.m_prefix;
     }
     if (properties.m_suffix != UNUSED) {
         m_suffix = properties.m_suffix;
@@ -1501,59 +1628,113 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_bulletColor != UNUSED) {
         m_bulletColor = properties.m_bulletColor;
     }
-    if (properties.m_bulletRelativeSize != "100") {
+    if (properties.m_bulletRelativeSize != UNUSED) {
         m_bulletRelativeSize = properties.m_bulletRelativeSize;
     }
-    if (!properties.m_bulletSize.isEmpty()) {
+    if (properties.m_bulletSize != UNUSED) {
         m_bulletSize = properties.m_bulletSize;
+    }
+    if (properties.m_followingChar != UNUSED) {
+        m_followingChar = properties.m_followingChar;
+    }
+    if (!(properties.m_textStyle == m_textStyle)) {
+        KoGenStyle::copyPropertiesFromStyle(properties.m_textStyle, m_textStyle, KoGenStyle::TextType);
     }
 }
 
-QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fileByPowerPoint) const
+QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& mainStyles, Utils::MSOOXMLFilter currentFilter)
 {
-    QString returnValue;
-    QString ending;
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter out(&buf);
+
+    //---------------------------------------------
+    // list-level-style-*
+    //---------------------------------------------
     if (m_type == ParagraphBulletProperties::NumberType) {
-        returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
-        returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
-        if (m_startValue != UNUSED) {
-            returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
+        out.startElement("text:list-level-style-number");
+        if (m_numFormat != UNUSED) {
+            out.addAttribute("style:num-format", m_numFormat);
         }
-        ending = "</text:list-level-style-number>";
+        if (m_prefix != UNUSED) {
+            out.addAttribute("style:num-prefix", m_prefix);
+        }
+        if (m_suffix != UNUSED) {
+            out.addAttribute("style:num-suffix", m_suffix);
+        }
+        out.addAttribute("text:start-value", m_startValue);
     }
     else if (m_type == ParagraphBulletProperties::PictureType) {
-        returnValue = QString("<text:list-level-style-image text:level=\"%1\" ").arg(m_level);
-        returnValue += QString("xlink:href=\"%1\" ").arg(m_picturePath);
-        returnValue += "xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" ";
-        ending = "</text:list-level-style-image>";
+        out.startElement("text:list-level-style-image");
+        out.addAttribute("xlink:href", m_picturePath);
+        out.addAttribute("xlink:type", "simple");
+        out.addAttribute("xlink:show", "embed");
+        out.addAttribute("xlink:actuate", "onLoad");
     }
     else {
-        returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
-
+        out.startElement("text:list-level-style-bullet");
         if (m_bulletChar == UNUSED) {
-            returnValue += QString("text:bullet-char=\"\" ");
+            out.addAttribute("text:bullet-char", "");
+        } else {
+            out.addAttribute("text:bullet-char", m_bulletChar);
         }
-        else {
-            returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+    }
+    out.addAttribute("text:level", m_level);
+    //---------------------------------------------
+    // text-properties
+    //---------------------------------------------
+
+    //NOTE: Setting a num. of text-properties to default values if not provided
+    //for the list style to maintain compatibility with both ODF and MSOffice.
+
+    QString bulletSize;
+    if (m_bulletRelativeSize != UNUSED) {
+        bulletSize = QString(m_bulletRelativeSize).append("%");
+    } else if (m_bulletSize != UNUSED) {
+        bulletSize = QString(m_bulletSize).append("pt");
+    } else {
+        bulletSize = "100%";
+    }
+
+    if (currentFilter == Utils::DocxFilter) {
+
+        //MSWord: A label does NOT inherit Underline from text-properties of
+        //the paragraph style.  A bullet does not inherit {Italics, Bold}.
+        if (m_type != ParagraphBulletProperties::NumberType) {
+            if ((m_textStyle.property("fo:font-style")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-style", "normal");
+            }
+            if ((m_textStyle.property("fo:font-weight")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-weight", "normal");
+            }
+        }
+        if ((m_textStyle.property("style:text-underline-style")).isEmpty()) {
+            m_textStyle.addProperty("style:text-underline-style", "none");
         }
 
-        ending = "</text:list-level-style-bullet>";
+        //fo:font-size
+        if (m_type != ParagraphBulletProperties::PictureType) {
+            if ((m_textStyle.property("fo:font-size")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-size", bulletSize);
+            }
+        }
+        out.addAttribute("text:style-name", mainStyles.insert(m_textStyle, "T"));
     }
-    returnValue += ">";
 
-    returnValue += "<style:list-level-properties ";
-    if (m_align != "UNUSED") {
-        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
+    //---------------------------------------------
+    // list-level-properties
+    //---------------------------------------------
+    out.startElement("style:list-level-properties");
+    if (m_align != UNUSED) {
+        out.addAttribute("fo:text-align", m_align);
+    }
+    if ((m_type == ParagraphBulletProperties::PictureType) && (m_bulletSize != UNUSED)) {
+        QString size = QString(m_bulletSize).append("pt");
+        out.addAttribute("fo:width", size);
+        out.addAttribute("fo:height", size);
     }
 
-    returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
-
-    if (!m_bulletSize.isEmpty() && m_type == ParagraphBulletProperties::PictureType) {
-        returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
-            arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
-    }
-    returnValue += ">";
-
+    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
     // NOTE: DrawingML: If indent and marL were not provided by a master slide
     // or defaults, then according to the spec. a value of -342900 is implied
     // for indent and a value of 347663 is implied for marL (no matter which
@@ -1563,116 +1744,125 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(const bool fil
     double indent = 0;
     bool ok = false;
 
-    if (m_margin != "UNUSED") {
+    if (m_margin != UNUSED) {
         margin = m_margin.toDouble(&ok);
         if (!ok) {
             kDebug() << "STRING_TO_DOUBLE: error converting" << m_margin << "(attribute \"marL\")";
         }
     }
-    if (m_indent != "UNUSED") {
+    if (m_indent != UNUSED) {
         indent = m_indent.toDouble(&ok);
         if (!ok) {
             kDebug() << "STRING_TO_DOUBLE: error converting" << m_indent << "(attribute \"indent\")";
         }
     }
+    out.startElement("style:list-level-label-alignment");
 
-    if (fileByPowerPoint) {
-        returnValue += "<style:list-level-label-alignment ";
-        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
-        if (qAbs(indent) > qAbs(margin)) {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(-margin);
-            returnValue += "text:label-followed-by=\"listtab\" ";
-            returnValue += QString("text:list-tab-stop-position=\"%1pt\" ").arg(qAbs(indent));
+    if (currentFilter == Utils::PptxFilter) {
+        //fo:margin-left
+        out.addAttributePt("fo:margin-left", margin);
+
+        if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
+            (m_type == ParagraphBulletProperties::DefaultType))
+        {
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
+                    out.addAttributePt("fo:text-indent", -margin);
+                } else {
+                    out.addAttributePt("fo:text-indent", indent);
+                }
+            }
+            //first-line and none:
+            else {
+                out.addAttributePt("fo:text-indent", indent);
+            }
+            out.addAttribute("text:label-followed-by", "nothing");
         } else {
-            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
-            returnValue += "text:label-followed-by=\"nothing\" ";
+            //hanging:
+            if (indent < 0) {
+                if (qAbs(indent) > margin) {
+                    out.addAttributePt("fo:text-indent", -margin);
+                    out.addAttribute("text:label-followed-by", "listtab");
+                    out.addAttributePt("text:list-tab-stop-position", qAbs(indent));
+                } else {
+                    out.addAttributePt("fo:text-indent", indent);
+                    out.addAttribute("text:label-followed-by", "listtab");
+                    out.addAttributePt("text:list-tab-stop-position", margin);
+                }
+            }
+            //first-line:
+            else if (indent > 0) {
+                out.addAttribute("fo:text-indent", "0pt");
+                out.addAttribute("text:label-followed-by", "listtab");
+                out.addAttributePt("text:list-tab-stop-position", margin + indent);
+            }
+            //none
+            else {
+                out.addAttribute("fo:text-indent", "0pt");
+                out.addAttribute("text:label-followed-by", "nothing");
+            }
         }
-        returnValue += "/>";
-    }
-    // TODO: The text:label-followed-by is a required attribute, set the proper
-    // value, for now add the default used by calligra.
-    else {
-        returnValue += "<style:list-level-label-alignment ";
-        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(margin);
-        returnValue += QString("fo:text-indent=\"%1pt\" ").arg(indent);
-        returnValue += "text:label-followed-by=\"space\" ";
-        returnValue += "/>";
-    }
-
-    returnValue += "</style:list-level-properties>";
-    returnValue += "<style:text-properties ";
-
-    if (m_bulletColor != "UNUSED") {
-    	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
-    }
-    if (m_type != ParagraphBulletProperties::PictureType) {
-        returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
-    }
-    //PowerPoint UI does not enable to change the font for numbered lists
-    if (m_bulletFont != "UNUSED") {
-        if (!fileByPowerPoint || (m_type == ParagraphBulletProperties::BulletType)) {
-            returnValue += QString("fo:font-family=\"%1\" ").arg(m_bulletFont);
+    } else {
+        //fo:margin-left
+        out.addAttributePt("fo:margin-left", margin);
+        //fo:text-indent
+        out.addAttributePt("fo:text-indent", indent);
+        //text:label-followed-by
+        if ((m_followingChar == "tab") || (m_followingChar == UNUSED)) {
+            out.addAttribute("text:label-followed-by", "listtab");
+            // Layout hints: none/first-line/hanging are values from the
+            // Special field of the Paragraph dialog in MS Word.
+            //
+            // first-line:
+            // IF (indent > 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent > 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent > 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
+            //
+            // none:
+            // IF (indent == 0) and (margin > 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent == 0) and (margin == 0), THEN use default tab stop OR a custom tab stop if defined.
+            // IF (indent == 0) and (margin < 0), THEN use default tab stop OR a custom tab stop if defined.
+            //
+            // hanging:
+            // 1. the tab should be placed at the margin position
+            // 2. bullet_position = margin - indent; (that's the indentation
+            // left value that can be seen in Paragraph dialog in MS Word)
         }
-    }
-    returnValue += "/>";
-
-    returnValue += ending;
-
-    return returnValue;
-}
-
-MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
-{
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
-
-    if (tint > 0) {
-        red = tint * red + (1 - tint) * 255;
-        green = tint * green + (1 - tint) * 255;
-        blue = tint * blue + (1 - tint) * 255;
-    }
-    if (shade > 0) {
-        red = shade * red;
-        green = shade * green;
-        blue = shade * blue;
-    }
-
-    // FIXME: This calculation for sure is incorrect,
-    // According to MS forums, RGB should first be converted to linear RGB
-    // Then to HSL and then multiply saturation value by satMod
-    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
-    // ADD INFO: MS document does not say that when calculating TINT and SHADE
-    // That whether one should use normal RGB or linear RGB, check it!
-
-
-    // This method is used temporarily, it seems to produce visually better results than the lower one.
-    if (satMod > 0) {
-        QColor temp = QColor(red, green, blue);
-        qreal saturationFromFull = 1.0 - temp.saturationF();
-        temp = QColor::fromHsvF(temp.hueF(), temp.saturationF() + saturationFromFull / 10 * satMod, temp.valueF());
-        red = temp.red();
-        green = temp.green();
-        blue = temp.blue();
-    }
-
-    /*
-    if (satMod > 0) {
-        red = red * satMod;
-        green = green * satMod;
-        blue = blue * satMod;
-        if (red > 255) {
-            red = 255;
-        }
-        if (green > 255) {
-            green = 255;
-        }
-        if (blue > 255) {
-            blue = 255;
+        //space and nothing are same in OOXML and ODF
+        else {
+            out.addAttribute("text:label-followed-by", m_followingChar);
         }
     }
-    */
+    out.endElement(); //style:list-level-label-alignment
+    out.endElement(); //style:list-level-properties
+    if (currentFilter != Utils::DocxFilter) {
+        out.startElement("style:text-properties");
+        if (m_bulletColor != UNUSED) {
+            out.addAttribute("fo:color", m_bulletColor);
+        }
+        if (m_type != ParagraphBulletProperties::PictureType) {
+            out.addAttribute("fo:font-size", bulletSize);
+        }
+        //MSPowerPoint: UI does not enable to change font of a numbered lists.
+        if (m_bulletFont != UNUSED) {
+            if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {
+                out.addAttribute("fo:font-family", m_bulletFont);
+            }
+        }
+        //MSPowerPoint: A label does NOT inherit Underline from text-properties
+        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        if ((currentFilter == Utils::PptxFilter)) {
+            if (m_type != ParagraphBulletProperties::NumberType) {
+                out.addAttribute("fo:font-style", "normal");
+                out.addAttribute("fo:font-weight", "normal");
+            }
+            out.addAttribute("style:text-underline-style", "none");
+        }
+        out.endElement(); //style:text-properties
+    }
+    out.endElement(); //text:list-level-style-*
 
-    color = QColor(red, green, blue);
+    return QString::fromUtf8(buf.buffer(), buf.buffer().size());
 }
 

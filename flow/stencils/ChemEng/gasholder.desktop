@@ -1,11 +1,17 @@
 [Desktop Entry]
 Name=gasholder
+Name[ca]=sortidor
+Name[ca@valencia]=eixidor
 Name[es]=bombona de gas
+Name[et]=Gasomeeter
+Name[it]=gasholder
+Name[kk]=Газқоймасы
 Name[nb]=gassholder
 Name[nl]=gashouder
 Name[pl]=zbiornik na gaz
 Name[pt]=cisterna
 Name[pt_BR]=cisterna
+Name[ru]=Ёмкость для газа
 Name[sv]=gasbehållare
 Name[uk]=Газосховище
 Name[x-test]=xxgasholderxx

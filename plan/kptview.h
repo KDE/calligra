@@ -32,7 +32,8 @@
 #include <QTimer>
 #include <QMap>
 
-class QProgressBar;
+#include <KConfigDialog>
+
 class QStackedWidget;
 class QSplitter;
 class KUndo2Command;
@@ -40,6 +41,8 @@ class KUndo2Command;
 class KAction;
 class KToggleAction;
 class QLabel;
+class KConfigSkeleton;
+class KConfigSkeletonItem;
 
 class KoView;
 
@@ -80,6 +83,53 @@ class ReportView;
 
 class ReportDesignDialog;
 
+class ConfigDialog : public KConfigDialog
+{
+    Q_OBJECT
+public:
+    ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
+
+protected slots:
+    /// Return true if any widget has changed
+    virtual bool hasChanged();
+    /**
+    * Update the settings from the dialog.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Ok or Apply button in a configure dialog.
+    */
+    virtual void updateSettings();
+
+    /**
+    * Update the dialog based on the settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: Initialisation of dialog.
+    * Example use: User clicks Reset button in a configure dialog.
+    */
+    virtual void updateWidgets();
+
+    /**
+    * Update the dialog based on the default settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Defaults button in a configure dialog.
+    */
+    virtual void updateWidgetsDefault();
+
+  /**
+   * Returns whether the current state of the dialog is
+   * the same as the default configuration.
+   */
+  virtual bool isDefault();
+
+private:
+    KConfigSkeleton *m_config;
+    QMap<QString, QByteArray> m_signalsmap;
+    QMap<QWidget*, KConfigSkeletonItem*> m_itemmap;
+    QMap<QString, QByteArray> m_propertymap;
+};
+
 //-------------
 class KPLATO_EXPORT View : public KoView
 {
@@ -111,6 +161,8 @@ public:
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
+    /// Returns the default category information like standard name and tooltip for category type @p type
+    ViewInfo defaultCategoryInfo( const QString type ) const;
 
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
@@ -148,6 +200,7 @@ public slots:
     void slotUpdate();
     void slotCreateTemplate();
     void slotEditResource();
+    void slotEditResource( Resource *resource );
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -196,10 +249,7 @@ protected slots:
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index );
     void slotCalculateSchedule( Project*, ScheduleManager* );
-    void slotCalculationStarted( Project *project, ScheduleManager *sm );
-    void slotCalculationFinished( Project *project, ScheduleManager *sm );
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
-    void slotProgressChanged( int value );
 
     void slotProjectWorktime();
 
@@ -222,8 +272,6 @@ protected slots:
     void slotDeleteResourceObjects( QObjectList );
 
     void slotCurrentChanged( int );
-
-    void removeProgressBarItems();
 
     void slotInsertFile();
 
@@ -304,9 +352,6 @@ private slots:
 
     void slotRemoveCommands();
 
-    void slotMaxProgress( int p );
-    void slotSetProgress( int p );
-
     void hideToolDocker();
 
 private:
@@ -333,9 +378,6 @@ private:
     bool m_updatePertEditor;
 
     QLabel *m_estlabel;
-    QProgressBar *m_progress;
-    QLabel *m_text;
-    QTimer m_progressBarTimer;
 
     ViewAdaptor* m_dbus;
 

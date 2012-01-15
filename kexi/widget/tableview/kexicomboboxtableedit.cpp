@@ -63,8 +63,8 @@ public:
 //======================================================
 
 KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidget *parent)
-        : KexiInputTableEdit(column, parent)
-        , KexiComboBoxBase()
+        : KexiComboBoxBase()
+        , KexiInputTableEdit(column, parent)
         , d(new Private())
 {
     m_setVisibleValueOnSetValueInternal = true;

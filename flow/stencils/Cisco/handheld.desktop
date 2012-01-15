@@ -2,6 +2,8 @@
 Name=Handheld
 Name[bg]=Мобилно устройство
 Name[ca]=Mans lliures
+Name[ca@valencia]=Mans lliures
+Name[cs]=Handheld
 Name[el]=Χειρός
 Name[et]=Pihuarvuti
 Name[it]=Palmare
@@ -11,6 +13,7 @@ Name[nl]=Handheld
 Name[pl]=Handheld
 Name[pt]=Dispositivo Móvel
 Name[pt_BR]=Handheld
+Name[ru]=Карманный ПК
 Name[sv]=Handdator
 Name[uk]=Кишеньковий пристрій
 Name[x-test]=xxHandheldxx

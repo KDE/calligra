@@ -1,14 +1,19 @@
 [Desktop Entry]
 Name=EtherClient
+Name[ca]=Client ether
+Name[ca@valencia]=Client ether
 Name[de]=EtherClient
 Name[el]=EtherClient
+Name[et]=Etherneti klient
 Name[it]=EtherClient
 Name[nb]=EtherClient
 Name[nl]=EtherClient
 Name[pl]=EtherClient
 Name[pt]=Cliente Ethernet
 Name[pt_BR]=Cliente Ethernet
+Name[ru]=Клиент локальной сети
 Name[sv]=Etherklient
 Name[uk]=EtherClient
 Name[x-test]=xxEtherClientxx
+Name[zh_CN]=以太客户端
 Name[zh_TW]=乙太客戶端

@@ -359,8 +359,8 @@ Resource::~Resource() {
         removeId(); // only remove myself (I may be just a working copy)
     }
     removeRequests();
-    foreach (long key, m_schedules.keys()) {
-        delete m_schedules.take(key);
+    foreach ( Schedule *s, m_schedules ) {
+        delete s;
     }
     clearExternalAppointments();
     if (cost.account) {
@@ -954,19 +954,19 @@ void Resource::calendarIntervals( const DateTime &from, const DateTime &until ) 
         m_workinfocache.start = from;
         m_workinfocache.end = until;
         m_workinfocache.intervals = cal->workIntervals( from, until, m_units );
-//         kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
+//         kDebug()<<"calendarIntervals (first):"<<m_workinfocache.intervals;
     } else {
         if ( from < m_workinfocache.start ) {
-            //kDebug()<<"Add to start:"<<from<<m_workinfocache.start;
+//             kDebug()<<"Add to start:"<<from<<m_workinfocache.start;
             m_workinfocache.intervals += cal->workIntervals( from, m_workinfocache.start, m_units );
             m_workinfocache.start = from;
-//             kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
+//             kDebug()<<"calendarIntervals (start):"<<m_workinfocache.intervals;
         }
         if ( until > m_workinfocache.end ) {
-            //kDebug()<<"Add to end:"<<m_workinfocache.end<<until;
+//             kDebug()<<"Add to end:"<<m_workinfocache.end<<until;
             m_workinfocache.intervals += cal->workIntervals( m_workinfocache.end, until, m_units );
             m_workinfocache.end = until;
-//             kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
+//             kDebug()<<"calendarIntervals: (end)"<<m_workinfocache.intervals;
         }
     }
 }
@@ -2366,13 +2366,12 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     int inc = backward ? -1 : 1;
     DateTime end = start;
     Duration e1;
-    Duration d( 1, 0, 0 );
     int nDays = numDays(lst, time, backward) + 1;
     int day = 0;
     for (day=0; !match && day <= nDays; ++day) {
         // days
         end = end.addDays(inc);
-        e1 = effort( lst, start, d, ns, backward );
+        e1 = effort( lst, start, backward ? start - end : end - start, ns, backward );
         //kDebug()<<"["<<i<<"of"<<nDays<<"]"<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match"<<_effort.toString();
         if (e + e1 < _effort) {
             e += e1;
@@ -2390,11 +2389,10 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         if ( ns ) ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
-        d = Duration(0, 1, 0); // 1 hour
         for (int i=0; !match && i < 24; ++i) {
             // hours
             end = end.addSecs(inc*60*60);
-            e1 = effort( lst, start, d, ns, backward );
+            e1 = effort( lst, start, backward ? start - end : end - start, ns, backward );
             if (e + e1 < _effort) {
                 e += e1;
                 start = end;
@@ -2419,11 +2417,10 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         if ( ns ) ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
-        d = Duration(0, 0, 1); // 1 minute
         for (int i=0; !match && i < 60; ++i) {
             //minutes
             end = end.addSecs(inc*60);
-            e1 = effort( lst, start, d, ns, backward );
+            e1 = effort( lst, start, backward ? start - end : end - start, ns, backward );
             if (e + e1 < _effort) {
                 e += e1;
                 start = end;
@@ -2453,11 +2450,10 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         if ( ns ) ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
-        d = Duration(0, 0, 0, 1); // 1 second
         for (int i=0; !match && i < 60; ++i) {
             //seconds
             end = end.addSecs(inc);
-            e1 = effort( lst, start, d, ns, backward );
+            e1 = effort( lst, start, backward ? start - end : end - start, ns, backward );
             if (e + e1 < _effort) {
                 e += e1;
                 start = end;
@@ -2475,11 +2471,10 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
 #ifndef PLAN_NLOGDEBUG
         if ( ns ) ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
-        d = Duration(0, 0, 0, 0, 1); // 1 millisecond
         for (int i=0; !match && i < 1000; ++i) {
             //milliseconds
             end.setTime(end.time().addMSecs(inc));
-            e1 = effort( lst, start, d, ns, backward );
+            e1 = effort( lst, start, backward ? start - end : end - start, ns, backward );
             if (e + e1 < _effort) {
                 e += e1;
                 start = end;

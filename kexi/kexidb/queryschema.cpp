@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -427,36 +427,35 @@ QString OrderByColumn::debugString() const
            : QString("NONE");
 }
 
-QString OrderByColumn::toSQLString(bool includeTableName, Driver *drv, int identifierEscaping) const
+QString OrderByColumn::toSQLString(bool includeTableName, const Driver *drv, int identifierEscaping) const
 {
     const QString orderString(m_ascending ? "" : " DESC");
-    QString fieldName, tableName;
+    QString fieldName, tableName, collationString;
     if (m_column) {
         if (m_pos > -1)
             return QString::number(m_pos + 1) + orderString;
         else {
             if (includeTableName && m_column->alias.isEmpty()) {
-                tableName = m_column->field->table()->name();
-                if (drv)
-                    tableName = drv->escapeIdentifier(tableName, identifierEscaping);
-                tableName += ".";
+                tableName = KexiDB::escapeIdentifier(
+                                drv, m_column->field->table()->name(), identifierEscaping) + '.';
             }
-            fieldName = m_column->aliasOrName();
-            if (drv)
-                fieldName = drv->escapeIdentifier(fieldName, identifierEscaping);
+            fieldName = KexiDB::escapeIdentifier(drv, m_column->aliasOrName(), identifierEscaping);
+        }
+        if (m_column->field->isTextType() && drv) {
+            collationString = drv->collationSQL();
         }
     } else {
-        if (includeTableName) {
-            tableName = m_field->table()->name();
-            if (drv)
-                tableName = drv->escapeIdentifier(tableName, identifierEscaping);
-            tableName += ".";
+        if (m_field && includeTableName) {
+            tableName = KexiDB::escapeIdentifier(
+                            drv, m_field->table()->name(), identifierEscaping) + '.';
         }
-        fieldName = m_field ? m_field->name() : "??"/*error*/;
-        if (drv)
-            fieldName = drv->escapeIdentifier(fieldName, identifierEscaping);
+        fieldName = KexiDB::escapeIdentifier(drv, m_field ? m_field->name() : "??"/*error*/,
+                                             identifierEscaping);
+        if (m_field && m_field->isTextType() && drv) {
+            collationString = drv->collationSQL();
+        }
     }
-    return tableName + fieldName + orderString;
+    return tableName + fieldName + orderString + collationString;
 }
 
 //=======================================
@@ -564,7 +563,7 @@ QString OrderByColumnList::debugString() const
     return dbg;
 }
 
-QString OrderByColumnList::toSQLString(bool includeTableNames, Driver *drv, int identifierEscaping) const
+QString OrderByColumnList::toSQLString(bool includeTableNames, const Driver *drv, int identifierEscaping) const
 {
     QString string;
     for (QList<OrderByColumn*>::ConstIterator it(constBegin()); it != constEnd(); ++it) {
@@ -1651,7 +1650,7 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
     return d->autoincFields;
 }
 
-QString QuerySchema::sqlColumnsList(QueryColumnInfo::List* infolist, Driver *driver)
+QString QuerySchema::sqlColumnsList(QueryColumnInfo::List* infolist, const Driver *driver)
 {
     if (!infolist)
         return QString();
@@ -1663,17 +1662,17 @@ QString QuerySchema::sqlColumnsList(QueryColumnInfo::List* infolist, Driver *dri
             result += ",";
         else
             start = false;
-        result += driver->escapeIdentifier(ci->field->name());
+        result += KexiDB::escapeIdentifier(driver, ci->field->name());
     }
     return result;
 }
 
-QString QuerySchema::autoIncrementSQLFieldsList(Driver *driver)
+QString QuerySchema::autoIncrementSQLFieldsList(const Driver *driver)
 {
-    if ((Driver *)d->lastUsedDriverForAutoIncrementSQLFieldsList != driver
+    if ((const Driver *)d->lastUsedDriverForAutoIncrementSQLFieldsList != driver
             || d->autoIncrementSQLFieldsList.isEmpty()) {
         d->autoIncrementSQLFieldsList = QuerySchema::sqlColumnsList(autoIncrementFields(), driver);
-        d->lastUsedDriverForAutoIncrementSQLFieldsList = driver;
+        d->lastUsedDriverForAutoIncrementSQLFieldsList = const_cast<Driver*>(driver);
     }
     return d->autoIncrementSQLFieldsList;
 }

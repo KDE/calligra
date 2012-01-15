@@ -43,6 +43,11 @@ ReportData::~ReportData()
 {
 }
 
+void ReportData::setColumnRole( int column, int role )
+{
+    m_columnroles[ column ] = role;
+}
+
 bool ReportData::open()
 {
     ItemModelBase *m = itemModel();
@@ -93,7 +98,8 @@ QVariant ReportData::value ( unsigned int i ) const {
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
-    QVariant value = m_model.index( at(), i ).data();
+    int role = m_columnroles.contains( i ) ? m_columnroles[ i ] : Qt::DisplayRole;
+    QVariant value = m_model.index( at(), i ).data( role );
     return value;
 }
 
@@ -176,6 +182,9 @@ void ReportData::setSorting(const QList<SortedField>& lst )
         int col = fieldNumber( sort.field );
         sf = new QSortFilterProxyModel( &m_model );
         sf->setSourceModel( source_model );
+        if ( itemModel() ) {
+            sf->setSortRole( itemModel()->sortRole( col ) );
+        }
         sf->sort( col, sort.order );
         source_model = sf;
     }
@@ -411,7 +420,7 @@ QStringList ChartReportData::fieldNames() const
     return names;
 }
 
-void ChartReportData::addExpression( const QString &field, const QVariant &value, int relation )
+void ChartReportData::addExpression( const QString &field, const QVariant &/*value*/, int /*relation*/ )
 {
 //     kDebug()<<field<<value<<relation;
     QStringList lst = field.split( '=', QString::SkipEmptyParts );

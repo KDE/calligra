@@ -2,6 +2,7 @@
 Name=Horizontal Rest
 Name[bg]=Хоризонтален остатък
 Name[ca]=Descans horitzontal
+Name[ca@valencia]=Descans horitzontal
 Name[de]=Waagerechte Stütze
 Name[et]=Horisontaalne rest
 Name[it]=Resto orizzontale
@@ -11,7 +12,9 @@ Name[nl]=Horizontale steun
 Name[pl]=Podpora pozioma
 Name[pt]=Descanso Horizontal
 Name[pt_BR]=Descanso horizontal
+Name[ru]=Горизонтальная опора
 Name[sv]=Horisontellt stöd
 Name[uk]=Горизонтальна опора
 Name[x-test]=xxHorizontal Restxx
+Name[zh_CN]=水平平衡
 Name[zh_TW]=水平支架

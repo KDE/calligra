@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Man red
+Name[ca]=Home vermell
+Name[ca@valencia]=Home roig
 Name[el]=Άνδρας κόκκινος
 Name[et]=Punane mees
 Name[it]=Uomo rosso
@@ -8,7 +10,9 @@ Name[nl]=Rode man
 Name[pl]=Mężczyzna czerwony
 Name[pt]=Homem vermelho
 Name[pt_BR]=Homem vermelho
+Name[ru]=Человек красного цвета
 Name[sv]=Man röd
 Name[uk]=Чоловік (червоним)
 Name[x-test]=xxMan redxx
+Name[zh_CN]=男性(红色)
 Name[zh_TW]=男人（紅）

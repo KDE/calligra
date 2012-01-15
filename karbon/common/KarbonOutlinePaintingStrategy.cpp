@@ -50,7 +50,7 @@ KarbonOutlinePaintingStrategy::~KarbonOutlinePaintingStrategy()
     delete m_border;
 }
 
-void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool)
+void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintContext*/)
 {
     painter.save();
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());

@@ -11,34 +11,15 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
-<title>The &kspread; Configuration Dialog Box</title>
+<title>The &tables; Configuration Dialog Box</title>
 
 <para>Selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>
-Configure &kspread;...</guimenuitem></menuchoice> opens a dialog box 
+Configure Tables...</guimenuitem></menuchoice> opens a dialog box 
 with several pages, selected with the icons at the left of the dialog box, 
-which allow you to change many aspects of &kspread;'s operation.</para>
-
-<sect1 id="configlocale">
-<title><guilabel>Locale Settings</guilabel></title>
-<para>
-    <mediaobject>
-        <imageobject>
-            <imagedata fileref="configure1.png" format="PNG"/>
-        </imageobject>
-        <textobject>
-            <phrase>Locale Settings Configuration.</phrase>
-        </textobject>
-    </mediaobject>
-</para>
-<para>This page of &kspread;'s configuration dialog box shows how items 
-such as numbers, date, time and money are displayed.</para>
-<para>If you have loaded a spreadsheet that was generated using a different 
-locale, then pressing the <guibutton>Update Locale Settings</guibutton> 
-button on this page will update it to conform to your locale settings as they are fixed in &kcontrolcenter;.</para>
-</sect1>
+which allow you to change many aspects of &tables;'s operation.</para>
 
 <sect1 id="configinterface">
-<title><guilabel>Interface</guilabel></title>
+<title>Interface</title>
 <para>
     <mediaobject>
         <imageobject>
@@ -49,21 +30,95 @@ button on this page will update it to conform to your locale settings as they ar
         </textobject>
     </mediaobject>
 </para>
-<para>This page of &kspread;'s configuration dialog box (obtained by selecting 
-<guimenuitem>Configure &kspread;...</guimenuitem> from the <guimenu>Settings
-</guimenu> menu) controls some more &kspread; features:</para>
 
 <para><variablelist>
 <varlistentry>
-<term><guilabel>Number of sheets open at the beginning:</guilabel></term>
-<listitem><para>Controls how many worksheets will be created if the 
-option <guilabel>Blank Worksheet</guilabel> is chosen when 
-&kspread; is started.
+<term><guilabel>Cursor movement after pressing Enter:</guilabel></term>
+<listitem><para>Select whether pressing the &Enter; 
+key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
+<guilabel>Right</guilabel>, <guilabel>Left</guilabel>, <guilabel>Down, 
+First Column</guilabel> or <guilabel>None</guilabel> as determined by the setting in this drop down selection box.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Number of files to show in Recent Files list:</guilabel></term>
+<term><guilabel>Function shown in the status bar:</guilabel></term>
+<listitem><para>This drop down selection box can be used to choose the 
+calculation performed by the <link linkend="statusbarsum">Statusbar Summary
+</link> function.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Unit:</guilabel></term>
+<listitem><para>Choose the default unit that will be used in your sheets.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Indentation step:</guilabel></term>
+<listitem><para>Set the amount of indent that will be used in the cell when you
+choose the <guilabel>Increase Indent</guilabel>/<guilabel>Decrease Indent</guilabel> 
+actions from the toolbar. These actions are not enabled by default in the toolbar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capture all navigation keys while editing</guilabel></term>
+<listitem><para>Captures all navigation keys, &ie; the arrow keys, page up/down, tabulator 
+and backward tabulator key, while editing a cell with the embedded editor. 
+The embedded editor is the one appearing directly in the cell. If captured, 
+these keys are used for navigating in the editor. Otherwise, they are used 
+for cell navigation.</para>
+</listitem>
+</varlistentry>
+
+</variablelist></para>
+
+<para>The <guilabel>Colors</guilabel> section lets you choose the color of the 
+sheet grid. If you do not want the grid to appear at all, uncheck the 
+<guilabel>Show grid</guilabel> box in the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
+
+<para>This section also lets you select the color of the lines used to indicate 
+the printed page borders when the <guimenuitem>Page Borders</guimenuitem> 
+box in the <guimenu>View</guimenu> menu is checked.</para>
+<para>Select <guilabel>Custom</guilabel> from the current color to display the 
+standard &kde; <guilabel>Select Color</guilabel> dialog.</para>
+
+<para><variablelist>
+
+<varlistentry>
+<term><guilabel>Grid</guilabel></term>
+<listitem><para>Click here to change the grid color &ie; the color of the borders of each cell. 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Page border</guilabel></term>
+<listitem><para>When the <menuchoice><guimenu>View</guimenu><guimenuitem>Show Page Borders</guimenuitem></menuchoice> menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red. 
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="configopensave">
+<title>Open/Save</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure3.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase>Open/Save Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para><variablelist>
+<varlistentry>
+<term><guilabel>Number of entries in Recent Files list:</guilabel></term>
 <listitem><para>Controls the maximum number of filenames that are shown
 when you select <menuchoice><guimenu>File</guimenu><guisubmenu>
 Open Recent</guisubmenu></menuchoice>.
@@ -71,10 +126,9 @@ Open Recent</guisubmenu></menuchoice>.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Autosave Delay (minutes):</guilabel></term>
+<term><guilabel>Autosave delay (minutes):</guilabel></term>
 <listitem><para>Here you can select the time between autosaves, or disable 
-this feature altogether by choosing <guilabel>Do not save automatically</guilabel>
-(drag the slider to the far left).
+this feature altogether by choosing <guilabel>Do not save automatically</guilabel>.
 </para></listitem>
 </varlistentry>
 
@@ -84,69 +138,15 @@ this feature altogether by choosing <guilabel>Do not save automatically</guilabe
 </para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guilabel>Show vertical scrollbar</guilabel></term>
-<listitem><para>Check or uncheck this box to show or hide the vertical 
-scrollbar in all sheets.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show horizontal scrollbar</guilabel></term>
-<listitem><para>Check or uncheck this box to show or hide the horizontal 
-scrollbar in all sheets.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show column header</guilabel></term>
-<listitem><para>Check this box to show the column letters across the top of each 
-worksheet.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show row header</guilabel></term>
-<listitem><para>Check this box to show the row numbers down the left side.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show tabs</guilabel></term>
-<listitem><para>This check box controls whether the sheet tabs are shown 
-at the bottom of the worksheet.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show formula toolbar</guilabel></term>
-<listitem><para>Here is where you can choose to show or hide the <guilabel>Formula</guilabel> bar.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show status bar</guilabel></term>
-<listitem><para>Uncheck this box if you want to hide the status bar.
-</para></listitem>
-</varlistentry>
-
 </variablelist></para>
 
 </sect1>
 
+<!-- no longer in config dialog
 <sect1 id="configmisc">
 <title><guilabel>Misc</guilabel></title>
-<para>
-    <mediaobject>
-        <imageobject>
-            <imagedata fileref="configure3.png" format="PNG"/>
-        </imageobject>
-        <textobject>
-            <phrase>Miscellaneous Configuration.</phrase>
-        </textobject>
-    </mediaobject>
-</para>
-<para>The <guilabel>Misc</guilabel> page of &kspread;'s configuration 
+
+<para>The <guilabel>Misc</guilabel> page of &tables;'s configuration 
 dialog box contains the following items;</para>
 
 <para><variablelist>
@@ -158,103 +158,28 @@ range of options in the drop down selection box.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Pressing enter moves cell cursor:</guilabel></term>
-<listitem><para>Select whether pressing the <keysym>Enter</keysym> 
-key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
-<guilabel>Right</guilabel>, <guilabel>Left</guilabel> or <guilabel>Down, 
-First Column</guilabel> as determined by the setting in this drop down selection box.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Method of calc:</guilabel></term>
-<listitem><para>This drop down selection box can be used to choose the 
-calculation performed by the <link linkend="statusbarsum">Statusbar Summary
-</link> function.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Indentation step (cm):</guilabel></term>
-<listitem><para>Lets you define the amount of indenting used by the 
-<guimenuitem>Increase Indent</guimenuitem> option in the <guimenu>Format
-</guimenu> menu.
-</para>
-<para>The unit taken here is the one you fixed in the Configure
-&kspread; dialog, in the Page Layout tab in the <guilabel>Default page
-unit:</guilabel> setting. </para></listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guilabel>Show error message for invalid formulae</guilabel></term>
 <listitem><para>If this box is checked a message box will pop up when what 
-you have entered into a cell cannot be understood by &kspread;.
+you have entered into a cell cannot be understood by &tables;.
 </para></listitem>
 </varlistentry>
 
-<!--<varlistentry>
+<varlistentry>
 <term><guilabel>Show comment indicator</guilabel></term>
 <listitem><para>If this box is checked cells containing comments will be 
 marked by a small red triangle at the top right corner.
 </para></listitem>
-</varlistentry>-->
-
-</variablelist></para>
-
-</sect1>
-
-<sect1 id="configcolor">
-<title><guilabel>Color</guilabel></title>
-<para>
-    <mediaobject>
-        <imageobject>
-            <imagedata fileref="configure4.png" format="PNG"/>
-        </imageobject>
-        <textobject>
-            <phrase>Color Configuration.</phrase>
-        </textobject>
-    </mediaobject>
-</para>
-<para>This page of &kspread;'s configuration dialog box lets you choose the 
-color of the sheet grid. If you do not want the grid to appear at all, uncheck the <guilabel>Show grid</guilabel> box in 
-the <menuchoice><guimenu>Format</guimenu><guisubmenu>Sheet</guisubmenu><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
-
-<para>This page also lets you select the color of the lines used to indicate 
-the printed page borders when the <guimenuitem>Page Borders</guimenuitem> 
-box in the <guimenu>View</guimenu> menu is checked.</para>
-<para>Click on the current color to display the standard KDE <guilabel>Select Color</guilabel> dialog.</para>
-
-<para><variablelist>
-
-<varlistentry>
-<term><guilabel>Grid color:</guilabel></term>
-<listitem><para>Click here to change the grid color &ie; the color of the borders of each cell. 
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Page borders:</guilabel></term>
-<listitem><para>When the <menuchoice><guimenu>View</guimenu><guimenuitem>Show Page Borders</guimenuitem></menuchoice> menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red. 
-</para></listitem>
 </varlistentry>
 
 </variablelist></para>
 
 </sect1>
-
+-->
+<!-- Move this to page layout section
 <sect1 id="configpagelayout">
 <title><guilabel>Page Layout</guilabel></title>
-<para>
-    <mediaobject>
-        <imageobject>
-            <imagedata fileref="configure5.png" format="PNG"/>
-        </imageobject>
-        <textobject>
-            <phrase>Page Layout Configuration.</phrase>
-        </textobject>
-    </mediaobject>
-</para>
-<para>This page of &kspread;'s configuration dialog box lets you set up the 
+
+<para>This page of &tables;'s configuration dialog box lets you set up the 
 default page size, orientation and units used by the printer and by the 
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
 <guimenuitem>Page Layout...</guimenuitem> from the <guimenu>Format
@@ -286,27 +211,24 @@ Layout...</guimenuitem></menuchoice> dialog.
 </variablelist></para>
 
 </sect1>
-
+-->
+<!--FIXME empty plugins page 
+error message in konsole
+tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTrader: serviceType  "KSpread/Plugin"  not found
+ -->
+<!--FIXME link to sonnet handbook -> building blocks-->
 <sect1 id="configspelling">
-<title><guilabel>Spelling</guilabel></title>
-<para>
-    <mediaobject>
-        <imageobject>
-            <imagedata fileref="configure6.png" format="PNG"/>
-        </imageobject>
-        <textobject>
-            <phrase>Spelling Configuration.</phrase>
-        </textobject>
-    </mediaobject>
-</para>
-<para>This page lets you configure the behavior of &kspread;'s spell 
+<title>Spelling</title>
+<para>This page lets you configure the behavior of &tables;'s spell 
 checker.</para>
-<para><variablelist>
-
+<para>For more information please refer to the 
+<ulink url="help:kcontrol/spellchecking">Spell Checker</ulink> documentation.</para>
+</sect1>
+<!--
 <varlistentry>
 <term><guilabel>Create root/affix combinations not in dictionary</guilabel>
 </term>
-<listitem><para>If this box is checked then when &kspread; finds a word in 
+<listitem><para>If this box is checked then when &tables; finds a word in 
 the document which it does not recognize but which consists of a recognized
 root word plus a recognized prefix or suffix it will accept it, whereas if
 the box is not checked the spell checker will reject it.
@@ -358,11 +280,7 @@ the title case, for example My Own Spreadsheet or My own spreadsheet. If this is
 
 </variablelist></para>
 </sect1>
-
-<sect1 id="opt-tts"><title>Configure Text-To-Speech options</title>
-<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
-in the accessibility chapter for further details.</para>
-</sect1>
+-->
 </chapter>
 
 <!--

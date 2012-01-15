@@ -277,7 +277,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 void KPrViewModeSlidesSorter::deactivate()
 {
     // Give the ressources back to the canvas
-    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
     m_view->doUpdateActivePage(m_view->activePage());
@@ -584,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomSlideShow) {
-        const bool animate = KGlobalSettings::graphicEffectsLevel() && KGlobalSettings::SimpleAnimationEffects;
+        const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
         const int duration = animate ? 250 : 1;
         QPropertyAnimation *animation = new QPropertyAnimation(m_customSlideShowView, "maximumHeight");
 

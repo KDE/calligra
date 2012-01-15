@@ -145,7 +145,9 @@ public:
                                  KexiPart::Item &item, 
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode, 
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
-
+    
+    //virtual void initTabs();
+    
     /*! @return i18n'd instance name usable for displaying in gui as object's name,
      e.g. "table".
      The name is valid identifier - contains latin-1 lowercase characters only. */

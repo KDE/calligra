@@ -55,9 +55,7 @@ class KPlatoXmlLoaderBase;
  * The Schedule class holds data calculated during project
  * calculation and scheduling, eg start- and end-times and
  * appointments.
- * There is one schedule per node and one per resource.
- * Schedules can be of type Expected, Optimistic or Pessimistic
- * referring to which estimate is used for the calculation.
+ * There is one Schedule per node (tasks and project ) and one per resource.
  * Schedule is subclassed into:
  * MainSchedule     Used by the main project.
  * NodeSchedule     Used by all other nodes (tasks).
@@ -67,9 +65,7 @@ class KPLATOKERNEL_EXPORT Schedule
 {
 public:
     //NOTE: Must match Effort::Use atm.
-    enum Type { Expected = 0,   //Effort::Use_Expected
-                Optimistic = 1,   //Effort::Use_Optimistic
-                Pessimistic = 2 //Effort::Use_Pessimistic
+    enum Type { Expected = 0   //Effort::Use_Expected
               };
 
     Schedule();
@@ -162,12 +158,18 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     
+    /// Returns the total planned effort for @p resource this schedule
+    virtual Duration plannedEffort( const Resource *resource, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule
     virtual Duration plannedEffort( EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule on date
     virtual Duration plannedEffort( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource on the @p date date
+    virtual Duration plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource up to and including date
+    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
 
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -222,7 +224,7 @@ public:
 
     virtual ScheduleManager *manager() const { return 0; }
     
-    class Log {
+    class KPLATOKERNEL_EXPORT Log {
         public:
             enum Type { Type_Debug = 0, Type_Info, Type_Warning, Type_Error };
             Log() 
@@ -544,9 +546,8 @@ public:
 
 /**
  * ScheduleManager is used by the Project class to manage the schedules.
- * Each ScheduleManager manages a schedule group that can consist of 
- * Expected-, Optimistic- and Pessimistic schedules.
- * A ScheduleManager can also have child manager(s).
+ * The ScheduleManager is the bases for the user interface to scheduling.
+ * A ScheduleManager can have child manager(s).
  */
 class KPLATOKERNEL_EXPORT ScheduleManager : public QObject
 {
@@ -599,12 +600,6 @@ public:
     void setExpected( MainSchedule *sch );
     MainSchedule *expected() const { return m_expected; }
 
-    void setOptimistic( MainSchedule *sch );
-    MainSchedule *optimistic() const { return m_optimistic; }
-
-    void setPessimistic( MainSchedule *sch );
-    MainSchedule *pessimistic() const { return m_pessimistic; }
-
     QStringList state() const;
 
     void setBaselined( bool on );
@@ -619,18 +614,11 @@ public:
     void setUsePert( bool on );
     bool usePert() const { return m_usePert; }
 
-    void setCalculateAll( bool on );
-    bool calculateAll() const { return m_calculateAll; }
-
     void setSchedulingDirection( bool on );
     bool schedulingDirection() const { return m_schedulingDirection; }
 
     void setScheduling( bool on );
     bool scheduling() const { return m_scheduling; }
-
-    QList<MainSchedule*> schedules() const;
-    int numSchedules() const;
-    int indexOf( const MainSchedule *sch ) const;
 
     bool loadXML( KoXmlElement &element, XMLLoaderObject &status );
     void saveXML( QDomElement &element ) const;
@@ -705,7 +693,6 @@ protected:
     bool m_baselined;
     bool m_allowOverbooking;
     bool m_checkExternalAppointments;
-    bool m_calculateAll;
     bool m_usePert;
     bool m_recalculate;
     DateTime m_recalculateFrom;
@@ -714,9 +701,6 @@ protected:
     int m_progress;
     int m_maxprogress;
     MainSchedule *m_expected;
-    MainSchedule *m_optimistic;
-    MainSchedule *m_pessimistic;
-    QList<MainSchedule*> m_schedules;
     QList<ScheduleManager*> m_children;
 
     QString m_schedulerPluginId;

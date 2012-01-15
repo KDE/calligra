@@ -64,8 +64,8 @@ KexiMainWelcomePage::KexiMainWelcomePage(
                   parent)
  , m_assistant(assistant)
 {
-    connect(this, SIGNAL(openProject(KexiProjectData)),
-            assistant, SIGNAL(openProject(KexiProjectData)));
+    connect(this, SIGNAL(openProject(KexiProjectData,QString,bool*)),
+            assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)));
     m_recentProjects = new KexiCategorizedView;
     //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
@@ -103,9 +103,12 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
     //m_templatesList->clearSelection();
 
     if (pdata) {
-        emit openProject(*pdata);
-//        next();
-//        return;
+        bool opened = false;
+        emit openProject(*pdata, m_assistant->projects()->shortcutPath(*pdata), &opened);
+        if (opened) { // update
+            pdata->setLastOpened(QDateTime::currentDateTime());
+            m_recentProjects->update();
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Man gold
 Name[ca]=Home daurat
+Name[ca@valencia]=Home daurat
 Name[el]=Άνδρας χρυσός
 Name[et]=Kuldne mees
 Name[it]=Uomo dorato
@@ -9,7 +10,9 @@ Name[nl]=Gouden man
 Name[pl]=Mężczyzna złoty
 Name[pt]=Homem dourado
 Name[pt_BR]=Homem dourado
+Name[ru]=Человек золотого цвета
 Name[sv]=Man gyllene
 Name[uk]=Чоловік (золотавим)
 Name[x-test]=xxMan goldxx
+Name[zh_CN]=男性(金色)
 Name[zh_TW]=男人（金）

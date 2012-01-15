@@ -43,25 +43,19 @@ KWPageStylePrivate::~KWPageStylePrivate()
 
 void KWPageStylePrivate::clear()
 {
-    // defaults
-    footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    footNoteSeparatorLineWidth = 0.5; // like in OOo
-    footNoteSeparatorLineType = Qt::SolidLine;
-
     displayName.clear();
-    mainFrame = true;
     headerDistance = 10; // ~3mm
     footerDistance = 10;
-    headerMinimumHeight = 0;
-    footerMinimumHeight = 0;
-    footNoteDistance = 10;
-    endNoteDistance = 10;
+    headerMinimumHeight = 10; // includes spacing
+    footerMinimumHeight = 10; // includes spacing
     headers = Words::HFTypeNone;
     footers = Words::HFTypeNone;
     pageUsage = KWPageStyle::AllPages;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
     direction = KoText::AutoDirection;
+    headerDynamicSpacing = false;
+    footerDynamicSpacing = false;
 
     if (fullPageBackground && !fullPageBackground->deref()) {
         delete fullPageBackground;
@@ -155,16 +149,6 @@ Words::HeaderFooterType KWPageStyle::footerPolicy() const
     return d->footers;
 }
 
-void KWPageStyle::setHasMainTextFrame(bool on)
-{
-    d->mainFrame = on;
-}
-
-bool KWPageStyle::hasMainTextFrame() const
-{
-    return d->mainFrame;
-}
-
 qreal KWPageStyle::headerDistance() const
 {
     return d->headerDistance;
@@ -173,6 +157,16 @@ qreal KWPageStyle::headerDistance() const
 void KWPageStyle::setHeaderDistance(qreal distance)
 {
     d->headerDistance = distance;
+}
+
+bool KWPageStyle::headerDynamicSpacing() const
+{
+    return d->headerDynamicSpacing;
+}
+
+void KWPageStyle::setHeaderDynamicSpacing(bool dynamic)
+{
+    d->headerDynamicSpacing = dynamic;
 }
 
 qreal KWPageStyle::headerMinimumHeight() const
@@ -205,64 +199,14 @@ void KWPageStyle::setFooterDistance(qreal distance)
     d->footerDistance = distance;
 }
 
-qreal KWPageStyle::footnoteDistance() const
+bool KWPageStyle::footerDynamicSpacing() const
 {
-    return d->footNoteDistance;
+    return d->footerDynamicSpacing;
 }
 
-void KWPageStyle::setFootnoteDistance(qreal distance)
+void KWPageStyle::setFooterDynamicSpacing(bool dynamic)
 {
-    d->footNoteDistance = distance;
-}
-
-qreal KWPageStyle::endNoteDistance() const
-{
-    return d->endNoteDistance;
-}
-
-void KWPageStyle::setEndNoteDistance(qreal distance)
-{
-    d->endNoteDistance = distance;
-}
-
-int KWPageStyle::footNoteSeparatorLineLength() const
-{
-    return d->footNoteSeparatorLineLength;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineLength(int length)
-{
-    d->footNoteSeparatorLineLength = length;
-}
-
-qreal KWPageStyle::footNoteSeparatorLineWidth() const
-{
-    return d->footNoteSeparatorLineWidth;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineWidth(qreal width)
-{
-    d->footNoteSeparatorLineWidth = width;
-}
-
-Qt::PenStyle KWPageStyle::footNoteSeparatorLineType() const
-{
-    return d->footNoteSeparatorLineType;
-}
-
-void KWPageStyle::setFootNoteSeparatorLineType(Qt::PenStyle type)
-{
-    d->footNoteSeparatorLineType = type;
-}
-
-Words::FootNoteSeparatorLinePos KWPageStyle::footNoteSeparatorLinePosition() const
-{
-    return d->footNoteSeparatorLinePos;
-}
-
-void KWPageStyle::setFootNoteSeparatorLinePosition(Words::FootNoteSeparatorLinePos position)
-{
-    d->footNoteSeparatorLinePos = position;
+    d->footerDynamicSpacing = dynamic;
 }
 
 void KWPageStyle::clear()
@@ -302,15 +246,18 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.setAutoStyleInStylesDotXml(true);
     pageLayout.addAttribute("style:page-usage", "all");
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter writer(&buffer);
-
     if (d->columns.columns > 1) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:columns");
         writer.addAttribute("fo:column-count", d->columns.columns);
         writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        pageLayout.addChildElement("columnsEnzo", contentElement);
     }
 
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
@@ -324,32 +271,42 @@ KoGenStyle KWPageStyle::saveOdf() const
 
     // TODO save background
 
-    QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-    pageLayout.addChildElement("columnsEnzo", contentElement);
 
-// the header/footer-style should be saved as a child of the style:page-layout; but using the
-// addChildElement its instead saved as a child of style:page-layout-properties  I can't follow why...
-// so lets disable this until I figure out how to save this in the right position in the tree.
-#if 0
     if (headerPolicy() != Words::HFTypeNone) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:header-style");
         writer.startElement("style:header-footer-properties");
-        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:min-height", headerMinimumHeight());
         writer.addAttributePt("fo:margin-bottom", headerDistance());
+        writer.addAttribute("style:dynamic-spacing", headerDynamicSpacing());
         // TODO there are quite some more properties we want to at least preserve between load and save
         writer.endElement();
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        // the 1_ 2_ is needed to get the correct order
+        pageLayout.addStyleChildElement("1_headerStyle", contentElement);
     }
     if (footerPolicy() != Words::HFTypeNone) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
         writer.startElement("style:footer-style");
         writer.startElement("style:header-footer-properties");
-        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:min-height", footerMinimumHeight());
         writer.addAttributePt("fo:margin-top", footerDistance());
+        writer.addAttribute("style:dynamic-spacing", footerDynamicSpacing());
         // TODO there are quite some more properties we want to at least preserve between load and save
         writer.endElement();
         writer.endElement();
+
+        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        pageLayout.addStyleChildElement("2_footerStyle", contentElement);
     }
-#endif
 
     // TODO see how we should save margins if we use the 'closest to binding' stuff.
 
@@ -393,6 +350,8 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         if (! hfprops.isNull())
             d->headerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-bottom"));
             d->headerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
+            const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
+            d->headerDynamicSpacing = dynamicSpacing == "true";
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 
@@ -402,6 +361,8 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         if (! hfprops.isNull())
             d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
             d->footerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
+            const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
+            d->footerDynamicSpacing = dynamicSpacing == "true";
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 

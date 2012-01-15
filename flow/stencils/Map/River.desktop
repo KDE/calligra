@@ -2,6 +2,8 @@
 Name=River
 Name[bg]=Река
 Name[ca]=Riu
+Name[ca@valencia]=Riu
+Name[cs]=Řeka
 Name[de]=Fluss
 Name[et]=Jõgi
 Name[it]=Fiume
@@ -10,6 +12,7 @@ Name[nl]=Rivier
 Name[pl]=Rzeka
 Name[pt]=Rio
 Name[pt_BR]=Rio
+Name[ru]=Река
 Name[sv]=Flod
 Name[ug]=دەريا
 Name[uk]=Річка

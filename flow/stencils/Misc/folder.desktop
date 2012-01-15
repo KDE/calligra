@@ -1,6 +1,9 @@
 [Desktop Entry]
 Name=Folder
 Name[bg]=Папка
+Name[ca]=Carpeta
+Name[ca@valencia]=Carpeta
+Name[cs]=Složka
 Name[de]=Ordner
 Name[el]=Φάκελος
 Name[es]=Carpeta
@@ -12,6 +15,7 @@ Name[nl]=Map
 Name[pl]=Katalog
 Name[pt]=Pasta
 Name[pt_BR]=Pasta
+Name[ru]=Папка
 Name[sv]=Mapp
 Name[ug]=قىسقۇچ
 Name[uk]=Тека

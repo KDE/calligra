@@ -40,7 +40,6 @@
 #include "functordata.h"
 #include "word95_generated.h"
 #include "convert.h"
-#include "zcodec.hxx"
 #include "wvlog.h"
 
 #include <numeric>
@@ -61,7 +60,7 @@ Parser9x::Position::Position( U32 cp, const PLCF<Word97::PCD>* plcfpcd ) :
 
 
 Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib ) :
-        Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ), 
+        Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ),
         m_properties( 0 ), m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ),
         m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
@@ -137,6 +136,7 @@ Parser9x::~Parser9x()
     delete m_plcfpcd;
     delete m_headers;
     delete m_footnotes;
+    delete m_bookmarks;
     delete m_annotations;
     delete m_fields;
     delete m_textconverter;
@@ -374,7 +374,7 @@ bool Parser9x::readPieceTable()
 #if WV2_DUMP_PIECE_TABLE > 0
         wvlog << "Found a clxtGrpprl (size=" << size << ")" << endl;
 #endif
-        m_table->seek( size, G_SEEK_CUR );
+        m_table->seek( size, WV2_SEEK_CUR );
         blockType = m_table->readU8();
     }
     if ( blockType == wvWare::clxtPlcfpcd ) {
@@ -682,7 +682,7 @@ void Parser9x::processParagraph( U32 fc )
 #endif
         }
         // init == 1 because of the parag. mark!
-        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(), 1, 
+        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(), 1,
                                              &Parser9x::accumulativeLength );
 
         //check if this is a Table Terminating Paragraph Mark
@@ -870,8 +870,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
-            wvlog << "startCP=" << startCP << " disruption=" << disruption << 
-		     " bkmk_length=" << bkmk_length << " length=" << length << endl;
+            wvlog << "startCP=" << startCP << " disruption=" << disruption <<
+             " bkmk_length=" << bkmk_length << " length=" << length << endl;
 #endif
             U32 disLen = disruption - startCP;
             //there's something to be processed before the bookmark
@@ -901,8 +901,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
                 //NOTE: Not checking the ok value, invalid bookmarks were
                 //already reported.  So it's obsolete at the moment.
-		bool ok;
-		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
+        bool ok;
+        BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
                 if ( !(bkmk_length <= length) ) {
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
@@ -1111,17 +1111,17 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
     // Of course the file format has changed between Word 6/7 and Word 8, so I
     // had to add a workaround... oh well.
     HeaderData data( m_sectionNumber++ );
-    
+
     if ( m_fib.nFib < Word8nFib ) {
         data.headerMask = sep->grpfIhdt;
         m_headers->set_headerMask( sep->grpfIhdt );
     }
     else {
-	//check if an even header/footer is expected
+        //check if an even header/footer is expected
         if ( dop().fFacingPages ) {
             data.headerMask |= HeaderData::HeaderEven | HeaderData::FooterEven;
         }
-	//check if a first page header/footer is expected
+        //check if a first page header/footer is expected
         if ( sep->fTitlePage ) {
             data.headerMask |= HeaderData::HeaderFirst | HeaderData::FooterFirst;
         }
@@ -1143,7 +1143,7 @@ void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP>
         return;
     }
     stream->push();
-    stream->seek( chp->fcPic_fcObj_lTagObj, G_SEEK_SET );
+    stream->seek( chp->fcPic_fcObj_lTagObj, WV2_SEEK_SET );
 
     Word97::PICF* picf( 0 );
     if ( m_fib.nFib < Word8nFib ) {
@@ -1191,7 +1191,7 @@ void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP>
 #endif
             delete [] stPicName;
         }
-	offset += cchPicName + 1;
+    offset += cchPicName + 1;
     }
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
@@ -1229,8 +1229,10 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 //         m_subDocumentHandler->headerEnd();
         return;
     }
-    else if ( length > 1 )
-        --length; // get rid of the trailing "end of header/footer" character
+    else if ( length > 1 ) {
+        // get rid of the trailing "end of header/footer" character
+        --length;
+    }
 
     saveState( length, Header );
 

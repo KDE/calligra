@@ -504,9 +504,8 @@ Value func_covar_helper(Value range1, Value range2,
 }
 
 
-//
+/*
 // helper: GetValue - Returns result of a formula.
-//
 static double GetValue(const QString& formula, const double x)
 {
     Formula f;
@@ -522,11 +521,32 @@ static double GetValue(const QString& formula, const double x)
 
     return result.asFloat();
 }
+*/
 
-//
-// helper: IterateInverse - Returns the unknown value
-//
-static Value IterateInverse(const double unknown, const QString& formula, double x0, double x1, bool& convergenceError)
+/**
+ * Helper-class to inverse iterate over a value to determinate
+ * an unknown value.
+ */
+class InverseIterator
+{
+public:
+    InverseIterator(FunctionPtr ptr, const valVector &args, ValueCalc *calc)
+        : m_caller(FunctionCaller(ptr, args, calc)) {}
+    Value exec(double unknown, double x0, double x1, bool& convergenceError);
+private:
+    FunctionCaller m_caller;
+    inline double getValue(Value arg) {
+        valVector args = m_caller.m_args;
+        args.prepend(arg);
+        return m_caller.exec(args).asFloat();
+    }
+    inline double getValue(double arg) {
+        return getValue(Value(arg));
+    }
+};
+
+Value InverseIterator::exec(double unknown, double x0, double x1, bool& convergenceError)
+// static Value InverseIterator(const double unknown, FunctionPtr ptr, double x0, double x1, bool& convergenceError)
 {
     convergenceError = false; // reset error flag
     double eps = 1.0E-7;      // define Epsilon
@@ -534,10 +554,10 @@ static Value IterateInverse(const double unknown, const QString& formula, double
     kDebug() << "searching for " << unknown << " in interval x0=" << x0 << " x1=" << x1;
 
     if (x0 > x1)
-        kDebug() << "IterateInverse: wrong interval";
+        kDebug() << "InverseIterator: wrong interval";
 
-    double f0 = unknown - GetValue(formula, x0);
-    double f1 = unknown - GetValue(formula, x1);
+    double f0 = unknown - getValue(x0);
+    double f1 = unknown - getValue(x1);
 
     kDebug() << " f(" << x0 << ") =" << f0;
     kDebug() << " f(" << x1 << ") =" << f1;
@@ -552,13 +572,13 @@ static Value IterateInverse(const double unknown, const QString& formula, double
                 x0 = 0.0;
             x1 = xs;
             f1 = f0;
-            f0 = unknown - GetValue(formula, x0);
+            f0 = unknown - getValue(x0);
         } else {
             xs = x1;
             x1 += 2.0 * (x1 - x0);
             x0 = xs;
             f0 = f1;
-            f1 = unknown - GetValue(formula, x1);
+            f1 = unknown - getValue(x1);
         }
     }
 
@@ -576,7 +596,7 @@ static Value IterateInverse(const double unknown, const QString& formula, double
     for (i = 0; i < 100; i++) {
         xs = 0.5 * (x0 + x1);
         if (fabs(f1 - f0) >= eps) {
-            fs = unknown - GetValue(formula, xs);
+            fs = unknown - getValue(xs);
             if (f0*fs <= 0.0) {
                 x1 = xs;
                 f1 = fs;
@@ -591,7 +611,7 @@ static Value IterateInverse(const double unknown, const QString& formula, double
                 if (regxs != 0.0) {
                     double regx = x1 - f1 / regxs;
                     if (regx >= x00 && regx <= x11) {
-                        double regfs = unknown - GetValue(formula, regx);
+                        double regfs = unknown - getValue(regx);
                         if (fabs(regfs) < fabs(fs))
                             xs = regx;
                     }
@@ -834,10 +854,7 @@ Value func_betainv(valVector args, ValueCalc *calc, FuncExtra *)
 
     bool convergenceError;
 
-    // create formula string
-    QString formula = QString("BETADIST(x;%1;%2)").arg((double)alpha.asFloat()).arg((double)beta.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , 0.0, 1.0, convergenceError);
+    result = InverseIterator(func_betadist, valVector() << alpha << beta, calc).exec(p.asFloat(), 0.0, 1.0, convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();
@@ -1151,7 +1168,7 @@ Value func_fdist(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // returns the inverse f-distribution
 //
-Value func_finv(valVector args, ValueCalc *, FuncExtra *)
+Value func_finv(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value p  = args[0];
     Value f1 = args[1];
@@ -1166,10 +1183,7 @@ Value func_finv(valVector args, ValueCalc *, FuncExtra *)
 
     bool convergenceError;
 
-    // create formula string
-    QString formula = QString("FDIST(x;%1;%2;1)").arg((double)f1.asFloat()).arg((double)f2.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , f1.asFloat() * 0.5, f1.asFloat(), convergenceError);
+    result = InverseIterator(func_fdist, valVector() << f1 << f2 << Value(1), calc).exec(p.asFloat(), f1.asFloat() * 0.5, f1.asFloat(), convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();
@@ -1359,10 +1373,7 @@ Value func_gammainv(valVector args, ValueCalc *calc, FuncExtra *)
     bool convergenceError;
     Value start = calc->mul(alpha, beta);
 
-    // create formula string
-    QString formula = QString("GAMMADIST(x;%1;%2;1)").arg((double)alpha.asFloat()).arg((double)beta.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , start.asFloat() * 0.5, start.asFloat(), convergenceError);
+    result = InverseIterator(func_gammadist, valVector() << alpha << beta << Value(1), calc).exec(p.asFloat(), start.asFloat() * 0.5, start.asFloat(), convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();
@@ -1834,10 +1845,7 @@ Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *)
 
     bool convergenceError;
 
-    // create formula string
-    QString formula = QString("LEGACYCHIDIST(x;%1)").arg((double)DF.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , DF.asFloat() * 0.5, DF.asFloat(), convergenceError);
+    result = InverseIterator(func_legacychidist, valVector() << DF, calc).exec(p.asFloat(), DF.asFloat() * 0.5, DF.asFloat(), convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();
@@ -1875,7 +1883,7 @@ Value func_legacyfdist(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // returns the inverse legacy f-distribution
 //
-Value func_legacyfinv(valVector args, ValueCalc *, FuncExtra *)
+Value func_legacyfinv(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value p  = args[0];
     Value f1 = args[1];
@@ -1890,10 +1898,7 @@ Value func_legacyfinv(valVector args, ValueCalc *, FuncExtra *)
 
     bool convergenceError;
 
-    // create formula string
-    QString formula = QString("LEGACYFDIST(x;%1;%2)").arg((double)f1.asFloat()).arg((double)f2.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , f1.asFloat() * 0.5, f1.asFloat(), convergenceError);
+    result = InverseIterator(func_legacyfdist, valVector() << f1 << f2, calc).exec(p.asFloat(), f1.asFloat() * 0.5, f1.asFloat(), convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();
@@ -2666,10 +2671,7 @@ Value func_tinv(valVector args, ValueCalc *calc, FuncExtra *)
 
     bool convergenceError;
 
-    // create formula string
-    QString formula = QString("TDIST(x;%1;2)").arg((double)DF.asFloat());
-
-    result = IterateInverse(p.asFloat(), formula , DF.asFloat() * 0.5, DF.asFloat(), convergenceError);
+    result = InverseIterator(func_tdist, valVector() << DF << Value(2), calc).exec(p.asFloat(), DF.asFloat() * 0.5, DF.asFloat(), convergenceError);
 
     if (convergenceError)
         return Value::errorVALUE();

@@ -37,6 +37,7 @@ public:
     //!Part class to display
     QString itemsPartClass;
     KexiProjectModelItem *rootItem;
+    QPersistentModelIndex searchHighlight;
 };
 
 KexiProjectModel::Private::Private() : rootItem(0)
@@ -228,23 +229,25 @@ bool KexiProjectModel::hasChildren(const QModelIndex& parent) const
 
 bool KexiProjectModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    Q_UNUSED(role);
 //    if (!(m_features & Writable))
 //        return;
-    KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(index.internalPointer());
-    if (!it)
-        return false;
-    
-    QString txt = value.toString().trimmed();
-    bool ok = QString::compare(it->partItem()->name(), txt, Qt::CaseInsensitive); //make sure the new name is different
-    if (ok) {
-        emit renameItem(it->partItem(), txt, ok);
-    }
+    if (role == Qt::EditRole) {
+        KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(index.internalPointer());
+        if (!it)
+            return false;
+        
+        QString txt = value.toString().trimmed();
+        bool ok = QString::compare(it->partItem()->name(), txt, Qt::CaseInsensitive); //make sure the new name is different
+        if (ok) {
+            emit renameItem(it->partItem(), txt, ok);
+        }
 
-    if (ok) {
-        emit dataChanged(index, index);
+        if (ok) {
+            emit dataChanged(index, index);
+        }
+        return ok;
     }
-    return ok;
+    return QAbstractItemModel::setData(index, value, role);
 }
 
 Qt::ItemFlags KexiProjectModel::flags(const QModelIndex& index) const
@@ -339,10 +342,10 @@ QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
     //kDebug();
     if (item /*&& item->parent()*/) {
-        int row = item->row();
+        int row = item->parent() ? item->row() : 0;
         //kDebug() << row;
         return createIndex(row, 0, (void*)item);
-    } 
+    }
     return QModelIndex();
 }
 
@@ -393,4 +396,70 @@ QModelIndex KexiProjectModel::firstChildPartItem(const QModelIndex &parentIndex)
 QModelIndex KexiProjectModel::firstPartItem() const
 {
     return firstChildPartItem(indexFromItem(d->rootItem));
+}
+
+// Implemented for KexiSearchableModel:
+
+int KexiProjectModel::searchableObjectCount() const
+{
+    const QModelIndex rootIndex = indexFromItem(d->rootItem);
+    const int topLevelCount = rowCount(rootIndex);
+    int result = 0;
+    for (int i = 0; i < topLevelCount; i++) {
+        QModelIndex index = this->index(i, 0, rootIndex);
+        result += rowCount(index);
+    }
+    return result;
+}
+
+QModelIndex KexiProjectModel::sourceIndexForSearchableObject(int objectIndex) const
+{
+    const QModelIndex rootIndex = indexFromItem(d->rootItem);
+    const int topLevelCount = rowCount(rootIndex);
+    int j = objectIndex;
+    for (int i = 0; i < topLevelCount; i++) {
+        QModelIndex index = this->index(i, 0, rootIndex);
+        const int childCount = rowCount(index);
+        if (j < childCount) {
+            return this->index(j, 0, index);
+        }
+        j -= childCount;
+    }
+    return QModelIndex();
+}
+
+QVariant KexiProjectModel::searchableData(const QModelIndex &sourceIndex, int role) const
+{
+    return data(sourceIndex, role);
+}
+
+QString KexiProjectModel::pathFromIndex(const QModelIndex &sourceIndex) const
+{
+    KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(sourceIndex.internalPointer());
+    return it->partItem()->name();
+}
+
+QPersistentModelIndex KexiProjectModel::itemWithSearchHighlight() const
+{
+    return d->searchHighlight;
+}
+
+bool KexiProjectModel::highlightSearchableObject(const QModelIndex &index)
+{
+    if (d->searchHighlight.isValid() && index != d->searchHighlight) {
+        setData(d->searchHighlight, false, SearchHighlight);
+    }
+    setData(index, true, SearchHighlight);
+    emit highlightSearchedItem(index);
+    d->searchHighlight = QPersistentModelIndex(index);
+    return true;
+}
+
+bool KexiProjectModel::activateSearchableObject(const QModelIndex &index)
+{
+    if (d->searchHighlight.isValid() && index != d->searchHighlight) {
+        setData(d->searchHighlight, false, SearchHighlight);
+    }
+    emit activateSearchedItem(index);
+    return true;
 }

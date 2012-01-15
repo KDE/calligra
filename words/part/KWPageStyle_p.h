@@ -35,11 +35,11 @@ public:
     KoPageLayout pageLayout;
     QString name;
     QString displayName;
-    bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     qreal headerMinimumHeight,footerMinimumHeight;
     Words::HeaderFooterType headers, footers;
-
+    bool headerDynamicSpacing;
+    bool footerDynamicSpacing;
     qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int footNoteSeparatorLineLength; ///< It's a percentage of page.
     Qt::PenStyle footNoteSeparatorLineType; ///< foot note separate type
@@ -56,7 +56,6 @@ public:
         columns = other->columns;
         pageLayout = other->pageLayout;
         //name = other->name;
-        mainFrame = other->mainFrame;
         headerDistance = other->headerDistance;
         footerDistance = other->footerDistance;
         footNoteDistance = other->footNoteDistance;

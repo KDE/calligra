@@ -2,6 +2,7 @@
 Name=Horizontal Valve
 Name[bg]=Хоризонтална клапа
 Name[ca]=Vàlvula horitzontal
+Name[ca@valencia]=Vàlvula horitzontal
 Name[de]=Waagerechtes Ventil
 Name[el]=Οριζόντια βαλβίδα
 Name[et]=Horisontaalne siiber
@@ -12,7 +13,9 @@ Name[nl]=Horizontale klep
 Name[pl]=Zawór poziomy
 Name[pt]=Válvula Horizontal
 Name[pt_BR]=Válvula horizontal
+Name[ru]=Горизонтальный клапан
 Name[sv]=Horisontell ventil
 Name[uk]=Горизонтальний клапан
 Name[x-test]=xxHorizontal Valvexx
+Name[zh_CN]=水平阀
 Name[zh_TW]=水平活門

@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=l-integrator
+Name[ca]=integrador-I
+Name[ca@valencia]=integrador-I
 Name[el]=l-integrator
+Name[et]=Vasak integreerimislüli
+Name[it]=l-integrator
 Name[nb]=l-integrator
 Name[nl]=l-integrator
 Name[pl]=l-całkowanie
 Name[pt]=integrador-l
 Name[pt_BR]=integrador-l
+Name[ru]=l-интегратор
 Name[sv]=v-integrator
 Name[uk]=Інтегратор (вхід ліворуч)
 Name[x-test]=xxl-integratorxx

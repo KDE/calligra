@@ -89,6 +89,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (startType == RectStart) {
         body->startElement("draw:rect");
     }
+    else if (startType == EllipseStart) {
+        body->startElement("draw:ellipse");
+    }
     // Simplifying connector to be a line
     else if (startType == LineStart) {
         body->startElement("draw:line");
@@ -283,19 +286,35 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             hor_pos_rel = "page-end-margin";
             m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
+        else if (hor_pos_rel == "text") {
+            hor_pos_rel = "paragraph";
+        }
         if (!asChar) {
             m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
         }
     }
+#ifdef DOCXXMLDOCREADER_H
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame-content");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
+            }
         }
         else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            }
         }
         else if (ver_pos_rel == "bottom-margin-area") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            if (m_headerActive || m_footerActive) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            } else {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            }
             // This effectively emulates the bottom-margin-area
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
@@ -304,7 +323,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-#ifdef DOCXXMLDOCREADER_H
     if (!m_currentVMLProperties.wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (asChar) { // Default
@@ -430,12 +448,20 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentVMLProperties.opacity));
     }
 
+    // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
+    // text content of a drawing object to fill an entire object.  The
+    // style:shrink-to-fit attribute specifies whether content is reduced in
+    // size to fit within a cell or drawing object.  Shrinking means that the
+    // font size of the content is decreased to fit the content into a cell or
+    // drawing object.  That's needed to be compatible with MS PowerPoint.  Any
+    // margin, padding or indent MUST be retained.
     if (m_currentVMLProperties.fitTextToShape) {
         m_currentDrawStyle->addProperty("draw:fit-to-size", "true");
     }
 
     if (m_currentVMLProperties.fitShapeToText) {
         m_currentDrawStyle->addProperty("draw:auto-grow-height", "true");
+        m_currentDrawStyle->addProperty("draw:auto-grow-width", "true");
     }
 
     m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.leftMargin);
@@ -1255,9 +1281,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     READ_EPILOGUE
 }
 
-// Generic helper which approximates all figures to be rectangles
-// use until better implementation is done
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
+// Generic helper to help with draw:xxx shapes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader(FrameStartElement startType)
 {
     const QXmlStreamAttributes attrs(attributes());
 //! @todo support more attrs
@@ -1299,7 +1324,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart(RectStart);
+    createFrameStart(startType);
 
     (void)frameBuf.releaseWriter();
 
@@ -1314,13 +1339,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 #define CURRENT_EL oval
 //! oval handler (Oval)
 // For parents, children, look from rect
-// Note: this is atm. simplified, should in reality make an oval
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
 {
     READ_PROLOGUE
 
     m_currentVMLProperties.currentEl = "v:oval";
-    KoFilter::ConversionStatus status = genericReader();
+    KoFilter::ConversionStatus status = genericReader(EllipseStart);
     if (status != KoFilter::OK) {
         return status;
     }
@@ -1338,7 +1362,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     READ_PROLOGUE
 
     m_currentVMLProperties.currentEl = "v:roundrect";
-    KoFilter::ConversionStatus status = genericReader();
+    KoFilter::ConversionStatus status = genericReader(RectStart);
     if (status != KoFilter::OK) {
         return status;
     }
@@ -2722,9 +2746,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     // Documentation says default to be 'page', however because these are always in a paragraph
     // in a text run, a better default for odf purposes seems to be 'paragraph'
 
+#ifdef DOCXMLDOCREADER_H
     if (anchory == "page") {
-        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-        m_currentVMLProperties.anchorType = "page";
+        if (m_headerActive || m_footerActive) {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
+            m_currentVMLProperties.anchorType = "frame";
+        } else {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentVMLProperties.anchorType = "page";
+        }
     }
     else if (anchory == "text") {
         m_currentVMLProperties.anchorType = "as-char";
@@ -2751,6 +2781,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     else {
         m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
     }
+#endif
 
     readNext();
     READ_EPILOGUE
