@@ -328,11 +328,13 @@ void KWStatistics::sentencesDisplayChanged(int state)
         widgetDocker.Sentences->show();
         widgetDocker.count_sentences->show();
         cfgGroup.writeEntry("SentencesVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Sentences->hide();
         widgetDocker.count_sentences->hide();
         cfgGroup.writeEntry("SentencesVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -347,11 +349,13 @@ void KWStatistics::linesDisplayChanged(int state)
         widgetDocker.Lines->show();
         widgetDocker.count_lines->show();
         cfgGroup.writeEntry("LinesVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Lines->hide();
         widgetDocker.count_lines->hide();
         cfgGroup.writeEntry("LinesVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -365,11 +369,13 @@ void KWStatistics::syllablesDisplayChanged(int state)
         widgetDocker.Syllables->show();
         widgetDocker.count_syllables->show();
         cfgGroup.writeEntry("SyllablesVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Syllables->hide();
         widgetDocker.count_syllables->hide();
         cfgGroup.writeEntry("SyllablesVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -383,11 +389,13 @@ void KWStatistics::charspaceDisplayChanged(int state)
         widgetDocker.spaces->show();
         widgetDocker.count_spaces->show();
         cfgGroup.writeEntry("CharspacesVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.spaces->hide();
         widgetDocker.count_spaces->hide();
         cfgGroup.writeEntry("CharspacesVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -402,11 +410,13 @@ void KWStatistics::charnospaceDisplayChanged(int state)
         widgetDocker.nospaces->show();
         widgetDocker.count_nospaces->show();
         cfgGroup.writeEntry("CharnospacesVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.nospaces->hide();
         widgetDocker.count_nospaces->hide();
         cfgGroup.writeEntry("CharnospacesVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -420,11 +430,13 @@ void KWStatistics::eastDisplayChanged(int state)
         widgetDocker.Cjkchars->show();
         widgetDocker.count_cjkchars->show();
         cfgGroup.writeEntry("EastAsianCharactersVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Cjkchars->hide();
         widgetDocker.count_cjkchars->hide();
         cfgGroup.writeEntry("EastAsianCharactersVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
@@ -438,11 +450,13 @@ void KWStatistics::fleschDisplayChanged(int state)
         widgetDocker.Flesch->show();
         widgetDocker.count_flesch->show();
         cfgGroup.writeEntry("FleschVisible",true);
+        cfgGroup.sync();
         break;
     case Qt::Unchecked:
         widgetDocker.Flesch->hide();
         widgetDocker.count_flesch->hide();
         cfgGroup.writeEntry("FleschVisible",false);
+        cfgGroup.sync();
         break;
     default:
         break;
