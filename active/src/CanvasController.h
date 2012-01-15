@@ -90,6 +90,11 @@ public:
     void setCameraY(int cameraY);
     int loadProgress() const;
     CanvasController* canvasController();
+    KoCanvasControllerProxyObject* canvasControllerProxyObject();
+    KoZoomHandler* zoomHandler();
+    KoZoomController* zoomController();
+    void setZoomHandler(KoZoomHandler* zoomHandler);
+    void setZoomController(KoZoomController* zoomController);
 
 public slots:
     void scrollDown();
@@ -100,7 +105,7 @@ public slots:
 
 private slots:
     void processLoadProgress(int value);
-    void updateCanvasItem();
+    void updateCanvas();
 
 private:
     KoZoomHandler *m_zoomHandler;
@@ -137,6 +142,7 @@ signals:
     void documentLoaded();
     void loadProgressChanged();
     void searchStringChanged();
+    void needCanvasUpdate();
 };
 
 #endif // CANVASCONTROLLER_H

@@ -35,6 +35,9 @@ public:
     virtual bool openDocument (const QString &uri);
     virtual KoDocument* document();
 
+public slots:
+    void updateCanvas();
+
 private:
     class Private;
     Private * const d;
