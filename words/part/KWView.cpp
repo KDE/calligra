@@ -237,14 +237,14 @@ void KWView::setupActions()
     m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
     m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
-    m_actionViewHeader = new KAction(i18n("Enable Document Headers"), this);
-    actionCollection()->addAction("format_header", m_actionViewHeader);
+    m_actionViewHeader = new KAction(i18n("Create Header"), this);
+    actionCollection()->addAction("insert_header", m_actionViewHeader);
     if (m_currentPage.isValid())
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(enableHeader()));
 
-    m_actionViewFooter = new KAction(i18n("Enable Document Footers"), this);
-    actionCollection()->addAction("format_footer", m_actionViewFooter);
+    m_actionViewFooter = new KAction(i18n("Create Footer"), this);
+    actionCollection()->addAction("insert_footer", m_actionViewFooter);
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));

@@ -29,6 +29,8 @@
 
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
+#include <KoToolRegistry.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
@@ -36,6 +38,7 @@
 #include "dockers/KWRdfDockerFactory.h"
 #endif
 #include "dockers/KWStatisticsDocker.h"
+#include "pagetool/KWPageToolFactory.h"
 
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
@@ -95,7 +98,8 @@ const KComponentData &KWFactory::componentData()
 #ifdef SHOULD_BUILD_RDF
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
-
+        
+        KoToolRegistry::instance()->add(new KWPageToolFactory());
     }
     return *s_instance;
 }
