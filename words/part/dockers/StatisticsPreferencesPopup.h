@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWSTATISTICSDIALOG_H
-#define KWSTATISTICSDIALOG_H
+#ifndef STATISTICSPREFERENCESPOPUP_H
+#define STATISTICSPREFERENCESPOPUP_H
+#include <QWidget>
+#include<QToolButton>
+#include<QMenu>
 
-#include <KDialog>
+class QMenu;
 
-class KWView;
 
-class KWStatisticsDialog : public KDialog
+namespace Ui {
+    class StatisticsPreferencesPopup;
+}
+
+class StatisticsPreferencesPopup : public QMenu
 {
     Q_OBJECT
 public:
-    /**
-     * Constructor.
-     * @param parent a parent widget for the purpose of centering the dialog
-     */
-    KWStatisticsDialog(KWView *parent);
-    ~KWStatisticsDialog();
+    StatisticsPreferencesPopup(QWidget *parent = 0);
+    virtual QSize sizeHint() const;
+
+signals:
+    void wordsDisplayChange(int);
+    void sentencesDisplayChange(int);
+    void syllablesDisplayChange(int);
+    void linesDisplayChange(int);
+    void charspaceDisplayChange(int);
+    void charnospaceDisplayChange(int);
+    void eastDisplayChange(int);
+    void fleschDisplayChange(int);
 };
 
-#endif
+#endif // StatisticsPreferencesPopup_H
+
