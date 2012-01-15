@@ -48,11 +48,10 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
         m_sentences(0),
         m_lines(0),
         m_syllables(0),
-        m_paragraphs(0),
-        m_autoUpdate(true)
+        m_paragraphs(0)
+
 {
     m_showInDocker = true;
-    m_autoUpdate = false;
     m_timer = new QTimer(this);
     m_timer->start(2500);
     widgetDocker.setupUi(this);
@@ -70,32 +69,40 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
     connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
     connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
+
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     bool visible = cfgGroup.readEntry("WordsVisible", true);
     widgetDocker.Words->setVisible(visible);
     widgetDocker.count_words->setVisible(visible);
+
     visible = cfgGroup.readEntry("SentencesVisible", true);
     widgetDocker.Sentences->setVisible(visible);
     widgetDocker.count_sentences->setVisible(visible);
+
     visible = cfgGroup.readEntry("SyllablesVisible", true);
     widgetDocker.Syllables->setVisible(visible);
     widgetDocker.count_syllables->setVisible(visible);
+
     visible = cfgGroup.readEntry("LinesVisible", true);
     widgetDocker.Lines->setVisible(visible);
     widgetDocker.count_lines->setVisible(visible);
+
     visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
     widgetDocker.Cjkchars->setVisible(visible);
     widgetDocker.count_cjkchars->setVisible(visible);
+
     visible = cfgGroup.readEntry("FleschVisible", true);
     widgetDocker.Flesch->setVisible(visible);
     widgetDocker.count_flesch->setVisible(visible);
+
     visible = cfgGroup.readEntry("CharspacesVisible", true);
     widgetDocker.spaces->setVisible(visible);
     widgetDocker.count_spaces->setVisible(visible);
+
     visible = cfgGroup.readEntry("CharnospacesVisible", true);
     widgetDocker.nospaces->setVisible(visible);
     widgetDocker.count_nospaces->setVisible(visible);
-   }
+}
 
 void KWStatistics::updateData()
 {
@@ -204,55 +211,47 @@ void KWStatistics::updateData()
             s.replace(re, "0,0");
             re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
             s.replace(re, "*");
-            for (int i = 0 ; i < s.length(); ++i) {
-                QChar ch = s[i];
-                if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
-                    ++m_sentences;
+                for (int i = 0 ; i < s.length(); ++i) {
+                    QChar ch = s[i];
+                    if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
+                        ++m_sentences;
             }
         }
     }
-updateDataUi();
-
+    updateDataUi();
 }
 
 void KWStatistics::updateDataUi()
 {
-
-
     // calculate Flesch reading ease score:
     float flesch_score = 0;
     if (m_words > 0 && m_sentences > 0)
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     QString flesch = KGlobal::locale()->formatNumber(flesch_score);
+    QString newText[8];
+    newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
+    widgetDocker.count_words->setText(newText[0]);
 
+    newText[1] = KGlobal::locale()->formatNumber(m_sentences, 0);
+    widgetDocker.count_sentences->setText(newText[1]);
 
+    newText[2] = KGlobal::locale()->formatNumber(m_syllables, 0);
+    widgetDocker.count_syllables->setText(newText[2]);
 
-         QString newText[8];
-         newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
-         widgetDocker.count_words->setText(newText[0]);
+    newText[3] = KGlobal::locale()->formatNumber(m_lines, 0);
+    widgetDocker.count_lines->setText(newText[3]);
 
-         newText[1] = KGlobal::locale()->formatNumber(m_sentences, 0);
-          widgetDocker.count_sentences->setText(newText[1]);
+    newText[4] = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
+    widgetDocker.count_spaces->setText(newText[4]);
 
-         newText[2] = KGlobal::locale()->formatNumber(m_syllables, 0);
-         widgetDocker.count_syllables->setText(newText[2]);
+    newText[5] = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
+    widgetDocker.count_nospaces->setText(newText[5]);
 
-         newText[3] = KGlobal::locale()->formatNumber(m_lines, 0);
-         widgetDocker.count_lines->setText(newText[3]);
+    newText[6] = KGlobal::locale()->formatNumber(m_cjkChars, 0);
+    widgetDocker.count_cjkchars->setText(newText[6]);
 
-         newText[4] = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
-         widgetDocker.count_spaces->setText(newText[4]);
-
-         newText[5] = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
-         widgetDocker.count_nospaces->setText(newText[5]);
-
-         newText[6] = KGlobal::locale()->formatNumber(m_cjkChars, 0);
-         widgetDocker.count_cjkchars->setText(newText[6]);
-
-         newText[7] = flesch;
-         widgetDocker.count_flesch->setText(newText[7]);
-
-
+     newText[7] = flesch;
+     widgetDocker.count_flesch->setText(newText[7]);
 }
 
 
@@ -267,11 +266,10 @@ void KWStatistics::selectionChanged()
     if (!frame) return; // you can have embedded shapes selected, in that case it surely is no text frameset.
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
     if (fs) {
-        if (m_textDocument && m_autoUpdate)
+        if (m_textDocument)
             disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
         m_textDocument = fs->document();
-        if (m_autoUpdate)
-            connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+
     }
 }
 
