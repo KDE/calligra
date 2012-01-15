@@ -78,12 +78,10 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         return false;
     }
 
-    kDebug() << "Trying to open the document";
     d->document = static_cast<KWDocument*> (doc);
     d->document->openUrl (KUrl (uri));
 
     setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
-    kDebug() << "CONTROLLER " << documentController()->canvasController();
     KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
     KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
 
