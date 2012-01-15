@@ -494,19 +494,18 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
         m_frames.append(frame);
     }
 
-    KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
-
     foreach (KWFrame *frame, m_frames) {
         if (m_anchorTypeGroup->checkedId() != -1) {
             KoTextAnchor::AnchorType type = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
             KoTextAnchor *anchor = 0;
 
-            if (type != KoTextAnchor::AnchorPage) {
-                anchor = m_state->document()->anchorOfShape(frame->shape(), true);
-            }
-            else {
-                anchor = m_state->document()->anchorOfShape(frame->shape(), true);
-                m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
+            anchor = m_state->document()->anchorOfShape(frame->shape());
+            if (anchor->anchorType() != type) {
+                if (type != KoTextAnchor::AnchorPage) {
+                    m_state->document()->insertAnchorInText(anchor, macro);
+                } else {
+                    m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
+                }
             }
 
             QPointF offset = anchor->offset();
