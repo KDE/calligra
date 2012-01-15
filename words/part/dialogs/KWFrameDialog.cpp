@@ -39,10 +39,15 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
     setFaceType(Tabbed);
     m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
     addPage(m_generalFrameProperties, i18n("General"));
+    m_generalFrameProperties->open(frames);
+
     m_anchoringProperties = new KWAnchoringProperties(m_state);
-    addPage(m_anchoringProperties, i18n("Smart Positioning"));
+    if (m_anchoringProperties->open(frames))
+        addPage(m_anchoringProperties, i18n("Smart Positioning"));
+
     m_runAroundProperties = new KWRunAroundProperties(m_state);
-    addPage(m_runAroundProperties, i18n("Text Run Around"));
+    if (m_runAroundProperties->open(frames))
+        addPage(m_runAroundProperties, i18n("Text Run Around"));
 
     if (frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
@@ -56,9 +61,6 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
         }
     }
 
-    m_generalFrameProperties->open(frames);
-    m_anchoringProperties->open(frames);
-    m_runAroundProperties->open(frames);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));

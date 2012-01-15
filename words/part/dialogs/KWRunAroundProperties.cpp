@@ -21,6 +21,7 @@
 #include "KWFrameDialog.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 
 #include <commands/KoShapeRunAroundCommand.h>
 
@@ -54,7 +55,7 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
 }
 
-void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
+bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
@@ -64,7 +65,16 @@ void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
     KoShape::TextRunAroundSide side = KoShape::BiggestRunAroundSide;
     qreal distance = 10.0;
     qreal threshold = 0.0;
+
+    bool atLeastOne = false;
+
     foreach (KWFrame *frame, frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
+        atLeastOne = true;
         if (runaround == GuiHelper::Unset) {
             side = frame->shape()->textRunAroundSide();
             runaround = GuiHelper::On;
@@ -84,11 +94,17 @@ void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
             raThreshold = GuiHelper::TriState;
     }
 
+    if (!atLeastOne) {
+        return false;
+    }
+
     if (runaround != GuiHelper::TriState)
         m_runAroundSide->button(side)->setChecked(true);
 
     widget.distance->changeValue(distance);
     widget.threshold->changeValue(threshold);
+
+    return true;
 }
 
 void KWRunAroundProperties::open(KoShape *shape)
@@ -116,6 +132,11 @@ void KWRunAroundProperties::save(KUndo2Command *macro)
         m_frames.append(frame);
     }
     foreach (KWFrame *frame, m_frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
         KoShape *shape = frame->shape();
         KoShape::TextRunAroundSide side = shape->textRunAroundSide();
         int runThrough = shape->runThrough();

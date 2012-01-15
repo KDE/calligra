@@ -183,7 +183,9 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape, bool create) const;
+    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+
+    bool insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent);
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
