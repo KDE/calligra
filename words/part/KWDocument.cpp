@@ -890,27 +890,23 @@ KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
     return anchor;
 }
 
-bool KWDocument::insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent)
+KoShapeContainer *KWDocument::insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent)
 {
     KWFrame *targetFrame = findClosestFrame(anchor->shape());
 
     if (targetFrame == 0) {/* can't happen later on... */
         kDebug(32001) << "bailing out...no shape to anchor to";
-        return false;
+        return 0;
     }
 
     KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(targetFrame->shape()->userData());
 
     if (!textData)
-        return false;
-
-    QPointF absPos =  anchor->shape()->absolutePosition();
-    anchor->shape()->setParent(static_cast<KoShapeContainer*>(targetFrame->shape()));
-    anchor->shape()->setAbsolutePosition(absPos);
+        return 0;
 
     KoTextEditor editor(textData->document());
     editor.insertInlineObject(anchor, parent);
-    return true;
+    return static_cast<KoShapeContainer*>(targetFrame->shape());
 }
 
 
