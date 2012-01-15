@@ -54,14 +54,13 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_showInDocker = true;
     m_autoUpdate = false;
     m_timer = new QTimer(this);
-    m_timer->setInterval(2000); // make the interval configurable?
-    m_timer->setSingleShot(true);
+    m_timer->start(2500);
     widgetDocker.setupUi(this);
-
     m_menu = new StatisticsPreferencesPopup(widgetDocker.preferences);
     widgetDocker.preferences->setMenu(m_menu);
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
 
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu()));
     connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
     connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));
@@ -71,7 +70,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
     connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
     connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+
 
 }
 
