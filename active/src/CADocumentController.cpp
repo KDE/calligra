@@ -30,15 +30,15 @@ class CADocumentController::Private
 {
 public:
     QString documentUri;
-    CanvasController *canvasController;
+    CanvasController* canvasController;
     QList<CAAbstractDocumentHandler*> documentHandlers;
 };
 
-CADocumentController::CADocumentController(QObject* parent)
-    : QObject(parent)
-    , d(new Private())
+CADocumentController::CADocumentController (QObject* parent)
+    : QObject (parent)
+    , d (new Private())
 {
-    d->documentHandlers.append(new CATextDocumentHandler(this));
+    d->documentHandlers.append (new CATextDocumentHandler (this));
 }
 
 CADocumentController::~CADocumentController()
@@ -51,7 +51,7 @@ QString CADocumentController::documentUri() const
     return d->documentUri;
 }
 
-void CADocumentController::setDocumentUri(const QString& uri)
+void CADocumentController::setDocumentUri (const QString& uri)
 {
     d->documentUri = uri;
     emit documentUriChanged();
@@ -64,7 +64,7 @@ CanvasController* CADocumentController::canvasController() const
     return d->canvasController;
 }
 
-void CADocumentController::setCanvasController(CanvasController* canvasController)
+void CADocumentController::setCanvasController (CanvasController* canvasController)
 {
     d->canvasController = canvasController;
     emit canvasControllerChanged();
@@ -72,9 +72,9 @@ void CADocumentController::setCanvasController(CanvasController* canvasControlle
 
 bool CADocumentController::loadDocument()
 {
-    Q_FOREACH (CAAbstractDocumentHandler *handler, d->documentHandlers) {
-        if (handler->canOpenDocument(documentUri())) {
-            if (handler->openDocument(documentUri())) {
+    Q_FOREACH (CAAbstractDocumentHandler * handler, d->documentHandlers) {
+        if (handler->canOpenDocument (documentUri())) {
+            if (handler->openDocument (documentUri())) {
                 return true;
             }
         }

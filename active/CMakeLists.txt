@@ -21,6 +21,7 @@ qt4_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_active_global.h)
 
 set(calligra-active_SRCS
+    src/CASpreadsheetHandler.cpp
     src/CATextDocumentHandler.cpp
     src/CAAbstractDocumentHandler.cpp
     src/CADocumentController.cpp

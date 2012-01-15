@@ -44,7 +44,7 @@ CAAbstractDocumentHandler::CAAbstractDocumentHandler (CADocumentController* docu
 
 CADocumentController* CAAbstractDocumentHandler::documentController() const
 {
-    return qobject_cast<CADocumentController*>(parent());
+    return qobject_cast<CADocumentController*> (parent());
 }
 
 CAAbstractDocumentHandler::~CAAbstractDocumentHandler()
@@ -59,12 +59,12 @@ KoCanvasBase* CAAbstractDocumentHandler::canvas() const
 
 void CAAbstractDocumentHandler::setCanvas (KoCanvasBase* canvas)
 {
-    documentController()->canvasController()->setCanvas(canvas);
+    documentController()->canvasController()->setCanvas (canvas);
 }
 
 bool CAAbstractDocumentHandler::canOpenDocument (const QString& uri)
 {
-    return supportedMimetypes().contains(KMimeType::findByUrl(uri)->name());
+    return supportedMimetypes().contains (KMimeType::findByUrl (uri)->name());
 }
 
 #include "CAAbstractDocumentHandler.moc"
