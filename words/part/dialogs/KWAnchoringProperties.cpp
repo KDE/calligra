@@ -22,6 +22,7 @@
 #include "KWFrameDialog.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 
 #include <KoTextAnchor.h>
 #include <KoInlineTextObjectManager.h>
@@ -147,7 +148,7 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     connect(widget.cHOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
 }
 
-void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
+bool KWAnchoringProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
@@ -163,7 +164,16 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
     m_horizRel = -1;
     QPointF offset;
 
+    bool atLeastOne = false;
+
     foreach (KWFrame *frame, frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
+        atLeastOne = true;
+
         KoTextAnchor *anchor = frame->anchor();
         KoTextAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoTextAnchor::AnchorPage;
 
@@ -205,6 +215,10 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
         }
     }
 
+    if (!atLeastOne) {
+        return false;
+    }
+
     if (anchorTypeHelper != GuiHelper::TriState) {
         m_anchorTypeGroup->button(anchorType)->setChecked(true);
 
@@ -228,6 +242,8 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
         widget.grpVert->setEnabled(false);
         widget.grpHoriz->setEnabled(false);
     }
+
+    return true;
 }
 
 void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
@@ -495,6 +511,11 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
     }
 
     foreach (KWFrame *frame, m_frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
         if (m_anchorTypeGroup->checkedId() != -1) {
             KoTextAnchor::AnchorType type = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
             KoTextAnchor *anchor = 0;
