@@ -36,7 +36,7 @@ Item
         width: 64
         z: 1
 
-        onClicked: canvas.previousSheet()
+        onClicked: docDocumentController.documentHandler().previousSheet()
     }
 
     Button {
@@ -49,6 +49,6 @@ Item
         width: 64
         z: 1
 
-        onClicked: canvas.nextSheet()
+        onClicked: docDocumentController.documentHandler().nextSheet()
     }
 }

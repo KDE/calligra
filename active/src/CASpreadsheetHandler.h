@@ -44,6 +44,9 @@ public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);
     void updateCanvas();
 
+    void nextSheet();
+    void previousSheet();
+
 private:
     class Private;
     Private * const d;

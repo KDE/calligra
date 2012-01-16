@@ -105,6 +105,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
+    updateCanvas();
     return true;
 }
 
@@ -136,6 +137,42 @@ void CASpreadsheetHandler::updateDocumentSizeForActiveSheet()
 QString CASpreadsheetHandler::documentTypeName()
 {
     return "spreadsheet";
+}
+
+void CASpreadsheetHandler::nextSheet()
+{
+    Calligra::Tables::CanvasItem* canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas());
+    if (!canvasItem)
+        return;
+    Calligra::Tables::Sheet* sheet = canvasItem->activeSheet();
+    if (!sheet)
+        return;
+    Calligra::Tables::DocBase* kspreadDoc = qobject_cast<Calligra::Tables::DocBase*> (document());
+    if (!kspreadDoc)
+        return;
+    sheet = kspreadDoc->map()->nextSheet (sheet);
+    if (!sheet)
+        return;
+    canvasItem->setActiveSheet (sheet);
+    documentController()->canvasController()->updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
+}
+
+void CASpreadsheetHandler::previousSheet()
+{
+    Calligra::Tables::CanvasItem* canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas());
+    if (!canvasItem)
+        return;
+    Calligra::Tables::Sheet* sheet = canvasItem->activeSheet();
+    if (!sheet)
+        return;
+    Calligra::Tables::DocBase* kspreadDoc = dynamic_cast<Calligra::Tables::DocBase*> (document());
+    if (!kspreadDoc)
+        return;
+    sheet = kspreadDoc->map()->previousSheet (sheet);
+    if (!sheet)
+        return;
+    canvasItem->setActiveSheet (sheet);
+    documentController()->canvasController()->updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
 }
 
 #include "CASpreadsheetHandler.moc"
