@@ -41,6 +41,7 @@ public:
 
     virtual QStringList supportedMimetypes() = 0;
     virtual bool openDocument (const QString& uri) = 0;
+    virtual QString documentTypeName() = 0;
 
     bool canOpenDocument (const QString& uri);
     KoCanvasBase* canvas() const;

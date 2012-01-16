@@ -34,6 +34,7 @@ public:
     virtual ~CAPresentationHandler();
     virtual bool openDocument (const QString& uri);
     virtual QStringList supportedMimetypes();
+    virtual QString documentTypeName();
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);

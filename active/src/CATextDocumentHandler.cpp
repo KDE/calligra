@@ -127,5 +127,9 @@ void CATextDocumentHandler::updateCanvas()
     kwCanvasItem->update();
 }
 
-#include "CATextDocumentHandler.moc"
+QString CATextDocumentHandler::documentTypeName()
+{
+    return "textdocument";
+}
 
+#include "CATextDocumentHandler.moc"

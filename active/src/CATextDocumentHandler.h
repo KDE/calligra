@@ -34,6 +34,7 @@ public:
     virtual QStringList supportedMimetypes();
     virtual bool openDocument (const QString& uri);
     virtual KoDocument* document();
+    virtual QString documentTypeName();
 
 public slots:
     void updateCanvas();
