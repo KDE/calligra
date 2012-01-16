@@ -106,6 +106,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
     updateCanvas();
+
     return true;
 }
 
