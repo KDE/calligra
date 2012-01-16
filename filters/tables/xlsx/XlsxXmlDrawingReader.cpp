@@ -494,6 +494,9 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
 
 #define blipFill_NS "a"
 
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "a" // required for the next header file
+
 // in PPTX we do not have pPr, so p@text:style-name should be added earlier
 //#define SETUP_PARA_STYLE_IN_READ_P
 #include <MsooXmlCommonReaderImpl.h> // adds a:p, a:pPr, a:t, a:r, etc.

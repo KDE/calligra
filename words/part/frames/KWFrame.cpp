@@ -48,11 +48,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor)
     if (parent)
         parent->addFrame(this);
 
-    if (!m_anchor) {
-        m_anchor = new KoTextAnchor(shape); // sets itself on the shape
-        m_anchor->setAnchorType(KoTextAnchor::AnchorPage);
-    }
-
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {
         if (Words::isHeaderFooter(parentFrameSet)) {

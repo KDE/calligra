@@ -50,6 +50,7 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
+class KActionMenu;
 class KFontAction;
 class FontSizeAction;
 
@@ -75,9 +76,11 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
@@ -344,6 +347,7 @@ private:
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
     KAction *m_actionChangeDirection;
+    KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;

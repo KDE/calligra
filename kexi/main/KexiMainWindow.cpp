@@ -328,6 +328,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
+    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -1377,6 +1378,13 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
+    d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
+    d->tabbedToolBar->showTab("data");
+    d->tabbedToolBar->showTab("external");
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    //d->tabbedToolBar->showTab("form");
+    //d->tabbedToolBar->showTab("report");
     return true;
 }
 
@@ -1706,6 +1714,12 @@ tristate KexiMainWindow::closeProject()
     updateAppCaption();
 
     emit projectClosed();
+    d->tabbedToolBar->hideTab("create");
+    d->tabbedToolBar->hideTab("data");
+    d->tabbedToolBar->hideTab("external");
+    d->tabbedToolBar->hideTab("tools");
+    d->tabbedToolBar->hideTab("form");
+    d->tabbedToolBar->hideTab("report");
     return true;
 }
 
@@ -2861,6 +2875,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
+    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
     return true;
 }
 
@@ -3104,7 +3119,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     }
 
     const int window_id = window->id(); //remember now, because removeObject() can destruct partitem object
-
+    const QString window_partClass = window->partItem()->partClass();
     if (remove_on_closing) {
         //we won't save this object, and it was never saved -remove it
         if (!removeObject(window->partItem(), true)) {
@@ -3195,6 +3210,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
+    showTabIfNeeded();
     return true;
 }
 
@@ -3377,6 +3393,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
+    showDesignTabIfNeeded(item->partClass(), viewMode);
+    setDesignTabIfNeeded(item->partClass());
     return window;
 }
 
@@ -4405,5 +4423,57 @@ void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
     d->tabbedToolBar->addSearchableModel(model);
 }
 
+void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+{
+    closeTab("");
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: 
+            d->tabbedToolBar->showTab("form");
+            break;
+        case KexiPart::ReportObjectType: 
+            d->tabbedToolBar->showTab("report");
+            break;
+        default: ;
+        }
+    }
+}
+
+void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->setCurrentTab("form"); 
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->setCurrentTab("report"); 
+        break;
+    default:;
+    }  
+}
+
+void KexiMainWindow::closeTab(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->hideTab("form");
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->hideTab("report");
+        break;
+    default:
+        d->tabbedToolBar->hideTab("form");
+        d->tabbedToolBar->hideTab("report");
+    }
+}
+
+void KexiMainWindow::showTabIfNeeded()
+{
+    if (currentWindow()) {
+        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+    } else {
+        closeTab("");
+    }
+}
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

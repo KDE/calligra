@@ -2,6 +2,7 @@
 Name=Calligra Spreadsheet Component
 Name[bg]=Компонент за електронни таблици в Calligra
 Name[ca]=Component de full de càlcul del Calligra
+Name[ca@valencia]=Component de full de càlcul del Calligra
 Name[cs]=Komponenta Calligra pro tabulky
 Name[da]=Caligra-komponent til regneark
 Name[de]=Calligra-Komponente für Tabellenkalkulation
@@ -37,6 +38,7 @@ GenericName[el]=Φύλλο εργασίας
 GenericName[en_GB]=Spreadsheet
 GenericName[es]=Hoja de cálculo
 GenericName[et]=Tabelitöötlus
+GenericName[fi]=Taulukkolaskentaohjelma
 GenericName[fr]=Tableur
 GenericName[fy]=Spreadsheet
 GenericName[ga]=Scarbhileog

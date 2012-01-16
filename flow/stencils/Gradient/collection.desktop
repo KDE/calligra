@@ -2,6 +2,7 @@
 Name=Gradient
 Name[bg]=Преливка
 Name[ca]=Gradient
+Name[ca@valencia]=Gradient
 Name[cs]=Přechod
 Name[de]=Farbverlauf
 Name[el]=Διαβάθμιση
@@ -9,6 +10,7 @@ Name[es]=Gradiente
 Name[et]=Üleminekud
 Name[it]=Sfumatura
 Name[nb]=Toning
+Name[nl]=Kleurverloop
 Name[pl]=Gradient
 Name[pt]=Gradiente
 Name[pt_BR]=Gradiente

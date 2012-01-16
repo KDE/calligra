@@ -2,6 +2,7 @@
 Name=SIP Proxy server
 Name[bg]=Сървър-посредник SIP
 Name[ca]=Servidor proxy SIP
+Name[ca@valencia]=Servidor proxy SIP
 Name[el]=Ενδιάμεσος εξυπηρετητής SIP
 Name[et]=SIP puhverserver
 Name[it]=SIP Proxy server

@@ -32,7 +32,7 @@ public:
     CSThumbProviderKarbon(KarbonPart *doc);
     virtual ~CSThumbProviderKarbon();
 
-    virtual QList<QPixmap> createThumbnails(const QSize &thumbSize);
+    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
     KarbonPart *m_doc;

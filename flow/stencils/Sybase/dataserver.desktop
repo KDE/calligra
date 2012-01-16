@@ -2,12 +2,14 @@
 Name=Dataserver
 Name[bg]=Сървър за данни
 Name[ca]=Servidor de dades
+Name[ca@valencia]=Servidor de dades
 Name[de]=Datenserver
 Name[el]=Εξυπηρετητής δεδομένων
 Name[et]=Andmeserver
 Name[it]=Server dati
 Name[nb]=Datatjener
 Name[nds]=Datenserver
+Name[nl]=Dataserver
 Name[pl]=Serwer danych
 Name[pt]=Servidor de dados
 Name[pt_BR]=Servidor de dados

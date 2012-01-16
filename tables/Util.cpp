@@ -446,6 +446,12 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
                 state = InNumber;
                 *out++ = *data++;
             }
+            else if (*data == QChar('.', 0)) {
+                state = InNumber;
+                *out = decimal[0];
+                ++out;
+                ++data;
+            }
             else if (isIdentifier(*data)) {
                 // beginning with alphanumeric ?
                 // could be identifier, cell, range, or function...
@@ -495,12 +501,6 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
                 case '"': // a string ?
                     state = InString;
                     *out++ = *data++;
-                    break;
-                case '.': // decimal dot ?
-                    state = InNumber;
-                    *out = decimal[0];
-                    ++out;
-                    ++data;
                     break;
                 case '[': // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
                     state = InReference;

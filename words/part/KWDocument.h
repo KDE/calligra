@@ -45,6 +45,8 @@ class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
+class KoTextAnchor;
+class KoShapeContainer;
 
 class KLocalizedString;
 class QIODevice;
@@ -64,10 +66,13 @@ public:
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
-    void addShape(KoShape *shape);
+    virtual void addShape(KoShape *shape);
     /// reimplemented from KoShapeBasedDocumentBase
-    void removeShape(KoShape *shape);
+    virtual void removeShape(KoShape *shape);
+    // reimplemented from KoShapeBasedDocumentBase
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
+    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -175,6 +180,15 @@ public:
 
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
+
+    /// find the frame closest to the given shape or return 0
+    KWFrame *findClosestFrame(KoShape *shape) const;
+
+    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+
+    KoShapeContainer *insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent);
+
+    KWFrame *frameOfShape(KoShape *shape) const;
 
 public slots:
     /**

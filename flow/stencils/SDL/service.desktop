@@ -2,6 +2,7 @@
 Name=Service
 Name[bg]=Услуга
 Name[ca]=Servei
+Name[ca@valencia]=Servei
 Name[cs]=Služba
 Name[el]=Υπηρεσία
 Name[es]=Servicio
@@ -9,6 +10,7 @@ Name[et]=Teenus
 Name[it]=Servizio
 Name[nb]=Tjeneste
 Name[nds]=Deenst
+Name[nl]=Service
 Name[pl]=Usługa
 Name[pt]=Serviço
 Name[pt_BR]=Serviço

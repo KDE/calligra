@@ -2,11 +2,13 @@
 Name=connpoint
 Name[bg]=точка на свързване
 Name[ca]=connpoint
+Name[ca@valencia]=connpoint
 Name[cs]=Access
 Name[el]=connpoint
 Name[et]=Ühenduspunkt
 Name[it]=connpoint
 Name[nb]=kobl.punkt
+Name[nl]=connpunt
 Name[pl]=puntkpołączenia
 Name[pt]=ponto-ligação
 Name[pt_BR]=ponto de conexão

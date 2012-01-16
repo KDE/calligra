@@ -643,6 +643,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (outlineLevel > 0) {
         blockTagInformation.setTagName("text:h");
         blockTagInformation.addAttribute("text:outline-level", outlineLevel);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            blockTagInformation.addAttribute("text:is-list-header", "true");
+        }
     } else {
         blockTagInformation.setTagName("text:p");
     }
@@ -732,20 +735,28 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
                 saveODF12Change(charFormat);
             }
-            
+
             if ((!previousFragmentLink.isEmpty()) && (charFormat.anchorHref() != previousFragmentLink || !charFormat.isAnchor())) {
                 // Close the current text:a
                 closeTagRegion(linkTagChangeId);
                 previousFragmentLink = "";
             }
-            
+
             if (charFormat.isAnchor() && charFormat.anchorHref() != previousFragmentLink) {
                 // Open a text:a
                 previousFragmentLink = charFormat.anchorHref();
                 TagInformation linkTagInformation;
-                linkTagInformation.setTagName("text:a");
-                linkTagInformation.addAttribute("xlink:type", "simple");
-                linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                if (previousFragmentLink.startsWith(QChar('#', 0))) {
+                    linkTagInformation.setTagName("text:bookmark-ref");
+                    QString href = previousFragmentLink.right(previousFragmentLink.size()-1);
+                    linkTagInformation.addAttribute("text:ref-name", href);
+                    //linkTagInformation.addAttribute("text:ref-format", add the style of the ref here);
+                }
+                else {
+                    linkTagInformation.setTagName("text:a");
+                    linkTagInformation.addAttribute("xlink:type", "simple");
+                    linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                }
                 if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                     // Write xml:id here for Rdf
                     kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
@@ -753,7 +764,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 }
                 linkTagChangeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, linkTagInformation);
             }
-            
+
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
             KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
             // If we are in an inline object
@@ -870,6 +881,26 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
     if (!previousFragmentLink.isEmpty()) {
         writer->endElement();
+    }
+
+    QString text = block.text();
+    if (text.length() == 0 || text.at(text.length()-1) == QChar(0x2028)) {
+        if (block.blockFormat().hasProperty(KoParagraphStyle::EndCharStyle)) {
+            QVariant v = block.blockFormat().property(KoParagraphStyle::EndCharStyle);
+            QSharedPointer<KoCharacterStyle> endCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
+            if (!endCharStyle.isNull()) {
+                QTextCharFormat charFormat;
+                endCharStyle->applyStyle(charFormat);
+
+                QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
+
+                if (!styleName.isEmpty()) {
+                    writer->startElement("text:span", false);
+                    writer->addAttribute("text:style-name", styleName);
+                    writer->endElement();
+                }
+            }
+        }
     }
 
     if (to !=-1 && to < block.position() + block.length()) {
@@ -1422,7 +1453,9 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, level + 1, currentTable);
+                    while (KoList::level(block) == (level + 1)) {
+                        block = saveList(block, listStyles, level + 1, currentTable);
+                    }
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();

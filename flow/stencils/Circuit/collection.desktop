@@ -2,12 +2,15 @@
 Name=Circuit
 Name[bg]=Верига
 Name[ca]=Circuit
+Name[ca@valencia]=Circuit
 Name[cs]=Obvod
 Name[de]=Schaltkreis
 Name[el]=Κύκλωμα
 Name[et]=Vooluring
 Name[ga]=Circuit
+Name[hu]=Áramkör
 Name[it]=Circuito
+Name[kk]=Электрсұлба
 Name[nb]=Krets
 Name[nds]=Schaltkrink
 Name[nl]=Elektrisch schema

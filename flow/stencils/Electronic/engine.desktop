@@ -2,12 +2,14 @@
 Name=engine
 Name[bg]=двигател
 Name[ca]=motor
+Name[ca@valencia]=motor
 Name[cs]=motor
 Name[el]=μηχανή
 Name[et]=Mootor
 Name[it]=motore
 Name[nb]=motor
 Name[nds]=Motor
+Name[nl]=engine
 Name[pl]=silnik
 Name[pt]=motor
 Name[pt_BR]=motor
