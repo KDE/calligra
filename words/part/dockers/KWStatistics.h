@@ -21,17 +21,11 @@
 #define KWSTATISTICS_H
 
 
-#include <ui_KWStatistics.h>
-#include <ui_KWStatisticsDocker.h>
 #include<kglobal.h>
-#include "dockers/StatisticsPreferencesPopup.h"
-#include <ui_StatisticsPreferencesPopup.h>
-#include <QToolButton>
+
 #include <QWidget>
-#include <QDialog>
-#include <QtGui/QVBoxLayout>
-#include <QCheckBox>
-#include <QMenu>
+
+#include <ui_KWStatisticsDocker.h>
 
 class QTimer;
 class QTextDocument;
