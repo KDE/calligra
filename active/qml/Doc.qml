@@ -33,11 +33,11 @@ Item {
     }
 
     function initToolbar() {
-        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
+        if (docDocumentController.documentTypeName == "spreadsheet") {
             toolbarLoader.source = "SpreadsheetToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
+        } else if (docDocumentController.documentTypeName == "textdocument") {
             toolbarLoader.source = "WordsToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.Presentation) {
+        } else if (docDocumentController.documentTypeName == "presentation") {
             toolbarLoader.source = "PresentationToolbar.qml";
         }
     }
@@ -55,7 +55,10 @@ Item {
     CADocumentController {
         id: docDocumentController
         canvasController: canvas
-        onDocumentOpened: docRootRect.documentLoaded()
+        onDocumentOpened: {
+            docRootRect.initToolbar();
+            docRootRect.documentLoaded();
+        }
     }
 
     CanvasController {
@@ -66,9 +69,6 @@ Item {
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
-
-        Component.onCompleted: documentLoaded.connect(initToolbar)
-        onDocumentLoaded: docRootRect.documentLoaded()
 
         //searchString: findToolbar.searchString
     }
@@ -90,7 +90,7 @@ Item {
         id: findToolbar
         height: 32
         z: 2
-        visible: (canvas.documentType == CADocumentInfo.TextDocument)
+        visible: (docDocumentController.documentTypeName == "textdocument")
 
         anchors.left: parent.left
         anchors.right: parent.right

@@ -26,14 +26,18 @@
 #include "CASpreadsheetHandler.h"
 #include "CAPresentationHandler.h"
 
-#include <QDebug>
-
 class CADocumentController::Private
 {
 public:
+    Private()
+    {
+        canvasController = 0;
+        currentDocumentHandler = 0;
+    }
     QString documentUri;
     CanvasController* canvasController;
     QList<CAAbstractDocumentHandler*> documentHandlers;
+    CAAbstractDocumentHandler* currentDocumentHandler;
 };
 
 CADocumentController::CADocumentController (QObject* parent)
@@ -79,12 +83,27 @@ bool CADocumentController::loadDocument()
     Q_FOREACH (CAAbstractDocumentHandler * handler, d->documentHandlers) {
         if (handler->canOpenDocument (documentUri())) {
             if (handler->openDocument (documentUri())) {
+                d->currentDocumentHandler = handler;
+                emit documentTypeNameChanged();
                 return true;
             }
         }
     }
 
     return false;
+}
+
+QString CADocumentController::documentTypeName() const
+{
+    if (!d->currentDocumentHandler) {
+        return QString();
+    }
+    return d->currentDocumentHandler->documentTypeName();
+}
+
+QObject* CADocumentController::documentHandler()
+{
+    return d->currentDocumentHandler;
 }
 
 #include "CADocumentController.moc"

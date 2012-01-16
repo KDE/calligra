@@ -179,5 +179,9 @@ void CAPresentationHandler::updateCanvas()
     dynamic_cast<KoPACanvasItem*> (canvas())->update();
 }
 
-#include "CAPresentationHandler.moc"
+QString CAPresentationHandler::documentTypeName()
+{
+    return "presentation";
+}
 
+#include "CAPresentationHandler.moc"

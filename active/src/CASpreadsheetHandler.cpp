@@ -133,4 +133,9 @@ void CASpreadsheetHandler::updateDocumentSizeForActiveSheet()
         sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
 }
 
+QString CASpreadsheetHandler::documentTypeName()
+{
+    return "spreadsheet";
+}
+
 #include "CASpreadsheetHandler.moc"
