@@ -24,6 +24,7 @@
 #include "CATextDocumentHandler.h"
 #include "CanvasController.h"
 #include "CASpreadsheetHandler.h"
+#include "CAPresentationHandler.h"
 
 #include <QDebug>
 
@@ -41,6 +42,7 @@ CADocumentController::CADocumentController (QObject* parent)
 {
     d->documentHandlers.append (new CATextDocumentHandler (this));
     d->documentHandlers.append (new CASpreadsheetHandler (this));
+    d->documentHandlers.append (new CAPresentationHandler (this));
 }
 
 CADocumentController::~CADocumentController()
