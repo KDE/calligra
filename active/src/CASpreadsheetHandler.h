@@ -39,6 +39,7 @@ public:
     virtual bool openDocument (const QString& uri);
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
+    Q_INVOKABLE int sheetCount() const;
 
 public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);

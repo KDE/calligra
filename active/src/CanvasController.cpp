@@ -25,43 +25,22 @@
 
 #include "CanvasController.h"
 
-#include <KoDocument.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
-#include <KoView.h>
 #include <KoCanvasBase.h>
-#include <KWCanvasItem.h>
-#include <KDebug>
+#include <KoShape.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
-#include <KActionCollection>
-#include <KoToolManager.h>
-#include <tables/part/CanvasItem.h>
-#include <KoPACanvasItem.h>
-#include <KoPAView.h>
-#include <KoPADocument.h>
-#include <KoPAViewBase.h>
-#include <stage/part/KPrDocument.h>
-#include <tables/Sheet.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include "PAView.h"
-#include <flow/part/FlowPage.h>
-#include <part/Doc.h>
+
+#include <KDebug>
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtGui/QGraphicsWidget>
 #include <QtCore/QSettings>
 #include <QtCore/QFileInfo>
-#include <KoFindText.h>
-#include <KoShapeManager.h>
-#include <KoResourceManager_p.h>
 
 CanvasController::CanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
-      m_canvas (0), m_currentPoint (QPoint (0, 0)), m_documentType (CADocumentInfo::Undefined),
-      m_documentSize (QSizeF (0, 0)), m_doc (0), m_currentSlideNum (-1), m_paView (0), m_loadProgress (0)
+      m_canvas (0), m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0))
 {
     setFlag (QGraphicsItem::ItemHasNoContents, false);
     setClip (true);
@@ -194,51 +173,12 @@ void CanvasController::setDrawShadow (bool drawShadow)
 
 QSize CanvasController::viewportSize() const
 {
-    //kDebug() << "ASKING";
     return QSize();
 }
 
 void CanvasController::scrollContentsBy (int dx, int dy)
 {
     kDebug() << dx << dy;
-}
-
-void CanvasController::scrollDown()
-{
-    return;
-    m_currentPoint.ry() += 50;
-    proxyObject->emitMoveDocumentOffset (m_currentPoint);
-    dynamic_cast<KWCanvasItem*> (m_canvas)->update();
-}
-
-void CanvasController::scrollUp()
-{
-    return;
-    m_currentPoint.ry() -= 50;
-    proxyObject->emitMoveDocumentOffset (m_currentPoint);
-    dynamic_cast<KWCanvasItem*> (m_canvas)->update();
-
-}
-
-int CanvasController::sheetCount() const
-{
-    if (m_canvas && m_documentType == CADocumentInfo::Spreadsheet) {
-        Calligra::Tables::CanvasItem* canvas = dynamic_cast<Calligra::Tables::CanvasItem*> (m_canvas);
-        return canvas->activeSheet()->map()->count();
-    } else {
-        return 0;
-    }
-}
-
-void CanvasController::tellZoomControllerToSetDocumentSize (QSize size)
-{
-    m_zoomController->setDocumentSize (size);
-    setDocumentSize (size);
-}
-
-CADocumentInfo::DocumentType CanvasController::documentType() const
-{
-    return m_documentType;
 }
 
 qreal CanvasController::docHeight() const
@@ -288,7 +228,6 @@ void CanvasController::centerToCamera()
     if (proxyObject) {
         proxyObject->emitMoveDocumentOffset (m_currentPoint);
     }
-
     updateCanvas();
 }
 
@@ -327,37 +266,6 @@ void CanvasController::updateCanvas()
     emit needCanvasUpdate();
 }
 
-void CanvasController::processLoadProgress (int value)
-{
-    m_loadProgress = value;
-    emit loadProgressChanged();
-    if (value == 100) {
-        switch (m_documentType) {
-        case CADocumentInfo::Presentation:
-            updateDocumentSizeForActiveSheet();
-            break;
-        }
-    }
-}
-
-int CanvasController::loadProgress() const
-{
-    return m_loadProgress;
-}
-
-CanvasController* CanvasController::canvasController()
-{
-    return this;
-}
-
-void CanvasController::updateDocumentSizeForActiveSheet()
-{
-    if (m_documentType != CADocumentInfo::Spreadsheet)
-        return;
-    Calligra::Tables::Sheet* sheet = dynamic_cast<Calligra::Tables::CanvasItem*> (m_canvas)->activeSheet();
-    updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
-}
-
 void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (m_canvas) {
@@ -392,3 +300,4 @@ void CanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 }
 
 #include "CanvasController.moc"
+

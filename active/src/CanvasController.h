@@ -29,30 +29,20 @@
 #include <KWPage.h>
 #include <QDeclarativeItem>
 
-class KoFindText;
-class KWPage;
-class PAView;
-class KoDocument;
 class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
-class KoFindMatch;
 
 class CanvasController : public QDeclarativeItem, public KoCanvasController
 {
     Q_OBJECT
 
-    Q_PROPERTY (int sheetCount READ sheetCount NOTIFY sheetCountChanged)
     Q_PROPERTY (qreal docHeight READ docHeight NOTIFY docHeightChanged)
     Q_PROPERTY (qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY (int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
-    Q_PROPERTY (CADocumentInfo::DocumentType documentType READ documentType NOTIFY documentTypeChanged)
-    Q_PROPERTY (int loadProgress READ loadProgress NOTIFY loadProgressChanged)
-    Q_PROPERTY (CanvasController* canvasController READ canvasController CONSTANT)
 
 public:
-
     explicit CanvasController (QDeclarativeItem* parent = 0);
     virtual ~CanvasController();
     virtual void setVastScrolling (qreal factor);
@@ -80,16 +70,13 @@ public:
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy (int dx, int dy);
 
-    int sheetCount() const;
-    CADocumentInfo::DocumentType documentType() const;
     qreal docWidth() const;
     qreal docHeight() const;
     int cameraX() const;
     int cameraY() const;
     void setCameraX (int cameraX);
     void setCameraY (int cameraY);
-    int loadProgress() const;
-    CanvasController* canvasController();
+
     KoCanvasControllerProxyObject* canvasControllerProxyObject();
     KoZoomHandler* zoomHandler();
     KoZoomController* zoomController();
@@ -97,14 +84,8 @@ public:
     void setZoomController (KoZoomController* zoomController);
 
 public slots:
-    void scrollDown();
-    void scrollUp();
-    void tellZoomControllerToSetDocumentSize (QSize size);
     void centerToCamera();
     void zoomToFit();
-
-private slots:
-    void processLoadProgress (int value);
     void updateCanvas();
 
 private:
@@ -112,36 +93,20 @@ private:
     KoZoomController* m_zoomController;
     KoCanvasBase* m_canvas;
     QPoint m_currentPoint;
-    CADocumentInfo::DocumentType m_documentType;
     QSizeF m_documentSize;
-    KoDocument* m_doc;
     QList<CADocumentInfo*> m_recentFiles;
-    int m_currentSlideNum;
-    PAView* m_paView;
-    KWPage m_currentTextDocPage;
-    int m_loadProgress;
-    QString m_searchString;
-    KoFindText* m_find;
 
     void loadSettings();
     void saveSettings();
-    inline void updateDocumentSizeForActiveSheet();
 
 protected:
-    bool isPresentationDocumentExtension (const QString& extension) const;
-    bool isSpreadsheetDocumentExtension (const QString& extension) const;
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
 signals:
-    void sheetCountChanged();
     void docHeightChanged();
     void docWidthChanged();
     void cameraXChanged();
     void cameraYChanged();
-    void documentTypeChanged();
-    void documentLoaded();
-    void loadProgressChanged();
-    void searchStringChanged();
     void needCanvasUpdate();
     void needsCanvasResize(const QSizeF canvasSize);
 };

@@ -183,4 +183,9 @@ void CASpreadsheetHandler::resizeCanvas (const QSizeF& canvasSize)
     canvas()->canvasItem()->setGeometry (QRectF (QPointF (0, 0), canvasSize));
 }
 
+int CASpreadsheetHandler::sheetCount() const
+{
+    return dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->activeSheet()->map()->count();
+}
+
 #include "CASpreadsheetHandler.moc"
