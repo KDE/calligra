@@ -50,7 +50,7 @@ This file is part of the Calligra project
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="2.0">
 
-    <xsl:output method="xhtml"/>
+    <xsl:output method="html" indent="true"/>
 
 
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="param_no_css"/>
@@ -67,20 +67,20 @@ This file is part of the Calligra project
     </xsl:template>
 
     <xsl:template match="/office:document">
-    <html>
-        <head>
+    <xsl:element name="html">
+        <xsl:element name="head">
             <!-- meta must be first -->
             <xsl:apply-templates select="office:document-meta"/>
             <!-- must be second -->
-            <style>
-            <xsl:apply-templates select="office:document-styles"/>
-            </style>
-        </head>
+            <xsl:element name="style">
+                <xsl:apply-templates select="office:document-styles"/>
+            </xsl:element>
+        </xsl:element>
         <!-- body must be after head -->
-        <body>
+        <xsl:element name="body">
             <xsl:apply-templates select="office:document-content"/>
-        </body>
-    </html>
+        </xsl:element>
+    </xsl:element>
     </xsl:template>
 
     <xsl:template match="office:document-meta">
@@ -155,8 +155,6 @@ This file is part of the Calligra project
             border: thin solid gray;
             border-collapse: collapse;
             empty-cells: show;
-            font-size: 10pt;
-            table-layout: fixed;
         }
         td
         {
@@ -213,16 +211,17 @@ This file is part of the Calligra project
         <xsl:text><!-- office:automatic-styles end --></xsl:text>
     </xsl:template>
 
-    <xsl:template match="office:master-styles">
-        <xsl:text><!-- office:master-styles begin --></xsl:text>
-        <xsl:apply-templates/>
-        <xsl:text><!-- office:master-styles end --></xsl:text>
-    </xsl:template>
+    
     
 <!-- Some interesting behaviour with style:header and style:footer nested inside style:master-page.
      Initial (incorrect) behaviour was to expand header/footer elements within <head><style> element, when they should
      be set to the beginning and end of the document,
 -->
+    <xsl:template match="office:master-styles">
+    </xsl:template>
+
+
+   
     
     <xsl:template match="style:default-style">
             <xsl:text>p{</xsl:text>
@@ -259,66 +258,71 @@ This file is part of the Calligra project
     <xsl:template match="office:document-content">
     <xsl:apply-templates/>
     </xsl:template> 
+
+    <xsl:template match="office:body">
+    <xsl:apply-templates/>
+    </xsl:template> 
+
+    <xsl:template match="office:text">
+    <xsl:apply-templates/>
+    </xsl:template> 
     
     <xsl:template match="text:p">
-    <xsl:element name="p"><xsl:apply-templates/></xsl:element>
+        <xsl:element name="p">
+            <xsl:apply-templates/>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="text:span[@text:style-name='T1']">
-    <xsl:element name="strong"><xsl:apply-templates/></xsl:element>
+        <xsl:element name="strong">
+            <xsl:apply-templates/>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="text:span">
-    <xsl:apply-templates/>
+        <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="table:table-columns">
-    <xsl:apply-templates />
+        <xsl:apply-templates />
     </xsl:template>
 
     <xsl:template match="table:table-header-rows">
         <xsl:element name="thead">
-        <xsl:for-each select="table:table-row">
-            <xsl:element name="tr">
-            <xsl:apply-templates mode="table_header" />
-            </xsl:element>
-        </xsl:for-each>
+            <xsl:for-each select="table:table-row">
+                <xsl:element name="tr">
+                <xsl:apply-templates mode="table_header" />
+                </xsl:element>
+            </xsl:for-each>
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="table:table-row">
         <xsl:element name="tr">
-        <xsl:apply-templates />
+            <xsl:apply-templates />
         </xsl:element>
     </xsl:template>
 
-<!--
-  <xsl:template match="table:table-row" mode="table_header">
-    <tr>
-    <xsl:apply-templates />
-    </tr>
-  </xsl:template>
+    <xsl:template match="table:table-cell" mode="table_header">
+        <xsl:element name="th">
+        <xsl:if test="@table:number-columns-spanned!=''">
+            <xsl:attribute name="colspan">
+                <xsl:value-of select="@table:number-columns-spanned" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@table:number-rows-spanned!=''">
+            <xsl:attribute name="rowspan">
+                <xsl:value-of select="@table:number-rows-spanned" />
+            </xsl:attribute>
+        </xsl:if>
+        </xsl:element>
+<!-- TODO DELETE 
+    <th colspan="{@table:number-columns-spanned}" 
+        rowspan="{@table:number-rows-spanned}">
+    <xsl:apply-templates select="text:p"/>
+    </th>
 -->
-
- <!--
-  <xsl:template match="table:covered-table-cell" mode="table_header">
-  <th>
-  <xsl:apply-templates select="text:p"/>
-  </th>
-  </xsl:template>
-
-  <xsl:template match="table:covered-table-cell">
-  <td>
-  <xsl:apply-templates select="text:p"/>
-  </td>
-  </xsl:template>
--->
-  <xsl:template match="table:table-cell" mode="table_header">
-  <th colspan="{@table:number-columns-spanned}" 
-      rowspan="{@table:number-rows-spanned}">
-  <xsl:apply-templates select="text:p"/>
-  </th>
-  </xsl:template>
+    </xsl:template>
 
   <xsl:template match="table:table-cell">
   <td colspan="{@table:number-columns-spanned}" 
