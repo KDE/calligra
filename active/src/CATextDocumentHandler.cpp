@@ -51,7 +51,6 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
-
 }
 
 CATextDocumentHandler::~CATextDocumentHandler()
@@ -111,8 +110,10 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         kwCanvasItem->updateSize();
     }
 
+    connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
+    documentController()->canvasController()->zoomToFit();
     return true;
 }
 
@@ -130,6 +131,17 @@ void CATextDocumentHandler::updateCanvas()
 QString CATextDocumentHandler::documentTypeName()
 {
     return "textdocument";
+}
+
+void CATextDocumentHandler::resizeCanvas (const QSizeF& canvasSize)
+{
+    qreal width = documentController()->canvasController()->width();
+    qreal height = documentController()->canvasController()->height();
+    KWPage currentPage = d->document->pageManager()->page (qreal (documentController()->canvasController()->cameraY()));
+    if (currentPage.isValid()) {
+        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / currentPage.width() * 0.75);
+    }
+    canvas()->canvasItem()->setGeometry (0, 0, width, height);
 }
 
 #include "CATextDocumentHandler.moc"

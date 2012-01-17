@@ -25,6 +25,7 @@
 #include "CAAbstractDocumentHandler.h"
 
 class QSize;
+class QSizeF;
 
 class CAPresentationHandler : public CAAbstractDocumentHandler
 {
@@ -43,6 +44,7 @@ public slots:
     void previousSlide();
     void zoomToFit();
     void updateCanvas();
+    void resizeCanvas(const QSizeF &canvasSize);
 
 protected:
     virtual KoDocument* document();

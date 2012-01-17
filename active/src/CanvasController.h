@@ -143,6 +143,7 @@ signals:
     void loadProgressChanged();
     void searchStringChanged();
     void needCanvasUpdate();
+    void needsCanvasResize(const QSizeF canvasSize);
 };
 
 #endif // CANVASCONTROLLER_H

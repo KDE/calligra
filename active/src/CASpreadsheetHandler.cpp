@@ -48,7 +48,6 @@ CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentContro
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
-
 }
 
 CASpreadsheetHandler::~CASpreadsheetHandler()
@@ -103,9 +102,11 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
         canvasItem->update();
     }
 
+    connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
     updateCanvas();
+    documentController()->canvasController()->zoomToFit();
 
     return true;
 }
@@ -131,8 +132,9 @@ void CASpreadsheetHandler::updateCanvas()
 void CASpreadsheetHandler::updateDocumentSizeForActiveSheet()
 {
     Calligra::Tables::Sheet* sheet = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->activeSheet();
+    //FIXME 1.5 is a hack to "fix" the wrong values below. Why is it wrong?
     documentController()->canvasController()->updateDocumentSize (
-        sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
+        sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size()*1.5, false);
 }
 
 QString CASpreadsheetHandler::documentTypeName()
@@ -174,6 +176,11 @@ void CASpreadsheetHandler::previousSheet()
         return;
     canvasItem->setActiveSheet (sheet);
     documentController()->canvasController()->updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
+}
+
+void CASpreadsheetHandler::resizeCanvas (const QSizeF& canvasSize)
+{
+    canvas()->canvasItem()->setGeometry (QRectF (QPointF (0, 0), canvasSize));
 }
 
 #include "CASpreadsheetHandler.moc"

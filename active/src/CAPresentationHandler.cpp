@@ -53,7 +53,6 @@ CAPresentationHandler::CAPresentationHandler (CADocumentController* documentCont
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
-
 }
 
 CAPresentationHandler::~CAPresentationHandler()
@@ -111,6 +110,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     setCanvas (paCanvas);
     KoToolManager::instance()->addController (documentController()->canvasController());
 
+    connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
     d->currentSlideNum = -1;
@@ -182,6 +182,24 @@ void CAPresentationHandler::updateCanvas()
 QString CAPresentationHandler::documentTypeName()
 {
     return "presentation";
+}
+
+void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
+{
+    QSizeF pageSize = d->paView->activePage()->boundingRect().size();
+    QGraphicsWidget* canvasItem = canvas()->canvasItem();
+    QSizeF newSize (pageSize);
+    newSize.scale (canvasSize, Qt::KeepAspectRatio);
+
+    if (canvasSize.width() < canvasSize.height()) {
+        canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
+                                 newSize.width(), newSize.height());
+        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / pageSize.width() * 0.75);
+    } else {
+        canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
+                                  newSize.width(), newSize.height());
+        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.height() / pageSize.height() * 0.75);
+    }
 }
 
 #include "CAPresentationHandler.moc"

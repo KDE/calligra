@@ -24,6 +24,8 @@
 
 #include "CAAbstractDocumentHandler.h"
 
+class QSizeF;
+
 class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
@@ -38,6 +40,7 @@ public:
 
 public slots:
     void updateCanvas();
+    void resizeCanvas(const QSizeF &canvasSize);
 
 private:
     class Private;

@@ -317,41 +317,7 @@ CanvasController::~CanvasController()
 
 void CanvasController::zoomToFit()
 {
-    QSizeF canvasSize (width(), height());
-
-    switch (documentType()) {
-    case CADocumentInfo::Presentation: {
-        QSizeF pageSize = m_paView->activePage()->boundingRect().size();
-        QGraphicsWidget* canvasItem = m_canvas->canvasItem();
-        QSizeF newSize (pageSize);
-        newSize.scale (canvasSize, Qt::KeepAspectRatio);
-
-        if (canvasSize.width() < canvasSize.height()) {
-            canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
-                                     newSize.width(), newSize.height());
-            m_zoomHandler->setZoom (canvasSize.width() / pageSize.width() * 0.75);
-        } else {
-            canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
-                                      newSize.width(), newSize.height());
-            m_zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.75);
-        }
-
-        break;
-    }
-    case CADocumentInfo::TextDocument: {
-        KWDocument* doc = static_cast<KWDocument*> (m_doc);
-        KWPage currentPage = doc->pageManager()->page (qreal (cameraY()));
-        if (currentPage.isValid()) {
-            m_zoomHandler->setZoom (canvasSize.width() / currentPage.width() * 0.75);
-        }
-    }
-    m_canvas->canvasItem()->setGeometry (0, 0, width(), height());
-    break;
-    case CADocumentInfo::Spreadsheet:
-    default:
-        m_canvas->canvasItem()->setGeometry (0, 0, width(), height());
-    }
-
+    emit needsCanvasResize(QSizeF(width(), height()));
     emit docHeightChanged();
     emit docWidthChanged();
 }

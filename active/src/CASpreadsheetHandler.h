@@ -43,6 +43,7 @@ public:
 public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);
     void updateCanvas();
+    void resizeCanvas(const QSizeF &canvasSize);
 
     void nextSheet();
     void previousSheet();
