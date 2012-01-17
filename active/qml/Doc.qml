@@ -25,7 +25,6 @@ import CalligraActive 1.0
 Item {
     id: docRootRect
     signal documentLoaded
-    property alias loadProgress: canvas.loadProgress
     clip: true
 
     function openDocument(path) {
@@ -69,8 +68,6 @@ Item {
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
-
-        //searchString: findToolbar.searchString
     }
 
 //     Button {
@@ -96,8 +93,9 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-//         onFindNextRequested: canvas.findNext();
-//         onFindPreviousRequested: canvas.findPrevious();
+        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
+        onFindNextRequested: docDocumentController.documentHandler().findNext();
+        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
     }
 
     MouseArea {

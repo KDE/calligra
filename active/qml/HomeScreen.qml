@@ -92,7 +92,8 @@ Image {
         id: progressBar
 
         color: "blue"
-        width: parent.width/100*doc.loadProgress; height: 32;
+        //DISABLED
+        //width: parent.width/100*doc.loadProgress; height: 32;
         anchors.bottom: parent.bottom
     }
 

@@ -25,10 +25,13 @@
 #include "CAAbstractDocumentHandler.h"
 
 class QSizeF;
+class KoFindMatch;
 
 class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
+    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+
 public:
     explicit CATextDocumentHandler (CADocumentController* documentController);
     virtual ~CATextDocumentHandler();
@@ -38,9 +41,22 @@ public:
     virtual KoDocument* document();
     virtual QString documentTypeName();
 
+    QString searchString() const;
+    void setSearchString (const QString& searchString);
+
 public slots:
     void updateCanvas();
-    void resizeCanvas(const QSizeF &canvasSize);
+    void resizeCanvas (const QSizeF& canvasSize);
+
+    void findNext();
+    void findPrevious();
+
+signals:
+    void searchStringChanged();
+
+private slots:
+    void findMatchFound(const KoFindMatch& match);
+    void findNoMatchFound();
 
 private:
     class Private;

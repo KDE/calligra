@@ -45,21 +45,21 @@ Item {
         }
 
         PlasmaComponents.Button {
-            id: findNextButton
-            height: parent.height
-            width: 128
-            text: "Find Next"
-
-            onClicked: findToolbarRootItem.findNextRequested()
-        }
-
-        PlasmaComponents.Button {
             id: findPreviousButton
             height: parent.height
             width: 128
             text: "Find Previous"
 
             onClicked: findToolbarRootItem.findPreviousRequested()
+        }
+
+        PlasmaComponents.Button {
+            id: findNextButton
+            height: parent.height
+            width: 128
+            text: "Find Next"
+
+            onClicked: findToolbarRootItem.findNextRequested()
         }
     }
 }

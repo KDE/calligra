@@ -32,25 +32,36 @@
 #include <KoZoomController.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
+#include <KoShapeManager.h>
 
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDebug>
+
+#include <QTextDocument>
 
 class CATextDocumentHandler::Private
 {
 public:
     Private() {
         document = 0;
+        findText = 0;
     }
     KWDocument* document;
     KWPage currentTextDocPage;
+    QString searchString;
+    KoFindText* findText;
 };
 
 CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
+    QList<QTextDocument*> texts;
+    d->findText = new KoFindText (texts, this);
+    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvasItem()));
+    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
+    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
 }
 
 CATextDocumentHandler::~CATextDocumentHandler()
@@ -110,10 +121,15 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         kwCanvasItem->updateSize();
     }
 
-    connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
+    connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
     documentController()->canvasController()->zoomToFit();
+
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
+    d->findText->addDocuments(texts);
+
     return true;
 }
 
@@ -142,6 +158,43 @@ void CATextDocumentHandler::resizeCanvas (const QSizeF& canvasSize)
         documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / currentPage.width() * 0.75);
     }
     canvas()->canvasItem()->setGeometry (0, 0, width, height);
+}
+
+QString CATextDocumentHandler::searchString() const
+{
+    return d->searchString;
+}
+
+void CATextDocumentHandler::setSearchString (const QString& searchString)
+{
+    d->searchString = searchString;
+    d->findText->find(searchString);
+
+    emit searchStringChanged();
+}
+
+void CATextDocumentHandler::findNext()
+{
+    d->findText->findNext();
+}
+
+void CATextDocumentHandler::findPrevious()
+{
+    d->findText->findPrevious();
+}
+
+void CATextDocumentHandler::findMatchFound (const KoFindMatch& match)
+{
+    QTextCursor cursor = match.location().value<QTextCursor>();
+    canvas()->canvasItem()->update();
+
+    canvas()->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+}
+
+void CATextDocumentHandler::findNoMatchFound()
+{
+    kDebug() << "Match for " << searchString() << " not found";
 }
 
 #include "CATextDocumentHandler.moc"
