@@ -19,8 +19,8 @@
  * 02110-1301 USA
  */
 
-#ifndef PAVIEW_H
-#define PAVIEW_H
+#ifndef CAPAVIEW_H
+#define CAPAVIEW_H
 
 #include <libs/kopageapp/KoPAViewBase.h>
 #include <KoZoomMode.h>
@@ -30,12 +30,12 @@ class KoZoomMode;
 class KPrDocument;
 class KoPACanvasBase;
 
-class PAView : public QObject, public KoPAViewBase
+class CAPAView : public QObject, public KoPAViewBase
 {
     Q_OBJECT
 public:
-    PAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
-    virtual ~PAView();
+    CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
+    virtual ~CAPAView();
     virtual void setShowRulers (bool show);
     virtual void editPaste();
     virtual void pagePaste();
@@ -61,4 +61,4 @@ private slots:
     void slotZoomChanged (KoZoomMode::Mode mode, qreal zoom);
 };
 
-#endif // PAVIEW_H
+#endif // CAPAVIEW_H

@@ -20,7 +20,7 @@
  */
 
 #include "CAPresentationHandler.h"
-#include "PAView.h"
+#include "CAPAView.h"
 #include "CADocumentController.h"
 #include "CACanvasController.h"
 
@@ -45,7 +45,7 @@ class CAPresentationHandler::Private
 {
 public:
     KPrDocument* document;
-    PAView* paView;
+    CAPAView* paView;
     int currentSlideNum;
 };
 
@@ -88,7 +88,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     }
 
     if (paCanvasItem) {
-        d->paView = new PAView (documentController()->canvasController(), dynamic_cast<KoPACanvasBase*> (paCanvas),
+        d->paView = new CAPAView (documentController()->canvasController(), dynamic_cast<KoPACanvasBase*> (paCanvas),
                                 d->document);
         paCanvasItem->setView (d->paView);
 

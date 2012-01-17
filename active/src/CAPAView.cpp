@@ -23,7 +23,7 @@
  * 02110-1301 USA
  */
 
-#include "PAView.h"
+#include "CAPAView.h"
 #include <KoZoomController.h>
 #include <libs/kopageapp/KoPADocument.h>
 #include <KoPACanvasBase.h>
@@ -40,7 +40,7 @@
 #include <KoPACanvasItem.h>
 #include <KoZoomHandler.h>
 
-PAView::PAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
+CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
     : m_canvasController (canvasController), m_paCanvas (canvas), m_prDocument (prDocument), m_page (0)
 {
     KoPAViewModeNormal* mode = new KoPAViewModeNormal (this, m_paCanvas);
@@ -50,52 +50,52 @@ PAView::PAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KP
     connect (m_zoomController, SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
 }
 
-PAView::~PAView()
+CAPAView::~CAPAView()
 {
 
 }
 
-void PAView::setShowRulers (bool show)
+void CAPAView::setShowRulers (bool show)
 {
 
 }
 
-void PAView::editPaste()
+void CAPAView::editPaste()
 {
 
 }
 
-void PAView::pagePaste()
+void CAPAView::pagePaste()
 {
 
 }
 
-void PAView::insertPage()
+void CAPAView::insertPage()
 {
 
 }
 
-void PAView::updatePageNavigationActions()
+void CAPAView::updatePageNavigationActions()
 {
 
 }
 
-void PAView::setActionEnabled (int actions, bool enable)
+void CAPAView::setActionEnabled (int actions, bool enable)
 {
 
 }
 
-void PAView::navigatePage (KoPageApp::PageNavigation pageNavigation)
+void CAPAView::navigatePage (KoPageApp::PageNavigation pageNavigation)
 {
 
 }
 
-KoPAPageBase* PAView::activePage() const
+KoPAPageBase* CAPAView::activePage() const
 {
     return m_page;
 }
 
-void PAView::setActivePage (KoPAPageBase* page)
+void CAPAView::setActivePage (KoPAPageBase* page)
 {
     KoShapeManager* shapeManager = m_paCanvas->shapeManager();
     KoShapeManager* masterShapeManager = m_paCanvas->masterShapeManager();
@@ -130,7 +130,7 @@ void PAView::setActivePage (KoPAPageBase* page)
     m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::CurrentPage, m_prDocument->pageIndex (page) + 1);
 }
 
-void PAView::doUpdateActivePage (KoPAPageBase* page)
+void CAPAView::doUpdateActivePage (KoPAPageBase* page)
 {
     // save the old offset into the page so we can use it also on the new page
     setActivePage (page);
@@ -151,22 +151,22 @@ void PAView::doUpdateActivePage (KoPAPageBase* page)
     proxyObject->emitActivePageChanged();
 }
 
-KoZoomController* PAView::zoomController() const
+KoZoomController* CAPAView::zoomController() const
 {
     return m_zoomController;
 }
 
-KoPADocument* PAView::kopaDocument() const
+KoPADocument* CAPAView::kopaDocument() const
 {
     return m_prDocument;
 }
 
-KoPACanvasBase* PAView::kopaCanvas() const
+KoPACanvasBase* CAPAView::kopaCanvas() const
 {
     return m_paCanvas;
 }
 
-void PAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)
+void CAPAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)
 {
     Q_UNUSED (zoom);
     if (m_page) {
@@ -191,4 +191,4 @@ void PAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)
     }
 }
 
-#include "PAView.moc"
+#include "CAPAView.moc"
