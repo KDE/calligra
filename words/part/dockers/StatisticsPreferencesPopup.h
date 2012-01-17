@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,21 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWStatisticsDialog.h"
-#include "KWStatistics.h"
-#include "KWView.h"
-#include "KWCanvas.h"
+#ifndef STATISTICSPREFERENCESPOPUP_H
+#define STATISTICSPREFERENCESPOPUP_H
+#include <QWidget>
+#include<QToolButton>
+#include<QMenu>
 
-KWStatisticsDialog::KWStatisticsDialog(KWView *parent)
-        : KDialog(parent)
-{
-    setCaption(i18n("Statistics"));
-    setButtons(KDialog::Close);
-    setDefaultButton(KDialog::Close);
-    setMainWidget(new KWStatistics(parent->canvasBase()->resourceManager(), parent->kwdocument(), 0, this));
+class QMenu;
+
+
+namespace Ui {
+    class StatisticsPreferencesPopup;
 }
 
-KWStatisticsDialog::~KWStatisticsDialog()
+class StatisticsPreferencesPopup : public QMenu
 {
-}
+    Q_OBJECT
+public:
+    StatisticsPreferencesPopup(QWidget *parent = 0);
+    virtual QSize sizeHint() const;
+
+signals:
+    void wordsDisplayChange(int);
+    void sentencesDisplayChange(int);
+    void syllablesDisplayChange(int);
+    void linesDisplayChange(int);
+    void charspaceDisplayChange(int);
+    void charnospaceDisplayChange(int);
+    void eastDisplayChange(int);
+    void fleschDisplayChange(int);
+};
+
+#endif // StatisticsPreferencesPopup_H
 

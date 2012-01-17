@@ -197,6 +197,12 @@ void KPrNotes::setDisplayMasterBackground( bool )
 {
 }
 
+QImage KPrNotes::thumbImage(const QSize&)
+{
+    Q_ASSERT( 0 );
+    return QImage();
+}
+
 QPixmap KPrNotes::generateThumbnail( const QSize& )
 {
     Q_ASSERT( 0 );

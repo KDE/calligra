@@ -34,7 +34,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
-#include "dialogs/KWStatisticsDialog.h"
 #include "dialogs/KWPrintingDialog.h"
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
@@ -238,21 +237,17 @@ void KWView::setupActions()
     m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
     m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
-    m_actionViewHeader = new KToggleAction(i18n("Enable Document Headers"), this);
+    m_actionViewHeader = new KAction(i18n("Enable Document Headers"), this);
     actionCollection()->addAction("format_header", m_actionViewHeader);
-    m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
-    m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
-    connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
+        m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
+    connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(enableHeader()));
 
-    m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
+    m_actionViewFooter = new KAction(i18n("Enable Document Footers"), this);
     actionCollection()->addAction("format_footer", m_actionViewFooter);
-    m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
-    m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special shapes at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
-    connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
+        m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
+    connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
@@ -335,17 +330,6 @@ void KWView::setupActions()
     new KoCopyController(canvasBase(), action);
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
-
-    // connect to the paste action here because the KoPasteController only calls
-    // the paste method of the current active tool.
-    // so we are connecting here to be able to alway paste images to the docoment.
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(pasteRequested()));
-
-    action  = new KAction(i18n("Statistics"), this);
-    actionCollection()->addAction("file_statistics", action);
-    action->setToolTip(i18n("Sentence, word and letter counts for this document"));
-    action->setWhatsThis(i18n("Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score.</p>"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showStatisticsDialog()));
 
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
@@ -640,21 +624,23 @@ void KWView::deleteBookmark(const QString &name)
 #endif
 }
 
-void KWView::toggleHeader()
+void KWView::enableHeader()
 {
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
+    m_currentPage.pageStyle().setHeaderPolicy(Words::HFTypeUniform);
+    m_actionViewHeader->setEnabled(false);
     m_document->relayout();
 }
 
-void KWView::toggleFooter()
+void KWView::enableFooter()
 {
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
+    m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeUniform);
+    m_actionViewFooter->setEnabled(false);
     m_document->relayout();
 }
 
@@ -721,13 +707,6 @@ void KWView::editSemanticStylesheets()
         // TODO this leaks memory
     }
 #endif
-}
-
-void KWView::showStatisticsDialog()
-{
-    KWStatisticsDialog *dia = new KWStatisticsDialog(this);
-    dia->exec();
-    delete dia;
 }
 
 void KWView::showRulers(bool visible)
@@ -885,8 +864,8 @@ void KWView::setCurrentPage(const KWPage &currentPage)
             m_zoomController->setPageSize(m_maxPageSize);
         }
 
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
+        m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
+        m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     }
 }
 

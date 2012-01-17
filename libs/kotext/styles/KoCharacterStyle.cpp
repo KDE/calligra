@@ -40,6 +40,7 @@
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
+#include "KoInlineTextObjectManager.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -461,22 +462,65 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     // remove StyleId if it is there as it is not a property of the style itself and will not be written out
     // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only 
     // property left and then we write out an empty style which is unneeded.
+    // we also need to remove the properties of links as they are saved differently
     autoStyle->d->stylesPrivate.remove(StyleId);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::IsAnchor);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorHref);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorName);
     return autoStyle;
 }
+
+struct FragmentData
+{
+    FragmentData(const QTextCharFormat &format, int position, int length)
+    : format(format)
+    , position(position)
+    , length(length)
+    {}
+
+    QTextCharFormat format;
+    int position;
+    int length;
+};
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
     QTextCharFormat cf = cursor.blockCharFormat();
     applyStyle(cf);
-    QTextCharFormat format = cf;
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);
 
-    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-    cursor.setCharFormat(cf);
-// FIXME above effectively removes any char styles and direct formatting from the block
+    // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
+
+    QList<FragmentData> fragments;
+    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+        QTextFragment currentFragment = it.fragment();
+        if (currentFragment.isValid()) {
+            QTextCharFormat format(cf);
+            QVariant v = currentFragment.charFormat().property(InlineInstanceId);
+            if (!v.isNull()) {
+                format.setProperty(InlineInstanceId, v);
+            }
+
+            v = currentFragment.charFormat().property(ChangeTrackerId);
+            if (!v.isNull()) {
+                format.setProperty(ChangeTrackerId, v);
+            }
+
+            if (currentFragment.charFormat().isAnchor()) {
+                format.setAnchor(true);
+                format.setAnchorHref(currentFragment.charFormat().anchorHref());
+            }
+            fragments.append(FragmentData(format, currentFragment.position(), currentFragment.length()));
+        }
+    }
+
+    foreach (const FragmentData &fragment, fragments) {
+        cursor.setPosition(fragment.position);
+        cursor.setPosition(fragment.position + fragment.length, QTextCursor::KeepAnchor);
+        cursor.setCharFormat(fragment.format);
+    }
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
@@ -1802,6 +1846,11 @@ bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
      return compareCharacterProperties(other);
 }
 
+bool KoCharacterStyle::operator!=(const KoCharacterStyle &other) const
+{
+     return !compareCharacterProperties(other);
+}
+
 bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
@@ -2123,9 +2172,9 @@ QVariant KoCharacterStyle::value(int key) const
     QVariant variant = d->stylesPrivate.value(key);
     if (variant.isNull()) {
         if (d->parentStyle)
-            return d->parentStyle->value(key);
+            variant = d->parentStyle->value(key);
         else if (d->defaultStyle)
-            return d->defaultStyle->value(key);
+            variant = d->defaultStyle->value(key);
     }
     return variant;
 }

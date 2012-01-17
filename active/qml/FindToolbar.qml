@@ -20,10 +20,16 @@
  */
 
 import QtQuick 1.0
-import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.metadatamodels 0.1 as MetadataModels
+import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.mobilecomponents 0.1 as MobileComponents
+import org.kde.qtextracomponents 0.1
 
 Item {
     property string searchString: findToolbarSearchString.text
+    signal findNextRequested
+    signal findPreviousRequested
 
     id: findToolbarRootItem
     focus: true
@@ -32,16 +38,28 @@ Item {
         id: row
         anchors.fill: parent
 
-        PlasmaWidgets.LineEdit {
+        PlasmaComponents.TextField {
             id: findToolbarSearchString
             height: parent.height
-            width: parent.width - findButton.width
+            width: parent.width - findNextButton.width - findPreviousButton.width
         }
 
-        PlasmaWidgets.PushButton {
-            id: findButton
+        PlasmaComponents.Button {
+            id: findNextButton
             height: parent.height
             width: 128
+            text: "Find Next"
+
+            onClicked: findToolbarRootItem.findNextRequested()
+        }
+
+        PlasmaComponents.Button {
+            id: findPreviousButton
+            height: parent.height
+            width: 128
+            text: "Find Previous"
+
+            onClicked: findToolbarRootItem.findPreviousRequested()
         }
     }
 }

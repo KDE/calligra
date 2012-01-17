@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWSTATISTICSDIALOG_H
-#define KWSTATISTICSDIALOG_H
+#ifndef KOSHAPERUNAROUNDCOMMAND_H
+#define KOSHAPERUNAROUNDCOMMAND_H
 
-#include <KDialog>
+#include "flake_export.h"
+#include <kundo2command.h>
 
-class KWView;
+#include <KoShape.h>
 
-class KWStatisticsDialog : public KDialog
+/// API docs go here
+class FLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
 {
-    Q_OBJECT
 public:
-    /**
-     * Constructor.
-     * @param parent a parent widget for the purpose of centering the dialog
-     */
-    KWStatisticsDialog(KWView *parent);
-    ~KWStatisticsDialog();
+    KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold, KUndo2Command *parent = 0);
+    virtual ~KoShapeRunAroundCommand();
+
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
+
+private:
+    class Private;
+    Private * const d;
 };
 
-#endif
+#endif /* KOSHAPERUNAROUNDCOMMAND_H */

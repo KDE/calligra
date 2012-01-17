@@ -458,8 +458,10 @@ public slots:
 signals:
     void isBidiUpdated();
     void cursorPositionChanged();
+    void textFormatChanged();
 
 protected:
+    void recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *style);
     bool recursiveProtectionCheck(QTextFrame::iterator it) const;
 
 private:
@@ -467,6 +469,7 @@ private:
     Q_PRIVATE_SLOT(d, void runDirectionUpdater())
 
     class Private;
+    friend class Private;
     Private* const d;
 };
 

@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,9 +77,11 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
@@ -160,7 +163,7 @@ signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
-    void charFormatChanged(const QTextCharFormat &format);
+    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat& refBlockCharFormat);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
@@ -286,16 +289,20 @@ private slots:
 
     void ensureCursorVisible(bool moveView = true);
 
+    void createStyleFromCurrentBlockFormat(QString name);
+    void createStyleFromCurrentCharFormat(QString name);
+
     void testSlot(bool);
 
     /// change block text direction
     void textDirectionChanged();
 
+    void updateActions();
+
 private:
     void repaintCaret();
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
-    void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);
     void updateSelectionHandler();

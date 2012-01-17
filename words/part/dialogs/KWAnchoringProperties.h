@@ -42,7 +42,8 @@ public:
     explicit KWAnchoringProperties(FrameConfigSharedState *state);
 
     /// load all info from the argument frames into this widget
-    void open(const QList<KWFrame*> &frames);
+    /// returns true if at least one frame was accepted
+    bool open(const QList<KWFrame*> &frames);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented

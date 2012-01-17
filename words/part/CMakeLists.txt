@@ -46,12 +46,13 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWDocumentColumns.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
-    dialogs/KWStatistics.cpp
-    dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
+
     dockers/KWStatisticsDocker.cpp
+    dockers/KWStatistics.cpp
+    dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -79,11 +80,11 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
-    dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
+    dockers/StatisticsPreferencesPopup.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
