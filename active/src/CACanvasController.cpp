@@ -35,8 +35,6 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtGui/QGraphicsWidget>
-#include <QtCore/QSettings>
-#include <QtCore/QFileInfo>
 
 CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
@@ -44,7 +42,6 @@ CACanvasController::CACanvasController (QDeclarativeItem* parent)
 {
     setFlag (QGraphicsItem::ItemHasNoContents, false);
     setClip (true);
-    loadSettings();
 }
 
 void CACanvasController::setVastScrolling (qreal factor)
@@ -231,27 +228,8 @@ void CACanvasController::centerToCamera()
     updateCanvas();
 }
 
-void CACanvasController::loadSettings()
-{
-    QSettings settings;
-    foreach (QString string, settings.value ("recentFiles").toStringList()) {
-        m_recentFiles.append (CADocumentInfo::fromStringList (string.split (";")));
-    }
-}
-
-void CACanvasController::saveSettings()
-{
-    QSettings settings;
-    QStringList list;
-    foreach (CADocumentInfo * docInfo, m_recentFiles) {
-        list << docInfo->toStringList().join (";");
-    }
-    settings.setValue ("recentFiles", list);
-}
-
 CACanvasController::~CACanvasController()
 {
-    saveSettings();
 }
 
 void CACanvasController::zoomToFit()

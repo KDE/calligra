@@ -96,9 +96,6 @@ private:
     QSizeF m_documentSize;
     QList<CADocumentInfo*> m_recentFiles;
 
-    void loadSettings();
-    void saveSettings();
-
 protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
