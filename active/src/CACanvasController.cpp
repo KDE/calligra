@@ -23,7 +23,7 @@
  */
 
 
-#include "CanvasController.h"
+#include "CACanvasController.h"
 
 #include <KoCanvasBase.h>
 #include <KoShape.h>
@@ -38,7 +38,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QFileInfo>
 
-CanvasController::CanvasController (QDeclarativeItem* parent)
+CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
       m_canvas (0), m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0))
 {
@@ -47,114 +47,114 @@ CanvasController::CanvasController (QDeclarativeItem* parent)
     loadSettings();
 }
 
-void CanvasController::setVastScrolling (qreal factor)
+void CACanvasController::setVastScrolling (qreal factor)
 {
 
 }
 
-void CanvasController::setZoomWithWheel (bool zoom)
+void CACanvasController::setZoomWithWheel (bool zoom)
 {
 
 }
 
-void CanvasController::updateDocumentSize (const QSize& sz, bool recalculateCenter)
+void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCenter)
 {
     m_documentSize = sz;
     emit docHeightChanged();
     emit docWidthChanged();
 }
 
-void CanvasController::setScrollBarValue (const QPoint& value)
+void CACanvasController::setScrollBarValue (const QPoint& value)
 {
 
 }
 
-QPoint CanvasController::scrollBarValue() const
-{
-    return QPoint();
-}
-
-void CanvasController::pan (const QPoint& distance)
-{
-
-}
-
-QPoint CanvasController::preferredCenter() const
+QPoint CACanvasController::scrollBarValue() const
 {
     return QPoint();
 }
 
-void CanvasController::setPreferredCenter (const QPoint& viewPoint)
+void CACanvasController::pan (const QPoint& distance)
 {
 
 }
 
-void CanvasController::recenterPreferred()
+QPoint CACanvasController::preferredCenter() const
 {
+    return QPoint();
 }
 
-void CanvasController::zoomTo (const QRect& rect)
-{
-
-}
-
-void CanvasController::zoomBy (const QPoint& center, qreal zoom)
+void CACanvasController::setPreferredCenter (const QPoint& viewPoint)
 {
 
 }
 
-void CanvasController::zoomOut (const QPoint& center)
+void CACanvasController::recenterPreferred()
+{
+}
+
+void CACanvasController::zoomTo (const QRect& rect)
 {
 
 }
 
-void CanvasController::zoomIn (const QPoint& center)
+void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
 {
 
 }
 
-void CanvasController::ensureVisible (KoShape* shape)
+void CACanvasController::zoomOut (const QPoint& center)
+{
+
+}
+
+void CACanvasController::zoomIn (const QPoint& center)
+{
+
+}
+
+void CACanvasController::ensureVisible (KoShape* shape)
 {
     setCameraX (shape->position().x());
     setCameraY (shape->position().y());
 }
 
-void CanvasController::ensureVisible (const QRectF& rect, bool smooth)
+void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
     kDebug() << rect << smooth;
 }
 
-int CanvasController::canvasOffsetY() const
+int CACanvasController::canvasOffsetY() const
 {
     return 0;
 }
 
-int CanvasController::canvasOffsetX() const
+int CACanvasController::canvasOffsetX() const
 {
     return 0;
 }
 
-int CanvasController::visibleWidth() const
+int CACanvasController::visibleWidth() const
 {
     return 0;
 }
 
-int CanvasController::visibleHeight() const
+int CACanvasController::visibleHeight() const
 {
     return 0;
 }
 
-KoCanvasBase* CanvasController::canvas() const
+KoCanvasBase* CACanvasController::canvas() const
 {
     return m_canvas;
 }
 
-KoCanvasControllerProxyObject* CanvasController::canvasControllerProxyObject()
+KoCanvasControllerProxyObject* CACanvasController::canvasControllerProxyObject()
 {
     return proxyObject;
 }
 
-void CanvasController::setCanvas (KoCanvasBase* canvas)
+void CACanvasController::setCanvas (KoCanvasBase* canvas)
 {
     QGraphicsWidget* widget = canvas->canvasItem();
     widget->setParentItem (this);
@@ -165,23 +165,23 @@ void CanvasController::setCanvas (KoCanvasBase* canvas)
     zoomToFit();
 }
 
-void CanvasController::setDrawShadow (bool drawShadow)
+void CACanvasController::setDrawShadow (bool drawShadow)
 {
     //kDebug() << "ASKING";
     kDebug() << drawShadow;
 }
 
-QSize CanvasController::viewportSize() const
+QSize CACanvasController::viewportSize() const
 {
     return QSize();
 }
 
-void CanvasController::scrollContentsBy (int dx, int dy)
+void CACanvasController::scrollContentsBy (int dx, int dy)
 {
     kDebug() << dx << dy;
 }
 
-qreal CanvasController::docHeight() const
+qreal CACanvasController::docHeight() const
 {
     if (m_zoomHandler) {
         return m_documentSize.height() * m_zoomHandler->zoomFactorY();
@@ -190,7 +190,7 @@ qreal CanvasController::docHeight() const
     }
 }
 
-qreal CanvasController::docWidth() const
+qreal CACanvasController::docWidth() const
 {
     if (m_zoomHandler) {
         return m_documentSize.width() * m_zoomHandler->zoomFactorX();
@@ -199,31 +199,31 @@ qreal CanvasController::docWidth() const
     }
 }
 
-int CanvasController::cameraX() const
+int CACanvasController::cameraX() const
 {
     return m_currentPoint.x();
 }
 
-int CanvasController::cameraY() const
+int CACanvasController::cameraY() const
 {
     return m_currentPoint.y();
 }
 
-void CanvasController::setCameraX (int cameraX)
+void CACanvasController::setCameraX (int cameraX)
 {
     m_currentPoint.setX (cameraX);
     emit cameraXChanged();
     centerToCamera();
 }
 
-void CanvasController::setCameraY (int cameraY)
+void CACanvasController::setCameraY (int cameraY)
 {
     m_currentPoint.setY (cameraY);
     emit cameraYChanged();
     centerToCamera();
 }
 
-void CanvasController::centerToCamera()
+void CACanvasController::centerToCamera()
 {
     if (proxyObject) {
         proxyObject->emitMoveDocumentOffset (m_currentPoint);
@@ -231,7 +231,7 @@ void CanvasController::centerToCamera()
     updateCanvas();
 }
 
-void CanvasController::loadSettings()
+void CACanvasController::loadSettings()
 {
     QSettings settings;
     foreach (QString string, settings.value ("recentFiles").toStringList()) {
@@ -239,7 +239,7 @@ void CanvasController::loadSettings()
     }
 }
 
-void CanvasController::saveSettings()
+void CACanvasController::saveSettings()
 {
     QSettings settings;
     QStringList list;
@@ -249,24 +249,24 @@ void CanvasController::saveSettings()
     settings.setValue ("recentFiles", list);
 }
 
-CanvasController::~CanvasController()
+CACanvasController::~CACanvasController()
 {
     saveSettings();
 }
 
-void CanvasController::zoomToFit()
+void CACanvasController::zoomToFit()
 {
     emit needsCanvasResize(QSizeF(width(), height()));
     emit docHeightChanged();
     emit docWidthChanged();
 }
 
-void CanvasController::updateCanvas()
+void CACanvasController::updateCanvas()
 {
     emit needCanvasUpdate();
 }
 
-void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
+void CACanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (m_canvas) {
         QGraphicsWidget* widget = m_canvas->canvasItem();
@@ -279,25 +279,25 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
     QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
 }
 
-KoZoomController* CanvasController::zoomController()
+KoZoomController* CACanvasController::zoomController()
 {
     return m_zoomController;
 }
 
-KoZoomHandler* CanvasController::zoomHandler()
+KoZoomHandler* CACanvasController::zoomHandler()
 {
     return m_zoomHandler;
 }
 
-void CanvasController::setZoomController (KoZoomController* zoomController)
+void CACanvasController::setZoomController (KoZoomController* zoomController)
 {
     m_zoomController = zoomController;
 }
 
-void CanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
+void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 {
     m_zoomHandler = zoomHandler;
 }
 
-#include "CanvasController.moc"
+#include "CACanvasController.moc"
 

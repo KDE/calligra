@@ -25,13 +25,13 @@
 #include <QtCore/QObject>
 
 class CAAbstractDocumentHandler;
-class CanvasController;
+class CACanvasController;
 
 class CADocumentController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY (QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
-    Q_PROPERTY (CanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
+    Q_PROPERTY (CACanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
     Q_PROPERTY (QString documentTypeName READ documentTypeName NOTIFY documentTypeNameChanged)
 
 public:
@@ -41,8 +41,8 @@ public:
     void setDocumentUri (const QString& uri);
     QString documentUri() const;
 
-    CanvasController* canvasController() const;
-    void setCanvasController (CanvasController* canvasController);
+    CACanvasController* canvasController() const;
+    void setCanvasController (CACanvasController* canvasController);
 
     QString documentTypeName() const;
     Q_INVOKABLE QObject* documentHandler();

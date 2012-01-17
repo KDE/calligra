@@ -20,7 +20,7 @@
  */
 
 #include "MainWindow.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 #include "CADocumentInfo.h"
 #include "CADocumentController.h"
 #include "calligra_active_global.h"
@@ -37,7 +37,7 @@
 
 MainWindow::MainWindow (QWidget* parent)
 {
-    qmlRegisterType<CanvasController> ("CalligraActive", 1, 0, "CanvasController");
+    qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");

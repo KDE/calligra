@@ -28,7 +28,7 @@ set(calligra-active_SRCS
     src/CADocumentController.cpp
     src/CADocumentInfo.cpp
     src/PAView.cpp
-    src/CanvasController.cpp
+    src/CACanvasController.cpp
     src/MainWindow.cpp
     main.cpp
     ${calligra-active_RCC_SRCS}

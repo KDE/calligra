@@ -21,7 +21,7 @@
 
 #include "CASpreadsheetHandler.h"
 #include "CADocumentController.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 
 #include <tables/Sheet.h>
 #include <tables/Map.h>

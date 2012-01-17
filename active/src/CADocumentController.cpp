@@ -21,8 +21,8 @@
 
 #include "CADocumentController.h"
 
+#include "CACanvasController.h"
 #include "CATextDocumentHandler.h"
-#include "CanvasController.h"
 #include "CASpreadsheetHandler.h"
 #include "CAPresentationHandler.h"
 
@@ -35,7 +35,7 @@ public:
         currentDocumentHandler = 0;
     }
     QString documentUri;
-    CanvasController* canvasController;
+    CACanvasController* canvasController;
     QList<CAAbstractDocumentHandler*> documentHandlers;
     CAAbstractDocumentHandler* currentDocumentHandler;
 };
@@ -67,12 +67,12 @@ void CADocumentController::setDocumentUri (const QString& uri)
     emit documentOpened();
 }
 
-CanvasController* CADocumentController::canvasController() const
+CACanvasController* CADocumentController::canvasController() const
 {
     return d->canvasController;
 }
 
-void CADocumentController::setCanvasController (CanvasController* canvasController)
+void CADocumentController::setCanvasController (CACanvasController* canvasController)
 {
     d->canvasController = canvasController;
     emit canvasControllerChanged();

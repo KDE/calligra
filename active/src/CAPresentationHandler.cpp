@@ -22,7 +22,7 @@
 #include "CAPresentationHandler.h"
 #include "PAView.h"
 #include "CADocumentController.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 
 #include <stage/part/KPrDocument.h>
 

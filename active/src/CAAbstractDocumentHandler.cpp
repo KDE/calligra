@@ -21,7 +21,7 @@
 
 #include "CAAbstractDocumentHandler.h"
 #include "CADocumentController.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>

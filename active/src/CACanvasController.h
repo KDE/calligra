@@ -20,8 +20,8 @@
  */
 
 
-#ifndef CANVASCONTROLLER_H
-#define CANVASCONTROLLER_H
+#ifndef CACANVASCONTROLLER_H
+#define CACANVASCONTROLLER_H
 
 #include "KoCanvasController.h"
 #include "CADocumentInfo.h"
@@ -33,7 +33,7 @@ class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
 
-class CanvasController : public QDeclarativeItem, public KoCanvasController
+class CACanvasController : public QDeclarativeItem, public KoCanvasController
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ class CanvasController : public QDeclarativeItem, public KoCanvasController
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
 
 public:
-    explicit CanvasController (QDeclarativeItem* parent = 0);
-    virtual ~CanvasController();
+    explicit CACanvasController (QDeclarativeItem* parent = 0);
+    virtual ~CACanvasController();
     virtual void setVastScrolling (qreal factor);
     virtual void setZoomWithWheel (bool zoom);
     virtual void updateDocumentSize (const QSize& sz, bool recalculateCenter);
@@ -111,4 +111,4 @@ signals:
     void needsCanvasResize(const QSizeF canvasSize);
 };
 
-#endif // CANVASCONTROLLER_H
+#endif // CACANVASCONTROLLER_H

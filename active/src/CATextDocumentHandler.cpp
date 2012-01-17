@@ -21,7 +21,7 @@
 
 #include "CATextDocumentHandler.h"
 #include "CADocumentController.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
