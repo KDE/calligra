@@ -52,9 +52,10 @@ signals:
     void canvasControllerChanged();
     void documentOpened();
     void documentTypeNameChanged();
+    void failedToOpenDocument();
 
-protected:
-    bool loadDocument();
+public slots:
+    void loadDocument();
 
 private:
     class Private;

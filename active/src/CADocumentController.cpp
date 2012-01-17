@@ -63,8 +63,6 @@ void CADocumentController::setDocumentUri (const QString& uri)
 {
     d->documentUri = uri;
     emit documentUriChanged();
-    loadDocument();
-    emit documentOpened();
 }
 
 CACanvasController* CADocumentController::canvasController() const
@@ -78,19 +76,20 @@ void CADocumentController::setCanvasController (CACanvasController* canvasContro
     emit canvasControllerChanged();
 }
 
-bool CADocumentController::loadDocument()
+void CADocumentController::loadDocument()
 {
     Q_FOREACH (CAAbstractDocumentHandler * handler, d->documentHandlers) {
         if (handler->canOpenDocument (documentUri())) {
             if (handler->openDocument (documentUri())) {
                 d->currentDocumentHandler = handler;
                 emit documentTypeNameChanged();
-                return true;
+                emit documentOpened();
+                return;
             }
         }
     }
 
-    return false;
+    emit failedToOpenDocument();
 }
 
 QString CADocumentController::documentTypeName() const

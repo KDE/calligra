@@ -29,6 +29,7 @@ Item {
 
     function openDocument(path) {
         docDocumentController.documentUri = path;
+        docDocumentController.loadDocument();
     }
 
     function initToolbar() {
