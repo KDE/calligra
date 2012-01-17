@@ -31,20 +31,23 @@
 class CAAbstractDocumentHandler::Private
 {
 public:
-    Private() {
+    Private()
+    {
+        documentController = 0;
     }
+    CADocumentController *documentController;
 };
 
 CAAbstractDocumentHandler::CAAbstractDocumentHandler (CADocumentController* documentController)
     : QObject (documentController)
     , d (new Private())
 {
-
+    d->documentController = documentController;
 }
 
 CADocumentController* CAAbstractDocumentHandler::documentController() const
 {
-    return qobject_cast<CADocumentController*> (parent());
+    return d->documentController;
 }
 
 CAAbstractDocumentHandler::~CAAbstractDocumentHandler()
