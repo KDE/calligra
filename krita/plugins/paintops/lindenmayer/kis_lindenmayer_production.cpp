@@ -27,20 +27,22 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
 
 
 
-    if(letter->length() < 20.0f && letter->getParameter("branched").toBool() == false) {
-        if(letter->getComputedParameter("distanceToSun").toFloat() < 50) {// for safty reasons..
-            letter->setParameter("length", letter->length()+letter->getComputedParameter("distanceToSun").toFloat()/20.0);
-            letter->setParameter("drawn", false);
-        }
-    }
+//    if(letter->length() < 20.0f && letter->getParameter("branched").toBool() == false) {
+//        if(letter->getComputedParameter("distanceToSun").toFloat() < 50) {// for safty reasons..
+//            letter->setParameter("length", letter->length()+letter->getComputedParameter("distanceToSun").toFloat()/20.0);
+//            letter->setParameter("drawn", false);
+//        }
+//    }
 
-    if(letter->length() > 14.0f
+    if(/*letter->length() > 14.0f
+            && */
+            letter->getComputedParameter("distanceToSun").toFloat() > 50.0f
             && letter->getParameter("branched").toBool() == false
             && letter->getParameter("stem").toBool() == false
             && letter->getParameter("leaf").toBool() == false) {
         KisLindenmayerLetter* newLetter = letter->createCopy();
         newLetter->setParameter("drawn", false);
-        newLetter->setParameter("length", 3.0f);
+        newLetter->setParameter("length", 30.0f);
         newLetter->setParameter("angle", newLetter->getComputedParameter("angleToSun"));
         newLetter->setParameter("position", letter->getComputedParameter("endPosition"));
         retList.append(newLetter);
