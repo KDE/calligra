@@ -67,7 +67,6 @@ private slots:
     void testMATCH();
     void testN();
     void testNA();
-    // void testNUMBERVALUE(); // to be implemented
     void testROW();
     void testROWS();
     void testSHEET();

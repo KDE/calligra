@@ -480,15 +480,6 @@ void TestInformationFunctions::testNA()
     // and operators, just like any other error type.
 }
 
-/*
-void TestInformationFunctions::testNUMBERVALUE()
-{
-    CHECK_EVAL( "NUMBERVALUE(\"6\"      ; \".\")", Value(    6   ) ); // VALUE converts text to numbers (unlike N).
-    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
-    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
-}
-*/
-
 // TODO row not working here
 void TestInformationFunctions::testROW()
 {
