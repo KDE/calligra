@@ -147,7 +147,7 @@ private:
 
     //Hierarchies of exceptions.
     QList<const MSO::TextPFException*> pfs;
-    const MSO::TextPFException9* pf9s[6];
+    QList<const MSO::TextPFException9*> pf9s;
 };
 
 class PptTextCFRun {
