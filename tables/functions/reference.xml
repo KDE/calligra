@@ -210,7 +210,7 @@
            <Type>Reference</Type>
        </Parameter>
        <Help>
-           <Text> Returns the sheet number of the reference or the string representing a sheet name.</Text>
+           <Text>Returns the sheet number of the reference or the string representing a sheet name.</Text>
            <Syntax>SHEET(reference)</Syntax>
            <Example>SHEET(Sheet1!C7) returns 1</Example>
            <Example>SHEET(Sheet2!C7) returns 2</Example>
@@ -225,7 +225,7 @@
            <Type>Reference</Type>
        </Parameter>
        <Help>
-           <Text> Returns the number of sheets in a reference or current document.</Text>
+           <Text>Returns the number of sheets in a reference or current document.</Text>
            <Syntax>SHEETS(reference)</Syntax>
        </Help>
    </Function>
