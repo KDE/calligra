@@ -135,11 +135,11 @@
        </Parameter>
        <Parameter>
            <Comment>Row</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Parameter>
            <Comment>Column</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is returned.</Text>
@@ -353,7 +353,6 @@
        </Help>
    </Function>
 
-   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
    <Function>
        <Name>OFFSET</Name>
        <Type>Reference</Type>
@@ -382,7 +381,6 @@
            <Syntax>OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer newHeight; Integer newWidth)</Syntax>
        </Help>
    </Function>
-   -->
 </Group>
 
 </KSpreadFunctions>
