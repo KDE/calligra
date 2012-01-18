@@ -50,7 +50,7 @@ private slots:
     void testCOUNTBLANK();
     void testCOUNTIF();
     void testERRORTYPE();
-    // void testFORMULA();  // to be implemented
+    void testFORMULA();
     void testINFO();
     void testISBLANK();
     void testISERR();
