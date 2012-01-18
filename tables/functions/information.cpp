@@ -34,6 +34,7 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Region.h"
 #include "Cell.h"
@@ -67,7 +68,6 @@ Value func_n(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_na(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
-
 
 CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("information", InformationModule)
 
@@ -139,7 +139,6 @@ QString InformationModule::descriptionFileName() const
 {
     return QString("information.xml");
 }
-
 
 // Function: ERROR.TYPE
 Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
@@ -376,7 +375,7 @@ Value func_n(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: NA
-Value func_na(valVector, ValueCalc *, FuncExtra *)
+Value func_na(valVector, ValueCalc *, FuncExtra *e)
 {
     return Value::errorNA();
 }

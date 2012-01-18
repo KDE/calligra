@@ -31,6 +31,7 @@ namespace Calligra
 namespace Tables
 {
 class Map;
+class Cell;
 
 class TestInformationFunctions: public QObject
 {
@@ -41,7 +42,7 @@ private slots:
     void initTestCase();
 
     void testAREAS();
-    // void testCELL();        // to be implemented
+    void testCELL();
     void testCOLUMN();
     void testCOLUMNS();
     void testCOUNT();
@@ -69,15 +70,15 @@ private slots:
     // void testNUMBERVALUE(); // to be implemented
     void testROW();
     void testROWS();
-    // void testSHEET();       // to be implemented
-    // void testSHEETS();      // to be implemented
+    void testSHEET();
+    void testSHEETS();
     void testTYPE();
     void testVALUE();
 
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString&, Value& ex, const Cell &cell = Cell());
 
     Map* m_map;
 };
