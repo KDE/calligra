@@ -215,7 +215,6 @@
        </Help>
    </Function>
 
-   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
    <Function>
        <Name>ISFORMULA</Name>
        <Type>Boolean</Type>
@@ -228,7 +227,6 @@
            <Syntax>ISFORMULA(x)</Syntax>
        </Help>
    </Function>
-   -->
 
    <Function>
        <Name>ISODD</Name>
