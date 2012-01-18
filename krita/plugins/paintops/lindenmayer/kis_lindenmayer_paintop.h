@@ -20,6 +20,8 @@
 #ifndef KIS_LINDENMAYER_PAINTOP_H_
 #define KIS_LINDENMAYER_PAINTOP_H_
 
+#include <QList>
+
 #include <kis_paintop.h>
 #include <kis_types.h>
 
@@ -27,6 +29,7 @@
 #include "kis_lindenmayer_paintop_settings.h"
 
 class KisPainter;
+class KisLindenmayerLetter;
 
 class KisLindenmayerPaintOp : public KisPaintOp
 {
@@ -38,11 +41,18 @@ public:
 
     qreal paintAt(const KisPaintInformation& info);
 
+    const KisPaintInformation& getSunInformations() const; //returns paint information, only valid, if called from inside of paintAt().
+
 private:
     KisPaintDeviceSP m_dab;
     LindenmayerBrush * m_lindenmayerBrush;
     KisPressureOpacityOption m_opacityOption;
     LindenmayerProperties m_properties;
+
+    bool m_firstPaint;
+    QList<KisLindenmayerLetter*> m_letters;
+
+    const KisPaintInformation* m_paintInformation;
 };
 
 #endif // KIS_LINDENMAYER_PAINTOP_H_

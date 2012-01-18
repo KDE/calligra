@@ -37,6 +37,8 @@
 
 #include <kis_pressure_opacity_option.h>
 
+#include "kis_lindenmayer_production.h"
+
 KisLindenmayerPaintOp::KisLindenmayerPaintOp(const KisLindenmayerPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
@@ -51,16 +53,24 @@ KisLindenmayerPaintOp::KisLindenmayerPaintOp(const KisLindenmayerPaintOpSettings
         transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
     }
     m_lindenmayerBrush = new LindenmayerBrush( &m_properties, transfo );
+
+    m_firstPaint = true;
 }
 
 KisLindenmayerPaintOp::~KisLindenmayerPaintOp()
 {
     delete m_lindenmayerBrush;
+
+    foreach(KisLindenmayerLetter* letter, m_letters) {
+        delete letter;
+    }
 }
 
 qreal KisLindenmayerPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return 1.0;
+
+    m_paintInformation = &info;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -68,18 +78,65 @@ qreal KisLindenmayerPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
-    qreal x1, y1;
+    qreal x, y;
 
-    x1 = info.pos().x();
-    y1 = info.pos().y();
+    x = info.pos().x();
+    y = info.pos().y();
+
+    if(m_firstPaint) {
+        m_firstPaint = false;
+        m_letters.append(new KisLindenmayerLetter(QPointF(x, y), 0, this));
+    }
+
+    QList<KisLindenmayerLetter*> newLetters;
+    KisLindenmayerProduction production;
+    for(int i=m_letters.size()-1; i>=0; i--) {
+        newLetters.append(production.produce(m_letters.at(i)));
+    }
+    m_letters = newLetters;
+
+
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_lindenmayerBrush->paint(m_dab, x1, y1, painter()->paintColor());
+//    m_lindenmayerBrush->paint(m_dab, x1, y1, painter()->paintColor());
+
+    KisPainter dabPainter;
+    QRect limits = painter()->device()->extent();
+    dabPainter.setMaskImageSize(limits.width(), limits.height());
+    dabPainter.setBounds(limits);
+
+
+    dabPainter.begin(m_dab);
+    dabPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    dabPainter.setPaintColor(painter()->paintColor());
+    dabPainter.setBackgroundColor(painter()->paintColor());
+
+
+//    dabPainter.begin();
+    foreach (KisLindenmayerLetter* letter, m_letters) {
+        if(letter->getParameter("drawn").toBool() == false) {
+            dabPainter.drawThickLine(letter->position(), letter->lineEndPosition(), 1, 1);
+            letter->setParameter("drawn", true);
+        }
+//        dabPainter.paintLine(KisPaintInformation(letter->position()), KisPaintInformation(letter->lineEndPosition()));
+//        painter()->addDirtyRect(QRectF(letter->position(), letter->lineEndPosition()).normalized().toRect());
+    }
+//    dabPainter.end();
 
     QRect rc = m_dab->extent();
-
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc,m_dab);
+
+
+//    painter()->renderMirrorMask(rc,m_dab);
     painter()->setOpacity(origOpacity);
+
+
+    m_paintInformation = 0;
+
     return 1.0;
+}
+
+const KisPaintInformation& KisLindenmayerPaintOp::getSunInformations() const {
+    Q_ASSERT(m_paintInformation);
+    return *m_paintInformation;
 }

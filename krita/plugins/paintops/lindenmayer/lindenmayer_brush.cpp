@@ -29,6 +29,7 @@ inline double drand48() {
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <kis_painter.h>
 
 #include <QVariant>
 #include <QHash>
@@ -63,58 +64,28 @@ LindenmayerBrush::~LindenmayerBrush()
 }
 
 
-void LindenmayerBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * cs, QPointF pos, const KoColor& color,qreal weight, bool respectOpacity = true)
-{
-    // opacity top left, right, bottom left, right
-    KoColor myColor(color);
-    quint8 opacity = respectOpacity? myColor.opacityU8() : OPACITY_OPAQUE_U8;
-
-    int ipx = int (pos.x());
-    int ipy = int (pos.y());
-    qreal fx = pos.x() - ipx;
-    qreal fy = pos.y() - ipy;
-
-    quint8 btl = qRound((1.0 - fx) * (1.0 - fy) * opacity * weight);
-    quint8 btr = qRound((fx)  * (1.0 - fy) * opacity * weight);
-    quint8 bbl = qRound((1.0 - fx) * (fy)  * opacity * weight);
-    quint8 bbr = qRound((fx)  * (fy)  * opacity * weight);
-
-    accWrite.moveTo(ipx  , ipy);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
-
-    accWrite.moveTo(ipx + 1, ipy);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
-
-    accWrite.moveTo(ipx, ipy + 1);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
-
-    accWrite.moveTo(ipx + 1, ipy + 1);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
-}
-
 void LindenmayerBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    if(m_firstDab) {
-        m_firstDab = false;
-        m_leafs.append(new KisLindenmayerLetter(Eigen::Vector2f(x, y), Eigen::Vector2f(0, 1)));
-    }
+    return;
+//    if(m_firstDab) {
+//        m_firstDab = false;
+//        m_leafs.append(new KisLindenmayerLetter());
+//    }
 
-    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
+//    for(int i=m_leafs.size()-1; i>=0; i--) {
+//        m_leafs.at(i)->grow(0.1, m_leafs);
+//    }
 
-    for(int i=m_leafs.size()-1; i>=0; i--) {
-        m_leafs.at(i)->grow(0.1, m_leafs);
-    }
+//    KisPainter painter;
+//    painter.begin(dev);
+//    painter.setPaintColor(color);
 
-    foreach (KisLindenmayerLetter* leaf, m_leafs) {
-        paintParticle(accessor, dev->colorSpace(), leaf->position(), color, 1);
-    }
+//    foreach (KisLindenmayerLetter* leaf, m_leafs) {
+//        painter.drawDDALine(leaf->position(), leaf->position());
+//    }
 
-    m_inkColor = color;
-    m_counter++;
+//    m_inkColor = color;
+//    m_counter++;
 
 
     //paintParticle(accessor, dev->colorSpace(), QPointF(x, y), color, 1);
