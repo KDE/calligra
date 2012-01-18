@@ -375,7 +375,7 @@ Value func_n(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: NA
-Value func_na(valVector, ValueCalc *, FuncExtra *e)
+Value func_na(valVector, ValueCalc *, FuncExtra *)
 {
     return Value::errorNA();
 }

@@ -57,6 +57,26 @@
    </Function>
 
    <Function>
+       <Name>CELL</Name>
+       <Type>Any</Type>
+       <Parameter>
+           <Comment>Type</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type range="true">Reference</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns information about position, formatting or contents in a reference.</Text>
+           <Syntax>CELL(type; reference)</Syntax>
+           <Example>CELL("COL", C7) returns 3</Example>
+           <Example>CELL("ROW", C7) returns 7</Example>
+           <Example>CELL("ADDRESS", C7) returns $C$7</Example>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>CHOOSE</Name>
        <Parameter>
            <Comment>Index</Comment>
@@ -181,6 +201,35 @@
            <Related>COLUMNS</Related>
        </Help>
    </Function>
+
+   <Function>
+       <Name>SHEET</Name>
+       <Type>Int</Type>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Help>
+           <Text> Returns the sheet number of the reference or the string representing a sheet name.</Text>
+           <Syntax>SHEET(reference)</Syntax>
+           <Example>SHEET(Sheet1!C7) returns 1</Example>
+           <Example>SHEET(Sheet2!C7) returns 2</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>SHEETS</Name>
+       <Type>Int</Type>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Help>
+           <Text> Returns the number of sheets in a reference or current document.</Text>
+           <Syntax>SHEETS(reference)</Syntax>
+       </Help>
+   </Function>
+
    <Function>
        <Name>LOOKUP</Name>
        <Parameter>
