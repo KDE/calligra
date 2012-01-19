@@ -23,7 +23,9 @@
 #include <KoParagraphStyle.h>
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoBibliographyInfo.h>
+
 #include <QMessageBox>
+#include <QListWidgetItem>
 
 InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
     QDialog(parent),
@@ -36,6 +38,8 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.add,SIGNAL(clicked()),this,SLOT(addField()));
     connect(dialog.remove,SIGNAL(clicked()),this,SLOT(removeField()));
+    connect(dialog.span,SIGNAL(clicked()),this,SLOT(addSpan()));
+
     /*  To do : handle tab stops
     */
     //connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
@@ -44,8 +48,13 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     dialog.addedFields->clear();
     dialog.availableFields->clear();
     m_bibInfo->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
-    dialog.bibTypes->setCurrentRow(0,QItemSelectionModel::Select);
+    dialog.bibTypes->setCurrentRow(0, QItemSelectionModel::Select);
     show();
+}
+
+QString InsertBibliographyDialog::bibliographyType()
+{
+    return dialog.bibTypes->currentItem()->text().remove(" ").toLower();
 }
 
 void InsertBibliographyDialog::insert()
@@ -59,62 +68,72 @@ void InsertBibliographyDialog::updateFields()
     dialog.availableFields->clear();
     dialog.addedFields->clear();
 
-    QString bibType(dialog.bibTypes->currentItem()->text().remove(" ").toLower());
-
     QSet<QString> addedFields;
-    foreach(IndexEntry *entry,m_bibInfo->m_entryTemplate[bibType].indexEntries) {
+    foreach(IndexEntry *entry, m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries) {
         if (entry->name == IndexEntry::BIBLIOGRAPHY) {
             IndexEntryBibliography *bibEntry = static_cast<IndexEntryBibliography *>(entry);
-            new QListWidgetItem(bibEntry->dataField,dialog.addedFields);
+            QListWidgetItem *bibItem = new QListWidgetItem(bibEntry->dataField, dialog.addedFields);
             addedFields.insert(bibEntry->dataField);
+            bibItem->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::BIBLIOGRAPHY));
+        } else if (entry->name == IndexEntry::SPAN) {
+            IndexEntrySpan *span = static_cast<IndexEntrySpan *>(entry);
+            QListWidgetItem *spanField = new QListWidgetItem(span->text, dialog.addedFields);
+            addedFields.insert(span->text);
+            spanField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::SPAN));
+            spanField->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
     }
     QSet<QString> availableFields = QSet<QString>::fromList(KoOdfBibliographyConfiguration::bibDataFields) - addedFields;
 
     foreach (QString field, availableFields) {
-        new QListWidgetItem(field,dialog.availableFields);
+        new QListWidgetItem(field, dialog.availableFields);
     }
     dialog.availableFields->sortItems();
 }
 
 void InsertBibliographyDialog::addField()
 {
-    int row = dialog.availableFields->row(dialog.availableFields->currentItem());
+    int row = dialog.availableFields->currentRow();
 
     if (row != -1) {
         QString newDataField = dialog.availableFields->takeItem(row)->text();
-        new QListWidgetItem(newDataField,dialog.addedFields);
+        QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
+        bibField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::BIBLIOGRAPHY));
 
-        QString bibType(dialog.bibTypes->currentItem()->text().remove(" ").toLower());
-
-        //creating IndexEntries
         IndexEntryBibliography *newEntry = new IndexEntryBibliography(QString());
         newEntry->dataField = newDataField;
-        IndexEntrySpan *span = new IndexEntrySpan(QString());
-        if (dialog.addedFields->count() == 1) {
-            span->text = ":";
-        }
-        else span->text = ",";
 
-        m_bibInfo->m_entryTemplate[bibType].indexEntries.append(span);
-        m_bibInfo->m_entryTemplate[bibType].indexEntries.append(newEntry);
+        m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(newEntry));
     }
 }
 
 void InsertBibliographyDialog::removeField()
 {
-    int row = dialog.addedFields->row(dialog.addedFields->currentItem());
+    int row = dialog.addedFields->currentRow();
 
     if (row != -1) {
-        new QListWidgetItem(dialog.addedFields->takeItem(row)->text(),dialog.availableFields);
-        dialog.availableFields->sortItems();
+        if (dialog.addedFields->currentItem()->data(Qt::UserRole).value<IndexEntry::IndexEntryName>() == IndexEntry::BIBLIOGRAPHY) {
+            new QListWidgetItem(dialog.addedFields->takeItem(row)->text(), dialog.availableFields);
+            dialog.availableFields->sortItems();
+        } else {
+            dialog.availableFields->removeItemWidget(dialog.addedFields->takeItem(row));
+        }
 
-        QString bibType(dialog.bibTypes->currentItem()->text().remove(" ").toLower());
-
-        //Removing IndexEntries
-        m_bibInfo->m_entryTemplate[bibType].indexEntries.removeAt(2*row);       //to remove IndexEntry
-        m_bibInfo->m_entryTemplate[bibType].indexEntries.removeAt(2*row);       //to remove span text
+        m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.removeAt(row);
     }
+}
+
+void InsertBibliographyDialog::addSpan()
+{
+    QString spanText = (dialog.addedFields->count() == 1) ? QString(":") : QString(",");
+    QListWidgetItem *spanField = new QListWidgetItem(spanText, dialog.addedFields);
+    spanField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::SPAN));
+    spanField->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+    IndexEntrySpan *span = new IndexEntrySpan(QString());
+    span->text = spanText;
+
+    m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(span));
 }
 
 void InsertBibliographyDialog::insertTabStop()
