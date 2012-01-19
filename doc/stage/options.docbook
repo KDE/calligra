@@ -52,9 +52,9 @@
 <varlistentry>
 <term><guilabel>Handle radius</guilabel></term>
 <listitem><para>If you select a shape with the default tool (arrow) you see the yellow and 
-read rectangles. These are called handles (used for resizing, rotation, ...). 
+red rectangles. These are called handles (used for resizing, rotation, ...). 
 The handle radius changes the size of the handles. If you make them bigger it 
-is easier to hit them easier.</para></listitem>
+is easier to hit them.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -67,7 +67,7 @@ a handle to select it.</para></listitem>
 <term><guilabel>Paste offset</guilabel></term>
 <listitem><para>This is only active if <guilabel>Paste at Cursor</guilabel> is disabled. 
 If you copy a shape with the shortcut <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> 
-and paste it with <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>, 
+and paste it with <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>, 
 and do that at a place where already a shape is this offset is used to paste the 
 new shape to the bottom/right.</para></listitem>
 </varlistentry>

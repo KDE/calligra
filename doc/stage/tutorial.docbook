@@ -284,7 +284,7 @@ outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
 click twice within the chart area. The chart <guilabel>Tools Options</guilabel> 
 should appear in the docker. You can then 
-use these tools to edit the chart properties like chart type, labels and axis and data.</para>
+use these tools to edit the chart properties like chart type, labels, axis and data.</para>
 
 <para>Click anywhere with the &LMB; outside the chart to go back to
 &stage; slide.</para>

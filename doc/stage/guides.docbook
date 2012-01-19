@@ -68,7 +68,7 @@ slideshow</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>Fill in <guilabel>Titel</guilabel> and <guilabel>Author</guilabel> fields. 
+<para>Fill in <guilabel>Title</guilabel> and <guilabel>Author</guilabel> fields. 
 Select the slides which should be exported. If you want to change a name 
 used on the &HTML; page for each slide double click on the name and edit it 
 inline.</para>

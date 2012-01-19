@@ -54,7 +54,7 @@ described in brief.</para>
 toolbar consists of a collection of icons. A toolbar icon often presents
 a convenient shortcut to a command that is found in one of the menus.</para>
 
-<para>You can move the unlocked toolbar around by dragging the handleat the left. The unlocked toolbar can
+<para>You can move the unlocked toolbar around by dragging the handle at the left. The unlocked toolbar can
 be <quote>docked</quote> or attached to any side of the &stage;
 window. If you like, you can also have the toolbar <quote>float</quote> in
 its own window, separated from the main &stage; window.</para>
@@ -64,7 +64,7 @@ its own window, separated from the main &stage; window.</para>
 </para>
 
 <para>
-Choosing the item in <guisubmenu>Text Position</guisubmenu> the menu leads
+Choosing the item <guisubmenu>Text Position</guisubmenu> leads
 to an additional menu which lets you control the appearance of the items
 in toolbar. This additional cascading menu is shown in the screenshot
 below:
@@ -940,7 +940,7 @@ open dialog will appear, allowing you to choose a
 </term>
 <listitem>
 <para>Use this menu item to insert one or more pictures, each 
-is inserted on a new slide. This is usefull for the people who want to use 
+is inserted on a new slide. This is useful for the people who want to use 
 &stage; to make a slide show.</para>
 </listitem>
 </varlistentry>
@@ -1762,7 +1762,7 @@ will be asked to confirm this action.</para>
 <shortcut><keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></shortcut>
 <guimenu>Slide Show</guimenu>
 <guisubmenu>Start Presentation</guisubmenu>
-<guimenuitem>From Curent Slide</guimenuitem>
+<guimenuitem>From Current Slide</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1943,9 +1943,9 @@ the toolbars.</para>
 
 <para>At the top is a drop down box to enable you to choose which
 toolbar you want to modify. In the picture the <guilabel>File</guilabel> toolbar is
-selected. If I want to add the <guiicon>Docker</guiicon> icon to
+selected. If I want to add the <guiicon>Dockers</guiicon> icon to
 that toolbar, I click the entry in the left window. The arrow pointing
-right becomes available, if I click the arrow the <guiicon>Docker</guiicon> 
+right becomes available, if I click the arrow the <guiicon>Dockers</guiicon> 
 entry is added to the selected toolbar. The left arrow
 is available when you click in the right side window. It allows you to
 remove an icon from a toolbar. The up and down arrows become active
