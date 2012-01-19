@@ -55,14 +55,6 @@ BibliographyGenerator::~BibliographyGenerator()
     delete m_bibInfo;
 }
 
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager,QString bibType) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Bibliography_"+bibType);
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    styleManager->add(style);
-    return style;
-}
-
 static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
     if ( keyIndex == sortKeys.size() ) return false;

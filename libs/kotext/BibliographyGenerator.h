@@ -45,8 +45,6 @@ public slots:
     void generate();
 
 private:
-    void generateEntry(QString bibType, QTextCursor &cursor, QTextBlock block, int &blockId);
-
     QTextDocument *m_document;
     QTextDocument *m_bibDocument;
     KoBibliographyInfo *m_bibInfo;
