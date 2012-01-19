@@ -204,9 +204,8 @@ Select a file and click <guibutton>OK</guibutton>.
 </para>
 
 <para>
-Click with the &LMB; where you want to place the loge in it's original size or 
-draw a rectangle with the left mouse (click the &LMB; and keep the button pressed) to specify the position and size for the logo.
-There are selection handles (little squares) visible around the border of the graphic.
+Now the image is inserted in the slide and there are selection handles 
+(little squares) visible around the border of the graphic.
 </para>
 
 <screenshot>
@@ -429,7 +428,7 @@ screen, or use the <keycap>Page Down</keycap> key.
 </para>
 
 <para>
-To exit the slide show, press the &Esc; button.
+To exit the slide show, press the &Esc; key.
 </para>
 
 </sect1>
