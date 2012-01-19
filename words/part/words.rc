@@ -78,14 +78,14 @@
  </Menu>
 
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="view_toggledockers" group="settings_show"/>
-  <Action name="showStatusBar" group="settings_show"/>
   <Menu name="SpellCheck"><text>Spellcheck</text>
       <Action name="tool_auto_spellcheck"/>
       <Action name="tool_configure_spellcheck"/>
   </Menu>
   <Action name="enable_autocorrection"/>
   <Action name="configure_autocorrection"/>
+  <Action name="view_toggledockers" group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="configure_footendnote" group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
