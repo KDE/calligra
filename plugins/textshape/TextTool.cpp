@@ -1991,7 +1991,7 @@ void TextTool::stopMacro()
     m_currentCommand = 0;
 }
 
-void TextTool::showStyleManager()
+void TextTool::showStyleManager(int styleId)
 {
     if (!m_textShapeData)
         return;
