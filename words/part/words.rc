@@ -62,7 +62,6 @@
  -->
 
  <Menu name="format"><text>F&amp;ormat</text>
-  <Action name="text_default"/>
   <Action name="format_font"/>
   <Action name="format_paragraph"/>
   <Action name="format_footendnote"/>
