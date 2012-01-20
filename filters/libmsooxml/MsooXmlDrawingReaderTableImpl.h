@@ -18,9 +18,9 @@
  */
 
 /**
-* This file deals with the tables designed for the DrawingML namespace
-* the table starts at tbl §21.1.3.13
-*/
+ * This file deals with the tables designed for the DrawingML namespace
+ * the table starts at tbl §21.1.3.13
+ */
 
 #undef CURRENT_EL
 #define CURRENT_EL tbl
@@ -38,7 +38,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
     m_tableStyle = 0;
 
-    if(!d->tableStyleList) {
+    if (!d->tableStyleList) {
         d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle*>;
 
         QString tableStylesFile;
@@ -96,7 +96,7 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(m_localTableStyles);
-
+    // TODO: converterProperties.setLocalDefaulCelltStyle()
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
