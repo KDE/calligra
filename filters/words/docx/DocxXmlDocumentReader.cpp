@@ -5225,8 +5225,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
                         m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
                     }
                 }
-                m_currentTableStyleBase = m_currentTableStyleName;
-                m_currentTableStyleName.clear();
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
@@ -5294,7 +5292,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
-    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     QPair<int, int> spans;
 
