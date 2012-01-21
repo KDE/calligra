@@ -1610,7 +1610,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
-    connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
+    connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1620,7 +1620,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
-    connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
+    connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -2002,6 +2002,17 @@ void TextTool::showStyleManager(int styleId)
     StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
     dia->setStyleManager(styleManager);
     dia->setUnit(canvas()->unit());
+
+    KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(styleId);
+    if (paragraphStyle) {
+        dia->setParagraphStyle(paragraphStyle);
+    }
+/*TODO enable when we have the charStyles in the styleManager
+    KoCharacterStyle *characterStyle = styleManager->characterStyle(styleId);
+    if (characterStyle) {
+        dia->setCharacterStyle(characterStyle);
+    }
+*/
     dia->show();
 }
 
