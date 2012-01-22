@@ -37,6 +37,7 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDebug>
+#include <KoSelection.h>
 
 #include <QTextDocument>
 
@@ -59,7 +60,7 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
 {
     QList<QTextDocument*> texts;
     d->findText = new KoFindText (texts, this);
-    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvasItem()));
+    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
     connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
     connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
 }
@@ -93,6 +94,19 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
     KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
+    KoSelection *sel = canvas()->shapeManager()->selection();
+
+    KoShape *textShape = 0;
+    foreach (KoShape *shape, canvas()->shapeManager()->shapes()) {
+        if (shape->shapeId() == "TextShapeID") {
+            textShape = shape;
+        }
+    }
+    if (textShape) {
+        sel->select(textShape);
+        KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
+    }
+
     KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
 
     if (!kwCanvasItem) {
