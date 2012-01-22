@@ -31,6 +31,7 @@
 #include <QTabWidget>
 
 #include <KDebug>
+#include <KoTextDebug.h>
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent),
@@ -163,6 +164,8 @@ void StyleManager::save()
         KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
         orig->copyProperties(altered);
+        kDebug() << "changed char style: " << orig->name();
+        kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
         m_styleManager->alteredStyle(orig);
         delete altered;
     }
@@ -172,6 +175,8 @@ void StyleManager::save()
         KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
         orig->copyProperties(altered);
+        kDebug() << "changed par style: " << orig->name();
+        kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
         m_styleManager->alteredStyle(orig);
         delete altered;
     }
