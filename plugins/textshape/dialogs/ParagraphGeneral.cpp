@@ -160,8 +160,6 @@ void ParagraphGeneral::setUnit(const KoUnit &unit)
 
 void ParagraphGeneral::save(KoParagraphStyle *style)
 {
-    CharacterGeneral::save(style);
-
     KoParagraphStyle *savingStyle;
     if (style == 0) {
         if (m_style == 0)
@@ -171,6 +169,8 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     }
     else
         savingStyle = style;
+
+    CharacterGeneral::save(static_cast<KoCharacterStyle*>(savingStyle));
 
     m_paragraphIndentSpacing->save(savingStyle);
     m_paragraphLayout->save(savingStyle);
