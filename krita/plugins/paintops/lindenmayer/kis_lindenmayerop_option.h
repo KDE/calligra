@@ -22,9 +22,7 @@
 #include <krita_export.h>
 
 const QString LINDENMAYER_RADIUS = "Lindenmayer/radius";
-const QString LINDENMAYER_INK_DEPLETION = "Lindenmayer/inkDepletion";
-const QString LINDENMAYER_USE_OPACITY = "Lindenmayer/opacity";
-const QString LINDENMAYER_USE_SATURATION = "Lindenmayer/saturation";
+const QString LINDENMAYER_CODE = "Lindenmayer/code";
 
 class KisLindenmayerOpOptionsWidget;
 
@@ -36,10 +34,7 @@ public:
 
     void setRadius(int radius) const;
     int radius() const;
-
-    bool inkDepletion() const; 
-    bool saturation() const;
-    bool opacity() const;
+    QString code() const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -54,15 +49,11 @@ private:
 class LindenmayerProperties{
 public:
     int radius;
-    bool inkDepletion;
-    bool useOpacity;
-    bool useSaturation;
+    QString code;
     
     void readOptionSetting(const KisPropertiesConfiguration* settings){
-            radius = settings->getInt(LINDENMAYER_RADIUS);
-            inkDepletion = settings->getBool(LINDENMAYER_INK_DEPLETION);
-            useOpacity = settings->getBool(LINDENMAYER_USE_OPACITY);
-            useSaturation = settings->getBool(LINDENMAYER_USE_SATURATION);
+        radius = settings->getInt(LINDENMAYER_RADIUS);
+        code = settings->getString(LINDENMAYER_CODE).replace("<br>", QString('\n'));
     }
 };
 

@@ -27,6 +27,7 @@
 
 #include "lindenmayer_brush.h"
 #include "kis_lindenmayer_paintop_settings.h"
+#include "kis_lindenmayer_production.h"
 
 class KisPainter;
 class KisLindenmayerLetter;
@@ -48,6 +49,7 @@ private:
     LindenmayerBrush * m_lindenmayerBrush;
     KisPressureOpacityOption m_opacityOption;
     LindenmayerProperties m_properties;
+    KisLindenmayerProduction m_productions;
 
     bool m_firstPaint;
     QList<KisLindenmayerLetter*> m_letters;

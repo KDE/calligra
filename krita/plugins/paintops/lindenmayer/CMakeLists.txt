@@ -6,7 +6,7 @@ set(kritalindenmayerpaintop_PART_SRCS
     kis_lindenmayer_paintop_settings_widget.cpp
     kis_lindenmayer_letter.cpp
     kis_lindenmayer_production.cpp
-    lindenmayer_brush.cpp	
+    lindenmayer_brush.cpp
     )
 
 kde4_add_ui_files(kritalindenmayerpaintop_PART_SRCS wdglindenmayeroptions.ui )

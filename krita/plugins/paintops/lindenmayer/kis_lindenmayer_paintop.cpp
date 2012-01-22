@@ -37,10 +37,9 @@
 
 #include <kis_pressure_opacity_option.h>
 
-#include "kis_lindenmayer_production.h"
 
 KisLindenmayerPaintOp::KisLindenmayerPaintOp(const KisLindenmayerPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter), m_productions(*this)
 {
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
@@ -48,18 +47,19 @@ KisLindenmayerPaintOp::KisLindenmayerPaintOp(const KisLindenmayerPaintOpSettings
 
     m_properties.readOptionSetting(settings);
 
-    KoColorTransformation* transfo = 0;
-    if (m_properties.inkDepletion && m_properties.useSaturation){
-        transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-    }
-    m_lindenmayerBrush = new LindenmayerBrush( &m_properties, transfo );
+//    KoColorTransformation* transfo = 0;
+//    if (m_properties.inkDepletion && m_properties.useSaturation){
+//        transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+//    }
+//    m_lindenmayerBrush = new LindenmayerBrush( &m_properties, transfo );
 
+    m_productions.setCode(m_properties.code);
     m_firstPaint = true;
 }
 
 KisLindenmayerPaintOp::~KisLindenmayerPaintOp()
 {
-    delete m_lindenmayerBrush;
+//    delete m_lindenmayerBrush;
 
     foreach(KisLindenmayerLetter* letter, m_letters) {
         delete letter;
@@ -84,16 +84,23 @@ qreal KisLindenmayerPaintOp::paintAt(const KisPaintInformation& info)
     y = info.pos().y();
 
     QList<KisLindenmayerLetter*> newLetters;
-    KisLindenmayerProduction production(*this);
+//    KisLindenmayerProduction production(*this);
     if(m_firstPaint) {
         m_firstPaint = false;
         m_letters.append(new KisLindenmayerLetter(QPointF(x, y), 0, this));
-        production.runTests();
+//        production.runTests();
     }
     for(int i=m_letters.size()-1; i>=0; i--) {
-        newLetters.append(production.produce(m_letters.at(i)));
+        newLetters.append(m_productions.produce(m_letters.at(i)));
     }
     m_letters = newLetters;
+    if(m_letters.size() > 100) {
+        qDebug() << "WARNING: to many lindenmayerletters, there is a maximum of 100 letters. only the first 100 letters will be kept.";
+        for(int i= m_letters.size()-1; i>=100; i--) {
+            delete m_letters.at(i);
+            m_letters.removeLast();
+        }
+    }
 
 
 

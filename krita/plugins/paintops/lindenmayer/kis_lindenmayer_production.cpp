@@ -83,7 +83,15 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
             "if{letter[drawn] && letter[stem]}{letter.delete();}"
             "if{letter[drawn] && letter[leaf]}{letter.delete();}";
 
-    exec(code);
+    exec(m_code);
+
+    if(m_isScriptError) {
+        qDebug() << "Scripting errors detected:";
+        QPair<int, QString> pair;
+        foreach (pair, m_errorList) {
+            qDebug() << QString("script error>") + QString::number(pair.first) + QString(":") + pair.second;
+        }
+    }
 
     if(m_letter->markedForRemoving()) {
         delete m_letter;
@@ -94,6 +102,10 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
     }
 
     return m_retList;
+}
+
+void KisLindenmayerProduction::setCode(QString code) {
+    m_code = code;
 }
 
 

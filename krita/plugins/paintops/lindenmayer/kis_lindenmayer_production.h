@@ -14,6 +14,7 @@ public:
 
     // this can change the letter and return zero or more new letters.
     QList<KisLindenmayerLetter*> produce(KisLindenmayerLetter* letter);
+    void setCode(QString code);
 
 protected:
     void exec(QString code);
@@ -32,6 +33,8 @@ public:
 
 private:
     const KisLindenmayerPaintOp& m_paintOp;
+
+    QString m_code;
 
     // script environment
     QList<KisLindenmayerLetter*> m_retList;

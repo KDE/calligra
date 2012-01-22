@@ -34,9 +34,7 @@ KisLindenmayerOpOption::KisLindenmayerOpOption()
     m_checkable = false;
     m_options = new KisLindenmayerOpOptionsWidget();
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opacity, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->saturation, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->codeEditor, SIGNAL(textChanged()), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -57,41 +55,21 @@ void KisLindenmayerOpOption::setRadius(int radius) const
     m_options->radiusSpinBox->setValue( radius );
 }
 
-
-
-bool KisLindenmayerOpOption::inkDepletion() const
+QString KisLindenmayerOpOption::code() const
 {
-    return m_options->inkDepletionCHBox->isChecked();
+    return m_options->codeEditor->toPlainText();
 }
-
-
-
-bool KisLindenmayerOpOption::opacity() const
-{
-    return m_options->opacity->isChecked();
-}
-
-
-bool KisLindenmayerOpOption::saturation() const
-{
-    return m_options->saturation->isChecked();
-}
-
 
 void KisLindenmayerOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty(LINDENMAYER_RADIUS, radius());
-    setting->setProperty(LINDENMAYER_INK_DEPLETION, inkDepletion());
-    setting->setProperty(LINDENMAYER_USE_OPACITY, opacity());
-    setting->setProperty(LINDENMAYER_USE_SATURATION, saturation());
+    setting->setProperty(LINDENMAYER_CODE, code().replace(QRegExp("\n"), "<br>"));
 }
 
 void KisLindenmayerOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_options->radiusSpinBox->setValue(setting->getInt(LINDENMAYER_RADIUS));
-    m_options->inkDepletionCHBox->setChecked(setting->getBool(LINDENMAYER_INK_DEPLETION));
-    m_options->opacity->setChecked(setting->getBool(LINDENMAYER_USE_OPACITY));
-    m_options->saturation->setChecked(setting->getBool(LINDENMAYER_USE_SATURATION));
+    m_options->codeEditor->setPlainText(setting->getString(LINDENMAYER_CODE).replace("<br>", QString('\n')));
 }
 
 
