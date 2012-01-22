@@ -21,8 +21,8 @@ protected:
     void execBlock(QString blockCode);
     void execCommand(QString command);
 
-    bool evalIfClause(QString clause);
     bool evalBoolClause(QString clause);
+    bool evalBoolClausePart(QString clause);
     float evalFloatClause(QString clause);
     QVariant evalVariantClause(QString clause);
 
