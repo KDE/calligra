@@ -14,9 +14,9 @@ class KisLindenmayerLetter
 {
 private:
     const KisLindenmayerPaintOp* m_paintOp;
-
-    // i don't use an enum here, because maybe i will allow custom parameters for gramer internal computations some day
+    // we don't use an enum here, because we allow custom parameters for gramer internal computations
     QHash<QString, QVariant> m_parameters;
+    bool m_markedForRemoving;
 
     // angles are relative to the vertical axis, +90 degrees points to right, -90 to left. positive +90+180=+270 points to the left. watch out, what happens at +180 or -180
 
@@ -29,7 +29,7 @@ private:
     // creating copies should be done with createCopy(), because it will reset the age to 0. i don't want to do this in the operator, because it would change the meaning.
     KisLindenmayerLetter(const KisLindenmayerLetter& other);
 public:
-    KisLindenmayerLetter(QPointF position, float angle, const KisLindenmayerPaintOp* paintop);
+    KisLindenmayerLetter(QPointF position, float angle, const KisLindenmayerPaintOp* paintOp);
 
     QPointF position() const {
         return getParameter("position").toPointF();
@@ -41,12 +41,13 @@ public:
 
     float length() const { return getParameter("length").toFloat(); }
 
-    const KisPaintInformation& getSunInformations() const;
-
     QVariant getComputedParameter(QString key) const;
 
     QVariant getParameter(QString key) const {
-        return m_parameters.value(key, QVariant());
+        if(key == "endPosition" || key == "angleToSun" || key == "distanceToSun")
+            return getComputedParameter(key);
+
+        return m_parameters.value(key, QVariant(false));
     }
 
     void setParameter(QString key, QVariant parameter) {
@@ -57,6 +58,14 @@ public:
         KisLindenmayerLetter* newLetter = new KisLindenmayerLetter(*this);
         newLetter->setParameter("age", 0.0f);
         return newLetter;
+    }
+
+    void markForRemoving() {
+        m_markedForRemoving = true;
+    }
+
+    bool markedForRemoving() const {
+        return m_markedForRemoving;
     }
 
 private:

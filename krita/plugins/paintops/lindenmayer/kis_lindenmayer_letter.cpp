@@ -14,13 +14,13 @@ KisLindenmayerLetter::KisLindenmayerLetter(QPointF position, float angle, const 
     setParameter("angle", angle);
     setParameter("age", 0.0f);
     setParameter("length", 0.0f);
+    m_markedForRemoving = false;
 }
 
-KisLindenmayerLetter::KisLindenmayerLetter(const KisLindenmayerLetter& other) : m_paintOp(other.m_paintOp), m_parameters(other.m_parameters) {
-}
-
-const KisPaintInformation& KisLindenmayerLetter::getSunInformations() const {
-    return m_paintOp->getSunInformations();
+KisLindenmayerLetter::KisLindenmayerLetter(const KisLindenmayerLetter& other) :
+    m_paintOp(other.m_paintOp),
+    m_parameters(other.m_parameters),
+    m_markedForRemoving(other.m_markedForRemoving) {
 }
 
 // computed parameters: endPosition, angleToSun (points towards the mouse position), distanceToSun
@@ -43,7 +43,7 @@ QVariant KisLindenmayerLetter::getComputedParameter(QString key) const {
 //        Eigen::Vector2f pos(qEndPos.x(), qEndPos.y());
         Eigen::Vector2f pos = eigenPosition();
 
-        QPointF qSunPos = getSunInformations().pos();
+        QPointF qSunPos = m_paintOp->getSunInformations().pos();
         Eigen::Vector2f sunPos(qSunPos.x(), qSunPos.y());
 
         Eigen::Vector2f direction = sunPos-pos;

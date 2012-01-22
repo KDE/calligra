@@ -83,13 +83,13 @@ qreal KisLindenmayerPaintOp::paintAt(const KisPaintInformation& info)
     x = info.pos().x();
     y = info.pos().y();
 
+    QList<KisLindenmayerLetter*> newLetters;
+    KisLindenmayerProduction production(*this);
     if(m_firstPaint) {
         m_firstPaint = false;
         m_letters.append(new KisLindenmayerLetter(QPointF(x, y), 0, this));
+        production.runTests();
     }
-
-    QList<KisLindenmayerLetter*> newLetters;
-    KisLindenmayerProduction production;
     for(int i=m_letters.size()-1; i>=0; i--) {
         newLetters.append(production.produce(m_letters.at(i)));
     }
