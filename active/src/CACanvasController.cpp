@@ -120,8 +120,12 @@ void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
     kDebug() << rect;
     kDebug() << canvas()->canvasItem()->size();
-    setCameraX(rect.center().x());
-    setCameraY(rect.center().y());
+
+    int y = rect.center().y() - height()/2;
+    if (y<0) {
+        y = 0;
+    }
+    setCameraY(y);
 }
 
 int CACanvasController::canvasOffsetY() const
