@@ -18,6 +18,8 @@
 #ifndef KIS_LINDENMAYEROP_OPTION_H
 #define KIS_LINDENMAYEROP_OPTION_H
 
+#include <QHash>
+
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
@@ -28,6 +30,7 @@ class KisLindenmayerOpOptionsWidget;
 
 class KisLindenmayerOpOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisLindenmayerOpOption();
     ~KisLindenmayerOpOption();
@@ -39,6 +42,10 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+public slots:
+    void setScriptErrors(QList<QPair<int, QString> > errors);
+    void clearScriptErrors();
+    void setScriptToManyLettersError();
 
 private:
 

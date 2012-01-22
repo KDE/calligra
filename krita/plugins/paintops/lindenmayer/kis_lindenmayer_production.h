@@ -44,7 +44,7 @@ private:
     // errors
     bool m_isScriptError;
     QList<QPair<int, QString> > m_errorList;
-    int m_scriptLineNumer;
+    int m_scriptStatementNumber;
 };
 
 #endif // KIS_LINDENMAYER_PRODUCTION_H

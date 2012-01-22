@@ -4,6 +4,7 @@
 
 #include "kis_lindenmayer_letter.h"
 #include "kis_lindenmayer_paintop.h"
+#include "kis_lindenmayer_script_error_repeater.h"
 
 #include <QDebug>
 
@@ -86,11 +87,9 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
     exec(m_code);
 
     if(m_isScriptError) {
-        qDebug() << "Scripting errors detected:";
-        QPair<int, QString> pair;
-        foreach (pair, m_errorList) {
-            qDebug() << QString("script error>") + QString::number(pair.first) + QString(":") + pair.second;
-        }
+        KisLindenmayerScriptErrorRepeater::instance()->repeatErrors(m_errorList);
+        m_errorList.clear();
+        m_isScriptError = false;
     }
 
     if(m_letter->markedForRemoving()) {
@@ -122,6 +121,7 @@ inline QString cutOut(QString clause, int start, int end) {
 
 void KisLindenmayerProduction::exec(QString code) {
     code = code.trimmed();
+    m_scriptStatementNumber = 0;
 
     QStringList split = code.split("}");
     for(int i=0; i<split.size(); i++) {
@@ -134,15 +134,16 @@ void KisLindenmayerProduction::exec(QString code) {
             QString ifClause = current.mid(3, current.length());
             i++;
             if(i >= split.size() || split.at(i).length() < 2) {
-                m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error, expected block with '{' and '}' and, and.. but i got nothing.."));
+                m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error, expected block with '{' and '}' and, and.. but i got nothing.."));
                 m_isScriptError = true;
             }
 
             if(evalIfClause(ifClause) == true) {
                 QString next = split.at(i).trimmed();
                 if(next.at(0) != '{') {
-                    m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error, expected {"));
+                    m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error, expected {"));
                     m_isScriptError = true;
+                    m_scriptStatementNumber += next.count(";");
                 }
                 else {
                     next = next.mid(1, next.length());
@@ -152,7 +153,7 @@ void KisLindenmayerProduction::exec(QString code) {
         }
         else {
             if(current.at(0) != '{') {
-                m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error, expected {"));
+                m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error, expected {"));
                 m_isScriptError = true;
             }
             else {
@@ -174,6 +175,7 @@ void KisLindenmayerProduction::execBlock(QString blockCode) {
 }
 
 void KisLindenmayerProduction::execCommand(QString command) {
+    m_scriptStatementNumber++;
     bool parseError = false;
     command = command.trimmed();
 
@@ -189,7 +191,7 @@ void KisLindenmayerProduction::execCommand(QString command) {
         else {
             if(m_newLetter == 0) {
                 m_isScriptError = true;
-                m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "error: newLetter was not initialised in '" + command + "'"));
+                m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "error: newLetter was not initialised in '" + command + "'"));
                 return;
             }
             letter = m_newLetter;
@@ -234,13 +236,14 @@ void KisLindenmayerProduction::execCommand(QString command) {
     }
 
     if(parseError) {
-        m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error in '" + command + "'"));
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error in '" + command + "'"));
         m_isScriptError = true;
     }
 }
 
 
 bool KisLindenmayerProduction::evalIfClause(QString clause) {
+    m_scriptStatementNumber++;
     QStringList clauseList = clause.split("&&");
     foreach (QString c, clauseList) {
         if(evalBoolClause(c) == false)
@@ -279,7 +282,7 @@ bool KisLindenmayerProduction::evalBoolClause(QString clause) {
         result = first.toFloat(&ok1) < second.toFloat(&ok2);
     }
     else {
-        m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "error: operator '" + op + "' not supported."));
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "error: operator '" + op + "' not supported."));
         m_isScriptError = true;
         return false;
     }
@@ -288,7 +291,7 @@ bool KisLindenmayerProduction::evalBoolClause(QString clause) {
         return result;
     }
     else {
-        m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error for '" + clause + "' (couldn't convert to float)"));
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error for '" + clause + "' (couldn't convert to float)"));
         m_isScriptError = true;
         return false;
     }
@@ -313,13 +316,13 @@ float KisLindenmayerProduction::compute(float old, QString numberExpression, QSt
             return old / number;
         }
         else {
-            m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "division by zero error for expression '" + numberExpression + "'"));
+            m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "division by zero error for expression '" + numberExpression + "'"));
             m_isScriptError = true;
             return 0.0f;
         }
     }
     else {
-        m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error for '" + numberExpression + "' (couldn't convert to float)"));
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error for '" + numberExpression + "' (couldn't convert to float)"));
         m_isScriptError = true;
     }
 
@@ -371,7 +374,7 @@ QVariant KisLindenmayerProduction::evalVariantClause(QString clause) {
             }
             else {
                 m_isScriptError = true;
-                m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "error: newLetter was not initialised in '" + clause + "'"));
+                m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "error: newLetter was not initialised in '" + clause + "'"));
                 return QVariant();
             }
         }
@@ -382,7 +385,7 @@ QVariant KisLindenmayerProduction::evalVariantClause(QString clause) {
             }
             else {
                 m_isScriptError = true;
-                m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "error: there is no such paintInfo in '" + clause + "'"));
+                m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "error: there is no such paintInfo in '" + clause + "'"));
                 return QVariant();
             }
         }
@@ -396,7 +399,7 @@ QVariant KisLindenmayerProduction::evalVariantClause(QString clause) {
         return QVariant(number);
     }
 
-    m_errorList.append(QPair<int , QString>(m_scriptLineNumer, "parse error for '" + clause + "'"));
+    m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error for '" + clause + "'"));
     m_isScriptError = true;
     return QVariant();
 }
@@ -416,73 +419,73 @@ void KisLindenmayerProduction::runTests() {
     m_newLetter = 0;
 
     m_isScriptError = false;
-    m_scriptLineNumer = 1;
+    m_scriptStatementNumber = 1;
 
-    Q_ASSERT((evalVariantClause("letter[pointF]").toPointF() - QPointF(10.0, 10.0)).manhattanLength() < 0.0001); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("true").toBool() == true); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("false").toBool() == false); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("letter[booleanTrue]").toBool() == true); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("letter[booleanFalse]").toBool() == false); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("letter[booleanFalse").isValid() == false); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("newLetter[asdf]").isValid() == false); m_scriptLineNumer++;
-    Q_ASSERT(evalVariantClause("paintInfo[asdf]").isValid() == false); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalVariantClause("letter[floatTest50]").toFloat(), 50.0f)); m_scriptLineNumer++;
+    Q_ASSERT((evalVariantClause("letter[pointF]").toPointF() - QPointF(10.0, 10.0)).manhattanLength() < 0.0001); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("true").toBool() == true); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("false").toBool() == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("letter[booleanTrue]").toBool() == true); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("letter[booleanFalse]").toBool() == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("letter[booleanFalse").isValid() == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("newLetter[asdf]").isValid() == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalVariantClause("paintInfo[asdf]").isValid() == false); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalVariantClause("letter[floatTest50]").toFloat(), 50.0f)); m_scriptStatementNumber++;
 
-    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]"), 50.0f)); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]+50"), 100.0f)); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]*2"), 100.0f)); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]-20.58+10.08+10.5"), 50.0f)); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] +   20.58 -  10.08 - 10.5 / 2"), 25.0f)); m_scriptLineNumer++;
-    Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] ++ 20.58 --  10.08 //0/ 10.5 "), 0.0f)); m_scriptLineNumer++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]"), 50.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]+50"), 100.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]*2"), 100.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]-20.58+10.08+10.5"), 50.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] +   20.58 -  10.08 - 10.5 / 2"), 25.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] ++ 20.58 --  10.08 //0/ 10.5 "), 0.0f)); m_scriptStatementNumber++;
 
     m_newLetter = new KisLindenmayerLetter(QPointF(0, 0), 30, &m_paintOp);
-    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50] +\n\t newLetter[angle]  "), 80.0f)); m_scriptLineNumer++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50] +\n\t newLetter[angle]  "), 80.0f)); m_scriptStatementNumber++;
     delete m_newLetter;
     m_newLetter = 0;
 
-    Q_ASSERT(evalBoolClause("true")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("50")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[booleanTrue]")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[notExistantShouldBeFalse]") == false); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("true")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("50")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[booleanTrue]")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[notExistantShouldBeFalse]") == false); m_scriptStatementNumber++;
 
-    Q_ASSERT(evalBoolClause("true == true")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("false != true")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("false == true") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("true == false") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("true != false") == true); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("true == true")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("false != true")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("false == true") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("true == false") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("true != false") == true); m_scriptStatementNumber++;
 
-    Q_ASSERT(evalBoolClause("42 == 24") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("42 != 42") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("42 == 42.0000")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("42 != 42.0000") == false); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("42 == 24") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("42 != 42") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("42 == 42.0000")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("42 != 42.0000") == false); m_scriptStatementNumber++;
 
-    Q_ASSERT(evalBoolClause("50 == letter[floatTest50]")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[floatTest50] == 50.00")); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("50 == letter[floatTest50]")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[floatTest50] == 50.00")); m_scriptStatementNumber++;
 
-    Q_ASSERT(evalBoolClause("letter[booleanFalse] == false")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[asdf] == false")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[pointF] == letter[pointF]")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[booleanFalse] != letter[floatTest50]")); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("letter[booleanFalse] == false")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[asdf] == false")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[pointF] == letter[pointF]")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[booleanFalse] != letter[floatTest50]")); m_scriptStatementNumber++;
 
     m_letter->setParameter("floatTest40", 40.0f);
-    Q_ASSERT(evalBoolClause("letter[floatTest40] < letter[floatTest50]")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[floatTest50] > letter[floatTest40]")); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("letter[floatTest50] != letter[floatTest40]")); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("letter[floatTest40] < letter[floatTest50]")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[floatTest50] > letter[floatTest40]")); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("letter[floatTest50] != letter[floatTest40]")); m_scriptStatementNumber++;
 
 
-    Q_ASSERT(evalBoolClause("false = true") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalBoolClause("2 * 5") == false); m_scriptLineNumer++;
+    Q_ASSERT(evalBoolClause("false = true") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("2 * 5") == false); m_scriptStatementNumber++;
 
-    Q_ASSERT(evalIfClause("false != true")); m_scriptLineNumer++;
-    Q_ASSERT(evalIfClause("false != true && true == true && 40>30")); m_scriptLineNumer++;
-    Q_ASSERT(evalIfClause("false != true && true == true && 40<30") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalIfClause("false == true && true == true && 40>30") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalIfClause("false != true && true != true && 40>30") == false); m_scriptLineNumer++;
-    Q_ASSERT(evalIfClause("50 == letter[floatTest50] && letter[floatTest40] < letter[floatTest50] && letter[floatTest50] != letter[floatTest40]")); m_scriptLineNumer++;
+    Q_ASSERT(evalIfClause("false != true")); m_scriptStatementNumber++;
+    Q_ASSERT(evalIfClause("false != true && true == true && 40>30")); m_scriptStatementNumber++;
+    Q_ASSERT(evalIfClause("false != true && true == true && 40<30") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalIfClause("false == true && true == true && 40>30") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalIfClause("false != true && true != true && 40>30") == false); m_scriptStatementNumber++;
+    Q_ASSERT(evalIfClause("50 == letter[floatTest50] && letter[floatTest40] < letter[floatTest50] && letter[floatTest50] != letter[floatTest40]")); m_scriptStatementNumber++;
 
-    execCommand("letter[newBool]=bool(true)"); m_scriptLineNumer++;
-    execCommand("letter[newFloat] = float(40+50 - letter[floatTest50]  ) "); m_scriptLineNumer++;
-    execCommand("letter[newPoint] = variant(letter[pointF])"); m_scriptLineNumer++;
+    execCommand("letter[newBool]=bool(true)"); m_scriptStatementNumber++;
+    execCommand("letter[newFloat] = float(40+50 - letter[floatTest50]  ) "); m_scriptStatementNumber++;
+    execCommand("letter[newPoint] = variant(letter[pointF])"); m_scriptStatementNumber++;
 
     // i want to make this work:
 //    m_newLetter = new KisLindenmayerLetter(QPointF(0, 0), 30, &m_paintOp);

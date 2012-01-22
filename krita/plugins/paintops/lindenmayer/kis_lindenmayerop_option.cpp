@@ -17,7 +17,11 @@
  */
 #include "kis_lindenmayerop_option.h"
 
+#include <QMetaType>
+#include "kis_lindenmayer_script_error_repeater.h"
+
 #include "ui_wdglindenmayeroptions.h"
+#include <QDebug>
 
 class KisLindenmayerOpOptionsWidget: public QWidget, public Ui::WdgLindenmayerOptions
 {
@@ -25,6 +29,7 @@ public:
     KisLindenmayerOpOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        this->splitter->setCollapsible(0, false);
     }
 };
 
@@ -35,6 +40,10 @@ KisLindenmayerOpOption::KisLindenmayerOpOption()
     m_options = new KisLindenmayerOpOptionsWidget();
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->codeEditor, SIGNAL(textChanged()), SIGNAL(sigSettingChanged()));
+    connect(m_options->codeEditor, SIGNAL(textChanged()), SLOT(clearScriptErrors()));
+
+    qRegisterMetaType<QList<QPair<int,QString> > >("QList<QPair<int,QString> >");
+    connect(KisLindenmayerScriptErrorRepeater::instance(), SIGNAL(errorsOccured(QList<QPair<int,QString> >)), SLOT(setScriptErrors(QList<QPair<int,QString> >)), Qt::UniqueConnection);
 
     setConfigurationPage(m_options);
 }
@@ -70,6 +79,30 @@ void KisLindenmayerOpOption::readOptionSetting(const KisPropertiesConfiguration*
 {
     m_options->radiusSpinBox->setValue(setting->getInt(LINDENMAYER_RADIUS));
     m_options->codeEditor->setPlainText(setting->getString(LINDENMAYER_CODE).replace("<br>", QString('\n')));
+}
+
+void KisLindenmayerOpOption::setScriptErrors(QList<QPair<int, QString> > errors) {
+    m_options->errorTableWidget->setRowCount(errors.size());
+    QPair<int, QString> pair;
+    int i=0;
+    foreach (pair, errors) {
+        int rowNumber = i;
+        i++;
+
+        QTableWidgetItem *newItem = new QTableWidgetItem(QString::number(pair.first));
+        m_options->errorTableWidget->setItem(rowNumber, 0, newItem);
+
+        newItem = new QTableWidgetItem(pair.second);
+        m_options->errorTableWidget->setItem(rowNumber, 1, newItem);
+    }
+}
+
+void KisLindenmayerOpOption::clearScriptErrors() {
+    m_options->errorTableWidget->setRowCount(0);
+}
+
+void KisLindenmayerOpOption::setScriptToManyLettersError() {
+    // will be used later to indicate, that the productions are producing too many letters/items
 }
 
 

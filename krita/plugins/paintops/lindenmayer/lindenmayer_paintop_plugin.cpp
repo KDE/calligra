@@ -30,6 +30,7 @@
 
 #include "kis_lindenmayer_paintop.h"
 #include "kis_simple_paintop_factory.h"
+#include "kis_lindenmayer_script_error_repeater.h"
 
 #include "kis_global.h"
 
@@ -48,6 +49,7 @@ LindenmayerPaintOpPlugin::LindenmayerPaintOpPlugin(QObject *parent, const QVaria
 
 LindenmayerPaintOpPlugin::~LindenmayerPaintOpPlugin()
 {
+    KisLindenmayerScriptErrorRepeater::destroy();
 }
 
 #include "lindenmayer_paintop_plugin.moc"
