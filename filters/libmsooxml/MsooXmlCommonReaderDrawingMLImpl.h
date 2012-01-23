@@ -3883,9 +3883,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    // TODO: Process the pitchFamili attribute.
     defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
-
+    // Skip reading because the current theme is unknown at time of reading.
     skipCurrentElement();
     READ_EPILOGUE
 #endif
@@ -3896,10 +3896,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
             font = m_context->themes->fontScheme.majorFonts.latinTypeface;
         }
         else if (typeface.startsWith("+mn")) {
-           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+            font = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_currentTextStyle.addProperty("fo:font-family", font);
+        m_currentTextStyleProperties->setFontFamily(font);
     }
+
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
         int pitchFamilyInt;

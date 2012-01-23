@@ -26,6 +26,8 @@
 
 #include <KoTextAnchor.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextShapeData.h>
+#include <KoShapeContainer.h>
 #include <commands/ChangeAnchorPropertiesCommand.h>
 
 #include <kundo2command.h>
@@ -501,35 +503,46 @@ void KWAnchoringProperties::save()
 
 void KWAnchoringProperties::save(KUndo2Command *macro)
 {
-    if (m_frames.count() == 0) {
-        KWFrame *frame = m_state->frame();
-        if (frame == 0 && m_shape)
-            frame = m_state->createFrame(m_shape);
-        Q_ASSERT(frame);
-        m_state->markFrameUsed();
-        m_frames.append(frame);
-    }
+    Q_ASSERT(macro);
+    Q_ASSERT(m_frames.count() > 0);
 
-    foreach (KWFrame *frame, m_frames) {
-        if (frame->frameSet()->type() == Words::TextFrameSet) {
-            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
-                continue;
-            }
-        }
-        if (m_anchorTypeGroup->checkedId() != -1) {
-            KoTextAnchor::AnchorType type = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
-            KoTextAnchor *anchor = 0;
-            KoShapeContainer *container = 0;
- 
-            anchor = m_state->document()->anchorOfShape(frame->shape());
-            if (anchor->anchorType() != type) {
-                if (type != KoTextAnchor::AnchorPage) {
-                    container = m_state->document()->insertAnchorInText(anchor, macro);
-                } else {
-                    m_state->document()->inlineTextObjectManager()->removeInlineObject(anchor);
+    if (m_anchorTypeGroup->checkedId() != -1) {
+        foreach (KWFrame *frame, m_frames) {
+            if (frame->frameSet()->type() == Words::TextFrameSet) {
+                if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                    continue;
                 }
-            } else {
+            }
+
+            KoTextAnchor::AnchorType type = KoTextAnchor::AnchorType(m_anchorTypeGroup->checkedId());
+
+            KoTextAnchor *anchor = frame->anchor();
+            if (!anchor) {
+                anchor = new KoTextAnchor(frame->shape());
+                anchor->setAnchorType(KoTextAnchor::AnchorPage);
+                anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
+                anchor->setVerticalPos(KoTextAnchor::VFromTop);
+                frame->setAnchor(anchor);
+            }
+            KoShapeContainer *container = 0;
+            // we change from page anchored to text shape anchored.
+            if (type != KoTextAnchor::AnchorPage && anchor->anchorType() == KoTextAnchor::AnchorPage) {
+                KWFrame *targetFrame = m_state->document()->findClosestFrame(anchor->shape());
+
+                if (targetFrame != 0) {
+                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetFrame->shape()->userData());
+                    if (textData) {
+                        container = static_cast<KoShapeContainer*>(targetFrame->shape());
+                    }
+                }
+            }
+            else if (type != KoTextAnchor::AnchorPage) {
                 container = anchor->shape()->parent();
+            }
+
+            // if there was not text shape found where we can anchor the shape to set anchoring to page.
+            if (!container) {
+                type = KoTextAnchor::AnchorPage;
             }
 
             QPointF offset = anchor->offset();
@@ -540,31 +553,17 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
                 offset.setY(widget.sVOffset->value());
             }
 
-            if (macro) {
-                // create the actual undo step.
-                KoTextAnchor anchorProperties(0);
-                anchorProperties.setAnchorType(type);
-                anchorProperties.setOffset(offset);
-                anchorProperties.setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
-                anchorProperties.setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
-                anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
-                anchorProperties.setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
+            KoTextAnchor anchorProperties(0);
+            anchorProperties.setAnchorType(type);
+            anchorProperties.setOffset(offset);
+            anchorProperties.setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
+            anchorProperties.setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
+            anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
+            anchorProperties.setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
 
-                new ChangeAnchorPropertiesCommand(anchor, &anchorProperties, container, macro);
-            } else {
-                // no macro, then this is on creation and no undo step wanted.
-                QPointF absPos =  anchor->shape()->absolutePosition();
-                anchor->shape()->setParent(container);
-                anchor->shape()->setAbsolutePosition(absPos);
-                anchor->setAnchorType(type);
-                anchor->setOffset(offset);
-                anchor->setHorizontalRel(KoTextAnchor::HorizontalRel(m_horizRel));
-                anchor->setVerticalRel(KoTextAnchor::VerticalRel(m_vertRel));
-                anchor->setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
-                anchor->setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
-                anchor->shape()->notifyChanged();
-            }
+            new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
         }
     }
+
     m_state->removeUser();
 }

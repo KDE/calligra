@@ -91,7 +91,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
-    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
@@ -203,11 +203,24 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
         bool unchanged = true;
+
         foreach(int property, m_currentBlockFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
+            switch (property) {
+            case QTextFormat::ObjectIndex:
+            case KoParagraphStyle::ListStyleId:
+            case KoParagraphStyle::OutlineLevel:
+            case KoParagraphStyle::ListStartValue:
+            case KoParagraphStyle::IsListHeader:
+            case KoParagraphStyle::UnnumberedListItem:
                 continue;
-            if (property == KoParagraphStyle::ListStyleId)
+            // These can be both content and style properties so let's ignore
+            case KoParagraphStyle::BreakBefore:
+            case KoParagraphStyle::MasterPageName:
                 continue;
+
+            default:
+                break;
+            }
             if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
                 if ((m_currentBlockFormat.property(property) != style->value(property))
                         && !(style->value(property).isNull()
@@ -232,11 +245,11 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             }
         }
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
-        disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
         widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
-        connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     }
 }
 
@@ -244,9 +257,9 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
-    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)

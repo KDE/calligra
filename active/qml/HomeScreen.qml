@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -92,7 +92,8 @@ Image {
         id: progressBar
 
         color: "blue"
-        width: parent.width/100*doc.loadProgress; height: 32;
+        //DISABLED
+        //width: parent.width/100*doc.loadProgress; height: 32;
         anchors.bottom: parent.bottom
     }
 

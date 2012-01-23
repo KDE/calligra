@@ -36,7 +36,7 @@
        </Parameter>
        <Parameter optional="true">
            <Comment>No_commas</Comment>
-           <Type>Bool</Type>
+           <Type>Boolean</Type>
        </Parameter>
        <Help>
            <Text>The FIXED() function rounds a number to the specified number of decimals, formats the number in decimal format string, and returns the result as text. If decimals is negative, number is rounded to the left of the decimal point. If you omit decimals, it is assumed to be 2. If optional parameter no_commas is True, thousand separators will not show up.</Text>
@@ -331,6 +331,7 @@
        <Help>
            <Text>The FINDB() function finds one text string (find_text) within another text string (within_text) and returns the number of the starting point of find_text, from the leftmost character of within_text using byte positions.</Text>
            <Text>Parameter BytePosition specifies the character at which to start the search. The first character is character number 2. If start_num is omitted, it is assumed to be 2.</Text>
+	   <!--FIXME rename start_num to BytePosition like in Syntax-->
            <Syntax>FINDB(find_text;within_text;BytePosition Start)</Syntax>
            <Related>FIND</Related>
            <Related>SEARCH</Related>

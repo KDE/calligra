@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,25 +19,25 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import CalligraActive 1.0
 
 Item {
     id: docRootRect
     signal documentLoaded
-    property alias loadProgress: canvas.loadProgress
     clip: true
 
     function openDocument(path) {
-        canvas.openDocument(path);
+        docDocumentController.documentUri = path;
+        docDocumentController.loadDocument();
     }
 
     function initToolbar() {
-        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
+        if (docDocumentController.documentTypeName == "spreadsheet") {
             toolbarLoader.source = "SpreadsheetToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
+        } else if (docDocumentController.documentTypeName == "textdocument") {
             toolbarLoader.source = "WordsToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.Presentation) {
+        } else if (docDocumentController.documentTypeName == "presentation") {
             toolbarLoader.source = "PresentationToolbar.qml";
         }
     }
@@ -52,6 +52,67 @@ Item {
 //         }
 //     }
 
+    CADocumentController {
+        id: docDocumentController
+        canvasController: canvas
+        onDocumentOpened: {
+            docRootRect.initToolbar();
+            docRootRect.documentLoaded();
+        }
+    }
+
+    PinchArea {
+        width: Math.max(docFlickable.contentWidth, docFlickable.width)
+        height: Math.max(docFlickable.contentHeight, docFlickable.height)
+
+        property real initialWidth
+        property real initialHeight
+        onPinchStarted: {
+            initialWidth = docFlickable.contentWidth
+            initialHeight = docFlickable.contentHeight
+        }
+
+        onPinchUpdated: {
+            // adjust content pos due to drag
+            docFlickable.contentX += pinch.previousCenter.x - pinch.center.x
+            docFlickable.contentY += pinch.previousCenter.y - pinch.center.y
+
+            // resize content
+            docFlickable.resizeContent(initialWidth * pinch.scale, initialHeight * pinch.scale, pinch.center)
+        }
+
+        onPinchFinished: {
+            // Move its content within bounds.
+            docFlickable.returnToBounds()
+        }
+
+        MouseArea {
+            id: flickableMouseArea
+            anchors.fill: docRootRect
+            drag.filterChildren: true
+
+            Flickable {
+                id: docFlickable
+                x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
+
+                contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+            }
+
+            Loader {
+                id: toolbarLoader
+                property bool containsMouse: false
+
+                anchors.fill: docRootRect
+                opacity: 0
+            }
+
+            Connections {
+                target: toolbarLoader.item
+                onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
+            }
+        }
+    }
+
     CanvasController {
         id: canvas
 
@@ -60,11 +121,6 @@ Item {
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
-
-        Component.onCompleted: documentLoaded.connect(initToolbar)
-        onDocumentLoaded: docRootRect.documentLoaded()
-
-        searchString: findToolbar.searchString
     }
 
 //     Button {
@@ -76,48 +132,23 @@ Item {
 //         height: 64
 //         width: 64
 //         z: 30
-// 
+//
 //         onClicked: toggleEdit();
 //     }
-// 
+//
     FindToolbar {
         id: findToolbar
         height: 32
         z: 2
-        visible: (canvas.documentType == CADocumentInfo.TextDocument)
+        visible: (docDocumentController.documentTypeName == "textdocument")
 
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        onFindNextRequested: canvas.findNext();
-        onFindPreviousRequested: canvas.findPrevious();
-    }
-
-    MouseArea {
-        id: flickableMouseArea
-        anchors.fill: parent
-        drag.filterChildren: true
-
-        Flickable {
-            id: docFlickable
-            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
-
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-        }
-
-        Loader {
-            id: toolbarLoader
-            property bool containsMouse: false
-
-            anchors.fill: parent
-            opacity: 0
-        }
-
-        Connections {
-            target: toolbarLoader.item
-            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
-        }
+        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
+        onFindNextRequested: docDocumentController.documentHandler().findNext();
+        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
     }
 
     states : [

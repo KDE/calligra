@@ -122,8 +122,6 @@ public:
     /// reimplemented from superclass
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
-    bool isBidiDocument() const;
-
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
@@ -150,14 +148,6 @@ public slots:
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
-    /// call this when the 'is-bidi' boolean has been changed.
-    void isBidiUpdated();
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -212,8 +202,6 @@ private slots:
     void setFontFamily(const QString &);
     /// Set Font size
     void setFontSize(qreal size);
-    /// Default Format
-    void setDefaultFormat();
     /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
@@ -241,7 +229,7 @@ private slots:
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
-    void showStyleManager();
+    void showStyleManager(int styleId = -1);
     /// change color of a selected text
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
@@ -309,8 +297,6 @@ private:
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
-    void readConfig();
-    void writeConfig();
     void runUrl(KoPointerEvent *event, QString &url);
 
 private:
@@ -325,7 +311,6 @@ private:
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
-    bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
     int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
@@ -345,9 +330,6 @@ private:
     KAction *m_actionFormatSub;
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
-    KAction *m_actionShowChanges;
-    KAction *m_actionRecordChanges;
-    KAction *m_configureChangeTracking;
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;

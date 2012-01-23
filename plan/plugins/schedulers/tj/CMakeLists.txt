@@ -42,6 +42,8 @@ target_link_libraries(
     koodf
 )
 
+set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )
+
 install( TARGETS plantjscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############

@@ -670,7 +670,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (outlineLevel > 0) {
         blockTagInformation.setTagName("text:h");
         blockTagInformation.addAttribute("text:outline-level", outlineLevel);
-        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader) || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)) {
             blockTagInformation.addAttribute("text:is-list-header", "true");
         }
     } else {
@@ -1407,7 +1407,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
 
-        if (listXmlIds.contains(list->listContinuedFrom())) {
+        if (list && listXmlIds.contains(list->listContinuedFrom())) {
             listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
         }
 

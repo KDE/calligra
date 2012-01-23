@@ -56,7 +56,6 @@ StylesCombo::StylesCombo(QWidget *parent)
     setIconSize(QSize(0,0));
 
     StylesComboPreview *preview = new StylesComboPreview(this);
-    connect(preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     QComboBox::setEditable(true);
     setLineEdit(preview);
 }
@@ -113,35 +112,40 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
     if (m_preview) {
         connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
+        connect(m_preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+        connect(m_preview, SIGNAL(clicked()), this, SLOT(slotPreviewClicked()));
     }
 
 }
 
 void StylesCombo::slotSelectionChanged(int index)
 {
-    if (index != m_selectedItem || !m_originalStyle) {
-        m_selectedItem = index;
-        m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
-        update();
-        emit selectionChanged(index);
-    }
+    m_selectedItem = index;
+    m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
+    update();
+    emit selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(QModelIndex index)
 {
-    //this slot allows us to emit a selectionChanged signal in case the already selected style isn't in its original form anymore. In such case, the view does not emit currentIndexChanged, so we use the editorEvent of the delegate to send us a signal. There is a bit of redundancy if the item clicked was indeed a new selection, hence the check in both slots.
-    if (index.row() != m_selectedItem || !m_originalStyle) {
-        m_selectedItem = index.row();
-        m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
-        update();
-        emit selectionChanged(m_selectedItem);
-    }
+    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, wher we also emit the selectionChanged signal from the slot above.
+    m_selectedItem = index.row();
+    m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
+    update();
+    emit selected(m_selectedItem);
 }
 
 void StylesCombo::slotUpdatePreview()
 {
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
     update();
+}
+
+void StylesCombo::slotPreviewClicked()
+{
+    if (!view()->isVisible()) {
+        showPopup();
+    }
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

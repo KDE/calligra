@@ -222,7 +222,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextEditor *editor = KoTextDocument(textShapeData.document()).textEditor();
     if (editor) // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
-    editor->finishedLoading();
 
     if (updater) updater->setProgress(90);
 
