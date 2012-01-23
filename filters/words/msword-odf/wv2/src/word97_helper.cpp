@@ -766,7 +766,7 @@ namespace
         else
             brc = toWord97( Word95::BRC( ptr ) );
     }
-}       
+} //anonymous namespace
 
 // Returns -1 if this wasn't a PAP sprm and it returns the length
 // of the applied sprm if it was successful
