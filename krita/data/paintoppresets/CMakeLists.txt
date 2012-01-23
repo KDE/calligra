@@ -1,4 +1,13 @@
 install( FILES
+_lb_0just_line.kpp
+_lb_1fur_line.kpp
+_lb_2random_lines.kpp
+_lb_7palme.kpp
+_lb_7palme2.kpp
+_lb_8twig.kpp
+_lb_9standard.kpp
+_lb_9standard_with_pressure.kpp
+_lb_9startWidth_demo.kpp
 Airbrush_300.kpp
 Airbrush_600.kpp
 Aquarelle_paint.kpp
