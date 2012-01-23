@@ -78,7 +78,14 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
-    // TODO Reimplement export dialog as new functionality could use it
+    /* TODO Reimplement export dialog when future functionality could benefit from user input.
+     * The options of encoding and stylesheets have no effect on the export process at present.
+     * The dialog was been disabled in the interest of reducing user confusion, avoiding
+     * frustration should they try and use functionality which is not actually present.
+     *
+     * Styles are currently read from the ODT file's styles.xml and content.xml files and embedded
+     * in the output html.
+     */
     /*
     if (!m_chain->manager()->getBatchMode() ) {
         if (m_dialog->exec() == QDialog::Rejected) {
