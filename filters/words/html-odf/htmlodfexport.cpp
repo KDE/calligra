@@ -65,14 +65,13 @@ HTMLOdfExport::~HTMLOdfExport()
 {
 }
 
-
-
 KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
     if (to != "text/html"
-            || from != "application/vnd.oasis.opendocument.text")
+        || from != "application/vnd.oasis.opendocument.text") {
         return KoFilter::NotImplemented;
+    }
 
     kDebug(30503) << "######################## HTMLOdfExport::convert ########################";
 
@@ -95,47 +94,46 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         out.close();
         return KoFilter::FileNotFound;
     }
-    
+
     QFileInfo base(outputFile);
     QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
-    
+
     KoFilter::ConversionStatus error;
     error = transformXml(inputFile, &out, filenamewithoutext+"/");
-    
-    if(error != KoFilter::OK)
-    {
+
+    if(error != KoFilter::OK) {
         return error;
     }
-    
-    
+
     QString directory=base.absolutePath();
     QDir dir(outputFile);
     dir.mkdir(filenamewithoutext);
-    
+
 
     QString stylesheet=filenamewithoutext+"/style.css";
     QFile css(stylesheet);
-    if (!css.open(QIODevice::WriteOnly)){
+    if (!css.open(QIODevice::WriteOnly)) {
         kError(30501) << "Unable to open stylesheet!";
         css.close();
         return KoFilter::FileNotFound;
     }
-    
+
     error = extractImages(inputFile, filenamewithoutext+"/");
-    if (error != KoFilter::OK)
-    {
+    if (error != KoFilter::OK) {
         return error;
     }
-            
+
     out.close();
     css.close();
 
 
-
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) { }
-        ~Finalizer() {
+        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) 
+        { 
+        }
+        ~Finalizer() 
+        {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
         }
 
@@ -148,7 +146,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
 
 
     kDebug(30503) << "######################## HTMLOdfExport::convert done ####################";
-    
+
     return KoFilter::OK;
 }
 
@@ -157,57 +155,58 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
  * Applies the converter.xsl stylesheet tranform on the combination
  * of the meta, styles and content xml files within the ODT file.
  */
-KoFilter::ConversionStatus HTMLOdfExport::transformXml(const QString &inputFileName, QFile *outputFile, const QString &resourcesPath) 
+KoFilter::ConversionStatus HTMLOdfExport::transformXml(const QString &inputFileName, QFile *outputFile, const QString &resourcesPath)
 {
     KoFilter::ConversionStatus result = KoFilter::OK;
     bool success;
+
     // Create single xml file from ODT meta, styles and content components
     QByteArray contall("<?xml version='1.0' encoding='UTF-8'?>");
     contall.append("<office:document xmlns:office='urn:oasis:names:tc:opendocument:xmlns:office:1.0'>");
-    
+
     QByteArray cont;
     QByteArray sty;
     QByteArray met;
-    
+
     KoStore* storecont = KoStore::createStore(inputFileName, KoStore::Read);
     storecont->extractFile("meta.xml",met);
     met.remove(0,38); // remove xml file header
     contall.append(met);
-    
+
     storecont->extractFile("styles.xml",sty);
     sty.remove(0,38); // remove xml file header
     contall.append(sty);
-    
+
     storecont->extractFile("content.xml",cont);
     cont.remove(0,38); // remove xml file header
     contall.append(cont);
-    
+
     contall.append("</office:document>");
-    
+
     QFile temp1(KStandardDirs::locate("data","words/html-odf/converter.xsl"));
     temp1.open(QIODevice::ReadOnly);
-    
-    
+
+
     // Execute XML transformation
-    
+
     QXmlQuery myQuery(QXmlQuery::XSLT20);
     myQuery.bindVariable(QString("html-odf-resourcesPath"), QVariant(resourcesPath));
     myQuery.setFocus(contall);
     myQuery.setQuery(temp1.readAll());
     success = myQuery.evaluateTo(outputFile);
-    
+
     if (!success) {
         result = KoFilter::ParsingError;
     }
-    
+
     temp1.close();
     contall.clear();
     met.clear();
     sty.clear();
     cont.clear();
-    
+
     delete storecont;
-    
+
     return result;
 }
 
@@ -223,7 +222,7 @@ KoFilter::ConversionStatus HTMLOdfExport::extractImages(const QString &inputFile
 {
     QDir dir(resourcesPath);    
     QByteArray manifest;
-    
+
     KoStore* storecont = KoStore::createStore(inputFile, KoStore::Read);
     storecont->extractFile("META-INF/manifest.xml",manifest);
 
@@ -231,28 +230,28 @@ KoFilter::ConversionStatus HTMLOdfExport::extractImages(const QString &inputFile
     // The ManifestParser extracts just those files which are suppported
     ManifestParser manifestParser;
     QXmlInputSource source;
-    source.setData( manifest );
+    source.setData(manifest);
     QXmlSimpleReader reader;
-    reader.setContentHandler( &manifestParser );
-    reader.parse( source );
+    reader.setContentHandler(&manifestParser);
+    reader.parse(source);
 
     QString sourceImage;
     QString destImage;
     QString outputPath;
-    
+
     // Extract each file
     QStringListIterator fileListIt = QStringListIterator(manifestParser.fileList());
     while (fileListIt.hasNext()) {
         sourceImage = fileListIt.next();
         destImage = resourcesPath + sourceImage;
-        
+
         // Create the target directory
         outputPath = resourcesPath+sourceImage.left(sourceImage.lastIndexOf('/'));
         dir.mkpath(outputPath);
-        
+
         storecont->extractFile(sourceImage,destImage);
     }
-    
+
     return KoFilter::OK;
 }
 

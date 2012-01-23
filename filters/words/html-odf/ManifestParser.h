@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef MANIFESTPARSER_H_H
+#ifndef MANIFESTPARSER_H
 #define MANIFESTPARSER_H
 
 #include "qxml.h"
@@ -31,14 +31,14 @@ class ManifestParser : public QXmlDefaultHandler
 {
 public:    
     bool startDocument();
-    bool endElement( const QString&, const QString&, const QString &name );
-    bool startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs );
-  
+    bool endElement(const QString&, const QString&, const QString &name);
+    bool startElement(const QString&, const QString&, const QString &name, const QXmlAttributes &attrs);
+
     const QStringList& fileList();
-  
-protected:
-    QString     m_currentType;
-    QString     m_currentPath;
+
+private:
+    QString m_currentType;
+    QString m_currentPath;
     QStringList m_fileList;
 };
 

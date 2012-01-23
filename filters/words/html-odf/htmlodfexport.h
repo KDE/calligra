@@ -43,7 +43,7 @@ public:
     HTMLOdfExport(QObject* parent, const QVariantList&);
     virtual ~HTMLOdfExport();
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-    
+
     KoFilter::ConversionStatus transformXml(const QString &inputFileName, QFile *outputFile, const QString& resourcesPath);
     KoFilter::ConversionStatus extractImages(const QString &inputFile, const QString &outputRoot);
 
