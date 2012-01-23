@@ -4,7 +4,7 @@ This file is part of the Calligra project
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
    Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
    Copyright (C) 2011 Stuart Dickson <stuart@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
    version 2 of the License, or (at your option) version 3 or,
@@ -54,7 +54,7 @@ This file is part of the Calligra project
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="scale">1</xsl:param>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="style.background-color">#F0F0F0</xsl:param>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CSS.debug">0</xsl:param>
-    <xsl:variable xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="linebreak">    
+    <xsl:variable xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="linebreak">
     </xsl:variable>
 
 
@@ -62,7 +62,7 @@ This file is part of the Calligra project
 
 
     <xsl:template match="office:document">
-    <xsl:apply-templates/>   
+    <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="/office:document">
@@ -101,7 +101,7 @@ This file is part of the Calligra project
     </xsl:template>
     <xsl:template match="dc:title">
         <xsl:if test="current()!=''">
-            <xsl:element name="title"><xsl:apply-templates/></xsl:element>            
+            <xsl:element name="title"><xsl:apply-templates/></xsl:element>
         </xsl:if>
     </xsl:template>
     <xsl:template match="dc:language">
@@ -188,7 +188,7 @@ This file is part of the Calligra project
         <xsl:call-template name="office:document-styles" />
         <xsl:apply-templates/>
 
-        <!-- office:document-styles end -->         
+        <!-- office:document-styles end -->
     </xsl:template>
 
     <xsl:template match="office:styles">
@@ -205,10 +205,10 @@ This file is part of the Calligra project
 
     <xsl:template match="style:default-style">
             <xsl:text>p{</xsl:text>
-            <xsl:text>}</xsl:text>       
+            <xsl:text>}</xsl:text>
     </xsl:template>
 
-    <xsl:template match="office:styles/style:style">     
+    <xsl:template match="office:styles/style:style">
         <xsl:text>.</xsl:text><xsl:value-of select="@style:family"></xsl:value-of><xsl:text>_</xsl:text>
         <xsl:value-of select="@style:name"></xsl:value-of>
         <xsl:text>
@@ -232,20 +232,20 @@ This file is part of the Calligra project
         <xsl:text> font-family:</xsl:text>
         <xsl:value-of select="@fo:font-family"></xsl:value-of><xsl:text>; </xsl:text>
         <xsl:text> font-style:</xsl:text>
-        <xsl:value-of select="@fo:font-style"></xsl:value-of><xsl:text>; </xsl:text>        
+        <xsl:value-of select="@fo:font-style"></xsl:value-of><xsl:text>; </xsl:text>
     </xsl:template>
 
     <xsl:template match="office:document-content">
     <xsl:apply-templates/>
-    </xsl:template> 
+    </xsl:template>
 
     <xsl:template match="office:body">
     <xsl:apply-templates/>
-    </xsl:template> 
+    </xsl:template>
 
     <xsl:template match="office:text">
     <xsl:apply-templates/>
-    </xsl:template> 
+    </xsl:template>
 
     <xsl:template match="text:p">
         <xsl:element name="p">
@@ -323,7 +323,7 @@ This file is part of the Calligra project
 
     <xsl:template match="draw:frame">
         <xsl:apply-templates/>
-    </xsl:template> 
+    </xsl:template>
 
     <xsl:template match="draw:image">
         <img src="{$html-odf-resourcesPath}/{@xlink:href}"/>
@@ -343,4 +343,4 @@ This file is part of the Calligra project
 
 
 
- 
+

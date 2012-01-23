@@ -20,32 +20,31 @@
 #include "ManifestParser.h"
 
 
-
 bool ManifestParser::startDocument()
-{ 
-    m_currentType = QString();
-    m_currentPath = QString();
-    return true; 
-}
-
-bool ManifestParser::endElement(const QString&, const QString&, const QString &name)
 {
     m_currentType = QString();
     m_currentPath = QString();
     return true;
 }
 
-bool ManifestParser::startElement(const QString&, const QString&, const QString &name, const QXmlAttributes &attrs)
+bool ManifestParser::endElement(const QString &, const QString &, const QString &name)
 {
-    if( name == "manifest:file-entry" ) {
+    m_currentType = QString();
+    m_currentPath = QString();
+    return true;
+}
+
+bool ManifestParser::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attrs)
+{
+    if (name == "manifest:file-entry") {
         QString attrName;
 
-        for( int i=0; i<attrs.count(); i++ ) {
-            attrName = attrs.localName( i );
-            if( attrName == "media-type" ) {
-                m_currentType = attrs.value( i );
-            } else if( attrName == "full-path" ) {
-                m_currentPath = attrs.value( i );
+        for (int i=0; i<attrs.count(); i++) {
+            attrName = attrs.localName(i);
+            if (attrName == "media-type") {
+                m_currentType = attrs.value(i);
+            } else if(attrName == "full-path") {
+                m_currentPath = attrs.value(i);
             }
         }
         if (!m_currentType.isEmpty() && !m_currentPath.isEmpty()) {
@@ -62,7 +61,7 @@ bool ManifestParser::startElement(const QString&, const QString&, const QString 
     return true;
 }
 
-const QStringList& ManifestParser::fileList()
+QStringList ManifestParser::fileList() const
 {
     return m_fileList;
 }
