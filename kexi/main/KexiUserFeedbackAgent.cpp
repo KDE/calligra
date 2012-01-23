@@ -25,13 +25,21 @@
 #include <KIO/Job>
 #include <KLocale>
 #include <KDebug>
+#include <KConfigGroup>
 
 #include <QPair>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QProcess>
+#include <QUuid>
 
-static const char userFeedbackUrl[] = "http://www.kexi-project.org/feedback/send";
+//! Version of feedback data format.
+//! Changelog:
+//! *1.0: initial version
+//! *1.1: added JSON-compatible character escaping; added uid
+static const char KexiUserFeedbackAgent_VERSION[] = "1.1";
+
+static const char KexiUserFeedbackAgent_URL[] = "http://www.kexi-project.org/feedback/send";
 
 typedef QPair<QByteArray, QVariant> DataPair;
 
@@ -44,13 +52,27 @@ public:
     }
     bool enabled;
     QList<DataPair> data;
+    //! Unique user ID handy if used does not want to disclose username
+    //! but agrees to be identified as unique user of the application.
+    QUuid uid;
 };
 
 KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
  : QObject(parent), d(new Private)
 {
+    KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
+    
+    // load or create uid
+    QString uidString = configGroup.readEntry("uid", QString());
+    d->uid = QUuid(uidString);
+    if (d->uid.isNull()) {
+        d->uid = QUuid::createUuid();
+        configGroup.writeEntry("uid", d->uid.toString());
+    }
+    
     #define ADD(a, b) d->data.append(qMakePair(QByteArray(a), QVariant(b)))
-    ADD("ver", "1.0");
+    ADD("ver", KexiUserFeedbackAgent_VERSION);
+    ADD("uid", d->uid.toString());
     ADD("app_ver", Kexi::versionString());
     ADD("app_ver_major", Kexi::versionMajor());
     ADD("app_ver_minor", Kexi::versionMinor());
@@ -116,6 +138,26 @@ void KexiUserFeedbackAgent::setEnabled(bool enabled)
     d->enabled = enabled;
 }
 
+//! Escapes string for json format (see http://json.org/string.gif).
+inline QString escapeJson(const QString& s)
+{
+    QString res;
+    for (int i=0; i<s.length(); i++) {
+        switch (s[i].toLatin1()) {
+        case '\\': res += QLatin1String("\\\\"); break;
+        case '/': res += QLatin1String("\\/"); break;
+        case '"': res += QLatin1String("\\\""); break;
+        case '\b': res += QLatin1String("\\b"); break;
+        case '\f': res += QLatin1String("\\f"); break;
+        case '\n': res += QLatin1String("\\n"); break;
+        case '\r': res += QLatin1String("\\r"); break;
+        case '\t': res += QLatin1String("\\t"); break;
+        default: res += s[i];
+        }
+    }
+    return res;
+}
+
 void KexiUserFeedbackAgent::sendData()
 {
     QByteArray postData;
@@ -124,11 +166,12 @@ void KexiUserFeedbackAgent::sendData()
             postData += ',';
         }
         postData += (QByteArray("\"") + item.first + "\":\""
-                     + item.second.toString().toUtf8() + '"');
+                     + escapeJson(item.second.toString()).toUtf8() + '"');
     }
+    kDebug() << postData;
     
     KIO::Job* sendJob = KIO::storedHttpPost(
-        postData, KUrl(userFeedbackUrl), KIO::HideProgressInfo);
+        postData, KUrl(KexiUserFeedbackAgent_URL), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(finished(KJob*)), this, SLOT(sendJobFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }

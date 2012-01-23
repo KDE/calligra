@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "KexiWelcomeAssistant.h"
 
 #include "KexiRecentProjectsModel.h"
+#include "KexiWelcomeStatusBar.h"
 
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
@@ -66,7 +67,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 {
     connect(this, SIGNAL(openProject(KexiProjectData,QString,bool*)),
             assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)));
+    QWidget* contents = new QWidget;
+    QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
+    
     m_recentProjects = new KexiCategorizedView;
+    contentsLyr->addWidget(m_recentProjects, 1);
     //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
@@ -77,7 +82,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    setContents(m_recentProjects);
+    
+    m_statusBar = new KexiWelcomeStatusBar;
+    contentsLyr->addWidget(m_statusBar);
+    
+    setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
 }

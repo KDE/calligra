@@ -34,6 +34,7 @@ class KexiProjectSelectorWidget;
 class KCategorizedView;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
+class KexiWelcomeStatusBar;
 
 class KexiMainWelcomePage : public KexiAssistantPage
 {
@@ -55,6 +56,7 @@ private:
     KexiCategorizedView* m_recentProjects;
     KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
     KexiWelcomeAssistant* m_assistant;
+    KexiWelcomeStatusBar* m_statusBar;
 };
 
 class KexiProjectData;
