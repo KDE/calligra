@@ -18,12 +18,15 @@ include_directories(
 set (calligra-active_RCCS CalligraActive.qrc)
 qt4_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_active_global.h)
-
 set(calligra-active_SRCS
+    src/CAPresentationHandler.cpp
+    src/CASpreadsheetHandler.cpp
+    src/CATextDocumentHandler.cpp
+    src/CAAbstractDocumentHandler.cpp
+    src/CADocumentController.cpp
     src/CADocumentInfo.cpp
-    src/PAView.cpp
-    src/CanvasController.cpp
+    src/CAPAView.cpp
+    src/CACanvasController.cpp
     src/MainWindow.cpp
     main.cpp
     ${calligra-active_RCC_SRCS}
@@ -45,4 +48,3 @@ target_link_libraries(calligraactive
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
 install(FILES calligraactive.desktop DESTINATION share/applications)
 install(DIRECTORY qml DESTINATION share/calligraactive)
-install(DIRECTORY templates DESTINATION share/calligraactive)

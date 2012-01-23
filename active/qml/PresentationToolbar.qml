@@ -38,7 +38,7 @@ Item
         width: 64
         z: 2
 
-        onClicked: canvas.previousSlide()
+        onClicked: docDocumentController.documentHandler().previousSlide()
     }
 
     Button {
@@ -51,6 +51,6 @@ Item
         width: 64
         z: 2
 
-        onClicked: canvas.nextSlide()
+        onClicked: docDocumentController.documentHandler().nextSlide()
     }
 }
