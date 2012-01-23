@@ -242,6 +242,27 @@
    </Function>
 
    <Function>
+       <Name>DECIMAL</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>The value to convert</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Base</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Converts text representing a number in a given base into a base 10 number.</Text>
+           <Syntax>DECIMAL(text;radix)</Syntax>
+           <Example>DECIMAL("23";10) equals 23</Example>
+           <Example>DECIMAL("0110";2) equals 6</Example>
+           <Example>DECIMAL("A";16) equals 10</Example>
+           <Example>DECIMAL("ZAP";36) equals 45745</Example>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>OCT2BIN</Name>
        <Type>String</Type>
        <Parameter>

@@ -398,6 +398,27 @@
    </Function>
 
    <Function>
+       <Name>NUMBERVALUE</Name>
+       <Type>Number</Type>
+       <Parameter>
+           <Comment>Text</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Decimal point</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Thousands separator</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Help>
+           <Text>Convert text to number, in a locale-independent way.</Text>
+           <Syntax>NUMBERVALUE(text;decimalPoint;thousandsSeparator)</Syntax>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>LEN</Name>
        <Type>Int</Type>
        <Parameter>

@@ -175,6 +175,60 @@
    </Function>
 
    <Function>
+       <Name>COUPDAYS</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Settlement</Comment>
+           <Type>Date</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Maturity</Comment>
+           <Type>Date</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Frequency</Comment>
+           <Type>Float</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Day counting basis</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Calculates the number of days in a coupon period that contains a settlement date.</Text>
+           <Syntax>COUPDAYS(settlement;maturity;frequency;basis)</Syntax>
+           <Example>COUPDAYS(DATE(1997;11;9);DATE(1999;11;15);2) equals 180</Example>
+           <Example>COUPDAYS(DATE(2004;2;1);DATE(2009;1;1);1) equals 360</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>COUPDAYBS</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Settlement</Comment>
+           <Type>Date</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Maturity</Comment>
+           <Type>Date</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Frequency</Comment>
+           <Type>Float</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Day counting basis</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Calculates the number of days between the beginning of athe coupon period that contains the settlement date and the settlement date.</Text>
+           <Syntax>COUPDAYBS(settlement;maturity;frequency;basis)</Syntax>
+           <Example>COUPDAYBS(DATE(1997;11;9);DATE(1999;11;15);2) equals 174</Example>
+           <Example>COUPDAYBS(DATE(2004;3;1);DATE(2009;1;1);1) equals 60</Example>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>COUPNUM</Name>
        <Type>Float</Type>
        <Parameter>

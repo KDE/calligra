@@ -1021,6 +1021,24 @@
            </Function>
 
            <Function>
+               <Name>QUARTILE</Name>
+               <Type>Number</Type>
+               <Parameter>
+                   <Comment>The cell range or data array of numeric values.</Comment>
+                   <Type range="true">Number</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>The number of the quartile to return.</Comment>
+                   <Type>Int</Type>
+               </Parameter>
+               <Help>
+                   <Text>Returns a quartile of a set of data points.</Text>
+                   <Syntax>QUARTILE(data;quart)</Syntax>
+                   <Example>QUARTILE({1,2,4,8,16,32,64};3) equals 0.386668</Example>
+               </Help>
+           </Function>
+
+           <Function>
                <Name>RANK</Name>
                <Type>Float</Type>
                <Parameter>
