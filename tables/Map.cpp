@@ -140,6 +140,7 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->recalcManager = new RecalcManager(this);
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
+    d->textStyleManager->setUndoStack(doc->undoStack());
 
     d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
