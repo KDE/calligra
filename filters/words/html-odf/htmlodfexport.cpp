@@ -103,21 +103,20 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     }
 
     QFileInfo base(outputFile);
-    QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
+    QString filenameWithoutExtension = outputFile.left(outputFile.lastIndexOf('.'));
 
     KoFilter::ConversionStatus error;
-    error = transformXml(inputFile, &out, filenamewithoutext+"/");
+    error = transformXml(inputFile, &out, filenameWithoutExtension+"/");
 
-    if(error != KoFilter::OK) {
+    if (error != KoFilter::OK) {
         return error;
     }
 
     QString directory=base.absolutePath();
     QDir dir(outputFile);
-    dir.mkdir(filenamewithoutext);
+    dir.mkdir(filenameWithoutExtension);
 
-
-    QString stylesheet=filenamewithoutext+"/style.css";
+    QString stylesheet=filenameWithoutExtension+"/style.css";
     QFile css(stylesheet);
     if (!css.open(QIODevice::WriteOnly)) {
         kError(30501) << "Unable to open stylesheet!";
@@ -125,7 +124,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         return KoFilter::FileNotFound;
     }
 
-    error = extractImages(inputFile, filenamewithoutext+"/");
+    error = extractImages(inputFile, filenameWithoutExtension+"/");
     if (error != KoFilter::OK) {
         return error;
     }
@@ -136,10 +135,10 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
 
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) 
-        { 
+        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0)
+        {
         }
-        ~Finalizer() 
+        ~Finalizer()
         {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
         }
@@ -147,8 +146,8 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         KoStore *m_store;
         KoGenStyles *m_genStyles;
         Document *m_document;
-        KoXmlWriter* m_contentWriter;
-        KoXmlWriter* m_bodyWriter;
+        KoXmlWriter *m_contentWriter;
+        KoXmlWriter *m_bodyWriter;
     };
 
 
@@ -175,7 +174,7 @@ KoFilter::ConversionStatus HTMLOdfExport::transformXml(const QString &inputFileN
     QByteArray sty;
     QByteArray met;
 
-    KoStore* storecont = KoStore::createStore(inputFileName, KoStore::Read);
+    KoStore *storecont = KoStore::createStore(inputFileName, KoStore::Read);
     storecont->extractFile("meta.xml",met);
     met.remove(0,38); // remove xml file header
     contall.append(met);
@@ -218,19 +217,19 @@ KoFilter::ConversionStatus HTMLOdfExport::transformXml(const QString &inputFileN
 }
 
 /*
- * Given inputFile, extracts all recognised image types and exports 
+ * Given inputFile, extracts all recognised image types and exports
  * these and their containing folders to resourcesPath.
  * e.g.
  *      Picturess/myImage.png would be written to resourcesPath/Pictures/myImage.png
- * 
+ *
  * ManifestParser determines which file types should be extracted.
  */
 KoFilter::ConversionStatus HTMLOdfExport::extractImages(const QString &inputFile, const QString &resourcesPath)
 {
-    QDir dir(resourcesPath);    
+    QDir dir(resourcesPath);
     QByteArray manifest;
 
-    KoStore* storecont = KoStore::createStore(inputFile, KoStore::Read);
+    KoStore *storecont = KoStore::createStore(inputFile, KoStore::Read);
     storecont->extractFile("META-INF/manifest.xml",manifest);
 
     // parse manifest for file-entry elements.
