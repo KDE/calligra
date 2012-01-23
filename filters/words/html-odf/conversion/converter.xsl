@@ -124,8 +124,8 @@ This file is part of the Calligra project
     <xsl:template match="meta:generator">
         <meta name="generator" content="{current()}"/>
     </xsl:template>
-   
-    
+
+
     <xsl:template name="office:document-styles">
         html
         {
@@ -170,27 +170,27 @@ This file is part of the Calligra project
         {
             text-align: right;
         }
-        
+
         td p:hover
         {
             max-height: none;
         }
-        
+
         .page-break
         {
             margin: 1em;
         }
     </xsl:template>
-    
+
     <xsl:template match="office:document-styles">
         <!-- office:document-styles begin -->
-        
+
         <xsl:call-template name="office:document-styles" />
         <xsl:apply-templates/>
-            
+
         <!-- office:document-styles end -->         
     </xsl:template>
-    
+
     <xsl:template match="office:styles">
         <xsl:text><!-- office:styles begin --></xsl:text>
         <xsl:apply-templates />
@@ -202,7 +202,7 @@ This file is part of the Calligra project
         <xsl:apply-templates/>
         <xsl:text><!-- office:automatic-styles end --></xsl:text>
     </xsl:template>
-      
+
     <xsl:template match="style:default-style">
             <xsl:text>p{</xsl:text>
             <xsl:text>}</xsl:text>       
@@ -217,7 +217,7 @@ This file is part of the Calligra project
         <xsl:text>}
         </xsl:text>
     </xsl:template>
-    
+
     <xsl:template match="office:styles/style:paragraph-properties">
         <xsl:text> padding-top:</xsl:text>
         <xsl:value-of select="@fo:padding-top"></xsl:value-of><xsl:text>; </xsl:text>
@@ -246,7 +246,7 @@ This file is part of the Calligra project
     <xsl:template match="office:text">
     <xsl:apply-templates/>
     </xsl:template> 
-    
+
     <xsl:template match="text:p">
         <xsl:element name="p">
             <xsl:apply-templates/>
@@ -328,7 +328,7 @@ This file is part of the Calligra project
     <xsl:template match="draw:image">
         <img src="{$html-odf-resourcesPath}/{@xlink:href}"/>
     </xsl:template>
-  
+
 
     <!--
         We may need to remove non-printing character sequence EF BF BC (0xfffc)
@@ -337,7 +337,7 @@ This file is part of the Calligra project
     <xsl:template match="text()">
         <xsl:value-of select="replace(.,'\xEF\xBF\xBC','')"/>
     </xsl:template>
-    
+
 
 </xsl:stylesheet>
 

@@ -21,24 +21,26 @@
 
 
 
-bool ManifestParser::startDocument() { 
-    m_currentType = "";
-    m_currentPath = "";
+bool ManifestParser::startDocument()
+{ 
+    m_currentType = QString();
+    m_currentPath = QString();
     return true; 
 }
-bool ManifestParser::endElement( const QString&, const QString&, const QString &name ) {
-    m_currentType = "";
-    m_currentPath = "";
+
+bool ManifestParser::endElement(const QString&, const QString&, const QString &name)
+{
+    m_currentType = QString();
+    m_currentPath = QString();
     return true;
 }
 
-bool ManifestParser::startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs ) {
-    if( name == "manifest:file-entry" )
-    {
+bool ManifestParser::startElement(const QString&, const QString&, const QString &name, const QXmlAttributes &attrs)
+{
+    if( name == "manifest:file-entry" ) {
         QString attrName;
-        
-        for( int i=0; i<attrs.count(); i++ )
-        {
+
+        for( int i=0; i<attrs.count(); i++ ) {
             attrName = attrs.localName( i );
             if( attrName == "media-type" ) {
                 m_currentType = attrs.value( i );
@@ -50,16 +52,17 @@ bool ManifestParser::startElement( const QString&, const QString&, const QString
             if (m_currentType == "image/png") {
                 // We support this file type
                 m_fileList += m_currentPath;
-                
-                m_currentType = "";
-                m_currentPath = "";
+
+                m_currentType = QString();
+                m_currentPath = QString();
             }
         }
     }
-    
+
     return true;
 }
 
-const QStringList& ManifestParser::fileList() {
+const QStringList& ManifestParser::fileList()
+{
     return m_fileList;
 }
