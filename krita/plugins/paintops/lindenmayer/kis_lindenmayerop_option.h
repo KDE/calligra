@@ -25,6 +25,8 @@
 
 const QString LINDENMAYER_RADIUS = "Lindenmayer/radius";
 const QString LINDENMAYER_CODE = "Lindenmayer/code";
+const QString LINDENMAYER_MIN_DISTANCE = "Lindenmayer/minDistance";
+const QString LINDENMAYER_MAX_DISTANCE = "Lindenmayer/maxDistance";
 
 class KisLindenmayerOpOptionsWidget;
 
@@ -38,6 +40,8 @@ public:
     void setRadius(int radius) const;
     int radius() const;
     QString code() const;
+    int minDistance() const;
+    int maxDistance() const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -57,10 +61,14 @@ class LindenmayerProperties{
 public:
     int radius;
     QString code;
+    int minDistance;
+    int maxDistance;
     
     void readOptionSetting(const KisPropertiesConfiguration* settings){
         radius = settings->getInt(LINDENMAYER_RADIUS);
         code = settings->getString(LINDENMAYER_CODE).replace("<br>", QString('\n'));
+        minDistance = settings->getInt(LINDENMAYER_MIN_DISTANCE);
+        maxDistance = settings->getInt(LINDENMAYER_MAX_DISTANCE);
     }
 };
 

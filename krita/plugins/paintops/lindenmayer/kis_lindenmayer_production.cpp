@@ -26,70 +26,19 @@ KisLindenmayerProduction::KisLindenmayerProduction(const KisLindenmayerPaintOp& 
 
 QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLetter* letter) {
     m_retList.clear();
-
     m_letter = letter;
-    m_newLetter = 0;//letter[distanceToSun] > 50 &&
-    QString code = "if{letter[distanceToSun] > 50 && letter[branched] == false && letter[stem]==false && letter[leaf]==false} {"
-            "newLetter = newLetter();"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[angle] = variant(newLetter[angleToSun]);"
-            "newLetter[length] = float(30);"
-            "letter[branched] = bool(true);"
-            ""
-            "newLetter = newLetter();"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[angle] = float(newLetter[angleToSun]+45);"
-            "newLetter[length] = float(30);"
-            "newLetter[stem] = bool(true);"
-            ""
-            "newLetter = newLetter();"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[angle] = float(newLetter[angleToSun]-45);"
-            "newLetter[length] = float(30);"
-            "newLetter[stem] = bool(true);"
-            "}"
-            ""
+    m_newLetter = 0;
 
-            "if{letter[stem]} {"
-            "newLetter = newLetter();"
-            "newLetter[length] = float(10);"
-            "newLetter[angle] = float(letter[angle]);"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[leaf] = bool(true);"
-
-            "newLetter = newLetter();"
-            "newLetter[length] = float(10);"
-            "newLetter[angle] = float(letter[angle]+15);"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[leaf] = bool(true);"
-
-            "newLetter = newLetter();"
-            "newLetter[length] = float(10);"
-            "newLetter[angle] = float(letter[angle]+30);"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[leaf] = bool(true);"
-
-            "newLetter = newLetter();"
-            "newLetter[length] = float(10);"
-            "newLetter[angle] = float(letter[angle]-15);"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[leaf] = bool(true);"
-
-            "newLetter = newLetter();"
-            "newLetter[length] = float(10);"
-            "newLetter[angle] = float(letter[angle]-30);"
-            "newLetter[position] = variant(letter[endPosition]);"
-            "newLetter[leaf] = bool(true);"
-            "}"
-            ""
-
-            "if{letter[drawn] && letter[branched]}{letter.delete();}"
-            "if{letter[drawn] && letter[stem]}{letter.delete();}"
-            "if{letter[drawn] && letter[leaf]}{letter.delete();}";
-
-    exec(m_code);
-
-    m_letter->setParameter("age", m_letter->getParameter("age").toFloat() + 1);
+    if((getPaintInfo("position").toPointF() - letter->getParameter("position").toPointF()).manhattanLength() > m_maxDistance) {
+        m_errorList.append(QPair<int, QString>(0, "error: distance to mouse is greater than max distance."));
+        m_isScriptError = true;
+    }
+    else {
+        if(letter->getParameter("distanceToSun").toFloat() > m_minDistance) {
+            exec(m_code);
+            m_letter->setParameter("age", m_letter->getParameter("age").toFloat() + 1);
+        }
+    }
 
     if(m_isScriptError) {
         KisLindenmayerScriptErrorRepeater::instance()->repeatErrors(m_errorList);
@@ -108,8 +57,10 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
     return m_retList;
 }
 
-void KisLindenmayerProduction::setCode(QString code) {
+void KisLindenmayerProduction::setCodeAndLimits(QString code, int minDistance, int maxDistance) {
     m_code = code;
+    m_minDistance = minDistance;
+    m_maxDistance = maxDistance;
 }
 
 
@@ -709,7 +660,7 @@ void KisLindenmayerProduction::runTests() {
 
 QVariant KisLindenmayerProduction::getPaintInfo(QString key) {
     const KisPaintInformation& paintInfo = m_paintOp.getSunInformations();
-    if(key == "pos") return paintInfo.pos();
+    if(key == "position") return paintInfo.pos();
     if(key == "pressure") return paintInfo.pressure();
     if(key == "movement") return toQPointF(paintInfo.movement());
     if(key == "xTilt") return paintInfo.xTilt();
@@ -718,6 +669,7 @@ QVariant KisLindenmayerProduction::getPaintInfo(QString key) {
     if(key == "tangentialPressure") return paintInfo.tangentialPressure();
     if(key == "perspective") return paintInfo.perspective();
     if(key == "time") return (float) paintInfo.currentTime();
+    if(key == "pos") return paintInfo.pos();
 
     return QVariant();
 }

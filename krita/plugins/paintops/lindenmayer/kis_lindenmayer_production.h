@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QVariant>
+#include <QPointF>
 
 class KisLindenmayerLetter;
 class KisLindenmayerPaintOp;
@@ -14,7 +15,7 @@ public:
 
     // this can change the letter and return zero or more new letters.
     QList<KisLindenmayerLetter*> produce(KisLindenmayerLetter* letter);
-    void setCode(QString code);
+    void setCodeAndLimits(QString code, int minDistance, int maxDistance);
 
 private:
     void exec(QString code);
@@ -37,6 +38,8 @@ private:
     const KisLindenmayerPaintOp& m_paintOp;
 
     QString m_code;
+    int m_minDistance;
+    int m_maxDistance;
 
     // script environment
     QList<KisLindenmayerLetter*> m_retList;

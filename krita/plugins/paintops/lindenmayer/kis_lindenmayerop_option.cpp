@@ -39,6 +39,8 @@ KisLindenmayerOpOption::KisLindenmayerOpOption()
     m_checkable = false;
     m_options = new KisLindenmayerOpOptionsWidget();
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->minDistSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->maxDistSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->codeEditor, SIGNAL(textChanged()), SIGNAL(sigSettingChanged()));
     connect(m_options->codeEditor, SIGNAL(textChanged()), SLOT(clearScriptErrors()));
 
@@ -69,16 +71,28 @@ QString KisLindenmayerOpOption::code() const
     return m_options->codeEditor->toPlainText();
 }
 
+int KisLindenmayerOpOption::minDistance() const {
+    return m_options->minDistSpinBox->value();
+}
+
+int KisLindenmayerOpOption::maxDistance() const {
+    return m_options->maxDistSpinBox->value();
+}
+
 void KisLindenmayerOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty(LINDENMAYER_RADIUS, radius());
     setting->setProperty(LINDENMAYER_CODE, code().replace(QRegExp("\n"), "<br>"));
+    setting->setProperty(LINDENMAYER_MIN_DISTANCE, minDistance());
+    setting->setProperty(LINDENMAYER_MAX_DISTANCE, maxDistance());
 }
 
 void KisLindenmayerOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_options->radiusSpinBox->setValue(setting->getInt(LINDENMAYER_RADIUS));
     m_options->codeEditor->setPlainText(setting->getString(LINDENMAYER_CODE).replace("<br>", QString('\n')));
+    m_options->minDistSpinBox->setValue(setting->getInt(LINDENMAYER_MIN_DISTANCE));
+    m_options->maxDistSpinBox->setValue(setting->getInt(LINDENMAYER_MAX_DISTANCE));
 }
 
 void KisLindenmayerOpOption::setScriptErrors(QList<QPair<int, QString> > errors) {

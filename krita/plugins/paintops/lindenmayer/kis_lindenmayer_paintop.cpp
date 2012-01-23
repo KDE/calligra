@@ -53,7 +53,7 @@ KisLindenmayerPaintOp::KisLindenmayerPaintOp(const KisLindenmayerPaintOpSettings
 //    }
 //    m_lindenmayerBrush = new LindenmayerBrush( &m_properties, transfo );
 
-    m_productions.setCode(m_properties.code);
+    m_productions.setCodeAndLimits(m_properties.code, m_properties.minDistance, m_properties.maxDistance);
     m_firstPaint = true;
 }
 
