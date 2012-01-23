@@ -46,20 +46,19 @@ This file is part of the Calligra project
     xmlns:ooow="http://openoffice.org/2004/writer"
     xmlns:oooc="http://openoffice.org/2004/calc"
     xmlns:int="http://opendocumentfellowship.org/internal"
-    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="2.0">
-
-    <xsl:output method="html" indent="true"/>
-
 
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="param_no_css"/>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="param_css_only"/>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="scale">1</xsl:param>
-    <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="style.background-color">#A0A0A0</xsl:param>
+    <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="style.background-color">#F0F0F0</xsl:param>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CSS.debug">0</xsl:param>
     <xsl:variable xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="linebreak">    
     </xsl:variable>
+
+
+    <xsl:output method="html" indent="true"/>
 
 
     <xsl:template match="office:document">
@@ -78,7 +77,9 @@ This file is part of the Calligra project
         </xsl:element>
         <!-- body must be after head -->
         <xsl:element name="body">
+            <xsl:apply-templates select="office:document-styles/office:master-styles/style:master-page/style:header"/>
             <xsl:apply-templates select="office:document-content"/>
+            <xsl:apply-templates select="office:document-styles/office:master-styles/style:master-page/style:footer"/>
         </xsl:element>
     </xsl:element>
     </xsl:template>
@@ -143,11 +144,11 @@ This file is part of the Calligra project
             {
                 background-color: <xsl:value-of select="$style.background-color"/>;
                 margin: 1.5em;
-                position: absolute;
             }
             body
             {
-                position: absolute;
+                max-width: 40em;
+                margin:0 auto;  /* center document content */
             }
         }
         table
@@ -169,20 +170,12 @@ This file is part of the Calligra project
         {
             text-align: right;
         }
-        td p
-        {
-            max-height: 2.5ex;
-            overflow: hidden;
-        }
+        
         td p:hover
         {
             max-height: none;
         }
-        p
-        {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+        
         .page-break
         {
             margin: 1em;
@@ -192,9 +185,8 @@ This file is part of the Calligra project
     <xsl:template match="office:document-styles">
         <!-- office:document-styles begin -->
         
-        <xsl:call-template name="office:document-styles">
-        </xsl:call-template>
-        <xsl:apply-templates></xsl:apply-templates>    
+        <xsl:call-template name="office:document-styles" />
+        <xsl:apply-templates/>
             
         <!-- office:document-styles end -->         
     </xsl:template>
@@ -210,19 +202,7 @@ This file is part of the Calligra project
         <xsl:apply-templates/>
         <xsl:text><!-- office:automatic-styles end --></xsl:text>
     </xsl:template>
-
-    
-    
-<!-- Some interesting behaviour with style:header and style:footer nested inside style:master-page.
-     Initial (incorrect) behaviour was to expand header/footer elements within <head><style> element, when they should
-     be set to the beginning and end of the document,
--->
-    <xsl:template match="office:master-styles">
-    </xsl:template>
-
-
-   
-    
+      
     <xsl:template match="style:default-style">
             <xsl:text>p{</xsl:text>
             <xsl:text>}</xsl:text>       
@@ -233,7 +213,7 @@ This file is part of the Calligra project
         <xsl:value-of select="@style:name"></xsl:value-of>
         <xsl:text>
                 {</xsl:text>
-        <xsl:apply-templates/>
+                <xsl:apply-templates/>
         <xsl:text>}
         </xsl:text>
     </xsl:template>
@@ -305,66 +285,59 @@ This file is part of the Calligra project
 
     <xsl:template match="table:table-cell" mode="table_header">
         <xsl:element name="th">
-        <xsl:if test="@table:number-columns-spanned!=''">
+        <xsl:if test="string(@table:number-columns-spanned)">
             <xsl:attribute name="colspan">
                 <xsl:value-of select="@table:number-columns-spanned" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:if test="@table:number-rows-spanned!=''">
+        <xsl:if test="string(@table:number-rows-spanned)">
             <xsl:attribute name="rowspan">
                 <xsl:value-of select="@table:number-rows-spanned" />
             </xsl:attribute>
         </xsl:if>
+        <xsl:apply-templates select="text:p"/>
         </xsl:element>
-<!-- TODO DELETE 
-    <th colspan="{@table:number-columns-spanned}" 
-        rowspan="{@table:number-rows-spanned}">
-    <xsl:apply-templates select="text:p"/>
-    </th>
--->
     </xsl:template>
 
-  <xsl:template match="table:table-cell">
-  <td colspan="{@table:number-columns-spanned}" 
-      rowspan="{@table:number-rows-spanned}">
-  <xsl:apply-templates select="text:p"/>
-  </td>
-  </xsl:template>
+    <xsl:template match="table:table-cell">
+        <xsl:element name="td">
+        <xsl:if test="string(@table:number-columns-spanned)">
+            <xsl:attribute name="colspan">
+                <xsl:value-of select="@table:number-columns-spanned" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="string(@table:number-rows-spanned)">
+            <xsl:attribute name="rowspan">
+                <xsl:value-of select="@table:number-rows-spanned" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="text:p"/>
+        </xsl:element>
+    </xsl:template>
 
+    <xsl:template match="table:table">
+        <table border="1">
+            <xsl:apply-templates />
+        </table>
+    </xsl:template>
 
-  <xsl:template match="table:table">
-  <table border="1">
-  <xsl:apply-templates />
-<!--
-      <xsl:for-each select="table:table-header-rows">
-	<xsl:for-each select="table:table-row">
-	<tr>
-	<xsl:apply-templates />
-	</tr>
-	</xsl:for-each>
-      </xsl:for-each>
-      <xsl:for-each select="table:table-row">
-      <tr>
-      <xsl:apply-templates />
-      </tr>
-      </xsl:for-each>
-  -->
-  </table>
-  </xsl:template>
+    <xsl:template match="draw:frame">
+        <xsl:apply-templates/>
+    </xsl:template> 
+
+    <xsl:template match="draw:image">
+        <img src="{$html-odf-resourcesPath}/{@xlink:href}"/>
+    </xsl:template>
   
 
-
- <xsl:template match="draw:frame">
- <xsl:apply-templates/>
- </xsl:template> 
-
-  <xsl:template match="draw:image">
-    <img src="{$html-odf-resourcesPath}/{@xlink:href}" />
-  </xsl:template>
-  
-
-
-
+    <!--
+        We may need to remove non-printing character sequence EF BF BC (0xfffc)
+        This is a UTF-8 encoding for QChar::ObjectRepalcementMarker
+    -->
+    <xsl:template match="text()">
+        <xsl:value-of select="replace(.,'\xEF\xBF\xBC','')"/>
+    </xsl:template>
+    
 
 </xsl:stylesheet>
 
