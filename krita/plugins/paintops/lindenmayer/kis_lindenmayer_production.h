@@ -16,11 +16,13 @@ public:
     QList<KisLindenmayerLetter*> produce(KisLindenmayerLetter* letter);
     void setCode(QString code);
 
-protected:
+private:
     void exec(QString code);
     void execBlock(QString blockCode);
     void execCommand(QString command);
-
+    bool evalCommandValue(QString value, KisLindenmayerLetter* letter, const QString& param); // returns true, if there was a parse error
+    float evalRandClause(const QString& params);
+    float evalMixAnglesClause(const QString& params);
     bool evalBoolClause(QString clause);
     bool evalBoolClausePart(QString clause);
     float evalFloatClause(QString clause);

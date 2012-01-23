@@ -1,6 +1,9 @@
 #include "kis_lindenmayer_production.h"
 
 #include "kis_vec.h"
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+//USING_PART_OF_NAMESPACE_EIGEN
 
 #include "kis_lindenmayer_letter.h"
 #include "kis_lindenmayer_paintop.h"
@@ -85,6 +88,8 @@ QList<KisLindenmayerLetter*> KisLindenmayerProduction::produce(KisLindenmayerLet
             "if{letter[drawn] && letter[leaf]}{letter.delete();}";
 
     exec(m_code);
+
+    m_letter->setParameter("age", m_letter->getParameter("age").toFloat() + 1);
 
     if(m_isScriptError) {
         KisLindenmayerScriptErrorRepeater::instance()->repeatErrors(m_errorList);
@@ -206,27 +211,7 @@ void KisLindenmayerProduction::execCommand(QString command) {
         }
 
         QString value = cutOut(command, index, command.length()).trimmed();
-
-        if(value.endsWith(")")) {
-            if(value.startsWith("bool(")) {
-                value = cutOut(value, "bool(", ")");
-                letter->setParameter(param, evalBoolClause(value));
-            }
-            else if(value.startsWith("float(")) {
-                value = cutOut(value, "float(", ")");
-                letter->setParameter(param, evalFloatClause(value));
-            }
-            else if(value.startsWith("variant(")) {
-                value = cutOut(value, "variant(", ")");
-                letter->setParameter(param, evalVariantClause(value));
-            }
-            else {
-                parseError = true;
-            }
-        }
-        else {
-            letter->setParameter(param, evalVariantClause(value));
-        }
+        parseError = evalCommandValue(value, letter, param);
     }
     else if(command == "letter.delete()") {
         m_letter->markForRemoving();
@@ -249,6 +234,130 @@ void KisLindenmayerProduction::execCommand(QString command) {
     }
 }
 
+float KisLindenmayerProduction::evalRandClause(const QString& params) {
+    QStringList str = params.split(",");
+    float lowerBound = 0.0f;
+    float upperBound = 1.0f;
+    if(str.size() == 2) {
+        lowerBound = evalFloatClause(str.at(0));
+        upperBound = evalFloatClause(str.at(1));
+    }
+    else if(str.size() == 1 && str.at(0) != "") {
+        upperBound = evalFloatClause(str.at(0));
+    }
+
+    if(lowerBound < upperBound) {
+        float rand = qrand() % RAND_MAX; // just to be sure, that the qt lib has not a bigger random range..
+        rand /= (float) RAND_MAX;
+        rand *= upperBound - lowerBound; // scale
+        rand += lowerBound;
+        return rand;
+    }
+    else {
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error, while evaluating rand(" + params + "), lower bound greater higher bound."));
+        m_isScriptError = true;
+        return 0.0f;
+    }
+}
+
+//inline Eigen::Vector2d angleToVector(double angle) {
+//    double angleInRadians = (M_PI/180.0)*angle;
+//    Eigen::Rotation2D<double> rot = Eigen::Rotation2D<double>(angleInRadians);
+
+//    Eigen::Vector2d upVector(0.0, -1.0); // coord system is negative at the top
+
+//    return rot*upVector;
+//}
+
+inline float normaliseAngle(float angle) {
+    while(angle < -180) {
+        angle+=360;
+    }
+
+    while(angle > 180) {
+        angle-= 360;
+    }
+    return angle;
+}
+
+float KisLindenmayerProduction::evalMixAnglesClause(const QString& params) {
+    QStringList str = params.split(",");
+    if(str.size() != 3) {
+        m_errorList.append(QPair<int , QString>(m_scriptStatementNumber, "parse error, while evaluating mixAngles("
+                                                + params + "), parameter count is wrong (usage: mixAngles(firstAngle, secondAngle, percentageOfFirstAngle); percentage is from 0 to 1)."));
+        m_isScriptError = true;
+        return 0.0f;
+    }
+
+    float firstAngle = evalFloatClause(str.at(0));
+    float secondAngle = evalFloatClause(str.at(1));
+    float mixRatio = evalFloatClause(str.at(2)); // 0.3 means 30 % of the first angle
+    if(mixRatio < 0)
+        mixRatio = 0;
+    if(mixRatio > 1)
+        mixRatio = 1;
+
+    firstAngle = normaliseAngle(firstAngle);
+    secondAngle = normaliseAngle(secondAngle);
+
+    float firstAnglePlus = (firstAngle > 0) ? firstAngle : firstAngle + 360;
+    float secondAnglePlus = (secondAngle > 0) ? secondAngle : secondAngle + 360;
+
+    if(fabs(firstAnglePlus - secondAnglePlus) <= 180) {
+        return normaliseAngle((firstAnglePlus - secondAnglePlus)*mixRatio + secondAnglePlus);
+    }
+
+    return mixRatio * firstAngle + (1-mixRatio) * secondAngle;
+
+//    Eigen::Vector2d firstVector = angleToVector(firstAngle) * mixRatio;
+//    Eigen::Vector2d secondVector = angleToVector(secondAngle) * (1 - mixRatio);
+
+//    Eigen::Vector2d sum = firstVector + secondVector;
+
+//    if(sum.norm() < 0.01)
+//        return 0.0f;
+
+//    sum.normalize();
+
+//    double radianAngle = acos(sum.dot(Eigen::Vector2d(0.0, -1.0)));
+//    if(sum.x() < 0) {
+//        radianAngle*=-1.0;
+//    }
+//    float ret = (180.0/M_PI)*radianAngle;
+//    return ret;
+}
+
+bool KisLindenmayerProduction::evalCommandValue(QString value, KisLindenmayerLetter* letter, const QString& param) {
+    if(value.endsWith(")")) {
+        if(value.startsWith("bool(")) {
+            value = cutOut(value, "bool(", ")");
+            letter->setParameter(param, evalBoolClause(value));
+        }
+        else if(value.startsWith("float(")) {
+            value = cutOut(value, "float(", ")");
+            letter->setParameter(param, evalFloatClause(value));
+        }
+        else if(value.startsWith("variant(")) {
+            value = cutOut(value, "variant(", ")");
+            letter->setParameter(param, evalVariantClause(value));
+        }
+        else if(value.startsWith("rand(")) {
+            value = cutOut(value, "rand(", ")");
+            letter->setParameter(param, evalRandClause(value));
+        }
+        else if(value.startsWith("mixAngles(")) {
+            value = cutOut(value, "mixAngles(", ")");
+            letter->setParameter(param, evalMixAnglesClause(value));
+        }
+        else {
+            return true;
+        }
+    }
+    else {
+        letter->setParameter(param, evalVariantClause(value));
+    }
+    return false;
+}
 
 bool KisLindenmayerProduction::evalBoolClause(QString clause) {
     m_scriptStatementNumber++;
@@ -344,9 +453,16 @@ float KisLindenmayerProduction::evalFloatClause(QString clause) {
     int lastPos = 0;
     QString lastSign = "+";
     int currentSignPos;
+
     // the minus sign must be escaped (otherwise it would mean a range): \-
     // c++ compilers eat '\', so we have to use \\. hence \\- matches a minus sign.
     QRegExp regexp = QRegExp("[+\\-*/]");
+
+    clause = clause.trimmed();
+    if(clause.at(0) == '-') {
+        lastPos = 1;
+        lastSign = "-";
+    }
 
     currentSignPos = clause.indexOf(regexp, lastPos);
     while(currentSignPos != -1) {
@@ -446,6 +562,7 @@ void KisLindenmayerProduction::runTests() {
     Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50]-20.58+10.08+10.5"), 50.0f)); m_scriptStatementNumber++;
     Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] +   20.58 -  10.08 - 10.5 / 2"), 25.0f)); m_scriptStatementNumber++;
     Q_ASSERT(qFuzzyCompare(evalFloatClause(" letter[floatTest50] ++ 20.58 --  10.08 //0/ 10.5 "), 0.0f)); m_scriptStatementNumber++;
+    Q_ASSERT(qFuzzyCompare(evalFloatClause(" - 30 "), -30.0f)); m_scriptStatementNumber++;
 
     m_newLetter = new KisLindenmayerLetter(QPointF(0, 0), 30, &m_paintOp);
     Q_ASSERT(qFuzzyCompare(evalFloatClause("letter[floatTest50] +\n\t newLetter[angle]  "), 80.0f)); m_scriptStatementNumber++;
@@ -500,19 +617,48 @@ void KisLindenmayerProduction::runTests() {
     execCommand("letter[test30_2] = letter[test30]"); m_scriptStatementNumber++;
     execCommand("letter[boolTest] = bool(40>30 && true && false != true && letter[booleanTrue])"); m_scriptStatementNumber++;
 
+    execCommand("letter[rand1] = rand()"); m_scriptStatementNumber++;
+    execCommand("letter[rand2] = rand(5)"); m_scriptStatementNumber++;
+    execCommand("letter[rand3] = rand(-5, 10)"); m_scriptStatementNumber++;
+    execCommand("letter[rand4] = rand(10, 20)"); m_scriptStatementNumber++;
+
+    execCommand("letter[mixAngle1] = mixAngles(10, 170, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle2] = mixAngles(-10, -170, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle3] = mixAngles(-90, 90, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle4] = mixAngles(-170, 150, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle5] = mixAngles(180, 270, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle6] = mixAngles(270, -50, 0.5)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle7] = mixAngles(50, 100, 0.2)"); m_scriptStatementNumber++;
+    execCommand("letter[mixAngle8] = mixAngles(10, -90, 0.7)"); m_scriptStatementNumber++;
+
+    qDebug() << "rand 1 (range  0 - 1 )= " << m_letter->getParameter("rand1").toString();
+    qDebug() << "rand 2 (range  0 - 5 )= " << m_letter->getParameter("rand2").toString();
+    qDebug() << "rand 3 (range -5 - 10)= " << m_letter->getParameter("rand3").toString();
+    qDebug() << "rand 4 (range 10 - 20)= " << m_letter->getParameter("rand4").toString();
+
     Q_ASSERT(m_letter->getParameter("newBool").toBool());
     Q_ASSERT(qFuzzyCompare(m_letter->getParameter("newFloat").toFloat(), 40.0f));
     Q_ASSERT(m_letter->getParameter("newPoint").toPointF() == testPointF);
     Q_ASSERT(qFuzzyCompare(m_letter->getParameter("test30").toFloat(), 30.0f));
     Q_ASSERT(qFuzzyCompare(m_letter->getParameter("test30_2").toFloat(), 30.f));
+    Q_ASSERT(m_letter->getParameter("rand1").toFloat() > 0 && m_letter->getParameter("rand1").toFloat() < 1);
+    Q_ASSERT(m_letter->getParameter("rand2").toFloat() > 0 && m_letter->getParameter("rand2").toFloat() < 5);
+    Q_ASSERT(m_letter->getParameter("rand3").toFloat() > -5 && m_letter->getParameter("rand3").toFloat() < 10);
+    Q_ASSERT(m_letter->getParameter("rand4").toFloat() > 10 && m_letter->getParameter("rand4").toFloat() < 20);
 
-    m_newLetter = 0;
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle1").toFloat(), 90));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle2").toFloat(), -90));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle3").toFloat(), 0) || qFuzzyCompare(m_letter->getParameter("mixAngle3").toFloat(), 180));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle4").toFloat(), 170));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle5").toFloat(), -135));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle6").toFloat(), -70));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle7").toFloat(), 90));
+    Q_ASSERT(qFuzzyCompare(m_letter->getParameter("mixAngle8").toFloat(), -20));
 
-
-    // new features, placing tests at the bottom, so that parse errors are at the correct position..
+    // some new features, placing tests at the bottom, so that parse errors are at the correct position..
     Q_ASSERT(qFuzzyCompare(evalVariantClause("float(50+30)").toFloat(), 80.0f)); m_scriptStatementNumber++;
     Q_ASSERT(evalBoolClause("float(letter[floatTest50] - 40) == float(0.25*letter[floatTest40])") == true); m_scriptStatementNumber++;
-    Q_ASSERT(evalBoolClause("float(letter[floatTest50] - 40) == float(0.25*letter[floatTest40])") == true); m_scriptStatementNumber++;
+    Q_ASSERT(evalBoolClause("float(letter[floatTest50] - 40) == float(0.25*letter[floatTest40]) && true != false") == true); m_scriptStatementNumber++;
 
 
 
@@ -534,7 +680,7 @@ void KisLindenmayerProduction::runTests() {
         QPair<int, QString> pair;
         int i=0;
         foreach (pair, m_errorList) {
-            if(pair.second != errors.at(i)) {
+            if(pair.second != errors.at(i)) { // errors.at(i) could be out of range, if there are new errors, but we can crash, because it's an error anyway..
                 qDebug() << QString("unexpected parse error in assert no ") + QString::number(pair.first) + QString(":") + pair.second;
                 Q_ASSERT(false);
             }
