@@ -26,7 +26,8 @@
 #include "Sheet.h"
 #include "Util.h"
 #include "Value.h"
-
+#include "Map.h"
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Formula.h"
 #include "Function.h"
@@ -41,6 +42,7 @@ using namespace Calligra::Tables;
 // prototypes (sorted alphabetically)
 Value func_address(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_areas(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_choose(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_column(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_columns(valVector args, ValueCalc *calc, FuncExtra *);
@@ -53,6 +55,8 @@ Value func_multiple_operations(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_offset(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sheet(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sheets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
 
@@ -71,6 +75,11 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setParamCount(1);
     f->setNeedsExtra(true);
     f->setAcceptArray();
+    add(f);
+    f = new Function("CELL", func_cell);
+    f->setParamCount(1, 2);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
     add(f);
     f = new Function("CHOOSE",   func_choose);
     f->setParamCount(2, -1);
@@ -118,6 +127,15 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("ROWS",     func_rows);
     f->setParamCount(1);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("SHEET", func_sheet);
+    f->setParamCount(0, 1);
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("SHEETS", func_sheets);
+    f->setParamCount(0, 1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
@@ -245,6 +263,54 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     return Value(num);
 }
 
+//
+// Function: CELL
+//
+Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    const QString type = calc->conv()->asString(args[0]).asString().toLower();
+
+    args.pop_front();
+    FuncExtra extra(*e);
+    extra.ranges.pop_front();
+    extra.regions.pop_front();
+
+    if (type == "col") {
+        return func_column(args, calc, &extra);
+    }
+    if (type == "row") {
+        return func_row(args, calc, &extra);
+    }
+    if (type == "sheet") {
+        return func_sheet(args, calc, &extra);
+    }
+    if (type == "address") {
+        const Calligra::Tables::Region &region = args.count() ? extra.regions[0] : Calligra::Tables::Region(QPoint(e->mycol, e->myrow), e->sheet);
+        QString s;
+        if (region.firstSheet() && region.firstSheet() != e->sheet)
+            s += "'" + region.firstSheet()->sheetName() + "'!";
+        s += "$" + Cell::columnName(region.firstRange().x()) + "$" + QString::number(region.firstRange().y());
+        if (region.firstRange() != region.lastRange())
+            s += ":$" + Cell::columnName(region.lastRange().x()) + "$" + QString::number(region.lastRange().y());
+        return Value(s);
+    }
+    if (type == "filename") {
+        return Value(calc->settings()->fileName());
+    }
+
+    /*TODO
+    if (type == "contents")
+    if (type == "color")
+    if (type == "format")
+    if (type == "width")
+    if (type == "type")
+    if (type == "protect")
+    if (type == "parenthese")
+    if (type == "prefix")
+    */
+
+    return Value::errorVALUE();
+}
 
 //
 // Function: CHOOSE
@@ -502,8 +568,14 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
     //const int colNew = args.count() >= 5 ? calc->conv()->asInteger(args[4]).asInteger() : -1;
     //if (colNew == 0 || rowNew == 0) return Value::errorVALUE();
 
-    const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
-    const Calligra::Tables::Region region(rect, e->sheet);
+    // Doesn't take references to other sheets into account
+    //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
+    //const Calligra::Tables::Region region(rect, e->sheet);
+
+    if (e->regions.isEmpty())
+        return Value::errorVALUE();
+
+    const Calligra::Tables::Region &region = e->regions[0];
 
     if (!region.isValid() /* || !region.isSingular() */)
         return Value::errorVALUE();
@@ -542,6 +614,38 @@ Value func_rows(valVector, ValueCalc *, FuncExtra *e)
     return Value(row2 - row1 + 1);
 }
 
+//
+// Function: SHEET
+//
+Value func_sheet(valVector args, ValueCalc *, FuncExtra *e)
+{
+    Sheet *sheet = e->sheet;
+    if (!e->regions.isEmpty()) {
+        const Calligra::Tables::Region &region = e->regions[0];
+        if (region.isValid())
+            sheet = region.firstSheet();
+    }
+    return Value(sheet->map()->indexOf(sheet) + 1);
+}
+
+//
+// Function: SHEETS
+//
+Value func_sheets(valVector args, ValueCalc *, FuncExtra *e)
+{
+    if (!e->regions.isEmpty()) {
+        const Calligra::Tables::Region &region = e->regions[0];
+        if (region.isValid()) {
+            QList<Calligra::Tables::Sheet*> sheets;
+            Calligra::Tables::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
+            for(; it != end; ++it)
+                if (!sheets.contains((*it)->sheet()))
+                    sheets.append((*it)->sheet());
+            return Value(sheets.count());
+        }
+    }
+    return Value(e->sheet->map()->count());
+}
 
 //
 // Function: VLOOKUP

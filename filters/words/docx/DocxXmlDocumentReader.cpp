@@ -5214,19 +5214,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 		kDebug() << "insideH:" << m_currentDefaultCellStyle->insideH.style;
 		kDebug() << "insideV:" << m_currentDefaultCellStyle->insideV.style;
 #endif
-                //reference to the default parent style from styles.xml
-                if (m_currentTableStyleName.isEmpty() &&
-                    m_context->m_namedDefaultStyles.contains("table"))
-                {
-                    m_currentTableStyleName = m_context->m_namedDefaultStyles.value("table");
-                    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
-                    Q_ASSERT(tableStyle);
-                    if (tableStyle) {
-                        m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
-                    }
-                }
-                m_currentTableStyleBase = m_currentTableStyleName;
-                m_currentTableStyleName.clear();
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
@@ -5234,6 +5221,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 //             ELSE_TRY_READ_IF(bookmarkStart)
 //             ELSE_TRY_READ_IF(bookmarkEnd)
 //             ELSE_WRONG_FORMAT
+        }
+    }
+
+    //reference to the default parent style from styles.xml
+    if (m_currentTableStyleName.isEmpty() &&
+        m_context->m_namedDefaultStyles.contains("table"))
+    {
+        m_currentTableStyleName = m_context->m_namedDefaultStyles.value("table");
+        MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
+        Q_ASSERT(tableStyle);
+        if (tableStyle) {
+            m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
         }
     }
 
@@ -5294,7 +5293,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
-    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     QPair<int, int> spans;
 

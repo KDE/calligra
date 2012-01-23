@@ -57,6 +57,26 @@
    </Function>
 
    <Function>
+       <Name>CELL</Name>
+       <Type>Any</Type>
+       <Parameter>
+           <Comment>Type</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type range="true">Reference</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns information about position, formatting or contents in a reference.</Text>
+           <Syntax>CELL(type; reference)</Syntax>
+           <Example>CELL("COL", C7) returns 3</Example>
+           <Example>CELL("ROW", C7) returns 7</Example>
+           <Example>CELL("ADDRESS", C7) returns $C$7</Example>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>CHOOSE</Name>
        <Parameter>
            <Comment>Index</Comment>
@@ -115,11 +135,11 @@
        </Parameter>
        <Parameter>
            <Comment>Row</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Parameter>
            <Comment>Column</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is returned.</Text>
@@ -181,6 +201,35 @@
            <Related>COLUMNS</Related>
        </Help>
    </Function>
+
+   <Function>
+       <Name>SHEET</Name>
+       <Type>Int</Type>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns the sheet number of the reference or the string representing a sheet name.</Text>
+           <Syntax>SHEET(reference)</Syntax>
+           <Example>SHEET(Sheet1!C7) returns 1</Example>
+           <Example>SHEET(Sheet2!C7) returns 2</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>SHEETS</Name>
+       <Type>Int</Type>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns the number of sheets in a reference or current document.</Text>
+           <Syntax>SHEETS(reference)</Syntax>
+       </Help>
+   </Function>
+
    <Function>
        <Name>LOOKUP</Name>
        <Parameter>
@@ -222,7 +271,7 @@
            <Type>Boolean</Type>
        </Parameter>
        <Help>
-           <Text>Look for a matching value in the first row of the given table, and return the value of the indicated row.</Text>
+           <Text>Look for a matching value in the first row of the given table, and return the value of the indicated row.</Text>
            <Text>Looks up the 'lookup value' in the first row of the 'data source'. If a value matches, the value in the 'row' and the column, the value was found in, is returned. If 'sorted' is true (default), the first row is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
            <Syntax>HLOOKUP(Lookup value; data source; Row; Sorted)</Syntax>
        </Help>
@@ -304,7 +353,6 @@
        </Help>
    </Function>
 
-   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
    <Function>
        <Name>OFFSET</Name>
        <Type>Reference</Type>
@@ -321,7 +369,7 @@
            <Type>Int</Type>
        </Parameter>
        <Parameter>
-           <Comment>Height of the offset range (optionl)</Comment>
+           <Comment>Height of the offset range (optional)</Comment>
            <Type>Int</Type>
        </Parameter>
        <Parameter>
@@ -333,7 +381,6 @@
            <Syntax>OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer newHeight; Integer newWidth)</Syntax>
        </Help>
    </Function>
-   -->
 </Group>
 
 </KSpreadFunctions>

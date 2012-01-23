@@ -185,6 +185,12 @@ set(TestDatabaseFilter_SRCS TestDatabaseFilter.cpp)
 kde4_add_unit_test(TestDatabaseFilter TESTNAME kspread-Database-Filter ${TestDatabaseFilter_SRCS})
 target_link_libraries(TestDatabaseFilter calligratablesodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestPasteCommand_SRCS TestPasteCommand.cpp)
+kde4_add_unit_test(TestPasteCommand TESTNAME kspread-PasteCommand ${TestPasteCommand_SRCS})
+target_link_libraries(TestPasteCommand calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility

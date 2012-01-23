@@ -368,20 +368,20 @@ public:
 
     TextCombineType textCombine() const;
     void setTextCombine(TextCombineType type);
-    
+
     QChar textCombineStartChar() const;
     void setTextCombineStartChar(const QChar &character);
-    
+
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
-    
-    
+
+
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
-    
+
     EmphasisStyle textEmphasizeStyle() const;
     void setTextEmphasizeStyle(EmphasisStyle emphasis);
-    
+
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
 
@@ -467,6 +467,8 @@ public:
 
     bool operator==(const KoCharacterStyle &other) const;
 
+    bool operator!=(const KoCharacterStyle &other) const;
+
     /**
      * Removes properties from this style that have the same value in other style.
      */
@@ -524,5 +526,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(QSharedPointer<KoCharacterStyle>)
-Q_DECLARE_METATYPE(KoCharacterStyle *)
+
 #endif

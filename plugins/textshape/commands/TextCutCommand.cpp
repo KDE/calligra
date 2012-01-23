@@ -20,6 +20,7 @@
 #include "TextCutCommand.h"
 
 #include <KoTextEditor.h>
+#include <KoChangeTracker.h>
 #include <TextTool.h>
 #include <KAction>
 #include <klocale.h>
@@ -48,8 +49,10 @@ void TextCutCommand::redo()
         if (te == 0)
             return;
 
+        KoChangeTracker *changeTracker = KoTextDocument(te->document()).changeTracker();
+
         te->deleteChar(KoTextEditor::NextChar,
-                       m_tool->m_actionShowChanges->isChecked(),
+                       (changeTracker && changeTracker->displayChanges()),
                        m_tool->canvas()->shapeController());
     }
 }

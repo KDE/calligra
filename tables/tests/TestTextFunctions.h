@@ -49,6 +49,7 @@ private slots:
     void testLEN();
     void testLOWER();
     void testMID();
+    void testNUMBERVALUE();
     void testPROPER();
     void testREPLACE();
     void testREPT();

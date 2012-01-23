@@ -53,6 +53,7 @@ signals:
 
 private slots:    
     void slotLinkActivated(const QString& link);
+    void slotCancel();
 
 private:
     class Private;

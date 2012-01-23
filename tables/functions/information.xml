@@ -216,6 +216,19 @@
    </Function>
 
    <Function>
+       <Name>ISFORMULA</Name>
+       <Type>Boolean</Type>
+       <Parameter>
+           <Comment>Reference</Comment>
+           <Type>Reference</Type>
+       </Parameter>
+       <Help>
+           <Text>The ISFORMULA() function returns True if the referenced cell contains a formula. Otherwise it returns False</Text>
+           <Syntax>ISFORMULA(x)</Syntax>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>ISODD</Name>
        <Type>Boolean</Type>
        <Parameter>

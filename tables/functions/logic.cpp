@@ -200,7 +200,7 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: IFERROR
 //
-Value func_iferror(valVector args, ValueCalc *calc, FuncExtra *)
+Value func_iferror(valVector args, ValueCalc *, FuncExtra *)
 {
     if (args[0].isError())
         return args[1];
@@ -211,7 +211,7 @@ Value func_iferror(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: IFNA
 //
-Value func_ifna(valVector args, ValueCalc *calc, FuncExtra *)
+Value func_ifna(valVector args, ValueCalc *, FuncExtra *)
 {
     if (args[0] == Value::errorNA())
         return args[1];

@@ -60,6 +60,43 @@ enum XmlTkTags {
     XmlTkTpb = 0x0020
 };
 
+QByteArray xmlTkTagName(XmlTkTags tag) {
+    switch (tag) {
+        case XmlTkBackWallThickness: return "BackWallThickness";
+        case XmlTkBaseTimeUnitFrt: return "BaseTimeUnitFrt";
+        case XmlTkColorMappingOverride: return "ColorMappingOverride";
+        case XmlTkDispBlanksAsFrt: return "DispBlanksAsFrt";
+        case XmlTkFloorThicknessFrt: return "FloorThicknessFrt";
+        case XmlTkFormatCodeFrt: return "FormatCodeFrt";
+        case XmlTkHeightPercent: return "HeightPercent";
+        case XmlTkLogBaseFrt: return "LogBaseFrt";
+        case XmlTkMajorUnitFrt: return "MajorUnitFrt";
+        case XmlTkMajorUnitTypeFrt: return "MajorUnitTypeFrt";
+        case XmlTkMaxFrt: return "MaxFrt";
+        case XmlTkMinFrt: return "MinFrt";
+        case XmlTkMinorUnitFrt: return "MinorUnitFrt";
+        case XmlTkMinorUnitTypeFrt: return "MinorUnitTypeFrt";
+        case XmlTkNoMultiLvlLbl: return "NoMultiLvlLbl";
+        case XmlTkOverlay: return "Overlay";
+        case XmlTkPerspectiveFrt: return "PerspectiveFrt";
+        case XmlTkPieComboFrom12Frt: return "PieComboFrom12Frt";
+        case XmlTkRAngAxOffFrt: return "RAngAxOffFrt";
+        case XmlTkRotXFrt: return "RotXFrt";
+        case XmlTkRotYFrt: return "RotYFrt";
+        case XmlTkShowDLblsOverMax: return "ShowDLblsOverMax";
+        case XmlTkSpb: return "Spb";
+        case XmlTkStartSurface: return "StartSurface";
+        case XmlTkStyle: return "Style";
+        case XmlTkSymbolFrt: return "SymbolFrt";
+        case XmlTkThemeOverride: return "ThemeOverride";
+        case XmlTkTickLabelPositionFrt: return "TickLabelPositionFrt";
+        case XmlTkTickLabelSkipFrt: return "TickLabelSkipFrt";
+        case XmlTkTickMarkSkipFrt: return "TickMarkSkipFrt";
+        case XmlTkTpb: return "Tpb";
+    }
+    return QByteArray();
+}
+
 class XmlTk {
 public:
     unsigned m_xmlTkTag;
