@@ -1236,11 +1236,12 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             chse = readU16( ptr + 1 );
             break;
         case SPRM::sprmCSymbol:
-            // First the length byte...
-            ftcSym = readS16( ptr + 1 );
             if ( version == Word8 ) {
-                xchSym = readS16( ptr + 3 );
+                ftcSym = readS16( ptr );
+                xchSym = readS16( ptr + 2 );
             } else {
+                // First the length byte...
+                ftcSym = readS16( ptr + 1 );
                 xchSym = *( ptr + 3 );
             }
 #ifdef WV2_DEBUG_SPRMS
