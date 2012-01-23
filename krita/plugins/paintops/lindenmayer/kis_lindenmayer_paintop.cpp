@@ -122,7 +122,7 @@ qreal KisLindenmayerPaintOp::paintAt(const KisPaintInformation& info)
 //    dabPainter.begin();
     foreach (KisLindenmayerLetter* letter, m_letters) {
         if(letter->getParameter("drawn").toBool() == false) {
-            dabPainter.drawThickLine(letter->position(), letter->lineEndPosition(), 1, 1);
+            dabPainter.drawThickLine(letter->position(), letter->lineEndPosition(), letter->getParameter("startWidth").toFloat(), letter->getParameter("endWidth").toFloat());
             letter->setParameter("drawn", true);
         }
 //        dabPainter.paintLine(KisPaintInformation(letter->position()), KisPaintInformation(letter->lineEndPosition()));

@@ -21,7 +21,7 @@ private:
     // angles are relative to the vertical axis, +90 degrees points to right, -90 to left. positive +90+180=+270 points to the left. watch out, what happens at +180 or -180
 
     //default parameters:
-    // position, angle, length, age
+    // position, angle, length, age, startWidth, endWidth
 
     // computed parameters:
     // endPosition, angleToSun (points towards the mouse position), distanceToSun

@@ -14,6 +14,9 @@ KisLindenmayerLetter::KisLindenmayerLetter(QPointF position, float angle, const 
     setParameter("angle", angle);
     setParameter("age", 0.0f);
     setParameter("length", 0.0f);
+    setParameter("startWidth", 1.0f);
+    setParameter("endWidth", 1.0f);
+
     m_markedForRemoving = false;
 }
 
