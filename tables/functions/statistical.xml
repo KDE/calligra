@@ -1022,10 +1022,10 @@
 
            <Function>
                <Name>QUARTILE</Name>
-               <Type>Number</Type>
+               <Type>Float</Type>
                <Parameter>
                    <Comment>The cell range or data array of numeric values.</Comment>
-                   <Type range="true">Number</Type>
+                   <Type range="true">Float</Type>
                </Parameter>
                <Parameter>
                    <Comment>The number of the quartile to return.</Comment>
