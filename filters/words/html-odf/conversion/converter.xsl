@@ -54,11 +54,10 @@ This file is part of the Calligra project
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="scale">1</xsl:param>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="style.background-color">#F0F0F0</xsl:param>
     <xsl:param xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CSS.debug">0</xsl:param>
-    <xsl:variable xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="linebreak">
-    </xsl:variable>
+    <xsl:variable xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="linebreak">&#10;</xsl:variable>
 
 
-    <xsl:output method="html" indent="true"/>
+    <xsl:output method="xml" indent="yes" omit-xml-declaration="yes"/>
 
 
     <xsl:template match="office:document">
@@ -99,11 +98,25 @@ This file is part of the Calligra project
         <meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8"/>
         <xsl:comment>office:metadata end</xsl:comment>
     </xsl:template>
+
+    <!-- Without care, the XSLT would output <title/> for an empty title, which is incorrectly
+        parsed by many modern browsers.
+        To ensure that some value for title is defined, if it is not set in the document,
+        we write the filename into the title.
+        -->
     <xsl:template match="dc:title">
-        <xsl:if test="current()!=''">
-            <xsl:element name="title"><xsl:apply-templates/></xsl:element>
-        </xsl:if>
+        <xsl:element name="title">
+            <xsl:choose>
+                <xsl:when test="current()!=''">
+                    <xsl:apply-templates/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$html-odf-fileName"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
     </xsl:template>
+
     <xsl:template match="dc:language">
         <meta http-equiv="content-language" content="{current()}"/>
     </xsl:template>
@@ -236,15 +249,15 @@ This file is part of the Calligra project
     </xsl:template>
 
     <xsl:template match="office:document-content">
-    <xsl:apply-templates/>
+        <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="office:body">
-    <xsl:apply-templates/>
+        <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="office:text">
-    <xsl:apply-templates/>
+        <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="text:p">
@@ -267,22 +280,29 @@ This file is part of the Calligra project
         <xsl:apply-templates />
     </xsl:template>
 
+    <!-- table headers need to be processed slightly differtly in order to output <th> elements
+        instead of <td> elements. As both <table-header-rows> and <table-row> contain
+        <table-cell> elements, we need to set a "table_header" mode to apply the appropriate
+        template
+    -->
     <xsl:template match="table:table-header-rows">
         <xsl:element name="thead">
             <xsl:for-each select="table:table-row">
                 <xsl:element name="tr">
-                <xsl:apply-templates mode="table_header" />
+                    <xsl:apply-templates mode="table_header" />
                 </xsl:element>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
 
+    <!-- Regular table row -->
     <xsl:template match="table:table-row">
         <xsl:element name="tr">
             <xsl:apply-templates />
         </xsl:element>
     </xsl:template>
 
+    <!-- Table cell inside a table header -->
     <xsl:template match="table:table-cell" mode="table_header">
         <xsl:element name="th">
         <xsl:if test="string(@table:number-columns-spanned)">
@@ -299,6 +319,7 @@ This file is part of the Calligra project
         </xsl:element>
     </xsl:template>
 
+    <!-- Regular table cell -->
     <xsl:template match="table:table-cell">
         <xsl:element name="td">
         <xsl:if test="string(@table:number-columns-spanned)">
@@ -317,10 +338,12 @@ This file is part of the Calligra project
 
     <xsl:template match="table:table">
         <table border="1">
+        <xsl:value-of select="$linebreak"/>
             <xsl:apply-templates />
         </table>
     </xsl:template>
 
+    <!-- Images -->
     <xsl:template match="draw:frame">
         <xsl:apply-templates/>
     </xsl:template>

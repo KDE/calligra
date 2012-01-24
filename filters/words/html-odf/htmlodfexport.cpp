@@ -195,7 +195,9 @@ KoFilter::ConversionStatus HTMLOdfExport::transformXml(const QString &inputFileN
     // Execute XML transformation
 
     QXmlQuery myQuery(QXmlQuery::XSLT20);
+    // bind variables for root of resources and output filename
     myQuery.bindVariable(QString("html-odf-resourcesPath"), QVariant(resourcesPath));
+    myQuery.bindVariable(QString("html-odf-fileName"), QVariant(outputFile->fileName()));
     myQuery.setFocus(contall);
     myQuery.setQuery(temp1.readAll());
     success = myQuery.evaluateTo(outputFile);
