@@ -61,58 +61,6 @@ Item {
         }
     }
 
-    PinchArea {
-        width: Math.max(docFlickable.contentWidth, docFlickable.width)
-        height: Math.max(docFlickable.contentHeight, docFlickable.height)
-
-        property real initialWidth
-        property real initialHeight
-        onPinchStarted: {
-            initialWidth = docFlickable.contentWidth
-            initialHeight = docFlickable.contentHeight
-        }
-
-        onPinchUpdated: {
-            // adjust content pos due to drag
-            docFlickable.contentX += pinch.previousCenter.x - pinch.center.x
-            docFlickable.contentY += pinch.previousCenter.y - pinch.center.y
-
-            // resize content
-            docFlickable.resizeContent(initialWidth * pinch.scale, initialHeight * pinch.scale, pinch.center)
-        }
-
-        onPinchFinished: {
-            // Move its content within bounds.
-            docFlickable.returnToBounds()
-        }
-
-        MouseArea {
-            id: flickableMouseArea
-            anchors.fill: docRootRect
-            drag.filterChildren: true
-
-            Flickable {
-                id: docFlickable
-                x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
-
-                contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-            }
-
-            Loader {
-                id: toolbarLoader
-                property bool containsMouse: false
-
-                anchors.fill: docRootRect
-                opacity: 0
-            }
-
-            Connections {
-                target: toolbarLoader.item
-                onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
-            }
-        }
-    }
-
     CanvasController {
         id: canvas
 
@@ -149,6 +97,32 @@ Item {
         onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
         onFindNextRequested: docDocumentController.documentHandler().findNext();
         onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
+    }
+
+    MouseArea {
+        id: flickableMouseArea
+        anchors.fill: parent
+        drag.filterChildren: true
+
+        Flickable {
+            id: docFlickable
+            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
+
+            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+        }
+
+        Loader {
+            id: toolbarLoader
+            property bool containsMouse: false
+
+            anchors.fill: parent
+            opacity: 0
+        }
+
+        Connections {
+            target: toolbarLoader.item
+            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
+        }
     }
 
     states : [
