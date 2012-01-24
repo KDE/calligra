@@ -31,7 +31,7 @@ class ManifestParser : public QXmlDefaultHandler
 {
 public:
     bool startDocument();
-    bool endElement(const QString &, const QString , const QString &name);
+    bool endElement(const QString &, const QString &, const QString &name);
     bool startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attrs);
 
     QStringList fileList() const;
