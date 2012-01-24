@@ -13,6 +13,8 @@ include_directories(
 macro_optional_find_package(WPD)
 macro_optional_find_package(WPG)
 macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+macro_optional_find_package(Koralle)
+macro_log_feature(LIBKORALLE_FOUND "libkoralle" "Koralle library (RIFF parser)" "http://quickgit.kde.org/?p=scratch%2Fkossebau%2Flibkoralle.git&a=summary" FALSE "" "Required by the Karbon CDR import filter")
 macro_optional_find_package(Poppler)
 # The pdf-importer needs the not-officially-supported XPDF Headers
 # Installing these is off by default in poppler sources, so lets make
@@ -27,6 +29,9 @@ macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface librar
 
 add_subdirectory( png )
 add_subdirectory( svg )
+if (LIBKORALLE_FOUND)
+  add_subdirectory( cdr )
+endif (LIBKORALLE_FOUND)
 if (WPD_FOUND AND LIBWPG_FOUND)
   add_subdirectory( wpg )
 endif (WPD_FOUND AND LIBWPG_FOUND)

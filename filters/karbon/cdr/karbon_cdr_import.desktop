@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon14 Corel Draw Import Filter
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
+X-KDE-Import=application/vnd.corel-draw
+X-KDE-Weight=1
+X-KDE-Library=karboncdrimport
+X-KDE-ServiceTypes=CalligraFilter

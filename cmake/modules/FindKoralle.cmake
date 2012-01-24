@@ -1,0 +1,68 @@
+# - Try to find libkoralle v0 (RIFF library)
+# Once done this will define
+#
+#  LIBKORALLE_FOUND - system has libkoralle
+#  LIBKORALLE_INCLUDE_DIRS - the libkoralle include directory
+#  LIBKORALLE_LIBRARIES - Link these to use libkoralle
+
+
+# Already in cache?
+if (LIBKORALLE_INCLUDE_DIRS AND LIBKORALLE_LIBRARIES)
+    # be silent
+    set(LIBKORALLE_FIND_QUIETLY TRUE )
+endif(LIBKORALLE_INCLUDE_DIRS AND LIBKORALLE_LIBRARIES)
+
+
+# Search include dirs
+find_path(LIBKORALLE_NORMAL_INCLUDE_DIR
+    NAMES
+    koralle_export.h
+    PATH_SUFFIXES
+    koralle0
+    HINTS
+    ${INCLUDE_INSTALL_DIR}
+)
+find_path(LIBKORALLE_CAMELCASE_INCLUDE_DIR
+    NAMES
+    Koralle0/RiffStreamReader
+    HINTS
+    ${INCLUDE_INSTALL_DIR}
+)
+set(LIBKORALLE_INCLUDE_DIRS
+    ${LIBKORALLE_NORMAL_INCLUDE_DIR}
+    ${LIBKORALLE_CAMELCASE_INCLUDE_DIR}
+)
+
+# Search libraries
+find_library( LIBKORALLE_LIBRARY
+    NAMES
+    koralle0
+    HINTS
+    ${LIB_INSTALL_DIR}
+)
+set(LIBKORALLE_LIBRARIES
+    ${LIBKORALLE_LIBRARY}
+)
+
+
+# handle results
+if(LIBKORALLE_INCLUDE_DIRS AND LIBKORALLE_LIBRARIES)
+    set(LIBKORALLE_FOUND TRUE)
+else (LIBKORALLE_INCLUDE_DIRS AND LIBKORALLE_LIBRARIES)
+    set(LIBKORALLE_FOUND FALSE)
+endif(LIBKORALLE_INCLUDE_DIRS AND LIBKORALLE_LIBRARIES)
+
+if( LIBKORALLE_FOUND )
+   if( NOT LIBKORALLE_FIND_QUIETLY )
+      message( STATUS "Found Koralle libraries: ${LIBKORALLE_LIBRARIES}" )
+   endif( NOT LIBKORALLE_FIND_QUIETLY )
+else( LIBKORALLE_FOUND )
+   if( LIBKORALLE_FIND_REQUIRED )
+      message( FATAL_ERROR "Could not find Koralle v0 libraries" )
+   endif( LIBKORALLE_FIND_REQUIRED )
+endif( LIBKORALLE_FOUND )
+
+mark_as_advanced(
+    LIBKORALLE_INCLUDE_DIRS
+    LIBKORALLE_LIBRARIES
+)

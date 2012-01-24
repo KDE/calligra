@@ -304,6 +304,10 @@
                 <title xml:lang="en_us">Kontour</title>
                 <stat import="onestar" export="none"/>
             </filter>
+            <filter id="karbon_cdr">
+                <title xml:lang="en_us">Corel Draw</title>
+                <stat import="onestar" export="none"/>
+            </filter>
             <filter id="karbon_eps">
                 <title xml:lang="en_us">EPS</title>
                 <note xml:lang="en_us">Encapsulated PostScript</note>
