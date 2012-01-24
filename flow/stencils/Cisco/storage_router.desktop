@@ -2,11 +2,13 @@
 Name=Storage Router
 Name[bg]=Маршрутизатор за хранилище
 Name[ca]=Encaminador d'emmagatzematge
+Name[ca@valencia]=Encaminador d'emmagatzematge
 Name[el]=Δρομολογητής αποθήκευσης
 Name[et]=Salvestusmarsruuter
 Name[it]=Router archiviazione
 Name[nb]=Lagringsruter
 Name[nds]=Spieker-Nettweger
+Name[nl]=Storagerouter
 Name[pl]=Router przechowywania
 Name[pt]=Encaminhador Armazenamento
 Name[pt_BR]=Roteador de armazenamento

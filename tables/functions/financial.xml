@@ -462,7 +462,7 @@
        </Parameter>
        <Parameter>
            <Comment>Basis</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>Returns the Macauley duration of a fixed interest security in years.</Text>
@@ -652,7 +652,7 @@
        </Parameter>
        <Parameter>
            <Comment>Type (optional)</Comment>
-           <Type>IntType</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>IPMT calculates the amount of a payment of an annuity going towards interest.</Text>
@@ -698,11 +698,11 @@
        </Parameter>
        <Parameter>
            <Comment>Period</Comment>
-           <Type>IntType</Type>
+           <Type>Int</Type>
        </Parameter>
        <Parameter>
            <Comment>Number of periods</Comment>
-           <Type>IntType</Type>
+           <Type>Int</Type>
        </Parameter>
        <Parameter>
            <Comment>Present values (PV)</Comment>
@@ -779,7 +779,7 @@
        </Parameter>
        <Parameter>
            <Comment>Basis</Comment>
-           <Type>Integer</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>The MDURATION() function will calculate the modified Macauley duration of a fixed interest security in years.</Text>
@@ -852,7 +852,7 @@
        </Parameter>
        <Parameter>
            <Comment>Type (optional)</Comment>
-           <Type>IntType</Type>
+           <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>Returns the number of periods of an investment.</Text>
@@ -879,6 +879,7 @@
        </Parameter>
        <Help>
            <Text>The net present value (NPV) for a series of periodic cash flows.</Text>
+           <!--FIXME remove wordwrap, leads to strange looking translation messages-->
            <Text>Computes the net present value for a series of periodic cash flows with the
                discount rate Rate. Values should be positive if they are received as income, and
                    negative if the amounts are expenditure.</Text>
@@ -1000,7 +1001,7 @@
                </Parameter>
                <Parameter>
                    <Comment>Type (optional)</Comment>
-                   <Type>IntType</Type>
+                   <Type>Int</Type>
                </Parameter>
                <Help>
                    <Text>PMT returns the amount of payment for a loan based on a constant interest rate and constant payments (each payment is equal amount).</Text>
@@ -1038,7 +1039,7 @@
                </Parameter>
                <Parameter>
                    <Comment>Type (optional)</Comment>
-                   <Type>IntType</Type>
+                   <Type>Int</Type>
                </Parameter>
                <Help>
                    <Text>PPMT calculates the amount of a payment of an annuity going towards principal.</Text>
@@ -1142,8 +1143,6 @@
                </Help>
            </Function>
 
-           <!-- sebsauer; uncomment following once Calligra 2.4 is released
-
            <Function>
                <Name>RATE</Name>
                <Type>Float</Type>
@@ -1177,7 +1176,6 @@
                    <Example>RATE(4*12;-200;8000) equals 0.007701472</Example>
                </Help>
            </Function>
-           -->
 
            <Function>
                <Name>RECEIVED</Name>
@@ -1381,7 +1379,7 @@
                </Parameter>
                <Parameter>
                    <Comment>Basis</Comment>
-                   <Type>int</Type>
+                   <Type>Int</Type>
                </Parameter>
                <Help>
                    <Text>VDB calculates the depreciation allowance of an asset with an initial value, an expected useful life, and a final value of salvage for a period specified, using the variable-rate declining balance method.</Text>
@@ -1457,7 +1455,7 @@
                </Parameter>
                <Parameter>
                    <Comment>Basis</Comment>
-                   <Type>int</Type>
+                   <Type>Int</Type>
                </Parameter>
                <Help>
                    <Text>YIELDDISC calculates the yield of a discounted security per 100 currency units of face value.</Text>

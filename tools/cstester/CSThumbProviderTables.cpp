@@ -43,13 +43,13 @@ CSThumbProviderTables::~CSThumbProviderTables()
 {
 }
 
-QList<QPixmap> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
-    QList<QPixmap> thumbnails;
+    QList<QImage> thumbnails;
     if (0 != m_doc->map()) {
         foreach(Calligra::Tables::Sheet* sheet, m_doc->map()->sheetList()) {
-            QPixmap thumbnail(thumbSize);
-            thumbnail.fill(Qt::white);
+            QImage thumbnail(thumbSize, QImage::Format_RGB32);
+            thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);
 
             KoPageLayout pageLayout;

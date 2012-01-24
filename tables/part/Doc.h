@@ -126,7 +126,7 @@ public:
 
     virtual void addView(KoView *_view);
 
-    bool docData(QString const & xmlTag, QDomElement & data);
+    bool docData(QString const & xmlTag, QDomDocument & data);
 
     // reimplemented; paints the thumbnail
     virtual void paintContent(QPainter & painter, const QRect & rect);

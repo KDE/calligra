@@ -182,6 +182,9 @@ void ReportData::setSorting(const QList<SortedField>& lst )
         int col = fieldNumber( sort.field );
         sf = new QSortFilterProxyModel( &m_model );
         sf->setSourceModel( source_model );
+        if ( itemModel() ) {
+            sf->setSortRole( itemModel()->sortRole( col ) );
+        }
         sf->sort( col, sort.order );
         source_model = sf;
     }

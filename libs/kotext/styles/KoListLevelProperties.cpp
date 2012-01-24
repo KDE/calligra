@@ -41,6 +41,7 @@
 #include <KoImageData.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
+#include <KoTextSharedSavingData.h>
 
 class KoListLevelProperties::Private
 {
@@ -445,12 +446,13 @@ void KoListLevelProperties::onStyleChanged(int key)
         case KoListStyle::Bullet:               bullet = 0x2022; break;
         case KoListStyle::BlackCircle:          bullet = 0x25CF; break;
         case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-        case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-        case KoListStyle::SquareItem:           bullet = 0xE00A; break;
+        case KoListStyle::RhombusItem:          bullet = 0x25C6; break;
+        case KoListStyle::SquareItem:           bullet = 0x25A0; break;
         case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
         case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
         case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
         case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+        case KoListStyle::DiscItem:             bullet = 0x25CF; break;
     }
 
     if (bullet != 0)
@@ -487,7 +489,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             else {
 //                kDebug(32500) << "==> cs.name:" << cs->name();
 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
-               setCharacterStyleId(cs->styleId());
+                setCharacterStyleId(cs->styleId());
             }
         }
     }
@@ -514,10 +516,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             case 0x25CB:           //white circle, no fill
                 setStyle(KoListStyle::CircleItem);
                 break;
-            case 0xE00C: // losange => rhombus
+            case 0x25C6: // losange => rhombus
                 setStyle(KoListStyle::RhombusItem);
                 break;
-            case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
+            case 0x25A0: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                 setStyle(KoListStyle::SquareItem);
                 break;
             case 0x27A2: // two-colors right-pointing triangle
@@ -788,16 +790,28 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             switch (style()) {
             case KoListStyle::Bullet:               bullet = 0x2022; break;
             case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-            case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-            case KoListStyle::SquareItem:           bullet = 0xE00A; break;
+            case KoListStyle::RhombusItem:          bullet = 0x25C6; break;
+            case KoListStyle::SquareItem:           bullet = 0x25A0; break;
             case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+            case KoListStyle::BlackCircle:
+            case KoListStyle::DiscItem:             bullet = 0x25CF; break;
             default:                                bullet = 0; break; //empty character
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
+    }
+
+    KoTextSharedSavingData *sharedSavingData = 0;
+    if (d->stylesPrivate.contains(KoListStyle::CharacterStyleId) && (characterStyleId() != 0) &&
+           (sharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        QString styleName = sharedSavingData->styleName(characterStyleId());
+               // dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))->styleName(characterStyleId());
+        if (!styleName.isEmpty()) {
+            writer->addAttribute("text:style-name", styleName);
+         }
     }
 
     // These apply to bulleted and numbered lists

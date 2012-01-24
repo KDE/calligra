@@ -109,7 +109,7 @@
        </Parameter>
        <Parameter optional="true">
            <Comment>Cumulative</Comment>
-           <Type>Bool</Type>
+           <Type>Boolean</Type>
        </Parameter>
        <Help>
            <Text>The BETADIST() function returns the cumulative beta probability density function.</Text>
@@ -1424,7 +1424,7 @@
            </Parameter>
            <Parameter optional="true">
                <Comment>allowOffset</Comment>
-               <Type>Bool</Type>
+               <Type>Boolean</Type>
            </Parameter>
            <Help>
                <Text>The TREND() function calculates a sequence of values based on a linear regression of known value pairs.</Text>
@@ -1705,6 +1705,7 @@
            <Help>
                <Text>The ZTEST() function calculates the two tailed probability of a z-test with normal distribution.</Text>
                <Syntax>ZTEST(x; mean; standardDeviation)</Syntax>
+               <!--FIXME remove wordwrap, leads to strange looking translation messages-->
                <Text>Performs a test of the null hypothesis, that sample is a sample
                    of a normal distributed random variable with mean mean and standard
                    deviation sigma. A return value of 1 indicates, that the null

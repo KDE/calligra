@@ -328,6 +328,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
+    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -2874,6 +2875,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
+    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
     return true;
 }
 
@@ -3208,7 +3210,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
-    closeTab(window_partClass);
+    showTabIfNeeded();
     return true;
 }
 
@@ -3391,20 +3393,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
-    
-    if (viewMode == Kexi::DesignViewMode) {
-        kDebug() << "PART CLASS: " << item->partClass();
-        switch (d->prj->idForClass(item->partClass())) {
-        case KexiPart::FormObjectType: 
-            d->tabbedToolBar->showTab("form");
-            break;
-        case KexiPart::ReportObjectType: 
-            d->tabbedToolBar->showTab("report");
-            break;
-        default: ;
-        }
-        setDesignTabIfNeeded(item->partClass());
-    }
+    showDesignTabIfNeeded(item->partClass(), viewMode);
+    setDesignTabIfNeeded(item->partClass());
     return window;
 }
 
@@ -3495,7 +3485,6 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
     if (!it->neverSaved()) { //only add stored objects to the browser
         d->navigator->model()->slotAddItem(*it);
     }
-    setDesignTabIfNeeded(it->partClass());
     return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
 
@@ -4434,6 +4423,22 @@ void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
     d->tabbedToolBar->addSearchableModel(model);
 }
 
+void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+{
+    closeTab("");
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: 
+            d->tabbedToolBar->showTab("form");
+            break;
+        case KexiPart::ReportObjectType: 
+            d->tabbedToolBar->showTab("report");
+            break;
+        default: ;
+        }
+    }
+}
+
 void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
 {
     switch (d->prj->idForClass(partClass)) {
@@ -4449,7 +4454,6 @@ void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
 
 void KexiMainWindow::closeTab(const QString &partClass)
 {
-    kDebug() << "CLOSE OBJECT";
     switch (d->prj->idForClass(partClass)) {
     case KexiPart::FormObjectType: 
         d->tabbedToolBar->hideTab("form");
@@ -4457,7 +4461,18 @@ void KexiMainWindow::closeTab(const QString &partClass)
     case KexiPart::ReportObjectType: 
         d->tabbedToolBar->hideTab("report");
         break;
-    default:;
+    default:
+        d->tabbedToolBar->hideTab("form");
+        d->tabbedToolBar->hideTab("report");
+    }
+}
+
+void KexiMainWindow::showTabIfNeeded()
+{
+    if (currentWindow()) {
+        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+    } else {
+        closeTab("");
     }
 }
 #include "KexiMainWindow.moc"

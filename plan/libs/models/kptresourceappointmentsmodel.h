@@ -213,6 +213,9 @@ public:
     /// If @p idx is an appointment, return the node, else 0
     Node *node( const QModelIndex &idx ) const;
     
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
     class Private;
 
 public slots:

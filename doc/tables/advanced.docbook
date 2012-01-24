@@ -18,12 +18,12 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
-<title>Advanced &kspread;</title>
+<title>Advanced &tables;</title>
 <sect1 id="series">
 <title>Series</title>
 <para>When constructing a spreadsheet you often need to include a series of
 values, such as 10, 11, 12..., in a row or column. There are several ways you
-can do this in &kspread;.</para>
+can do this in &tables;.</para>
 <para>For a simple short series such as 5, 6, 7, 8... the <quote>Drag and Copy
 </quote> method is the simplest. Enter the starting value into the starting
 cell and the next value of the series into an adjacent cell.
@@ -43,15 +43,16 @@ the step value is not a constant value but is itself a series. So that if you
 start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10, 
 12..., the step value in this example being the series 2, 1, 2, 1...</para>
 
-<para>&kspread; also recognizes some special <quote>series</quote> such as
+ <!--FIXME does not work here -->
+<para>&tables; also recognizes some special <quote>series</quote> such as
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
 (note the capitalization) then Drag and Copy it down. To see what special series 
-are available, and perhaps create your own, select <menuchoice><guimenu>Tools
-</guimenu><guimenuitem>Custom Lists...</guimenuitem></menuchoice> .</para>
+are available, and perhaps create your own, select <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>Custom Lists...</guimenuitem></menuchoice></para>
 
 <para>If you select a cell and choose <guimenuitem>Series...</guimenuitem> 
-from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series
-</guilabel> dialog box. This is useful for creating series that are too long 
+from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series</guilabel> 
+dialog box. This is useful for creating series that are too long 
 to be conveniently constructed using the Drag and Copy method, or for 
 creating geometric series such as 1, 1.5, 2.25, 3.375... where the step value,
 1.5 in this case, is used as a multiplier.</para>
@@ -66,11 +67,12 @@ Drag and Copy cell A2 down.</para>
 <title>Formulae</title>
 <sect2 id="builtin">
 <title>Built in Functions</title>
-<para>&kspread; has a huge range of built in mathematical and other functions 
+<para>&tables; has a huge range of built in mathematical and other 
+<link linkend="functions">functions</link> 
 that can be used in a formula cell. They can be seen and accessed by selecting 
 a cell then choosing <guimenuitem>Function...</guimenuitem> from the 
-<guimenu>Insert</guimenu> menu. This brings up the <guilabel>Function
-</guilabel> dialog box.</para>
+<guimenu>Insert</guimenu> menu. This brings up the <guilabel>Function</guilabel> 
+dialog box.</para>
 <para>Select the function you want to use from the listbox at the left of the 
 dialog box. The <guilabel>Help</guilabel> tab page will then display a description,
 the return type, Syntax, Parameters, and Examples for this function.
@@ -94,8 +96,9 @@ semi-colon (<keysym>;</keysym>).</para>
 function into the current cell and close the <guilabel>Function</guilabel>
 dialog.</para>
 <para>You can of course do without the <guilabel>Function</guilabel> 
-dialog and simply type the complete expression into the Formula toolbar's 
-main edit box. Function names are not case sensitive. Do not forget that all 
+dialog and simply type the complete expression into the main text entry box 
+in the <guilabel>Cell Editor</guilabel> tool options. 
+Function names are not case sensitive. Do not forget that all 
 expressions must start with an <keysym>=</keysym> symbol.</para>
 </sect2>
 
@@ -217,25 +220,25 @@ and select <guilabel>Addition</guilabel>, <guilabel>Subtraction</guilabel>,
 <guilabel>Operation</guilabel> section of the dialog box.</para>
 <para>You can also apply different modifier values to different rows or 
 columns of the target area by copying an area containing the wanted modifiers 
-before selecting the target area and doing <guimenuitem>Special Paste...
-</guimenuitem> . For example, if you enter <userinput>5</userinput> into cell 
+before selecting the target area and doing <guimenuitem>Special Paste...</guimenuitem>
+For example, if you enter <userinput>5</userinput> into cell 
 A1, <userinput>10</userinput> into B1, select both cells and do a <guimenuitem>
 Copy</guimenuitem> then <guimenuitem>Special Paste...</guimenuitem> <guilabel>
 Addition</guilabel> into cells A10 to D15, 5 will be added to A10:A15 and 
 C10:C15, and 10 to B10:B15 and D10:D15.</para>
 <para>Note that a modifier value can be a formula as well as a simple numeric 
-value. If it is a formula then &kspread; will adjust the cell references as 
+value. If it is a formula then &tables; will adjust the cell references as 
 for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
 </sect1>
 
 <sect1 id="goalseek">
 <title>Goal Seeking</title>
-<para>&kspread; can be used to solve algebraic expressions such as <emphasis>
+<para>&tables; can be used to solve algebraic expressions such as <emphasis>
 x + x^2 = 4</emphasis> or <emphasis>For what value of x does x + x squared 
 equal 4 ?</emphasis></para>
 <para>For this example you could enter <userinput>=A2+A2*A2</userinput>
 into A1 then either try different values in A2 until the result in A1 is as 
-close as you wish to <emphasis>4</emphasis> or, preferably, use &kspread;'s  
+close as you wish to <emphasis>4</emphasis> or, preferably, use &tables;'s  
 <guimenuitem>Goal Seek...</guimenuitem> feature which automatically adjusts the 
 value in one cell to try to make the value in another cell as close as 
 possible to a target value.</para>
@@ -248,7 +251,7 @@ and the reference of the cell that is to be changed
 (<userinput>A2</userinput>) into the <guilabel>By changing cell:</guilabel> 
 box. Note that you need to have entered some initial value into the cell that 
 is to be changed before starting <guimenuitem>Goal Seek</guimenuitem>.</para>
-<para>Pressing the <guibutton>Start</guibutton> button will start the
+<para>Pressing the <guibutton>OK</guibutton> button will start the
 calculation. When it finishes and if it has found a solution press the
 <guibutton>OK</guibutton> button to accept the result or
 <guibutton>Cancel</guibutton> to keep the original value.
@@ -257,31 +260,23 @@ calculation. When it finishes and if it has found a solution press the
 
 <sect1 id="sheets">
 <title>Using more than one Worksheet</title>
-<para>When you start a new, empty, document with &kspread; it will create a 
+<para>When you start a new, empty, document with &tables; it will create a 
 number of blank worksheets. The number of sheets it creates is determined 
-by the <guilabel>Number of sheets open at the beginning:</guilabel> setting in 
-the <guilabel>Interface</guilabel> page of &kspread;'s 
-<link linkend="configinterface">configuration</link> dialog box.</para>
+by the selected template.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
 </menuchoice> will add another sheet to the document.</para>
-<para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
-</guilabel> page of &kspread;'s configuration dialog box is checked a small 
-tab will be shown near the bottom left of &kspread;'s window for each sheet. 
-<mousebutton>Left</mousebutton> click on one of these tabs to see that sheet.
-</para>
 <para>You can also switch between worksheets by using the 
-<keycombo action="simul">&Ctrl;<keysym>PageDown</keysym></keycombo> 
+<keycombo action="simul">&Ctrl;<keysym>PgDown</keysym></keycombo> 
 to move to the next sheet, 
-<keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
+<keycombo action="simul">&Ctrl;<keysym>PgUp</keysym></keycombo> to move to 
 the previous one.</para>
 <para>Worksheets are given the default names of <emphasis>Sheet1</emphasis>, 
 <emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
 <mousebutton>right</mousebutton> clicking on the tab and selecting 
-<guimenuitem>Rename Sheet...</guimenuitem>.</para>
+<guimenuitem>Rename Sheet...</guimenuitem></para>
 <para>To remove a sheet from the document use the <guimenuitem>Remove Sheet
-</guimenuitem> option in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
-Sheet</guisubmenu></menuchoice> submenu or in the little 
-menu that pops up when you <mousebutton>right</mousebutton> click on the tab 
+</guimenuitem> option in the context menu 
+that pops up when you <mousebutton>right</mousebutton> click on the tab 
 for the sheet you want to remove.</para>
 <para>Other entries in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
 Sheet</guisubmenu></menuchoice> submenu allow you to show or hide a sheet in 
@@ -314,30 +309,32 @@ select the cell in the target sheet where you want the top left corner of the
 consolidated results to appear. Then choose the appropriate function from
 the <guilabel>Function:</guilabel> combo box and press the
 <guibutton>OK</guibutton> button.</para>
-<para>If you check the <guilabel>Copy data</guilabel> box in the <guilabel>
-Consolidate</guilabel> dialog the values resulting from the consolidation will 
+<para>If you click the <guibutton>Details >></guibutton> in the dialog and check 
+the <guilabel>Copy data</guilabel> box the values resulting from the consolidation will 
 be placed into the target cells rather than the formulae to calculate them.
 </para>
 </sect2>
 </sect1>
-
 <sect1 id="insertchart">
 <title>Inserting a Chart</title>
 <para>You can insert a chart into a sheet to give a graphical view of your 
 data.</para>
-<para>First select the area of cells containing the data and choose 
-<menuchoice><guimenu>Insert</guimenu><guimenuitem>Chart</guimenuitem>
-</menuchoice>. The cursor will change to a small cross shape which you 
-should drag across the sheet while holding the <mousebutton>left
-</mousebutton> mouse button down to define the area where you want the 
+<para>First enable <guilabel>Add Shape</guilabel> docker using the <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Dockers</guimenuitem>
+</menuchoice>.</para>
+<para>Then select the area of cells containing the data and choose 
+<guilabel>Chart</guilabel> in the <guilabel>Add Shape</guilabel>. Drag the cursor across the sheet while holding the 
+<mousebutton>left</mousebutton> mouse button down to define the area where you want the 
 chart to appear, there is no need to be too accurate at this stage as the 
 chart size can easily be changed at any time. When you release the mouse 
-button a chart wizard dialog box will appear.</para>
-<para>The wizard allows you to define the type of chart, labels and legend 
-that you need. You may wish to refer to the &kchart; Handbook at this stage,
-but again if you make a wrong choice you can correct it later. 
-When you press the <guibutton>Finish</guibutton> button the wizard will 
-vanish and you will see the chart embedded into the worksheet.</para>
+button a <guilabel>Chart Options</guilabel> dialog box will appear.</para>
+<para>The data area is already prefilled with the selected cell range.
+Select the first row and column as labels, check <guilabel>Data set in rows</guilabel>
+and click the <guibutton>OK</guibutton> button. The Dialog will vanish and you 
+will see the chart embedded into the worksheet.</para>
+<para>Now select <guibutton>Chart Editing Tool</guibutton> from the <guilabel>Tools</guilabel> 
+docker and edit the chart properties like chart type, labels and axis in the 
+<guilabel>Tools Options</guilabel>.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -348,42 +345,41 @@ vanish and you will see the chart embedded into the worksheet.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>To move, resize or even delete the embedded chart click anywhere 
-within the chart area. It should now appear with a diagonal hatch border 
-and with a small black square at each corner and in the middle of each edge.
+<para>To move, resize or even delete the embedded chart switch to the 
+<guibutton>Basic shape manipulation</guibutton> tool and click anywhere 
+within the chart area. It should now appear with a green border 
+and with a small yellow square at each corner and in the middle of each edge.
 </para>
-<para>If you move the cursor over any of the black squares it should change 
+<para>If you move the cursor over any of the squares it should change 
 to a double headed arrow. You can resize the chart by dragging one of these 
 squares with the <mousebutton>left</mousebutton> mouse button pressed. To 
 delete the chart <mousebutton>right</mousebutton> click on one of the 
-squares and select <guimenuitem>Delete Embedded Document</guimenuitem>.</para>
-<para>To move the chart move the cursor so that it is over one of the 
-hatched borders. The cursor should then change to a hand, press the 
+squares and select <guimenuitem>Delete</guimenuitem>.</para>
+<para>To move the chart move the cursor into the chart. 
+The cursor should then change to a cross, press the 
 <mousebutton>left</mousebutton> mouse button and you will be able to drag the 
 chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. It should then appear with a diagonal 
-hatch border without any small black squares and &kchart;'s <interface>
-Chart Toolbar</interface> should appear in &kspread;'s window. You can then 
-use these &kchart; tools or a selection from the menu that pops up when you 
-<mousebutton>right</mousebutton> click in the chart area to change the chart.</para>
+click twice within the chart area. The chart <interface>Tools Options</interface> 
+should appear in the docker. You can then 
+use these tools to change the chart.</para>
 </sect1>
 
 <sect1 id="insertdata">
 <title>Inserting External Data</title>
 <para>You can insert data from a text file or from the clipboard into a 
 worksheet by first selecting the cell where you want the top left item of the 
-inserted data to appear, then choosing <guimenuitem>From Text File...
-</guimenuitem> or <guimenuitem>From Clipboard...</guimenuitem> from the 
+inserted data to appear, then choosing <guimenuitem>From Text File...</guimenuitem> 
+or <guimenuitem>From Clipboard...</guimenuitem> from the 
 <menuchoice><guimenu>Insert</guimenu><guisubmenu>External Data</guisubmenu>
 </menuchoice> sub menu.</para>
-<para>In both cases &kspread; will assume that the data is in
+<para>In both cases &tables; will assume that the data is in
 <acronym>CSV</acronym> form and will open a
 dialog box allowing you to control how the data is extracted from the file or
 clipboard and placed into the worksheet cells.</para>
-<para>If support for it has been included in your system, &kspread; can also
+<para>If support for it has been included in your system, &tables; can also
 insert data from a <acronym>SQL</acronym> database into a worksheet. This is
 done by using the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
 External Data</guisubmenu><guimenuitem>From Database...</guimenuitem>
@@ -420,37 +416,36 @@ application when clicked on.
 </para></listitem>
 
 <listitem><para>The <guilabel>Cell</guilabel> type of link cell holds a 
-&kspread; cell reference, entered in the <guilabel>Cell:</guilabel> text box. 
+&tables; cell reference, entered in the <guilabel>Cell or Named Area</guilabel> text box. 
 <mousebutton>Left</mousebutton> clicking on this type of link cell causes 
-&kspread;'s focus to move to the target cell.
+&tables;'s focus to move to the target cell.
 </para></listitem>
 </itemizedlist>
 
 <para>All four types of link cell need some suitable text to be entered into 
-the <guilabel>Comment:</guilabel> field of the <guilabel>Insert Link</guilabel> 
-dialog. This is the text that appears in the cell, you can set 
-its style to <guilabel>Bold</guilabel> or <guilabel>Italic</guilabel> if you 
-wish.</para>
+the <guilabel>Text to display</guilabel> field of the <guilabel>Insert Link</guilabel> 
+dialog. This is the text that appears in the cell.</para>
 </sect1>
 
 <sect1 id="validcheck">
 <title>Validity Checking</title>
-<para>&kspread; can automatically check the validity of entered data against 
+<para>&tables; can automatically check the validity of entered data against 
 a number of criteria, and pop up a message box if the data is invalid.</para>
 <para>To enable this feature, select the cell(s) to be monitored and choose 
-<menuchoice><guimenu>Edit</guimenu><guimenuitem>Validity...</guimenuitem>
-</menuchoice>. This will bring up &kspread;'s <guilabel>Validity</guilabel> 
-dialog box which has two tabbed pages.</para>
-<para>In the <guilabel>Values</guilabel> page select what type of data is to 
+<menuchoice><guimenu>Data</guimenu><guimenuitem>Validity...</guimenuitem>
+</menuchoice>. This will bring up &tables;'s <guilabel>Validity</guilabel> 
+dialog box which has three tabbed pages.</para>
+<para>In the <guilabel>Criteria</guilabel> page select what type of data is to 
 be considered valid from the <guilabel>Allow:</guilabel> combo box list then 
 define the valid range of values by choosing one of the options in the 
 <guilabel>Data:</guilabel> combo box and entering suitable value(s) into 
 one or both of the edit box(es).</para>
 <para>When you have done this change to the <guilabel>Error Alert</guilabel> 
-tab page. Here you can choose the type of message box
+tab. Here you can choose the type of message box
 (<guimenuitem>Stop</guimenuitem>, <guimenuitem>Warning</guimenuitem>
 or <guimenuitem>Information</guimenuitem>) that will appear when an invalid
 value is entered, and define the message box title and message text.</para>
+<!--FIXME missing Input Help tab-->
 <para>Note that this feature only checks data that you enter into the cell, 
 for a way of checking the results from formulae cells see the <link 
 linkend="formatdata">Conditional Cell Attributes</link> section of this 
@@ -465,7 +460,7 @@ Handbook.</para>
 <para>Protecting the document means that without the password a user cannot add
 or delete sheets. Document protection does not protect cells.</para>
 <para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document...</guimenuitem></menuchoice>.
+Document...</guimenuitem></menuchoice>
 A dialog appears asking you for a password. The <guilabel>Password:</guilabel> strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure your password.</para>
@@ -717,11 +712,11 @@ enabled in Cell Protection and the sheet is protected</phrase>
 
 <sect1 id="other">
 <title>Other Features</title>
-
+<!-- no split view in 2.4
 <sect2 id="splitview">
 <title>Splitting the View</title>
 <para>If your spreadsheet is so large that you cannot see all of it at once, 
-splitting &kspread;'s window into two or more views can help you work on it. 
+splitting &tables;'s window into two or more views can help you work on it. 
 This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
 Split View</guimenuitem></menuchoice> which will split the current view into 
 two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
@@ -742,7 +737,7 @@ separating the views.</para>
 <para>To remove a view select <menuchoice><guimenu>View</guimenu><guimenuitem>
 Remove View</guimenuitem></menuchoice></para>
 </sect2>
-
+-->
 
 <sect2 id="namedareas">
 <title>Named Cells and Areas</title>
@@ -755,10 +750,10 @@ where you can enter any name you wish.</para>
 into the small text box at the left end of the Formula toolbar, overwriting the 
 cell reference that normally appears here.</para>
 <para>If you enter a name that has already been used into this text box 
-&kspread;'s selection will change to show the named cell(s).</para>
-<para>The <menuchoice><guimenu>Data</guimenu><guimenuitem>Show Area...
-</guimenuitem></menuchoice> option will give you a list of existing names 
-and let you change &kspread;'s focus to any of them or let you remove a name.
+&tables;'s selection will change to show the named cell(s).</para>
+<para>The <menuchoice><guimenu>Data</guimenu><guimenuitem>Named Areas...</guimenuitem>
+</menuchoice> option will give you a list of existing names 
+and let you change &tables;'s focus to any of them or let you remove a name.
 </para>
 <para>Named cells are particularly useful in formulae as an alternative to 
 <link linkend="absolute"> absolute cell references</link> as the names can 
@@ -776,12 +771,11 @@ should be enclosed in single quotation marks.</para>
 <title>Cell Comments</title>
 <para>A cell can contain a text comment that can be viewed when working on 
 the spreadsheet but which is not printed and not normally seen.</para>
-<para>To add a comment select the cell and choose <guimenuitem>Add/Modify 
-Comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
-button menu or from the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
-Cell Comment</guisubmenu></menuchoice> menu and type your comment into the 
+<para>To add a comment select the cell and choose <guimenuitem>Comment...</guimenuitem> 
+from the <mousebutton>right</mousebutton> mouse 
+button menu or from the <guimenu>Insert</guimenu> menu and type your comment into the 
 resulting <guilabel>Cell Comment</guilabel> dialog box.</para>
-<para>To see the comment hover the mouse pointer over the top right corner of 
+<para>To see the comment hover the mouse pointer over  
 the cell. The comment will appear as if it were a Tooltip.
 </para>
 <para>If you check the <guilabel>Show comment indicator</guilabel> box of the 
@@ -793,8 +787,8 @@ button onto the sheet tab at the bottom of the main window and select
 <guimenuitem>Sheet Properties</guimenuitem> from the popup menu. Or select it from the 
 <menuchoice><guimenu>Format</guimenu><guisubmenu>Sheet</guisubmenu></menuchoice> menu.</para>
 
-<para>To remove a comment from a cell, select <guimenuitem>Remove Comment
-</guimenuitem> from the <mousebutton>right</mousebutton> mouse button menu or 
+<para>To remove a comment from a cell, select <guimenuitem>Remove Comment</guimenuitem> 
+from the <mousebutton>right</mousebutton> mouse button menu or 
 choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu>
 <guimenuitem>Comment</guimenuitem></menuchoice>.</para>
 </sect2>

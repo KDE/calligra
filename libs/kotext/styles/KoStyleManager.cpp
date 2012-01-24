@@ -37,6 +37,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextSharedSavingData.h>
 
 #include <QTimer>
 #include <QUrl>
@@ -52,7 +53,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0)
     {
     }
     ~Private() {
@@ -78,6 +79,7 @@ public:
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
+    KoListStyle *defaultOutlineStyle;
     KoListStyle *outlineStyle;
     QList<int> defaultToCEntriesStyleId;
     KoOdfNotesConfiguration *footNotesConfiguration;
@@ -103,12 +105,22 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     //TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
     d->defaultListStyle = new KoListStyle(this);
-    KoListLevelProperties llp;
-    llp.setLevel(1);
-    llp.setStartValue(1);
-    llp.setStyle(KoListStyle::DecimalItem);
-    llp.setListItemSuffix(".");
-    d->defaultListStyle->setLevelProperties(llp);
+    const int margin = 10; // we specify the margin for the default list style(Note: Even ChangeListCommand has this value)
+    const int maxListLevel = 10;
+    for (int level = 1; level <= maxListLevel; level++) {
+        KoListLevelProperties llp;
+        llp.setLevel(level);
+        llp.setStartValue(1);
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(".");
+        llp.setAlignmentMode(true);
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setTabStopPosition(margin*(level+2));
+        llp.setMargin(margin*(level+1));
+        llp.setTextIndent(margin);
+
+        d->defaultListStyle->setLevelProperties(llp);
+    }
 
     //default styles for ToCs
     int maxOutLineLevel = 10;
@@ -150,6 +162,12 @@ void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 
 void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 {
+    KoTextSharedSavingData *textSharedSavingData = 0;
+    if (!(textSharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        textSharedSavingData = new KoTextSharedSavingData;
+        context.addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedSavingData);
+    }
+
     saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
@@ -166,6 +184,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         paragraphStyle->saveOdf(style, context);
         QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(paragraphStyle->styleId(), newName);
         savedNames.insert(paragraphStyle, newName);
     }
 
@@ -189,7 +208,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
         KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
         characterStyle->saveOdf(style);
-        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(characterStyle->styleId(), newName);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -202,6 +222,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ListStyle);
         listStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(listStyle->styleId(), newName);
     }
 
     foreach(KoTableStyle *tableStyle, d->tableStyles) {
@@ -772,6 +794,27 @@ KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const
 KoListStyle *KoStyleManager::defaultListStyle() const
 {
     return d->defaultListStyle;
+}
+
+KoListStyle *KoStyleManager::defaultOutlineStyle() const
+{
+    if (!d->defaultOutlineStyle) {
+        d->defaultOutlineStyle = d->defaultListStyle->clone();
+
+        QList<int> levels = d->defaultOutlineStyle->listLevels();
+        foreach (int level, levels) {
+            KoListLevelProperties llp = d->defaultOutlineStyle->levelProperties(level);
+            llp.setOutlineList(true);
+            llp.setDisplayLevel(level);
+            llp.setTabStopPosition(0);
+            llp.setMargin(0);
+            llp.setTextIndent(0);
+            d->defaultOutlineStyle->setLevelProperties(llp);
+        }
+        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);
+    }
+
+    return d->defaultOutlineStyle;
 }
 
 void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)

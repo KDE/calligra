@@ -2375,12 +2375,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_br()
     m_currentTextStyle.removeProperty("style:text-underline-style");
     m_currentTextStyle.removeProperty("style:text-underline-width");
 
-    // The fo:font-size is applied to both the start of a new line and the
-    // end of the current line during layout, which affects line-height
-    // calculation and results in overlapping.  Avoid use of the application
-    // default font-size and font-size of the default text/paragraph style!
-    m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_MIN);
-
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", mainStyles->insert(m_currentTextStyle));
     body->startElement("text:line-break");
@@ -3889,9 +3883,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    // TODO: Process the pitchFamili attribute.
     defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
-
+    // Skip reading because the current theme is unknown at time of reading.
     skipCurrentElement();
     READ_EPILOGUE
 #endif
@@ -3902,10 +3896,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
             font = m_context->themes->fontScheme.majorFonts.latinTypeface;
         }
         else if (typeface.startsWith("+mn")) {
-           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+            font = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_currentTextStyle.addProperty("fo:font-family", font);
+        m_currentTextStyleProperties->setFontFamily(font);
     }
+
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
         int pitchFamilyInt;

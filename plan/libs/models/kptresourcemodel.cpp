@@ -1430,6 +1430,19 @@ QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Re
     return QModelIndex();
 }
 
+int ResourceItemModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case ResourceModel::ResourceAvailableFrom:
+        case ResourceModel::ResourceAvailableUntil:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
+}
+
+
 //-------------------
 ResourceItemSFModel::ResourceItemSFModel( QObject *parent )
     : QSortFilterProxyModel( parent )

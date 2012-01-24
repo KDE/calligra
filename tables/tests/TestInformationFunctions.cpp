@@ -22,6 +22,7 @@
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <CalculationSettings.h>
 
 #include "TestKspreadCommon.h"
 
@@ -30,10 +31,10 @@
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
+Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, const Cell &cell)
 {
     Sheet* sheet = m_map->sheet(0);
-    Formula f(sheet);
+    Formula f(sheet, cell);
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -77,6 +78,11 @@ void TestInformationFunctions::initTestCase()
      storage->setValue(1,30, Value( 2048 ) );
      storage->setValue(1,31, Value( 4096 ) );
 
+     // B1:B2
+     Formula formula(sheet);
+     formula.setExpression("=SUM(A19:A31)");
+     storage->setFormula(2,1, formula);
+     storage->setFormula(2,2, Formula::empty());
 
      // B3:B17
     storage->setValue(2, 3, Value("7"));
@@ -185,6 +191,27 @@ void TestInformationFunctions::initTestCase()
      storage->setValue(26,22, Value(    2 ) );
      storage->setValue(26,23, Value(    1 ) );
 
+    // Add the second sheet
+    m_map->addNewSheet();
+    sheet = m_map->sheet(1);
+    sheet->setSheetName("Sheet2");
+    storage = sheet->cellStorage();
+
+    // B1:B2
+     Formula formula2(sheet);
+     formula2.setExpression("=SUM(Sheet1!A19:Sheet1!A31)");
+     storage->setFormula(2,1, formula2);
+     storage->setFormula(2,2, Formula::empty());
+
+    // Add the theird sheet
+    m_map->addNewSheet();
+    sheet = m_map->sheet(2);
+    sheet->setSheetName("Sheet3");
+    storage = sheet->cellStorage();
+
+    // A1:A2
+     storage->setValue(1,1, Value( 1.1 ) );
+     storage->setValue(1,2, Value( 2.2 ) );
 }
 
 //
@@ -200,22 +227,35 @@ void TestInformationFunctions::testAREAS()
 //    CHECK_EVAL( "AREAS(B3:C4~B3)",    Value( 2 ) ); // Cell concatenation counts, even if the cells are duplicated
 }
 
-/*
 void TestInformationFunctions::testCELL()
 {
-    CHECK_EVAL( "CELL(\"COL\";B7)",            Value( 2              ) ); // Column B is column number 2.
-    CHECK_EVAL( "CELL(\"ADDRESS\";B7)",        Value( "$B$7"         ) ); // Absolute address
-    CHECK_EVAL( "CELL(\"ADDRESS\";Sheet2!B7)", Value( "$Sheet2.$B$7" ) ); // Absolute address including sheet name
+    CHECK_EVAL( "CELL(\"COL\";C7)", Value( 3 ) ); // Column C is column number 3.
+    CHECK_EVAL( "CELL(\"COL\";Sheet2!C7)", Value( 3 ) );
 
-    // Absolute address including sheet name and IRI of location of documentare duplicated
-    CHECK_EVAL( "CELL(\"ADDRESS\";'x:\\sample.ods'#Sheet3!B7)", Value( "'file:///x:/sample.ods'#$Sheet3.$B$7" ) );
+    CHECK_EVAL( "CELL(\"ROW\";C7)", Value( 7 ) ); // Row 7 is row number 7.
+    CHECK_EVAL( "CELL(\"ROW\";Sheet2!C7)", Value( 7 ) );
 
-    // The current cell is saved in a file named ��sample.ods�� which is located at ��file:///x:/��
-    CHECK_EVAL( "CELL(\"FILENAME\")",          Value( "file:///x:/sample.ods" ) );
+    CHECK_EVAL( "CELL(\"Sheet\";C7)", Value( 1 ) );
+    CHECK_EVAL( "CELL(\"Sheet\";Sheet2!C7)", Value( 2 ) );
+    CHECK_EVAL( "CELL(\"Sheet\";Sheet3!C7)", Value( 3 ) );
 
-    CHECK_EVAL( "CELL(\"FORMAT\";C7)",         Value( "D4" ) ); // C7's number format is like ��DD-MM-YYYY HH:MM:SS��
+    CHECK_EVAL( "CELL(\"ADDRESS\";B7)", Value( "$B$7" ) );
+    CHECK_EVAL( "CELL(\"ADDRESS\";Sheet2!B7)", Value( "'Sheet2'!$B$7" ) );
+
+    Value v1( "$B$7" );
+    Value r1 = evaluate("CELL(\"ADDRESS\")", v1, Cell(m_map->sheet(0), 2, 7));
+    QCOMPARE(r1, v1);
+
+    Value v2( "$B$7" );
+    Value r2 = evaluate("CELL(\"ADDRESS\")", v2, Cell(m_map->sheet(1), 2, 7));
+    QCOMPARE(r2, v2);
+
+    //CHECK_EVAL( "CELL(\"ADDRESS\";'x:\\sample.ods'#Sheet3!B7)", Value( "'file:///x:/sample.ods'#$Sheet3.$B$7" ) );
+
+    m_map->calculationSettings()->setFileName("/home/sample.ods");
+    CHECK_EVAL( "CELL(\"FILENAME\")", Value( "/home/sample.ods" ) );
+    CHECK_EVAL( "CELL(\"FILENAME\";B7)", Value( "/home/sample.ods" ) );
 }
-*/
 
 void TestInformationFunctions::testCOLUMN()
 {
@@ -279,13 +319,14 @@ void TestInformationFunctions::testERRORTYPE()
     CHECK_EVAL("ERRORTYPE(1/0)",  Value(2));
 }
 
-/*
 void TestInformationFunctions::testFORMULA()
 {
-    CHECK_EVAL( "LENGTH(FORMULA(B7))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
-    CHECK_EVAL( "FORMULA(B3)",           Value( true ) ); // Simple formulas that produce Text are still formulas
+    CHECK_EVAL( "FORMULA(B1)", Value( "=SUM(A19:A31)" ) ); // B1 contains a simple SUM formula
+    CHECK_EVAL( "FORMULA(B2)", Value::errorNA() ); // Empty formula means no formula
+    CHECK_EVAL( "FORMULA(B3)", Value::errorNA() ); // Cell constants are not formulas
+
+    CHECK_EVAL( "LEN(FORMULA(B1))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
 }
-*/
 
 void TestInformationFunctions::testINFO()
 {
@@ -351,16 +392,12 @@ void TestInformationFunctions::testISEVEN()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN(2.5)", Value(true)); // alternate function name
 }
 
-/*
 void TestInformationFunctions::testISFORMULA()
 {
-    CHECK_EVAL( "ISFORMULA(B5)", Value( true  ) ); // Simple formulas that produce Number are still formulas
-    CHECK_EVAL( "ISFORMULA(B3)", Value( true  ) ); // Simple formulas that produce Text are still formulas
-    CHECK_EVAL( "ISFORMULA(C5)", Value( false ) ); // Cell constants are not formulas
-    CHECK_EVAL( "ISFORMULA(C7)", Value( false ) ); // Cell constants are not formulas, even if they are dates
-    CHECK_EVAL( "ISFORMULA(B9)", Value( true  ) ); // Formulas that return an error are still formulas
+    CHECK_EVAL( "ISFORMULA(B1)", Value( true  ) ); // B1 contains a simple SUM formula
+    CHECK_EVAL( "ISFORMULA(B2)", Value( false ) ); // Empty formula means no formula
+    CHECK_EVAL( "ISFORMULA(B3)", Value( false ) ); // Cell constants are not formulas
 }
-*/
 
 void TestInformationFunctions::testISLOGICAL()
 {
@@ -443,15 +480,6 @@ void TestInformationFunctions::testNA()
     // and operators, just like any other error type.
 }
 
-/*
-void TestInformationFunctions::testNUMBERVALUE()
-{
-    CHECK_EVAL( "NUMBERVALUE(\"6\"      ; \".\")", Value(    6   ) ); // VALUE converts text to numbers (unlike N).
-    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
-    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
-}
-*/
-
 // TODO row not working here
 void TestInformationFunctions::testROW()
 {
@@ -473,19 +501,27 @@ void TestInformationFunctions::testROWS()
     CHECK_EVAL("ROWS(A4:D100)", Value(97));     // Number of rows in range.
 }
 
-/*
 void TestInformationFunctions::testSHEET()
 {
-    CHECK_EVAL( "SHEET(B7)>=1",         Value( true ) ); // If given, the sheet number of the reference is used.
-    CHECK_EVAL( "SHEET(\"Sheet1\")>=1", Value( true ) ); // Given a sheet name, the sheet number is returned.
+    CHECK_EVAL("SHEET(B7)", Value(1));
+    CHECK_EVAL("SHEET(Sheet2!B7)", Value(2));
+    CHECK_EVAL("SHEET(Sheet3!B7)", Value(3));
+    CHECK_EVAL("SHEET()", Value(1));
 }
 
 void TestInformationFunctions::testSHEETS()
 {
-    CHECK_EVAL( "SHEETS(B7)",  Value(    1 ) ); // If given, the sheet number of the reference is used.
-    CHECK_EVAL( "SHEETS()>=1", Value( true ) ); // Range with four rows.
+    CHECK_EVAL( "SHEETS(B7)",  Value( 1 ) ); // If given, the sheet number of the reference is used.
+    CHECK_EVAL( "SHEETS(Sheet1!B7:C9)",  Value( 1 ) );
+    CHECK_EVAL( "SHEETS(Sheet1!A7:Sheet1!C9)",  Value( 1 ) );
+
+    //TODO this should not fail! :-(
+    //CHECK_EVAL( "SHEETS(Sheet1!B7:Sheet2!C9)",  Value( 2 ) );
+    //CHECK_EVAL( "SHEETS(Sheet1!B7:Sheet3!C9)",  Value( 2 ) );
+    //CHECK_EVAL( "SHEETS(Sheet1!A7:Sheet3!C9)",  Value( 3 ) );
+
+    CHECK_EVAL( "SHEETS()", Value( 3 ) ); // Count all sheets
 }
-*/
 
 void TestInformationFunctions::testTYPE()
 {

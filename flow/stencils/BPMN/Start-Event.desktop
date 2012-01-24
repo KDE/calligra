@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Start-Event
 Name[ca]=Inicia-Esdeveniment
+Name[ca@valencia]=Inicia-Esdeveniment
 Name[es]=Evento inicial
-Name[et]=Sündmuse algus
+Name[et]=Algussündmus
 Name[it]=Evento-intermedio
+Name[kk]=Бастау оқиғасы
 Name[nb]=Start-hendelse
 Name[nl]=Begin-gebeurtenis
 Name[pl]=Zdarzenie-Rozpoczynające

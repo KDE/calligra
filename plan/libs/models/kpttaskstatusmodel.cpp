@@ -722,6 +722,26 @@ void TaskStatusItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
+int TaskStatusItemModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
+}
+
 } // namespace KPlato
 
 #include "kpttaskstatusmodel.moc"

@@ -2,6 +2,7 @@
 Name=Note
 Name[bg]=Бележка
 Name[ca]=Nota
+Name[ca@valencia]=Nota
 Name[cs]=Poznámka
 Name[el]=Σημείωση
 Name[es]=Nota
@@ -10,6 +11,7 @@ Name[ga]=Nóta
 Name[it]=Nota
 Name[nb]=Merknad
 Name[nds]=Notiz
+Name[nl]=Notitie
 Name[pl]=Uwaga
 Name[pt]=Nota
 Name[pt_BR]=Nota

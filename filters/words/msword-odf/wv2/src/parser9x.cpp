@@ -512,7 +512,7 @@ void Parser9x::parseHelper( Position startPos )
                 if ( ( string[ j ] & 0xff00 ) == 0xf000 ) {
                     // Microsoft uses a Private Unicode Area (PUA) to store the characters of the
                     // Symbol and the Wingdings font. We simply clear these bits to shift the
-                    // characters to 0x00XX and hope the correct font is installed. If the font
+                    // characters to 0x00XX and hope the correct font is installed.  If the font
                     // isn't there, the user will get some ASCII text instead of symbols :}
                     //wvlog << "private unicode area detected -- cropping" << endl;
                     string[ j ] &= 0x00ff;
@@ -1028,6 +1028,12 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     case TextHandler::FieldEscapeChar:
         wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
         break;
+    case TextHandler::Symbol:
+    {
+        //NOTE: MS Word 2k/2k3/2k7 ignores chp->ftcSym (font for the symbol).
+        m_textHandler->runOfText(UString(reinterpret_cast<const wvWare::UChar*>(&chp->xchSym), 1), chp);
+        break;
+    }
     default:
         wvlog << "Parser9x::processSpecialCharacter(): Support for character " << character.unicode()
               << " not implemented yet." << endl;

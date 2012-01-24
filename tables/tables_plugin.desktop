@@ -4,6 +4,7 @@ X-KDE-ServiceType=CalligraTables/Plugin
 Comment=Plugin for Calligra Tables
 Comment[bg]=Приставка за Calligra Tables
 Comment[ca]=Connector per a les taules del Calligra
+Comment[ca@valencia]=Connector per a les taules del Calligra
 Comment[cs]=Modul pro Calligra Tables
 Comment[da]=Plugin til Calligra Tables
 Comment[de]=Modul für Calligra Tables

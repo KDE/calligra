@@ -231,7 +231,7 @@ bool PasteCommand::mainProcessing()
         if (m_firstrun) { // apply
             // First, prepare the data ONCE for all region elements.
             if (m_mimeData->hasFormat("application/x-kspread-snippet")) {
-                m_xmlDocument = new KoXmlDocument();
+                m_xmlDocument = new KoXmlDocument(true);
                 const QByteArray data = m_mimeData->data("application/x-kspread-snippet");
                 kDebug(36005) << "Parsing" << data.size() << "bytes";
                 QString errorMsg;

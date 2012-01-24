@@ -150,28 +150,16 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// delete the currently selected frame(s)
-    void editDeleteFrame();
-    /// enable/disable document headers
-    void toggleHeader();
-    /// enable/disable document footers
-    void toggleFooter();
+    /// enable document headers
+    void enableHeader();
+    /// enable document footers
+    void enableFooter();
     /// snap to grid
     void toggleSnapToGrid();
-    /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame();
-    /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame();
-    /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront();
-    /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
-    /// displays the KWStatisticsDialog
-    void showStatisticsDialog();
     /// shows or hides the rulers
     void showRulers(bool visible);
     /// creates a copy of the current frame
@@ -198,6 +186,8 @@ private slots:
     void loadingCompleted();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
+    /// user wants to past data from the clipboard
+    void pasteRequested();
 
 private:
     KWGui *m_gui;
@@ -221,8 +211,8 @@ private:
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;
     KToggleAction *m_actionFormatStrikeOut;
-    KToggleAction *m_actionViewHeader;
-    KToggleAction *m_actionViewFooter;
+    KAction *m_actionViewHeader;
+    KAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
 
     bool m_snapToGrid;

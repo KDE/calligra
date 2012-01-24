@@ -179,6 +179,7 @@ void TestFormula::testTokenizer()
 
     // empty parameter
     CHECK_TOKENIZE("IF(A1;A2;)", "xococoo");
+    CHECK_TOKENIZE("=OFFSET(Sheet2'!B7;0;0)", "");
 
     // function cascade
     CHECK_TOKENIZE("SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo");

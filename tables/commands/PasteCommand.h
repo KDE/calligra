@@ -26,6 +26,8 @@
 
 #include "Global.h"
 
+#include "calligra_tables_export.h"
+
 class QMimeData;
 class KoXmlDocument;
 
@@ -38,7 +40,7 @@ namespace Tables
  * \ingroup Commands
  * \brief Command to paste cell data.
  */
-class PasteCommand : public AbstractRegionCommand
+class CALLIGRA_TABLES_COMMON_TEST_EXPORT PasteCommand : public AbstractRegionCommand
 {
 public:
     PasteCommand(KUndo2Command *parent = 0);

@@ -46,6 +46,7 @@ class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
+class KoShapeContainer;
 
 class KLocalizedString;
 class QIODevice;
@@ -183,7 +184,7 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape, bool create) const;
+    KoTextAnchor *anchorOfShape(KoShape *shape) const;
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
