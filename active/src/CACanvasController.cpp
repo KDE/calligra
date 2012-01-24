@@ -4,7 +4,7 @@
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
