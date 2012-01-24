@@ -46,12 +46,12 @@ CACanvasController::CACanvasController (QDeclarativeItem* parent)
 
 void CACanvasController::setVastScrolling (qreal factor)
 {
-    kDebug() << factor;
+    //kDebug() << factor;
 }
 
 void CACanvasController::setZoomWithWheel (bool zoom)
 {
-    kDebug() << zoom;
+    //kDebug() << zoom;
 }
 
 void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCenter)
@@ -63,7 +63,7 @@ void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCe
 
 void CACanvasController::setScrollBarValue (const QPoint& value)
 {
-    kDebug() << value;
+    //kDebug() << value;
 }
 
 QPoint CACanvasController::scrollBarValue() const
@@ -73,7 +73,7 @@ QPoint CACanvasController::scrollBarValue() const
 
 void CACanvasController::pan (const QPoint& distance)
 {
-    kDebug() << distance;
+    //kDebug() << distance;
 }
 
 QPoint CACanvasController::preferredCenter() const
@@ -83,7 +83,7 @@ QPoint CACanvasController::preferredCenter() const
 
 void CACanvasController::setPreferredCenter (const QPoint& viewPoint)
 {
-    kDebug() << viewPoint;
+    //kDebug() << viewPoint;
 }
 
 void CACanvasController::recenterPreferred()
@@ -92,22 +92,22 @@ void CACanvasController::recenterPreferred()
 
 void CACanvasController::zoomTo (const QRect& rect)
 {
-    kDebug() << rect;
+    //kDebug() << rect;
 }
 
 void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
 {
-    kDebug() << center << zoom;
+    //kDebug() << center << zoom;
 }
 
 void CACanvasController::zoomOut (const QPoint& center)
 {
-    kDebug() << center;
+    //kDebug() << center;
 }
 
 void CACanvasController::zoomIn (const QPoint& center)
 {
-    kDebug() << center;
+    //kDebug() << center;
 }
 
 void CACanvasController::ensureVisible (KoShape* shape)
@@ -118,8 +118,8 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    kDebug() << rect;
-    kDebug() << canvas()->canvasItem()->size();
+    //kDebug() << rect;
+    //kDebug() << canvas()->canvasItem()->size();
 
     int y = rect.center().y() - height()/2;
     if (y<0) {
@@ -171,7 +171,7 @@ void CACanvasController::setCanvas (KoCanvasBase* canvas)
 
 void CACanvasController::setDrawShadow (bool drawShadow)
 {
-    kDebug() << drawShadow;
+    //kDebug() << drawShadow;
 }
 
 QSize CACanvasController::viewportSize() const
@@ -181,7 +181,7 @@ QSize CACanvasController::viewportSize() const
 
 void CACanvasController::scrollContentsBy (int dx, int dy)
 {
-    kDebug() << dx << dy;
+    //kDebug() << dx << dy;
 }
 
 qreal CACanvasController::docHeight() const
