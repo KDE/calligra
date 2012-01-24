@@ -45,7 +45,6 @@
 
 #include <document.h>
 #include <exportdialog.h>
-#include <convert.h>
 #include <KoDocument.h>
 
 #include <iostream>
