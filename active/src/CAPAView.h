@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,8 +19,8 @@
  * 02110-1301 USA
  */
 
-#ifndef PAVIEW_H
-#define PAVIEW_H
+#ifndef CAPAVIEW_H
+#define CAPAVIEW_H
 
 #include <libs/kopageapp/KoPAViewBase.h>
 #include <KoZoomMode.h>
@@ -30,35 +30,35 @@ class KoZoomMode;
 class KPrDocument;
 class KoPACanvasBase;
 
-class PAView : public QObject, public KoPAViewBase
+class CAPAView : public QObject, public KoPAViewBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    PAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument);
-    virtual ~PAView();
-    virtual void setShowRulers(bool show);
+    CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
+    virtual ~CAPAView();
+    virtual void setShowRulers (bool show);
     virtual void editPaste();
     virtual void pagePaste();
     virtual void insertPage();
     virtual void updatePageNavigationActions();
-    virtual void setActionEnabled(int actions, bool enable);
-    virtual void navigatePage(KoPageApp::PageNavigation pageNavigation);
+    virtual void setActionEnabled (int actions, bool enable);
+    virtual void navigatePage (KoPageApp::PageNavigation pageNavigation);
     virtual KoPAPageBase* activePage() const;
-    virtual void setActivePage(KoPAPageBase* page);
-    virtual void doUpdateActivePage(KoPAPageBase* page);
+    virtual void setActivePage (KoPAPageBase* page);
+    virtual void doUpdateActivePage (KoPAPageBase* page);
     virtual KoZoomController* zoomController() const;
     virtual KoPADocument* kopaDocument() const;
     virtual KoPACanvasBase* kopaCanvas() const;
 
 private:
-    KoCanvasController *m_canvasController;
-    KoPACanvasBase *m_paCanvas;
-    KPrDocument *m_prDocument;
-    KoZoomController *m_zoomController;
-    KoPAPageBase *m_page;
+    KoCanvasController* m_canvasController;
+    KoPACanvasBase* m_paCanvas;
+    KPrDocument* m_prDocument;
+    KoZoomController* m_zoomController;
+    KoPAPageBase* m_page;
 
 private slots:
-    void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
+    void slotZoomChanged (KoZoomMode::Mode mode, qreal zoom);
 };
 
-#endif // PAVIEW_H
+#endif // CAPAVIEW_H

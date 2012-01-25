@@ -56,6 +56,7 @@ StyleManager::StyleManager(QWidget *parent)
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
+    widget.bDelete->setVisible(false); // TODO make it visible when we can safely delete styles
 
     connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
@@ -146,7 +147,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.characterStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
-    widget.bDelete->setEnabled(canDelete);
+ //   widget.bDelete->setEnabled(canDelete);
 }
 
 void StyleManager::setUnit(const KoUnit &unit)
@@ -160,9 +161,12 @@ void StyleManager::save()
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
 
+    m_styleManager->beginEdit();
+
     foreach(int styleId, m_alteredCharacterStyles.keys()) {
-        KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
+        //debug
+	KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         kDebug() << "orig char style: " << orig->name();
         kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
         kDebug() << "changed char style: " << altered->name();
@@ -170,14 +174,16 @@ void StyleManager::save()
         orig->copyProperties(altered);
         kDebug() << "orig modified char style: " << orig->name();
         kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
-        m_styleManager->alteredStyle(orig);
+	//end debug
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredCharacterStyles.clear();
 
     foreach(int styleId, m_alteredParagraphStyles.keys()) {
-        KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
+        //debug
+	KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         kDebug() << "orig par style: " << orig->name();
         kDebug() << "properties: " << KoTextDebug::paraAttributes(*orig);
         kDebug() << "changed par style: " << altered->name();
@@ -185,10 +191,13 @@ void StyleManager::save()
         orig->copyProperties(altered);
         kDebug() << "orig modified par style: " << orig->name();
         kDebug() << "properties: " << KoTextDebug::paraAttributes(*orig);
-        m_styleManager->alteredStyle(orig);
+	//end debug
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredParagraphStyles.clear();
+
+    m_styleManager->endEdit();
 
     //Reset the active style
     if (m_selectedCharStyle) {

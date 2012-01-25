@@ -531,7 +531,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     ODrawToOdf odrawtoodf(drawclient);
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
+    kDebug(30513) << "shapeType: 0x" << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
@@ -1001,10 +1001,7 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             textId = (quint32)ds.iTxid();
         }
     }
-    if (textId) {
-        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
-    }
-
+    emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }
