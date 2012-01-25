@@ -26,6 +26,7 @@
 
 #include <QMessageBox>
 #include <QListWidgetItem>
+#include <QDebug>
 
 InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
     QDialog(parent),
@@ -34,11 +35,12 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 {
     dialog.setupUi(this);
 
-    connect(dialog.bibTypes,SIGNAL(currentTextChanged(QString)),this,SLOT(updateFields()));
-    connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
-    connect(dialog.add,SIGNAL(clicked()),this,SLOT(addField()));
-    connect(dialog.remove,SIGNAL(clicked()),this,SLOT(removeField()));
-    connect(dialog.span,SIGNAL(clicked()),this,SLOT(addSpan()));
+    connect(dialog.bibTypes, SIGNAL(currentTextChanged(QString)), this, SLOT(updateFields()));
+    connect(dialog.buttonBox, SIGNAL(accepted()), this, SLOT(insert()));
+    connect(dialog.add, SIGNAL(clicked()), this, SLOT(addField()));
+    connect(dialog.remove, SIGNAL(clicked()), this, SLOT(removeField()));
+    connect(dialog.span, SIGNAL(clicked()), this, SLOT(addSpan()));
+    connect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
 
     /*  To do : handle tab stops
     */
@@ -134,6 +136,17 @@ void InsertBibliographyDialog::addSpan()
     span->text = spanText;
 
     m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(span));
+}
+
+void InsertBibliographyDialog::spanChanged( QListWidgetItem *item )
+{
+    int row = dialog.addedFields->currentRow();
+
+    if (row != -1) {
+        IndexEntrySpan *span = static_cast<IndexEntrySpan *>( m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row) );
+        span->text = item->text();
+        qDebug() << "Here\n\n changes are " << span->text << "but orig is " << item->text();
+    }
 }
 
 void InsertBibliographyDialog::insertTabStop()

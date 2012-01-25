@@ -29,6 +29,7 @@
 class KoInlineCite;
 class KoBibliographyInfo;
 class BibliographyEntryTemplate;
+class QListWidgetItem;
 
 class InsertBibliographyDialog : public QDialog
 {
@@ -45,6 +46,7 @@ public slots:
     void addSpan();
     void insertTabStop();
     void removeTabStop();
+    void spanChanged( QListWidgetItem *);
 
 private:
     Ui::InsertBibliographyDialog dialog;
