@@ -303,7 +303,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         default:
             key = "unknown"+QString::number(id);
-            value = QString::number(properties[id].toInt());
+            value = properties[id].toString();
             break;
         }
         if (!key.isEmpty())
@@ -338,44 +338,161 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         switch (id) {
         // the following are 'todo'
         case KoParagraphStyle::PercentLineHeight:
+            key = "percentLineHeight";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::FixedLineHeight:
+            key = "fixedLineHeight";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::MinimumLineHeight:
+            key = "minimumLineHeight";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::LineSpacing:
+            key = "lineSpacing";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::LineSpacingFromFont:
+            key = "lineSpacingFromFont";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::AlignLastLine:
+            key = "alignLastLine";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::WidowThreshold:
+            key = "windowThreshold";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::OrphanThreshold:
+            key = "orphanThreshold";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::DropCapsTextStyle:
+            key = "dropCapTextStyle";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::FollowDocBaseline:
+            key = "followDocBaseline";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::HasLeftBorder:
+            key = "hasLeftBorder";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::HasTopBorder:
+            key = "hasTopBorder";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::HasRightBorder:
+            key = "hasRightBorder";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::HasBottomBorder:
+            key = "hasBottomBorder";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BorderLineWidth:
+            key = "borderLineWidth";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::SecondBorderLineWidth:
+            key = "secondBorderLineWidth";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::DistanceToSecondBorder:
+            key = "distanceToSecondBorder";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::LeftPadding:
+            key = "leftPadding";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TopPadding:
+            key = "topPadding";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RightPadding:
+            key = "rightPadding";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BottomPadding:
+            key = "bottomPadding";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::LeftBorderColor:
+            key = "leftBorderColumn";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TopInnerBorderWidth:
+            key = "topInnerBorderWidth";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TopBorderSpacing:
+            key = "topBorderSpacing";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TopBorderStyle:
+            key = "topBorderStyle";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TopBorderColor:
+            key = "topBorderColor";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RightInnerBorderWidth:
+            key = "rightInnerBorderWidth";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RightBorderSpacing:
+            key = "rightBorderSpacing";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RightBorderStyle:
+            key = "rightBorderStyle";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RightBorderColor:
+            key = "rightBorderColor";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BottomInnerBorderWidth:
+            key = "bottomInnerBorderWidth";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BottomBorderSpacing:
+            key = "bottomBorderSpacing";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BottomBorderStyle:
+            key = "bottomBorderStyle";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::BottomBorderColor:
+            key = "bottomBorderColor";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::ListStyleId:
+            key = "listStyleId";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::ListStartValue:
+            key = "listStartValue";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::RestartListNumbering:
+            key = "restartListNumbering";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::TextProgressionDirection:
+            key = "textProgressionDirection";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::MasterPageName:
+            key = "masterPageName";
+            value = properties[id].toString();
+            break;
         case KoParagraphStyle::OutlineLevel:
             break;
         case KoParagraphStyle::AutoTextIndent:
@@ -485,6 +602,8 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             value = QString::number(properties[id].toInt());
             break;
         default:
+            key = "unknown"+QString::number(id);
+            value = properties[id].toString();
             break;
         }
         if (!key.isEmpty())
