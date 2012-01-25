@@ -34,35 +34,46 @@ ParagraphDecorations::ParagraphDecorations(QWidget* parent)
 void ParagraphDecorations::slotBackgroundColorChanged()
 {
     m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    if (!m_ignoreSignals) {
+        m_backgroundColorInherited = false;
+    }
     emit backgroundColorChanged(widget.backgroundColor->color());
 }
 
 void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
 {
+    m_ignoreSignals = true;
     m_backgroundColorChanged = false;
-    m_backgroundColorReset = style->background().style() == Qt::NoBrush;
-    if (m_backgroundColorReset) {
+    m_backgroundColorReset = !style->hasProperty(QTextFormat::BackgroundBrush);
+    m_backgroundColorInherited = m_backgroundColorReset;
+    if (m_backgroundColorReset || (style->background().style() == Qt::NoBrush)) {
         clearBackgroundColor();
     } else {
         widget.backgroundColor->setColor(style->background().color());
     }
+    m_ignoreSignals = false;
 }
 
 void ParagraphDecorations::save(KoParagraphStyle *style) const
 {
     Q_ASSERT(style);
-    if (m_backgroundColorReset)
-        // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat
-        // so we'll set it to a Qt::NoBrush brush instead
-        style->setBackground(QBrush(Qt::NoBrush));
-    else if (m_backgroundColorChanged)
-        style->setBackground(QBrush(widget.backgroundColor->color()));
+    if (!m_backgroundColorInherited) {
+        if (m_backgroundColorReset)
+            // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat
+            // so we'll set it to a Qt::NoBrush brush instead
+            style->setBackground(QBrush(Qt::NoBrush));
+        else if (m_backgroundColorChanged)
+            style->setBackground(QBrush(widget.backgroundColor->color()));
+    }
 }
 
 void ParagraphDecorations::clearBackgroundColor()
 {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
+    if (!m_ignoreSignals) {
+        m_backgroundColorInherited = false;
+    }
     emit backgroundColorChanged(QColor(Qt::transparent));
 }
 

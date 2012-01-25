@@ -58,49 +58,65 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 void ParagraphIndentSpacing::autoTextIndentChanged(int state)
 {
     widget.first->setEnabled(state == Qt::Unchecked);
-    m_autoTextIndentInherited = false;
+    if (!m_ignoreSignals)
+        m_autoTextIndentInherited = false;
 }
 void ParagraphIndentSpacing::firstIndenValueChanged()
 {
-    m_textIndentInherited = false;
+    if (!m_ignoreSignals)
+        m_textIndentInherited = false;
 }
 
 void ParagraphIndentSpacing::rightMarginValueChanged()
 {
-    m_rightMarginIngerited = false;
+    if (!m_ignoreSignals)
+        m_rightMarginInherited = false;
 }
 
 void ParagraphIndentSpacing::leftMarginValueChanged()
 {
-    m_leftMarginInherited = false;
+    if (!m_ignoreSignals)
+        m_leftMarginInherited = false;
 }
 
 void ParagraphIndentSpacing::topMarginValueChanged()
 {
-    m_topMarginInherited = false;
+    if (!m_ignoreSignals)
+        m_topMarginInherited = false;
 }
 
 void ParagraphIndentSpacing::bottomMarginValueChanged()
 {
-    m_bottomMarginInherited = false;
+    if (!m_ignoreSignals)
+        m_bottomMarginInherited = false;
 }
 
 void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
 {
+    if (!style) {
+        return;
+    }
     m_style = style;
     // TODO : handle relatives
+    m_ignoreSignals = true;
     widget.first->changeValue(style->textIndent());
     widget.left->changeValue(style->leftMargin());
     widget.right->changeValue(style->rightMargin());
     widget.before->changeValue(style->topMargin());
     widget.after->changeValue(style->bottomMargin());
 
-    m_rightMarginIngerited = !style->hasProperty(QTextFormat::BlockRightMargin);
+    m_rightMarginInherited = !style->hasProperty(QTextFormat::BlockRightMargin);
     m_leftMarginInherited = !style->hasProperty(QTextFormat::BlockLeftMargin);
     m_topMarginInherited = !style->hasProperty(QTextFormat::BlockTopMargin);
     m_bottomMarginInherited = !style->hasProperty(QTextFormat::BlockBottomMargin);
     m_autoTextIndentInherited = !style->hasProperty(KoParagraphStyle::AutoTextIndent);
     m_textIndentInherited = !style->hasProperty(QTextFormat::TextIndent);
+    m_lineSpacingInherited = !(style->hasProperty(KoParagraphStyle::FixedLineHeight) ||
+                               style->hasProperty(KoParagraphStyle::LineSpacing) ||
+                               style->hasProperty(KoParagraphStyle::PercentLineHeight) ||
+                               style->hasProperty(KoParagraphStyle::MinimumLineHeight) ||
+                               style->hasProperty(KoParagraphStyle::LineSpacingFromFont) ||
+                               style->hasProperty((KoParagraphStyle::NormalLineHeight)));
 
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
@@ -128,6 +144,8 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
     widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
     widget.useFont->setChecked(style->lineSpacingFromFont());
     m_fontMetricsChecked = style->lineSpacingFromFont();
+
+    m_ignoreSignals = false;
 }
 
 void ParagraphIndentSpacing::lineSpacingChanged(int row)
@@ -188,21 +206,34 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
     widget.useFont->setEnabled(row != 5);
     widget.useFont->setChecked(row == 5 ? false : m_fontMetricsChecked);
 
+    if (!m_ignoreSignals) {
+        m_lineSpacingInherited = false;
+    }
+
     emit lineSpacingChanged(fixedLineHeight, lineSpacing, minimumLineSpacing, percentHeight, useFontMetrics);
 }
 
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
 {
-    if (widget.lineSpacing->currentIndex() == 3)
+    if (widget.lineSpacing->currentIndex() == 3) {
+        if (!m_ignoreSignals) {
+            m_lineSpacingInherited = false;
+        }
         emit lineSpacingChanged(0, 0, (qreal) widget.minimumLineSpacing->value(), percent, widget.useFont->isChecked());
+    }
 }
 
 void ParagraphIndentSpacing::spacingValueChanged(qreal value)
 {
-    if (widget.lineSpacing->currentIndex() == 4)
+    if (widget.lineSpacing->currentIndex() == 4) {
         emit lineSpacingChanged(0, value, (qreal) widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
-    else if (widget.lineSpacing->currentIndex() == 5)
+    }
+    else if (widget.lineSpacing->currentIndex() == 5) {
+        if (!m_ignoreSignals) {
+            m_lineSpacingInherited = false;
+        }
         emit lineSpacingChanged(value, 0, 0, 0, false);
+    }
 }
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)
@@ -216,7 +247,7 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     if (!m_leftMarginInherited){
         style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
     }
-    if (!m_rightMarginIngerited){
+    if (!m_rightMarginInherited){
         style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
     }
     if (!m_topMarginInherited){
@@ -228,29 +259,32 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     if (!m_autoTextIndentInherited){
         style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     }
-    style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
-    style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
-    style->setLineSpacing(0);
-    switch (widget.lineSpacing->currentIndex()) {
-    case 0: style->setLineHeightPercent(120); break;
-    case 1: style->setLineHeightPercent(180); break;
-    case 2: style->setLineHeightPercent(240); break;
-    case 3: style->setLineHeightPercent(widget.proportional->value()); break;
-    case 4:
-        if (widget.custom->value() == 0.0) { // then we need to save it differently.
-            style->setLineHeightPercent(100);
-        } else {
-            style->setLineHeightPercent(0);
-            style->setLineSpacing(widget.custom->value());
+    if (!m_lineSpacingInherited) {
+        style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+        style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
+        style->setLineSpacing(0);
+        switch (widget.lineSpacing->currentIndex()) {
+        case 0: style->setLineHeightPercent(120); break;
+        case 1: style->setLineHeightPercent(180); break;
+        case 2: style->setLineHeightPercent(240); break;
+        case 3: style->setLineHeightPercent(widget.proportional->value()); break;
+        case 4:
+            if (widget.custom->value() == 0.0) { // then we need to save it differently.
+                style->setLineHeightPercent(100);
+            } else {
+                style->setLineHeightPercent(0);
+                style->setLineSpacing(widget.custom->value());
+            }
+            break;
+        case 5: style->setLineHeightPercent(0);
+            style->setLineHeightAbsolute(widget.custom->value());
+            break;
         }
-        break;
-    case 5: style->setLineHeightPercent(0);
-        style->setLineHeightAbsolute(widget.custom->value());
-        break;
+        if (widget.lineSpacing->currentIndex() != 5) {
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.minimumLineSpacing->value()));
+        }
+        style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
     }
-    if (widget.lineSpacing->currentIndex() != 5)
-        style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.minimumLineSpacing->value()));
-    style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
 }
 
 void ParagraphIndentSpacing::setUnit(const KoUnit &unit)
@@ -266,8 +300,12 @@ void ParagraphIndentSpacing::setUnit(const KoUnit &unit)
 
 void ParagraphIndentSpacing::useFontMetrices(bool on)
 {
-    if (widget.lineSpacing->currentIndex() != 5)
+    if (widget.lineSpacing->currentIndex() != 5) {
+        if (!m_ignoreSignals) {
+            m_lineSpacingInherited = false;
+        }
         m_fontMetricsChecked = on;
+    }
 }
 
 #include <ParagraphIndentSpacing.moc>

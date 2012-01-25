@@ -43,12 +43,16 @@ private slots:
     void slotAlignChanged();
     void breakAfterChanged();
     void breakBeforeChanged();
+    void slotKeepTogetherChanged();
 
 private:
     Ui::ParagraphLayout widget;
     bool m_alignmentInherited;
     bool m_breakAfterInherited;
     bool m_breakBeforeInherited;
+    bool m_nonBreakableLineInherited;
+
+    bool m_ignoreSignals;
 };
 
 #endif
