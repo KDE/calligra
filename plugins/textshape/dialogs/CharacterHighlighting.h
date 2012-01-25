@@ -62,11 +62,13 @@ private:
     Ui::CharacterHighlighting widget;
 
     bool m_uniqueFormat;
+    bool m_ignoreSignals;
     bool m_underlineStyleInherited;
     bool m_underlineTypeInherited;
+    bool m_underlineColorInherited;
     bool m_strikeoutStyleInherited;
-    bool m_strikeoutcolorInherited;
     bool m_strikeoutTypeInherited;
+    bool m_strikeoutColorInherited;
     bool m_mixedCaseInherited;
     bool m_smallCapsInherited;
     bool m_allUpperCaseInherited;

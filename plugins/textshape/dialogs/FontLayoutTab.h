@@ -46,6 +46,8 @@ private:
     QButtonGroup *m_buttonGroup;
     
     bool m_uniqueFormat;
+
+    bool m_ignoreSignals;
     bool m_positionInherited;
     bool m_hyphenateInherited;
 

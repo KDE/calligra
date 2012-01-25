@@ -42,9 +42,20 @@ public:
 signals:
     void fontChanged(const QFont &font);
 
+private slots:
+    void slotFontChanged(const QFont &font);
+
 private:
+    QFont m_originalFont;
     KFontChooser *m_fontChooser;
     bool m_uniqueFormat;
+
+    bool m_fontFamilyInherited;
+    bool m_fontSizeInherited;
+    bool m_fontBoldInherited;
+    bool m_fontItalicInherited;
+
+    bool m_ignoreSignals;
 };
 
 #endif
