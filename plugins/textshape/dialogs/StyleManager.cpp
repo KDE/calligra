@@ -163,8 +163,12 @@ void StyleManager::save()
     foreach(int styleId, m_alteredCharacterStyles.keys()) {
         KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
+        kDebug() << "orig char style: " << orig->name();
+        kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
+        kDebug() << "changed char style: " << altered->name();
+        kDebug() << "properties: " << KoTextDebug::textAttributes(*altered);
         orig->copyProperties(altered);
-        kDebug() << "changed char style: " << orig->name();
+        kDebug() << "orig modified char style: " << orig->name();
         kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
         m_styleManager->alteredStyle(orig);
         delete altered;
@@ -174,9 +178,13 @@ void StyleManager::save()
     foreach(int styleId, m_alteredParagraphStyles.keys()) {
         KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
+        kDebug() << "orig par style: " << orig->name();
+        kDebug() << "properties: " << KoTextDebug::paraAttributes(*orig);
+        kDebug() << "changed par style: " << altered->name();
+        kDebug() << "properties: " << KoTextDebug::paraAttributes(*altered);
         orig->copyProperties(altered);
-        kDebug() << "changed par style: " << orig->name();
-        kDebug() << "properties: " << KoTextDebug::textAttributes(*orig);
+        kDebug() << "orig modified par style: " << orig->name();
+        kDebug() << "properties: " << KoTextDebug::paraAttributes(*orig);
         m_styleManager->alteredStyle(orig);
         delete altered;
     }
