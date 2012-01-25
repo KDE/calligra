@@ -111,7 +111,7 @@ install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-plan.png")
+kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
 
 kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 

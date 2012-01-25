@@ -216,6 +216,41 @@
        </Help>
    </Function>
 
+   <Function>
+       <Name>IFERROR</Name>
+       <Type>Any</Type>
+       <Parameter>
+           <Comment>Any X</Comment>
+           <Type>Any</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Any Alternative</Comment>
+           <Type>Any</Type>
+       </Parameter>
+       <Help>
+           <Text>Return X unless it is an Error, in which case return an alternative value.</Text>
+           <Syntax>IFERROR(AnyX;AnyAlternative)</Syntax>
+           <Example>IFERROR(A1;A2) returns the content of A1 if that content is not an error-value else the content of A2 is returned.</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>IFNA</Name>
+       <Type>Any</Type>
+       <Parameter>
+           <Comment>Any X</Comment>
+           <Type>Any</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Any Alternative</Comment>
+           <Type>Any</Type>
+       </Parameter>
+       <Help>
+           <Text>Return X unless it is an NA, in which case return an alternative value.</Text>
+           <Syntax>IFNA(AnyX;AnyAlternative)</Syntax>
+           <Example>IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-value else the content of A2 is returned.</Example>
+       </Help>
+   </Function>
 </Group>
 
 </KSpreadFunctions>

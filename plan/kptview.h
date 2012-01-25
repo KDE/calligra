@@ -161,6 +161,8 @@ public:
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
+    /// Returns the default category information like standard name and tooltip for category type @p type
+    ViewInfo defaultCategoryInfo( const QString type ) const;
 
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );

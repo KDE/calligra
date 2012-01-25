@@ -26,6 +26,17 @@
    <property name="spacing">
     <number>0</number>
    </property>
+   <item row="1" column="0">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <zorder></zorder>
+    </widget>
+   </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <property name="spacing">
@@ -60,14 +71,7 @@
       </widget>
      </item>
      <item row="2" column="8">
-      <widget class="QToolButton" name="reversedText"/>
-     </item>
-     <item row="2" column="9">
-      <widget class="QuickTableButton" name="quickTable">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
+      <widget class="QToolButton" name="changeTextDirection"/>
      </item>
      <item row="3" column="0">
       <widget class="QToolButton" name="alignLeft">
@@ -114,25 +118,7 @@
       </spacer>
      </item>
      <item row="1" column="0" colspan="11">
-      <widget class="SpecialButton" name="blockFrame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>32</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
+      <widget class="StylesCombo" name="paragraphStyleCombo">
       </widget>
      </item>
      <item row="2" column="10">
@@ -150,33 +136,18 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QWidget" name="SpecialSpacer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QuickTableButton</class>
-   <extends>QToolButton</extends>
-   <header>dialogs/QuickTableButton.h</header>
-  </customwidget>
   <customwidget>
    <class>FormattingButton</class>
    <extends>QToolButton</extends>
    <header>dialogs/FormattingButton.h</header>
   </customwidget>
   <customwidget>
-   <class>SpecialButton</class>
-   <extends>QFrame</extends>
-   <header>dialogs/SpecialButton.h</header>
+   <class>StylesCombo</class>
+   <extends>QComboBox</extends>
+   <header>dialogs/StylesCombo.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

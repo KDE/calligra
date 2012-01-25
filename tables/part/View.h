@@ -369,6 +369,9 @@ private Q_SLOTS:
     /** Removes \p sheet from the displayed sheets. */
     void removeSheet(Sheet* sheet);
 
+    /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
+    void sheetDestroyed(QObject* obj);
+
 private:
     Q_DISABLE_COPY(View)
 

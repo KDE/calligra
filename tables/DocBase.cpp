@@ -147,6 +147,9 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
         return false;
     }
 
+    // Document Url for FILENAME function and page header/footer.
+    d->map->calculationSettings()->setFileName(url().prettyUrl());
+
     KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
@@ -240,6 +243,9 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
         map()->deleteLoadingInfo();
         return false;
     }
+
+    // Document Url for FILENAME function and page header/footer.
+    d->map->calculationSettings()->setFileName(url().prettyUrl());
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
 

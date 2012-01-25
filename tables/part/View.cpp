@@ -176,7 +176,7 @@ public:
     // this is the sheet which has the input focus
     Sheet* activeSheet;
     MapViewModel* mapViewModel;
-    QHash<const Sheet*, SheetView*> sheetViews;
+    QHash<const Sheet*, QPointer<SheetView> > sheetViews;
 
     // GUI elements
     QWidget *frame;
@@ -629,7 +629,7 @@ View::~View()
     // delete the sheetView's after calling d->selection->emitCloseEditor cause the
     // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
     // which in turn needs the sheetview's to access the sheet itself.
-    qDeleteAll(d->sheetViews);
+    qDeleteAll(d->sheetViews.values());
 
     delete d->selection;
     delete d->calcLabel;
@@ -871,38 +871,59 @@ Sheet* View::activeSheet() const
     return d->activeSheet;
 }
 
+void View::sheetDestroyed(QObject* obj)
+{
+    Sheet *sheet = dynamic_cast<Sheet*>(obj);
+    Q_ASSERT(sheet);
+    Q_ASSERT(d->sheetViews.contains(sheet));
+    d->sheetViews.remove(sheet);
+    // The SheetView will be proper destroyed already cause it's a QObject-child of the sheet.
+}
+
 SheetView* View::sheetView(const Sheet* sheet) const
 {
-    if (!d->sheetViews.contains(sheet)) {
+    SheetView *sheetView = d->sheetViews.value(sheet);
+    if (!sheetView) {
         kDebug(36004) << "View: Creating SheetView for" << sheet->sheetName();
-        d->sheetViews.insert(sheet, new SheetView(sheet));
-        d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
-        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+        sheetView = new SheetView(sheet);
+        d->sheetViews.insert(sheet, sheetView);
+        sheetView->setViewConverter(zoomHandler());
+        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
                 d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
                 d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
-                d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
+                sheetView, SLOT(updateAccessedCellRange()));
+        connect(sheet, SIGNAL(destroyed(QObject*)),
+                this, SLOT(sheetDestroyed(QObject*)));
     }
-    return d->sheetViews[ sheet ];
+    return sheetView;
 }
 
 void View::refreshSheetViews()
 {
-    const QList<SheetView*> sheetViews = d->sheetViews.values();
-    for (int i = 0; i < sheetViews.count(); ++i) {
-        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
-        disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
-                   sheetViews[i], SLOT(updateAccessedCellRange()));
+    QList<const Sheet*> sheets = d->sheetViews.keys();
+    QList< QPointer<SheetView> > sheetViews = d->sheetViews.values();
+
+    foreach(const Sheet *sheet, d->sheetViews.keys()) {
+        disconnect(sheet, SIGNAL(destroyed(QObject*)), this, SLOT(sheetDestroyed(QObject*)));
     }
-    qDeleteAll(d->sheetViews);
+
+    foreach (SheetView *sheetView, sheetViews) {
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
+                   d->canvas, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
+                   d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetView->sheet(), SIGNAL(visibleSizeChanged()),
+                   sheetView, SLOT(updateAccessedCellRange()));
+    }
+
+    qDeleteAll(sheetViews);
     d->sheetViews.clear();
-    const QList<Sheet*> sheets = d->doc->map()->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->invalidateStyleCache();
+
+    foreach(const Sheet *sheet, d->doc->map()->sheetList()) {
+        sheet->cellStorage()->invalidateStyleCache();
+    }
 }
 
 void View::refreshSelection(const Region& region)

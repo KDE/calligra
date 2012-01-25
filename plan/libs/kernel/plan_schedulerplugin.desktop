@@ -1,8 +1,13 @@
 [Desktop Entry]
 Name=Plan Scheduler Plugin
+Name[ca]=Connector de planificador del Plan
+Name[ca@valencia]=Connector de planificador del Plan
 Name[da]=Skemalægnings-plugin til Plan
+Name[et]=Plani ajaplaneerijaplugin
+Name[it]=Estensione di pianificazione di Plan
 Name[nb]=Plan planleggingsprogramtillegg
 Name[nds]=Plan-Plaanmoduul
+Name[pl]=Wtyczka programu planowania Plan
 Name[pt]='Plugin' de Calendarização do Plan
 Name[pt_BR]=Plugin de Calendário do Plan
 Name[ru]=Модуль планировщика
@@ -35,6 +40,7 @@ Comment[pl]=Wtyczka, która oblicza harmonogram projektu
 Comment[pt]=Um 'plugin' que calcula o escalonamento de um projecto
 Comment[pt_BR]=Um plugin que calcula o agendamento de um projeto
 Comment[ru]=Модуль для рассчёта графика проекта
+Comment[sk]=Plugin ktorý vypočíta plán projektu
 Comment[sv]=Ett insticksprogram som beräknar ett projektschema
 Comment[tr]=Proje zamanlamasını hesaplayan bir eklenti
 Comment[uk]=Додаток для обчислення розкладу проекту

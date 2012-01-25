@@ -39,7 +39,6 @@
 
 #include <limits.h>
 
-#include <QRegExp>
 #include <QStack>
 #include <QString>
 #include <QTextStream>
@@ -131,15 +130,11 @@ class TokenStack : public QVector<Token>
 {
 public:
     TokenStack();
-    bool isEmpty() const;
     unsigned itemCount() const;
     void push(const Token& token);
     Token pop();
     const Token& top();
     const Token& top(unsigned index);
-private:
-    void ensureSpace();
-    unsigned topIndex;
 };
 
 } // namespace Tables
@@ -199,6 +194,87 @@ Token::Op Calligra::Tables::matchOperator(const QString& text)
     }
 
     return result;
+}
+
+bool Calligra::Tables::parseOperator(const QChar *&data, QChar *&out)
+{
+    bool retval = true;
+    switch(data->unicode()) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '^':
+    case ',':
+    case ';':
+    case ' ':
+    case '(':
+    case ')':
+    case '&':
+    case '%':
+    case '~':
+#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+    case '{':
+    case '}':
+    case '|':
+#endif
+#ifdef CALLIGRA_TABLES_UNICODE_OPERATORS
+    case 0x2212:
+    case 0x00D7:
+    case 0x00F7:
+    case 0x2215:
+#endif
+        *out = *data;
+        ++out;
+        ++data;
+        break;
+    case '<':
+        *out = *data;
+        ++out;
+        ++data;
+        if (!data->isNull()) {
+            if (*data == QChar('>', 0) || *data == QChar('=', 0)) {
+                *out = *data;
+                ++out;
+                ++data;
+            }
+        }
+        break;
+    case '>':
+        *out = *data;
+        ++out;
+        ++data;
+        if (!data->isNull() && *data == QChar('=', 0)) {
+            *out = *data;
+            ++out;
+            ++data;
+        }
+        break;
+    case '=':
+        *out++ = *data++;
+        if (!data->isNull() && *data == QChar('=', 0)) {
+            *out++ = *data++;
+        }
+        break;
+    case '!': {
+        const QChar * next = data + 1;
+        if (!next->isNull() && *next == QChar('=', 0)) {
+            *out = *data;
+            ++out;
+            ++data;
+            *out = *data;
+            ++out;
+            ++data;
+        }
+        else {
+            retval = false;
+        }
+    }   break;
+    default:
+        retval = false;
+        break;
+    }
+    return retval;
 }
 
 // helper function: give operator precedence
@@ -280,18 +356,21 @@ static Value tokenAsValue(const Token& token)
 
 // creates a token
 Token::Token(Type type, const QString& text, int pos)
+: m_type(type)
+, m_text(text)
+, m_pos(pos)
 {
-    m_type = type;
-    m_text = text;
-    m_pos = pos;
+    // the detach is needed as we manipulate the string we use as input afterwards
+    // by writing to QChar * data point which does nto detach automatically.
+    m_text.detach();
 }
 
 // copy constructor
 Token::Token(const Token& token)
+: m_type(token.m_type)
+, m_text(token.m_text)
+, m_pos(token.m_pos)
 {
-    m_type = token.m_type;
-    m_text = token.m_text;
-    m_pos = token.m_pos;
 }
 
 // assignment operator
@@ -383,29 +462,26 @@ QString Token::description() const
 
 TokenStack::TokenStack(): QVector<Token>()
 {
-    topIndex = 0;
-    ensureSpace();
-}
-
-bool TokenStack::isEmpty() const
-{
-    return topIndex == 0;
 }
 
 unsigned TokenStack::itemCount() const
 {
-    return topIndex;
+    return size();
 }
 
 void TokenStack::push(const Token& token)
 {
-    ensureSpace();
-    insert(topIndex++, token);
+    append(token);
 }
 
 Token TokenStack::pop()
 {
-    return (topIndex > 0) ? Token(at(--topIndex)) : Token();
+    if (!isEmpty()) {
+        Token token = last();
+        pop_back();
+        return token;
+    }
+    return Token();
 }
 
 const Token& TokenStack::top()
@@ -415,16 +491,12 @@ const Token& TokenStack::top()
 
 const Token& TokenStack::top(unsigned index)
 {
-    if (topIndex > index)
-        return at(topIndex - index - 1);
+    unsigned top = size();
+    if (top > index)
+        return at(top - index - 1);
     return Token::null;
 }
 
-void TokenStack::ensureSpace()
-{
-    while ((int) topIndex >= size())
-        resize(size() + 10);
-}
 
 /**********************
     FormulaPrivate
@@ -433,7 +505,14 @@ void TokenStack::ensureSpace()
 // helper function: return true for valid identifier character
 bool Calligra::Tables::isIdentifier(QChar ch)
 {
-    return (ch.unicode() == '_') || (ch.unicode() == '$') || (ch.unicode() == '.') || (ch.isLetter());
+    switch(ch.unicode()) {
+    case '_':
+    case '$':
+    case '.':
+        return true;
+    default:
+        return ch.isLetter();
+    }
 }
 
 
@@ -524,6 +603,7 @@ bool Formula::isValid() const
         if ((!locale) && d->sheet)
             locale = d->sheet->map()->calculationSettings()->locale();
         Tokens tokens = scan(d->expression, locale);
+
         if (tokens.valid())
             compile(tokens);
         else
@@ -556,11 +636,8 @@ Tokens Formula::tokens() const
     return scan(d->expression, locale);
 }
 
-Tokens Formula::scan(const QString& expr, const KLocale* locale) const
+Tokens Formula::scan(const QString &expr, const KLocale* locale) const
 {
-    // to hold the result
-    Tokens tokens;
-
     // parsing state
     enum { Start, Finish, InNumber, InDecimal, InExpIndicator, InExponent,
            InString, InIdentifier, InCell, InRange, InSheetOrAreaName, InError
@@ -570,358 +647,426 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
     QString thousand = locale ? locale->thousandsSeparator() : "";
     QString decimal = locale ? locale->decimalSymbol() : ".";
 
-    // initialize variables
+    const QChar *data = expr.constData();
+
+    Tokens tokens;
+    if (data->isNull() || *data != QChar('=', 0)) {
+        return tokens;
+    }
+    tokens.reserve(50);
+
+    ++data;
+    const QChar *start = data;
+    const QChar *tokenStart = data;
+    const QChar *cellStart = data;
+
     state = Start;
     bool parseError = false;
-    int i = 0;
-    QString ex = expr;
-    QString tokenText;
-    int tokenStart = 0;
 
-    // first character must be equal sign (=)
-    if (ex[0] != '=')
-        return tokens;
+    int length = expr.length() * 1.1; // TODO check if that is needed at all
+    QString token(length, QChar());
+    token.reserve(length); // needed to not realloc at the resize at the end
+    QChar * out = token.data();
+    QChar * outStart = token.data();
 
-    // but the scanner should not see this equal sign
-    ex.remove(0, 1);
-
-    // force a terminator
-    ex.append(QChar());
-
-    // main loop
-    while ((state != Finish) && (i < ex.length())) {
-        QChar ch = ex[i];
-
+    while (state != Finish) {
         switch (state) {
-
         case Start:
-
-            tokenStart = i;
-
+            tokenStart = data;
             // Whitespaces can be used as intersect-operator for two arrays.
-            if (ch.isSpace()) { //TODO && (tokens.isEmpty() || !tokens.last().isRange())) {
-                i++;
-                break;
+            if (data->isSpace()) {
+                ++data;
             }
-
             // check for number
-            if (ch.isDigit()) {
+            else if (data->isDigit()) {
                 state = InNumber;
+                *out++ = *data++;
             }
-
-            // a string ?
-            else if (ch == '"') {
-                tokenText.append(ex[i++]);
-                state = InString;
-            }
-
-            // decimal dot ?
-            else if (ch == decimal[0]) {
-                tokenText.append(ex[i++]);
-                state = InDecimal;
-            }
-
-            // beginning with alphanumeric ?
-            // could be identifier, cell, range, or function...
-            else if (isIdentifier(ch)) {
-                state = InIdentifier;
-            }
-
-            // aposthrophe (') marks sheet name for 3-d cell, e.g 'Sales Q3'!A4, or a named range
-            else if (ch.unicode() == '\'') {
-                i++;
-                state = InSheetOrAreaName;
-            }
-
-            // error value?
-            else if (ch == '#') {
-                tokenText.append(ex[i++]);
-                state = InError;
-            }
-
             // terminator character
-            else if (ch == QChar::Null)
+            else if (data->isNull()) {
                 state = Finish;
-
-            // look for operator match
+            }
             else {
-                int op;
-                QString s;
-
-                // check for two-chars operator, such as '<=', '>=', etc
-                s.append(ch).append(ex[i+1]);
-                op = matchOperator(s);
-
-                // check for one-char operator, such as '+', ';', etc
-                if (op == Token::InvalidOp) {
-                    s = QString(ch);
-                    op = matchOperator(s);
-                }
-
-                // any matched operator ?
-                if (op != Token::InvalidOp) {
-                    int len = s.length();
-                    i += len;
-                    tokens.append(Token(Token::Operator, s.left(len), tokenStart));
-                } else {
-                    // not matched an operator, add an Unknown token and remember whe had a parse error
-                    parseError = true;
-                    tokens.append(Token(Token::Unknown, s.left(1), tokenStart));
-                    i++;
+                switch (data->unicode()) {
+                case '"': // a string ?
+                    *out++ = *data++;
+                    state = InString;
+                    break;
+                case '\'': // aposthrophe (') marks sheet name for 3-d cell, e.g 'Sales Q3'!A4, or a named range
+                    ++data;
+                    state = InSheetOrAreaName;
+                    break;
+                case '#': // error value?
+                    *out++ = *data++;
+                    state = InError;
+                    break;
+                default:
+                    // decimal dot ?
+                    if (*data == decimal[0]) {
+                        *out++ = *data++;
+                        state = InDecimal;
+                    }
+                    // beginning with alphanumeric ?
+                    // could be identifier, cell, range, or function...
+                    else if (isIdentifier(*data)) {
+                        *out++ = *data++;
+                        state = InIdentifier;
+                    }
+                    else {
+                        // look for operator match
+                        if (parseOperator(data, out)) {
+                            token.resize(out - outStart);
+                            tokens.append(Token(Token::Operator, token, tokenStart - start));
+                            token.resize(length);
+                            out = outStart;
+                        }
+                        else {
+                            // not matched an operator, add an Unknown token and remember we had a parse error
+                            parseError = true;
+                            *out++ = *data++;
+                            token.resize(out - outStart);
+                            tokens.append(Token(Token::Unknown, token, tokenStart - start));
+                            token.resize(length);
+                            out = outStart;
+                        }
+                    }
+                    break;
                 }
             }
             break;
-
         case InIdentifier:
-
             // consume as long as alpha, dollar sign, underscore, or digit
-            if (isIdentifier(ch)  || ch.isDigit()) tokenText.append(ex[i++]);
-
+            if (isIdentifier(*data) || data->isDigit()) {
+                *out = *data;
+                ++out;
+                ++data;
+            }
             // a '!' ? then this must be sheet name, e.g "Sheet4!", unless the next character is '='
-            else if (ch == '!' && ex[i+1] != '=') {
-                tokenText.append(ex[i++]);
+            else if (*data == QChar('!', 0) && !(data + 1)->isNull() && *(data + 1) != QChar('=', 0)) {
+                *out++ = *data++;
+                cellStart = out;
                 state = InCell;
             }
-
             // a '(' ? then this must be a function identifier
-            else if (ch == '(') {
-                tokens.append(Token(Token::Identifier, tokenText, tokenStart));
-                tokenStart = i;
-                tokenText.clear();
+            else if (*data == QChar('(', 0)) {
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Identifier, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
             }
-
             // we're done with identifier
             else {
+                *out = QChar();
                 // check for cell reference,  e.g A1, VV123, ...
-                if (Util::isCellReference(tokenText)) {
-                    state = InCell;
-                } else {
-                    if (isNamedArea(tokenText))
-                        tokens.append(Token(Token::Range, tokenText, tokenStart));
-                    else
-                        tokens.append(Token(Token::Identifier, tokenText, tokenStart));
-                    tokenStart = i;
-                    tokenText.clear();
+                if (Util::isCellReference(token)) {
+                    // so up to now we've got something like A2 or Sheet2!F4
+                    // check for range reference
+                    if (*data == QChar(':', 0)) {
+                        *out++ = *data++;
+                        state = InRange;
+                    }
+                    // we're done with cell reference
+                    else {
+                        token.resize(out - outStart);
+                        tokens.append(Token(Token::Cell, token, tokenStart - start));
+                        token.resize(length);
+                        out = outStart;
+                        state = Start;
+                    }
+                }
+                else {
+                    token.resize(out - outStart);
+                    if (isNamedArea(token)) {
+                        tokens.append(Token(Token::Range, token, tokenStart - start));
+                    }
+                    else {
+                        tokens.append(Token(Token::Identifier, token, tokenStart - start));
+                    }
+                    token.resize(length);
+                    out = outStart;
                     state = Start;
                 }
             }
             break;
-
         case InCell:
-            if (isIdentifier(ch)  || ch.isDigit()) {
-                // consume as long as alpha, dollar sign, underscore, or digit
-                tokenText.append(ex[i++]);
-            } else {
-                // we're done with cell ref, possibly with sheet name (like "Sheet2!B2")
-                // note that "Sheet2!TotalSales" is also possible, in which "TotalSales" is a named area
-
+            // consume as long as alpha, dollar sign, underscore, or digit
+            if (isIdentifier(*data) || data->isDigit()) {
+                *out++ = *data++;
+            }
+            else {
+                *out = QChar();
                 // check if it's a cell ref like A32, not named area
-                QString cell;
-                for (int j = tokenText.length() - 1; j >= 0; j--)
-                    if (tokenText[j] == '!')
-                        break;
-                    else
-                        cell.prepend(tokenText[j]);
-                if (!Util::isCellReference(cell)) {
-                    // regexp failed, means we have something like "Sheet2!TotalSales"
+                if (!Util::isCellReference(token, cellStart - outStart)) {
+                    // test failed, means we have something like "Sheet2!TotalSales"
                     // and not "Sheet2!A2"
                     // thus, assume so far that it's a named area
-                    tokens.append(Token(Token::Range, tokenText, tokenStart));
-                    tokenText.clear();
+                    token.resize(out - outStart);
+                    tokens.append(Token(Token::Range, token, tokenStart - start));
+                    token.resize(length);
+                    out = outStart;
                     state = Start;
-                } else {
+                }
+                else {
                     // so up to now we've got something like A2 or Sheet2!F4
                     // check for range reference
-                    if (ch == ':') {
-                        tokenText.append(ex[i++]);
+                    if (*data == QChar(':', 0)) {
+                        *out++ = *data++;
                         state = InRange;
-                    } else {
+                    }
+                    else {
                         // we're done with cell reference
-                        tokens.append(Token(Token::Cell, tokenText, tokenStart));
-                        tokenText.clear();
+                        token.resize(out - outStart);
+                        tokens.append(Token(Token::Cell, token, tokenStart - start));
+                        token.resize(length);
+                        out = outStart;
                         state = Start;
                     }
                 }
             }
             break;
-
         case InRange:
-
             // consume as long as alpha, dollar sign, underscore, or digit or !
-            if (isIdentifier(ch) || ch.isDigit() || ch == '!') tokenText.append(ex[i++]);
-
+            if (isIdentifier(*data) || data->isDigit() || *data == QChar('!', 0)) {
+                *out++ = *data++;
+            }
             // we're done with range reference
             else {
-                tokens.append(Token(Token::Range, tokenText, tokenStart));
-                tokenText.clear();
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Range, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
             }
             break;
-
         case InSheetOrAreaName:
-
             // consume until '
-            if (ch.unicode() != '\'') tokenText.append(ex[i++]);
-
+            if (data->isNull()) {
+                parseError = true;
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Unknown, '\'' + token + '\'', tokenStart - start));
+                state = Start;
+            }
+            else if (*data != QChar('\'', 0)) {
+                *out++ = *data++;
+            }
             else {
                 // eat the aposthrophe itself
-                ++i;
+                ++data;
                 // must be followed by '!' to be sheet name
-                if (ex[i] == '!') {
-                    tokenText.append(ex[i++]);
+                if (!data->isNull() && *data == QChar('!', 0)) {
+                    *out++ = *data++;
+                    cellStart = out;
                     state = InCell;
-                } else {
-                    if (isNamedArea(tokenText))
-                        tokens.append(Token(Token::Range, tokenText, tokenStart));
+                }
+                else {
+                    token.resize(out - outStart);
+                    if (isNamedArea(token)) {
+                        tokens.append(Token(Token::Range, token, tokenStart - start));
+                    }
                     else {
                         // for compatibility with oocalc (and the openformula spec), don't parse single-quoted
                         // text as an identifier, instead add an Unknown token and remember we had an error
                         parseError = true;
-                        tokens.append(Token(Token::Unknown, '\'' + tokenText + '\'', tokenStart));
+                        tokens.append(Token(Token::Unknown, '\'' + token + '\'', tokenStart - start));
                     }
-                    tokenStart = i;
-                    tokenText.clear();
+                    token.resize(length);
+                    out = outStart;
                     state = Start;
                 }
             }
             break;
-
         case InNumber:
-
             // consume as long as it's digit
-            if (ch.isDigit()) tokenText.append(ex[i++]);
-
+            if (data->isDigit()) {
+                *out++ = *data++;
+            }
             // skip thousand separator
-            else if (!thousand.isEmpty() && (ch == thousand[0])) i++;
-
+            else if (!thousand.isEmpty() && (*data == thousand[0])) {
+                ++data;
+            }
             // convert decimal separator to '.', also support '.' directly
             // we always support '.' because of bug #98455
-            else if ((!decimal.isEmpty() && (ch == decimal[0])) || (ch == '.')) {
-                tokenText.append('.');
-                i++;
+            else if ((!decimal.isEmpty() && (*data == decimal[0])) || *data == QChar('.', 0)) {
+                *out++ = QChar('.', 0);
+                ++data;
                 state = InDecimal;
             }
-
             // exponent ?
-            else if (ch.toUpper() == 'E') {
-                tokenText.append('E');
-                i++;
+            else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
+                *out++ = QChar('E', 0);
+                ++data;
                 state = InExpIndicator;
             }
-
             // reference sheet delimiter?
-            else if (ch == '!') {
-                tokenText.append(ex[i++]);
+            else if (*data == QChar('!', 0)) {
+                *out++ = *data++;
+                cellStart = out;
                 state = InCell;
             }
-
             // identifier?
-            else if (isIdentifier(ch)) {
+            else if (isIdentifier(*data)) {
                 // has to be a sheet or area name then
+                *out++ = *data++;
                 state = InIdentifier;
             }
-
             // we're done with integer number
             else {
-                tokens.append(Token(Token::Integer, tokenText, tokenStart));
-                tokenText.clear();
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Integer, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
-            };
+            }
             break;
-
         case InDecimal:
-
             // consume as long as it's digit
-            if (ch.isDigit()) tokenText.append(ex[i++]);
-
+            if (data->isDigit()) {
+                *out++ = *data++;
+            }
             // exponent ?
-            else if (ch.toUpper() == 'E') {
-                tokenText.append('E');
-                i++;
+            else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
+                *out++ = QChar('E', 0);
+                ++data;
                 state = InExpIndicator;
             }
-
             // we're done with floating-point number
             else {
-                tokens.append(Token(Token::Float, tokenText, tokenStart));
-                tokenText.clear();
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Float, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
-            };
+            }
             break;
-
         case InExpIndicator:
-
             // possible + or - right after E, e.g 1.23E+12 or 4.67E-8
-            if ((ch == '+') || (ch == '-')) tokenText.append(ex[i++]);
-
+            if (*data == QChar('+', 0) || *data == QChar('-', 0)) {
+                *out++ = *data++;
+            }
             // consume as long as it's digit
-            else if (ch.isDigit()) state = InExponent;
-
+            else if (data->isDigit()) {
+                *out++ = *data++;
+                state = InExponent;
+            }
             // invalid thing here
             else {
                 parseError = true;
-                tokenText.append(ex[i++]);
-                tokens.append(Token(Token::Unknown, tokenText, tokenStart));
-                tokenText.clear();
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Unknown, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
             }
-
             break;
-
         case InExponent:
-
             // consume as long as it's digit
-            if (ch.isDigit()) tokenText.append(ex[i++]);
-
+            if (data->isDigit()) {
+                *out++ = *data++;
+            }
             // we're done with floating-point number
             else {
-                tokens.append(Token(Token::Float, tokenText, tokenStart));
-                tokenText.clear();
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Float, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
-            };
+            }
             break;
-
         case InString:
-
             // consume until "
-            if (ch != '"') tokenText.append(ex[i++]);
-
+            if (*data != QChar('"', 0)) {
+                *out++ = *data++;
+            }
             else {
-                tokenText.append(ch); i++;
-                tokens.append(Token(Token::String, tokenText, tokenStart));
-                tokenText.clear();
-                state = Start;
+                *out++ = *data++;
+                // check for escaped ""
+                if (data->isNull() || *data != QChar('"', 0)) {
+                    token.resize(out - outStart);
+                    tokens.append(Token(Token::String, token, tokenStart - start));
+                    token.resize(length);
+                    out = outStart;
+                    state = Start;
+                }
+                else {
+                    ++data;
+                }
             }
             break;
-
-        case InError:
-
-            // consume until !
-            if (ch != '!')
-                tokenText.append(ex[i++]);
-            else {
-                tokenText.append(ex[i++]);
-                tokens.append(Token(Token::Error, tokenText, tokenStart));
-                tokenText.clear();
+        case InError: {
+            ushort c = data->unicode();
+            switch (c) {
+            case '!':
+            case '?':
+                // TODO check if there is at least one char that needs to be there
+                *out++ = *data++;
+                token.resize(out - outStart);
+                tokens.append(Token(Token::Error, token, tokenStart - start));
+                token.resize(length);
+                out = outStart;
                 state = Start;
+                break;
+            case '/':
+                *out++ = *data++;
+                if (!data->isNull()) {
+                    bool error = false;
+                    if (*data >= 'A' && *data <= 'Z') {
+                        *out++ = *data++;
+                    }
+                    else if (*data >= '0' && *data <= '9'){
+                        *out++ = *data++;
+                        if (!data->isNull() && (*data == QChar('!', 0) || *data == QChar('?', 0))) {
+                            *out++ = *data++;
+                        }
+                    }
+                    else {
+                        error = true;
+                    }
+                    if (error) {
+                        parseError = true;
+                        token.resize(out - outStart);
+                        tokens.append(Token(Token::Unknown, token, tokenStart - start));
+                        token.resize(length);
+                        out = outStart;
+                        state = Start;
+                    }
+                    else {
+                        token.resize(out - outStart);
+                        tokens.append(Token(Token::Error, token, tokenStart - start));
+                        token.resize(length);
+                        out = outStart;
+                        state = Start;
+                    }
+                }
+                break;
+            default:
+                if ((c >= 'A' && c <= 'Z') || (c >= '0' && c<= '9')) {
+                    *out++ = *data++;
+                }
+                else {
+                    parseError = true;
+                    token.resize(out - outStart);
+                    tokens.append(Token(Token::Unknown, token, tokenStart - start));
+                    token.resize(length);
+                    out = outStart;
+                    state = Start;
+                }
+                break;
             }
-            break;
-
+        }   break;
         default:
             break;
-        };
-    };
+        }
+    }
 
     // parse error if any text remains
-    if (state != Finish) {
-        tokens.append(Token(Token::Unknown, ex.mid(tokenStart, ex.length() - tokenStart - 1), tokenStart));
+    if (!data->isNull())  {
+        tokens.append(Token(Token::Unknown, expr.mid(tokenStart - start), tokenStart - start));
         parseError = true;
     }
 
     if (parseError)
         tokens.setValid(false);
-
     return tokens;
 }
 

@@ -169,7 +169,9 @@ Region::Region(const Region& list)
 {
     d = new Private();
     d->map = list.d->map;
-
+#if QT_VERSION >= 0x040700
+    d->cells.reserve(list.d->cells.size());
+#endif
     ConstIterator end(list.d->cells.constEnd());
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
@@ -811,6 +813,86 @@ bool Region::isValid(const QRect& rect)
         return true;
 }
 
+static void append(const QChar *from, const QChar *to, QChar **dest)
+{
+    while (from < to) {
+        **dest = *from;
+        ++from;
+        ++*dest;
+    }
+}
+
+// static
+void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
+{
+    enum { Start, InQuotes } state = Start;
+
+    if (*data == QChar('$', 0)) {
+        ++data;
+    }
+
+    bool isRange = false;
+
+    const QChar *pos = data;
+    while (data < end) {
+        switch (state) {
+        case Start:
+            switch (data->unicode()) {
+            case '\'': // quoted sheet name or named area
+                state = InQuotes;
+                break;
+            case '.': // sheet name separator
+                if (pos != data && !isRange) {
+                    append(pos, data, &out);
+                    *out = QChar('!', 0);
+                    ++out;
+                }
+                pos = data;
+                ++pos;
+                break;
+            case ':': { // cell separator
+                isRange = true;
+                append(pos, data, &out);
+                *out = *data; // append :
+                ++out;
+                const QChar * next = data + 1;
+                if (!next->isNull()) {
+                    const QChar * nextnext = next + 1;
+                    if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
+                        ++data;
+                    }
+                }
+                pos = data + 1;
+            }   break;
+            case ' ': // range separator
+                append(pos, data, &out);
+                *out = QChar(';', 0);
+                ++out;
+                pos = data;
+                break;
+            default:
+                break;
+            }
+            break;
+        case InQuotes:
+            if (data->unicode() == '\'') {
+                // an escaped apostrophe?
+                // As long as Tables does not support fixed sheets eat the dollar sign.
+                const QChar * next = data + 1;
+                if (!next->isNull() && *next == QChar('\'', 0)) {
+                    ++data;
+                }
+                else { // the end
+                    state = Start;
+                }
+            }
+            break;
+        }
+        ++data;
+    }
+    append(pos, data, &out);
+}
+
 // static
 QString Region::loadOdf(const QString& expression)
 {
@@ -1051,6 +1133,24 @@ Region::Element::~Element()
 /***************************************************************************
   class Point
 ****************************************************************************/
+static int firstNonCharPos(const QString& s, int pos = 0)
+{
+    int result = -1;
+    const QChar *data = s.constData();
+    int i = 0;
+    while (!data->isNull()) {
+        if (i >= pos) {
+            char c = data->unicode();
+            if (c < 'A' || c > 'z' || (c < 'a' && c > 'Z')) {
+                result = i;
+                break;
+            }
+        }
+        ++data;
+        ++i;
+    }
+    return result;
+}
 
 Region::Point::Point(const QPoint& point)
         : Region::Element()
@@ -1076,7 +1176,7 @@ Region::Point::Point(const QString& string)
     uint p = 0;
 
     // Fixed ?
-    if (string[0] == '$') {
+    if (string[0] == QChar('$', 0)) {
         m_fixedColumn = true;
         p++;
     }
@@ -1085,13 +1185,13 @@ Region::Point::Point(const QString& string)
     if (p == length)
         return;
 
-    if ((string[p] < 'A' || string[p] > 'Z') && (string[p] < 'a' || string[p] > 'z'))
+    if ((string[p] < QChar('A',0) || string[p] > QChar('Z',0)) && (string[p] < QChar('a', 0) || string[p] > QChar('z', 0)))
         return;
 
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = string.indexOf(QRegExp("[^A-Za-z]+"), p);
+    int result = firstNonCharPos(string, p);
 
     //get the column number for the character between actual position and the first non text charakter
     if (result != -1)
@@ -1111,7 +1211,7 @@ Region::Point::Point(const QString& string)
     if (p == length)
         return;
 
-    if (string[p] == '$') {
+    if (string[p] == QChar('$', 0)) {
         m_fixedRow = true;
         p++;
     }

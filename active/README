@@ -1,10 +1,4 @@
-Calligra Mobile
+Calligra Active
 
-Visit http://community.kde.org/Calligra/Calligra_Mobile for more information.
-
-NOTES
-
-* The thumbnail PNGs are temporary, TODO: generate thumbnail on the fly
-* Make a C++ plugin for PresentationTemplatesModel so it can dynamically generate
-  plugins list
-
+Part of the Calligra Project http://www.calligra.org
+and the Plasma Active Project http://plasma-active.org/

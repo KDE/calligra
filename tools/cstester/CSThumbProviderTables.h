@@ -37,7 +37,7 @@ public:
     CSThumbProviderTables(Calligra::Tables::Doc *doc);
     virtual ~CSThumbProviderTables();
 
-    virtual QList<QPixmap> createThumbnails(const QSize &thumbSize);
+    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
     Calligra::Tables::Doc *m_doc;

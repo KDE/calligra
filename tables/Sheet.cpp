@@ -2100,7 +2100,6 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         const int n = cellElement.attributeNS(KoXmlNS::table, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
         // KSpread so limit the number of repeated columns.
-        // FIXME POSSIBLE DATA LOSS!
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
         columnMaximal = qMax(numberColumns, columnMaximal);
 
@@ -2221,6 +2220,8 @@ bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& table
     }
     return compareCellsInRows(cellStorage(), row1, row2, maxCols);
 #else
+    Q_UNUSED(maxCols);
+
     // Optimized comparision by using the RowRepeatStorage to compare the content
     // rather then an expensive loop like compareCellsInRows.
     int row1repeated = cellStorage()->rowRepeat(row1);

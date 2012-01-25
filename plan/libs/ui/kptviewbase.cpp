@@ -35,6 +35,7 @@
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
+#include <QSortFilterProxyModel>
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
@@ -1196,14 +1197,21 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                 }
             }
         } else {
+            QMap<int, int > m; // QMap<destination, column>
             for ( int i = 0; i < h->count(); ++i ) {
-                QString n = map.key( i );
-                if ( ! n.isEmpty() ) {
-                    int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
-                    if ( col >= 0 && col < h->count() ) {
-                        header()->moveSection( h->visualIndex( col ), i );
-                    }
+                QString n = e.attribute( s.arg( i ) );
+                if ( n.isEmpty() ) {
+                    continue;
                 }
+                int col = map.keyToValue( n.toUtf8() );
+                if ( col >= 0 && col < h->count() ) {
+                    m.insert( i, col );
+                }
+            }
+            for ( QMap<int, int>::const_iterator it = m.constBegin(); it != m.constEnd(); ++it ) {
+                QString n = e.attribute( s.arg( it.key() ) );
+                int current = h->visualIndex( it.value() );
+                header()->moveSection( current, it.key() );
             }
         }
     }
@@ -1244,6 +1252,17 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
             }
         }
     }
+}
+
+ItemModelBase *TreeViewBase::itemModel() const
+{
+    QAbstractItemModel *m = model();
+    QAbstractProxyModel *p = qobject_cast<QAbstractProxyModel*>( m );
+    while ( p ) {
+        m = p->sourceModel();
+        p = qobject_cast<QAbstractProxyModel*>( m );
+    }
+    return qobject_cast<ItemModelBase*>( m );
 }
 
 //----------------------
@@ -1528,15 +1547,29 @@ void DoubleTreeViewBase::init()
     connect( m_rightview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotRightSortIndicatorChanged( int, Qt::SortOrder ) ) );
 }
 
-void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
+void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder /*order*/ )
 {
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    if ( sf ) {
+        ItemModelBase *m = m_rightview->itemModel();
+        if ( m ) {
+            sf->setSortRole( m->sortRole( logicalIndex ) );
+        }
+    }
     m_leftview->header()->setSortIndicatorShown( true );
     // sorting controlled by left treeview, turn right off
     m_rightview->header()->setSortIndicatorShown( false );
 }
 
-void DoubleTreeViewBase::slotRightSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
+void DoubleTreeViewBase::slotRightSortIndicatorChanged( int logicalIndex, Qt::SortOrder /*order*/ )
 {
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    if ( sf ) {
+        ItemModelBase *m = m_rightview->itemModel();
+        if ( m ) {
+            sf->setSortRole( m->sortRole( logicalIndex ) );
+        }
+    }
     m_rightview->header()->setSortIndicatorShown( true );
     // sorting controlled by right treeview, turn left off
     m_leftview->header()->setSortIndicatorShown( false );
@@ -1790,18 +1823,18 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
     //kDebug();
     QList<int> lst1;
     QList<int> lst2;
-    KoXmlElement e = element.namedItem( "master" ).toElement();
+    KoXmlElement e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( map, e );
-    }
-    e = element.namedItem( "slave" ).toElement();
-    if ( ! e.isNull() ) {
-        m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         } else {
             setStretchFactors();
         }
+        m_rightview->loadContext( map, e );
+    }
+    e = element.namedItem( "master" ).toElement();
+    if ( ! e.isNull() ) {
+        m_leftview->loadContext( map, e );
     }
     return true;
 }

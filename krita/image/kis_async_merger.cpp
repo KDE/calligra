@@ -38,7 +38,6 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "kis_transaction.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
 #include "kis_node_progress_proxy.h"
@@ -93,7 +92,6 @@ public:
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
-        if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is

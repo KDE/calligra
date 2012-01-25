@@ -2,8 +2,11 @@
 Name=command
 Name[bg]=команда
 Name[ca]=command
+Name[ca@valencia]=command
 Name[cs]=příkaz
 Name[el]=εντολή
+Name[et]=Kontaktor
+Name[it]=comando
 Name[nb]=styring
 Name[nds]=Befehl
 Name[nl]=commando

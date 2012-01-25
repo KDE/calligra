@@ -224,12 +224,18 @@ public:
     /// Returns the planned effort from start for the duration
     Duration effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type = ECCT_All) const;
 
+    /// Returns the total planned effort for @p resource on this appointment
+    Duration plannedEffort( const Resource *resource, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the total planned effort for this appointment
     Duration plannedEffort(EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort on the date
     Duration plannedEffort(const QDate &date, EffortCostCalculationType type = ECCT_All) const;
+    /// Returns the planned effort for @p resource on the @p date date
+    Duration plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort upto and including date
     Duration plannedEffortTo(const QDate &date, EffortCostCalculationType type = ECCT_All) const;
+    /// Returns the planned effort upto and including date
+    Duration plannedEffortTo( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
 
      /// Calculates the total planned cost for this appointment
     EffortCost plannedCost(EffortCostCalculationType type = ECCT_All) const;

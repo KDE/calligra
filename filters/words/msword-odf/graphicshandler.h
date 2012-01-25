@@ -105,16 +105,15 @@ private:
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
                                               Writer& out);
-        virtual void addTextStyles(const quint16 msospt,
-                                   const MSO::OfficeArtClientTextBox* clientTextbox,
+        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                    const MSO::OfficeArtClientData* clientData,
                                    KoGenStyle& style, Writer& out);
 
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
+        virtual QString formatPos(qreal v);
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
-        virtual QString formatPos(qreal v);
 
         WordsGraphicsHandler* const gh;
     public:

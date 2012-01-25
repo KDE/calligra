@@ -825,6 +825,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 //            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
+            if ( e.hasAttribute( "currency-digits" ) ) {
+                l->setFracDigits( e.attribute( "currency-digits" ).toInt() );
+            }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
             }
@@ -1128,6 +1131,7 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
+    loc.setAttribute( "currency-digits", l->fracDigits() );
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );
@@ -1384,9 +1388,9 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     if ( emitSignal ) {
         emit nodeAdded( task );
         emit changed();
-    }
-    if ( p != this && p->numChildren() == 1 ) {
-        emit nodeChanged( p );
+        if ( p != this && p->numChildren() == 1 ) {
+            emit nodeChanged( p );
+        }
     }
     return true;
 }
@@ -1406,10 +1410,9 @@ void Project::takeTask( Node *node, bool emitSignal )
     if ( emitSignal ) {
         emit nodeRemoved( node );
         emit changed();
-    }
-    //kDebug()<<node->name()<<"removed";
-    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
-        emit nodeChanged( parent );
+        if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+            emit nodeChanged( parent );
+        }
     }
 }
 

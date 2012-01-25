@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=source voltage direct
 Name[ca]=font directa de voltatge
+Name[ca@valencia]=font directa de voltatge
 Name[el]=τάση πηγής συνεχής
+Name[et]=Alalispinge allikas
+Name[it]=sorgente di tensione continua
 Name[nb]=kildespenning likestrøm
+Name[nl]=gelijkstroomspanningsbron
 Name[pl]=stałe napięcie źródłowe
 Name[pt]=tensão directa fonte
 Name[pt_BR]=tensão direta de fonte

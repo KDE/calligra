@@ -97,7 +97,6 @@ public:
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
         FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
-        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
@@ -176,11 +175,6 @@ public:
     enum RotationScale {
         Fixed,
         LineHeight
-    };
-
-    enum FontPitchMode {
-        FixedWidth,
-        VariableWidth
     };
 
     /**
@@ -374,25 +368,22 @@ public:
 
     TextCombineType textCombine() const;
     void setTextCombine(TextCombineType type);
-    
+
     QChar textCombineStartChar() const;
     void setTextCombineStartChar(const QChar &character);
-    
+
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
-    
-    
+
+
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
-    
+
     EmphasisStyle textEmphasizeStyle() const;
     void setTextEmphasizeStyle(EmphasisStyle emphasis);
-    
+
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
-
-    FontPitchMode fontPitch() const;
-    void setFontPitch(FontPitchMode mode);
 
     /// Set the country
     void setCountry(const QString &country);
@@ -475,6 +466,8 @@ public:
     bool compareCharacterProperties(const KoCharacterStyle &other) const;
 
     bool operator==(const KoCharacterStyle &other) const;
+
+    bool operator!=(const KoCharacterStyle &other) const;
 
     /**
      * Removes properties from this style that have the same value in other style.

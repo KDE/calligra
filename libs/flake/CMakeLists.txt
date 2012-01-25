@@ -163,11 +163,13 @@ set(flake_SRCS
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
+    commands/KoShapeRunAroundCommand.cpp
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
     commands/KoShapeClipCommand.cpp
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
+    commands/KoShapeConnectionChangeCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp

@@ -239,16 +239,18 @@ const CellView& SheetView::cellView(int col, int row)
 #ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
-    if (!d->cache.contains(QPoint(col, row))) {
-        CellView *v = createCellView(col, row);
+    CellView *v = d->cache.object(QPoint(col, row));
+    if (!v) {
+        v = createCellView(col, row);
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
 #ifdef CALLIGRA_TABLES_MT
-    CellView v = *d->cache.object(QPoint(col, row));
-    return v;
+    // create a copy as long as the mutex is locked
+    CellView cellViewCopy = *v;
+    return cellViewCopy;
 #else
-    return *d->cache.object(QPoint(col, row));
+    return *v;
 #endif
 }
 

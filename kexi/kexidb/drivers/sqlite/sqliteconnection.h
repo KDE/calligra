@@ -104,6 +104,10 @@ protected:
 
 private:
     bool drv_useDatabaseInternal(bool *cancelled, MessageHandler* msgHandler, bool createIfMissing);
+    //! Closes database without altering stored result number and message
+    void drv_closeDatabaseSilently();
+    //! Loads extension from library at @a path (absolute path is recommended)
+    bool loadExtension(const QString& path);
 
     friend class SQLiteDriver;
     friend class SQLiteCursor;

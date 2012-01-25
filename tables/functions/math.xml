@@ -188,7 +188,7 @@
         </Parameter>
         <Parameter>
             <Comment>Precision</Comment>
-            <Type>Integer</Type>
+            <Type>Int</Type>
         </Parameter>
         <Help>
             <Text>The TRUNC() function truncates a numeric value to a certain precision. If the precision is omitted 0 is assumed.</Text>
@@ -886,6 +886,7 @@
         </Parameter>
         <Help>
             <Text>Round a number x down to the nearest multiple of the second parameter, Significance.</Text>
+            <!--FIXME remove wordwrap, leads to strange looking translation messages-->
             <Text>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance.
                 The default value for Significance is 1, if x is positive. It is -1, if the value is negative,
                 which means rounding up to the nearest integer.
@@ -1258,7 +1259,7 @@
                 <Type range="true">Float</Type>
                 <Parameter>
                     <Comment>Dimension</Comment>
-                    <Type>Integer</Type>
+                    <Type>Int</Type>
                 </Parameter>
                 <Help>
                     <Text>Creates the unity matrix of the given dimension.</Text>

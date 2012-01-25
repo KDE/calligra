@@ -24,6 +24,7 @@
 #include <QCheckBox>
 #include <QDate>
 #include <QTableWidget>
+#include <QHeaderView>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -804,6 +805,8 @@ void CompletionEntryItemModel::addEntry( const QDate date )
 CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     : QTableView( parent )
 {
+    verticalHeader()->hide();
+
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
     setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
@@ -832,7 +835,6 @@ void CompletionEntryEditor::setCompletionModel( CompletionEntryItemModel *m )
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
 {
-    kDebug()<<endl;
     model()->setCompletion( completion );
 }
 
@@ -844,6 +846,7 @@ void CompletionEntryEditor::addEntry()
         model()->setFlags( i.column(), Qt::ItemIsEditable );
         setCurrentIndex( i );
         emit selectionChanged( QItemSelection(), QItemSelection() ); //hmmm, control removeEntryBtn
+        scrollTo( i );
         edit( i );
         model()->setFlags( i.column(), Qt::NoItemFlags );
     }

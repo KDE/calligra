@@ -24,6 +24,8 @@
 
 // please keep it in alphabetical order
 #include <QRegExp>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include <math.h>
 
@@ -57,6 +59,7 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_len(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lower(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mid(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_proper(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *);
@@ -152,6 +155,9 @@ TextModule::TextModule(QObject* parent, const QVariantList&)
     f = new Function("MID", func_mid);
     f->setParamCount(2, 3);
     f->setAlternateName("MIDB");
+    add(f);
+    f = new Function("NUMBERVALUE", func_numbervalue);
+    f->setParamCount(2, 3);
     add(f);
     f = new Function("REGEXP", func_regexp);
     f->setParamCount(2, 4);
@@ -442,6 +448,32 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     if (len > 0x7fffffff - pos) len = 0x7fffffff - pos;
 
     return Value(str.mid(pos, len));
+}
+
+// Function: NUMBERVALUE
+Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString text = calc->conv()->asString(args[0]).asString();
+
+    QString decimalPoint = calc->conv()->asString(args[1]).asString();
+
+    QString thousandsSeparator;
+    if (args.count() >= 3)
+        thousandsSeparator = calc->conv()->asString(args[2]).asString();
+    else if (decimalPoint == ".")
+        thousandsSeparator = ',';
+    else if (decimalPoint == ",")
+        thousandsSeparator = '.';
+
+    KLocale l(*KGlobal::locale());
+    l.setDecimalSymbol(decimalPoint);
+    l.setThousandsSeparator(thousandsSeparator);
+    l.setPositiveSign("+");
+    l.setNegativeSign("-");
+
+    bool ok;
+    double v = l.readNumber(text, &ok);
+    return ok ? Value(v) : Value::errorVALUE();
 }
 
 // Function: PROPER

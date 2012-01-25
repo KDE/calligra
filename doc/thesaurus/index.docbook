@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
  <!ENTITY kappname "&kthesaurus;">
+ <!ENTITY words "<application>Calligra Words</application>">
  <!ENTITY wordnet "WordNet">
- <!ENTITY koffice "Calligra">
+ <!ENTITY calligra "Calligra">
  <!ENTITY % addindex "IGNORE">
  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -18,8 +19,8 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2003-04-12</date>
-<releaseinfo>0.95.00</releaseinfo>
+<date>2012-01-12</date>
+<releaseinfo>1.0 (Calligra 2.4)</releaseinfo>
 
 <copyright>
 <year>2002</year>
@@ -50,6 +51,9 @@ English language is supported.
 
 
 <chapter id="thesaurus">
+<title>Thesaurus</title>
+
+<sect1 id="thesaurus-tab">
 <title>The Thesaurus Tab</title>
 
 <para>The <guilabel>Thesaurus</guilabel> tab offers a small thesaurus,
@@ -62,20 +66,21 @@ They do not necessarily apply to all senses of each word, so you cannot
 always replace a word with any synonym.</para>
 
 <para>You can double click on a word to search for its synonyms &etc;.
-You can also type a word directly into the <guilabel>Search for:</guilabel>
+You can also type a word directly into the search 
 box at the top and press
-<keycap>Return</keycap>. The word which is currently visible in the
+<keycap>Return</keycap>. <!--FIXME no action in calligra 2.4 apps to open kthesaurus 
+The word which is currently visible in the
 <guilabel>Replace with:</guilabel> box at the bottom is the one that will 
-be used if you click on <guibutton>Replace</guibutton>.</para>
-
+  be used if you click on <guibutton>Replace</guibutton>.--></para>
+<!--FIXME not accessible from calligra
 <note><para>&kthesaurus; can be used as a standalone application, but it can also be 
-used from other applications (like &kword;, typically by right clicking
+used from other applications (like &words;, typically by right clicking
 on a word and selecting <guilabel>Show related words</guilabel>). 
-The <guibutton>Replace with:</guibutton> button will only be visible
+The <guibutton>Replace</guibutton> button will only be visible
 if &kthesaurus; is called from another application.</para></note>
-
+-->
 <para>We have to keep the data file small so that it can be
-included in &koffice; &mdash; this introduces several limitations 
+included in &calligra; &mdash; this introduces several limitations 
 (compared to &wordnet;):</para>
 
 <itemizedlist>
@@ -93,24 +98,24 @@ meaning, so one word may appear in more than one list at the same time.</para></
 and very few words specific to &kde;).</para>
 
 <para>Please do <emphasis>not</emphasis> report bugs in the thesaurus
-to the &wordnet; project, but to &kde;.</para>
+  to the &wordnet; project, but to <ulink url="http://bugs.kde.org">&kde;</ulink>.</para>
 
-</chapter>
+</sect1>
 
-
-<chapter id="languages">
+<!--FIXME no page on calligra .org
+<sect1 id="languages">
 <title>Using languages besides English</title>
 
 <para>By default, only the English language is supported 
 in &kthesaurus;. You can check out
 <ulink url="http://www.calligra.org/addons/#thesauri">the
-&koffice; download page</ulink> to see which other languages 
+&calligra; download page</ulink> to see which other languages 
 are available.</para>
 
-</chapter>
+</sect1>
+-->
 
-
-<chapter id="frontend">
+<sect1 id="frontend">
 <title>The &wordnet; tab</title>
 
 <para>The <guilabel>&wordnet;</guilabel> tab provides a user interface
@@ -118,17 +123,17 @@ to a local installation of <ulink url="http://wordnet.princeton.edu/">&wordnet;<
 &wordnet; is <quote>an online lexical reference
 system whose design is inspired by current psycholinguistic theories
 of human lexical memory.</quote> The &kthesaurus; user interface offers nearly all options
-which are available on the command line. It calls the <command>wn</command> binary,
+which are available on the command line. It calls the <command>wn</command>,
 which has to be in your <envar>PATH</envar>.</para>
 
 <para>To learn more about &wordnet;, please see the &wordnet; <command>man</command> pages
 or have a look at the <ulink url="http://wordnet.princeton.edu/">&wordnet; homepage</ulink>.
 </para>
 
-</chapter>
+</sect1>
 
 
-<chapter id="legal">
+<sect1 id="legal">
 <title>Copyright and Licensing</title>
 
 <para>
@@ -138,6 +143,8 @@ or have a look at the <ulink url="http://wordnet.princeton.edu/">&wordnet; homep
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 &underGPL;
+
+</sect1>
 
 </chapter>
 

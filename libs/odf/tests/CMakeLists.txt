@@ -23,20 +23,20 @@ target_link_libraries(TestKoOdfLoadingContext koodf ${QT_QTGUI_LIBRARY} ${QT_QTT
 
 set(xmlwritertest_SRCS TestXmlWriter.cpp )
 
-kde4_add_unit_test(TestXmlWriter TESTNAME libs-store-testxmlwriter ${xmlwritertest_SRCS})
+kde4_add_unit_test(TestXmlWriter TESTNAME libs-odf-TestXmlWriter ${xmlwritertest_SRCS})
 
 target_link_libraries(TestXmlWriter koodf ${QT_QTTEST_LIBRARY}  ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 
 set(xmlreadertest_SRCS TestXmlReader.cpp )
-kde4_add_unit_test(TestXmlReader TESTNAME libs-store-testxmlreader ${xmlreadertest_SRCS})
+kde4_add_unit_test(TestXmlReader TESTNAME libs-odf-TestXmlReader ${xmlreadertest_SRCS})
 target_link_libraries(TestXmlReader koodf ${QT_QTTEST_LIBRARY}  ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 
 set(xmlreadertestwithoutspaces_SRCS TestXmlReaderWithoutSpaces.cpp )
-kde4_add_unit_test(TestXmlReaderWithoutSpaces TESTNAME libs-store-testxmlreader ${xmlreadertestwithoutspaces_SRCS})
+kde4_add_unit_test(TestXmlReaderWithoutSpaces TESTNAME libs-odf-TestXmlReaderWithoutSpaces ${xmlreadertestwithoutspaces_SRCS})
 target_link_libraries(TestXmlReaderWithoutSpaces koodf ${QT_QTTEST_LIBRARY}  ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
@@ -72,5 +72,11 @@ target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} koodf ${QT_QTTEST_LIB
 set(TestKoUnit_SRCS TestKoUnit.cpp)
 kde4_add_unit_test(TestKoUnit TESTNAME libs-kobase-TestKoUnit ${TestKoUnit_SRCS})
 target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestNumberStyle_SRCS TestNumberStyle.cpp )
+kde4_add_unit_test(TestNumberStyle TESTNAME libs-odf-TestNumberStyle ${TestNumberStyle_SRCS})
+target_link_libraries(TestNumberStyle koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### end ###############

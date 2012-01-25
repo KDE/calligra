@@ -2,10 +2,12 @@
 Name=Terminal Server
 Name[bg]=Терминален сървър
 Name[ca]=Servidor de terminal
+Name[ca@valencia]=Servidor de terminal
 Name[de]=Terminal-Server
 Name[el]=Τερματικός εξυπηρετητής
 Name[et]=Terminalserver
 Name[it]=Terminal server
+Name[kk]=Терминал сервері
 Name[nb]=Terminaltjener
 Name[nl]=Terminal-server
 Name[pl]=Serwer terminala

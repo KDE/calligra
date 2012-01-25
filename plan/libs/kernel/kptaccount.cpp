@@ -779,7 +779,7 @@ void Accounts::save(QDomElement &element) const {
 
 QStringList Accounts::costElements() const {
     QStringList l;
-    foreach (const QString key, m_idDict.uniqueKeys()) {
+    foreach (const QString &key, m_idDict.uniqueKeys()) {
         if (m_idDict[key]->isElement())
             l << key;
     }

@@ -35,9 +35,12 @@ SET ( textshape_SRCS
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
+    dialogs/StylesCombo.cpp
+    dialogs/StylesComboPreview.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
+    dialogs/SimpleInsertWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/CitationInsertionDialog.cpp
@@ -74,7 +77,6 @@ SET ( textshape_SRCS
     dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
-    dialogs/ChangeTrackingOptionsWidget.cpp
     dialogs/BibliographyConfigureDialog.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
@@ -99,6 +101,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
+    dialogs/SimpleInsertWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
     dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/CitationInsertionDialog.ui
@@ -127,7 +130,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
-    dialogs/ChangeTrackingOptionsWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

@@ -2,9 +2,11 @@
 Name=camera
 Name[bg]=камера
 Name[ca]=càmera
+Name[ca@valencia]=càmera
 Name[cs]=kamera
 Name[el]=κάμερα
-Name[et]=kaamera
+Name[et]=Kaamera
+Name[it]=camera
 Name[nb]=kamera
 Name[nds]=Kamera
 Name[nl]=camera

@@ -36,14 +36,14 @@ namespace MSOOXML {
 
 struct MSOOXML_EXPORT TableStyleProperties
 {
-    TableStyleProperties() {
-/*         bordersToEdgesOnly = false; */
-        target = Table;
-    }
+    TableStyleProperties()
+    :    target(Table)
+    {}
 
-    enum Target {
+    enum TargetLevel {
         Table,
         TableRow,
+        TableColumn,
         TableCell
     };
 
@@ -66,7 +66,7 @@ struct MSOOXML_EXPORT TableStyleProperties
         BackgroundOpacity = 32768
     };
 
-    Target target;
+    TargetLevel target;
 
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
@@ -90,10 +90,6 @@ struct MSOOXML_EXPORT TableStyleProperties
 
     QString verticalAlign;
     bool glyphOrientation;
-
-    // OOXML: It seems that if wholetbl borders are defined, those should be
-    // only applied to cells which are on the edges, not to every cell.
-/*     bool bordersToEdgesOnly; */
 
     KoGenStyle textStyle;
     KoGenStyle paragraphStyle;
@@ -169,17 +165,33 @@ public:
     TableStyleConverter(int row, int column);
     virtual ~TableStyleConverter();
 
-    virtual KoCellStyle::Ptr style(int row, int column) = 0;
+    virtual KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) = 0;
 
 protected:
-    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                    int row, int column, const QPair<int, int> &spans);
+
+    //NOTE: TESTING
+    void reapplyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties,
+                                       MSOOXML::TableStyleProperties* localProperties,
+                                       MSOOXML::TableStyleProperties* exceptionProperties,
+                                       KoCellStyle::Ptr& style,
+                                       int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyTableBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                     int row, int column, const QPair<int, int> &spans);
 
-    void applyCellBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style);
+    void applyRowLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                   int row, int column, const QPair<int, int> &spans);
 
-    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyColumnLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                      int row, int column, const QPair<int, int> &spans);
+
+    void applyCellLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style);
+
+    void applyBackground(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                         int row, int column);
 
     int m_row;
     int m_column;

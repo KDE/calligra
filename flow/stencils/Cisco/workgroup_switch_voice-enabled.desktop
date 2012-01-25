@@ -2,9 +2,11 @@
 Name=Voice switch
 Name[bg]=Комутиране на глас
 Name[ca]=Commutador de veu
+Name[ca@valencia]=Commutador de veu
 Name[de]=Voice-Switch
 Name[el]=Μεταγωγέας φωνής
 Name[et]=Häälekommutaator
+Name[it]=Voice switch
 Name[nb]=Talesvitsj
 Name[nds]=Stimm-Ümschalter
 Name[nl]=Omschakelen van stem

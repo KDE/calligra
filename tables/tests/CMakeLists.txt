@@ -28,6 +28,12 @@ target_link_libraries(TestFormula calligratablescommon ${QT_QTCORE_LIBRARY} ${QT
 
 ########### next target ###############
 
+set(TestUtil_SRCS TestUtil.cpp)
+kde4_add_unit_test(TestUtil TESTNAME kspread-Util  ${TestUtil_SRCS})
+target_link_libraries(TestUtil calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestOpenFormula_SRCS TestOpenFormula.cpp)
 kde4_add_unit_test(TestOpenFormula TESTNAME kspread-OpenFormula  ${TestOpenFormula_SRCS})
 target_link_libraries(TestOpenFormula calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
@@ -178,6 +184,12 @@ target_link_libraries(TestRowFormatStorage calligratablescommon ${QT_QTCORE_LIBR
 set(TestDatabaseFilter_SRCS TestDatabaseFilter.cpp)
 kde4_add_unit_test(TestDatabaseFilter TESTNAME kspread-Database-Filter ${TestDatabaseFilter_SRCS})
 target_link_libraries(TestDatabaseFilter calligratablesodf ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestPasteCommand_SRCS TestPasteCommand.cpp)
+kde4_add_unit_test(TestPasteCommand TESTNAME kspread-PasteCommand ${TestPasteCommand_SRCS})
+target_link_libraries(TestPasteCommand calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### Benchmarks ###############
 

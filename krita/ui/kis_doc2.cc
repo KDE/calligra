@@ -177,7 +177,9 @@ QByteArray KisDoc2::mimeType() const
 }
 
 void KisDoc2::slotLoadingFinished() {
-    image()->initialRefreshGraph();
+    if (m_d->image) {
+        m_d->image->initialRefreshGraph();
+    }
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
@@ -464,6 +466,7 @@ void KisDoc2::showErrorAndDie()
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
+    if (!m_d->image) return;
     KisConfig cfg;
     const KoColorProfile *profile = cfg.displayProfile();
     QRect rect = rc & m_d->image->bounds();
@@ -488,16 +491,9 @@ KoShapeBasedDocumentBase * KisDoc2::shapeController() const
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForNode(KisNodeSP layer) const
+KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 {
     return m_d->shapeController->shapeForNode(layer);
-}
-
-KoShape * KisDoc2::addShape(const KisNodeSP node)
-{
-    KisNodeSP parent = node->parent();
-    m_d->shapeController->slotNodeAdded(parent.data(), parent->index(node));
-    return m_d->shapeController->shapeForNode(node);
 }
 
 void KisDoc2::prepareForImport()

@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,25 +19,25 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import CalligraActive 1.0
 
 Item {
     id: docRootRect
     signal documentLoaded
-    property alias loadProgress: canvas.loadProgress
     clip: true
 
     function openDocument(path) {
-        canvas.openDocument(path);
+        docDocumentController.documentUri = path;
+        docDocumentController.loadDocument();
     }
 
     function initToolbar() {
-        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
+        if (docDocumentController.documentTypeName == "spreadsheet") {
             toolbarLoader.source = "SpreadsheetToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
+        } else if (docDocumentController.documentTypeName == "textdocument") {
             toolbarLoader.source = "WordsToolbar.qml";
-        } else if (canvas.documentType == CADocumentInfo.Presentation) {
+        } else if (docDocumentController.documentTypeName == "presentation") {
             toolbarLoader.source = "PresentationToolbar.qml";
         }
     }
@@ -52,6 +52,15 @@ Item {
 //         }
 //     }
 
+    CADocumentController {
+        id: docDocumentController
+        canvasController: canvas
+        onDocumentOpened: {
+            docRootRect.initToolbar();
+            docRootRect.documentLoaded();
+        }
+    }
+
     CanvasController {
         id: canvas
 
@@ -60,11 +69,6 @@ Item {
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
-
-        Component.onCompleted: documentLoaded.connect(initToolbar)
-        onDocumentLoaded: docRootRect.documentLoaded()
-
-        //searchString: findToolbar.searchString
     }
 
 //     Button {
@@ -76,18 +80,24 @@ Item {
 //         height: 64
 //         width: 64
 //         z: 30
-// 
+//
 //         onClicked: toggleEdit();
 //     }
-// 
-//     FindToolbar {
-//         id: findToolbar
-//         height: 32
 //
-//         anchors.left: parent.left
-//         anchors.right: parent.right
-//         anchors.bottom: parent.bottom
-//     }
+    FindToolbar {
+        id: findToolbar
+        height: 32
+        z: 2
+        visible: (docDocumentController.documentTypeName == "textdocument")
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
+        onFindNextRequested: docDocumentController.documentHandler().findNext();
+        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
+    }
 
     MouseArea {
         id: flickableMouseArea

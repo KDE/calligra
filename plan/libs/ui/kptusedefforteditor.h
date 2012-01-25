@@ -39,7 +39,7 @@ class KPLATOUI_EXPORT UsedEffortItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    UsedEffortItemModel( QWidget *parent );
+    UsedEffortItemModel( QWidget *parent = 0 );
     
     void setProject( Project *project ) { m_project = project; }
     

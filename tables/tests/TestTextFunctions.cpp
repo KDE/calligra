@@ -172,6 +172,16 @@ void TestTextFunctions::testMID()
     CHECK_EVAL("MID(\"123456789\";5)", Value("56789"));
 }
 
+void TestTextFunctions::testNUMBERVALUE()
+{
+    CHECK_EVAL( "NUMBERVALUE(\"6\"; \".\")", Value( 6 ) ); // VALUE converts text to numbers (unlike N).
+    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
+    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
+    CHECK_EVAL( "NUMBERVALUE(\"3!456!000*567\"; \"*\"; \"!\")", Value( 3456000.567 ) ); // Thousands separator works
+    CHECK_EVAL( "NUMBERVALUE(\"+6,000.5\"; \".\")", Value( 6000.5 ) ); // Positive sign
+    CHECK_EVAL( "NUMBERVALUE(\"-6,000.5\"; \".\")", Value( -6000.5 ) ); // Negative sign
+}
+
 void TestTextFunctions::testPROPER()
 {
     CHECK_EVAL("PROPER(\"hello there\")", Value("Hello There"));
@@ -229,6 +239,7 @@ void TestTextFunctions::testSUBSTITUTE()
     CHECK_EVAL("SUBSTITUTE(\"\";\"\";\"ab\")", Value(""));
     CHECK_EVAL("SUBSTITUTE(\"Hello\"; \"H\"; \"J\"; 0)", Value::errorVALUE());
     CHECK_EVAL("SUBSTITUTE(\"Hello\"; \"H\"; \"J\"; 1)", Value("Jello"));
+    CHECK_EVAL("SUBSTITUTE(\"fo\"\"o\";\"o\";\"a\")", Value("fa\"a"));
 }
 
 void TestTextFunctions::testT()
