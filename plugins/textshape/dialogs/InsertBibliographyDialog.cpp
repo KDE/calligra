@@ -145,7 +145,6 @@ void InsertBibliographyDialog::spanChanged( QListWidgetItem *item )
     if (row != -1) {
         IndexEntrySpan *span = static_cast<IndexEntrySpan *>( m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row) );
         span->text = item->text();
-        qDebug() << "Here\n\n changes are " << span->text << "but orig is " << item->text();
     }
 }
 
