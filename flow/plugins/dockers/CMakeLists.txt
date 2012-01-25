@@ -12,8 +12,8 @@ set(flowdockers_SRCS
     stencilboxdocker/StencilBoxView.cpp
     stencilboxdocker/CollectionItemModel.cpp
     stencilboxdocker/StencilShapeFactory.cpp
-    shapehelperdocker/ShapeCreationHelperDocker.cpp
-    shapehelperdocker/ShapeCreationHelperDockerFactory.cpp
+    #shapehelperdocker/ShapeCreationHelperDocker.cpp
+    #shapehelperdocker/ShapeCreationHelperDockerFactory.cpp
 )
 
 kde4_add_plugin(flowdockersplugin ${flowdockers_SRCS})
