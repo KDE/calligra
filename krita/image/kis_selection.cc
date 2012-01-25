@@ -77,12 +77,12 @@ KisSelection::KisSelection(const KisSelection& rhs)
     m_d->isVisible = rhs.m_d->isVisible;
     m_d->defaultBounds = rhs.m_d->defaultBounds;
 
-    if(rhs.m_d->projection) {
+    if (rhs.m_d->projection) {
         m_d->projection = new KisPixelSelection(*rhs.m_d->projection);
         Q_ASSERT(m_d->projection);
     }
 
-    if(rhs.m_d->pixelSelection) {
+    if (rhs.m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
         Q_ASSERT(m_d->pixelSelection);
     }
@@ -104,12 +104,12 @@ KisSelection &KisSelection::operator=(const KisSelection &rhs)
         m_d->isVisible = rhs.m_d->isVisible;
         m_d->defaultBounds = rhs.m_d->defaultBounds;
 
-        if(rhs.m_d->projection) {
+        if (rhs.m_d->projection) {
             m_d->projection = new KisPixelSelection(*rhs.m_d->projection);
             Q_ASSERT(m_d->projection);
         }
 
-        if(rhs.m_d->pixelSelection) {
+        if (rhs.m_d->pixelSelection) {
             m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
             Q_ASSERT(m_d->pixelSelection);
         }
@@ -196,12 +196,12 @@ KisPaintDeviceSP KisSelection::projection() const
 void KisSelection::updateProjection(const QRect &rc)
 {
     KisPixelSelectionSP currentProjection = m_d->getProjection();
-    if(currentProjection == m_d->pixelSelection) return;
+    if (currentProjection == m_d->pixelSelection) return;
 
     QRect updateRect = rc;
 
-    if(m_d->pixelSelection) {
-        if(*(m_d->pixelSelection->paintDevice()->defaultPixel()) !=
+    if (m_d->pixelSelection) {
+        if (*(m_d->pixelSelection->paintDevice()->defaultPixel()) !=
            *(currentProjection->paintDevice()->defaultPixel())) {
 
             quint8 defPixel = *(m_d->pixelSelection->paintDevice()->defaultPixel());
@@ -212,7 +212,7 @@ void KisSelection::updateProjection(const QRect &rc)
         m_d->pixelSelection->renderToProjection(currentProjection->paintDevice(), updateRect);
     }
 
-    if(m_d->shapeSelection) {
+    if (m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(currentProjection->paintDevice(), updateRect);
     }
 }
@@ -225,12 +225,12 @@ void KisSelection::updateProjection()
      */
 
     KisPixelSelectionSP currentProjection = m_d->getProjection();
-    if(currentProjection == m_d->pixelSelection) return;
+    if (currentProjection == m_d->pixelSelection) return;
 
     currentProjection->clear();
 
-    if(m_d->pixelSelection) {
-        if(*(m_d->pixelSelection->paintDevice()->defaultPixel()) !=
+    if (m_d->pixelSelection) {
+        if (*(m_d->pixelSelection->paintDevice()->defaultPixel()) !=
            *(currentProjection->paintDevice()->defaultPixel())) {
 
             quint8 defPixel = *(m_d->pixelSelection->paintDevice()->defaultPixel());
@@ -239,7 +239,7 @@ void KisSelection::updateProjection()
         m_d->pixelSelection->renderToProjection(currentProjection->paintDevice());
     }
 
-    if(m_d->shapeSelection) {
+    if (m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(currentProjection->paintDevice());
     }
 }
@@ -321,14 +321,14 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
     m_d->defaultBounds = bounds;
 
     m_d->getProjection()->paintDevice()->setDefaultBounds(bounds);
-    if(m_d->pixelSelection) {
+    if (m_d->pixelSelection) {
         m_d->pixelSelection->paintDevice()->setDefaultBounds(bounds);
     }
 }
 
 void KisSelection::clear()
 {
-    if(m_d->pixelSelection) {
+    if (m_d->pixelSelection) {
         m_d->pixelSelection->clear();
     }
 
@@ -336,7 +336,7 @@ void KisSelection::clear()
     delete m_d->shapeSelection;
 
     KisPixelSelectionSP currentProjection = m_d->getProjection();
-    if(currentProjection != m_d->pixelSelection) {
+    if (currentProjection != m_d->pixelSelection) {
         currentProjection->clear();
     }
 }
