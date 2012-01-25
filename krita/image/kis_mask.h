@@ -102,7 +102,7 @@ public:
     /**
      * @return the selection: if you paint on mask, you paint on the selections
      */
-    KisPaintDeviceSP paintDevice() const;
+    virtual KisPaintDeviceSP paintDevice() const;
 
     /**
      * Change the selection to the specified selection object. The

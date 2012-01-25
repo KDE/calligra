@@ -162,8 +162,7 @@ KisSelectionSP KisMask::selection() const
 
 KisPaintDeviceSP KisMask::paintDevice() const
 {
-    selection()->createPixelSelection();
-    return selection()->selectionPaintDevice();
+    return selection()->getOrCreateSelectionPaintDevice(KisSelection::MASK);
 }
 
 void KisMask::setSelection(KisSelectionSP selection)

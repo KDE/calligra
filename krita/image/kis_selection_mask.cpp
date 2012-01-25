@@ -56,6 +56,10 @@ bool KisSelectionMask::allowAsChild(KisNodeSP node) const
     return false;
 }
 
+KisPaintDeviceSP KisSelectionMask::paintDevice() const
+{
+    return selection()->getOrCreateSelectionPaintDevice(KisSelection::SELECTION);
+}
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
         : KisMask(rhs)

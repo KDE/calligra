@@ -56,6 +56,8 @@ public:
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
+    virtual KisPaintDeviceSP paintDevice() const;
+
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
