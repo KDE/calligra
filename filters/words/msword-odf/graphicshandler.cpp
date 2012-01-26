@@ -321,6 +321,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
+                ref.name = m_picNames[fbse->rgbUid];
                 continue;
             } else {
                 ref = savePicture(block, m_store);
