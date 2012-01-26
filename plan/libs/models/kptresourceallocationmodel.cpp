@@ -40,6 +40,8 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
+#include <kabc/addressee.h>
+#include <kabc/vcardconverter.h>
 
 #include <kdebug.h>
 

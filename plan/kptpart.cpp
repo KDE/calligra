@@ -84,10 +84,8 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     if ( locale ) {
         locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "kdgantt" );
-        locale->insertCatalog( "timezones4" );
-#ifdef KDEPIMLIBS_FOUND
         locale->insertCatalog( "kabc" );
-#endif
+        locale->insertCatalog( "timezones4" );
 
         m_config.setLocale( new KLocale( *locale ) );
     }

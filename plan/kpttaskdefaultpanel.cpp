@@ -23,11 +23,8 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#if KDE_IS_VERSION( 4, 5, 0 )
-#include <akonadi/contact/emailaddressselectiondialog.h>
-#include <akonadi/contact/emailaddressselectionwidget.h>
-#include <akonadi/contact/emailaddressselection.h>
-#endif
+#include <kabc/addressee.h>
+#include <kabc/addresseedialog.h>
 
 #include <QDateTime>
 #include <QDateTimeEdit>
@@ -112,31 +109,11 @@ void ConfigTaskPanelImpl::initDescription()
 
 void ConfigTaskPanelImpl::changeLeader()
 {
-#if KDE_IS_VERSION( 4, 5, 0 )
-    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
-    if ( dlg->exec() && dlg ) {
-        QStringList names;
-        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
-        foreach ( const Akonadi::EmailAddressSelection &selection, selections ) {
-            QString s = selection.name();
-            if ( ! selection.email().isEmpty() ) {
-                if ( ! selection.name().isEmpty() ) {
-                    s += " <";
-                }
-                s += selection.email();
-                if ( ! selection.name().isEmpty() ) {
-                    s += ">";
-                }
-                if ( ! s.isEmpty() ) {
-                    names << s;
-                }
-            }
-        }
-        if ( ! names.isEmpty() ) {
-            kcfg_Leader->setText( names.join( ", " ) );
-        }
+    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
+    if (!a.isEmpty())
+    {
+        kcfg_Leader->setText(a.fullEmail());
     }
-#endif
 }
 
 void ConfigTaskPanelImpl::startDateTimeChanged( const QDateTime &dt )
