@@ -313,7 +313,7 @@ namespace wvWare {
                                 DateM = 29, DateShort = 30, MonthShort = 33,
                                 YearLong = 34, YearShort = 35,
                                 AbbreviatedMonth = 36, MonthLong = 37,
-                                CurrentTimeHMS = 38, DateLong = 39 };
+                                CurrentTimeHMS = 38, DateLong = 39, Symbol = 40};
 
         /**
          * Very special characters (bad, bad name) are the ones which need additional

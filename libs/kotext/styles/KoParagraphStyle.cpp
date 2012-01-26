@@ -304,8 +304,10 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
                 }
                 d->list->add(block, listLevel());
             } else {
-                if (block.textList())
-                    block.textList()->remove(block);
+                // Gopalakrishna Bhat A: We do not remove the block from the list if the paragraphstyle does not have a listStyle
+                // even if applyListStyle is true
+                //if (block.textList())
+                //    block.textList()->remove(block);
                 KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
                 if (data)
                     data->setCounterWidth(-1);
@@ -339,10 +341,18 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
                 format.clearProperty(keys[i]);
         }
     }
+
+    format.clearProperty(KoParagraphStyle::OutlineLevel);
+
     cursor.setBlockFormat(format);
     KoCharacterStyle::unapplyStyle(block);
-    if (listStyle() && block.textList()) // TODO check its the same one?
-        block.textList()->remove(block);
+    if (listStyle() && block.textList()) { // TODO check its the same one?
+        KoList::remove(block);
+    }
+    if (d->list && block.textList()) { // TODO check its the same one?
+        KoList::remove(block);
+    }
+
 }
 
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
@@ -1865,6 +1875,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
     setName(style->name()); // make sure we emit property change
     KoCharacterStyle::copyProperties(style);
     d->parentStyle = style->d->parentStyle;
+    d->defaultStyle = style->d->defaultStyle;
 }
 
 KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)

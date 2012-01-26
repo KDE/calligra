@@ -216,7 +216,6 @@
        </Help>
    </Function>
 
-   <!-- sebsauer; TODO 2.5 uncomment following once Calligra 2.4 is released
    <Function>
        <Name>IFERROR</Name>
        <Type>Any</Type>
@@ -252,7 +251,6 @@
            <Example>IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-value else the content of A2 is returned.</Example>
        </Help>
    </Function>
-   -->
 </Group>
 
 </KSpreadFunctions>

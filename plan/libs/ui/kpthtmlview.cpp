@@ -35,9 +35,6 @@
 #include <kxmlguifactory.h>
 #include <khtmlview.h>
 
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-
 #include <kdebug.h>
 
 namespace KPlato

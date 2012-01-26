@@ -161,7 +161,7 @@
     account CDATA #IMPLIED>
 
 <!-- Task can be tasks, milestones (zero estimate) or summary tasks (have children) -->
-<!ELEMENT task (task*|estimate|workpackage|documents?|resourcegroup-request*|schedules?|progress?)>
+<!ELEMENT task (task*|estimate|documents?|resourcegroup-request*|schedules?|progress?)>
 <!ATTLIST task	id CDATA #REQUIRED
     name CDATA #IMPLIED
     leader CDATA #IMPLIED
@@ -180,7 +180,8 @@
     expected CDATA "0"
     optimistic CDATA "0"
     pessimistic CDATA "0"
-    unit CDATA "h">
+    unit CDATA "h"
+    calendar-id CDATA #IMPLIED>
 
 <!-- Not used by import/export
 <!ELEMENT workpackage EMPTY>
@@ -189,7 +190,7 @@
     owner-id CDATA #IMPLIED>
 -->
 
-<!ELEMENT progress (completion*|used-effort)>
+<!ELEMENT progress (completion-entry*|used-effort)>
 <!ATTLIST progress
     entrymode (FollowPlan|EnterCompleted|EnterEffortPerTask|EnterEffortPerResource) "EnterCompleted"
     startTime CDATA #IMPLIED
@@ -197,7 +198,6 @@
     started CDATA "0"
     finished CDATA "0">
 
-<!ELEMENT completion (completion-entry*)>
 <!ELEMENT completion-entry EMPTY>
 <!ATTLIST completion-entry
     date CDATA #REQUIRED

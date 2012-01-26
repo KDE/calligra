@@ -55,6 +55,7 @@ StyleManager::StyleManager(QWidget *parent)
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
+    widget.bDelete->setVisible(false); // TODO make it visible when we can safely delete styles
 
     connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
@@ -145,7 +146,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.characterStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
-    widget.bDelete->setEnabled(canDelete);
+ //   widget.bDelete->setEnabled(canDelete);
 }
 
 void StyleManager::setUnit(const KoUnit &unit)
@@ -159,23 +160,23 @@ void StyleManager::save()
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
 
+    m_styleManager->beginEdit();
+
     foreach(int styleId, m_alteredCharacterStyles.keys()) {
-        KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredCharacterStyles.clear();
 
     foreach(int styleId, m_alteredParagraphStyles.keys()) {
-        KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredParagraphStyles.clear();
+
+    m_styleManager->endEdit();
 
     //Reset the active style
     if (m_selectedCharStyle) {
