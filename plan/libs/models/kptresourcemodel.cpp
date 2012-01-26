@@ -41,15 +41,12 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
+#include <kabc/addressee.h>
+#include <kabc/vcardconverter.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kio/job.h>
 #include <kdebug.h>
-
-#ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-#endif
 
 namespace KPlato
 {
@@ -1191,14 +1188,9 @@ Qt::DropActions ResourceItemModel::supportedDropActions() const
 
 bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-#ifdef KDEPIMLIBS_FOUND
+//     kDebug()<<index<<data;
     Q_UNUSED(data);
-#else
-    if ( ! data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
-        return false;
-    }
-#endif
-    //kDebug()<<index<<data;
+    //kDebug()<<index;
     // TODO: if internal, don't allow dropping on my own parent
     switch ( dropIndicatorPosition ) {
         case ItemModelBase::OnItem:
@@ -1251,7 +1243,6 @@ void ResourceItemModel::slotJobFinished( KJob *job )
 
 bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
 {
-#ifdef KDEPIMLIBS_FOUND
     KABC::VCardConverter vc;
     KABC::Addressee::List lst = vc.parseVCards( data );
     MacroCommand *m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
@@ -1271,9 +1262,6 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
     }
     emit executeCommand( m );
     return true;
-#else
-    return false;
-#endif
 }
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )

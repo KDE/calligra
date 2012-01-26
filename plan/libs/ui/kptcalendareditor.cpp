@@ -48,6 +48,8 @@
 #include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
+#include <kabc/addressee.h>
+#include <kabc/vcardconverter.h>
 #include <kmenu.h>
 
 #include <kdebug.h>
