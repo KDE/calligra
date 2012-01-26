@@ -9,6 +9,10 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+if (KdepimLibs_FOUND)
+    add_definitions(-DKDEPIMLIBS_FOUND)
+endif (KdepimLibs_FOUND)
+
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
@@ -90,7 +94,7 @@ kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} komain)
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
