@@ -55,6 +55,9 @@ private:
     bool m_backgroundColorChanged, m_backgroundColorReset;
 
     bool m_uniqueFormat;
+    bool m_foregroundColorInherited;
+    bool m_backgroundColorInherited;
+    bool m_ignoreSignals;
 };
 
 #endif

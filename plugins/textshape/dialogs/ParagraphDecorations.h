@@ -47,6 +47,8 @@ private:
     Ui::ParagraphDecorations widget;
 
     bool m_backgroundColorChanged, m_backgroundColorReset;
+    bool m_backgroundColorInherited;
+    bool m_ignoreSignals;
 };
 
 #endif

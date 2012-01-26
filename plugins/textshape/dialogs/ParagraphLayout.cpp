@@ -31,6 +31,7 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.center, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.justify, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.left, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.keepTogether, SIGNAL(stateChanged(int)), this, SLOT(slotKeepTogetherChanged()));
     connect(widget.breakAfter, SIGNAL(stateChanged(int)), this, SLOT(breakAfterChanged()));
     connect(widget.breakBefore, SIGNAL(stateChanged(int)), this, SLOT(breakBeforeChanged()));
 }
@@ -47,23 +48,37 @@ void ParagraphLayout::slotAlignChanged()
     else
         align = Qt::AlignLeft;
 
-    m_alignmentInherited = false;
+    if (!m_ignoreSignals) {
+        m_alignmentInherited = false;
+    }
 
     emit horizontalAlignmentChanged(align);
 }
 
+void ParagraphLayout::slotKeepTogetherChanged()
+{
+    if (!m_ignoreSignals) {
+        m_nonBreakableLineInherited = false;
+    }
+}
+
 void ParagraphLayout::breakAfterChanged()
 {
-   m_breakAfterInherited = false;
+    if (!m_ignoreSignals) {
+        m_breakAfterInherited = false;
+    }
 }
 
 void ParagraphLayout::breakBeforeChanged()
 {
-    m_breakBeforeInherited = false;
+    if (!m_ignoreSignals) {
+        m_breakBeforeInherited = false;
+    }
 }
 
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)
 {
+    m_ignoreSignals = true;
     switch (style->alignment()) {
     case Qt::AlignRight: widget.right->setChecked(true); break;
     case Qt::AlignHCenter: widget.center->setChecked(true); break;
@@ -76,11 +91,12 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
     m_alignmentInherited = !style->hasProperty(QTextFormat::BlockAlignment);
     m_breakAfterInherited = !style->hasProperty(KoParagraphStyle::BreakAfter);
     m_breakBeforeInherited = !style->hasProperty(KoParagraphStyle::BreakBefore);
-
+    m_nonBreakableLineInherited = !style->hasProperty(QTextFormat::BlockNonBreakableLines);
 
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
     widget.breakAfter->setChecked(style->breakAfter());
+    m_ignoreSignals = false;
 }
 
 void ParagraphLayout::save(KoParagraphStyle *style)
@@ -98,19 +114,21 @@ void ParagraphLayout::save(KoParagraphStyle *style)
         style->setAlignment(align);
     }
 
+    if (!m_nonBreakableLineInherited) {
         style->setNonBreakableLines(widget.keepTogether->isChecked());
-        if (!m_breakBeforeInherited){
-            if (widget.breakBefore->isChecked())
-                style->setBreakBefore(KoText::PageBreak);
-            else
-                style->setBreakBefore(KoText::NoBreak);
-        }
-        if (!m_breakAfterInherited){
-            if (widget.breakAfter->isChecked())
-                style->setBreakAfter(KoText::PageBreak);
-            else
-                style->setBreakAfter(KoText::NoBreak);
-        }
+    }
+    if (!m_breakBeforeInherited){
+        if (widget.breakBefore->isChecked())
+            style->setBreakBefore(KoText::PageBreak);
+        else
+            style->setBreakBefore(KoText::NoBreak);
+    }
+    if (!m_breakAfterInherited){
+        if (widget.breakAfter->isChecked())
+            style->setBreakAfter(KoText::PageBreak);
+        else
+            style->setBreakAfter(KoText::NoBreak);
+    }
 }
 
 #include <ParagraphLayout.moc>

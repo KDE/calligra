@@ -52,18 +52,21 @@ FontLayoutTab::FontLayoutTab(bool withSubSuperScript, bool uniqueFormat, QWidget
 
 void FontLayoutTab::textPositionChanged()
 {
-   m_positionInherited = false;
+    if (!m_ignoreSignals)
+        m_positionInherited = false;
 }
 
 void FontLayoutTab::hyphenateStateChanged()
 {
-    m_hyphenateInherited = false;
+    if (!m_ignoreSignals)
+        m_hyphenateInherited = false;
 }
 
 void FontLayoutTab::setDisplay(KoCharacterStyle *style)
 {
     if (!style)
         return;
+    m_ignoreSignals = true;
     m_positionInherited  = !style->hasProperty(QTextFormat::TextVerticalAlignment);
     m_hyphenateInherited = !style->hasProperty(KoCharacterStyle::HasHyphenation);
 
@@ -79,15 +82,8 @@ void FontLayoutTab::setDisplay(KoCharacterStyle *style)
         widget.normal->setChecked(true);
     }
 
-    widget.positionGroup->setCheckable(!m_uniqueFormat);
-    widget.positionGroup->setChecked(m_uniqueFormat);
-
-    if (!m_uniqueFormat) {
-        widget.hyphenate->setTristate(true);
-        widget.hyphenate->setCheckState(Qt::PartiallyChecked);
-    }
-    else
-        widget.hyphenate->setChecked(style->hasHyphenation());
+    widget.hyphenate->setChecked(style->hasHyphenation());
+    m_ignoreSignals = false;
 }
 
 void FontLayoutTab::save(KoCharacterStyle *style)
@@ -95,7 +91,7 @@ void FontLayoutTab::save(KoCharacterStyle *style)
     Q_ASSERT(style);
     QTextCharFormat::VerticalAlignment va;
 
-    if (m_uniqueFormat || widget.positionGroup->isChecked() || !m_positionInherited) {
+    if (!m_positionInherited) {
         if (widget.normal->isChecked())
             va = QTextCharFormat::AlignNormal;
         else if (widget.subscript->isChecked())

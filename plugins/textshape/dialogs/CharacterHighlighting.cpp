@@ -110,27 +110,30 @@ int CharacterHighlighting::lineStyleToIndex(KoCharacterStyle::LineStyle type)
 
 void CharacterHighlighting::capitalisationChanged()
 {
-    if (m_uniqueFormat || widget.groupBox->isChecked()) {
-        if (widget.normal->isChecked()) {
-            emit capitalizationChanged(QFont::MixedCase);
+    if (widget.normal->isChecked()) {
+        emit capitalizationChanged(QFont::MixedCase);
+        if (!m_ignoreSignals)
             m_mixedCaseInherited = false;
-        }
-        else if (widget.smallcaps->isChecked()) {
-            emit capitalizationChanged(QFont::SmallCaps);
+    }
+    else if (widget.smallcaps->isChecked()) {
+        emit capitalizationChanged(QFont::SmallCaps);
+        if (!m_ignoreSignals)
             m_smallCapsInherited = false;
-        }
-        else if (widget.uppercase->isChecked()) {
-            emit capitalizationChanged(QFont::AllUppercase);
+    }
+    else if (widget.uppercase->isChecked()) {
+        emit capitalizationChanged(QFont::AllUppercase);
+        if (!m_ignoreSignals)
             m_allUpperCaseInherited = false;
-        }
-        else if (widget.lowercase->isChecked()) {
-            emit capitalizationChanged(QFont::AllLowercase);
+    }
+    else if (widget.lowercase->isChecked()) {
+        emit capitalizationChanged(QFont::AllLowercase);
+        if (!m_ignoreSignals)
             m_allLowerCaseInherited = false;
-        }
-        else if (widget.capitalize->isChecked()) {
-            emit capitalizationChanged(QFont::Capitalize);
+    }
+    else if (widget.capitalize->isChecked()) {
+        emit capitalizationChanged(QFont::Capitalize);
+        if (!m_ignoreSignals)
             m_capitalizInherited = false;
-        }
     }
 }
 
@@ -138,7 +141,8 @@ void CharacterHighlighting::underlineTypeChanged(int item)
 {
     widget.underlineLineStyle->setEnabled(item > 0);
     widget.underlineColor->setEnabled(item > 0);
-    m_underlineTypeInherited = false;
+    if (!m_ignoreSignals)
+        m_underlineTypeInherited = false;
     emit underlineChanged(indexToLineType(item), indexToLineStyle(widget.underlineLineStyle->currentIndex()), widget.underlineColor->color());
 }
 
@@ -146,20 +150,24 @@ void CharacterHighlighting::underlineStyleChanged(int item)
 {
     if (widget.underlineStyle->currentIndex())
         emit underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(item), widget.underlineColor->color());
-    m_underlineStyleInherited = false;
+    if (!m_ignoreSignals)
+        m_underlineStyleInherited = false;
 }
 
 void CharacterHighlighting::underlineColorChanged(QColor color)
 {
     if (widget.underlineStyle->currentIndex())
         emit underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(widget.underlineLineStyle->currentIndex()), color);
+    if (!m_ignoreSignals)
+        m_underlineColorInherited = false;
 }
 
 void CharacterHighlighting::strikethroughTypeChanged(int item)
 {
     widget.strikethroughLineStyle->setEnabled(item > 0);
     widget.strikethroughColor->setEnabled(item > 0);
-    m_strikeoutTypeInherited = false;
+    if (!m_ignoreSignals)
+        m_strikeoutTypeInherited = false;
     emit strikethroughChanged(indexToLineType(item), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), widget.strikethroughColor->color());
 }
 
@@ -167,25 +175,30 @@ void CharacterHighlighting::strikethroughStyleChanged(int item)
 {
     if (widget.strikethroughStyle->currentIndex())
         emit strikethroughChanged(indexToLineType(widget.strikethroughStyle->currentIndex()), indexToLineStyle(item), widget.strikethroughColor->color());
-    m_strikeoutStyleInherited = false;
+    if (!m_ignoreSignals)
+        m_strikeoutStyleInherited = false;
 }
 
 void CharacterHighlighting::strikethroughColorChanged(QColor color)
 {
     if (widget.strikethroughStyle->currentIndex())
         emit strikethroughChanged(indexToLineType(widget.strikethroughStyle->currentIndex()), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), color);
-    m_strikeoutcolorInherited = false;
+    if (!m_ignoreSignals)
+        m_strikeoutColorInherited = false;
 }
 
 void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
 {
     if (style == 0)
         return;
+    m_ignoreSignals = true;
+
     m_underlineStyleInherited = !style->hasProperty(KoCharacterStyle::UnderlineStyle);
     m_underlineTypeInherited = !style->hasProperty(KoCharacterStyle::UnderlineType);
+    m_underlineColorInherited = !style->hasProperty(QTextCharFormat::TextUnderlineColor);
     m_strikeoutStyleInherited = !style->hasProperty(KoCharacterStyle::StrikeOutStyle);
     m_strikeoutTypeInherited = !style->hasProperty(KoCharacterStyle::StrikeOutType);
-    m_strikeoutcolorInherited = !style->hasProperty(KoCharacterStyle::StrikeOutColor);
+    m_strikeoutColorInherited = !style->hasProperty(KoCharacterStyle::StrikeOutColor);
     m_mixedCaseInherited = !style->hasProperty(QFont::MixedCase);
     m_smallCapsInherited = !style->hasProperty(QFont::SmallCaps);
     m_allUpperCaseInherited = !style->hasProperty(QFont::AllUppercase);
@@ -222,10 +235,9 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
     case QFont::Capitalize: widget.capitalize->setChecked(true); break;
     }
 
-    widget.groupBox->setCheckable(!m_uniqueFormat);
-    widget.groupBox->setChecked(m_uniqueFormat);
-
     capitalisationChanged();
+
+    m_ignoreSignals = false;
 }
 
 void CharacterHighlighting::save(KoCharacterStyle *style)
@@ -233,44 +245,55 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
     if (style == 0)
         return;
 
-    if (widget.underlineStyle->currentIndex() == 0) {
-        style->setUnderlineType(KoCharacterStyle::NoLineType);
-        style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
-    } else if (widget.underlineStyle->currentIndex() > 0) {
-        if (!m_underlineTypeInherited) {
-            style->setUnderlineType(indexToLineType(widget.underlineStyle->currentIndex()));
+    if (!m_underlineStyleInherited || !m_underlineTypeInherited || !m_underlineColorInherited) {
+        if (widget.underlineStyle->currentIndex() == 0) {
+            style->setUnderlineType(KoCharacterStyle::NoLineType);
+            style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
+        } else if (widget.underlineStyle->currentIndex() > 0) {
+            if (!m_underlineTypeInherited) {
+                style->setUnderlineType(indexToLineType(widget.underlineStyle->currentIndex()));
+            }
+            if (!m_underlineStyleInherited) {
+                style->setUnderlineStyle(indexToLineStyle(widget.underlineLineStyle->currentIndex()));
+            }
+            if (!m_underlineColorInherited) {
+                style->setUnderlineColor(widget.underlineColor->color());
+            }
         }
-        if (!m_underlineStyleInherited) {
-            style->setUnderlineStyle(indexToLineStyle(widget.underlineLineStyle->currentIndex()));
-        }
-        style->setUnderlineColor(widget.underlineColor->color());
     }
 
-    if (widget.strikethroughStyle->currentIndex() == 0) {
-        style->setStrikeOutType(KoCharacterStyle::NoLineType);
-        style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
-    } else if (widget.strikethroughStyle->currentIndex() > 0) {
-        if (!m_strikeoutTypeInherited) {
-            style->setStrikeOutType(indexToLineType(widget.strikethroughStyle->currentIndex()));
-        }
-        if (!m_strikeoutStyleInherited) {
-            style->setStrikeOutStyle(indexToLineStyle(widget.strikethroughLineStyle->currentIndex()));
-        }
-        if (!m_strikeoutcolorInherited) {
-            style->setStrikeOutColor(widget.strikethroughColor->color());
+    if (!m_strikeoutStyleInherited || !m_strikeoutTypeInherited || !m_strikeoutColorInherited) {
+        if (widget.strikethroughStyle->currentIndex() == 0) {
+            style->setStrikeOutType(KoCharacterStyle::NoLineType);
+            style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
+        } else if (widget.strikethroughStyle->currentIndex() > 0) {
+            if (!m_strikeoutTypeInherited) {
+                style->setStrikeOutType(indexToLineType(widget.strikethroughStyle->currentIndex()));
+            }
+            if (!m_strikeoutStyleInherited) {
+                style->setStrikeOutStyle(indexToLineStyle(widget.strikethroughLineStyle->currentIndex()));
+            }
+            if (!m_strikeoutColorInherited) {
+                style->setStrikeOutColor(widget.strikethroughColor->color());
+            }
         }
     }
-    if (m_uniqueFormat || widget.groupBox->isChecked()) {
-        if (widget.normal->isChecked() && !m_mixedCaseInherited)
+    if (!m_mixedCaseInherited || !m_smallCapsInherited || !m_allUpperCaseInherited || !m_allLowerCaseInherited || !m_capitalizInherited) {
+        if (widget.normal->isChecked()) {
             style->setFontCapitalization(QFont::MixedCase);
-        else if (widget.smallcaps->isChecked() && !m_smallCapsInherited)
+        }
+        else if (widget.smallcaps->isChecked()) {
             style->setFontCapitalization(QFont::SmallCaps);
-        else if (widget.uppercase->isChecked() && !m_allUpperCaseInherited)
+        }
+        else if (widget.uppercase->isChecked()) {
             style->setFontCapitalization(QFont::AllUppercase);
-        else if (widget.lowercase->isChecked() && !m_allLowerCaseInherited)
+        }
+        else if (widget.lowercase->isChecked()) {
             style->setFontCapitalization(QFont::AllLowercase);
-        else if (widget.capitalize->isChecked() && !m_capitalizInherited)
+        }
+        else if (widget.capitalize->isChecked()) {
             style->setFontCapitalization(QFont::Capitalize);
+        }
     }
 }
 

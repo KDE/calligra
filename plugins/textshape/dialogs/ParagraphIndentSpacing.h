@@ -63,12 +63,15 @@ private:
 
     KoParagraphStyle *m_style;
     bool m_fontMetricsChecked;
-    bool m_rightMarginIngerited;
+    bool m_rightMarginInherited;
     bool m_leftMarginInherited;
     bool m_topMarginInherited;
     bool m_bottomMarginInherited;
     bool m_textIndentInherited;
     bool m_autoTextIndentInherited;
+    bool m_lineSpacingInherited;
+
+    bool m_ignoreSignals;
 };
 
 #endif
