@@ -21,11 +21,18 @@
 #ifndef CDRPARSER_H
 #define CDRPARSER_H
 
+// filter
+#include "cdrstructs.h"
 // Koralle
 #include <Koralle0/RiffStreamReader>
 
 class KarbonDocument;
+class KoShapeGroup;
+class KoPathShape;
+class KoShape;
+class QPointF;
 class QFile;
+template<class T> class QList;
 
 
 class CdrParser
@@ -55,13 +62,26 @@ private:
     void readDocStyle();
 
     void readPageFlags();
-    void readPageGObj();
-    void readPageGObjLayer();
-    void readPageGObjLayerFlags();
-    void readPageGObjLayerLGOb();
-    void readPageGObjLayerLGObTrfl();
-    void readPageGObjLayerObj();
-    void readPageGObjLayerGrp();
+
+    void readLayer();
+    void readLayerFlags();
+    void readLayerLGOb();
+
+    KoShapeGroup* readObjectGroup();
+    void readObjectGroupFlags();
+
+    KoShape* readObject();
+    void readObjectFlags();
+    KoShape* readObjectLGOb();
+
+    void readTrfl();
+    KoShape* readLoda();
+
+    KoPathShape* readPathObject( const CdrArgumentData* argsData );
+
+    qreal koXCoord( cdr4Coord cdrCoord ) const;
+    qreal koYCoord( cdr4Coord cdrCoord ) const;
+    QPointF koCoords( Cdr4Point cdrCoords ) const;
 
 private:
     KarbonDocument* mDocument;
