@@ -276,11 +276,28 @@ KoZoomHandler* CACanvasController::zoomHandler()
 void CACanvasController::setZoomController (KoZoomController* zoomController)
 {
     m_zoomController = zoomController;
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(updateZoomValue(KoZoomMode::Mode,qreal)));
 }
 
 void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 {
     m_zoomHandler = zoomHandler;
+}
+
+void CACanvasController::setZoom(qreal zoom)
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    emit zoomChanged();
+}
+
+qreal CACanvasController::zoom() const
+{
+    return m_zoom;
+}
+
+void CACanvasController::updateZoomValue(KoZoomMode::Mode mode, qreal zoom)
+{
+    m_zoom = zoom;
 }
 
 #include "CACanvasController.moc"
