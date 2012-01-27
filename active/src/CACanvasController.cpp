@@ -186,20 +186,12 @@ void CACanvasController::scrollContentsBy (int dx, int dy)
 
 qreal CACanvasController::docHeight() const
 {
-    if (m_zoomHandler) {
-        return m_documentSize.height() * m_zoomHandler->zoomFactorY();
-    } else {
-        return m_documentSize.height();
-    }
+    return m_documentSize.height();
 }
 
 qreal CACanvasController::docWidth() const
 {
-    if (m_zoomHandler) {
-        return m_documentSize.width() * m_zoomHandler->zoomFactorX();
-    } else {
-        return m_documentSize.width();
-    }
+    return m_documentSize.width();
 }
 
 int CACanvasController::cameraX() const
@@ -286,10 +278,8 @@ void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 
 void CACanvasController::setZoom(qreal zoom)
 {
-    if (m_zoomHandler) {
-        m_zoomHandler->setZoom(zoom);
-        emit zoomChanged();
-    }
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    emit zoomChanged();
 }
 
 qreal CACanvasController::zoom() const

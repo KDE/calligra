@@ -27,12 +27,10 @@ import org.kde.plasma.mobilecomponents 0.1 as MobileComponents
 import org.kde.qtextracomponents 0.1
 
 Item {
+    id: findToolbarRootItem
     property string searchString: findToolbarSearchString.text
     signal findNextRequested
     signal findPreviousRequested
-
-    id: findToolbarRootItem
-    focus: true
 
     Row {
         id: row
@@ -40,8 +38,14 @@ Item {
 
         PlasmaComponents.TextField {
             id: findToolbarSearchString
+            focus: true
             height: parent.height
             width: parent.width - findNextButton.width - findPreviousButton.width
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: findToolbarSearchString.forceActiveFocus()
+            }
         }
 
         PlasmaComponents.Button {

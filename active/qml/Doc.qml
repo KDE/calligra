@@ -27,9 +27,72 @@ Item {
     signal documentLoaded
     clip: true
 
-    function openDocument(path) {
-        docDocumentController.documentUri = path;
-        docDocumentController.loadDocument();
+    FindToolbar {
+        id: findToolbar
+        height: 32
+        z: 1
+        visible: (docDocumentController.documentTypeName == "textdocument")
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
+        onFindNextRequested: docDocumentController.documentHandler().findNext();
+        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
+    }
+
+    Loader {
+        id: toolbarLoader
+        z: 1
+
+        anchors.fill: parent
+    }
+
+    CanvasController {
+        id: canvas
+        anchors.fill: parent
+
+        cameraX: docFlickable.contentX
+        cameraY: docFlickable.contentY
+
+        Flickable {
+            id: docFlickable
+            anchors.fill: parent
+            z: 1
+
+            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+
+            PinchArea {
+                id: docPinchArea
+                width: Math.max(canvas.docWidth, docFlickable.width)
+                height: Math.max(canvas.docHeight, docFlickable.height)
+                z: 1
+
+                property real initialZoom
+
+                onPinchStarted: {
+                    initialZoom = pinch.scale - canvas.zoom
+                }
+
+                onPinchUpdated: {
+                    // adjust content pos due to drag
+                    docFlickable.contentX += pinch.previousCenter.x - pinch.center.x
+                    docFlickable.contentY += pinch.previousCenter.y - pinch.center.y
+
+                    canvas.zoom = pinch.scale - initialZoom
+                }
+
+                onPinchFinished: {
+                    // Move its content within bounds.
+                    docFlickable.returnToBounds()
+
+                    canvas.zoom = pinch.scale - initialZoom
+                    docPinchArea.width = Math.max(canvas.docWidth, docFlickable.width)
+                    docPinchArea.height = Math.max(canvas.docHeight, docFlickable.height)
+                }
+            }
+        }
     }
 
     function initToolbar() {
@@ -42,15 +105,10 @@ Item {
         }
     }
 
-//     function toggleEdit() {
-//         if (docFlickable.visible) {
-//             docFlickable.visible = false;
-//             canvas.z = 1
-//         } else {
-//             docFlickable.visible = true;
-//             canvas.z = -1
-//         }
-//     }
+    function openDocument(path) {
+        docDocumentController.documentUri = path;
+        docDocumentController.loadDocument();
+    }
 
     CADocumentController {
         id: docDocumentController
@@ -60,88 +118,4 @@ Item {
             docRootRect.documentLoaded();
         }
     }
-
-    CanvasController {
-        id: canvas
-
-        anchors.fill: parent
-        z: -1
-
-        cameraX: docFlickable.contentX
-        cameraY: docFlickable.contentY
-    }
-
-//     Button {
-//         id: editModeButton
-//         drawBackground: false
-//         imageSource: "qrc:///images/document-edit.png"
-//         anchors.left: parent.left
-//         anchors.bottom: parent.bottom
-//         height: 64
-//         width: 64
-//         z: 30
-//
-//         onClicked: toggleEdit();
-//     }
-//
-    FindToolbar {
-        id: findToolbar
-        height: 32
-        z: 2
-        visible: (docDocumentController.documentTypeName == "textdocument")
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
-        onFindNextRequested: docDocumentController.documentHandler().findNext();
-        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
-    }
-
-    MouseArea {
-        id: flickableMouseArea
-        anchors.fill: parent
-        drag.filterChildren: true
-
-        Flickable {
-            id: docFlickable
-            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
-
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-        }
-
-        Loader {
-            id: toolbarLoader
-            property bool containsMouse: false
-
-            anchors.fill: parent
-            opacity: 0
-        }
-
-        Connections {
-            target: toolbarLoader.item
-            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
-        }
-    }
-
-    states : [
-        State {
-            name: "toolbarShown";
-            when: (flickableMouseArea.pressed || toolbarLoader.containsMouse) && !docFlickable.moving
-            PropertyChanges { target: toolbarLoader; opacity: 1 }
-        }
-    ]
-
-    transitions : [
-        Transition {
-            from: "toolbarShown"
-            SequentialAnimation {
-                PauseAnimation { duration: 2000 }
-                NumberAnimation {
-                    target: toolbarLoader; properties: "opacity"; duration: 3000
-                }
-            }
-        }
-    ]
 }
