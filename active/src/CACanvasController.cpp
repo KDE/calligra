@@ -286,8 +286,10 @@ void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 
 void CACanvasController::setZoom(qreal zoom)
 {
-    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
-    emit zoomChanged();
+    if (m_zoomHandler) {
+        m_zoomHandler->setZoom(zoom);
+        emit zoomChanged();
+    }
 }
 
 qreal CACanvasController::zoom() const
