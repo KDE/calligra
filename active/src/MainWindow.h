@@ -24,6 +24,8 @@
 
 #include <QtGui/QMainWindow>
 
+#include <kdeclarative.h>
+
 class QDeclarativeView;
 
 class MainWindow : public QMainWindow
@@ -36,6 +38,7 @@ public:
     void openFile (const QString& path);
 private:
     QDeclarativeView* m_view;
+    KDeclarative kdeclarative;
 
 private slots:
     void adjustWindowSize (QSize size);

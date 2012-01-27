@@ -40,7 +40,7 @@ QML.Item {
         PlasmaComponents.Button {
             id: button1
 
-            iconSource: "qrc:///images/words.png"
+            iconSource: "words"
             text: "Text Document"
             width: buttonWidth; height: buttonHeight
 
@@ -50,7 +50,7 @@ QML.Item {
         PlasmaComponents.Button {
             id: button2
 
-            iconSource: "qrc:///images/tables.png"
+            iconSource: "kspread"
             text: "Spreadsheet"
             width: buttonWidth; height: buttonHeight
 
@@ -59,7 +59,7 @@ QML.Item {
         PlasmaComponents.Button {
             id: button3
 
-            iconSource: "qrc:///images/stage.png"
+            iconSource: "stage"
             text: "Presentation"
             width: buttonWidth; height: buttonHeight
 

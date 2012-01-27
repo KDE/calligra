@@ -59,7 +59,7 @@ Image {
     PlasmaComponents.Button {
         id: openFileDialogButton
 
-        iconSource: "qrc:///images/words.png"
+        iconSource: "document-open"
 	text: "Open File"
         width: homeScreen.width/2.1;
 	height: 100;
@@ -75,7 +75,7 @@ Image {
     PlasmaComponents.Button {
         id: aboutCalligraButton
 
-        iconSource: "qrc:///images/active-about.png"
+        iconSource: "active-about"
         text: "About Calligra Active"
         width: homeScreen.width/2.1;
         height: 100;

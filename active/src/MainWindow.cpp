@@ -44,6 +44,10 @@ MainWindow::MainWindow (QWidget* parent)
 
     m_view = new QDeclarativeView (this);
 
+    kdeclarative.setDeclarativeEngine(m_view->engine());
+    kdeclarative.initialize();
+    kdeclarative.setupBindings();
+
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;
     QList<QObject*> recentSpreadsheets;
