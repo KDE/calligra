@@ -40,14 +40,13 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-
-
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
-    Q_UNUSED(canvas);
     m_canvas = dynamic_cast<KWCanvas*>(canvas);
-    m_document = m_canvas->document();
+    if (m_canvas) {
+        m_document = m_canvas->document();
+    }
 }
 
 KWPageTool::~KWPageTool()
