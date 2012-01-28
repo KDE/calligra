@@ -40,19 +40,27 @@
 #include <KMimeTypeTrader>
 
 #include <QtCore/QSize>
+#include <QtCore/QTimer>
 
 class CAPresentationHandler::Private
 {
 public:
+    Private()
+    {
+        currentSlideNum = -1;
+    }
+
     KPrDocument* document;
     CAPAView* paView;
     int currentSlideNum;
+    QTimer slideshowTimer;
 };
 
 CAPresentationHandler::CAPresentationHandler (CADocumentController* documentController)
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
+    connect(&d->slideshowTimer, SIGNAL(timeout()), SLOT(advanceSlideshow()));
 }
 
 CAPresentationHandler::~CAPresentationHandler()
@@ -113,7 +121,6 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
-    d->currentSlideNum = -1;
     nextSlide();
 
     return true;
@@ -167,6 +174,8 @@ void CAPresentationHandler::zoomToFit()
                                   newSize.width(), newSize.height());
         zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.75);
     }
+
+    updateCanvas();
 }
 
 void CAPresentationHandler::tellZoomControllerToSetDocumentSize (const QSize& size)
@@ -202,6 +211,11 @@ void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
     }
 }
 
+QString CAPresentationHandler::topToolbarSource() const
+{
+    return "PresentationTopToolbar.qml";
+}
+
 QString CAPresentationHandler::leftToolbarSource() const
 {
     return "PresentationLeftToolbar.qml";
@@ -210,6 +224,37 @@ QString CAPresentationHandler::leftToolbarSource() const
 QString CAPresentationHandler::rightToolbarSource() const
 {
     return "PresentationRightToolbar.qml";
+}
+
+void CAPresentationHandler::setSlideshowDelay(int delay)
+{
+    d->slideshowTimer.setInterval(delay*1000);
+}
+
+int CAPresentationHandler::slideshowDelay() const
+{
+    return d->slideshowTimer.interval()/1000;
+}
+
+void CAPresentationHandler::startSlideshow()
+{
+    d->slideshowTimer.start();
+    emit slideshowStarted();
+}
+
+void CAPresentationHandler::stopSlideshow()
+{
+    d->slideshowTimer.stop();
+    emit slideshowStopped();
+}
+
+void CAPresentationHandler::advanceSlideshow()
+{
+    nextSlide();
+
+    if (d->currentSlideNum == d->document->pageCount() - 1) {
+        stopSlideshow();
+    }
 }
 
 #include "CAPresentationHandler.moc"

@@ -30,6 +30,8 @@ class QSizeF;
 class CAPresentationHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
+    Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
+
 public:
     explicit CAPresentationHandler (CADocumentController* documentController);
     virtual ~CAPresentationHandler();
@@ -37,8 +39,12 @@ public:
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
 
+    virtual QString topToolbarSource() const;
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
+
+    int slideshowDelay() const;
+    void setSlideshowDelay(int delay);
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
@@ -48,9 +54,19 @@ public slots:
     void zoomToFit();
     void updateCanvas();
     void resizeCanvas(const QSizeF &canvasSize);
+    void startSlideshow();
+    void stopSlideshow();
+
+signals:
+    void slideshowDelayChanged();
+    void slideshowStarted();
+    void slideshowStopped();
 
 protected:
     virtual KoDocument* document();
+
+private slots:
+    void advanceSlideshow();
 
 private:
     class Private;
