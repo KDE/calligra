@@ -25,6 +25,7 @@ Item {
     id: root
     property QtObject documentController
     property Item docRootItem
+    property int animationDuration: 200
 
     Loader {
         id: topToolbarLoader
@@ -53,7 +54,7 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 300 }
+            AnchorAnimation { duration: root.animationDuration }
         }
     }
 
@@ -84,7 +85,7 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 300 }
+            AnchorAnimation { duration: root.animationDuration }
         }
     }
 
@@ -115,7 +116,7 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 300 }
+            AnchorAnimation { duration: root.animationDuration }
         }
     }
 
@@ -146,7 +147,7 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 300 }
+            AnchorAnimation { duration: root.animationDuration }
         }
     }
 
