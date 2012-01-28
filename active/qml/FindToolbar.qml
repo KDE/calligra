@@ -28,9 +28,7 @@ import org.kde.qtextracomponents 0.1
 
 Item {
     id: findToolbarRootItem
-    property string searchString: findToolbarSearchString.text
-    signal findNextRequested
-    signal findPreviousRequested
+    property QtObject documentController
 
     Row {
         id: row
@@ -46,6 +44,8 @@ Item {
                 anchors.fill: parent
                 onClicked: findToolbarSearchString.forceActiveFocus()
             }
+
+            onTextChanged: findToolbarRootItem.documentController.documentHandler().searchString = text
         }
 
         PlasmaComponents.Button {
@@ -54,7 +54,7 @@ Item {
             width: 128
             text: "Find Previous"
 
-            onClicked: findToolbarRootItem.findPreviousRequested()
+            onClicked: findToolbarRootItem.documentController.documentHandler().findPrevious()
         }
 
         PlasmaComponents.Button {
@@ -63,7 +63,7 @@ Item {
             width: 128
             text: "Find Next"
 
-            onClicked: findToolbarRootItem.findNextRequested()
+            onClicked: findToolbarRootItem.documentController.documentHandler().findNext()
         }
     }
 }

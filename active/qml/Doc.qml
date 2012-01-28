@@ -36,21 +36,6 @@ Item {
         }
     }
 
-    FindToolbar {
-        id: findToolbar
-        height: 32
-        z: 1
-        visible: (docDocumentController.documentTypeName == "textdocument")
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        onSearchStringChanged: docDocumentController.documentHandler().searchString = searchString;
-        onFindNextRequested: docDocumentController.documentHandler().findNext();
-        onFindPreviousRequested: docDocumentController.documentHandler().findPrevious();
-    }
-
     Loader {
         id: toolbarLoader
         z: 1
@@ -74,14 +59,71 @@ Item {
         }
     }
 
-    function initToolbar() {
-        if (docDocumentController.documentTypeName == "spreadsheet") {
-            toolbarLoader.source = "SpreadsheetToolbar.qml";
-        } else if (docDocumentController.documentTypeName == "textdocument") {
-            toolbarLoader.source = "WordsToolbar.qml";
-        } else if (docDocumentController.documentTypeName == "presentation") {
-            toolbarLoader.source = "PresentationToolbar.qml";
+    Loader {
+        id: topToolbarLoader
+        height: 32
+        z: 1
+        //visible: source
+
+        anchors.left: leftToolbarLoader.right
+        anchors.right: rightToolbarLoader.left
+        anchors.top: parent.top
+
+        onSourceChanged: {
+            item.documentController = docDocumentController
         }
+    }
+
+    Loader {
+        id: rightToolbarLoader
+        width: 32
+        z: 1
+        //visible: source
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        onSourceChanged: {
+            item.documentController = docDocumentController
+        }
+    }
+
+    Loader {
+        id: bottomToolbarLoader
+        height: 32
+        z: 1
+        //visible: source
+
+        anchors.left: leftToolbarLoader.right
+        anchors.right: rightToolbarLoader.left
+        anchors.bottom: parent.bottom
+
+        onSourceChanged: {
+            item.documentController = docDocumentController
+        }
+    }
+
+    Loader {
+        id: leftToolbarLoader
+        width: 32
+        z: 1
+        //visible: source
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        onSourceChanged: {
+            item.documentController = docDocumentController
+        }
+    }
+
+    function initToolbar() {
+        topToolbarLoader.source = docDocumentController.documentHandler().topToolbarSource
+        rightToolbarLoader.source = docDocumentController.documentHandler().rightToolbarSource
+        bottomToolbarLoader.source = docDocumentController.documentHandler().bottomToolbarSource
+        leftToolbarLoader.source = docDocumentController.documentHandler().leftToolbarSource
     }
 
     function openDocument(path) {

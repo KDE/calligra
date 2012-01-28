@@ -211,4 +211,9 @@ void CATextDocumentHandler::findNoMatchFound()
     kDebug() << "Match for " << searchString() << " not found";
 }
 
+QString CATextDocumentHandler::bottomToolbarSource() const
+{
+    return "FindToolbar.qml";
+}
+
 #include "CATextDocumentHandler.moc"

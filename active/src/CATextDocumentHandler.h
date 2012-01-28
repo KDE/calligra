@@ -44,6 +44,8 @@ public:
     QString searchString() const;
     void setSearchString (const QString& searchString);
 
+    virtual QString bottomToolbarSource() const;
+
 public slots:
     void updateCanvas();
     void resizeCanvas (const QSizeF& canvasSize);
