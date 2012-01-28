@@ -63,14 +63,29 @@ Item {
         id: topToolbarLoader
         height: 32
         z: 1
-        //visible: source
 
         anchors.left: leftToolbarLoader.right
         anchors.right: rightToolbarLoader.left
-        anchors.top: parent.top
+        anchors.bottom: parent.top
 
         onSourceChanged: {
-            item.documentController = docDocumentController
+            if (source) {
+                item.documentController = docDocumentController
+            }
+        }
+
+        states: State {
+            name: "shown"
+
+            AnchorChanges {
+                target: topToolbarLoader
+                anchors.bottom: undefined
+                anchors.top: parent.top
+            }
+        }
+
+        transitions: Transition {
+            AnchorAnimation { duration: 500 }
         }
     }
 
@@ -78,14 +93,30 @@ Item {
         id: rightToolbarLoader
         width: 32
         z: 1
-        //visible: source
 
-        anchors.right: parent.right
+        anchors.left: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
         onSourceChanged: {
-            item.documentController = docDocumentController
+            if (source) {
+                item.documentController = docDocumentController
+                state = "shown"
+            }
+        }
+
+        states: State {
+            name: "shown"
+
+            AnchorChanges {
+                target: rightToolbarLoader
+                anchors.left: undefined
+                anchors.right: parent.right
+            }
+        }
+
+        transitions: Transition {
+            AnchorAnimation { duration: 500 }
         }
     }
 
@@ -93,14 +124,30 @@ Item {
         id: bottomToolbarLoader
         height: 32
         z: 1
-        //visible: source
 
         anchors.left: leftToolbarLoader.right
         anchors.right: rightToolbarLoader.left
-        anchors.bottom: parent.bottom
+        anchors.top: parent.bottom
 
         onSourceChanged: {
-            item.documentController = docDocumentController
+            if (source) {
+                item.documentController = docDocumentController
+                state = "shown"
+            }
+        }
+
+        states: State {
+            name: "shown"
+
+            AnchorChanges {
+                target: bottomToolbarLoader
+                anchors.top: undefined
+                anchors.bottom: parent.bottom
+            }
+        }
+
+        transitions: Transition {
+            AnchorAnimation { duration: 500 }
         }
     }
 
@@ -108,14 +155,30 @@ Item {
         id: leftToolbarLoader
         width: 32
         z: 1
-        //visible: source
 
-        anchors.left: parent.left
+        anchors.right: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
         onSourceChanged: {
-            item.documentController = docDocumentController
+            if (source) {
+                item.documentController = docDocumentController
+                state = "shown"
+            }
+        }
+
+        states: State {
+            name: "shown"
+
+            AnchorChanges {
+                target: leftToolbarLoader
+                anchors.right: undefined
+                anchors.left: parent.left
+            }
+        }
+
+        transitions: Transition {
+            AnchorAnimation { duration: 500 }
         }
     }
 
