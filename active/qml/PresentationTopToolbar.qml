@@ -28,27 +28,70 @@ Item
     property QtObject documentController
     property Item docRootItem
 
-    PlasmaComponents.ToolButton {
-        id: startPresentationButton
-        iconSource: "view-presentation"
+    PlasmaComponents.ToolBar {
         anchors.centerIn: parent
-        height: parent.height
-        width: height
-        checkable: true
+        anchors.fill: parent
 
-        onCheckedChanged: {
-            if (checked) {
-                documentController.documentHandler().slideshowDelay = 2;
-                documentController.documentHandler().startSlideshow()
-                documentController.documentHandler().slideshowStopped.connect(slideshowStopped)
-            } else {
-                documentController.documentHandler().stopSlideshow()
+        tools: Row {
+            anchors.centerIn: parent
+            height: parent.height
+            spacing: 10
+
+            PlasmaComponents.ToolButton {
+                id: slideshowDelayLabel
+                height: parent.height
+                width: height
+                checkable: true
+
+                iconSource: "player-time"
+                text: Math.floor(slideshowDelaySlider.value.toString())
+
+                PlasmaComponents.Slider {
+                    id: slideshowDelaySlider
+                    width: parent.height
+                    height: parent.checked ? 256 : 0
+                    visible: parent.checked
+                    anchors.top: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    orientation: Qt.Vertical
+                    minimumValue: 1
+                    maximumValue: 30
+                    value: 5
+
+                    onValueChanged: documentController.documentHandler().slideshowDelay = Math.floor(value)
+                    onPressedChanged: if (!pressed) slideshowDelayLabel.checked = false
+                }
+            }
+
+            PlasmaComponents.ToolButton {
+                id: startPresentationButton
+                iconSource: "view-presentation"
+                height: parent.height
+                width: parent.height
+                checkable: true
+
+                onCheckedChanged: {
+                    if (checked) {
+                        documentController.documentHandler().startSlideshow()
+                        documentController.documentHandler().slideshowStopped.connect(slideshowStopped)
+                    } else {
+                        documentController.documentHandler().stopSlideshow()
+                    }
+                }
+
+                function slideshowStopped()
+                {
+                    startPresentationButton.checked = false;
+                }
             }
         }
+    }
 
-        function slideshowStopped()
-        {
-            startPresentationButton.checked = false;
-        }
+    Row {
+        anchors.centerIn: parent
+        height: parent.height
+
+        
     }
 }
