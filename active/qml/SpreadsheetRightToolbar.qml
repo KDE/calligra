@@ -30,7 +30,7 @@ Item
     PlasmaComponents.ToolButton {
         iconSource: "arrow-right"
         anchors.centerIn: parent
-        height: height
+        height: width
         width: parent.width
 
         onClicked: root.documentController.documentHandler().nextSheet()
