@@ -188,4 +188,14 @@ int CASpreadsheetHandler::sheetCount() const
     return dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->activeSheet()->map()->count();
 }
 
+QString CASpreadsheetHandler::leftToolbarSource() const
+{
+    return "SpreadsheetLeftToolbar.qml";
+}
+
+QString CASpreadsheetHandler::rightToolbarSource() const
+{
+    return "SpreadsheetRightToolbar.qml";
+}
+
 #include "CASpreadsheetHandler.moc"
