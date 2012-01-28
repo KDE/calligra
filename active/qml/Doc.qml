@@ -25,6 +25,7 @@ import CalligraActive 1.0
 Item {
     id: docRootRect
     signal documentLoaded
+    signal toggleToolbars
     clip: true
 
     CADocumentController {
@@ -34,13 +35,6 @@ Item {
             docRootRect.documentLoaded();
             docRootRect.initToolbar();
         }
-    }
-
-    Loader {
-        id: toolbarLoader
-        z: 1
-
-        anchors.fill: parent
     }
 
     CanvasController {
@@ -56,6 +50,13 @@ Item {
             z: 1
 
             contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+
+            MouseArea {
+                anchors.fill: parent
+                z: 1
+
+                onClicked: docRootRect.toggleToolbars()
+            }
         }
     }
 
@@ -85,8 +86,10 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 500 }
+            AnchorAnimation { duration: 300 }
         }
+
+        function toggle() { state = state ? "" : "shown" }
     }
 
     Loader {
@@ -116,8 +119,10 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 500 }
+            AnchorAnimation { duration: 300 }
         }
+
+        function toggle() { state = state ? "" : "shown" }
     }
 
     Loader {
@@ -147,8 +152,10 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 500 }
+            AnchorAnimation { duration: 300 }
         }
+
+        function toggle() { state = state ? "" : "shown" }
     }
 
     Loader {
@@ -178,8 +185,17 @@ Item {
         }
 
         transitions: Transition {
-            AnchorAnimation { duration: 500 }
+            AnchorAnimation { duration: 300 }
         }
+
+        function toggle() { state = state ? "" : "shown" }
+    }
+
+    onToggleToolbars : {
+        topToolbarLoader.toggle()
+        rightToolbarLoader.toggle()
+        bottomToolbarLoader.toggle()
+        leftToolbarLoader.toggle()
     }
 
     function initToolbar() {
