@@ -73,25 +73,28 @@ Item
 
                 onCheckedChanged: {
                     if (checked) {
-                        documentController.documentHandler().startSlideshow()
-                        documentController.documentHandler().slideshowStopped.connect(slideshowStopped)
+                        root.documentController.documentHandler().startSlideshow()
                     } else {
-                        documentController.documentHandler().stopSlideshow()
+                        root.documentController.documentHandler().stopSlideshow()
                     }
+                }
+
+                function slideshowStarted()
+                {
+                    root.parent.parent.state = "hidden"
                 }
 
                 function slideshowStopped()
                 {
-                    startPresentationButton.checked = false;
+                    startPresentationButton.checked = false
+                    root.parent.parent.state = "shown"
                 }
             }
         }
     }
 
-    Row {
-        anchors.centerIn: parent
-        height: parent.height
-
-        
+    onDocumentControllerChanged: {
+        root.documentController.documentHandler().slideshowStopped.connect(startPresentationButton.slideshowStopped)
+        root.documentController.documentHandler().slideshowStarted.connect(startPresentationButton.slideshowStarted)
     }
 }
