@@ -65,10 +65,15 @@ Item {
         anchors.fill: parent
 
         documentController: docDocumentController
+        docRootItem: docRootRect
     }
 
     function openDocument(path) {
         docDocumentController.documentUri = path;
         docDocumentController.loadDocument();
+    }
+
+    function toggleEditing() {
+        docFlickable.visible = docFlickable.visible ? false : true
     }
 }

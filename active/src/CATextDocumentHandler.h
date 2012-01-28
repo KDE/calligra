@@ -45,6 +45,7 @@ public:
     void setSearchString (const QString& searchString);
 
     virtual QString bottomToolbarSource() const;
+    virtual QString topToolbarSource() const;
 
 public slots:
     void updateCanvas();

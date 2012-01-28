@@ -213,7 +213,12 @@ void CATextDocumentHandler::findNoMatchFound()
 
 QString CATextDocumentHandler::bottomToolbarSource() const
 {
-    return "FindToolbar.qml";
+    return "TextDocumentFindToolbar.qml";
+}
+
+QString CATextDocumentHandler::topToolbarSource() const
+{
+    return "TextDocumentEditingToolbar.qml";
 }
 
 #include "CATextDocumentHandler.moc"

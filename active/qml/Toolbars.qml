@@ -24,6 +24,7 @@ import QtQuick 1.1
 Item {
     id: root
     property QtObject documentController
+    property Item docRootItem
 
     Loader {
         id: topToolbarLoader
@@ -37,6 +38,7 @@ Item {
         onSourceChanged: {
             if (source) {
                 item.documentController = root.documentController
+                item.docRootItem = root.docRootItem
             }
         }
 
@@ -67,7 +69,7 @@ Item {
         onSourceChanged: {
             if (source) {
                 item.documentController = root.documentController
-                state = "shown"
+                item.docRootItem = root.docRootItem
             }
         }
 
@@ -98,7 +100,7 @@ Item {
         onSourceChanged: {
             if (source) {
                 item.documentController = root.documentController
-                state = "shown"
+                item.docRootItem = root.docRootItem
             }
         }
 
@@ -129,7 +131,7 @@ Item {
         onSourceChanged: {
             if (source) {
                 item.documentController = root.documentController
-                state = "shown"
+                item.docRootItem = root.docRootItem
             }
         }
 
@@ -168,7 +170,6 @@ Item {
     function toggle() { state = (state == "shown" ? "hidden" : "shown") }
 
     function initToolbars() {
-        console.log("LOADING")
         topToolbarLoader.source = root.documentController.documentHandler().topToolbarSource
         rightToolbarLoader.source = root.documentController.documentHandler().rightToolbarSource
         bottomToolbarLoader.source = root.documentController.documentHandler().bottomToolbarSource
