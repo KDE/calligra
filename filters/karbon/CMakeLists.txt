@@ -14,7 +14,7 @@ macro_optional_find_package(WPD)
 macro_optional_find_package(WPG)
 macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 macro_optional_find_package(Koralle)
-macro_log_feature(LIBKORALLE_FOUND "libkoralle" "Koralle library (RIFF parser)" "http://quickgit.kde.org/?p=scratch%2Fkossebau%2Flibkoralle.git&a=summary" FALSE "" "Required by the Karbon CDR import filter")
+macro_log_feature(LIBKORALLE_FOUND "libkoralle" "Koralle library (RIFF parser)" "https://projects.kde.org/projects/playground/libs/libkoralle" FALSE "" "Required by the Karbon CDR import filter")
 macro_optional_find_package(Poppler)
 # The pdf-importer needs the not-officially-supported XPDF Headers
 # Installing these is off by default in poppler sources, so lets make
