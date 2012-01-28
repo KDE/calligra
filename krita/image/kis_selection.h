@@ -45,11 +45,6 @@ class KRITAIMAGE_EXPORT KisSelection : public KisShared
 
 public:
 
-    enum MaskType {
-        SELECTION, //< single byte mask, suitable for selection tools
-        MASK       //< double byte mask, suitable for painting
-    };
-
     /**
      * Create a new KisSelection.
      *
@@ -104,9 +99,9 @@ public:
      *    given pixel.
      * @return
      */
-    KisPaintDeviceSP selectionPaintDevice(MaskType type = SELECTION) const;
+    KisPaintDeviceSP selectionPaintDevice(SelectionMaskType type = SELECTION) const;
 
-    KisPaintDeviceSP getOrCreateSelectionPaintDevice(MaskType type = SELECTION) const;
+    KisPaintDeviceSP getOrCreateSelectionPaintDevice(SelectionMaskType type = SELECTION) const;
 
 
     /**

@@ -163,17 +163,17 @@ void KisSelection::setPixelSelection(KisSelectionComponentSP pixelSelection)
     }
 }
 
-KisPaintDeviceSP KisSelection::selectionPaintDevice(MaskType maskType) const
+KisPaintDeviceSP KisSelection::selectionPaintDevice(SelectionMaskType maskType) const
 {
     return m_d->pixelSelection->paintDevice();
 }
 
-KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice(MaskType maskType) const
+KisPaintDeviceSP KisSelection::getOrCreateSelectionPaintDevice(SelectionMaskType maskType) const
 {
     if (!m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
     }
-    return m_d->pixelSelection->paintDevice();
+    return m_d->pixelSelection->paintDevice(maskType);
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponentSP shapeSelection)

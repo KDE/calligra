@@ -38,6 +38,12 @@ enum SelectionAction {
     SELECTION_INTERSECT
 };
 
+enum SelectionMaskType {
+    SELECTION, //< single byte mask, suitable for selection tools
+    MASK       //< double byte mask, suitable for painting
+};
+
+
 class KRITAIMAGE_EXPORT KisSelectionComponent : public KisShared
 {
 public:
