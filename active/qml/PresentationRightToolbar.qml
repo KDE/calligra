@@ -19,16 +19,16 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Item
 {
     id: root
     property QtObject documentController
 
-    Button {
-        drawBackground: false
-        imageSource: "qrc:///images/arrow-right.png"
+    PlasmaComponents.ToolButton {
+        iconSource: "arrow-right"
         anchors.centerIn: parent
         height: height
         width: parent.width
