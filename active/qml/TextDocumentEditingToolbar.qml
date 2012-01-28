@@ -28,11 +28,12 @@ Item
     property QtObject documentController
     property Item docRootItem
 
-    PlasmaComponents.Button {
+    PlasmaComponents.ToolButton {
         iconSource: "document-edit"
         anchors.centerIn: parent
         height: parent.height
         width: 32
+        checkable: true
 
         onClicked: docRootItem.toggleEditing()
     }
