@@ -32,7 +32,7 @@ Item
         iconSource: "document-edit"
         anchors.centerIn: parent
         height: parent.height
-        width: 32
+        width: height
         checkable: true
 
         onClicked: docRootItem.toggleEditing()

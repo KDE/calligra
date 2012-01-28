@@ -30,8 +30,8 @@ Item
         drawBackground: false
         imageSource: "qrc:///images/arrow-left.png"
         anchors.centerIn: parent
-        height: 64
-        width: 64
+        height: height
+        width: parent.width
 
         onClicked: root.documentController.documentHandler().previousSlide()
     }

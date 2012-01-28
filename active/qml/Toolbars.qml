@@ -26,10 +26,12 @@ Item {
     property QtObject documentController
     property Item docRootItem
     property int animationDuration: 200
+    property int commonHeight: 48
+    property int commonWidth: 48
 
     Loader {
         id: topToolbarLoader
-        height: 32
+        height: root.commonHeight
         z: 1
 
         anchors.left: leftToolbarLoader.right
@@ -60,7 +62,7 @@ Item {
 
     Loader {
         id: rightToolbarLoader
-        width: 32
+        width: root.commonWidth
         z: 1
 
         anchors.left: parent.right
@@ -91,7 +93,7 @@ Item {
 
     Loader {
         id: bottomToolbarLoader
-        height: 32
+        height: root.commonHeight
         z: 1
 
         anchors.left: leftToolbarLoader.right
@@ -122,7 +124,7 @@ Item {
 
     Loader {
         id: leftToolbarLoader
-        width: 32
+        width: root.commonWidth
         z: 1
 
         anchors.right: parent.left
