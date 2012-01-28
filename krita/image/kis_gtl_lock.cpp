@@ -18,16 +18,22 @@
 
 #include "kis_gtl_lock.h"
 
+#include "config-opengtl-threading.h"
+
 #include <QMutex>
 
 QMutex gtlMutex;
 
 void KisGtlLock::lock()
 {
+#ifndef ENABLE_OPENGTL_MULTITHREADING
     gtlMutex.lock();
+#endif
 }
 
 void KisGtlLock::unlock()
 {
+#ifndef ENABLE_OPENGTL_MULTITHREADING
     gtlMutex.unlock();
+#endif
 }
