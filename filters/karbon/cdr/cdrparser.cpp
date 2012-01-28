@@ -123,7 +123,7 @@ CdrParser::koXCoord( cdr4Coord cdrCoord ) const
 {
     if( ! mDocument ) return 0.0;
 
-    return /*mDocument->pageSize().width() -*/ xCDR_TO_POINT(static_cast<qreal>(cdrCoord));
+    return xCDR_TO_POINT(static_cast<qreal>(cdrCoord));
 }
 
 qreal
@@ -131,7 +131,7 @@ CdrParser::koYCoord( cdr4Coord cdrCoord ) const
 {
     if( ! mDocument ) return 0.0;
 
-    return /*mDocument->pageSize().height() -*/ yCDR_TO_POINT(static_cast<qreal>(cdrCoord));
+    return yCDR_TO_POINT(static_cast<qreal>(cdrCoord));
 }
 
 
@@ -783,11 +783,25 @@ qDebug() << "line coords:" << points->count;
             for (unsigned int j=0; j<points->count; j++)
             {
                 const QPointF point = koCoords( points->point(j) );
-// qDebug() << point.x()<<","<<point.y()<<":"<< QString::number(points->pointType(j),16);
+                const PointType pointType = points->pointType(j);
+qDebug() << point.x()<<","<<point.y()<<":"<< QString::number(pointType,16);
                 if(j==0) // is first point
                     path->moveTo( point );
                 else
-                    path->lineTo( point );
+                {
+                    const bool isLineStarting = (pointType == 0x0C);
+
+                    if( isLineStarting )
+                        path->moveTo( point );
+                    else
+                    {
+                        path->lineTo( point );
+
+                        const bool isLineEnding = (pointType == 0x48);
+                        if( isLineEnding )
+                            path->close();
+                    }
+                }
             }
             path->normalize();
             path->setBorder( new KoLineBorder(1.0) );

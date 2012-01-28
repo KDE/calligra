@@ -94,14 +94,42 @@ struct CdrArgumentData
 };
 
 
-// point types: looks like flags, a nibble per direction: 4=0100, 8=1000, C=1100, 6=0110
+// point types:
 // 0C
 // 44
 // 48
 // 64
 // C0
 // 84
-typedef char PointType;
+// first point has 0C (or 0D)
+// last point has 48 (or 49)
+// a break in the line are points with 48 0C
+// but there is also C0 84, difference is?
+// lots of connected straight lines seem 44 44 44
+// no idea about this example yet:
+// -63.5019 , 115.261 : "c" 
+// 19.6554 , 47.2277 : "44" 
+// 114.116 , 98.271 : "64" 
+// 114.116 , 98.271 : "c0" 
+// 42.3346 , 188.911 : "c0" 
+// 42.3346 , 188.911 : "84" 
+// -63.5019 , 115.261 : "48" 
+
+// looks like flags, a nibble per direction?
+// 0  0000
+// 4  0100
+// 6  0110
+// 8  1000
+// 9  1001
+// C  1100
+// D  1101
+typedef unsigned char PointType;
+enum PointFlags {
+    UnknownPointFlag = 1 << 0,
+    LineCurved       = 1 << 1, //(?)
+    LineStart        = 1 << 2,
+    UnknownPointFlag2 = 1 << 3
+};
 
 struct Cdr4PointList
 {
