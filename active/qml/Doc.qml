@@ -25,7 +25,7 @@ import CalligraActive 1.0
 Item {
     id: docRootRect
     signal documentLoaded
-    signal toggleToolbars
+
     clip: true
 
     CADocumentController {
@@ -33,7 +33,7 @@ Item {
         canvasController: canvas
         onDocumentOpened: {
             docRootRect.documentLoaded();
-            docRootRect.initToolbar();
+            docToolbars.initToolbars();
         }
     }
 
@@ -55,154 +55,16 @@ Item {
                 anchors.fill: parent
                 z: 1
 
-                onClicked: docRootRect.toggleToolbars()
+                onClicked: docToolbars.toggle()
             }
         }
     }
 
-    Loader {
-        id: topToolbarLoader
-        height: 32
-        z: 1
+    Toolbars {
+        id: docToolbars
+        anchors.fill: parent
 
-        anchors.left: leftToolbarLoader.right
-        anchors.right: rightToolbarLoader.left
-        anchors.bottom: parent.top
-
-        onSourceChanged: {
-            if (source) {
-                item.documentController = docDocumentController
-            }
-        }
-
-        states: State {
-            name: "shown"
-
-            AnchorChanges {
-                target: topToolbarLoader
-                anchors.bottom: undefined
-                anchors.top: parent.top
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation { duration: 300 }
-        }
-
-        function toggle() { state = state ? "" : "shown" }
-    }
-
-    Loader {
-        id: rightToolbarLoader
-        width: 32
-        z: 1
-
-        anchors.left: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        onSourceChanged: {
-            if (source) {
-                item.documentController = docDocumentController
-                state = "shown"
-            }
-        }
-
-        states: State {
-            name: "shown"
-
-            AnchorChanges {
-                target: rightToolbarLoader
-                anchors.left: undefined
-                anchors.right: parent.right
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation { duration: 300 }
-        }
-
-        function toggle() { state = state ? "" : "shown" }
-    }
-
-    Loader {
-        id: bottomToolbarLoader
-        height: 32
-        z: 1
-
-        anchors.left: leftToolbarLoader.right
-        anchors.right: rightToolbarLoader.left
-        anchors.top: parent.bottom
-
-        onSourceChanged: {
-            if (source) {
-                item.documentController = docDocumentController
-                state = "shown"
-            }
-        }
-
-        states: State {
-            name: "shown"
-
-            AnchorChanges {
-                target: bottomToolbarLoader
-                anchors.top: undefined
-                anchors.bottom: parent.bottom
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation { duration: 300 }
-        }
-
-        function toggle() { state = state ? "" : "shown" }
-    }
-
-    Loader {
-        id: leftToolbarLoader
-        width: 32
-        z: 1
-
-        anchors.right: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        onSourceChanged: {
-            if (source) {
-                item.documentController = docDocumentController
-                state = "shown"
-            }
-        }
-
-        states: State {
-            name: "shown"
-
-            AnchorChanges {
-                target: leftToolbarLoader
-                anchors.right: undefined
-                anchors.left: parent.left
-            }
-        }
-
-        transitions: Transition {
-            AnchorAnimation { duration: 300 }
-        }
-
-        function toggle() { state = state ? "" : "shown" }
-    }
-
-    onToggleToolbars : {
-        topToolbarLoader.toggle()
-        rightToolbarLoader.toggle()
-        bottomToolbarLoader.toggle()
-        leftToolbarLoader.toggle()
-    }
-
-    function initToolbar() {
-        topToolbarLoader.source = docDocumentController.documentHandler().topToolbarSource
-        rightToolbarLoader.source = docDocumentController.documentHandler().rightToolbarSource
-        bottomToolbarLoader.source = docDocumentController.documentHandler().bottomToolbarSource
-        leftToolbarLoader.source = docDocumentController.documentHandler().leftToolbarSource
+        documentController: docDocumentController
     }
 
     function openDocument(path) {
