@@ -37,6 +37,9 @@ public:
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
 
+    virtual QString rightToolbarSource() const;
+    virtual QString leftToolbarSource() const;
+
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
 

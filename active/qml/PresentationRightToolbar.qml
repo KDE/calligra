@@ -23,34 +23,16 @@ import QtQuick 1.0
 
 Item
 {
-    id: presentationToolbarRootItem
-    property bool containsMouse: previousSlide.containsMouse || nextSlide.containsMouse
-    signal editTriggered
-    anchors.fill: parent
+    id: root
+    property QtObject documentController
 
     Button {
-        id: previousSlide
-        drawBackground: false
-        imageSource: "qrc:///images/arrow-left.png"
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        height: 64
-        width: 64
-        z: 2
-
-        onClicked: docDocumentController.documentHandler().previousSlide()
-    }
-
-    Button {
-        id: nextSlide
         drawBackground: false
         imageSource: "qrc:///images/arrow-right.png"
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         height: 64
         width: 64
-        z: 2
 
-        onClicked: docDocumentController.documentHandler().nextSlide()
+        onClicked: root.documentController.documentHandler().nextSlide()
     }
 }

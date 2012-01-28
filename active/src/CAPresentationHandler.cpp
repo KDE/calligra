@@ -202,4 +202,14 @@ void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
     }
 }
 
+QString CAPresentationHandler::leftToolbarSource() const
+{
+    return "PresentationLeftToolbar.qml";
+}
+
+QString CAPresentationHandler::rightToolbarSource() const
+{
+    return "PresentationRightToolbar.qml";
+}
+
 #include "CAPresentationHandler.moc"
