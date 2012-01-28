@@ -27,6 +27,15 @@ Item {
     signal documentLoaded
     clip: true
 
+    CADocumentController {
+        id: docDocumentController
+        canvasController: canvas
+        onDocumentOpened: {
+            docRootRect.documentLoaded();
+            docRootRect.initToolbar();
+        }
+    }
+
     FindToolbar {
         id: findToolbar
         height: 32
@@ -62,36 +71,6 @@ Item {
             z: 1
 
             contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-
-            PinchArea {
-                id: docPinchArea
-                width: Math.max(canvas.docWidth, docFlickable.width)
-                height: Math.max(canvas.docHeight, docFlickable.height)
-                z: 1
-
-                property real initialZoom
-
-                onPinchStarted: {
-                    initialZoom = pinch.scale - canvas.zoom
-                }
-
-                onPinchUpdated: {
-                    // adjust content pos due to drag
-                    docFlickable.contentX += pinch.previousCenter.x - pinch.center.x
-                    docFlickable.contentY += pinch.previousCenter.y - pinch.center.y
-
-                    canvas.zoom = pinch.scale - initialZoom
-                }
-
-                onPinchFinished: {
-                    // Move its content within bounds.
-                    docFlickable.returnToBounds()
-
-                    canvas.zoom = pinch.scale - initialZoom
-                    docPinchArea.width = Math.max(canvas.docWidth, docFlickable.width)
-                    docPinchArea.height = Math.max(canvas.docHeight, docFlickable.height)
-                }
-            }
         }
     }
 
@@ -108,14 +87,5 @@ Item {
     function openDocument(path) {
         docDocumentController.documentUri = path;
         docDocumentController.loadDocument();
-    }
-
-    CADocumentController {
-        id: docDocumentController
-        canvasController: canvas
-        onDocumentOpened: {
-            docRootRect.initToolbar();
-            docRootRect.documentLoaded();
-        }
     }
 }

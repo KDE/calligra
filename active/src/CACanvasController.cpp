@@ -118,9 +118,6 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    //kDebug() << rect;
-    //kDebug() << canvas()->canvasItem()->size();
-
     int y = rect.center().y() - height()/2;
     if (y<0) {
         y = 0;
