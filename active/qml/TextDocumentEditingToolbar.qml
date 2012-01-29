@@ -28,13 +28,33 @@ Item
     property QtObject documentController
     property Item docRootItem
 
-    PlasmaComponents.ToolButton {
-        iconSource: "document-edit"
+    PlasmaComponents.ToolBar {
         anchors.centerIn: parent
-        height: parent.height
-        width: height
-        checkable: true
+        anchors.fill: parent
 
-        onClicked: docRootItem.toggleEditing()
+        tools: Row {
+            anchors.centerIn: parent
+            height: parent.height
+            spacing: 10
+
+            PlasmaComponents.ToolButton {
+                id: editButton
+                iconSource: "document-edit"
+                height: parent.height
+                width: height
+                checkable: true
+
+                onClicked: docRootItem.toggleEditing()
+            }
+
+            PlasmaComponents.ToolButton {
+                iconSource: "edit-copy"
+                height: parent.height
+                width: height
+                visible: editButton.checked
+
+                onClicked: documentController.documentHandler().copy()
+            }
+        }
     }
 }
