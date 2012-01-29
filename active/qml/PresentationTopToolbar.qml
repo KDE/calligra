@@ -55,6 +55,7 @@ Item
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     orientation: Qt.Vertical
+                    inverted: true
                     minimumValue: 1
                     maximumValue: 30
                     value: 5
