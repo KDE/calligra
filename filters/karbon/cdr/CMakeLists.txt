@@ -5,7 +5,9 @@ include_directories(
 )
 
 set( karboncdrimport_PART_SRCS
+    cdrdocument.cpp
     cdrparser.cpp
+    cdrsvgwriter.cpp
     cdrimportfilter.cpp
     main.cpp
 )

@@ -20,19 +20,14 @@
 
 #include "cdrparser.h"
 
+// filter
+#include "cdrdocument.h"
 // Koralle
 #include <Koralle0/FourCharCode>
-// Karbon
-#include <KarbonDocument.h>
-// Calligra
-#include <KoShapeUngroupCommand.h>
-#include <KoShapeGroup.h>
-#include <KoShapeLayer.h>
-#include <KoPathShape.h>
-#include <KoLineBorder.h>
 // Qt
 #include <QtCore/QFile>
 #include <QtCore/QByteArray>
+#include <QtCore/QSizeF>
 
 #include <QDebug>
 
@@ -64,6 +59,33 @@ static const Koralle::FourCharCode trfdId('t','r','f','d');
 static const Koralle::FourCharCode trflId('t','r','f','l');
 static const Koralle::FourCharCode vrsnId('v','r','s','n');
 
+
+/// Returns the string starting at @arg startOffset, until the first '\0' or the
+/// end of the @arg data.
+static QByteArray
+baStringData( const QByteArray& data, int startOffset = 0 )
+{
+    QByteArray result;
+
+    const char* string = &data.constData()[startOffset];
+
+    // find terminating \0
+    int stringLength = data.size() - startOffset;
+    if( stringLength > 0 )
+    {
+        for( int i = 0; i < stringLength; ++i )
+        {
+            if( string[i] == 0 )
+            {
+                stringLength = i;
+                break;
+            }
+        }
+        result = QByteArray( string, stringLength );
+    }
+
+    return result;
+}
 
 /// Returns the string starting at @arg startOffset, until the first '\0' or the
 /// end of the @arg data.
@@ -117,39 +139,11 @@ CdrParser::~CdrParser()
 {
 }
 
-
-qreal
-CdrParser::koXCoord( cdr4Coord cdrCoord ) const
+// TODO: make this a static method, and have parsing done by CdrParser constructor,
+// keeping results as members.
+CdrDocument*
+CdrParser::parse( QFile& file )
 {
-    if( ! mDocument ) return 0.0;
-
-    return xCDR_TO_POINT(static_cast<qreal>(cdrCoord));
-}
-
-qreal
-CdrParser::koYCoord( cdr4Coord cdrCoord ) const
-{
-    if( ! mDocument ) return 0.0;
-
-    return yCDR_TO_POINT(static_cast<qreal>(cdrCoord));
-}
-
-
-QPointF
-CdrParser::koCoords( Cdr4Point cdrCoords) const
-{
-    return QPointF( koXCoord(cdrCoords.mX), koYCoord(cdrCoords.mY) );
-}
-
-
-bool
-CdrParser::parse( KarbonDocument* document, QFile& file )
-{
-    mDocument = document;
-
-    KoShapeLayer* oldLayer =
-        (! mDocument->layers().isEmpty()) ? mDocument->layers().first() : 0;
-
     mRiffStreamReader.setDevice( &file );
 
     if( mRiffStreamReader.readNextChunkHeader() )
@@ -169,21 +163,23 @@ CdrParser::parse( KarbonDocument* document, QFile& file )
             isCDR &&
             (4 <= mCdrVersion) && (mCdrVersion <= 5) )
         {
+            mDocument = new CdrDocument;
             readCDR();
         }
         else
         {
 //             mRiffStreamReader.raiseError("The file is not an CDR file in a supported version."));
-            return false;
+            return 0;
         }
     }
 
-    if (oldLayer) {
-        mDocument->removeLayer(oldLayer);
-        delete oldLayer;
+    if( mRiffStreamReader.hasError() )
+    {
+        delete mDocument;
+        mDocument = 0;
     }
 
-    return (! mRiffStreamReader.hasError() );
+    return mDocument;
 }
 
 
@@ -210,7 +206,11 @@ CdrParser::readCDR()
             readDoc();
         else if( (chunkId == pageId) &&
                  mRiffStreamReader.isListChunk() )
-            readPage();
+        {
+            CdrPage* page = readPage();
+            if( page )
+                mDocument->addPage( page );
+        }
     }
 
     mRiffStreamReader.closeList();
@@ -220,9 +220,9 @@ void
 CdrParser::readVersion()
 {
     const QByteArray versionData = mRiffStreamReader.chunkData();
-    const quint16 fullVersion = data<quint16>( versionData );
+    mDocument->setFullVersion( data<quint16>(versionData) );
 
-qDebug() << "Version:" << static_cast<qreal>(fullVersion)/100;
+qDebug() << "Version:" << static_cast<qreal>(mDocument->fullVersion())/100;
 }
 
 void
@@ -275,8 +275,7 @@ CdrParser::readDocMCfg()
     const MCfgData* mcfg = dataPtr<MCfgData>( mcfgData );
 
     // set the page size
-    const QSizeF pageSize( xCDR_TO_POINT(mcfg->width), yCDR_TO_POINT(mcfg->height) );
-    mDocument->setPageSize(pageSize);
+    mDocument->setSize( mcfg->width, mcfg->height );
 }
 
 void
@@ -284,8 +283,8 @@ CdrParser::readDocStsh()
 {
     // 0..end: a \0 terminated string with some file name, e.g. "CORELDRW.CDT"
     const QByteArray mcfgData = mRiffStreamReader.chunkData();
-    const QString fileName = stringData( mcfgData );
-qDebug() << "Stsh:" << fileName;
+    mDocument->setStyleSheetFileName( baStringData(mcfgData) );
+qDebug() << "Stsh:" << mDocument->styleSheetFileName();
 }
 
 void
@@ -455,9 +454,11 @@ qDebug() << styleIndex << styleName;
     mRiffStreamReader.closeList();
 }
 
-void
+CdrPage*
 CdrParser::readPage()
 {
+    CdrPage* page = new CdrPage;
+
     mRiffStreamReader.openList();
 
 qDebug() << "Reading Page...";
@@ -480,7 +481,9 @@ qDebug() << "Reading Page...";
                 if( (mRiffStreamReader.chunkId() == layrId) &&
                     mRiffStreamReader.isListChunk() )
                 {
-                    readLayer();
+                    CdrLayer* layer = readLayer();
+                    if( layer )
+                        page->addLayer( layer );
                 }
             }
 
@@ -489,6 +492,8 @@ qDebug() << "Reading Page...";
     }
 
     mRiffStreamReader.closeList();
+
+    return page;
 }
 
 void
@@ -501,12 +506,12 @@ CdrParser::readPageFlags()
 }
 
 
-void
+CdrLayer*
 CdrParser::readLayer()
 {
-    mRiffStreamReader.openList();
+    CdrLayer* layer = new CdrLayer();
 
-    KoShapeLayer* layer = new KoShapeLayer();
+    mRiffStreamReader.openList();
 
 qDebug() << "Layer <<<";
     while( mRiffStreamReader.readNextChunkHeader() )
@@ -524,22 +529,23 @@ qDebug() << "Layer <<<";
         else if( (chunkId == grp_Id) &&
                  mRiffStreamReader.isListChunk() )
         {
-            KoShapeGroup* group = readObjectGroup();
+            CdrGroupObject* group = readObjectGroup();
             if( group )
-                layer->addShape( group );
+                layer->addObject( group );
         }
         else if( (chunkId == obj_Id) &&
                  mRiffStreamReader.isListChunk() )
         {
-            KoShape* object = readObject();
+            CdrObject* object = readObject();
             if( object )
-                layer->addShape( object );
+                layer->addObject( object );
         }
     }
 
 qDebug() << "Layer >>>";
-    mDocument->insertLayer(layer);
     mRiffStreamReader.closeList();
+
+    return layer;
 }
 
 void
@@ -581,10 +587,10 @@ qDebug() << "LGOb >>>";
     mRiffStreamReader.closeList();
 }
 
-KoShapeGroup*
+CdrGroupObject*
 CdrParser::readObjectGroup()
 {
-    KoShapeGroup* group = new KoShapeGroup();
+    CdrGroupObject* group = new CdrGroupObject();
 //     group->setZIndex(m_context.nextZIndex());
 // TODO: register all created in a lookup table, or not needed?
 //     shape->setName(id);
@@ -604,13 +610,13 @@ qDebug() << "Group <<<";
         else if( (chunkId == obj_Id) &&
                  mRiffStreamReader.isListChunk() )
         {
-            KoShape* object = readObject();
+            CdrObject* object = readObject();
             if( object )
-                group->addShape( object );
+                group->addObject( object );
         }
     }
 
-    mDocument->add(group);
+//     mSvgWriter->add(group);
 qDebug() << "Group >>>...";
     mRiffStreamReader.closeList();
     return group;
@@ -622,10 +628,10 @@ CdrParser::readObjectGroupFlags()
 }
 
 
-KoShape*
+CdrObject*
 CdrParser::readObject()
 {
-    KoShape* object = 0;
+    CdrObject* object = 0;
 
     mRiffStreamReader.openList();
 qDebug() << "Object <<<";
@@ -656,10 +662,10 @@ CdrParser::readObjectFlags()
 {
 }
 
-KoShape*
+CdrObject*
 CdrParser::readObjectLGOb()
 {
-    KoShape* object = 0;
+    CdrObject* object = 0;
     mRiffStreamReader.openList();
 qDebug() << "LGOb <<<";
 
@@ -707,10 +713,10 @@ qDebug() << "Reading Trfd" << argsData->count << "args";
 }
 
 
-KoShape*
+CdrObject*
 CdrParser::readLoda()
 {
-    KoShape* object = 0;
+    CdrObject* object = 0;
 
     const QByteArray lodaData = mRiffStreamReader.chunkData();
 
@@ -765,15 +771,16 @@ qDebug() << stringData( lodaData, argsData->argOffsets()[i] );
 //   10: 1024    (00 04 00 00)
 
     }
-    if( object )
-        mDocument->add( object );
+//     if( object )
+//         mSvgWriter->add( object );
     return object;
 }
 
-KoPathShape*
+CdrPathObject*
 CdrParser::readPathObject( const CdrArgumentData* argsData )
 {
-    KoPathShape* path = new KoPathShape();
+    CdrPathObject* pathObject = new CdrPathObject();
+
     for (int i=0; i < argsData->count; i++)
     {
         if( argsData->argType(i) == 30 )
@@ -782,6 +789,8 @@ CdrParser::readPathObject( const CdrArgumentData* argsData )
 qDebug() << "line coords:" << points->count;
             for (unsigned int j=0; j<points->count; j++)
             {
+                pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
+#if 0
                 const QPointF point = koCoords( points->point(j) );
                 const PointType pointType = points->pointType(j);
 qDebug() << point.x()<<","<<point.y()<<":"<< QString::number(pointType,16);
@@ -802,10 +811,10 @@ qDebug() << point.x()<<","<<point.y()<<":"<< QString::number(pointType,16);
                             path->close();
                     }
                 }
+#endif
             }
-            path->normalize();
-            path->setBorder( new KoLineBorder(1.0) );
         }
     }
-    return path;
+
+    return pathObject;
 }

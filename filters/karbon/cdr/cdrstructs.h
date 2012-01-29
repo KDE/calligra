@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef CDRSTRUCTS_H
@@ -23,6 +23,7 @@
 
 // Qt
 #include <QtCore/QtGlobal>
+#include <QtCore/QPoint>
 
 // TODO: make sure conversion data is alright
 //      cdr    mm     ko (points)
@@ -53,13 +54,32 @@ enum CdrObjectIds
 // type 11: "Desktop"
 };
 
-typedef qint16 cdr4Coord;
+typedef qint16 Cdr4Coord;
 
 struct Cdr4Point
 {
-    cdr4Coord mX;
-    cdr4Coord mY;
+    Cdr4Coord mX;
+    Cdr4Coord mY;
 };
+
+inline qreal
+koXCoord( Cdr4Coord cdrCoord )
+{
+    return xCDR_TO_POINT(static_cast<qreal>(cdrCoord));
+}
+
+inline qreal
+koYCoord( Cdr4Coord cdrCoord )
+{
+    return yCDR_TO_POINT(static_cast<qreal>(cdrCoord));
+}
+
+
+inline QPointF
+koCoords( Cdr4Point cdrCoords )
+{
+    return QPointF( koXCoord(cdrCoords.mX), koYCoord(cdrCoords.mY) );
+}
 
 struct CdrArgumentData
 {

@@ -22,9 +22,8 @@
 
 // filter
 #include "cdrparser.h"
-// Karbon
-#include <KarbonPart.h>
-#include <KarbonDocument.h>
+#include "cdrdocument.h"
+#include "cdrsvgwriter.h"
 // Calligra core
 #include <KoFilterChain.h>
 // Qt
@@ -44,7 +43,7 @@ KoFilter::ConversionStatus
 CdrImportFilter::convert( const QByteArray& from, const QByteArray& to )
 {
     if ((from != "application/vnd.corel-draw") ||
-        (to   != "application/vnd.oasis.opendocument.graphics")) {
+        (to   != "image/svg+xml")) {
         return KoFilter::NotImplemented;
     }
 
@@ -52,19 +51,24 @@ CdrImportFilter::convert( const QByteArray& from, const QByteArray& to )
     QFile inputFile( m_chain->inputFile() );
     if( ! inputFile.open(QIODevice::ReadOnly) )
     {
-        inputFile.close();
         return KoFilter::FileNotFound;
     }
 
     // prepare output
-    KarbonPart* part = dynamic_cast<KarbonPart*>( m_chain->outputDocument() );
-    if (! part)
+    QFile svgFile( m_chain->outputFile() );
+    if( ! svgFile.open(QIODevice::WriteOnly) )
+    {
         return KoFilter::CreationError;
+    }
+    CdrSvgWriter svgWriter( &svgFile );
 
     // translate!
     CdrParser parser;
-    if (! parser.parse(&part->document(), inputFile)) {
-        inputFile.close();
+    CdrDocument* document = parser.parse( inputFile );
+    if( ! document ) {
+        return KoFilter::CreationError;
+    }
+    if (! svgWriter.write(document)) {
         return KoFilter::CreationError;
     }
 

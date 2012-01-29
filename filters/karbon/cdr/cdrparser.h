@@ -26,10 +26,13 @@
 // Koralle
 #include <Koralle0/RiffStreamReader>
 
-class KarbonDocument;
-class KoShapeGroup;
-class KoPathShape;
-class KoShape;
+class CdrDocument;
+class CdrPage;
+class CdrLayer;
+class CdrGroupObject;
+class CdrPathObject;
+class CdrObject;
+
 class QPointF;
 class QFile;
 template<class T> class QList;
@@ -42,7 +45,7 @@ public:
     ~CdrParser();
 
 public:
-    bool parse( KarbonDocument* output, QFile& input );
+    CdrDocument* parse( QFile& input );
 
 private:
     void readCDR();
@@ -50,7 +53,7 @@ private:
     void readDisp();
     void readInfo();
     void readDoc();
-    void readPage();
+    CdrPage* readPage();
 
     void readDocStsh();
     void readDocMCfg();
@@ -63,28 +66,24 @@ private:
 
     void readPageFlags();
 
-    void readLayer();
+    CdrLayer* readLayer();
     void readLayerFlags();
     void readLayerLGOb();
 
-    KoShapeGroup* readObjectGroup();
+    CdrGroupObject* readObjectGroup();
     void readObjectGroupFlags();
 
-    KoShape* readObject();
+    CdrObject* readObject();
     void readObjectFlags();
-    KoShape* readObjectLGOb();
+    CdrObject* readObjectLGOb();
 
     void readTrfl();
-    KoShape* readLoda();
+    CdrObject* readLoda();
 
-    KoPathShape* readPathObject( const CdrArgumentData* argsData );
-
-    qreal koXCoord( cdr4Coord cdrCoord ) const;
-    qreal koYCoord( cdr4Coord cdrCoord ) const;
-    QPointF koCoords( Cdr4Point cdrCoords ) const;
+    CdrPathObject* readPathObject( const CdrArgumentData* argsData );
 
 private:
-    KarbonDocument* mDocument;
+    CdrDocument* mDocument;
 
     int mCdrVersion;
 
@@ -92,5 +91,3 @@ private:
 };
 
 #endif
-
-
