@@ -136,6 +136,7 @@ QStringList CAPresentationHandler::supportedMimetypes()
 void CAPresentationHandler::nextSlide()
 {
     d->currentSlideNum++;
+    emit currentSlideNumChanged();
 
     if (d->currentSlideNum >= d->document->pageCount())
         d->currentSlideNum = d->document->pageCount() - 1;
@@ -146,6 +147,7 @@ void CAPresentationHandler::nextSlide()
 void CAPresentationHandler::previousSlide()
 {
     d->currentSlideNum--;
+    emit currentSlideNumChanged();
 
     if (d->currentSlideNum < 0)
         d->currentSlideNum = 0;
@@ -255,6 +257,11 @@ void CAPresentationHandler::advanceSlideshow()
     if (d->currentSlideNum == d->document->pageCount() - 1) {
         stopSlideshow();
     }
+}
+
+int CAPresentationHandler::currentSlideNumber() const
+{
+    return d->currentSlideNum + 1;
 }
 
 #include "CAPresentationHandler.moc"
