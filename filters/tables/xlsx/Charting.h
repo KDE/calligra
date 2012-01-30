@@ -285,7 +285,12 @@ namespace Charting
         bool m_reversed;
         bool m_logarithmic;
 
-        Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false) {}
+        bool m_autoMinimum;
+        bool m_autoMaximum;
+        qreal m_minimum;
+        qreal m_maximum;
+
+        Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false), m_autoMinimum(true), m_autoMaximum(true), m_minimum(0), m_maximum(0) {}
         virtual ~Axis() {}
     };
 
