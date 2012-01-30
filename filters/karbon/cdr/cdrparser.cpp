@@ -31,8 +31,13 @@
 
 #include <QDebug>
 
+static const Koralle::FourCharCode bboxId('b','b','o','x');
 static const Koralle::FourCharCode bmp_Id('b','m','p',' ');
 static const Koralle::FourCharCode bmptId('b','m','p','t');
+static const Koralle::FourCharCode bnchId('b','n','c','h');
+static const Koralle::FourCharCode bschId('b','s','c','h');
+static const Koralle::FourCharCode btidId('b','t','i','d');
+static const Koralle::FourCharCode btxtId('b','t','x','t');
 static const Koralle::FourCharCode dispId('D','I','S','P');
 static const Koralle::FourCharCode doc_Id('d','o','c',' ');
 static const Koralle::FourCharCode fillId('f','i','l','l');
@@ -42,21 +47,29 @@ static const Koralle::FourCharCode fnttId('f','n','t','t');
 static const Koralle::FourCharCode fontId('f','o','n','t');
 static const Koralle::FourCharCode gobjId('g','o','b','j');
 static const Koralle::FourCharCode grp_Id('g','r','p',' ');
+static const Koralle::FourCharCode guidId('g','u','i','d');
 static const Koralle::FourCharCode infoId('I','N','F','O');
 static const Koralle::FourCharCode layrId('l','a','y','r');
 static const Koralle::FourCharCode lgobId('l','g','o','b');
+static const Koralle::FourCharCode lnkgId('l','n','k','g');
+static const Koralle::FourCharCode lnktId('l','n','k','t');
 static const Koralle::FourCharCode lodaId('l','o','d','a');
 static const Koralle::FourCharCode mcfgId('m','c','f','g');
 static const Koralle::FourCharCode obj_Id('o','b','j',' ');
 static const Koralle::FourCharCode otltId('o','t','l','t');
 static const Koralle::FourCharCode outlId('o','u','t','l');
 static const Koralle::FourCharCode pageId('p','a','g','e');
+static const Koralle::FourCharCode paraId('p','a','r','a');
+static const Koralle::FourCharCode parlId('p','a','r','l');
+static const Koralle::FourCharCode spndId('s','p','d','d');
 static const Koralle::FourCharCode stltId('s','t','l','t');
+static const Koralle::FourCharCode strlId('s','t','r','l');
 static const Koralle::FourCharCode stshId('s','t','s','h');
 static const Koralle::FourCharCode stylId('s','t','y','l');
 static const Koralle::FourCharCode stydId('s','t','y','d');
 static const Koralle::FourCharCode trfdId('t','r','f','d');
 static const Koralle::FourCharCode trflId('t','r','f','l');
+static const Koralle::FourCharCode vectId('v','e','c','t');
 static const Koralle::FourCharCode vrsnId('v','r','s','n');
 
 
@@ -238,12 +251,19 @@ CdrParser::readDoc()
             readDocStsh();
         else if( chunkId == mcfgId )
             readDocMCfg();
-        else if( (chunkId == bmptId) &&
-                 mRiffStreamReader.isListChunk() )
-            readDocBitmapTable();
+        else if( chunkId == guidId )
+            readDocGuid();
         else if( (chunkId == fnttId) &&
                  mRiffStreamReader.isListChunk() )
             readDocFontTable();
+        else if( (chunkId == bmptId) &&
+                 mRiffStreamReader.isListChunk() )
+            readDocBitmapTable();
+        else if( chunkId == lnktId )
+            readDocLnkTable();
+        else if( (chunkId == vectId) &&
+                 mRiffStreamReader.isListChunk() )
+            readDocVecTable();
         else if( (chunkId == filtId) &&
                  mRiffStreamReader.isListChunk() )
             readDocFillTable();
@@ -253,6 +273,9 @@ CdrParser::readDoc()
         else if( (chunkId == stltId) &&
                  mRiffStreamReader.isListChunk() )
             readDocStyleTable();
+        else if( (chunkId == btxtId) &&
+                 mRiffStreamReader.isListChunk() )
+            readDocBtxTable();
     }
 
     mRiffStreamReader.closeList();
@@ -276,6 +299,12 @@ CdrParser::readDocMCfg()
 
     // set the page size
     mDocument->setSize( mcfg->width, mcfg->height );
+}
+
+void
+CdrParser::readDocGuid()
+{
+    const QByteArray guidData = mRiffStreamReader.chunkData();
 }
 
 void
@@ -319,6 +348,25 @@ qDebug() << fontIndex << fontName;
 
     mRiffStreamReader.closeList();
 }
+
+void
+CdrParser::readDocLnkTable()
+{
+    const QByteArray lnkTableData = mRiffStreamReader.chunkData();
+    const CdrArgumentData* argsData = dataPtr<CdrArgumentData>( lnkTableData );
+qDebug() << "Reading LnkTable" << argsData->count << "args";
+    for (int i=0; i < argsData->count; i++)
+    {
+// qDebug() << i << ": type" << argsData->argPtr<LnkData>(i);
+    }
+}
+
+void
+CdrParser::readDocVecTable()
+{
+qDebug() << "Reading Vec Table";
+}
+
 
 void
 CdrParser::readDocBitmapTable()
@@ -454,6 +502,76 @@ qDebug() << styleIndex << styleName;
     mRiffStreamReader.closeList();
 }
 
+
+void
+CdrParser::readDocBtxTable()
+{
+    mRiffStreamReader.openList();
+qDebug() << "Reading Btx Table...";
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        if( (mRiffStreamReader.chunkId() == strlId) &&
+            mRiffStreamReader.isListChunk() )
+        {
+            readStrl();
+        }
+    }
+
+    mRiffStreamReader.closeList();
+}
+
+
+void
+CdrParser::readStrl()
+{
+    mRiffStreamReader.openList();
+qDebug() << "Reading Strl...";
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        if( (mRiffStreamReader.chunkId() == btidId) )
+        {
+            const QByteArray btidData = mRiffStreamReader.chunkData();
+            // 0..1: ?
+            const quint16 btid = data<quint16>( btidData );
+        }
+        else if( (mRiffStreamReader.chunkId() == parlId) &&
+            mRiffStreamReader.isListChunk() )
+        {
+            readParl();
+        }
+    }
+
+    mRiffStreamReader.closeList();
+}
+
+void
+CdrParser::readParl()
+{
+    mRiffStreamReader.openList();
+qDebug() << "Reading Parl...";
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        if( (mRiffStreamReader.chunkId() == paraId) )
+        {
+            const QByteArray paraData = mRiffStreamReader.chunkData();
+            // 0..5: ?
+        }
+        else if( (mRiffStreamReader.chunkId() == bnchId) )
+        {
+            const QByteArray bnchData = mRiffStreamReader.chunkData();
+            // 0..?: ?  sizes seen are 52, 72, 80, 4
+        }
+        else if( (mRiffStreamReader.chunkId() == bschId) )
+        {
+            const QByteArray bschData = mRiffStreamReader.chunkData();
+            // 0..23: ?
+        }
+    }
+
+    mRiffStreamReader.closeList();
+}
+
+
 CdrPage*
 CdrParser::readPage()
 {
@@ -526,10 +644,17 @@ qDebug() << "Layer <<<";
         {
             readLayerLGOb();
         }
+        else if( (chunkId == lnkgId) &&
+                 mRiffStreamReader.isListChunk() )
+        {
+            CdrLinkGroupObject* group = readLinkGroupObject();
+            if( group )
+                layer->addObject( group );
+        }
         else if( (chunkId == grp_Id) &&
                  mRiffStreamReader.isListChunk() )
         {
-            CdrGroupObject* group = readObjectGroup();
+            CdrGroupObject* group = readGroupObject();
             if( group )
                 layer->addObject( group );
         }
@@ -587,8 +712,51 @@ qDebug() << "LGOb >>>";
     mRiffStreamReader.closeList();
 }
 
+CdrLinkGroupObject*
+CdrParser::readLinkGroupObject()
+{
+    CdrLinkGroupObject* group = new CdrLinkGroupObject();
+//     group->setZIndex(m_context.nextZIndex());
+// TODO: register all created in a lookup table, or not needed?
+//     shape->setName(id);
+//     m_context.registerShape(id, shape);
+
+    mRiffStreamReader.openList();
+qDebug() << "LinkGroup <<<";
+
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
+
+        if( mRiffStreamReader.chunkId() == spndId )
+        {
+            const QByteArray spndData = mRiffStreamReader.chunkData();
+            // 0..1: ?
+            const quint16 spnd = data<quint16>( spndData );
+        }
+        else if( mRiffStreamReader.chunkId() == flgsId )
+        {
+            const QByteArray flagsData = mRiffStreamReader.chunkData();
+            // 0..3: ?
+            const quint32 flags = data<quint32>( flagsData );
+        }
+        else if( (chunkId == obj_Id) &&
+                 mRiffStreamReader.isListChunk() )
+        {
+            CdrObject* object = readObject();
+            if( object )
+                group->addObject( object );
+        }
+    }
+
+qDebug() << "LinkGroup >>>...";
+    mRiffStreamReader.closeList();
+    return group;
+}
+
+
 CdrGroupObject*
-CdrParser::readObjectGroup()
+CdrParser::readGroupObject()
 {
     CdrGroupObject* group = new CdrGroupObject();
 //     group->setZIndex(m_context.nextZIndex());
@@ -603,9 +771,30 @@ qDebug() << "Group <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( mRiffStreamReader.chunkId() == flgsId )
+        if( mRiffStreamReader.chunkId() == spndId )
         {
-            readObjectGroupFlags();
+            const QByteArray spndData = mRiffStreamReader.chunkData();
+            // 0..1: ?
+            const quint16 spnd = data<quint16>( spndData );
+        }
+        else if( mRiffStreamReader.chunkId() == flgsId )
+        {
+            const QByteArray flagsData = mRiffStreamReader.chunkData();
+            // 0..3: ?
+            const quint32 flags = data<quint32>( flagsData );
+        }
+        else if( mRiffStreamReader.chunkId() == bboxId )
+        {
+            const QByteArray bboxData = mRiffStreamReader.chunkData();
+            // 0..7: Cdr4BoundingBox
+            const Cdr4BoundingBox* boundingBox = dataPtr<Cdr4BoundingBox>( bboxData );
+        }
+        else if( (chunkId == grp_Id) &&
+                 mRiffStreamReader.isListChunk() )
+        {
+            CdrGroupObject* object = readGroupObject();
+            if( object )
+                group->addObject( object );
         }
         else if( (chunkId == obj_Id) &&
                  mRiffStreamReader.isListChunk() )
@@ -616,15 +805,9 @@ qDebug() << "Group <<<";
         }
     }
 
-//     mSvgWriter->add(group);
 qDebug() << "Group >>>...";
     mRiffStreamReader.closeList();
     return group;
-}
-
-void
-CdrParser::readObjectGroupFlags()
-{
 }
 
 
@@ -640,9 +823,17 @@ qDebug() << "Object <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (mRiffStreamReader.chunkId() == flgsId) )
+        if( (mRiffStreamReader.chunkId() == spndId) )
         {
-            readObjectFlags();
+            const QByteArray spndData = mRiffStreamReader.chunkData();
+            // 0..1: ?
+            const quint16 spnd = data<quint16>( spndData );
+        }
+        else if( (mRiffStreamReader.chunkId() == flgsId) )
+        {
+            const QByteArray flagsData = mRiffStreamReader.chunkData();
+            // 0..3: flags
+            const quint32 flags = data<quint32>( flagsData );
         }
         else if( (chunkId == lgobId) &&
                  mRiffStreamReader.isListChunk() )
@@ -657,10 +848,6 @@ qDebug() << "Object >>>...";
     return object;
 }
 
-void
-CdrParser::readObjectFlags()
-{
-}
 
 CdrObject*
 CdrParser::readObjectLGOb()
@@ -700,7 +887,7 @@ CdrParser::readTrfl()
             const QByteArray trfdData = mRiffStreamReader.chunkData();
             // 6..7: start of arguments types, here always set to FF FF, kind of null pointer?
             // 8..9: type of chunk, here always 00 00
-            const CdrArgumentData* argsData = dataPtr<CdrArgumentData>( trfdData );
+            const CdrArgumentWithTypeData* argsData = dataPtr<CdrArgumentWithTypeData>( trfdData );
 qDebug() << "Reading Trfd" << argsData->count << "args";
     for (int i=0; i < argsData->count; i++)
     {
@@ -720,32 +907,67 @@ CdrParser::readLoda()
 
     const QByteArray lodaData = mRiffStreamReader.chunkData();
 
-    const CdrArgumentData* argsData = dataPtr<CdrArgumentData>( lodaData );
+    const CdrArgumentWithTypeData* argsData = dataPtr<CdrArgumentWithTypeData>( lodaData );
 
 qDebug() << "Reading Loda" << argsData->count << "args, loda type" << argsData->chunkType;
-    if( argsData->chunkType == CdrPathObjectId )
+    if( argsData->chunkType == CdrRectangleObjectId )
+        object = readRectangleObject( argsData );
+    if( argsData->chunkType == CdrEllipseObjectId )
+        object = readEllipseObject( argsData );
+    else if( argsData->chunkType == CdrPathObjectId )
         object = readPathObject( argsData );
-    else
+    else if( argsData->chunkType == CdrTextObjectId )
+        object = readTextObject( argsData );
+
     for (int i=0; i < argsData->count; i++)
     {
-qDebug() << i << ": type" << argsData->argType(i);
+const quint16 argType = argsData->argType(i);
+QString argAsString;
+switch(argsData->argType(i))
+{
+    case 10 :
+    case 20 :
+        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        break;
+    case 200 :
+    case 1010 :
+        argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
+        break;
+    case 1000 :
+        argAsString = stringData( lodaData, argsData->argOffsets()[i] );
+        break;
+    case 100 :
+    {
+        Cdr4Point point = data<Cdr4Point>( lodaData, argsData->argOffsets()[i] );
+        argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
+        break;
+    }
+}
+qDebug() << i << ": type" << argsData->argType(i) << argAsString;
 
 // each page has as start types 0B, 0C, 11, 0
 // first set has both arg type 1000 and 2000, with text set for 1000, other have just 2000, no text
 // types 3 and 4 are on second, type 5 on last
 // type 3 and 5 have args 10, 20, 30, 100, 200, 1010 (1010 sometimes missing)
 
-if( argsData->argType(i) == 1000 )
-qDebug() << stringData( lodaData, argsData->argOffsets()[i] );
 // Arg types:
 // 10  32bit (outline?)
 // 20  32bit (fill?)
-// 30  coordinates data?
-// 100 32bit
-// 200 16 bit  (index to bitmap?)
+// 30  object specific data
+// 40  32bit  seen only with ellipse so far
+// 100 32bit (point?)
+// 200 16 bit  (style index for type 6?)
 // 1000: text/title
 // 1010 16 bit
 // 2000: data 01 00 64 00 64 00 00 00 00 00 00 00
+
+// type 2: ellipse
+//  200:    5    (05 00)
+//  100: 197636  (04 04 03 00)
+//   40:         (28 FD 14 FE)
+//   30:         (...)
+//   20:   15    (0F 00 00 00)
+//   10:    3    (03 00 00 00)
 
 // type 5: bitmap?
 // 1010:  320    (40 01)
@@ -755,29 +977,83 @@ qDebug() << stringData( lodaData, argsData->argOffsets()[i] );
 //   20:    2    (02 00 00 00)
 //   10:    2    (02 00 00 00)
 
-// type 3: line or curve?
+// type 4: text
+//  200:   29    (1D 00)
+//  100:         (94 06 EA 01)
+//   30:         (...)
+//   20:    1    (01 00 00 00)
+//   10:    2    (01 00 00 00)
+
+// type 4: text
+//  200:   32    (20 00)
+//  100:         (64 07 FE 01)
+//   30:         (...)
+//   20:    1    (01 00 00 00)
+//   10:    2    (01 00 00 00)
+
+// type 3: line or curve
 //  200:    5    (05 00)
 //  100: 1972    (B4 07 00 00)
 //   30:         (...) 64 bytes
 //   20:    1    (01 00 00 00)
 //   10:    2    (02 00 00 00)
 
-// type 3: line or curve?
+// type 3: line or curve
 // 1010: 32768   (01 80)
 //  200:    5    (05 00)
 //  100: 1940    (94 07 00 00)
 //   30:         (...) 872 bytes
 //   20:  256    (00 01 00 00)
 //   10: 1024    (00 04 00 00)
-
     }
-//     if( object )
-//         mSvgWriter->add( object );
+
     return object;
 }
 
+
+CdrRectangleObject*
+CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
+{
+    CdrRectangleObject* rectangleObject = new CdrRectangleObject;
+
+    for (int i=0; i < argsData->count; i++)
+    {
+        if( argsData->argType(i) == 30 )
+        {
+            const Cdr4RectangleData* rectangleData = argsData->argPtr<Cdr4RectangleData>( i );
+            rectangleObject->setSize( rectangleData->mWidth, rectangleData->mHeight );
+qDebug() << "rectangle: width" << rectangleObject->width()<<"height"<<rectangleObject->height()
+                 << "unknown" << rectangleData->_unknown;
+        }
+    }
+
+    return rectangleObject;
+}
+
+CdrEllipseObject*
+CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
+{
+    CdrEllipseObject* ellipseObject = new CdrEllipseObject;
+
+    for (int i=0; i < argsData->count; i++)
+    {
+        if( argsData->argType(i) == 30 )
+        {
+            const Cdr4EllipseData* ellipseData = argsData->argPtr<Cdr4EllipseData>( i );
+            ellipseObject->setCenterPoint(ellipseData->mCenterPoint);
+            ellipseObject->setXRadius(ellipseData->mXRadius);
+            ellipseObject->setYRadius(ellipseData->mYRadius);
+qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->mCenterPoint.mY
+                     <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
+                     <<"unknown"<<ellipseData->_unknown;
+        }
+    }
+
+    return ellipseObject;
+}
+
 CdrPathObject*
-CdrParser::readPathObject( const CdrArgumentData* argsData )
+CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
 {
     CdrPathObject* pathObject = new CdrPathObject();
 
@@ -786,35 +1062,34 @@ CdrParser::readPathObject( const CdrArgumentData* argsData )
         if( argsData->argType(i) == 30 )
         {
             const Cdr4PointList* points = argsData->argPtr<Cdr4PointList>( i );
-qDebug() << "line coords:" << points->count;
+qDebug() << "path points:" << points->count;
             for (unsigned int j=0; j<points->count; j++)
             {
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
-#if 0
-                const QPointF point = koCoords( points->point(j) );
-                const PointType pointType = points->pointType(j);
-qDebug() << point.x()<<","<<point.y()<<":"<< QString::number(pointType,16);
-                if(j==0) // is first point
-                    path->moveTo( point );
-                else
-                {
-                    const bool isLineStarting = (pointType == 0x0C);
-
-                    if( isLineStarting )
-                        path->moveTo( point );
-                    else
-                    {
-                        path->lineTo( point );
-
-                        const bool isLineEnding = (pointType == 0x48);
-                        if( isLineEnding )
-                            path->close();
-                    }
-                }
-#endif
             }
         }
     }
 
     return pathObject;
+}
+
+CdrTextObject*
+CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
+{
+    CdrTextObject* textObject = new CdrTextObject;
+
+    for (int i=0; i < argsData->count; i++)
+    {
+        // 10, 20, 30, 100, 200
+        if( argsData->argType(i) == 30 )
+        {
+            const Cdr4TextData* textData = argsData->argPtr<Cdr4TextData>( i );
+            QString text;
+            for (unsigned int j=0; j<textData->mLength; j++)
+                text.append( QLatin1Char(textData->charData(j).mChar) );
+qDebug() << "text:" << text;
+        }
+    }
+
+    return textObject;
 }

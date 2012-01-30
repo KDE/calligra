@@ -77,6 +77,10 @@ CdrSvgWriter::writeObject( const CdrObject* object )
 
     if( id == PathObjectId )
         writePathObject( dynamic_cast<const CdrPathObject*>(object) );
+    else if( id == RectangleObjectId )
+        writeRectangleObject( dynamic_cast<const CdrRectangleObject*>(object) );
+    else if( id == EllipseObjectId )
+        writeEllipseObject( dynamic_cast<const CdrEllipseObject*>(object) );
     else if( id == GroupObjectId )
         writeGroupObject( dynamic_cast<const CdrGroupObject*>(object) );
 }
@@ -90,6 +94,30 @@ CdrSvgWriter::writeGroupObject( const CdrGroupObject* groupObject )
         writeObject( object );
 
     mXmlWriter.endElement(); // g
+}
+
+void
+CdrSvgWriter::writeRectangleObject( const CdrRectangleObject* object )
+{
+    mXmlWriter.startElement("rect");
+//     mXmlWriter.addAttribute("x", x);
+//     mXmlWriter.addAttribute("y", y);
+    mXmlWriter.addAttribute("width", object->width());
+    mXmlWriter.addAttribute("height", object->height());
+//     mXmlWriter.addAttribute("rx", object->cornerRoundness());
+//     mXmlWriter.addAttribute("ry", object->cornerRoundness());
+    mXmlWriter.endElement(); // rect
+}
+
+void
+CdrSvgWriter::writeEllipseObject( const CdrEllipseObject* object )
+{
+    mXmlWriter.startElement("ellipse");
+    mXmlWriter.addAttribute("cx", object->centerPoint().mX);
+    mXmlWriter.addAttribute("cy", object->centerPoint().mY);
+    mXmlWriter.addAttribute("rx", object->xRadius());
+    mXmlWriter.addAttribute("ry", object->yRadius());
+    mXmlWriter.endElement(); // ellipse
 }
 
 void

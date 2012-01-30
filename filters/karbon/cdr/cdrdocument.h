@@ -25,6 +25,7 @@
 #include "cdrstructs.h"
 // Qt
 #include <QtCore/QVector>
+#include <QtCore/QString>
 #include <QtCore/QByteArray>
 
 
@@ -32,6 +33,7 @@ enum CdrObjectId
 {
     PathObjectId,
     RectangleObjectId,
+    EllipseObjectId,
     TextObjectId,
     GroupObjectId
 };
@@ -58,6 +60,38 @@ struct Cdr4PathPoint
     PointType mType;
 };
 
+class CdrRectangleObject : public CdrObject
+{
+public:
+    CdrRectangleObject() : CdrObject(RectangleObjectId) {}
+public:
+    void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
+public:
+    quint16 width() const { return mWidth; }
+    quint16 height() const { return mHeight; }
+private:
+    quint16 mWidth;
+    quint16 mHeight;
+};
+
+class CdrEllipseObject : public CdrObject
+{
+public:
+    CdrEllipseObject() : CdrObject(EllipseObjectId) {}
+public:
+    void setCenterPoint( Cdr4Point centerPoint ) { mCenterPoint = centerPoint; }
+    void setXRadius( quint16 xRadius ) { mXRadius = xRadius; }
+    void setYRadius( quint16 yRadius ) { mYRadius = yRadius; }
+public:
+    Cdr4Point centerPoint() const { return mCenterPoint; }
+    quint16 xRadius() const { return mXRadius; }
+    quint16 yRadius() const { return mYRadius; }
+private:
+    Cdr4Point mCenterPoint;
+    quint16 mXRadius;
+    quint16 mYRadius;
+};
+
 class CdrPathObject : public CdrObject
 {
 public:
@@ -70,6 +104,18 @@ private:
     QVector<Cdr4PathPoint> mPathPoints;
 };
 
+class CdrTextObject : public CdrObject
+{
+public:
+    CdrTextObject() : CdrObject(TextObjectId) {}
+public:
+    void setText( const QString& text ) { mText = text; }
+public:
+    const QString& text() const { return mText; }
+private:
+    Cdr4Point mPoint;
+    QString mText;
+};
 
 class CdrGroupObject : public CdrObject
 {
@@ -83,6 +129,10 @@ public:
     const QVector<CdrObject*>& objects() const { return mObjects; }
 private:
     QVector<CdrObject*> mObjects;
+};
+
+class CdrLinkGroupObject : public CdrGroupObject //tmp for now
+{
 };
 
 class CdrLayer

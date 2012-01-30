@@ -29,8 +29,12 @@
 class CdrDocument;
 class CdrPage;
 class CdrLayer;
+class CdrLinkGroupObject;
 class CdrGroupObject;
+class CdrEllipseObject;
+class CdrRectangleObject;
 class CdrPathObject;
+class CdrTextObject;
 class CdrObject;
 
 class QPointF;
@@ -57,12 +61,18 @@ private:
 
     void readDocStsh();
     void readDocMCfg();
+    void readDocGuid();
     void readDocFontTable();
+    void readDocLnkTable();
     void readDocBitmapTable();
+    void readDocVecTable();
     void readDocFillTable();
     void readDocOutlineTable();
     void readDocStyleTable();
     void readDocStyle();
+    void readDocBtxTable();
+    void readStrl();
+    void readParl();
 
     void readPageFlags();
 
@@ -70,17 +80,19 @@ private:
     void readLayerFlags();
     void readLayerLGOb();
 
-    CdrGroupObject* readObjectGroup();
-    void readObjectGroupFlags();
+    CdrLinkGroupObject* readLinkGroupObject();
+    CdrGroupObject* readGroupObject();
 
     CdrObject* readObject();
-    void readObjectFlags();
     CdrObject* readObjectLGOb();
 
     void readTrfl();
     CdrObject* readLoda();
 
-    CdrPathObject* readPathObject( const CdrArgumentData* argsData );
+    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeData* argsData );
+    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeData* argsData );
+    CdrPathObject* readPathObject( const CdrArgumentWithTypeData* argsData );
+    CdrTextObject* readTextObject( const CdrArgumentWithTypeData* argsData );
 
 private:
     CdrDocument* mDocument;

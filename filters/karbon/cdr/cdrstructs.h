@@ -38,13 +38,13 @@
 enum CdrObjectIds
 {
 // type 00: "Ebene1"
-// type 01: rectangle(?)
+// type 01: rectangle
     CdrRectangleObjectId = 0x01,
 // type 02: ellipse (?)
     CdrEllipseObjectId = 0x02,
-// type 03: line and curve (?)
+// type 03: line and curve
     CdrPathObjectId = 0x03,
-// type 04: text (?)
+// type 04: text
     CdrTextObjectId = 0x04,
 // type 05: bitmap (?)
     CdrBitmapObjectId = 0x05,
@@ -58,8 +58,18 @@ typedef qint16 Cdr4Coord;
 
 struct Cdr4Point
 {
+    // 0..1
     Cdr4Coord mX;
+    // 2..3
     Cdr4Coord mY;
+};
+
+struct Cdr4BoundingBox
+{
+    // 0..3
+    Cdr4Point mUpperLeft;
+    // 4..7
+    Cdr4Point mLowerRight;
 };
 
 inline qreal
@@ -88,11 +98,6 @@ struct CdrArgumentData
 
     const quint16* argOffsets() const
     { return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+startOfArgs ); }
-    const quint16* argTypes() const
-    { return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+startOfArgTypes ); }
-
-    // order of types seems inverted...
-    quint16 argType( int i ) const { return argTypes()[count-i-1]; }
 
     template<typename T>
     T arg( int i ) const
@@ -107,12 +112,49 @@ struct CdrArgumentData
     quint16 count;
     // 4..5: start of arguments
     quint16 startOfArgs;
+};
+
+
+struct CdrArgumentWithTypeData : public CdrArgumentData
+{
+    // TODO: convert endianness on bigendian system
+    // void convertToBugEndian();
+
+    const quint16* argTypes() const
+    { return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+startOfArgTypes ); }
+
+    // order of types seems inverted...
+    quint16 argType( int i ) const { return argTypes()[count-i-1]; }
+
     // 6..7: start of arguments types
     quint16 startOfArgTypes;
     // 8..9: type of loda
     quint16 chunkType;
 };
 
+// sample data: AC 2D B6 DF 00 00
+struct Cdr4RectangleData
+{
+    // 0..1: width?
+    quint16 mWidth;
+    // 2..3: height?
+    quint16 mHeight;
+    // 4..5: ? rounded corners?
+    quint16 _unknown;
+};
+
+// sample data: 4F FA 28 FC 8C 0A 8C 0A 00 00
+struct Cdr4EllipseData
+{
+    // 0..3: center?
+    Cdr4Point mCenterPoint;
+    // 4..5: x radius?
+    quint16 mXRadius;
+    // 6..7: y radius?
+    quint16 mYRadius;
+    // 8..9: ?
+    quint16 _unknown;
+};
 
 // point types:
 // 0C
@@ -171,6 +213,35 @@ private:
     // seems types are padded to full 32 bit slots, but no need to care while reading
 };
 
+struct Cdr4CharData
+{
+    quint8 _unknown;
+    char mChar;
+    quint8 _unknown2;
+};
+
+struct Cdr4TextData
+{
+    Cdr4CharData charData( int i ) const
+    { return (&firstChar)[i]; }
+
+public:
+    // 0..1: ? is 00 00 in samples
+    quint16 _unknown;
+    // 2..3: length of text
+    quint16 mLength;
+    // 4..5: size of complete data
+    quint16 mDataSize;
+    // now the chars, have two \0 bytes between them,
+    // one before the first, not sure if the first has meaning or belongs to char
+    // assume this for now, see CharData
+    // "ä" was seen, so encoding is local one (was 8-bit one for me, visible with iso-8859-1)
+    // linebreak is with 0D 0A chars
+private:
+    // 4..4+num*4: num of 16bit coord pairs
+    Cdr4CharData firstChar; // used to get pointer in pointType(...)
+};
+
 struct TransformData
 {
     quint32 factor[6];
@@ -184,6 +255,14 @@ struct MCfgData
     quint16 width;
     // 2..3: height
     quint16 height;
+};
+
+// 0000:0020 |       61 00  01 00 00 00  00 00 00 00  00 00 00 00 |   a.............
+// 0000:0030 | 04 00 C2 00  98 1F                                 | ..Â...
+struct LnkData
+{
+    // 0..19: unknown
+    char unknown[20];
 };
 
 #endif

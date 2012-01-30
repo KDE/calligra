@@ -28,6 +28,8 @@ class CdrDocument;
 class CdrPage;
 class CdrLayer;
 class CdrGroupObject;
+class CdrRectangleObject;
+class CdrEllipseObject;
 class CdrPathObject;
 class CdrObject;
 
@@ -46,6 +48,8 @@ private:
     void writeLayer( const CdrLayer* layer );
     void writeObject( const CdrObject* object );
     void writeGroupObject( const CdrGroupObject* groupObject );
+    void writeRectangleObject( const CdrRectangleObject* object );
+    void writeEllipseObject( const CdrEllipseObject* object );
     void writePathObject( const CdrPathObject* pathObject );
 
 private:
