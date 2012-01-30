@@ -67,6 +67,8 @@ QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *pa
 
     KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
 
+    KoToolRegistry::instance()->add(new KWPageToolFactory());
+
     if (!bWantKoDocument)
         doc->setReadWrite(false);
 
@@ -98,8 +100,7 @@ const KComponentData &KWFactory::componentData()
 #ifdef SHOULD_BUILD_RDF
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
-        
-        KoToolRegistry::instance()->add(new KWPageToolFactory());
+
     }
     return *s_instance;
 }
