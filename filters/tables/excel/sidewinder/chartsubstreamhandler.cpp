@@ -98,7 +98,7 @@ public:
     virtual void dump(std::ostream& out) const {
         QStringList tokens;
         foreach(XmlTk* t, m_tokens)
-            tokens.append( QString("%1 %2 %3").arg(t->m_xmlTkTag, 0, 16).arg(t->type()).arg(t->value()) );
+            tokens.append( QString("%1(%2)=%3").arg(QString::fromUtf8(xmlTkTagName(XmlTkTags(t->m_xmlTkTag)))).arg(t->type()).arg(t->value()) );
         out << qPrintable(QString("[%1]").arg(tokens.join(", ")));
     }
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) {
@@ -1239,14 +1239,14 @@ void ChartSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 void ChartSubStreamHandler::handleShapePropsStream(ShapePropsStreamRecord* record)
 {
     if (!record) return;
-    DEBUG << "rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
+    DEBUG << "wObjContext=" << record->wObjContext() << "rgbLength=" << record->rgb().length() << " rgbString=" << record->rgb() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleTextPropsStream(TextPropsStreamRecord* record)
 {
     if (!record) return;
-    DEBUG << "rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
+    DEBUG << "rgbLength=" << record->rgb().length() << " rgbString=" << record->rgb() << std::endl;
     //TODO
 }
 
@@ -1296,7 +1296,10 @@ void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
-    //TODO
+    if ( Charting::Axis *axis = dynamic_cast< Charting::Axis* > ( m_currentObj ) ) {
+        axis->m_reversed = record->isFReversed();
+        axis->m_logarithmic = record->isFLog();
+    }
 }
 
 void ChartSubStreamHandler::handleTick(TickRecord *record)

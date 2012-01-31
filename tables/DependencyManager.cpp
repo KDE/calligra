@@ -23,9 +23,6 @@
 #include "DependencyManager.h"
 #include "DependencyManager_p.h"
 
-#include <QHash>
-#include <QList>
-
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Formula.h"
@@ -36,6 +33,12 @@
 #include "RTree.h"
 #include "Sheet.h"
 #include "Value.h"
+#include "DocBase.h"
+
+#include <QHash>
+#include <QList>
+
+#include <KoUpdater.h>
 
 using namespace Calligra::Tables;
 
@@ -175,7 +178,7 @@ void DependencyManager::removeSheet(Sheet *sheet)
     // TODO Stefan: Implement, if dependencies should not be tracked all the time.
 }
 
-void DependencyManager::updateAllDependencies(const Map* map)
+void DependencyManager::updateAllDependencies(const Map* map, KoUpdater *updater)
 {
     ElapsedTime et("Generating dependencies", ElapsedTime::PrintOnlyTime);
 
@@ -186,9 +189,19 @@ void DependencyManager::updateAllDependencies(const Map* map)
     d->namedAreaConsumers.clear();
     d->depths.clear();
 
+    int cellsCount = 9;
+    int cellCurrent = 0;
+
+    if (updater) {
+        updater->setProgress(0);
+
+        foreach(const Sheet* sheet, map->sheetList())
+            cellsCount += sheet->formulaStorage()->count();
+    }
+
     Cell cell;
     foreach(const Sheet* sheet, map->sheetList()) {
-        for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
+        for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
             cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
             d->generateDependencies(cell, sheet->formulaStorage()->data(c));
@@ -198,8 +211,14 @@ void DependencyManager::updateAllDependencies(const Map* map)
             }
             if (!sheet->formulaStorage()->data(c).isValid())
                 cell.setValue(Value::errorPARSE());
+
+            if (updater)
+                updater->setProgress(int(qreal(cellCurrent) / qreal(cellsCount) * 100.));
         }
     }
+
+    if (updater)
+        updater->setProgress(100);
 }
 
 QMap<Cell, int> DependencyManager::depths() const

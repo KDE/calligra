@@ -231,7 +231,11 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         d->setSuffix(location.toEncoded());
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(location.toEncoded());
+        qint64 oldKey = d->key;
         d->key = KoImageDataPrivate::generateKey(md5.result());
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
 }
@@ -268,7 +272,11 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
                 if (d->image.loadFromData(data)) {
                     QCryptographicHash md5(QCryptographicHash::Md5);
                     md5.addData(data);
+                    qint64 oldKey = d->key;
                     d->key = KoImageDataPrivate::generateKey(md5.result());
+                    if (oldKey != 0 && d->collection) {
+                        d->collection->update(oldKey, d->key);
+                    }
                     d->dataStoreState = KoImageDataPrivate::StateImageOnly;
                     return;
                 }
@@ -326,7 +334,12 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         }
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
+        qint64 oldKey = d->key;
         d->key = KoImageDataPrivate::generateKey(md5.result());
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
+
     }
 }
 

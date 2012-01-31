@@ -186,8 +186,6 @@ public:
 
     KoTextAnchor *anchorOfShape(KoShape *shape) const;
 
-    KoShapeContainer *insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent);
-
     KWFrame *frameOfShape(KoShape *shape) const;
 
 public slots:

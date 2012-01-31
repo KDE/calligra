@@ -200,11 +200,6 @@ public:
     int setActiveElement(const Cell &cell);
 
     /**
-     * Sets the element, which has @p point as anchor, as active
-     */
-    void setActiveElement(const QPoint& point, CellEditor* cellEditor);
-
-    /**
      * @return the active element
      */
     Element* activeElement() const;

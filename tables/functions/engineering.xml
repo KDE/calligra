@@ -16,12 +16,12 @@
            <Type>Int</Type>
        </Parameter>
        <Parameter optional="true">
-           <Comment>MinLength</Comment>
+           <Comment>MinLength</Comment> <!-- FIXME change to lower for 2.5-->
            <Type>Int</Type>
        </Parameter>
        <Help>
            <Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
-           <Syntax>BASE(number;base;prec)</Syntax>
+           <Syntax>BASE(number;base;prec)</Syntax> <!-- FIXME change prec to minlength for 2.5-->
            <Example>BASE(128;8) returns "200"</Example>
        </Help>
    </Function>
