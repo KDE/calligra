@@ -207,6 +207,18 @@ int KoImageCollection::count() const
     return d->images.count();
 }
 
+void KoImageCollection::update(qint64 oldKey, qint64 newKey)
+{
+    if (oldKey == newKey) {
+        return;
+    }
+    if (d->images.contains(oldKey)) {
+        KoImageDataPrivate *imageData = d->images[oldKey];
+        d->images.remove(oldKey);
+        d->images.insert(newKey, imageData);
+    }
+}
+
 void KoImageCollection::removeOnKey(qint64 imageDataKey)
 {
     d->images.remove(imageDataKey);
