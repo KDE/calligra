@@ -42,7 +42,10 @@ enum CdrObjectId
 class CdrObject
 {
 protected:
-    CdrObject(CdrObjectId id) : mId( id ) {}
+    explicit CdrObject(CdrObjectId id) : mId( id ) {}
+private:
+    CdrObject( const CdrObject& );
+    CdrObject& operator=( const CdrObject& );
 public:
     virtual ~CdrObject() {}
 public:
@@ -165,12 +168,54 @@ class CdrStyle
 {
 };
 
+class CdrOutline
+{
+public:
+    void setType( quint32 type ) { mType = type; }
+public:
+    quint32 type() const { return mType; }
+private:
+    quint32 mType;
+};
+
+class CdrAbstractFill
+{
+public:
+    enum Id { Transparent = 0, Solid = 1, Gradient = 2 };
+protected:
+    explicit CdrAbstractFill(Id id) : mId( id ) {}
+private:
+    CdrAbstractFill( const CdrAbstractFill& );
+    CdrAbstractFill& operator=( const CdrAbstractFill& );
+public:
+    virtual ~CdrAbstractFill() {}
+public:
+    Id id() const { return mId; }
+private:
+    Id mId;
+};
+
+class CdrTransparentFill : public CdrAbstractFill
+{
+public:
+    CdrTransparentFill() : CdrAbstractFill(Transparent) {}
+};
+
+class CdrSolidFill : public CdrAbstractFill
+{
+public:
+    CdrSolidFill() : CdrAbstractFill(Solid) {}
+};
+
+
 class CdrDocument
 {
 public:
-    ~CdrDocument() { qDeleteAll( mPages );}
+    ~CdrDocument();
 public:
-    void insertStyle( int id, CdrStyle* style ) { mStyleTable.insert(id, style); }
+    void insertStyle( quint16 id, CdrStyle* style ) { mStyleTable.insert(id, style); }
+    void insertOutline( quint32 id, CdrOutline* outline ) { mOutlineTable.insert(id, outline); }
+    void insertFill( quint32 id, CdrAbstractFill* fill ) { mFillTable.insert(id, fill); }
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
@@ -181,7 +226,9 @@ public:
     quint16 height() const { return mHeight; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QByteArray& styleSheetFileName() const { return mStyleSheetFileName; }
-    CdrStyle* style( int id ) { return mStyleTable.value(id); }
+    CdrStyle* style( quint16 id ) { return mStyleTable.value(id); }
+    CdrOutline* outline( quint32 id ) { return mOutlineTable.value(id); }
+    CdrAbstractFill* fill( quint32 id ) { return mFillTable.value(id); }
 private:
     quint16 mFullVersion;
     quint16 mWidth;
@@ -189,6 +236,8 @@ private:
     QByteArray mStyleSheetFileName;
 
     QHash<quint16, CdrStyle*> mStyleTable;
+    QHash<quint32, CdrOutline*> mOutlineTable;
+    QHash<quint32, CdrAbstractFill*> mFillTable;
     QVector<CdrPage*> mPages;
 };
 

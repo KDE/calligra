@@ -20,3 +20,10 @@
 
 #include "cdrdocument.h"
 
+CdrDocument::~CdrDocument()
+{
+    qDeleteAll( mPages );
+    qDeleteAll( mStyleTable );
+    qDeleteAll( mOutlineTable );
+    qDeleteAll( mFillTable );
+}

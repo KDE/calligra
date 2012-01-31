@@ -406,8 +406,6 @@ qDebug() << bmpIndex << "width" << width << "height" << height;
     mRiffStreamReader.closeList();
 }
 
-enum FillType { Transparent = 0, Solid = 0, Gradient = 0 };
-
 void
 CdrParser::readDocFillTable()
 {
@@ -417,12 +415,32 @@ qDebug() << "Reading Fills...";
     {
         if( mRiffStreamReader.chunkId() == fillId )
         {
+            CdrAbstractFill* fill = 0;
+
             const QByteArray fillData = mRiffStreamReader.chunkData();
-            // 0..1: int16 index/key/id?
-            const quint16 fillIndex = data<quint16>( fillData );
+            // 0..3: uint32 index/key/id? would match loda
+            const quint32 fillIndex = data<quint32>( fillData );
             // 4: filltype (?)
-            // found with 8 (filltype transparent) and 30 bytes (filltype solid)
-qDebug() << fillIndex;
+            const quint32 fillType = data<quint32>( fillData, 4 );
+            if( fillType == CdrTransparent )
+            {
+                fill = new CdrTransparentFill;
+                // transparent has no other data stored
+            }
+            else if( fillType == CdrSolid )
+            {
+                fill = new CdrSolidFill;
+                // 8: filltype (?)
+                const CdrSolidFillData* solidFillData = dataPtr<CdrSolidFillData>( fillData, 8 );
+            }
+            const QString fillTypeName =
+                QLatin1String(fillType == CdrTransparent ? "Transparent" :
+                              fillType == CdrSolid ? "Solid" :
+                              /*other*/              "UNKNOWN!");
+qDebug() << fillIndex << fillTypeName;
+
+            if( fill )
+                mDocument->insertFill( fillIndex, fill );
         }
     }
 
@@ -438,12 +456,15 @@ qDebug() << "Reading Outlines...";
     {
         if( mRiffStreamReader.chunkId() == outlId )
         {
-            const QByteArray outlineData = mRiffStreamReader.chunkData();
-            // 0..1: int16 index/key/id?
-            const quint16 outlineIndex = data<quint16>( outlineData );
-            // 4: filltype (?)
-            // found with 8 (filltype transparent) and 30 bytes (filltype solid)
-qDebug() << outlineIndex;
+            CdrOutline* outline = new CdrOutline;
+
+            const QByteArray outlineBlob = mRiffStreamReader.chunkData();
+            const CdrOutlineData* outlineData = dataPtr<CdrOutlineData>( outlineBlob );
+            outline->setType( outlineData->mType );
+
+qDebug() << outlineData->mIndex << outline->type();
+
+            mDocument->insertOutline( outlineData->mIndex, outline );
         }
     }
 
