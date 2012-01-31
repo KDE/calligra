@@ -166,6 +166,17 @@ private:
 
 class CdrStyle
 {
+public:
+    CdrStyle() : mFontId(-1) {}
+public:
+    void setTitle( const QString& title ) { mTitle = title; }
+    void setFontId( quint16 fontId ) { mFontId = fontId; }
+public:
+    const QString& title() const { return mTitle; }
+    quint16 fontId() const { return mFontId; }
+private:
+    quint16 mFontId;
+    QString mTitle;
 };
 
 class CdrOutline

@@ -156,6 +156,16 @@ struct CdrStyleArgumentData : public CdrArgumentWithTypeData
     qint16 _unknown4;
 };
 
+// 0D 00 16 01 01 00 - also size, bold, italic etc. ?
+struct CdrStyleFontArgumentData
+{
+    // 0..1: font index
+    quint16 mFontIndex;
+    // 2..3: ?
+    quint16 _unknown0;
+    // 4..5: ?
+    quint16 _unknown1;
+};
 
 // 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 // 02 00 00 00 02 00 00 00 00 00 03 00 64 00 00 00 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00

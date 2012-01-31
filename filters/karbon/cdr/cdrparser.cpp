@@ -505,14 +505,14 @@ CdrParser::readDocStyle()
             // 2..end: data
             const CdrStyleArgumentData* styleArgs =
                 dataPtr<CdrStyleArgumentData>( styleData, 2 );
-qDebug()<<"Style:"<<styleIndex<<"arg count"<<styleArgs->count<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
+qDebug()<<"Style id:"<<styleIndex<<"args:"<<styleArgs->count<<"d:"<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
                                               <<styleArgs->_unknown3<<styleArgs->_unknown4;
 
 // Arg types:
 // 200   text/title/name
 // 205: 32bit 02 00 00 00
 // 210: 32bit 02 00 00 00
-// 220: 6 bytes (0D 00 16 01 01 00 = 3x16bit 13 278 1) first two bytes could be font index
+// 220: 6 bytes CdrStyleFontArgumentData
 // 225: 16 bit
 // 230: 20 bytes (all 00)
 // 235: 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00)
@@ -537,15 +537,26 @@ switch(argType)
         argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) );
         break;
     case 200 :
+    {
+        const QString title = stringData( styleData, styleArgs->argOffsets()[i]+2 );
+        style->setTitle( title );
+
         argTypeAsString = QLatin1String("title");
-        argAsString = stringData( styleData, styleArgs->argOffsets()[i]+2 );
+        argAsString = title;
         break;
+    }
     case 220:
-        argTypeAsString = QLatin1String("some 6 bytes");
-        argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) ) + QLatin1Char(' ') +
-                      QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+4) ) + QLatin1Char(' ') +
-                      QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+6) );
+    {
+        const CdrStyleFontArgumentData* fontData =
+            dataPtr<CdrStyleFontArgumentData>( styleData, styleArgs->argOffsets()[i]+2 );
+        style->setFontId( fontData->mFontIndex );
+
+        argTypeAsString = QLatin1String("font");
+        argAsString = QString::number( fontData->mFontIndex ) + QLatin1Char(' ') +
+                      QString::number( fontData->_unknown0 ) + QLatin1Char(' ') +
+                      QString::number( fontData->_unknown1 );
         break;
+    }
     case 230:
     case 235:
     case 240:
