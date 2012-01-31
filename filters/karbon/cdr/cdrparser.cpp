@@ -476,26 +476,59 @@ CdrParser::readDocStyle()
     {
         if( mRiffStreamReader.chunkId() == stydId )
         {
+            CdrStyle* style = new CdrStyle;
+
             const QByteArray styleData = mRiffStreamReader.chunkData();
             // 0..1: int16 index/key/id?
             const quint16 styleIndex = data<quint16>( styleData );
-            // 2..3: size of style data
-            // 4..5: style type (?)
-            const quint16 styleType = data<quint16>( styleData, 4 );
-            // 40..41: size of style data again(?)
+            // 2..end: data
+            const CdrStyleArgumentData* styleArgs =
+                dataPtr<CdrStyleArgumentData>( styleData, 2 );
+qDebug()<<"Style: arg count"<<styleArgs->count<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
+                                              <<styleArgs->_unknown3<<styleArgs->_unknown4;
 
-            // -: no(?) start of titel with type 2
-            // 42: start of title with type 3
-            // 74: start of title with type 6
-            // 380: start of titel with type 10
-            const int styleNameOffset =
-                ( styleType ==  3 ) ?  42 :
-                ( styleType ==  6 ) ? (mCdrVersion==4 ?  74 :  78) :
-                ( styleType == 10 ) ? (mCdrVersion==4 ? 380 : 392) :
-                                       -1;
-            const QString styleName =
-                stringData(styleData, styleNameOffset);
-qDebug() << styleIndex << styleName;
+// Arg types:
+// 200   text/title/name
+// 205: 32bit 02 00 00 00
+// 210: 32bit 02 00 00 00
+// 220: 6 bytes (0D 00 16 01 01 00 = 3x16bit 13 278 1)
+// 225: 16 bit
+// 230: 20 bytes (all 00)
+// 235: 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00)
+// 240: 258 bytes (all 00)
+// 245: 8 bytes (all 00)
+// 250: 32bit (00 00 00 00)
+            for (int i=0; i < styleArgs->count; i++)
+            {
+                const quint16 argType = styleArgs->argType(i);
+QString argAsString;
+switch(argType)
+{
+    case 205 :
+    case 210 :
+    case 250 :
+        argAsString = QString::number( data<quint32>(styleData, styleArgs->argOffsets()[i]+2) );
+        break;
+    case 225 :
+        argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) );
+        break;
+    case 200 :
+        argAsString = stringData( styleData, styleArgs->argOffsets()[i]+2 );
+        break;
+    case 220:
+    case 230:
+    case 235:
+    case 240:
+    case 245:
+        argAsString = QLatin1String("larger data");
+        break;
+    default:
+        argAsString = QLatin1String("UNKNOWN!");
+        break;
+}
+qDebug() << i << ": type" << argType << argAsString;
+            }
+            mDocument->insertStyle( styleIndex, style );
         }
     }
 
@@ -907,7 +940,7 @@ CdrParser::readLoda()
 
     const QByteArray lodaData = mRiffStreamReader.chunkData();
 
-    const CdrArgumentWithTypeData* argsData = dataPtr<CdrArgumentWithTypeData>( lodaData );
+    const CdrObjectArgumentData* argsData = dataPtr<CdrObjectArgumentData>( lodaData );
 
 qDebug() << "Reading Loda" << argsData->count << "args, loda type" << argsData->chunkType;
     if( argsData->chunkType == CdrRectangleObjectId )
@@ -929,6 +962,9 @@ switch(argsData->argType(i))
     case 20 :
         argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
         break;
+    case 30 :
+        argAsString = QLatin1String("object specific data");
+        break;
     case 200 :
     case 1010 :
         argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
@@ -942,6 +978,12 @@ switch(argsData->argType(i))
         argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
         break;
     }
+    case 2000:
+        argAsString = QLatin1String("larger data");
+        break;
+    default:
+        argAsString = QLatin1String("UNKNOWN!");
+        break;
 }
 qDebug() << i << ": type" << argsData->argType(i) << argAsString;
 
@@ -956,7 +998,7 @@ qDebug() << i << ": type" << argsData->argType(i) << argAsString;
 // 30  object specific data
 // 40  32bit  seen only with ellipse so far
 // 100 32bit (point?)
-// 200 16 bit  (style index for type 6?)
+// 200 16 bit  (style index?)
 // 1000: text/title
 // 1010 16 bit
 // 2000: data 01 00 64 00 64 00 00 00 00 00 00 00

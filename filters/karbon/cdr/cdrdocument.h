@@ -24,6 +24,7 @@
 // filter
 #include "cdrstructs.h"
 // Qt
+#include <QtCore/QHash>
 #include <QtCore/QVector>
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
@@ -159,11 +160,17 @@ private:
     QVector<CdrLayer*> mLayers;
 };
 
+
+class CdrStyle
+{
+};
+
 class CdrDocument
 {
 public:
     ~CdrDocument() { qDeleteAll( mPages );}
 public:
+    void insertStyle( int id, CdrStyle* style ) { mStyleTable.insert(id, style); }
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
@@ -174,12 +181,14 @@ public:
     quint16 height() const { return mHeight; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QByteArray& styleSheetFileName() const { return mStyleSheetFileName; }
+    CdrStyle* style( int id ) { return mStyleTable.value(id); }
 private:
     quint16 mFullVersion;
     quint16 mWidth;
     quint16 mHeight;
     QByteArray mStyleSheetFileName;
 
+    QHash<quint16, CdrStyle*> mStyleTable;
     QVector<CdrPage*> mPages;
 };
 

@@ -128,8 +128,32 @@ struct CdrArgumentWithTypeData : public CdrArgumentData
 
     // 6..7: start of arguments types
     quint16 startOfArgTypes;
+};
+
+struct CdrObjectArgumentData : public CdrArgumentWithTypeData
+{
+    // TODO: convert endianness on bigendian system
+    // void convertToBugEndian();
+
     // 8..9: type of loda
     quint16 chunkType;
+};
+
+struct CdrStyleArgumentData : public CdrArgumentWithTypeData
+{
+    // TODO: convert endianness on bigendian system
+    // void convertToBugEndian();
+
+    // 8..9: ?
+    qint16 _unknown0;
+    // 10..11: ?
+    qint16 _unknown1;
+    // 12..13: ?
+    qint16 _unknown2;
+    // 14..15: ?
+    qint16 _unknown3;
+    // 16..17: ?
+    qint16 _unknown4;
 };
 
 // sample data: AC 2D B6 DF 00 00
@@ -242,10 +266,26 @@ private:
     Cdr4CharData firstChar; // used to get pointer in pointType(...)
 };
 
+// possible transformations:
+// translate: needs two coords, qint16 -> 4 byte
+// scale: needs two scale, qint16 -> 4 byte
+// rotate: needs center coords + angle -> 4+x byte
+// skewX: needs angle -> x byte
+// skewY: needs angle -> x byte
+// sample: 08 00 00 00 01 00 00 00 00 00 04 EC FF FF 00 00 00 00 00 00 01 00 13 0E 00 00
+// sample: 08 00 29 B6 05 00 86 6A FE FF 83 F7 FF FF 7A 95 01 00 29 B6 05 00 6F FC FF FF
+// sample: 08 00 29 B6 05 00 86 6A FE FF D6 F7 FF FF 7A 95 01 00 29 B6 05 00 34 FC FF FF
+// sample: 08 00 1A EF 00 00 00 00 00 00 D8 F0 FF FF 00 00 00 00 00 00 01 00 8B 0B 00 00
+// sample: 08 00 00 00 01 00 00 00 00 00 2A E9 FF FF 00 00 00 00 00 00 01 00 25 10 00 00
+// sample: 08 00 00 00 01 00 00 00 00 00 3E 04 00 00 00 00 00 00 00 00 01 00 DF 03 00 00
+// sample: 08 00 00 00 01 00 00 00 00 00 87 F3 FF FF 00 00 00 00 00 00 01 00 98 F8 FF FF
+//              |     |     |           |           |           |     |     |           |
+// Also found this in a list of data, size 72 bytes:
+// sample: 02 00 01 00 00 00 BC F3 13 08 FB 0F E9 F7 BC F3 E9 F7 BC F3 13 08 FB 0F 13 08 FB 0F E9 F7 BC F3 E9 F7 E8 1C 00 00 00 00 80 84 2E 41 00 00 00 00 00 00 00 C0 D0 1C 00 00 00 00 00 B8 7D 40 00 00 00 00 80 84 2E 41 00 00
+// for type 3 number of trfd args: 2, 15, 1, 12, in sync with arg type 10 (outline index?)
 struct TransformData
 {
-    quint32 factor[6];
-    quint16 _unknown;
+    char _unknown[26];
 };
 
 // CDR4 has 54 bytes, CDR5 56 bytes (const structure?)
