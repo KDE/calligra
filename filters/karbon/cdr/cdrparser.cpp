@@ -505,14 +505,14 @@ CdrParser::readDocStyle()
             // 2..end: data
             const CdrStyleArgumentData* styleArgs =
                 dataPtr<CdrStyleArgumentData>( styleData, 2 );
-qDebug()<<"Style: arg count"<<styleArgs->count<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
+qDebug()<<"Style:"<<styleIndex<<"arg count"<<styleArgs->count<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
                                               <<styleArgs->_unknown3<<styleArgs->_unknown4;
 
 // Arg types:
 // 200   text/title/name
 // 205: 32bit 02 00 00 00
 // 210: 32bit 02 00 00 00
-// 220: 6 bytes (0D 00 16 01 01 00 = 3x16bit 13 278 1)
+// 220: 6 bytes (0D 00 16 01 01 00 = 3x16bit 13 278 1) first two bytes could be font index
 // 225: 16 bit
 // 230: 20 bytes (all 00)
 // 235: 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00)
@@ -523,31 +523,40 @@ qDebug()<<"Style: arg count"<<styleArgs->count<<styleArgs->_unknown0<<styleArgs-
             {
                 const quint16 argType = styleArgs->argType(i);
 QString argAsString;
+QString argTypeAsString;
 switch(argType)
 {
     case 205 :
     case 210 :
     case 250 :
+        argTypeAsString = QLatin1String("some 32-bit");
         argAsString = QString::number( data<quint32>(styleData, styleArgs->argOffsets()[i]+2) );
         break;
     case 225 :
+        argTypeAsString = QLatin1String("some 16-bit");
         argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) );
         break;
     case 200 :
+        argTypeAsString = QLatin1String("title");
         argAsString = stringData( styleData, styleArgs->argOffsets()[i]+2 );
         break;
     case 220:
+        argTypeAsString = QLatin1String("some 6 bytes");
+        argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) ) + QLatin1Char(' ') +
+                      QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+4) ) + QLatin1Char(' ') +
+                      QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+6) );
+        break;
     case 230:
     case 235:
     case 240:
     case 245:
-        argAsString = QLatin1String("larger data");
+        argTypeAsString = QLatin1String("larger data");
         break;
     default:
-        argAsString = QLatin1String("UNKNOWN!");
+        argTypeAsString = QLatin1String("UNKNOWN!");
         break;
 }
-qDebug() << i << ": type" << argType << argAsString;
+qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
             }
             mDocument->insertStyle( styleIndex, style );
         }
@@ -977,36 +986,51 @@ qDebug() << "Reading Loda" << argsData->count << "args, loda type" << argsData->
     {
 const quint16 argType = argsData->argType(i);
 QString argAsString;
-switch(argsData->argType(i))
+QString argTypeAsString;
+switch(argType)
 {
     case 10 :
+        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argTypeAsString = QLatin1String("outline index");
+        break;
     case 20 :
         argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argTypeAsString = QLatin1String("fill index");
         break;
     case 30 :
-        argAsString = QLatin1String("object specific data");
+        argTypeAsString = QLatin1String("object specific data");
+        break;
+    case 40 :
+        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argTypeAsString = QLatin1String("some 32-bit");
         break;
     case 200 :
+        argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
+        argTypeAsString = QLatin1String("style index");
+        break;
     case 1010 :
         argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
+        argTypeAsString = QLatin1String("some 16-bit");
         break;
     case 1000 :
         argAsString = stringData( lodaData, argsData->argOffsets()[i] );
+        argTypeAsString = QLatin1String("title");
         break;
     case 100 :
     {
         Cdr4Point point = data<Cdr4Point>( lodaData, argsData->argOffsets()[i] );
         argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
+        argTypeAsString = QLatin1String("point?");
         break;
     }
     case 2000:
-        argAsString = QLatin1String("larger data");
+        argTypeAsString = QLatin1String("some larger data");
         break;
     default:
-        argAsString = QLatin1String("UNKNOWN!");
+        argTypeAsString = QLatin1String("UNKNOWN!");
         break;
 }
-qDebug() << i << ": type" << argsData->argType(i) << argAsString;
+qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
 
 // each page has as start types 0B, 0C, 11, 0
 // first set has both arg type 1000 and 2000, with text set for 1000, other have just 2000, no text
