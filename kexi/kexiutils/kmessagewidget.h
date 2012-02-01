@@ -122,6 +122,8 @@ public:
 
     explicit KMessageWidget(const QString &text, QWidget *parent = 0);
 
+    KMessageWidget(QWidget *contentsWidget, QWidget *parent);
+
     ~KMessageWidget();
 
     QString text() const;

@@ -80,13 +80,14 @@ void KMessageWidgetFrame::setCalloutPointerDirection(
 
 void KMessageWidgetFrame::updateCalloutPointerTransformation() const
 {
-    if (m_sizeForRecentTransformation == size())
+    if (m_sizeForRecentTransformation == parentWidget()->size())
         return;
 
     m_calloutPointerTransformation.reset();
 
-    const QSizeF s(size());
-    m_sizeForRecentTransformation = size();
+    const QSizeF s(parentWidget()->size());
+    m_sizeForRecentTransformation = parentWidget()->size();
+    // kDebug() << size() << parentWidget()->size();
     const qreal rad = radius;
     // Original: [v    ]
     //           [     ]
@@ -136,6 +137,14 @@ void KMessageWidgetFrame::updateCalloutPointerPosition() const
         return;
     QWidget *messageWidgetParent = parentWidget()->parentWidget();
     if (messageWidgetParent) {
+/*        kDebug() << "m_calloutPointerGlobalPosition:" << m_calloutPointerGlobalPosition
+         << "pos():" << pos()
+         << "pointerPosition():" << pointerPosition()
+         << "(m_calloutPointerGlobalPosition - pos() - pointerPosition()):"
+         << (m_calloutPointerGlobalPosition - pos() - pointerPosition())
+         << "messageWidgetParent->mapFromGlobal():"
+         << messageWidgetParent->mapFromGlobal(
+              m_calloutPointerGlobalPosition - pos() - pointerPosition());*/
         parentWidget()->move(
             messageWidgetParent->mapFromGlobal(
                 m_calloutPointerGlobalPosition - pos() - pointerPosition())
@@ -173,6 +182,7 @@ QPoint KMessageWidgetFrame::pointerPosition() const
 class KMessageWidgetPrivate
 {
 public:
+    KMessageWidgetPrivate();
     void init(KMessageWidget*);
 
     KMessageWidget* q;
@@ -192,6 +202,7 @@ public:
     KColorScheme::BackgroundRole bgRole;
     KColorScheme::ForegroundRole fgRole;
     bool autoDelete;
+    QWidget* contentsWidget;
 
     void createLayout();
     void updateSnapShot();
@@ -200,6 +211,11 @@ public:
     void slotTimeLineFinished();
     void updateStyleSheet();
 };
+
+KMessageWidgetPrivate::KMessageWidgetPrivate()
+ : contentsWidget(0)
+{
+}
 
 void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
 {
@@ -216,26 +232,32 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
 
     wordWrap = false;
 
-    iconLabel = new QLabel(content);
-    iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    if (contentsWidget) {
+        iconLabel = 0;
+        textLabel = 0;
+        closeButton = 0;
+    }
+    else {
+        iconLabel = new QLabel(content);
+        iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    textLabel = new QLabel(content);
-    textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    textLabel->setContentsMargins(0, 0, 0, 0);
+        textLabel = new QLabel(content);
+        textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        textLabel->setContentsMargins(0, 0, 0, 0);
 #if 0
     content->setAutoFillBackground(true);
     content->setBackgroundRole(QPalette::Dark);
     textLabel->setAutoFillBackground(true);
     textLabel->setBackgroundRole(QPalette::Mid);
 #endif
-
+    }
     KAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
 
     closeButton = new QToolButton(content);
     closeButton->setAutoRaise(true);
     closeButton->setDefaultAction(closeAction);
-    
+
     defaultAction = 0;
     autoDelete = false;
     q->setMessageType(KMessageWidget::Information);
@@ -279,8 +301,13 @@ void KMessageWidgetPrivate::createLayout()
     if (wordWrap) {
         QGridLayout* layout = new QGridLayout(content);
         layout->setSpacing(0);
-        layout->addWidget(iconLabel, 0, 0);
-        layout->addWidget(textLabel, 0, 1);
+        if (contentsWidget) {
+            layout->addWidget(contentsWidget, 0, 0, 0, 2);
+        }
+        else {
+            layout->addWidget(iconLabel, 0, 0);
+            layout->addWidget(textLabel, 0, 1);
+        }
 
         QHBoxLayout* buttonLayout = new QHBoxLayout;
         buttonLayout->addStretch();
@@ -294,9 +321,13 @@ void KMessageWidgetPrivate::createLayout()
         layout->addItem(buttonLayout, 1, 0, 1, 2);
     } else {
         QHBoxLayout* layout = new QHBoxLayout(content);
-        layout->addWidget(iconLabel);
-        layout->addWidget(textLabel);
-
+        if (contentsWidget) {
+            layout->addWidget(contentsWidget);
+        }
+        else {
+            layout->addWidget(iconLabel);
+            layout->addWidget(textLabel);
+        }
         Q_FOREACH(QToolButton* button, buttons) {
             layout->addWidget(button);
         }
@@ -449,6 +480,14 @@ KMessageWidget::KMessageWidget(const QString& text, QWidget* parent)
     setText(text);
 }
 
+KMessageWidget::KMessageWidget(QWidget* contentsWidget, QWidget* parent)
+    : QFrame(parent)
+    , d(new KMessageWidgetPrivate)
+{
+    d->contentsWidget = contentsWidget;
+    d->init(this);
+}
+
 KMessageWidget::~KMessageWidget()
 {
     delete d;
@@ -456,13 +495,15 @@ KMessageWidget::~KMessageWidget()
 
 QString KMessageWidget::text() const
 {
-    return d->textLabel->text();
+    return d->textLabel ? d->textLabel->text() : QString();
 }
 
 void KMessageWidget::setText(const QString& text)
 {
-    d->textLabel->setText(text);
-    updateGeometry();
+    if (d->textLabel) {
+        d->textLabel->setText(text);
+        updateGeometry();
+    }
 }
 
 KMessageWidget::MessageType KMessageWidget::messageType() const
@@ -498,8 +539,10 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
         d->fgRole = KColorScheme::NegativeText;
         break;
     }
-    const int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
-    d->iconLabel->setPixmap(icon.pixmap(size));
+    if (d->iconLabel) {
+        const int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+        d->iconLabel->setPixmap(icon.pixmap(size));
+    }
 
     d->updateStyleSheet();
     d->updateLayout();
@@ -515,6 +558,7 @@ void KMessageWidget::setCalloutPointerDirection(KMessageWidget::CalloutPointerDi
     d->content->setCalloutPointerDirection(direction);
     d->updateStyleSheet();
     d->updateLayout();
+    d->content->updateCalloutPointerPosition();
 }
 
 QSize KMessageWidget::sizeHint() const
@@ -593,8 +637,10 @@ bool KMessageWidget::wordWrap() const
 void KMessageWidget::setWordWrap(bool wordWrap)
 {
     d->wordWrap = wordWrap;
-    d->textLabel->setWordWrap(wordWrap);
-    d->updateLayout();
+    if (d->textLabel) {
+        d->textLabel->setWordWrap(wordWrap);
+        d->updateLayout();
+    }
 }
 
 bool KMessageWidget::isCloseButtonVisible() const
