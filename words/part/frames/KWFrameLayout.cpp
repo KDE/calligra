@@ -450,10 +450,10 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             main[i]->shape()->setZIndex(minZIndex);
     }
     if (footer && footer->shape()) {
-        footer->shape()->setZIndex(--minZIndex);
+        footer->shape()->setZIndex(minZIndex);
     }
     if (header && header->shape()) {
-        header->shape()->setZIndex(--minZIndex);
+        header->shape()->setZIndex(minZIndex);
     }
 
     if (pageBackground) {
