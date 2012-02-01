@@ -218,6 +218,15 @@ public:
     CdrSolidFill() : CdrAbstractFill(Solid) {}
 };
 
+class CdrFont
+{
+public:
+    void setName( const QString& name ) { mName = name; }
+public:
+    const QString& name() const { return mName; }
+private:
+    QString mName;
+};
 
 class CdrDocument
 {
@@ -227,6 +236,7 @@ public:
     void insertStyle( quint16 id, CdrStyle* style ) { mStyleTable.insert(id, style); }
     void insertOutline( quint32 id, CdrOutline* outline ) { mOutlineTable.insert(id, outline); }
     void insertFill( quint32 id, CdrAbstractFill* fill ) { mFillTable.insert(id, fill); }
+    void insertFont( quint16 id, CdrFont* font ) { mFontTable.insert(id, font); }
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
@@ -240,6 +250,7 @@ public:
     CdrStyle* style( quint16 id ) { return mStyleTable.value(id); }
     CdrOutline* outline( quint32 id ) { return mOutlineTable.value(id); }
     CdrAbstractFill* fill( quint32 id ) { return mFillTable.value(id); }
+    CdrFont* font( quint16 id ) { return mFontTable.value(id); }
 private:
     quint16 mFullVersion;
     quint16 mWidth;
@@ -249,6 +260,7 @@ private:
     QHash<quint16, CdrStyle*> mStyleTable;
     QHash<quint32, CdrOutline*> mOutlineTable;
     QHash<quint32, CdrAbstractFill*> mFillTable;
+    QHash<quint16, CdrFont*> mFontTable;
     QVector<CdrPage*> mPages;
 };
 

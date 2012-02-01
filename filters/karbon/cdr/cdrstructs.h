@@ -156,15 +156,25 @@ struct CdrStyleArgumentData : public CdrArgumentWithTypeData
     qint16 _unknown4;
 };
 
+
+struct CdrTrflArgumentData : public CdrArgumentData
+{
+    // 6..7: seen FF FF
+    qint16 _unknown0;
+    // 8..9: seen 00 00
+    qint16 _unknown1;
+};
+
 // 0D 00 16 01 01 00 - also size, bold, italic etc. ?
 struct CdrStyleFontArgumentData
 {
     // 0..1: font index
     quint16 mFontIndex;
-    // 2..3: ?
-    quint16 _unknown0;
-    // 4..5: ?
-    quint16 _unknown1;
+    // 2..5: ?
+    quint8 _unknown0;
+    quint8 _unknown1;
+    quint8 _unknown2;
+    quint8 _unknown3;
 };
 
 // 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -177,17 +187,21 @@ struct CdrStyleFontArgumentData
 // 05 00 00 00 32 00 00 00 00 00 4A 00 0A 00 8E FE 01 00 00 00 00 00 00 00 32 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 // 06 00 00 00 32 00 00 00 00 00 1E 00 0A 00 8E FE 01 00 00 00 00 00 00 00 3C 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 // 07 00 00 00 32 00 00 00 00 00 1E 00 0A 00 8E FE 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-//            |           |     |     |     |     |           |           |           |           |           |
+//            |     |     |     |     |     |     |           |           |           |           |           |
+// 0           4     6     8     10    12    14    16          20          24          28          32          36
+// possible data: line type, line ending type, color
 struct CdrOutlineData
 {
     // 68 bytes:
     // 0..3: uint32 index/key/id? would match loda
     quint32 mIndex;
-    // 4..7: type (?) seen 1, 2, 50
-    quint32 mType;
+    // 4..5: type (?) seen 1, 2, 50
+    quint16 mType;
+    // 6..7: always 00 00
+    quint16 _unknown1;
     // 8..9: always 00 00
     quint16 _unknown1;
-    // 10..11: seen 0, 3, 14, 30, 74
+    // 10..11: line width? seen 0, 3, 14, 30, 74
     quint16 _unknown2;
     // 12..13: seen 0, 10, 100
     quint16 _unknown3;
@@ -219,6 +233,7 @@ enum CdrFillType { CdrTransparent = 0, CdrSolid };
 // 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 //            |           |           |           |           |
 // similar to CdrOutlineData from 16..
+// possible data: color
 struct CdrSolidFillData
 {
     // 0..3: seen 1

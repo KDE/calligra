@@ -174,7 +174,7 @@ CdrParser::parse( QFile& file )
 
         if( mRiffStreamReader.isFileChunk() &&
             isCDR &&
-            (4 <= mCdrVersion) && (mCdrVersion <= 5) )
+            (4 == mCdrVersion)/*(4 <= mCdrVersion) && (mCdrVersion <= 5)*/ )
         {
             mDocument = new CdrDocument;
             readCDR();
@@ -325,24 +325,20 @@ qDebug() << "Reading fonts...";
     {
         if( mRiffStreamReader.chunkId() == fontId )
         {
+            CdrFont* font = new CdrFont;
+
             const QByteArray fontData = mRiffStreamReader.chunkData();
 
             // bytes 0..1: some index/id/key which seems sorted
             // TODO: endianness
             const quint16 fontIndex = data<quint16>( fontData );
 
-            // bytes 2..17 for version not yet known, font info?
+            // bytes 2..end: font info
             // name
-            const int fontNameOffset =
-                (mCdrVersion == 4) ? 2 :
-                /*mCdrVersion == 5*/ 18;
-            const int fontDataSize = fontData.size();
-            if( fontDataSize > fontNameOffset )
-            {
-                const QString fontName =
-                    stringData(fontData, fontNameOffset);
-qDebug() << fontIndex << fontName;
-            }
+            font->setName( stringData(fontData, 2) );
+
+qDebug() << fontIndex << font->name();
+            mDocument->insertFont( fontIndex, font );
         }
     }
 
@@ -553,8 +549,10 @@ switch(argType)
 
         argTypeAsString = QLatin1String("font");
         argAsString = QString::number( fontData->mFontIndex ) + QLatin1Char(' ') +
-                      QString::number( fontData->_unknown0 ) + QLatin1Char(' ') +
-                      QString::number( fontData->_unknown1 );
+                      QString::number( fontData->_unknown0) + QLatin1Char(' ') +
+                      QString::number( fontData->_unknown1) + QLatin1Char(' ') +
+                      QString::number( fontData->_unknown2) + QLatin1Char(' ') +
+                      QString::number( fontData->_unknown3);
         break;
     }
     case 230:
@@ -959,10 +957,8 @@ CdrParser::readTrfl()
         if( (mRiffStreamReader.chunkId() == trfdId) )
         {
             const QByteArray trfdData = mRiffStreamReader.chunkData();
-            // 6..7: start of arguments types, here always set to FF FF, kind of null pointer?
-            // 8..9: type of chunk, here always 00 00
-            const CdrArgumentWithTypeData* argsData = dataPtr<CdrArgumentWithTypeData>( trfdData );
-qDebug() << "Reading Trfd" << argsData->count << "args";
+            const CdrTrflArgumentData* argsData = dataPtr<CdrTrflArgumentData>( trfdData );
+qDebug() << "Reading Trfd" << argsData->count << "args" << argsData->_unknown0 <<argsData->_unknown1;
     for (int i=0; i < argsData->count; i++)
     {
 // qDebug() << i << ": type" << argsData->argPtr<>()<TransformData>(i);
