@@ -22,6 +22,7 @@
 #define CDRSTRUCTS_H
 
 // Qt
+#include <QtGui/QColor>
 #include <QtCore/QtGlobal>
 #include <QtCore/QPoint>
 
@@ -90,6 +91,14 @@ koCoords( Cdr4Point cdrCoords )
 {
     return QPointF( koXCoord(cdrCoords.mX), koYCoord(cdrCoords.mY) );
 }
+
+struct CdrCmyk
+{
+    quint8 mC;
+    quint8 mM;
+    quint8 mY;
+    quint8 mK;
+};
 
 struct CdrArgumentData
 {
@@ -170,11 +179,46 @@ struct CdrStyleFontArgumentData
 {
     // 0..1: font index
     quint16 mFontIndex;
-    // 2..5: ?
-    quint8 _unknown0;
+    // 2: fontsize?
+    quint8 mFontSize;
+    // 3..5: ?
     quint8 _unknown1;
     quint8 _unknown2;
     quint8 _unknown3;
+};
+
+enum CdrFillType { CdrTransparent = 0, CdrSolid = 1 };
+
+// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00
+// 01 00 00 00 00 00 00 00 14 00 00 00 00 00 00 00 C2 01 3C 00 00 00
+// 01 00 00 00 00 00 00 00 3C 00 00 00 00 00 00 00 C2 01 3C 00 00 00
+// 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C2 01 3C 00 00 00
+
+// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00
+// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 00 00 00 00 00 00
+// 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+//            |           |           |           |           |
+// colormd                 CMYK?
+// possible data: color
+struct CdrSolidFillData
+{
+    QColor color() const
+//     { return QColor::fromCmyk(mColor.mC, mColor.mM, mColor.mY, mColor.mK); }
+    { return QColor::fromCmyk(0, 0, 0, 255-mColor.mC); }
+//     { return QColor::fromCmyk(0, 0, 0, 1); }
+
+    // 0..3: seen 1
+    quint32 _unknown1;
+    // 4..7: seen 0
+    quint32 _unknown2;
+    // 8..11: seen 0, 20, 60, 100
+    CdrCmyk mColor;
+    // 12..15: seen 0
+    quint32 _unknown4;
+    // 16..19: seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)
+    quint32 _unknown5;
+    // 20..21: seen 0
+    quint16 _unknown6;
 };
 
 // 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -197,55 +241,32 @@ struct CdrOutlineData
     quint32 mIndex;
     // 4..5: type (?) seen 1, 2, 50
     quint16 mType;
-    // 6..7: always 00 00
-    quint16 _unknown1;
-    // 8..9: always 00 00
+    // 6..7: always 00 00 caps
+    quint16 _unknown0;
+    // 8..9: always 00 00 corner
     quint16 _unknown1;
     // 10..11: line width? seen 0, 3, 14, 30, 74
-    quint16 _unknown2;
+    quint16 mLineWidth;
     // 12..13: seen 0, 10, 100
     quint16 _unknown3;
     // 14..15: seen 0, -370
     quint16 _unknown4;
+    // 16..37: sample data hints to be like CdrSolidFillData
+    CdrSolidFillData mFillData;
     // 16..19: seen 0, 1
-    quint32 _unknown5;
+//     quint32 _unknown5;
     // 20..23: seen 0
-    quint32 _unknown6;
+//     quint32 _unknown6;
     // 24..27: seen 0, 50, 60, 100
-    quint32 _unknown7;
+//     quint32 _unknown7;
     // 28..31: seen 0
-    quint32 _unknown8;
+//     quint32 _unknown8;
     // 32..35: seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)
-    quint32 _unknown9;
-    // 36..67: seen 0
-    char _data[32];
-};
-
-enum CdrFillType { CdrTransparent = 0, CdrSolid };
-
-// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00
-// 01 00 00 00 00 00 00 00 14 00 00 00 00 00 00 00 C2 01 3C 00 00 00
-// 01 00 00 00 00 00 00 00 3C 00 00 00 00 00 00 00 C2 01 3C 00 00 00
-// 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C2 01 3C 00 00 00
-
-// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00
-// 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 00 00 00 00 00 00
-// 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-//            |           |           |           |           |
-// similar to CdrOutlineData from 16..
-// possible data: color
-struct CdrSolidFillData
-{
-    // 0..3: seen 1
-    quint32 _unknown1;
-    // 4..7: seen 0
-    quint32 _unknown2;
-    // 8..11: seen 0, 20, 60, 100
-    quint32 _unknown3;
-    // 12..15: seen 0
-    quint32 _unknown4;
-    // 16..19: seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)
-    quint32 _unknown5;
+//     quint32 _unknown9;
+    // 36..37: seen 0
+//     quint16 _unknown10;
+    // 38..67: seen 0
+    char _data[30];
 };
 
 // sample data: AC 2D B6 DF 00 00

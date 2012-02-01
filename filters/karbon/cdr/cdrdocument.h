@@ -24,6 +24,7 @@
 // filter
 #include "cdrstructs.h"
 // Qt
+#include <QtGui/QColor>
 #include <QtCore/QHash>
 #include <QtCore/QVector>
 #include <QtCore/QString>
@@ -64,10 +65,28 @@ struct Cdr4PathPoint
     PointType mType;
 };
 
-class CdrRectangleObject : public CdrObject
+class CdrGraphObject : public CdrObject
+{
+protected:
+    explicit CdrGraphObject(CdrObjectId id) : CdrObject( id ), mStyleId(0), mOutlineId(0), mFillId(0) {}
+public:
+    void setStyleId( quint32 styleId ) { mStyleId = styleId; }
+    void setOutlineId( quint32 outlineId ) { mOutlineId = outlineId; }
+    void setFillId( quint32 fillId ) { mFillId = fillId; }
+public:
+    quint16 styleId() const { return mStyleId; }
+    quint32 outlineId() const { return mOutlineId; }
+    quint32 fillId() const { return mFillId; }
+private:
+    quint16 mStyleId; // TODO: make sure that 0 is never an id
+    quint32 mOutlineId; // TODO: make sure that 0 is never an id
+    quint32 mFillId; // TODO: make sure that 0 is never an id
+};
+
+class CdrRectangleObject : public CdrGraphObject
 {
 public:
-    CdrRectangleObject() : CdrObject(RectangleObjectId) {}
+    CdrRectangleObject() : CdrGraphObject(RectangleObjectId) {}
 public:
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
 public:
@@ -78,10 +97,10 @@ private:
     quint16 mHeight;
 };
 
-class CdrEllipseObject : public CdrObject
+class CdrEllipseObject : public CdrGraphObject
 {
 public:
-    CdrEllipseObject() : CdrObject(EllipseObjectId) {}
+    CdrEllipseObject() : CdrGraphObject(EllipseObjectId) {}
 public:
     void setCenterPoint( Cdr4Point centerPoint ) { mCenterPoint = centerPoint; }
     void setXRadius( quint16 xRadius ) { mXRadius = xRadius; }
@@ -96,10 +115,10 @@ private:
     quint16 mYRadius;
 };
 
-class CdrPathObject : public CdrObject
+class CdrPathObject : public CdrGraphObject
 {
 public:
-    CdrPathObject() : CdrObject(PathObjectId) {}
+    CdrPathObject() : CdrGraphObject(PathObjectId) {}
 public:
     void addPathPoint( const Cdr4PathPoint& pathPoint ) { mPathPoints.append(pathPoint); }
 public:
@@ -108,10 +127,10 @@ private:
     QVector<Cdr4PathPoint> mPathPoints;
 };
 
-class CdrTextObject : public CdrObject
+class CdrTextObject : public CdrGraphObject
 {
 public:
-    CdrTextObject() : CdrObject(TextObjectId) {}
+    CdrTextObject() : CdrGraphObject(TextObjectId) {}
 public:
     void setText( const QString& text ) { mText = text; }
 public:
@@ -167,26 +186,37 @@ private:
 class CdrStyle
 {
 public:
-    CdrStyle() : mFontId(-1) {}
+    CdrStyle() : mFontId(-1), mFontSize(18) {}
 public:
     void setTitle( const QString& title ) { mTitle = title; }
     void setFontId( quint16 fontId ) { mFontId = fontId; }
+    void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
 public:
     const QString& title() const { return mTitle; }
     quint16 fontId() const { return mFontId; }
+    quint16 fontSize() const { return mFontSize; }
 private:
     quint16 mFontId;
+    quint16 mFontSize;
     QString mTitle;
 };
 
 class CdrOutline
 {
 public:
+    CdrOutline() : mLineWidth(0) {}
+public:
     void setType( quint32 type ) { mType = type; }
+    void setLineWidth( quint16 lineWidth ) { mLineWidth = lineWidth; }
+    void setColor( const QColor& color ) { mColor = color; }
 public:
     quint32 type() const { return mType; }
+    quint16 lineWidth() const { return mLineWidth; }
+    const QColor& color() const { return mColor; }
 private:
     quint32 mType;
+    quint16 mLineWidth;
+    QColor mColor;
 };
 
 class CdrAbstractFill
@@ -216,6 +246,12 @@ class CdrSolidFill : public CdrAbstractFill
 {
 public:
     CdrSolidFill() : CdrAbstractFill(Solid) {}
+public:
+    void setColor( const QColor& color ) { mColor = color; }
+public:
+    const QColor& color() const { return mColor; }
+private:
+    QColor mColor;
 };
 
 class CdrFont

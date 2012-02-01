@@ -36,6 +36,8 @@ CdrSvgWriter::~CdrSvgWriter()
 bool
 CdrSvgWriter::write( CdrDocument* document )
 {
+    mDocument = document;
+
     mXmlWriter.addCompleteElement("<?xml version=\"1.0\" standalone=\"no\"?>\n");
     mXmlWriter.addCompleteElement("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" "
                                   "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
@@ -44,7 +46,7 @@ CdrSvgWriter::write( CdrDocument* document )
     mXmlWriter.addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->\n");
     mXmlWriter.startElement("svg");
 
-    foreach( const CdrPage* page, document->pages() )
+    foreach( const CdrPage* page, mDocument->pages() )
         writePage( page );
 
     mXmlWriter.endElement(); // svg
@@ -81,6 +83,8 @@ CdrSvgWriter::writeObject( const CdrObject* object )
         writeRectangleObject( dynamic_cast<const CdrRectangleObject*>(object) );
     else if( id == EllipseObjectId )
         writeEllipseObject( dynamic_cast<const CdrEllipseObject*>(object) );
+    else if( id == TextObjectId )
+        writeTextObject( dynamic_cast<const CdrTextObject*>(object) );
     else if( id == GroupObjectId )
         writeGroupObject( dynamic_cast<const CdrGroupObject*>(object) );
 }
@@ -100,12 +104,17 @@ void
 CdrSvgWriter::writeRectangleObject( const CdrRectangleObject* object )
 {
     mXmlWriter.startElement("rect");
+
 //     mXmlWriter.addAttribute("x", x);
 //     mXmlWriter.addAttribute("y", y);
     mXmlWriter.addAttribute("width", object->width());
     mXmlWriter.addAttribute("height", object->height());
 //     mXmlWriter.addAttribute("rx", object->cornerRoundness());
 //     mXmlWriter.addAttribute("ry", object->cornerRoundness());
+    writeStrokeWidth( object->outlineId() );
+    writeStrokeColor( object->outlineId() );
+    writeFillColor( object->fillId() );
+
     mXmlWriter.endElement(); // rect
 }
 
@@ -113,10 +122,15 @@ void
 CdrSvgWriter::writeEllipseObject( const CdrEllipseObject* object )
 {
     mXmlWriter.startElement("ellipse");
+
     mXmlWriter.addAttribute("cx", object->centerPoint().mX);
     mXmlWriter.addAttribute("cy", -object->centerPoint().mY);
     mXmlWriter.addAttribute("rx", object->xRadius());
     mXmlWriter.addAttribute("ry", object->yRadius());
+    writeStrokeWidth( object->outlineId() );
+    writeStrokeColor( object->outlineId() );
+    writeFillColor( object->fillId() );
+
     mXmlWriter.endElement(); // ellipse
 }
 
@@ -148,6 +162,65 @@ CdrSvgWriter::writePathObject( const CdrPathObject* pathObject )
         }
     }
     mXmlWriter.addAttribute( "d", pathData );
+    writeStrokeWidth( pathObject->outlineId() );
+    writeStrokeColor( pathObject->outlineId() );
+    writeFillColor( pathObject->fillId() );
 
     mXmlWriter.endElement(); // path
+}
+
+void
+CdrSvgWriter::writeTextObject( const CdrTextObject* object )
+{
+    mXmlWriter.startElement("text");
+
+//     writeStrokeWidth( object->outlineId() );
+    writeStrokeColor( object->outlineId() );
+    writeFillColor( object->fillId() );
+    writeFont( object->styleId() );
+    mXmlWriter.addTextNode( object->text() );
+
+    mXmlWriter.endElement(); // text
+}
+
+void
+CdrSvgWriter::writeFillColor( quint32 fillId )
+{
+    CdrAbstractFill* fill = mDocument->fill( fillId );
+    const QString colorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
+        dynamic_cast<CdrSolidFill*>( fill )->color().name() :
+        QString::fromLatin1("none");
+    mXmlWriter.addAttribute("fill", colorName);
+}
+
+void
+CdrSvgWriter::writeStrokeColor( quint32 outlineId )
+{
+    CdrOutline* outline = mDocument->outline( outlineId );
+    const QString colorName = ( outline ) ?
+        outline->color().name() :
+        QString::fromLatin1("none");
+    mXmlWriter.addAttribute("stroke", colorName);
+}
+
+void
+CdrSvgWriter::writeStrokeWidth( quint32 outlineId )
+{
+    CdrOutline* outline = mDocument->outline( outlineId );
+    const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
+    mXmlWriter.addAttribute("stroke-width", QString::number(lineWidth) );
+}
+
+void
+CdrSvgWriter::writeFont( quint16 styleId )
+{
+    CdrStyle* style = mDocument->style( styleId );
+    const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
+    mXmlWriter.addAttribute("font-size", QString::number(fontSize) );
+    if( style )
+    {
+        CdrFont* font = mDocument->font( style->fontId() );
+        if( font )
+            mXmlWriter.addAttribute("font-family", font->name() );
+    }
 }

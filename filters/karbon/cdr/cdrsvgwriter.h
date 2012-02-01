@@ -31,6 +31,7 @@ class CdrGroupObject;
 class CdrRectangleObject;
 class CdrEllipseObject;
 class CdrPathObject;
+class CdrTextObject;
 class CdrObject;
 
 
@@ -51,9 +52,17 @@ private:
     void writeRectangleObject( const CdrRectangleObject* object );
     void writeEllipseObject( const CdrEllipseObject* object );
     void writePathObject( const CdrPathObject* pathObject );
+    void writeTextObject( const CdrTextObject* object );
+
+    void writeFillColor( quint32 fillId );
+    void writeStrokeColor( quint32 outlineId );
+    void writeStrokeWidth( quint32 outlineId );
+    void writeFont( quint16 styleId );
 
 private:
     KoXmlWriter mXmlWriter;
+
+    CdrDocument* mDocument;
 };
 
 #endif

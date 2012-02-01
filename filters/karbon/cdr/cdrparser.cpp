@@ -418,6 +418,7 @@ qDebug() << "Reading Fills...";
             const quint32 fillIndex = data<quint32>( fillData );
             // 4: filltype (?)
             const quint32 fillType = data<quint32>( fillData, 4 );
+            QString fillDataString;
             if( fillType == CdrTransparent )
             {
                 fill = new CdrTransparentFill;
@@ -425,15 +426,21 @@ qDebug() << "Reading Fills...";
             }
             else if( fillType == CdrSolid )
             {
-                fill = new CdrSolidFill;
-                // 8: filltype (?)
+                CdrSolidFill* solidFill = new CdrSolidFill;
+                // 8: (?)
                 const CdrSolidFillData* solidFillData = dataPtr<CdrSolidFillData>( fillData, 8 );
+                solidFill->setColor( solidFillData->color() );
+
+                fill = solidFill;
+
+                fillDataString = solidFill->color().name();
             }
+
             const QString fillTypeName =
                 QLatin1String(fillType == CdrTransparent ? "Transparent" :
                               fillType == CdrSolid ? "Solid" :
                               /*other*/              "UNKNOWN!");
-qDebug() << fillIndex << fillTypeName;
+qDebug() << fillIndex << fillTypeName << fillDataString;
 
             if( fill )
                 mDocument->insertFill( fillIndex, fill );
@@ -457,8 +464,10 @@ qDebug() << "Reading Outlines...";
             const QByteArray outlineBlob = mRiffStreamReader.chunkData();
             const CdrOutlineData* outlineData = dataPtr<CdrOutlineData>( outlineBlob );
             outline->setType( outlineData->mType );
+            outline->setLineWidth( outlineData->mLineWidth );
+            outline->setColor( outlineData->mFillData.color() );
 
-qDebug() << outlineData->mIndex << outline->type();
+qDebug() << outlineData->mIndex << outline->type() << outline->color().name();
 
             mDocument->insertOutline( outlineData->mIndex, outline );
         }
@@ -546,10 +555,11 @@ switch(argType)
         const CdrStyleFontArgumentData* fontData =
             dataPtr<CdrStyleFontArgumentData>( styleData, styleArgs->argOffsets()[i]+2 );
         style->setFontId( fontData->mFontIndex );
+        style->setFontSize( fontData->mFontSize );
 
         argTypeAsString = QLatin1String("font");
         argAsString = QString::number( fontData->mFontIndex ) + QLatin1Char(' ') +
-                      QString::number( fontData->_unknown0) + QLatin1Char(' ') +
+                      QString::number( fontData->mFontSize) + QLatin1Char(' ') +
                       QString::number( fontData->_unknown1) + QLatin1Char(' ') +
                       QString::number( fontData->_unknown2) + QLatin1Char(' ') +
                       QString::number( fontData->_unknown3);
@@ -1112,12 +1122,27 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
 
     for (int i=0; i < argsData->count; i++)
     {
-        if( argsData->argType(i) == 30 )
+        const quint16 argType = argsData->argType(i);
+        const quint16 argOffset = argsData->argOffsets()[i];
+
+        switch( argType )
+        {
+        case 10 :
+            rectangleObject->setOutlineId( argsData->arg<quint32>(i) );
+            break;
+        case 20 :
+            rectangleObject->setFillId( argsData->arg<quint32>(i) );
+            break;
+        case 30:
         {
             const Cdr4RectangleData* rectangleData = argsData->argPtr<Cdr4RectangleData>( i );
             rectangleObject->setSize( rectangleData->mWidth, rectangleData->mHeight );
 qDebug() << "rectangle: width" << rectangleObject->width()<<"height"<<rectangleObject->height()
                  << "unknown" << rectangleData->_unknown;
+        }
+        case 200 :
+            rectangleObject->setStyleId( argsData->arg<quint16>(i) );
+            break;
         }
     }
 
@@ -1131,7 +1156,18 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
 
     for (int i=0; i < argsData->count; i++)
     {
-        if( argsData->argType(i) == 30 )
+        const quint16 argType = argsData->argType(i);
+        const quint16 argOffset = argsData->argOffsets()[i];
+
+        switch( argType )
+        {
+        case 10 :
+            ellipseObject->setOutlineId( argsData->arg<quint32>(i) );
+            break;
+        case 20 :
+            ellipseObject->setFillId( argsData->arg<quint32>(i) );
+            break;
+        case 30:
         {
             const Cdr4EllipseData* ellipseData = argsData->argPtr<Cdr4EllipseData>( i );
             ellipseObject->setCenterPoint(ellipseData->mCenterPoint);
@@ -1140,6 +1176,10 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
 qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->mCenterPoint.mY
                      <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
                      <<"unknown"<<ellipseData->_unknown;
+        }
+        case 200 :
+            ellipseObject->setStyleId( argsData->arg<quint16>(i) );
+            break;
         }
     }
 
@@ -1153,7 +1193,18 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
 
     for (int i=0; i < argsData->count; i++)
     {
-        if( argsData->argType(i) == 30 )
+        const quint16 argType = argsData->argType(i);
+        const quint16 argOffset = argsData->argOffsets()[i];
+
+        switch( argType )
+        {
+        case 10 :
+            pathObject->setOutlineId( argsData->arg<quint32>(i) );
+            break;
+        case 20 :
+            pathObject->setFillId( argsData->arg<quint32>(i) );
+            break;
+        case 30:
         {
             const Cdr4PointList* points = argsData->argPtr<Cdr4PointList>( i );
 qDebug() << "path points:" << points->count;
@@ -1161,6 +1212,10 @@ qDebug() << "path points:" << points->count;
             {
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
             }
+        }
+        case 200 :
+            pathObject->setStyleId( argsData->arg<quint16>(i) );
+            break;
         }
     }
 
@@ -1174,14 +1229,29 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
 
     for (int i=0; i < argsData->count; i++)
     {
-        // 10, 20, 30, 100, 200
-        if( argsData->argType(i) == 30 )
+        const quint16 argType = argsData->argType(i);
+        const quint16 argOffset = argsData->argOffsets()[i];
+
+        switch( argType )
+        {
+        case 10 :
+            textObject->setOutlineId( argsData->arg<quint32>(i) );
+            break;
+        case 20 :
+            textObject->setFillId( argsData->arg<quint32>(i) );
+            break;
+        case 30:
         {
             const Cdr4TextData* textData = argsData->argPtr<Cdr4TextData>( i );
             QString text;
             for (unsigned int j=0; j<textData->mLength; j++)
                 text.append( QLatin1Char(textData->charData(j).mChar) );
+            textObject->setText( text );
 qDebug() << "text:" << text;
+        }
+        case 200 :
+            textObject->setStyleId( argsData->arg<quint16>(i) );
+            break;
         }
     }
 
