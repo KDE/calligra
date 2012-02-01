@@ -681,7 +681,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
         if (blockData->saveXmlID()) {
             // text:id is deprecated. if present, it must have the same value as
-            // xml:id. We only save the id's if the textblockdata is usef for
+            // xml:id. We only save the id's if the textblockdata is used for
             // animation.
             writer->addAttribute("xml:id", context.subId(blockData));
             writer->addAttribute("text:id", context.subId(blockData));
