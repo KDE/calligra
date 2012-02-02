@@ -2,11 +2,15 @@
 Name=CallManager
 Name[bg]=Управление на обаждания
 Name[ca]=CallManager
+Name[ca@valencia]=CallManager
 Name[de]=CallManager
 Name[el]=CallManager
+Name[et]=CallManager
 Name[it]=CallManager
+Name[kk]=Қоңырау соғу менеджері
 Name[nb]=Oppringingshåndtering
 Name[nds]=Anroop-Pleger
+Name[nl]=CallManager
 Name[pl]=MenadżerDzwonienia
 Name[pt]=Gestor de Chamadas
 Name[pt_BR]=Gerenciador de chamadas

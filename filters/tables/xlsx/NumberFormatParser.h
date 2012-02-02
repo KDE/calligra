@@ -36,12 +36,8 @@ public:
     static QColor color(const QString& name);
     static QLocale locale(int langid);
 
-    static void setStyles(KoGenStyles* styles);
-    static KoGenStyle parse(const QString& numberFormat, KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle);
+    static KoGenStyle parse(const QString& numberFormat, KoGenStyles* styles = 0, KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle);
     static bool isDateFormat(const QString& numberFormat);
-
-private:
-    static KoGenStyles* styles;
 };
 
 #endif

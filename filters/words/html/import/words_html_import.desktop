@@ -2,12 +2,17 @@
 Type=Service
 Name=Words HTML Import Filter
 Name[bg]=Филтър за внасяне от HTML в Words
+Name[ca]=Filtre d'importació HTML per al Words
+Name[ca@valencia]=Filtre d'importació HTML per al Words
 Name[cs]=Importní filtr HTML pro Words
 Name[da]=HTML-importfilter til Words
 Name[de]=Words HTML-Importfilter
+Name[el]=Φίλτρο εισαγωγής HTML του Words
 Name[es]=Filtro de Words de importación de HTML
 Name[et]=Wordsi HTML-i impordifilter
+Name[hu]=Words HTML importszűrő
 Name[it]=Filtro di importazione HTML per Words
+Name[kk]=HTML -> Words импорт сүзгісі
 Name[nb]=HTML-importfilter for Words
 Name[nds]=HTML-Importfilter för Words
 Name[nl]=HTML-importfilter voor Words

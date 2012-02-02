@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1178,6 +1178,15 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
                                     const QList<QVariant>& params,
                                     const SelectStatementOptions& options) const
 {
+    return KexiDB::selectStatement(driver(), querySchema, params, options);
+}
+
+// static
+QString KexiDB::selectStatement(const KexiDB::Driver *driver,
+                                KexiDB::QuerySchema& querySchema,
+                                const QList<QVariant>& params,
+                                const KexiDB::Connection::SelectStatementOptions& options)
+{
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
 //  return QString();
@@ -1295,7 +1304,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
 //! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
 //! @todo Add possibility for joining the values at client side.
                         s_additional_fields += visibleColumns->sqlFieldsList(
-                                                   driver(), " || ' ' || ", internalUniqueTableAlias, options.identifierEscaping);
+                                                   driver, " || ' ' || ", internalUniqueTableAlias, options.identifierEscaping);
                     }
                     delete visibleColumns;
                 } else if (rowSource.type() == LookupFieldSchema::RowSource::Query) {
@@ -1326,12 +1335,12 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
                         kexidb_subquery_prefix + lookupQuery->name() + "_"
                         + QString::number(internalUniqueQueryAliasNumber++));
                     s_additional_joins += QString::fromLatin1("LEFT OUTER JOIN (%1) AS %2 ON %3.%4=%5.%6")
-                                          .arg(selectStatement(*lookupQuery, params, options))
-                                          .arg(internalUniqueQueryAlias)
-                                          .arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
-                                          .arg(escapeIdentifier(f->name(), options.identifierEscaping))
-                                          .arg(internalUniqueQueryAlias)
-                                          .arg(escapeIdentifier(boundColumnInfo->aliasOrName(), options.identifierEscaping));
+                        .arg(KexiDB::selectStatement(driver, *lookupQuery, params, options))
+                        .arg(internalUniqueQueryAlias)
+                        .arg(KexiDB::escapeIdentifier(driver, f->table()->name(), options.identifierEscaping))
+                        .arg(KexiDB::escapeIdentifier(driver, f->name(), options.identifierEscaping))
+                        .arg(internalUniqueQueryAlias)
+                        .arg(QString(KexiDB::escapeIdentifier(driver, boundColumnInfo->aliasOrName(), options.identifierEscaping)));
 
                     if (!s_additional_fields.isEmpty())
                         s_additional_fields += QLatin1String(", ");
@@ -1367,13 +1376,13 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
     if (!s_additional_fields.isEmpty())
         sql += (QLatin1String(", ") + s_additional_fields);
 
-    if (options.alsoRetrieveROWID) { //append rowid column
+    if (driver && options.alsoRetrieveROWID) { //append rowid column
         QString s;
         if (!sql.isEmpty())
             s = QLatin1String(", ");
         if (querySchema.masterTable())
             s += (escapeIdentifier(querySchema.masterTable()->name()) + ".");
-        s += m_driver->beh->ROW_ID_FIELD_NAME;
+        s += driver->behaviour()->ROW_ID_FIELD_NAME;
         sql += s;
     }
 
@@ -1405,7 +1414,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
             if (!s_from.isEmpty())
                 s_from += QLatin1String(", ");
             s_from += QLatin1String("(");
-            s_from += selectStatement(*subQuery, params, options);
+            s_from += selectStatement(driver, *subQuery, params, options);
             s_from += QString::fromLatin1(") AS %1%2")
                       .arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter++);
         }
@@ -1449,7 +1458,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
     }
     //EXPLICITLY SPECIFIED WHERE EXPRESSION
     if (querySchema.whereExpression()) {
-        QuerySchemaParameterValueListIterator paramValuesIt(*m_driver, params);
+        QuerySchemaParameterValueListIterator paramValuesIt(driver, params);
         QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
         if (wasWhere) {
 //TODO: () are not always needed
@@ -1466,7 +1475,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
     // ORDER BY
     QString orderByString(
         querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/,
-                driver(), options.identifierEscaping));
+                driver, options.identifierEscaping));
     const QVector<int> pkeyFieldsOrder(querySchema.pkeyFieldsOrder());
     if (orderByString.isEmpty() && !pkeyFieldsOrder.isEmpty()) {
         //add automatic ORDER BY if there is no explicitly defined (especially helps when there are complex JOINs)
@@ -1484,7 +1493,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
             automaticPKOrderBy.appendColumn(*ci);
         }
         orderByString = automaticPKOrderBy.toSQLString(!singleTable/*includeTableName*/,
-                        driver(), options.identifierEscaping);
+                        driver, options.identifierEscaping);
     }
     if (!orderByString.isEmpty())
         sql += (" ORDER BY " + orderByString);

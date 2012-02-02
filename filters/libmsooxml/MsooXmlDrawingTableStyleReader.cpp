@@ -640,13 +640,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
         }
     }
 
-    TRY_READ_ATTR(b)
-    TRY_READ_ATTR(i)
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(i)
     if (b == "on") {
-        m_currentTextStyle.addProperty("svg:font-weight", "bold");
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
     }
     if (i == "on") {
-        m_currentTextStyle.addProperty("svg:font-style", "italic");
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
     }
     if (m_currentColor.isValid()) {
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());

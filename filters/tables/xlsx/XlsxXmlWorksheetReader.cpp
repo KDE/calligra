@@ -1608,8 +1608,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
 // 3.8.31 numFmts
 QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& valueFormat)
 {
-    NumberFormatParser::setStyles( q->mainStyles );
-    const KoGenStyle style = NumberFormatParser::parse( valueFormat );
+    const KoGenStyle style = NumberFormatParser::parse( valueFormat, q->mainStyles );
     if( style.type() == KoGenStyle::ParagraphAutoStyle )
         return QString();
 

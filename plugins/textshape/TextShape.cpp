@@ -68,6 +68,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_pageProvider(0)
         , m_imageCollection(0)
+        , m_paragraphStyle(0)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -151,6 +152,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
     pc.showSpellChecking = paintContext.showSpellChecking;
+    pc.showSelections = paintContext.showSelections;
 
     // When clipping the painter we need to make sure not to cutoff cosmetic pens which
     // may used to draw e.g. table-borders for user convenience when on screen (but not
@@ -211,6 +213,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     else {
         saveOdfAttributes(context, OdfAllAttributes);
     }
+
     writer.startElement("draw:text-box");
     if (! textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);
@@ -255,6 +258,10 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
         style.addProperty("draw:auto-grow-height", "false");
     if (resize == KoTextShapeData::ShrinkToFitResize)
         style.addProperty("draw:fit-to-size", "true");
+
+    if (m_paragraphStyle) {
+        m_paragraphStyle->saveOdf(style, context);
+    }
 
     return KoShape::saveStyle(style, context);
 }
@@ -338,17 +345,18 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     }
 
     if (style) {
-        KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context, true);
+        delete m_paragraphStyle;
+        m_paragraphStyle = new KoParagraphStyle();
+        m_paragraphStyle->loadOdf(style, context, true);
         QTextDocument *document = m_textShapeData->document();
         QTextCursor cursor(document);
-    QTextBlockFormat format;
-    paragraphStyle.applyStyle(format);
-    cursor.setBlockFormat(format);
-    QTextCharFormat cformat;
-    paragraphStyle.KoCharacterStyle::applyStyle(cformat);
-    cursor.setCharFormat(cformat);
-    cursor.setBlockCharFormat(cformat);
+        QTextBlockFormat format;
+        m_paragraphStyle->applyStyle(format);
+        cursor.setBlockFormat(format);
+        QTextCharFormat cformat;
+        m_paragraphStyle->KoCharacterStyle::applyStyle(cformat);
+        cursor.setCharFormat(cformat);
+        cursor.setBlockCharFormat(cformat);
 
 #ifndef NWORKAROUND_ODF_BUGS
         KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();

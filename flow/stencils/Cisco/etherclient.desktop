@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=EtherClient
+Name[ca]=Client ether
+Name[ca@valencia]=Client ether
 Name[de]=EtherClient
 Name[el]=EtherClient
+Name[et]=Etherneti klient
 Name[it]=EtherClient
+Name[kk]=Ethernet клиенті
 Name[nb]=EtherClient
 Name[nl]=EtherClient
 Name[pl]=EtherClient

@@ -147,7 +147,7 @@ public:
     /**
      * TODO
      */
-    enum Through {
+    enum RunThroughLevel {
         Background,
         Foreground
     };
@@ -370,7 +370,7 @@ public:
      * @param side the requested side
      * @param runThrought run through the foreground or background or...
      */
-    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
      * The space between this shape's edge and text that runs around this shape.
@@ -592,6 +592,14 @@ public:
      * @param rect the rectangle (in pt) to queue for repaint.
      */
     virtual void update(const QRectF &rect) const;
+
+   /**
+    * Returns if during compareShapeZIndex() this shape should overrule
+    * it childrens z alues with it's own. The default behaviour is to do so
+    * but for special cases (like Calligra's TextShape) it can be overloaded
+    * @returns if we overrule z order (default impl. returns true)
+    */
+    virtual bool overruleChildZValues();
 
     /**
      * This is a method used to sort a list using the STL sorting methods.

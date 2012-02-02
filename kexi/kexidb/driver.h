@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -236,19 +236,8 @@ public:
         return valueToSQL((field ? field->type() : Field::InvalidType), v);
     }
 
-    /*! not compatible with all drivers - reimplement */
-    inline virtual QString dateTimeToSQL(const QDateTime& v) const {
-
-        /*! (was compatible with SQLite: http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions)
-          Now it's ISO 8601 DateTime format - with "T" delimiter:
-          http://www.w3.org/TR/NOTE-datetime
-          (e.g. "1994-11-05T13:15:30" not "1994-11-05 13:15:30")
-          @todo add support for time zones?
-        */
-//old   const QDateTime dt( v.toDateTime() );
-//old   return QString("\'")+dt.date().toString(Qt::ISODate)+" "+dt.time().toString(Qt::ISODate)+"\'";
-        return QString("\'") + v.toString(Qt::ISODate) + "\'";
-    }
+    /*! Not compatible with all drivers - reimplement */
+    inline virtual QString dateTimeToSQL(const QDateTime& v) const;
 
     /*! Driver-specific SQL string escaping.
      Implement escaping for any character like " or ' as your
@@ -306,6 +295,8 @@ public:
 
     //! \return a list of property names available for this driver.
     QList<QByteArray> propertyNames() const;
+
+    const DriverBehaviour* behaviour() const { return beh; }
 
 protected:
     /*! Used by DriverManager.
@@ -385,6 +376,57 @@ protected:
 /*! \return true if the \a word is an reserved KexiSQL's keyword
  (see keywords.cpp for a list of reserved keywords). */
 KEXI_DB_EXPORT bool isKexiSQLKeyword(const QByteArray& word);
+
+/*! SQL string escaping of KexiSQL type. */
+KEXI_DB_EXPORT QString escapeString(const QString& str);
+
+/*! Like @ref KexiDB::escapeIdentifier(const QString&, int) const
+    but static version, thus only EscapeKexi type is supported. */
+KEXI_DB_EXPORT QString escapeIdentifier(const QString& str,
+                                        int options = KexiDB::Driver::EscapeKexi
+                                                      | KexiDB::Driver::EscapeAsNecessary);
+
+inline KEXI_DB_EXPORT QString escapeIdentifier(const KexiDB::Driver* driver,
+                                        const QString& str,
+                                        int options = KexiDB::Driver::EscapeKexi
+                                                      | KexiDB::Driver::EscapeAsNecessary)
+{
+    return driver ? driver->escapeIdentifier(str, options) : KexiDB::escapeIdentifier(str, options);
+}
+                                                      
+/*! Like @ref escapeIdentifier(const QString&, int) const */
+KEXI_DB_EXPORT QByteArray escapeIdentifier(const QByteArray& str,
+                                           int options = KexiDB::Driver::EscapeKexi
+                                                         | KexiDB::Driver::EscapeAsNecessary);
+
+inline KEXI_DB_EXPORT QByteArray escapeIdentifier(const KexiDB::Driver* driver,
+                                           const QByteArray& str,
+                                           int options = KexiDB::Driver::EscapeKexi
+                                                         | KexiDB::Driver::EscapeAsNecessary)
+{
+    return driver ? driver->escapeIdentifier(str, options) : KexiDB::escapeIdentifier(str, options);
+}
+
+/*! Escapes and converts value \a v (for type \a ftype)
+    to string representation required by KexiSQL commands.
+    For Date/Time type KexiDB::dateTimeToSQL() is used.
+    For BLOB type KexiDB::escapeBlob() with BLOBEscape0xHex conversion type is used. */
+KEXI_DB_EXPORT QString valueToSQL(uint ftype, const QVariant& v);
+
+KEXI_DB_EXPORT inline QString dateTimeToSQL(const QDateTime& v)
+{
+    /*! (was compatible with SQLite: http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions)
+        Now it's ISO 8601 DateTime format - with "T" delimiter:
+        http://www.w3.org/TR/NOTE-datetime
+        (e.g. "1994-11-05T13:15:30" not "1994-11-05 13:15:30")
+        @todo add support for time zones?
+    */
+    return QLatin1String("\'") + v.toString(Qt::ISODate) + QLatin1String("\'");
+}
+
+inline QString Driver::dateTimeToSQL(const QDateTime& v) const {
+    return KexiDB::dateTimeToSQL(v);
+}
 
 } //namespace KexiDB
 

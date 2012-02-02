@@ -610,7 +610,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (frame->anchor()->anchorType() != KoTextAnchor::AnchorPage)
+            if (frame->anchorType() != KoTextAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

@@ -321,6 +321,9 @@ public:
     
     bool projectShown() const { return m_projectshown; }
 
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 signals:
     void nodeInserted( Node *node );
     void projectShownChanged( bool );
@@ -337,7 +340,10 @@ protected slots:
     virtual void slotNodeToBeRemoved( Node *node );
     virtual void slotNodeRemoved( Node *node );
 
-    void slotLayoutChanged();
+    virtual void slotNodeToBeMoved( Node *node );
+    virtual void slotNodeMoved( Node *node );
+
+    virtual void slotLayoutChanged();
 
 protected:
     virtual bool setType( Node *node, const QVariant &value, int role );
@@ -386,6 +392,9 @@ protected slots:
     virtual void slotNodeInserted( Node *node );
     virtual void slotNodeToBeRemoved( Node *node );
     virtual void slotNodeRemoved( Node *node );
+
+    virtual void slotNodeToBeMoved( Node *node );
+    virtual void slotNodeMoved( Node *node );
 
     void slotWorkPackageToBeAdded( Node *node, int row );
     void slotWorkPackageAdded( Node *node );

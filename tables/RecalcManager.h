@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+class KoUpdater;
+
 namespace Calligra
 {
 namespace Tables
@@ -88,7 +90,7 @@ public:
      *
      * \see recalc()
      */
-    void recalcMap();
+    void recalcMap(KoUpdater *updater = 0);
 
     /**
      * Returns the recalculation state.
@@ -119,7 +121,7 @@ protected:
      *
      * \see recalcCell()
      */
-    void recalc();
+    void recalc(KoUpdater *updater = 0);
 
 private:
     Q_DISABLE_COPY(RecalcManager)

@@ -31,7 +31,6 @@ enum XmlTkTags {
     XmlTkBaseTimeUnitFrt = 0x005F,
     XmlTkColorMappingOverride = 0x0034,
     XmlTkDispBlanksAsFrt = 0x0066,
-    XmlTkEnd = 0x01, // including XmlTkEndSurface
     XmlTkFloorThicknessFrt = 0x0036,
     XmlTkFormatCodeFrt = 0x0064,
     XmlTkHeightPercent = 0x0065,
@@ -60,6 +59,43 @@ enum XmlTkTags {
     XmlTkTickMarkSkipFrt = 0x0052,
     XmlTkTpb = 0x0020
 };
+
+QByteArray xmlTkTagName(XmlTkTags tag) {
+    switch (tag) {
+        case XmlTkBackWallThickness: return "BackWallThickness";
+        case XmlTkBaseTimeUnitFrt: return "BaseTimeUnitFrt";
+        case XmlTkColorMappingOverride: return "ColorMappingOverride";
+        case XmlTkDispBlanksAsFrt: return "DispBlanksAsFrt";
+        case XmlTkFloorThicknessFrt: return "FloorThicknessFrt";
+        case XmlTkFormatCodeFrt: return "FormatCodeFrt";
+        case XmlTkHeightPercent: return "HeightPercent";
+        case XmlTkLogBaseFrt: return "LogBaseFrt";
+        case XmlTkMajorUnitFrt: return "MajorUnitFrt";
+        case XmlTkMajorUnitTypeFrt: return "MajorUnitTypeFrt";
+        case XmlTkMaxFrt: return "MaxFrt";
+        case XmlTkMinFrt: return "MinFrt";
+        case XmlTkMinorUnitFrt: return "MinorUnitFrt";
+        case XmlTkMinorUnitTypeFrt: return "MinorUnitTypeFrt";
+        case XmlTkNoMultiLvlLbl: return "NoMultiLvlLbl";
+        case XmlTkOverlay: return "Overlay";
+        case XmlTkPerspectiveFrt: return "PerspectiveFrt";
+        case XmlTkPieComboFrom12Frt: return "PieComboFrom12Frt";
+        case XmlTkRAngAxOffFrt: return "RAngAxOffFrt";
+        case XmlTkRotXFrt: return "RotXFrt";
+        case XmlTkRotYFrt: return "RotYFrt";
+        case XmlTkShowDLblsOverMax: return "ShowDLblsOverMax";
+        case XmlTkSpb: return "Spb";
+        case XmlTkStartSurface: return "StartSurface";
+        case XmlTkStyle: return "Style";
+        case XmlTkSymbolFrt: return "SymbolFrt";
+        case XmlTkThemeOverride: return "ThemeOverride";
+        case XmlTkTickLabelPositionFrt: return "TickLabelPositionFrt";
+        case XmlTkTickLabelSkipFrt: return "TickLabelSkipFrt";
+        case XmlTkTickMarkSkipFrt: return "TickMarkSkipFrt";
+        case XmlTkTpb: return "Tpb";
+    }
+    return QByteArray();
+}
 
 class XmlTk {
 public:
@@ -149,19 +185,29 @@ private:
     unsigned m_cbBlob;
 };
 
-class XmlTkHeader : public XmlTk {
+class XmlTkBegin : public XmlTk {
 public:
     virtual QString value() const { return QString(); }
-    virtual QString type() const { return "header"; }
+    virtual QString type() const { return "begin"; }
     virtual unsigned size() const { return 4; }
-    XmlTkHeader(const unsigned char* data) : XmlTk(data) {}
+    XmlTkBegin(const unsigned char* data) : XmlTk(data) {}
+};
+
+class XmlTkEnd : public XmlTk {
+public:
+    virtual QString value() const { return QString(); }
+    virtual QString type() const { return "end"; }
+    virtual unsigned size() const { return 4; }
+    XmlTkEnd(const unsigned char* data) : XmlTk(data) {}
 };
 
 XmlTk* parseXmlTk(const unsigned char* data) {
     unsigned drType = readU8(data);
     switch (drType) {
         case 0x00:
-            return new XmlTkHeader(data);
+            return new XmlTkBegin(data);
+        case 0x01:
+            return new XmlTkEnd(data);
         case 0x02:
             return new XmlTkBool(data);
         case 0x03:
@@ -175,7 +221,7 @@ XmlTk* parseXmlTk(const unsigned char* data) {
         case 0x07:
             return new XmlTkBlob(data);
         default:
-            Q_ASSERT_X(false, __FUNCTION__, qPrintable(QString("Unhandled drType=%1").arg(drType, 0, 16)));
+            std::cout << "Error in " << __FUNCTION__ << ": Unhandled drType " << qPrintable(QString::number(drType, 16)) << std::endl;
             break;
     }
     return 0;
@@ -183,7 +229,7 @@ XmlTk* parseXmlTk(const unsigned char* data) {
 
 QList<XmlTk*> parseXmlTkChain(const unsigned char* data, int size) {
     QList<XmlTk*> tokens;
-    for (unsigned p = 0; p + 4 < size;) {
+    for (int p = 0; p + 4 < size;) {
         XmlTk *t = parseXmlTk(data + p);
         if (!t) break;
         tokens.append(t);

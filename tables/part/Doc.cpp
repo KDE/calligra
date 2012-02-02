@@ -284,7 +284,7 @@ QDomDocument Doc::saveXML()
     SavedDocParts::const_iterator end  = d->savedDocParts.constEnd();
     while (iter != end) {
         // save data we loaded in the beginning and which has no owner back to file
-        spread.appendChild(iter.value());
+        spread.appendChild(iter.value().documentElement());
         ++iter;
     }
 
@@ -425,7 +425,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
                 && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname"
                 && tagName != "paper") {
             // belongs to a plugin, load it and save it for later use
-            d->savedDocParts[ tagName ] = KoXml::asQDomElement(QDomDocument(), element);
+            QDomDocument doc;
+            KoXml::asQDomElement(doc, element);
+            d->savedDocParts[ tagName ] = doc;
         }
 
         element = element.nextSibling().toElement();
@@ -513,7 +515,7 @@ bool Doc::completeLoading(KoStore* store)
 }
 
 
-bool Doc::docData(QString const & xmlTag, QDomElement & data)
+bool Doc::docData(QString const & xmlTag, QDomDocument & data)
 {
     SavedDocParts::iterator iter = d->savedDocParts.find(xmlTag);
     if (iter == d->savedDocParts.end())

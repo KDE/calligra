@@ -25,6 +25,8 @@
 
 #include "Region.h"
 
+class KoUpdater;
+
 namespace Calligra
 {
 namespace Tables
@@ -66,7 +68,7 @@ public:
     /**
      * Updates the whole \p map.
      */
-    void updateAllDependencies(const Map* map);
+    void updateAllDependencies(const Map* map, KoUpdater *updater = 0);
 
     /**
      * Returns the cell depths.

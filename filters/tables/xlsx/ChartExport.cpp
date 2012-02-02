@@ -563,6 +563,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         KoGenStyle axisstyle(KoGenStyle::ChartAutoStyle, "chart");
 
+        if (axis->m_reversed)
+            axisstyle.addProperty( "chart:reverse-direction", "true", KoGenStyle::ChartType );
+
+        //FIXME this hits an infinite-looping bug in kdchart it seems... maybe fixed with a newer version
+//         if (axis->m_logarithmic)
+//             axisstyle.addProperty( "chart:logarithmic", "true", KoGenStyle::ChartType );
+
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
 
         QColor labelColor = labelFontColor();
@@ -570,8 +577,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             axisstyle.addProperty( "fo:font-color", labelColor.name(), KoGenStyle::TextType );
 
         if (!axis->m_numberFormat.isEmpty()) {
-            //NumberFormatParser::setStyles( &styles );
-            const KoGenStyle style = NumberFormatParser::parse( axis->m_numberFormat );
+            const KoGenStyle style = NumberFormatParser::parse( axis->m_numberFormat, &styles );
             axisstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
         }
 
@@ -735,8 +741,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //seriesstyle.addProperty( "chart:data-label-symbol", "true", KoGenStyle::ChartType );
 
         if (!series->m_numberFormat.isEmpty()) {
-            //NumberFormatParser::setStyles( &styles );
-            const KoGenStyle style = NumberFormatParser::parse( series->m_numberFormat );
+            const KoGenStyle style = NumberFormatParser::parse( series->m_numberFormat, &styles );
             seriesstyle.addAttribute( "style:data-style-name", styles.insert( style, "ds" ) );
         }
 

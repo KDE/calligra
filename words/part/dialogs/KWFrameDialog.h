@@ -36,6 +36,7 @@ class KWFrame;
 class KWFrameSet;
 class KWDocument;
 class FrameConfigSharedState;
+class KWCanvas;
 
 /// A dialog for showing and altering frame properties
 class KWFrameDialog : public KPageDialog
@@ -46,9 +47,9 @@ public:
      * Constructor.
      * @param selectedFrames all frames that this dialog will show for user modification
      * @param document the parent document where the frames belong to
-     * @param parent a parent widget for the purpose of centering the dialog
+     * @param canvas the canvas for centering the dialog and providing undobuffer
      */
-    KWFrameDialog(const QList<KWFrame*> &selectedFrames, KWDocument *document, QWidget *parent = 0);
+    KWFrameDialog(const QList<KWFrame*> &selectedFrames, KWDocument *document, KWCanvas *canvas = 0);
     ~KWFrameDialog();
 
     /**
@@ -67,6 +68,7 @@ private:
     KWGeneralFrameProperties *m_generalFrameProperties;
     KWAnchoringProperties *m_anchoringProperties;
     FrameConfigSharedState *m_state;
+    KWCanvas *m_canvas;
 };
 
 /// A simple class useful for finding out if a series of data object will cause a

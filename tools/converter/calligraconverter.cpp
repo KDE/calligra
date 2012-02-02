@@ -42,6 +42,8 @@
 
 bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat)
 {
+    Q_UNUSED(outputFormat);
+
     QString error;
     KoDocument *doc = KMimeTypeTrader::self()->createPartInstanceFromQuery< KoDocument >(
                     inputFormat, 0, 0, QString(), QVariantList(), &error);

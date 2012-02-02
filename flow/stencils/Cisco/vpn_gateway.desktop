@@ -2,11 +2,13 @@
 Name=VPN Gateway
 Name[bg]=Шлюз VPN
 Name[ca]=Passarel·la VPN
+Name[ca@valencia]=Passarel·la VPN
 Name[cs]=Brána VPN
 Name[de]=VPN-Gateway
 Name[el]=Πύλη VPN
 Name[et]=VPN lüüs
 Name[it]=Gateway VPN
+Name[kk]=VPN шлюзі
 Name[nb]=VPN-portner
 Name[nds]=VPN-Döörreekner
 Name[nl]=VPN-gateway

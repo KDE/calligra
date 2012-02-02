@@ -63,7 +63,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -80,8 +86,8 @@ public: // KisNodeGraphListener implementation
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
     void nodeHasBeenRemoved(KisNode *parent, int index);
-    void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
-    void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
+    void aboutToMoveNode(KisNode * node, int oldIndex, int newIndex);
+    void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
@@ -155,28 +161,6 @@ public:
      * global selection is always read-write.
      */
     KisSelectionSP globalSelection() const;
-
-    /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
 
     /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
@@ -260,6 +244,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
@@ -553,12 +540,12 @@ signals:
     /**
      * Inform the model we're about to move a layer.
      */
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
+    void sigAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
 
     /**
      * Inform the model we're done moving a layer.
      */
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    void sigNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
 
     /**
      * Inform the model that a node was changed
@@ -569,6 +556,12 @@ signals:
      * Inform that the image is going to be deleted
      */
     void sigAboutToBeDeleted();
+
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeMovedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
+
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
@@ -618,6 +611,35 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisPixelSelectionTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+
+    /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeselectedGlobalSelection(KisSelectionSP selection);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

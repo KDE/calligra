@@ -115,11 +115,8 @@ QString Cat::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
     if (m_numRef.m_numCache.m_ptCount != 0) {
         KoGenStyle::Type formatType = KoGenStyle::NumericNumberStyle;
         if (!m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General") {
-            KoGenStyles dummyStyles;
-            NumberFormatParser::setStyles(&dummyStyles);
             KoGenStyle style = NumberFormatParser::parse(m_numRef.m_numCache.formatCode);
             formatType = style.type();
-            NumberFormatParser::setStyles(0);
         }
         chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, formatType, m_numRef.m_numCache.formatCode );
         return m_numRef.m_f;
@@ -618,6 +615,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
                 const QXmlStreamAttributes attrs(attributes());
                 axis->m_numberFormat = attrs.value("formatCode").toString();
             }
+            ELSE_TRY_READ_IF(scaling)
         }
     }
     READ_EPILOGUE
@@ -646,6 +644,33 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
                   axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+            }
+            ELSE_TRY_READ_IF(scaling)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL scaling
+KoFilter::ConversionStatus XlsxXmlChartReader::read_scaling()
+{
+    READ_PROLOGUE
+    Q_ASSERT(!m_context->m_chart->m_axes.isEmpty());
+    Charting::Axis* axis = m_context->m_chart->m_axes.last();
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(orientation) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_reversed = ( val == QLatin1String( "maxMin" ) );
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(logBase) ) ) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_logarithmic = ( val.toDouble() >= 2. );
             }
         }
     }

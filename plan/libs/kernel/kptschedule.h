@@ -158,12 +158,18 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     
+    /// Returns the total planned effort for @p resource this schedule
+    virtual Duration plannedEffort( const Resource *resource, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule
     virtual Duration plannedEffort( EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule on date
     virtual Duration plannedEffort( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource on the @p date date
+    virtual Duration plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource up to and including date
+    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
 
     /**
      * Planned cost is the sum total of all resources and other costs

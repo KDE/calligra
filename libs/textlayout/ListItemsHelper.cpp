@@ -260,7 +260,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     if (!fixed) {
         //if this is the first item then find if the list has to be continued from any other list
         KoList *listContinued = 0;
-        if (m_textList->itemNumber(block) == 0 && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
+        if (m_textList->itemNumber(block) == 0 && KoTextDocument(m_textList->document()).list(m_textList) && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
             //find the previous list of the same level
             QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
             if (previousTextList) {
@@ -306,6 +306,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     if (displayLevel > 1) {
         int checkLevel = level;
         int tmpDisplayLevel = displayLevel;
+        bool counterResetRequired = true;
         for (QTextBlock b = block.previous(); tmpDisplayLevel > 1 && b.isValid(); b = b.previous()) {
             if (b.textList() == 0)
                 continue;
@@ -324,6 +325,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             }
 
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
+            if (isOutline && checkLevel == otherLevel) {
+                counterResetRequired = false;
+            }
+
             if (checkLevel <= otherLevel)
                 continue;
             /*if(needsRecalc(b->textList())) {
@@ -352,6 +357,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 for (int i = otherLevel + 1; i < level; i++)
                     item += ".1"; // add missing counters.
                 tmpDisplayLevel = 0;
+                if (isOutline && counterResetRequired) {
+                    index = 1;
+                }
                 break;
             }
         }
@@ -389,6 +397,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     case KoListStyle::SquareItem:
     case KoListStyle::Bullet:
     case KoListStyle::BlackCircle:
+    case KoListStyle::DiscItem:
     case KoListStyle::CircleItem:
     case KoListStyle::HeavyCheckMarkItem:
     case KoListStyle::BallotXItem:
@@ -454,20 +463,18 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
-    if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode)) {
-            // for aligmentmode spacing should be 0
-            counterSpacing = 0;
-        } else {
+    if (format.boolProperty(KoListStyle::AlignmentMode)) {
+        // for aligmentmode spacing should be 0
+        counterSpacing = 0;
+    } else {
+        if (listStyle != KoListStyle::None) {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
             if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
                 counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
             }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
-            width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
-    } else {
         width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);

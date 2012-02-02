@@ -2,10 +2,13 @@
 Name=fan
 Name[bg]=вентилатор
 Name[ca]=ventilador
+Name[ca@valencia]=ventilador
 Name[de]=Lüfter
 Name[el]=ανεμιστήρας
 Name[es]=ventilador
+Name[et]=Ventilaator
 Name[it]=ventola
+Name[kk]=Желдеткіш
 Name[nb]=vifte
 Name[nds]=Püüster
 Name[nl]=ventilator

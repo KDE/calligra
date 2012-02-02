@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Data Source
 Name[bg]=Източник на данни
+Name[ca]=Font de dades
+Name[ca@valencia]=Font de dades
 Name[cs]=Zdroj dat
 Name[da]=Datakilde
 Name[de]=Datenquelle
 Name[el]=Πηγή δεδομένων
+Name[es]=Fuente de datos
 Name[et]=Andmeallikas
 Name[it]=Origine dati
+Name[kk]=Дерек көзі
 Name[nb]=Datakilde
 Name[nds]=Datenborn
 Name[nl]=Gegevensbron
@@ -15,7 +19,7 @@ Name[pt]=Fonte de Dados
 Name[pt_BR]=Fonte de dados
 Name[ru]=Источник данных
 Name[sv]=Datakälla
-Name[ug]=سانلىق مەلۇمات مەنبەسى
+Name[ug]=سانلىق-مەلۇمات مەنبەسى
 Name[uk]=Джерело даних
 Name[x-test]=xxData Sourcexx
 Name[zh_CN]=数据源

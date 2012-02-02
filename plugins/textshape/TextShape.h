@@ -61,6 +61,9 @@ public:
     /// reimplemented
     QRectF outlineRect() const;
 
+    ///reimplemented
+    bool overruleChildZValues() {return false;}
+
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
 
@@ -113,6 +116,7 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
 };
 
 #endif
