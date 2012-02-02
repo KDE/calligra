@@ -451,9 +451,13 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
     if (footer && footer->shape()) {
         footer->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        footer->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
     if (header && header->shape()) {
         header->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        header->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
 
     if (pageBackground) {
@@ -509,14 +513,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             }
         }
 
-        bool first = true;
         for (int i = columns - 1; i >= 0; i--) {
             main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(points[i]);
             shape->setSize(QSizeF(columnWidth, resultingPositions[4] - resultingPositions[3]));
-            first = false;
         }
         delete[] points;
 
