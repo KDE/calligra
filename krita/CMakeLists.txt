@@ -92,6 +92,7 @@ add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( benchmarks )
+add_subdirectory( touch )
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
