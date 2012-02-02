@@ -22,8 +22,10 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <kis_image.h>
+#include <kis_doc2.h>
 
-KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0)
+KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0), m_displayProfile(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     qDebug() << "oh";
@@ -36,11 +38,15 @@ KtoCanvas::~KtoCanvas()
 
 void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
+    painter->fillRect(boundingRect(), Qt::gray);
     if(m_doc)
     {
+        KisPaintDeviceSP projection = m_doc->image()->projection();
+        QRect r = boundingRect().toRect();
+        QImage image = projection->convertToQImage(m_displayProfile, r.x(), r.y(), r.width(), r.height());
         
-    } else {
-        painter->fillRect(boundingRect(), Qt::gray);
+        painter->setRenderHints(QPainter::SmoothPixmapTransform);
+        painter->drawImage(QPoint(0, 0), image);
     }
 }
 

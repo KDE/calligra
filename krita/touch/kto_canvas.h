@@ -19,6 +19,7 @@
  */
 #include <QDeclarativeItem>
 
+class KoColorProfile;
 class KisDoc2;
 
 class KtoCanvas : public QDeclarativeItem
@@ -30,4 +31,5 @@ public:
     void setDocument(KisDoc2* _doc);
 private:
     KisDoc2* m_doc;
+    const KoColorProfile* m_displayProfile;
 };
