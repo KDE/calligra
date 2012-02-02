@@ -19,8 +19,12 @@
  */
 
 import QtQuick 1.0
+import KritaTouch 1.0
 
 Rectangle
 {
     id: mainWindow
+    Canvas {
+        anchors.fill: parent
+    }
 }

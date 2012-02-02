@@ -17,35 +17,17 @@
  * 02110-1301 sure
  * USA
  */
+#include <QDeclarativeItem>
 
-#include "kto_main_window.h"
+class KisDoc2;
 
-#include <QDebug>
-#include <QDeclarativeView>
-
-#include <KGlobal>
-#include <KComponentData>
-#include <KStandardDirs>
-
-KtoMainWindow::KtoMainWindow(QWidget* parent )
+class KtoCanvas : public QDeclarativeItem
 {
-    m_view = new QDeclarativeView (this);
-    setCentralWidget(m_view);
-    
-    KGlobal::mainComponent().dirs()->addResourceType("krita_touch_qml", "data", "kritatouch/qml/");
-    
-    m_view->setSource(QUrl::fromLocalFile(KGlobal::mainComponent().dirs()->findResource("krita_touch_qml", "MainWindow.qml")));
-    m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
-}
-
-KtoMainWindow::~KtoMainWindow()
-{
-}
-
-void KtoMainWindow::openFile (const QString& path)
-{
-    
-}
-
-
-#include "kto_main_window.moc"
+public:
+    KtoCanvas(QDeclarativeItem* parent = 0);
+    virtual ~KtoCanvas();
+    virtual void paint(QPainter* , const QStyleOptionGraphicsItem* , QWidget* );
+    void setDocument(KisDoc2* _doc);
+private:
+    KisDoc2* m_doc;
+};

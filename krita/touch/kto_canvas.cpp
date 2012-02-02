@@ -18,34 +18,33 @@
  * USA
  */
 
-#include "kto_main_window.h"
+#include "kto_canvas.h"
 
 #include <QDebug>
-#include <QDeclarativeView>
+#include <QPainter>
 
-#include <KGlobal>
-#include <KComponentData>
-#include <KStandardDirs>
-
-KtoMainWindow::KtoMainWindow(QWidget* parent )
+KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0)
 {
-    m_view = new QDeclarativeView (this);
-    setCentralWidget(m_view);
-    
-    KGlobal::mainComponent().dirs()->addResourceType("krita_touch_qml", "data", "kritatouch/qml/");
-    
-    m_view->setSource(QUrl::fromLocalFile(KGlobal::mainComponent().dirs()->findResource("krita_touch_qml", "MainWindow.qml")));
-    m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    qDebug() << "oh";
 }
 
-KtoMainWindow::~KtoMainWindow()
+KtoCanvas::~KtoCanvas()
 {
+
 }
 
-void KtoMainWindow::openFile (const QString& path)
+void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-    
+    if(m_doc)
+    {
+        
+    } else {
+        painter->fillRect(boundingRect(), Qt::gray);
+    }
 }
 
-
-#include "kto_main_window.moc"
+void KtoCanvas::setDocument(KisDoc2* _doc)
+{
+    m_doc = _doc;
+}

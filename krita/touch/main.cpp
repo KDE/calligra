@@ -22,6 +22,8 @@
 #include "kto_main_window.h"
 #include "ui/kis_aboutdata.h"
 #include <KCmdLineArgs>
+#include <qdeclarative.h>
+#include "kto_canvas.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,6 +40,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("kde.org");
     QCoreApplication::setApplicationName("Calligra Active");
 
+    qmlRegisterType<KtoCanvas> ("KritaTouch", 1, 0, "Canvas");
+    
     KtoMainWindow window;
     if (app.argc() > 1)
         window.openFile(app.arguments().at(1));
