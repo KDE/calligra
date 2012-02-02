@@ -28,7 +28,6 @@
 KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0), m_displayProfile(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    qDebug() << "oh";
 }
 
 KtoCanvas::~KtoCanvas()
