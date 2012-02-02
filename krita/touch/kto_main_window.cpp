@@ -18,23 +18,34 @@
  * USA
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "kto_main_window.h"
 
-#include <QtGui/QMainWindow>
+#include <QDebug>
+#include <QDeclarativeView>
 
-class QDeclarativeView;
+#include <KGlobal>
+#include <KComponentData>
+#include <KStandardDirs>
 
-class MainWindow : public QMainWindow
+KtoMainWindow::KtoMainWindow(QWidget* parent )
 {
-    Q_OBJECT
-public:
-    MainWindow (QWidget* parent = 0);
-    ~MainWindow();
+    m_view = new QDeclarativeView (this);
+    setCentralWidget(m_view);
+    
+    KGlobal::mainComponent().dirs()->addResourceType("krita_touch_qml", "data", "kritatouch/qml/");
+    
+    m_view->setSource(QUrl::fromLocalFile(KGlobal::mainComponent().dirs()->findResource("krita_touch_qml", "KtoMainWindow.qml")));
+    m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
+}
 
-    void openFile (const QString& path);
-private:
-    QDeclarativeView* m_view;
-};
+KtoMainWindow::~KtoMainWindow()
+{
+}
 
-#endif // MAINWINDOW_H
+void KtoMainWindow::openFile (const QString& path)
+{
+    
+}
+
+
+#include "kto_main_window.moc"

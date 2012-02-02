@@ -19,7 +19,7 @@
  */
 
 #include <KApplication>
-#include "MainWindow.h"
+#include "kto_main_window.h"
 #include "ui/kis_aboutdata.h"
 #include <KCmdLineArgs>
 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("kde.org");
     QCoreApplication::setApplicationName("Calligra Active");
 
-    MainWindow window;
+    KtoMainWindow window;
     if (app.argc() > 1)
         window.openFile(app.arguments().at(1));
     window.show();

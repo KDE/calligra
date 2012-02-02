@@ -6,7 +6,7 @@ set (kritatouch_RCCS KritaTouch.qrc)
 qt4_add_resources(kritatouch_RCC_SRCS ${kritatouch_RCCS})
 
 set(kritatouch_SRCS
-    MainWindow.cpp
+    kto_main_window.cpp
     main.cpp
     ${kritatouch_RCCS}
 )
