@@ -29,6 +29,8 @@ public:
     virtual ~KtoCanvas();
     virtual void paint(QPainter* , const QStyleOptionGraphicsItem* , QWidget* );
     void setDocument(KisDoc2* _doc);
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
     KisDoc2* m_doc;
     const KoColorProfile* m_displayProfile;

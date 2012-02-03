@@ -28,6 +28,7 @@
 KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0), m_displayProfile(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 KtoCanvas::~KtoCanvas()
@@ -52,4 +53,10 @@ void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidg
 void KtoCanvas::setDocument(KisDoc2* _doc)
 {
     m_doc = _doc;
+}
+
+void KtoCanvas::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    qDebug() << "oy";
+    QGraphicsItem::mousePressEvent(event);
 }
