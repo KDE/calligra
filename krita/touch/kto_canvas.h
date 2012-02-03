@@ -22,7 +22,15 @@
 #define _KTO_CANVAS_H_
 
 #include <QDeclarativeItem>
+#include <kis_types.h>
 
+class KisPostExecutionUndoAdapter;
+class KisUpdateScheduler;
+class KisUndoStore;
+class KisPaintingInformationBuilder;
+class KisToolFreehandHelper;
+class KoCanvasResourceManager;
+class KtoCanvasNodeListener;
 class KoColorProfile;
 class KtoMainWindow;
 
@@ -34,11 +42,26 @@ public:
     virtual ~KtoCanvas();
     virtual void paint(QPainter* , const QStyleOptionGraphicsItem* , QWidget* );
     void setMainWindow(KtoMainWindow* _mainWindow);
+    // A callback for our own node graph listener
+    void imageUpdated(const QRect &rect);
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 private:
     KtoMainWindow* m_mainWindow;
     const KoColorProfile* m_displayProfile;
+    
+    KisPaintDeviceSP m_paintDevice;
+    KisPaintLayerSP  m_paintLayer;
+    
+    KtoCanvasNodeListener*          m_nodeListener;
+    KoCanvasResourceManager*        m_resourceManager;    
+    KisPaintingInformationBuilder*  m_infoBuilder;
+    KisToolFreehandHelper*          m_helper;
+    KisUpdateScheduler*             m_updateScheduler;
+    KisUndoStore*                   m_undoStore;
+    KisPostExecutionUndoAdapter*    m_undoAdapter;
 };
 
 #endif
