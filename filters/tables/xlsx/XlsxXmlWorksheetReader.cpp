@@ -1355,10 +1355,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     bool ok;
     uint styleId = s.toUInt(&ok);
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
-    const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
+
+    QString formattedStyle;
+    if (cellFormat->applyNumberFormat)
+        formattedStyle = m_context->styles->numberFormatStyleName( cellFormat->numFmtId );
+
     //kDebug() << "type=" << t << "styleId=" << styleId << "applyNumberFormat=" << cellFormat->applyNumberFormat << "numberFormat=" << numberFormat << "value=" << m_value;
 
-    const QString formattedStyle = d->processValueFormat( numberFormat );
     QString charStyleName;
 
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
