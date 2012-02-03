@@ -23,8 +23,13 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
+#if KDE_IS_VERSION( 4, 5, 0 )
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
+#endif
 
 #include <QDateTime>
 #include <QDateTimeEdit>
@@ -50,6 +55,13 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     setupUi(this);
     kcfg_ExpectedEstimate->setMinimumUnit( (Duration::Unit)KPlatoSettings::self()->minimumDurationUnit() );
     kcfg_ExpectedEstimate->setMaximumUnit( (Duration::Unit)KPlatoSettings::self()->maximumDurationUnit() );
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
+#if ! KDE_IS_VERSION( 4, 5, 0 )
+    chooseLeader->hide();
+#endif
 
     initDescription();
 
@@ -109,11 +121,33 @@ void ConfigTaskPanelImpl::initDescription()
 
 void ConfigTaskPanelImpl::changeLeader()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty())
-    {
-        kcfg_Leader->setText(a.fullEmail());
+#ifdef PLAN_KDEPIMLIBS_FOUND
+#if KDE_IS_VERSION( 4, 5, 0 )
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList names;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        foreach ( const Akonadi::EmailAddressSelection &selection, selections ) {
+            QString s = selection.name();
+            if ( ! selection.email().isEmpty() ) {
+                if ( ! selection.name().isEmpty() ) {
+                    s += " <";
+                }
+                s += selection.email();
+                if ( ! selection.name().isEmpty() ) {
+                    s += ">";
+                }
+                if ( ! s.isEmpty() ) {
+                    names << s;
+                }
+            }
+        }
+        if ( ! names.isEmpty() ) {
+            kcfg_Leader->setText( names.join( ", " ) );
+        }
     }
+#endif
+#endif
 }
 
 void ConfigTaskPanelImpl::startDateTimeChanged( const QDateTime &dt )
