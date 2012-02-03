@@ -27,6 +27,8 @@
 #include <KComponentData>
 #include <KStandardDirs>
 
+#include "kto_canvas.h"
+
 KtoMainWindow::KtoMainWindow(QWidget* parent )
 {
     m_view = new QDeclarativeView (this);
@@ -36,6 +38,9 @@ KtoMainWindow::KtoMainWindow(QWidget* parent )
     
     m_view->setSource(QUrl::fromLocalFile(KGlobal::mainComponent().dirs()->findResource("krita_touch_qml", "MainWindow.qml")));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
+    
+    m_canvas = m_view->rootObject()->findChild<KtoCanvas*>("canvas");
+    Q_ASSERT(m_canvas);
 }
 
 KtoMainWindow::~KtoMainWindow()

@@ -23,6 +23,7 @@
 
 #include <QtGui/QMainWindow>
 
+class KtoCanvas;
 class QDeclarativeView;
 
 class KtoMainWindow : public QMainWindow
@@ -35,6 +36,7 @@ public:
     void openFile (const QString& path);
 private:
     QDeclarativeView* m_view;
+    KtoCanvas*        m_canvas;
 };
 
 #endif // MAINWINDOW_H

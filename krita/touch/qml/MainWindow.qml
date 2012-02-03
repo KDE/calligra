@@ -25,6 +25,8 @@ Rectangle
 {
     id: mainWindow
     Canvas {
+        id: canvas
+        objectName: "canvas"
         anchors.fill: parent
     }
     Rectangle {

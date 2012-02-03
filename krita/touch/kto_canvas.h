@@ -17,6 +17,10 @@
  * 02110-1301 sure
  * USA
  */
+
+#ifndef _KTO_CANVAS_H_
+#define _KTO_CANVAS_H_
+
 #include <QDeclarativeItem>
 
 class KoColorProfile;
@@ -24,6 +28,7 @@ class KisDoc2;
 
 class KtoCanvas : public QDeclarativeItem
 {
+    Q_OBJECT
 public:
     KtoCanvas(QDeclarativeItem* parent = 0);
     virtual ~KtoCanvas();
@@ -35,3 +40,5 @@ private:
     KisDoc2* m_doc;
     const KoColorProfile* m_displayProfile;
 };
+
+#endif

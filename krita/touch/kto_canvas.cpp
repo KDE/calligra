@@ -60,3 +60,5 @@ void KtoCanvas::mousePressEvent(QGraphicsSceneMouseEvent* event)
     qDebug() << "oy";
     QGraphicsItem::mousePressEvent(event);
 }
+
+#include "kto_canvas.moc"
