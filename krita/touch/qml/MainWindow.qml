@@ -45,4 +45,12 @@ Rectangle
         anchors.top: parent.top
         anchors.right: showWidgets.left
     }
+    Rectangle {
+        id: colorSelector
+        color: "green"
+        width: 50
+        height: 50
+        anchors.top: parent.top
+        anchors.right: selectBrush.left
+    }
 }
