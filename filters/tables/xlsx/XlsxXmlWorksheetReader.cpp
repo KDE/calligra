@@ -53,6 +53,7 @@
 #include <QRegExp>
 #include <QString>
 #include <QList>
+#include <QCache>
 
 #include "NumberFormatParser.h"
 
@@ -670,20 +671,49 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                         body->addAttribute("table:style-name", cell->styleName);
                     }
                     //body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
-                    if (!hasHyperlink && !cell->valueType.isEmpty()) {
-                        body->addAttribute("office:value-type", cell->valueType);
+                    if (!hasHyperlink) {
+                        switch(cell->valueType) {
+                            case Cell::ConstNone:
+                                break;
+                            case Cell::ConstString:
+                                body->addAttribute("office:value-type", MsooXmlReader::constString);
+                                break;
+                            case Cell::ConstBoolean:
+                                body->addAttribute("office:value-type", MsooXmlReader::constBoolean);
+                                break;
+                            case Cell::ConstDate:
+                                body->addAttribute("office:value-type", MsooXmlReader::constDate);
+                                break;
+                            case Cell::ConstFloat:
+                                body->addAttribute("office:value-type", MsooXmlReader::constFloat);
+                                break;
+                        }
                     }
-                    if (!cell->valueAttr.isEmpty()) {
-                        // Treat boolean values specially (ODF1.1 chapter 6.7.1)
-                        if (cell->valueAttr == XlsxXmlWorksheetReader::officeBooleanValue)
-                            //! @todo This breaks down if the value is a formula and not constant.
-                            body->addAttribute(cell->valueAttr,
-                                               cell->valueAttrValue == "0" ? "false" : "true");
-                        else
-                            body->addAttribute(cell->valueAttr, cell->valueAttrValue);
+
+                    if (cell->valueAttr != Cell::OfficeNone && cell->valueAttrValue) {
+                        switch(cell->valueAttr) {
+                            case Cell::OfficeNone:
+                                break;
+                            case Cell::OfficeValue:
+                                body->addAttribute(XlsxXmlWorksheetReader::officeValue, *cell->valueAttrValue);
+                                break;
+                            case Cell::OfficeStringValue:
+                                body->addAttribute(XlsxXmlWorksheetReader::officeStringValue, *cell->valueAttrValue);
+                                break;
+                            case Cell::OfficeBooleanValue:
+                                // Treat boolean values specially (ODF1.1 chapter 6.7.1)
+                                //! @todo This breaks down if the value is a formula and not constant.
+                                body->addAttribute(XlsxXmlWorksheetReader::officeBooleanValue,
+                                                *cell->valueAttrValue == "0" ? "false" : "true");
+                                break;
+                            case Cell::OfficeDateValue:
+                                body->addAttribute(XlsxXmlWorksheetReader::officeDateValue, *cell->valueAttrValue);
+                                break;
+                        }
                     }
-                    if (!cell->formula.isEmpty()) {
-                        body->addAttribute("table:formula", cell->formula);
+
+                    if (cell->formula && !cell->formula->isEmpty()) {
+                        body->addAttribute("table:formula", *cell->formula);
                     }
                     if (cell->rowsMerged > 1) {
                         body->addAttribute("table:number-rows-spanned", cell->rowsMerged);
@@ -1324,9 +1354,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     bool ok;
     uint styleId = s.toUInt(&ok);
-    kDebug() << "styleId:" << styleId;
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
     const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
+    //kDebug() << "type=" << t << "styleId=" << styleId << "applyNumberFormat=" << cellFormat->applyNumberFormat << "numberFormat=" << numberFormat << "value=" << m_value;
 
     const QString formattedStyle = d->processValueFormat( numberFormat );
     QString charStyleName;
@@ -1357,27 +1387,27 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             }
             QString sharedstring = m_context->sharedStrings->at(stringIndex);
             cell->text = sharedstring;
-            cell->valueType = MsooXmlReader::constString;
+            cell->valueType = Cell::ConstString;
             m_value = sharedstring;
             // no valueAttr
         } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
 //! @todo handle value properly
             cell->text = m_value;
-            cell->valueType = MsooXmlReader::constString;
+            cell->valueType = Cell::ConstString;
             // no valueAttr
         } else if (t == QLatin1String("b")) {
             cell->text = m_value;
-            cell->valueType = MsooXmlReader::constBoolean;
-            cell->valueAttr = XlsxXmlWorksheetReader::officeBooleanValue;
+            cell->valueType = Cell::ConstBoolean;
+            cell->valueAttr = Cell::OfficeBooleanValue;
         } else if (t == QLatin1String("d")) {
 //! @todo handle value properly
             cell->text = m_value;
-            cell->valueType = MsooXmlReader::constDate;
-            cell->valueAttr = XlsxXmlWorksheetReader::officeDateValue;
+            cell->valueType = Cell::ConstDate;
+            cell->valueAttr = Cell::OfficeDateValue;
         } else if (t == QLatin1String("str")) {
 //! @todo handle value properly
             cell->text = m_value;
-            cell->valueType = MsooXmlReader::constString;
+            cell->valueType = Cell::ConstString;
             // no valueAttr
         } else if (t == QLatin1String("n") || t.isEmpty() /* already checked if numeric */) {
             if (!t.isEmpty()) { // sanity check
@@ -1389,22 +1419,22 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             const KoGenStyle* const style = mainStyles->style( formattedStyle );
             if( style == 0 || valueIsNumeric(m_value) ) {
 //            body->addTextSpan(m_value);
-                cell->valueType = MsooXmlReader::constFloat;
-                cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
+                cell->valueType = Cell::ConstFloat;
+                cell->valueAttr = Cell::OfficeValue;
             } else {
                 switch( style->type() ) {
                 case KoGenStyle::NumericDateStyle:
-                    cell->valueType = MsooXmlReader::constDate;
-                    cell->valueAttr = XlsxXmlWorksheetReader::officeDateValue;
+                    cell->valueType = Cell::ConstDate;
+                    cell->valueAttr = Cell::OfficeDateValue;
                     m_value = QDate( 1899, 12, 30 ).addDays( m_value.toInt() ).toString( Qt::ISODate );
                     break;
                 case KoGenStyle::NumericTextStyle:
-                    cell->valueType = MsooXmlReader::constString;
-                    cell->valueAttr = XlsxXmlWorksheetReader::officeStringValue;
+                    cell->valueType = Cell::ConstString;
+                    cell->valueAttr = Cell::OfficeStringValue;
                     break;
                 default:
-                    cell->valueType = MsooXmlReader::constFloat;
-                    cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
+                    cell->valueType = Cell::ConstFloat;
+                    cell->valueAttr = Cell::OfficeValue;
                     break;
                 }
             }
@@ -1414,8 +1444,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             else
                 cell->text = m_value;
 //! @todo full parsing needed to retrieve the type
-            cell->valueType = MsooXmlReader::constFloat;
-            cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
+            cell->valueType = Cell::ConstFloat;
+            cell->valueAttr = Cell::OfficeValue;
             m_value = QLatin1String("0");
         } else {
             raiseUnexpectedAttributeValueError(t, "c@t");
@@ -1465,7 +1495,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         cell->styleName = cellStyleName;
     }
 
-    cell->valueAttrValue = m_value;
+    delete cell->valueAttrValue;
+    if (m_value.isEmpty()) {
+        cell->valueAttrValue = 0;
+    } else {
+        cell->valueAttrValue = new QString(m_value);
+    }
 
     ++m_currentColumn; // This cell is done now. Select the next cell.
 
@@ -1514,7 +1549,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
-            cell->formula = Calligra::Tables::MSOOXML::convertFormula(text().toString());
+            delete cell->formula;
+            cell->formula = new QString(Calligra::Tables::MSOOXML::convertFormula(text().toString()));
         }
     }
 
@@ -1532,9 +1568,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
                 cell.
                 */
                 if (d->sharedFormulas.contains(sharedGroupIndex)) {
-                    if (cell->formula.isEmpty()) // don't do anything if the cell already defines a formula
-                        cell->formula = MSOOXML::convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell);
-                } else if (!cell->formula.isEmpty()) { // is this cell the master cell?
+                    if (!cell->formula || cell->formula->isEmpty()) { // don't do anything if the cell already defines a formula
+                        delete cell->formula;
+                        cell->formula = new QString(MSOOXML::convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell));
+                    }
+                } else if (cell->formula && !cell->formula->isEmpty()) { // is this cell the master cell?
                     d->sharedFormulas[sharedGroupIndex] = cell;
                 }
             }
@@ -1610,7 +1648,7 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 {
     const KoGenStyle style = NumberFormatParser::parse( valueFormat, q->mainStyles );
     if( style.type() == KoGenStyle::ParagraphAutoStyle )
-        return QString();
+         return QString();
 
     return q->mainStyles->insert( style, "N" );
 }
