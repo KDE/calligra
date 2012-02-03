@@ -46,9 +46,6 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-
 #include <kdebug.h>
 
 namespace KPlato
@@ -74,6 +71,7 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 
 void ResourceTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
 {
+    event->ignore();
     if ( model()->dropAllowed( index, dropIndicatorPosition, event->mimeData() ) ) {
         event->accept();
     }

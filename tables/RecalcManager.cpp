@@ -21,9 +21,6 @@
 // Local
 #include "RecalcManager.h"
 
-#include <QHash>
-#include <QMap>
-
 #include "Cell.h"
 #include "CellStorage.h"
 #include "DependencyManager.h"
@@ -34,6 +31,12 @@
 #include "Region.h"
 #include "Value.h"
 #include "ValueFormatter.h"
+#include "DocBase.h"
+
+#include <KoUpdater.h>
+
+#include <QHash>
+#include <QMap>
 
 using namespace Calligra::Tables;
 
@@ -191,14 +194,14 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
     d->active = false;
 }
 
-void RecalcManager::recalcMap()
+void RecalcManager::recalcMap(KoUpdater *updater)
 {
     if (d->active)
         return;
     d->active = true;
     ElapsedTime et("Overall map recalculation", ElapsedTime::PrintOnlyTime);
     d->cellsToCalculate();
-    recalc();
+    recalc(updater);
     d->active = false;
 }
 
@@ -224,12 +227,17 @@ void RecalcManager::removeSheet(Sheet *sheet)
     recalcMap(); // FIXME Stefan: Implement a more elegant solution.
 }
 
-void RecalcManager::recalc()
+void RecalcManager::recalc(KoUpdater *updater)
 {
     kDebug(36002) << "Recalculating" << d->cells.count() << " cell(s)..";
     ElapsedTime et("Recalculating cells", ElapsedTime::PrintOnlyTime);
+
+    if (updater)
+        updater->setProgress(0);
+
     const QList<Cell> cells = d->cells.values();
-    for (int c = 0; c < cells.count(); ++c) {
+    const int cellsCount = cells.count();
+    for (int c = 0; c < cellsCount; ++c) {
         // only recalculate, if no circular dependency occurred
         if (cells.value(c).value() == Value::errorCIRCLE())
             continue;
@@ -252,9 +260,16 @@ void RecalcManager::recalc()
             }
             // relock
             sheet->cellStorage()->lockCells(rect);
-        } else
+        } else {
             Cell(cells.value(c)).setValue(result);
+        }
+        if (updater)
+            updater->setProgress(int(qreal(c) / qreal(cellsCount) * 100.));
     }
+
+    if (updater)
+        updater->setProgress(100);
+
 //     dump();
     d->cells.clear();
 }

@@ -7,6 +7,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 Name=Web Browser Plugin for Kexi Forms
 Name[ca]=Connector de navegador web per a formularis del Kexi
 Name[ca@valencia]=Connector de navegador web per a formularis del Kexi
+Name[es]=Complemento de navegador web para los formularios de Kexi
 Name[et]=Kexi vormide veebibrauseri plugin
 Name[it]=Estensione del browser web per i moduli di Kexi
 Name[nb]=Kartleser-programtillegg for Kexi-former

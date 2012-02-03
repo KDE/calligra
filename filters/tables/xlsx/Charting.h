@@ -282,7 +282,10 @@ namespace Charting
 
         QString m_numberFormat;
 
-        Axis(Type type) : Obj(), m_type(type) {}
+        bool m_reversed;
+        bool m_logarithmic;
+
+        Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false) {}
         virtual ~Axis() {}
     };
 

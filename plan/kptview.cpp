@@ -66,7 +66,6 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <KConfigDialog>
-#include <kpimutils/kfileio.h>
 #include <KToolInvocation>
 #include <KRun>
 

@@ -41,6 +41,9 @@ public:
     virtual QString documentTypeName();
     Q_INVOKABLE int sheetCount() const;
 
+    virtual QString rightToolbarSource() const;
+    virtual QString leftToolbarSource() const;
+
 public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);
     void updateCanvas();

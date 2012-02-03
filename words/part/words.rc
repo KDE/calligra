@@ -56,24 +56,14 @@
  -->
  
  <!-- leftovers from insert menu - to be moved to texttool
-  <Action name="insert_framebreak"/>
   <Action name="insert_link"/>
   <Action name="add_bookmark"/>
  -->
 
  <Menu name="format"><text>F&amp;ormat</text>
-  <Action name="format_font"/>
-  <Action name="format_paragraph"/>
-  <Action name="format_footendnote"/>
   <Action name="format_stylemenu"/>
   <Action name="format_stylist"/>
   <Action name="import_style"/>
-  <Action name="create_style"/>
-  <Separator/>
-  <Action name="format_page"/>
-  <Separator/>
-  <Action name="format_header"/>
-  <Action name="format_footer"/>
  </Menu>
 
  <Menu name="settings"><text>&amp;Settings</text>

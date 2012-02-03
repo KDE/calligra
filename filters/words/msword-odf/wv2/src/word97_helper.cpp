@@ -205,6 +205,7 @@ typedef enum
     sprmCRgLid1 = 0x486E,
     sprmCRgLidUndocumented1 = 0x4873, // According to OOo it's equal to sprmCRgLid0
     sprmCUndocumented2 = 0x4874,
+    sprmCPbiGrf = 0x4888,
     sprmCIstd = 0x4A30,
     sprmCFtcDefault = 0x4A3D,
     sprmCLid = 0x4A41,
@@ -253,6 +254,7 @@ typedef enum
     sprmCBrc = 0x6865,
     sprmCCv = 0x6870,
     sprmCCvUl = 0x6877,
+    sprmCPbiIBullet = 0x6887,
     sprmCPicLocation = 0x6A03,
     sprmCSymbol = 0x6A09,
     sprmPicBrcTop = 0x6C02,
@@ -1739,6 +1741,15 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fTNYCompress = ufel;
             break;
         }
+        case SPRM::sprmCPbiIBullet:
+            picBulletCP = readU16( ptr );
+            wvlog << "=> picBulletCP:" << picBulletCP;
+            break;
+        case SPRM::sprmCPbiGrf:
+            fPicBullet = (*ptr & 0x01);
+            fNoAutoSize = (*ptr & 0x02) >> 1;
+            wvlog << "=> fPicBullet:" << fPicBullet << "| fNoAutoSize:" << fNoAutoSize << "| check:" << *ptr;
+            break;
         default:
             wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
             break;

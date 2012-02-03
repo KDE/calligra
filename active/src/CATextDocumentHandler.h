@@ -44,12 +44,16 @@ public:
     QString searchString() const;
     void setSearchString (const QString& searchString);
 
+    virtual QString bottomToolbarSource() const;
+    virtual QString topToolbarSource() const;
+
 public slots:
     void updateCanvas();
     void resizeCanvas (const QSizeF& canvasSize);
 
     void findNext();
     void findPrevious();
+    void copy();
 
 signals:
     void searchStringChanged();

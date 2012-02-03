@@ -27,6 +27,8 @@
 #include "CADocumentInfo.h"
 
 #include <KWPage.h>
+#include <KoZoomMode.h>
+
 #include <QDeclarativeItem>
 
 class KoCanvasBase;
@@ -41,6 +43,7 @@ class CACanvasController : public QDeclarativeItem, public KoCanvasController
     Q_PROPERTY (qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY (int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
+    Q_PROPERTY (qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 
 public:
     explicit CACanvasController (QDeclarativeItem* parent = 0);
@@ -76,6 +79,8 @@ public:
     int cameraY() const;
     void setCameraX (int cameraX);
     void setCameraY (int cameraY);
+    qreal zoom() const;
+    void setZoom(qreal zoom);
 
     KoCanvasControllerProxyObject* canvasControllerProxyObject();
     KoZoomHandler* zoomHandler();
@@ -87,6 +92,7 @@ public slots:
     void centerToCamera();
     void zoomToFit();
     void updateCanvas();
+    void updateZoomValue(KoZoomMode::Mode mode, qreal zoom);
 
 private:
     KoZoomHandler* m_zoomHandler;
@@ -95,6 +101,7 @@ private:
     QPoint m_currentPoint;
     QSizeF m_documentSize;
     QList<CADocumentInfo*> m_recentFiles;
+    qreal m_zoom;
 
 protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
@@ -106,6 +113,7 @@ signals:
     void cameraYChanged();
     void needCanvasUpdate();
     void needsCanvasResize(const QSizeF canvasSize);
+    void zoomChanged();
 };
 
 #endif // CACANVASCONTROLLER_H
