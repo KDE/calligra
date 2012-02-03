@@ -27,4 +27,20 @@ Rectangle
     Canvas {
         anchors.fill: parent
     }
+    Rectangle {
+        id: showWidgets
+        color: "red"
+        width: 50
+        height: 50
+        anchors.top: parent.top
+        anchors.right: parent.right
+    }
+    Rectangle {
+        id: selectBrush
+        color: "blue"
+        width: 50
+        height: 50
+        anchors.top: parent.top
+        anchors.right: showWidgets.left
+    }
 }
