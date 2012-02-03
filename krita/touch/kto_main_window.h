@@ -21,8 +21,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
+class KisDoc2;
 class KtoCanvas;
 class QDeclarativeView;
 
@@ -34,9 +35,11 @@ public:
     ~KtoMainWindow();
 
     void openFile (const QString& path);
+    KisDoc2* document();
 private:
     QDeclarativeView* m_view;
     KtoCanvas*        m_canvas;
+    KisDoc2*          m_doc;
 };
 
 #endif // MAINWINDOW_H

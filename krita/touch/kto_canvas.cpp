@@ -24,8 +24,9 @@
 #include <QPainter>
 #include <kis_image.h>
 #include <kis_doc2.h>
+#include "kto_main_window.h"
 
-KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_doc(0), m_displayProfile(0)
+KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_mainWindow(0), m_displayProfile(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -39,9 +40,9 @@ KtoCanvas::~KtoCanvas()
 void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
     painter->fillRect(boundingRect(), Qt::gray);
-    if(m_doc)
+    if(m_mainWindow and m_mainWindow->document()->image())
     {
-        KisPaintDeviceSP projection = m_doc->image()->projection();
+        KisPaintDeviceSP projection = m_mainWindow->document()->image()->projection();
         QRect r = boundingRect().toRect();
         QImage image = projection->convertToQImage(m_displayProfile, r.x(), r.y(), r.width(), r.height());
         
@@ -50,9 +51,10 @@ void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidg
     }
 }
 
-void KtoCanvas::setDocument(KisDoc2* _doc)
+void KtoCanvas::setMainWindow(KtoMainWindow* _mainWindow)
 {
-    m_doc = _doc;
+    Q_ASSERT(m_mainWindow == 0);
+    m_mainWindow = _mainWindow;
 }
 
 void KtoCanvas::mousePressEvent(QGraphicsSceneMouseEvent* event)

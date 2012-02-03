@@ -28,6 +28,8 @@
 #include <KStandardDirs>
 
 #include "kto_canvas.h"
+#include <kis_doc2.h>
+#include <kis_layer_manager.h>
 
 KtoMainWindow::KtoMainWindow(QWidget* parent )
 {
@@ -41,10 +43,18 @@ KtoMainWindow::KtoMainWindow(QWidget* parent )
     
     m_canvas = m_view->rootObject()->findChild<KtoCanvas*>("canvas");
     Q_ASSERT(m_canvas);
+    
+    m_doc = new KisDoc2(0, this);
+    m_canvas->setMainWindow(this);
 }
 
 KtoMainWindow::~KtoMainWindow()
 {
+}
+
+KisDoc2* KtoMainWindow::document()
+{
+    return m_doc;
 }
 
 void KtoMainWindow::openFile (const QString& path)

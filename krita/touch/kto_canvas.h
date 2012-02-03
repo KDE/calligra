@@ -24,7 +24,7 @@
 #include <QDeclarativeItem>
 
 class KoColorProfile;
-class KisDoc2;
+class KtoMainWindow;
 
 class KtoCanvas : public QDeclarativeItem
 {
@@ -33,11 +33,11 @@ public:
     KtoCanvas(QDeclarativeItem* parent = 0);
     virtual ~KtoCanvas();
     virtual void paint(QPainter* , const QStyleOptionGraphicsItem* , QWidget* );
-    void setDocument(KisDoc2* _doc);
+    void setMainWindow(KtoMainWindow* _mainWindow);
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
-    KisDoc2* m_doc;
+    KtoMainWindow* m_mainWindow;
     const KoColorProfile* m_displayProfile;
 };
 
