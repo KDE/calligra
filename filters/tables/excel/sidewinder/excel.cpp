@@ -2089,21 +2089,6 @@ public:
 
     // active sheet, all cell records will be stored here
     Sheet* activeSheet;
-
-    // for FORMULA+STRING record pair
-    Cell* formulaCell;
-
-    // mapping from font index to Swinder::FormatFont
-    std::map<unsigned, FormatFont> fontCache;
-
-    // mapping from cell position to shared formulas
-    std::map<std::pair<unsigned, unsigned>, FormulaTokens> sharedFormulas;
-
-    // for FORMULA+SHAREDFMLA record pair
-    Cell* lastFormulaCell;
-
-    // mapping from cell position to data tables
-    std::map<std::pair<unsigned, unsigned>, DataTableRecord> dataTables;
 };
 
 ExcelReader::ExcelReader()
@@ -2111,8 +2096,6 @@ ExcelReader::ExcelReader()
     d = new ExcelReader::Private();
     d->workbook    = 0;
     d->activeSheet = 0;
-    d->formulaCell = 0;
-    d->lastFormulaCell = 0;
     d->globals = 0;
 }
 
