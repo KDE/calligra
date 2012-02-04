@@ -68,14 +68,29 @@ private:
     QMutex m_lock;
 };
 
+class KtoCanvasDefaultBounds : public KisDefaultBounds
+{
+public:
+
+    KtoCanvasDefaultBounds(KtoCanvas *canvas)
+        : m_canvas(canvas)
+    {
+    }
+
+    QRect bounds() const {
+        return m_canvas->boundingRect().toAlignedRect();
+    }
+
+private:
+    KtoCanvas *m_canvas;
+};
+
 KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_mainWindow(0), m_displayProfile(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setAcceptedMouseButtons(Qt::LeftButton);
     
-    m_paintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "KritaTouchs");
-    m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, m_paintDevice);
-    m_paintLayer->setGraphListener(m_nodeListener);
+    m_nodeListener = new KtoCanvasNodeListener(this);
     
     m_resourceManager = new KoCanvasResourceManager;
 
@@ -86,11 +101,25 @@ KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_main
     m_undoStore = new KisSurrogateUndoStore();
     m_undoAdapter = new KisPostExecutionUndoAdapter(m_undoStore, m_updateScheduler);
     
-    QString paintopid = "paintbrush";
+    m_paintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "KritaTouchs");
+    
+    KoColor defaultColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
 
+    
+    m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, m_paintDevice);
+    m_paintLayer->setGraphListener(m_nodeListener);
+    m_paintDevice->setDefaultBounds(new KtoCanvasDefaultBounds(this));
+
+    m_paintDevice->setDefaultPixel(defaultColor.data());
+    m_paintDevice->clear();
+    
+    QString paintopid = "paintbrush";
+    KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
     QString defaultName = paintopid + ".kpp";
     QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
 
+    qDebug() << "=== " << path;
+    
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
     if (!preset->load()) {
@@ -104,11 +133,25 @@ KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_main
     v.setValue(preset);
     m_resourceManager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, v);
     
+    v.setValue(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+    m_resourceManager->setResource(KoCanvasResourceManager::ForegroundColor, v);
+
+    v.setValue(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+    m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
+    
+    v.setValue(1.0);
+    m_resourceManager->setResource(KisCanvasResourceProvider::Opacity, v);
 }
 
 KtoCanvas::~KtoCanvas()
 {
+    delete m_helper;
+    delete m_infoBuilder;
 
+    delete m_undoAdapter;
+    delete m_undoStore;
+    delete m_updateScheduler;
+    delete m_nodeListener;
 }
 
 void KtoCanvas::imageUpdated(const QRect& rect)
@@ -118,8 +161,9 @@ void KtoCanvas::imageUpdated(const QRect& rect)
 
 void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
+    qDebug() << "paint";
     painter->fillRect(boundingRect(), Qt::gray);
-    if(m_mainWindow and m_mainWindow->document()->image())
+//     if(m_mainWindow and m_mainWindow->document()->image())
     {
         KisPaintDeviceSP projection = m_paintLayer->projection();
         QRect r = boundingRect().toRect();
