@@ -165,7 +165,7 @@ public:
     /**
      * @brief Get the xml:id for a sub-item
      *
-     * The xml:id is globally unique..
+     * The xml:id is globally unique.
      *
      * @param subitem for which the sub-item id should be returned
      * @param insert if true a new sub-item id will be generated if there is non yet
