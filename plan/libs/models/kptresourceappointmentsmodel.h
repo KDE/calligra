@@ -1,5 +1,5 @@
  /* This file is part of the KDE project
-   Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net>
+   Copyright (C) 2005 - 2007, 2011 Dag Andersen <danders@get2net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,10 +24,6 @@
 
 #include <kptitemmodelbase.h>
 #include "kpteffortcostmap.h"
-
-class QDropEvent;
-class QDragMoveEvent;
-class QDragEnterEvent;
 
 
 namespace KPlato
@@ -75,10 +71,6 @@ public:
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    virtual QStringList mimeTypes () const;
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
-  
 
     QObject *object( const QModelIndex &index ) const;
     Node *node( const QModelIndex &index ) const;

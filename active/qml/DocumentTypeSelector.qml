@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  * Copyright (C) 2012 Sujith H <sujith.h@gmail.com>
  *
  * This program is free software; you can redistribute it and/or

@@ -32,16 +32,17 @@ class Cell::Private
 {
 public:
     Sheet* sheet;
-    unsigned row;
-    unsigned column;
-    Value value;
-    QString formula;
+    Value* value;
+    QString* formula;
+    QString* note;
     const Format* format;
-    unsigned columnSpan;
-    unsigned rowSpan;
-    bool covered;
-    int columnRepeat;
-    QString note;
+
+    unsigned row : 21; // KS_rowMax
+    unsigned column : 17; // KS_colMax
+    unsigned rowSpan : 21;
+    unsigned columnSpan : 17;
+    unsigned columnRepeat : 17;
+    bool covered : 1;
 };
 
 }
@@ -52,18 +53,22 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
 {
     d = new Cell::Private();
     d->sheet      = sheet;
-    d->column     = column;
-    d->row        = row;
-    d->value      = Value::empty();
-    d->columnSpan = 1;
-    d->rowSpan    = 1;
-    d->covered    = false;
-    d->columnRepeat = 1;
+    d->value      = 0;
+    d->formula    = 0;
+    d->note       = 0;
     d->format     = 0;
+    d->row        = row;
+    d->column     = column;
+    d->rowSpan    = 1;
+    d->columnSpan = 1;
+    d->columnRepeat = 1;
+    d->covered    = false;
 }
 
 Cell::~Cell()
 {
+    delete d->formula;
+    delete d->note;
     delete d;
 }
 
@@ -121,22 +126,38 @@ QString Cell::columnLabel(int column)
 
 Value Cell::value() const
 {
-    return d->value;
+    return d->value ? *d->value : Value::empty();
 }
 
 void Cell::setValue(const Value& value)
 {
-    d->value = value;
+    if (value.isEmpty()) {
+        delete d->value;
+        d->value = 0;
+    } else {
+        if (d->value)
+            *d->value = value;
+        else
+            d->value = new Value(value);
+    }
 }
 
 QString Cell::formula() const
 {
-    return d->formula;
+    return d->formula ? *(d->formula) : QString();
 }
 
 void Cell::setFormula(const QString& formula)
 {
-    d->formula = formula;
+    if (formula.isNull()) {
+        delete d->formula;
+        d->formula = 0;
+    } else {
+        if (d->formula)
+            *(d->formula) = formula;
+        else
+            d->formula = new QString(formula);
+    }
 }
 
 const Format& Cell::format() const
@@ -228,12 +249,20 @@ void Cell::setHyperlink(const Hyperlink& link)
 
 QString Cell::note() const
 {
-    return d->note;
+    return d->note ? *(d->note) : QString();
 }
 
 void Cell::setNote(const QString &n)
 {
-    d->note = n;
+    if (n.isNull()) {
+        delete d->note;
+        d->note = 0;
+    } else {
+        if (d->note)
+            *(d->note) = n;
+        else
+            d->note = new QString(n);
+    }
 }
 
 QList<ChartObject*> Cell::charts() const

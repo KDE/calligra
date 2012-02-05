@@ -450,10 +450,14 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             main[i]->shape()->setZIndex(minZIndex);
     }
     if (footer && footer->shape()) {
-        footer->shape()->setZIndex(--minZIndex);
+        footer->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        footer->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
     if (header && header->shape()) {
-        header->shape()->setZIndex(--minZIndex);
+        header->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        header->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
 
     if (pageBackground) {
@@ -493,11 +497,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     // actually move / size the frames.
     if (columns > 0 && main[0]) {
-        const qreal columnWidth = textWidth / columns;
+        const qreal columnWidth = (textWidth
+                - page.pageStyle().columns().columnSpacing * (columns- 1 ))/ columns;
+        const qreal columnStep = columnWidth + page.pageStyle().columns().columnSpacing;
         QPointF *points = new QPointF[columns];
-        for (int i = columns - 1; i >= 0; i--)
-            points[i] = QPointF(left + layout.leftMargin + layout.leftPadding
-                                + columnWidth * i, resultingPositions[3]);
+        for (int i = 0; i < columns; i++)
+            points[i] = QPointF(left + layout.leftMargin + layout.leftPadding +columnStep * i, resultingPositions[3]);
         for (int i = 0; i < columns; i++) {
             for (int f = 0; f < columns; f++) {
                 if (f == i) continue;
@@ -508,16 +513,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             }
         }
 
-        bool first = true;
         for (int i = columns - 1; i >= 0; i--) {
             main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(points[i]);
-            shape->setSize(QSizeF(columnWidth -
-                                  (first ? 0 : page.pageStyle().columns().columnSpacing),
-                                  resultingPositions[4] - resultingPositions[3]));
-            first = false;
+            shape->setSize(QSizeF(columnWidth, resultingPositions[4] - resultingPositions[3]));
         }
         delete[] points;
 

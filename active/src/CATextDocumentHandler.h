@@ -53,6 +53,7 @@ public slots:
 
     void findNext();
     void findPrevious();
+    void copy();
 
 signals:
     void searchStringChanged();
