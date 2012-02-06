@@ -21,11 +21,11 @@
 
 #include <sstream>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtGui/QApplication>
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextDocumentWriter>
+#include <QFile>
+#include <QString>
+#include <QApplication>
+#include <QTextDocument>
+#include <QTextDocumentWriter>
 
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>

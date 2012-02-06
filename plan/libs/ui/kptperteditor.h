@@ -32,7 +32,7 @@
 #include <QTableWidget>
 #include <QFont>
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <qwidget.h>
 

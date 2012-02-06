@@ -26,7 +26,7 @@
 
 #include <KoShapeManager.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KarbonPrintJob::KarbonPrintJob(KarbonView *view)
         : KoPrintingDialog(view),

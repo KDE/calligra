@@ -45,11 +45,11 @@
 #include <KDialog>
 #include <KNumInput>
 
-#include <QtGui/QWidget>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QLabel>
+#include <QWidget>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QStackedWidget>
+#include <QLabel>
 
 class KarbonFilterEffectsTool::Private
 {

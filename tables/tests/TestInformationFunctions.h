@@ -22,7 +22,7 @@
 #define CALLIGRA_TABLES_TEST_INFORMATION_FUNCTIONS
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <Value.h>
 

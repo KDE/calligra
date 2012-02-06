@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_TABLES_CELL_TEST
 #define CALLIGRA_TABLES_CELL_TEST
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoXmlDocument;
 

@@ -133,19 +133,19 @@
 #include <KDebug>
 
 // qt header
-#include <QtGui/QIcon>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtGui/QPainter>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QDropEvent>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtCore/QTimer>
-#include <QtCore/QEvent>
-#include <QtGui/QPrinter>
-#include <QtGui/QImageReader>
+#include <QIcon>
+#include <QApplication>
+#include <QClipboard>
+#include <QPainter>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QDropEvent>
+#include <QGridLayout>
+#include <QLabel>
+#include <QTimer>
+#include <QEvent>
+#include <QPrinter>
+#include <QImageReader>
 
 #include <unistd.h>
 

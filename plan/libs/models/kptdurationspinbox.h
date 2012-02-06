@@ -23,7 +23,7 @@
 #include "kptduration.h"
 #include "kplatomodels_export.h"
 
-#include <QtGui/qspinbox.h>
+#include <qspinbox.h>
 
 namespace KPlato
 {

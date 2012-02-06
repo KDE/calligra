@@ -22,8 +22,8 @@
 #include "drawstyle.h"
 #include "msodraw.h"
 #include <KoXmlWriter.h>
-#include <QtCore/QtDebug>
-#include <QtGui/QColor>
+#include <QtDebug>
+#include <QColor>
 #include <qbuffer.h>
 #include "generated/leinputstream.h"
 

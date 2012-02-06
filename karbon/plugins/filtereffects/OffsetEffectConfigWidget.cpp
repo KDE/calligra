@@ -22,8 +22,8 @@
 #include "KoFilterEffect.h"
 #include <KNumInput>
 #include <KLocale>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
+#include <QGridLayout>
+#include <QLabel>
 
 const qreal OffsetLimit = 100.0;
 

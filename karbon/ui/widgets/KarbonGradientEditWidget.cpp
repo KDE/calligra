@@ -34,18 +34,18 @@
 #include <kurl.h>
 #include <KNumInput>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QPointF>
-#include <QtGui/QLabel>
-#include <QtGui/QPainter>
-#include <QtGui/QLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QToolButton>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QGridLayout>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QConicalGradient>
+#include <QFileInfo>
+#include <QPointF>
+#include <QLabel>
+#include <QPainter>
+#include <QLayout>
+#include <QPushButton>
+#include <QToolButton>
+#include <QPaintEvent>
+#include <QGridLayout>
+#include <QRadialGradient>
+#include <QLinearGradient>
+#include <QConicalGradient>
 
 #include <math.h>
 

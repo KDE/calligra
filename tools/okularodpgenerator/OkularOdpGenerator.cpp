@@ -26,7 +26,7 @@
 #include <KDE/KStandardDirs>
 #include <KDE/KMimeType>
 #include <KDE/KParts/ComponentFactory>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <OkularOdpGenerator.h>
 #include <okular/core/page.h>
 #include <qimage.h>

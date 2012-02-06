@@ -19,8 +19,8 @@
 #ifndef SWINDER_DECRYPT_H
 #define SWINDER_DECRYPT_H
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QString>
 
 namespace Swinder
 {

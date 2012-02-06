@@ -35,8 +35,8 @@
 #include <QSizePolicy>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QMenu>

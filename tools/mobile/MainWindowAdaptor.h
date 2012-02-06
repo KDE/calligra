@@ -26,7 +26,7 @@
 #define MAINWINDOWADAPTOR_H
 
 #include <QColor>
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtDBus>
 #include <QDBusAbstractAdaptor>
 
