@@ -34,6 +34,17 @@ target_link_libraries(kritacolorselectorng kritaui)
 
 install(TARGETS kritacolorselectorng  DESTINATION ${PLUGIN_INSTALL_DIR})
 
+#
+
+set(KRITA_COLORSELECTORNG_QML_SRCS
+  colorselectorngqmlplugin.cpp
+)
+
+kde4_add_plugin(kritacolorselectorngqml ${KRITA_COLORSELECTORNG_QML_SRCS})
+
+target_link_libraries(kritacolorselectorngqml kritaui ${QT_QTDECLARATIVE_LIBRARY})
+
+install(TARGETS kritacolorselectorngqml DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 install( FILES  kis_colselng_color_patches.png
@@ -42,5 +53,5 @@ install( FILES  kis_colselng_color_patches.png
                 extended_color_selector.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-install( FILES  krita_colorselectorng.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_colorselectorng.desktop krita_colorselectorngqml.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 

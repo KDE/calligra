@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=ColorSelectorNG QML
+X-KDE-ServiceTypes=Krita/Qml
+Type=Service
+X-KDE-Library=kritacolorselectorngqml
+X-Krita-Version=5
