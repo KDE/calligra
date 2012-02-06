@@ -79,16 +79,30 @@ class StencilBoxDocker : public QDockWidget
         //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
 
         CollectionTreeWidget *m_treeWidget;
-        QMenu* m_menu;
-        QToolButton* m_button;
-        KLineEdit* m_filterLineEdit;
-        QVBoxLayout* m_layout;
-        QHBoxLayout* m_panelLayout;
+        QMenu *m_moreStencilMenu;
+        QMenu *m_stencilListMenu;
+        QToolButton *m_addButton;
+        QToolButton *m_showButton;
+        KLineEdit *m_filterLineEdit;
+        QVBoxLayout *m_layout;
+        QHBoxLayout *m_subLayout;
 
     private slots:
         void reapplyFilter();
         void getHotNewStuff();
+
+        /// Install stencil files
         void installStencil();
+
+        /// Remove stencil files
+        //bool removeStencil();
+
+        /// Open stencil in the docker
+        bool openStencil(const QString &stencilId);
+
+        /// Close stencil in the docker
+        bool closeStencil(const QString &stencilId);
+
         //void regenerateProxyMap();
 };
 

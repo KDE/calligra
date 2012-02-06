@@ -32,7 +32,7 @@ class QSortFilterProxyModel;
 class ShapeListView;
 class CollectionItemModel;
 
-///A delegate from qt designer, used to paint category item in the treewidget.
+/// A delegate from qt designer, used to paint stencil header.
 class SheetDelegate: public QItemDelegate
 {
     Q_OBJECT
@@ -46,6 +46,7 @@ private:
     QTreeView *m_view;
 };
 
+/// The listview of a stencil
 class ShapeListView : public QListView
 {
     Q_OBJECT

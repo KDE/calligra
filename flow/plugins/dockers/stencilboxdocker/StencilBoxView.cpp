@@ -99,9 +99,10 @@ ShapeListView::ShapeListView(QWidget* parent) :
 {
     setFocusPolicy(Qt::NoFocus);
     setFrameShape(QFrame::NoFrame);
-    setIconSize(QSize(22, 22));
+    setIconSize(QSize(32, 32));
     setMovement(QListView::Static);
     setSpacing(1);
+    setViewMode(QListView::IconMode);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListView::Adjust);
@@ -241,7 +242,7 @@ void CollectionTreeWidget::saveViewMode()
 void  CollectionTreeWidget::restoreViewMode()
 {
     //FIXME
-    m_viewMode = QListView::ListMode;
+    m_viewMode = QListView::IconMode;
 }
 
 void CollectionTreeWidget::handleMousePress(QTreeWidgetItem *item)

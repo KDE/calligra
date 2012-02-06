@@ -95,22 +95,25 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Stencil Box"));
-    QWidget* mainWidget = new QWidget(this);
-    setWidget(mainWidget);
+    QWidget *mainWidget = new QWidget(this);
 
-    m_menu = new QMenu();
-    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
-    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+    m_moreStencilMenu = new QMenu();
+    QAction* ghnsAction = m_moreStencilMenu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction* installAction = m_moreStencilMenu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+
+    m_stencilListMenu = new QMenu();
 
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
 
-    m_button = new QToolButton;
-    m_button->setIcon(SmallIcon("list-add"));
-    m_button->setToolTip(i18n("More shapes"));
-    m_button->setMenu(m_menu);
-    m_button->setPopupMode(QToolButton::InstantPopup);
+    //button for stencil creation/installation/share
+    m_addButton = new QToolButton;
+    m_addButton->setIcon(SmallIcon("list-add"));
+    m_addButton->setToolTip(i18n("More Stencils"));
+    m_addButton->setMenu(m_moreStencilMenu);
+    m_addButton->setPopupMode(QToolButton::InstantPopup);
 
+    //lineedit for search installed stencils
     m_filterLineEdit = new KLineEdit;
 #if QT_VERSION >= 0x040700
     m_filterLineEdit->setPlaceholderText(i18n("Filter"));
@@ -121,14 +124,23 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_treeWidget->setSelectionMode(QListView::SingleSelection);
     m_treeWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_panelLayout = new QHBoxLayout();
-    m_panelLayout->addWidget(m_button);
-    m_panelLayout->addWidget(m_filterLineEdit);
+    //button for stecnils listing
+    m_showButton = new QToolButton;
+    m_showButton->setIcon(SmallIcon("view-list-details"));
+    m_showButton->setToolTip(i18n("Show Stencils"));
+    m_showButton->setMenu(m_moreStencilMenu);
+    m_showButton->setPopupMode(QToolButton::InstantPopup);
+
+    m_subLayout = new QHBoxLayout();
+    m_subLayout->addWidget(m_filterLineEdit);
+    m_subLayout->addWidget(m_addButton);
+    m_subLayout->addWidget(m_showButton);
 
     m_layout = new QVBoxLayout(mainWidget);
-    m_layout->addLayout(m_panelLayout);
+    m_layout->addLayout(m_subLayout);
     m_layout->addWidget(m_treeWidget);
-    
+    setWidget(mainWidget);
+
     loadDefaultShapes();
     if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").isEmpty())
     {
@@ -367,4 +379,14 @@ void StencilBoxDocker::setViewMode(QListView::ViewMode iconMode)
         i.next();
         i.value()->setViewMode(iconMode);
     }
+}
+
+bool StencilBoxDocker::openStencil(const QString &stencilId)
+{
+    return true;
+}
+
+bool StencilBoxDocker::closeStencil(const QString &stencilId)
+{
+    return true;
 }
