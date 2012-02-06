@@ -153,7 +153,14 @@ Value& Value::operator=(const Value & _value)
 
 bool Value::operator==(const Value &other) const
 {
-    return type() == other.type() && asString() == other.asString();
+    Value::Type t = type();
+    if (t != other.type())
+        return false;
+    if (asString() != other.asString())
+        return false;
+    if (t == RichText && formatRuns() != other.formatRuns())
+        return false;
+    return true;
 }
 
 bool Value::operator!=(const Value &other) const
