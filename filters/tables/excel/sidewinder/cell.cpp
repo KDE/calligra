@@ -67,8 +67,10 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
 
 Cell::~Cell()
 {
+    delete d->value;
     delete d->formula;
     delete d->note;
+    //d->format is owned and destroyed by the Workbook
     delete d;
 }
 
