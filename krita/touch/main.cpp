@@ -24,6 +24,7 @@
 #include <KCmdLineArgs>
 #include <qdeclarative.h>
 #include "kto_canvas.h"
+#include <KoPluginLoader.h>
 
 int main(int argc, char *argv[])
 {
@@ -36,10 +37,14 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
     
     KApplication app;
-    QCoreApplication::setOrganizationName("KDE");
-    QCoreApplication::setOrganizationDomain("kde.org");
-    QCoreApplication::setApplicationName("Calligra Active");
 
+    // Load dockers
+    KoPluginLoader::PluginsConfig config;
+    config.blacklist = "QmlPluginsDisabled";
+    config.group = "krita";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Qml"),
+                                        QString::fromLatin1("[X-Krita-Version] == 5"));
+    
     qmlRegisterType<KtoCanvas> ("KritaTouch", 1, 0, "Canvas");
     
     KtoMainWindow window;
