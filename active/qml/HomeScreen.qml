@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  *
  * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
+ * Copyright (C) 2012 Sujith H <sujith.h@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,6 +22,7 @@
 
 import QtQuick 1.0
 import CalligraActive 1.0
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Image {
     id: homeScreen
@@ -54,11 +56,10 @@ Image {
         anchors.margins: 10
     }
 
-    Button {
+    PlasmaComponents.Button {
         id: openFileDialogButton
 
-        imageSource: "qrc:///images/words.png"
-	textPosition: "right"
+        iconSource: "document-open"
 	text: "Open File"
         width: homeScreen.width/2.1;
 	height: 100;
@@ -71,11 +72,10 @@ Image {
         onClicked: mainwindow.openFileDialog()
     }
 
-    Button {
+    PlasmaComponents.Button {
         id: aboutCalligraButton
 
-        imageSource: "qrc:///images/active-about.png"
-        textPosition: "right"
+        iconSource: "active-about"
         text: "About Calligra Active"
         width: homeScreen.width/2.1;
         height: 100;

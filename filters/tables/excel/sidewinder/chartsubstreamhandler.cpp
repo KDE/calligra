@@ -1296,7 +1296,14 @@ void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
-    //TODO
+    if ( Charting::Axis *axis = dynamic_cast< Charting::Axis* > ( m_currentObj ) ) {
+        axis->m_reversed = record->isFReversed();
+        axis->m_logarithmic = record->isFLog();
+        axis->m_autoMinimum = record->isFAutoMin();
+        axis->m_autoMaximum = record->isFAutoMax();
+        axis->m_minimum = record->isFAutoMin() ? 0 : record->numMin();
+        axis->m_maximum = record->isFAutoMax() ? 0 : record->numMax();
+    }
 }
 
 void ChartSubStreamHandler::handleTick(TickRecord *record)

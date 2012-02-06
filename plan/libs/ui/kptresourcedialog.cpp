@@ -31,10 +31,12 @@
 #include <QStandardItem>
 
 #include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
+#endif
 #endif
 
 #include <kdatetimewidget.h>
@@ -52,6 +54,10 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     m_resource( resource )
 {
     setupUi(this);
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseBtn->hide();
+#endif
 #if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseBtn->hide();
 #endif
@@ -199,6 +205,7 @@ void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
 
 void ResourceDialogImpl::slotChooseResource()
 {
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
@@ -217,6 +224,7 @@ void ResourceDialogImpl::slotChooseResource()
             initialsEdit->setText(in);
         }
     }
+#endif
 #endif
 }
 

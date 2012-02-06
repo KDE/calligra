@@ -3459,8 +3459,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
             QImage image;
             m_context->import->imageFromFile(m_recentDestName, image);
 
-            image = image.convertToFormat(QImage::Format_ARGB32);
+            // first copy the part we are interested in and then to the conversation what may
+            // save us some bytes and circles when the copy is way smaller then the original
+            // is in which case the convertToFormat is more cheap.
             image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            image = image.convertToFormat(QImage::Format_ARGB32);
 
             RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
             addManifestEntryForFile(destinationName);

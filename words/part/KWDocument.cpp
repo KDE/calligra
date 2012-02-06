@@ -167,6 +167,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(shape);
     }
+    shape->update();
 }
 
 void KWDocument::removeShape(KoShape *shape)

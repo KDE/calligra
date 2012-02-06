@@ -77,7 +77,7 @@ namespace wvWare {
     public:
         virtual ~SubDocumentHandler();
 
-        /**
+    /**
      * Set the progress of WordDocument Stream processing.  All other
      * streams (Table, Data) are refered from this one.
      */
@@ -216,17 +216,17 @@ namespace wvWare {
 
         virtual ~GraphicsHandler();
 
-        /**
-         * This method gets called when a floating object is found.
-     * @param globalCP (character position)
-         */
+       /**
+        * This method gets called when a floating object is found.
+        * @param globalCP (character position)
+        */
         virtual void handleFloatingObject(unsigned int globalCP);
 
-    /**
-     * This method gets called when an inline object is found.  @param data
-         * the picture properties and offset into data stream.
-     */
-    virtual void handleInlineObject(const PictureData& data);
+       /**
+        * This method gets called when an inline object is found.  @param data
+        * the picture properties and offset into data stream.
+        */
+	virtual QString handleInlineObject(const PictureData& data, const bool isBulletPicture = false);
     };
 
 

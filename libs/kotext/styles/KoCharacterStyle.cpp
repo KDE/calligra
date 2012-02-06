@@ -353,7 +353,7 @@ void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
     d->stylesPrivate = format.properties();
 }
 
-KoCharacterStyle *KoCharacterStyle::clone(QObject *parent)
+KoCharacterStyle *KoCharacterStyle::clone(QObject *parent) const
 {
     KoCharacterStyle *newStyle = new KoCharacterStyle(parent);
     newStyle->copyProperties(this);
@@ -373,6 +373,11 @@ void KoCharacterStyle::setDefaultStyle(KoCharacterStyle *defaultStyle)
 void KoCharacterStyle::setParentStyle(KoCharacterStyle *parent)
 {
     d->parentStyle = parent;
+}
+
+KoCharacterStyle *KoCharacterStyle::parentStyle() const
+{
+    return d->parentStyle;
 }
 
 QPen KoCharacterStyle::textOutline() const
@@ -492,17 +497,12 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
+    QTextCharFormat cf = block.charFormat();
 
-    if (block.length() > 0) // This weird setPosition is needed so currentFrame reports the table
-        cursor.setPosition(cursor.position()+1);
-    QTextTable *table = qobject_cast<QTextTable*>(cursor.currentFrame());
-    QTextCharFormat cf;
-    if (table) {
-        QTextTableCell cell = table->cellAt(cursor.position());
-        cf = cell.format();
-    } else {
+    if (!cf.isTableCellFormat()) {
         cf = KoTextDocument(block.document()).frameCharFormat();
     }
+
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

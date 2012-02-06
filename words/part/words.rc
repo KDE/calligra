@@ -56,24 +56,14 @@
  -->
  
  <!-- leftovers from insert menu - to be moved to texttool
-  <Action name="insert_framebreak"/>
   <Action name="insert_link"/>
   <Action name="add_bookmark"/>
  -->
 
  <Menu name="format"><text>F&amp;ormat</text>
-  <Action name="format_font"/>
-  <Action name="format_paragraph"/>
-  <Action name="format_footendnote"/>
   <Action name="format_stylemenu"/>
   <Action name="format_stylist"/>
   <Action name="import_style"/>
-  <Action name="create_style"/>
-  <Separator/>
-  <Action name="format_page"/>
-  <Separator/>
-  <Action name="format_header"/>
-  <Action name="format_footer"/>
  </Menu>
 
  <Menu name="settings"><text>&amp;Settings</text>
@@ -108,7 +98,6 @@
   -->
 </ToolBar>
 <Menu name="text_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -121,7 +110,6 @@
  <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -136,7 +124,6 @@
  <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell_with_result">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -155,7 +142,6 @@
  </Menu>
 </Menu>
 <Menu name="custom_var_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -169,7 +155,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
 </Menu>
 <Menu name="variable_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -185,7 +170,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work on variables (yet?)-->
 </Menu>
 <Menu name="text_popup_link">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -203,7 +187,6 @@
  <!--<ActionList name="datatools_link"/> Spell check doesn't work on links (yet?)-->
 </Menu>
 <Menu name="footnote_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -218,7 +201,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
 </Menu>
 <Menu name="comment_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>

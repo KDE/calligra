@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen danders@get2net>
+   Copyright (C) 2007, 2011 Dag Andersen danders@get2net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@
 #include "kptdatetime.h"
 
 #include <QDate>
-#include <QMimeData>
 #include <QList>
 #include <QObject>
 #include <QStringList>
@@ -42,9 +41,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
 
 #include "kdganttglobal.h"
 
@@ -1076,56 +1072,6 @@ void ResourceAppointmentsItemModel::slotResourceGroupChanged( ResourceGroup *res
         int row = p->resourceGroups().indexOf( res );
         emit dataChanged( createGroupIndex( row, 0, res ), createGroupIndex( row, columnCount() - 1, res ) );
     }
-}
-
-Qt::DropActions ResourceAppointmentsItemModel::supportedDropActions() const
-{
-    return Qt::CopyAction;
-}
-
-
-QStringList ResourceAppointmentsItemModel::mimeTypes() const
-{
-    return QStringList() << "text/x-vcard";
-}
-
-bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
-{
-    kDebug()<<row<<" p:"<<parent.row()<<endl;
-    if (action == Qt::IgnoreAction)
-        return true;
-
-    if (column > 0) {
-        return false;
-    }
-    //kDebug()<<row<<" p:"<<parent.row()<<endl;
-    ResourceGroup *g = 0;
-    if ( parent.isValid() ) {
-        g = resourcegroup( parent );
-    } else {
-        g = resourcegroup( index( row, column, parent ) );
-    }
-    if ( g == 0 ) {
-        return false;
-    }
-    //kDebug()<<data->formats()<<endl;
-    MacroCommand *m = 0;
-    if ( data->hasFormat( "text/x-vcard" ) ) {
-        QByteArray vcard = data->data( "text/x-vcard" );
-        KABC::VCardConverter vc;
-        KABC::Addressee::List lst = vc.parseVCards( vcard );
-        foreach( const KABC::Addressee &a, lst ) {
-            if ( m == 0 ) m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
-            Resource *r = new Resource();
-            r->setName( a.formattedName() );
-            r->setEmail( a.preferredEmail() );
-            m->addCommand( new AddResourceCmd( g, r ) );
-        }
-    }
-    if ( m ) {
-        emit executeCommand( m );
-    }
-    return true;
 }
 
 //-------------------------------------------------------

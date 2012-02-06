@@ -129,10 +129,9 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
                 cs = 0;
             }
         }
-        if( cs )
+        if ( cs ) {
             thePublic->setColorSet(cs);
-        // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
-        // thePublic->setFixedSize(mainLayout->sizeHint());
+        }
     }
     delete dlg;
 }
@@ -213,11 +212,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     KoColorSet *colorSet = new KoColorSet();
     setColorSet(colorSet);
-
-/*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
-    connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
-*/
-
 }
 
 KoColorSetWidget::~KoColorSetWidget()
@@ -228,11 +222,6 @@ KoColorSetWidget::~KoColorSetWidget()
         delete d->colorSet;
     }
     delete d;
-}
-
-void KoColorSetWidget::addRecentColor(const KoColor &color)
-{
-    d->addRecent(color);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
@@ -249,11 +238,6 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
     if(i == numRecents) // we didn't find it above
         addRecent(patch->color());
-}
-
-void KoColorSetWidget::setOppositeColor(const KoColor &color)
-{
-    Q_UNUSED(color);
 }
 
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)

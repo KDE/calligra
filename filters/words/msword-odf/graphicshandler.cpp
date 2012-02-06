@@ -238,7 +238,7 @@ void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
     emit textBoxFound(index, stylesxml);
 }
 
-void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
+QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture)
 {
     //TODO: The globalCP might be required to obtain the SPA structure for
     //inline MS-ODRAW shapes with missing OfficeArtClientAnchor.
@@ -249,6 +249,7 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     //msosptPictureFrame shapes is stored in the PICF struture.
 
     kDebug(30513) ;
+    QString ret;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
 #ifdef DEBUG_GHANDLER
@@ -260,22 +261,24 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     //the picture is store in some external file
     if (data.picf->mfp.mm == MM_SHAPEFILE) {
-        DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
-        m_objectType = Inline;
-        m_picf = data.picf;
-        insertEmptyInlineFrame(out);
-        return;
+        if (!isBulletPicture) {
+            DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
+            m_objectType = Inline;
+            m_picf = data.picf;
+            insertEmptyInlineFrame(out);
+        }
+        return ret;
     }
 
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
     if (!in) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
-        return;
+        return ret;
     }
     if (data.fcPic > in->getSize()) {
         kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
-        return;
+        return ret;
     }
 
 #ifdef DEBUG_GHANDLER
@@ -294,11 +297,11 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     } catch (const IOException& e) {
         kDebug(30513) << e.msg;
         in->rewind(_zero);
-        return;
+        return ret;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
         in->rewind(_zero);
-        return;
+        return ret;
     }
     in->rewind(_zero);
 
@@ -318,6 +321,7 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
+                ref.name = m_picNames[fbse->rgbUid];
                 continue;
             } else {
                 ref = savePicture(block, m_store);
@@ -332,6 +336,10 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
     m_store->leaveDirectory();
 
+    if (isBulletPicture) {
+        return ref.name;
+    }
+
     bool inStylesXml = m_document->writingHeader();
     DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
@@ -342,6 +350,8 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     const OfficeArtSpContainer* o = &(co.shape);
     processDrawingObject(*o, out);
+
+    return ret;
 }
 
 void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)

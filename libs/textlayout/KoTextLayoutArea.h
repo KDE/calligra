@@ -257,6 +257,7 @@ private:
     bool m_virginPage;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
+    qreal m_anchoringParagraphTop;
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;
