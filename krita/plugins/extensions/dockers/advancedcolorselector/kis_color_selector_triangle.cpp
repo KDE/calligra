@@ -26,8 +26,8 @@ USING_PART_OF_NAMESPACE_EIGEN
         
 #include "KoColor.h"
 
-KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
-    KisColorSelectorComponent(parent),
+KisColorSelectorTriangle::KisColorSelectorTriangle(QObject* parent, KisColorSelectorInterface* colorSelectorInterface) :
+    KisColorSelectorComponent(parent, colorSelectorInterface),
     m_lastClickPos(-1,-1)
 {
 }
@@ -51,7 +51,7 @@ void KisColorSelectorTriangle::paint(QPainter* painter)
                       m_pixelCache);
 
 
-    if(m_lastClickPos.x()>-0.1 && m_parent->displayBlip()) {
+    if(m_lastClickPos.x()>-0.1 && m_colorSelectorInterface->displayBlip()) {
         painter->setPen(QColor(0,0,0));
         painter->drawEllipse(m_lastClickPos.x()*width()-5, m_lastClickPos.y()*height()-5, 10, 10);
         painter->setPen(QColor(255,255,255));

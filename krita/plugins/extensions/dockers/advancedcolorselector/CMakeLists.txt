@@ -38,6 +38,9 @@ install(TARGETS kritacolorselectorng  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(KRITA_COLORSELECTORNG_QML_SRCS
   colorselectorngqmlplugin.cpp
+  kis_color_selector_component.cpp
+  kis_color_selector_item.cpp
+  kis_color_selector_wheel.cpp
 )
 
 kde4_add_plugin(kritacolorselectorngqml ${KRITA_COLORSELECTORNG_QML_SRCS})

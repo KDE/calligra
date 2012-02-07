@@ -20,6 +20,7 @@
 
 #include <QWidget>
 #include <QRgb>
+#include "kis_color_selector_interface.h"
 
 class QColor;
 class KoColor;
@@ -29,7 +30,7 @@ class KisCanvas2;
 class KisColorPreviewPopup;
 
 /// Base class for all color selectors, that should support color management and zooming.
-class KisColorSelectorBase : public QWidget
+class KisColorSelectorBase : public QWidget, public KisColorSelectorInterface
 {
 Q_OBJECT
 public:
@@ -38,7 +39,7 @@ public:
     ~KisColorSelectorBase();
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
-    void setColorSpace(const KoColorSpace* colorSpace);
+    virtual void setColorSpace(const KoColorSpace* colorSpace);
     virtual void setCanvas(KisCanvas2* canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
     const KoColorSpace* colorSpace() const;

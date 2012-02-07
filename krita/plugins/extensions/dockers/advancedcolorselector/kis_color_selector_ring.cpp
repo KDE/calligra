@@ -26,8 +26,8 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 #include "KoColor.h"
 
-KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
-    KisColorSelectorComponent(parent),
+KisColorSelectorRing::KisColorSelectorRing(QObject* parent, KisColorSelectorInterface* colorSelectorInterface) :
+    KisColorSelectorComponent(parent, colorSelectorInterface),
     m_cachedColorSpace(0),
     m_cachedSize(0),
     m_lastHue(0)
@@ -77,7 +77,7 @@ void KisColorSelectorRing::paint(QPainter* painter)
 
 
     // paint blip
-    if(m_parent->displayBlip()) {
+    if(m_colorSelectorInterface->displayBlip()) {
         qreal angle;
         int y_start, y_end, x_start, x_end;
         angle=m_lastHue*2.*M_PI+(M_PI);

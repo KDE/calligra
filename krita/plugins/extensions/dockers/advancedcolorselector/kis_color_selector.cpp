@@ -48,8 +48,7 @@ KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
                                        m_wheel(0),
                                        m_mainComponent(0),
                                        m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+                                       m_grabbingComponent(0)
 {
     init();
     setConfiguration(conf);
@@ -65,8 +64,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
                                        m_button(0),
                                        m_mainComponent(0),
                                        m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+                                       m_grabbingComponent(0)
 {
     init();
     updateSettings();
@@ -295,11 +293,11 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
-    m_ring = new KisColorSelectorRing(this);
-    m_triangle = new KisColorSelectorTriangle(this);
-    m_slider = new KisColorSelectorSimple(this);
-    m_square = new KisColorSelectorSimple(this);
-    m_wheel = new KisColorSelectorWheel(this);
+    m_ring = new KisColorSelectorRing(this, this);
+    m_triangle = new KisColorSelectorTriangle(this, this);
+    m_slider = new KisColorSelectorSimple(this, this);
+    m_square = new KisColorSelectorSimple(this, this);
+    m_wheel = new KisColorSelectorWheel(this, this);
 
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);

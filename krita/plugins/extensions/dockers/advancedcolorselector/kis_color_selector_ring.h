@@ -26,7 +26,7 @@ class KisColorSelectorRing : public KisColorSelectorComponent
 {
     Q_OBJECT
 public:
-    explicit KisColorSelectorRing(KisColorSelector *parent);
+    explicit KisColorSelectorRing(QObject* parent, KisColorSelectorInterface* colorSelectorInterface);
     int innerRadius() const;
     QColor selectColor(int x, int y);
     void setColor(const QColor &color);

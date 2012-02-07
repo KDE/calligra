@@ -22,8 +22,8 @@
 #include <QColor>
 #include <cmath>
 
-KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
-    KisColorSelectorComponent(parent),
+KisColorSelectorSimple::KisColorSelectorSimple(QObject* parent, KisColorSelectorInterface* colorSelectorInterface) :
+    KisColorSelectorComponent(parent, colorSelectorInterface),
     m_lastClickPos(-1,-1)
 {
 }
@@ -177,7 +177,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     painter->drawImage(0,0, m_pixelCache);
 
     // draw blip
-    if(m_lastClickPos!=QPointF(-1,-1) && m_parent->displayBlip()) {
+    if(m_lastClickPos!=QPointF(-1,-1) && m_colorSelectorInterface->displayBlip()) {
         switch (m_parameter) {
         case KisColorSelector::H:
         case KisColorSelector::hsvS:

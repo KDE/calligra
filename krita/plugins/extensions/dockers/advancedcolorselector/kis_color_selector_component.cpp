@@ -24,14 +24,14 @@
 #include <QMouseEvent>
 
 
-KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
+KisColorSelectorComponent::KisColorSelectorComponent(QObject* parent, KisColorSelectorInterface* colorSelectorInterface) :
     QObject(parent),
     m_hue(0),
     m_hsvSaturation(1),
     m_value(1),
     m_hslSaturation(1),
     m_lightness(0.5),
-    m_parent(parent),
+    m_colorSelectorInterface(colorSelectorInterface),
     m_width(0),
     m_height(0),
     m_x(0),
@@ -76,7 +76,7 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
 {
-    const KoColorSpace* cs = m_parent->colorSpace();
+    const KoColorSpace* cs = m_colorSelectorInterface->colorSpace();
     Q_ASSERT(cs);
     return cs;
 }

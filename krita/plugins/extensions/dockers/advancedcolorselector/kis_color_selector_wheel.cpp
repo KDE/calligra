@@ -22,8 +22,8 @@
 #include <QColor>
 #include <cmath>
 
-KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
-    KisColorSelectorComponent(parent),
+KisColorSelectorWheel::KisColorSelectorWheel(QObject* parent, KisColorSelectorInterface* colorSelectorInterface) :
+    KisColorSelectorComponent(parent, colorSelectorInterface),
     m_lastClickPos(-1,-1)
 {
 }
@@ -143,7 +143,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     painter->drawImage(0,0, m_pixelCache);
 
     // draw blips
-    if(m_lastClickPos!=QPoint(-1,-1) && m_parent->displayBlip()) {
+    if(m_lastClickPos!=QPoint(-1,-1) && m_colorSelectorInterface->displayBlip()) {
         QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
         if(width()<height())
             pos.setY(pos.y()+height()/2-width()/2);

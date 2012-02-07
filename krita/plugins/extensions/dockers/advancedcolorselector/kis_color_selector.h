@@ -131,11 +131,6 @@ private:
 
     QColor m_lastColor;
     QColor m_currentColor;
-    bool m_blipDisplay;
-
-public:
-    void setDisplayBlip(bool disp) {m_blipDisplay = disp;}
-    bool displayBlip() const {return m_blipDisplay;}
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H
