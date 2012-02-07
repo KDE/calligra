@@ -1838,7 +1838,8 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
 
         m_preregisteredFootNoteFrames.append(subFrame);
-        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - line.height() - m_y);
+        qreal offset = 0.1;
+        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - line.height() - m_y + offset);
         bool contNotNeeded = footNoteArea->layout(m_footNoteCursorToNext);
         if (contNotNeeded) {
             delete m_footNoteCursorToNext;
