@@ -318,6 +318,7 @@ void Parser9x::parseTextBox(uint index, bool stylesxml)
 
     PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( index ) );
 
+    //TODO: Do we need to save the state here?
     saveState( it.currentRun() - 1, TextBox );
     U32 offset = m_fib.ccpText + it.currentStart();
     offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
@@ -495,7 +496,7 @@ void Parser9x::parseHelper( Position startPos )
         U32 limit = it.currentRun(); // Number of characters in this piece
 
         // Check whether the text starts somewhere within the piece, reset at
-        // the end of the loop body
+        // the end of the loop body.
         if ( startPos.offset != 0 ) {
             fc += unicode ? startPos.offset * 2 : startPos.offset;
             limit -= startPos.offset;
@@ -746,6 +747,45 @@ void Parser9x::processParagraph( U32 fc )
         props->pap().dump();
 #endif
 
+        // Parse the bullet picture data.
+        const Word97::CHP* bulletChp = 0;
+        if (props->listInfo()) {
+            bulletChp = (props->listInfo()->text()).chp;
+        }
+        if (bulletChp && bulletChp->fPicBullet) {
+            bool ok;
+            BookmarkData data( m_bookmarks->bookmark(UString("_PictureBullets"), ok) );
+            if (ok) {
+                Position pos(data.startCP + bulletChp->picBulletCP, m_plcfpcd);
+                PLCFIterator<Word97::PCD> it( m_plcfpcd->at( pos.piece ));
+                U32 fc = it.current()->fc;
+                bool unicode;
+
+                realFC( fc, unicode );
+                fc +=  unicode ? pos.offset * 2: pos.offset;
+
+                Word97::CHP* bulletPicChp = new Word97::CHP();
+                m_properties->fullSavedChp( fc, bulletPicChp, 0 );
+
+                if (bulletPicChp->fSpec) {
+                    m_wordDocument->push();
+                    m_wordDocument->seek( fc, WV2_SEEK_SET );
+                    U8 c = m_wordDocument->readU8();
+                    m_wordDocument->pop();
+
+                    if (c == TextHandler::Picture) {
+                        SharedPtr<const Word97::CHP> sharedBPChp( bulletPicChp );
+                        QString name = emitPictureData( 0, sharedBPChp, true);
+                        props->setBulletPictureName(name);
+                    } else {
+                        wvlog << "BulletPicture: Support for character 0x" << hex << c << "not implement yet.";
+                    }
+                } else {
+                    wvlog << "BulletPicture: A special character expected, skipping!";
+                }
+            }
+        }
+
         // keep it that way, else the variables get deleted!
         SharedPtr<const ParagraphProperties> sharedPap( props );
         SharedPtr<const Word97::CHP> sharedParagraphChp( paragraphChp );
@@ -901,8 +941,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
                 //NOTE: Not checking the ok value, invalid bookmarks were
                 //already reported.  So it's obsolete at the moment.
-        bool ok;
-        BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
+                bool ok;
+                BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
                 if ( !(bkmk_length <= length) ) {
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
@@ -1135,7 +1175,7 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
     m_textHandler->headersFound( make_functor( *this, &Parser9x::parseHeaders, data ) );
 }
 
-void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp )
+QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp , const bool isBulletPicture)
 {
     //NOTE: No need for the globalCP argument at the moment.
 
@@ -1143,10 +1183,11 @@ void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP>
     wvlog << "Found a picture; fcPic: " << chp->fcPic_fcObj_lTagObj;
 #endif
 
+    QString ret;
     OLEStreamReader* stream( m_fib.nFib < Word8nFib ? m_wordDocument : m_data );
     if ( !stream || static_cast<unsigned int>( chp->fcPic_fcObj_lTagObj ) >= stream->size() ) {
         wvlog << "Error: Severe problems when trying to read an image. Skipping." << endl;
-        return;
+        return ret;
     }
     stream->push();
     stream->seek( chp->fcPic_fcObj_lTagObj, WV2_SEEK_SET );
@@ -1164,13 +1205,13 @@ void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP>
         wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
         wvlog << "Skipping the image!" << endl;
         delete picf;
-        return;
+        return ret;
     }
 
     if ( picf->fError ) {
         wvlog << "Information: Skipping the image, fError is set" << endl;
         delete picf;
-        return;
+        return ret;
     }
 
 #ifdef WV2_DEBUG_PICTURES
@@ -1197,12 +1238,18 @@ void Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP>
 #endif
             delete [] stPicName;
         }
-    offset += cchPicName + 1;
+        offset += cchPicName + 1;
     }
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
     PictureData data( offset, sharedPicf );
-    m_textHandler->msodrawObjectFound(globalCP, &data);
+
+    if (isBulletPicture) {
+        ret = m_graphicsHandler->handleInlineObject(data, isBulletPicture);
+    } else {
+        m_textHandler->msodrawObjectFound(globalCP, &data);
+    }
+    return ret;
 }
 
 void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )

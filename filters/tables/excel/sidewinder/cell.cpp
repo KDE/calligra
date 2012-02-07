@@ -25,61 +25,44 @@
 
 #include <iostream>
 
-namespace Swinder
-{
-
-class Cell::Private
-{
-public:
-    Sheet* sheet;
-    unsigned row;
-    unsigned column;
-    Value value;
-    QString formula;
-    const Format* format;
-    unsigned columnSpan;
-    unsigned rowSpan;
-    bool covered;
-    int columnRepeat;
-    QString note;
-};
-
-}
-
 using namespace Swinder;
 
 Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
+    : m_sheet(sheet)
+    , m_value(0)
+    , m_formula(0)
+    , m_note(0)
+    , m_format(0)
+    , m_row(row)
+    , m_column(column)
+    , m_rowSpan(1)
+    , m_columnSpan(1)
+    , m_columnRepeat(1)
+    , m_covered(false)
 {
-    d = new Cell::Private();
-    d->sheet      = sheet;
-    d->column     = column;
-    d->row        = row;
-    d->value      = Value::empty();
-    d->columnSpan = 1;
-    d->rowSpan    = 1;
-    d->covered    = false;
-    d->columnRepeat = 1;
-    d->format     = 0;
 }
 
 Cell::~Cell()
 {
-    delete d;
+    delete m_value;
+    delete m_formula;
+    delete m_note;
+    //m_format is owned and destroyed by the Workbook
 }
 
 Sheet* Cell::sheet()
 {
-    return d->sheet;
+    return m_sheet;
 }
 
 unsigned Cell::column() const
 {
-    return d->column;
+    return m_column;
 }
 
 unsigned Cell::row() const
 {
-    return d->row;
+    return m_row;
 }
 
 QString Cell::name() const
@@ -121,48 +104,64 @@ QString Cell::columnLabel(int column)
 
 Value Cell::value() const
 {
-    return d->value;
+    return m_value ? *m_value : Value::empty();
 }
 
 void Cell::setValue(const Value& value)
 {
-    d->value = value;
+    if (value.isEmpty()) {
+        delete m_value;
+        m_value = 0;
+    } else {
+        if (m_value)
+            *m_value = value;
+        else
+            m_value = new Value(value);
+    }
 }
 
 QString Cell::formula() const
 {
-    return d->formula;
+    return m_formula ? *(m_formula) : QString();
 }
 
 void Cell::setFormula(const QString& formula)
 {
-    d->formula = formula;
+    if (formula.isNull()) {
+        delete m_formula;
+        m_formula = 0;
+    } else {
+        if (m_formula)
+            *(m_formula) = formula;
+        else
+            m_formula = new QString(formula);
+    }
 }
 
 const Format& Cell::format() const
 {
     static const Format null;
-    if (!d->format) return null;
-    return *(d->format);
+    if (!m_format) return null;
+    return *(m_format);
 }
 
 void Cell::setFormat(const Format* format)
 {
-    d->format = format;
+    m_format = format;
 }
 
 unsigned Cell::columnSpan() const
 {
-    return d->columnSpan;
+    return m_columnSpan;
 }
 
 void Cell::setColumnSpan(unsigned span)
 {
     if (span < 1) return;
-    d->columnSpan = span;
+    m_columnSpan = span;
     // correctly set right border
     if (span > 1) {
-        Cell* lastCell = d->sheet->cell(d->column + span - 1, d->row, false);
+        Cell* lastCell = m_sheet->cell(m_column + span - 1, m_row, false);
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setRightBorder(lastCell->format().borders().rightBorder());
@@ -173,16 +172,16 @@ void Cell::setColumnSpan(unsigned span)
 
 unsigned Cell::rowSpan() const
 {
-    return d->rowSpan;
+    return m_rowSpan;
 }
 
 void Cell::setRowSpan(unsigned span)
 {
     if (span < 1) return;
-    d->rowSpan = span;
+    m_rowSpan = span;
     // correctly set bottom border
     if (span > 1) {
-        Cell* lastCell = d->sheet->cell(d->column, d->row + span - 1, false);
+        Cell* lastCell = m_sheet->cell(m_column, m_row + span - 1, false);
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setBottomBorder(lastCell->format().borders().bottomBorder());
@@ -193,67 +192,75 @@ void Cell::setRowSpan(unsigned span)
 
 bool Cell::isCovered() const
 {
-    return d->covered;
+    return m_covered;
 }
 
 void Cell::setCovered(bool covered)
 {
-    d->covered = covered;
+    m_covered = covered;
 }
 
 int Cell::columnRepeat() const
 {
-    return d->columnRepeat;
+    return m_columnRepeat;
 }
 
 void Cell::setColumnRepeat(int repeat)
 {
-    d->columnRepeat = repeat;
+    m_columnRepeat = repeat;
 }
 
 bool Cell::hasHyperlink() const
 {
-    return d->sheet->hyperlink(d->column, d->row).isValid;
+    return m_sheet->hyperlink(m_column, m_row).isValid;
 }
 
 Hyperlink Cell::hyperlink() const
 {
-    return d->sheet->hyperlink(d->column, d->row);
+    return m_sheet->hyperlink(m_column, m_row);
 }
 
 void Cell::setHyperlink(const Hyperlink& link)
 {
-    d->sheet->setHyperlink(d->column, d->row, link);
+    m_sheet->setHyperlink(m_column, m_row, link);
 }
 
 QString Cell::note() const
 {
-    return d->note;
+    return m_note ? *(m_note) : QString();
 }
 
 void Cell::setNote(const QString &n)
 {
-    d->note = n;
+    if (n.isNull()) {
+        delete m_note;
+        m_note = 0;
+    } else {
+        if (m_note)
+            *(m_note) = n;
+        else
+            m_note = new QString(n);
+    }
 }
 
 QList<ChartObject*> Cell::charts() const
 {
-    return d->sheet->charts(d->column, d->row);
+    return m_sheet->charts(m_column, m_row);
 }
 
 void Cell::addChart(ChartObject* chart)
 {
-    d->sheet->addChart(d->column, d->row, chart);
+    m_sheet->addChart(m_column, m_row, chart);
 }
 
 QList<OfficeArtObject*> Cell::drawObjects() const
 {
-    return d->sheet->drawObjects(d->column, d->row);
+    return m_sheet->drawObjects(m_column, m_row);
 }
 
 void Cell::addDrawObject(OfficeArtObject* of)
 {
-    d->sheet->addDrawObject(d->column, d->row, of);
+    m_sheet->addDrawObject(m_column, m_row, of);
 }
 
 bool Cell::operator==(const Cell &other) const

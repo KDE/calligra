@@ -23,6 +23,7 @@ import QtQuick 1.0
 import CalligraActive 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.metadatamodels 0.1 as MetadataModels
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 ListView {
     id: recentFilesListView
@@ -53,29 +54,25 @@ ListView {
     }
 
     model: metadataModel
-    delegate: Button {
-        textPosition: "right"
-
-        text: label
-        width: buttonWidth; height: buttonHeight;
-        imageSource: {
-            switch(typeFilter) {
-                case "PaginatedTextDocument":
-                    "qrc:///images/words.png"
-                    break;
-                case "Spreadsheet":
-                    "qrc:///images/tables.png"
-                    break;
-                case "Presentation":
-                    "qrc:///images/stage.png"
-                    break;
+    delegate:
+        PlasmaComponents.Button {
+            text: label
+            width: buttonWidth; height: buttonHeight;
+            iconSource: {
+                switch(typeFilter) {
+                    case "PaginatedTextDocument":
+                        "words"
+                        break;
+                    case "Spreadsheet":
+                        "kspread"
+                        break;
+                    case "Presentation":
+                        "stage"
+                        break;
+                }
             }
-        }
 
-        MouseArea {
-            anchors.fill: parent
             onClicked: homeScreen.openDocument(model["url"]);
         }
-    }
 }
 

@@ -58,6 +58,7 @@ protected:
     KoFilter::ConversionStatus read_plotArea();
     KoFilter::ConversionStatus read_valAx();
     KoFilter::ConversionStatus read_catAx();
+    KoFilter::ConversionStatus read_scaling();
     KoFilter::ConversionStatus read_title();
     KoFilter::ConversionStatus read_legend();
     KoFilter::ConversionStatus read_spPr();

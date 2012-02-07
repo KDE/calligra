@@ -44,6 +44,8 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
 #include <KoShapeRegistry.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
@@ -232,11 +234,19 @@ bool Map::isReadWrite() const
 bool Map::completeLoading(KoStore *store)
 {
     Q_UNUSED(store);
+
+    QPointer<KoUpdater> dependencyUpdater, recalcUpdater;
+    if (doc() && doc()->progressUpdater()) {
+        dependencyUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Tables::DependencyManager::updateAllDependencies");
+        recalcUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Tables::RecalcManager::recalc");
+    }
+
     // Initial build of all cell dependencies.
-    d->dependencyManager->updateAllDependencies(this);
+    d->dependencyManager->updateAllDependencies(this, dependencyUpdater);
     // Recalc the whole workbook now, since there may be formulas other spreadsheets support,
     // but KSpread does not.
-    d->recalcManager->recalcMap();
+    d->recalcManager->recalcMap(recalcUpdater);
+
     return true;
 }
 
