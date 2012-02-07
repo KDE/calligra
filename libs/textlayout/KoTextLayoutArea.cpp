@@ -1847,6 +1847,7 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
             m_continuedNoteToNext = 0;
         } else {
             m_continuedNoteToNext = note;
+            footNoteArea->postlayout(m_footNoteCursorToNext->subFrameIterator(subFrame));
         }
         m_preregisteredFootNotesHeight += footNoteArea->bottom();
         m_preregisteredFootNoteAreas.append(footNoteArea);
