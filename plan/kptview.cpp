@@ -29,7 +29,7 @@
 #include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <qsize.h>
+#include <QSize>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QTreeWidget>

@@ -27,20 +27,20 @@
 
 #include "kexicsvimportdialog.h"
 
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qclipboard.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qmime.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QClipboard>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMime>
+#include <QPushButton>
+#include <QRadioButton>
 #include <q3table.h>
-#include <qfiledialog.h>
-#include <qpainter.h>
-#include <qtextcodec.h>
-#include <qtimer.h>
-#include <qfontmetrics.h>
+#include <QFileDialog>
+#include <QPainter>
+#include <QTextCodec>
+#include <QTimer>
+#include <QFontMetrics>
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>

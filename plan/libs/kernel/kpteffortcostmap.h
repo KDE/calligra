@@ -20,7 +20,7 @@
 #ifndef KPTEFFORTCOST_H
 #define KPTEFFORTCOST_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QMap>
 
 #include "kptduration.h"

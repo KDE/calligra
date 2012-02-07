@@ -47,7 +47,7 @@
 #include <QSpinBox>
 #include <QLineEdit>
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kptitemmodelbase.h>
 
 #include <kactionselector.h>

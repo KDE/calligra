@@ -21,7 +21,7 @@
 #define EDITLISTVIEW_DIALOG_H
 
 #include <QHash>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <KPageDialog>
 
 #include <kexi_export.h>

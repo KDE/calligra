@@ -28,8 +28,8 @@
 #include <KActionCollection>
 #include <KAction>
 
-#include <qfiledialog.h>
-#include <qapplication.h>
+#include <QFileDialog>
+#include <QApplication>
 
 /*#ifdef Q_WS_WIN
 #include <win32_utils.h>

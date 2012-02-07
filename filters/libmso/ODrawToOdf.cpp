@@ -24,7 +24,7 @@
 #include <KoXmlWriter.h>
 #include <QtDebug>
 #include <QColor>
-#include <qbuffer.h>
+#include <QBuffer>
 #include "generated/leinputstream.h"
 
 #include <cmath>

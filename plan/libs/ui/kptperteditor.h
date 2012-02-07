@@ -34,7 +34,7 @@
 
 #include <QVariant>
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kactionselector.h>
 

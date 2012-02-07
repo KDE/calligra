@@ -43,7 +43,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 using namespace Calligra::Tables;
 

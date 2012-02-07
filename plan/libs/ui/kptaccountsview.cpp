@@ -30,7 +30,7 @@
 #include <QApplication>
 #include <QLabel>
 #include <QPainter>
-#include <qpalette.h>
+#include <QPalette>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QHBoxLayout>

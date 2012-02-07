@@ -23,7 +23,7 @@
 
 #include <kexiutils_export.h>
 
-#include <qpushbutton.h>
+#include <QPushButton>
 
 class KexiCommandLinkButtonPrivate;
 

@@ -44,11 +44,11 @@
 
 #include <kexiutils_export.h>
 
-#include <qobject.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qabstractitemmodel.h>
-#include <qrect.h>
+#include <QObject>
+#include <QPoint>
+#include <QString>
+#include <QAbstractItemModel>
+#include <QRect>
 
 #ifndef QT_NO_COMPLETER
 

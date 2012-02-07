@@ -25,9 +25,9 @@
 
 #include <KStandardAction>
 #include <KAction>
-#include <qwidget.h>
-#include <qstring.h>
-#include <qicon.h>
+#include <QWidget>
+#include <QString>
+#include <QIcon>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;

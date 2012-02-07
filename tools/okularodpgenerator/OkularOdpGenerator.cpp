@@ -29,8 +29,8 @@
 #include <QDebug>
 #include <OkularOdpGenerator.h>
 #include <okular/core/page.h>
-#include <qimage.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QPainter>
 
 static KAboutData createAboutData()
 {

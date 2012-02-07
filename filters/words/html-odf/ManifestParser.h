@@ -20,7 +20,7 @@
 #ifndef MANIFESTPARSER_H
 #define MANIFESTPARSER_H
 
-#include "qxml.h"
+#include "QtXml"
 
 /* Parses an odt's manifest.xml file, storing a list of files of supported filetypes.
 

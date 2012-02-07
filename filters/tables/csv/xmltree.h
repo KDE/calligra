@@ -20,7 +20,7 @@
 #ifndef XMLTREE_H
 #define XMLTREE_H
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QVector>
 #include <QTextStream>
 

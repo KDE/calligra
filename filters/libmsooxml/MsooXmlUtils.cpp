@@ -54,7 +54,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QColor>
 #include <QBrush>
 #include <QImage>

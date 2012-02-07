@@ -45,7 +45,7 @@
 #include <KoProgressUpdater.h>
 
 #include <QApplication>
-#include <qpainter.h>
+#include <QPainter>
 #include <QDir>
 #include <QMutableMapIterator>
 #include <QTreeView>

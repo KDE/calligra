@@ -39,31 +39,31 @@
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 
-#include "qdebug.h"
-#include "qcache.h"
-#include "qstyle.h"
-#include "qevent.h"
-#include "qtimer.h"
-#include "qlayout.h"
-#include "qmenu.h"
-#include "qpainter.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
+#include <QDebug>
+#include <QCache>
+#include <Style>
+#include <QEvent>
+#include <QTimer>
+#include <QLayout>
+#include <QMenu>
+#include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+# include <qaccessible.h>
 #endif
 /*#ifndef QT_NO_EFFECTS
 # include <private/qeffects_p.h>
 #endif*/
 #ifndef QT_NO_WHATSTHIS
-# include <qwhatsthis.h>
+# include <QWhatsThis>
 #endif
 
 #include "KexiMenuWidget_p.h"
 //#include "qmenubar_p.h"
-#include "qwidgetaction.h"
-#include "qtoolbutton.h"
-#include "qpushbutton.h"
+#include <QWidgetAction>
+#include <QToolButton>
+#include <QPushButton>
 #include <QScopedPointer>
 #include <QDesktopServices>
 #include <QUrl>
