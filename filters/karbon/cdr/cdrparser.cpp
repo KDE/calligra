@@ -935,41 +935,41 @@ QString argAsString;
 QString argTypeAsString;
 switch(argType)
 {
-    case 10 :
+    case CdrObjectOutlineIndexArgumentId :
         argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("outline index");
         break;
-    case 20 :
+    case CdrObjectFillIndexArgumentId :
         argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("fill index");
         break;
-    case 30 :
+    case CdrObjectSpecificDataArgumentId :
         argTypeAsString = QLatin1String("object specific data");
         break;
-    case 40 :
+    case CdrObject40ArgumentId :
         argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("some 32-bit");
         break;
-    case 200 :
+    case CdrObjectStyleIndexArgumentId :
         argAsString = QString::number( argsData->arg<quint16>(i) );
         argTypeAsString = QLatin1String("style index");
         break;
-    case 1010 :
+    case CdrObject1010ArgumentId :
         argAsString = QString::number( argsData->arg<quint16>(i) );
         argTypeAsString = QLatin1String("some 16-bit");
         break;
-    case 1000 :
+    case CdrObjectTitleArgumentId :
         argAsString = QLatin1String( argsData->argPtr<char>(i) ); // TODO: all argPtr<char> need \0 term check
         argTypeAsString = QLatin1String("title");
         break;
-    case 100 :
+    case CdrObject100ArgumentId :
     {
         const Cdr4Point point = argsData->arg<Cdr4Point>( i );
         argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
         argTypeAsString = QLatin1String("point?");
         break;
     }
-    case 2000:
+    case CdrObject2000ArgumentId :
         argTypeAsString = QLatin1String("some larger data");
         break;
     default:
@@ -978,66 +978,6 @@ switch(argType)
 }
 qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
 
-// each page has as start types 0B, 0C, 11, 0
-// first set has both arg type 1000 and 2000, with text set for 1000, other have just 2000, no text
-// types 3 and 4 are on second, type 5 on last
-// type 3 and 5 have args 10, 20, 30, 100, 200, 1010 (1010 sometimes missing)
-
-// Arg types:
-// 10  32bit (outline?)
-// 20  32bit (fill?)
-// 30  object specific data
-// 40  32bit  seen only with ellipse so far
-// 100 32bit (point?)
-// 200 16 bit  (style index?)
-// 1000: text/title
-// 1010 16 bit
-// 2000: data 01 00 64 00 64 00 00 00 00 00 00 00
-
-// type 2: ellipse
-//  200:    5    (05 00)
-//  100: 197636  (04 04 03 00)
-//   40:         (28 FD 14 FE)
-//   30:         (...)
-//   20:   15    (0F 00 00 00)
-//   10:    3    (03 00 00 00)
-
-// type 5: bitmap?
-// 1010:  320    (40 01)
-//  200:    5    (05 00)
-//  100: 2756    (C4 0A 00 00)
-//   30:         (...) 44 bytes
-//   20:    2    (02 00 00 00)
-//   10:    2    (02 00 00 00)
-
-// type 4: text
-//  200:   29    (1D 00)
-//  100:         (94 06 EA 01)
-//   30:         (...)
-//   20:    1    (01 00 00 00)
-//   10:    2    (01 00 00 00)
-
-// type 4: text
-//  200:   32    (20 00)
-//  100:         (64 07 FE 01)
-//   30:         (...)
-//   20:    1    (01 00 00 00)
-//   10:    2    (01 00 00 00)
-
-// type 3: line or curve
-//  200:    5    (05 00)
-//  100: 1972    (B4 07 00 00)
-//   30:         (...) 64 bytes
-//   20:    1    (01 00 00 00)
-//   10:    2    (02 00 00 00)
-
-// type 3: line or curve
-// 1010: 32768   (01 80)
-//  200:    5    (05 00)
-//  100: 1940    (94 07 00 00)
-//   30:         (...) 872 bytes
-//   20:  256    (00 01 00 00)
-//   10: 1024    (00 04 00 00)
     }
 
     return object;
@@ -1056,20 +996,20 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
 
         switch( argType )
         {
-        case 10 :
+        case CdrObjectOutlineIndexArgumentId :
             rectangleObject->setOutlineId( argsData->arg<quint32>(i) );
             break;
-        case 20 :
+        case CdrObjectFillIndexArgumentId :
             rectangleObject->setFillId( argsData->arg<quint32>(i) );
             break;
-        case 30:
+        case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4RectangleData* rectangleData = argsData->argPtr<Cdr4RectangleData>( i );
             rectangleObject->setSize( rectangleData->mWidth, rectangleData->mHeight );
 qDebug() << "rectangle: width" << rectangleObject->width()<<"height"<<rectangleObject->height()
                  << "unknown" << rectangleData->_unknown;
         }
-        case 200 :
+        case CdrObjectStyleIndexArgumentId :
             rectangleObject->setStyleId( argsData->arg<quint16>(i) );
             break;
         }
@@ -1090,13 +1030,13 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
 
         switch( argType )
         {
-        case 10 :
+        case CdrObjectOutlineIndexArgumentId :
             ellipseObject->setOutlineId( argsData->arg<quint32>(i) );
             break;
-        case 20 :
+        case CdrObjectFillIndexArgumentId :
             ellipseObject->setFillId( argsData->arg<quint32>(i) );
             break;
-        case 30:
+        case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4EllipseData* ellipseData = argsData->argPtr<Cdr4EllipseData>( i );
             ellipseObject->setCenterPoint(ellipseData->mCenterPoint);
@@ -1106,7 +1046,7 @@ qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->m
                      <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
                      <<"unknown"<<ellipseData->_unknown;
         }
-        case 200 :
+        case CdrObjectStyleIndexArgumentId :
             ellipseObject->setStyleId( argsData->arg<quint16>(i) );
             break;
         }
@@ -1127,13 +1067,13 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
 
         switch( argType )
         {
-        case 10 :
+        case CdrObjectOutlineIndexArgumentId :
             pathObject->setOutlineId( argsData->arg<quint32>(i) );
             break;
-        case 20 :
+        case CdrObjectFillIndexArgumentId :
             pathObject->setFillId( argsData->arg<quint32>(i) );
             break;
-        case 30:
+        case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4PointList* points = argsData->argPtr<Cdr4PointList>( i );
 qDebug() << "path points:" << points->count;
@@ -1142,7 +1082,7 @@ qDebug() << "path points:" << points->count;
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
             }
         }
-        case 200 :
+        case CdrObjectStyleIndexArgumentId :
             pathObject->setStyleId( argsData->arg<quint16>(i) );
             break;
         }
@@ -1163,13 +1103,13 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
 
         switch( argType )
         {
-        case 10 :
+        case CdrObjectOutlineIndexArgumentId :
             textObject->setOutlineId( argsData->arg<quint32>(i) );
             break;
-        case 20 :
+        case CdrObjectFillIndexArgumentId :
             textObject->setFillId( argsData->arg<quint32>(i) );
             break;
-        case 30:
+        case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4TextData* textData = argsData->argPtr<Cdr4TextData>( i );
             QString text;
@@ -1178,7 +1118,7 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
             textObject->setText( text );
 qDebug() << "text:" << text;
         }
-        case 200 :
+        case CdrObjectStyleIndexArgumentId :
             textObject->setStyleId( argsData->arg<quint16>(i) );
             break;
         }

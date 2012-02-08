@@ -346,7 +346,91 @@ const T* argPtr( int i ) const
       <!-- 38..67: seen 0-->
       <member name="_data[30]" type="char" />
     </struct>
+  </structs>
 
+  <enums>
+<!--
+// each page has as start types 0B, 0C, 11, 0
+// first set has both arg type 1000 and 2000, with text set for 1000, other have just 2000, no text
+// types 3 and 4 are on second, type 5 on last
+// type 3 and 5 have args 10, 20, 30, 100, 200, 1010 (1010 sometimes missing)
+
+// type 2: ellipse
+//  200:    5    (05 00)
+//  100: 197636  (04 04 03 00)
+//   40:         (28 FD 14 FE)
+//   30:         (...)
+//   20:   15    (0F 00 00 00)
+//   10:    3    (03 00 00 00)
+
+// type 5: bitmap?
+// 1010:  320    (40 01)
+//  200:    5    (05 00)
+//  100: 2756    (C4 0A 00 00)
+//   30:         (...) 44 bytes
+//   20:    2    (02 00 00 00)
+//   10:    2    (02 00 00 00)
+
+// type 4: text
+//  200:   29    (1D 00)
+//  100:         (94 06 EA 01)
+//   30:         (...)
+//   20:    1    (01 00 00 00)
+//   10:    2    (01 00 00 00)
+
+// type 4: text
+//  200:   32    (20 00)
+//  100:         (64 07 FE 01)
+//   30:         (...)
+//   20:    1    (01 00 00 00)
+//   10:    2    (01 00 00 00)
+
+// type 3: line or curve
+//  200:    5    (05 00)
+//  100: 1972    (B4 07 00 00)
+//   30:         (...) 64 bytes
+//   20:    1    (01 00 00 00)
+//   10:    2    (02 00 00 00)
+
+// type 3: line or curve
+// 1010: 32768   (01 80)
+//  200:    5    (05 00)
+//  100: 1940    (94 07 00 00)
+//   30:         (...) 872 bytes
+//   20:  256    (00 01 00 00)
+//   10: 1024    (00 04 00 00)
+-->
+    <enum name="CdrObjectArgumentType">
+      <!-- 10: 32bit (outline?) -->
+      <item name="CdrObjectOutlineIndexArgumentId" value="10">
+          <description>The index of the outline in the outline table of the document.</description>
+      </item>
+      <!-- 20: 32bit (fill?)-->
+      <item name="CdrObjectFillIndexArgumentId" value="20">
+          <description>The index of the fill in the fill table of the document.</description>
+      </item>
+      <!-- 30: object specific data-->
+      <item name="CdrObjectSpecificDataArgumentId" value="30" />
+      <!-- 40: 32bit  seen only with ellipse so far-->
+      <item name="CdrObject40ArgumentId" value="40" />
+      <!-- 100: 32bit (point?)-->
+      <item name="CdrObject100ArgumentId" value="100" />
+      <!-- 200: 16 bit  (style index?)-->
+      <item name="CdrObjectStyleIndexArgumentId" value="200">
+          <description>The index of the style in the style table of the document.</description>
+      </item>
+      <!-- 1000: text/title-->
+      <item name="CdrObjectTitleArgumentId" value="1000">
+          <description>The tile of the object.</description>
+      </item>
+      <!-- 1010: 16 bit -->
+      <item name="CdrObject1010ArgumentId" value="1010" />
+      <!-- 2000: data 01 00 64 00 64 00 00 00 00 00 00 00-->
+      <item name="CdrObject2000ArgumentId" value="2000" />
+    </enum>
+  </enums>
+
+  <structs>
     <!-- sample data: AC 2D B6 DF 00 00-->
     <struct name="Cdr4RectangleData">
       <!-- 0..1: width?-->
