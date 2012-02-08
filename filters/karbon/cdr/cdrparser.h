@@ -21,11 +21,10 @@
 #ifndef CDRPARSER_H
 #define CDRPARSER_H
 
-// filter
-#include "cdrstructs.h"
 // Koralle
 #include <Koralle0/RiffStreamReader>
 
+class CdrArgumentWithTypeData;
 class CdrDocument;
 class CdrPage;
 class CdrLayer;

@@ -14,9 +14,9 @@ target_link_libraries(cheadergenerator
 )
 
 add_custom_command(
-    OUTPUT cdrstructs.h
+    OUTPUT cdr4structs.h
     COMMAND cheadergenerator
-    ARGS cdrstructs.h "${CMAKE_CURRENT_SOURCE_DIR}/cdr4structs.format"
+    ARGS cdr4structs.h "${CMAKE_CURRENT_SOURCE_DIR}/cdr4structs.format"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/cdr4structs.format" cheadergenerator
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     VERBATIM
@@ -27,7 +27,7 @@ include_directories(
 )
 
 set( karboncdrimport_PART_SRCS
-    cdrstructs.h # find a better way to add to dep tree
+    cdr4structs.h # find a better way to add to dep tree
     cdrdocument.cpp
     cdrparser.cpp
     cdrsvgwriter.cpp

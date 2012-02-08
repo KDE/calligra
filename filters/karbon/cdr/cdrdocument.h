@@ -22,7 +22,7 @@
 #define CDRDOCUMENT_H
 
 // filter
-#include "cdrstructs.h"
+#include "cdr4structs.h"
 // Qt
 #include <QtGui/QColor>
 #include <QtCore/QHash>
