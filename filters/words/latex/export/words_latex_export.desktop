@@ -2,7 +2,7 @@
 X-KDE-Export=text/x-tex
 ExportDescription=LATEX
 Icon=
-X-KDE-Import=application/x-words
+X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 ImportDescription=Words
 Name=Words LATEX Export Filter
