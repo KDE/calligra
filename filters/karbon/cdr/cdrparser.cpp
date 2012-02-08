@@ -62,7 +62,7 @@ static const Koralle::FourCharCode outlId('o','u','t','l');
 static const Koralle::FourCharCode pageId('p','a','g','e');
 static const Koralle::FourCharCode paraId('p','a','r','a');
 static const Koralle::FourCharCode parlId('p','a','r','l');
-static const Koralle::FourCharCode spndId('s','p','d','d');
+static const Koralle::FourCharCode spndId('s','p','n','d');
 static const Koralle::FourCharCode stltId('s','t','l','t');
 static const Koralle::FourCharCode strlId('s','t','r','l');
 static const Koralle::FourCharCode stshId('s','t','s','h');
@@ -610,9 +610,11 @@ qDebug() << "Reading Page...";
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
         if( (chunkId == flgsId) &&
-            (mRiffStreamReader.chunkSize() == 2) )
+            (mRiffStreamReader.chunkSize() == 4) )
         {
-            readPageFlags();
+            const QByteArray flagsChunk = mRiffStreamReader.chunkData();
+//             const CdrPageFlagChunkData flags = data<CdrPageFlagChunkData>( flagsChunk );
+qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( (chunkId == gobjId) &&
                  mRiffStreamReader.isListChunk() )
@@ -639,15 +641,6 @@ qDebug() << "Reading Page...";
     return page;
 }
 
-void
-CdrParser::readPageFlags()
-{
-// 000C:3990 |       40 00  01 90                                 |   @...          
-// 000C:3B00 |                                 40 00  00 90       |           @...  
-// 000C:8FE0 |                           00 00 00 90              |         ....    
-
-}
-
 
 CdrLayer*
 CdrParser::readLayer()
@@ -662,8 +655,12 @@ qDebug() << "Layer <<<";
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
         if( (chunkId == flgsId) &&
-            (mRiffStreamReader.chunkSize() == 2) )
-            readLayerFlags();
+            (mRiffStreamReader.chunkSize() == 4) )
+        {
+            const QByteArray flagsChunk = mRiffStreamReader.chunkData();
+//             const CdrLayerFlagChunkData flags = data<CdrLayerFlagChunkData>( flagsChunk );
+qDebug()<< "...with flags"<<flagsChunk.toHex();
+        }
         else if( (chunkId == lgobId) &&
                  mRiffStreamReader.isListChunk() )
         {
@@ -697,26 +694,6 @@ qDebug() << "Layer >>>";
 
     return layer;
 }
-
-void
-CdrParser::readLayerFlags()
-{
-// 000C:39B0 |                    5A 01  01 98                    |       Z...      
-// 000C:3A00 |                                 4A 00  01 98       |           J...  
-// 000C:3A60 |       48 00  01 98                                 |   H...          
-// 000C:3AB0 |                    40 00  00 98                    |       @...      
-// 000C:3B00 |                                 40 00  00 90       |           @...  
-// 000C:3B20 |                                              5A 01 |               Z.
-// 000C:3B30 | 01 98                                              | ..              
-// 000C:3B70 |                    4A 00  01 98                    |       J...      
-// 000C:3BB0 |                                              48 00 |               H.
-// 000C:3BC0 | 01 98                                              | ..              
-// 000C:3C00 |                    40 00  00 98                    |       @...      
-// 000C:3C40 |                                              00 02 |               ..
-// 000C:3C50 | 00 08                                              | ..              
-
-}
-// 000C:3D40 |       00 02  00 08                                 |   ....          
 
 void
 CdrParser::readLayerLGOb()
@@ -755,15 +732,15 @@ qDebug() << "LinkGroup <<<";
 
         if( mRiffStreamReader.chunkId() == spndId )
         {
-            const QByteArray spndData = mRiffStreamReader.chunkData();
-            // 0..1: ?
-            const quint16 spnd = data<quint16>( spndData );
+            const QByteArray spndChunk = mRiffStreamReader.chunkData();
+//             const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
         else if( mRiffStreamReader.chunkId() == flgsId )
         {
-            const QByteArray flagsData = mRiffStreamReader.chunkData();
-            // 0..3: ?
-            const quint32 flags = data<quint32>( flagsData );
+            const QByteArray flagsChunk = mRiffStreamReader.chunkData();
+//             const CdrLinkGroupFlagChunkData flagsData = data<CdrLinkGroupFlagChunkData>( flagsChunk );
+qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( (chunkId == obj_Id) &&
                  mRiffStreamReader.isListChunk() )
@@ -798,15 +775,15 @@ qDebug() << "Group <<<";
 
         if( mRiffStreamReader.chunkId() == spndId )
         {
-            const QByteArray spndData = mRiffStreamReader.chunkData();
-            // 0..1: ?
-            const quint16 spnd = data<quint16>( spndData );
+            const QByteArray spndChunk = mRiffStreamReader.chunkData();
+//             const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
         else if( mRiffStreamReader.chunkId() == flgsId )
         {
-            const QByteArray flagsData = mRiffStreamReader.chunkData();
-            // 0..3: ?
-            const quint32 flags = data<quint32>( flagsData );
+            const QByteArray flagsChunk = mRiffStreamReader.chunkData();
+//             const CdrGroupFlagChunkData flagsData = data<CdrGroupFlagChunkData>( flagsChunk );
+qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( mRiffStreamReader.chunkId() == bboxId )
         {
@@ -849,15 +826,15 @@ qDebug() << "Object <<<";
 
         if( (mRiffStreamReader.chunkId() == spndId) )
         {
-            const QByteArray spndData = mRiffStreamReader.chunkData();
-            // 0..1: ?
-            const quint16 spnd = data<quint16>( spndData );
+            const QByteArray spndChunk = mRiffStreamReader.chunkData();
+//             const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
         else if( (mRiffStreamReader.chunkId() == flgsId) )
         {
-            const QByteArray flagsData = mRiffStreamReader.chunkData();
-            // 0..3: flags
-            const quint32 flags = data<quint32>( flagsData );
+            const QByteArray flagsChunk = mRiffStreamReader.chunkData();
+//             const CdrObjectFlagChunkData flagsData = data<CdrObjectFlagChunkData>( flagsChunk );
+qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( (chunkId == lgobId) &&
                  mRiffStreamReader.isListChunk() )

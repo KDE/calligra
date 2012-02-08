@@ -73,10 +73,7 @@ private:
     void readStrl();
     void readParl();
 
-    void readPageFlags();
-
     CdrLayer* readLayer();
-    void readLayerFlags();
     void readLayerLGOb();
 
     CdrLinkGroupObject* readLinkGroupObject();

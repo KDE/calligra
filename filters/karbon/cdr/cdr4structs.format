@@ -344,6 +344,74 @@ const T* argPtr( int i ) const
       <!-- 38..67: seen 0-->
       <member name="_data[30]" type="char" />
     </struct>
+
+<!--
+// 000C:3990 |       40 00  01 90                                 |   @...          
+// 000C:3B00 |                                 40 00  00 90       |           @...  
+// 000C:8FE0 |                           00 00 00 90              |         ....    
+00000190
+-->
+    <struct name="CdrPageFlagChunkData">
+        <!-- 0..3: flags?-->
+        <member name="_unknown" type="quint32" />
+    </struct>
+
+<!--
+// 000C:39B0 |                    5A 01  01 98                    |       Z...      
+// 000C:3A00 |                                 4A 00  01 98       |           J...  
+// 000C:3A60 |       48 00  01 98                                 |   H...          
+// 000C:3AB0 |                    40 00  00 98                    |       @...      
+// 000C:3B00 |                                 40 00  00 90       |           @...  
+// 000C:3B20 |                                              5A 01 |               Z.
+// 000C:3B30 | 01 98                                              | ..              
+// 000C:3B70 |                    4A 00  01 98                    |       J...      
+// 000C:3BB0 |                                              48 00 |               H.
+// 000C:3BC0 | 01 98                                              | ..              
+// 000C:3C00 |                    40 00  00 98                    |       @...      
+// 000C:3C40 |                                              00 02 |               ..
+// 000C:3C50 | 00 08                                              | ..              
+// 000C:3D40 |       00 02  00 08                                 |   ....          
+1a010198  loda type 11
+0a000198  loda type 12
+08000198  loda type 17
+00000098  loda type 0
+-->
+    <struct name="CdrLayerFlagChunkData">
+        <!-- 0..3: flags?-->
+        <member name="_unknown" type="quint32" />
+    </struct>
+
+    <struct name="CdrLinkGroupSpndChunkData">
+        <!-- 0..1: flags?-->
+        <member name="_unknown" type="quint16" />
+    </struct>
+
+    <struct name="CdrLinkGroupFlagChunkData">
+        <!-- 0..3: flags?-->
+        <member name="_unknown" type="quint32" />
+    </struct>
+
+    <struct name="CdrGroupSpndChunkData">
+        <!-- 0..1: flags?-->
+        <member name="_unknown" type="quint16" />
+    </struct>
+
+    <!-- seen 00000010, 00080010 -->
+    <struct name="CdrGroupFlagChunkData">
+        <!-- 0..3: flags?-->
+        <member name="_unknown" type="quint32" />
+    </struct>
+
+    <struct name="CdrObjectSpndChunkData">
+        <!-- 0..1: flags?-->
+        <member name="_unknown" type="quint16" />
+    </struct>
+
+    <!-- seen 00020008-->
+    <struct name="CdrObjectFlagChunkData">
+        <!-- 0..3: flags?-->
+        <member name="_unknown" type="quint32" />
+    </struct>
   </structs>
 
   <enums>
