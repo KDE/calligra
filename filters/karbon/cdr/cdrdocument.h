@@ -28,7 +28,6 @@
 #include <QtCore/QHash>
 #include <QtCore/QVector>
 #include <QtCore/QString>
-#include <QtCore/QByteArray>
 
 
 enum CdrObjectId
@@ -276,13 +275,13 @@ public:
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
-    void setStyleSheetFileName( const QByteArray& styleSheetFileName ) { mStyleSheetFileName = styleSheetFileName; }
+    void setStyleSheetFileName( const QString& styleSheetFileName ) { mStyleSheetFileName = styleSheetFileName; }
 public:
     quint16 fullVersion() const { return mFullVersion; }
     quint16 width() const { return mWidth; }
     quint16 height() const { return mHeight; }
     const QVector<CdrPage*>& pages() const { return mPages; }
-    const QByteArray& styleSheetFileName() const { return mStyleSheetFileName; }
+    const QString& styleSheetFileName() const { return mStyleSheetFileName; }
     CdrStyle* style( quint16 id ) { return mStyleTable.value(id); }
     CdrOutline* outline( quint32 id ) { return mOutlineTable.value(id); }
     CdrAbstractFill* fill( quint32 id ) { return mFillTable.value(id); }
@@ -291,7 +290,7 @@ private:
     quint16 mFullVersion;
     quint16 mWidth;
     quint16 mHeight;
-    QByteArray mStyleSheetFileName;
+    QString mStyleSheetFileName;
 
     QHash<quint16, CdrStyle*> mStyleTable;
     QHash<quint32, CdrOutline*> mOutlineTable;

@@ -73,60 +73,6 @@ static const Koralle::FourCharCode vectId('v','e','c','t');
 static const Koralle::FourCharCode vrsnId('v','r','s','n');
 
 
-/// Returns the string starting at @arg startOffset, until the first '\0' or the
-/// end of the @arg data.
-static QByteArray
-baStringData( const QByteArray& data, int startOffset = 0 )
-{
-    QByteArray result;
-
-    const char* string = &data.constData()[startOffset];
-
-    // find terminating \0
-    int stringLength = data.size() - startOffset;
-    if( stringLength > 0 )
-    {
-        for( int i = 0; i < stringLength; ++i )
-        {
-            if( string[i] == 0 )
-            {
-                stringLength = i;
-                break;
-            }
-        }
-        result = QByteArray( string, stringLength );
-    }
-
-    return result;
-}
-
-/// Returns the string starting at @arg startOffset, until the first '\0' or the
-/// end of the @arg data.
-static QString
-stringData( const QByteArray& data, int startOffset = 0 )
-{
-    QString result;
-
-    const char* string = &data.constData()[startOffset];
-
-    // find terminating \0
-    int stringLength = data.size() - startOffset;
-    if( stringLength > 0 )
-    {
-        for( int i = 0; i < stringLength; ++i )
-        {
-            if( string[i] == 0 )
-            {
-                stringLength = i;
-                break;
-            }
-        }
-        result = QString::fromLatin1( string, stringLength );
-    }
-
-    return result;
-}
-
 template<typename T>
 T
 data( const QByteArray& data, int offset = 0 )
@@ -232,8 +178,10 @@ CdrParser::readCDR()
 void
 CdrParser::readVersion()
 {
-    const QByteArray versionData = mRiffStreamReader.chunkData();
-    mDocument->setFullVersion( data<quint16>(versionData) );
+    const QByteArray versionChunk = mRiffStreamReader.chunkData();
+    const CdrVersionChunkData* versionData = dataPtr<CdrVersionChunkData>( versionChunk );
+
+    mDocument->setFullVersion( versionData->mVersion );
 
 qDebug() << "Version:" << static_cast<qreal>(mDocument->fullVersion())/100;
 }
@@ -294,11 +242,11 @@ CdrParser::readInfo()
 void
 CdrParser::readDocMCfg()
 {
-    const QByteArray mcfgData = mRiffStreamReader.chunkData();
-    const MCfgData* mcfg = dataPtr<MCfgData>( mcfgData );
+    const QByteArray mcfgChunk = mRiffStreamReader.chunkData();
+    const MCfgChunkData* mcfgData = dataPtr<MCfgChunkData>( mcfgChunk );
 
     // set the page size
-    mDocument->setSize( mcfg->width, mcfg->height );
+    mDocument->setSize( mcfgData->mWidth, mcfgData->mHeight );
 }
 
 void
@@ -310,9 +258,10 @@ CdrParser::readDocGuid()
 void
 CdrParser::readDocStsh()
 {
-    // 0..end: a \0 terminated string with some file name, e.g. "CORELDRW.CDT"
-    const QByteArray mcfgData = mRiffStreamReader.chunkData();
-    mDocument->setStyleSheetFileName( baStringData(mcfgData) );
+    const QByteArray styleSheetChunk = mRiffStreamReader.chunkData();
+    const CdrStyleSheetChunkData* styleSheetData = dataPtr<CdrStyleSheetChunkData>( styleSheetChunk );
+
+    mDocument->setStyleSheetFileName( QLatin1String(styleSheetData->fileName()) );
 qDebug() << "Stsh:" << mDocument->styleSheetFileName();
 }
 
@@ -328,7 +277,7 @@ qDebug() << "Reading fonts...";
             CdrFont* font = new CdrFont;
 
             const QByteArray fontChunk = mRiffStreamReader.chunkData();
-            const CdrFontData* fontData = dataPtr<CdrFontData>( fontChunk );
+            const CdrFontChunkData* fontData = dataPtr<CdrFontChunkData>( fontChunk );
 
             font->setName( QLatin1String(fontData->fontName()) );
 
@@ -343,10 +292,11 @@ qDebug() << fontData->mFontIndex << font->name();
 void
 CdrParser::readDocLnkTable()
 {
-    const QByteArray lnkTableData = mRiffStreamReader.chunkData();
-    const CdrArgumentData* argsData = dataPtr<CdrArgumentData>( lnkTableData );
-qDebug() << "Reading LnkTable" << argsData->count << "args";
-    for (int i=0; i < argsData->count; i++)
+    const QByteArray lnkTableChunk = mRiffStreamReader.chunkData();
+    const CdrLnkTableChunkData* lnkTableData = dataPtr<CdrLnkTableChunkData>( lnkTableChunk );
+
+qDebug() << "Reading LnkTable" << lnkTableData->mArguments.count << "args";
+    for (int i=0; i < lnkTableData->mArguments.count; i++)
     {
 // qDebug() << i << ": type" << argsData->argPtr<LnkData>(i);
     }
@@ -410,6 +360,7 @@ qDebug() << "Reading Fills...";
 
             const QByteArray fillChunk = mRiffStreamReader.chunkData();
             const CdrFillData* fillData = dataPtr<CdrFillData>( fillChunk );
+
             QString fillDataString;
             if( fillData->mFillType == CdrTransparent )
             {
@@ -452,8 +403,9 @@ qDebug() << "Reading Outlines...";
         {
             CdrOutline* outline = new CdrOutline;
 
-            const QByteArray outlineBlob = mRiffStreamReader.chunkData();
-            const CdrOutlineData* outlineData = dataPtr<CdrOutlineData>( outlineBlob );
+            const QByteArray outlineChunk = mRiffStreamReader.chunkData();
+            const CdrOutlineChunkData* outlineData = dataPtr<CdrOutlineChunkData>( outlineChunk );
+
             outline->setType( outlineData->mType );
             outline->setLineWidth( outlineData->mLineWidth );
             outline->setColor( outlineData->mFillData.color() );
@@ -496,7 +448,7 @@ CdrParser::readDocStyle()
             CdrStyle* style = new CdrStyle;
 
             const QByteArray styleChunk = mRiffStreamReader.chunkData();
-            const CdrStyleData* styleData = dataPtr<CdrStyleData>( styleChunk );
+            const CdrStyleChunkData* styleData = dataPtr<CdrStyleChunkData>( styleChunk );
 
             const CdrStyleArgumentData* styleArgs = &styleData->mArguments;
 qDebug()<<"Style id:"<<styleData->mStyleIndex<<"args:"<<styleArgs->count<<"d:"<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
@@ -844,9 +796,8 @@ qDebug() << "Group <<<";
         }
         else if( mRiffStreamReader.chunkId() == bboxId )
         {
-            const QByteArray bboxData = mRiffStreamReader.chunkData();
-            // 0..7: Cdr4BoundingBox
-            const Cdr4BoundingBox* boundingBox = dataPtr<Cdr4BoundingBox>( bboxData );
+            const QByteArray bboxChunk = mRiffStreamReader.chunkData();
+            const Cdr4BoundingBoxChunkData* boundingBoxData = dataPtr<Cdr4BoundingBoxChunkData>( bboxChunk );
         }
         else if( (chunkId == grp_Id) &&
                  mRiffStreamReader.isListChunk() )
@@ -943,10 +894,11 @@ CdrParser::readTrfl()
     {
         if( (mRiffStreamReader.chunkId() == trfdId) )
         {
-            const QByteArray trfdData = mRiffStreamReader.chunkData();
-            const CdrTrflArgumentData* argsData = dataPtr<CdrTrflArgumentData>( trfdData );
-qDebug() << "Reading Trfd" << argsData->count << "args" << argsData->_unknown0 <<argsData->_unknown1;
-    for (int i=0; i < argsData->count; i++)
+            const QByteArray trfdChunk = mRiffStreamReader.chunkData();
+            const CdrTrflChunkData* trfdData = dataPtr<CdrTrflChunkData>( trfdChunk );
+
+qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->_unknown0 <<trfdData->_unknown1;
+    for (int i=0; i < trfdData->mArguments.count; i++)
     {
 // qDebug() << i << ": type" << argsData->argPtr<>()<TransformData>(i);
     }
@@ -962,9 +914,9 @@ CdrParser::readLoda()
 {
     CdrObject* object = 0;
 
-    const QByteArray lodaData = mRiffStreamReader.chunkData();
+    const QByteArray lodaChunk = mRiffStreamReader.chunkData();
 
-    const CdrObjectArgumentData* argsData = dataPtr<CdrObjectArgumentData>( lodaData );
+    const CdrObjectArgumentData* argsData = dataPtr<CdrObjectArgumentData>( lodaChunk );
 
 qDebug() << "Reading Loda" << argsData->count << "args, loda type" << argsData->chunkType;
     if( argsData->chunkType == CdrRectangleObjectId )
@@ -984,35 +936,35 @@ QString argTypeAsString;
 switch(argType)
 {
     case 10 :
-        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("outline index");
         break;
     case 20 :
-        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("fill index");
         break;
     case 30 :
         argTypeAsString = QLatin1String("object specific data");
         break;
     case 40 :
-        argAsString = QString::number( data<quint32>(lodaData, argsData->argOffsets()[i]) );
+        argAsString = QString::number( argsData->arg<quint32>(i) );
         argTypeAsString = QLatin1String("some 32-bit");
         break;
     case 200 :
-        argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
+        argAsString = QString::number( argsData->arg<quint16>(i) );
         argTypeAsString = QLatin1String("style index");
         break;
     case 1010 :
-        argAsString = QString::number( data<quint16>(lodaData, argsData->argOffsets()[i]) );
+        argAsString = QString::number( argsData->arg<quint16>(i) );
         argTypeAsString = QLatin1String("some 16-bit");
         break;
     case 1000 :
-        argAsString = stringData( lodaData, argsData->argOffsets()[i] );
+        argAsString = QLatin1String( argsData->argPtr<char>(i) ); // TODO: all argPtr<char> need \0 term check
         argTypeAsString = QLatin1String("title");
         break;
     case 100 :
     {
-        Cdr4Point point = data<Cdr4Point>( lodaData, argsData->argOffsets()[i] );
+        const Cdr4Point point = argsData->arg<Cdr4Point>( i );
         argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
         argTypeAsString = QLatin1String("point?");
         break;

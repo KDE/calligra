@@ -70,7 +70,7 @@
       </member>
     </struct>
 
-    <struct name="Cdr4BoundingBox">
+    <struct name="Cdr4BoundingBoxChunkData">
       <description></description>
       <!-- 0..3 -->
       <member type="Cdr4Point" name="mUpperLeft">
@@ -180,14 +180,38 @@ const T* argPtr( int i ) const
       <member name="_unknown4" type="qint16" />
     </struct>
 
-    <struct name="CdrStyleData">
+    <struct name="CdrVersionChunkData">
+      <!-- 0..1: version -->
+      <member type="quint16" name="mVersion">
+          <description>The version, multiplied with 100, e.g. 401 for version 4.01.</description>
+      </member>
+    </struct>
+
+    <struct name="CdrStyleSheetChunkData">
+      <method><!--order of types seems inverted...-->
+<code><![CDATA[const char* fileName() const { return &firstFileNameChar; }]]></code>
+      </method>
+      <!-- 0..end: filename -->
+      <member type="char" name="firstFileNameChar">
+          <description>A \0 terminated string with some file name, e.g. "CORELDRW.CDT".</description>
+      </member>
+    </struct>
+
+    <struct name="CdrLnkTableChunkData">
+       <!-- 0..end: data-->
+       <member type="CdrArgumentData" name="mArguments" />
+    </struct>
+
+    <struct name="CdrStyleChunkData">
        <!-- 0..1: int16 index/key/id-->
        <member type="quint16" name="mStyleIndex" />
        <!-- 2..end: data-->
        <member type="CdrStyleArgumentData" name="mArguments" />
     </struct>
 
-    <struct name="CdrTrflArgumentData" base="CdrArgumentData">
+    <struct name="CdrTrflChunkData">
+       <!-- 0..5 + end: argument data-->
+       <member type="CdrArgumentData" name="mArguments" />
       <!-- 6..7: seen FF FF-->
       <member name="_unknown0" type="qint16" />
       <!-- 8..9: seen 00 00-->
@@ -210,7 +234,7 @@ const T* argPtr( int i ) const
       <member name="_unknown3" type="quint8" />
     </struct>
 
-    <struct name="CdrFontData">
+    <struct name="CdrFontChunkData">
       <method><!--order of types seems inverted...-->
 <code><![CDATA[const char* fontName() const { return &firstFontNameChar; }]]></code>
       </method>
@@ -290,7 +314,7 @@ const T* argPtr( int i ) const
 // possible data: line type, line ending type, color
 // 68 bytes:
 -->
-    <struct name="CdrOutlineData">
+    <struct name="CdrOutlineChunkData">
       <!-- 0..3: uint32 index/key/id? would match loda-->
       <member name="mIndex" type="quint32" />
       <!-- 4..5: type (?) seen 1, 2, 50-->
@@ -460,11 +484,11 @@ const T* argPtr( int i ) const
     </struct>
 
    <!-- CDR4 has 54 bytes, CDR5 56 bytes (const structure?)-->
-   <struct name="MCfgData">
+   <struct name="MCfgChunkData">
       <!-- 0..1: width-->
-      <member name="width" type="quint16" />
+      <member name="mWidth" type="quint16" />
       <!-- 2..3: height-->
-      <member name="height" type="quint16" />
+      <member name="mHeight" type="quint16" />
     </struct>
 
 <!--
