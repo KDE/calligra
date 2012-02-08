@@ -25,7 +25,7 @@
 #ifndef FORMULAPARSER_H
 #define FORMULAPARSER_H
 
-#include <QtCore/QString>
+#include <QString>
 
 class Cell;
 

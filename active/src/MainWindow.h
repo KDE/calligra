@@ -22,7 +22,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
+
+#include <kdeclarative.h>
 
 class QDeclarativeView;
 
@@ -34,11 +36,16 @@ public:
     ~MainWindow();
 
     void openFile (const QString& path);
+
 private:
     QDeclarativeView* m_view;
+    KDeclarative kdeclarative;
+    QString documentPath;
 
 private slots:
     void adjustWindowSize (QSize size);
+    void checkForAndOpenDocument();
+
 public Q_SLOTS:
     void openFileDialog();
 };

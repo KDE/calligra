@@ -20,7 +20,7 @@
 #include "MergeEffectConfigWidget.h"
 #include "MergeEffect.h"
 #include "KoFilterEffect.h"
-#include <QtGui/QGridLayout>
+#include <QGridLayout>
 
 MergeEffectConfigWidget::MergeEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

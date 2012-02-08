@@ -137,8 +137,18 @@ private:
     Cell(const Cell&);
     Cell& operator=(const Cell&);
 
-    class Private;
-    Private* d;
+    Sheet* m_sheet;
+    Value* m_value;
+    QString* m_formula;
+    QString* m_note;
+    const Format* m_format;
+
+    unsigned m_row : 21; // KS_rowMax
+    unsigned m_column : 17; // KS_colMax
+    unsigned m_rowSpan : 21;
+    unsigned m_columnSpan : 17;
+    unsigned m_columnRepeat : 17;
+    bool m_covered : 1;
 };
 
 } // namespace Swinder

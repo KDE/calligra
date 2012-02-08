@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <qclipboard.h>
-#include <qregexp.h>
+#include <QPainter>
+#include <QClipboard>
+#include <QRegExp>
 #include <QMouseEvent>
 
 #include <kmenu.h>

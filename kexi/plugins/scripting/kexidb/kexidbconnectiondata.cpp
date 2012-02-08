@@ -19,7 +19,7 @@
 
 #include "kexidbconnectiondata.h"
 
-#include <qvariant.h>
+#include <QVariant>
 
 using namespace Scripting;
 

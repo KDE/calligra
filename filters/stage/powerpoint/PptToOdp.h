@@ -35,11 +35,11 @@
 #include <KoGenStyles.h>
 #include <KoStore.h>
 
-#include <QtCore/QStack>
-#include <QtCore/QPair>
-#include <QtCore/QRectF>
-#include <QtGui/QColor>
-#include <QtCore/QDebug>
+#include <QStack>
+#include <QPair>
+#include <QRectF>
+#include <QColor>
+#include <QDebug>
 
 class PowerPointImport;
 class ODrawToOdf;

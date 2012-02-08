@@ -20,9 +20,9 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <qpointer.h>
-#include <qobject.h>
-#include <qpair.h>
+#include <QPointer>
+#include <QObject>
+#include <QPair>
 
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"

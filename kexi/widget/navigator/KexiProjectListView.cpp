@@ -23,9 +23,9 @@
 #include "KexiProjectListViewItem.h"
 
 #include <q3header.h>
-#include <qpoint.h>
-#include <qpixmapcache.h>
-#include <qtoolbutton.h>
+#include <QPoint>
+#include <QPixmapCache>
+#include <QToolButton>
 #include <QKeyEvent>
 #include <QEvent>
 

@@ -23,7 +23,7 @@
 #include <KGlobal>
 #include <KLocale>
 
-#include <qmap.h>
+#include <QMap>
 
 #include "TjMessageHandler.h"
 #include "tjlib-internal.h"

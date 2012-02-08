@@ -20,9 +20,9 @@
 #ifndef SCRIPTING_KEXIDBPARSER_H
 #define SCRIPTING_KEXIDBPARSER_H
 
-#include <qstring.h>
-#include <qobject.h>
-#include <qpointer.h>
+#include <QString>
+#include <QObject>
+#include <QPointer>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/parser/parser.h>

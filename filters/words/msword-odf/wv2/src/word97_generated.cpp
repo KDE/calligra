@@ -3267,6 +3267,9 @@ void CHP::clear() {
     cvUl=cvAuto;
     fTNY=0;
     fTNYCompress=0;
+    picBulletCP=0;
+    fPicBullet=0;
+    fNoAutoSize=0;
 }
 
 void CHP::dump() const
@@ -3437,12 +3440,18 @@ std::string CHP::toString() const
     s += uint2string( fTNYCompress );
     for(int _i=0; _i<(16); ++_i) {
         s += "\nxstDispFldRMark[" + int2string( _i ) + "]=";
-    s += uint2string( xstDispFldRMark[_i] );
+        s += uint2string( xstDispFldRMark[_i] );
     }
     s += "\nshd=";
     s += "\n{" + shd.toString() + "}\n";
     s += "\nbrc=";
     s += "\n{" + brc.toString() + "}\n";
+    s += "\npicBulletCP=";
+    s += uint2string(picBulletCP);
+    s += "\nfPicBullet=";
+    s += uint2string(fPicBullet);
+    s += "\nfNoAutoSize=";
+    s += uint2string(fNoAutoSize);
     s += "\nCHP Done.";
     return s;
 }

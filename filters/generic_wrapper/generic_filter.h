@@ -20,7 +20,7 @@
 #ifndef __GENERICFILTER_H__
 #define __GENERICFILTER_H__
 
-#include <qstring.h>
+#include <QString>
 #include <QVariantList>
 
 #include <KoFilter.h>

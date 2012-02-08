@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qtimer.h>
-#include <qapplication.h>
+#include <QTimer>
+#include <QApplication>
 
 #include <kmessagebox.h>
 #include <klocale.h>

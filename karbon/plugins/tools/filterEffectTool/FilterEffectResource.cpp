@@ -26,8 +26,8 @@
 
 #include <KDebug>
 
-#include <QtCore/QFile>
-#include <QtCore/QBuffer>
+#include <QFile>
+#include <QBuffer>
 
 double fromPercentage(QString s)
 {

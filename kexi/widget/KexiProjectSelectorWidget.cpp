@@ -30,9 +30,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QPushButton>
+#include <QLayout>
 #include <QPixmap>
 #include <QKeyEvent>
 

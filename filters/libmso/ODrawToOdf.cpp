@@ -22,9 +22,9 @@
 #include "drawstyle.h"
 #include "msodraw.h"
 #include <KoXmlWriter.h>
-#include <QtCore/QtDebug>
-#include <QtGui/QColor>
-#include <qbuffer.h>
+#include <QtDebug>
+#include <QColor>
+#include <QBuffer>
 #include "generated/leinputstream.h"
 
 #include <cmath>

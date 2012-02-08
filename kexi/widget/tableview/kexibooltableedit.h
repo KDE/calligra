@@ -20,7 +20,7 @@
 #ifndef KEXIBOOLTABLEEDIT_H
 #define KEXIBOOLTABLEEDIT_H
 
-#include <qvariant.h>
+#include <QVariant>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"

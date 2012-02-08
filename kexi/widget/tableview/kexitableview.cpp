@@ -59,7 +59,7 @@
 #include <KAction>
 
 #ifndef KEXI_NO_PRINT
-#include <QtGui/QPrinter>
+#include <QPrinter>
 #endif
 
 #include "kexitableview.h"

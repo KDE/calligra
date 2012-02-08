@@ -24,7 +24,7 @@
 #ifndef DOCXXMLSTYLESREADER_H
 #define DOCXXMLSTYLESREADER_H
 
-#include <QtCore/QMap>
+#include <QMap>
 
 #include "DocxXmlDocumentReader.h"
 #include <MsooXmlDrawingTableStyle.h>

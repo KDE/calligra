@@ -411,7 +411,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
                 //from the QString
                 kDebug(30513) << "complete element: " <<
                                  m_textStrings[i].toLocal8Bit().constData();
-                writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
+                writer->addCompleteElement(m_textStrings[i].toUtf8().constData());
             } else {
                 //put style into m_mainStyles & get its name
                 textStyleName = 'T';
@@ -438,7 +438,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
                 }
                 //special case we need style applied and complete element added
                 else {
-                    writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
+                    writer->addCompleteElement(m_textStrings[i].toUtf8().constData());
                 }
                 //cleanup
                 delete m_textStyles[i];

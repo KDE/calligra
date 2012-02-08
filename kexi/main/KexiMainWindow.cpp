@@ -22,17 +22,17 @@
 #include <config-kexi.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QEventLoop>
+#include <QFile>
+#include <QTimer>
+#include <QObject>
 #include <QProcess>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qfiledialog.h>
+#include <QToolButton>
+
+#include <QMutex>
+#include <QWaitCondition>
+#include <QFileDialog>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QTextStream>

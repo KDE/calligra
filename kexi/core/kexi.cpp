@@ -24,12 +24,12 @@
 #include <kexiutils/identifier.h>
 #include <kexidb/msghandler.h>
 
-#include <qtimer.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpixmapcache.h>
-#include <qcolor.h>
-#include <qfileinfo.h>
+#include <QTimer>
+#include <QImage>
+#include <QPixmap>
+#include <QPixmapCache>
+#include <QColor>
+#include <QFileInfo>
 #include <QLabel>
 
 #include <kdebug.h>

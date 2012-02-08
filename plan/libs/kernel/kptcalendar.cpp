@@ -29,7 +29,7 @@
 
 #include <KoXmlReader.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QList>
 
 #include <kdatetime.h>

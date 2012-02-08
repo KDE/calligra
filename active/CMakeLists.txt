@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 project(calligra-active)
 
 find_package(Qt4 4.7.0 REQUIRED)
+find_package(KDE4 REQUIRED)
+
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories(${QT_INCLUDES}
                     ${KDE4_INCLUDES}
@@ -41,6 +43,7 @@ add_executable(calligraactive ${calligra-active_SRCS})
 target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
+    kdeclarative
     komain
     wordsprivate
     calligratablescommon

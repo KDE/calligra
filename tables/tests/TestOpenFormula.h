@@ -23,7 +23,7 @@
 #define CALLIGRA_TABLES_TEST_OPENFORMULA
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

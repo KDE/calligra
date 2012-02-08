@@ -20,7 +20,7 @@
 #ifndef KEXIANIMATEDLAYOUT_H
 #define KEXIANIMATEDLAYOUT_H
 
-#include <QtGui/QStackedLayout>
+#include <QStackedLayout>
 
 #include "kexiutils_export.h"
 

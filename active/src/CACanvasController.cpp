@@ -32,9 +32,9 @@
 
 #include <KDebug>
 
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
-#include <QtGui/QGraphicsWidget>
+#include <QPoint>
+#include <QSize>
+#include <QGraphicsWidget>
 
 CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
@@ -118,9 +118,6 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    //kDebug() << rect;
-    //kDebug() << canvas()->canvasItem()->size();
-
     int y = rect.center().y() - height()/2;
     if (y<0) {
         y = 0;
@@ -186,20 +183,12 @@ void CACanvasController::scrollContentsBy (int dx, int dy)
 
 qreal CACanvasController::docHeight() const
 {
-    if (m_zoomHandler) {
-        return m_documentSize.height() * m_zoomHandler->zoomFactorY();
-    } else {
-        return m_documentSize.height();
-    }
+    return m_documentSize.height();
 }
 
 qreal CACanvasController::docWidth() const
 {
-    if (m_zoomHandler) {
-        return m_documentSize.width() * m_zoomHandler->zoomFactorX();
-    } else {
-        return m_documentSize.width();
-    }
+    return m_documentSize.width();
 }
 
 int CACanvasController::cameraX() const
@@ -276,11 +265,28 @@ KoZoomHandler* CACanvasController::zoomHandler()
 void CACanvasController::setZoomController (KoZoomController* zoomController)
 {
     m_zoomController = zoomController;
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(updateZoomValue(KoZoomMode::Mode,qreal)));
 }
 
 void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 {
     m_zoomHandler = zoomHandler;
+}
+
+void CACanvasController::setZoom(qreal zoom)
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    emit zoomChanged();
+}
+
+qreal CACanvasController::zoom() const
+{
+    return m_zoom;
+}
+
+void CACanvasController::updateZoomValue(KoZoomMode::Mode mode, qreal zoom)
+{
+    m_zoom = zoom;
 }
 
 #include "CACanvasController.moc"

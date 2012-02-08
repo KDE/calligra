@@ -21,7 +21,7 @@
 #define _KARBONPATTERNTOOL_H_
 
 #include <KoToolBase.h>
-#include <QtCore/QMap>
+#include <QMap>
 
 class QPainter;
 class KoResource;

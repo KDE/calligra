@@ -32,6 +32,7 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QSettings>
+#include <QTimer>
 #include <QFileDialog>
 #include <QDesktopServices>
 
@@ -43,6 +44,10 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
 
     m_view = new QDeclarativeView (this);
+
+    kdeclarative.setDeclarativeEngine(m_view->engine());
+    kdeclarative.initialize();
+    kdeclarative.setupBindings();
 
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;
@@ -83,15 +88,13 @@ MainWindow::MainWindow (QWidget* parent)
     setCentralWidget (m_view);
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
     resize (800, 600);
+
+    QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
 }
 
 void MainWindow::openFile (const QString& path)
 {
-    if (path.isEmpty())
-        return;
-
-    QObject* object = m_view->rootObject();
-    QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (path)));
+    documentPath = path;
 }
 
 void MainWindow::adjustWindowSize (QSize size)
@@ -112,6 +115,16 @@ void MainWindow::openFileDialog()
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::checkForAndOpenDocument()
+{
+    if (documentPath.isEmpty()) {
+        return;
+    }
+
+    QObject* object = m_view->rootObject();
+    QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
 }
 
 #include "MainWindow.moc"

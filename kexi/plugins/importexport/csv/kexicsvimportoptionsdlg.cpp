@@ -21,12 +21,12 @@
 #include <widget/kexicharencodingcombobox.h>
 #include <kexiutils/utils.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtextcodec.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qgridlayout.h>
+#include <QLabel>
+#include <QLayout>
+#include <QTextCodec>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QGridLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>

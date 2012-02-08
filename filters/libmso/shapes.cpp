@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 #include <QTransform>
-#include <qbuffer.h>
+#include <QBuffer>
 
 #include <cmath>
 

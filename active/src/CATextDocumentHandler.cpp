@@ -25,6 +25,7 @@
 
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
+#include <KoCopyController.h>
 #include <KoCanvasController.h>
 
 #include <KoToolManager.h>
@@ -37,6 +38,7 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDebug>
+#include <KActionCollection>
 #include <KoSelection.h>
 
 #include <QTextDocument>
@@ -144,6 +146,9 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
     d->findText->addDocuments(texts);
 
+    KAction *action = doc->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    new KoCopyController(canvas(), action);
+
     return true;
 }
 
@@ -172,6 +177,7 @@ void CATextDocumentHandler::resizeCanvas (const QSizeF& canvasSize)
         documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / currentPage.width() * 0.75);
     }
     canvas()->canvasItem()->setGeometry (0, 0, width, height);
+    dynamic_cast<KWCanvasItem*> (canvas())->updateSize();
 }
 
 QString CATextDocumentHandler::searchString() const
@@ -209,6 +215,21 @@ void CATextDocumentHandler::findMatchFound (const KoFindMatch& match)
 void CATextDocumentHandler::findNoMatchFound()
 {
     kDebug() << "Match for " << searchString() << " not found";
+}
+
+QString CATextDocumentHandler::bottomToolbarSource() const
+{
+    return "TextDocumentFindToolbar.qml";
+}
+
+QString CATextDocumentHandler::topToolbarSource() const
+{
+    return "TextDocumentEditingToolbar.qml";
+}
+
+void CATextDocumentHandler::copy()
+{
+    document()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
 }
 
 #include "CATextDocumentHandler.moc"

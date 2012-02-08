@@ -70,4 +70,24 @@ bool CAAbstractDocumentHandler::canOpenDocument (const QString& uri)
     return supportedMimetypes().contains (KMimeType::findByUrl (uri)->name());
 }
 
+QString CAAbstractDocumentHandler::bottomToolbarSource() const
+{
+    return QString();
+}
+
+QString CAAbstractDocumentHandler::leftToolbarSource() const
+{
+    return QString();
+}
+
+QString CAAbstractDocumentHandler::rightToolbarSource() const
+{
+    return QString();
+}
+
+QString CAAbstractDocumentHandler::topToolbarSource() const
+{
+    return QString();
+}
+
 #include "CAAbstractDocumentHandler.moc"

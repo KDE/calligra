@@ -19,9 +19,9 @@
 #ifndef SLIDELOADER_H
 #define SLIDELOADER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSize>
-#include <QtGui/QPixmap>
+#include <QObject>
+#include <QSize>
+#include <QPixmap>
 
 class SlideLoader : public QObject {
 private:

@@ -24,6 +24,8 @@
 #include "XlsxXmlStylesReader.h"
 #include "XlsxImport.h"
 
+#include "NumberFormatParser.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
@@ -457,7 +459,22 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
+    // Read the style-sheet.
     TRY_READ(styleSheet)
+
+    // Once finished reading the style-sheets we can translate the MSExcel number-formattings
+    // to ODF number-formattings. We do this here cause m_context->styles->numberFormatStrings
+    // is filled now, not allowed to change from here on and it greatly improves the performance
+    // if we do the whole conversation only once right now and use the result later.
+    for(QMap< int, QString >::ConstIterator it = m_context->styles->numberFormatStrings.constBegin(); it != m_context->styles->numberFormatStrings.constEnd(); ++it) {
+        const KoGenStyle style = NumberFormatParser::parse( it.value(), mainStyles );
+        //m_context->styles->numberFormatStyles[ it.key() ] = style;
+        if ( style.type() != KoGenStyle::ParagraphAutoStyle ) {
+            QString styleName = mainStyles->insert( style, "N" );
+            m_context->styles->numberFormatStyleNames[ it.key() ] = styleName;
+        }
+    }
+
     kDebug() << "===========finished============";
     return KoFilter::OK;
 }

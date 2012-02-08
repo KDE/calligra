@@ -59,13 +59,13 @@ class RowFormat::Private
 {
 public:
     Sheet*      sheet;
-    int         row;
-    double      height;
-    bool        hide;
-    bool        filtered;
-    bool        pageBreak; // before row
     RowFormat*  next;
     RowFormat*  prev;
+    double      height;
+    int         row;
+    bool        hide : 1;
+    bool        filtered : 1;
+    bool        pageBreak : 1; // before row
 };
 
 RowFormat::RowFormat()
@@ -320,13 +320,13 @@ class ColumnFormat::Private
 {
 public:
     Sheet*          sheet;
-    int             column;
-    double          width;
-    bool            hide;
-    bool            filtered;
-    bool            pageBreak; // before column
     ColumnFormat*   next;
     ColumnFormat*   prev;
+    double          width;
+    int             column;
+    bool            hide : 1;
+    bool            filtered : 1;
+    bool            pageBreak : 1; // before column
 };
 
 ColumnFormat::ColumnFormat()

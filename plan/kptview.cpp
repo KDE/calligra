@@ -29,7 +29,7 @@
 #include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <qsize.h>
+#include <QSize>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QTreeWidget>
@@ -66,7 +66,6 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <KConfigDialog>
-#include <kpimutils/kfileio.h>
 #include <KToolInvocation>
 #include <KRun>
 

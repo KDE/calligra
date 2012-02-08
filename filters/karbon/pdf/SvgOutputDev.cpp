@@ -24,14 +24,14 @@
 #include <poppler/GfxFont.h>
 
 #include <KDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtCore/QSizeF>
-#include <QtCore/QBuffer>
-#include <QtGui/QColor>
-#include <QtGui/QBrush>
-#include <QtGui/QPen>
-#include <QtGui/QImage>
+#include <QFile>
+#include <QTextStream>
+#include <QSizeF>
+#include <QBuffer>
+#include <QColor>
+#include <QBrush>
+#include <QPen>
+#include <QImage>
 
 class SvgOutputDev::Private
 {

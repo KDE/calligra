@@ -18,7 +18,7 @@
 */
 #include "ODrawClient.h"
 
-#include <qdebug.h>
+#include <QDebug>
 #include <QColor>
 #include <KoXmlWriter.h>
 #include <KoEmbeddedDocumentSaver.h>

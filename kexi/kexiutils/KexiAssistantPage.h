@@ -20,7 +20,7 @@
 #ifndef KEXIASSISTANTPAGE_H
 #define KEXIASSISTANTPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "kexiutils_export.h"
 
