@@ -555,9 +555,9 @@ qDebug() << "Reading Strl...";
     {
         if( (mRiffStreamReader.chunkId() == btidId) )
         {
-            const QByteArray btidData = mRiffStreamReader.chunkData();
+//             const QByteArray btidData = mRiffStreamReader.chunkData();
             // 0..1: ?
-            const quint16 btid = data<quint16>( btidData );
+//             const quint16 btid = data<quint16>( btidData );
         }
         else if( (mRiffStreamReader.chunkId() == parlId) &&
             mRiffStreamReader.isListChunk() )
@@ -787,8 +787,8 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( mRiffStreamReader.chunkId() == bboxId )
         {
-            const QByteArray bboxChunk = mRiffStreamReader.chunkData();
-            const Cdr4BoundingBoxChunkData* boundingBoxData = dataPtr<Cdr4BoundingBoxChunkData>( bboxChunk );
+//             const QByteArray bboxChunk = mRiffStreamReader.chunkData();
+//             const Cdr4BoundingBoxChunkData* boundingBoxData = dataPtr<Cdr4BoundingBoxChunkData>( bboxChunk );
         }
         else if( (chunkId == grp_Id) &&
                  mRiffStreamReader.isListChunk() )
@@ -983,7 +983,6 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
     for (int i=0; i < argsData->count; i++)
     {
         const quint16 argType = argsData->argType(i);
-        const quint16 argOffset = argsData->argOffsets()[i];
 
         switch( argType )
         {
@@ -1020,7 +1019,6 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
     for (int i=0; i < argsData->count; i++)
     {
         const quint16 argType = argsData->argType(i);
-        const quint16 argOffset = argsData->argOffsets()[i];
 
         switch( argType )
         {
@@ -1060,7 +1058,6 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
     for (int i=0; i < argsData->count; i++)
     {
         const quint16 argType = argsData->argType(i);
-        const quint16 argOffset = argsData->argOffsets()[i];
 
         switch( argType )
         {
@@ -1099,7 +1096,6 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
     for (int i=0; i < argsData->count; i++)
     {
         const quint16 argType = argsData->argType(i);
-        const quint16 argOffset = argsData->argOffsets()[i];
 
         switch( argType )
         {
