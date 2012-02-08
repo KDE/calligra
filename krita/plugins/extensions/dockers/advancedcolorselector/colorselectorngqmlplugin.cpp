@@ -22,12 +22,15 @@
 
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
+#include <qdeclarative.h>
+#include "kis_color_selector_item.h"
 
 K_PLUGIN_FACTORY(ColorSelectorNgQmlPluginFactory, registerPlugin<ColorSelectorNgQmlPlugin>();)
 K_EXPORT_PLUGIN(ColorSelectorNgQmlPluginFactory("krita"))
 
 ColorSelectorNgQmlPlugin::ColorSelectorNgQmlPlugin(QObject *parent, const QVariantList &)
 {
+    qmlRegisterType<KisColorSelectorItem> ("KritaTouch.Extensions.AdvancedColorSelectors", 1, 0, "ColorSelector");
 }
 
 ColorSelectorNgQmlPlugin::~ColorSelectorNgQmlPlugin()
