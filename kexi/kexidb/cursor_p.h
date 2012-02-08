@@ -20,7 +20,7 @@
 #ifndef KEXIDB_CURSOR_P_H
 #define KEXIDB_CURSOR_P_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "connection.h"
 

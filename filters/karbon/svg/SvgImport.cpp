@@ -40,7 +40,7 @@
 #include <KDebug>
 #include <kfilterdev.h>
 
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
 
 K_PLUGIN_FACTORY(SvgImportFactory, registerPlugin<SvgImport>();)
 K_EXPORT_PLUGIN(SvgImportFactory("calligrafilters"))

@@ -26,7 +26,7 @@
 
 #include <QPushButton>
 #include <QList>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 

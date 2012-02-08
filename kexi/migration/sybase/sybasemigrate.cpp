@@ -19,11 +19,11 @@
 
 #include "sybasemigrate.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
 #include <kdebug.h>
 
 #include <migration/keximigratedata.h>

@@ -24,9 +24,9 @@
 #include "value.h"
 #include <map>
 
-#include <QtCore/QString>
-#include <QtCore/QUuid>
-#include <QtCore/QRect>
+#include <QString>
+#include <QUuid>
+#include <QRect>
 #include <QtEndian>
 
 namespace Swinder

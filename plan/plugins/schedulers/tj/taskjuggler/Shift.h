@@ -15,7 +15,7 @@
 
 #include <time.h>
 
-#include <qlist.h>
+#include <QList>
 
 #include "CoreAttributes.h"
 

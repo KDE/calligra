@@ -26,8 +26,8 @@
 #include <KDebug>
 #include <KComboBox>
 
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QPushButton>
+#include <QGraphicsProxyWidget>
+#include <QPushButton>
 
 const qreal ItemSpacing = 10.0;
 const qreal ConnectionDistance = 10.0;

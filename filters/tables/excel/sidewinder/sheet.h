@@ -22,8 +22,8 @@
 
 #include "format.h"
 #include "cell.h"
-#include <QtCore/QString>
-#include <QtGui/QImage>
+#include <QString>
+#include <QImage>
 #include <generated/simpleParser.h>
 
 #include "database/Filter.h"

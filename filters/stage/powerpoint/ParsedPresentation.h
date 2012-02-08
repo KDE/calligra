@@ -22,7 +22,7 @@
 
 #include "generated/simpleParser.h"
 #include "pole.h"
-#include <QtCore/QMap>
+#include <QMap>
 
 class ParsedPresentation
 {

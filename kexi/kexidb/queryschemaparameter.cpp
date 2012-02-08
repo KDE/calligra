@@ -21,7 +21,7 @@
 #include "driver.h"
 
 #include <kdebug.h>
-#include <qpointer.h>
+#include <QPointer>
 
 using namespace KexiDB;
 

@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_TEST_FORMULA
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <Value.h>
 
 namespace Calligra

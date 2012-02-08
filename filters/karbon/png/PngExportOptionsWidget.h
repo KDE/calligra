@@ -22,7 +22,7 @@
 
 #include "ui_PngExportOptionsWidget.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class PngExportOptionsWidget : public QWidget
 {

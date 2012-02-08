@@ -20,7 +20,7 @@
 
 #include "Find.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 #include <KoFindOptionSet.h>
 #include <KoFindOption.h>

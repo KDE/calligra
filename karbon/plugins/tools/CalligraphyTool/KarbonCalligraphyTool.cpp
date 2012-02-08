@@ -39,7 +39,7 @@
 #include <KAction>
 #include <KDebug>
 #include <KLocale>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <cmath>
 

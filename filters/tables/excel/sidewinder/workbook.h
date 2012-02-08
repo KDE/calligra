@@ -21,9 +21,9 @@
 #ifndef SWINDER_WORKBOOK_H
 #define SWINDER_WORKBOOK_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
-#include <QtCore/QRect>
+#include <QObject>
+#include <QVariant>
+#include <QRect>
 #include <string>
 #include <map>
 

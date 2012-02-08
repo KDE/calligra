@@ -20,9 +20,9 @@
 
 #include "kexidbtimeedit.h"
 
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qpainter.h>
+#include <QToolButton>
+#include <QLayout>
+#include <QPainter>
 
 #include <kmenu.h>
 #include <kdatepicker.h>

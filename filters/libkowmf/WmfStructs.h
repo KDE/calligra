@@ -20,7 +20,7 @@
 #ifndef _WMFSTRUCT_H_
 #define _WMFSTRUCT_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <qnamespace.h>
 #include <QPainter>
 

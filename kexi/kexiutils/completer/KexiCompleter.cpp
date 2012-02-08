@@ -144,17 +144,17 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include <qscrollbar.h>
-#include <qstringlistmodel.h>
-#include <qdirmodel.h>
-#include <qfilesystemmodel.h>
-#include <qheaderview.h>
-#include <qlistview.h>
-#include <qapplication.h>
-#include <qevent.h>
-#include <qheaderview.h>
-#include <qdesktopwidget.h>
-#include <qlineedit.h>
+#include <QScrollBar>
+#include <QStringListModel>
+#include <QDirModel>
+#include <QFileSystemModel>
+#include <QHeaderView>
+#include <QListView>
+#include <QApplication>
+#include <QEvent>
+#include <QHeaderView>
+#include <QDesktopWidget>
+#include <QLineEdit>
 
 #include <limits.h>
 

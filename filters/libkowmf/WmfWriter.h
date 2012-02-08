@@ -22,7 +22,7 @@
 
 #include "kowmf_export.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 class QPen;
 class QBrush;

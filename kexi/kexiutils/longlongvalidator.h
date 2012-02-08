@@ -22,7 +22,7 @@
 
 #include "kexiutils_export.h"
 
-#include <qvalidator.h>
+#include <QValidator>
 class QWidget;
 
 namespace KexiUtils

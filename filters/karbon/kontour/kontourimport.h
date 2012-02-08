@@ -21,7 +21,7 @@
 #define __KONTOURIMPORT_H__
 
 #include <KoFilter.h>
-#include <qdom.h>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <Q3CString>
 #include <core/KarbonDocument.h>

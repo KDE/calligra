@@ -22,7 +22,7 @@
 #define KARBONZOOMCONTROLLER_H
 
 #include <KoZoomMode.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 class KoCanvasController;
 class KActionCollection;

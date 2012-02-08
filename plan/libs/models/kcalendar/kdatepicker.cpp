@@ -22,17 +22,17 @@
 #include "kdatetable.h"
 #include "kdatetable_p.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QComboBox>
-#include <QtGui/QFont>
-#include <QtGui/QLayout>
+#include <QApplication>
+#include <QComboBox>
+#include <QFont>
+#include <QLayout>
 #include <QKeyEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QPainter>
-#include <QtGui/QStyle>
-#include <QtGui/QToolButton>
-#include <QtGui/QDoubleValidator>
-#include <QtGui/QWidget>
+#include <QMenu>
+#include <QPainter>
+#include <QStyle>
+#include <QToolButton>
+#include <QDoubleValidator>
+#include <QWidget>
 #include <QPushButton>
 
 #include <kcalendarsystem.h>

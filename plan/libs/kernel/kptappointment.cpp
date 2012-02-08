@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QMutableMapIterator>
 
 #include <cassert>

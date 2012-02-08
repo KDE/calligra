@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_TEST_SELECTION
 #define CALLIGRA_TABLES_TEST_SELECTION
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

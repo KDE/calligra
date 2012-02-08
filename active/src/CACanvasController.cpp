@@ -32,9 +32,9 @@
 
 #include <KDebug>
 
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
-#include <QtGui/QGraphicsWidget>
+#include <QPoint>
+#include <QSize>
+#include <QGraphicsWidget>
 
 CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
