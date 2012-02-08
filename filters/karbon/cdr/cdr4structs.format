@@ -175,6 +175,16 @@ const T* argPtr( int i ) const
       <!-- 5..5: ?-->
       <member name="_unknown3" type="quint8" />
     </struct>
+
+    <struct name="CdrFontData">
+      <method><!--order of types seems inverted...-->
+<code><![CDATA[const char* fontName() const { return &firstFontNameChar; }]]></code>
+      </method>
+      <!-- 0..1: some index/id/key which seems sorted-->
+      <member type="quint16" name="mFontIndex" />
+      <!-- bytes 2..end: font name-->
+      <member type="char" name="firstFontNameChar" />
+    </struct>
   </structs>
 
   <enums>

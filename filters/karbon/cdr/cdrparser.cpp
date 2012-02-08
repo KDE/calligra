@@ -327,18 +327,13 @@ qDebug() << "Reading fonts...";
         {
             CdrFont* font = new CdrFont;
 
-            const QByteArray fontData = mRiffStreamReader.chunkData();
+            const QByteArray fontChunk = mRiffStreamReader.chunkData();
+            const CdrFontData* fontData = dataPtr<CdrFontData>( fontChunk );
 
-            // bytes 0..1: some index/id/key which seems sorted
-            // TODO: endianness
-            const quint16 fontIndex = data<quint16>( fontData );
+            font->setName( QLatin1String(fontData->fontName()) );
 
-            // bytes 2..end: font info
-            // name
-            font->setName( stringData(fontData, 2) );
-
-qDebug() << fontIndex << font->name();
-            mDocument->insertFont( fontIndex, font );
+qDebug() << fontData->mFontIndex << font->name();
+            mDocument->insertFont( fontData->mFontIndex, font );
         }
     }
 
