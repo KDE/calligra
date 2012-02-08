@@ -166,19 +166,15 @@ CdrParser::readCDR()
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
         // TODO: where to check fixed sizes for correctness?
-        if( (chunkId == vrsnId) &&
-            (mRiffStreamReader.chunkSize() == 2) )
+        if( chunkId == vrsnId )
             readVersion();
-        else if( (chunkId == dispId) )
+        else if( chunkId == dispId )
             readDisp();
-        else if( (chunkId == infoId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == infoId )
             readInfo();
-        else if( (chunkId == doc_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == doc_Id )
             readDoc();
-        else if( (chunkId == pageId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == pageId )
         {
             CdrPage* page = readPage();
             if( page )
@@ -209,34 +205,27 @@ CdrParser::readDoc()
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (chunkId == stshId) )
+        if( chunkId == stshId )
             readDocStsh();
         else if( chunkId == mcfgId )
             readDocMCfg();
         else if( chunkId == guidId )
             readDocGuid();
-        else if( (chunkId == fnttId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == fnttId )
             readDocFontTable();
-        else if( (chunkId == bmptId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == bmptId )
             readDocBitmapTable();
         else if( chunkId == lnktId )
             readDocLnkTable();
-        else if( (chunkId == vectId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == vectId )
             readDocVecTable();
-        else if( (chunkId == filtId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == filtId )
             readDocFillTable();
-        else if( (chunkId == otltId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == otltId )
             readDocOutlineTable();
-        else if( (chunkId == stltId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == stltId )
             readDocStyleTable();
-        else if( (chunkId == btxtId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == btxtId )
             readDocBtxTable();
     }
 
@@ -440,8 +429,7 @@ CdrParser::readDocStyleTable()
 qDebug() << "Reading Styles...";
     while( mRiffStreamReader.readNextChunkHeader() )
     {
-        if( (mRiffStreamReader.chunkId() == stylId) &&
-            mRiffStreamReader.isListChunk() )
+        if( mRiffStreamReader.chunkId() == stylId )
         {
             readDocStyle();
         }
@@ -535,8 +523,7 @@ CdrParser::readDocBtxTable()
 qDebug() << "Reading Btx Table...";
     while( mRiffStreamReader.readNextChunkHeader() )
     {
-        if( (mRiffStreamReader.chunkId() == strlId) &&
-            mRiffStreamReader.isListChunk() )
+        if( mRiffStreamReader.chunkId() == strlId )
         {
             readStrl();
         }
@@ -553,14 +540,15 @@ CdrParser::readStrl()
 qDebug() << "Reading Strl...";
     while( mRiffStreamReader.readNextChunkHeader() )
     {
-        if( (mRiffStreamReader.chunkId() == btidId) )
+        const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
+
+        if( chunkId == btidId )
         {
 //             const QByteArray btidData = mRiffStreamReader.chunkData();
             // 0..1: ?
 //             const quint16 btid = data<quint16>( btidData );
         }
-        else if( (mRiffStreamReader.chunkId() == parlId) &&
-            mRiffStreamReader.isListChunk() )
+        else if( chunkId == parlId )
         {
             readParl();
         }
@@ -576,17 +564,19 @@ CdrParser::readParl()
 qDebug() << "Reading Parl...";
     while( mRiffStreamReader.readNextChunkHeader() )
     {
-        if( (mRiffStreamReader.chunkId() == paraId) )
+        const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
+
+        if( chunkId == paraId )
         {
             const QByteArray paraData = mRiffStreamReader.chunkData();
             // 0..5: ?
         }
-        else if( (mRiffStreamReader.chunkId() == bnchId) )
+        else if( chunkId == bnchId )
         {
             const QByteArray bnchData = mRiffStreamReader.chunkData();
             // 0..?: ?  sizes seen are 52, 72, 80, 4
         }
-        else if( (mRiffStreamReader.chunkId() == bschId) )
+        else if( chunkId == bschId )
         {
             const QByteArray bschData = mRiffStreamReader.chunkData();
             // 0..23: ?
@@ -609,22 +599,19 @@ qDebug() << "Reading Page...";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (chunkId == flgsId) &&
-            (mRiffStreamReader.chunkSize() == 4) )
+        if( chunkId == flgsId )
         {
             const QByteArray flagsChunk = mRiffStreamReader.chunkData();
 //             const CdrPageFlagChunkData flags = data<CdrPageFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
-        else if( (chunkId == gobjId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == gobjId )
         {
             mRiffStreamReader.openList();
 
             while( mRiffStreamReader.readNextChunkHeader() )
             {
-                if( (mRiffStreamReader.chunkId() == layrId) &&
-                    mRiffStreamReader.isListChunk() )
+                if( mRiffStreamReader.chunkId() == layrId )
                 {
                     CdrLayer* layer = readLayer();
                     if( layer )
@@ -654,34 +641,29 @@ qDebug() << "Layer <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (chunkId == flgsId) &&
-            (mRiffStreamReader.chunkSize() == 4) )
+        if( chunkId == flgsId )
         {
             const QByteArray flagsChunk = mRiffStreamReader.chunkData();
 //             const CdrLayerFlagChunkData flags = data<CdrLayerFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
-        else if( (chunkId == lgobId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == lgobId )
         {
             readLayerLGOb();
         }
-        else if( (chunkId == lnkgId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == lnkgId )
         {
             CdrLinkGroupObject* group = readLinkGroupObject();
             if( group )
                 layer->addObject( group );
         }
-        else if( (chunkId == grp_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == grp_Id )
         {
             CdrGroupObject* group = readGroupObject();
             if( group )
                 layer->addObject( group );
         }
-        else if( (chunkId == obj_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == obj_Id )
         {
             CdrObject* object = readObject();
             if( object )
@@ -730,20 +712,19 @@ qDebug() << "LinkGroup <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( mRiffStreamReader.chunkId() == spndId )
+        if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
 //             const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
 qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
-        else if( mRiffStreamReader.chunkId() == flgsId )
+        else if( chunkId == flgsId )
         {
             const QByteArray flagsChunk = mRiffStreamReader.chunkData();
 //             const CdrLinkGroupFlagChunkData flagsData = data<CdrLinkGroupFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
-        else if( (chunkId == obj_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == obj_Id )
         {
             CdrObject* object = readObject();
             if( object )
@@ -773,32 +754,30 @@ qDebug() << "Group <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( mRiffStreamReader.chunkId() == spndId )
+        if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
 //             const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
 qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
-        else if( mRiffStreamReader.chunkId() == flgsId )
+        else if( chunkId == flgsId )
         {
             const QByteArray flagsChunk = mRiffStreamReader.chunkData();
 //             const CdrGroupFlagChunkData flagsData = data<CdrGroupFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
-        else if( mRiffStreamReader.chunkId() == bboxId )
+        else if( chunkId == bboxId )
         {
 //             const QByteArray bboxChunk = mRiffStreamReader.chunkData();
 //             const Cdr4BoundingBoxChunkData* boundingBoxData = dataPtr<Cdr4BoundingBoxChunkData>( bboxChunk );
         }
-        else if( (chunkId == grp_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == grp_Id )
         {
             CdrGroupObject* object = readGroupObject();
             if( object )
                 group->addObject( object );
         }
-        else if( (chunkId == obj_Id) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == obj_Id )
         {
             CdrObject* object = readObject();
             if( object )
@@ -824,20 +803,19 @@ qDebug() << "Object <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (mRiffStreamReader.chunkId() == spndId) )
+        if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
 //             const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
 qDebug()<< "...with spnd"<<spndChunk.toHex();
         }
-        else if( (mRiffStreamReader.chunkId() == flgsId) )
+        else if( chunkId == flgsId )
         {
             const QByteArray flagsChunk = mRiffStreamReader.chunkData();
 //             const CdrObjectFlagChunkData flagsData = data<CdrObjectFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
-        else if( (chunkId == lgobId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == lgobId )
         {
             object = readObjectLGOb();
         }
@@ -861,12 +839,11 @@ qDebug() << "LGOb <<<";
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
-        if( (chunkId == lodaId) )
+        if( chunkId == lodaId )
         {
             object = readLoda();
         }
-        else if( (chunkId == trflId) &&
-                 mRiffStreamReader.isListChunk() )
+        else if( chunkId == trflId )
         {
             readTrfl();
         }
