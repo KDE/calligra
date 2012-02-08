@@ -413,22 +413,18 @@ qDebug() << "Reading Fills...";
         {
             CdrAbstractFill* fill = 0;
 
-            const QByteArray fillData = mRiffStreamReader.chunkData();
-            // 0..3: uint32 index/key/id? would match loda
-            const quint32 fillIndex = data<quint32>( fillData );
-            // 4: filltype (?)
-            const quint32 fillType = data<quint32>( fillData, 4 );
+            const QByteArray fillChunk = mRiffStreamReader.chunkData();
+            const CdrFillData* fillData = dataPtr<CdrFillData>( fillChunk );
             QString fillDataString;
-            if( fillType == CdrTransparent )
+            if( fillData->mFillType == CdrTransparent )
             {
                 fill = new CdrTransparentFill;
                 // transparent has no other data stored
             }
-            else if( fillType == CdrSolid )
+            else if( fillData->mFillType == CdrSolid )
             {
                 CdrSolidFill* solidFill = new CdrSolidFill;
-                // 8: (?)
-                const CdrSolidFillData* solidFillData = dataPtr<CdrSolidFillData>( fillData, 8 );
+                const CdrSolidFillData* solidFillData = fillData->solidFillData();
                 solidFill->setColor( solidFillData->color() );
 
                 fill = solidFill;
@@ -437,13 +433,13 @@ qDebug() << "Reading Fills...";
             }
 
             const QString fillTypeName =
-                QLatin1String(fillType == CdrTransparent ? "Transparent" :
-                              fillType == CdrSolid ? "Solid" :
-                              /*other*/              "UNKNOWN!");
-qDebug() << fillIndex << fillTypeName << fillDataString;
+                QLatin1String(fillData->mFillType == CdrTransparent ? "Transparent" :
+                              fillData->mFillType == CdrSolid ?       "Solid" :
+                              /*other*/                               "UNKNOWN!");
+qDebug() << fillData->mFillIndex << fillTypeName << fillDataString;
 
             if( fill )
-                mDocument->insertFill( fillIndex, fill );
+                mDocument->insertFill( fillData->mFillIndex, fill );
         }
     }
 

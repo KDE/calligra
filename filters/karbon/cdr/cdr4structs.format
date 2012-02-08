@@ -218,6 +218,18 @@ const T* argPtr( int i ) const
       <!-- 20..21: seen 0-->
       <member name="_unknown6" type="quint16" />
     </struct>
+
+    <struct name="CdrFillData">
+      <method>
+          <code><![CDATA[const CdrSolidFillData* solidFillData() const
+          { return reinterpret_cast<const CdrSolidFillData*>(&firstFillTypeData); }]]></code></method>
+      <!-- 0..3: uint32 index/key/id? would match loda-->
+      <member type="quint32" name="mFillIndex" />
+      <!-- 4..7: filltype (?)-->
+      <member type="quint32" name="mFillType" />
+      <!-- 8..end: fill specific data, size depends on type-->
+      <member type="char" name="firstFillTypeData" />
+    </struct>
 <!--
 // 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 // 02 00 00 00 02 00 00 00 00 00 03 00 64 00 00 00 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
