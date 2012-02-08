@@ -83,7 +83,7 @@ private:
     CdrAbstractObject( const CdrAbstractObject& );
     CdrAbstractObject& operator=( const CdrAbstractObject& );
 public:
-    virtual ~CdrAbstractObject() {}
+    virtual ~CdrAbstractObject() { qDeleteAll(mTransformations);}
 public:
     void setTransformations( const QVector<CdrAbstractTransformation*>& transformations )
     { mTransformations = transformations; }
