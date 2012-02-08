@@ -28,7 +28,9 @@ class KisColorSelectorItem : public QDeclarativeItem, public KisColorSelectorInt
 public:
   KisColorSelectorItem ( QDeclarativeItem * parent = 0 );
   virtual const KoColorSpace* colorSpace() const;
+protected:
+  virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* );
 private:
   KisColorSelectorComponent* m_component;
-
+  QSize m_lastSize;
 };

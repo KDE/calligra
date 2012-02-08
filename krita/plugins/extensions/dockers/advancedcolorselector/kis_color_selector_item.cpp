@@ -19,17 +19,34 @@
  */
 
 #include "kis_color_selector_item.h"
+
+#include <QPainter>
+
 #include <KoColorSpaceRegistry.h>
+
 #include "kis_color_selector_wheel.h"
 
 KisColorSelectorItem::KisColorSelectorItem(QDeclarativeItem* parent): QDeclarativeItem(parent), m_component(new KisColorSelectorWheel(this, this))
 {
   setFlag(QGraphicsItem::ItemHasNoContents, false);
   setAcceptedMouseButtons(Qt::LeftButton);
-
+  
+  m_component->setConfiguration(KisColorSelector::hslSH, KisColorSelector::Wheel);
 }
 
 const KoColorSpace* KisColorSelectorItem::colorSpace() const
 {
   return KoColorSpaceRegistry::instance()->rgb8();
+}
+
+void KisColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
+{
+  QSize currentSize(width(), height());
+  if(currentSize != m_lastSize)
+  {
+    m_component->setGeometry(0, 0, width(), height());
+    m_lastSize = currentSize;
+  }
+  
+  m_component->paintEvent(painter);
 }
