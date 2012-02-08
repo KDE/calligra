@@ -946,7 +946,7 @@ switch(argType)
         argTypeAsString = QLatin1String("style index");
         break;
     case CdrObject1010ArgumentId :
-        argAsString = QString::number( argsData->arg<quint16>(i) );
+        argAsString = QString::number( argsData->arg<quint16>(i), 16 );
         argTypeAsString = QLatin1String("some 16-bit");
         break;
     case CdrObjectTitleArgumentId :
