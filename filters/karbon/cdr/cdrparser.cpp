@@ -359,7 +359,7 @@ qDebug() << "Reading Fills...";
             CdrAbstractFill* fill = 0;
 
             const QByteArray fillChunk = mRiffStreamReader.chunkData();
-            const CdrFillData* fillData = dataPtr<CdrFillData>( fillChunk );
+            const CdrFillChunkData* fillData = dataPtr<CdrFillChunkData>( fillChunk );
 
             QString fillDataString;
             if( fillData->mFillType == CdrTransparent )

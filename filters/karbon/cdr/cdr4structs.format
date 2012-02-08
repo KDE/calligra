@@ -287,7 +287,7 @@ const T* argPtr( int i ) const
       <member name="_unknown6" type="quint16" />
     </struct>
 
-    <struct name="CdrFillData">
+    <struct name="CdrFillChunkData">
       <method>
           <code><![CDATA[const CdrSolidFillData* solidFillData() const
           { return reinterpret_cast<const CdrSolidFillData*>(&firstFillTypeData); }]]></code></method>
