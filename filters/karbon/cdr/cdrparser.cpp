@@ -495,26 +495,13 @@ CdrParser::readDocStyle()
         {
             CdrStyle* style = new CdrStyle;
 
-            const QByteArray styleData = mRiffStreamReader.chunkData();
-            // 0..1: int16 index/key/id?
-            const quint16 styleIndex = data<quint16>( styleData );
-            // 2..end: data
-            const CdrStyleArgumentData* styleArgs =
-                dataPtr<CdrStyleArgumentData>( styleData, 2 );
-qDebug()<<"Style id:"<<styleIndex<<"args:"<<styleArgs->count<<"d:"<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
+            const QByteArray styleChunk = mRiffStreamReader.chunkData();
+            const CdrStyleData* styleData = dataPtr<CdrStyleData>( styleChunk );
+
+            const CdrStyleArgumentData* styleArgs = &styleData->mArguments;
+qDebug()<<"Style id:"<<styleData->mStyleIndex<<"args:"<<styleArgs->count<<"d:"<<styleArgs->_unknown0<<styleArgs->_unknown1<<styleArgs->_unknown2
                                               <<styleArgs->_unknown3<<styleArgs->_unknown4;
 
-// Arg types:
-// 200   text/title/name
-// 205: 32bit 02 00 00 00
-// 210: 32bit 02 00 00 00
-// 220: 6 bytes CdrStyleFontArgumentData
-// 225: 16 bit
-// 230: 20 bytes (all 00)
-// 235: 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00)
-// 240: 258 bytes (all 00)
-// 245: 8 bytes (all 00)
-// 250: 32bit (00 00 00 00)
             for (int i=0; i < styleArgs->count; i++)
             {
                 const quint16 argType = styleArgs->argType(i);
@@ -522,29 +509,28 @@ QString argAsString;
 QString argTypeAsString;
 switch(argType)
 {
-    case 205 :
-    case 210 :
-    case 250 :
+    case CdrStyle205ArgumentId :
+    case CdrStyle210ArgumentId :
+    case CdrStyle250ArgumentId :
         argTypeAsString = QLatin1String("some 32-bit");
-        argAsString = QString::number( data<quint32>(styleData, styleArgs->argOffsets()[i]+2) );
+        argAsString = QString::number( styleArgs->arg<quint32>(i) );
         break;
-    case 225 :
+    case CdrStyle225ArgumentId :
         argTypeAsString = QLatin1String("some 16-bit");
-        argAsString = QString::number( data<quint16>(styleData, styleArgs->argOffsets()[i]+2) );
+        argAsString = QString::number( styleArgs->arg<quint16>(i) );
         break;
-    case 200 :
+    case CdrStyleTitleArgumentId :
     {
-        const QString title = stringData( styleData, styleArgs->argOffsets()[i]+2 );
+        const QString title = QLatin1String( styleArgs->argPtr<char>(i) );
         style->setTitle( title );
 
         argTypeAsString = QLatin1String("title");
         argAsString = title;
         break;
     }
-    case 220:
+    case CdrStyleFontArgumentId:
     {
-        const CdrStyleFontArgumentData* fontData =
-            dataPtr<CdrStyleFontArgumentData>( styleData, styleArgs->argOffsets()[i]+2 );
+        const CdrStyleFontArgumentData* fontData = styleArgs->argPtr<CdrStyleFontArgumentData>( i );
         style->setFontId( fontData->mFontIndex );
         style->setFontSize( fontData->mFontSize );
 
@@ -556,10 +542,10 @@ switch(argType)
                       QString::number( fontData->_unknown3);
         break;
     }
-    case 230:
-    case 235:
-    case 240:
-    case 245:
+    case CdrStyle230ArgumentId:
+    case CdrStyle235ArgumentId:
+    case CdrStyle240ArgumentId:
+    case CdrStyle245ArgumentId:
         argTypeAsString = QLatin1String("larger data");
         break;
     default:
@@ -568,7 +554,7 @@ switch(argType)
 }
 qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
             }
-            mDocument->insertStyle( styleIndex, style );
+            mDocument->insertStyle( styleData->mStyleIndex, style );
         }
     }
 
