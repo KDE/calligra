@@ -976,7 +976,7 @@ switch(argType)
         argAsString = QLatin1String( argsData->argPtr<char>(i) ); // TODO: all argPtr<char> need \0 term check
         argTypeAsString = QLatin1String("title");
         break;
-    case CdrObject100ArgumentId :
+    case CdrObjectOffsetPointArgumentId :
     {
         const Cdr4Point point = argsData->arg<Cdr4Point>( i );
         argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
@@ -1023,6 +1023,9 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
 qDebug() << "rectangle: width" << rectangleObject->width()<<"height"<<rectangleObject->height()
                  << "unknown" << rectangleData->_unknown;
         }
+        case CdrObjectOffsetPointArgumentId :
+            rectangleObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
+            break;
         case CdrObjectStyleIndexArgumentId :
             rectangleObject->setStyleId( argsData->arg<quint16>(i) );
             break;
@@ -1060,6 +1063,9 @@ qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->m
                      <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
                      <<"unknown"<<ellipseData->_unknown;
         }
+        case CdrObjectOffsetPointArgumentId :
+            ellipseObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
+            break;
         case CdrObjectStyleIndexArgumentId :
             ellipseObject->setStyleId( argsData->arg<quint16>(i) );
             break;
@@ -1096,6 +1102,9 @@ qDebug() << "path points:" << points->count;
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
             }
         }
+        case CdrObjectOffsetPointArgumentId :
+            pathObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
+            break;
         case CdrObjectStyleIndexArgumentId :
             pathObject->setStyleId( argsData->arg<quint16>(i) );
             break;
@@ -1132,6 +1141,9 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
             textObject->setText( text );
 qDebug() << "text:" << text;
         }
+        case CdrObjectOffsetPointArgumentId :
+            textObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
+            break;
         case CdrObjectStyleIndexArgumentId :
             textObject->setStyleId( argsData->arg<quint16>(i) );
             break;

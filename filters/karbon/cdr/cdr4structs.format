@@ -54,6 +54,12 @@
   <structs>
     <struct name="Cdr4Point">
       <description>A point given by its x and y coordinates.</description>
+      <method>
+<code><![CDATA[Cdr4Point() {}]]></code>
+      </method>
+      <method>
+<code><![CDATA[Cdr4Point( Cdr4Coord x, Cdr4Coord y ) : mX(x), mY(y) {}]]></code>
+      </method>
       <!-- 0..1 -->
       <member type="Cdr4Coord" name="mX">
         <description>The x coordinate of the point.</description>
@@ -403,10 +409,10 @@ const T* argPtr( int i ) const
       </item>
       <!-- 30: object specific data-->
       <item name="CdrObjectSpecificDataArgumentId" value="30" />
-      <!-- 40: 32bit  seen only with ellipse so far-->
+      <!-- 40: 32bit  seen only with ellipse so far, rotation center?-->
       <item name="CdrObject40ArgumentId" value="40" />
-      <!-- 100: 32bit (point?)-->
-      <item name="CdrObject100ArgumentId" value="100" />
+      <!-- 100: 32bit (point, transform?)-->
+      <item name="CdrObjectOffsetPointArgumentId" value="100" />
       <!-- 200: 16 bit  (style index?)-->
       <item name="CdrObjectStyleIndexArgumentId" value="200">
           <description>The index of the style in the style table of the document.</description>
