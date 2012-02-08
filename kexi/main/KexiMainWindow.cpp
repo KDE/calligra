@@ -2864,6 +2864,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         return cancelled;
     }
 
+    activateWindow(window);
     //view changed: switch to this view's gui client
     KXMLGUIClient *viewClient = currentWindow()->guiClient();
     updateWindowViewGUIClient(viewClient);
