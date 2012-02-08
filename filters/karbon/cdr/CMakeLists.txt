@@ -1,10 +1,33 @@
 project(cdrimportfilter)
 
+set( cheadergenerator_SRCS
+    generator/formatdocument.cpp
+    generator/formatparser.cpp
+    generator/cheadergenerator.cpp
+    generator/main.cpp
+)
+
+kde4_add_executable(cheadergenerator  ${cheadergenerator_SRCS})
+target_link_libraries(cheadergenerator
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTXML_LIBRARY}
+)
+
+add_custom_command(
+    OUTPUT cdrstructs.h
+    COMMAND cheadergenerator
+    ARGS cdrstructs.h "${CMAKE_CURRENT_SOURCE_DIR}/cdr4structs.format"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/cdr4structs.format" cheadergenerator
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    VERBATIM
+)
+
 include_directories(
     ${LIBKORALLE_INCLUDES}
 )
 
 set( karboncdrimport_PART_SRCS
+    cdrstructs.h # find a better way to add to dep tree
     cdrdocument.cpp
     cdrparser.cpp
     cdrsvgwriter.cpp
