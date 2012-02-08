@@ -66,16 +66,29 @@ CdrSvgWriter::writeLayer( const CdrLayer* layer )
 {
     mXmlWriter.startElement("g");
 
-    foreach( const CdrObject* object, layer->objects() )
+    foreach( const CdrAbstractObject* object, layer->objects() )
         writeObject( object );
 
     mXmlWriter.endElement(); // g
 }
 
 void
-CdrSvgWriter::writeObject( const CdrObject* object )
+CdrSvgWriter::writeObject( const CdrAbstractObject* object )
 {
     const CdrObjectId id = object->id();
+    mXmlWriter.startElement("g");
+    const CdrGraphObject* graphObject = dynamic_cast<const CdrGraphObject*>(object);
+    if( graphObject && !graphObject->transformations().isEmpty())
+    {
+        const CdrNormalTransformation* normalTrafo =
+            dynamic_cast<const CdrNormalTransformation*>(graphObject->transformations().at(0));
+
+        if( normalTrafo )
+        {
+            const QString tfString = QString::fromLatin1("translate(%1,%2)").arg(normalTrafo->x()).arg(normalTrafo->y());
+            mXmlWriter.addAttribute( "transform", tfString );
+        }
+    }
 
     if( id == PathObjectId )
         writePathObject( dynamic_cast<const CdrPathObject*>(object) );
@@ -87,6 +100,7 @@ CdrSvgWriter::writeObject( const CdrObject* object )
         writeTextObject( dynamic_cast<const CdrTextObject*>(object) );
     else if( id == GroupObjectId )
         writeGroupObject( dynamic_cast<const CdrGroupObject*>(object) );
+    mXmlWriter.endElement(); // g
 }
 
 void
@@ -94,7 +108,7 @@ CdrSvgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mXmlWriter.startElement("g");
 
-    foreach( const CdrObject* object, groupObject->objects() )
+    foreach( const CdrAbstractObject* object, groupObject->objects() )
         writeObject( object );
 
     mXmlWriter.endElement(); // g

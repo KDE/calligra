@@ -28,17 +28,18 @@ class CdrArgumentWithTypeData;
 class CdrDocument;
 class CdrPage;
 class CdrLayer;
+class CdrAbstractTransformation;
 class CdrLinkGroupObject;
 class CdrGroupObject;
 class CdrEllipseObject;
 class CdrRectangleObject;
 class CdrPathObject;
 class CdrTextObject;
-class CdrObject;
+class CdrAbstractObject;
 
 class QPointF;
 class QFile;
-template<class T> class QList;
+template<typename T> class QVector;
 
 
 class CdrParser
@@ -79,11 +80,11 @@ private:
     CdrLinkGroupObject* readLinkGroupObject();
     CdrGroupObject* readGroupObject();
 
-    CdrObject* readObject();
-    CdrObject* readObjectLGOb();
+    CdrAbstractObject* readObject();
+    CdrAbstractObject* readObjectLGOb();
 
-    void readTrfl();
-    CdrObject* readLoda();
+    QVector<CdrAbstractTransformation*> readTrfl();
+    CdrAbstractObject* readLoda();
 
     CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeData* argsData );
     CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeData* argsData );

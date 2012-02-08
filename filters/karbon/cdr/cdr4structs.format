@@ -609,6 +609,7 @@ const T* argPtr( int i ) const
       <!-- 4..4+num*4: num of 16bit coord pairs-->
       <member name="firstChar" type="Cdr4CharData" />; // used to get pointer in pointType(...)
     </struct>
+  </structs>
 
 <!--
 // possible transformations:
@@ -617,6 +618,7 @@ const T* argPtr( int i ) const
 // rotate: needs center coords + angle -> 4+x byte
 // skewX: needs angle -> x byte
 // skewY: needs angle -> x byte
+// 26 bytes:
 // sample: 08 00 00 00 01 00 00 00 00 00 04 EC FF FF 00 00 00 00 00 00 01 00 13 0E 00 00
 // sample: 08 00 29 B6 05 00 86 6A FE FF 83 F7 FF FF 7A 95 01 00 29 B6 05 00 6F FC FF FF
 // sample: 08 00 29 B6 05 00 86 6A FE FF D6 F7 FF FF 7A 95 01 00 29 B6 05 00 34 FC FF FF
@@ -627,10 +629,54 @@ const T* argPtr( int i ) const
 //              |     |     |           |           |           |     |     |           |
 // Also found this in a list of data, size 72 bytes:
 // sample: 02 00 01 00 00 00 BC F3 13 08 FB 0F E9 F7 BC F3 E9 F7 BC F3 13 08 FB 0F 13 08 FB 0F E9 F7 BC F3 E9 F7 E8 1C 00 00 00 00 80 84 2E 41 00 00 00 00 00 00 00 C0 D0 1C 00 00 00 00 00 B8 7D 40 00 00 00 00 80 84 2E 41 00 00
+//              |     |     |           |           |           |     |     |           |
 // for type 3 number of trfd args: 2, 15, 1, 12, in sync with arg type 10 (outline index?)
+// Also seen: 01 00, size 42 bytes
 -->
-    <struct name="TransformData">
-      <member name="_unknown[26]" type="char" />
+  <enums>
+    <enum name="CdrTransformDataType">
+      <!-- data is 10x 32bit -->
+      <item name="CdrUnknownTransform1Id" value="1" />
+      <!-- data is 35x 16bit -->
+      <item name="CdrUnknownTransform2Id" value="2" />
+      <!-- data is 6x 32bit -->
+      <item name="CdrUnknownTransform8Id" value="8" />
+    </enum>
+  </enums>
+
+  <structs>
+    <struct name="CdrTransform8Data">
+      <!-- 0..3: ? -->
+      <member name="m1" type="float" />
+      <!-- 4..7: ? -->
+      <member name="m2" type="float" />
+      <!-- 8..11: ? -->
+      <member name="mX" type="qint32" />
+      <!-- 12..15: ? -->
+      <member name="m4" type="float" />
+      <!-- 16..19: ? -->
+      <member name="m5" type="float" />
+      <!-- 20..23: ? -->
+      <member name="mY" type="qint32" />
+    </struct>
+
+    <struct name="CdrTransformData">
+      <method>
+          <code><![CDATA[const CdrTransform8Data* data8() const
+              { return reinterpret_cast<const CdrTransform8Data*>(&_firstOfData); }]]></code>
+      </method>
+      <method>
+          <code><![CDATA[const char* data() const
+          { return &_firstOfData; }]]></code>
+      </method>
+      <method>
+          <code><![CDATA[int dataSize() const
+          { return (mIndex == 1) ? 40 : (mIndex == 2) ? 70 : (mIndex == 8) ? 24 : 0; }]]></code>
+      </method>
+      <!-- 0..1: could be some kind of index or type id -->
+      <member name="mIndex" type="quint16" />
+      <!-- 2..end: actual data-->
+      <member name="_firstOfData" type="char" />
     </struct>
 
    <!-- CDR4 has 54 bytes, CDR5 56 bytes (const structure?)-->

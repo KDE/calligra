@@ -30,6 +30,42 @@
 #include <QtCore/QString>
 
 
+class CdrAbstractTransformation
+{
+public:
+    enum Id { Normal = 0 };
+protected:
+    explicit CdrAbstractTransformation(Id id) : mId( id ) {}
+private:
+    CdrAbstractTransformation( const CdrAbstractTransformation& );
+    CdrAbstractTransformation& operator=( const CdrAbstractTransformation& );
+public:
+    virtual ~CdrAbstractTransformation() {}
+public:
+    Id id() const { return mId; }
+private:
+    Id mId;
+};
+
+class CdrNormalTransformation : public CdrAbstractTransformation
+{
+public:
+    CdrNormalTransformation() : CdrAbstractTransformation(Normal) {}
+    void setData( float _1, float _2, qint32 x, float _3, float _4, qint32 y )
+    { m1 = _1; m2 = _2; mX = x; m3 = _3; m4 = _4; mY = y; }
+    qint32 x() const { return mX; }
+    qint32 y() const { return mY; }
+private:
+    float m1;
+    float m2;
+    qint32 mX;
+    float m3;
+    float m4;
+    qint32 mY;
+};
+
+
+
 enum CdrObjectId
 {
     PathObjectId,
@@ -39,19 +75,23 @@ enum CdrObjectId
     GroupObjectId
 };
 
-class CdrObject
+class CdrAbstractObject
 {
 protected:
-    explicit CdrObject(CdrObjectId id) : mId( id ) {}
+    explicit CdrAbstractObject(CdrObjectId id) : mId( id ) {}
 private:
-    CdrObject( const CdrObject& );
-    CdrObject& operator=( const CdrObject& );
+    CdrAbstractObject( const CdrAbstractObject& );
+    CdrAbstractObject& operator=( const CdrAbstractObject& );
 public:
-    virtual ~CdrObject() {}
+    virtual ~CdrAbstractObject() {}
 public:
+    void setTransformations( const QVector<CdrAbstractTransformation*>& transformations )
+    { mTransformations = transformations; }
     CdrObjectId id() const { return mId; }
+    const QVector<CdrAbstractTransformation*>& transformations() const { return mTransformations; }
 private:
     CdrObjectId mId;
+    QVector<CdrAbstractTransformation*> mTransformations;
 };
 
 
@@ -64,11 +104,11 @@ struct Cdr4PathPoint
     PointType mType;
 };
 
-class CdrGraphObject : public CdrObject
+class CdrGraphObject : public CdrAbstractObject
 {
 protected:
     explicit CdrGraphObject(CdrObjectId id)
-    : CdrObject( id ), mStyleId(0), mOutlineId(0), mFillId(0) {}
+    : CdrAbstractObject( id ), mStyleId(0), mOutlineId(0), mFillId(0) {}
 public:
     void setStyleId( quint32 styleId ) { mStyleId = styleId; }
     void setOutlineId( quint32 outlineId ) { mOutlineId = outlineId; }
@@ -143,18 +183,18 @@ private:
     QString mText;
 };
 
-class CdrGroupObject : public CdrObject
+class CdrGroupObject : public CdrAbstractObject
 {
 public:
-    CdrGroupObject() : CdrObject(GroupObjectId) {}
+    CdrGroupObject() : CdrAbstractObject(GroupObjectId) {}
 public:
     virtual ~CdrGroupObject() { qDeleteAll( mObjects );}
 public:
-    void addObject( CdrObject* object ) { mObjects.append(object); }
+    void addObject( CdrAbstractObject* object ) { mObjects.append(object); }
 public:
-    const QVector<CdrObject*>& objects() const { return mObjects; }
+    const QVector<CdrAbstractObject*>& objects() const { return mObjects; }
 private:
-    QVector<CdrObject*> mObjects;
+    QVector<CdrAbstractObject*> mObjects;
 };
 
 class CdrLinkGroupObject : public CdrGroupObject //tmp for now
@@ -166,11 +206,11 @@ class CdrLayer
 public:
     ~CdrLayer() { qDeleteAll( mObjects );}
 public:
-    void addObject( CdrObject* object ) { mObjects.append(object); }
+    void addObject( CdrAbstractObject* object ) { mObjects.append(object); }
 public:
-    const QVector<CdrObject*>& objects() const { return mObjects; }
+    const QVector<CdrAbstractObject*>& objects() const { return mObjects; }
 private:
-    QVector<CdrObject*> mObjects;
+    QVector<CdrAbstractObject*> mObjects;
 };
 
 class CdrPage

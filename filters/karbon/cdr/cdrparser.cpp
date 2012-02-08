@@ -665,7 +665,7 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( chunkId == obj_Id )
         {
-            CdrObject* object = readObject();
+            CdrAbstractObject* object = readObject();
             if( object )
                 layer->addObject( object );
         }
@@ -726,7 +726,7 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( chunkId == obj_Id )
         {
-            CdrObject* object = readObject();
+            CdrAbstractObject* object = readObject();
             if( object )
                 group->addObject( object );
         }
@@ -779,7 +779,7 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( chunkId == obj_Id )
         {
-            CdrObject* object = readObject();
+            CdrAbstractObject* object = readObject();
             if( object )
                 group->addObject( object );
         }
@@ -791,10 +791,10 @@ qDebug() << "Group >>>...";
 }
 
 
-CdrObject*
+CdrAbstractObject*
 CdrParser::readObject()
 {
-    CdrObject* object = 0;
+    CdrAbstractObject* object = 0;
 
     mRiffStreamReader.openList();
 qDebug() << "Object <<<";
@@ -828,10 +828,11 @@ qDebug() << "Object >>>...";
 }
 
 
-CdrObject*
+CdrAbstractObject*
 CdrParser::readObjectLGOb()
 {
-    CdrObject* object = 0;
+    CdrAbstractObject* object = 0;
+    QVector<CdrAbstractTransformation*> transformations;
     mRiffStreamReader.openList();
 qDebug() << "LGOb <<<";
 
@@ -845,17 +846,21 @@ qDebug() << "LGOb <<<";
         }
         else if( chunkId == trflId )
         {
-            readTrfl();
+            transformations = readTrfl();
         }
     }
 qDebug() << "LGOb >>>";
     mRiffStreamReader.closeList();
+    if( object )
+        object->setTransformations( transformations );
     return object;
 }
 
-void
+QVector<CdrAbstractTransformation*>
 CdrParser::readTrfl()
 {
+    QVector<CdrAbstractTransformation*> result;
+
     mRiffStreamReader.openList();
 
     while( mRiffStreamReader.readNextChunkHeader() )
@@ -868,19 +873,35 @@ CdrParser::readTrfl()
 qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->_unknown0 <<trfdData->_unknown1;
     for (int i=0; i < trfdData->mArguments.count; i++)
     {
-// qDebug() << i << ": type" << argsData->argPtr<>()<TransformData>(i);
+        const CdrTransformData* transformData = trfdData->mArguments.argPtr<CdrTransformData>(i);
+qDebug() << i << ": type" << transformData->mIndex
+         << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
+         << transformData->dataSize()+2;
+        if( transformData->mIndex == CdrUnknownTransform8Id )
+        {
+            const CdrTransform8Data* data8 = transformData->data8();
+            CdrNormalTransformation* transformation = new CdrNormalTransformation;
+            transformation->setData( data8->m1, data8->m2, data8->mX, data8->m4, data8->m5, data8->mY );
+            result.append( transformation );
+
+qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
+        }
+        else
+qDebug() << QByteArray::fromRawData(transformData->data(), transformData->dataSize()).toHex();
     }
         }
     }
 
     mRiffStreamReader.closeList();
+
+    return result;
 }
 
 
-CdrObject*
+CdrAbstractObject*
 CdrParser::readLoda()
 {
-    CdrObject* object = 0;
+    CdrAbstractObject* object = 0;
 
     const QByteArray lodaChunk = mRiffStreamReader.chunkData();
 
