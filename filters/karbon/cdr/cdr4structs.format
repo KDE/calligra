@@ -8,12 +8,6 @@
       <type name="qint32" />
       <type name="quint32" />
     </file>
-    <file name="QtCore/QPoint">
-      <type name="QPoint" />
-    </file>
-    <file name="QtGui/QColor">
-      <type name="QColor" />
-    </file>
   </includes>
 
   <typedefs>
@@ -81,15 +75,15 @@
       </member>
     </struct>
 
-    <struct name="CdrCmyk">
+    <struct name="CdrColor">
       <!-- 0..0 -->
-      <member type="quint8" name="mC" />
+      <member type="quint8" name="m1" />
       <!-- 1..1 -->
-      <member type="quint8" name="mM" />
+      <member type="quint8" name="m2" />
       <!-- 2..2 -->
-      <member type="quint8" name="mY" />
+      <member type="quint8" name="m3" />
       <!-- 3..3 -->
-      <member type="quint8" name="mK" />
+      <member type="quint8" name="m4" />
     </struct>
 
     <struct name="CdrArgumentData">
@@ -250,6 +244,10 @@ const T* argPtr( int i ) const
       <item name="CdrTransparent" value="0" />
       <item name="CdrSolid" value="1" />
     </enum>
+
+    <enum name="CdrColorModel">
+      <item name="CdrPantoneId" value="1" />
+    </enum>
   </enums>
 
   <structs>
@@ -267,18 +265,12 @@ const T* argPtr( int i ) const
 // possible data: color
 -->
     <struct name="CdrSolidFillData">
-      <method>
-<code><![CDATA[QColor color() const
-//     { return QColor::fromCmyk(mColor.mC, mColor.mM, mColor.mY, mColor.mK); }
-    { return QColor::fromCmyk(0, 0, 0, 255-mColor.mC); }
-//     { return QColor::fromCmyk(0, 0, 0, 1); }]]></code>
-      </method>
-      <!-- 0..3: seen 1-->
-      <member name="_unknown1" type="quint32" />
+      <!-- 0..3: seen 1, color model?-->
+      <member name="mColorModel" type="quint32" />
       <!-- 4..7: seen 0-->
       <member name="_unknown2" type="quint32" />
       <!-- 8..11: seen 0, 20, 60, 100-->
-      <member name="mColor" type="CdrCmyk" />
+      <member name="mColor" type="CdrColor" />
       <!-- 12..15: seen 0-->
       <member name="_unknown4" type="quint32" />
       <!-- 16..19: seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)-->
@@ -311,7 +303,7 @@ const T* argPtr( int i ) const
 // 07 00 00 00 32 00 00 00 00 00 1E 00 0A 00 8E FE 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 //            |     |     |     |     |     |     |           |           |           |           |           |
 // 0           4     6     8     10    12    14    16          20          24          28          32          36
-// possible data: line type, line ending type, color
+// possible data: line type, line ending type, color, shape of pen
 // 68 bytes:
 -->
     <struct name="CdrOutlineChunkData">

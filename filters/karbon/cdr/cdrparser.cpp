@@ -25,6 +25,7 @@
 // Koralle
 #include <Koralle0/FourCharCode>
 // Qt
+#include <QtGui/QColor>
 #include <QtCore/QFile>
 #include <QtCore/QByteArray>
 #include <QtCore/QSizeF>
@@ -84,6 +85,19 @@ const T*
 dataPtr( const QByteArray& data, int offset = 0 )
 {
     return reinterpret_cast<const T*>(&data.constData()[offset]);
+}
+
+
+static QColor
+color( const CdrColor& cdrColor, quint32 colorModel )
+{
+    if( colorModel == CdrPantoneId )
+        // pantone needs user to supply data it seems, as wikipedia claims the pantone definers are nasty
+        // whatever, this formula results in pretty similar grey tones for my check picture
+        return QColor::fromCmyk(0, 0, 0, cdrColor.m1*255/100);
+//     { return QColor::fromCmyk(mColor.mC, mColor.mM, mColor.mY, mColor.mK); }
+//     { return QColor::fromCmyk(0, 0, 0, 1); }]]></code>
+    return QColor();
 }
 
 
@@ -371,7 +385,7 @@ qDebug() << "Reading Fills...";
             {
                 CdrSolidFill* solidFill = new CdrSolidFill;
                 const CdrSolidFillData* solidFillData = fillData->solidFillData();
-                solidFill->setColor( solidFillData->color() );
+                solidFill->setColor( color(solidFillData->mColor, solidFillData->mColorModel) );
 
                 fill = solidFill;
 
@@ -408,7 +422,7 @@ qDebug() << "Reading Outlines...";
 
             outline->setType( outlineData->mType );
             outline->setLineWidth( outlineData->mLineWidth );
-            outline->setColor( outlineData->mFillData.color() );
+            outline->setColor( color(outlineData->mFillData.mColor, outlineData->mFillData.mColorModel) );
 
 qDebug() << outlineData->mIndex << outline->type() << outline->color().name();
 
