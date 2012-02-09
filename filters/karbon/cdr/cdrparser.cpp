@@ -544,9 +544,9 @@ qDebug() << "Reading Strl...";
 
         if( chunkId == btidId )
         {
-//             const QByteArray btidData = mRiffStreamReader.chunkData();
-            // 0..1: ?
-//             const quint16 btid = data<quint16>( btidData );
+            const QByteArray btidChunk = mRiffStreamReader.chunkData();
+//             const CdrBlockTextIdChunkData btidData = data<CdrBlockTextIdChunkData>( btidChunk );
+qDebug()<< "...with btid"<<btidChunk.toHex();
         }
         else if( chunkId == parlId )
         {
@@ -562,27 +562,49 @@ CdrParser::readParl()
 {
     mRiffStreamReader.openList();
 qDebug() << "Reading Parl...";
+    QString completeText;
     while( mRiffStreamReader.readNextChunkHeader() )
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
 
         if( chunkId == paraId )
         {
-            const QByteArray paraData = mRiffStreamReader.chunkData();
-            // 0..5: ?
+            const QByteArray paraChunk = mRiffStreamReader.chunkData();
+            const CdrBlockTextParagraphChunkData* paraData = dataPtr<CdrBlockTextParagraphChunkData>( paraChunk );
+
+            qDebug() << "...para:"<<paraData->_unknown0 <<paraData->_unknown1 <<paraData->_unknown2;
         }
         else if( chunkId == bnchId )
         {
-            const QByteArray bnchData = mRiffStreamReader.chunkData();
-            // 0..?: ?  sizes seen are 52, 72, 80, 4
+            const QByteArray bnchChunk = mRiffStreamReader.chunkData();
+            const CdrBlockTextNormalCharChunkData* bnchData =
+                dataPtr<CdrBlockTextNormalCharChunkData>( bnchChunk );
+
+            QString text;
+            const int count = bnchChunk.count() / sizeof(CdrBlockTextChar);
+            for( int i = 0; i<count; ++i )
+            {
+                const unsigned char textChar = bnchData->textChar(i).mChar;
+                if( textChar >= ' ' )
+                    text.append( QChar(textChar) );
+            }
+            completeText.append(text);
+            qDebug() << "...bnch:"<<text;
         }
         else if( chunkId == bschId )
         {
-            const QByteArray bschData = mRiffStreamReader.chunkData();
-            // 0..23: ?
+            const QByteArray bschChunk = mRiffStreamReader.chunkData();
+            const CdrBlockTextSpecialCharChunkData* bschData =
+                dataPtr<CdrBlockTextSpecialCharChunkData>( bschChunk );
+            const unsigned char textChar = bschData->mChar.mChar;
+            if( textChar >= ' ' )
+                completeText.append( QChar(textChar) );
+            qDebug() << "...bsch:"<<QChar(textChar) <<bschData->_unknown2
+                                  <<bschData->_unknown3 <<bschData->_unknown4 <<bschData->_unknown5
+                                  <<bschData->_unknown6 <<bschData->_unknown7 <<bschData->_unknown8;
         }
     }
-
+    qDebug() <<"Complete:"<< completeText;
     mRiffStreamReader.closeList();
 }
 
