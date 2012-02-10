@@ -17,3 +17,79 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "formatdocument.h"
+
+
+Structure
+FormatDocument::structure( const QString& name ) const
+{
+    Structure result;
+
+    foreach( const Structure& structure, mStructures )
+    {
+        if( structure.name() == name )
+        {
+            result = structure;
+            break;
+        }
+    }
+
+    return result;
+}
+
+int
+FormatDocument::sizeOfType(const QString& typeName) const
+{
+    int result = -1;
+
+    const QString* actualTypeName = &typeName;
+
+    QHash<QString,QString>::ConstIterator it = mTypeDefByName.find(typeName);
+    if( it != mTypeDefByName.constEnd() )
+        actualTypeName = &(it.value());
+
+    foreach( const IncludedType& includedType, mIncludedTypes )
+    {
+        if( includedType.name() == *actualTypeName )
+        {
+            result = includedType.size();
+            break;
+        }
+    }
+
+    if( result == -1 )
+    {
+        foreach( const Structure& structure, mStructures )
+        {
+            if( structure.name() == *actualTypeName )
+            {
+                result = structure.size();
+                break;
+            }
+        }
+    }
+
+    if( result == -1 )
+    {
+        struct BuiltInTypeDatum { char const* name; int size; };
+        static const BuiltInTypeDatum builtInTypeData[] =
+        {
+            {"char", 1},
+            {"unsigned char", 1},
+            {"float", 4}
+        };
+        static const int builtInTypeDataSize = sizeof( builtInTypeData ) / sizeof( builtInTypeData[0] );
+        for( int i = 0; i < builtInTypeDataSize; ++i)
+        {
+            const BuiltInTypeDatum& builtInTypeDatum = builtInTypeData[i];
+            if( builtInTypeDatum.name == *actualTypeName )
+            {
+                result = builtInTypeDatum.size;
+                break;
+            }
+        }
+    }
+
+    return result;
+}

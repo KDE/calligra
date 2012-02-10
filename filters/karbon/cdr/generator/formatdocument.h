@@ -44,35 +44,62 @@ private:
 };
 
 
+class IncludedType
+{
+public:
+    IncludedType() : mSize(0) {}
+    void setName( const QString& name ) { mName = name; }
+    void setIncludeName( const QString& includeName ) { mIncludeName = includeName; }
+    void setSize( int size ) { mSize = size; }
+    const QString& name() const { return mName; }
+    const QString& includeName() const { return mIncludeName; }
+    int size() const { return mSize; }
+private:
+    QString mName;
+    QString mIncludeName;
+    /// size of the type in bytes
+    int mSize;
+};
+
 class StructureMember
 {
 public:
-    StructureMember() {}
-    StructureMember( const QString& name, const QString& typeId ) : mName( name ), mTypeId( typeId ) {}
+    StructureMember() : mArraySize(0) {}
+    StructureMember( const QString& name, const QString& typeId )
+    : mName( name ), mTypeId( typeId ), mArraySize(0) {}
+    void setArraySize( int arraySize ) { mArraySize = arraySize; }
     const QString& name() const { return mName; }
     const QString& typeId() const { return mTypeId; }
+    int arraySize() const { return mArraySize; }
 private:
     QString mName;
     QString mTypeId;
+    int mArraySize; // 0 means no array
 };
 
 
 class Structure
 {
 public:
+    Structure() : mSize(0) {}
     void setName( const QString& name ) { mName = name; }
     void setBaseName( const QString& baseName ) { mBaseName = baseName; }
-    void appendMember( const StructureMember& member ) { mMembers.append(member); }
+    void appendMember( const StructureMember& member, int size ) { mMembers.append(member); mSize += size; }
     void appendMethod( const QString& method ) { mMethods.append(method); }
+    void setSize( int size ) { mSize = size; }
     const QString& name() const { return mName; }
     const QString& baseName() const { return mBaseName; }
     const QVector<StructureMember>& members() const { return mMembers; }
     const QVector<QString>& methods() const { return mMethods; }
+    int size() const { return mSize; }
+    bool isNull() const { return mName.isNull(); }
 private:
     QString mName;
     QString mBaseName;
     QVector<StructureMember> mMembers;
     QVector<QString> mMethods;
+    /// size of the structure in bytes
+    int mSize;
 };
 
 
@@ -80,18 +107,19 @@ class FormatDocument
 {
 public:
     void appendStructure( const Structure& structure ) { mStructures.append(structure); }
+    void appendIncludedType( const IncludedType& includedType ) { mIncludedTypes.append(includedType); }
     void appendEnumeration( const Enumeration& enumeration ) { mEnumeration.append(enumeration); }
     void insertTypeDef( const QString& typeName, const QString& originalName )
     { mTypeDefByName.insert(typeName, originalName); }
-    void insertInclude( const QString& typeName, const QString& include )
-    { mIncludeByType.insert(typeName, include); }
     const QHash<QString,QString>& typeDefByName() const { return mTypeDefByName; }
-    const QHash<QString,QString>& includeByType() const { return mIncludeByType; }
+    const QVector<IncludedType>& includedTypes() const { return mIncludedTypes; }
     const QVector<Enumeration>& enumerations() const { return mEnumeration; }
     const QVector<Structure>& structures() const { return mStructures; }
+    Structure structure( const QString& name ) const;
+    int sizeOfType(const QString& typeName ) const;
 private:
     QHash<QString,QString> mTypeDefByName;
-    QHash<QString,QString> mIncludeByType;
+    QVector<IncludedType> mIncludedTypes;
     QVector<Enumeration> mEnumeration;
     QVector<Structure> mStructures;
 };

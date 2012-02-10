@@ -24,6 +24,8 @@
 #include "formatdocument.h"
 // Qt
 #include <QtCore/QIODevice>
+#include <QtCore/QStringList>
+#include <QtCore/QSet>
 
 
 bool
@@ -42,8 +44,10 @@ CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device 
     mTextStream << QLatin1String("#ifndef ")<<upperName<<QLatin1Char('\n');
     mTextStream << QLatin1String("#define ")<<upperName<<QLatin1Char('\n');
 
-    foreach( const QString& include, mDocument->includeByType() )
-        writeInclude( include );
+    QSet<QString> includes;
+    foreach( const IncludedType& includedType, mDocument->includedTypes() )
+        includes.insert(includedType.includeName());
+    writeIncludes( includes.toList() );
 
     writeTypeDefs( mDocument->typeDefByName() );
 
@@ -57,9 +61,10 @@ CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device 
 }
 
 void
-CHeaderGenerator::writeInclude( const QString& fileName )
+CHeaderGenerator::writeIncludes( const QStringList& fileNames )
 {
-    mTextStream << QLatin1String("#include <") << fileName << QLatin1String(">\n");
+    foreach( const QString& fileName, fileNames )
+        mTextStream << QLatin1String("#include <") << fileName << QLatin1String(">\n");
 }
 
 void
@@ -107,7 +112,12 @@ CHeaderGenerator::writeStructure( const Structure& structure )
 
     // members
     foreach( const StructureMember& member, structure.members() )
-        mTextStream << QLatin1String("    ") << member.typeId() << QLatin1Char(' ') << member.name() << QLatin1String(";\n");
+    {
+        mTextStream << QLatin1String("    ") << member.typeId() << QLatin1Char(' ') << member.name();
+        if( member.arraySize() != 0 )
+            mTextStream << QLatin1Char('[') << member.arraySize() << QLatin1Char(']');
+        mTextStream << QLatin1String(";\n");
+    }
 
     mTextStream << QLatin1String("};\n");
 }

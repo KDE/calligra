@@ -28,7 +28,7 @@ class FormatDocument;
 class Structure;
 class Enumeration;
 class QIODevice;
-class QString;
+class QStringList;
 template<typename T1, typename T2> class QHash;
 
 
@@ -39,7 +39,7 @@ private:
 public:
     static bool write( FormatDocument* document, QIODevice* device );
 private:
-    void writeInclude( const QString& fileName );
+    void writeIncludes( const QStringList& fileName );
     void writeTypeDefs( const QHash<QString,QString>& typeDefByName );
     void writeEnums( const Enumeration& enumeration );
     void writeStructure( const Structure& structure );
