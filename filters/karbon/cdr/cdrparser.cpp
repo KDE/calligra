@@ -1168,8 +1168,8 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
                 default:
                     qDebug() << "UNKNOWN CHARDATA type" << charData->mType;
                     break;
-                case 0: rawCharData += 3; break;
-                case 1: rawCharData += 25; break;
+                case 0: rawCharData += sizeof(Cdr4CharData); break;
+                case 1: rawCharData += sizeof(Cdr4CharData)+sizeof(Cdr4CharAdditionalData); break;
                 }
             }
             textObject->setText( text );
