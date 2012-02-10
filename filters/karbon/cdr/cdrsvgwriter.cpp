@@ -154,7 +154,7 @@ CdrSvgWriter::writePathObject( const CdrPathObject* pathObject )
 
     const QVector<Cdr4PathPoint>& pathPoints = pathObject->pathPoints();
     QString pathData;
-    for (unsigned int j=0; j<pathPoints.count(); j++)
+    for( int j=0; j<pathPoints.count(); j++ )
     {
         if(j==0) // is first point
             pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[0].mPoint.mX ).arg( -pathPoints[0].mPoint.mY ) );
