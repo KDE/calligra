@@ -77,18 +77,17 @@ CdrSvgWriter::writeObject( const CdrAbstractObject* object )
 {
     const CdrObjectId id = object->id();
     mXmlWriter.startElement("g");
-    const CdrGraphObject* graphObject = dynamic_cast<const CdrGraphObject*>(object);
-    if( graphObject && !graphObject->transformations().isEmpty())
+
+    QString tfString;
+    foreach(const CdrAbstractTransformation* transformation, object->transformations())
     {
         const CdrNormalTransformation* normalTrafo =
-            dynamic_cast<const CdrNormalTransformation*>(graphObject->transformations().at(0));
+            dynamic_cast<const CdrNormalTransformation*>(transformation);
 
         if( normalTrafo )
-        {
-            const QString tfString = QString::fromLatin1("translate(%1,%2)").arg(normalTrafo->x()).arg(normalTrafo->y());
-            mXmlWriter.addAttribute( "transform", tfString );
-        }
+            tfString.append( QString::fromLatin1("translate(%1,%2) ").arg(normalTrafo->x()).arg(normalTrafo->y()) );
     }
+    mXmlWriter.addAttribute( "transform", tfString );
 
     if( id == PathObjectId )
         writePathObject( dynamic_cast<const CdrPathObject*>(object) );
@@ -121,8 +120,8 @@ CdrSvgWriter::writeRectangleObject( const CdrRectangleObject* object )
 
 //     mXmlWriter.addAttribute("x", x);
 //     mXmlWriter.addAttribute("y", y);
-    mXmlWriter.addAttribute("width", qAbs(object->cornerPoint().mX) );
-    mXmlWriter.addAttribute("height", qAbs(object->cornerPoint().mY) );
+    mXmlWriter.addAttribute("width", object->cornerPoint().mX );
+    mXmlWriter.addAttribute("height", object->cornerPoint().mY );
 //     mXmlWriter.addAttribute("rx", object->cornerRoundness());
 //     mXmlWriter.addAttribute("ry", object->cornerRoundness());
     writeStrokeWidth( object->outlineId() );

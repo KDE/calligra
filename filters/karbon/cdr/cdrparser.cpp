@@ -810,7 +810,7 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
         else if( chunkId == lgobId )
         {
-            readObjectLGOb();
+            readGroupObjectLGOb( group );
         }
         else if( chunkId == bboxId )
         {
@@ -836,6 +836,31 @@ qDebug() << "Group >>>...";
     return group;
 }
 
+void
+CdrParser::readGroupObjectLGOb( CdrGroupObject* group )
+{
+    QVector<CdrAbstractTransformation*> transformations;
+    mRiffStreamReader.openList();
+qDebug() << "LGOb <<<";
+
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
+
+        if( chunkId == lodaId )
+        {
+            readLoda();
+        }
+        else if( chunkId == trflId )
+        {
+            transformations = readTrfl();
+        }
+    }
+qDebug() << "LGOb >>>";
+    mRiffStreamReader.closeList();
+    if( group )
+        group->setTransformations( transformations );
+}
 
 CdrAbstractObject*
 CdrParser::readObject()
@@ -920,9 +945,9 @@ qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->
             for (int i=0; i < trfdData->mArguments.count; i++)
             {
                 const CdrTransformData* transformData = trfdData->mArguments.argPtr<CdrTransformData>(i);
-        // qDebug() << i << ": type" << transformData->mIndex
-        //          << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
-        //          << transformData->dataSize()+2;
+//         qDebug() << i << ": type" << transformData->mIndex
+//                  << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
+//                  << transformData->dataSize()+2;
                 if( transformData->mIndex == CdrUnknownTransform8Id )
                 {
                     const CdrTransform8Data* data8 = transformData->data8();
@@ -930,10 +955,11 @@ qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->
                     transformation->setData( data8->m1, data8->m2, data8->mX, data8->m4, data8->m5, data8->mY );
                     result.append( transformation );
 
-        // qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
+//         qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
                 }
                 else
-        ;// qDebug() << QByteArray::fromRawData(transformData->data(), transformData->dataSize()).toHex();
+// qDebug() << QByteArray::fromRawData(transformData->data(), transformData->dataSize()).toHex();
+        ;
             }
         }
     }

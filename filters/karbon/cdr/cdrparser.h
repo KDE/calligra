@@ -82,6 +82,7 @@ private:
     CdrLinkGroupObject* readLinkGroupObject();
     CdrGroupObject* readGroupObject();
 
+    void readGroupObjectLGOb( CdrGroupObject* group );
     CdrAbstractObject* readObject();
     CdrAbstractObject* readObjectLGOb();
 

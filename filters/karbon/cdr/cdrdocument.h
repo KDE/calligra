@@ -51,16 +51,20 @@ class CdrNormalTransformation : public CdrAbstractTransformation
 {
 public:
     CdrNormalTransformation() : CdrAbstractTransformation(Normal) {}
-    void setData( float _1, float _2, qint32 x, float _3, float _4, qint32 y )
-    { m1 = _1; m2 = _2; mX = x; m3 = _3; m4 = _4; mY = y; }
+    void setData( float f1, float f2, qint32 x, float f3, float f4, qint32 y )
+    { mF1 = f1; mF2 = f2; mX = x; mF3 = f3; mF4 = f4; mY = y; }
     qint32 x() const { return mX; }
     qint32 y() const { return mY; }
+    float f1() const { return mF1; }
+    float f2() const { return mF2; }
+    float f3() const { return mF3; }
+    float f4() const { return mF4; }
 private:
-    float m1;
-    float m2;
+    float mF1;
+    float mF2;
     qint32 mX;
-    float m3;
-    float m4;
+    float mF3;
+    float mF4;
     qint32 mY;
 };
 
