@@ -15,6 +15,15 @@
     <type name="Cdr4Coord" original="qint16">
       <description>2-byte signed integer is used to describe the x and the y coordinates.</description>
     </type>
+    <type name="Cdr4OutlineIndex" original="quint32">
+      <description>4-byte unsigned integer is used to reference an outline in the outline table.</description>
+    </type>
+    <type name="Cdr4FillIndex" original="quint32">
+      <description>4-byte unsigned integer is used to reference a fill in the fill table.</description>
+    </type>
+    <type name="Cdr4StyleIndex" original="quint16">
+      <description>2-byte unsigned integer is used to reference a style in the style table.</description>
+    </type>
   </typedefs>
 
   <enums>
@@ -279,8 +288,8 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrStyleChunkData" size="20" sizeExtended="true">
-      <member start="0" end="1" type="quint16" name="mStyleIndex">
-        <description>The index of the style.</description>
+      <member start="0" end="1" type="Cdr4StyleIndex" name="mStyleIndex">
+        <description>The index of the style in the style table of the document.</description>
       </member>
       <member start="2" end="19" type="CdrStyleArgumentData" name="mArguments" />
       <extension start="20" />
@@ -364,8 +373,8 @@ size |count|aps  | ap1 |apl  |?????|
       <method>
           <code><![CDATA[const CdrSolidFillData* solidFillData() const
           { return reinterpret_cast<const CdrSolidFillData*>(&firstFillTypeData); }]]></code></method>
-      <member start="0" end="3" type="quint32" name="mFillIndex">
-        <description>The index/id/key of the fill.</description>
+      <member start="0" end="3" type="Cdr4FillIndex" name="mFillIndex">
+        <description>The index/id/key of the fill in the fill table of the document.</description>
       </member>
       <member start="4" end="7" type="quint32" name="mFillType" />
       <extension start="8" type="char" name="firstFillTypeData">
@@ -390,7 +399,7 @@ size |count|aps  | ap1 |apl  |?????|
 -->
     <struct name="CdrOutlineChunkData" size="68">
       <!-- 0..3: uint32 index/key/id? would match loda-->
-      <member start="0" end="3" name="mIndex" type="quint32">
+      <member start="0" end="3" name="mIndex" type="Cdr4OutlineIndex">
         <description>The index of the outline in the outline table.</description>
       </member>
       <!-- type (?) seen 1, 2, 50-->
@@ -544,13 +553,11 @@ size |count|aps  | ap1 |apl  |?????|
 //   10: 1024    (00 04 00 00)
 -->
     <enum name="CdrObjectArgumentType">
-      <!-- 10: 32bit (outline?) -->
       <item name="CdrObjectOutlineIndexArgumentId" value="10">
-          <description>The index of the outline in the outline table of the document.</description>
+          <description>The index of the outline in the outline table of the document, of type Cdr4OutlineIndex.</description>
       </item>
-      <!-- 20: 32bit (fill?)-->
       <item name="CdrObjectFillIndexArgumentId" value="20">
-          <description>The index of the fill in the fill table of the document.</description>
+          <description>The index of the fill in the fill table of the document, of type Cdr4FillIndex.</description>
       </item>
       <!-- 30: object specific data-->
       <item name="CdrObjectSpecificDataArgumentId" value="30" />
@@ -558,9 +565,8 @@ size |count|aps  | ap1 |apl  |?????|
       <item name="CdrObject40ArgumentId" value="40" />
       <!-- 100: 32bit (point, transform?)-->
       <item name="CdrObjectOffsetPointArgumentId" value="100" />
-      <!-- 200: 16 bit  (style index?)-->
       <item name="CdrObjectStyleIndexArgumentId" value="200">
-          <description>The index of the style in the style table of the document.</description>
+          <description>The index of the style in the style table of the document, of type Cdr4StyleIndex.</description>
       </item>
       <!-- 1000: text/title-->
       <item name="CdrObjectTitleArgumentId" value="1000">

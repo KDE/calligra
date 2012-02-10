@@ -969,11 +969,11 @@ QString argTypeAsString;
 switch(argType)
 {
     case CdrObjectOutlineIndexArgumentId :
-        argAsString = QString::number( argsData->arg<quint32>(i) );
+        argAsString = QString::number( argsData->arg<Cdr4OutlineIndex>(i) );
         argTypeAsString = QLatin1String("outline index");
         break;
     case CdrObjectFillIndexArgumentId :
-        argAsString = QString::number( argsData->arg<quint32>(i) );
+        argAsString = QString::number( argsData->arg<Cdr4FillIndex>(i) );
         argTypeAsString = QLatin1String("fill index");
         break;
     case CdrObjectSpecificDataArgumentId :
@@ -984,7 +984,7 @@ switch(argType)
         argTypeAsString = QLatin1String("some 32-bit");
         break;
     case CdrObjectStyleIndexArgumentId :
-        argAsString = QString::number( argsData->arg<quint16>(i) );
+        argAsString = QString::number( argsData->arg<Cdr4StyleIndex>(i) );
         argTypeAsString = QLatin1String("style index");
         break;
     case CdrObject1010ArgumentId :
@@ -1036,10 +1036,10 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
         switch( argType )
         {
         case CdrObjectOutlineIndexArgumentId :
-            rectangleObject->setOutlineId( argsData->arg<quint32>(i) );
+            rectangleObject->setOutlineId( argsData->arg<Cdr4OutlineIndex>(i) );
             break;
         case CdrObjectFillIndexArgumentId :
-            rectangleObject->setFillId( argsData->arg<quint32>(i) );
+            rectangleObject->setFillId( argsData->arg<Cdr4FillIndex>(i) );
             break;
         case CdrObjectSpecificDataArgumentId :
         {
@@ -1052,7 +1052,7 @@ qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().mX<<","<
             rectangleObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
-            rectangleObject->setStyleId( argsData->arg<quint16>(i) );
+            rectangleObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
         }
     }
@@ -1072,10 +1072,10 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
         switch( argType )
         {
         case CdrObjectOutlineIndexArgumentId :
-            ellipseObject->setOutlineId( argsData->arg<quint32>(i) );
+            ellipseObject->setOutlineId( argsData->arg<Cdr4OutlineIndex>(i) );
             break;
         case CdrObjectFillIndexArgumentId :
-            ellipseObject->setFillId( argsData->arg<quint32>(i) );
+            ellipseObject->setFillId( argsData->arg<Cdr4FillIndex>(i) );
             break;
         case CdrObjectSpecificDataArgumentId :
         {
@@ -1091,7 +1091,7 @@ qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->m
             ellipseObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
-            ellipseObject->setStyleId( argsData->arg<quint16>(i) );
+            ellipseObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
         }
     }
@@ -1111,10 +1111,10 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
         switch( argType )
         {
         case CdrObjectOutlineIndexArgumentId :
-            pathObject->setOutlineId( argsData->arg<quint32>(i) );
+            pathObject->setOutlineId( argsData->arg<Cdr4OutlineIndex>(i) );
             break;
         case CdrObjectFillIndexArgumentId :
-            pathObject->setFillId( argsData->arg<quint32>(i) );
+            pathObject->setFillId( argsData->arg<Cdr4FillIndex>(i) );
             break;
         case CdrObjectSpecificDataArgumentId :
         {
@@ -1129,7 +1129,7 @@ qDebug() << "path points:" << points->count;
             pathObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
-            pathObject->setStyleId( argsData->arg<quint16>(i) );
+            pathObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
         }
     }
@@ -1149,10 +1149,10 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
         switch( argType )
         {
         case CdrObjectOutlineIndexArgumentId :
-            textObject->setOutlineId( argsData->arg<quint32>(i) );
+            textObject->setOutlineId( argsData->arg<Cdr4OutlineIndex>(i) );
             break;
         case CdrObjectFillIndexArgumentId :
-            textObject->setFillId( argsData->arg<quint32>(i) );
+            textObject->setFillId( argsData->arg<Cdr4FillIndex>(i) );
             break;
         case CdrObjectSpecificDataArgumentId :
         {
@@ -1179,7 +1179,7 @@ qDebug() << "text:" << text;
             textObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
-            textObject->setStyleId( argsData->arg<quint16>(i) );
+            textObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
         }
     }
@@ -1199,10 +1199,10 @@ CdrParser::readBlockTextObject( const CdrArgumentWithTypeData* argsData )
         switch( argType )
         {
         case CdrObjectOutlineIndexArgumentId :
-            blockTextObject->setOutlineId( argsData->arg<quint32>(i) );
+            blockTextObject->setOutlineId( argsData->arg<Cdr4OutlineIndex>(i) );
             break;
         case CdrObjectFillIndexArgumentId :
-            blockTextObject->setFillId( argsData->arg<quint32>(i) );
+            blockTextObject->setFillId( argsData->arg<Cdr4FillIndex>(i) );
             break;
         case CdrObjectSpecificDataArgumentId :
         {
@@ -1215,7 +1215,7 @@ qDebug() << "blockTextData:" << blockTextData->_unknown0 << blockTextData->mWidt
             blockTextObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
-            blockTextObject->setStyleId( argsData->arg<quint16>(i) );
+            blockTextObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
         }
     }
