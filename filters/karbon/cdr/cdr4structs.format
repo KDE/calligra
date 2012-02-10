@@ -267,7 +267,12 @@ const T* argPtr( int i ) const
           <description>A \0 terminated string with some file name, e.g. "CORELDRW.CDT".</description>
       </extension>
     </struct>
-
+<!--
+there are 2 bytes not part of the CdrArgumentData, behind the arg pointers. also for other CdrArgumentData usages?
+20 00 01 00 06 00 0C 00 20 00 00 00 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
+22 00 01 00 06 00 0C 00 22 00 22 00 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
+size |count|aps  | ap1 |apl  |?????|
+-->
     <struct name="CdrLnkTableChunkData" size="6" sizeExtended="true">
       <member start="0" end="5" type="CdrArgumentData" name="mArguments" />
       <extension start="6" />
@@ -767,11 +772,26 @@ sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
     </struct>
 
 <!--
-// 0000:0020 |       61 00  01 00 00 00  00 00 00 00  00 00 00 00 |   a.............
-// 0000:0030 | 04 00 C2 00  98 1F                                 | ..Â...
+sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 04 00 C2 00 98 1F
+sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
+sample: 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
+             |     |           |           |     |     |     |     |
 -->
-    <struct name="LnkData" size="20">
-      <member start="0" end="19" name="_unknown" type="char" array="20" />
+    <struct name="LnkData" size="18" sizeExtended="true">
+      <!-- seen 97 -->
+      <member start="0" end="1"  name="_unknown0" type="quint16" />
+      <!-- seen 1,2 -->
+      <member start="2" end="3"  name="_unknown1" type="quint16" />
+      <!-- seen 0 -->
+      <member start="4" end="7"  name="_unknown2" type="quint32" />
+      <!-- seen 0 -->
+      <member start="8" end="11"  name="_unknown3" type="quint32" />
+      <!-- seen 0 -->
+      <member start="12" end="13"  name="_unknown4" type="quint16" />
+      <!-- seen 1,2,4 -->
+      <member start="14" end="15"  name="_unknown5" type="quint16" />
+      <!-- seen 30,57,194 -->
+      <member start="16" end="17"  name="_unknown6" type="quint16" />
     </struct>
   </structs>
 </format>

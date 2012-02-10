@@ -301,7 +301,9 @@ CdrParser::readDocLnkTable()
 qDebug() << "Reading LnkTable" << lnkTableData->mArguments.count << "args";
     for (int i=0; i < lnkTableData->mArguments.count; i++)
     {
-// qDebug() << i << ": type" << argsData->argPtr<LnkData>(i);
+        const LnkData* lnkData = lnkTableData->mArguments.argPtr<LnkData>(i);
+qDebug() << i << ":" << lnkData->_unknown0 << lnkData->_unknown1 << lnkData->_unknown2
+                     << lnkData->_unknown3 << lnkData->_unknown4 << lnkData->_unknown5 << lnkData->_unknown6;
     }
 }
 
