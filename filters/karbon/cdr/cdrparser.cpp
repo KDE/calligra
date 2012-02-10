@@ -980,36 +980,48 @@ switch(argType)
         argTypeAsString = QLatin1String("object specific data");
         break;
     case CdrObject40ArgumentId :
-        argAsString = QString::number( argsData->arg<quint32>(i) );
+    {
+        const CdrObject40ArgumentData data = argsData->arg<CdrObject40ArgumentData>( i );
+        argAsString = QString::number( data._unknown0 )+QLatin1Char(',')+QString::number(data._unknown1);
         argTypeAsString = QLatin1String("some 32-bit");
         break;
+    }
+    case CdrObject100ArgumentId :
+    {
+        const CdrObject100ArgumentData data = argsData->arg<CdrObject100ArgumentData>( i );
+        argAsString = QString::number(data._unknown0)+QLatin1Char(',')+QString::number(data._unknown1);
+        argTypeAsString = QLatin1String("some 32-bit");
+        break;
+    }
     case CdrObjectStyleIndexArgumentId :
         argAsString = QString::number( argsData->arg<Cdr4StyleIndex>(i) );
         argTypeAsString = QLatin1String("style index");
-        break;
-    case CdrObject1010ArgumentId :
-        argAsString = QString::number( argsData->arg<quint16>(i), 16 );
-        argTypeAsString = QLatin1String("some 16-bit");
         break;
     case CdrObjectTitleArgumentId :
         argAsString = QLatin1String( argsData->argPtr<char>(i) ); // TODO: all argPtr<char> need \0 term check
         argTypeAsString = QLatin1String("title");
         break;
-    case CdrObjectOffsetPointArgumentId :
+    case CdrObject1010ArgumentId :
+        argAsString = QString::number( argsData->arg<CdrObject1010ArgumentData>(i)._unknown0, 16 );
+        argTypeAsString = QLatin1String("some 16-bit");
+        break;
+    case CdrObject2000ArgumentId :
     {
-        const Cdr4Point point = argsData->arg<Cdr4Point>( i );
-        argAsString = QString::number(point.mX)+QLatin1Char(',')+QString::number(point.mY);
-        argTypeAsString = QLatin1String("point?");
+        const CdrObject2000ArgumentData* data = argsData->argPtr<CdrObject2000ArgumentData>( i );
+        argAsString =
+            QString::number(data->_unknown0)+QLatin1Char(',')+QString::number(data->_unknown1)+QLatin1Char(',') +
+            QString::number(data->_unknown2)+QLatin1Char(',')+QString::number(data->_unknown3)+QLatin1Char(',') +
+            QString::number(data->_unknown4)+QLatin1Char(',')+QString::number(data->_unknown5);
+        argTypeAsString = QLatin1String("some 12 bytes");
         break;
     }
-    case CdrObject2000ArgumentId :
-        argTypeAsString = QLatin1String("some larger data");
-        break;
     case CdrObject6000ArgumentId :
     {
-        const char* data = argsData->argPtr<char>(i);
-        argAsString = QByteArray::fromRawData(data,8).toHex();
-        argTypeAsString = QLatin1String("8 bytes");
+        const CdrObject6000ArgumentData* data = argsData->argPtr<CdrObject6000ArgumentData>( i );
+        argAsString =
+            QString::number(data->_unknown0)+QLatin1Char(',')+QString::number(data->_unknown1)+QLatin1Char(',') +
+            QString::number(data->_unknown2)+QLatin1Char(',')+QString::number(data->_unknown3);
+        argTypeAsString = QLatin1String("some 8 bytes");
         break;
     }
     default:
@@ -1048,9 +1060,6 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
 qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().mX<<","<<rectangleObject->cornerPoint().mY
                  << "unknown" << rectangleData->_unknown;
         }
-        case CdrObjectOffsetPointArgumentId :
-            rectangleObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
-            break;
         case CdrObjectStyleIndexArgumentId :
             rectangleObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
             break;
@@ -1087,8 +1096,6 @@ qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->m
                      <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
                      <<"unknown"<<ellipseData->_unknown;
         }
-        case CdrObjectOffsetPointArgumentId :
-            ellipseObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
             ellipseObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
@@ -1125,8 +1132,6 @@ qDebug() << "path points:" << points->count;
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
             }
         }
-        case CdrObjectOffsetPointArgumentId :
-            pathObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
             pathObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
@@ -1175,8 +1180,6 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
             textObject->setText( text );
 qDebug() << "text:" << text;
         }
-        case CdrObjectOffsetPointArgumentId :
-            textObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
             textObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );
@@ -1211,8 +1214,6 @@ qDebug() << "blockTextData:" << blockTextData->_unknown0 << blockTextData->mWidt
                              << blockTextData->mHeight << blockTextData->mIndex
                              << blockTextData->_unknown4 << blockTextData->_unknown5;
         }
-        case CdrObjectOffsetPointArgumentId :
-            blockTextObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
             break;
         case CdrObjectStyleIndexArgumentId :
             blockTextObject->setStyleId( argsData->arg<Cdr4StyleIndex>(i) );

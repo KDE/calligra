@@ -559,29 +559,60 @@ size |count|aps  | ap1 |apl  |?????|
       <item name="CdrObjectFillIndexArgumentId" value="20">
           <description>The index of the fill in the fill table of the document, of type Cdr4FillIndex.</description>
       </item>
-      <!-- 30: object specific data-->
-      <item name="CdrObjectSpecificDataArgumentId" value="30" />
-      <!-- 40: 32bit  seen only with ellipse so far, rotation center?-->
+      <item name="CdrObjectSpecificDataArgumentId" value="30">
+          <description>The argument with object specific data.</description>
+      </item>
       <item name="CdrObject40ArgumentId" value="40" />
-      <!-- 100: 32bit (point, transform?)-->
-      <item name="CdrObjectOffsetPointArgumentId" value="100" />
+      <item name="CdrObject100ArgumentId" value="100" />
       <item name="CdrObjectStyleIndexArgumentId" value="200">
           <description>The index of the style in the style table of the document, of type Cdr4StyleIndex.</description>
       </item>
-      <!-- 1000: text/title-->
       <item name="CdrObjectTitleArgumentId" value="1000">
-          <description>The tile of the object.</description>
+          <description>The title of the object.</description>
       </item>
-      <!-- 1010: 16 bit, seen 80 01 (3=path), 01 40 (5=bitmap) -->
       <item name="CdrObject1010ArgumentId" value="1010" />
-      <!-- 2000: data 01 00 64 00 64 00 00 00 00 00 00 00-->
       <item name="CdrObject2000ArgumentId" value="2000" />
-      <!-- 6000: 8 byte data 00 00 00 00 00 00 00 00, seen with path-->
       <item name="CdrObject6000ArgumentId" value="6000" />
     </enum>
   </enums>
 
   <structs>
+    <!-- seen only with ellipse so far, rotation center?-->
+    <struct name="CdrObject40ArgumentData" size="4">
+        <member start="0" end="1" name="_unknown0" type="quint16" />
+        <member start="2" end="3" name="_unknown1" type="quint16" />
+    </struct>
+
+    <!-- seen only with ellipse so far, rotation center?-->
+    <struct name="CdrObject100ArgumentData" size="4">
+        <member start="0" end="1" name="_unknown0" type="quint16" />
+        <!-- seen 0,10,20,30,40,100 -->
+        <member start="2" end="3" name="_unknown1" type="quint16" />
+    </struct>
+
+    <!-- 16 bit, seen 80 01 (3=path), 01 40 (5=bitmap) -->
+    <struct name="CdrObject1010ArgumentData" size="2">
+        <member start="0" end="1" name="_unknown0" type="quint16" />
+    </struct>
+
+    <!-- sample: 01 00 64 00 64 00 00 00 00 00 00 00-->
+    <struct name="CdrObject2000ArgumentData" size="12">
+        <member start="0" end="1" name="_unknown0" type="quint16" />
+        <member start="2" end="3" name="_unknown1" type="quint16" />
+        <member start="4" end="5" name="_unknown2" type="quint16" />
+        <member start="6" end="7" name="_unknown3" type="quint16" />
+        <member start="8" end="9" name="_unknown4" type="quint16" />
+        <member start="10" end="11" name="_unknown5" type="quint16" />
+    </struct>
+
+    <!-- sample: 00 00 00 00 00 00 00 00, seen with path-->
+    <struct name="CdrObject6000ArgumentData" size="8">
+        <member start="0" end="1" name="_unknown0" type="quint16" />
+        <member start="2" end="3" name="_unknown1" type="quint16" />
+        <member start="4" end="5" name="_unknown2" type="quint16" />
+        <member start="6" end="7" name="_unknown3" type="quint16" />
+    </struct>
+
     <!-- sample data: AC 2D B6 DF 00 00-->
     <struct name="Cdr4RectangleData" size="6">
       <!-- width?-->

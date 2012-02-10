@@ -137,17 +137,14 @@ public:
     void setStyleId( quint32 styleId ) { mStyleId = styleId; }
     void setOutlineId( quint32 outlineId ) { mOutlineId = outlineId; }
     void setFillId( quint32 fillId ) { mFillId = fillId; }
-    void setOffsetPoint( Cdr4Point offsetPoint ) { mOffsetPoint = offsetPoint; }
 public:
     quint16 styleId() const { return mStyleId; }
     quint32 outlineId() const { return mOutlineId; }
     quint32 fillId() const { return mFillId; }
-    Cdr4Point offsetPoint() const { return mOffsetPoint; }
 private:
     quint16 mStyleId; // TODO: make sure that 0 is never an id
     quint32 mOutlineId; // TODO: make sure that 0 is never an id
     quint32 mFillId; // TODO: make sure that 0 is never an id
-    Cdr4Point mOffsetPoint;
 };
 
 class CdrRectangleObject : public CdrGraphObject
