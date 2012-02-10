@@ -2,6 +2,7 @@
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -424,7 +425,7 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
 
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor,3);
     //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
