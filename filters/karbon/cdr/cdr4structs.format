@@ -459,7 +459,9 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrLinkGroupSpndChunkData" size="2">
-        <member start="0" end="1" name="_unknown" type="quint16" />
+        <member start="0" end="1" name="mId" type="quint16">
+            <description>might be some object index which is used in lnkt</description>
+        </member>
     </struct>
 
     <struct name="CdrLinkGroupFlagChunkData" size="4">
@@ -467,7 +469,9 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrGroupSpndChunkData" size="2">
-        <member start="0" end="1" name="_unknown" type="quint16" />
+        <member start="0" end="1" name="mId" type="quint16">
+            <description>might be some object index which is used in lnkt</description>
+        </member>
     </struct>
 
     <!-- seen 00000010, 00080010 -->
@@ -476,7 +480,9 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrObjectSpndChunkData" size="2">
-        <member start="0" end="1" name="_unknown" type="quint16" />
+        <member start="0" end="1" name="mId" type="quint16">
+            <description>might be some object index which is used in lnkt</description>
+        </member>
     </struct>
 
     <!-- seen 00020008-->
@@ -795,24 +801,48 @@ garbage data? undo data?
 <!--
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 04 00 C2 00 98 1F
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
+sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 4A 00 00 00
+sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 02 00 15 01 00 00
 sample: 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
-             |     |           |           |     |     |     |     |
+sample: 50 00 00 00 12 01 BD 00 00 00 00 00 00 00 00 00 00 00
+sample: 50 00 00 00 CE 00 BD 00 00 00 00 00 00 00 00 00 00 00
+sample: 50 00 00 00 13 01 BD 00 00 00 00 00 00 00 00 00 00 00
+sample: 50 00 00 00 1D 00 BD 00 00 00 00 00 00 00 00 00 00 00
+sample: 50 00 00 00 1C 00 BD 00 00 00 00 00 00 00 00 00 00 00
+             |     |     |     |     |     |     |     |     |     |
 -->
     <struct name="LnkData" size="18" sizeExtended="true">
-      <!-- seen 97 -->
-      <member start="0" end="1"  name="_unknown0" type="quint16" />
-      <!-- seen 1,2 -->
-      <member start="2" end="3"  name="_unknown1" type="quint16" />
+      <method>
+<code><![CDATA[quint16 data( int i ) const
+    { return (&firstData)[i]; }]]></code>
+      </method>
+      <!-- seen 80,97 -->
+      <member start="0" end="1"  name="mType" type="quint16" />
+      <!-- seen 0,1,2 -->
+      <member start="2" end="3"  name="mDataSize" type="quint16">
+          <description>The number of whatever 16-bit data is attached.</description>
+      </member>
       <!-- seen 0 -->
-      <member start="4" end="7"  name="_unknown2" type="quint32" />
+      <member start="4" end="5"  name="_unknown2" type="quint16">
+          <description>With mType=80 the spnd of the object copy?</description>
+      </member>
       <!-- seen 0 -->
-      <member start="8" end="11"  name="_unknown3" type="quint32" />
+      <member start="6" end="7"  name="_unknown3" type="quint16">
+          <description>With mType=80 the spnd of the original object?</description>
+      </member>
       <!-- seen 0 -->
-      <member start="12" end="13"  name="_unknown4" type="quint16" />
+      <member start="8" end="9"  name="_unknown4" type="quint16" />
+      <!-- seen 0 -->
+      <member start="10" end="11"  name="_unknown5" type="quint16" />
+      <!-- seen 0 -->
+      <member start="12" end="13"  name="_unknown6" type="quint16" />
       <!-- seen 1,2,4 -->
-      <member start="14" end="15"  name="_unknown5" type="quint16" />
+      <member start="14" end="15"  name="_unknown7" type="quint16" />
       <!-- seen 30,57,194 -->
-      <member start="16" end="17"  name="_unknown6" type="quint16" />
+      <member start="16" end="17"  name="_unknown8" type="quint16" />
+      <extension start="18" name="firstData" type="quint16" >
+          <description>some 16-bit data, number seems defined by mDataSize</description>
+      </extension>
     </struct>
   </structs>
 </format>

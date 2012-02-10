@@ -302,8 +302,12 @@ qDebug() << "Reading LnkTable" << lnkTableData->mArguments.count << "args";
     for (int i=0; i < lnkTableData->mArguments.count; i++)
     {
         const LnkData* lnkData = lnkTableData->mArguments.argPtr<LnkData>(i);
-qDebug() << i << ":" << lnkData->_unknown0 << lnkData->_unknown1 << lnkData->_unknown2
-                     << lnkData->_unknown3 << lnkData->_unknown4 << lnkData->_unknown5 << lnkData->_unknown6;
+qDebug() << i << ": type:" << lnkData->mType << "ed size:" << lnkData->mDataSize<<"other:"
+                    << lnkData->_unknown2
+                    << lnkData->_unknown3 << lnkData->_unknown4 << lnkData->_unknown5
+                    << lnkData->_unknown6 << lnkData->_unknown7 << lnkData->_unknown8;
+        for(int j=0; j<lnkData->mDataSize; ++j)
+qDebug() << "    "<<j<<":"<<lnkData->data(j);
     }
 }
 
@@ -753,8 +757,8 @@ qDebug() << "LinkGroup <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-//             const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndChunk.toHex();
+            const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndData.mId;
         }
         else if( chunkId == flgsId )
         {
@@ -795,8 +799,8 @@ qDebug() << "Group <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-//             const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndChunk.toHex();
+            const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndData.mId;
         }
         else if( chunkId == flgsId )
         {
@@ -844,8 +848,8 @@ qDebug() << "Object <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-//             const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndChunk.toHex();
+            const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
+qDebug()<< "...with spnd"<<spndData.mId;
         }
         else if( chunkId == flgsId )
         {
