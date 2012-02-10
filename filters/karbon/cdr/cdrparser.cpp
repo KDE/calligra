@@ -1033,8 +1033,8 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4RectangleData* rectangleData = argsData->argPtr<Cdr4RectangleData>( i );
-            rectangleObject->setSize( rectangleData->mWidth, rectangleData->mHeight );
-qDebug() << "rectangle: width" << rectangleObject->width()<<"height"<<rectangleObject->height()
+            rectangleObject->setCornerPoint( rectangleData->mCornerPoint );
+qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().mX<<","<<rectangleObject->cornerPoint().mY
                  << "unknown" << rectangleData->_unknown;
         }
         case CdrObjectOffsetPointArgumentId :

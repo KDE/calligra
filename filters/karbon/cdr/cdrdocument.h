@@ -155,13 +155,11 @@ class CdrRectangleObject : public CdrGraphObject
 public:
     CdrRectangleObject() : CdrGraphObject(RectangleObjectId) {}
 public:
-    void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
+    void setCornerPoint( Cdr4Point cornerPoint ) { mCornerPoint = cornerPoint; }
 public:
-    quint16 width() const { return mWidth; }
-    quint16 height() const { return mHeight; }
+    Cdr4Point cornerPoint() const { return mCornerPoint; }
 private:
-    quint16 mWidth;
-    quint16 mHeight;
+    Cdr4Point mCornerPoint;
 };
 
 class CdrEllipseObject : public CdrGraphObject

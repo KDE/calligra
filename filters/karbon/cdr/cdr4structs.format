@@ -571,9 +571,9 @@ size |count|aps  | ap1 |apl  |?????|
     <!-- sample data: AC 2D B6 DF 00 00-->
     <struct name="Cdr4RectangleData" size="6">
       <!-- width?-->
-      <member start="0" end="1" name="mWidth" type="quint16" />
-      <!-- height?-->
-      <member start="2" end="3" name="mHeight" type="quint16" />
+      <member start="0" end="3" name="mCornerPoint" type="Cdr4Point">
+          <description>The point of the opposite corner of the rectangle, with 0,0 being the base point.</description>
+      </member>
       <!-- ? rounded corners?-->
       <member start="4" end="5" name="_unknown" type="quint16" />
     </struct>

@@ -121,8 +121,8 @@ CdrSvgWriter::writeRectangleObject( const CdrRectangleObject* object )
 
 //     mXmlWriter.addAttribute("x", x);
 //     mXmlWriter.addAttribute("y", y);
-    mXmlWriter.addAttribute("width", object->width());
-    mXmlWriter.addAttribute("height", object->height());
+    mXmlWriter.addAttribute("width", qAbs(object->cornerPoint().mX) );
+    mXmlWriter.addAttribute("height", qAbs(object->cornerPoint().mY) );
 //     mXmlWriter.addAttribute("rx", object->cornerRoundness());
 //     mXmlWriter.addAttribute("ry", object->cornerRoundness());
     writeStrokeWidth( object->outlineId() );
