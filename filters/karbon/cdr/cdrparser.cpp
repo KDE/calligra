@@ -1147,8 +1147,20 @@ CdrParser::readTextObject( const CdrArgumentWithTypeData* argsData )
         {
             const Cdr4TextData* textData = argsData->argPtr<Cdr4TextData>( i );
             QString text;
+            const char* rawCharData = &(textData->mCharDataStart);
             for (unsigned int j=0; j<textData->mLength; j++)
-                text.append( QLatin1Char(textData->charData(j).mChar) );
+            {
+                const Cdr4CharData* charData = reinterpret_cast<const Cdr4CharData*>(rawCharData);
+                text.append( QLatin1Char(charData->mChar) );
+                switch( charData->mType )
+                {
+                default:
+                    qDebug() << "UNKNOWN CHARDATA type" << charData->mType;
+                    break;
+                case 0: rawCharData += 3; break;
+                case 1: rawCharData += 25; break;
+                }
+            }
             textObject->setText( text );
 qDebug() << "text:" << text;
         }

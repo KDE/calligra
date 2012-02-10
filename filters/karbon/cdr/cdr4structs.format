@@ -676,28 +676,49 @@ sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
     </struct>
 
     <struct name="Cdr4CharData" size="3">
-      <member start="0" end="0" name="_unknown" type="quint8" />
+      <!-- seen 0,1 -->
+      <member start="0" end="0" name="mType" type="quint8" />
       <member start="1" end="1" name="mChar" type="char" />
       <member start="2" end="2" name="_unknown2" type="quint8" />
     </struct>
 
+<!--
+sample: 10 65 00 00 B6 02 00 73 00 00 00 00 00 00 00 00 67 00 00 65 00 00
+sample: 18 68 15 00 85 01 00 65 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 18 00 15 00 85 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 18 00 15 00 85 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 28 00 43 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 50 00 00 21 B6 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 10 00 00 00 B6 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 10 00 00 00 B6 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+sample: 12 00 00 00 B6 02 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00
+sample: 02 65 00 00 72 00 00 6E 00 00 00 00 00 00 04 00 00 00 00 00 00 00
+sample: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 01 00 00
+             |     |
+it could be seen that the second byte was the letter which was following. accident?
+or even three chars data, with just the very first byte overwritten with 02
+garbage data? undo data?
+-->
+    <struct name="Cdr4CharAdditionalData" size="22">
+        <member start="0" end="21" name="_unknown" type="char" array="22" />
+    </struct>
+
     <struct name="Cdr4TextData" size="6">
-      <method>
-<code><![CDATA[Cdr4CharData charData( int i ) const
-    { return (&firstChar)[i]; }]]></code>
-      </method>
       <!-- ? is 00 00 in samples-->
       <member start="0" end="1" name="_unknown" type="quint16" />
       <!-- length of text-->
       <member start="2" end="3" name="mLength" type="quint16" />
       <member start="4" end="5" name="mDataSize" type="quint16">
-        <description>The size of the complete data.</description>
+        <description>The size of the complete data, including mLength and the unknown field.</description>
       </member>
-      <extension start="6" name="firstChar" type="Cdr4CharData">
+      <extension start="6" name="mCharDataStart" type="char">
           <description>now the chars, have two \0 bytes between them,
            one before the first, not sure if the first has meaning or belongs to char
            assume this for now, see Cdr4CharData
            "ä" was seen, so encoding is local one (was 8-bit one for me, visible with iso-8859-1)
+           if mType is 0, then one char after the other is read. If mType is 1, after the current
+           char things are somehow different. Then 22 bytes come, Cdr4CharAdditionalData,
+           then after that the next char data.
            linebreak is with 0D 0A chars</description>
       </extension>
     </struct>
