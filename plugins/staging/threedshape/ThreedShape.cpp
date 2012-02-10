@@ -29,8 +29,6 @@
 
 // KDE
 #include <KDebug>
-#include <KJob>
-#include <KIO/Job>
 
 // Calligra
 #include <KoViewConverter.h>
@@ -66,8 +64,116 @@ void ThreedShape::saveOdf(KoShapeSavingContext &context) const
 {
 }
 
-bool ThreedShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
 {
+    kDebug(31000) << "========================================================== Starting 3D Scene";
+    kDebug(31000) <<"Loading ODF element: " << sceneElement.tagName();
+
+    loadOdfAttributes(sceneElement, context,
+                      OdfMandatories | OdfCommonChildElements | OdfAdditionalAttributes);
+
+    // Extract the attributes of dr3d:scene
+    //
+    // From the ODF 1.2 spec section 9.4.1:
+    // The attributes that may be associated with the <dr3d:scene> element are:
+    //  o Position, Size, Style, Layer, Z-Index, ID and Caption ID – see section 9.2.15
+    //  o Text anchor, table background, draw end position – see section 9.2.16
+    //  * Camera vectors
+    //  * Projection
+    //  * Distance
+    //  * Focal length
+    //  * Shadow slant
+    //  * Shade mode
+    //  * Ambient color
+    //  * Lighting mode
+    //
+    // Example: 
+    //    dr3d:vrp="(0 0 16885.7142857143)"
+    //    dr3d:vpn="(0 0 14285.7142857143)"
+    //    dr3d:projection="perspective"
+    //    dr3d:distance="2.6cm"
+    //    dr3d:focal-length="10cm"
+    //    dr3d:shadow-slant="0"
+    //    dr3d:shade-mode="gouraud"
+    //    dr3d:ambient-color="#666666"
+    //    dr3d:lighting-mode="false"
+
+    // Camera vectors
+    QString vrp          = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
+    QString vpn          = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn", "");
+    QString vup          = sceneElement.attributeNS(KoXmlNS::dr3d, "vup", "(0.0 0.0 1.0)");
+    QString distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance", "");
+    QString projection   = sceneElement.attributeNS(KoXmlNS::dr3d, "projection", "perspective");
+    QString focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length", "");
+    QString shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant", "");
+    QString ambientColor = sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888");
+
+    QString shadeMode    = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
+    QString lightingMode = sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "");
+    QString transform    = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
+
+    kDebug(31000) 
+        << vrp
+        << vpn
+        << vup
+        << distance
+        << projection
+        << focalLength
+        << shadowSlant
+        << ambientColor
+        << shadeMode
+        << lightingMode
+        << transform;
+    // FIXME
+
+    // Get the scene itself, i.e. the elements in the scene
+    // From the ODF 1.2 spec section 9.4.1:
+    //
+    // The elements that may be contained in the <dr3d:scene> element are:
+    //  * Title (short accessible name) – see section 9.2.20.
+    //  * Long description (in support of accessibility) – see section 9.2.20.
+    //  * Light – see section 9.4.2.
+    //  * Scene – see section 9.4.1.
+    //  * Extrude – see section 9.4.5.
+    //  * Sphere – see section 9.4.4.
+    //  * Rotate – see section 9.4.6.
+    //  * Cube – see section 9.4.3.
+    KoXmlElement  elem;
+    forEachElement(elem, sceneElement) {
+
+        if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:diffuse-color
+            // dr3d:direction
+            // dr3d:enabled
+            // dr3d:specular
+        }
+        else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // FIXME: Recursive!
+        }
+        else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:center
+            // dr3d:size
+            // + a number of other standard attributes
+        }
+        else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:min-edge
+            // dr3d:max-edge
+            // + a number of other standard attributes
+        }
+        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+        else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+    }
+
+
     return true;
 }
 
