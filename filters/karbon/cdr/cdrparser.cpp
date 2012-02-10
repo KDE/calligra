@@ -536,6 +536,9 @@ qDebug() << "Reading Btx Table...";
 void
 CdrParser::readStrl()
 {
+    CdrBlockText* blockText = new CdrBlockText;
+    quint16 blockTextId;
+
     mRiffStreamReader.openList();
 qDebug() << "Reading Strl...";
     while( mRiffStreamReader.readNextChunkHeader() )
@@ -545,21 +548,29 @@ qDebug() << "Reading Strl...";
         if( chunkId == btidId )
         {
             const QByteArray btidChunk = mRiffStreamReader.chunkData();
-//             const CdrBlockTextIdChunkData btidData = data<CdrBlockTextIdChunkData>( btidChunk );
-qDebug()<< "...with btid"<<btidChunk.toHex();
+            const CdrBlockTextIdChunkData btidData = data<CdrBlockTextIdChunkData>( btidChunk );
+            blockTextId = btidData.mId;
         }
         else if( chunkId == parlId )
         {
-            readParl();
+            CdrParagraph* paragraph = readParl();
+            if( paragraph )
+                blockText->addParagraph( paragraph );
         }
     }
+qDebug()<<"BlockText id:"<<blockTextId;
+foreach(const CdrParagraph* paragraph, blockText->paragraphs())
+    qDebug() << paragraph->text();
 
     mRiffStreamReader.closeList();
+
+    mDocument->insertBlockText( blockTextId, blockText );
 }
 
-void
+CdrParagraph*
 CdrParser::readParl()
 {
+    CdrParagraph* paragraph = new CdrParagraph;
     mRiffStreamReader.openList();
 qDebug() << "Reading Parl...";
     QString completeText;
@@ -572,7 +583,7 @@ qDebug() << "Reading Parl...";
             const QByteArray paraChunk = mRiffStreamReader.chunkData();
             const CdrBlockTextParagraphChunkData* paraData = dataPtr<CdrBlockTextParagraphChunkData>( paraChunk );
 
-            qDebug() << "...para:"<<paraData->_unknown0 <<paraData->_unknown1 <<paraData->_unknown2;
+            qDebug() << "...para:"<<paraData->_unknown0 <<"length:"<<paraData->mLength<<paraData->_unknown2;
         }
         else if( chunkId == bnchId )
         {
@@ -604,8 +615,11 @@ qDebug() << "Reading Parl...";
                                   <<bschData->_unknown6 <<bschData->_unknown7 <<bschData->_unknown8;
         }
     }
-    qDebug() <<"Complete:"<< completeText;
     mRiffStreamReader.closeList();
+
+    paragraph->setText(completeText);
+
+    return paragraph;
 }
 
 
@@ -893,24 +907,24 @@ CdrParser::readTrfl()
             const CdrTrflChunkData* trfdData = dataPtr<CdrTrflChunkData>( trfdChunk );
 
 qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->_unknown0 <<trfdData->_unknown1;
-    for (int i=0; i < trfdData->mArguments.count; i++)
-    {
-        const CdrTransformData* transformData = trfdData->mArguments.argPtr<CdrTransformData>(i);
-qDebug() << i << ": type" << transformData->mIndex
-         << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
-         << transformData->dataSize()+2;
-        if( transformData->mIndex == CdrUnknownTransform8Id )
-        {
-            const CdrTransform8Data* data8 = transformData->data8();
-            CdrNormalTransformation* transformation = new CdrNormalTransformation;
-            transformation->setData( data8->m1, data8->m2, data8->mX, data8->m4, data8->m5, data8->mY );
-            result.append( transformation );
+            for (int i=0; i < trfdData->mArguments.count; i++)
+            {
+                const CdrTransformData* transformData = trfdData->mArguments.argPtr<CdrTransformData>(i);
+        // qDebug() << i << ": type" << transformData->mIndex
+        //          << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
+        //          << transformData->dataSize()+2;
+                if( transformData->mIndex == CdrUnknownTransform8Id )
+                {
+                    const CdrTransform8Data* data8 = transformData->data8();
+                    CdrNormalTransformation* transformation = new CdrNormalTransformation;
+                    transformation->setData( data8->m1, data8->m2, data8->mX, data8->m4, data8->m5, data8->mY );
+                    result.append( transformation );
 
-qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
-        }
-        else
-qDebug() << QByteArray::fromRawData(transformData->data(), transformData->dataSize()).toHex();
-    }
+        // qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
+                }
+                else
+        ;// qDebug() << QByteArray::fromRawData(transformData->data(), transformData->dataSize()).toHex();
+            }
         }
     }
 
@@ -938,6 +952,8 @@ qDebug() << "Reading Loda" << argsData->count << "args, loda type" << argsData->
         object = readPathObject( argsData );
     else if( argsData->chunkType == CdrTextObjectId )
         object = readTextObject( argsData );
+    else if( argsData->chunkType == CdrBlockTextObjectId )
+        object = readBlockTextObject( argsData );
 
     for (int i=0; i < argsData->count; i++)
     {
@@ -1144,4 +1160,40 @@ qDebug() << "text:" << text;
     }
 
     return textObject;
+}
+
+CdrBlockTextObject*
+CdrParser::readBlockTextObject( const CdrArgumentWithTypeData* argsData )
+{
+    CdrBlockTextObject* blockTextObject = new CdrBlockTextObject;
+
+    for (int i=0; i < argsData->count; i++)
+    {
+        const quint16 argType = argsData->argType(i);
+
+        switch( argType )
+        {
+        case CdrObjectOutlineIndexArgumentId :
+            blockTextObject->setOutlineId( argsData->arg<quint32>(i) );
+            break;
+        case CdrObjectFillIndexArgumentId :
+            blockTextObject->setFillId( argsData->arg<quint32>(i) );
+            break;
+        case CdrObjectSpecificDataArgumentId :
+        {
+            const Cdr4BlockTextData* blockTextData = argsData->argPtr<Cdr4BlockTextData>( i );
+qDebug() << "blockTextData:" << blockTextData->_unknown0 << blockTextData->mWidth
+                             << blockTextData->mHeight << blockTextData->mIndex
+                             << blockTextData->_unknown4 << blockTextData->_unknown5;
+        }
+        case CdrObjectOffsetPointArgumentId :
+            blockTextObject->setOffsetPoint( argsData->arg<Cdr4Point>(i) );
+            break;
+        case CdrObjectStyleIndexArgumentId :
+            blockTextObject->setStyleId( argsData->arg<quint16>(i) );
+            break;
+        }
+    }
+
+    return blockTextObject;
 }

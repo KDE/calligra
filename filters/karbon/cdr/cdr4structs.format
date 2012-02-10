@@ -196,10 +196,11 @@ const T* argPtr( int i ) const
 0C 00 00 00 00 00
 -->
     <struct name="CdrBlockTextParagraphChunkData" size="6">
-      <!-- ?, seen 6, 7, 12-->
+      <!-- ?, seen 6, 7, 12, 26-->
       <member start="0" end="1" type="quint16" name="_unknown0" />
-      <!-- length?-->
-      <member start="2" end="3" type="quint16" name="_unknown1" />
+      <member start="2" end="3" type="quint16" name="mLength">
+          <description>The length of the text in this paragraph?</description>
+      </member>
       <!-- ?, seen 0-->
       <member start="4" end="5" type="quint16" name="_unknown2" />
     </struct>
@@ -647,6 +648,26 @@ const T* argPtr( int i ) const
           Types might be inverted, similar to arguments, not yet checked.
           Seems the structure is padded to full 32 bit units.</description>
       </extension>
+    </struct>
+
+<!--
+sample: 00 00 EA 18 37 27 01 00 00 00 3F 05
+sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
+             |     |     |           |
+-->
+    <struct name="Cdr4BlockTextData" size="12">
+      <member start="0" end="1" name="_unknown0" type="quint16" />
+      <member start="2" end="3" name="mWidth" type="qint16">
+          <description>The width?</description>
+      </member>
+      <member start="4" end="5" name="mHeight" type="qint16">
+          <description>The height?</description>
+      </member>
+      <member start="6" end="7" name="mIndex" type="quint16">
+          <description>The index of the block text to use?</description>
+      </member>
+      <member start="8" end="9" name="_unknown4" type="quint16" />
+      <member start="10" end="11" name="_unknown5" type="qint16" />
     </struct>
 
     <struct name="Cdr4CharData" size="3">

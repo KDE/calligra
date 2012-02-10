@@ -26,4 +26,5 @@ CdrDocument::~CdrDocument()
     qDeleteAll( mStyleTable );
     qDeleteAll( mOutlineTable );
     qDeleteAll( mFillTable );
+    qDeleteAll( mBlockTextTable );
 }

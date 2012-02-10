@@ -72,6 +72,7 @@ enum CdrObjectId
     RectangleObjectId,
     EllipseObjectId,
     TextObjectId,
+    BlockTextObjectId,
     GroupObjectId
 };
 
@@ -103,6 +104,29 @@ struct Cdr4PathPoint
     Cdr4Point mPoint;
     PointType mType;
 };
+
+
+struct CdrParagraph
+{
+public:
+    void setText( const QString& text ) { mText = text; }
+public:
+    const QString& text() const { return mText; }
+private:
+    QString mText;
+};
+
+class CdrBlockText
+{
+public:
+    ~CdrBlockText() { qDeleteAll(mParagraphs);}
+    void addParagraph( CdrParagraph* paragraph ) { mParagraphs.append(paragraph); }
+public:
+    const QVector<CdrParagraph*>& paragraphs() const { return mParagraphs; }
+private:
+    QVector<CdrParagraph*> mParagraphs;
+};
+
 
 class CdrGraphObject : public CdrAbstractObject
 {
@@ -179,8 +203,13 @@ public:
 public:
     const QString& text() const { return mText; }
 private:
-    Cdr4Point mPoint;
     QString mText;
+};
+
+class CdrBlockTextObject : public CdrGraphObject
+{
+public:
+    CdrBlockTextObject() : CdrGraphObject(BlockTextObjectId) {}
 };
 
 class CdrGroupObject : public CdrAbstractObject
@@ -316,6 +345,7 @@ public:
     void insertOutline( quint32 id, CdrOutline* outline ) { mOutlineTable.insert(id, outline); }
     void insertFill( quint32 id, CdrAbstractFill* fill ) { mFillTable.insert(id, fill); }
     void insertFont( quint16 id, CdrFont* font ) { mFontTable.insert(id, font); }
+    void insertBlockText( quint16 id, CdrBlockText* blockText ) { mBlockTextTable.insert(id, blockText); }
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
@@ -330,6 +360,7 @@ public:
     CdrOutline* outline( quint32 id ) { return mOutlineTable.value(id); }
     CdrAbstractFill* fill( quint32 id ) { return mFillTable.value(id); }
     CdrFont* font( quint16 id ) { return mFontTable.value(id); }
+    CdrBlockText* blockText( quint16 id ) { return mBlockTextTable.value(id); }
 private:
     quint16 mFullVersion;
     quint16 mWidth;
@@ -340,6 +371,7 @@ private:
     QHash<quint32, CdrOutline*> mOutlineTable;
     QHash<quint32, CdrAbstractFill*> mFillTable;
     QHash<quint16, CdrFont*> mFontTable;
+    QHash<quint16, CdrBlockText*> mBlockTextTable;
     QVector<CdrPage*> mPages;
 };
 
