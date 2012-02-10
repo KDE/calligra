@@ -570,6 +570,8 @@ size |count|aps  | ap1 |apl  |?????|
       <item name="CdrObject1010ArgumentId" value="1010" />
       <!-- 2000: data 01 00 64 00 64 00 00 00 00 00 00 00-->
       <item name="CdrObject2000ArgumentId" value="2000" />
+      <!-- 6000: 8 byte data 00 00 00 00 00 00 00 00, seen with path-->
+      <item name="CdrObject6000ArgumentId" value="6000" />
     </enum>
   </enums>
 
@@ -809,6 +811,8 @@ sample: 50 00 00 00 CE 00 BD 00 00 00 00 00 00 00 00 00 00 00
 sample: 50 00 00 00 13 01 BD 00 00 00 00 00 00 00 00 00 00 00
 sample: 50 00 00 00 1D 00 BD 00 00 00 00 00 00 00 00 00 00 00
 sample: 50 00 00 00 1C 00 BD 00 00 00 00 00 00 00 00 00 00 00
+sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
+                    1F link group, 3B text object, 25 text object
              |     |     |     |     |     |     |     |     |     |
 -->
     <struct name="LnkData" size="18" sizeExtended="true">
@@ -816,7 +820,7 @@ sample: 50 00 00 00 1C 00 BD 00 00 00 00 00 00 00 00 00 00 00
 <code><![CDATA[quint16 data( int i ) const
     { return (&firstData)[i]; }]]></code>
       </method>
-      <!-- seen 80,97 -->
+      <!-- seen 16,80,97 -->
       <member start="0" end="1"  name="mType" type="quint16" />
       <!-- seen 0,1,2 -->
       <member start="2" end="3"  name="mDataSize" type="quint16">

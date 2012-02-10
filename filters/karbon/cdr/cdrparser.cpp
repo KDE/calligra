@@ -1005,6 +1005,13 @@ switch(argType)
     case CdrObject2000ArgumentId :
         argTypeAsString = QLatin1String("some larger data");
         break;
+    case CdrObject6000ArgumentId :
+    {
+        const char* data = argsData->argPtr<char>(i);
+        argAsString = QByteArray::fromRawData(data,8).toHex();
+        argTypeAsString = QLatin1String("8 bytes");
+        break;
+    }
     default:
         argTypeAsString = QLatin1String("UNKNOWN!");
         break;
