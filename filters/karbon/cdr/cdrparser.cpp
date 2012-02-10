@@ -808,6 +808,10 @@ qDebug()<< "...with spnd"<<spndData.mId;
 //             const CdrGroupFlagChunkData flagsData = data<CdrGroupFlagChunkData>( flagsChunk );
 qDebug()<< "...with flags"<<flagsChunk.toHex();
         }
+        else if( chunkId == lgobId )
+        {
+            readObjectLGOb();
+        }
         else if( chunkId == bboxId )
         {
 //             const QByteArray bboxChunk = mRiffStreamReader.chunkData();
