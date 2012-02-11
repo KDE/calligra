@@ -1065,6 +1065,19 @@ switch(argType)
         argTypeAsString = QLatin1String("some 12 bytes");
         break;
     }
+    case CdrObject3000ArgumentId :
+    {
+        const CdrObject3000ArgumentData* data = argsData->argPtr<CdrObject3000ArgumentData>( i );
+        for(int i=0; i<12; ++i )
+            argAsString = argAsString + QLatin1Char(' ')+QString::number(data->item(i));
+        argTypeAsString = QLatin1String("some 24 bytes");
+        break;
+    }
+    case CdrObject3010ArgumentId :
+    {
+        argTypeAsString = QLatin1String("text aligned on path data");
+        break;
+    }
     case CdrObject6000ArgumentId :
     {
         const CdrObject6000ArgumentData* data = argsData->argPtr<CdrObject6000ArgumentData>( i );
