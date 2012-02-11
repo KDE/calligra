@@ -663,7 +663,7 @@ size |count|aps  | ap1 |apl  |?????|
         </member>
     </struct>
 
-    <!-- 16 bit, seen 80 01 (3=path), 01 40 (5=bitmap) -->
+    <!-- 16 bit, seen 80 01(384), 7F FF(-129), 01 40(16385), with all kinds -->
     <struct name="CdrObject1010ArgumentData" size="2">
         <member start="0" end="1" name="_unknown0" type="quint16" />
     </struct>
@@ -761,7 +761,7 @@ sample2: other text object linked to same object
 
     <!-- sample data: 4F FA 28 FC 8C 0A 8C 0A 00 00-->
     <struct name="Cdr4EllipseData" size="10">
-      <!-- center?-->
+      <!-- center? or rather corner point?-->
       <member start="0" end="3" name="mCenterPoint" type="Cdr4Point" />
       <!-- x radius?-->
       <member start="4" end="5" name="mXRadius" type="quint16" />
@@ -773,15 +773,19 @@ sample2: other text object linked to same object
 <!--
 // point types:
 // 0C
+// 1C
 // 44
 // 48
 // 64
 // C0
 // 84
+// 88
+// 94
 // first point has 0C (or 0D)
 // last point has 48 (or 49)
 // a break in the line are points with 48 0C
 // but there is also C0 84, difference is?
+// also seen: 88 1C
 // lots of connected straight lines seem 44 44 44
 // no idea about this example yet:
 // -63.5019 , 115.261 : "c" 
@@ -794,12 +798,21 @@ sample2: other text object linked to same object
 
 // looks like flags, a nibble per direction?
 // 0  0000
+// 1  0001
 // 4  0100
 // 6  0110
 // 8  1000
 // 9  1001
 // C  1100
 // D  1101
+
+first point nibble: 0,1,8
+      *00*
+last point nibble: 0,8,9
+      *00*
+But other nibble for lines also have any of both not set: 4,6,C,D
+      *1**
+
 -->
   <typedefs>
     <type name="PointType" original="quint8" />
