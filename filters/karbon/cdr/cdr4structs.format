@@ -24,6 +24,9 @@
     <type name="Cdr4StyleIndex" original="quint16">
       <description>2-byte unsigned integer is used to reference a style in the style table.</description>
     </type>
+    <type name="Cdr4ObjectSpndIndex" original="quint16">
+      <description>2-byte unsigned integer is used to reference a graphical object (abbr. "spnd" still needs decoding).</description>
+    </type>
   </typedefs>
 
   <enums>
@@ -531,7 +534,7 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrLinkGroupSpndChunkData" size="2">
-        <member start="0" end="1" name="mId" type="quint16">
+        <member start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </member>
     </struct>
@@ -541,7 +544,7 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrGroupSpndChunkData" size="2">
-        <member start="0" end="1" name="mId" type="quint16">
+        <member start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </member>
     </struct>
@@ -552,7 +555,7 @@ size |count|aps  | ap1 |apl  |?????|
     </struct>
 
     <struct name="CdrObjectSpndChunkData" size="2">
-        <member start="0" end="1" name="mId" type="quint16">
+        <member start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </member>
     </struct>
@@ -1015,12 +1018,10 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
       <member start="2" end="3"  name="mDataSize" type="quint16">
           <description>The number of whatever 16-bit data is attached.</description>
       </member>
-      <!-- seen 0 -->
-      <member start="4" end="5"  name="_unknown2" type="quint16">
+      <member start="4" end="5"  name="_unknown2" type="Cdr4ObjectSpndIndex">
           <description>With mType=80 the spnd of the object copy?</description>
       </member>
-      <!-- seen 0 -->
-      <member start="6" end="7"  name="_unknown3" type="quint16">
+      <member start="6" end="7"  name="_unknown3" type="Cdr4ObjectSpndIndex">
           <description>With mType=80 the spnd of the original object?</description>
       </member>
       <!-- seen 0 -->

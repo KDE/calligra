@@ -75,7 +75,7 @@ CdrSvgWriter::writeLayer( const CdrLayer* layer )
 void
 CdrSvgWriter::writeObject( const CdrAbstractObject* object )
 {
-    const CdrObjectId id = object->id();
+    const CdrObjectTypeId typeId = object->typeId();
     mXmlWriter.startElement("g");
 
     QString tfString;
@@ -89,15 +89,15 @@ CdrSvgWriter::writeObject( const CdrAbstractObject* object )
     }
     mXmlWriter.addAttribute( "transform", tfString );
 
-    if( id == PathObjectId )
+    if( typeId == PathObjectId )
         writePathObject( dynamic_cast<const CdrPathObject*>(object) );
-    else if( id == RectangleObjectId )
+    else if( typeId == RectangleObjectId )
         writeRectangleObject( dynamic_cast<const CdrRectangleObject*>(object) );
-    else if( id == EllipseObjectId )
+    else if( typeId == EllipseObjectId )
         writeEllipseObject( dynamic_cast<const CdrEllipseObject*>(object) );
-    else if( id == TextObjectId )
+    else if( typeId == TextObjectId )
         writeTextObject( dynamic_cast<const CdrTextObject*>(object) );
-    else if( id == GroupObjectId )
+    else if( typeId == GroupObjectId )
         writeGroupObject( dynamic_cast<const CdrGroupObject*>(object) );
     mXmlWriter.endElement(); // g
 }

@@ -70,7 +70,7 @@ private:
 
 
 
-enum CdrObjectId
+enum CdrObjectTypeId
 {
     PathObjectId,
     RectangleObjectId,
@@ -79,11 +79,13 @@ enum CdrObjectId
     BlockTextObjectId,
     GroupObjectId
 };
+typedef quint16 CdrObjectId;
+
 
 class CdrAbstractObject
 {
 protected:
-    explicit CdrAbstractObject(CdrObjectId id) : mId( id ) {}
+    explicit CdrAbstractObject(CdrObjectTypeId typeId) : mTypeId( typeId ) {}
 private:
     CdrAbstractObject( const CdrAbstractObject& );
     CdrAbstractObject& operator=( const CdrAbstractObject& );
@@ -92,10 +94,13 @@ public:
 public:
     void setTransformations( const QVector<CdrAbstractTransformation*>& transformations )
     { mTransformations = transformations; }
-    CdrObjectId id() const { return mId; }
+    void setObjectId( CdrObjectId objectId ) { mObjectId = objectId; }
+    CdrObjectId objectId() const { return mObjectId; }
+    CdrObjectTypeId typeId() const { return mTypeId; }
     const QVector<CdrAbstractTransformation*>& transformations() const { return mTransformations; }
 private:
-    CdrObjectId mId;
+    CdrObjectId mObjectId;
+    CdrObjectTypeId mTypeId;
     QVector<CdrAbstractTransformation*> mTransformations;
 };
 
@@ -135,7 +140,7 @@ private:
 class CdrGraphObject : public CdrAbstractObject
 {
 protected:
-    explicit CdrGraphObject(CdrObjectId id)
+    explicit CdrGraphObject(CdrObjectTypeId id)
     : CdrAbstractObject( id ), mStyleId(0), mOutlineId(0), mFillId(0) {}
 public:
     void setStyleId( quint32 styleId ) { mStyleId = styleId; }

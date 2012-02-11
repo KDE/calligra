@@ -778,7 +778,9 @@ qDebug() << "LinkGroup <<<";
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
             const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndData.mId;
+            group->setObjectId( spndData.mId );
+
+qDebug()<< "...with spnd"<<group->objectId();
         }
         else if( chunkId == flgsId )
         {
@@ -820,7 +822,9 @@ qDebug() << "Group <<<";
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
             const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndData.mId;
+            group->setObjectId( spndData.mId );
+
+qDebug()<< "...with spnd"<<group->objectId();
         }
         else if( chunkId == flgsId )
         {
@@ -886,6 +890,7 @@ CdrAbstractObject*
 CdrParser::readObject()
 {
     CdrAbstractObject* object = 0;
+    CdrObjectId objectId;
 
     mRiffStreamReader.openList();
 qDebug() << "Object <<<";
@@ -898,7 +903,8 @@ qDebug() << "Object <<<";
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
             const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
-qDebug()<< "...with spnd"<<spndData.mId;
+            objectId = spndData.mId;
+qDebug()<< "...with spnd"<<objectId;
         }
         else if( chunkId == flgsId )
         {
@@ -914,6 +920,11 @@ qDebug()<< "...with flags"<<flagsChunk.toHex();
 
 qDebug() << "Object >>>...";
     mRiffStreamReader.closeList();
+
+    if( object )
+    {
+        object->setObjectId( objectId );
+    }
 
     return object;
 }
@@ -1192,6 +1203,7 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
 qDebug() << "path points:" << points->count;
             for (unsigned int j=0; j<points->count; j++)
             {
+// qDebug() <<"    "<< j<<":"<<points->point(j).mX<<","<<points->point(j).mY<< QString::number(points->pointType(j),16);
                 pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
             }
         }
