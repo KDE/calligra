@@ -890,7 +890,7 @@ CdrAbstractObject*
 CdrParser::readObject()
 {
     CdrAbstractObject* object = 0;
-    CdrObjectId objectId;
+    CdrObjectId objectId = cdrObjectInvalidId;
 
     mRiffStreamReader.openList();
 qDebug() << "Object <<<";

@@ -80,12 +80,13 @@ enum CdrObjectTypeId
     GroupObjectId
 };
 typedef quint16 CdrObjectId;
+static const CdrObjectId cdrObjectInvalidId = 0;
 
 
 class CdrAbstractObject
 {
 protected:
-    explicit CdrAbstractObject(CdrObjectTypeId typeId) : mTypeId( typeId ) {}
+    explicit CdrAbstractObject(CdrObjectTypeId typeId) : mObjectId( cdrObjectInvalidId ), mTypeId( typeId ) {}
 private:
     CdrAbstractObject( const CdrAbstractObject& );
     CdrAbstractObject& operator=( const CdrAbstractObject& );
