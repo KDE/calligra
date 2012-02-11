@@ -26,6 +26,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QTimer>
+#include <QToolTip>
 
 #ifdef __GNUC__
 #warning KexiToolTip ported to Qt4 but not tested

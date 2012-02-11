@@ -41,7 +41,7 @@
 
 #include <QDebug>
 #include <QCache>
-#include <Style>
+#include <QStyle>
 #include <QEvent>
 #include <QTimer>
 #include <QLayout>

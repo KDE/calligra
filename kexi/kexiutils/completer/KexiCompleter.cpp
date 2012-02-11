@@ -155,6 +155,7 @@
 #include <QHeaderView>
 #include <QDesktopWidget>
 #include <QLineEdit>
+#include <QKeyEvent>
 
 #include <limits.h>
 

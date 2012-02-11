@@ -32,7 +32,7 @@
 #include <QClipboard>
 #include <QLabel>
 #include <QLineEdit>
-#include <QMime>
+#include <QMimeSource>
 #include <QPushButton>
 #include <QRadioButton>
 #include <q3table.h>
