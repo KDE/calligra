@@ -386,12 +386,21 @@ qDebug() << "Reading Fills...";
 
                 fillDataString = solidFill->color().name();
             }
+            else if( fillData->mFillType == CdrUnknown11FillType )
+            {
+                const CdrUnknown11FillData* unknown11FillData = fillData->unknown11FillData();
+
+                fillDataString = QLatin1String(unknown11FillData->mOriginalName)+QLatin1Char('|')+
+                    QLatin1String(unknown11FillData->mLocalizedName);
+            }
 
             const QString fillTypeName =
                 QLatin1String(fillData->mFillType == CdrTransparent ? "Transparent" :
                               fillData->mFillType == CdrSolid ?       "Solid" :
+                              fillData->mFillType == CdrUnknown7FillType ?       "Unknown type 7" :
+                              fillData->mFillType == CdrUnknown11FillType ?       "Unknown type 11" :
                               /*other*/                               "UNKNOWN!");
-qDebug() << fillData->mFillIndex << fillTypeName << fillDataString;
+qDebug() << fillData->mFillIndex << fillData->mFillType << fillTypeName << fillDataString;
 
             if( fill )
                 mDocument->insertFill( fillData->mFillIndex, fill );
