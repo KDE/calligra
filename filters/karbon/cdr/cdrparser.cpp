@@ -315,6 +315,17 @@ void
 CdrParser::readDocVecTable()
 {
 qDebug() << "Reading Vec Table";
+    mRiffStreamReader.openList();
+
+    while( mRiffStreamReader.readNextChunkHeader() )
+    {
+        if( mRiffStreamReader.chunkId() == grp_Id )
+        {
+            /*CdrGroupObject* group = */readGroupObject();
+        }
+    }
+
+    mRiffStreamReader.closeList();
 }
 
 
