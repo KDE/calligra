@@ -37,6 +37,7 @@ class KtoMainWindow;
 class KtoCanvas : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(KoCanvasResourceManager* resourceManager READ resourceManager)
 public:
     KtoCanvas(QDeclarativeItem* parent = 0);
     virtual ~KtoCanvas();
@@ -44,6 +45,7 @@ public:
     void setMainWindow(KtoMainWindow* _mainWindow);
     // A callback for our own node graph listener
     void imageUpdated(const QRect &rect);
+    KoCanvasResourceManager* resourceManager() const;
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

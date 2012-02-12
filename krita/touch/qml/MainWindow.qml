@@ -80,6 +80,7 @@ Rectangle
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: colorSelectorButton.bottom
+        resourceManager: canvas.resourceManager
         visible: false
     }
     states : [

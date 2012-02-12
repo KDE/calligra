@@ -201,4 +201,9 @@ void KtoCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     m_helper->endPaint();
 }
 
+KoCanvasResourceManager* KtoCanvas::resourceManager() const
+{
+    return m_resourceManager;
+}
+
 #include "kto_canvas.moc"
