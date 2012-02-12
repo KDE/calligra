@@ -90,15 +90,15 @@ CdrSvgWriter::writeObject( const CdrAbstractObject* object )
     mXmlWriter.addAttribute( "transform", tfString );
 
     if( typeId == PathObjectId )
-        writePathObject( dynamic_cast<const CdrPathObject*>(object) );
+        writePathObject( static_cast<const CdrPathObject*>(object) );
     else if( typeId == RectangleObjectId )
-        writeRectangleObject( dynamic_cast<const CdrRectangleObject*>(object) );
+        writeRectangleObject( static_cast<const CdrRectangleObject*>(object) );
     else if( typeId == EllipseObjectId )
-        writeEllipseObject( dynamic_cast<const CdrEllipseObject*>(object) );
+        writeEllipseObject( static_cast<const CdrEllipseObject*>(object) );
     else if( typeId == TextObjectId )
-        writeTextObject( dynamic_cast<const CdrTextObject*>(object) );
+        writeTextObject( static_cast<const CdrTextObject*>(object) );
     else if( typeId == GroupObjectId )
-        writeGroupObject( dynamic_cast<const CdrGroupObject*>(object) );
+        writeGroupObject( static_cast<const CdrGroupObject*>(object) );
     mXmlWriter.endElement(); // g
 }
 
@@ -201,7 +201,7 @@ CdrSvgWriter::writeFillColor( quint32 fillId )
 {
     CdrAbstractFill* fill = mDocument->fill( fillId );
     const QString colorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
-        dynamic_cast<CdrSolidFill*>( fill )->color().name() :
+        static_cast<CdrSolidFill*>( fill )->color().name() :
         QString::fromLatin1("none");
     mXmlWriter.addAttribute("fill", colorName);
 }
