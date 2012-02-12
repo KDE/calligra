@@ -66,6 +66,12 @@
   </enums>
 
   <records>
+   <record name="MCfgChunkData" size="54">
+      <field start="0" end="1"  name="width" type="quint16" />
+      <field start="2" end="3"  name="height" type="quint16" />
+      <array start="4" end="53" name="_unknown" type="char" length="50" />
+    </record>
+
     <record name="Cdr4Point" size="4">
       <description>A point given by its x and y coordinates.</description>
       <field start="0" end="1" type="Cdr4Coord" name="x">
@@ -92,7 +98,7 @@
       <field start="3" end="3" type="quint8" name="d4" />
     </record>
 
-    <record name="CdrArgumentData" size="6">
+    <record name="CdrArgumentListData" size="6">
 <!--    // TODO: convert endianness on bigendian system // void convertToBugEndian(); -->
       <method>
 <code><![CDATA[const quint16* argOffsets() const
@@ -120,7 +126,7 @@ const T* argPtr( int i ) const
       </field>
     </record>
 
-    <record name="CdrArgumentWithTypeData" base="CdrArgumentData" size="8">
+    <record name="CdrArgumentWithTypeListData" base="CdrArgumentListData" size="8">
       <method>
 <code><![CDATA[const quint16* argTypes() const
 { return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+__startOfArgTypes ); }]]></code>
@@ -133,7 +139,7 @@ const T* argPtr( int i ) const
       </field>
     </record>
 
-    <record name="CdrObjectArgumentData" base="CdrArgumentWithTypeData" size="10">
+    <record name="CdrObjectArgumentsData" base="CdrArgumentWithTypeListData" size="10">
       <field start="8" end="9" name="chunkType" type="quint16">
           <description>The type of the object, see CdrObjectIds.</description>
       </field>
@@ -166,7 +172,7 @@ const T* argPtr( int i ) const
   </enums>
 
   <records>
-    <record name="CdrStyleArgumentData" base="CdrArgumentWithTypeData" size="18">
+    <record name="CdrStyleArgumentsData" base="CdrArgumentWithTypeListData" size="18">
       <field start="8"  end="9"  name="_unknown0" type="qint16" />
       <field start="10" end="11" name="_unknown1" type="qint16" />
       <field start="12" end="13" name="_unknown2" type="qint16" />
@@ -267,13 +273,13 @@ const T* argPtr( int i ) const
       </dynbytestring>
     </record>
 <!--
-there are 2 bytes not part of the CdrArgumentData, behind the arg pointers. also for other CdrArgumentData usages?
+there are 2 bytes not part of the CdrArgumentListData, behind the arg pointers. also for other CdrArgumentListData usages?
 20 00 01 00 06 00 0C 00 20 00 00 00 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
 22 00 01 00 06 00 0C 00 22 00 22 00 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
 size |count|aps  | ap1 |apl  |?????|
 -->
     <record name="CdrLnkTableChunkData" size="6" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentData" name="arguments" />
+      <field start="0" end="5" type="CdrArgumentListData" name="arguments" />
       <extension start="6" />
     </record>
 
@@ -281,20 +287,11 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="0" end="1" type="Cdr4StyleIndex" name="styleIndex">
         <description>The index of the style in the style table of the document.</description>
       </field>
-      <field start="2" end="19" type="CdrStyleArgumentData" name="arguments" />
+      <field start="2" end="19" type="CdrStyleArgumentsData" name="arguments" />
       <extension start="20" />
     </record>
 
-    <record name="CdrTrflChunkData" size="10" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentData" name="arguments" />
-      <!-- ? seen FF FF-->
-      <field start="6" end="7" name="_unknown0" type="qint16" />
-      <!-- ? seen 00 00-->
-      <field start="8" end="9" name="_unknown1" type="qint16" />
-      <extension start="10" />
-    </record>
-
-    <record name="CdrStyleTitleArgumenData" size="0" sizeExtended="true">
+    <record name="CdrStyleTitleArgumentData" size="0" sizeExtended="true">
         <dynbytestring start="0" name="title" />
     </record>
 
@@ -796,7 +793,7 @@ But other nibble for lines also have any of both not set: 4,6,C,D
 
 -->
   <typedefs>
-    <type name="PointType" original="quint8" />
+    <type name="Cdr4PointType" original="quint8" />
   </typedefs>
 
   <enums>
@@ -811,16 +808,15 @@ But other nibble for lines also have any of both not set: 4,6,C,D
   <records>
     <record name="Cdr4PointList" size="4" sizeExtended="true">
       <method>
-        <!-- TODO: check that type is not inverted like arg types are-->
-<code><![CDATA[PointType pointType( int i ) const
-    { return reinterpret_cast<const PointType*>(&__point+count())[i]; }]]></code>
+<code><![CDATA[Cdr4PointType pointType( int i ) const
+    { return reinterpret_cast<const Cdr4PointType*>(&__point+count())[i]; }]]></code>
       </method>
       <field start="0" end="1" name="count" type="quint16">
           <description>The number of the points.</description>
       </field>
       <field start="2" end="3" name="_unknown" type="quint16" />
       <dynarray start="4" name="point" type="Cdr4Point" length="count">
-          <description>A list of points in the Cdr4Point format, with the number as given in the "count" field, followed by a list of types in the PointType format, with the same number.
+          <description>A list of points in the Cdr4Point format, with the number as given in the "count" field, followed by a list of types in the Cdr4PointType format, with the same number.
           Types might be inverted, similar to arguments, not yet checked.
           Seems the record is padded to full 32 bit units.</description>
       </dynarray>
@@ -954,10 +950,13 @@ garbage data? undo data?
       </union>
     </record>
 
-   <record name="MCfgChunkData" size="54">
-      <field start="0" end="1"  name="width" type="quint16" />
-      <field start="2" end="3"  name="height" type="quint16" />
-      <array start="4" end="53" name="_unknown" type="char" length="50" />
+    <record name="CdrTrflChunkData" size="10" sizeExtended="true">
+      <field start="0" end="5" type="CdrArgumentListData" name="arguments" />
+      <!-- ? seen FF FF-->
+      <field start="6" end="7" name="_unknown0" type="qint16" />
+      <!-- ? seen 00 00-->
+      <field start="8" end="9" name="_unknown1" type="qint16" />
+      <extension start="10" />
     </record>
 
 <!--

@@ -478,13 +478,13 @@ CdrParser::readDocStyle()
             const QByteArray styleChunk = mRiffStreamReader.chunkData();
             const CdrStyleChunkData& styleData = dataRef<CdrStyleChunkData>( styleChunk );
 
-            const CdrStyleArgumentData* styleArgs = &styleData.arguments();
-qDebug()<<"Style id:"<<styleData.styleIndex()<<"args:"<<styleArgs->count()<<"d:"<<styleArgs->_unknown0()<<styleArgs->_unknown1()<<styleArgs->_unknown2()
-                                              <<styleArgs->_unknown3()<<styleArgs->_unknown4();
+            const CdrStyleArgumentsData& styleArgs = styleData.arguments();
+qDebug()<<"Style id:"<<styleData.styleIndex()<<"args:"<<styleArgs.count()<<"d:"<<styleArgs._unknown0()<<styleArgs._unknown1()<<styleArgs._unknown2()
+                                              <<styleArgs._unknown3()<<styleArgs._unknown4();
 
-            for (int i=0; i < styleArgs->count(); i++)
+            for (int i=0; i < styleArgs.count(); i++)
             {
-                const quint16 argType = styleArgs->argType(i);
+                const quint16 argType = styleArgs.argType(i);
 QString argAsString;
 QString argTypeAsString;
 switch(argType)
@@ -493,15 +493,15 @@ switch(argType)
     case CdrStyle210ArgumentId :
     case CdrStyle250ArgumentId :
         argTypeAsString = QLatin1String("some 32-bit");
-        argAsString = QString::number( styleArgs->arg<quint32>(i) );
+        argAsString = QString::number( styleArgs.arg<quint32>(i) );
         break;
     case CdrStyle225ArgumentId :
         argTypeAsString = QLatin1String("some 16-bit");
-        argAsString = QString::number( styleArgs->arg<quint16>(i) );
+        argAsString = QString::number( styleArgs.arg<quint16>(i) );
         break;
     case CdrStyleTitleArgumentId :
     {
-        const QString title = QLatin1String( styleArgs->argPtr<CdrStyleTitleArgumenData>(i)->title() );
+        const QString title = QLatin1String( styleArgs.argPtr<CdrStyleTitleArgumentData>(i)->title() );
         style->setTitle( title );
 
         argTypeAsString = QLatin1String("title");
@@ -510,7 +510,7 @@ switch(argType)
     }
     case CdrStyleFontArgumentId:
     {
-        const CdrStyleFontArgumentData* fontData = styleArgs->argPtr<CdrStyleFontArgumentData>( i );
+        const CdrStyleFontArgumentData* fontData = styleArgs.argPtr<CdrStyleFontArgumentData>( i );
         style->setFontId( fontData->fontIndex() );
         style->setFontSize( fontData->fontSize() );
 
@@ -1008,7 +1008,7 @@ CdrParser::readLoda()
 
     const QByteArray lodaChunk = mRiffStreamReader.chunkData();
 
-    const CdrObjectArgumentData& argsData = dataRef<CdrObjectArgumentData>( lodaChunk );
+    const CdrObjectArgumentsData& argsData = dataRef<CdrObjectArgumentsData>( lodaChunk );
 
 qDebug() << "Reading Loda" << argsData.count() << "args, loda type" << argsData.chunkType();
     if( argsData.chunkType() == CdrRectangleObjectId )
@@ -1111,7 +1111,7 @@ qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
 
 
 CdrRectangleObject*
-CdrParser::readRectangleObject( const CdrArgumentWithTypeData& argsData )
+CdrParser::readRectangleObject( const CdrArgumentWithTypeListData& argsData )
 {
     CdrRectangleObject* rectangleObject = new CdrRectangleObject;
 
@@ -1144,7 +1144,7 @@ qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().x()<<","
 }
 
 CdrEllipseObject*
-CdrParser::readEllipseObject( const CdrArgumentWithTypeData& argsData )
+CdrParser::readEllipseObject( const CdrArgumentWithTypeListData& argsData )
 {
     CdrEllipseObject* ellipseObject = new CdrEllipseObject;
 
@@ -1181,7 +1181,7 @@ qDebug() << "ellipse: center"<<ellipseObject->centerPoint().x()<<","<<ellipseObj
 }
 
 CdrPathObject*
-CdrParser::readPathObject( const CdrArgumentWithTypeData& argsData )
+CdrParser::readPathObject( const CdrArgumentWithTypeListData& argsData )
 {
     CdrPathObject* pathObject = new CdrPathObject();
 
@@ -1219,7 +1219,7 @@ qDebug() << "path points:" << points->count();
 }
 
 CdrTextObject*
-CdrParser::readTextObject( const CdrArgumentWithTypeData& argsData )
+CdrParser::readTextObject( const CdrArgumentWithTypeListData& argsData )
 {
     CdrTextObject* textObject = new CdrTextObject;
 
@@ -1267,7 +1267,7 @@ qDebug() << "text:" << text;
 }
 
 CdrBlockTextObject*
-CdrParser::readBlockTextObject( const CdrArgumentWithTypeData& argsData )
+CdrParser::readBlockTextObject( const CdrArgumentWithTypeListData& argsData )
 {
     CdrBlockTextObject* blockTextObject = new CdrBlockTextObject;
 

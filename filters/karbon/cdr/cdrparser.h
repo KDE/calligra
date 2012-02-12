@@ -24,7 +24,7 @@
 // Koralle
 #include <Koralle0/RiffStreamReader>
 
-class CdrArgumentWithTypeData;
+class CdrArgumentWithTypeListData;
 class CdrDocument;
 class CdrPage;
 class CdrLayer;
@@ -89,11 +89,11 @@ private:
     QVector<CdrAbstractTransformation*> readTrfl();
     CdrAbstractObject* readLoda();
 
-    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeData& argsData );
-    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeData& argsData );
-    CdrPathObject* readPathObject( const CdrArgumentWithTypeData& argsData );
-    CdrTextObject* readTextObject( const CdrArgumentWithTypeData& argsData );
-    CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeData& argsData );
+    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeListData& argsData );
+    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeListData& argsData );
+    CdrPathObject* readPathObject( const CdrArgumentWithTypeListData& argsData );
+    CdrTextObject* readTextObject( const CdrArgumentWithTypeListData& argsData );
+    CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeListData& argsData );
 
 private:
     CdrDocument* mDocument;
