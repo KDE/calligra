@@ -9,7 +9,7 @@
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
-   Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2008,2012 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,7 +55,16 @@ PngExport::PngExport(QObject*parent, const QVariantList&)
 KoFilter::ConversionStatus
 PngExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "image/png" || from != "application/vnd.oasis.opendocument.graphics") {
+    QString format;
+    if (to == "image/png") {
+        format = "PNG";
+    } else if(to == "image/jpeg") {
+        format = "JPG";
+    }
+    if (format.isEmpty()) {
+        return KoFilter::NotImplemented;
+    }
+    if (from != "application/vnd.oasis.opendocument.graphics") {
         return KoFilter::NotImplemented;
     }
 
@@ -72,7 +81,7 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
 
     // get the bounding rect of the content
     QRectF shapesRect = painter.contentRect();
-    // get the size on point
+    // get the size in point
     QSizeF pointSize = shapesRect.size();
     // get the size in pixel (100% zoom)
     KoZoomHandler zoomHandler;
@@ -83,9 +92,11 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
         PngExportOptionsWidget * widget = new PngExportOptionsWidget(pointSize);
         widget->setUnit(karbonPart->unit());
         widget->setBackgroundColor(backgroundColor);
+        widget->enableBackgroundOpacity(format == "PNG");
 
         KDialog dlg;
-        dlg.setCaption(i18n("PNG Export Options"));
+        //dlg.setCaption(i18n("PNG Export Options"));
+        dlg.setCaption("Image Export Options"); // TODO add i18n after release
         dlg.setButtons(KDialog::Ok | KDialog::Cancel);
         dlg.setMainWidget(widget);
         if (dlg.exec() != QDialog::Accepted)
@@ -101,7 +112,10 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
 
     // paint the shapes
     painter.paint(image);
-    image.save(m_chain->outputFile(), "PNG");
+
+    if(!image.save(m_chain->outputFile(), format.toAscii())) {
+        return KoFilter::CreationError;
+    }
 
     return KoFilter::OK;
 }

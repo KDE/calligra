@@ -46,6 +46,9 @@ public:
     /// Returns the chosen background color
     QColor backgroundColor() const;
 
+    /// Enables/disables setting the background opacity
+    void enableBackgroundOpacity(bool enable);
+
 private slots:
     void unitWidthChanged(qreal);
     void unitHeightChanged(qreal);

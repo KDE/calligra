@@ -212,4 +212,11 @@ void PngExportOptionsWidget::aspectChanged(bool keepAspect)
     if (keepAspect)
         unitWidthChanged(widget.unitWidth->value());
 }
+
+void PngExportOptionsWidget::enableBackgroundOpacity(bool enable)
+{
+    widget.opacity->setVisible(enable);
+    widget.labelOpacity->setVisible(enable);
+}
+
 #include "PngExportOptionsWidget.moc"
