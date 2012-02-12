@@ -38,7 +38,7 @@ Rectangle
         anchors.fill: parent
     }
     Rectangle {
-        id: showWidgets
+        id: showWidgetsButton
         color: "red"
         width: 50
         height: 50
@@ -55,7 +55,7 @@ Rectangle
         width: 50
         height: 50
         anchors.top: parent.top
-        anchors.right: showWidgets.left
+        anchors.right: showWidgetsButton.left
 
         MouseArea {
             anchors.fill: parent        
@@ -74,14 +74,32 @@ Rectangle
             onClicked: toggle_colorSelector()
         }
     }
-    ColorSelector {
-        id: colorSelector
+    Rectangle {
+        id: widgetAreaBackground
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: colorSelectorButton.bottom
-        resourceManager: canvas.resourceManager
+        anchors.top: showWidgetsButton.bottom
+        color: "#BBBBBB"
+        opacity: 0.5
         visible: false
+    }
+    Item {
+        id: widgetArea
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: showWidgetsButton.bottom
+        visible: false
+        
+        // Color selector area
+        ColorSelector {
+            id: colorSelector
+            anchors.fill: parent
+            resourceManager: canvas.resourceManager
+            visible: false
+            opacity: 1.0
+        }
     }
     states : [
         State {
@@ -89,11 +107,14 @@ Rectangle
         },
         State {
             name: "toggle-widgets-view"
+            PropertyChanges { target: widgetAreaBackground; visible: true }
+            PropertyChanges { target: widgetArea; visible: true }
         },
         State {
             name: "toggle-color-selector-view"
+            PropertyChanges { target: widgetAreaBackground; visible: true }
+            PropertyChanges { target: widgetArea; visible: true }
             PropertyChanges { target: colorSelector; visible: true }
-            
         }
     ]
 }
