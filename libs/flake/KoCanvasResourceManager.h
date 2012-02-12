@@ -250,4 +250,6 @@ private:
     Private *const d;
 };
 
+Q_DECLARE_METATYPE(KoCanvasResourceManager*)
+
 #endif

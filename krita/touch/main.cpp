@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Qml"),
                                         QString::fromLatin1("[X-Krita-Version] == 5"));
     
+    qRegisterMetaType<KoCanvasResourceManager*>("KoCanvasResourceManager*");
     qmlRegisterType<KtoCanvas> ("KritaTouch", 1, 0, "Canvas");
     
     KtoMainWindow window;
