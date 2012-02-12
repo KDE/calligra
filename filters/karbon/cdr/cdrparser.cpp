@@ -401,8 +401,8 @@ qDebug() << "Reading Fills...";
             {
                 const CdrUnknown11FillData* unknown11FillData = fillData->unknown11FillData();
 
-                fillDataString = QLatin1String(unknown11FillData->mOriginalName)+QLatin1Char('|')+
-                    QLatin1String(unknown11FillData->mLocalizedName);
+                fillDataString = QLatin1String(unknown11FillData->originalName())+QLatin1Char('|')+
+                    QLatin1String(unknown11FillData->localizedName());
             }
 
             const QString fillTypeName =
@@ -501,7 +501,7 @@ switch(argType)
         break;
     case CdrStyleTitleArgumentId :
     {
-        const QString title = QLatin1String( styleArgs->argPtr<char>(i) );
+        const QString title = QLatin1String( styleArgs->argPtr<CdrStyleTitleArgumenData>(i)->title() );
         style->setTitle( title );
 
         argTypeAsString = QLatin1String("title");
@@ -1059,7 +1059,7 @@ switch(argType)
         argTypeAsString = QLatin1String("style index");
         break;
     case CdrObjectTitleArgumentId :
-        argAsString = QLatin1String( argsData->argPtr<char>(i) ); // TODO: all argPtr<char> need \0 term check
+        argAsString = QLatin1String( argsData->argPtr<CdrObjectTitleArgumentData>(i)->title() );
         argTypeAsString = QLatin1String("title");
         break;
     case CdrObject1010ArgumentId :

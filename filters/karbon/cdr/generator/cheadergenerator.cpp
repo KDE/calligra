@@ -125,7 +125,7 @@ CHeaderGenerator::writeRecord( const Record* record )
         else if( field->typeId() == ArrayFieldId )
         {
             const ArrayRecordField* arrayField = static_cast<const ArrayRecordField*>( field );
-            mTextStream << QLatin1String("    ") << arrayField->typeId() << QLatin1Char(' ') << arrayField->name() << QLatin1Char('[') << arrayField->arraySize() << QLatin1Char(']') << QLatin1String(";\n");
+            mTextStream << QLatin1String("    ") << arrayField->typeId() << QLatin1Char(' ') << arrayField->name() << QLatin1Char('[') << arrayField->arraySize() << QLatin1String("];\n");
         }
         else if( field->typeId() == DynArrayFieldId )
         {
@@ -136,6 +136,26 @@ CHeaderGenerator::writeRecord( const Record* record )
             mTextStream << arrayField->typeId() << QLatin1Char(' ')
                         << arrayField->name() << QLatin1String("( int i ) const { return (&__")<< arrayField->name()
                         << QLatin1String(")[i]; }\n");
+        }
+        else if( field->typeId() == Text8BitFieldId )
+        {
+            // member
+            const Text8BitRecordField* textField = static_cast<const Text8BitRecordField*>( field );
+            mTextStream << QLatin1String("    char") << QLatin1String(" __") << textField->name() << QLatin1Char('[') << textField->length() << QLatin1String("];\n");
+            // access method, TODO: add check for length and no \0
+            mTextStream << QLatin1String("    const char* ")
+                        << textField->name() << QLatin1String("() const { return __")<< textField->name()
+                        << QLatin1String("; }\n");
+        }
+        else if( field->typeId() == DynText8BitFieldId )
+        {
+            // member
+            const DynText8BitRecordField* textField = static_cast<const DynText8BitRecordField*>( field );
+            mTextStream << QLatin1String("    char") << QLatin1String(" __") << textField->name()<< QLatin1String(";\n");
+            // access method
+            mTextStream << QLatin1String("    const char* ")
+                        << textField->name() << QLatin1String("() const { return &__")<< textField->name()
+                        << QLatin1String("; }\n");
         }
     }
 

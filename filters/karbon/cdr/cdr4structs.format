@@ -262,12 +262,9 @@ const T* argPtr( int i ) const
     </record>
 
     <record name="CdrStyleSheetChunkData" size="0" sizeExtended="true">
-      <method>
-<code><![CDATA[const char* fileName() const { return &firstFileNameChar; }]]></code>
-      </method>
-      <extension start="0" type="char" name="firstFileNameChar">
+      <dynbytestring start="0" name="fileName">
           <description>A \0 terminated string with some file name, e.g. "CORELDRW.CDT".</description>
-      </extension>
+      </dynbytestring>
     </record>
 <!--
 there are 2 bytes not part of the CdrArgumentData, behind the arg pointers. also for other CdrArgumentData usages?
@@ -297,6 +294,10 @@ size |count|aps  | ap1 |apl  |?????|
       <extension start="10" />
     </record>
 
+    <record name="CdrStyleTitleArgumenData" size="0" sizeExtended="true">
+        <dynbytestring start="0" name="title" />
+    </record>
+
     <!-- 0D 00 16 01 01 00 - also size, bold, italic etc. ?-->
     <record name="CdrStyleFontArgumentData" size="6">
       <field start="0" end="1" name="mFontIndex" type="quint16">
@@ -310,15 +311,12 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 
     <record name="CdrFontChunkData" size="2" sizeExtended="true">
-      <method>
-<code><![CDATA[const char* fontName() const { return &firstFontNameChar; }]]></code>
-      </method>
       <field start="0" end="1" type="quint16" name="mFontIndex">
         <description>The index/id/key of the font, seems sorted in the font table.</description>
       </field>
-      <extension start="2" type="char" name="firstFontNameChar">
+      <dynbytestring start="2" name="fontName">
         <description>The name of the font in latin1 chars, ended with a \0.</description>
-      </extension>
+      </dynbytestring>
     </record>
   </records>
 
@@ -403,16 +401,16 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="6" end="7" name="_unknown3" type="quint16" />
       <!-- seen 0 -->
       <array start="8" end="39" name="_unknown4" type="char" length="32" />
-      <array start="40" end="71" name="mLocalizedName" type="char" length="32">
+      <bytestring start="40" end="71" name="localizedName" length="32">
           <description>The localized name of the X, with a maximum length of 32.
           The current name is finished by a \0 char, but junk from previous names
           can be seen in the dump.</description>
-       </array>
-      <array start="72" end="103" name="mOriginalName" type="char" length="32">
+       </bytestring>
+      <bytestring start="72" end="103" name="originalName" length="32">
           <description>The original (english) name of the X, with a maximum length of 32.
           The current name is finished by a \0 char, but junk from previous names
           can be seen in the dump.</description>
-       </array>
+       </bytestring>
       <!-- seen 9-->
       <field start="104" end="105" name="_unknown5" type="quint16" />
       <field start="106" end="137" name="_unknown6" type="CdrUnknown11FillSubData" />
@@ -654,6 +652,10 @@ size |count|aps  | ap1 |apl  |?????|
           <description>value is mostly the same for objects in the same group,
               but can be also used in different groups.</description>
         </field>
+    </record>
+
+    <record name="CdrObjectTitleArgumentData" size="0" sizeExtended="true">
+        <dynbytestring start="0" name="title" />
     </record>
 
     <!-- 16 bit, seen 0, 80 01(384), 7F FF(-129), 01 40(16385), with all kinds -->

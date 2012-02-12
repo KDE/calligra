@@ -66,7 +66,8 @@ enum RecordFieldTypeId
     PlainFieldId,
     ArrayFieldId,
     DynArrayFieldId,
-    Text8BitFieldId
+    Text8BitFieldId,
+    DynText8BitFieldId
 };
 
 class AbstractRecordField
@@ -123,6 +124,30 @@ public:
 private:
     QString mName;
     QString mTypeId;
+};
+
+class Text8BitRecordField : public AbstractRecordField
+{
+public:
+    Text8BitRecordField( const QString& name, int length )
+    : AbstractRecordField(Text8BitFieldId), mName( name ), mLength( length ) {}
+public:
+    const QString& name() const { return mName; }
+    int length() const { return mLength; }
+private:
+    QString mName;
+    int mLength;
+};
+
+class DynText8BitRecordField : public AbstractRecordField
+{
+public:
+    DynText8BitRecordField( const QString& name )
+    : AbstractRecordField(DynText8BitFieldId), mName( name ) {}
+public:
+    const QString& name() const { return mName; }
+private:
+    QString mName;
 };
 
 

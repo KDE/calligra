@@ -274,6 +274,46 @@ qDebug() << "  array:" <<arrayField->name() <<arrayField->typeId() << arrayField
                     record->appendField( dynArrayField, 0 );
 qDebug() << "  dynarray:" <<dynArrayField->name() <<dynArrayField->typeId();
                 }
+                else if( mReader.name() == QLatin1String("bytestring") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const int arrayLength = attributes.value(QLatin1String("length")).toString().toInt();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    const int endOffset = attributes.value(QLatin1String("end")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+                    const int fieldSize = arrayLength;
+                    if( (endOffset-startOffset+1) != fieldSize )
+                    {
+                        mReader.raiseError( QLatin1String("Endoffset ")+QString::number(endOffset)+QLatin1String(" does not match the length of the string.") );
+                        break;
+                    }
+
+                    Text8BitRecordField* textField = new Text8BitRecordField( fieldName, arrayLength );
+                    record->appendField( textField, fieldSize );
+qDebug() << "  bytestring:" << textField->name() << textField->length();
+                }
+                else if( mReader.name() == QLatin1String("dynbytestring") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+
+                    DynText8BitRecordField* dynTextField = new DynText8BitRecordField( fieldName );
+                    record->appendField( dynTextField, 0 );
+qDebug() << "  dynbytestring:" <<dynTextField->name();
+                }
                 else if( mReader.name() == QLatin1String("extension") )
                 {
                     const QXmlStreamAttributes attributes = mReader.attributes();
