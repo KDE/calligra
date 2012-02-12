@@ -1130,8 +1130,8 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeData* argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4RectangleData* rectangleData = argsData->argPtr<Cdr4RectangleData>( i );
-            rectangleObject->setCornerPoint( rectangleData->mCornerPoint );
-qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().mX<<","<<rectangleObject->cornerPoint().mY
+            rectangleObject->setCornerPoint( CdrPoint(rectangleData->mCornerPoint.mX,rectangleData->mCornerPoint.mY) );
+qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().x()<<","<<rectangleObject->cornerPoint().y()
                  << "unknown" << rectangleData->_unknown;
         }
         case CdrObjectStyleIndexArgumentId :
@@ -1163,11 +1163,11 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeData* argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4EllipseData* ellipseData = argsData->argPtr<Cdr4EllipseData>( i );
-            ellipseObject->setCenterPoint(ellipseData->mCenterPoint);
+            ellipseObject->setCenterPoint( CdrPoint(ellipseData->mCenterPoint.mX,ellipseData->mCenterPoint.mY) );
             ellipseObject->setXRadius(ellipseData->mXRadius);
             ellipseObject->setYRadius(ellipseData->mYRadius);
-qDebug() << "ellipse: center"<<ellipseData->mCenterPoint.mX<<","<<ellipseData->mCenterPoint.mY
-                     <<"xradius"<<ellipseData->mXRadius<<"yradius"<<ellipseData->mYRadius
+qDebug() << "ellipse: center"<<ellipseObject->centerPoint().x()<<","<<ellipseObject->centerPoint().x()
+                     <<"xradius"<<ellipseObject->xRadius()<<"yradius"<<ellipseObject->yRadius()
                      <<"unknown"<<ellipseData->_unknown;
         }
             break;
@@ -1203,8 +1203,9 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
 qDebug() << "path points:" << points->count;
             for (unsigned int j=0; j<points->count; j++)
             {
+                const Cdr4Point point = points->point(j);
 // qDebug() <<"    "<< j<<":"<<points->point(j).mX<<","<<points->point(j).mY<< QString::number(points->pointType(j),16);
-                pathObject->addPathPoint( Cdr4PathPoint(points->point(j), points->pointType(j)) );
+                pathObject->addPathPoint( CdrPathPoint(CdrPoint(point.mX,point.mY), points->pointType(j)) );
             }
         }
             break;

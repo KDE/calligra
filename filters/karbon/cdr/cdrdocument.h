@@ -105,13 +105,28 @@ private:
     QVector<CdrAbstractTransformation*> mTransformations;
 };
 
+typedef qint16 CdrCoord;
 
-struct Cdr4PathPoint
+struct CdrPoint
 {
-    Cdr4PathPoint() : mPoint(0,0) {}
-    Cdr4PathPoint( Cdr4Point point, PointType type ) : mPoint(point), mType(type) {}
+public:
+    CdrPoint() {}
+    CdrPoint( CdrCoord x, CdrCoord y ) : mX(x), mY(y) {}
+public:
+    CdrCoord x() const { return mX; }
+    CdrCoord y() const { return mY; }
+private:
+    CdrCoord mX;
+    CdrCoord mY;
+};
 
-    Cdr4Point mPoint;
+
+struct CdrPathPoint
+{
+    CdrPathPoint() : mPoint(0,0) {}
+    CdrPathPoint( CdrPoint point, PointType type ) : mPoint(point), mType(type) {}
+
+    CdrPoint mPoint;
     PointType mType;
 };
 
@@ -162,11 +177,11 @@ class CdrRectangleObject : public CdrGraphObject
 public:
     CdrRectangleObject() : CdrGraphObject(RectangleObjectId) {}
 public:
-    void setCornerPoint( Cdr4Point cornerPoint ) { mCornerPoint = cornerPoint; }
+    void setCornerPoint( CdrPoint cornerPoint ) { mCornerPoint = cornerPoint; }
 public:
-    Cdr4Point cornerPoint() const { return mCornerPoint; }
+    CdrPoint cornerPoint() const { return mCornerPoint; }
 private:
-    Cdr4Point mCornerPoint;
+    CdrPoint mCornerPoint;
 };
 
 class CdrEllipseObject : public CdrGraphObject
@@ -174,15 +189,15 @@ class CdrEllipseObject : public CdrGraphObject
 public:
     CdrEllipseObject() : CdrGraphObject(EllipseObjectId) {}
 public:
-    void setCenterPoint( Cdr4Point centerPoint ) { mCenterPoint = centerPoint; }
+    void setCenterPoint( CdrPoint centerPoint ) { mCenterPoint = centerPoint; }
     void setXRadius( quint16 xRadius ) { mXRadius = xRadius; }
     void setYRadius( quint16 yRadius ) { mYRadius = yRadius; }
 public:
-    Cdr4Point centerPoint() const { return mCenterPoint; }
+    CdrPoint centerPoint() const { return mCenterPoint; }
     quint16 xRadius() const { return mXRadius; }
     quint16 yRadius() const { return mYRadius; }
 private:
-    Cdr4Point mCenterPoint;
+    CdrPoint mCenterPoint;
     quint16 mXRadius;
     quint16 mYRadius;
 };
@@ -192,11 +207,11 @@ class CdrPathObject : public CdrGraphObject
 public:
     CdrPathObject() : CdrGraphObject(PathObjectId) {}
 public:
-    void addPathPoint( const Cdr4PathPoint& pathPoint ) { mPathPoints.append(pathPoint); }
+    void addPathPoint( const CdrPathPoint& pathPoint ) { mPathPoints.append(pathPoint); }
 public:
-    const QVector<Cdr4PathPoint>& pathPoints() const { return mPathPoints; }
+    const QVector<CdrPathPoint>& pathPoints() const { return mPathPoints; }
 private:
-    QVector<Cdr4PathPoint> mPathPoints;
+    QVector<CdrPathPoint> mPathPoints;
 };
 
 class CdrTextObject : public CdrGraphObject

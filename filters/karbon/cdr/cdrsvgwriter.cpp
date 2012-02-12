@@ -120,8 +120,8 @@ CdrSvgWriter::writeRectangleObject( const CdrRectangleObject* object )
 
 //     mXmlWriter.addAttribute("x", x);
 //     mXmlWriter.addAttribute("y", y);
-    mXmlWriter.addAttribute("width", object->cornerPoint().mX );
-    mXmlWriter.addAttribute("height", object->cornerPoint().mY );
+    mXmlWriter.addAttribute("width", object->cornerPoint().x() );
+    mXmlWriter.addAttribute("height", object->cornerPoint().y() );
 //     mXmlWriter.addAttribute("rx", object->cornerRoundness());
 //     mXmlWriter.addAttribute("ry", object->cornerRoundness());
     writeStrokeWidth( object->outlineId() );
@@ -136,8 +136,8 @@ CdrSvgWriter::writeEllipseObject( const CdrEllipseObject* object )
 {
     mXmlWriter.startElement("ellipse");
 
-    mXmlWriter.addAttribute("cx", object->centerPoint().mX);
-    mXmlWriter.addAttribute("cy", -object->centerPoint().mY);
+    mXmlWriter.addAttribute("cx", object->centerPoint().x());
+    mXmlWriter.addAttribute("cy", -object->centerPoint().y());
     mXmlWriter.addAttribute("rx", object->xRadius());
     mXmlWriter.addAttribute("ry", object->yRadius());
     writeStrokeWidth( object->outlineId() );
@@ -152,21 +152,21 @@ CdrSvgWriter::writePathObject( const CdrPathObject* pathObject )
 {
     mXmlWriter.startElement("path");
 
-    const QVector<Cdr4PathPoint>& pathPoints = pathObject->pathPoints();
+    const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
     QString pathData;
     for( int j=0; j<pathPoints.count(); j++ )
     {
         if(j==0) // is first point
-            pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[0].mPoint.mX ).arg( -pathPoints[0].mPoint.mY ) );
+            pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[0].mPoint.x() ).arg( -pathPoints[0].mPoint.y() ) );
         else
         {
             const bool isLineStarting = (pathPoints[j].mType == 0x0C);
 
             if( isLineStarting )
-                pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[j].mPoint.mX ).arg( -pathPoints[j].mPoint.mY ) );
+                pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[j].mPoint.x() ).arg( -pathPoints[j].mPoint.y() ) );
             else
             {
-                pathData.append( QString::fromLatin1("L %1 %2 ").arg( pathPoints[j].mPoint.mX ).arg( -pathPoints[j].mPoint.mY ) );
+                pathData.append( QString::fromLatin1("L %1 %2 ").arg( pathPoints[j].mPoint.x() ).arg( -pathPoints[j].mPoint.y() ) );
 
                 const bool isLineEnding = (pathPoints[j].mType == 0x48);
                 if( isLineEnding )
