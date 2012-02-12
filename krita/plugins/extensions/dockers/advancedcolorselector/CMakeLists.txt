@@ -13,6 +13,7 @@ kis_minimal_shade_selector.cpp
 kis_shade_selector_line.cpp
 kis_shade_selector_line_combo_box.cpp
 kis_shade_selector_lines_settings.cpp
+kis_color_selector_interface.cpp
 kis_color_selector_settings.cpp
 kis_color_selector_container.cpp
 kis_color_selector_base.cpp
@@ -39,6 +40,7 @@ install(TARGETS kritacolorselectorng  DESTINATION ${PLUGIN_INSTALL_DIR})
 set(KRITA_COLORSELECTORNG_QML_SRCS
   colorselectorngqmlplugin.cpp
   kis_color_selector_component.cpp
+  kis_color_selector_interface.cpp
   kis_color_selector_item.cpp
   kis_color_selector_wheel.cpp
 )

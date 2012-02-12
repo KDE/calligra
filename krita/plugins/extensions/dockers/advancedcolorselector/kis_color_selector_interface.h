@@ -22,22 +22,35 @@
 #ifndef _KIS_COLOR_SELECTOR_INTERFACE_H_
 #define _KIS_COLOR_SELECTOR_INTERFACE_H_
 
+class QColor;
+class KoColor;
+class KoCanvasResourceManager;
 class KoColorSpace;
 
+/**
+ * This class is used as a base class for QWidget-based and QML-based color selector 
+ */
 class KisColorSelectorInterface
 {
 public:
-    KisColorSelectorInterface() : m_blipDisplay(true) {}
-    virtual ~KisColorSelectorInterface() {}
+    enum ColorRole {Foreground, Background};
+public:
+    KisColorSelectorInterface();
+    virtual ~KisColorSelectorInterface();
     virtual const KoColorSpace* colorSpace() const = 0;
 
 public:
-    void setDisplayBlip(bool disp) {m_blipDisplay = disp;}
-    bool displayBlip() const {return m_blipDisplay;}
-
+    void setDisplayBlip(bool disp);
+    bool displayBlip() const;
+    void commitColor(const KoColor& koColor, ColorRole role);
+    QColor findGeneratingColor(const KoColor& ref) const;
+protected:
+    virtual KoCanvasResourceManager* resourceManager() const = 0;
+    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
 private:
     bool m_blipDisplay;
-  
+protected:
+    bool m_colorUpdateAllowed;
 };
 
 #endif

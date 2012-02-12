@@ -43,7 +43,6 @@ public:
     virtual void setCanvas(KisCanvas2* canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
     const KoColorSpace* colorSpace() const;
-    enum ColorRole {Foreground, Background};
 
 public slots:
     virtual void updateSettings();
@@ -54,8 +53,6 @@ public slots:
     void updateColorPreview(const QColor& color);
 
 public:
-    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
-    QColor findGeneratingColor(const KoColor& ref) const;
 
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
@@ -67,7 +64,7 @@ protected:
     void dropEvent(QDropEvent *);
     void setHidingDistanceAndTime(int distance, int time);
     bool isPopup() const { return m_isPopup; }
-
+    virtual KoCanvasResourceManager* resourceManager() const;
 protected slots:
     void hidePopup();
 
@@ -81,7 +78,6 @@ protected:
     KisCanvas2* m_canvas;
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
-    bool m_colorUpdateAllowed;
 
 private:
     int m_hideDistance;

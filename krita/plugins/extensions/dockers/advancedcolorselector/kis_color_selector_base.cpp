@@ -116,7 +116,6 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_canvas(0),
     m_popup(0),
     m_parent(0),
-    m_colorUpdateAllowed(true),
     m_hideDistance(0),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
@@ -280,71 +279,6 @@ void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
     hidePopup();
 }
 
-qreal distance(const QColor& c1, const QColor& c2)
-{
-    qreal dr = c1.redF()-c2.redF();
-    qreal dg = c1.greenF()-c2.greenF();
-    qreal db = c1.blueF()-c2.blueF();
-
-    return sqrt(dr*dr+dg*dg+db*db);
-}
-
-inline bool inRange(qreal m) {
-    if(m>=0. && m<=1.) return true;
-    else return false;
-}
-
-inline bool modify(QColor* estimate, const QColor& target, const QColor& result)
-{
-    qreal r = estimate->redF() - (result.redF() - target.redF());
-    qreal g = estimate->greenF() - (result.greenF() - target.greenF());
-    qreal b = estimate->blueF() - (result.blueF() - target.blueF());
-
-    if(inRange(r) && inRange(g) && inRange(b)) {
-        estimate->setRgbF(r, g, b);
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
-{
-//    kDebug() << "starting search for generating colour";
-    KoColor converter(colorSpace());
-    QColor currentEstimate;
-    ref.toQColor(&currentEstimate);
-//    kDebug() << "currentEstimate: " << currentEstimate;
-
-    QColor currentResult;
-    converter.fromQColor(currentEstimate);
-    converter.toQColor(&currentResult);
-//    kDebug() << "currentResult: " << currentResult;
-
-
-    QColor target;
-    ref.toQColor(&target);
-//    kDebug() << "target: " << target;
-
-    bool estimateValid=true;
-    int iterationCounter=0;
-
-//    kDebug() << "current distance = " << distance(target, currentResult);
-    while(distance(target, currentResult)>0.001 && estimateValid && iterationCounter<100) {
-        estimateValid = modify(&currentEstimate, target, currentResult);
-        converter.fromQColor(currentEstimate);
-        converter.toQColor(&currentResult);
-//        kDebug() << "current distance = " << distance(target, currentResult);
-
-        iterationCounter++;
-    }
-
-//    kDebug() << "end search for generating colour";
-
-    return currentEstimate;
-}
-
 void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
 {
     if(e->mimeData()->hasColor())
@@ -423,17 +357,7 @@ void KisColorSelectorBase::hidePopup()
 
 void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 {
-    if (!m_canvas)
-        return;
-
-    m_colorUpdateAllowed=false;
-
-    if (role==Foreground)
-        m_canvas->resourceManager()->setForegroundColor(color);
-    else
-        m_canvas->resourceManager()->setBackgroundColor(color);
-
-    m_colorUpdateAllowed=true;
+    KisColorSelectorInterface::commitColor(color, role);
 }
 
 void KisColorSelectorBase::updateColorPreview(const QColor& color)
@@ -497,3 +421,8 @@ void KisColorSelectorBase::updateSettings()
     }
 }
 
+KoCanvasResourceManager* KisColorSelectorBase::resourceManager() const
+{
+    if(!m_canvas) return 0;
+    return m_canvas->resourceManager();
+}

@@ -21,8 +21,10 @@
 #include "kis_color_selector_item.h"
 
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoCanvasResourceManager.h>
 
 #include "kis_color_selector_wheel.h"
 
@@ -51,6 +53,28 @@ void KisColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsIt
     m_component->paintEvent(painter);
 }
 
+void KisColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+//     QGraphicsItem::mouseMoveEvent(event);
+}
+
+void KisColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+//     QGraphicsItem::mousePressEvent(event);
+}
+
+void KisColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    if(event->button()&Qt::LeftButton || event->buttons()&Qt::RightButton)
+    {
+        m_component->mouseEvent(event->pos().x(), event->pos().y());
+        KoColor currentColor = KoColor(m_component->currentColor(), colorSpace());
+        commitColor(currentColor, Foreground);
+    }
+    
+//     QGraphicsItem::mouseReleaseEvent(event);
+}
+
 KoCanvasResourceManager* KisColorSelectorItem::resourceManager() const
 {
     return m_resourceManager;
@@ -58,5 +82,7 @@ KoCanvasResourceManager* KisColorSelectorItem::resourceManager() const
 
 void KisColorSelectorItem::setResourceManager(KoCanvasResourceManager* _canvasResourceManager)
 {
+    qDebug() << _canvasResourceManager;
     m_resourceManager = _canvasResourceManager;
+    m_component->setColor(findGeneratingColor(m_resourceManager->foregroundColor()));
 }

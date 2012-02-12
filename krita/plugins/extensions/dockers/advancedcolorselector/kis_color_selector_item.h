@@ -20,6 +20,7 @@
 
 #include <QDeclarativeItem>
 #include "kis_color_selector_interface.h"
+#include <KoColor.h>
 
 class KoCanvasResourceManager;
 class KisColorSelectorComponent;
@@ -31,10 +32,13 @@ class KisColorSelectorItem : public QDeclarativeItem, public KisColorSelectorInt
 public:
     KisColorSelectorItem ( QDeclarativeItem * parent = 0 );
     virtual const KoColorSpace* colorSpace() const;
-    KoCanvasResourceManager* resourceManager() const;
+    virtual KoCanvasResourceManager* resourceManager() const;
     void setResourceManager(KoCanvasResourceManager* _canvasResourceManager);
 protected:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* );
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 private:
     KisColorSelectorComponent* m_component;
     KoCanvasResourceManager* m_resourceManager;
