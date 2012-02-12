@@ -1436,7 +1436,12 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
 
 KoPrintJob * KarbonView::createPrintJob()
 {
-    return new KarbonPrintJob(this);
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPaper);
+}
+
+KoPrintJob * KarbonView::createPdfPrintJob()
+{
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPdf);
 }
 
 void KarbonView::applyFillToSelection()
