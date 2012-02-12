@@ -27,8 +27,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "PngExport.h"
-#include "PngExportOptionsWidget.h"
+#include "ImageExport.h"
+#include "ImageExportOptionsWidget.h"
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -43,17 +43,17 @@
 #include <KDialog>
 #include <QImage>
 
-K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<PngExport>();)
+K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<ImageExport>();)
 K_EXPORT_PLUGIN(PngExportFactory("calligrafilters"))
 
 
-PngExport::PngExport(QObject*parent, const QVariantList&)
-        : KoFilter(parent)
+ImageExport::ImageExport(QObject*parent, const QVariantList&)
+    : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
-PngExport::convert(const QByteArray& from, const QByteArray& to)
+ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
     QString format;
     if (to == "image/png") {
@@ -89,7 +89,7 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
     QColor backgroundColor(Qt::white);
 
     if (! m_chain->manager()->getBatchMode()) {
-        PngExportOptionsWidget * widget = new PngExportOptionsWidget(pointSize);
+        ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
         widget->setUnit(karbonPart->unit());
         widget->setBackgroundColor(backgroundColor);
         widget->enableBackgroundOpacity(format == "PNG");
@@ -120,5 +120,5 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
     return KoFilter::OK;
 }
 
-#include "PngExport.moc"
+#include "ImageExport.moc"
 

@@ -62,5 +62,5 @@ X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/jpeg
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
-X-KDE-Library=karbonpngexport
+X-KDE-Library=karbonimageexport
 X-KDE-Weight=1

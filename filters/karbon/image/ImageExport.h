@@ -21,21 +21,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef PNGEXPORT_H
-#define PNGEXPORT_H
+#ifndef IMAGEEXPORT_H
+#define IMAGEEXPORT_H
 
 #include <KoFilter.h>
 #include <QVariantList>
 
-class PngExport : public KoFilter
+class ImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    PngExport(QObject* parent, const QVariantList&);
-    virtual ~PngExport() {}
+    ImageExport(QObject* parent, const QVariantList&);
+    virtual ~ImageExport() {}
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
-#endif
-
+#endif // IMAGEEXPORT_H

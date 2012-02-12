@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PngExportOptionsWidget</class>
- <widget class="QWidget" name="PngExportOptionsWidget">
+ <class>ImageExportOptionsWidget</class>
+ <widget class="QWidget" name="ImageExportOptionsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
