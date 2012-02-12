@@ -89,11 +89,11 @@ private:
     QVector<CdrAbstractTransformation*> readTrfl();
     CdrAbstractObject* readLoda();
 
-    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeData* argsData );
-    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeData* argsData );
-    CdrPathObject* readPathObject( const CdrArgumentWithTypeData* argsData );
-    CdrTextObject* readTextObject( const CdrArgumentWithTypeData* argsData );
-    CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeData* argsData );
+    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeData& argsData );
+    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeData& argsData );
+    CdrPathObject* readPathObject( const CdrArgumentWithTypeData& argsData );
+    CdrTextObject* readTextObject( const CdrArgumentWithTypeData& argsData );
+    CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeData& argsData );
 
 private:
     CdrDocument* mDocument;
