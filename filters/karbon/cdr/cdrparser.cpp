@@ -1079,8 +1079,8 @@ switch(argType)
     case CdrObject3000ArgumentId :
     {
         const CdrObject3000ArgumentData* data = argsData->argPtr<CdrObject3000ArgumentData>( i );
-        for(int i=0; i<12; ++i )
-            argAsString = argAsString + QLatin1Char(' ')+QString::number(data->item(i));
+        for(unsigned int i=0; i<sizeof(CdrObject3000ArgumentData); ++i )
+            argAsString = argAsString + QLatin1Char(' ')+QString::number(data->_unknown0[i]);
         argTypeAsString = QLatin1String("some 24 bytes");
         break;
     }
@@ -1200,8 +1200,8 @@ CdrParser::readPathObject( const CdrArgumentWithTypeData* argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4PointList* points = argsData->argPtr<Cdr4PointList>( i );
-qDebug() << "path points:" << points->count;
-            for (unsigned int j=0; j<points->count; j++)
+qDebug() << "path points:" << points->mCount;
+            for (unsigned int j=0; j<points->mCount; j++)
             {
                 const Cdr4Point point = points->point(j);
 // qDebug() <<"    "<< j<<":"<<points->point(j).mX<<","<<points->point(j).mY<< QString::number(points->pointType(j),16);

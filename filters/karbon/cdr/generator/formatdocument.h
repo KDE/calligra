@@ -61,20 +61,68 @@ private:
     int mSize;
 };
 
-class RecordField
+enum RecordFieldTypeId
+{
+    PlainFieldId,
+    ArrayFieldId,
+    DynArrayFieldId,
+    Text8BitFieldId
+};
+
+class AbstractRecordField
+{
+protected:
+    explicit AbstractRecordField(RecordFieldTypeId typeId) : mTypeId( typeId ) {}
+private:
+    AbstractRecordField( const AbstractRecordField& );
+    AbstractRecordField& operator=( const AbstractRecordField& );
+public:
+    virtual ~AbstractRecordField() {}
+public:
+    RecordFieldTypeId typeId() const { return mTypeId; }
+private:
+    RecordFieldTypeId mTypeId;
+};
+
+class PlainRecordField : public AbstractRecordField
 {
 public:
-    RecordField() : mArraySize(0) {}
-    RecordField( const QString& name, const QString& typeId )
-    : mName( name ), mTypeId( typeId ), mArraySize(0) {}
-    void setArraySize( int arraySize ) { mArraySize = arraySize; }
+    PlainRecordField( const QString& name, const QString& typeId )
+    : AbstractRecordField(PlainFieldId), mName( name ), mTypeId( typeId ) {}
+public:
+    const QString& name() const { return mName; }
+    const QString& typeId() const { return mTypeId; }
+private:
+    const QString mName;
+    const QString mTypeId;
+};
+
+class ArrayRecordField : public AbstractRecordField
+{
+public:
+    ArrayRecordField( const QString& name, const QString& typeId, int arraySize )
+    : AbstractRecordField(ArrayFieldId), mName( name ), mTypeId( typeId ), mArraySize( arraySize ) {}
+public:
     const QString& name() const { return mName; }
     const QString& typeId() const { return mTypeId; }
     int arraySize() const { return mArraySize; }
 private:
     QString mName;
     QString mTypeId;
-    int mArraySize; // 0 means no array
+    int mArraySize;
+};
+
+class DynArrayRecordField : public AbstractRecordField
+{
+public:
+    DynArrayRecordField( const QString& name, const QString& typeId )
+    : AbstractRecordField(DynArrayFieldId), mName( name ), mTypeId( typeId ) {}
+public:
+    const QString& name() const { return mName; }
+    const QString& typeId() const { return mTypeId; }
+private:
+    QString mName;
+    QString mTypeId;
 };
 
 
@@ -82,21 +130,23 @@ class Record
 {
 public:
     Record() : mSize(0) {}
+    ~Record() { qDeleteAll(mFields); }
     void setName( const QString& name ) { mName = name; }
     void setBaseName( const QString& baseName ) { mBaseName = baseName; }
-    void appendField( const RecordField& field, int size ) { mFields.append(field); mSize += size; }
+    /// pass size!=0 only if field is part of static size
+    void appendField( AbstractRecordField* field, int size ) { mFields.append(field); mSize += size; }
     void appendMethod( const QString& method ) { mMethods.append(method); }
     void setSize( int size ) { mSize = size; }
     const QString& name() const { return mName; }
     const QString& baseName() const { return mBaseName; }
-    const QVector<RecordField>& fields() const { return mFields; }
+    const QVector<AbstractRecordField*>& fields() const { return mFields; }
     const QVector<QString>& methods() const { return mMethods; }
     int size() const { return mSize; }
     bool isNull() const { return mName.isNull(); }
 private:
     QString mName;
     QString mBaseName;
-    QVector<RecordField> mFields;
+    QVector<AbstractRecordField*> mFields;
     QVector<QString> mMethods;
     /// size of the record in bytes
     int mSize;
@@ -106,7 +156,8 @@ private:
 class FormatDocument
 {
 public:
-    void appendRecord( const Record& record ) { mRecords.append(record); }
+    ~FormatDocument() { qDeleteAll(mRecords); }
+    void appendRecord( Record* record ) { mRecords.append(record); }
     void appendIncludedType( const IncludedType& includedType ) { mIncludedTypes.append(includedType); }
     void appendEnumeration( const Enumeration& enumeration ) { mEnumeration.append(enumeration); }
     void insertTypeDef( const QString& typeName, const QString& originalName )
@@ -114,14 +165,14 @@ public:
     const QHash<QString,QString>& typeDefByName() const { return mTypeDefByName; }
     const QVector<IncludedType>& includedTypes() const { return mIncludedTypes; }
     const QVector<Enumeration>& enumerations() const { return mEnumeration; }
-    const QVector<Record>& records() const { return mRecords; }
-    Record record( const QString& name ) const;
+    const QVector<Record*>& records() const { return mRecords; }
+    const Record* record( const QString& name ) const;
     int sizeOfType(const QString& typeName ) const;
 private:
     QHash<QString,QString> mTypeDefByName;
     QVector<IncludedType> mIncludedTypes;
     QVector<Enumeration> mEnumeration;
-    QVector<Record> mRecords;
+    QVector<Record*> mRecords;
 };
 
 #endif

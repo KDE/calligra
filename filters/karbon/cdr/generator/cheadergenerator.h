@@ -42,7 +42,7 @@ private:
     void writeIncludes( const QStringList& fileName );
     void writeTypeDefs( const QHash<QString,QString>& typeDefByName );
     void writeEnums( const Enumeration& enumeration );
-    void writeRecord( const Record& record );
+    void writeRecord( const Record* record );
 private:
     FormatDocument* mDocument;
     QTextStream mTextStream;

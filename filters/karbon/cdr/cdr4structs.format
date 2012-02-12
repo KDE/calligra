@@ -223,13 +223,9 @@ const T* argPtr( int i ) const
 
     <record name="CdrBlockTextNormalCharChunkData" size="0" sizeExtended="true">
       <!-- hm, number of chars must be calculated outside this record, by chunk size -->
-      <method>
-<code><![CDATA[CdrBlockTextChar textChar( int i ) const
-    { return (&firstTextChar)[i]; }]]></code>
-      </method>
-      <extension start="0" type="CdrBlockTextChar" name="firstTextChar">
+      <dynarray start="0" type="CdrBlockTextChar" name="textChar">
           <description>The array of CdrBlockTextChar as in the text.</description>
-      </extension>
+      </dynarray>
     </record>
 
 <!--
@@ -375,7 +371,7 @@ size |count|aps  | ap1 |apl  |?????|
 0000:0030 | 00 00                                              | ..              
 -->
     <record name="CdrUnknown7FillData" size="50">
-      <field start="0" end="49" name="_unknown0" type="char" array="50"/>
+      <array start="0" end="49" name="_unknown0" type="char" length="50" />
     </record>
 
 <!--
@@ -394,7 +390,7 @@ size |count|aps  | ap1 |apl  |?????|
 0000:00C0 | 00 00 00 00  3C 00 14 00  00 00                    | ....<.....      
 -->
     <record name="CdrUnknown11FillSubData" size="32">
-      <field start="0" end="31" name="_unknown" type="qint16" array="16"/>
+      <array start="0" end="31" name="_unknown" type="qint16" length="16" />
     </record>
     <record name="CdrUnknown11FillData" size="202">
       <!-- seen 11 (happened to be same as type id, but also the same as spnd value of group in vec table), ?-->
@@ -406,17 +402,17 @@ size |count|aps  | ap1 |apl  |?????|
       <!-- seen 400-->
       <field start="6" end="7" name="_unknown3" type="quint16" />
       <!-- seen 0 -->
-      <field start="8" end="39" name="_unknown4" type="char" array="32" />
-      <field start="40" end="71" name="mLocalizedName" type="char" array="32">
+      <array start="8" end="39" name="_unknown4" type="char" length="32" />
+      <array start="40" end="71" name="mLocalizedName" type="char" length="32">
           <description>The localized name of the X, with a maximum length of 32.
           The current name is finished by a \0 char, but junk from previous names
           can be seen in the dump.</description>
-       </field>
-      <field start="72" end="103" name="mOriginalName" type="char" array="32">
+       </array>
+      <array start="72" end="103" name="mOriginalName" type="char" length="32">
           <description>The original (english) name of the X, with a maximum length of 32.
           The current name is finished by a \0 char, but junk from previous names
           can be seen in the dump.</description>
-       </field>
+       </array>
       <!-- seen 9-->
       <field start="104" end="105" name="_unknown5" type="quint16" />
       <field start="106" end="137" name="_unknown6" type="CdrUnknown11FillSubData" />
@@ -489,7 +485,7 @@ size |count|aps  | ap1 |apl  |?????|
       // 36..37: seen 0
 //     quint16 _unknown10;-->
       <!-- seen 0-->
-      <field start="38" end="67" name="_unknown11" type="char" array="30" />
+      <array start="38" end="67" name="_unknown11" type="char" length="30" />
     </record>
 
 <!--
@@ -680,11 +676,7 @@ sample: 05 00 00 00 01 00 00 00 16 0D 00 00 00 00 00 00 04 00 00 00 01 00 01 00
                    |           |     |     |           |           |     |
 -->
     <record name="CdrObject3000ArgumentData" size="24">
-        <method>
-<code><![CDATA[quint16 item( int i ) const
-    { return _unknown0[i]; }]]></code>
-        </method>
-        <field start="0" end="23" name="_unknown0" type="quint16" array="12" />
+        <array start="0" end="23" name="_unknown0" type="quint16" length="12" />
     </record>
 
 <!--
@@ -731,11 +723,7 @@ sample2: other text object linked to same object
 
     <record name="CdrObject3010ArgumentData" size="0" sizeExtended="true">
         <description>There are as many items in the list as there are chars in the string.</description>
-        <method>
-<code><![CDATA[CdrObject3010ArgumentItem item( int i ) const
-    { return (&firstItem)[i]; }]]></code>
-        </method>
-        <extension start="0" name="firstItem" type="CdrObject3010ArgumentItem" />
+        <dynarray start="0" name="item" type="CdrObject3010ArgumentItem" />
     </record>
 
     <!-- sample: 00 00 00 00 00 00 00 00, seen with path-->
@@ -827,23 +815,19 @@ But other nibble for lines also have any of both not set: 4,6,C,D
   <records>
     <record name="Cdr4PointList" size="4" sizeExtended="true">
       <method>
-<code><![CDATA[Cdr4Point point( int i ) const
-    { return (&firstPoint)[i]; }]]></code>
-      </method>
-      <method>
         <!-- TODO: check that type is not inverted like arg types are-->
 <code><![CDATA[PointType pointType( int i ) const
-    { return reinterpret_cast<const PointType*>(&firstPoint+count)[i]; }]]></code>
+    { return reinterpret_cast<const PointType*>(&__point+mCount)[i]; }]]></code>
       </method>
-      <field start="0" end="1" name="count" type="quint16">
+      <field start="0" end="1" name="mCount" type="quint16">
           <description>The number of the points.</description>
       </field>
       <field start="2" end="3" name="_unknown" type="quint16" />
-      <extension start="4" name="firstPoint" type="Cdr4Point">
-          <description>A list of points in the Cdr4Point format, with the number as given in the "count" field, followed by a list of types in the PointType format, with the same number.
+      <dynarray start="4" name="point" type="Cdr4Point" length="mCount">
+          <description>A list of points in the Cdr4Point format, with the number as given in the "mCount" field, followed by a list of types in the PointType format, with the same number.
           Types might be inverted, similar to arguments, not yet checked.
           Seems the record is padded to full 32 bit units.</description>
-      </extension>
+      </dynarray>
     </record>
 
 <!--
@@ -891,7 +875,7 @@ or even three chars data, with just the very first byte overwritten with 02
 garbage data? undo data?
 -->
     <record name="Cdr4CharAdditionalData" size="22">
-        <field start="0" end="21" name="_unknown" type="char" array="22" />
+        <array start="0" end="21" name="_unknown" type="char" length="22" />
     </record>
 
     <record name="Cdr4TextData" size="6">
@@ -980,7 +964,7 @@ garbage data? undo data?
    <record name="MCfgChunkData" size="54">
       <field start="0" end="1"  name="mWidth" type="quint16" />
       <field start="2" end="3"  name="mHeight" type="quint16" />
-      <field start="4" end="53" name="_unknown" type="char" array="50" />
+      <array start="4" end="53" name="_unknown" type="char" length="50" />
     </record>
 
 <!--
@@ -1002,10 +986,6 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
              |     |     |     |     |     |     |     |     |     |
 -->
     <record name="LnkData" size="18" sizeExtended="true">
-      <method>
-<code><![CDATA[quint16 data( int i ) const
-    { return (&firstData)[i]; }]]></code>
-      </method>
       <!-- seen 16,80,97 -->
       <field start="0" end="1"  name="mType" type="quint16" />
       <!-- seen 0,1,2 -->
@@ -1028,9 +1008,9 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
       <field start="14" end="15"  name="_unknown7" type="quint16" />
       <!-- seen 30,57,194 -->
       <field start="16" end="17"  name="_unknown8" type="quint16" />
-      <extension start="18" name="firstData" type="quint16" >
+      <dynarray start="18" name="data" type="quint16" length="mDataSize">
           <description>some 16-bit data, number seems defined by mDataSize</description>
-      </extension>
+      </dynarray>
     </record>
   </records>
 </format>

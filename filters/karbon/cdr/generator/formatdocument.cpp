@@ -21,14 +21,14 @@
 #include "formatdocument.h"
 
 
-Record
+const Record*
 FormatDocument::record( const QString& name ) const
 {
-    Record result;
+    const Record* result = 0;
 
-    foreach( const Record& record, mRecords )
+    foreach( const Record* record, mRecords )
     {
-        if( record.name() == name )
+        if( record->name() == name )
         {
             result = record;
             break;
@@ -60,11 +60,11 @@ FormatDocument::sizeOfType(const QString& typeName) const
 
     if( result == -1 )
     {
-        foreach( const Record& record, mRecords )
+        foreach( const Record* record, mRecords )
         {
-            if( record.name() == *actualTypeName )
+            if( record->name() == *actualTypeName )
             {
-                result = record.size();
+                result = record->size();
                 break;
             }
         }

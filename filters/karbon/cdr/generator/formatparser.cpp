@@ -24,6 +24,7 @@
 #include "formatdocument.h"
 // Qt
 #include <QtCore/QIODevice>
+#include <QtCore/QScopedPointer>
 
 #include <QDebug>
 
@@ -168,25 +169,25 @@ FormatParser::readRecords()
     {
         if( mReader.name() == QLatin1String("record") )
         {
-            Record record;
+            QScopedPointer<Record> record( new Record );
             const QXmlStreamAttributes attributes = mReader.attributes();
             const int recordSize = attributes.value(QLatin1String("size")).toString().toInt();
             const QString recordName = attributes.value(QLatin1String("name")).toString();
-            record.setName( recordName );
+            record->setName( recordName );
             const QStringRef recordBaseNameStringRef = attributes.value(QLatin1String("base"));
             if( ! recordBaseNameStringRef.isEmpty() )
             {
                 const QString recordBaseName = recordBaseNameStringRef.toString();
-                const Record baseRecord = mDocument->record(recordBaseName);
-                if( baseRecord.isNull() )
+                const Record* baseRecord = mDocument->record(recordBaseName);
+                if( baseRecord == 0 )
                 {
                     mReader.raiseError( QLatin1String("Record ")+recordBaseName+QLatin1String(" used as base not yet known.") );
                     break;
                 }
-                record.setBaseName( recordBaseName );
-                record.setSize( baseRecord.size() );
+                record->setBaseName( recordBaseName );
+                record->setSize( baseRecord->size() );
             }
-qDebug() << "record:" <<record.name()<<record.baseName();
+qDebug() << "record:" <<record->name()<<record->baseName();
             while( mReader.readNextStartElement() )
             {
                 if( mReader.name() == QLatin1String("field") )
@@ -194,15 +195,10 @@ qDebug() << "record:" <<record.name()<<record.baseName();
                     const QXmlStreamAttributes attributes = mReader.attributes();
                     const QString fieldName = attributes.value(QLatin1String("name")).toString();
                     const QString fieldType = attributes.value(QLatin1String("type")).toString();
-                    RecordField recordField( fieldName, fieldType );
-                    // array?
-                    const QStringRef arraySizeStringRef = attributes.value(QLatin1String("array"));
-                    const int arraySize = ( ! arraySizeStringRef.isNull() ) ?
-                        arraySizeStringRef.toString().toInt() : 0;
                     // check offsets
                     const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
                     const int endOffset = attributes.value(QLatin1String("end")).toString().toInt();
-                    if( startOffset != record.size() )
+                    if( startOffset != record->size() )
                     {
                         mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
                         break;
@@ -213,25 +209,76 @@ qDebug() << "record:" <<record.name()<<record.baseName();
                         mReader.raiseError( fieldType+QLatin1String(" is not yet known.") );
                         break;
                     }
-                    if( arraySize != 0 )
-                        fieldSize *= arraySize;
                     if( (endOffset-startOffset+1) != fieldSize )
                     {
                         mReader.raiseError( QLatin1String("Endoffset ")+QString::number(endOffset)+QLatin1String(" does not match the size of the type.") );
                         break;
                     }
 
-                    if( arraySize != 0 )
-                        recordField.setArraySize( arraySizeStringRef.toString().toInt() );
+                    PlainRecordField* plainField = new PlainRecordField( fieldName, fieldType );
+                    record->appendField( plainField, fieldSize );
+qDebug() << "  field:" <<plainField->name() <<plainField->typeId();
+                }
+                else if( mReader.name() == QLatin1String("array") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const QString arrayType = attributes.value(QLatin1String("type")).toString();
+                    const int arrayLength = attributes.value(QLatin1String("length")).toString().toInt();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    const int endOffset = attributes.value(QLatin1String("end")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+                    int fieldSize = mDocument->sizeOfType(arrayType);
+                    if( fieldSize == -1 )
+                    {
+                        mReader.raiseError( arrayType+QLatin1String(" is not yet known.") );
+                        break;
+                    }
+                    fieldSize *= arrayLength;
+                    if( (endOffset-startOffset+1) != fieldSize )
+                    {
+                        mReader.raiseError( QLatin1String("Endoffset ")+QString::number(endOffset)+QLatin1String(" does not match the size of the type.") );
+                        break;
+                    }
 
-                    record.appendField( recordField, fieldSize );
-qDebug() << "  field:" <<recordField.name() <<recordField.typeId() << recordField.arraySize();
+                    ArrayRecordField* arrayField = new ArrayRecordField( fieldName, arrayType, arrayLength );
+                    record->appendField( arrayField, fieldSize );
+qDebug() << "  array:" <<arrayField->name() <<arrayField->typeId() << arrayField->arraySize();
+                }
+                else if( mReader.name() == QLatin1String("dynarray") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const QString arrayType = attributes.value(QLatin1String("type")).toString();
+//                     const int arrayLength = attributes.value(QLatin1String("length")).toString().toInt();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+                    int fieldSize = mDocument->sizeOfType(arrayType);
+                    if( fieldSize == -1 )
+                    {
+                        mReader.raiseError( arrayType+QLatin1String(" is not yet known.") );
+                        break;
+                    }
+
+                    DynArrayRecordField* dynArrayField = new DynArrayRecordField( fieldName, arrayType );
+                    record->appendField( dynArrayField, 0 );
+qDebug() << "  dynarray:" <<dynArrayField->name() <<dynArrayField->typeId();
                 }
                 else if( mReader.name() == QLatin1String("extension") )
                 {
                     const QXmlStreamAttributes attributes = mReader.attributes();
                     const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
-                    if( startOffset != record.size() )
+                    if( startOffset != record->size() )
                     {
                         mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
                         break;
@@ -240,12 +287,9 @@ qDebug() << "  field:" <<recordField.name() <<recordField.typeId() << recordFiel
                     if( ! itemName.isEmpty() )
                     {
                         const QString itemTypeId = attributes.value(QLatin1String("type")).toString();
-                        RecordField recordField( itemName, itemTypeId );
-                        const QStringRef arraySizeStringRef = attributes.value(QLatin1String("array"));
-                        if( ! arraySizeStringRef.isNull() )
-                            recordField.setArraySize( arraySizeStringRef.toString().toInt() );
-                        record.appendField( recordField, 0 );
-qDebug() << "  extension:" <<recordField.name() <<recordField.typeId() << recordField.arraySize();
+                        PlainRecordField* recordField = new PlainRecordField( itemName, itemTypeId );
+                        record->appendField( recordField, 0 );
+qDebug() << "  extension:" <<recordField->name() <<recordField->typeId();
                     }
                 }
                 else if( mReader.name() == QLatin1String("method") )
@@ -255,7 +299,7 @@ qDebug() << "  extension:" <<recordField.name() <<recordField.typeId() << record
                         if( mReader.name() == QLatin1String("code") )
                         {
                             const QString code = mReader.readElementText();
-                            record.appendMethod(code);
+                            record->appendMethod(code);
                             qDebug() << code << mReader.tokenString()<<mReader.qualifiedName();
                         }
                         else
@@ -265,12 +309,12 @@ qDebug() << "  extension:" <<recordField.name() <<recordField.typeId() << record
                 if( mReader.tokenType() != QXmlStreamReader::EndElement )
                     mReader.skipCurrentElement();
             }
-            if( recordSize != record.size() )
+            if( recordSize != record->size() )
             {
                 mReader.raiseError( QLatin1String("Size of the record ")+QString::number(recordSize)+QLatin1String(" does not match the size of its fields.") );
                 break;
             }
-            mDocument->appendRecord(record);
+            mDocument->appendRecord(record.take());
         }
         else
             mReader.skipCurrentElement();
