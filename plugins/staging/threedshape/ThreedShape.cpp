@@ -57,6 +57,31 @@ ThreedShape::~ThreedShape()
 void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
                         KoShapePaintingContext &context)
 {
+    //painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.setPen(QPen(QColor(0, 0, 0)));
+
+#if 0
+    QRectF rect = converter.documentToView(boundingRect());
+    QRectF rect = converter.documentToView(QRectF(QPoint(0, 0), size()));
+    painter.drawRect(rect);
+#else
+    painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
+#endif
+    kDebug(31000) << "boundingRect: " << boundingRect();
+    kDebug(31000) << "outlineRect: " << outlineRect();
+
+#if 0
+    QRectF  rect(QPointF(0,0), m_size);
+    painter.save();
+
+    // Draw a simple cross in a rectangle just to indicate that there is something here.
+    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.drawRect(rect);
+    painter.drawLine(rect.topLeft(), rect.bottomRight());
+    painter.drawLine(rect.bottomLeft(), rect.topRight());
+
+    painter.restore();
+#endif
 }
 
 
@@ -69,8 +94,9 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     kDebug(31000) << "========================================================== Starting 3D Scene";
     kDebug(31000) <<"Loading ODF element: " << sceneElement.tagName();
 
-    loadOdfAttributes(sceneElement, context,
-                      OdfMandatories | OdfCommonChildElements | OdfAdditionalAttributes);
+    loadOdfAttributes(sceneElement, context, OdfAllAttributes);
+
+
 
     // Extract the attributes of dr3d:scene
     //
