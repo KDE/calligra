@@ -107,6 +107,7 @@ private:
 
 typedef qint16 CdrCoord;
 
+typedef quint16 CdrPointType;
 struct CdrPoint
 {
 public:
@@ -124,10 +125,10 @@ private:
 struct CdrPathPoint
 {
     CdrPathPoint() : mPoint(0,0) {}
-    CdrPathPoint( CdrPoint point, PointType type ) : mPoint(point), mType(type) {}
+    CdrPathPoint( CdrPoint point, CdrPointType type ) : mPoint(point), mType(type) {}
 
     CdrPoint mPoint;
-    PointType mType;
+    CdrPointType mType;
 };
 
 
