@@ -55,12 +55,14 @@ void KisColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 void KisColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-//     QGraphicsItem::mouseMoveEvent(event);
+    m_component->mouseEvent(event->pos().x(), event->pos().y());
+    update();
 }
 
 void KisColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-//     QGraphicsItem::mousePressEvent(event);
+    m_component->mouseEvent(event->pos().x(), event->pos().y());
+    update();
 }
 
 void KisColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
@@ -71,8 +73,7 @@ void KisColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         KoColor currentColor = KoColor(m_component->currentColor(), colorSpace());
         commitColor(currentColor, Foreground);
     }
-    
-//     QGraphicsItem::mouseReleaseEvent(event);
+    update();
 }
 
 KoCanvasResourceManager* KisColorSelectorItem::resourceManager() const
