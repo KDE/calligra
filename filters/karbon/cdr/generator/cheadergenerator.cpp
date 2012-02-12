@@ -157,6 +157,20 @@ CHeaderGenerator::writeRecord( const Record* record )
                         << textField->name() << QLatin1String("() const { return &__")<< textField->name()
                         << QLatin1String("; }\n");
         }
+        else if( field->typeId() == UnionFieldId )
+        {
+            // member
+            const UnionRecordField* unionField = static_cast<const UnionRecordField*>( field );
+            mTextStream << QLatin1String("    char") << QLatin1String(" __") << unionField->name()<< QLatin1String(";\n");
+            // access methods
+            foreach( const RecordFieldUnionVariant& variant, unionField->variants() )
+            {
+                mTextStream << QLatin1String("    const ") << variant.typeId() << QLatin1String("& ")
+                            << variant.name() << QLatin1String("() const { return reinterpret_cast<const ")
+                            << variant.typeId() << ("&>(__")<< unionField->name()
+                            << QLatin1String("); }\n");
+            }
+        }
     }
 
     mTextStream << QLatin1String("};\n");

@@ -67,7 +67,8 @@ enum RecordFieldTypeId
     ArrayFieldId,
     DynArrayFieldId,
     Text8BitFieldId,
-    DynText8BitFieldId
+    DynText8BitFieldId,
+    UnionFieldId
 };
 
 class AbstractRecordField
@@ -148,6 +149,34 @@ public:
     const QString& name() const { return mName; }
 private:
     QString mName;
+};
+
+
+class RecordFieldUnionVariant
+{
+public:
+    void setName( const QString& name ) { mName = name; }
+    void setTypeId( const QString& typeId ) { mTypeId = typeId; }
+    const QString& name() const { return mName; }
+    const QString& typeId() const { return mTypeId; }
+private:
+    QString mName;
+    QString mTypeId;
+};
+
+
+class UnionRecordField : public AbstractRecordField
+{
+public:
+    UnionRecordField( const QString& name )
+    : AbstractRecordField(UnionFieldId), mName( name ) {}
+public:
+    void appendVariant( const RecordFieldUnionVariant& variant ) { mVariants.append(variant); }
+    const QString& name() const { return mName; }
+    const QVector<RecordFieldUnionVariant>& variants() const { return mVariants; }
+private:
+    const QString mName;
+    QVector<RecordFieldUnionVariant> mVariants;
 };
 
 

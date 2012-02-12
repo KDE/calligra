@@ -332,6 +332,38 @@ qDebug() << "  dynbytestring:" <<dynTextField->name();
 qDebug() << "  extension:" <<recordField->name() <<recordField->typeId();
                     }
                 }
+                else if( mReader.name() == QLatin1String("union") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+                    UnionRecordField* unionField = new UnionRecordField( fieldName );
+qDebug() << "  union:" <<unionField->name();
+                    while( mReader.readNextStartElement() )
+                    {
+                        if( mReader.name() == QLatin1String("field") )
+                        {
+                            const QXmlStreamAttributes attributes = mReader.attributes();
+                            const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                            const QString fieldType = attributes.value(QLatin1String("type")).toString();
+
+                            RecordFieldUnionVariant variant;
+                            variant.setName( fieldName );
+                            variant.setTypeId( fieldType );
+
+                            unionField->appendVariant(variant);
+qDebug() << "      variant:" <<variant.name() <<variant.typeId();
+                        }
+                        mReader.skipCurrentElement();
+                    }
+                    record->appendField( unionField, 0 );
+                }
                 else if( mReader.name() == QLatin1String("method") )
                 {
                     while( mReader.readNextStartElement() )

@@ -390,8 +390,8 @@ qDebug() << "Reading Fills...";
             else if( fillData->mFillType == CdrSolid )
             {
                 CdrSolidFill* solidFill = new CdrSolidFill;
-                const CdrSolidFillData* solidFillData = fillData->solidFillData();
-                solidFill->setColor( color(solidFillData->mColor, solidFillData->mColorModel) );
+                const CdrSolidFillData& solidFillData = fillData->solidFillData();
+                solidFill->setColor( color(solidFillData.mColor, solidFillData.mColorModel) );
 
                 fill = solidFill;
 
@@ -399,10 +399,10 @@ qDebug() << "Reading Fills...";
             }
             else if( fillData->mFillType == CdrUnknown11FillType )
             {
-                const CdrUnknown11FillData* unknown11FillData = fillData->unknown11FillData();
+                const CdrUnknown11FillData& unknown11FillData = fillData->unknown11FillData();
 
-                fillDataString = QLatin1String(unknown11FillData->originalName())+QLatin1Char('|')+
-                    QLatin1String(unknown11FillData->localizedName());
+                fillDataString = QLatin1String(unknown11FillData.originalName())+QLatin1Char('|')+
+                    QLatin1String(unknown11FillData.localizedName());
             }
 
             const QString fillTypeName =
@@ -981,9 +981,9 @@ qDebug() << "Reading Trfd" << trfdData->mArguments.count << "args" << trfdData->
 //                  << transformData->dataSize()+2;
                 if( transformData->mIndex == CdrUnknownTransform8Id )
                 {
-                    const CdrTransform8Data* data8 = transformData->data8();
+                    const CdrTransform8Data& data8 = transformData->data8();
                     CdrNormalTransformation* transformation = new CdrNormalTransformation;
-                    transformation->setData( data8->m1, data8->m2, data8->mX, data8->m4, data8->m5, data8->mY );
+                    transformation->setData( data8.m1, data8.m2, data8.mX, data8.m4, data8.m5, data8.mY );
                     result.append( transformation );
 
 //         qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
