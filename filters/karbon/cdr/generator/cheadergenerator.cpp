@@ -54,8 +54,8 @@ CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device 
     foreach( const Enumeration& enumeration, mDocument->enumerations() )
         writeEnums( enumeration );
 
-    foreach( const Structure& structure, mDocument->structures() )
-        writeStructure( structure );
+    foreach( const Record& record, mDocument->records() )
+        writeRecord( record );
 
     mTextStream << QLatin1String("#endif\n");
 }
@@ -99,23 +99,23 @@ CHeaderGenerator::writeEnums( const Enumeration& enumeration )
 }
 
 void
-CHeaderGenerator::writeStructure( const Structure& structure )
+CHeaderGenerator::writeRecord( const Record& record )
 {
-    mTextStream << QLatin1String("struct ") << structure.name();
-    if( ! structure.baseName().isEmpty() )
-        mTextStream << QLatin1String(" : public ") << structure.baseName();
+    mTextStream << QLatin1String("struct ") << record.name();
+    if( ! record.baseName().isEmpty() )
+        mTextStream << QLatin1String(" : public ") << record.baseName();
     mTextStream << QLatin1String("\n{\n");
 
     // methods
-    foreach( const QString& method, structure.methods() )
+    foreach( const QString& method, record.methods() )
         mTextStream << QLatin1String("    ") << method << QLatin1Char('\n');
 
     // members
-    foreach( const StructureMember& member, structure.members() )
+    foreach( const RecordField& field, record.fields() )
     {
-        mTextStream << QLatin1String("    ") << member.typeId() << QLatin1Char(' ') << member.name();
-        if( member.arraySize() != 0 )
-            mTextStream << QLatin1Char('[') << member.arraySize() << QLatin1Char(']');
+        mTextStream << QLatin1String("    ") << field.typeId() << QLatin1Char(' ') << field.name();
+        if( field.arraySize() != 0 )
+            mTextStream << QLatin1Char('[') << field.arraySize() << QLatin1Char(']');
         mTextStream << QLatin1String(";\n");
     }
 

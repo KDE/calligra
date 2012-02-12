@@ -39,7 +39,7 @@ private:
     void readIncludes();
     void readTypeDefs();
     void readEnums();
-    void readStructs();
+    void readRecords();
 private:
     QXmlStreamReader mReader;
     FormatDocument* mDocument;

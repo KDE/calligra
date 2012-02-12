@@ -21,16 +21,16 @@
 #include "formatdocument.h"
 
 
-Structure
-FormatDocument::structure( const QString& name ) const
+Record
+FormatDocument::record( const QString& name ) const
 {
-    Structure result;
+    Record result;
 
-    foreach( const Structure& structure, mStructures )
+    foreach( const Record& record, mRecords )
     {
-        if( structure.name() == name )
+        if( record.name() == name )
         {
-            result = structure;
+            result = record;
             break;
         }
     }
@@ -60,11 +60,11 @@ FormatDocument::sizeOfType(const QString& typeName) const
 
     if( result == -1 )
     {
-        foreach( const Structure& structure, mStructures )
+        foreach( const Record& record, mRecords )
         {
-            if( structure.name() == *actualTypeName )
+            if( record.name() == *actualTypeName )
             {
-                result = structure.size();
+                result = record.size();
                 break;
             }
         }

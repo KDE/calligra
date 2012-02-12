@@ -61,11 +61,11 @@ private:
     int mSize;
 };
 
-class StructureMember
+class RecordField
 {
 public:
-    StructureMember() : mArraySize(0) {}
-    StructureMember( const QString& name, const QString& typeId )
+    RecordField() : mArraySize(0) {}
+    RecordField( const QString& name, const QString& typeId )
     : mName( name ), mTypeId( typeId ), mArraySize(0) {}
     void setArraySize( int arraySize ) { mArraySize = arraySize; }
     const QString& name() const { return mName; }
@@ -78,27 +78,27 @@ private:
 };
 
 
-class Structure
+class Record
 {
 public:
-    Structure() : mSize(0) {}
+    Record() : mSize(0) {}
     void setName( const QString& name ) { mName = name; }
     void setBaseName( const QString& baseName ) { mBaseName = baseName; }
-    void appendMember( const StructureMember& member, int size ) { mMembers.append(member); mSize += size; }
+    void appendField( const RecordField& field, int size ) { mFields.append(field); mSize += size; }
     void appendMethod( const QString& method ) { mMethods.append(method); }
     void setSize( int size ) { mSize = size; }
     const QString& name() const { return mName; }
     const QString& baseName() const { return mBaseName; }
-    const QVector<StructureMember>& members() const { return mMembers; }
+    const QVector<RecordField>& fields() const { return mFields; }
     const QVector<QString>& methods() const { return mMethods; }
     int size() const { return mSize; }
     bool isNull() const { return mName.isNull(); }
 private:
     QString mName;
     QString mBaseName;
-    QVector<StructureMember> mMembers;
+    QVector<RecordField> mFields;
     QVector<QString> mMethods;
-    /// size of the structure in bytes
+    /// size of the record in bytes
     int mSize;
 };
 
@@ -106,7 +106,7 @@ private:
 class FormatDocument
 {
 public:
-    void appendStructure( const Structure& structure ) { mStructures.append(structure); }
+    void appendRecord( const Record& record ) { mRecords.append(record); }
     void appendIncludedType( const IncludedType& includedType ) { mIncludedTypes.append(includedType); }
     void appendEnumeration( const Enumeration& enumeration ) { mEnumeration.append(enumeration); }
     void insertTypeDef( const QString& typeName, const QString& originalName )
@@ -114,14 +114,14 @@ public:
     const QHash<QString,QString>& typeDefByName() const { return mTypeDefByName; }
     const QVector<IncludedType>& includedTypes() const { return mIncludedTypes; }
     const QVector<Enumeration>& enumerations() const { return mEnumeration; }
-    const QVector<Structure>& structures() const { return mStructures; }
-    Structure structure( const QString& name ) const;
+    const QVector<Record>& records() const { return mRecords; }
+    Record record( const QString& name ) const;
     int sizeOfType(const QString& typeName ) const;
 private:
     QHash<QString,QString> mTypeDefByName;
     QVector<IncludedType> mIncludedTypes;
     QVector<Enumeration> mEnumeration;
-    QVector<Structure> mStructures;
+    QVector<Record> mRecords;
 };
 
 #endif

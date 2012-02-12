@@ -73,8 +73,8 @@ FormatParser::readFormat()
             readTypeDefs();
         else if( tokenName == QLatin1String("enums") )
             readEnums();
-        else if( tokenName == QLatin1String("structs") )
-            readStructs();
+        else if( tokenName == QLatin1String("records") )
+            readRecords();
         else
             mReader.skipCurrentElement();
     }
@@ -162,39 +162,39 @@ qDebug() << "  item:" <<itemName <<value;
 }
 
 void
-FormatParser::readStructs()
+FormatParser::readRecords()
 {
     while( mReader.readNextStartElement() )
     {
-        if( mReader.name() == QLatin1String("struct") )
+        if( mReader.name() == QLatin1String("record") )
         {
-            Structure structure;
+            Record record;
             const QXmlStreamAttributes attributes = mReader.attributes();
-            const int structSize = attributes.value(QLatin1String("size")).toString().toInt();
-            const QString structName = attributes.value(QLatin1String("name")).toString();
-            structure.setName( structName );
-            const QStringRef structBaseNameStringRef = attributes.value(QLatin1String("base"));
-            if( ! structBaseNameStringRef.isEmpty() )
+            const int recordSize = attributes.value(QLatin1String("size")).toString().toInt();
+            const QString recordName = attributes.value(QLatin1String("name")).toString();
+            record.setName( recordName );
+            const QStringRef recordBaseNameStringRef = attributes.value(QLatin1String("base"));
+            if( ! recordBaseNameStringRef.isEmpty() )
             {
-                const QString structBaseName = structBaseNameStringRef.toString();
-                const Structure baseStructure = mDocument->structure(structBaseName);
-                if( baseStructure.isNull() )
+                const QString recordBaseName = recordBaseNameStringRef.toString();
+                const Record baseRecord = mDocument->record(recordBaseName);
+                if( baseRecord.isNull() )
                 {
-                    mReader.raiseError( QLatin1String("Structure ")+structBaseName+QLatin1String(" used as base not yet known.") );
+                    mReader.raiseError( QLatin1String("Record ")+recordBaseName+QLatin1String(" used as base not yet known.") );
                     break;
                 }
-                structure.setBaseName( structBaseName );
-                structure.setSize( baseStructure.size() );
+                record.setBaseName( recordBaseName );
+                record.setSize( baseRecord.size() );
             }
-qDebug() << "struct:" <<structure.name()<<structure.baseName();
+qDebug() << "record:" <<record.name()<<record.baseName();
             while( mReader.readNextStartElement() )
             {
-                if( mReader.name() == QLatin1String("member") )
+                if( mReader.name() == QLatin1String("field") )
                 {
                     const QXmlStreamAttributes attributes = mReader.attributes();
-                    const QString memberName = attributes.value(QLatin1String("name")).toString();
-                    const QString memberType = attributes.value(QLatin1String("type")).toString();
-                    StructureMember structureMember( memberName, memberType );
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const QString fieldType = attributes.value(QLatin1String("type")).toString();
+                    RecordField recordField( fieldName, fieldType );
                     // array?
                     const QStringRef arraySizeStringRef = attributes.value(QLatin1String("array"));
                     const int arraySize = ( ! arraySizeStringRef.isNull() ) ?
@@ -202,50 +202,50 @@ qDebug() << "struct:" <<structure.name()<<structure.baseName();
                     // check offsets
                     const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
                     const int endOffset = attributes.value(QLatin1String("end")).toString().toInt();
-                    if( startOffset != structure.size() )
+                    if( startOffset != record.size() )
                     {
-                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last member.") );
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
                         break;
                     }
-                    int memberSize = mDocument->sizeOfType(memberType);
-                    if( memberSize == -1 )
+                    int fieldSize = mDocument->sizeOfType(fieldType);
+                    if( fieldSize == -1 )
                     {
-                        mReader.raiseError( memberType+QLatin1String(" is not yet known.") );
+                        mReader.raiseError( fieldType+QLatin1String(" is not yet known.") );
                         break;
                     }
                     if( arraySize != 0 )
-                        memberSize *= arraySize;
-                    if( (endOffset-startOffset+1) != memberSize )
+                        fieldSize *= arraySize;
+                    if( (endOffset-startOffset+1) != fieldSize )
                     {
                         mReader.raiseError( QLatin1String("Endoffset ")+QString::number(endOffset)+QLatin1String(" does not match the size of the type.") );
                         break;
                     }
 
                     if( arraySize != 0 )
-                        structureMember.setArraySize( arraySizeStringRef.toString().toInt() );
+                        recordField.setArraySize( arraySizeStringRef.toString().toInt() );
 
-                    structure.appendMember( structureMember, memberSize );
-qDebug() << "  member:" <<structureMember.name() <<structureMember.typeId() << structureMember.arraySize();
+                    record.appendField( recordField, fieldSize );
+qDebug() << "  field:" <<recordField.name() <<recordField.typeId() << recordField.arraySize();
                 }
                 else if( mReader.name() == QLatin1String("extension") )
                 {
                     const QXmlStreamAttributes attributes = mReader.attributes();
                     const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
-                    if( startOffset != structure.size() )
+                    if( startOffset != record.size() )
                     {
-                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last member.") );
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
                         break;
                     }
                     const QString itemName = attributes.value(QLatin1String("name")).toString();
                     if( ! itemName.isEmpty() )
                     {
                         const QString itemTypeId = attributes.value(QLatin1String("type")).toString();
-                        StructureMember structureMember( itemName, itemTypeId );
+                        RecordField recordField( itemName, itemTypeId );
                         const QStringRef arraySizeStringRef = attributes.value(QLatin1String("array"));
                         if( ! arraySizeStringRef.isNull() )
-                            structureMember.setArraySize( arraySizeStringRef.toString().toInt() );
-                        structure.appendMember( structureMember, 0 );
-qDebug() << "  extension:" <<structureMember.name() <<structureMember.typeId() << structureMember.arraySize();
+                            recordField.setArraySize( arraySizeStringRef.toString().toInt() );
+                        record.appendField( recordField, 0 );
+qDebug() << "  extension:" <<recordField.name() <<recordField.typeId() << recordField.arraySize();
                     }
                 }
                 else if( mReader.name() == QLatin1String("method") )
@@ -255,7 +255,7 @@ qDebug() << "  extension:" <<structureMember.name() <<structureMember.typeId() <
                         if( mReader.name() == QLatin1String("code") )
                         {
                             const QString code = mReader.readElementText();
-                            structure.appendMethod(code);
+                            record.appendMethod(code);
                             qDebug() << code << mReader.tokenString()<<mReader.qualifiedName();
                         }
                         else
@@ -265,12 +265,12 @@ qDebug() << "  extension:" <<structureMember.name() <<structureMember.typeId() <
                 if( mReader.tokenType() != QXmlStreamReader::EndElement )
                     mReader.skipCurrentElement();
             }
-            if( structSize != structure.size() )
+            if( recordSize != record.size() )
             {
-                mReader.raiseError( QLatin1String("Size of the structure ")+QString::number(structSize)+QLatin1String(" does not match the size of its members.") );
+                mReader.raiseError( QLatin1String("Size of the record ")+QString::number(recordSize)+QLatin1String(" does not match the size of its fields.") );
                 break;
             }
-            mDocument->appendStructure(structure);
+            mDocument->appendRecord(record);
         }
         else
             mReader.skipCurrentElement();

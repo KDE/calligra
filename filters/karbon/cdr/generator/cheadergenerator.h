@@ -25,7 +25,7 @@
 #include <QtCore/QTextStream>
 
 class FormatDocument;
-class Structure;
+class Record;
 class Enumeration;
 class QIODevice;
 class QStringList;
@@ -42,7 +42,7 @@ private:
     void writeIncludes( const QStringList& fileName );
     void writeTypeDefs( const QHash<QString,QString>& typeDefByName );
     void writeEnums( const Enumeration& enumeration );
-    void writeStructure( const Structure& structure );
+    void writeRecord( const Record& record );
 private:
     FormatDocument* mDocument;
     QTextStream mTextStream;
