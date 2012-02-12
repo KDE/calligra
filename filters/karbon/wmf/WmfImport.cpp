@@ -28,7 +28,7 @@ DESCRIPTION
 
 #include <KPluginFactory>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
 K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))

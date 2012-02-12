@@ -44,7 +44,7 @@
 #endif
 #endif
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QPushButton>
 
 #include <kdebug.h>

@@ -21,8 +21,8 @@
 #ifndef EXPORT_DIALOG_H
 #define EXPORT_DIALOG_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QButtonGroup>
+#include <QWidget>
+#include <QButtonGroup>
 
 #include <kdialog.h>
 #include <ui_ExportDialogUI.h>

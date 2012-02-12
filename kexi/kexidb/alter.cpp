@@ -20,7 +20,7 @@
 #include "alter.h"
 #include "utils.h"
 #include <kexiutils/utils.h>
-#include <qmap.h>
+#include <QMap>
 #include <stdlib.h>
 
 namespace KexiDB

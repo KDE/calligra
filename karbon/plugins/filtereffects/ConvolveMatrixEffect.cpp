@@ -24,9 +24,9 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include <KLocale>
-#include <QtCore/QRect>
-#include <QtCore/QVector>
-#include <QtGui/QPainter>
+#include <QRect>
+#include <QVector>
+#include <QPainter>
 #include <cmath>
 
 ConvolveMatrixEffect::ConvolveMatrixEffect()

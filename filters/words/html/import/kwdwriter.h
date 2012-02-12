@@ -21,7 +21,7 @@
 
 
 #include <QRect>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <KoStore.h>
 

@@ -21,7 +21,7 @@
 #include "utils_p.h"
 
 #include <q3header.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QThread>
 
 #include <ktabwidget.h>

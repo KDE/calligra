@@ -69,8 +69,8 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
             this, SIGNAL(zoomedToAll()));
 
     actionCollection->addAction("view_zoom", d->action);
-    actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", d->action, SLOT(zoomIn()));
-    actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", d->action, SLOT(zoomOut()));
+    actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", this, SLOT(zoomInRelative()));
+    actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", this, SLOT(zoomOutRelative()));
 
     d->canvas = dynamic_cast<KarbonCanvas*>(d->canvasController->canvas());
     d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
@@ -200,6 +200,17 @@ void KarbonZoomController::resourceChanged(int key, const QVariant &value)
         d->canvas->adjustOrigin();
         d->canvas->update();
     }
+}
+
+void KarbonZoomController::zoomInRelative()
+{
+    requestZoomBy(sqrt(2.0));
+
+}
+
+void KarbonZoomController::zoomOutRelative()
+{
+    requestZoomBy(sqrt(0.5));
 }
 
 #include "KarbonZoomController.moc"

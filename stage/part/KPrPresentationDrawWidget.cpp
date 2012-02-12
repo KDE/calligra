@@ -21,10 +21,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMenu>
+#include <QVBoxLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QMenu>
 #include <QList>
 #include <QMenu>
 #include <QIcon>

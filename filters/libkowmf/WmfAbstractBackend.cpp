@@ -23,8 +23,8 @@
 
 #include <kdebug.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
+#include <QFile>
+#include <QString>
 
 /**
    Namespace for Windows Metafile (WMF) classes

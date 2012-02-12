@@ -19,7 +19,7 @@
 #include <QApplication>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <qdebug.h>
+#include <QDebug>
 
 #include <kcomponentdata.h>
 

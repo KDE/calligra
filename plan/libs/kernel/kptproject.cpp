@@ -32,10 +32,10 @@
 
 #include <KoXmlReader.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
-#include <qdatetime.h>
-#include <qbrush.h>
+#include <QDateTime>
+#include <QBrush>
 #include <QList>
 
 #include <kdatetime.h>

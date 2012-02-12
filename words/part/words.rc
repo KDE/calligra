@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="133">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="134">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -98,7 +98,6 @@
   -->
 </ToolBar>
 <Menu name="text_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -111,7 +110,6 @@
  <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -126,7 +124,6 @@
  <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell_with_result">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -145,7 +142,6 @@
  </Menu>
 </Menu>
 <Menu name="custom_var_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -159,7 +155,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
 </Menu>
 <Menu name="variable_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -175,7 +170,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work on variables (yet?)-->
 </Menu>
 <Menu name="text_popup_link">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -193,7 +187,6 @@
  <!--<ActionList name="datatools_link"/> Spell check doesn't work on links (yet?)-->
 </Menu>
 <Menu name="footnote_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>
@@ -208,7 +201,6 @@
  <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
 </Menu>
 <Menu name="comment_popup">
- <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
  <Separator/>

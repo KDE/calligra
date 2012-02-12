@@ -31,7 +31,7 @@ class Container;
 class DocumentWrapper;
 }
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kdialog.h>
 

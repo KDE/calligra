@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qfile.h>
-#include <qapplication.h>
-#include <qdom.h>
+#include <QFile>
+#include <QApplication>
+#include <QDomDocument>
 
 #include <kmimetype.h>
 #include <kdebug.h>

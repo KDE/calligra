@@ -21,7 +21,7 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QDragMoveEvent>
 #include <QEvent>
 #include <QDropEvent>

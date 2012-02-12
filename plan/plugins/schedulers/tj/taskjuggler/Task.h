@@ -21,7 +21,7 @@
 
 #include <stdarg.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include "debug.h"
 #include "TaskList.h"

@@ -33,8 +33,8 @@
 
 #include <KoXmlReader.h>
 
-#include <qdom.h>
-#include <qbrush.h>
+#include <QDomDocument>
+#include <QBrush>
 //Added by qt3to4:
 #include <QList>
 #include <kdebug.h>

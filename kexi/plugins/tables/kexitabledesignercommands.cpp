@@ -16,12 +16,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qdom.h>
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qsplitter.h>
-#include <qmetaobject.h>
+#include <QDomDocument>
+#include <QWidget>
+#include <QLayout>
+#include <QLabel>
+#include <QSplitter>
+#include <QMetaObject>
 
 #include <kdebug.h>
 #include <klocale.h>

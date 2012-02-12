@@ -22,8 +22,8 @@
 #define KFE_RESIZEHANDLER_H
 
 #include <QHash>
-#include <qpointer.h>
-#include <qwidget.h>
+#include <QPointer>
+#include <QWidget>
 
 #include <kexi_export.h>
 

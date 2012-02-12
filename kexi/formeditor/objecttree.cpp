@@ -20,10 +20,10 @@
 */
 
 #include <kdebug.h>
-#include <qwidget.h>
-#include <qvariant.h>
-#include <qdom.h>
-#include <qtextstream.h>
+#include <QWidget>
+#include <QVariant>
+#include <QDomDocument>
+#include <QTextStream>
 
 #include "form.h"
 #include "container.h"

@@ -662,15 +662,24 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scaling()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
             if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(orientation) ) ) {
-                const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 axis->m_reversed = ( val == QLatin1String( "maxMin" ) );
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(logBase) ) ) {
-                const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 axis->m_logarithmic = ( val.toDouble() >= 2. );
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(max) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_maximum = val.toDouble();
+                axis->m_autoMaximum = false;
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(min) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_minimum = val.toDouble();
+                axis->m_autoMinimum = false;
             }
         }
     }

@@ -20,8 +20,8 @@
 #ifndef KEXINAMEWIDGET_H
 #define KEXINAMEWIDGET_H
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <QGridLayout>
 #include <klineedit.h>
 

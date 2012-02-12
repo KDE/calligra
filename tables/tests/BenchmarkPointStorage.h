@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_POINT_STORAGE_BENCHMARK
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

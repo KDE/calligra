@@ -20,7 +20,7 @@
 #include <kdebug.h>
 #include <QFile>
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include "wordsgenerator.h"
 #include "document.h"

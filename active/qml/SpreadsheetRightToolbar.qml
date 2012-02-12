@@ -32,6 +32,7 @@ Item
         anchors.centerIn: parent
         height: width
         width: parent.width
+        visible: root.documentController.documentHandler().currentSheetNumber < root.documentController.documentHandler().sheetCount
 
         onClicked: root.documentController.documentHandler().nextSheet()
     }

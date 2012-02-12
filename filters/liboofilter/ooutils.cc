@@ -23,7 +23,7 @@
 #include <KoOdfReadStore.h>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QColor>
 #include <QImage>
 #include <KoUnit.h>

@@ -14,8 +14,8 @@
 #ifndef _TjMessageHandler_h_
 #define _TjMessageHandler_h_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 namespace TJ
 {

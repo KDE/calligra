@@ -21,9 +21,9 @@
 
 #include <kexidb/field.h>
 
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kglobal.h>
 #include <klocale.h>

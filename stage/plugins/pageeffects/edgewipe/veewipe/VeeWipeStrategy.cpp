@@ -19,8 +19,8 @@
 
 #include "VeeWipeStrategy.h"
 #include "VeeWipeEffectFactory.h"
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QPainter>
 
 const int StepCount = 250;
 

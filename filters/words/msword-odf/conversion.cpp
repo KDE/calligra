@@ -29,7 +29,7 @@
 #include <wv2/src/functordata.h>
 #include <wv2/src/fields.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QRegExp>
 #include <QString>
 #include <QMap>

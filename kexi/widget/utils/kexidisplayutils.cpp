@@ -20,10 +20,10 @@
 #include "kexidisplayutils.h"
 #include <kexiutils/utils.h>
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qwidget.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QImage>
+#include <QWidget>
 
 #include <kglobal.h>
 #include <klocale.h>

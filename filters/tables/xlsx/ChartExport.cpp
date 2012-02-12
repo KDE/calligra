@@ -570,6 +570,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 //         if (axis->m_logarithmic)
 //             axisstyle.addProperty( "chart:logarithmic", "true", KoGenStyle::ChartType );
 
+        if (!axis->m_autoMinimum)
+            axisstyle.addProperty( "chart:minimum", QString::number(axis->m_minimum, 'f'), KoGenStyle::ChartType );
+        if (!axis->m_autoMaximum)
+            axisstyle.addProperty( "chart:maximum", QString::number(axis->m_maximum, 'f'), KoGenStyle::ChartType );
+
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
 
         QColor labelColor = labelFontColor();
