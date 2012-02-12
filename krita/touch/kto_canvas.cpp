@@ -165,8 +165,9 @@ void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidg
     painter->fillRect(boundingRect(), Qt::gray);
 //     if(m_mainWindow and m_mainWindow->document()->image())
     {
-        KisPaintDeviceSP projection = m_paintLayer->projection();
         QRect r = boundingRect().toRect();
+        m_paintLayer->updateProjection(r);
+        KisPaintDeviceSP projection = m_paintLayer->projection();
         QImage image = projection->convertToQImage(m_displayProfile, r.x(), r.y(), r.width(), r.height());
         
         painter->setRenderHints(QPainter::SmoothPixmapTransform);
