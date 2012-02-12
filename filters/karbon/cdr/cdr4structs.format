@@ -68,35 +68,35 @@
   <records>
     <record name="Cdr4Point" size="4">
       <description>A point given by its x and y coordinates.</description>
-      <field start="0" end="1" type="Cdr4Coord" name="mX">
+      <field start="0" end="1" type="Cdr4Coord" name="x">
         <description>The x coordinate of the point.</description>
       </field>
-      <field start="2" end="3" type="Cdr4Coord" name="mY">
+      <field start="2" end="3" type="Cdr4Coord" name="y">
         <description>The y coordinate of the point.</description>
       </field>
     </record>
 
     <record name="Cdr4BoundingBoxChunkData" size="8">
       <description></description>
-      <field start="0" end="3" type="Cdr4Point" name="mUpperLeft">
+      <field start="0" end="3" type="Cdr4Point" name="upperLeft">
         <description>The upper-left corner of the box.</description>
       </field>
-      <field start="4" end="7" type="Cdr4Point" name="mLowerRight">
+      <field start="4" end="7" type="Cdr4Point" name="lowerRight">
       </field>
     </record>
 
     <record name="CdrColor" size="4">
-      <field start="0" end="0" type="quint8" name="m1" />
-      <field start="1" end="1" type="quint8" name="m2" />
-      <field start="2" end="2" type="quint8" name="m3" />
-      <field start="3" end="3" type="quint8" name="m4" />
+      <field start="0" end="0" type="quint8" name="d1" />
+      <field start="1" end="1" type="quint8" name="d2" />
+      <field start="2" end="2" type="quint8" name="d3" />
+      <field start="3" end="3" type="quint8" name="d4" />
     </record>
 
     <record name="CdrArgumentData" size="6">
 <!--    // TODO: convert endianness on bigendian system // void convertToBugEndian(); -->
       <method>
 <code><![CDATA[const quint16* argOffsets() const
-{ return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+startOfArgs ); }]]></code>
+{ return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+__startOfArgs ); }]]></code>
       </method>
       <method>
 <code><![CDATA[template<typename T>
@@ -109,7 +109,7 @@ const T* argPtr( int i ) const
 { return reinterpret_cast<const T*>( reinterpret_cast<const char*>(this)+argOffsets()[i] ); }]]></code>
       </method>
 
-      <field start="0" end="1" name="mChunkLength" type="quint16">
+      <field start="0" end="1" name="chunkLength" type="quint16">
         <description>size of data</description>
       </field>
       <field start="2" end="3" name="count" type="quint16">
@@ -123,10 +123,10 @@ const T* argPtr( int i ) const
     <record name="CdrArgumentWithTypeData" base="CdrArgumentData" size="8">
       <method>
 <code><![CDATA[const quint16* argTypes() const
-{ return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+startOfArgTypes ); }]]></code>
+{ return reinterpret_cast<const quint16*>( reinterpret_cast<const char*>(this)+__startOfArgTypes ); }]]></code>
       </method>
       <method><!--order of types seems inverted...-->
-<code><![CDATA[quint16 argType( int i ) const { return argTypes()[count-i-1]; }]]></code>
+<code><![CDATA[quint16 argType( int i ) const { return argTypes()[count()-i-1]; }]]></code>
       </method>
       <field start="6" end="7" name="startOfArgTypes" type="quint16">
         <description>start of argument types, relativ to begin of this record.</description>
@@ -175,13 +175,13 @@ const T* argPtr( int i ) const
     </record>
 
     <record name="CdrVersionChunkData" size="2">
-      <field start="0" end="1" type="quint16" name="mVersion">
+      <field start="0" end="1" type="quint16" name="version">
           <description>The version, multiplied with 100, e.g. 401 for version 4.01.</description>
       </field>
     </record>
 
     <record name="CdrBlockTextIdChunkData" size="2">
-      <field start="0" end="1" type="quint16" name="mId">
+      <field start="0" end="1" type="quint16" name="id">
           <description>Really the block text id?</description>
       </field>
     </record>
@@ -204,7 +204,7 @@ const T* argPtr( int i ) const
     <record name="CdrBlockTextParagraphChunkData" size="6">
       <!-- ?, seen 6, 7, 12, 26-->
       <field start="0" end="1" type="quint16" name="_unknown0" />
-      <field start="2" end="3" type="quint16" name="mLength">
+      <field start="2" end="3" type="quint16" name="length">
           <description>The length of the text in this paragraph?</description>
       </field>
       <!-- ?, seen 0-->
@@ -214,7 +214,7 @@ const T* argPtr( int i ) const
     <record name="CdrBlockTextChar" size="4">
       <!-- ?, seen 0 -->
       <field start="0" end="1" type="quint16" name="_unknown0" />
-      <field start="2" end="2" type="unsigned char" name="mChar">
+      <field start="2" end="2" type="unsigned char" name="character">
           <description>The 8-bit char, encoded in latin1.</description>
       </field>
       <!-- seen 0-->
@@ -242,7 +242,7 @@ const T* argPtr( int i ) const
      |     |     |     |           |     |     |           |
 -->
     <record name="CdrBlockTextSpecialCharChunkData" size="24">
-      <field start="0" end="3" type="CdrBlockTextChar" name="mChar">
+      <field start="0" end="3" type="CdrBlockTextChar" name="character">
           <description>The actual char.</description>
       </field>
       <!-- ? always 56-->
@@ -273,20 +273,20 @@ there are 2 bytes not part of the CdrArgumentData, behind the arg pointers. also
 size |count|aps  | ap1 |apl  |?????|
 -->
     <record name="CdrLnkTableChunkData" size="6" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentData" name="mArguments" />
+      <field start="0" end="5" type="CdrArgumentData" name="arguments" />
       <extension start="6" />
     </record>
 
     <record name="CdrStyleChunkData" size="20" sizeExtended="true">
-      <field start="0" end="1" type="Cdr4StyleIndex" name="mStyleIndex">
+      <field start="0" end="1" type="Cdr4StyleIndex" name="styleIndex">
         <description>The index of the style in the style table of the document.</description>
       </field>
-      <field start="2" end="19" type="CdrStyleArgumentData" name="mArguments" />
+      <field start="2" end="19" type="CdrStyleArgumentData" name="arguments" />
       <extension start="20" />
     </record>
 
     <record name="CdrTrflChunkData" size="10" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentData" name="mArguments" />
+      <field start="0" end="5" type="CdrArgumentData" name="arguments" />
       <!-- ? seen FF FF-->
       <field start="6" end="7" name="_unknown0" type="qint16" />
       <!-- ? seen 00 00-->
@@ -300,18 +300,18 @@ size |count|aps  | ap1 |apl  |?????|
 
     <!-- 0D 00 16 01 01 00 - also size, bold, italic etc. ?-->
     <record name="CdrStyleFontArgumentData" size="6">
-      <field start="0" end="1" name="mFontIndex" type="quint16">
+      <field start="0" end="1" name="fontIndex" type="quint16">
         <description>The index of the font in the font table.</description>
       </field>
       <!-- fontsize? -->
-      <field start="2" end="2" name="mFontSize" type="quint8" />
+      <field start="2" end="2" name="fontSize" type="quint8" />
       <field start="3" end="3" name="_unknown1" type="quint8" />
       <field start="4" end="4" name="_unknown2" type="quint8" />
       <field start="5" end="5" name="_unknown3" type="quint8" />
     </record>
 
     <record name="CdrFontChunkData" size="2" sizeExtended="true">
-      <field start="0" end="1" type="quint16" name="mFontIndex">
+      <field start="0" end="1" type="quint16" name="fontIndex">
         <description>The index/id/key of the font, seems sorted in the font table.</description>
       </field>
       <dynbytestring start="2" name="fontName">
@@ -349,11 +349,11 @@ size |count|aps  | ap1 |apl  |?????|
 -->
     <record name="CdrSolidFillData" size="22">
       <!-- seen 1, color model?-->
-      <field start="0" end="3" name="mColorModel" type="quint32" />
+      <field start="0" end="3" name="colorModel" type="quint32" />
       <!-- seen 0-->
       <field start="4" end="7" name="_unknown2" type="quint32" />
       <!-- seen 0, 20, 60, 100-->
-      <field start="8" end="11" name="mColor" type="CdrColor" />
+      <field start="8" end="11" name="color" type="CdrColor" />
       <!-- seen 0-->
       <field start="12" end="15" name="_unknown4" type="quint32" />
       <!-- seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)-->
@@ -419,11 +419,11 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 
     <record name="CdrFillChunkData" size="8" sizeExtended="true">
-      <field start="0" end="3" type="Cdr4FillIndex" name="mFillIndex">
+      <field start="0" end="3" type="Cdr4FillIndex" name="fillIndex">
         <description>The index/id/key of the fill in the fill table of the document.</description>
       </field>
-      <field start="4" end="7" type="quint32" name="mFillType" value="CdrFillType" />
-      <union start="8" name="mData" depends="mFillType">
+      <field start="4" end="7" type="quint32" name="fillType" value="CdrFillType" />
+      <union start="8" name="data" depends="fillType">
         <description>The fill specific data, size depends on the type.</description>
         <field name="solidFillData" type="CdrSolidFillData" dependValue="CdrSolid" />
         <field name="unknown11FillData" type="CdrUnknown11FillData" dependValue="CdrUnknown7FillType" />
@@ -447,23 +447,23 @@ size |count|aps  | ap1 |apl  |?????|
 -->
     <record name="CdrOutlineChunkData" size="68">
       <!-- 0..3: uint32 index/key/id? would match loda-->
-      <field start="0" end="3" name="mIndex" type="Cdr4OutlineIndex">
+      <field start="0" end="3" name="index" type="Cdr4OutlineIndex">
         <description>The index of the outline in the outline table.</description>
       </field>
       <!-- type (?) seen 1, 2, 50-->
-      <field start="4" end="5" name="mType" type="quint16" />
+      <field start="4" end="5" name="type" type="quint16" />
       <!-- always 00 00 caps-->
       <field start="6" end="7" name="_unknown0" type="quint16" />
       <!-- always 00 00 corner-->
       <field start="8" end="9" name="_unknown1" type="quint16" />
       <!-- line width? seen 0, 3, 14, 30, 74-->
-      <field start="10" end="11" name="mLineWidth" type="quint16" />
+      <field start="10" end="11" name="lineWidth" type="quint16" />
       <!-- seen 0, 10, 100-->
       <field start="12" end="13" name="_unknown3" type="quint16" />
       <!-- seen 0, -370-->
       <field start="14" end="15" name="_unknown4" type="quint16" />
       <!-- sample data hints to be like CdrSolidFillData-->
-      <field start="16" end="37" name="mFillData" type="CdrSolidFillData" />
+      <field start="16" end="37" name="fillData" type="CdrSolidFillData" />
       <!-- 16..19: seen 0, 1>
 //     quint32 _unknown5;
       // 20..23: seen 0
@@ -516,7 +516,7 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 
     <record name="CdrLinkGroupSpndChunkData" size="2">
-        <field start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
+        <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </field>
     </record>
@@ -526,7 +526,7 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 
     <record name="CdrGroupSpndChunkData" size="2">
-        <field start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
+        <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </field>
     </record>
@@ -537,7 +537,7 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 
     <record name="CdrObjectSpndChunkData" size="2">
-        <field start="0" end="1" name="mId" type="Cdr4ObjectSpndIndex">
+        <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </field>
     </record>
@@ -708,13 +708,13 @@ sample2: other text object linked to same object
         <field start="4" end="7" name="_unknown1" type="qint32" />
         <!-- sample1: from 3995 to 7658
              sample2: from 416 to 5206 -->
-        <field start="8" end="9" name="mXOffset" type="qint16" />
+        <field start="8" end="9" name="xOffset" type="qint16" />
         <!-- sample1: from 234 to 1355 and back to 676
              sample2: -4368 to -5735 and back to -4831 -->
-        <field start="10" end="11" name="mYOffset" type="qint16" />
+        <field start="10" end="11" name="yOffset" type="qint16" />
         <!-- sample1: 500,330,210,130,40,-10,-130,-250,-380,-520
              sample2: -490 to 480 -->
-        <field start="12" end="13" name="mRotationDegree" type="qint16" />
+        <field start="12" end="13" name="rotationDegree" type="qint16" />
     </record>
 
     <record name="CdrObject3010ArgumentData" size="0" sizeExtended="true">
@@ -733,7 +733,7 @@ sample2: other text object linked to same object
     <!-- sample data: AC 2D B6 DF 00 00-->
     <record name="Cdr4RectangleData" size="6">
       <!-- width?-->
-      <field start="0" end="3" name="mCornerPoint" type="Cdr4Point">
+      <field start="0" end="3" name="cornerPoint" type="Cdr4Point">
           <description>The point of the opposite corner of the rectangle, with 0,0 being the base point.</description>
       </field>
       <!-- ? rounded corners?-->
@@ -743,11 +743,11 @@ sample2: other text object linked to same object
     <!-- sample data: 4F FA 28 FC 8C 0A 8C 0A 00 00-->
     <record name="Cdr4EllipseData" size="10">
       <!-- center? or rather corner point?-->
-      <field start="0" end="3" name="mCenterPoint" type="Cdr4Point" />
+      <field start="0" end="3" name="centerPoint" type="Cdr4Point" />
       <!-- x radius?-->
-      <field start="4" end="5" name="mXRadius" type="quint16" />
+      <field start="4" end="5" name="xRadius" type="quint16" />
       <!-- y radius?-->
-      <field start="6" end="7" name="mYRadius" type="quint16" />
+      <field start="6" end="7" name="yRadius" type="quint16" />
       <field start="8" end="9" name="_unknown" type="quint16" />
     </record>
   </records>
@@ -813,14 +813,14 @@ But other nibble for lines also have any of both not set: 4,6,C,D
       <method>
         <!-- TODO: check that type is not inverted like arg types are-->
 <code><![CDATA[PointType pointType( int i ) const
-    { return reinterpret_cast<const PointType*>(&__point+mCount)[i]; }]]></code>
+    { return reinterpret_cast<const PointType*>(&__point+count())[i]; }]]></code>
       </method>
-      <field start="0" end="1" name="mCount" type="quint16">
+      <field start="0" end="1" name="count" type="quint16">
           <description>The number of the points.</description>
       </field>
       <field start="2" end="3" name="_unknown" type="quint16" />
-      <dynarray start="4" name="point" type="Cdr4Point" length="mCount">
-          <description>A list of points in the Cdr4Point format, with the number as given in the "mCount" field, followed by a list of types in the PointType format, with the same number.
+      <dynarray start="4" name="point" type="Cdr4Point" length="count">
+          <description>A list of points in the Cdr4Point format, with the number as given in the "count" field, followed by a list of types in the PointType format, with the same number.
           Types might be inverted, similar to arguments, not yet checked.
           Seems the record is padded to full 32 bit units.</description>
       </dynarray>
@@ -833,13 +833,13 @@ sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
 -->
     <record name="Cdr4BlockTextData" size="12">
       <field start="0" end="1" name="_unknown0" type="quint16" />
-      <field start="2" end="3" name="mWidth" type="qint16">
+      <field start="2" end="3" name="width" type="qint16">
           <description>The width?</description>
       </field>
-      <field start="4" end="5" name="mHeight" type="qint16">
+      <field start="4" end="5" name="height" type="qint16">
           <description>The height?</description>
       </field>
-      <field start="6" end="7" name="mIndex" type="quint16">
+      <field start="6" end="7" name="index" type="quint16">
           <description>The index of the block text to use?</description>
       </field>
       <field start="8" end="9" name="_unknown4" type="quint16" />
@@ -848,8 +848,8 @@ sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
 
     <record name="Cdr4CharData" size="3">
       <!-- seen 0,1 -->
-      <field start="0" end="0" name="mType" type="quint8" />
-      <field start="1" end="1" name="mChar" type="char" />
+      <field start="0" end="0" name="type" type="quint8" />
+      <field start="1" end="1" name="character" type="char" />
       <field start="2" end="2" name="_unknown2" type="quint8" />
     </record>
 
@@ -878,11 +878,11 @@ garbage data? undo data?
       <!-- ? is 00 00 in samples-->
       <field start="0" end="1" name="_unknown" type="quint16" />
       <!-- length of text-->
-      <field start="2" end="3" name="mLength" type="quint16" />
-      <field start="4" end="5" name="mDataSize" type="quint16">
+      <field start="2" end="3" name="length" type="quint16" />
+      <field start="4" end="5" name="dataSize" type="quint16">
         <description>The size of the complete data, including mLength and the unknown field.</description>
       </field>
-      <extension start="6" name="mCharDataStart" type="char">
+      <extension start="6" name="charDataStart" type="char">
           <description>now the chars, have two \0 bytes between them,
            one before the first, not sure if the first has meaning or belongs to char
            assume this for now, see Cdr4CharData
@@ -935,19 +935,19 @@ garbage data? undo data?
     </record>
 
     <record name="CdrTransform8Data" size="24">
-      <field start="0" end="3" name="m1" type="float" />
-      <field start="4" end="7" name="m2" type="float" />
-      <field start="8" end="11" name="mX" type="qint32" />
-      <field start="12" end="15" name="m4" type="float" />
-      <field start="16" end="19" name="m5" type="float" />
-      <field start="20" end="23" name="mY" type="qint32" />
+      <field start="0" end="3" name="d1" type="float" />
+      <field start="4" end="7" name="d2" type="float" />
+      <field start="8" end="11" name="x" type="qint32" />
+      <field start="12" end="15" name="d4" type="float" />
+      <field start="16" end="19" name="d5" type="float" />
+      <field start="20" end="23" name="y" type="qint32" />
     </record>
 
     <record name="CdrTransformData" size="2" sizeExtended="true">
-      <field start="0" end="1" name="mIndex" type="quint16">
+      <field start="0" end="1" name="index" type="quint16">
           <description>could be some kind of index or type id, CdrTransformDataType</description>
       </field>
-      <union start="2" name="data" depends="mIndex">
+      <union start="2" name="data" depends="index">
           <field name="data1" type="CdrTransform1Data" dependValue="CdrUnknownTransform1Id" />
           <field name="data2" type="CdrTransform2Data" dependValue="CdrUnknownTransform2Id" />
           <field name="data8" type="CdrTransform8Data" dependValue="CdrUnknownTransform8Id" />
@@ -955,8 +955,8 @@ garbage data? undo data?
     </record>
 
    <record name="MCfgChunkData" size="54">
-      <field start="0" end="1"  name="mWidth" type="quint16" />
-      <field start="2" end="3"  name="mHeight" type="quint16" />
+      <field start="0" end="1"  name="width" type="quint16" />
+      <field start="2" end="3"  name="height" type="quint16" />
       <array start="4" end="53" name="_unknown" type="char" length="50" />
     </record>
 
@@ -980,9 +980,9 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
 -->
     <record name="LnkData" size="18" sizeExtended="true">
       <!-- seen 16,80,97 -->
-      <field start="0" end="1"  name="mType" type="quint16" />
+      <field start="0" end="1"  name="type" type="quint16" />
       <!-- seen 0,1,2 -->
-      <field start="2" end="3"  name="mDataSize" type="quint16">
+      <field start="2" end="3"  name="dataSize" type="quint16">
           <description>The number of whatever 16-bit data is attached.</description>
       </field>
       <field start="4" end="5"  name="_unknown2" type="Cdr4ObjectSpndIndex">
@@ -1001,7 +1001,7 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
       <field start="14" end="15"  name="_unknown7" type="quint16" />
       <!-- seen 30,57,194 -->
       <field start="16" end="17"  name="_unknown8" type="quint16" />
-      <dynarray start="18" name="data" type="quint16" length="mDataSize">
+      <dynarray start="18" name="data" type="quint16" length="dataSize">
           <description>some 16-bit data, number seems defined by mDataSize</description>
       </dynarray>
     </record>

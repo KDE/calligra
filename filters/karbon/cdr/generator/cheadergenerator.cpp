@@ -110,6 +110,9 @@ CHeaderGenerator::writeRecord( const Record* record )
         mTextStream << QLatin1String(" : public ") << record->baseName();
     mTextStream << QLatin1String("\n{\n");
 
+    QStringList getters;
+    QStringList members;
+
     // methods
     foreach( const QString& method, record->methods() )
         mTextStream << QLatin1String("    ") << method << QLatin1Char('\n');
@@ -120,58 +123,79 @@ CHeaderGenerator::writeRecord( const Record* record )
         if( field->typeId() == PlainFieldId )
         {
             const PlainRecordField* plainField = static_cast<const PlainRecordField*>( field );
-            mTextStream << QLatin1String("    ") << plainField->typeId() << QLatin1Char(' ') << plainField->name() << QLatin1String(";\n");
+
+            // member
+            members.append( QLatin1String("    ")+plainField->typeId()+QLatin1String(" __")+plainField->name()+
+                            QLatin1String(";\n") );
+            // access method, TODO: for POD return by value
+            getters.append( QLatin1String("    const ")+plainField->typeId()+QLatin1String("& ")+plainField->name() +
+                            QLatin1String("() const { return __")+plainField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == ArrayFieldId )
         {
             const ArrayRecordField* arrayField = static_cast<const ArrayRecordField*>( field );
-            mTextStream << QLatin1String("    ") << arrayField->typeId() << QLatin1Char(' ') << arrayField->name() << QLatin1Char('[') << arrayField->arraySize() << QLatin1String("];\n");
+
+            // member
+            members.append( QLatin1String("    ")+arrayField->typeId()+QLatin1String(" __")+arrayField->name()+
+                            QLatin1Char('[')+QString::number(arrayField->arraySize())+QLatin1String("];\n") );
+            // access method
+            getters.append( QLatin1String("    const ")+arrayField->typeId()+QLatin1String("* ")+arrayField->name() +
+                            QLatin1String("() const { return __")+arrayField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynArrayFieldId )
         {
-            // member
             const DynArrayRecordField* arrayField = static_cast<const DynArrayRecordField*>( field );
-            mTextStream << QLatin1String("    ") << arrayField->typeId() << QLatin1String(" __") << arrayField->name() << QLatin1String(";\n");
+
+            // member
+            members.append( QLatin1String("    ")+arrayField->typeId()+QLatin1String(" __")+arrayField->name()+
+                            QLatin1String(";\n") );
             // access method
-            mTextStream << arrayField->typeId() << QLatin1Char(' ')
-                        << arrayField->name() << QLatin1String("( int i ) const { return (&__")<< arrayField->name()
-                        << QLatin1String(")[i]; }\n");
+            getters.append( arrayField->typeId()+QLatin1Char(' ')+arrayField->name()+
+                            QLatin1String("( int i ) const { return (&__")+arrayField->name()+
+                            QLatin1String(")[i]; }\n") );
         }
         else if( field->typeId() == Text8BitFieldId )
         {
-            // member
             const Text8BitRecordField* textField = static_cast<const Text8BitRecordField*>( field );
-            mTextStream << QLatin1String("    char") << QLatin1String(" __") << textField->name() << QLatin1Char('[') << textField->length() << QLatin1String("];\n");
+
+            // member
+            members.append( QLatin1String("    char __")+textField->name()+
+                            QLatin1Char('[')+QString::number(textField->length())+QLatin1String("];\n") );
             // access method, TODO: add check for length and no \0
-            mTextStream << QLatin1String("    const char* ")
-                        << textField->name() << QLatin1String("() const { return __")<< textField->name()
-                        << QLatin1String("; }\n");
+            getters.append( QLatin1String("    const char* ")+textField->name()+
+                            QLatin1String("() const { return __")+textField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynText8BitFieldId )
         {
-            // member
             const DynText8BitRecordField* textField = static_cast<const DynText8BitRecordField*>( field );
-            mTextStream << QLatin1String("    char") << QLatin1String(" __") << textField->name()<< QLatin1String(";\n");
+
+            // member
+            members.append( QLatin1String("    char __")+textField->name()+QLatin1String(";\n") );
             // access method
-            mTextStream << QLatin1String("    const char* ")
-                        << textField->name() << QLatin1String("() const { return &__")<< textField->name()
-                        << QLatin1String("; }\n");
+            getters.append( QLatin1String("    const char* ")+textField->name()+
+                            QLatin1String("() const { return &__")+textField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == UnionFieldId )
         {
-            // member
             const UnionRecordField* unionField = static_cast<const UnionRecordField*>( field );
-            mTextStream << QLatin1String("    char") << QLatin1String(" __") << unionField->name()<< QLatin1String(";\n");
+
+            // member
+            members.append( QLatin1String("    char __")+unionField->name()+QLatin1String(";\n") );
             // access methods
             foreach( const RecordFieldUnionVariant& variant, unionField->variants() )
             {
-                mTextStream << QLatin1String("    const ") << variant.typeId() << QLatin1String("& ")
-                            << variant.name() << QLatin1String("() const { return reinterpret_cast<const ")
-                            << variant.typeId() << ("&>(__")<< unionField->name()
-                            << QLatin1String("); }\n");
+                getters.append( QLatin1String("    const ")+variant.typeId()+QLatin1String("& ")+variant.name() +
+                                QLatin1String("() const { return reinterpret_cast<const ")+variant.typeId()+
+                                ("&>(__")+unionField->name()+QLatin1String("); }\n") );
             }
         }
     }
 
+    mTextStream << QLatin1String("public:\n");
+    foreach( const QString& getter, getters )
+        mTextStream << getter;
+    mTextStream << QLatin1String("private:\n");
+    foreach( const QString& member, members )
+        mTextStream << member;
     mTextStream << QLatin1String("};\n");
 }
