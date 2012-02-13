@@ -173,16 +173,16 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(plainField->name());
 
             // member
-            members.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+memberName+
+            members.append( typeName+QLatin1Char(' ')+memberName+
                             QLatin1String(";\n") );
             // access method
             if( mDocument->sizeOfType(plainField->typeId()) <= maxReturnByValueTypeSize )
                 // return by value
-                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+plainField->name() +
+                getters.append( typeName+QLatin1Char(' ')+plainField->name() +
                                 QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
             else
                 // return by reference
-                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+plainField->name() +
+                getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+plainField->name() +
                                 QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
         }
         else if( field->typeId() == ArrayFieldId )
@@ -192,19 +192,19 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(arrayField->name());
 
             // member
-            members.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+memberName+
+            members.append( typeName+QLatin1Char(' ')+memberName+
                             QLatin1Char('[')+QString::number(arrayField->arraySize())+QLatin1String("];\n") );
             // access method
-            getters.append( QLatin1String("    const ")+typeName+QLatin1String("* ")+arrayField->name() +
+            getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
                             QLatin1String("Ptr() const { return ")+memberName+QLatin1String("; }\n") );
             if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
                 // return by value
-                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+arrayField->name()+
+                getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
                                 QLatin1String("( int i ) const { return ")+memberName+
                                 QLatin1String("[i]; }\n") );
             else
                 // return by reference
-                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+arrayField->name()+
+                getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+arrayField->name()+
                                 QLatin1String("( int i ) const { return ")+memberName+
                                 QLatin1String("[i]; }\n") );
         }
@@ -215,19 +215,19 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(arrayField->name());
 
             // member
-            members.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+memberName+
+            members.append( typeName+QLatin1Char(' ')+memberName+
                             QLatin1String(";\n") );
             // access method
-            getters.append( QLatin1String("    const ")+typeName+QLatin1String("* ")+arrayField->name() +
+            getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
                             QLatin1String("Ptr() const { return &")+memberName+QLatin1String("; }\n") );
             if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
                 // return by value
-                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+arrayField->name()+
+                getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
                                 QLatin1String("( int i ) const { return (&")+memberName+
                                 QLatin1String(")[i]; }\n") );
             else
                 // return by reference
-                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+arrayField->name()+
+                getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+arrayField->name()+
                                 QLatin1String("( int i ) const { return (&")+memberName+
                                 QLatin1String(")[i]; }\n") );
         }
@@ -237,10 +237,10 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(textField->name());
 
             // member
-            members.append( QLatin1String("    char ")+memberName+
+            members.append( QLatin1String("char ")+memberName+
                             QLatin1Char('[')+QString::number(textField->length())+QLatin1String("];\n") );
             // access method, TODO: add check for length and no \0
-            getters.append( QLatin1String("    const char* ")+textField->name()+
+            getters.append( QLatin1String("const char* ")+textField->name()+
                             QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynText8BitFieldId )
@@ -249,9 +249,9 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(textField->name());
 
             // member
-            members.append( QLatin1String("    char ")+memberName+QLatin1String(";\n") );
+            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
             // access method
-            getters.append( QLatin1String("    const char* ")+textField->name()+
+            getters.append( QLatin1String("const char* ")+textField->name()+
                             QLatin1String("() const { return &")+memberName+QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynBlobFieldId )
@@ -260,9 +260,9 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(blobField->name());
 
             // member
-            members.append( QLatin1String("    char ")+memberName+QLatin1String(";\n") );
+            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
             // access method
-            getters.append( QLatin1String("    const char* ")+blobField->name()+
+            getters.append( QLatin1String("const char* ")+blobField->name()+
                             QLatin1String("() const { return &")+memberName+QLatin1String("; }\n") );
         }
         else if( field->typeId() == UnionFieldId )
@@ -271,12 +271,12 @@ CHeaderGenerator::writeRecord( const Record* record )
             const QString memberName = ::memberName(unionField->name());
 
             // member
-            members.append( QLatin1String("    char ")+memberName+QLatin1String(";\n") );
+            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
             // access methods
             foreach( const RecordFieldUnionVariant& variant, unionField->variants() )
             {
                 const QString& typeName = codeName(variant.typeId());
-                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+variant.name() +
+                getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+variant.name() +
                                 QLatin1String("() const { return reinterpret_cast<const ")+typeName+
                                 ("&>(")+memberName+QLatin1String("); }\n") );
             }
@@ -285,9 +285,9 @@ CHeaderGenerator::writeRecord( const Record* record )
 
     mTextStream << QLatin1String("public:\n");
     foreach( const QString& getter, getters )
-        mTextStream << getter;
+        mTextStream << QLatin1String("    ") << getter;
     mTextStream << QLatin1String("private:\n");
     foreach( const QString& member, members )
-        mTextStream << member;
+        mTextStream << QLatin1String("    ") << member;
     mTextStream << QLatin1String("};\n");
 }
