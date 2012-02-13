@@ -28,6 +28,9 @@
 
 #include <QDebug>
 
+static const int recordSizeUndeclared = -1;
+
+
 FormatDocument*
 FormatParser::parse( QIODevice* device )
 {
@@ -170,8 +173,10 @@ FormatParser::readRecords()
         if( mReader.name() == QLatin1String("record") )
         {
             QScopedPointer<Record> record( new Record );
+
             const QXmlStreamAttributes attributes = mReader.attributes();
-            const int recordSize = attributes.value(QLatin1String("size")).toString().toInt();
+
+            // name & basename
             const QString recordName = attributes.value(QLatin1String("name")).toString();
             record->setName( recordName );
             const QStringRef recordBaseNameStringRef = attributes.value(QLatin1String("base"));
@@ -188,6 +193,12 @@ FormatParser::readRecords()
                 record->setSize( baseRecord->size() );
             }
 qDebug() << "record:" <<record->name()<<record->baseName();
+
+            // remember declared size
+            const QStringRef sizeStringRef = attributes.value(QLatin1String("size"));
+            const int declaredRecordSize =  sizeStringRef.isEmpty() ? recordSizeUndeclared :
+                                                                      sizeStringRef.toString().toInt();
+            // fields
             while( mReader.readNextStartElement() )
             {
                 if( mReader.name() == QLatin1String("field") )
@@ -381,11 +392,16 @@ qDebug() << "      variant:" <<variant.name() <<variant.typeId();
                 if( mReader.tokenType() != QXmlStreamReader::EndElement )
                     mReader.skipCurrentElement();
             }
-            if( recordSize != record->size() )
+
+            // check size against declared size
+            if( (declaredRecordSize != recordSizeUndeclared) &&
+                (declaredRecordSize != record->size()) )
             {
-                mReader.raiseError( QLatin1String("Size of the record ")+QString::number(recordSize)+QLatin1String(" does not match the size of its fields.") );
+                mReader.raiseError( QLatin1String("Size of the record ")+QString::number(declaredRecordSize)+QLatin1String(" does not match the size of its fields.") );
                 break;
             }
+
+            // store record
             mDocument->appendRecord(record.take());
         }
         else
