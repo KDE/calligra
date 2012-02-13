@@ -422,14 +422,28 @@ View::~View()
     delete m_estlabel;*/
 }
 
-// hackish way to get rid of unused docker, but as long as no official way exists...
+// hackish way to get rid of unused dockers, but as long as no official way exists...
 void View::hideToolDocker()
 {
     if ( shell() ) {
+        QStringList lst; lst << "KPlatoViewList" << "Scripting";
+        QStringList names;
         foreach ( QDockWidget *w, shell()->dockWidgets() ) {
-            if ( w->objectName() == "sharedtooldocker" ) {
+            if ( ! lst.contains( w->objectName() ) ) {
+                names << w->windowTitle();
                 w->setFeatures( QDockWidget::DockWidgetClosable );
                 w->hide();
+            }
+        }
+        foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+            KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+            if ( a ) {
+                QList<QAction*> actions = a->menu()->actions();
+                foreach ( QAction *act, actions ) {
+                    if ( names.contains( act->text() ) ) {
+                        a->removeAction( act );
+                    }
+                }
                 break;
             }
         }
