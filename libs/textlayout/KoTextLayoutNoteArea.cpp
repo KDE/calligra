@@ -32,7 +32,9 @@ public:
     }
     KoInlineNote *note;
     QTextLayout *textLayout;
+    QTextLayout *postLayout;
     qreal labelIndent;
+    bool isContinuedArea;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -43,6 +45,8 @@ KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea 
     Q_ASSERT(parent);
 
     d->note = note;
+    d->isContinuedArea = false;
+    d->postLayout = 0;
 }
 
 KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
@@ -54,6 +58,9 @@ void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::
 {
     KoTextLayoutArea::paint(painter, context);
     d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
+    if (d->postLayout) {
+        d->postLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
+    }
 }
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
@@ -64,7 +71,14 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     } else if (d->note->type() == KoInlineNote::Endnote) {
         notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
-    QString label = d->note->label();
+
+    QString label;
+    if (d->isContinuedArea)
+    {
+        label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
+    } else {
+        label = d->note->label();
+    }
     label.prepend(notesConfig->numberFormat().prefix());
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();
@@ -97,4 +111,37 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->labelIndent += pStyle.leftMargin();
 
     return KoTextLayoutArea::layout(cursor);
+}
+
+void KoTextLayoutNoteArea::postlayout(FrameIterator *cursor)
+{
+    KoOdfNotesConfiguration *notesConfig = KoTextDocument(d->note->textFrame()->document()).
+            styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    QString contNote = notesConfig->footnoteContinuationForward();
+    QPaintDevice *pd = documentLayout()->paintDevice();
+    QTextCharFormat format = cursor->it.currentBlock().charFormat();
+    QFont font(format.font(), pd);
+    font.setBold(true);
+    d->postLayout = new QTextLayout(contNote, font, pd);
+    QList<QTextLayout::FormatRange> layouts;
+    QTextLayout::FormatRange range;
+    range.start = 0;
+    range.length = contNote.length();
+    range.format = format;
+    range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    layouts.append(range);
+    d->postLayout->setAdditionalFormats(layouts);
+
+    QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+    //option.setTextDirection();
+    d->postLayout->setTextOption(option);
+    d->postLayout->beginLayout();
+    QTextLine line = d->postLayout->createLine();
+    line.setPosition(QPointF(right() - QFontMetricsF(font).width('x') * contNote.length(), bottom() - 10));
+    d->postLayout->endLayout();
+}
+
+void KoTextLayoutNoteArea::setAsContinuedArea(bool isContinuedArea)
+{
+    d->isContinuedArea = isContinuedArea;
 }

@@ -30,7 +30,8 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, QWidget *
           document(doc)
 {
     widget.setupUi(this);
-
+    widget.prefixLineEdit->setText("(");
+    widget.suffixLineEdit->setText(")");
     connect(widget.footnote,SIGNAL(toggled(bool)),this,SLOT(footnoteSetup(bool)));
     connect(widget.endnote,SIGNAL(toggled(bool)),this,SLOT(endnoteSetup(bool)));
     connect(widget.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(apply(QAbstractButton*)));
@@ -50,6 +51,8 @@ void NotesConfigurationDialog::footnoteSetup(bool on)
 {
     if(on) {
         widget.numStyleCombo->setCurrentIndex(0);
+        widget.prefixLineEdit->setText("(");
+        widget.suffixLineEdit->setText(")");
     }
 }
 
@@ -59,6 +62,8 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
     widget.beginAtCombo->setDisabled(on);
     if(on) {
         widget.numStyleCombo->setCurrentIndex(5);
+        widget.prefixLineEdit->setText("<");
+        widget.suffixLineEdit->setText(">");
     }
 
 }

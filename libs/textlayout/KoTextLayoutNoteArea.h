@@ -35,6 +35,10 @@ public:
 
     bool layout(FrameIterator *cursor);
 
+    void postlayout(FrameIterator *cursor);
+
+    void setAsContinuedArea(bool isContinuedArea);
+
 private:
     class Private;
     Private * const d;
