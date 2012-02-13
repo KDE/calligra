@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=Flow Visio Import Filter
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
+X-KDE-Import=application/vnd.visio
+X-KDE-Weight=1
+X-KDE-ServiceTypes=CalligraGenericFilter
