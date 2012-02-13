@@ -1080,7 +1080,7 @@ switch(argType)
     {
         const CdrObject3000ArgumentData* data = argsData.argPtr<CdrObject3000ArgumentData>( i );
         for(unsigned int i=0; i<sizeof(CdrObject3000ArgumentData); ++i )
-            argAsString = argAsString + QLatin1Char(' ')+QString::number(data->_unknown0()[i]);
+            argAsString = argAsString + QLatin1Char(' ')+QString::number(data->_unknown0(i));
         argTypeAsString = QLatin1String("some 24 bytes");
         break;
     }

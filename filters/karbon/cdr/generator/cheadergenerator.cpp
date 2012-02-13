@@ -27,14 +27,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSet>
 
-bool
-CHeaderGenerator::write( FormatDocument* document, QIODevice* device )
-{
-    CHeaderGenerator generator( document, device );
 
-    return true; // TODO: how to learn about error?
-}
-
+static const int maxReturnByValueTypeSize = 4;
 
 static
 const QString&
@@ -68,6 +62,16 @@ codeName( const QString& typeName )
 
     return (it!=mTypeTable.constEnd()) ? it.value() : typeName;
 }
+
+
+bool
+CHeaderGenerator::write( FormatDocument* document, QIODevice* device )
+{
+    CHeaderGenerator generator( document, device );
+
+    return true; // TODO: how to learn about error?
+}
+
 
 CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device )
   : mDocument( document)
@@ -164,9 +168,15 @@ CHeaderGenerator::writeRecord( const Record* record )
             // member
             members.append( QLatin1String("    ")+typeName+QLatin1String(" __")+plainField->name()+
                             QLatin1String(";\n") );
-            // access method, TODO: for POD return by value
-            getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+plainField->name() +
-                            QLatin1String("() const { return __")+plainField->name()+QLatin1String("; }\n") );
+            // access method
+            if( mDocument->sizeOfType(plainField->typeId()) <= maxReturnByValueTypeSize )
+                // return by value
+                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+plainField->name() +
+                                QLatin1String("() const { return __")+plainField->name()+QLatin1String("; }\n") );
+            else
+                // return by reference
+                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+plainField->name() +
+                                QLatin1String("() const { return __")+plainField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == ArrayFieldId )
         {
@@ -178,7 +188,17 @@ CHeaderGenerator::writeRecord( const Record* record )
                             QLatin1Char('[')+QString::number(arrayField->arraySize())+QLatin1String("];\n") );
             // access method
             getters.append( QLatin1String("    const ")+typeName+QLatin1String("* ")+arrayField->name() +
-                            QLatin1String("() const { return __")+arrayField->name()+QLatin1String("; }\n") );
+                            QLatin1String("Ptr() const { return __")+arrayField->name()+QLatin1String("; }\n") );
+            if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
+                // return by value
+                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+arrayField->name()+
+                                QLatin1String("( int i ) const { return __")+arrayField->name()+
+                                QLatin1String("[i]; }\n") );
+            else
+                // return by reference
+                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+arrayField->name()+
+                                QLatin1String("( int i ) const { return __")+arrayField->name()+
+                                QLatin1String("[i]; }\n") );
         }
         else if( field->typeId() == DynArrayFieldId )
         {
@@ -189,9 +209,18 @@ CHeaderGenerator::writeRecord( const Record* record )
             members.append( QLatin1String("    ")+typeName+QLatin1String(" __")+arrayField->name()+
                             QLatin1String(";\n") );
             // access method
-            getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
-                            QLatin1String("( int i ) const { return (&__")+arrayField->name()+
-                            QLatin1String(")[i]; }\n") );
+            getters.append( QLatin1String("    const ")+typeName+QLatin1String("* ")+arrayField->name() +
+                            QLatin1String("Ptr() const { return &__")+arrayField->name()+QLatin1String("; }\n") );
+            if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
+                // return by value
+                getters.append( QLatin1String("    ")+typeName+QLatin1Char(' ')+arrayField->name()+
+                                QLatin1String("( int i ) const { return (&__")+arrayField->name()+
+                                QLatin1String(")[i]; }\n") );
+            else
+                // return by reference
+                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+arrayField->name()+
+                                QLatin1String("( int i ) const { return (&__")+arrayField->name()+
+                                QLatin1String(")[i]; }\n") );
         }
         else if( field->typeId() == Text8BitFieldId )
         {
