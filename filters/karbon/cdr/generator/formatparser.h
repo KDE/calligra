@@ -26,6 +26,7 @@
 
 class FormatDocument;
 class QIODevice;
+class QXmlStreamAttributes;
 
 
 class FormatParser
@@ -40,6 +41,9 @@ private:
     void readTypeDefs();
     void readEnums();
     void readRecords();
+
+    bool isDeclaredStartOffsetCorrect( const QXmlStreamAttributes& attributes, int expectedStartOffset );
+    bool isDeclaredEndOffsetCorrect( const QXmlStreamAttributes& attributes, int expectedEndOffset );
 private:
     QXmlStreamReader mReader;
     FormatDocument* mDocument;
