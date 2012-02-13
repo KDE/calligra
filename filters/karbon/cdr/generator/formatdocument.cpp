@@ -75,9 +75,17 @@ FormatDocument::sizeOfType(const QString& typeName) const
         struct BuiltInTypeDatum { char const* name; int size; };
         static const BuiltInTypeDatum builtInTypeData[] =
         {
-            {"char", 1},
-            {"unsigned char", 1},
-            {"float", 4}
+            {"char",   1},
+            {"uchar",  1},
+            {"sint8",  1},
+            {"uint8",  1},
+            {"sint16", 2},
+            {"uint16", 2},
+            {"sint32", 4},
+            {"uint32", 4},
+            {"sint64", 8},
+            {"uint64", 8},
+            {"float",  4}
         };
         static const int builtInTypeDataSize = sizeof( builtInTypeData ) / sizeof( builtInTypeData[0] );
         for( int i = 0; i < builtInTypeDataSize; ++i)

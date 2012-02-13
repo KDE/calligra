@@ -35,6 +35,40 @@ CHeaderGenerator::write( FormatDocument* document, QIODevice* device )
     return true; // TODO: how to learn about error?
 }
 
+
+static
+const QString&
+codeName( const QString& typeName )
+{
+    static QHash<QString,QString> mTypeTable;
+    if( mTypeTable.isEmpty() )
+    {
+        struct BuiltInTypeDatum { char const* name; char const* codeName; };
+        static const BuiltInTypeDatum builtInTypeData[] =
+        {
+            {"uchar",  "unsigned char"},
+            {"sint8",  "qint8"},
+            {"uint8",  "quint8"},
+            {"sint16", "qint16"},
+            {"uint16", "quint16"},
+            {"sint32", "qint32"},
+            {"uint32", "quint32"},
+            {"sint64", "qint64"},
+            {"uint64", "quint64"}
+        };
+        static const int builtInTypeDataSize = sizeof( builtInTypeData ) / sizeof( builtInTypeData[0] );
+        for( int i = 0; i < builtInTypeDataSize; ++i )
+        {
+            const BuiltInTypeDatum& builtInTypeDatum = builtInTypeData[i];
+            mTypeTable.insert( QLatin1String(builtInTypeDatum.name), QLatin1String(builtInTypeDatum.codeName) );
+        }
+    }
+
+    const QHash<QString,QString>::ConstIterator it = mTypeTable.find( typeName );
+
+    return (it!=mTypeTable.constEnd()) ? it.value() : typeName;
+}
+
 CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device )
   : mDocument( document)
   , mTextStream( device )
@@ -47,6 +81,8 @@ CHeaderGenerator::CHeaderGenerator( FormatDocument* document, QIODevice* device 
     mTextStream << QLatin1String("#define ")<<upperName<<QLatin1Char('\n');
 
     QSet<QString> includes;
+    // add custom include for q-typedefs
+    includes.insert( QLatin1String("QtCore/QtGlobal") );
     foreach( const IncludedType& includedType, mDocument->includedTypes() )
         includes.insert(includedType.includeName());
     writeIncludes( includes.toList() );
@@ -79,7 +115,7 @@ CHeaderGenerator::writeTypeDefs( const QHash<QString,QString>& typeDefByName )
     QHash<QString,QString>::ConstIterator it = begin;
     for( ; it != end; ++it )
     {
-        mTextStream << QLatin1String("typedef ") << it.value() << QLatin1String(" ") << it.key() << QLatin1String(";\n");;
+        mTextStream << QLatin1String("typedef ") << codeName(it.value()) << QLatin1String(" ") << it.key() << QLatin1String(";\n");;
     }
 }
 
@@ -123,34 +159,37 @@ CHeaderGenerator::writeRecord( const Record* record )
         if( field->typeId() == PlainFieldId )
         {
             const PlainRecordField* plainField = static_cast<const PlainRecordField*>( field );
+            const QString& typeName = codeName(plainField->typeId());
 
             // member
-            members.append( QLatin1String("    ")+plainField->typeId()+QLatin1String(" __")+plainField->name()+
+            members.append( QLatin1String("    ")+typeName+QLatin1String(" __")+plainField->name()+
                             QLatin1String(";\n") );
             // access method, TODO: for POD return by value
-            getters.append( QLatin1String("    const ")+plainField->typeId()+QLatin1String("& ")+plainField->name() +
+            getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+plainField->name() +
                             QLatin1String("() const { return __")+plainField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == ArrayFieldId )
         {
             const ArrayRecordField* arrayField = static_cast<const ArrayRecordField*>( field );
+            const QString& typeName = codeName(arrayField->typeId());
 
             // member
-            members.append( QLatin1String("    ")+arrayField->typeId()+QLatin1String(" __")+arrayField->name()+
+            members.append( QLatin1String("    ")+typeName+QLatin1String(" __")+arrayField->name()+
                             QLatin1Char('[')+QString::number(arrayField->arraySize())+QLatin1String("];\n") );
             // access method
-            getters.append( QLatin1String("    const ")+arrayField->typeId()+QLatin1String("* ")+arrayField->name() +
+            getters.append( QLatin1String("    const ")+typeName+QLatin1String("* ")+arrayField->name() +
                             QLatin1String("() const { return __")+arrayField->name()+QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynArrayFieldId )
         {
             const DynArrayRecordField* arrayField = static_cast<const DynArrayRecordField*>( field );
+            const QString& typeName = codeName(arrayField->typeId());
 
             // member
-            members.append( QLatin1String("    ")+arrayField->typeId()+QLatin1String(" __")+arrayField->name()+
+            members.append( QLatin1String("    ")+typeName+QLatin1String(" __")+arrayField->name()+
                             QLatin1String(";\n") );
             // access method
-            getters.append( arrayField->typeId()+QLatin1Char(' ')+arrayField->name()+
+            getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
                             QLatin1String("( int i ) const { return (&__")+arrayField->name()+
                             QLatin1String(")[i]; }\n") );
         }
@@ -194,8 +233,9 @@ CHeaderGenerator::writeRecord( const Record* record )
             // access methods
             foreach( const RecordFieldUnionVariant& variant, unionField->variants() )
             {
-                getters.append( QLatin1String("    const ")+variant.typeId()+QLatin1String("& ")+variant.name() +
-                                QLatin1String("() const { return reinterpret_cast<const ")+variant.typeId()+
+                const QString& typeName = codeName(variant.typeId());
+                getters.append( QLatin1String("    const ")+typeName+QLatin1String("& ")+variant.name() +
+                                QLatin1String("() const { return reinterpret_cast<const ")+typeName+
                                 ("&>(__")+unionField->name()+QLatin1String("); }\n") );
             }
         }
