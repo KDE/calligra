@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_PASTE_COMMAND_TEST
 #define CALLIGRA_TABLES_PASTE_COMMAND_TEST
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

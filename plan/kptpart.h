@@ -33,7 +33,7 @@
 
 #include "KoDocument.h"
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 #include <KDialog>
 

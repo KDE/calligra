@@ -30,7 +30,7 @@
 #include "kptappointment.h"
 #include "kptcalendar.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QHash>
 #include <QString>
 #include <QList>

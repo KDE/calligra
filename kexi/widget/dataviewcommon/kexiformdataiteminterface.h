@@ -22,7 +22,7 @@
 
 #include <widget/utils/kexidisplayutils.h>
 #include <core/kexidataiteminterface.h>
-#include <qwidget.h>
+#include <QWidget>
 
 namespace KexiDB
 {

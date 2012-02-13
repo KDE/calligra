@@ -26,7 +26,7 @@
 #include <KoFilter.h>
 
 #include <QHash>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QByteArray>
 #include <KoXmlReader.h>
 #include <QVariantList>

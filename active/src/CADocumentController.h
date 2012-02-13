@@ -22,7 +22,7 @@
 #ifndef CADOCUMENTCONTROLLER_H
 #define CADOCUMENTCONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class CAAbstractDocumentHandler;
 class CACanvasController;

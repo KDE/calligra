@@ -20,8 +20,8 @@
 #ifndef MATRIXDATAMODEL_H
 #define MATRIXDATAMODEL_H
 
-#include <QtCore/QAbstractTableModel>
-#include <QtCore/QVector>
+#include <QAbstractTableModel>
+#include <QVector>
 
 class MatrixDataModel : public QAbstractTableModel
 {

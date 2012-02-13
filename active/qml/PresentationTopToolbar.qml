@@ -65,6 +65,14 @@ Item
                 }
             }
 
+            PlasmaComponents.Label {
+                id: currentNumber
+                height: parent.height
+                width: height
+
+                text: "Slide " + root.documentController.documentHandler().currentSlideNumber + " of " + root.documentController.documentHandler().totalNumberOfSlides
+            }
+
             PlasmaComponents.ToolButton {
                 id: startPresentationButton
                 iconSource: "view-presentation"

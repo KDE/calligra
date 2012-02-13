@@ -23,7 +23,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QPainter>
-#include <QtGui/QDesktopWidget>
+#include <QDesktopWidget>
 
 #include <kdebug.h>
 #include <kcursor.h>

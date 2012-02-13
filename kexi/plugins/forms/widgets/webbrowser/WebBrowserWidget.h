@@ -20,14 +20,14 @@
 #ifndef WEBBROWSERWIDGET_H
 #define WEBBROWSERWIDGET_H
 #include <QProgressBar>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "widgetfactory.h"	
 #include "container.h"
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtCore/QUrl>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QUrl>
 #include<QWebView>
 #include <kpushbutton.h>
   

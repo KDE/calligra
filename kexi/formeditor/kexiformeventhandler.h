@@ -20,7 +20,7 @@
 #ifndef KEXIFORMEVENTHANDLER_H
 #define KEXIFORMEVENTHANDLER_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kaction.h>
 #include <kexi_export.h>
 

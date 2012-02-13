@@ -55,7 +55,7 @@
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QRectF>
 
 class KarbonDocument::Private

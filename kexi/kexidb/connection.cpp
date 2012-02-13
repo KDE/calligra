@@ -39,10 +39,10 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
 
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qpointer.h>
-#include <qdom.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QPointer>
+#include <QDomDocument>
 
 #include <klocale.h>
 #include <kdebug.h>

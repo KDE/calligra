@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 #include <KDebug>
-#include <QtCore/QBuffer>
+#include <QBuffer>
 #include <math.h>
 
 /*

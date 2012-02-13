@@ -20,7 +20,7 @@
 #ifndef NOTESDIALOG_H
 #define NOTESDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QFormLayout>
 #include <QLabel>
 #include <QApplication>

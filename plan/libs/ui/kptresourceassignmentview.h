@@ -31,23 +31,23 @@
 #include <QVBoxLayout>
 #include <QTreeWidget>
 
-#include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QTableWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLineEdit>
+#include <QVariant>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QSpinBox>
+#include <QLineEdit>
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kptitemmodelbase.h>
 
 #include <kactionselector.h>

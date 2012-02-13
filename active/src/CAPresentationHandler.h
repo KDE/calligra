@@ -31,6 +31,8 @@ class CAPresentationHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
+    Q_PROPERTY(int currentSlideNumber READ currentSlideNumber NOTIFY currentSlideNumChanged)
+    Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides)
 
 public:
     explicit CAPresentationHandler (CADocumentController* documentController);
@@ -45,6 +47,9 @@ public:
 
     int slideshowDelay() const;
     void setSlideshowDelay(int delay);
+
+    int currentSlideNumber() const;
+    int totalNumberOfSlides() const;
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
@@ -61,6 +66,7 @@ signals:
     void slideshowDelayChanged();
     void slideshowStarted();
     void slideshowStopped();
+    void currentSlideNumChanged();
 
 protected:
     virtual KoDocument* document();

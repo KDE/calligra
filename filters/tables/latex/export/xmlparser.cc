@@ -23,7 +23,7 @@
 #include <KoStore.h>
 
 #include "xmlparser.h"
-#include "qfile.h"
+#include "QFile"
 
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;

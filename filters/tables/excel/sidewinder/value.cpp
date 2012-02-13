@@ -33,14 +33,20 @@ public:
 
     Value::Type type;
 
+    struct RichTextContainer {
+        QString s;
+        std::map<unsigned, FormatFont> formatRuns;
+        RichTextContainer(const QString &s, const std::map<unsigned, FormatFont> &formatRuns) : s(s), formatRuns(formatRuns) {}
+    };
+
     // someday move to use union to reduce memory consumption
     union {
         bool b;
         int i;
         double f;
+        QString *s;
+        RichTextContainer *r;
     };
-    QString s;
-    std::map<unsigned, FormatFont> formatRuns;
 
     // create empty data
     ValueData() {
@@ -48,7 +54,8 @@ public:
         b = false;
         i = 0;
         f = 0.0;
-        s = QString::null;
+        s = 0;
+        r = 0;
         type = Value::Empty;
         ref();
     }
@@ -56,6 +63,16 @@ public:
     // destroys data
     ~ValueData() {
         if (this == s_null) s_null = 0;
+        switch(type) {
+            case Value::RichText:
+                delete r;
+                break;
+            case Value::Error:
+            case Value::String:
+                delete s;
+                break;
+            default: break;
+        }
     }
 
     void ref() {
@@ -267,8 +284,20 @@ double Value::asFloat() const
 void Value::setValue(const QString& s)
 {
     detach();
+    switch(type()) {
+        case RichText:
+            delete d->r;
+            d->r = 0;
+            break;
+        case Error:
+        case String:
+            delete d->s;
+            d->s = 0;
+            break;
+        default: break;
+    }
     d->type = String;
-    d->s = s;
+    d->s = new QString(s);
 }
 
 // get the value as string
@@ -277,10 +306,14 @@ QString Value::asString() const
     QString result;
 
     switch(type()) {
-        case Value::Error:
-        case Value::String:
-        case Value::RichText:
-            result = d->s;
+        case RichText:
+            if (d->r)
+                result = d->r->s;
+            break;
+        case Error:
+        case String:
+            if (d->s)
+                result = *d->s;
             break;
         case Value::Boolean:
             result = (asBoolean() ? "True" : "False");
@@ -308,9 +341,20 @@ QString Value::asString() const
 void Value::setValue(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
 {
     detach();
+    switch(type()) {
+        case RichText:
+            delete d->r;
+            d->r = 0;
+            break;
+        case Error:
+        case String:
+            delete d->s;
+            d->s = 0;
+            break;
+        default: break;
+    }
     d->type = RichText;
-    d->s = s;
-    d->formatRuns = formatRuns;
+    d->r = new ValueData::RichTextContainer(s, formatRuns);
 }
 
 // get the format runs
@@ -318,8 +362,9 @@ std::map<unsigned, FormatFont> Value::formatRuns() const
 {
     std::map<unsigned, FormatFont> result;
 
-    if (type() == Value::RichText)
-        result = d->formatRuns;
+    if (type() == RichText)
+        if (d->r)
+            result = d->r->formatRuns;
 
     return result;
 }
@@ -328,8 +373,20 @@ std::map<unsigned, FormatFont> Value::formatRuns() const
 void Value::setError(const QString& msg)
 {
     detach();
+    switch(type()) {
+        case RichText:
+            delete d->r;
+            d->r = 0;
+            break;
+        case Error:
+        case String:
+            delete d->s;
+            d->s = 0;
+            break;
+        default: break;
+    }
     d->type = Error;
-    d->s = msg;
+    d->s = new QString(msg);;
 }
 
 // get error message
@@ -338,7 +395,8 @@ QString Value::errorMessage() const
     QString result;
 
     if (type() == Value::Error)
-        result = d->s;
+        if (d->s)
+            result = *d->s;
 
     return result;
 }
@@ -411,15 +469,21 @@ void Value::detach()
     if (d->isNull() || (d->count > 1)) {
         ValueData* n;
         n = new ValueData;
-
         n->type = d->type;
         switch (n->type) {
         case Empty: break;
         case Boolean: n->b = d->b; break;
         case Integer: n->i = d->i; break;
         case Float:   n->f = d->f; break;
-        case String:  n->s = d->s; break;
-        case Error:   n->s = d->s; break;
+        case RichText:
+            if (d->r)
+                n->r = new ValueData::RichTextContainer(d->r->s, d->r->formatRuns);
+            break;
+        case String:
+        case Error:
+            if (d->s)
+                n->s = new QString(*d->s);
+            break;
         default: break;
         }
 

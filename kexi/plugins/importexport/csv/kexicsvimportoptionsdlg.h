@@ -21,7 +21,7 @@
 #define KEXICSVOPTIONSDIALOG_H
 
 #include <kdialog.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 class KexiCharacterEncodingComboBox;
 class QComboBox;

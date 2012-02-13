@@ -33,10 +33,10 @@
 
 #include <KLocale>
 #include <KGlobal>
-#include <QtGui/QToolButton>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMenu>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QMenu>
 
 const int FixedWidgetSize = 20;
 const int ScrollUpdateIntervall = 25;

@@ -24,11 +24,14 @@
 
 #include "CAAbstractDocumentHandler.h"
 
-#include <QtCore/QSize>
+#include <QSize>
 
 class CASpreadsheetHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
+    Q_PROPERTY(int currentSheetNumber READ currentSheetNumber NOTIFY currentSheetNumChanged)
+    Q_PROPERTY(int sheetCount READ sheetCount NOTIFY sheetCountChanged)
+
 protected:
     virtual KoDocument* document();
 
@@ -44,6 +47,8 @@ public:
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
 
+    int currentSheetNumber() const;
+
 public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);
     void updateCanvas();
@@ -51,6 +56,10 @@ public slots:
 
     void nextSheet();
     void previousSheet();
+
+signals:
+    void currentSheetNumChanged();
+    void sheetCountChanged();
 
 private:
     class Private;

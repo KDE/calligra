@@ -24,7 +24,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QSlider>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QStyle>
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 #include <QTreeWidget>

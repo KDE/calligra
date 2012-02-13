@@ -37,8 +37,8 @@
 #include <KInputDialog>
 #include <KDebug>
 
-#include <QtGui/QGraphicsItem>
-#include <QtCore/QSet>
+#include <QGraphicsItem>
+#include <QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
         : QWidget(parent), m_scene(new FilterEffectScene(this))

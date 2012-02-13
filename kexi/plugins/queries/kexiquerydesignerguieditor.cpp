@@ -22,7 +22,7 @@
 
 #include <QLayout>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QRegExp>
 #include <QSplitter>
 #include <QDragMoveEvent>

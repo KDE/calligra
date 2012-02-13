@@ -21,7 +21,7 @@
 #define _KARBONPENCILTOOL_H_
 
 #include <KoToolBase.h>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 class KoPathShape;
 class KoLineBorder;

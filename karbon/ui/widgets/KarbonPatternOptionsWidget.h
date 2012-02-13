@@ -24,7 +24,7 @@
 
 #include <KoPatternBackground.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget {
     Q_OBJECT
