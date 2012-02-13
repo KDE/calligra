@@ -325,6 +325,22 @@ qDebug() << "  bytestring:" << textField->name() << textField->length();
                     record->appendField( dynTextField, 0 );
 qDebug() << "  dynbytestring:" <<dynTextField->name();
                 }
+                else if( mReader.name() == QLatin1String("dynblob") )
+                {
+                    const QXmlStreamAttributes attributes = mReader.attributes();
+                    const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    // check offsets
+                    const int startOffset = attributes.value(QLatin1String("start")).toString().toInt();
+                    if( startOffset != record->size() )
+                    {
+                        mReader.raiseError( QLatin1String("Startoffset ")+QString::number(startOffset)+QLatin1String(" is not aligned to last field.") );
+                        break;
+                    }
+
+                    DynBlobRecordField* dynBlobField = new DynBlobRecordField( fieldName );
+                    record->appendField( dynBlobField, 0 );
+qDebug() << "  dynblob:" <<dynBlobField->name();
+                }
                 else if( mReader.name() == QLatin1String("extension") )
                 {
                     const QXmlStreamAttributes attributes = mReader.attributes();

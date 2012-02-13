@@ -175,6 +175,16 @@ CHeaderGenerator::writeRecord( const Record* record )
             getters.append( QLatin1String("    const char* ")+textField->name()+
                             QLatin1String("() const { return &__")+textField->name()+QLatin1String("; }\n") );
         }
+        else if( field->typeId() == DynBlobFieldId )
+        {
+            const DynBlobRecordField* blobField = static_cast<const DynBlobRecordField*>( field );
+
+            // member
+            members.append( QLatin1String("    char __")+blobField->name()+QLatin1String(";\n") );
+            // access method
+            getters.append( QLatin1String("    const char* ")+blobField->name()+
+                            QLatin1String("() const { return &__")+blobField->name()+QLatin1String("; }\n") );
+        }
         else if( field->typeId() == UnionFieldId )
         {
             const UnionRecordField* unionField = static_cast<const UnionRecordField*>( field );

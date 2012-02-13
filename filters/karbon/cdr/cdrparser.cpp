@@ -1239,7 +1239,7 @@ CdrParser::readTextObject( const CdrArgumentWithTypeListData& argsData )
         {
             const Cdr4TextData* textData = argsData.argPtr<Cdr4TextData>( i );
             QString text;
-            const char* rawCharData = &(textData->charDataStart());
+            const char* rawCharData = textData->charData();
             for (unsigned int j=0; j<textData->length(); j++)
             {
                 const Cdr4CharData* charData = reinterpret_cast<const Cdr4CharData*>(rawCharData);

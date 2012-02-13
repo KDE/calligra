@@ -878,7 +878,7 @@ garbage data? undo data?
       <field start="4" end="5" name="dataSize" type="quint16">
         <description>The size of the complete data, including mLength and the unknown field.</description>
       </field>
-      <extension start="6" name="charDataStart" type="char">
+      <dynblob start="6" name="charData">
           <description>now the chars, have two \0 bytes between them,
            one before the first, not sure if the first has meaning or belongs to char
            assume this for now, see Cdr4CharData
@@ -887,7 +887,7 @@ garbage data? undo data?
            char things are somehow different. Then 22 bytes come, Cdr4CharAdditionalData,
            then after that the next char data.
            linebreak is with 0D 0A chars</description>
-      </extension>
+      </dynblob>
     </record>
   </records>
 
