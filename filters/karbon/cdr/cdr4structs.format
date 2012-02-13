@@ -101,8 +101,8 @@ T arg( int i ) const
       </method>
       <method>
 <code><![CDATA[template<typename T>
-const T* argPtr( int i ) const
-{ return reinterpret_cast<const T*>( reinterpret_cast<const char*>(this)+argOffsets()[i] ); }]]></code>
+const T& argRef( int i ) const
+{ return *reinterpret_cast<const T*>( reinterpret_cast<const char*>(this)+argOffsets()[i] ); }]]></code>
       </method>
 
       <field start="0" end="1" name="chunkLength" type="uint16">
