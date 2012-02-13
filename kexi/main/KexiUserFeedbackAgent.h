@@ -36,12 +36,14 @@ public:
 
     void setEnabled(bool enabled);
 
-    void sendData();
+    bool isEnabled() const;
 
 private slots:
     void sendJobFinished(KJob* job);
 
-protected:
+private:
+    void sendData();
+
     class Private;
     Private * const d;
 };

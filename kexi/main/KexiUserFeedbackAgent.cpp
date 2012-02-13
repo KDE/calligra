@@ -33,11 +33,17 @@
 #include <QProcess>
 #include <QUuid>
 
-//! Version of feedback data format.
-//! Changelog:
-//! *1.0: initial version
-//! *1.1: added JSON-compatible character escaping; added uid
-static const char KexiUserFeedbackAgent_VERSION[] = "1.1";
+#if defined HAVE_UNAME || defined Q_WS_WIN
+# include <sys/utsname.h>
+#endif
+
+/*! Version of the feedback data format.
+ Changelog:
+ 1.0: initial version
+ 1.1: added JSON-compatible character escaping; added uid
+ 1.2: added JSON-compatible character escaping; added os_release, os_machine, screen_count
+*/
+static const char KexiUserFeedbackAgent_VERSION[] = "1.2";
 
 static const char KexiUserFeedbackAgent_URL[] = "http://www.kexi-project.org/feedback/send";
 
@@ -47,32 +53,27 @@ class KexiUserFeedbackAgent::Private
 {
 public:
     Private()
-     : enabled(false)
+     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+     , sentDataInThisSession(false)
     {
     }
+    
+    void updateData();
+    
+    KConfigGroup configGroup;
     bool enabled;
+    bool sentDataInThisSession;
     QList<DataPair> data;
     //! Unique user ID handy if used does not want to disclose username
     //! but agrees to be identified as unique user of the application.
     QUuid uid;
 };
 
-KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
- : QObject(parent), d(new Private)
+void KexiUserFeedbackAgent::Private::updateData()
 {
-    KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
-    
-    // load or create uid
-    QString uidString = configGroup.readEntry("uid", QString());
-    d->uid = QUuid(uidString);
-    if (d->uid.isNull()) {
-        d->uid = QUuid::createUuid();
-        configGroup.writeEntry("uid", d->uid.toString());
-    }
-    
-    #define ADD(a, b) d->data.append(qMakePair(QByteArray(a), QVariant(b)))
+    #define ADD(a, b) data.append(qMakePair(QByteArray(a), QVariant(b)))
     ADD("ver", KexiUserFeedbackAgent_VERSION);
-    ADD("uid", d->uid.toString());
+    ADD("uid", uid.toString());
     ADD("app_ver", Kexi::versionString());
     ADD("app_ver_major", Kexi::versionMajor());
     ADD("app_ver_minor", Kexi::versionMinor());
@@ -113,10 +114,19 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
     ADD("os", "other");
 #endif
 
+#if defined HAVE_UNAME || defined Q_WS_WIN
+    struct utsname buf;
+    if (uname(&buf) == 0) {
+        ADD("os_release", buf.release);
+        ADD("os_machine", buf.machine);
+    }
+#endif
+
     QSize screen(QApplication::desktop()->screenGeometry(
                            KexiMainWindowIface::global()->thisWidget()).size());
     ADD("screen_width", screen.width());
     ADD("screen_height", screen.height());
+    ADD("screen_count", QApplication::desktop()->screenCount());
 
     ADD("country", KGlobal::locale()->country());
     ADD("language", KGlobal::locale()->language());
@@ -124,8 +134,25 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
     ADD("short_date_format", KGlobal::locale()->dateFormatShort());
     ADD("time_format", KGlobal::locale()->timeFormat());
     ADD("right_to_left", QApplication::isRightToLeft());
+#undef ADD
+}
 
-    sendData();
+// ---
+
+KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
+ : QObject(parent), d(new Private)
+{
+    d->enabled = d->configGroup.readEntry("Enabled", false);
+    
+    // load or create uid
+    QString uidString = d->configGroup.readEntry("Uid", QString());
+    d->uid = QUuid(uidString);
+    if (d->uid.isNull()) {
+        d->uid = QUuid::createUuid();
+        d->configGroup.writeEntry("Uid", d->uid.toString());
+    }
+
+    setEnabled(d->enabled); // to update data
 }
 
 KexiUserFeedbackAgent::~KexiUserFeedbackAgent()
@@ -136,6 +163,18 @@ KexiUserFeedbackAgent::~KexiUserFeedbackAgent()
 void KexiUserFeedbackAgent::setEnabled(bool enabled)
 {
     d->enabled = enabled;
+    d->configGroup.writeEntry("Enabled", d->enabled);
+    if (d->enabled) {
+        if (!d->sentDataInThisSession) {
+            d->updateData();
+            sendData();
+        }
+    }
+}
+
+bool KexiUserFeedbackAgent::isEnabled() const
+{
+    return d->enabled;
 }
 
 //! Escapes string for json format (see http://json.org/string.gif).
@@ -184,4 +223,5 @@ void KexiUserFeedbackAgent::sendJobFinished(KJob* job)
     }
     KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
     kDebug() << sendJob->data();
+    d->sentDataInThisSession = true;
 }
