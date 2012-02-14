@@ -36,10 +36,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KNumInput>
 #include <KColorButton>
 
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QGridLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QGridLayout>
 
 KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* name)
 {

@@ -19,7 +19,7 @@
 
 #include <QApplication>
 #include <QDateTime> // For creation date/time.
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QString>
 #include <QList>

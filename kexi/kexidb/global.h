@@ -21,7 +21,7 @@
 #define KEXIDB_GLOBAL_H
 
 #include "kexidb_export.h"
-#include <qstring.h>
+#include <QString>
 
 //global public definitions
 

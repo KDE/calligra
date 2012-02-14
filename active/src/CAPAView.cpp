@@ -35,7 +35,7 @@
 #include <KoSelection.h>
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
-#include <qgraphicsitem.h>
+#include <QGraphicsItem>
 #include <KoCanvasController.h>
 #include <KoPACanvasItem.h>
 #include <KoZoomHandler.h>

@@ -21,9 +21,9 @@
 #include "pqxxmigrate.h"
 #include "pg_type.h"
 
-#include <qstring.h>
+#include <QString>
 #include <kdebug.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 //I maybe should not use stl?
 #include <string>

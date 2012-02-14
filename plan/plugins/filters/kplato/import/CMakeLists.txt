@@ -13,7 +13,7 @@ set(kplatoimport_PART_SRCS
 
 kde4_add_plugin(plankplatoimport ${kplatoimport_PART_SRCS})
 
-target_link_libraries(plankplatoimport planprivate kplatokernel komain ${LIBKCAL_LIBRARY})
+target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 
 install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

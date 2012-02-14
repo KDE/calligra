@@ -22,8 +22,8 @@
 
 #include "global.h"
 #include <kexiutils/validator.h>
-#include <qstring.h>
-#include <qpointer.h>
+#include <QString>
+#include <QPointer>
 
 namespace KexiDB
 {

@@ -39,8 +39,8 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 
-#include <QtCore/QSize>
-#include <QtCore/QTimer>
+#include <QSize>
+#include <QTimer>
 
 class CAPresentationHandler::Private
 {
@@ -140,17 +140,19 @@ void CAPresentationHandler::nextSlide()
 
     if (d->currentSlideNum >= d->document->pageCount())
         d->currentSlideNum = d->document->pageCount() - 1;
+    emit currentSlideNumChanged();
     d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
     zoomToFit();
 }
 
 void CAPresentationHandler::previousSlide()
 {
-    d->currentSlideNum--;
-    emit currentSlideNumChanged();
+    if (d->currentSlideNum > 0)
+    {
+        d->currentSlideNum--;
+        emit currentSlideNumChanged();
+    }
 
-    if (d->currentSlideNum < 0)
-        d->currentSlideNum = 0;
     d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
     zoomToFit();
 }
@@ -262,6 +264,11 @@ void CAPresentationHandler::advanceSlideshow()
 int CAPresentationHandler::currentSlideNumber() const
 {
     return d->currentSlideNum + 1;
+}
+
+int CAPresentationHandler::totalNumberOfSlides() const
+{
+     return d->document->pageCount();
 }
 
 #include "CAPresentationHandler.moc"

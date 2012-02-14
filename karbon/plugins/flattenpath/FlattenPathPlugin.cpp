@@ -43,9 +43,9 @@
 #include <kicon.h>
 #include <klocale.h>
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QHBoxLayout>
 
 
 K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)

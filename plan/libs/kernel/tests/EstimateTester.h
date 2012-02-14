@@ -20,7 +20,7 @@
 #ifndef KPlato_EstimateTester_h
 #define KPlato_EstimateTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {

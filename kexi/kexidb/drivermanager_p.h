@@ -22,7 +22,7 @@
 
 #include "object.h"
 
-#include <qobject.h>
+#include <QObject>
 
 namespace KexiDB
 {

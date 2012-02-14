@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QCheckBox>
+
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QFrame>

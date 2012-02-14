@@ -17,7 +17,7 @@
 
 #include "kplatotj_export.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QMap>
 
 #include "VacationList.h"

@@ -20,9 +20,9 @@
 
 #include "KexiMobileMainWindow.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 #include <QHBoxLayout>
 
 #include "KexiMobileWidget.h"

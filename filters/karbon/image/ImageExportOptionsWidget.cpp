@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PngExportOptionsWidget.h"
+#include "ImageExportOptionsWidget.h"
 
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoDpi.h>
 
-PngExportOptionsWidget::PngExportOptionsWidget(QSizeF pointSize, QWidget * parent)
+ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget * parent)
         : QWidget(parent), m_pointSize(pointSize)
 {
     KoUnit unit;
@@ -63,24 +63,24 @@ PngExportOptionsWidget::PngExportOptionsWidget(QSizeF pointSize, QWidget * paren
     connect(widget.unitAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectChanged(bool)));
 }
 
-void PngExportOptionsWidget::setUnit(const KoUnit &unit)
+void ImageExportOptionsWidget::setUnit(const KoUnit &unit)
 {
     widget.unitWidth->setUnit(unit);
     widget.unitHeight->setUnit(unit);
     widget.unit->setCurrentIndex(unit.indexInList());
 }
 
-QSize PngExportOptionsWidget::pixelSize() const
+QSize ImageExportOptionsWidget::pixelSize() const
 {
     return QSize(widget.pxWidth->value(), widget.pxHeight->value());
 }
 
-QSizeF PngExportOptionsWidget::pointSize() const
+QSizeF ImageExportOptionsWidget::pointSize() const
 {
     return QSizeF(widget.unitWidth->value(), widget.unitHeight->value());
 }
 
-void PngExportOptionsWidget::setBackgroundColor(const QColor &color)
+void ImageExportOptionsWidget::setBackgroundColor(const QColor &color)
 {
     blockChildSignals(true);
 
@@ -90,14 +90,14 @@ void PngExportOptionsWidget::setBackgroundColor(const QColor &color)
     blockChildSignals(false);
 }
 
-QColor PngExportOptionsWidget::backgroundColor() const
+QColor ImageExportOptionsWidget::backgroundColor() const
 {
     QColor color = widget.backColor->color();
     color.setAlphaF(0.01 * widget.opacity->value());
     return color;
 }
 
-void PngExportOptionsWidget::updateFromPointSize(const QSizeF &pointSize)
+void ImageExportOptionsWidget::updateFromPointSize(const QSizeF &pointSize)
 {
     blockChildSignals(true);
     widget.pxWidth->setValue(qRound(POINT_TO_INCH(pointSize.width()) * widget.dpi->value()));
@@ -105,7 +105,7 @@ void PngExportOptionsWidget::updateFromPointSize(const QSizeF &pointSize)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::updateFromPixelSize(const QSize &pixelSize)
+void ImageExportOptionsWidget::updateFromPixelSize(const QSize &pixelSize)
 {
     blockChildSignals(true);
     double inchWidth = static_cast<double>(pixelSize.width()) / static_cast<double>(widget.dpi->value());
@@ -115,7 +115,7 @@ void PngExportOptionsWidget::updateFromPixelSize(const QSize &pixelSize)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::blockChildSignals(bool block)
+void ImageExportOptionsWidget::blockChildSignals(bool block)
 {
     widget.pxWidth->blockSignals(block);
     widget.pxHeight->blockSignals(block);
@@ -126,7 +126,7 @@ void PngExportOptionsWidget::blockChildSignals(bool block)
     widget.opacity->blockSignals(block);
 }
 
-void PngExportOptionsWidget::unitWidthChanged(qreal newWidth)
+void ImageExportOptionsWidget::unitWidthChanged(qreal newWidth)
 {
     blockChildSignals(true);
 
@@ -140,7 +140,7 @@ void PngExportOptionsWidget::unitWidthChanged(qreal newWidth)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::unitHeightChanged(qreal newHeight)
+void ImageExportOptionsWidget::unitHeightChanged(qreal newHeight)
 {
     blockChildSignals(true);
 
@@ -154,7 +154,7 @@ void PngExportOptionsWidget::unitHeightChanged(qreal newHeight)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::pxWidthChanged(int newWidth)
+void ImageExportOptionsWidget::pxWidthChanged(int newWidth)
 {
     blockChildSignals(true);
 
@@ -168,7 +168,7 @@ void PngExportOptionsWidget::pxWidthChanged(int newWidth)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::pxHeightChanged(int newHeight)
+void ImageExportOptionsWidget::pxHeightChanged(int newHeight)
 {
     blockChildSignals(true);
 
@@ -182,7 +182,7 @@ void PngExportOptionsWidget::pxHeightChanged(int newHeight)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::dpiChanged(int)
+void ImageExportOptionsWidget::dpiChanged(int)
 {
     blockChildSignals(true);
 
@@ -191,7 +191,7 @@ void PngExportOptionsWidget::dpiChanged(int)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::unitChanged(int newUnit)
+void ImageExportOptionsWidget::unitChanged(int newUnit)
 {
     KoUnit unit((KoUnit::Unit) newUnit);
     blockChildSignals(true);
@@ -200,7 +200,7 @@ void PngExportOptionsWidget::unitChanged(int newUnit)
     blockChildSignals(false);
 }
 
-void PngExportOptionsWidget::aspectChanged(bool keepAspect)
+void ImageExportOptionsWidget::aspectChanged(bool keepAspect)
 {
     blockChildSignals(true);
 
@@ -212,4 +212,11 @@ void PngExportOptionsWidget::aspectChanged(bool keepAspect)
     if (keepAspect)
         unitWidthChanged(widget.unitWidth->value());
 }
-#include "PngExportOptionsWidget.moc"
+
+void ImageExportOptionsWidget::enableBackgroundOpacity(bool enable)
+{
+    widget.opacity->setVisible(enable);
+    widget.labelOpacity->setVisible(enable);
+}
+
+#include "ImageExportOptionsWidget.moc"

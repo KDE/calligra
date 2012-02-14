@@ -20,7 +20,7 @@
 // based on the SVG exporter.  Not intended for public release
 // Microsoft WVG renamed to XAML Graphics.  Worry about that later.
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QString>
 #include <QList>

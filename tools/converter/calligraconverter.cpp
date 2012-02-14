@@ -74,6 +74,8 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
 
     printJob->printer().setOutputFileName(uOut.path());
     printJob->printer().setOutputFormat(QPrinter::PdfFormat);
+    printJob->printer().setColorMode(QPrinter::Color);
+    printJob->printer().setPageMargins(0.2, 0.2, 0.2, 0.2, QPrinter::Point);
     printJob->startPrinting();
 
     doc->deleteLater();

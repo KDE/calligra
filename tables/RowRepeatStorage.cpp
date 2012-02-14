@@ -20,7 +20,7 @@
 
 #include <QList>
 #include <QPair>
-#include <qdebug.h>
+#include <QDebug>
 
 #include "calligra_tables_limits.h"
 

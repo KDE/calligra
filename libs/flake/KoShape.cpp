@@ -461,9 +461,9 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
-bool KoShape::overruleChildZValues()
+KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
 {
-    return true;
+    return ChildZDefault;
 }
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
@@ -484,18 +484,22 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
                 foundCommonParent = true;
                 break;
             }
-            if (parentShapeS2->overruleChildZValues()) {
+            if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
                 index2 = parentShapeS2->zIndex();
+                runThrough2 = parentShapeS2->runThrough();
+            } else {
+                runThrough2 = runThrough2 + parentShapeS2->runThrough();
             }
-            runThrough2 = parentShapeS2->runThrough();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
-            if (parentShapeS1->overruleChildZValues()) {
+            if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
                 index1 = parentShapeS1->zIndex();
+                runThrough1 = parentShapeS1->runThrough();
+            } else {
+                runThrough1 = runThrough1 + parentShapeS1->runThrough();
             }
-            runThrough1 = parentShapeS1->runThrough();
             parentShapeS1 = parentShapeS1->parent();
         }
     }
@@ -1741,6 +1745,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             }
             parent = parent->parent();
         }
+    }
+
+    if (attributes & OdfZIndex) {
+        context.xmlWriter().addAttribute("draw:z-index", zIndex());
     }
 
     if (attributes & OdfSize) {

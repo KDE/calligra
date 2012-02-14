@@ -580,12 +580,10 @@ void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
     for (int column = firstColumn; column <= lastColumn; column++) {
         Cell* cell = d->sheet->cell(column, row, true);
         const int i = column - firstColumn;
-        Value value;
         if (record->isInteger(i))
-            value.setValue(record->asInteger(i));
+            cell->setValue(Value(record->asInteger(i)));
         else
-            value.setValue(record->asFloat(i));
-        cell->setValue(value);
+            cell->setValue(Value(record->asFloat(i)));
         cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
     }
 }

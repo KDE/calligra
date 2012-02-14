@@ -24,7 +24,7 @@
 #include "KoXmlReader.h"
 #include <KoStore.h>
 
-#include "qdom.h"
+#include "QDomDocument"
 
 #include <kdebug.h>
 

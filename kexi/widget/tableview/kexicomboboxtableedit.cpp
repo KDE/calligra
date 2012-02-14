@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qwindowsstyle.h>
-#include <qpainter.h>
+#include <QLayout>
+#include <QStyle>
+#include <QWindowsStyle>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 #include <QMouseEvent>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QClipboard>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>

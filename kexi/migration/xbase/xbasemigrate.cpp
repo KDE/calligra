@@ -19,12 +19,12 @@
 
 #include "xbasemigrate.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
-#include <qdir.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
+#include <QDir>
 #include <kdebug.h>
 
 #include <migration/keximigratedata.h>

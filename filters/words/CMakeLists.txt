@@ -1,6 +1,3 @@
-macro_optional_find_package(DCMTK)
-macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http://dicom.offis.de/dcmtk.php.en" FALSE "" "Required for processing DICOM structured reports")
-
 # check whether we can compile wv2
 
 macro_optional_find_package(Iconv)
@@ -79,10 +76,6 @@ if (NOT TINY)
     	    add_subdirectory( wordperfect )
         endif(WPD_FOUND)
     endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
-
-    if(DCMTK_FOUND)
-    	add_subdirectory( dcm )
-    endif(DCMTK_FOUND)
 
     
 endif (NOT TINY)

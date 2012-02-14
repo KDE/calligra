@@ -33,6 +33,7 @@
 #include "XlsxXmlDrawingReader.h"
 
 class Sheet;
+class Cell;
 
 class EmbeddedCellObjects
 {
@@ -46,6 +47,29 @@ public:
     QString hyperlink;
 };
 
+class Formula {
+protected:
+    explicit Formula() {}
+public:
+    virtual ~Formula() {}
+    virtual bool isShared() const = 0;
+};
+
+class FormulaImpl : public Formula {
+public:
+    QString m_formula;
+    explicit FormulaImpl(const QString &formula) : Formula(), m_formula(formula) {}
+    virtual bool isShared() const { return false; }
+    virtual ~FormulaImpl() {}
+};
+
+class SharedFormula : public Formula {
+public:
+    Cell *m_referencedCell;
+    explicit SharedFormula(Cell *referencedCell) : Formula(), m_referencedCell(referencedCell) {}
+    virtual bool isShared() const { return true; }
+    virtual ~SharedFormula() {}
+};
 
 class Cell
 {
@@ -85,50 +109,74 @@ public:
             return QString();
         }
     }
-    int column, row;
-    int rowsMerged, columnsMerged;
+
     QString styleName;
     QString charStyleName;
     QString text;
-    bool isPlainText;
-    QString valueType;
-    QByteArray valueAttr;
-    QString valueAttrValue;
-    QString formula;
+
+    QString *valueAttrValue;
+
+    Formula *formula;
+
     EmbeddedCellObjects* embedded;
 
-    Cell(/*Sheet* s,*/ int columnIndex, int rowIndex) : /*sheet(s),*/ column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true), embedded(0) {}
-    ~Cell() { delete embedded; }
+    int column;
+    int row;
+    int rowsMerged;
+    int columnsMerged;
+
+    enum ValueType {
+        ConstNone,
+        ConstString,
+        ConstBoolean,
+        ConstDate,
+        ConstFloat
+    };
+    ValueType valueType;
+
+    enum ValueAttr {
+        OfficeNone,
+        OfficeValue,
+        OfficeStringValue,
+        OfficeBooleanValue,
+        OfficeDateValue
+    };
+    ValueAttr valueAttr;
+
+    bool isPlainText : 1;
+
+    Cell(int columnIndex, int rowIndex) : valueAttrValue(0), formula(0), embedded(0), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), valueType(Cell::ConstNone), valueAttr(OfficeNone), isPlainText(true) {}
+    ~Cell() { delete valueAttrValue; delete formula; delete embedded; }
 };
 
 class Row
 {
 public:
-//     Sheet* sheet;
-    int rowIndex;
-    bool hidden;
     QString styleName;
+    int rowIndex;
+    bool hidden : 1;
 
-    Row(/*Sheet* s,*/ int index) : /*sheet(s),*/ rowIndex(index), hidden(false) {}
+    Row(int index) : rowIndex(index), hidden(false) {}
     ~Row() {}
 };
 
 class Column
 {
 public:
-    Sheet* sheet;
-    int columnIndex;
-    bool hidden;
     QString styleName;
+    int columnIndex;
+    bool hidden : 1;
 
-    Column(/*Sheet* s,*/ int index) : /*sheet(s),*/ columnIndex(index), hidden(false) {}
+    Column(int index) : columnIndex(index), hidden(false) {}
     ~Column() {}
 };
+
 class Sheet
 {
 public:
     QString m_name;
     double m_defaultRowHeight, m_defaultColWidth, m_baseColWidth;
+
     explicit Sheet(const QString &name) : m_name(name), m_defaultRowHeight(-1.0), m_defaultColWidth(-1.0), m_baseColWidth(-1.0), m_maxRow(0), m_maxColumn(0), m_visible(true) {}
     ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); /*qDeleteAll(m_cells);*/ }
 
@@ -159,7 +207,7 @@ public:
         const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
         Cell* c = m_cells[ hashed ];
         if (!c && autoCreate) {
-            c = new Cell(/*this,*/ columnIndex, rowIndex);
+            c = new Cell(columnIndex, rowIndex);
             m_cells[ hashed ] = c;
             this->column(columnIndex, true);
             this->row(rowIndex, true);
@@ -185,11 +233,11 @@ private:
     QHash<int, Row*> m_rows;
     QHash<int, Column*> m_columns;
     QHash<unsigned, Cell*> m_cells;
+    QHash<int, int> m_maxCellsInRow;
+    QString m_pictureBackgroundPath;
     int m_maxRow;
     int m_maxColumn;
-    QHash<int, int> m_maxCellsInRow;
-    bool m_visible;
-    QString m_pictureBackgroundPath;
+    bool m_visible : 1;
 };
 
 #endif
