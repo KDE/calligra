@@ -6,7 +6,7 @@ kde4_add_ui_files(PdfImport_PART_SRCS ImportDialogUI.ui )
 
 kde4_add_plugin(pdfimport ${PdfImport_PART_SRCS})
 
-target_link_libraries(pdfimport komain)
+target_link_libraries(pdfimport komain -lpoppler-qt4)
 
 install(TARGETS pdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
