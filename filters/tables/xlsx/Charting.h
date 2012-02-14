@@ -20,12 +20,12 @@
 #ifndef CHARTING_H
 #define CHARTING_H
 
-#include <QtCore/QString>
-//#include <QtCore/QStringList>
-#include <QtCore/QRect>
-#include <QtCore/QMap>
-#include <QtGui/QColor>
-#include <QtCore/QDebug>
+#include <QString>
+//#include <QStringList>
+#include <QRect>
+#include <QMap>
+#include <QColor>
+#include <QDebug>
 #include <MsooXmlGlobal.h>
 
 namespace Charting
@@ -282,7 +282,15 @@ namespace Charting
 
         QString m_numberFormat;
 
-        Axis(Type type) : Obj(), m_type(type) {}
+        bool m_reversed;
+        bool m_logarithmic;
+
+        bool m_autoMinimum;
+        bool m_autoMaximum;
+        qreal m_minimum;
+        qreal m_maximum;
+
+        Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false), m_autoMinimum(true), m_autoMaximum(true), m_minimum(0), m_maximum(0) {}
         virtual ~Axis() {}
     };
 

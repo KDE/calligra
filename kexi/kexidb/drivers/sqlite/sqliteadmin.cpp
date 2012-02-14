@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdir.h>
+#include <QDir>
 
 #include "sqliteadmin.h"
 #include <kexidb/drivermanager.h>

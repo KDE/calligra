@@ -48,11 +48,11 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
-#include <qsqldatabase.h>
-#include <qsqlerror.h>
-#include <qsqlfield.h>
-#include <qsqlquery.h>
-#include <qsqlrecord.h>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlField>
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include <QVariant>
 #include <QWidget>
 #include <QListWidget>

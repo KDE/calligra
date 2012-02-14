@@ -47,8 +47,8 @@ start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10,
 <para>&tables; also recognizes some special <quote>series</quote> such as
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
 (note the capitalization) then Drag and Copy it down. To see what special series 
-are available, and perhaps create your own, select <menuchoice><guimenu>Tools
-</guimenu><guimenuitem>Custom Lists...</guimenuitem></menuchoice> .</para>
+are available, and perhaps create your own, select <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>Custom Lists...</guimenuitem></menuchoice></para>
 
 <para>If you select a cell and choose <guimenuitem>Series...</guimenuitem> 
 from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series</guilabel> 
@@ -265,15 +265,10 @@ number of blank worksheets. The number of sheets it creates is determined
 by the selected template.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
 </menuchoice> will add another sheet to the document.</para>
-<para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
-</guilabel> page of &tables;'s configuration dialog box is checked a small 
-tab will be shown near the bottom left of &tables;'s window for each sheet. 
-<mousebutton>Left</mousebutton> click on one of these tabs to see that sheet.
-</para>
 <para>You can also switch between worksheets by using the 
-<keycombo action="simul">&Ctrl;<keysym>PageDown</keysym></keycombo> 
+<keycombo action="simul">&Ctrl;<keysym>PgDown</keysym></keycombo> 
 to move to the next sheet, 
-<keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
+<keycombo action="simul">&Ctrl;<keysym>PgUp</keysym></keycombo> to move to 
 the previous one.</para>
 <para>Worksheets are given the default names of <emphasis>Sheet1</emphasis>, 
 <emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
@@ -367,8 +362,8 @@ chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. The chart <interface>Tools
-Options</interface> should appear in the docker. You can then 
+click twice within the chart area. The chart <interface>Tools Options</interface> 
+should appear in the docker. You can then 
 use these tools to change the chart.</para>
 </sect1>
 
@@ -465,7 +460,7 @@ Handbook.</para>
 <para>Protecting the document means that without the password a user cannot add
 or delete sheets. Document protection does not protect cells.</para>
 <para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document...</guimenuitem></menuchoice>.
+Document...</guimenuitem></menuchoice>
 A dialog appears asking you for a password. The <guilabel>Password:</guilabel> strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure your password.</para>

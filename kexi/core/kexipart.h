@@ -21,8 +21,8 @@
 #ifndef KEXIPART_H
 #define KEXIPART_H
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QObject>
+#include <QMap>
 
 #include <kexiutils/tristate.h>
 #include <kexiutils/InternalPropertyMap.h>

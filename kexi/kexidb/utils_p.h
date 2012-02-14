@@ -20,8 +20,8 @@
 #ifndef KEXIDB_UTILS_P_H
 #define KEXIDB_UTILS_P_H
 
-#include <qtimer.h>
-#include <qwaitcondition.h>
+#include <QTimer>
+#include <QWaitCondition>
 
 #include <kprogressdialog.h>
 

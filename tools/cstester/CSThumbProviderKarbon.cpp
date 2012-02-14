@@ -25,8 +25,8 @@
 
 #include <QApplication>
 #include <QEventLoop>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainter>
+#include <QPixmap>
+#include <QPainter>
 
 void processEvents()
 {
@@ -46,18 +46,18 @@ CSThumbProviderKarbon::~CSThumbProviderKarbon()
 {
 }
 
-QList<QPixmap> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
 {
     // make sure everything is rendered before painting
     processEvents();
 
-    QPixmap thumbnail(thumbSize);
-    thumbnail.fill(Qt::white);
+    QImage thumbnail(thumbSize, QImage::Format_RGB32);
+    thumbnail.fill(QColor(Qt::white).rgb());
     QPainter thumbPainter(&thumbnail);
     m_doc->paintContent(thumbPainter, QRect(QPoint(0, 0), thumbSize));
 
     // make sure there are no events; this fixes a crash on shutdown
     processEvents();
 
-    return QList<QPixmap>() << thumbnail;
+    return QList<QImage>() << thumbnail;
 }

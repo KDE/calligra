@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <qtest_kde.h>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KWTextFrame;
 class KWTextFrameSet;

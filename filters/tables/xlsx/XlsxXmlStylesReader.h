@@ -25,7 +25,7 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlThemesReader.h>
-#include <QtCore/QFlags>
+#include <QFlags>
 #include <QColor>
 
 #include "XlsxXmlCommonReader.h"
@@ -191,6 +191,16 @@ public:
         return numberFormatStrings[ id ];
     }
 
+//     //! @return the KoGenStyle the number-formatting style has
+//     KoGenStyle numberFormatStyle( int id ) const {
+//         return numberFormatStyles[ id ];
+//     }
+
+    //! @return the KoGenStyle styleName the number-formatting style has
+    QString numberFormatStyleName( int id ) const {
+        return numberFormatStyleNames[ id ];
+    }
+
     //! @return conditional style name for the given index
     QString conditionalStyle( int index ) const
     {
@@ -205,6 +215,8 @@ protected:
     QVector<KoGenStyle*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
+//     QMap< int, KoGenStyle > numberFormatStyles;
+    QMap< int, QString > numberFormatStyleNames;
     QMap< int, QString > conditionalStyles;
 
     friend class XlsxXmlStylesReader;

@@ -259,7 +259,6 @@ protected:
 
     MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
-    QString m_currentTableStyleBase;
 
     //! Name of the KoGenStyle style of type GraphicAutoStyle prepared for the
     //! parent <draw:frame> element containing the <table:table> element

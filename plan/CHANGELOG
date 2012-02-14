@@ -1,6 +1,10 @@
 
 Calligra Plan current:
 
+* Fix crash in reports due incorrect use of KoXml to QDom conversion
+
+* Fix bug 291056 - Dates are sorted alphabetically and not by date / time
+
 * Improve users control of work package merging
 
 * PlanWork:

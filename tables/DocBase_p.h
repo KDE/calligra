@@ -35,7 +35,7 @@
 
 static const int CURRENT_SYNTAX_VERSION = 1;
 
-typedef QMap<QString, QDomElement> SavedDocParts;
+typedef QMap<QString, QDomDocument> SavedDocParts;
 
 namespace Calligra {
 namespace Tables {

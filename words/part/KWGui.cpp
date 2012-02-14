@@ -36,6 +36,7 @@
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
 #include <KActionCollection>
+#include <KApplication>
 
 #include <QGridLayout>
 #include <QTimer>
@@ -70,7 +71,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
     if (m_view->shell())
     {
-        KoModeBoxFactory modeBoxFactory(canvasController, i18n("Tools"));
+        KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
         m_view->shell()->createDockWidget(&modeBoxFactory);
         m_view->shell()->dockerManager()->removeToolOptionsDocker();
     }

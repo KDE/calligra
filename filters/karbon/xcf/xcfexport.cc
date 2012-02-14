@@ -19,7 +19,7 @@
 
 #include <q3cstring.h>
 #include <QDataStream>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QString>
 #include <QList>

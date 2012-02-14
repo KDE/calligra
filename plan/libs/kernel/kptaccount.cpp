@@ -19,7 +19,7 @@
 
 #include "kptaccount.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 #include <QDate>
 

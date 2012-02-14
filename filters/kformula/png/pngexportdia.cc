@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <qpaintdevice.h>
+#include <QPaintDevice>
 #include <QRect>
 #include <QWidget>
 //Added by qt3to4:

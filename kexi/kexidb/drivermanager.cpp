@@ -33,7 +33,7 @@
 
 #include <assert.h>
 
-#include <qapplication.h>
+#include <QApplication>
 
 //remove debug
 #undef KexiDBDbg

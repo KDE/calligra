@@ -103,8 +103,8 @@ Values) files, even though the separating character may not be a comma.</para>
 in <acronym>CSV</acronym> format and launches a dialog box that allows you to
 specify the delimiter (separating character) used by the file, and shows how
 the data items will be placed into different spreadsheet cells.</para>
-<para>Other options in this dialog box let you define the <guilabel>Format
-</guilabel> of the spreadsheet cells, whether text quote characters should be
+<para>Other options in this dialog box let you define the <guilabel>Format</guilabel> 
+of the spreadsheet cells, whether text quote characters should be
 removed, and whether the first line(s) of the file should be ignored.</para>
 </listitem>
 </varlistentry>

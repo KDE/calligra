@@ -20,17 +20,17 @@
 
 #include "kexidbimagebox.h"
 
-#include <qapplication.h>
-#include <qpixmap.h>
+#include <QApplication>
+#include <QPixmap>
 #include <QStyle>
 #include <QStyleOptionFocusRect>
 #include <QStyleOptionFrameV3>
-#include <qclipboard.h>
-#include <qtooltip.h>
-#include <qimage.h>
-#include <qbuffer.h>
-#include <qfiledialog.h>
-#include <qpainter.h>
+#include <QClipboard>
+
+#include <QImage>
+#include <QBuffer>
+#include <QFileDialog>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <kmenu.h>

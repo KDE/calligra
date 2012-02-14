@@ -167,6 +167,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(shape);
     }
+    shape->update();
 }
 
 void KWDocument::removeShape(KoShape *shape)
@@ -863,7 +864,7 @@ KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
     return result;
 }
 
-KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape, bool create) const
+KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
 {
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
@@ -876,38 +877,20 @@ KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape, bool create) const
         }
     }
 
-    if (create) {
-        KWFrame *targetFrame = findClosestFrame(shape);
+    KWFrame *frame = frameOfShape(shape);
+    KoTextAnchor *anchor = frame->anchor();
 
-        if (targetFrame == 0) {/* can't happen later on... */
-            kDebug(32001) << "bailing out...no shape to anchor to";
-            return 0;
-        }
-
-        KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(targetFrame->shape()->userData());
-
-        if (!textData)
-            return 0;
-
-        QPointF absPos = shape->absolutePosition();
-        shape->setParent(static_cast<KoShapeContainer*>(targetFrame->shape()));
-        shape->setAbsolutePosition(absPos);
-
-        KWFrame *frame = frameOfShape(shape);
-        KoTextAnchor *anchor = frame->anchor();
-
-        if (!anchor) {
-            anchor = new KoTextAnchor(shape);
-            frame->setAnchor(anchor);
-        }
-
-        KoTextEditor editor(textData->document());
-        editor.insertInlineObject(anchor);
-        return anchor;
+    if (!anchor) {
+        anchor = new KoTextAnchor(shape);
+        anchor->setAnchorType(KoTextAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
+        anchor->setVerticalPos(KoTextAnchor::VFromTop);
+        frame->setAnchor(anchor);
     }
 
-    return 0;
+    return anchor;
 }
+
 
 KWFrame *KWDocument::frameOfShape(KoShape* shape) const
 {

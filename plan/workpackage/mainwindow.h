@@ -32,7 +32,7 @@
 #include <ktabwidget.h>
 
 #include <QMap>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <QLabel>
 
 #include <kmimetype.h>

@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 #include <KDebug>
-#include <QtCore/QBuffer>
+#include <QBuffer>
 #include <math.h>
 
 /*
@@ -531,7 +531,7 @@ QString WMFImportParser::saveStroke(Libwmf::WmfDeviceContext &context)
         return "stroke:none;";
     }
 
-    const qreal width = context.pen.width() > 1.0 ? qMax(1.0, context.pen.width() * m_scaleX) : 1.0;
+    const qreal width = context.pen.width() > qreal(1.0) ? qMax(qreal(1.0), context.pen.width() * m_scaleX) : qreal(1.0);
 
     QString strokeStyle;
 

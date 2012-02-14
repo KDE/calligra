@@ -28,7 +28,7 @@
 
 #include <QList>
 #include <QListIterator>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kglobal.h>
 #include <klocale.h>

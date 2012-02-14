@@ -44,8 +44,8 @@
 #include <KoOdfReadStore.h>
 #include <KoDocumentInfo.h>
 
-#include <qpainter.h>
-#include <qfileinfo.h>
+#include <QPainter>
+#include <QFileInfo>
 #include <QDir>
 #include <QTimer>
 #include <kundo2qstack.h>
@@ -355,7 +355,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "planlibs" );
+#ifdef PLAN_KDEPIMLIBS_FOUND
         locale->insertCatalog( "kabc" );
+#endif
     }
     if ( isReadWrite() ) {
         setXMLFile( "planwork.rc" );

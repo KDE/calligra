@@ -65,6 +65,8 @@ public:
     virtual void setDisplayMasterBackground( bool );
     /// reimplemented
     virtual bool displayShape(KoShape *shape) const;
+
+    QImage thumbImage(const QSize& = QSize(512, 512));
     /// reimplemented
     virtual QPixmap generateThumbnail( const QSize& );
     /// reimplemented

@@ -32,10 +32,10 @@
 
 #include <KoXmlReader.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
-#include <qdatetime.h>
-#include <qbrush.h>
+#include <QDateTime>
+#include <QBrush>
 #include <QList>
 
 #include <kdatetime.h>
@@ -825,6 +825,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 //            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
+            if ( e.hasAttribute( "currency-digits" ) ) {
+                l->setFracDigits( e.attribute( "currency-digits" ).toInt() );
+            }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
             }
@@ -1128,6 +1131,7 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
+    loc.setAttribute( "currency-digits", l->fracDigits() );
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );

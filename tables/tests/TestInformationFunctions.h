@@ -22,7 +22,7 @@
 #define CALLIGRA_TABLES_TEST_INFORMATION_FUNCTIONS
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <Value.h>
 
@@ -31,6 +31,7 @@ namespace Calligra
 namespace Tables
 {
 class Map;
+class Cell;
 
 class TestInformationFunctions: public QObject
 {
@@ -41,7 +42,7 @@ private slots:
     void initTestCase();
 
     void testAREAS();
-    // void testCELL();        // to be implemented
+    void testCELL();
     void testCOLUMN();
     void testCOLUMNS();
     void testCOUNT();
@@ -49,13 +50,13 @@ private slots:
     void testCOUNTBLANK();
     void testCOUNTIF();
     void testERRORTYPE();
-    // void testFORMULA();  // to be implemented
+    void testFORMULA();
     void testINFO();
     void testISBLANK();
     void testISERR();
     void testISERROR();
     void testISEVEN();
-    // void testISFORMULA();   // to be implemented
+    void testISFORMULA();
     void testISLOGICAL();
     void testISNONTEXT();
     void testISNA();
@@ -66,18 +67,17 @@ private slots:
     void testMATCH();
     void testN();
     void testNA();
-    // void testNUMBERVALUE(); // to be implemented
     void testROW();
     void testROWS();
-    // void testSHEET();       // to be implemented
-    // void testSHEETS();      // to be implemented
+    void testSHEET();
+    void testSHEETS();
     void testTYPE();
     void testVALUE();
 
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString&, Value& ex, const Cell &cell = Cell());
 
     Map* m_map;
 };

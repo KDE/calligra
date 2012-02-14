@@ -27,7 +27,7 @@
 #include <Utils.h>
 #include <QEvent>
 #include <QPainter>
-#include <qcoreapplication.h>
+#include <QCoreApplication>
 
 struct Layout::Private : public KoShape {
     Private() : eventSent(false) {}

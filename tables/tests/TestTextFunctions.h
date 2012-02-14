@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_TEST_TEXT_FUNCTIONS
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <Value.h>
 
@@ -49,6 +49,7 @@ private slots:
     void testLEN();
     void testLOWER();
     void testMID();
+    void testNUMBERVALUE();
     void testPROPER();
     void testREPLACE();
     void testREPT();

@@ -103,7 +103,7 @@ Numbers are right justified by default.</para>
 <term><guilabel>Percent</guilabel></term>
 <listitem><para>When you have a number in the current cell and you switch the
 cell format from <guilabel>Generic</guilabel> to <guilabel>Percent</guilabel>, the current cell number will be multiplied
-by 100%.</para>
+by 100.</para>
 <para>For example if you enter 2 and set the cell format to <guilabel>Percent</guilabel>, the number
 will then be 200 %. Switching back to <guilabel>Generic</guilabel> cell format will bring it back to
 2.</para>
@@ -118,7 +118,7 @@ Toolbar: <inlinemediaobject><imageobject>
 <listitem><para>The <guilabel>Money</guilabel> format converts your number into money notation using
 the settings globally fixed in &systemsettings; in <menuchoice><guimenu>Locale</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
 currency symbol will be displayed and the precision will be the one set in
-&kcontrolcenter;.</para>
+&systemsettings;.</para>
 <para>You can also use the <guiicon>Money Format</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
 cell formatting to look like your current currency:
 <inlinemediaobject><imageobject>
@@ -150,7 +150,7 @@ fraction.</para>
 </listitem><!--TODO formatting of numbers?-->
 </varlistentry>
 <varlistentry>
-<term><guilabel>Date format</guilabel></term>
+<term><guilabel>Date</guilabel></term>
 <listitem><para>To enter a date, you should enter it in one of the formats set
 in &systemsettings; in <menuchoice><guimenu>Locale</guimenu>
 <guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
@@ -158,31 +158,45 @@ Time</guimenuitem></menuchoice>. There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
 December 1899 (which is 0) with the number of days NN added. For example if you
-have a cell with 100 and you choose <guilabel>Date format</guilabel>, "1900-04-09" will be
+have a cell with 100 and you choose <guilabel>Date</guilabel> format, "1900-04-09" will be
 displayed in the cell which is 100 days after 30st December 1899. This starting
 date is two days early as it was a bug in Lotus 123 and then it stayed that way
 in Excel in order to keep compatibility. Few people will need to calculate from
 1st January 1900 anyway and adding 9 days to 1st November 2000 for example will
 give you 10th November 2000 so all normal calculations on dates are
 correct.</para>
-<note><para>When a cell is in the <guilabel>Date format</guilabel>, you can drag this cell down as
+<note><para>When a cell is in the <guilabel>Date</guilabel> format, you can drag this cell down as
 you do with numbers and the next cells will also get
 dates, each date being increased by one day.</para></note><!--TODO explain that
 better-->
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Time format</guilabel></term>
+<term><guilabel>Time</guilabel></term>
 <listitem><para>This formats your cell content as a time. To enter a time, you
-should enter it in the <guilabel>Time format</guilabel> set in &kcontrolcenter;
-in <menuchoice><guimenu>Regional &amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; 
-Language</guisubmenu><guimenuitem>Time
-&amp; Dates</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+should enter it in the <guilabel>Time format</guilabel> set in &systemsettings; 
+in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
 dialog box you can set how the time should be displayed by choosing one of the
 available time format options. The default format is the system format set in
-&kcontrolcenter;. When the number in the cell does not make sense as a time,
+&systemsettings;. When the number in the cell does not make sense as a time,
 &tables; will display 00:00 in the global format you have in
-&kcontrolcenter;.</para>
+&systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Date and Time</guilabel></term>
+<listitem><para>This formats your cell content as date and time. To enter a date and a time, you
+should enter it in the <guilabel>Time format</guilabel> set in &systemsettings; 
+in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+dialog box you can set how the date and time should be displayed by choosing one of the
+available date and time format options. The default format is the system format set in
+&systemsettings;. When the number in the cell does not make sense as a date and time,
+&tables; will display 00:00 in the global format you have in
+&systemsettings;.</para>
 </listitem>
 </varlistentry>
 <varlistentry>

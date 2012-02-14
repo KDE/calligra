@@ -50,18 +50,27 @@ QStringList ScriptingTester::initTestList()
 
 void ScriptingTester::initTestCase()
 {
-    m_module = new Scripting::Module( this );
-    m_result = new TestResult( this );
-    Kross::Manager::self().addObject( m_module, "Plan" );
-    Kross::Manager::self().addObject( m_result, "TestResult" );
-    
-    QStringList scripts = initTestList();;
-    for ( int i = 0; i < scripts.count(); ++i ) {
-        //Create a new Kross::Action instance.
-        Kross::Action* action = new Kross::Action(0, QString( "%1" ).arg( scripts.at( i ) ) );
-        // Set the script file we like to execute.
-        action->setFile( QString( "%1/%2" ).arg( FILES_DATA_DIR ).arg( scripts.at( i ) ) );
-        m_tests << action;
+    Kross::Action *a = new Kross::Action( 0, "PythonDetection" );
+    a->setInterpreter( "python" );
+    bool py = a->initialize();
+    a->finalize();
+    if ( ! py ) {
+        QEXPECT_FAIL( "", "Python not available, tests will not be executed", Continue );
+        QVERIFY( py == true );
+    } else {
+        m_module = new Scripting::Module( this );
+        m_result = new TestResult( this );
+        Kross::Manager::self().addObject( m_module, "Plan" );
+        Kross::Manager::self().addObject( m_result, "TestResult" );
+
+        QStringList scripts = initTestList();;
+        for ( int i = 0; i < scripts.count(); ++i ) {
+            //Create a new Kross::Action instance.
+            Kross::Action* action = new Kross::Action(0, QString( "%1" ).arg( scripts.at( i ) ) );
+            // Set the script file we like to execute.
+            action->setFile( QString( "%1/%2" ).arg( FILES_DATA_DIR ).arg( scripts.at( i ) ) );
+            m_tests << action;
+        }
     }
 }
 

@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qobject.h>
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qapplication.h>
+#include <QObject>
+#include <QPainter>
+#include <QCursor>
+#include <QApplication>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QList>

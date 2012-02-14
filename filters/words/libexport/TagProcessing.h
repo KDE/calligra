@@ -34,7 +34,7 @@
 #ifndef EXPORTTAGPROCESSING_H
 #define EXPORTTAGPROCESSING_H
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QList>
 
 #include <kdemacros.h>

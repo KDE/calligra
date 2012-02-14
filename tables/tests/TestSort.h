@@ -20,7 +20,7 @@
 #define CALLIGRA_TABLES_TEST_SORT
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

@@ -25,9 +25,9 @@
 #include "kptproject.h"
 #include "kptdatetime.h"
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 
 namespace KPlato 
 {

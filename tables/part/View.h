@@ -33,7 +33,7 @@
 #include <QPoint>
 #include <QString>
 #include <QStringList>
-#include <QtGui/QPrinter>
+#include <QPrinter>
 
 #include <QPointF>
 #include <KoView.h>

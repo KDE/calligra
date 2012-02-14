@@ -23,8 +23,8 @@
 #ifndef _WMFPARSER_H_
 #define _WMFPARSER_H_
 
-#include <QtGui/QColor>
-#include <QtCore/QRect>
+#include <QColor>
+#include <QRect>
 
 #include "WmfEnums.h"
 #include "WmfStructs.h"

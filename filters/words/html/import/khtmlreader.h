@@ -21,7 +21,7 @@
 
 #include <khtml_part.h> // fixme speedup compile time by moving these into the cpp file.
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QStack>
 
 #include <kwdwriter.h>

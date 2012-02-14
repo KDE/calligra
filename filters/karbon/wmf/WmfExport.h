@@ -20,7 +20,7 @@
 #ifndef WMFEXPORT_H
 #define WMFEXPORT_H
 
-#include <QtGui/QPen>
+#include <QPen>
 #include <KoFilter.h>
 #include <QVariantList>
 

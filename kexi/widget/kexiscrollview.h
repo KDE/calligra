@@ -24,7 +24,7 @@
 #include <kexi_export.h>
 
 #include <Q3ScrollView>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
