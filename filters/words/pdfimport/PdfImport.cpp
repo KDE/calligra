@@ -42,7 +42,7 @@
 
 #define MAXLINES 10000
 
-K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<AsciiImport>();)
+K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
 K_EXPORT_PLUGIN(PdfImportFactory("wordspdfimportng", "calligrafilters"))
 
 bool checkEncoding(QTextCodec *codec, QByteArray &data)
@@ -57,16 +57,16 @@ bool checkEncoding(QTextCodec *codec, QByteArray &data)
     return true;
 }
 
-AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
+PdfImport::PdfImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
 {
 }
 
-AsciiImport::~AsciiImport()
+PdfImport::~PdfImport()
 {
 }
 
-KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
     if (to != "application/vnd.oasis.opendocument.text" || from != "text/plain") {
@@ -109,7 +109,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     int paragraphStrategy = 0;
 
     if (!m_chain->manager()->getBatchMode()) {
-        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
+        QPointer<PdfImportDialog> dialog = new PdfImportDialog(codec->name(), QApplication::activeWindow());
         if (!dialog) {
             kError(30502) << "Dialog has not been created! Aborting!" << endl;
             in.close();
@@ -212,7 +212,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     return KoFilter::OK;
 }
 
-void AsciiImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
+void PdfImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
 {
     while (!stream.atEnd()) {
         QString line = stream.readLine();
@@ -226,7 +226,7 @@ void AsciiImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, cons
     }
 }
 
-void AsciiImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
+void PdfImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
 {
     QString stoppingPunctuation(".!?");
     QString skippingEnd(" \"')");
@@ -272,7 +272,7 @@ void AsciiImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, 
     }
 }
 
-void AsciiImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
+void PdfImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
 {
     while (!stream.atEnd()) {
         QString paragraph;
@@ -296,7 +296,7 @@ void AsciiImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter,
     }
 }
 
-bool AsciiImport::createMeta(KoOdfWriteStore &store)
+bool PdfImport::createMeta(KoOdfWriteStore &store)
 {
     if (!store.store()->open("meta.xml")) {
         return false;

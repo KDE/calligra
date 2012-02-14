@@ -32,7 +32,7 @@
 #include <ui_ImportDialogUI.h>
 #include <ImportDialog.h>
 
-AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
+PdfImportDialog::PdfImportDialog(const QString &encoding, QWidget* parent)
 : KDialog(parent)
 {
     QWidget *widget = new QWidget();
@@ -79,12 +79,12 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
     setMainWidget(widget);
 }
 
-AsciiImportDialog::~AsciiImportDialog()
+PdfImportDialog::~PdfImportDialog()
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
 }
 
-QTextCodec* AsciiImportDialog::getCodec() const
+QTextCodec* PdfImportDialog::getCodec() const
 {
     const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
     kDebug(30502) << "Encoding:" << strCodec << m_ui.comboBoxEncoding->currentText();
@@ -111,7 +111,7 @@ QTextCodec* AsciiImportDialog::getCodec() const
     return codec;
 }
 
-int AsciiImportDialog::getParagraphStrategy() const
+int PdfImportDialog::getParagraphStrategy() const
 {
     QAbstractButton* checkedButton = m_radioGroup.checkedButton();
     if (m_ui.radioParagraphAsIs == checkedButton) {

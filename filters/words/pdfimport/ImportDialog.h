@@ -27,12 +27,12 @@
 #include <kdialog.h>
 #include <ui_ImportDialogUI.h>
 
-class AsciiImportDialog : public KDialog
+class PdfImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AsciiImportDialog(const QString &encoding, QWidget *parent = 0);
-    ~AsciiImportDialog();
+    PdfImportDialog(const QString &encoding, QWidget *parent = 0);
+    ~PdfImportDialog();
     QTextCodec *getCodec() const;
     int getParagraphStrategy() const;
 

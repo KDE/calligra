@@ -31,13 +31,13 @@ class KoGenStyles;
 class KoOdfWriteStore;
 class KoXmlWriter;
 
-class AsciiImport : public KoFilter
+class PdfImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    AsciiImport(QObject *parent, const QVariantList &);
-    virtual ~AsciiImport();
+    PdfImport(QObject *parent, const QVariantList &);
+    virtual ~PdfImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
@@ -49,4 +49,4 @@ private:
     bool createMeta(KoOdfWriteStore &store);
 };
 
-#endif /* ASCIIIMPORT_H */
+#endif /* PdfIMPORT_H */
