@@ -40,7 +40,7 @@
 
 #include <calligraversion.h>
 
-bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat)
+bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
 {
     Q_UNUSED(outputFormat);
 
@@ -75,7 +75,47 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     printJob->printer().setOutputFileName(uOut.path());
     printJob->printer().setOutputFormat(QPrinter::PdfFormat);
     printJob->printer().setColorMode(QPrinter::Color);
-    printJob->printer().setPageMargins(0.2, 0.2, 0.2, 0.2, QPrinter::Point);
+
+    if (orientation == "Portrait") printJob->printer().setOrientation(QPrinter::Portrait);
+    else if (orientation == "Landscape") printJob->printer().setOrientation(QPrinter::Landscape);
+
+    if (orientation == "A0") printJob->printer().setPaperSize(QPrinter::A0);
+    else if (orientation == "A1") printJob->printer().setPaperSize(QPrinter::A1);
+    else if (orientation == "A2") printJob->printer().setPaperSize(QPrinter::A2);
+    else if (orientation == "A3") printJob->printer().setPaperSize(QPrinter::A3);
+    else if (orientation == "A4") printJob->printer().setPaperSize(QPrinter::A4);
+    else if (orientation == "A5") printJob->printer().setPaperSize(QPrinter::A5);
+    else if (orientation == "A6") printJob->printer().setPaperSize(QPrinter::A6);
+    else if (orientation == "A7") printJob->printer().setPaperSize(QPrinter::A7);
+    else if (orientation == "A8") printJob->printer().setPaperSize(QPrinter::A8);
+    else if (orientation == "A9") printJob->printer().setPaperSize(QPrinter::A9);
+    else if (orientation == "B0") printJob->printer().setPaperSize(QPrinter::B0);
+    else if (orientation == "B1") printJob->printer().setPaperSize(QPrinter::B1);
+    else if (orientation == "B2") printJob->printer().setPaperSize(QPrinter::B2);
+    else if (orientation == "B3") printJob->printer().setPaperSize(QPrinter::B3);
+    else if (orientation == "B4") printJob->printer().setPaperSize(QPrinter::B4);
+    else if (orientation == "B5") printJob->printer().setPaperSize(QPrinter::B5);
+    else if (orientation == "B6") printJob->printer().setPaperSize(QPrinter::B6);
+    else if (orientation == "B7") printJob->printer().setPaperSize(QPrinter::B7);
+    else if (orientation == "B8") printJob->printer().setPaperSize(QPrinter::B8);
+    else if (orientation == "B9") printJob->printer().setPaperSize(QPrinter::B9);
+    else if (orientation == "B10") printJob->printer().setPaperSize(QPrinter::B10);
+    else if (orientation == "C5E") printJob->printer().setPaperSize(QPrinter::C5E);
+    else if (orientation == "Comm10E") printJob->printer().setPaperSize(QPrinter::Comm10E);
+    else if (orientation == "DLE") printJob->printer().setPaperSize(QPrinter::DLE);
+    else if (orientation == "Executive") printJob->printer().setPaperSize(QPrinter::Executive);
+    else if (orientation == "Folio") printJob->printer().setPaperSize(QPrinter::Folio);
+    else if (orientation == "Ledger") printJob->printer().setPaperSize(QPrinter::Ledger);
+    else if (orientation == "Legal") printJob->printer().setPaperSize(QPrinter::Legal);
+    else if (orientation == "Letter") printJob->printer().setPaperSize(QPrinter::Letter);
+    else if (orientation == "Tabloid") printJob->printer().setPaperSize(QPrinter::Tabloid);
+
+    bool _marginOk;
+    qreal _margin = margin.toDouble(&_marginOk);
+    if (!_marginOk)
+        _margin = 0.2;
+    printJob->printer().setPageMargins(_margin, _margin, _margin, _margin, QPrinter::Point);
+
     printJob->startPrinting();
 
     doc->deleteLater();
@@ -86,10 +126,6 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
 bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, bool batch)
 {
     KoFilter::ConversionStatus status = KoFilter::OK;
-    if (outputFormat == "application/pdf") {
-        return convertPdf(uIn, inputFormat, uOut, outputFormat);
-    }
-
     KoFilterManager *manager = new KoFilterManager(uIn.path());
     manager->setBatchMode(batch);
     QByteArray mime(outputFormat.toLatin1());
@@ -117,6 +153,12 @@ int main(int argc, char **argv)
     options.add("batch", ki18n("Batch mode: do not show dialogs"));
     options.add("interactive", ki18n("Interactive mode: show dialogs (default)"));
     options.add("mimetype <mime>", ki18n("Mimetype of the output file"));
+
+    // PDF related options.
+    options.add("print-orientation <name>", ki18n("The print orientation. This could be either Portrait or Landscape."));
+    options.add("print-papersize <name>", ki18n("The paper size. A4, Legal, Letter, ..."));
+    options.add("print-margin <size>", ki18n("The size of the margin. Per default this is 0.2."));
+
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
@@ -176,9 +218,21 @@ int main(int argc, char **argv)
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    bool ok = convert(urlIn, inputMimetype->name(), urlOut, outputMimetype->name(), batch);
+
+    QString outputFormat = outputMimetype->name();
+    bool ok = false;
+    if (outputFormat == "application/pdf") {
+        QString orientation = args->getOption("print-orientation");
+        QString papersize = args->getOption("print-papersize");
+        QString margin = args->getOption("print-margin");
+        ok = convertPdf(urlIn, inputMimetype->name(), urlOut, outputFormat, orientation, papersize, margin);
+    } else {
+        ok = convert(urlIn, inputMimetype->name(), urlOut, outputFormat, batch);
+    }
+
     QTimer::singleShot(0, &app, SLOT(quit()));
     app.exec();
+
     QApplication::restoreOverrideCursor();
 
     if (!ok) {
