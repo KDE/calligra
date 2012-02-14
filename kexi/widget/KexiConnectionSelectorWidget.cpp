@@ -181,6 +181,7 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     d->remote->list->installEventFilter(this);
     d->descGroupBoxPaintBlocker = new KexiUtils::PaintBlocker(d->remote->descGroupBox);
     d->descGroupBoxPaintBlocker->setEnabled(false);
+    isConnectionSelected = false;
 }
 
 KexiConnectionSelectorWidget::~KexiConnectionSelectorWidget()
@@ -257,6 +258,7 @@ void KexiConnectionSelectorWidget::showSimpleConn()
         }
     }
     d->stack->setCurrentWidget(fileWidget);
+    connect(fileWidget->locationEdit()->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotConnectionSelected()));
 }
 
 KexiConnectionSelectorWidget::ConnectionType KexiConnectionSelectorWidget::selectedConnectionType() const
@@ -307,6 +309,7 @@ void KexiConnectionSelectorWidget::setSelectedFileName(const QString& fileName)
 void KexiConnectionSelectorWidget::slotConnectionItemExecuted(QTreeWidgetItem* item)
 {
     emit connectionItemExecuted(static_cast<ConnectionDataLVItem*>(item));
+    slotConnectionSelected();
 }
 
 void KexiConnectionSelectorWidget::slotConnectionItemExecuted()
@@ -315,6 +318,7 @@ void KexiConnectionSelectorWidget::slotConnectionItemExecuted()
     if (items.isEmpty())
         return;
     slotConnectionItemExecuted(items.first());
+    slotConnectionSelected();
 }
 
 void KexiConnectionSelectorWidget::slotConnectionSelectionChanged()
@@ -344,6 +348,7 @@ void KexiConnectionSelectorWidget::slotConnectionSelectionChanged()
         desc = item->data()->description;
     d->descGroupBoxPaintBlocker->setEnabled(desc.isEmpty());
     d->remote->descriptionLabel->setText(desc);
+    slotConnectionSelected();
     emit connectionItemHighlighted(item);
 }
 
@@ -493,4 +498,33 @@ bool KexiConnectionSelectorWidget::eventFilter(QObject* watched, QEvent* event)
         }
     }
     return QWidget::eventFilter(watched, event);
+}
+
+void KexiConnectionSelectorWidget::slotConnectionSelected()
+{
+    QList<QTreeWidgetItem *> items;
+    QLineEdit *lineEdit;
+    switch (selectedConnectionType()) {
+    case KexiConnectionSelectorWidget::FileBased:
+        lineEdit = fileWidget->locationEdit()->lineEdit();
+        if (!lineEdit->text().isEmpty())
+            isConnectionSelected = true;
+        else
+            isConnectionSelected = false;
+        break;
+    case KexiConnectionSelectorWidget::ServerBased:
+        items = d->remote->list->selectedItems();
+        if (!items.isEmpty())
+            isConnectionSelected = true;
+        else
+            isConnectionSelected = false;
+        break;
+    default:;
+    }
+    emit connectionSelected (isConnectionSelected);
+}
+
+bool KexiConnectionSelectorWidget::hasSelectedConnection() const
+{
+    return isConnectionSelected;
 }

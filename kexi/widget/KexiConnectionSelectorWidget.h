@@ -28,6 +28,7 @@
 
 #include <QPointer>
 #include <QTreeWidgetItem>
+#include <QLineEdit>
 
 class KexiFileWidget;
 
@@ -108,10 +109,13 @@ public:
     bool confirmOverwrites() const;
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
+    
+    bool hasSelectedConnection() const;
 
 signals:
     void connectionItemExecuted(ConnectionDataLVItem *item);
     void connectionItemHighlighted(ConnectionDataLVItem *item);
+    void connectionSelected(bool hasSelected);
 
 public slots:
     void showSimpleConn();
@@ -135,11 +139,13 @@ protected slots:
     void slotRemoteRemoveBtnClicked();
     void slotConnectionSelectionChanged();
     void slotPrjTypeSelected(int id);
+    void slotConnectionSelected();
 
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
-
+    bool isConnectionSelected;
+    
     class Private;
     Private * const d;
 };
