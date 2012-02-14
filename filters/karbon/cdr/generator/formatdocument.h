@@ -75,7 +75,8 @@ enum RecordFieldTypeId
 class AbstractRecordField
 {
 protected:
-    explicit AbstractRecordField(RecordFieldTypeId typeId) : mTypeId( typeId ) {}
+    AbstractRecordField( RecordFieldTypeId typeId, const QString& name )
+    : mTypeId( typeId ), mName( name ) {}
 private:
     AbstractRecordField( const AbstractRecordField& );
     AbstractRecordField& operator=( const AbstractRecordField& );
@@ -83,20 +84,20 @@ public:
     virtual ~AbstractRecordField() {}
 public:
     RecordFieldTypeId typeId() const { return mTypeId; }
+    const QString& name() const { return mName; }
 private:
     RecordFieldTypeId mTypeId;
+    const QString mName;
 };
 
 class PlainRecordField : public AbstractRecordField
 {
 public:
     PlainRecordField( const QString& name, const QString& typeId )
-    : AbstractRecordField(PlainFieldId), mName( name ), mTypeId( typeId ) {}
+    : AbstractRecordField( PlainFieldId, name ), mTypeId( typeId ) {}
 public:
-    const QString& name() const { return mName; }
     const QString& typeId() const { return mTypeId; }
 private:
-    const QString mName;
     const QString mTypeId;
 };
 
@@ -104,13 +105,11 @@ class ArrayRecordField : public AbstractRecordField
 {
 public:
     ArrayRecordField( const QString& name, const QString& typeId, int arraySize )
-    : AbstractRecordField(ArrayFieldId), mName( name ), mTypeId( typeId ), mArraySize( arraySize ) {}
+    : AbstractRecordField( ArrayFieldId, name ), mTypeId( typeId ), mArraySize( arraySize ) {}
 public:
-    const QString& name() const { return mName; }
     const QString& typeId() const { return mTypeId; }
     int arraySize() const { return mArraySize; }
 private:
-    QString mName;
     QString mTypeId;
     int mArraySize;
 };
@@ -118,23 +117,22 @@ private:
 class DynArrayRecordField : public AbstractRecordField
 {
 public:
-    DynArrayRecordField( const QString& name, const QString& typeId )
-    : AbstractRecordField(DynArrayFieldId), mName( name ), mTypeId( typeId ) {}
+    DynArrayRecordField( const QString& name, const QString& typeId, const QString& lengthField )
+    : AbstractRecordField( DynArrayFieldId, name ), mTypeId( typeId ), mLengthField( lengthField ) {}
 public:
-    const QString& name() const { return mName; }
     const QString& typeId() const { return mTypeId; }
+    const QString& lengthField() const { return mLengthField; }
 private:
-    QString mName;
     QString mTypeId;
+    QString mLengthField;
 };
 
 class Text8BitRecordField : public AbstractRecordField
 {
 public:
     Text8BitRecordField( const QString& name, int length )
-    : AbstractRecordField(Text8BitFieldId), mName( name ), mLength( length ) {}
+    : AbstractRecordField( Text8BitFieldId, name ), mLength( length ) {}
 public:
-    const QString& name() const { return mName; }
     int length() const { return mLength; }
 private:
     QString mName;
@@ -144,24 +142,24 @@ private:
 class DynText8BitRecordField : public AbstractRecordField
 {
 public:
-    DynText8BitRecordField( const QString& name )
-    : AbstractRecordField(DynText8BitFieldId), mName( name ) {}
+    DynText8BitRecordField( const QString& name, const QString& lengthField )
+    : AbstractRecordField( DynText8BitFieldId, name ), mLengthField( lengthField ) {}
 public:
-    const QString& name() const { return mName; }
+    const QString& lengthField() const { return mLengthField; }
 private:
-    QString mName;
+    QString mLengthField;
 };
 
 
 class DynBlobRecordField : public AbstractRecordField
 {
 public:
-    DynBlobRecordField( const QString& name )
-    : AbstractRecordField(DynBlobFieldId), mName( name ) {}
+    DynBlobRecordField( const QString& name, const QString& lengthField )
+    : AbstractRecordField( DynBlobFieldId, name ), mLengthField( lengthField ) {}
 public:
-    const QString& name() const { return mName; }
+    const QString& lengthField() const { return mLengthField; }
 private:
-    QString mName;
+    QString mLengthField;
 };
 
 
@@ -182,13 +180,11 @@ class UnionRecordField : public AbstractRecordField
 {
 public:
     UnionRecordField( const QString& name )
-    : AbstractRecordField(UnionFieldId), mName( name ) {}
+    : AbstractRecordField( UnionFieldId, name ) {}
 public:
     void appendVariant( const RecordFieldUnionVariant& variant ) { mVariants.append(variant); }
-    const QString& name() const { return mName; }
     const QVector<RecordFieldUnionVariant>& variants() const { return mVariants; }
 private:
-    const QString mName;
     QVector<RecordFieldUnionVariant> mVariants;
 };
 
@@ -207,6 +203,7 @@ public:
     const QString& name() const { return mName; }
     const QString& baseName() const { return mBaseName; }
     const QVector<AbstractRecordField*>& fields() const { return mFields; }
+    const AbstractRecordField* field( const QString& name ) const;
     const QVector<QString>& methods() const { return mMethods; }
     int size() const { return mSize; }
     bool isNull() const { return mName.isNull(); }
@@ -234,7 +231,10 @@ public:
     const QVector<Enumeration>& enumerations() const { return mEnumeration; }
     const QVector<Record*>& records() const { return mRecords; }
     const Record* record( const QString& name ) const;
+
+    const QString& realTypeName(const QString& typeName) const;
     int sizeOfType(const QString& typeName ) const;
+    bool isIntegerType( const QString& typeName ) const;
 private:
     QHash<QString,QString> mTypeDefByName;
     QVector<IncludedType> mIncludedTypes;

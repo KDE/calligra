@@ -21,6 +21,41 @@
 #include "formatdocument.h"
 
 
+struct BuiltInTypeDatum { char const* name; int size; bool isInteger; };
+static const BuiltInTypeDatum builtInTypeData[] =
+{
+    {"char",   1, false},
+    {"uchar",  1, false},
+    {"sint8",  1, true},
+    {"uint8",  1, true},
+    {"sint16", 2, true},
+    {"uint16", 2, true},
+    {"sint32", 4, true},
+    {"uint32", 4, true},
+    {"sint64", 8, true},
+    {"uint64", 8, true},
+    {"float",  4, false}
+};
+static const int builtInTypeDataSize = sizeof( builtInTypeData ) / sizeof( builtInTypeData[0] );
+
+const AbstractRecordField*
+Record::field( const QString& name ) const
+{
+    const AbstractRecordField* result = 0;
+
+    foreach( const AbstractRecordField* field, mFields )
+    {
+        if( field->name() == name )
+        {
+            result = field;
+            break;
+        }
+    }
+
+    return result;
+}
+
+
 const Record*
 FormatDocument::record( const QString& name ) const
 {
@@ -38,20 +73,33 @@ FormatDocument::record( const QString& name ) const
     return result;
 }
 
+const QString&
+FormatDocument::realTypeName(const QString& typeName) const
+{
+    const QString* realTypeName = &typeName;
+
+    while( true )
+    {
+        QHash<QString,QString>::ConstIterator it = mTypeDefByName.find(*realTypeName);
+        if( it == mTypeDefByName.constEnd() )
+            break;
+
+        realTypeName = &(it.value());
+    }
+
+    return *realTypeName;
+}
+
 int
 FormatDocument::sizeOfType(const QString& typeName) const
 {
     int result = -1;
 
-    const QString* actualTypeName = &typeName;
-
-    QHash<QString,QString>::ConstIterator it = mTypeDefByName.find(typeName);
-    if( it != mTypeDefByName.constEnd() )
-        actualTypeName = &(it.value());
+    const QString& realTypeName = this->realTypeName( typeName );
 
     foreach( const IncludedType& includedType, mIncludedTypes )
     {
-        if( includedType.name() == *actualTypeName )
+        if( includedType.name() == realTypeName )
         {
             result = includedType.size();
             break;
@@ -62,7 +110,7 @@ FormatDocument::sizeOfType(const QString& typeName) const
     {
         foreach( const Record* record, mRecords )
         {
-            if( record->name() == *actualTypeName )
+            if( record->name() == realTypeName )
             {
                 result = record->size();
                 break;
@@ -72,26 +120,10 @@ FormatDocument::sizeOfType(const QString& typeName) const
 
     if( result == -1 )
     {
-        struct BuiltInTypeDatum { char const* name; int size; };
-        static const BuiltInTypeDatum builtInTypeData[] =
-        {
-            {"char",   1},
-            {"uchar",  1},
-            {"sint8",  1},
-            {"uint8",  1},
-            {"sint16", 2},
-            {"uint16", 2},
-            {"sint32", 4},
-            {"uint32", 4},
-            {"sint64", 8},
-            {"uint64", 8},
-            {"float",  4}
-        };
-        static const int builtInTypeDataSize = sizeof( builtInTypeData ) / sizeof( builtInTypeData[0] );
         for( int i = 0; i < builtInTypeDataSize; ++i)
         {
             const BuiltInTypeDatum& builtInTypeDatum = builtInTypeData[i];
-            if( builtInTypeDatum.name == *actualTypeName )
+            if( QLatin1String(builtInTypeDatum.name) == realTypeName )
             {
                 result = builtInTypeDatum.size;
                 break;
@@ -99,5 +131,25 @@ FormatDocument::sizeOfType(const QString& typeName) const
         }
     }
 
+    return result;
+}
+
+bool
+FormatDocument::isIntegerType(const QString& typeName) const
+{
+    bool result = false;
+
+    const QString& realTypeName = this->realTypeName( typeName );
+
+    // TODO: check also included types
+    for( int i = 0; i < builtInTypeDataSize; ++i)
+    {
+        const BuiltInTypeDatum& builtInTypeDatum = builtInTypeData[i];
+        if( QLatin1String(builtInTypeDatum.name) == realTypeName )
+        {
+            result = builtInTypeDatum.isInteger;
+            break;
+        }
+    }
     return result;
 }

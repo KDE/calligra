@@ -70,6 +70,130 @@ memberName( const QString& fieldName )
     return QLatin1String("__") + fieldName;
 }
 
+static inline
+QString
+lengthFormula( const QString& fieldName )
+{
+    return fieldName.isEmpty() ? QString() : (fieldName + QLatin1String("()"));
+
+}
+
+class StructMemberAddress
+{
+public:
+    StructMemberAddress() : mIsPointerMember(false), mLength(0), mIsAbsolute(true), mIsBroken(false) {}
+    void insertStaticSizeMember( const QString& typeName, const QString& memberName,
+                                 bool isPointerMember, int length );
+    void insertDynamicSizeMember( const QString& typeName, const QString& memberName,
+                                  const QString& lengthFormula );
+    QString memberDeclaration() const;
+    QString reference() const;
+    bool isAbsolute() const { return mIsAbsolute; }
+    bool isBroken() const { return mIsBroken; }
+private:
+    void updateAddress();
+private:
+    QString mTypeName;
+    QString mMemberName;
+    bool mIsPointerMember;
+
+    int mLength; // -1 means it is a dynamic size
+    QString mLengthFormula;
+
+    QString mAddress;
+    bool mIsAbsolute : 1;
+    bool mIsBroken : 1;
+};
+
+void
+StructMemberAddress::updateAddress()
+{
+    // for the first member there is nothing to do
+    if( mTypeName.isEmpty() )
+        return;
+
+    if( mIsAbsolute )
+    {
+        // replace existing
+        mAddress = QLatin1String("reinterpret_cast<const char*>(");
+        if( ! mIsPointerMember || (mLength == -1) ) mAddress.append( QLatin1Char('&') );
+        mAddress = mAddress + mMemberName + QLatin1Char(')');
+    }
+    if( mLength == -1 )
+    {
+        if( mLengthFormula.isEmpty() )
+        {
+            mIsBroken = true;
+            return;
+        }
+        mAddress = mAddress+QLatin1String("+(sizeof(")+mTypeName+QLatin1String(")*")+mLengthFormula+QLatin1Char(')');
+        mIsAbsolute = false;
+    }
+    else
+        mAddress = mAddress+QLatin1String("+(sizeof(")+mTypeName+QLatin1String(")*")+QString::number(mLength)+QLatin1Char(')');
+}
+
+void
+StructMemberAddress::insertStaticSizeMember( const QString& typeName, const QString& memberName,
+                                             bool isPointerMember, int length )
+{
+    if( mIsBroken )
+        return;
+
+    updateAddress();
+
+    mTypeName = typeName;
+    mMemberName = memberName;
+    mLength = length;
+    mIsPointerMember = isPointerMember;
+}
+
+void
+StructMemberAddress::insertDynamicSizeMember( const QString& typeName,
+                                              const QString& memberName,
+                                              const QString& lengthFormula )
+{
+    if( mIsBroken )
+        return;
+
+    updateAddress();
+
+    mTypeName = typeName;
+    mMemberName = memberName;
+    mIsPointerMember = true;
+    mLengthFormula = lengthFormula;
+    mLength = -1;
+}
+
+
+QString
+StructMemberAddress::reference() const
+{
+    if( mIsAbsolute )
+        return mMemberName;
+
+    return QLatin1String("*reinterpret_cast<const ")+mTypeName+("*>(") + mAddress + QLatin1Char(')');
+}
+
+QString StructMemberAddress::memberDeclaration() const
+{
+    if( ! mIsAbsolute )
+        return QString();
+
+    if( mIsPointerMember ) // or add to members ourselves?
+    {
+        if( mLength == -1 )
+            return mTypeName+QLatin1Char(' ')+mMemberName+QLatin1String(";\n");
+        else
+            return mTypeName+QLatin1Char(' ')+mMemberName+
+                   QLatin1Char('[')+QString::number(mLength)+QLatin1String("];\n");
+    }
+    else
+        return mTypeName+QLatin1Char(' ')+mMemberName+QLatin1String(";\n");
+}
+
+
+
 bool
 CHeaderGenerator::write( FormatDocument* document, QIODevice* device )
 {
@@ -163,6 +287,8 @@ CHeaderGenerator::writeRecord( const Record* record )
     foreach( const QString& method, record->methods() )
         mTextStream << QLatin1String("    ") << method << QLatin1Char('\n');
 
+    StructMemberAddress structMemberAddress;
+
     // members
     foreach( const AbstractRecordField* field, record->fields() )
     {
@@ -171,41 +297,48 @@ CHeaderGenerator::writeRecord( const Record* record )
             const PlainRecordField* plainField = static_cast<const PlainRecordField*>( field );
             const QString& typeName = codeName(plainField->typeId());
             const QString memberName = ::memberName(plainField->name());
+            const int memberSize = mDocument->sizeOfType(plainField->typeId());
+            structMemberAddress.insertStaticSizeMember( typeName, memberName, false, memberSize );
 
             // member
-            members.append( typeName+QLatin1Char(' ')+memberName+
-                            QLatin1String(";\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method
-            if( mDocument->sizeOfType(plainField->typeId()) <= maxReturnByValueTypeSize )
+            if( memberSize <= maxReturnByValueTypeSize )
                 // return by value
                 getters.append( typeName+QLatin1Char(' ')+plainField->name() +
-                                QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
+                                QLatin1String("() const { return ")+structMemberAddress.reference()+
+                                QLatin1String("; }\n") );
             else
                 // return by reference
                 getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+plainField->name() +
-                                QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
+                                QLatin1String("() const { return ")+structMemberAddress.reference()+
+                                QLatin1String("; }\n") );
         }
         else if( field->typeId() == ArrayFieldId )
         {
             const ArrayRecordField* arrayField = static_cast<const ArrayRecordField*>( field );
             const QString& typeName = codeName(arrayField->typeId());
             const QString memberName = ::memberName(arrayField->name());
+            const int typeSize = mDocument->sizeOfType(arrayField->typeId());
+            structMemberAddress.insertStaticSizeMember( typeName, memberName, true, arrayField->arraySize() );
 
             // member
-            members.append( typeName+QLatin1Char(' ')+memberName+
-                            QLatin1Char('[')+QString::number(arrayField->arraySize())+QLatin1String("];\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method
             getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
-                            QLatin1String("Ptr() const { return ")+memberName+QLatin1String("; }\n") );
-            if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
+                            QLatin1String("Ptr() const { return ")+structMemberAddress.reference()+
+                            QLatin1String("; }\n") );
+            if( typeSize <= maxReturnByValueTypeSize )
                 // return by value
                 getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
-                                QLatin1String("( int i ) const { return ")+memberName+
+                                QLatin1String("( int i ) const { return ")+structMemberAddress.reference()+
                                 QLatin1String("[i]; }\n") );
             else
                 // return by reference
                 getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+arrayField->name()+
-                                QLatin1String("( int i ) const { return ")+memberName+
+                                QLatin1String("( int i ) const { return ")+structMemberAddress.reference()+
                                 QLatin1String("[i]; }\n") );
         }
         else if( field->typeId() == DynArrayFieldId )
@@ -213,72 +346,91 @@ CHeaderGenerator::writeRecord( const Record* record )
             const DynArrayRecordField* arrayField = static_cast<const DynArrayRecordField*>( field );
             const QString& typeName = codeName(arrayField->typeId());
             const QString memberName = ::memberName(arrayField->name());
+            const int typeSize = mDocument->sizeOfType(arrayField->typeId());
+            const QString lengthFormula = ::lengthFormula(arrayField->lengthField());
+            structMemberAddress.insertDynamicSizeMember( typeName, memberName, lengthFormula );
 
             // member
-            members.append( typeName+QLatin1Char(' ')+memberName+
-                            QLatin1String(";\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method
             getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
-                            QLatin1String("Ptr() const { return &")+memberName+QLatin1String("; }\n") );
-            if( mDocument->sizeOfType(arrayField->typeId()) <= maxReturnByValueTypeSize )
+                            QLatin1String("Ptr() const { return &")+structMemberAddress.reference()+
+                            QLatin1String("; }\n") );
+            if( typeSize <= maxReturnByValueTypeSize )
                 // return by value
                 getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
-                                QLatin1String("( int i ) const { return (&")+memberName+
+                                QLatin1String("( int i ) const { return (&")+structMemberAddress.reference()+
                                 QLatin1String(")[i]; }\n") );
             else
                 // return by reference
                 getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+arrayField->name()+
-                                QLatin1String("( int i ) const { return (&")+memberName+
+                                QLatin1String("( int i ) const { return (&")+structMemberAddress.reference()+
                                 QLatin1String(")[i]; }\n") );
         }
         else if( field->typeId() == Text8BitFieldId )
         {
             const Text8BitRecordField* textField = static_cast<const Text8BitRecordField*>( field );
             const QString memberName = ::memberName(textField->name());
+            const int length = textField->length();
+            structMemberAddress.insertStaticSizeMember( QLatin1String("char"), memberName, true, length );
 
             // member
-            members.append( QLatin1String("char ")+memberName+
-                            QLatin1Char('[')+QString::number(textField->length())+QLatin1String("];\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method, TODO: add check for length and no \0
             getters.append( QLatin1String("const char* ")+textField->name()+
-                            QLatin1String("() const { return ")+memberName+QLatin1String("; }\n") );
+                            QLatin1String("() const { return ")+structMemberAddress.reference()+
+                            QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynText8BitFieldId )
         {
             const DynText8BitRecordField* textField = static_cast<const DynText8BitRecordField*>( field );
             const QString memberName = ::memberName(textField->name());
+            const QString lengthFormula = ::lengthFormula(textField->lengthField());
+            structMemberAddress.insertDynamicSizeMember( QLatin1String("char"), memberName, lengthFormula );
 
             // member
-            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method
             getters.append( QLatin1String("const char* ")+textField->name()+
-                            QLatin1String("() const { return &")+memberName+QLatin1String("; }\n") );
+                            QLatin1String("() const { return &")+structMemberAddress.reference()+
+                            QLatin1String("; }\n") );
         }
         else if( field->typeId() == DynBlobFieldId )
         {
             const DynBlobRecordField* blobField = static_cast<const DynBlobRecordField*>( field );
             const QString memberName = ::memberName(blobField->name());
+            const QString lengthFormula = ::lengthFormula(blobField->lengthField());
+            structMemberAddress.insertDynamicSizeMember( QLatin1String("char"), memberName, lengthFormula );
 
             // member
-            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access method
             getters.append( QLatin1String("const char* ")+blobField->name()+
-                            QLatin1String("() const { return &")+memberName+QLatin1String("; }\n") );
+                            QLatin1String("() const { return &")+structMemberAddress.reference()+
+                            QLatin1String("; }\n") );
         }
         else if( field->typeId() == UnionFieldId )
         {
             const UnionRecordField* unionField = static_cast<const UnionRecordField*>( field );
             const QString memberName = ::memberName(unionField->name());
+            int memberSize = 1;
+            structMemberAddress.insertStaticSizeMember( QLatin1String("char"), memberName, false, memberSize );
 
             // member
-            members.append( QLatin1String("char ")+memberName+QLatin1String(";\n") );
+            if( structMemberAddress.isAbsolute() )
+                members.append( structMemberAddress.memberDeclaration() );
             // access methods
             foreach( const RecordFieldUnionVariant& variant, unionField->variants() )
             {
                 const QString& typeName = codeName(variant.typeId());
                 getters.append( QLatin1String("const ")+typeName+QLatin1String("& ")+variant.name() +
                                 QLatin1String("() const { return reinterpret_cast<const ")+typeName+
-                                ("&>(")+memberName+QLatin1String("); }\n") );
+                                ("&>(")+structMemberAddress.reference()+QLatin1String("); }\n") );
+                memberSize = qMax( memberSize, mDocument->sizeOfType(variant.typeId()) );
             }
         }
     }

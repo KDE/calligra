@@ -203,6 +203,25 @@ FormatParser::isDeclaredEndOffsetCorrect( const QXmlStreamAttributes& attributes
     return isCorrectEndOffset;
 }
 
+bool
+FormatParser::isIntegerTypeField(const QString& fieldName, const Record* record)
+{
+    const AbstractRecordField* field = record->field( fieldName );
+    // not
+    if( field == 0 )
+    {
+        mReader.raiseError( QLatin1String("Field ")+fieldName+QLatin1String(" used as length not yet known.") );
+        return false;
+    }
+    if( (field->typeId() != PlainFieldId) ||
+        ! mDocument->isIntegerType(static_cast<const PlainRecordField*>(field)->typeId()) )
+    {
+        mReader.raiseError( QLatin1String("Field ")+fieldName+QLatin1String(" is not of an integer type.") );
+        return false;
+    }
+    return true;
+}
+
 void
 FormatParser::readRecords()
 {
@@ -236,6 +255,7 @@ qDebug() << "record:" <<record->name()<<record->baseName();
             const QStringRef sizeStringRef = attributes.value(QLatin1String("size"));
             const int declaredRecordSize =  sizeStringRef.isEmpty() ? recordSizeUndeclared :
                                                                       sizeStringRef.toString().toInt();
+
             // fields
             while( mReader.readNextStartElement() )
             {
@@ -291,7 +311,10 @@ qDebug() << "  array:" <<arrayField->name() <<arrayField->typeId() << arrayField
                 {
                     const QString fieldName = attributes.value(QLatin1String("name")).toString();
                     const QString arrayType = attributes.value(QLatin1String("type")).toString();
-//                     const int arrayLength = attributes.value(QLatin1String("length")).toString().toInt();
+                    const QStringRef lengthFieldRef = attributes.value(QLatin1String("length"));
+                    const QString lengthField = lengthFieldRef.toString();
+                    if( ! lengthFieldRef.isNull() && ! isIntegerTypeField(lengthField, record.data()) )
+                        break;
 
                     // check offsets
                     const int startOffset = record->size();
@@ -305,9 +328,10 @@ qDebug() << "  array:" <<arrayField->name() <<arrayField->typeId() << arrayField
                         break;
                     }
 
-                    DynArrayRecordField* dynArrayField = new DynArrayRecordField( fieldName, arrayType );
+                    DynArrayRecordField* dynArrayField =
+                        new DynArrayRecordField( fieldName, arrayType, lengthField );
                     record->appendField( dynArrayField, 0 );
-qDebug() << "  dynarray:" <<dynArrayField->name() <<dynArrayField->typeId();
+qDebug() << "  dynarray:" <<dynArrayField->name() <<dynArrayField->typeId() << dynArrayField->lengthField();
                 }
                 else if( mReader.name() == QLatin1String("bytestring") )
                 {
@@ -329,26 +353,34 @@ qDebug() << "  bytestring:" << textField->name() << textField->length();
                 else if( mReader.name() == QLatin1String("dynbytestring") )
                 {
                     const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const QStringRef lengthFieldRef = attributes.value(QLatin1String("length"));
+                    const QString lengthField = lengthFieldRef.toString();
+                    if( ! lengthFieldRef.isNull() && ! isIntegerTypeField(lengthField, record.data()) )
+                        break;
 
                     // check offsets
                     const int startOffset = record->size();
                     if( ! isDeclaredStartOffsetCorrect(attributes,startOffset) )
                         break;
 
-                    DynText8BitRecordField* dynTextField = new DynText8BitRecordField( fieldName );
+                    DynText8BitRecordField* dynTextField = new DynText8BitRecordField( fieldName, lengthField );
                     record->appendField( dynTextField, 0 );
 qDebug() << "  dynbytestring:" <<dynTextField->name();
                 }
                 else if( mReader.name() == QLatin1String("dynblob") )
                 {
                     const QString fieldName = attributes.value(QLatin1String("name")).toString();
+                    const QStringRef lengthFieldRef = attributes.value(QLatin1String("length"));
+                    const QString lengthField = lengthFieldRef.toString();
+                    if( ! lengthFieldRef.isNull() && ! isIntegerTypeField(lengthField, record.data()) )
+                        break;
 
                     // check offsets
                     const int startOffset = record->size();
                     if( ! isDeclaredStartOffsetCorrect(attributes,startOffset) )
                         break;
 
-                    DynBlobRecordField* dynBlobField = new DynBlobRecordField( fieldName );
+                    DynBlobRecordField* dynBlobField = new DynBlobRecordField( fieldName, lengthField );
                     record->appendField( dynBlobField, 0 );
 qDebug() << "  dynblob:" <<dynBlobField->name();
                 }

@@ -797,10 +797,6 @@ But other nibble for lines also have any of both not set: 4,6,C,D
 
   <records>
     <record name="Cdr4PointList" size="4" sizeExtended="true">
-      <method>
-<code><![CDATA[Cdr4PointType pointType( int i ) const
-    { return reinterpret_cast<const Cdr4PointType*>(&__point+count())[i]; }]]></code>
-      </method>
       <field start="0" end="1" name="count" type="uint16">
           <description>The number of the points.</description>
       </field>
@@ -809,6 +805,10 @@ But other nibble for lines also have any of both not set: 4,6,C,D
           <description>A list of points in the Cdr4Point format, with the number as given in the "count" field, followed by a list of types in the Cdr4PointType format, with the same number.
           Types might be inverted, similar to arguments, not yet checked.
           Seems the record is padded to full 32 bit units.</description>
+      </dynarray>
+      <dynarray name="pointType" type="Cdr4PointType" length="count">
+        <!-- TODO: check that type is not inverted like arg types are-->
+          <description>The types of the points.</description>
       </dynarray>
     </record>
 

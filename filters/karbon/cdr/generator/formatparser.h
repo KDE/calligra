@@ -25,6 +25,7 @@
 #include <QtCore/QXmlStreamReader>
 
 class FormatDocument;
+class Record;
 class QIODevice;
 class QXmlStreamAttributes;
 
@@ -44,6 +45,7 @@ private:
 
     bool isDeclaredStartOffsetCorrect( const QXmlStreamAttributes& attributes, int expectedStartOffset );
     bool isDeclaredEndOffsetCorrect( const QXmlStreamAttributes& attributes, int expectedEndOffset );
+    bool isIntegerTypeField( const QString& fieldName, const Record* record );
 private:
     QXmlStreamReader mReader;
     FormatDocument* mDocument;
