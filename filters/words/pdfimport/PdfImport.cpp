@@ -1,9 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
-   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
-   Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
+   Copyright (C) 2011, 2012 Pankaj Kumar <me@panks.in> 
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +21,7 @@
 
 #include <QTextCodec>
 #include <QFile>
-
+#include <stddef.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
@@ -39,23 +35,26 @@
 #include <KoXmlWriter.h>
 
 #include "ImportDialog.h"
+//#include <poppler/PDFDoc.h>
+//#include <poppler/Page.h>
+#include<poppler/qt4/poppler-qt4.h>
 
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
 K_EXPORT_PLUGIN(PdfImportFactory("wordspdfimportng", "calligrafilters"))
 
-bool checkEncoding(QTextCodec *codec, QByteArray &data)
-{
-    QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
-    QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
-    for (int i = 0; i < unicode.size(); ++i) {
-        if (unicode[i] == 0) {
-            return false;
-        }
-    }
-    return true;
-}
+// bool checkEncoding(QTextCodec *codec, QByteArray &data)
+// {
+//     QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
+//     QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
+//     for (int i = 0; i < unicode.size(); ++i) {
+//         if (unicode[i] == 0) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }
 
 PdfImport::PdfImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
@@ -69,7 +68,7 @@ PdfImport::~PdfImport()
 KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if (to != "application/vnd.oasis.opendocument.text" || from != "text/plain") {
+    if (to != "application/vnd.oasis.opendocument.text" || from != "application/pdf") {
         return KoFilter::NotImplemented;
     }
 
@@ -80,49 +79,49 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
         return KoFilter::FileNotFound;
     }
 
-    // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
-    QByteArray data = in.read(100000);
-    in.seek(0);
-
-    // this code is inspired by the kate encoding guessing
-    // first try UTF-8
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    if (!checkEncoding(codec, data)) {
-        // then try to guess the encoding from the content
-        KEncodingProber prober(KEncodingProber::Universal);
-        prober.feed(data);
-        kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
-        if (prober.confidence() > 0.5) {
-            codec = QTextCodec::codecForName(prober.encoding());
-        }
-        if (!codec || !checkEncoding(codec, data )) {
-            // then try the fallback ISO 8859-15
-            codec = QTextCodec::codecForName("ISO 8859-15");
-            if (!checkEncoding(codec, data)) {
-                // if all failed use UTF-8
-                codec = QTextCodec::codecForName("UTF-8");
-                kWarning(30502) << "fallback to UTF-8 encoding";
-            }
-        }
-    }
+//     // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
+//     QByteArray data = in.read(100000);
+//     in.seek(0);
+// 
+//     // this code is inspired by the kate encoding guessing
+//     // first try UTF-8
+     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+//     if (!checkEncoding(codec, data)) {
+//         // then try to guess the encoding from the content
+//         KEncodingProber prober(KEncodingProber::Universal);
+//         prober.feed(data);
+//         kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+//         if (prober.confidence() > 0.5) {
+//             codec = QTextCodec::codecForName(prober.encoding());
+//         }
+//         if (!codec || !checkEncoding(codec, data )) {
+//             // then try the fallback ISO 8859-15
+//             codec = QTextCodec::codecForName("ISO 8859-15");
+//             if (!checkEncoding(codec, data)) {
+//                 // if all failed use UTF-8
+//                 codec = QTextCodec::codecForName("UTF-8");
+//                 kWarning(30502) << "fallback to UTF-8 encoding";
+//             }
+//         }
+//     }
 
     int paragraphStrategy = 0;
 
-    if (!m_chain->manager()->getBatchMode()) {
-        QPointer<PdfImportDialog> dialog = new PdfImportDialog(codec->name(), QApplication::activeWindow());
-        if (!dialog) {
-            kError(30502) << "Dialog has not been created! Aborting!" << endl;
-            in.close();
-            return KoFilter::StupidError;
-        }
-        if (!dialog->exec()) {
-            kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
-            in.close();
-            return KoFilter::UserCancelled;
-        }
-        codec = dialog->getCodec();
-        paragraphStrategy = dialog->getParagraphStrategy();
-    }
+//     if (!m_chain->manager()->getBatchMode()) {
+//         QPointer<PdfImportDialog> dialog = new PdfImportDialog(codec->name(), QApplication::activeWindow());
+//         if (!dialog) {
+//             kError(30502) << "Dialog has not been created! Aborting!" << endl;
+//             in.close();
+//             return KoFilter::StupidError;
+//         }
+//         if (!dialog->exec()) {
+//             kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
+//             in.close();
+//             return KoFilter::UserCancelled;
+//         }
+//         codec = dialog->getCodec();
+//         paragraphStrategy = dialog->getParagraphStrategy();
+//     }
 
     if (!codec) {
         kError(30502) << "Could not create QTextCodec! Aborting" << endl;
@@ -130,6 +129,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     }
 
     kDebug(30502) << "Charset used:" << codec->name();
+    kDebug(30502) << "Paragraph Strategy used:" << paragraphStrategy;
 
     QTextStream stream(&in);
     stream.setCodec(codec);
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
 
     if ( !odfStore.closeManifestWriter() ) {
-        kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
+      kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }
@@ -214,15 +214,29 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
 void PdfImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
 {
-    while (!stream.atEnd()) {
-        QString line = stream.readLine();
-        if (!line.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            if (!line.isEmpty())
-                bodyWriter->addTextSpan(line);
-            bodyWriter->endElement();
-        }
+//     while (!stream.atEnd()) {
+//         QString line = stream.readLine();
+//         if (!line.isNull()) {
+//             bodyWriter->startElement("text:p");
+//             bodyWriter->addAttribute("text:style-name", styleName);
+//             if (!line.isEmpty())
+//                 bodyWriter->addTextSpan(line);
+//             bodyWriter->endElement();
+//         }
+//     }
+    //GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
+    
+    Poppler::Document * pdfDoc=Poppler::Document::load(m_chain->inputFile());
+    //pdfDoc->load(m_chain->inputFile(),QByteArray(),QByteArray());
+    int noOfPages=pdfDoc->numPages();
+    for(int j=0; j<noOfPages; j++){
+    Poppler::Page  *pages = pdfDoc->page(j);
+//    kWarning(30502) << "Name of the file is !"<< m_chain->inputFile();
+    QString str=pages->text(QRectF());
+    bodyWriter->startElement("text:p");
+    bodyWriter->addAttribute("text:style-name", styleName);
+    bodyWriter->addTextSpan(str);
+    bodyWriter->endElement();
     }
 }
 

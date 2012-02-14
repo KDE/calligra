@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010, Thorsten Zachmann <zachmann@kde.org>
-
+   Copyright (C) 2011, 2012 Pankaj Kumar <me@panks.in>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -49,4 +49,4 @@ private:
     bool createMeta(KoOdfWriteStore &store);
 };
 
-#endif /* PdfIMPORT_H */
+#endif /* PDFIMPORT_H */
