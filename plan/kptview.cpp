@@ -444,7 +444,6 @@ void View::hideToolDocker()
                         a->removeAction( act );
                     }
                 }
-                break;
             }
         }
     }
