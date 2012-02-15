@@ -423,9 +423,20 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
     if (!block.isValid())
         return;
 
+    int i=0;
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor,3);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+
+    while(!((!(cursor.selectedText().at(i)==QChar('\''))) && (!(cursor.selectedText().at(i).isLetter())))){
+
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+            i++;
+        }
+    cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+    cursor.removeSelectedText();
+
+
     //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
