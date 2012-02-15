@@ -118,13 +118,13 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     KoOdfWriteStore odfWriter(output);
     KoXmlWriter* manifest = odfWriter.manifestWriter(KoXmlNS::presentation.toUtf8());
     //Save the preview picture
-    output->enterDirectory("Thumbnails");
-    output->open("thubnail.png");
+    output->enterDirectory(QLatin1String("Thumbnails"));
+    output->open(QLatin1String("thumbnail.png"));
     output->write(*preview);
     output->close();
     output->leaveDirectory();
-    manifest->addManifestEntry("Thubnails/", "");
-    manifest->addManifestEntry("Thubnails/thubnail.png", "");
+    manifest->addManifestEntry(QLatin1String("Thumbnails/"), QString());
+    manifest->addManifestEntry(QLatin1String("Thumbnails/thumbnail.png"), QString());
     delete preview;
 
     //Write the Pictures directory and its children, also fill the m_pictures hash
