@@ -119,6 +119,7 @@ public:
     bool file_sel_shown;
     bool confirmOverwrites;
     KexiUtils::PaintBlocker* descGroupBoxPaintBlocker;
+    bool isConnectionSelected;
 };
 
 /*================================================================*/
@@ -181,7 +182,7 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     d->remote->list->installEventFilter(this);
     d->descGroupBoxPaintBlocker = new KexiUtils::PaintBlocker(d->remote->descGroupBox);
     d->descGroupBoxPaintBlocker->setEnabled(false);
-    isConnectionSelected = false;
+    d->isConnectionSelected = false;
 }
 
 KexiConnectionSelectorWidget::~KexiConnectionSelectorWidget()
@@ -507,24 +508,18 @@ void KexiConnectionSelectorWidget::slotConnectionSelected()
     switch (selectedConnectionType()) {
     case KexiConnectionSelectorWidget::FileBased:
         lineEdit = fileWidget->locationEdit()->lineEdit();
-        if (!lineEdit->text().isEmpty())
-            isConnectionSelected = true;
-        else
-            isConnectionSelected = false;
+        d->isConnectionSelected = !lineEdit->text().isEmpty();
         break;
     case KexiConnectionSelectorWidget::ServerBased:
         items = d->remote->list->selectedItems();
-        if (!items.isEmpty())
-            isConnectionSelected = true;
-        else
-            isConnectionSelected = false;
+        d->isConnectionSelected = !items.isEmpty();
         break;
     default:;
     }
-    emit connectionSelected (isConnectionSelected);
+    emit connectionSelected (d->isConnectionSelected);
 }
 
 bool KexiConnectionSelectorWidget::hasSelectedConnection() const
 {
-    return isConnectionSelected;
+    return d->isConnectionSelected;
 }

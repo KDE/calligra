@@ -144,7 +144,6 @@ protected slots:
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
-    bool isConnectionSelected;
     
     class Private;
     Private * const d;
