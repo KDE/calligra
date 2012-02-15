@@ -23,8 +23,10 @@
 // filter
 #include "cdrparser.h"
 #include "cdrdocument.h"
-#include "cdrsvgwriter.h"
+#include "cdrodgwriter.h"
 // Calligra core
+#include <KoOdf.h>
+#include <KoStore.h>
 #include <KoFilterChain.h>
 // Qt
 #include <QtCore/QFile>
@@ -43,7 +45,7 @@ KoFilter::ConversionStatus
 CdrImportFilter::convert( const QByteArray& from, const QByteArray& to )
 {
     if ((from != "application/vnd.corel-draw") ||
-        (to   != "image/svg+xml")) {
+        (to   != "application/vnd.oasis.opendocument.graphics")) {
         return KoFilter::NotImplemented;
     }
 
@@ -55,12 +57,13 @@ CdrImportFilter::convert( const QByteArray& from, const QByteArray& to )
     }
 
     // prepare output
-    QFile svgFile( m_chain->outputFile() );
-    if( ! svgFile.open(QIODevice::WriteOnly) )
-    {
-        return KoFilter::CreationError;
+    KoStore* outputStore = KoStore::createStore( m_chain->outputFile(), KoStore::Write,
+                                                 KoOdf::mimeType(KoOdf::Graphics), KoStore::Zip );
+    if( ! outputStore ) {
+        return KoFilter::StorageCreationError;
     }
-    CdrSvgWriter svgWriter( &svgFile );
+
+    CdrOdgWriter odgWriter( outputStore );
 
     // translate!
     CdrParser parser;
@@ -68,7 +71,7 @@ CdrImportFilter::convert( const QByteArray& from, const QByteArray& to )
     if( ! document ) {
         return KoFilter::CreationError;
     }
-    if (! svgWriter.write(document)) {
+    if (! odgWriter.write(document)) {
         return KoFilter::CreationError;
     }
 

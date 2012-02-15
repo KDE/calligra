@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon Corel Draw Import Filter
-X-KDE-Export=image/svg+xml
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/vnd.corel-draw
 X-KDE-Weight=1
 X-KDE-Library=karboncdrimport

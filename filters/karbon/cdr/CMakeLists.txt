@@ -30,7 +30,7 @@ set( karboncdrimport_PART_SRCS
     cdr4structs.h # find a better way to add to dep tree
     cdrdocument.cpp
     cdrparser.cpp
-    cdrsvgwriter.cpp
+    cdrodgwriter.cpp
     cdrimportfilter.cpp
     main.cpp
 )

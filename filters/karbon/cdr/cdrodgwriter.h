@@ -18,11 +18,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CDRSVGWRITER_H
-#define CDRSVGWRITER_H
+#ifndef CDRODGWRITER_H
+#define CDRODGWRITER_H
 
 // Calligra
-#include <KoXmlWriter.h>
+#include <KoOdfWriteStore.h>
+#include <KoGenStyles.h>
 
 class CdrDocument;
 class CdrPage;
@@ -34,17 +35,27 @@ class CdrPathObject;
 class CdrTextObject;
 class CdrAbstractObject;
 
+class KoXmlWriter;
+class KoStore;
 
-class CdrSvgWriter
+
+class CdrOdgWriter
 {
 public:
-    explicit CdrSvgWriter( QIODevice* device );
-    ~CdrSvgWriter();
+    explicit CdrOdgWriter( KoStore* outputStore );
+    ~CdrOdgWriter();
 
 public:
     bool write( CdrDocument* document );
 
-private:
+private: // TODO: naming pattern for xml writing vs. file/data object storing
+    void writeThumbnailFile();
+    void writePixelImageFiles();
+    void writeDocumentInfoFile();
+    void writeDocumentSettingsFile();
+    void writeContentFile();
+
+    void writeMasterPage();
     void writePage( const CdrPage* page );
     void writeLayer( const CdrLayer* layer );
     void writeObject( const CdrAbstractObject* object );
@@ -60,7 +71,14 @@ private:
     void writeFont( quint16 styleId );
 
 private:
-    KoXmlWriter mXmlWriter;
+    KoOdfWriteStore mOdfWriteStore;
+    KoStore* mOutputStore;
+    KoXmlWriter* mManifestWriter;
+    KoXmlWriter* mBodyWriter;
+
+    KoGenStyles mStyleCollector;
+    QString mMasterPageStyleName;
+    int mPageCount;
 
     CdrDocument* mDocument;
 };
