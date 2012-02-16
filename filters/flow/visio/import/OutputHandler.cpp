@@ -17,34 +17,34 @@
  */
 
 #include "OutputHandler.h"
-
 #include <string.h>
 
 OutputHandler::OutputHandler() : OdfDocumentHandler(),
-	mbIsTagOpened(false)
+    mbIsTagOpened(false)
 {
+    m_array = QByteArray("");
 }
 
 void OutputHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
 	if (mbIsTagOpened)
 	{
-        m_array->append(">");
+        m_array.append(">");
 		mbIsTagOpened = false;
 	}
-    m_array->append("<");
-    m_array->append(psName);
+    m_array.append("<");
+    m_array.append(psName);
         WPXPropertyList::Iter i(xPropList);
         for (i.rewind(); i.next(); )
         {
                 // filter out libwpd elements
                 if (strncmp(i.key(), "libwpd", 6) != 0)
 		{
-            m_array->append(" ");
-            m_array->append(i.key());
-            m_array->append("=\"");
-            m_array->append(i()->getStr().cstr());
-            m_array->append("\"");
+            m_array.append(" ");
+            m_array.append(i.key());
+            m_array.append("=\"");
+            m_array.append(i()->getStr().cstr());
+            m_array.append("\"");
 		}
 
         }
@@ -58,23 +58,23 @@ void OutputHandler::endElement(const char *psName)
 	{
 		if( msOpenedTagName == psName )
 		{
-            m_array->append("/>");
+            m_array.append("/>");
 			mbIsTagOpened = false;
 		}
 		else // should not happen, but handle it
 		{
-            m_array->append(">");
-            m_array->append("</");
-            m_array->append(psName);
-            m_array->append(">");
+            m_array.append(">");
+            m_array.append("</");
+            m_array.append(psName);
+            m_array.append(">");
 			mbIsTagOpened = false;
 		}
 	}
 	else
 	{
-        m_array->append("</");
-        m_array->append(psName);
-        m_array->append(">");
+        m_array.append("</");
+        m_array.append(psName);
+        m_array.append(">");
 		mbIsTagOpened = false;
 	}
 }
@@ -83,24 +83,24 @@ void OutputHandler::characters(const WPXString &sCharacters)
 {
 	if (mbIsTagOpened)
 	{
-        m_array->append(">");
+        m_array.append(">");
 		mbIsTagOpened = false;
 	}
 	WPXString sEscapedCharacters(sCharacters, true);
 	if (sEscapedCharacters.len() > 0)
-        m_array->append(sEscapedCharacters.cstr());
+        m_array.append(sEscapedCharacters.cstr());
 }
 
 void OutputHandler::endDocument()
 {
 	if (mbIsTagOpened)
 	{
-        m_array->append(">");
+        m_array.append(">");
 		mbIsTagOpened = false;
 	}
 }
 
 QByteArray OutputHandler::array() const
 {
-    return *m_array;
+    return m_array;
 }

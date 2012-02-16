@@ -54,7 +54,7 @@ VSDXImport::~VSDXImport()
 
 KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
+    //const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
 
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
@@ -88,10 +88,12 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     if (!output) {
         return KoFilter::StorageCreationError;
     }
-
+/*
     output->open("mimetype");
     output->write(QByteArray(mimetypeStr));
     output->close();
+*/
+    kDebug()<<output->currentPath();
 
     output->enterDirectory("META-INF");
     output->open("manifest.xml");
@@ -99,9 +101,17 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     output->close();
     output->leaveDirectory();
 
+    kDebug()<<output->currentPath();
+
     writeConvertedContent(output, "settings.xml", input, ODF_SETTINGS_XML);
+    kDebug()<<output;
+
     writeConvertedContent(output, "styles.xml", input, ODF_STYLES_XML);
+    kDebug()<<output;
+
     writeConvertedContent(output, "content.xml", input, ODF_CONTENT_XML);
+    kDebug()<<output;
+
 
     return KoFilter::OK;
 }
