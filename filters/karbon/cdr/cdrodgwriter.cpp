@@ -296,7 +296,7 @@ CdrOdgWriter::writeMasterPage()
     drawingMasterPageStyle.addProperty( QLatin1String("draw:fill"), "none" );
 
     const QString drawingMasterPageStyleName =
-        mStyleCollector.insert( drawingMasterPageStyle, "drawingMasterPageStyle");
+        mStyleCollector.insert( drawingMasterPageStyle, QLatin1String("drawingMasterPageStyle") );
 
     masterPageStyle.addAttribute( QLatin1String("draw:style-name"), drawingMasterPageStyleName );
 
@@ -410,7 +410,7 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
     writeStrokeWidth( style, object->outlineId() );
     writeStrokeColor( style, object->outlineId() );
     writeFill( style, object->fillId() );
-    const QString styleName = mStyleCollector.insert( style, "rectangleStyle" );
+    const QString styleName = mStyleCollector.insert( style, QLatin1String("rectangleStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
 
     mBodyWriter->endElement(); // draw:rect
@@ -431,7 +431,7 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     writeStrokeWidth( style, object->outlineId() );
     writeStrokeColor( style, object->outlineId() );
     writeFill( style, object->fillId() );
-    const QString styleName = mStyleCollector.insert( style, "ellipseStyle" );
+    const QString styleName = mStyleCollector.insert( style, QLatin1String("ellipseStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
 
     mBodyWriter->endElement(); // draw:ellipse
@@ -461,7 +461,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     writeStrokeWidth( style, pathObject->outlineId() );
     writeStrokeColor( style, pathObject->outlineId() );
     writeFill( style, pathObject->fillId() );
-    const QString styleName = mStyleCollector.insert( style, "polylineStyle" );
+    const QString styleName = mStyleCollector.insert( style, QLatin1String("polylineStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
 
     mBodyWriter->endElement(); // draw:polyline
