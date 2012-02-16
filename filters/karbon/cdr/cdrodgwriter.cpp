@@ -52,27 +52,28 @@ CdrOdgWriter::write( CdrDocument* document )
 {
     mDocument = document;
 
-    writeThumbnailFile();
+    storeThumbnailFile();
 
-    writePixelImageFiles();
+    storePixelImageFiles();
+    storeSvgImageFiles();
 
     // Create content.xml
-    writeContentFile();
+    storeContentXml();
 
     // Create the styles.xml file
     mStyleCollector.saveOdfStylesDotXml( mOutputStore, mManifestWriter );
 
     // Create settings.xml
-    writeDocumentSettingsFile();
+    storeSettingsXml();
 
     // Create meta.xml
-    writeDocumentInfoFile();
+    storeMetaXml();
 
     return true;
 }
 
 void
-CdrOdgWriter::writeThumbnailFile()
+CdrOdgWriter::storeThumbnailFile()
 {
     // TODO: could be static strings
     const QString thumbnailDirPath = QLatin1String( "Thumbnails/" );
@@ -87,7 +88,7 @@ CdrOdgWriter::writeThumbnailFile()
 }
 
 void
-CdrOdgWriter::writePixelImageFiles()
+CdrOdgWriter::storePixelImageFiles()
 {
 #if 0
     // TODO: as mManifestWriter needs full rel path, perhaps drop enterDirectory/leaveDirectory
@@ -106,8 +107,101 @@ CdrOdgWriter::writePixelImageFiles()
 #endif
 }
 
+static
 void
-CdrOdgWriter::writeDocumentInfoFile()
+collectNonOdfObjects( QVector<const CdrAbstractObject*>& nonOdfObjects, const CdrAbstractObject* object )
+{
+    if( object->typeId() == GroupObjectId )
+    {
+        foreach( const CdrAbstractObject* object, static_cast<const CdrGroupObject*>(object)->objects() )
+            collectNonOdfObjects( nonOdfObjects, object );
+    }
+    else if( object->typeId() == TextObjectId )
+        nonOdfObjects.append( object );
+}
+
+void
+CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrTextObject* textObject )
+{
+    QTextStream svgStream( device );
+
+    // standard header:
+    svgStream << QLatin1String("<?xml version=\"1.0\" standalone=\"no\"?>") << endl;
+    svgStream << QLatin1String("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" "
+                               "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">") << endl;
+
+    svgStream << QLatin1String("<svg xmlns=\"http://www.w3.org/2000/svg\" "
+                                "xmlns:xlink=\"http://www.w3.org/1999/xlink\""
+                                " width=\"") << /*textObject->width()*/10 << QLatin1String("pt\""
+                                " height=\"") << /*textObject->height()*/10 << QLatin1String("pt\">") << endl;
+
+    svgStream << QLatin1String("<text");
+
+    CdrAbstractFill* fill = mDocument->fill( textObject->fillId() );
+    const QString fillColorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
+        static_cast<CdrSolidFill*>( fill )->color().name() :
+        QString::fromLatin1("none");
+    svgStream << QLatin1String(" fill=\"") << fillColorName<<QLatin1Char('\"');
+
+    CdrOutline* outline = mDocument->outline( textObject->outlineId() );
+    const QString outlineColorName = ( outline ) ?
+        outline->color().name() :
+        QString::fromLatin1("none");
+    svgStream << QLatin1String(" stroke=\"") << outlineColorName << QLatin1Char('\"');
+
+//     const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
+//     svgStream << QLatin1String(" stroke-width=\"") << QString::number(lineWidth)<<QLatin1Char('\"');
+
+    CdrStyle* style = mDocument->style( textObject->styleId() );
+    const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
+    svgStream << QLatin1String(" font-size=\"") << QString::number(fontSize) << QLatin1Char('\"');
+    if( style )
+    {
+        CdrFont* font = mDocument->font( style->fontId() );
+        if( font )
+            svgStream << QLatin1String(" font-family=\"") << font->name() << QLatin1Char('\"');
+    }
+    svgStream << QLatin1String("><tspan>")<<textObject->text() << QLatin1String("</tspan></text>");
+
+    // end tag:
+    svgStream << endl << QLatin1String("</svg>") << endl;
+}
+
+void
+CdrOdgWriter::storeSvgImageFiles()
+{
+    // get
+    QVector<const CdrAbstractObject*> nonOdfObjects;
+    foreach( const CdrPage* page, mDocument->pages() )
+        foreach( const CdrLayer* layer, page->layers() )
+            foreach( const CdrAbstractObject* object, layer->objects() )
+                collectNonOdfObjects( nonOdfObjects, object );
+
+    const QString svgImagesName = QLatin1String( "SvgImages" );
+    const QString mediaType = QLatin1String("text/svg+xml");
+
+    mOutputStore->enterDirectory( svgImagesName );
+
+    int imageIndex = 1;
+    foreach( const CdrAbstractObject* object, nonOdfObjects )
+    {
+        const QString fileName = QLatin1String("Image") + QString::number(imageIndex++);
+        mOutputStore->open( fileName );
+        KoStoreDevice svgFile( mOutputStore );
+
+        writeGraphicTextSvg( &svgFile, static_cast<const CdrTextObject*>(object) );
+        mOutputStore->close();
+
+        const QString filePath = svgImagesName + QLatin1Char('/') + fileName;
+        mManifestWriter->addManifestEntry( filePath, mediaType );
+        mSvgFilePathByObject.insert( object, filePath );
+    }
+
+    mOutputStore->leaveDirectory(); // "SvgImages"
+}
+
+void
+CdrOdgWriter::storeMetaXml()
 {
     KoDocumentInfo documentInfo;
     // TODO
@@ -123,7 +217,7 @@ CdrOdgWriter::writeDocumentInfoFile()
 }
 
 void
-CdrOdgWriter::writeDocumentSettingsFile()
+CdrOdgWriter::storeSettingsXml()
 {
     const QString documentSettingsFilePath = QLatin1String( "settings.xml" );
 
@@ -152,7 +246,7 @@ CdrOdgWriter::writeDocumentSettingsFile()
 }
 
 void
-CdrOdgWriter::writeContentFile()
+CdrOdgWriter::storeContentXml()
 {
     KoXmlWriter* contentWriter = mOdfWriteStore.contentWriter();
     mBodyWriter = mOdfWriteStore.bodyWriter();
@@ -162,8 +256,9 @@ CdrOdgWriter::writeContentFile()
 
     writeMasterPage();
 
-    foreach( const CdrPage* page, mDocument->pages() )
-        writePage( page );
+    writePage(mDocument->pages().at(1));
+//     foreach( const CdrPage* page, mDocument->pages() )
+//         writePage( page );
 
     mBodyWriter->endElement(); //office:drawing
     mBodyWriter->endElement(); //office:body
@@ -212,13 +307,30 @@ CdrOdgWriter::writeMasterPage()
 void
 CdrOdgWriter::writePage( const CdrPage* page )
 {
-    mBodyWriter->startElement("draw:page");
+    mBodyWriter->startElement( "draw:page" );
 
     mBodyWriter->addAttribute( "draw:id", QLatin1String("page")+QString::number(mPageCount++) );
     mBodyWriter->addAttribute( "draw:master-page-name", mMasterPageStyleName );
 
+    // layer set
+    int layerCount = 0;
+    mBodyWriter->startElement( "draw:layer-set" );
     foreach( const CdrLayer* layer, page->layers() )
+    {
+        const QString layerId = QLatin1String("Layer ")+QString::number(layerCount++);
+        mBodyWriter->startElement( "draw:layer" );
+        mBodyWriter->addAttribute( "draw:name", layerId );
+        mBodyWriter->endElement(); //draw:layer
+    }
+    mBodyWriter->endElement(); //draw:layer-set
+
+    // layer objects
+    layerCount = 0;
+    foreach( const CdrLayer* layer, page->layers() )
+    {
+        mLayerId = QLatin1String("Layer ")+QString::number(layerCount++);
         writeLayer( layer );
+    }
 
     mBodyWriter->endElement(); //draw:page
 }
@@ -226,18 +338,18 @@ CdrOdgWriter::writePage( const CdrPage* page )
 void
 CdrOdgWriter::writeLayer( const CdrLayer* layer )
 {
-//     mXmlWriter.startElement("g");
+//     mBodyWriter->startElement("g");
 
     foreach( const CdrAbstractObject* object, layer->objects() )
         writeObject( object );
 
-//     mXmlWriter.endElement(); // g
+//     mBodyWriter->endElement(); // g
 }
 
 void
 CdrOdgWriter::writeObject( const CdrAbstractObject* object )
 {
-//     mXmlWriter.startElement("g");
+//     mBodyWriter->startElement("g");
 
 #if 0
     QString tfString;
@@ -249,7 +361,7 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
         if( normalTrafo )
             tfString.append( QString::fromLatin1("translate(%1,%2) ").arg(normalTrafo->x()).arg(normalTrafo->y()) );
     }
-    mXmlWriter.addAttribute( "transform", tfString );
+    mBodyWriter->addAttribute( "transform", tfString );
 #endif
     const CdrObjectTypeId typeId = object->typeId();
 
@@ -264,7 +376,7 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
     else if( typeId == GroupObjectId )
         writeGroupObject( static_cast<const CdrGroupObject*>(object) );
 
-//     mXmlWriter.endElement(); // g
+//     mBodyWriter->endElement(); // g
 }
 
 void
@@ -284,140 +396,136 @@ CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 void
 CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
 {
-#if 0
-    mXmlWriter.startElement("rect");
+    mBodyWriter->startElement("draw:rect");
 
-//     mXmlWriter.addAttribute("x", x);
-//     mXmlWriter.addAttribute("y", y);
-    mXmlWriter.addAttribute("width", object->cornerPoint().x() );
-    mXmlWriter.addAttribute("height", object->cornerPoint().y() );
-//     mXmlWriter.addAttribute("rx", object->cornerRoundness());
-//     mXmlWriter.addAttribute("ry", object->cornerRoundness());
-    writeStrokeWidth( object->outlineId() );
-    writeStrokeColor( object->outlineId() );
-    writeFillColor( object->fillId() );
+//     mBodyWriter->addAttribute("x", x);
+//     mBodyWriter->addAttribute("y", y);
+    mBodyWriter->addAttribute("svg:width", object->cornerPoint().x() );
+    mBodyWriter->addAttribute("svg:height", object->cornerPoint().y() );
+//     mBodyWriter->addAttribute("rx", object->cornerRoundness());
+//     mBodyWriter->addAttribute("ry", object->cornerRoundness());
+    mBodyWriter->addAttribute("draw:layer", mLayerId );
 
-    mXmlWriter.endElement(); // rect
-#endif
+    KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
+    writeStrokeWidth( style, object->outlineId() );
+    writeStrokeColor( style, object->outlineId() );
+    writeFill( style, object->fillId() );
+    const QString styleName = mStyleCollector.insert( style, "rectangleStyle" );
+    mBodyWriter->addAttribute( "draw:style-name", styleName );
+
+    mBodyWriter->endElement(); // draw:rect
 }
 
 void
 CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
 {
-#if 0
-    mXmlWriter.startElement("ellipse");
+    mBodyWriter->startElement( "draw:ellipse" );
 
-    mXmlWriter.addAttribute("cx", object->centerPoint().x());
-    mXmlWriter.addAttribute("cy", -object->centerPoint().y());
-    mXmlWriter.addAttribute("rx", object->xRadius());
-    mXmlWriter.addAttribute("ry", object->yRadius());
-    writeStrokeWidth( object->outlineId() );
-    writeStrokeColor( object->outlineId() );
-    writeFillColor( object->fillId() );
+    mBodyWriter->addAttribute( "svg:cx", object->centerPoint().x() );
+    mBodyWriter->addAttribute( "svg:cy", -object->centerPoint().y() );
+    mBodyWriter->addAttribute( "svg:rx", object->xRadius() );
+    mBodyWriter->addAttribute( "svg:ry", object->yRadius() );
+    mBodyWriter->addAttribute( "draw:layer", mLayerId );
 
-    mXmlWriter.endElement(); // ellipse
-#endif
+    KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
+    writeStrokeWidth( style, object->outlineId() );
+    writeStrokeColor( style, object->outlineId() );
+    writeFill( style, object->fillId() );
+    const QString styleName = mStyleCollector.insert( style, "ellipseStyle" );
+    mBodyWriter->addAttribute( "draw:style-name", styleName );
+
+    mBodyWriter->endElement(); // draw:ellipse
 }
 
 void
 CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 {
-#if 0
-    mXmlWriter.startElement("path");
+    mBodyWriter->startElement( "draw:polyline" );
 
     const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
-    QString pathData;
-    for( int j=0; j<pathPoints.count(); j++ )
+
+    QString pointsAsString;
+    if( pathPoints.count() > 0 )
+        pointsAsString = QString::number(pathPoints[0].mPoint.x()) + QLatin1Char(',') +
+                         QString::number(pathPoints[0].mPoint.y());
+    for( int j=1; j<pathPoints.count(); j++ )
     {
-        if(j==0) // is first point
-            pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[0].mPoint.x() ).arg( -pathPoints[0].mPoint.y() ) );
-        else
-        {
-            const bool isLineStarting = (pathPoints[j].mType == 0x0C);
-
-            if( isLineStarting )
-                pathData.append( QString::fromLatin1("M %1 %2 ").arg( pathPoints[j].mPoint.x() ).arg( -pathPoints[j].mPoint.y() ) );
-            else
-            {
-                pathData.append( QString::fromLatin1("L %1 %2 ").arg( pathPoints[j].mPoint.x() ).arg( -pathPoints[j].mPoint.y() ) );
-
-                const bool isLineEnding = (pathPoints[j].mType == 0x48);
-                if( isLineEnding )
-                    pathData.append( QLatin1String("z ") );
-            }
-        }
+        const CdrPoint point = pathPoints[j].mPoint;
+        pointsAsString = pointsAsString + QLatin1Char(' ') +
+                         QString::number(point.x()) + QLatin1Char(',') +
+                         QString::number(point.y());
     }
-    mXmlWriter.addAttribute( "d", pathData );
-    writeStrokeWidth( pathObject->outlineId() );
-    writeStrokeColor( pathObject->outlineId() );
-    writeFillColor( pathObject->fillId() );
+    mBodyWriter->addAttribute( "draw:points", pointsAsString ) ;
 
-    mXmlWriter.endElement(); // path
-#endif
+    KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
+    writeStrokeWidth( style, pathObject->outlineId() );
+    writeStrokeColor( style, pathObject->outlineId() );
+    writeFill( style, pathObject->fillId() );
+    const QString styleName = mStyleCollector.insert( style, "polylineStyle" );
+    mBodyWriter->addAttribute( "draw:style-name", styleName );
+
+    mBodyWriter->endElement(); // draw:polyline
 }
 
 void
 CdrOdgWriter::writeTextObject( const CdrTextObject* object )
 {
-#if 0
-    mXmlWriter.startElement("text");
+    mBodyWriter->startElement( "draw:frame" );
+        mBodyWriter->startElement( "draw:image" );
+        mBodyWriter->addAttribute( "xlink:type", QLatin1String("simple") );
+        mBodyWriter->addAttribute( "xlink:show", QLatin1String("embed") );
+        mBodyWriter->addAttribute( "xlink:actuate", QLatin1String("onLoad") );
+        mBodyWriter->addAttribute( "xlink:href", mSvgFilePathByObject[object] );
 
-//     writeStrokeWidth( object->outlineId() );
-    writeStrokeColor( object->outlineId() );
-    writeFillColor( object->fillId() );
-    writeFont( object->styleId() );
-    mXmlWriter.addTextNode( object->text() );
-
-    mXmlWriter.endElement(); // text
-#endif
+        mBodyWriter->endElement(); // draw:frame
+    mBodyWriter->endElement(); // draw:frame
 }
 
 void
-CdrOdgWriter::writeFillColor( quint32 fillId )
+CdrOdgWriter::writeFill( KoGenStyle& odfStyle, quint32 fillId )
 {
-#if 0
     CdrAbstractFill* fill = mDocument->fill( fillId );
-    const QString colorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
-        static_cast<CdrSolidFill*>( fill )->color().name() :
-        QString::fromLatin1("none");
-    mXmlWriter.addAttribute("fill", colorName);
-#endif
+
+    const bool isSolid = ( fill && fill->id() == CdrAbstractFill::Solid );
+
+    odfStyle.addProperty( QLatin1String("draw:fill"), isSolid ? "solid" : "none" );
+
+    if( isSolid )
+        odfStyle.addProperty( QLatin1String("draw:fill-color"), static_cast<CdrSolidFill*>( fill )->color().name() );
 }
 
 void
-CdrOdgWriter::writeStrokeColor( quint32 outlineId )
+CdrOdgWriter::writeStrokeColor( KoGenStyle& odfStyle, quint32 outlineId )
 {
-#if 0
     CdrOutline* outline = mDocument->outline( outlineId );
+
     const QString colorName = ( outline ) ?
         outline->color().name() :
         QString::fromLatin1("none");
-    mXmlWriter.addAttribute("stroke", colorName);
-#endif
+    odfStyle.addProperty( QLatin1String("svg:stroke-color"), colorName );
 }
 
 void
-CdrOdgWriter::writeStrokeWidth( quint32 outlineId )
+CdrOdgWriter::writeStrokeWidth( KoGenStyle& odfStyle, quint32 outlineId )
 {
-#if 0
     CdrOutline* outline = mDocument->outline( outlineId );
+
     const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
-    mXmlWriter.addAttribute("stroke-width", QString::number(lineWidth) );
-#endif
+    odfStyle.addProperty( QLatin1String("svg:stroke-width"), lineWidth );
+    odfStyle.addProperty( QLatin1String("draw:stroke"), "solid" );
 }
 
 void
-CdrOdgWriter::writeFont( quint16 styleId )
+CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
 {
-#if 0
     CdrStyle* style = mDocument->style( styleId );
+
     const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
-    mXmlWriter.addAttribute("font-size", QString::number(fontSize) );
+    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), fontSize );
     if( style )
     {
         CdrFont* font = mDocument->font( style->fontId() );
         if( font )
-            mXmlWriter.addAttribute("font-family", font->name() );
+            odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
     }
-#endif
 }

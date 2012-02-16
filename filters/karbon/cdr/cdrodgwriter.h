@@ -37,6 +37,7 @@ class CdrAbstractObject;
 
 class KoXmlWriter;
 class KoStore;
+class KoGenStyle;
 
 
 class CdrOdgWriter
@@ -48,14 +49,18 @@ public:
 public:
     bool write( CdrDocument* document );
 
-private: // TODO: naming pattern for xml writing vs. file/data object storing
-    void writeThumbnailFile();
-    void writePixelImageFiles();
-    void writeDocumentInfoFile();
-    void writeDocumentSettingsFile();
-    void writeContentFile();
+private:
+    void storeThumbnailFile();
+    void storePixelImageFiles();
+    void storeSvgImageFiles();
+    void storeMetaXml();
+    void storeSettingsXml();
+    void storeContentXml();
+
+    void writeGraphicTextSvg( QIODevice* device, const CdrTextObject* object );
 
     void writeMasterPage();
+
     void writePage( const CdrPage* page );
     void writeLayer( const CdrLayer* layer );
     void writeObject( const CdrAbstractObject* object );
@@ -65,10 +70,10 @@ private: // TODO: naming pattern for xml writing vs. file/data object storing
     void writePathObject( const CdrPathObject* pathObject );
     void writeTextObject( const CdrTextObject* object );
 
-    void writeFillColor( quint32 fillId );
-    void writeStrokeColor( quint32 outlineId );
-    void writeStrokeWidth( quint32 outlineId );
-    void writeFont( quint16 styleId );
+    void writeFill( KoGenStyle& style, quint32 fillId );
+    void writeStrokeColor( KoGenStyle& style, quint32 outlineId );
+    void writeStrokeWidth( KoGenStyle& style, quint32 outlineId );
+    void writeFont( KoGenStyle& style, quint16 styleId );
 
 private:
     KoOdfWriteStore mOdfWriteStore;
@@ -79,6 +84,8 @@ private:
     KoGenStyles mStyleCollector;
     QString mMasterPageStyleName;
     int mPageCount;
+    QString mLayerId;
+    QHash<const CdrAbstractObject*,QString> mSvgFilePathByObject;
 
     CdrDocument* mDocument;
 };
