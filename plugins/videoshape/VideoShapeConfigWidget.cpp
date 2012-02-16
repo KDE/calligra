@@ -26,7 +26,10 @@
 #include <kfilewidget.h>
 #include <KDebug>
 #include <QGridLayout>
+
+#ifndef CALLIGRA_NO_PHONON
 #include <phonon/backendcapabilities.h>
+#endif
 
 VideoShapeConfigWidget::VideoShapeConfigWidget()
     : KoShapeConfigWidgetBase()
@@ -48,7 +51,9 @@ void VideoShapeConfigWidget::open(KoShape *shape)
         QVBoxLayout *layout = new QVBoxLayout(this);
         m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenVideoDialog"), this);
         m_fileWidget->setOperationMode(KFileWidget::Opening);
+#ifndef CALLIGRA_NO_PHONON
         m_fileWidget->setMimeFilter(Phonon::BackendCapabilities::availableMimeTypes());
+#endif
         layout->addWidget(m_fileWidget);
         setLayout(layout);
     }
@@ -56,7 +61,7 @@ void VideoShapeConfigWidget::open(KoShape *shape)
 
 void VideoShapeConfigWidget::save()
 {
-    if (!m_shape)
+    if (!m_shape || !m_fileWidget)
         return;
     m_fileWidget->slotOk();
     m_fileWidget->accept();

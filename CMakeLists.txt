@@ -31,19 +31,21 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
 option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
 option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
-set(BUILD_dbus_default OFF)
-if(QT_QTDBUS_FOUND)
-    if(NOT ANDROID)
-        set(BUILD_dbus_default ON)
-    endif(NOT ANDROID)
-endif(QT_QTDBUS_FOUND)
-option(BUILD_dbus "Build support for dbus" ${BUILD_dbus_default})
+option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+option(DBUS "support for Qt dbus" ON)
+option(PHONON "support for Qt Phonon" ON)
+option(GHNS "support for KDE Get Hot New Stuff" ON)
+option(NEPOMUK "support for KDE Nepomuk Tagging" ON)
 
-option(GHNS "support Get Hot New Stuff" ON)
-option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
-option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+
+if(ANDROID)
+    set(dbus OFF)
+    set(phonon OFF)
+    set(GHNS OFF)
+    set(NEPOMUK OFF)
+endif(ANDROID)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -104,16 +106,6 @@ ELSE()
     set(SHOULD_BUILD_ACTIVE TRUE)
 ENDIF()
 
-if(NOT BUILD_dbus)
-    add_definitions(-DCALLIGRA_NO_DBUS)
-    set(SHOULD_BUILD_SCRIPTING FALSE)
-endif(NOT BUILD_dbus)
-
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the FOO_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
-
  ########################
 #########################
 ## Look for KDE and Qt ##
@@ -122,16 +114,36 @@ endif(KDE4_BUILD_TESTS)
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
-else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
-endif (QT3SUPPORT)
+set(RequiredQtPackages, QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+if(QT3SUPPORT)
+    set(RequiredQtPackages, ${RequiredQtPackages} Qt3Support)
+endif(QT3SUPPORT)
+
+if(DBUS)
+    set(RequiredQtPackages, ${RequiredQtPackages} QtDBus)
+else(DBUS)
+    add_definitions(-DCALLIGRA_NO_DBUS)
+    # no dbus, no scripting (for now cause the DBusAdaptors are re-used - could be done as pure QObjects...)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
+endif(DBUS)
+
+if(PHONON)
+    set(RequiredQtPackages, ${RequiredQtPackages} QtPhonon)
+else(PHONON)
+    add_definitions(-DCALLIGRA_NO_PHONO)
+endif(PHONON)
+
+find_package(Qt4 4.6.0 REQUIRED ${RequiredQtPackages})
+
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the FOO_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
 
 include(KDE4Defaults)
 include(MacroLibrary)
-include (MacroAdditionalCleanFiles)
-include (MacroAddFileDependencies)
+include(MacroAdditionalCleanFiles)
+include(MacroAddFileDependencies)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
@@ -145,7 +157,7 @@ if (NOT LIBATTICA_FOUND)
 endif (NOT LIBATTICA_FOUND)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
-  set(NEPOMUK FALSE)
+    set(NEPOMUK FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")

@@ -19,7 +19,10 @@
 
 #include "KPrSoundEventAction.h"
 
+#ifndef CALLIGRA_NO_PHONO
 #include <phonon/mediaobject.h>
+#endif
+
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -93,17 +96,21 @@ void KPrSoundEventAction::start()
 {
     if ( m_soundData ) {
         finish();
+#ifndef CALLIGRA_NO_PHONO
         m_media = Phonon::createPlayer( Phonon::MusicCategory,
                                         Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
         connect( m_media, SIGNAL( finished() ), this, SLOT( finished() ) );
         m_media->play();
+#endif
     }
 }
 
 void KPrSoundEventAction::finish()
 {
     if ( m_media ) {
+#ifndef CALLIGRA_NO_PHONO
         m_media->stop();
+#endif
         finished();
     }
 }

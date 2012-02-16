@@ -19,16 +19,26 @@
  
 #include "FullScreenPlayer.h"
 
+#ifndef CALLIGRA_NO_PHONON
 #include <phonon/videowidget.h>
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
+#endif
+
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QKeyEvent>
 
 FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     : QWidget(0)
+    , m_mediaObject(0)
+    , m_videoWidget(0)
+    , m_audioOutput(0)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+
+#ifndef CALLIGRA_NO_PHONON
     m_mediaObject = new Phonon::MediaObject();
 
     m_videoWidget = new Phonon::VideoWidget(this);
@@ -37,15 +47,18 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     m_audioOutput = new Phonon::AudioOutput(Phonon::VideoCategory);
     Phonon::createPath(m_mediaObject, m_audioOutput);
 
-    QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_videoWidget);
-    layout->setMargin(0);
+#endif
+
     setLayout(layout);
     show();
     setWindowState(Qt::WindowFullScreen);
+
+#ifndef CALLIGRA_NO_PHONON
     m_mediaObject->setCurrentSource(url);
     connect(m_mediaObject, SIGNAL(finished()), this, SLOT(stop()));
     m_mediaObject->play();
+#endif
 }
 
 FullScreenPlayer::~FullScreenPlayer()
@@ -60,14 +73,18 @@ void FullScreenPlayer::stop()
 void FullScreenPlayer::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
+#ifndef CALLIGRA_NO_PHONON
     m_mediaObject->stop();
+#endif
     deleteLater();
 }
 
 void FullScreenPlayer::keyPressEvent(QKeyEvent *event)
 {
     if(event->key()==Qt::Key_Escape) {
+#ifndef CALLIGRA_NO_PHONON
        m_mediaObject->stop();
+#endif
        deleteLater();
     }
 }
