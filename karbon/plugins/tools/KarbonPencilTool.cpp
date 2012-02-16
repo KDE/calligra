@@ -39,12 +39,12 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
-#include <QtGui/QStackedWidget>
-#include <QtGui/QGroupBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QLabel>
+#include <QStackedWidget>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QPainter>
+#include <QLabel>
 
 #include <math.h>
 

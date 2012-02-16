@@ -39,11 +39,11 @@
 #include <ktoolbar.h>
 #include <kmenu.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QPushButton>
+#include <QLayout>
+#include <QCheckBox>
+
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QFrame>

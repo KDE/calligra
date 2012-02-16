@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 
 #include <QDateTime>
-#include <qdom.h>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <QByteArray>
 #include <QVariantList>

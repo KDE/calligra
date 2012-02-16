@@ -25,8 +25,8 @@
 
 #include <vector>
 
-#include <QtCore/QRect>
-#include <QtCore/QString>
+#include <QRect>
+#include <QString>
 
 namespace Swinder
 {

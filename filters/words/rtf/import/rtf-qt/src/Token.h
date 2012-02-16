@@ -18,8 +18,8 @@
 #ifndef RTFREADER_TOKEN_H
 #define RTFREADER_TOKEN_H
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QString>
 #include "rtfreader_export.h"
 namespace RtfReader
 {

@@ -18,9 +18,9 @@
 */
 #include "PptToOdp.h"
 #include <KoOdf.h>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDir>
-#include <QtCore/QBuffer>
+#include <QCoreApplication>
+#include <QDir>
+#include <QBuffer>
 
 int
 convert(const QString& in, KoStore* out)

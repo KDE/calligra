@@ -615,6 +615,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
                 const QXmlStreamAttributes attrs(attributes());
                 axis->m_numberFormat = attrs.value("formatCode").toString();
             }
+            ELSE_TRY_READ_IF(scaling)
         }
     }
     READ_EPILOGUE
@@ -643,6 +644,42 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
                   axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+            }
+            ELSE_TRY_READ_IF(scaling)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL scaling
+KoFilter::ConversionStatus XlsxXmlChartReader::read_scaling()
+{
+    READ_PROLOGUE
+    Q_ASSERT(!m_context->m_chart->m_axes.isEmpty());
+    Charting::Axis* axis = m_context->m_chart->m_axes.last();
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
+            if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(orientation) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_reversed = ( val == QLatin1String( "maxMin" ) );
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(logBase) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_logarithmic = ( val.toDouble() >= 2. );
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(max) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_maximum = val.toDouble();
+                axis->m_autoMaximum = false;
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(min) ) ) {
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                axis->m_minimum = val.toDouble();
+                axis->m_autoMinimum = false;
             }
         }
     }

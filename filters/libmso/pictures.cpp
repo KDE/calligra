@@ -20,7 +20,7 @@
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QImage>
 #include <QBuffer>
 

@@ -3459,8 +3459,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
             QImage image;
             m_context->import->imageFromFile(m_recentDestName, image);
 
-            image = image.convertToFormat(QImage::Format_ARGB32);
+            // first copy the part we are interested in and then to the conversation what may
+            // save us some bytes and circles when the copy is way smaller then the original
+            // is in which case the convertToFormat is more cheap.
             image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+            image = image.convertToFormat(QImage::Format_ARGB32);
 
             RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
             addManifestEntryForFile(destinationName);
@@ -3883,9 +3886,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
-    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    // TODO: Process the pitchFamili attribute.
     defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
-
+    // Skip reading because the current theme is unknown at time of reading.
     skipCurrentElement();
     READ_EPILOGUE
 #endif
@@ -3896,10 +3899,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
             font = m_context->themes->fontScheme.majorFonts.latinTypeface;
         }
         else if (typeface.startsWith("+mn")) {
-           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+            font = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_currentTextStyle.addProperty("fo:font-family", font);
+        m_currentTextStyleProperties->setFontFamily(font);
     }
+
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
         int pitchFamilyInt;

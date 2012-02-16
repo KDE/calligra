@@ -25,6 +25,9 @@ using namespace Swinder;
 class FormatFont::Private
 {
 public:
+    QColor color;
+    QString fontFamily;
+    double fontSize;
     bool null : 1 ;
     bool bold  : 1;
     bool italic : 1;
@@ -32,9 +35,6 @@ public:
     bool strikeout : 1;
     bool subscript : 1;
     bool superscript : 1;
-    QString fontFamily;
-    double fontSize;
-    QColor color;
 };
 
 FormatFont::FormatFont()
@@ -227,14 +227,14 @@ bool FormatFont::operator!=(const FormatFont& font) const
 class FormatAlignment::Private
 {
 public:
-    bool null;
     unsigned alignX;
     unsigned alignY;
-    bool wrap;
     unsigned indentLevel;
     unsigned rotationAngle;
-    bool stackedLetters;
-    bool shrinkToFit;
+    bool null : 1;
+    bool wrap : 1;
+    bool stackedLetters : 1;
+    bool shrinkToFit : 1;
 };
 
 FormatAlignment::FormatAlignment()
@@ -387,10 +387,10 @@ bool FormatAlignment::operator!=(const FormatAlignment& font) const
 class FormatBackground::Private
 {
 public:
-    bool null;
-    unsigned pattern;
     QColor background;
     QColor foreground;
+    unsigned pattern;
+    bool null : 1;
 };
 
 // constructor
@@ -487,13 +487,13 @@ bool FormatBackground::operator!=(const FormatBackground& font) const
 class FormatBorders::Private
 {
 public:
-    bool null;
     Pen leftBorder;
     Pen rightBorder;
     Pen topBorder;
     Pen bottomBorder;
     Pen topLeftBorder;
     Pen bottomLeftBorder;
+    bool null : 1;
 };
 
 // constructor
@@ -632,11 +632,11 @@ bool FormatBorders::operator!=(const FormatBorders& font) const
 class Format::Private
 {
 public:
+    QString valueFormat;
     FormatFont font;
     FormatAlignment alignment;
     FormatBorders borders;
     FormatBackground background;
-    QString valueFormat;
 };
 
 // create an empty format

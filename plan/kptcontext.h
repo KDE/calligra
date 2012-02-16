@@ -21,9 +21,9 @@
 #ifndef KPTCONTEXT_H
 #define KPTCONTEXT_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <KoXmlReader.h>
 

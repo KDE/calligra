@@ -29,7 +29,7 @@
 #include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <qsize.h>
+#include <QSize>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QTreeWidget>
@@ -66,7 +66,6 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <KConfigDialog>
-#include <kpimutils/kfileio.h>
 #include <KToolInvocation>
 #include <KRun>
 
@@ -126,7 +125,7 @@
 
 #include "plansettings.h"
 
-#include "KPtViewAdaptor.h"
+// #include "KPtViewAdaptor.h"
 
 #include <assert.h>
 
@@ -219,8 +218,7 @@ View::View( Part* part, QWidget* parent )
     else
         setXMLFile( "plan.rc" );
 
-    m_dbus = new ViewAdaptor( this );
-    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
+//     new ViewAdaptor( this );
 
     m_sp = new QSplitter( this );
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -423,23 +421,31 @@ View::~View()
     delete m_estlabel;*/
 }
 
-// hackish way to get rid of unused docker, but as long as no official way exists...
+// hackish way to get rid of unused dockers, but as long as no official way exists...
 void View::hideToolDocker()
 {
     if ( shell() ) {
+        QStringList lst; lst << "KPlatoViewList" << "Scripting";
+        QStringList names;
         foreach ( QDockWidget *w, shell()->dockWidgets() ) {
-            if ( w->objectName() == "sharedtooldocker" ) {
+            if ( ! lst.contains( w->objectName() ) ) {
+                names << w->windowTitle();
                 w->setFeatures( QDockWidget::DockWidgetClosable );
                 w->hide();
-                break;
+            }
+        }
+        foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+            KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+            if ( a ) {
+                QList<QAction*> actions = a->menu()->actions();
+                foreach ( QAction *act, actions ) {
+                    if ( names.contains( act->text() ) ) {
+                        a->removeAction( act );
+                    }
+                }
             }
         }
     }
-}
-
-ViewAdaptor* View::dbusObject()
-{
-    return m_dbus;
 }
 
 void View::slotCreateTemplate()

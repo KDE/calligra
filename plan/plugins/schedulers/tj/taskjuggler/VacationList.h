@@ -13,7 +13,7 @@
 #ifndef _VacationList_h_
 #define _VacationList_h_
 
-#include <qlist.h>
+#include <QList>
 
 #include "VacationInterval.h"
 

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qglobal.h>
+#include <QtGlobal>
 #ifdef Q_WS_WIN
 # define KDEWIN_FCNTL_H // avoid redef.
 # define KDEWIN_SYS_STAT_H // avoid redef.
@@ -31,11 +31,11 @@
 #include "mysqlmigrate.h"
 #include <kexidb/drivers/mySQL/mysqldriver_global.h>
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
 #include <kdebug.h>
 
 #ifdef Q_WS_WIN

@@ -16,7 +16,7 @@
 #include "taskjuggler.h"
 #include "Utility.h"
 
-#include <qdebug.h>
+#include <QDebug>
 
 namespace TJ
 {

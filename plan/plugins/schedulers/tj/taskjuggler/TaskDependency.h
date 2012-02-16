@@ -14,7 +14,7 @@
 #ifndef _TaskDependency_h_
 #define _TaskDependency_h_
 
-#include <qstring.h>
+#include <QString>
 
 namespace TJ
 {

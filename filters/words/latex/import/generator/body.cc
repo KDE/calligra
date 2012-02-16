@@ -19,7 +19,7 @@
 
 #include "body.h"
 #include <element.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 bool Body::analyze(Element* body)
 {

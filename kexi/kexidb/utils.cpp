@@ -25,10 +25,10 @@
 
 #include <QMap>
 #include <QHash>
-#include <qthread.h>
-#include <qdom.h>
-#include <qbuffer.h>
-#include <qpixmap.h>
+#include <QThread>
+#include <QDomDocument>
+#include <QBuffer>
+#include <QPixmap>
 #include <QMutex>
 #include <QSet>
 #include <QProgressBar>

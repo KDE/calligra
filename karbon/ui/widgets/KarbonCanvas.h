@@ -36,9 +36,9 @@
 
 #include <KoCanvasBase.h>
 
-#include <QtGui/QWidget>
-#include <QtCore/QList>
-#include <QtGui/QBrush>
+#include <QWidget>
+#include <QList>
+#include <QBrush>
 
 class KarbonPart;
 class KoViewConverter;

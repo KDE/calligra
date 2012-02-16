@@ -20,8 +20,8 @@
 #ifndef __koPictureKey_h__
 #define __koPictureKey_h__
 
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
+#include <QString>
+#include <QDateTime>
 #include "words_libexport_export.h"
 /**
  * \file PictureKey.h

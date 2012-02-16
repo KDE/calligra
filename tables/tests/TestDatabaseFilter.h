@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_DATABASE_FILTER_TEST
 #define CALLIGRA_TABLES_DATABASE_FILTER_TEST
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

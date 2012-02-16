@@ -46,6 +46,7 @@ class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
+class KoShapeContainer;
 
 class KLocalizedString;
 class QIODevice;
@@ -184,8 +185,6 @@ public:
     KWFrame *findClosestFrame(KoShape *shape) const;
 
     KoTextAnchor *anchorOfShape(KoShape *shape) const;
-
-    bool insertAnchorInText(KoTextAnchor *anchor, KUndo2Command *parent);
 
     KWFrame *frameOfShape(KoShape *shape) const;
 

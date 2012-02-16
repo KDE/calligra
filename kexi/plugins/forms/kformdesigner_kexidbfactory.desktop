@@ -5,6 +5,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 Name=Widgets Plugin for Kexi Forms
 Name[ca]=Connector d'estris per a formularis del Kexi
 Name[ca@valencia]=Connector d'estris per a formularis del Kexi
+Name[es]=Complemento de elementos gráficos para los formularios de Kexi
 Name[et]=Kexi vormide vidinate plugin
 Name[it]=Estensione degli oggetti dei moduli di Kexi
 Name[nb]=Skjermelement programtillegg for Kexi-former

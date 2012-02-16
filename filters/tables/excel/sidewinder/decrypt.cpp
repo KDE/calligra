@@ -18,7 +18,7 @@
  */
 #include "decrypt.h"
 
-#include <QtCore/QCryptographicHash>
+#include <QCryptographicHash>
 
 using namespace Swinder;
 

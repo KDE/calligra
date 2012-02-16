@@ -20,7 +20,7 @@
 
 #include "Localization.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 
 using namespace Calligra::Tables;
 

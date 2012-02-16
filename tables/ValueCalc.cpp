@@ -1923,14 +1923,14 @@ void ValueCalc::registerAwFunc(const QString &name, arrayWalkFunc func)
 Value ValueCalc::sum(const Value &range, bool full)
 {
     Value res(0);
-    arrayWalk(range, res, awFunc(full ? "suma" : "sum"), Value(0));
+    arrayWalk(range, res, full ? awSumA : awSum, Value(0));
     return res;
 }
 
 Value ValueCalc::sum(QVector<Value> range, bool full)
 {
     Value res(0);
-    arrayWalk(range, res, awFunc(full ? "suma" : "sum"), Value(0));
+    arrayWalk(range, res, full ? awSumA : awSum, Value(0));
     return res;
 }
 
@@ -1938,7 +1938,7 @@ Value ValueCalc::sum(QVector<Value> range, bool full)
 Value ValueCalc::sumsq(const Value &range, bool full)
 {
     Value res(0);
-    arrayWalk(range, res, awFunc(full ? "sumsqa" : "sumsq"), Value(0));
+    arrayWalk(range, res, full ? awSumSqA : awSumSq, Value(0));
     return res;
 }
 
@@ -2021,14 +2021,14 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
 int ValueCalc::count(const Value &range, bool full)
 {
     Value res(0);
-    arrayWalk(range, res, awFunc(full ? "counta" : "count"), Value(0));
+    arrayWalk(range, res, full ? awCountA : awCount, Value(0));
     return converter->asInteger(res).asInteger();
 }
 
 int ValueCalc::count(QVector<Value> range, bool full)
 {
     Value res(0);
-    arrayWalk(range, res, awFunc(full ? "counta" : "count"), Value(0));
+    arrayWalk(range, res, full ? awCountA : awCount, Value(0));
     return converter->asInteger(res).asInteger();
 }
 
@@ -2074,28 +2074,28 @@ Value ValueCalc::avg(QVector<Value> range, bool full)
 Value ValueCalc::max(const Value &range, bool full)
 {
     Value res;
-    arrayWalk(range, res, awFunc(full ? "maxa" : "max"), Value(0));
+    arrayWalk(range, res, full ? awMaxA : awMax, Value(0));
     return res;
 }
 
 Value ValueCalc::max(QVector<Value> range, bool full)
 {
     Value res;
-    arrayWalk(range, res, awFunc(full ? "maxa" : "max"), Value(0));
+    arrayWalk(range, res, full ? awMaxA: awMax, Value(0));
     return res;
 }
 
 Value ValueCalc::min(const Value &range, bool full)
 {
     Value res;
-    arrayWalk(range, res, awFunc(full ? "mina" : "min"), Value(0));
+    arrayWalk(range, res, full ? awMinA : awMin, Value(0));
     return res;
 }
 
 Value ValueCalc::min(QVector<Value> range, bool full)
 {
     Value res;
-    arrayWalk(range, res, awFunc(full ? "mina" : "min"), Value(0));
+    arrayWalk(range, res, full ? awMinA : awMin, Value(0));
     return res;
 }
 
@@ -2108,7 +2108,7 @@ Value ValueCalc::product(const Value &range, Value init,
             return init;
         res = Value(1.0);
     }
-    arrayWalk(range, res, awFunc(full ? "proda" : "prod"), Value(0));
+    arrayWalk(range, res, full ? awProdA : awProd, Value(0));
     return res;
 }
 
@@ -2121,7 +2121,7 @@ Value ValueCalc::product(QVector<Value> range,
             return init;
         res = Value(1.0);
     }
-    arrayWalk(range, res, awFunc(full ? "proda" : "prod"), Value(0));
+    arrayWalk(range, res, full ? awProdA : awProd, Value(0));
     return res;
 }
 
@@ -2135,7 +2135,7 @@ Value ValueCalc::stddev(const Value &range, Value avg,
 {
     Value res;
     int cnt = count(range, full);
-    arrayWalk(range, res, awFunc(full ? "devsqa" : "devsq"), avg);
+    arrayWalk(range, res, full ? awDevSqA : awDevSq, avg);
     return sqrt(div(res, cnt - 1));
 }
 
@@ -2149,7 +2149,7 @@ Value ValueCalc::stddev(QVector<Value> range,
 {
     Value res;
     int cnt = count(range, full);
-    arrayWalk(range, res, awFunc(full ? "devsqa" : "devsq"), avg);
+    arrayWalk(range, res, full ? awDevSqA : awDevSq, avg);
     return sqrt(div(res, cnt - 1));
 }
 
@@ -2163,7 +2163,7 @@ Value ValueCalc::stddevP(const Value &range, Value avg,
 {
     Value res;
     int cnt = count(range, full);
-    arrayWalk(range, res, awFunc(full ? "devsqa" : "devsq"), avg);
+    arrayWalk(range, res, full ? awDevSqA : awDevSq, avg);
     return sqrt(div(res, cnt));
 }
 
@@ -2177,7 +2177,7 @@ Value ValueCalc::stddevP(QVector<Value> range,
 {
     Value res;
     int cnt = count(range, full);
-    arrayWalk(range, res, awFunc(full ? "devsqa" : "devsq"), avg);
+    arrayWalk(range, res, full ? awDevSqA : awDevSq, avg);
     return sqrt(div(res, cnt));
 }
 

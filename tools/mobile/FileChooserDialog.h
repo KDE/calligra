@@ -1,7 +1,7 @@
 #ifndef FILECHOOSERDIALOG_H
 #define FILECHOOSERDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QModelIndex>
 
 class KConfig;

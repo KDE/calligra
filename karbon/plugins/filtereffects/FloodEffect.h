@@ -21,7 +21,7 @@
 #define FLOODEFFECT_H
 
 #include "KoFilterEffect.h"
-#include <QtGui/QColor>
+#include <QColor>
 
 #define FloodEffectId "feFlood"
 

@@ -20,8 +20,8 @@
 
 #include "kounavail.h"
 
-#include <qpainter.h>
-#include <qicon.h>
+#include <QPainter>
+#include <QIcon>
 #include <QPaintEvent>
 #include <kaction.h>
 #include <kcomponentdata.h>
@@ -30,7 +30,7 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <qapplication.h>
+#include <QApplication>
 #include <KoOdfReadStore.h>
 
 KoUnavailPart::KoUnavailPart( QWidget *parentWidget, QObject* parent )
