@@ -43,7 +43,10 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
+
+#ifndef CALLIGRA_NO_KNOTIFY
 #include <knotification.h>
+#endif
 
 #include "kdatepicker.moc"
 
@@ -613,7 +616,9 @@ KDatePicker::lineEnterPressed()
         emit(dateEntered(temp));
         setDate(temp);
     } else {
+#ifndef CALLIGRA_NO_KNOTIFY
       KNotification::beep();
+#endif
       kDebug()<< "KDatePicker::lineEnterPressed: invalid date entered.";
     }
 }

@@ -79,7 +79,7 @@
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kicon.h>
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_KNOTIFY
 #include <knotifyconfigwidget.h>
 #endif
 
@@ -449,8 +449,10 @@ void View::Private::initActions()
     actions->preference->setToolTip(i18n("Set various KSpread options"));
     ac->addAction("preference", actions->preference);
 
+#ifndef CALLIGRA_NO_KNOTIFY
     KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
     ac->addAction("configureNotifications", notifyAction);
+#endif
 
     // -- calculation actions --
     //
@@ -1607,7 +1609,7 @@ void View::showTabBar(bool enable)
 
 void View::optionsNotifications()
 {
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_KNOTIFY
     KNotifyConfigWidget::configure(this);
 #endif
 }

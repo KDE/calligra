@@ -282,7 +282,7 @@ target_link_libraries(calligratablescommon
     ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
-if(NOT ANDROID)
+if(KNOTIFY)
     target_link_libraries(calligratablescommon ${KDE4_KNOTIFYCONFIG_LIBS} )
 endif()
 if(KDE4_KCMUTILS_LIBS)

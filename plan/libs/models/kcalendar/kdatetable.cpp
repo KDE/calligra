@@ -41,7 +41,11 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
+
+#ifndef CALLIGRA_NO_KNOTIFY
 #include <knotification.h>
+#endif
+
 #include <kcalendarsystem.h>
 #include <kshortcut.h>
 #include <kstandardshortcut.h>
@@ -825,7 +829,9 @@ KDateTable::keyPressEvent( QKeyEvent *e )
         break;
     default:
         if (!e->modifiers()) { // hm
+#ifndef CALLIGRA_NO_KNOTIFY
             KNotification::beep();
+#endif
         }
     }
 }
@@ -870,7 +876,9 @@ KDateTable::mousePressEvent(QMouseEvent *e)
     }
   if(!isEnabled())
     {
+#ifndef CALLIGRA_NO_KNOTIFY
       KNotification::beep();
+#endif
       return;
     }
 
@@ -1124,14 +1132,18 @@ KDateInternalYearSelector::yearEnteredSlot()
   year=text().toInt(&ok);
   if(!ok)
     {
+#ifndef CALLIGRA_NO_KNOTIFY
       KNotification::beep();
+#endif
       return;
     }
   //date.setYMD(year, 1, 1);
   KGlobal::locale()->calendar()->setYMD(date, year, 1, 1);
   if(!date.isValid())
     {
+#ifndef CALLIGRA_NO_KNOTIFY
       KNotification::beep();
+#endif
       return;
     }
   result=year;

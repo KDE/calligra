@@ -62,7 +62,11 @@
 #include <KIconLoader>
 #include <kdebug.h>
 #include <kdeprintdialog.h>
+
+#ifndef CALLIGRA_NO_KNOTIFY
 #include <knotification.h>
+#endif
+
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 
@@ -583,10 +587,12 @@ bool KoDocument::saveFile()
     emit clearStatusBarMessage();
 
     if (ret) {
+#ifndef CALLIGRA_NO_KNOTIFY
         KNotification *notify = new KNotification("DocumentSaved");
         notify->setText(i18n("Document <i>%1</i> saved", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
+#endif
     }
 
     return ret;
@@ -1667,11 +1673,12 @@ bool KoDocument::openFile()
 
     if (ok) {
         setMimeTypeAfterLoading(typeName);
-
+#ifndef CALLIGRA_NO_KNOTIFY
         KNotification *notify = new KNotification("DocumentLoaded");
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
+#endif
         deleteOpenPane();
     }
 
@@ -1934,10 +1941,12 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     }
 
     if (oasis && store->hasFile("VersionList.xml")) {
+#ifndef CALLIGRA_NO_KNOTIFY
         KNotification *notify = new KNotification("DocumentHasVersions");
         notify->setText(i18n("Document <i>%1</i> contains several versions. Go to File->Versions to open an old version.", store->urlOfStore().url()));
         notify->addContext("url", store->urlOfStore().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
+#endif
 
         KoXmlDocument versionInfo;
         KoOdfReadStore oasisStore(store);
