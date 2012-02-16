@@ -1,0 +1,10 @@
+.cvsignore
+.deps
+.libs
+Makefile
+Makefile.in
+*.la
+*.lo
+*.loT
+poppler-config.h
+stamp-h2

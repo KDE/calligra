@@ -1,0 +1,15 @@
+*.la
+*.lo
+*.loT
+.cvsignore
+.deps
+.libs
+Makefile
+Makefile.in
+gtk-cairo-test
+gtk-splash-test
+gtk-test
+pdf_inspector
+perf-test
+pdf-fullrewrite
+*~

@@ -1,0 +1,9 @@
+.deps
+.libs
+*.la
+*.lo
+Makefile
+Makefile.in
+APIDOCS-html
+APIDOCS-latex
+*.moc

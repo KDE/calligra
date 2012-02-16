@@ -1,0 +1,11 @@
+*.la
+*.lo
+.deps
+.libs
+Makefile
+Makefile.in
+poppler-enums.c
+poppler-enums.h
+poppler-features.h
+stamp-*
+test-poppler-glib

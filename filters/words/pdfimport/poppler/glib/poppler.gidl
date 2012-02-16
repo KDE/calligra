@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!DOCTYPE api SYSTEM "gidl.dtd">
+<api version="1.0">
+  <namespace name="Poppler">
+    <enum name="PageLayout" type-name="PopplerPageLayout" get-type="poppler_page_layout_get_type">
+      <member name="PAGE_LAYOUT_UNSET" value="0" />
+      <member name="PAGE_LAYOUT_SINGLE_PAGE" value="1" />
+      <member name="PAGE_LAYOUT_ONE_COLUMN" value="2" />
+      <member name="PAGE_LAYOUT_TWO_COLUMN_LEFT" value="3" />
+      <member name="PAGE_LAYOUT_TWO_COLUMN_RIGHT" value="4" />
+      <member name="PAGE_LAYOUT_TWO_PAGE_LEFT" value="5" />
+      <member name="PAGE_LAYOUT_TWO_PAGE_RIGHT" value="6" />
+    </enum>
+    <enum name="PageMode" type-name="PopplerPageMode" get-type="poppler_page_mode_get_type">
+      <member name="PAGE_MODE_UNSET" value="0" />
+      <member name="PAGE_MODE_NONE" value="1" />
+      <member name="PAGE_MODE_USE_OUTLINES" value="2" />
+      <member name="PAGE_MODE_USE_THUMBS" value="3" />
+      <member name="PAGE_MODE_FULL_SCREEN" value="4" />
+      <member name="PAGE_MODE_USE_OC" value="5" />
+      <member name="PAGE_MODE_USE_ATTACHMENTS" value="6" />
+    </enum>
+    <errordomain name="Error" get-quark="poppler_error_quark" codes="ErrorCode" />
+    <enum name="ErrorCode" type-name="PopplerError" get-type="poppler_error_get_type">
+      <member name="ERROR_INVALID" value="0" />
+      <member name="ERROR_ENCRYPTED" value="1" />
+    </enum>
+    <enum name="Orientation" type-name="PopplerOrientation" get-type="poppler_orientation_get_type">
+      <member name="ORIENTATION_DOCUMENT" value="0" />
+      <member name="ORIENTATION_PORTRAIT" value="1" />
+      <member name="ORIENTATION_LANDSCAPE" value="2" />
+      <member name="ORIENTATION_UPSIDEDOWN" value="3" />
+      <member name="ORIENTATION_SEASCAPE" value="4" />
+    </enum>
+    <enum name="ActionType" type-name="PopplerActionType" get-type="poppler_action_type_get_type">
+      <member name="ACTION_UNKNOWN" value="0" />
+      <member name="ACTION_GOTO_DEST" value="1" />
+      <member name="ACTION_GOTO_REMOTE" value="2" />
+      <member name="ACTION_LAUNCH" value="3" />
+      <member name="ACTION_URI" value="4" />
+      <member name="ACTION_NAMED" value="5" />
+      <member name="ACTION_MOVIE" value="6" />
+    </enum>
+    <enum name="Dest" type-name="PopplerDest" get-type="poppler_dest_get_type">
+      <member name="DEST_UNKNOWN" value="0" />
+      <member name="DEST_XYZ" value="1" />
+      <member name="DEST_FIT" value="2" />
+      <member name="DEST_FITH" value="3" />
+      <member name="DEST_FITV" value="4" />
+      <member name="DEST_FITR" value="5" />
+      <member name="DEST_FITB" value="6" />
+      <member name="DEST_FITBH" value="7" />
+      <member name="DEST_FITBV" value="8" />
+    </enum>
+    <flags name="ViewerPreferences" type-name="PopplerViewerPreferences" get-type="poppler_viewer_preferences_get_type">
+      <member name="VIEWER_PREFERENCES_UNSET" value="0" />
+      <member name="VIEWER_PREFERENCES_HIDE_TOOLBAR" value="1" />
+      <member name="VIEWER_PREFERENCES_HIDE_MENUBAR" value="2" />
+      <member name="VIEWER_PREFERENCES_HIDE_WINDOWUI" value="4" />
+      <member name="VIEWER_PREFERENCES_FIT_WINDOW" value="8" />
+      <member name="VIEWER_PREFERENCES_CENTER_WINDOW" value="16" />
+      <member name="VIEWER_PREFERENCES_DISPLAY_DOC_TITLE" value="32" />
+      <member name="VIEWER_PREFERENCES_DIRECTION_RTL" value="64" />
+    </flags>
+    <boxed name="IndexIter" type-name="PopplerIndexIter" get-type="poppler_index_iter_get_type">
+      <constructor name="new" symbol="poppler_index_iter_new">
+        <return-type type="IndexIter*" transfer="full" />
+        <parameters>
+          <parameter name="document" type="gchar*" direction="in" />
+        </parameters>
+      </constructor>
+      <method name="get_child" symbol="poppler_index_iter_get_child">
+        <return-type type="IndexIter*" transfer="full" />
+        <parameters>
+          <parameter name="iter" type="IndexIter*" direction="in" />
+        </parameters>
+      </method>
+      <method name="next" symbol="poppler_index_iter_next">
+        <return-type type="gboolean" />
+        <parameters>
+          <parameter name="iter" type="IndexIter*" direction="in" />
+        </parameters>
+      </method>
+      <method name="get_action" symbol="poppler_index_get_action">
+        <return-type type="Action*" transfer="full" />
+        <parameters>
+          <parameter name="iter" type="IndexIter*" direction="in" />
+        </parameters>
+      </method>
+    </boxed>
+    <boxed name="Rectangle" type-name="PopplerRectangle" get-type="poppler_rectangle_get_type">
+      <field name="x1" readable="0" writable="0" offset="0" type="gdouble" />
+      <field name="y1" readable="0" writable="0" offset="0" type="gdouble" />
+      <field name="x2" readable="0" writable="0" offset="0" type="gdouble" />
+      <field name="y2" readable="0" writable="0" offset="0" type="gdouble" />
+      <constructor name="new" symbol="poppler_rectangle_new">
+        <return-type type="Rectangle*" transfer="full" />
+      </constructor>
+    </boxed>
+    <boxed name="LinkMapping" type-name="PopplerLinkMapping" get-type="poppler_link_mapping_get_type">
+      <field name="area" readable="0" writable="0" offset="0" type="Rectangle" />
+      <field name="action" readable="0" writable="0" offset="0" type="Action*" />
+      <constructor name="new" symbol="poppler_link_mapping_new">
+        <return-type type="LinkMapping*" transfer="full" />
+      </constructor>
+    </boxed>
+    <boxed name="Action" type-name="PopplerAction" get-type="poppler_action_get_type">
+      <!-- FIXME: no fields in an Union.. -->
+    </boxed>
+    <object name="Page" parent="GLib.GObject" type-name="PopplerPage" get-type="poppler_page_get_type">
+      <method name="render_to_pixbuf" symbol="poppler_page_render_to_pixbuf">
+        <return-type type="void" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="src_x" type="gint" direction="in" />
+          <parameter name="src_y" type="gint" direction="in" />
+          <parameter name="src_width" type="gint" direction="in" />
+          <parameter name="src_height" type="gint" direction="in" />
+          <parameter name="scale" type="gdouble" direction="in" />
+          <parameter name="pixbuf" type="GdkPixbuf.GdkPixbuf*" direction="in" />
+          <parameter name="dest_x" type="gint" direction="in" />
+          <parameter name="dest_y" type="gint" direction="in" />
+        </parameters>
+      </method>
+      <method name="get_size" symbol="poppler_page_get_size">
+        <return-type type="void" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="width" type="gdouble*" direction="out" />
+          <parameter name="height" type="gdouble*" direction="out" />
+        </parameters>
+      </method>
+      <method name="set_orientation" symbol="poppler_page_set_orientation">
+        <return-type type="void" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="orientation" type="Orientation" direction="in" />
+        </parameters>
+      </method>
+      <method name="get_index" symbol="poppler_page_get_index">
+        <return-type type="gint" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+        </parameters>
+      </method>
+      <method name="get_thumbnail" symbol="poppler_page_get_thumbnail">
+        <return-type type="GdkPixbuf.GdkPixbuf*" transfer="full" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+        </parameters>
+      </method>
+      <method name="get_thumbnail_size" symbol="poppler_page_get_thumbnail_size">
+        <return-type type="gboolean" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="width" type="gint*" direction="out" />
+          <parameter name="height" type="gint*" direction="out" />
+        </parameters>
+      </method>
+      <method name="find_text" symbol="poppler_page_find_text">
+        <return-type type="GList<Rectangle*>" transfer="full" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="text" type="gchar*" direction="in" />
+        </parameters>
+      </method>
+<!--
+      <method name="render_to_ps" type-name="poppler_page_render_to_ps">
+        <return-type type="void" />
+        <parameters>
+          <parameter name="page" type="Page*" direction="in" />
+          <parameter name="text" type="PSFile*" direction="in" />
+        </parameters>
+      </method>
+      -->
+      <property name="label" readable="1" writable="0" type="gchar*" />
+
+    </object>
+    <object name="Document" parent="GLib.GObject" type-name="PopplerDocument" get-type="poppler_document_get_type">
+      <constructor name="new_from_file" symbol="poppler_document_new_from_file">
+        <return-type type="Document*" transfer="full" />
+        <parameters>
+          <parameter name="uri" type="gchar*" direction="in" />
+          <parameter name="password" type="gchar*" direction="in" null-ok="1" />
+          <parameter name="error" type="GError<Error,GLib.FileError>" direction="out" null-ok="1" />
+        </parameters>
+      </constructor>
+      <method name="save" symbol="poppler_document_save">
+        <return-type type="gboolean" />
+        <parameters>
+          <parameter name="document" type="Document*" direction="in" />
+          <parameter name="uri" type="gchar*" direction="in" />
+          <parameter name="error" type="GError<Error,GLib.FileError>" direction="inout" null-ok="1" />
+        </parameters>
+      </method>
+      <method name="get_n_pages" symbol="poppler_document_get_n_pages">
+        <return-type type="gint" />
+        <parameters>
+          <parameter name="document" type="Document" direction="in" />
+        </parameters>
+      </method>
+      <property name="title" readable="1" writable="0" type="gchar*" />
+      <property name="format" readable="1" writable="0" type="gchar*" />
+      <property name="author" readable="1" writable="0" type="gchar*" />
+      <property name="subject" readable="1" writable="0" type="gchar*" />
+      <property name="keywords" readable="1" writable="0" type="gchar*" />
+      <property name="creator" readable="1" writable="0" type="gchar*" />
+      <property name="producer" readable="1" writable="0" type="gchar*" />
+      <property name="linearized" readable="1" writable="0" type="gchar*" />
+      <property name="creation_date" readable="1" writable="0" type="GTime*" />
+      <property name="modified_date" readable="1" writable="0" type="GTime*" />
+      <property name="page-layout" readable="1" writable="0" type="PageLayout" />
+      <property name="page-mode" readable="1" writable="0" type="PageMode" />
+      <property name="viewer-preferences" readable="1" writable="0" type="ViewerPreferences" />
+    </object>
+  </namespace>
+</api>

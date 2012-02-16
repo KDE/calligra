@@ -1,0 +1,14 @@
+.deps
+.libs
+Makefile
+Makefile.in
+pdfseparate
+pdffonts
+pdfimages
+pdfinfo
+pdfunite
+pdftohtml
+pdftoppm
+pdftops
+pdftotext
+pdftocairo

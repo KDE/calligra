@@ -1,0 +1,23 @@
+The unittests for the Qt4 bindings rely on the QtTestLib package, and
+will not be built until this is installed. If you do not have it, then
+you can download it from the Trolltech website.
+
+Note that there are a range of ways in which you can run the tests:
+1. "make check" will run all the tests.
+2. You can run a single test by executing the applicable
+executable. For example, you can run the PageMode tests by
+"./check_pagemode"
+3. You can run a single function within a single test by appending the
+name of the function to the executable. For example, if you just want
+to run the FullScreen test within the PageMode tests, you can
+"./check_pagemode checkFullScreen". Run the executable with -functions
+to get a list of all the functions.
+4. You can run a single function  with specific data by appending the
+name of the function, followed by a colon, then the data label to the
+executable. For example, to just do the Author check within the
+metadata checks, you can "./check_metadata checkStrings:Author".
+
+For a full list of options, run a executable with "-help".
+
+Brad Hards
+bradh@frogmouth.net

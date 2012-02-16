@@ -1,0 +1,9 @@
+/**
+ \mainpage The Poppler CPP interface library
+
+ The Poppler CPP interface library, called libpoppler-cpp, is a library that
+ allows C++ programmers to easily load and render PDF files using the Poppler
+ library. Unlike the other Poppler frontends, it has no additional
+ requirements, so can be used in any C++ application.
+
+*/
