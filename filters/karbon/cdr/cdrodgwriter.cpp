@@ -440,22 +440,29 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
 void
 CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 {
-    mBodyWriter->startElement( "draw:polyline" );
+    mBodyWriter->startElement( "draw:path" );
 
     const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
 
-    QString pointsAsString;
+    QString pathData;
     if( pathPoints.count() > 0 )
-        pointsAsString = QString::number(pathPoints[0].mPoint.x()) + QLatin1Char(',') +
-                         QString::number(pathPoints[0].mPoint.y());
+        pathData = QLatin1Char('M') + QString::number(pathPoints[0].mPoint.x()) + QLatin1Char(' ') +
+                   QString::number(pathPoints[0].mPoint.y());
     for( int j=1; j<pathPoints.count(); j++ )
     {
-        const CdrPoint point = pathPoints[j].mPoint;
-        pointsAsString = pointsAsString + QLatin1Char(' ') +
-                         QString::number(point.x()) + QLatin1Char(',') +
-                         QString::number(point.y());
+        const CdrPathPoint& pathPoint = pathPoints.at(j);
+
+        const bool isLineStarting = (pathPoint.mType == 0x0C);
+
+        pathData = pathData + QLatin1String(isLineStarting?" M":" L") +
+                   QString::number(pathPoint.mPoint.x()) + QLatin1Char(' ') +
+                   QString::number(pathPoint.mPoint.y());
+        const bool isLineEnding = (pathPoint.mType == 0x48);
+        if( isLineEnding )
+            pathData.append( QLatin1Char('z') );
     }
-    mBodyWriter->addAttribute( "draw:points", pointsAsString ) ;
+
+    mBodyWriter->addAttribute( "svg:d", pathData ) ;
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
     writeStrokeWidth( style, pathObject->outlineId() );
@@ -464,7 +471,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     const QString styleName = mStyleCollector.insert( style, QLatin1String("polylineStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
 
-    mBodyWriter->endElement(); // draw:polyline
+    mBodyWriter->endElement(); // draw:path
 }
 
 void
