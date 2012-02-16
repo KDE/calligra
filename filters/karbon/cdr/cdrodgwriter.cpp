@@ -482,6 +482,48 @@ CdrOdgWriter::writeTextObject( const CdrTextObject* object )
 }
 
 void
+CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* object )
+{
+    mBodyWriter->startElement("draw:frame");
+//     mBodyWriter->addAttribute( "draw:style-name", blockTextStyle );
+
+    mBodyWriter->startElement("draw:text-box");
+
+    //export every paragraph
+//     foreach( const CdrParagraph* paragraph, paragraphs )
+//         writeParagraph( paragraph );
+//     }
+
+    mBodyWriter->endElement();//draw:text-box
+    mBodyWriter->endElement();//draw:frame
+}
+
+void
+CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph )
+{
+    mBodyWriter->startElement( "text:p", false );  //false: we should not indent the inner tags
+
+    KoGenStyle paragraphStyle( KoGenStyle::ParagraphAutoStyle, "paragraph" );
+    const QString paragraphStyleName =
+        mStyleCollector.insert( paragraphStyle, QLatin1String("paragraphStyle") );
+
+    mBodyWriter->addAttribute( "text:style-name", paragraphStyleName );
+
+    KoGenStyle textStyle( KoGenStyle::TextAutoStyle, "text" );
+    const QString textStyleName =
+        mStyleCollector.insert( textStyle, "T" );
+
+        mBodyWriter->startElement( "text:span" );
+
+        mBodyWriter->addAttribute( "text:style-name", textStyleName );
+//         mBodyWriter->addTextNode( text );
+
+        mBodyWriter->endElement();//text:span
+
+    mBodyWriter->endElement();//text:p
+}
+
+void
 CdrOdgWriter::writeFill( KoGenStyle& odfStyle, quint32 fillId )
 {
     CdrAbstractFill* fill = mDocument->fill( fillId );
