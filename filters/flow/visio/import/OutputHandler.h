@@ -27,15 +27,15 @@ class OutputHandler : public OdfDocumentHandler
 {
 public:
     OutputHandler();
-    virtual void startDocument() {}
-    virtual void endDocument();
-    virtual void startElement(const char *psName, const WPXPropertyList &xPropList);
-    virtual void endElement(const char *psName);
-    virtual void characters(const WPXString &sCharacters);
+    void startDocument() {}
+    void endDocument();
+    void startElement(const char *psName, const WPXPropertyList &xPropList);
+    void endElement(const char *psName);
+    void characters(const WPXString &sCharacters);
     QByteArray array() const;
 
 private:
-    QByteArray *m_array;
+    QByteArray m_array;
     bool mbIsTagOpened;
     WPXString msOpenedTagName;
 };

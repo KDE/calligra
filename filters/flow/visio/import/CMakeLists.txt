@@ -8,7 +8,7 @@ set(vsdximport_PART_SRCS
 	DocumentElement.cxx
 	TextRunStyle.cxx
 	FontStyle.cxx
-	OdgGenerator.cxx
+        OdgGenerator.cxx
         OutputHandler.cpp
 	VSDXImport.cpp
 )

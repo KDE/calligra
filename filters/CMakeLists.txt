@@ -68,7 +68,7 @@ if(SHOULD_BUILD_KARBON)
 endif(SHOULD_BUILD_KARBON)
 
 if(SHOULD_BUILD_FLOW)
-    #macro_optional_add_subdirectory(flow)
+    macro_optional_add_subdirectory(flow)
 endif(SHOULD_BUILD_FLOW)
 
 if(SHOULD_BUILD_PLAN)
