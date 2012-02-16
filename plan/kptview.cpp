@@ -125,7 +125,7 @@
 
 #include "plansettings.h"
 
-#include "KPtViewAdaptor.h"
+// #include "KPtViewAdaptor.h"
 
 #include <assert.h>
 
@@ -218,8 +218,7 @@ View::View( Part* part, QWidget* parent )
     else
         setXMLFile( "plan.rc" );
 
-    m_dbus = new ViewAdaptor( this );
-    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
+//     new ViewAdaptor( this );
 
     m_sp = new QSplitter( this );
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -447,11 +446,6 @@ void View::hideToolDocker()
             }
         }
     }
-}
-
-ViewAdaptor* View::dbusObject()
-{
-    return m_dbus;
 }
 
 void View::slotCreateTemplate()

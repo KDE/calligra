@@ -65,7 +65,7 @@ set(planprivate_LIB_SRCS
     kptfactory.cpp
     kptpart.cpp
     kptview.cpp
-    KPtViewAdaptor.cpp
+#     KPtViewAdaptor.cpp
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
