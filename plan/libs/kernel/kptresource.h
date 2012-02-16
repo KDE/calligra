@@ -680,6 +680,8 @@ public:
     /// Set the list of required resources that will be used in scheduling.
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
+private:
+    friend class ResourceGroupRequest;
     QList<ResourceRequest*> teamMembers() const;
 
 protected:
