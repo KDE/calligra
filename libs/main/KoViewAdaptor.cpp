@@ -28,6 +28,8 @@
 #include <kaction.h>
 #include <QList>
 
+#ifndef CALLIGRA_NO_DBUS
+
 KoViewAdaptor::KoViewAdaptor(KoView *view)
         : QDBusAbstractAdaptor(view)
 {
@@ -52,3 +54,5 @@ QStringList KoViewAdaptor::actions()
 }
 
 #include <KoViewAdaptor.moc>
+
+#endif

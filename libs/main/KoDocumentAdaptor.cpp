@@ -30,6 +30,7 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 
+#ifndef CALLIGRA_NO_DBUS
 
 KoDocumentAdaptor::KoDocumentAdaptor(KoDocument * doc)
         : QDBusAbstractAdaptor(doc)
@@ -279,3 +280,5 @@ void KoDocumentAdaptor::setDocumentInfoAbstract(const QString &text)
 
 
 #include <KoDocumentAdaptor.moc>
+
+#endif

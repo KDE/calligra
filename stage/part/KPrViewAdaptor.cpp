@@ -30,6 +30,8 @@
 
 #include <QTextDocument>
 
+#ifndef CALLIGRA_NO_DBUS
+
 KPrViewAdaptor::KPrViewAdaptor( KPrView* view )
 : KoViewAdaptor( view )
 , m_view( view )
@@ -261,3 +263,4 @@ void KPrViewAdaptor::presentationActivated()
     emit presentationStarted( numPresentationPages() );
 }
 
+#endif

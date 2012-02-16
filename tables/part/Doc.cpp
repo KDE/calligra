@@ -103,9 +103,10 @@
 #include "BindingModel.h"
 
 // D-Bus
-#ifndef Q_OS_ANDROID
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
+
+#ifndef CALLIGRA_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
 
@@ -152,7 +153,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         , dd(new Private)
 {
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
     new MapAdaptor(d->map);
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
 #endif
@@ -612,7 +613,7 @@ bool Doc::configLoadFromFile() const
 
 void Doc::sheetAdded(Sheet* sheet)
 {
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
     new SheetAdaptor(sheet);
     QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
     if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {

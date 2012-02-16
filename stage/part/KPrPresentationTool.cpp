@@ -48,9 +48,7 @@
 #include "KPrPresentationDrawStrategy.h"
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
-#ifndef Q_OS_ANDROID
 #include "KPrPresentationToolAdaptor.h"
-#endif
 #include "KPrViewModePresentation.h"
 
 
@@ -58,11 +56,10 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
 : KoToolBase( viewMode.canvas() )
 , m_viewMode( viewMode )
 , m_strategy( new KPrPresentationStrategy( this ) )
-#ifndef Q_OS_ANDROID
-, m_bus ( new KPrPresentationToolAdaptor( this ) )
-#endif
+, m_bus( 0 )
 {
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
+    m_bus = new KPrPresentationToolAdaptor( this );
     QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
 #endif
     // tool box

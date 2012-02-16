@@ -44,9 +44,7 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
-#ifndef Q_OS_ANDROID
 #include "KPrViewAdaptor.h"
-#endif
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
@@ -72,10 +70,12 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
   , m_slidesSorterMode(new KPrViewModeSlidesSorter(this, kopaCanvas()))
-#ifndef Q_OS_ANDROID
-  , m_dbus( new KPrViewAdaptor( this ) )
-#endif
+  , m_dbus( 0 )
 {
+#ifndef CALLIGRA_NO_DBUS
+    m_dbus = new KPrViewAdaptor( this );
+#endif
+
     m_normalMode->setName(i18n("Normal"));
     initGUI();
     initActions();

@@ -14,8 +14,10 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
+    KoDocumentAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -38,6 +40,7 @@ set(komain_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
+    KoViewAdaptor.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -87,13 +90,7 @@ set(komain_LIB_SRCS
     KoFindOption.cpp
     KoFindOptionSet.cpp
 )
-if(NOT ANDROID)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        KoApplicationAdaptor.cpp
-        KoDocumentAdaptor.cpp
-        KoViewAdaptor.cpp
-    )
-endif(NOT ANDROID)
+
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         rdf/KoDocumentRdf.cpp

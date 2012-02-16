@@ -31,6 +31,8 @@
 
 #include <QMouseEvent>
 
+#ifndef CALLIGRA_NO_DBUS
+
 KPrPresentationToolAdaptor::KPrPresentationToolAdaptor(KPrPresentationTool* tool)
 : QDBusAbstractAdaptor(tool)
 , m_tool(tool)
@@ -108,3 +110,5 @@ void KPrPresentationToolAdaptor::normalPresentation()
 
 
 #include "KPrPresentationToolAdaptor.moc"
+
+#endif

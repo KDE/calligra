@@ -20,6 +20,8 @@
 #ifndef KPRPRESENTATIONTOOLADAPTOR_H
 #define KPRPRESENTATIONTOOLADAPTOR_H
 
+#ifndef CALLIGRA_NO_DBUS
+
 #include "KPrPresentationTool.h"
 
 #include <QtDBus/QtDBus>
@@ -75,4 +77,5 @@ private:
     KPrViewModePresentation &m_viewModePresentation;
 };
 
+#endif
 #endif /* KPRPRESENTATIONTOOLADAPTOR_H */

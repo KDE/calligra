@@ -21,6 +21,8 @@
 #ifndef KODOCUMENTADAPTOR_H
 #define KODOCUMENTADAPTOR_H
 
+#ifndef CALLIGRA_NO_DBUS
+
 #include <QMap>
 
 #include <QObject>
@@ -135,4 +137,4 @@ protected:
 };
 
 #endif
-
+#endif

@@ -31,6 +31,8 @@
 #include "KoDocumentEntry.h"
 #include "KoView.h"
 
+#ifndef CALLIGRA_NO_DBUS
+
 KoApplicationAdaptor::KoApplicationAdaptor(QObject *parent)
         : QDBusAbstractAdaptor(parent)
 {
@@ -95,3 +97,5 @@ QStringList KoApplicationAdaptor::getWindows()
 }
 
 #include <KoApplicationAdaptor.moc>
+
+#endif

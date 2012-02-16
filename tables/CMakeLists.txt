@@ -120,15 +120,11 @@ SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-IF(ANDROID)
-   SET (interface_DIR_SRCS "")
-ELSE(ANDROID)
-   SET (interfaces_DIR_SRCS
-       interfaces/MapAdaptor.cpp
-       interfaces/SheetAdaptor.cpp
-       interfaces/ViewAdaptor.cpp
-       )
-ENDIF(ANDROID)
+SET (interfaces_DIR_SRCS
+    interfaces/MapAdaptor.cpp
+    interfaces/SheetAdaptor.cpp
+    interfaces/ViewAdaptor.cpp
+    )
 
 SET (part_DIR_SRCS
     part/CanvasBase.cpp

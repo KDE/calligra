@@ -31,6 +31,14 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
 option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
 option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
+set(BUILD_dbus_default OFF)
+if(QT_QTDBUS_FOUND)
+    if(NOT ANDROID)
+        set(BUILD_dbus_default ON)
+    endif(NOT ANDROID)
+endif(QT_QTDBUS_FOUND)
+option(BUILD_dbus "Build support for dbus" ${BUILD_dbus_default})
+
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
@@ -95,6 +103,11 @@ ELSE()
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
     set(SHOULD_BUILD_ACTIVE TRUE)
 ENDIF()
+
+if(NOT BUILD_dbus)
+    add_definitions(-DCALLIGRA_NO_DBUS)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
+endif(NOT BUILD_dbus)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something

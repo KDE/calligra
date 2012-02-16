@@ -24,9 +24,7 @@
 #include "KoDocument.h"
 #include "KoDocument_p.h"
 
-#ifndef Q_OS_ANDROID
 #include "KoDocumentAdaptor.h"
-#endif
 #include "KoGlobal.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -73,9 +71,11 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
-#ifndef Q_OS_ANDROID
+
+#ifndef CALLIGRA_NO_DBUS
 #include <QtDBus/QDBusConnection>
 #endif
+
 #include <QLayout>
 #include <QApplication>
 #include <QPrinter>
@@ -349,7 +349,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->bSingleViewMode = singleViewMode;
 
     setObjectName(newObjectName());
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
     new KoDocumentAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif

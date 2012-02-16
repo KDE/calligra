@@ -161,8 +161,9 @@
 #include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
-#ifndef Q_OS_ANDROID
 #include "interfaces/ViewAdaptor.h"
+
+#ifndef CALLIGRA_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
 
@@ -611,7 +612,7 @@ View::View(QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
     new ViewAdaptor(this);
 #endif
     d->canvas->setFocus();

@@ -20,6 +20,8 @@
 #ifndef KPRVIEWADAPTOR_H
 #define KPRVIEWADAPTOR_H
 
+#ifndef CALLIGRA_NO_DBUS
+
 #include <KoViewAdaptor.h>
 
 class KPrView;
@@ -179,4 +181,5 @@ private:
     KPrView* m_view;
 };
 
+#endif
 #endif

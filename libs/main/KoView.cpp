@@ -27,9 +27,7 @@
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
-#ifndef Q_OS_ANDROID
 #include "KoViewAdaptor.h"
-#endif
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 
@@ -157,7 +155,7 @@ KoView::KoView(KoDocument *document, QWidget *parent)
 
     setObjectName(newObjectName());
 
-#ifndef Q_OS_ANDROID
+#ifndef CALLIGRA_NO_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif

@@ -21,8 +21,9 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
+#ifndef CALLIGRA_NO_DBUS
+
 #include <QObject>
-#include <QtDBus/QtDBus>
 #include "komain_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;
@@ -80,4 +81,4 @@ signals:
 };
 
 #endif
-
+#endif
