@@ -374,7 +374,7 @@ void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cur
                         && cursorPosition <= block.position() + range.start + range.length
                         && range.format == m_defaultMisspelledFormat) {
                     QString word = block.text().mid(range.start, range.length);
-                    m_spellCheckMenu->setMisspelled(word, block.position() + range.start);
+                    m_spellCheckMenu->setMisspelled(word, block.position() + range.start,range.length);
                     m_spellCheckMenu->setCurrentLanguage(m_bgSpellCheck->currentLanguage());
                     m_spellCheckMenu->setVisible(true);
                     m_spellCheckMenu->setEnabled(true);
@@ -414,7 +414,7 @@ void SpellCheck::clearHighlightMisspelled(int startPosition)
     }
 }
 
-void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
+void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition, int lengthOfWord)
 {
     if (!m_document)
         return;
@@ -426,17 +426,8 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
     int i=0;
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-
-    while(!((!(cursor.selectedText().at(i)==QChar('\''))) && (!(cursor.selectedText().at(i).isLetter())))){
-
-            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-            i++;
-        }
-    cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);
     cursor.removeSelectedText();
-
-
     //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
