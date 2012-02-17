@@ -615,7 +615,7 @@ CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& tr
         if( normalTrafo )
             tfString = tfString + QLatin1String("translate(") +
                        cLocale.toString(odfXTransformCoord(normalTrafo->x())) + QLatin1Char(' ') +
-                       cLocale.toString(odfYTransformCoord(normalTrafo->y())) + QLatin1String(")");
+                       cLocale.toString(odfYTransformCoord(normalTrafo->y())) + QLatin1Char(')');
     }
     if( ! tfString.isEmpty() )
         mBodyWriter->addAttribute( "draw:transform", tfString );
