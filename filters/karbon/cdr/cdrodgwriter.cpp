@@ -30,6 +30,7 @@
 #include <KoStoreDevice.h>
 #include <KoDocumentInfo.h>
 // Qt
+#include <QtCore/QLocale>
 #include <QtCore/QString>
 
 
@@ -351,18 +352,6 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
 {
 //     mBodyWriter->startElement("g");
 
-#if 0
-    QString tfString;
-    foreach(const CdrAbstractTransformation* transformation, object->transformations())
-    {
-        const CdrNormalTransformation* normalTrafo =
-            dynamic_cast<const CdrNormalTransformation*>(transformation);
-
-        if( normalTrafo )
-            tfString.append( QString::fromLatin1("translate(%1,%2) ").arg(normalTrafo->x()).arg(normalTrafo->y()) );
-    }
-    mBodyWriter->addAttribute( "transform", tfString );
-#endif
     const CdrObjectTypeId typeId = object->typeId();
 
     if( typeId == PathObjectId )
@@ -384,6 +373,7 @@ CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
 
+    writeTransformation( groupObject->transformations() );
 //     set2DGeometry(mBodyWriter, objectElement);
 //     mBodyWriter->addAttribute("draw:style-name", createGraphicStyle(objectElement));
 
@@ -398,6 +388,7 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
 {
     mBodyWriter->startElement("draw:rect");
 
+    writeTransformation( object->transformations() );
 //     mBodyWriter->addAttribute("x", x);
 //     mBodyWriter->addAttribute("y", y);
     mBodyWriter->addAttribute("svg:width", object->cornerPoint().x() );
@@ -421,6 +412,7 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
 {
     mBodyWriter->startElement( "draw:ellipse" );
 
+    writeTransformation( object->transformations() );
     mBodyWriter->addAttribute( "svg:cx", object->centerPoint().x() );
     mBodyWriter->addAttribute( "svg:cy", -object->centerPoint().y() );
     mBodyWriter->addAttribute( "svg:rx", object->xRadius() );
@@ -437,17 +429,33 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     mBodyWriter->endElement(); // draw:ellipse
 }
 
+
+static inline
+int
+odfXCoord( CdrCoord x )
+{ return x; }
+
+static inline
+int
+odfYCoord( CdrCoord y )
+{ return -y; }
+
+
 void
 CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 {
     mBodyWriter->startElement( "draw:path" );
 
+    writeTransformation( pathObject->transformations() );
     const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
 
     QString pathData;
     if( pathPoints.count() > 0 )
-        pathData = QLatin1Char('M') + QString::number(pathPoints[0].mPoint.x()) + QLatin1Char(' ') +
-                   QString::number(pathPoints[0].mPoint.y());
+    {
+        const CdrPoint point = pathPoints.at(0).mPoint;
+        pathData = QLatin1Char('M') + QString::number(odfXCoord(point.x())) + QLatin1Char(' ') +
+                   QString::number(odfYCoord(point.y()));
+    }
     for( int j=1; j<pathPoints.count(); j++ )
     {
         const CdrPathPoint& pathPoint = pathPoints.at(j);
@@ -455,8 +463,8 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
         const bool isLineStarting = (pathPoint.mType == 0x0C);
 
         pathData = pathData + QLatin1String(isLineStarting?" M":" L") +
-                   QString::number(pathPoint.mPoint.x()) + QLatin1Char(' ') +
-                   QString::number(pathPoint.mPoint.y());
+                   QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
+                   QString::number(odfYCoord(pathPoint.mPoint.y()));
         const bool isLineEnding = (pathPoint.mType == 0x48);
         if( isLineEnding )
             pathData.append( QLatin1Char('z') );
@@ -478,6 +486,7 @@ void
 CdrOdgWriter::writeTextObject( const CdrTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
+    writeTransformation( object->transformations() );
         mBodyWriter->startElement( "draw:image" );
         mBodyWriter->addAttribute( "xlink:type", QLatin1String("simple") );
         mBodyWriter->addAttribute( "xlink:show", QLatin1String("embed") );
@@ -492,6 +501,7 @@ void
 CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* object )
 {
     mBodyWriter->startElement("draw:frame");
+    writeTransformation( object->transformations() );
 //     mBodyWriter->addAttribute( "draw:style-name", blockTextStyle );
 
     mBodyWriter->startElement("draw:text-box");
@@ -577,4 +587,36 @@ CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
         if( font )
             odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
     }
+}
+
+
+static inline
+double
+odfXTransformCoord( qint32 x )
+{ return x; }
+
+static inline
+double
+odfYTransformCoord( qint32 y )
+{ return -y; }
+
+void
+CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations )
+{
+    QLocale cLocale(QLocale::c());
+    cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
+
+    QString tfString;
+    foreach( const CdrAbstractTransformation* transformation, transformations )
+    {
+        const CdrNormalTransformation* normalTrafo =
+            dynamic_cast<const CdrNormalTransformation*>(transformation);
+
+        if( normalTrafo )
+            tfString = tfString + QLatin1String("translate(") +
+                       cLocale.toString(odfXTransformCoord(normalTrafo->x())) + QLatin1Char(' ') +
+                       cLocale.toString(odfYTransformCoord(normalTrafo->y())) + QLatin1String(")");
+    }
+    if( ! tfString.isEmpty() )
+        mBodyWriter->addAttribute( "draw:transform", tfString );
 }

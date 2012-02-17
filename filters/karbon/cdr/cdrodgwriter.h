@@ -36,10 +36,13 @@ class CdrTextObject;
 class CdrBlockTextObject;
 class CdrAbstractObject;
 class CdrParagraph;
+class CdrAbstractTransformation;
 
 class KoXmlWriter;
 class KoStore;
 class KoGenStyle;
+
+template<typename T> class QVector;
 
 
 class CdrOdgWriter
@@ -79,6 +82,8 @@ private:
     void writeStrokeColor( KoGenStyle& style, quint32 outlineId );
     void writeStrokeWidth( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );
+
+    void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations );
 
 private:
     KoOdfWriteStore mOdfWriteStore;
