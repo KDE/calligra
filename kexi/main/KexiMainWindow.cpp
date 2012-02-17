@@ -4475,5 +4475,11 @@ void KexiMainWindow::showTabIfNeeded()
         closeTab("");
     }
 }
+
+KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
+{
+    return &d->userFeedback;
+}
+
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

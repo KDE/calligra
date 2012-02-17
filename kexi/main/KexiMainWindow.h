@@ -48,6 +48,7 @@ class Part;
 class KXMLGUIClient;
 class KXMLGUIFactory;
 class KexiMainWidget;
+class KexiUserFeedbackAgent;
 
 #include <KTabWidget>
 
@@ -224,6 +225,9 @@ public:
 
     //! Hides tabs when they are closed (depending on class)
     virtual void closeTab(const QString &partClass);
+
+    /*! Implemented for KexiMainWindow */
+    virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
 
 public slots:
     /*! Implemented for KexiMainWindow */
