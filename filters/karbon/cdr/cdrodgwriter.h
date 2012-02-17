@@ -27,7 +27,6 @@
 
 class CdrDocument;
 class CdrPage;
-class CdrLayer;
 class CdrGroupObject;
 class CdrRectangleObject;
 class CdrEllipseObject;
@@ -67,7 +66,6 @@ private:
     void writeMasterPage();
 
     void writePage( const CdrPage* page );
-    void writeLayer( const CdrLayer* layer );
     void writeObject( const CdrAbstractObject* object );
     void writeGroupObject( const CdrGroupObject* groupObject );
     void writeRectangleObject( const CdrRectangleObject* object );

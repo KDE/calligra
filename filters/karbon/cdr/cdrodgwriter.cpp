@@ -330,28 +330,16 @@ CdrOdgWriter::writePage( const CdrPage* page )
     foreach( const CdrLayer* layer, page->layers() )
     {
         mLayerId = QLatin1String("Layer ")+QString::number(layerCount++);
-        writeLayer( layer );
+        foreach( const CdrAbstractObject* object, layer->objects() )
+            writeObject( object );
     }
 
     mBodyWriter->endElement(); //draw:page
 }
 
 void
-CdrOdgWriter::writeLayer( const CdrLayer* layer )
-{
-//     mBodyWriter->startElement("g");
-
-    foreach( const CdrAbstractObject* object, layer->objects() )
-        writeObject( object );
-
-//     mBodyWriter->endElement(); // g
-}
-
-void
 CdrOdgWriter::writeObject( const CdrAbstractObject* object )
 {
-//     mBodyWriter->startElement("g");
-
     const CdrObjectTypeId typeId = object->typeId();
 
     if( typeId == PathObjectId )
@@ -364,8 +352,6 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
         writeTextObject( static_cast<const CdrTextObject*>(object) );
     else if( typeId == GroupObjectId )
         writeGroupObject( static_cast<const CdrGroupObject*>(object) );
-
-//     mBodyWriter->endElement(); // g
 }
 
 void
