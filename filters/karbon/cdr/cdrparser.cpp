@@ -1200,12 +1200,32 @@ CdrParser::readPathObject( const CdrArgumentWithTypeListData& argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4PointList& points = argsData.argRef<Cdr4PointList>( i );
+            int curveControlPointCount = 0;
 qDebug() << "path points:" << points.count();
             for (unsigned int j=0; j<points.count(); j++)
             {
+                const CdrPointType pointType = points.pointType(j);
+                // check validness
+                bool isBadPoint = false;
+                if( pointType == 0xC0 )
+                {
+                    ++curveControlPointCount;
+                    isBadPoint = ( curveControlPointCount > 2 );
+                }
+                else
+                {
+                    isBadPoint = ( curveControlPointCount == 1 );
+                    curveControlPointCount = 0;
+                }
                 const Cdr4Point point = points.point(j);
-// qDebug() <<"    "<< j<<":"<<points->point(j).mX<<","<<points->point(j).mY<< QString::number(points->pointType(j),16);
-                pathObject->addPathPoint( CdrPathPoint(CdrPoint(point.x(),point.y()), points.pointType(j)) );
+qDebug() <<"    "<< j<<":"<<point.x()<<","<<point.y()<< QString::number(pointType,16);
+                pathObject->addPathPoint( CdrPathPoint(CdrPoint(point.x(),point.y()), pointType) );
+                if( isBadPoint )
+                {
+qDebug() << "Assumption about path data not met, not creating path object.";
+                    delete pathObject;
+                    return 0;
+                }
             }
         }
             break;
