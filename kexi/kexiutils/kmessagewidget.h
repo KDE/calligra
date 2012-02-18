@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
  *
  * Copyright (c) 2011 Aurélien Gâteau <agateau@kde.org>
- * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -122,6 +122,8 @@ public:
 
     explicit KMessageWidget(const QString &text, QWidget *parent = 0);
 
+    KMessageWidget(QWidget *contentsWidget, QWidget *parent);
+
     ~KMessageWidget();
 
     QString text() const;
@@ -139,6 +141,8 @@ public:
     void removeAction(QAction *action);
 
     void setDefaultAction(QAction *action);
+
+    void setButtonLeftAlignedForAction(QAction *action);
 
     /**
      * @brief Sets autodeletion flag to be on or off.
@@ -165,6 +169,10 @@ public Q_SLOTS:
 
     void setCalloutPointerPosition(const QPoint& globalPos);
 
+    QBrush backgroundBrush() const;
+
+    QBrush borderBrush() const;
+
     /**
      * Show the widget using an animation, unless
      * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
@@ -177,14 +185,18 @@ public Q_SLOTS:
      */
     void animatedHide();
 
+Q_SIGNALS:
+    void animatedShowFinished();
+    void animatedHideFinished();
+    
 protected:
-    void paintEvent(QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
 
-    bool event(QEvent *event);
+    virtual bool event(QEvent *event);
 
-    void resizeEvent(QResizeEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
 
-    void showEvent(QShowEvent *event);
+    virtual void showEvent(QShowEvent *event);
 
 private:
     KMessageWidgetPrivate *const d;
