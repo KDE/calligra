@@ -58,7 +58,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>&lt;a href=&quot;show_info&quot; caption=&quot;aaaa&quot;&gt;Show what info is shared with the Kexi Project community to improve the application &amp;raquo;&lt;/a&gt;</string>
+         <string>&lt;a href=&quot;show_info&quot;&gt;Show what info is shared with the Kexi Project community to improve the application &amp;raquo;&lt;/a&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
