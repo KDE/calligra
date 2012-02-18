@@ -448,23 +448,27 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     for( int j=1; j<pathPoints.count(); j++ )
     {
         const CdrPathPoint& pathPoint = pathPoints.at(j);
-        if( pathPoint.mType == 0xC0 )
+
+        const quint8 strokeToPointType = (pathPoint.mType&0xC0);
+
+        // subpath start?
+        if( strokeToPointType == 0x00 ) // no line to point?
+        {
+            if(( pathPoint.mType&0x04) == 0x04 )  // real point?
+            {
+                pathData = pathData + QLatin1String(" M") +
+                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
+                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+            }
+        }
+        else if( strokeToPointType == 0xC0 ) // control point?
         {
             curveControlPoints[curveControlPointCount] = pathPoint.mPoint;
             ++curveControlPointCount;
-            continue;
-        }
-
-        // subpath start?
-        if( (pathPoint.mType&0xC4) == 0x04 )
-        {
-            pathData = pathData + QLatin1String(" M") +
-                       QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
-                       QString::number(odfYCoord(pathPoint.mPoint.y()));
         }
         else
         {
-            if( (pathPoint.mType&0xC0) == 0x80 )
+            if( strokeToPointType == 0x80 ) // curve to point?
             {
                 pathData = pathData + QLatin1String(" C") +
                         QString::number(odfXCoord(curveControlPoints[0].x())) + QLatin1Char(' ') +
@@ -475,7 +479,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
                         QString::number(odfYCoord(pathPoint.mPoint.y()));
                 curveControlPointCount = 0;
             }
-            else //if( (pathPoint.mType&0xC0) == 0x40 )
+            else //if( strokeToPointType == 0x40 )
                 pathData = pathData + QLatin1String(" L") +
                         QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
                         QString::number(odfYCoord(pathPoint.mPoint.y()));

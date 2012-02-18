@@ -739,25 +739,57 @@ sample2: other text object linked to same object
     </record>
   </records>
 <!--
+    <enum name="CdrStrokeToPointType">
+      <item name="CdrNoLineToPointId" value="0">
+        <description>no line to point</description>
+      </item>
+      <item name="CdrLineToPointId" value="1">
+        <description>start end</description>
+      </item>
+      <item name="CdrCurveToPointId" value="2">
+        <description>start end</description>
+      </item>
+      <item name="CdrControlPointId" value="3">
+        <description>start end</description>
+      </item>
+    </enum>
+    <bitrecord name="CdrPointType" size="1">
+        <bitfield start="0" end="0" name="_unknown0" value type="boolean"/>
+        <bitfield start="1" end="1" name="_unknown1" value type="boolean"/>
+        <bitfield start="2" end="2" name="_unknown2" value type="boolean">
+            <description>a flag for if actual point, not control point or joint end point?</description>
+        </bitfield>
+        <bitfield start="3" end="3" name="closeSubpath" value type="boolean">
+            <description>set for first and last point of subpath if with same coord and creating an area</description>
+        </bitfield>
+
+        <bitfield start="4" end="4" name="smooth" value type="boolean">
+            <description>line leaves point at the same angle as it enters the point</description>
+        </bitfield>
+        <bitfield start="5" end="5" name="symmetric" value type="boolean">
+            <description>control point before point is mirrored with control point after</description>
+        </bitfield>
+        <bitfield start="6" end="7" name="lineType" value="CdrPointLineType" type="integer"/>
+    </bitrecord>
 // point types:
 // 0C
 // 0D
 // 1C
 // 44
+// 45
 // 48
 // 49
+// 54
 // 64
 // C0
 // 84
 // 88
 // 94
 // 98
-// first point has 0C    (or 0D or 1C or       4)
-// last point has  48/88 (or 49 or 88 or 98 or 4/44)
-// a break in the line are points with 48 0C
-// points in line: 44 84 94
-// lots of connected straight lines seem 44 44 44
-// no idea about this example yet:
+// first point has 0C    (or 0D or 1C or          4)
+// last point has  48/88 (or 49 or 58/88 or 98 or 4/44)
+// points in line: 44 54 84 94
+// no idea about this example yet, why 64 on same point:
 // -63.5019 , 115.261 : "c" 
 // 19.6554 , 47.2277 : "44" 
 // 114.116 , 98.271 : "64" 
@@ -781,6 +813,15 @@ sample2: other text object linked to same object
 path points: 2 
      0 : 0 , 0 "4" 
      1 : 10630 , 0 "44" 
+end point two times, why, just an accident?:
+     38 : -763 , -346 "1c"
+     39 : -763 , -311 "c0"
+     40 : -754 , -275 "c0"
+     41 : -754 , -240 "94"
+     97 : -701 , -727 "c0"
+     98 : -763 , -559 "c0"
+     99 : -763 , -346 "94"
+     100 : -763 , -346 "58"
 
 // 0  0000
 // 1  0001
