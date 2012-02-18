@@ -465,7 +465,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["midLineWidth"] = i18n("Mid Frame Width");
     propCaption["frameShape"] = i18n("Frame Shape");
     propCaption["frameShadow"] = i18n("Frame Shadow");
-    //any QScrollbar
+    //any QScrollBar
     propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
     propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
 

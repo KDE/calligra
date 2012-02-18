@@ -34,7 +34,7 @@
 #include <core/vgroup.h>
 #include <core/vfill.h>
 #include <core/vstroke.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <QStack>
 

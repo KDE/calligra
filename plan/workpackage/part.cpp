@@ -44,8 +44,8 @@
 #include <KoOdfReadStore.h>
 #include <KoDocumentInfo.h>
 
-#include <qpainter.h>
-#include <qfileinfo.h>
+#include <QPainter>
+#include <QFileInfo>
 #include <QDir>
 #include <QTimer>
 #include <kundo2qstack.h>

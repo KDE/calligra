@@ -30,13 +30,13 @@
 #include <QApplication>
 #include <QLabel>
 #include <QPainter>
-#include <qpalette.h>
+#include <QPalette>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QMenu>

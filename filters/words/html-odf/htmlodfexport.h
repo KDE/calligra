@@ -22,7 +22,7 @@
 #ifndef HTMLODFEXPORT_H
 #define HTMLODFEXPORT_H
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <KoFilter.h>
 #include <KoXmlWriter.h>
 #include <QByteArray>

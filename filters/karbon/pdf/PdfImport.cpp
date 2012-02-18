@@ -20,8 +20,8 @@
 #include "PdfImport.h"
 #include "SvgOutputDev.h"
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFile>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>

@@ -20,7 +20,7 @@
 
 #include "kexireportpart.h"
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kmainwindow.h>
 #include <klocale.h>

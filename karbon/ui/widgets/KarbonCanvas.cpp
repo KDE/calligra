@@ -44,14 +44,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QFocusEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
-#include <QtCore/QEvent>
-#include <QtCore/QSizeF>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QMenu>
+#include <QEvent>
+#include <QSizeF>
 
 class KarbonCanvas::KarbonCanvasPrivate {
 public:

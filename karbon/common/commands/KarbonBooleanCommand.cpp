@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-#include <QtGui/QPainterPath>
+#include <QPainterPath>
 
 class KarbonBooleanCommand::Private
 {

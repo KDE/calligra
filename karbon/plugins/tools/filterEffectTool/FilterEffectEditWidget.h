@@ -22,7 +22,7 @@
 
 #include "ui_FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoShape;
 class KoCanvasBase;

@@ -25,7 +25,7 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlThemesReader.h>
-#include <QtCore/QFlags>
+#include <QFlags>
 #include <QColor>
 
 #include "XlsxXmlCommonReader.h"

@@ -21,7 +21,7 @@
 #define KARBONPALETTEWIDGET_H
 
 #include <KoColor.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoColorSet;
 

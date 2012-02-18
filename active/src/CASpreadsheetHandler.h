@@ -24,7 +24,7 @@
 
 #include "CAAbstractDocumentHandler.h"
 
-#include <QtCore/QSize>
+#include <QSize>
 
 class CASpreadsheetHandler : public CAAbstractDocumentHandler
 {

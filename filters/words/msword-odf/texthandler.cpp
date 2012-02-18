@@ -39,7 +39,7 @@
 #include <QFont>
 #include <QUrl>
 #include <QBuffer>
-#include <qfontinfo.h>
+#include <QFontInfo>
 #include <kdebug.h>
 #include <klocale.h>
 #include <KoGenStyle.h>

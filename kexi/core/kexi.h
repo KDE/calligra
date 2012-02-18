@@ -20,7 +20,7 @@
 #ifndef KEXI_H
 #define KEXI_H
 
-#include <qpointer.h>
+#include <QPointer>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"

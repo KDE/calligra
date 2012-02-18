@@ -20,7 +20,7 @@
 #ifndef KEXISIMPLEPRINTPREVIEWWINDOW_H
 #define KEXISIMPLEPRINTPREVIEWWINDOW_H
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QEvent>
 #include <ktoolbar.h>

@@ -22,8 +22,8 @@
 
 #include "htmlodfexport.h"
 
-#include <qdom.h>
-#include <qfontinfo.h>
+#include <QDomDocument>
+#include <QFontInfo>
 #include <QFile>
 #include <QString>
 #include <QBuffer>
