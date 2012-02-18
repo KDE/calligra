@@ -22,7 +22,7 @@
 #include <KoResourceServerAdapter.h>
 #include <kto_resource_information.h>
 
-KtoResourceInformationList::KtoResourceInformationList(const QString& _name, KoAbstractResourceServerAdapter* resourceAdapter, QObject* parent) : QObject(parent), QDeclarativeImageProvider(QDeclarativeImageProvider::Image), m_url_name(_name)
+KtoResourceInformationList::KtoResourceInformationList(KoAbstractResourceServerAdapter* resourceAdapter, QObject* parent) : QObject(parent)
 {
     m_resources = resourceAdapter->resources();
     for(int i = 0; i < m_resources.size(); ++i)
@@ -52,16 +52,6 @@ QList<QObject*> KtoResourceInformationList::resourcesInformationAsQObject() cons
 QList<KoResource*> KtoResourceInformationList::resources() const
 {
     return m_resources;
-}
-
-QString KtoResourceInformationList::urlName() const
-{
-    return m_url_name;
-}
-
-QImage KtoResourceInformationList::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
-{
-    return m_resources[id.toInt()]->image();
 }
 
 #include "kto_resource_information_list.moc"

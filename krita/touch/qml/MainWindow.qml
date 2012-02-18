@@ -116,14 +116,13 @@ Rectangle
             cellHeight: 130
             highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
             delegate: Rectangle {
-                opacity: 0.5
               height: 120
               width: 100
-              Image {
+              Icon {
                   anchors.top: parent.top
                   height: 100
                   width: 100
-                  source: model.modelData.imageUrl
+                  image: model.modelData.image
               }
               Text {
                   height: 20

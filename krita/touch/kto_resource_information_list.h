@@ -28,23 +28,20 @@ class KoAbstractResourceServerAdapter;
 class KoResource;
 class KtoResourceInformation;
 
-class KtoResourceInformationList : public QObject, public QDeclarativeImageProvider
+class KtoResourceInformationList : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QObject*> resourcesInformation READ resourcesInformationAsQObject NOTIFY resourcesChanged)
 public:
-    KtoResourceInformationList(const QString& _url_name, KoAbstractResourceServerAdapter* resourceAdapter, QObject* parent = 0);
+    KtoResourceInformationList(KoAbstractResourceServerAdapter* resourceAdapter, QObject* parent = 0);
     ~KtoResourceInformationList();
     QList<KtoResourceInformation*> resourcesInformation() const;
     QList<KoResource*> resources() const;
-    QString urlName() const;
-    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
 private:
     QList<QObject*> resourcesInformationAsQObject() const;
 signals:
     void resourcesChanged();
 private:
-    QString m_url_name;
     QList<KtoResourceInformation*> m_resourcesInformation;
     QList<KoResource*> m_resources;
     KoAbstractResourceServerAdapter* m_resourceAdapter;

@@ -7,6 +7,7 @@ qt4_add_resources(kritatouch_RCC_SRCS ${kritatouch_RCCS})
 
 set(kritatouch_SRCS
     kto_canvas.cpp
+    kto_icon_item.cpp
     kto_main_window.cpp
     kto_resource_information.cpp
     kto_resource_information_list.cpp

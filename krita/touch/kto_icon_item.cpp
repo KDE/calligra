@@ -18,32 +18,28 @@
  * USA
  */
 
-#include "kto_resource_information.h"
+#include "kto_icon_item.h"
+#include <QPainter>
 
-#include <QImage>
+KtoIconItem::KtoIconItem(QDeclarativeItem* parent): QDeclarativeItem(parent)
+{
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+}
 
-#include <KoResource.h>
-
-#include "kto_resource_information_list.h"
-
-KtoResourceInformation::KtoResourceInformation(int _index, KtoResourceInformationList* parent): QObject(parent), m_index(_index), m_parent(parent)
+KtoIconItem::~KtoIconItem()
 {
 
 }
 
-KtoResourceInformation::~KtoResourceInformation()
+void KtoIconItem::setImage(const QImage& _image)
 {
-
+    m_image = _image;
+    update();
 }
 
-QString KtoResourceInformation::name() const
+void KtoIconItem::paint(QPainter* _painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-    return m_parent->resources()[m_index]->name();
+    _painter->drawImage(QRect(0, 0, width(), height()), m_image);
 }
 
-QImage KtoResourceInformation::image() const
-{
-    return m_parent->resources()[m_index]->image();
-}
-
-#include "kto_resource_information.moc"
+#include "kto_icon_item.moc"

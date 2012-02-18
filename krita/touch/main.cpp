@@ -24,6 +24,7 @@
 #include <KCmdLineArgs>
 #include <qdeclarative.h>
 #include "kto_canvas.h"
+#include "kto_icon_item.h"
 #include <KoPluginLoader.h>
 
 class KtoResourceInformation;
@@ -51,6 +52,7 @@ int main(int argc, char *argv[])
                                         QString::fromLatin1("[X-Krita-Version] == 5"));
     
     qmlRegisterType<KtoCanvas> ("KritaTouch", 1, 0, "Canvas");
+    qmlRegisterType<KtoIconItem> ("KritaTouch", 1, 0, "Icon");
     
     KtoMainWindow window;
     if (app.argc() > 1)

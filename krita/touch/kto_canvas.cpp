@@ -102,9 +102,7 @@ KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_main
     
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoResourceServerAdapter<KisPaintOpPreset>* proxyAdapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
-    m_brushResourceModel = new KtoResourceInformationList("brushResourceModel", proxyAdapter, this);
-    qDebug() << QDeclarativeEngine::contextForObject(this);
-    QDeclarativeEngine::contextForObject(this)->engine()->addImageProvider(m_brushResourceModel->urlName(), m_brushResourceModel);
+    m_brushResourceModel = new KtoResourceInformationList(proxyAdapter, this);
 
     m_infoBuilder = new KisPaintingInformationBuilder();
     m_helper = new KisToolFreehandHelper(m_infoBuilder);

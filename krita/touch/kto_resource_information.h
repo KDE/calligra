@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QImage>
 
 class KtoResourceInformationList;
 class KoResource;
@@ -30,15 +31,15 @@ class KtoResourceInformation : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
+    Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
 public:
     KtoResourceInformation(int _index, KtoResourceInformationList* parent = 0);
     virtual ~KtoResourceInformation();
     QString name() const;
-    QString imageUrl() const;
+    QImage image() const;
 signals:
     void nameChanged();
-    void imageUrlChanged();
+    void imageChanged();
 private:
     int m_index;
     KtoResourceInformationList* m_parent;
