@@ -435,6 +435,9 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     writeTransformation( pathObject->transformations() );
     const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
 
+    CdrPoint curveControlPoints[2];
+    int curveControlPointCount = 0;
+
     QString pathData;
     if( pathPoints.count() > 0 )
     {
@@ -445,15 +448,41 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     for( int j=1; j<pathPoints.count(); j++ )
     {
         const CdrPathPoint& pathPoint = pathPoints.at(j);
+        if( pathPoint.mType == 0xC0 )
+        {
+            curveControlPoints[curveControlPointCount] = pathPoint.mPoint;
+            ++curveControlPointCount;
+            continue;
+        }
 
-        const bool isLineStarting = (pathPoint.mType == 0x0C);
-
-        pathData = pathData + QLatin1String(isLineStarting?" M":" L") +
-                   QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
-                   QString::number(odfYCoord(pathPoint.mPoint.y()));
-        const bool isLineEnding = (pathPoint.mType == 0x48);
-        if( isLineEnding )
-            pathData.append( QLatin1Char('z') );
+        // subpath start?
+        if( (pathPoint.mType&0xC4) == 0x04 )
+        {
+            pathData = pathData + QLatin1String(" M") +
+                       QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
+                       QString::number(odfYCoord(pathPoint.mPoint.y()));
+        }
+        else
+        {
+            if( (pathPoint.mType&0xC0) == 0x80 )
+            {
+                pathData = pathData + QLatin1String(" C") +
+                        QString::number(odfXCoord(curveControlPoints[0].x())) + QLatin1Char(' ') +
+                        QString::number(odfYCoord(curveControlPoints[0].y())) + QLatin1Char(' ') +
+                        QString::number(odfXCoord(curveControlPoints[1].x())) + QLatin1Char(' ') +
+                        QString::number(odfYCoord(curveControlPoints[1].y())) + QLatin1Char(' ') +
+                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
+                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+                curveControlPointCount = 0;
+            }
+            else //if( (pathPoint.mType&0xC0) == 0x40 )
+                pathData = pathData + QLatin1String(" L") +
+                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
+                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+            const bool isSubpathClosing = ((pathPoint.mType&0x0C) == 0x08);
+            if( isSubpathClosing )
+                pathData.append( QLatin1Char('z') );
+        }
     }
 
     mBodyWriter->addAttribute( "svg:d", pathData ) ;

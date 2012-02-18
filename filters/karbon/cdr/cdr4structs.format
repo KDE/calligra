@@ -741,19 +741,21 @@ sample2: other text object linked to same object
 <!--
 // point types:
 // 0C
+// 0D
 // 1C
 // 44
 // 48
+// 49
 // 64
 // C0
 // 84
 // 88
 // 94
-// first point has 0C (or 0D)
-// last point has 48 (or 49)
+// 98
+// first point has 0C    (or 0D or 1C or       4)
+// last point has  48/88 (or 49 or 88 or 98 or 4/44)
 // a break in the line are points with 48 0C
-// but there is also C0 84, difference is?
-// also seen: 88 1C
+// points in line: 44 84 94
 // lots of connected straight lines seem 44 44 44
 // no idea about this example yet:
 // -63.5019 , 115.261 : "c" 
@@ -763,8 +765,23 @@ sample2: other text object linked to same object
 // 42.3346 , 188.911 : "c0" 
 // 42.3346 , 188.911 : "84" 
 // -63.5019 , 115.261 : "48" 
+     0 : 0 , 0 "4" 
+     1 : 1 , 6 "4" 
+     2 : 12 , 4 "44" 
+     3 : 23 , 3 "44" 
+     32 : 166 , -52 "44" 
+     33 : 165 , -55 "44" 
+     34 : 145 , -40 "4" 
+     35 : 109 , -46 "4" 
+     36 : 98 , -40 "44" 
+     37 : 91 , -36 "44" 
+     46 : 10 , -8 "44" 
+     47 : -1 , -6 "44" 
+     48 : 0 , 0 "4" 
+path points: 2 
+     0 : 0 , 0 "4" 
+     1 : 10630 , 0 "44" 
 
-// looks like flags, a nibble per direction?
 // 0  0000
 // 1  0001
 // 4  0100
@@ -774,13 +791,13 @@ sample2: other text object linked to same object
 // C  1100
 // D  1101
 
-first point nibble: 0,1,8
-      *00*
-last point nibble: 0,8,9
-      *00*
-But other nibble for lines also have any of both not set: 4,6,C,D
-      *1**
 
+C0 lines come in pairs, never seen at start or end, followed by 84 or 94 (88 at end)
+
+Those subpaths which start with 0c end with 4c or 48
+subpaths start with 04 end with 04. hm, start with two 04, at different points
+
+04 points come in pairs, besides at end?
 -->
   <typedefs>
     <type name="Cdr4PointType" original="uint8" />
