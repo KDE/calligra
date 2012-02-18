@@ -240,7 +240,8 @@ public:
 public:
     virtual ~CdrGroupObject() { qDeleteAll( mObjects );}
 public:
-    void addObject( CdrAbstractObject* object ) { mObjects.append(object); }
+    // TODO: prepend instead of append here is just workaround for inversed order needed for odf (or not done z-index)
+    void addObject( CdrAbstractObject* object ) { mObjects.prepend(object); }
 public:
     const QVector<CdrAbstractObject*>& objects() const { return mObjects; }
 private:
@@ -256,7 +257,8 @@ class CdrLayer
 public:
     ~CdrLayer() { qDeleteAll( mObjects );}
 public:
-    void addObject( CdrAbstractObject* object ) { mObjects.append(object); }
+    // TODO: prepend instead of append here is just workaround for inversed order needed for odf (or not done z-index)
+    void addObject( CdrAbstractObject* object ) { mObjects.prepend(object); }
 public:
     const QVector<CdrAbstractObject*>& objects() const { return mObjects; }
 private:
