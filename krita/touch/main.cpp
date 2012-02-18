@@ -26,6 +26,8 @@
 #include "kto_canvas.h"
 #include <KoPluginLoader.h>
 
+class KtoResourceInformation;
+
 int main(int argc, char *argv[])
 {
     KAboutData * aboutData = newKritaAboutData();
@@ -38,6 +40,9 @@ int main(int argc, char *argv[])
     
     KApplication app;
 
+    qRegisterMetaType<KoCanvasResourceManager*>("KoCanvasResourceManager*");
+    qRegisterMetaType<QList<KtoResourceInformation*> >("QList<KtoResourceInformation*>");
+
     // Load dockers
     KoPluginLoader::PluginsConfig config;
     config.blacklist = "QmlPluginsDisabled";
@@ -45,7 +50,6 @@ int main(int argc, char *argv[])
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Qml"),
                                         QString::fromLatin1("[X-Krita-Version] == 5"));
     
-    qRegisterMetaType<KoCanvasResourceManager*>("KoCanvasResourceManager*");
     qmlRegisterType<KtoCanvas> ("KritaTouch", 1, 0, "Canvas");
     
     KtoMainWindow window;

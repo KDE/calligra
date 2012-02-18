@@ -26,17 +26,23 @@
 #include <kis_doc2.h>
 #include <kis_paint_layer.h>
 #include "kto_main_window.h"
+#include "kto_resource_information_list.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasResourceManager.h>
 #include <kis_painting_information_builder.h>
 #include <kis_tool_freehand_helper.h>
 #include <KoPointerEvent.h>
+#include <KoResourceServerAdapter.h>
+#include <KoResourceModel.h>
 #include <kis_update_scheduler.h>
 #include <kis_undo_stores.h>
 #include <kis_post_execution_undo_adapter.h>
 #include <QGraphicsSceneMouseEvent>
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_resource_server_provider.h>
 #include <KStandardDirs>
 
 class KtoCanvasNodeListener : public KisNodeGraphListener
@@ -93,6 +99,12 @@ KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_main
     m_nodeListener = new KtoCanvasNodeListener(this);
     
     m_resourceManager = new KoCanvasResourceManager;
+    
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KoResourceServerAdapter<KisPaintOpPreset>* proxyAdapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
+    m_brushResourceModel = new KtoResourceInformationList("brushResourceModel", proxyAdapter, this);
+    qDebug() << QDeclarativeEngine::contextForObject(this);
+    QDeclarativeEngine::contextForObject(this)->engine()->addImageProvider(m_brushResourceModel->urlName(), m_brushResourceModel);
 
     m_infoBuilder = new KisPaintingInformationBuilder();
     m_helper = new KisToolFreehandHelper(m_infoBuilder);
@@ -205,6 +217,11 @@ void KtoCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 KoCanvasResourceManager* KtoCanvas::resourceManager() const
 {
     return m_resourceManager;
+}
+
+KtoResourceInformationList* KtoCanvas::brushResourceModel() const
+{
+    return m_brushResourceModel;
 }
 
 #include "kto_canvas.moc"

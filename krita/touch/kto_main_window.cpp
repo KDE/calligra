@@ -22,12 +22,14 @@
 
 #include <QDebug>
 #include <QDeclarativeView>
+#include <QDeclarativeEngine>
 
 #include <KGlobal>
 #include <KComponentData>
 #include <KStandardDirs>
 
 #include "kto_canvas.h"
+#include "kto_resource_information_list.h"
 #include <kis_doc2.h>
 #include <kis_layer_manager.h>
 

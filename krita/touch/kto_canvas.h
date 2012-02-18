@@ -24,6 +24,9 @@
 #include <QDeclarativeItem>
 #include <kis_types.h>
 
+class KtoResourceInformationList;
+class QAbstractItemModel;
+class KoResourceModel;
 class KisPostExecutionUndoAdapter;
 class KisUpdateScheduler;
 class KisUndoStore;
@@ -38,6 +41,7 @@ class KtoCanvas : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(KoCanvasResourceManager* resourceManager READ resourceManager)
+    Q_PROPERTY(QObject* brushResourceModel READ brushResourceModel)
 public:
     KtoCanvas(QDeclarativeItem* parent = 0);
     virtual ~KtoCanvas();
@@ -46,6 +50,7 @@ public:
     // A callback for our own node graph listener
     void imageUpdated(const QRect &rect);
     KoCanvasResourceManager* resourceManager() const;
+    KtoResourceInformationList* brushResourceModel() const;
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -59,6 +64,7 @@ private:
     
     KtoCanvasNodeListener*          m_nodeListener;
     KoCanvasResourceManager*        m_resourceManager;    
+    KtoResourceInformationList*     m_brushResourceModel;
     KisPaintingInformationBuilder*  m_infoBuilder;
     KisToolFreehandHelper*          m_helper;
     KisUpdateScheduler*             m_updateScheduler;

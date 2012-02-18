@@ -8,6 +8,8 @@ qt4_add_resources(kritatouch_RCC_SRCS ${kritatouch_RCCS})
 set(kritatouch_SRCS
     kto_canvas.cpp
     kto_main_window.cpp
+    kto_resource_information.cpp
+    kto_resource_information_list.cpp
     main.cpp
     ${kritatouch_RCCS}
 )
@@ -19,6 +21,7 @@ target_link_libraries(kritatouch
     ${QT_LIBRARIES}
     komain
     kritaui
+    kowidgets
 )
 
 install(TARGETS kritatouch ${INSTALL_TARGETS_DEFAULT_ARGS})

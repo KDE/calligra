@@ -32,6 +32,13 @@ Rectangle
         else
             mainWindow.state = "toggle-color-selector-view"
     }
+    function toggle_brushSelector()
+    {
+        if(mainWindow.state == "toggle-brush-selector-view")
+            mainWindow.state = "default"
+        else
+            mainWindow.state = "toggle-brush-selector-view"
+    }
     Canvas {
         id: canvas
         objectName: "canvas"
@@ -59,7 +66,7 @@ Rectangle
 
         MouseArea {
             anchors.fill: parent        
-            onClicked: mainWindow.state = "toggle-brush-selector-view"
+            onClicked: toggle_brushSelector()
         }
     }
     Rectangle {
@@ -98,7 +105,34 @@ Rectangle
             anchors.fill: parent
             resourceManager: canvas.resourceManager
             visible: false
-            opacity: 1.0
+        }
+        // Brush selector area
+        GridView {
+            id: brushSelector
+            anchors.fill: parent
+            visible: false
+            model: canvas.brushResourceModel.resourcesInformation
+            cellWidth: 110
+            cellHeight: 130
+            highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+            delegate: Rectangle {
+                opacity: 0.5
+              height: 120
+              width: 100
+              Image {
+                  anchors.top: parent.top
+                  height: 100
+                  width: 100
+                  source: model.modelData.imageUrl
+              }
+              Text {
+                  height: 20
+                  width: 100
+                  elide: Text.ElideRight
+                  anchors.bottom: parent.bottom
+                  text: model.modelData.name
+              }
+            }
         }
     }
     states : [
@@ -109,6 +143,12 @@ Rectangle
             name: "toggle-widgets-view"
             PropertyChanges { target: widgetAreaBackground; visible: true }
             PropertyChanges { target: widgetArea; visible: true }
+        },
+        State {
+            name: "toggle-brush-selector-view"
+            PropertyChanges { target: widgetAreaBackground; visible: true }
+            PropertyChanges { target: widgetArea; visible: true }
+            PropertyChanges { target: brushSelector; visible: true }
         },
         State {
             name: "toggle-color-selector-view"
