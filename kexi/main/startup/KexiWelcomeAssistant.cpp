@@ -71,6 +71,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
     
     m_recentProjects = new KexiCategorizedView;
+    // do not alter background palette
+    QPalette pal(m_recentProjects->palette());
+    pal.setColor(QPalette::Disabled, QPalette::Base,
+                    pal.color(QPalette::Normal, QPalette::Base));
+    m_recentProjects->setPalette(pal);
     contentsLyr->addWidget(m_recentProjects, 1);
     //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
@@ -263,5 +268,16 @@ KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
+
+// void KexiWelcomeAssistant::mousePressEvent(QMouseEvent* e)
+// {
+//     if (e->buttons() == Qt::LeftButton) {
+//         QWidget *w = QApplication::widgetAt(e->globalPos());
+//         if (w) {
+//             emit widgetClicked(w);
+//         }
+//     }
+//     KexiAssistantWidget::mousePressEvent(e);
+// }
 
 #include "KexiWelcomeAssistant.moc"

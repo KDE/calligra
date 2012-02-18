@@ -91,6 +91,9 @@ signals:
      instance of Kexi. Receiver should set value pointed by @a opened to true if the
      database has been opened successfully. */
     void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
+    
+// protected:
+//     virtual void mousePressEvent(QMouseEvent* e);
 
 private:
     void createProject(
