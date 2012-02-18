@@ -21,9 +21,9 @@
 
 #include <assert.h>
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qbuffer.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QBuffer>
 #include <QPixmap>
 #include <QHash>
 

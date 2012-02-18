@@ -19,12 +19,12 @@
 */
 
 #include "KexiCommandLinkButton.h"
-#include "qstylepainter.h"
-#include "qstyleoption.h"
-#include "qtextdocument.h"
-#include "qtextlayout.h"
-#include "qcolor.h"
-#include "qfont.h"
+#include <QStylePainter>
+#include <QStyleOption>
+#include <QTextDocument>
+#include <QTextLayout>
+#include <QColor>
+#include <QFont>
 #include <qmath.h>
 
 /*!

@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_POINT_STORAGE_TEST
 #define CALLIGRA_TABLES_POINT_STORAGE_TEST
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

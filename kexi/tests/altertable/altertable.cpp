@@ -21,11 +21,11 @@
 
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
+#include <QClipboard>
 
 #include <kdebug.h>
 

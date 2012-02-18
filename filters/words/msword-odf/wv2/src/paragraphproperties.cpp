@@ -57,6 +57,11 @@ const ListInfo* ParagraphProperties::listInfo() const
     return m_listInfo;
 }
 
+void ParagraphProperties::setBulletPictureName(const QString& name)
+{
+    m_listInfo->setBulletPictureName(name);
+}
+
 void ParagraphProperties::createListInfo( ListInfoProvider& listInfoProvider, const Word97::CHP& chp)
 {
     if ( m_listInfo || !listInfoProvider.isValid( m_pap.ilfo, m_pap.nLvlAnm ) ) {

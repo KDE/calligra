@@ -30,6 +30,11 @@ set(wordsprivate_LIB_SRCS
     KWOdfSharedLoadingData.cpp
     KWRootAreaProvider.cpp
 
+    pagetool/KWPageTool.cpp
+    pagetool/KWPageToolFactory.cpp
+    pagetool/SimpleSetupWidget.cpp
+    pagetool/SimpleHeaderFooterWidget.cpp
+
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
@@ -85,6 +90,8 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
     dockers/StatisticsPreferencesPopup.ui
+    pagetool/SimpleSetupWidget.ui
+    pagetool/SimpleHeaderFooterWidget.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS

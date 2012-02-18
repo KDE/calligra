@@ -32,8 +32,8 @@
 #include "renderobjects.h"
 
 #include <kdebug.h>
-#include <qlayout.h>
-#include <qvarlengtharray.h>
+#include <QLayout>
+#include <QVarLengthArray>
 
 KoSimpleOdtDocument::KoSimpleOdtDocument()
     : manifestWriter(0)

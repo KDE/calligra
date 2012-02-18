@@ -19,7 +19,7 @@
 
 #include "kexicharencodingcombobox.h"
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <kdebug.h>
 #include <klocale.h>

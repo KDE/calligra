@@ -22,10 +22,11 @@
 
 #include "kptnode.h"
 
-#include <qevent.h>
-#include <qlineedit.h>
-#include <qlocale.h>
-#include <qvalidator.h>
+#include <QEvent>
+#include <QLineEdit>
+#include <QLocale>
+#include <QValidator>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <KDoubleValidator>

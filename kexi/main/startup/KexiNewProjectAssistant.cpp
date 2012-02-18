@@ -55,9 +55,9 @@
 #include <KAcceleratorManager>
 #include <KFileDialog>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QLayout>
+#include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>

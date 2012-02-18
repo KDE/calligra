@@ -24,7 +24,7 @@
 // Dummy macro to mark TaskJuggler syntax keywords
 #define KW(a) a
 
-#include <qstring.h>
+#include <QString>
 #include <QDebug>
 
 namespace TJ

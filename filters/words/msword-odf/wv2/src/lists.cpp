@@ -16,6 +16,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "../../msdoc.h"
 #include "lists.h"
 #include "olestream.h"
 #include "word97_generated.h"
@@ -609,7 +610,7 @@ ListInfo::ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& 
     m_linkedIstd( istdNil ), m_restartingCounter( false ), m_numberFormat( 0 ),
     m_alignment( 0 ), m_isLegal( false ), m_notRestarted( false ), m_prev( false ),
     m_prevSpace( false ), m_isWord6( false ), m_followingChar( 0 ), m_lsid( 0 ),
-    m_space( 0 ), m_indent( 0 )
+    m_space( 0 ), m_indent( 0 ), m_picAutoSize( false ), m_type( NumberType )
 {
     if ( !listInfoProvider.setPAP( &pap ) ) {
         return;
@@ -639,6 +640,14 @@ ListInfo::ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& 
         m_followingChar = level->followingChar();
         m_space = level->space();
         m_indent = level->indent();
+
+        if (m_numberFormat == msonfcBullet) {
+            m_type = BulletType;
+        }
+        if (m_text.chp->fPicBullet) {
+            m_type = PictureType;
+            m_picAutoSize = !m_text.chp->fNoAutoSize;
+        }
     } else {
         wvlog << "Bug: The ListLevel is 0!!" << endl;
     }

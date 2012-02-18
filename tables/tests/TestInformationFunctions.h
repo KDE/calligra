@@ -22,7 +22,7 @@
 #define CALLIGRA_TABLES_TEST_INFORMATION_FUNCTIONS
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <Value.h>
 
@@ -50,7 +50,7 @@ private slots:
     void testCOUNTBLANK();
     void testCOUNTIF();
     void testERRORTYPE();
-    // void testFORMULA();  // to be implemented
+    void testFORMULA();
     void testINFO();
     void testISBLANK();
     void testISERR();
@@ -67,7 +67,6 @@ private slots:
     void testMATCH();
     void testN();
     void testNA();
-    // void testNUMBERVALUE(); // to be implemented
     void testROW();
     void testROWS();
     void testSHEET();

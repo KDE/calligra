@@ -34,16 +34,16 @@
 #include <KLocale>
 #include <KGlobalSettings>
 
-#include <QtGui/QColor>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QPixmap>
-#include <QtGui/QGridLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QColor>
+#include <QPushButton>
+#include <QLabel>
+#include <QLayout>
+#include <QPixmap>
+#include <QGridLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPointF>
+#include <QRectF>
 
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15

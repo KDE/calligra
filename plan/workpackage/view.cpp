@@ -36,7 +36,7 @@
 #include <QApplication>
 #include <QLabel>
 #include <QString>
-#include <qsize.h>
+#include <QSize>
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QPrinter>

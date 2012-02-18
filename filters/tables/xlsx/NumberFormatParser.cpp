@@ -27,13 +27,13 @@
 
 #include <MsooXmlUtils.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QLocale>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QBuffer>
+#include <QLocale>
+#include <QString>
+#include <QStringList>
 
-#include <QtGui/QColor>
-#include <QtGui/QPalette>
+#include <QColor>
+#include <QPalette>
 
 QColor NumberFormatParser::color(const QString& name)
 {

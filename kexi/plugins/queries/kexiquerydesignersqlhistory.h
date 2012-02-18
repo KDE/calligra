@@ -22,9 +22,9 @@
 #define KEXIQUERYDESIGNERSQLHISTORY_H
 
 #include <q3scrollview.h>
-#include <qdatetime.h>
-#include <qlist.h>
-#include <qmap.h>
+#include <QDateTime>
+#include <QList>
+#include <QMap>
 #include <QMouseEvent>
 
 class QTextDocument;

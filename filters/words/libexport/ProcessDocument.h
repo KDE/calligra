@@ -21,7 +21,7 @@
 #ifndef PROCESS_DOCUMENT_H
 #define PROCESS_DOCUMENT_H
 
-#include <qdom.h>
+#include <QDomDocument>
 
 class KWEFWordsLeader;
 

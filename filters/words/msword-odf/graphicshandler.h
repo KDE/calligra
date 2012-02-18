@@ -144,7 +144,7 @@ public:
      * This method gets called when an inline object is found by wv2 parser.
      * @param data PictureData as defined in functordata.h
      */
-    virtual void handleInlineObject(const wvWare::PictureData& data);
+    virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.

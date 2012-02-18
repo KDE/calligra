@@ -28,7 +28,7 @@
 #include <tables/Style.h>
 #include <tables/StyleManager.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 
 using namespace Calligra::Tables;
 

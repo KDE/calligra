@@ -50,14 +50,14 @@
 #include "kactioncollection.h"
 #include "kaction.h"
 
-#include <QtCore/QDate>
-#include <QtCore/QCharRef>
-#include <QtGui/QPen>
-#include <QtGui/QPainter>
-#include <QtGui/QDialog>
-#include <QtGui/QActionEvent>
-#include <QtCore/QHash>
-#include <QtGui/QApplication>
+#include <QDate>
+#include <QCharRef>
+#include <QPen>
+#include <QPainter>
+#include <QDialog>
+#include <QActionEvent>
+#include <QHash>
+#include <QApplication>
 #include <QToolTip>
 
 #include <assert.h>

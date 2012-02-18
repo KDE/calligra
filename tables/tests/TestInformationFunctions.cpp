@@ -319,13 +319,14 @@ void TestInformationFunctions::testERRORTYPE()
     CHECK_EVAL("ERRORTYPE(1/0)",  Value(2));
 }
 
-/*
 void TestInformationFunctions::testFORMULA()
 {
-    CHECK_EVAL( "LENGTH(FORMULA(B7))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
-    CHECK_EVAL( "FORMULA(B3)",           Value( true ) ); // Simple formulas that produce Text are still formulas
+    CHECK_EVAL( "FORMULA(B1)", Value( "=SUM(A19:A31)" ) ); // B1 contains a simple SUM formula
+    CHECK_EVAL( "FORMULA(B2)", Value::errorNA() ); // Empty formula means no formula
+    CHECK_EVAL( "FORMULA(B3)", Value::errorNA() ); // Cell constants are not formulas
+
+    CHECK_EVAL( "LEN(FORMULA(B1))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
 }
-*/
 
 void TestInformationFunctions::testINFO()
 {
@@ -478,15 +479,6 @@ void TestInformationFunctions::testNA()
     CHECK_EVAL("ISNA(5+NA())",  Value(true));     // NA propagates through various functions
     // and operators, just like any other error type.
 }
-
-/*
-void TestInformationFunctions::testNUMBERVALUE()
-{
-    CHECK_EVAL( "NUMBERVALUE(\"6\"      ; \".\")", Value(    6   ) ); // VALUE converts text to numbers (unlike N).
-    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
-    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
-}
-*/
 
 // TODO row not working here
 void TestInformationFunctions::testROW()
