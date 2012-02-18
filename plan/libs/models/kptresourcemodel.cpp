@@ -1019,9 +1019,6 @@ bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int ro
             } else if ( value.type() == QVariant::String ) {
                 a = m_project->accounts().findAccount( value.toString() );
             }
-            if ( a == 0 ) {
-                return false;
-            }
             Account *old = res->account();
             if ( old != a ) {
                 emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18nc( "(qtundo-format)", "Modify resource account" ) ) );

@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     // PDF related options.
     options.add("print-orientation <name>", ki18n("The print orientation. This could be either Portrait or Landscape."));
     options.add("print-papersize <name>", ki18n("The paper size. A4, Legal, Letter, ..."));
-    options.add("print-margin <size>", ki18n("The size of the paper margin. Per default this is 0.2."));
+    options.add("print-margin <size>", ki18n("The size of the paper margin. By default this is 0.2."));
 
     KCmdLineArgs::addCmdLineOptions(options);
 
