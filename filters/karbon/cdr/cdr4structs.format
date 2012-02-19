@@ -37,7 +37,7 @@
       <item name="CdrTextObjectId" value="4">
         <description>Text</description>
       </item>
-      <item name="CdrBitmapObjectId" value="5">
+      <item name="CdrPixelImageObjectId" value="5">
         <description>Bitmap</description>
       </item>
       <item name="CdrBlockTextObjectId" value="6">
