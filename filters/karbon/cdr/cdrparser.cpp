@@ -1010,17 +1010,26 @@ CdrParser::readLoda()
 
     const CdrObjectArgumentsData& argsData = dataRef<CdrObjectArgumentsData>( lodaChunk );
 
-qDebug() << "Reading Loda" << argsData.count() << "args, loda type" << argsData.chunkType();
-    if( argsData.chunkType() == CdrRectangleObjectId )
-        object = readRectangleObject( argsData );
-    else if( argsData.chunkType() == CdrEllipseObjectId )
-        object = readEllipseObject( argsData );
-    else if( argsData.chunkType() == CdrPathObjectId )
-        object = readPathObject( argsData );
-    else if( argsData.chunkType() == CdrTextObjectId )
-        object = readTextObject( argsData );
-    else if( argsData.chunkType() == CdrBlockTextObjectId )
-        object = readBlockTextObject( argsData );
+    const QString lodaTypeName = QLatin1String(
+        (argsData.chunkType() == CdrLayerObjectId) ?      "Layer" :
+        (argsData.chunkType() == CdrPixelImageObjectId) ? "PixelImage" :
+        (argsData.chunkType() == CdrGridObjectId) ?       "Grid" :
+        (argsData.chunkType() == CdrGuidesObjectId) ?     "Guides" :
+        (argsData.chunkType() == CdrDesktopObjectId) ?    "Desktop" :
+        (argsData.chunkType() == CdrRectangleObjectId) ?  "Rectangle" :
+        (argsData.chunkType() == CdrEllipseObjectId) ?    "Ellipse" :
+        (argsData.chunkType() == CdrPathObjectId) ?       "Path" :
+        (argsData.chunkType() == CdrTextObjectId) ?       "Graphic Text" :
+        (argsData.chunkType() == CdrBlockTextObjectId) ?  "Block Text" :
+                                                         "" );
+qDebug() << "Reading Loda" << argsData.count() << "args, loda type" << argsData.chunkType() << lodaTypeName;
+    object =
+        (argsData.chunkType() == CdrRectangleObjectId) ? (CdrAbstractObject*)readRectangleObject( argsData ) :
+        (argsData.chunkType() == CdrEllipseObjectId) ?   (CdrAbstractObject*)readEllipseObject( argsData ) :
+        (argsData.chunkType() == CdrPathObjectId) ?      (CdrAbstractObject*)readPathObject( argsData ) :
+        (argsData.chunkType() == CdrTextObjectId) ?      (CdrAbstractObject*)readTextObject( argsData ) :
+        (argsData.chunkType() == CdrBlockTextObjectId) ? (CdrAbstractObject*)readBlockTextObject( argsData ) :
+                                                         (CdrAbstractObject*)0;
 
     for (int i=0; i < argsData.count(); i++)
     {
@@ -1218,7 +1227,7 @@ qDebug() << "path points:" << points.count();
                     curveControlPointCount = 0;
                 }
                 const Cdr4Point point = points.point(j);
-qDebug() <<"    "<< j<<":"<<point.x()<<","<<point.y()<< QString::number(pointType,16);
+// qDebug() <<"    "<< j<<":"<<point.x()<<","<<point.y()<< QString::number(pointType,16);
                 pathObject->addPathPoint( CdrPathPoint(CdrPoint(point.x(),point.y()), pointType) );
                 if( isBadPoint )
                 {
