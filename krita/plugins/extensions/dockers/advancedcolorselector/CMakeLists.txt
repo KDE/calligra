@@ -43,6 +43,10 @@ set(KRITA_COLORSELECTORNG_QML_SRCS
   kis_color_selector_component.cpp
   kis_color_selector_interface.cpp
   kis_color_selector_item.cpp
+  kis_color_selector_ring.cpp
+  kis_color_selector_simple.cpp
+  kis_color_selector_surface.cpp
+  kis_color_selector_triangle.cpp
   kis_color_selector_wheel.cpp
 )
 

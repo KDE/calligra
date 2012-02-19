@@ -22,18 +22,21 @@
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <KGlobal>
+#include <KConfigGroup>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasResourceManager.h>
 
 #include "kis_color_selector_wheel.h"
 
-KisColorSelectorItem::KisColorSelectorItem(QDeclarativeItem* parent): QDeclarativeItem(parent), m_component(new KisColorSelectorWheel(this, this)), m_resourceManager(0)
+KisColorSelectorItem::KisColorSelectorItem(QDeclarativeItem* parent): QDeclarativeItem(parent), m_surface(this), m_resourceManager(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setAcceptedMouseButtons(Qt::LeftButton);
-  
-    m_component->setConfiguration(KisColorSelectorSurface::hslSH, KisColorSelectorSurface::Wheel);
+    
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    setConfiguration(KisColorSelectorSurface::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorSurface::Configuration().toString())));
 }
 
 const KoColorSpace* KisColorSelectorItem::colorSpace() const
@@ -46,34 +49,31 @@ void KisColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsIt
     QSize currentSize(width(), height());
     if(currentSize != m_lastSize)
     {
-        m_component->setGeometry(0, 0, width(), height());
+        m_surface.resize(width(), height(), 0);
         m_lastSize = currentSize;
     }
     
-    m_component->paintEvent(painter);
+    m_surface.paint(painter);
 }
 
 void KisColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    m_component->mouseEvent(event->pos().x(), event->pos().y());
-    update();
+    m_surface.processMouseMove(event->pos().x(), event->pos().y(), event->buttons());
 }
 
 void KisColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    m_component->mouseEvent(event->pos().x(), event->pos().y());
-    update();
+    m_surface.processMousePress(event->pos().x(), event->pos().y(), event->buttons());
 }
 
 void KisColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     if(event->button()&Qt::LeftButton || event->buttons()&Qt::RightButton)
     {
-        m_component->mouseEvent(event->pos().x(), event->pos().y());
-        KoColor currentColor = KoColor(m_component->currentColor(), colorSpace());
+        m_surface.processMouseRelease(event->pos().x(), event->pos().y(), event->buttons());
+        KoColor currentColor = KoColor(m_surface.currentColor(), colorSpace());
         commitColor(currentColor, Foreground);
     }
-    update();
 }
 
 KoCanvasResourceManager* KisColorSelectorItem::resourceManager() const
@@ -83,7 +83,19 @@ KoCanvasResourceManager* KisColorSelectorItem::resourceManager() const
 
 void KisColorSelectorItem::setResourceManager(KoCanvasResourceManager* _canvasResourceManager)
 {
-    qDebug() << _canvasResourceManager;
     m_resourceManager = _canvasResourceManager;
-    m_component->setColor(findGeneratingColor(m_resourceManager->foregroundColor()));
+    m_surface.setColor(findGeneratingColor(m_resourceManager->foregroundColor()));
 }
+
+void KisColorSelectorItem::setConfiguration(KisColorSelectorSurface::Configuration conf)
+{
+    m_surface.setConfiguration(conf);
+    QObject::connect(m_surface.mainComponent(), SIGNAL(update()), this,   SLOT(update()), Qt::UniqueConnection);
+    QObject::connect(m_surface.subComponent(),  SIGNAL(update()), this,   SLOT(update()), Qt::UniqueConnection);
+}
+
+void KisColorSelectorItem::update(const QRectF& rect)
+{
+    QDeclarativeItem::update(rect);
+}
+
