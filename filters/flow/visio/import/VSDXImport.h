@@ -23,9 +23,6 @@
 #include <KoFilter.h>
 #include <QVariantList>
 
-
-class VsdToOdg;
-
 class VSDXImport : public KoFilter
 {
 
