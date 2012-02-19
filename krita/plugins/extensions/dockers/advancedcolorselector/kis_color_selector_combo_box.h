@@ -33,15 +33,15 @@ public:
     ~KisColorSelectorComboBox();
     void hidePopup();
     void showPopup();
-    KisColorSelector::Configuration configuration() const;
+    KisColorSelectorSurface::Configuration configuration() const;
 protected:
     void paintEvent(QPaintEvent *e);
 public slots:
     void setColorSpace(const KoColorSpace* colorSpace);
-    void setConfiguration(KisColorSelector::Configuration);
+    void setConfiguration(KisColorSelectorSurface::Configuration);
 private:
     KisColorSelectorComboBoxPrivate* m_private;
-    KisColorSelector::Configuration m_configuration;
+    KisColorSelectorSurface::Configuration m_configuration;
     KisColorSelector m_currentSelector;
 };
 

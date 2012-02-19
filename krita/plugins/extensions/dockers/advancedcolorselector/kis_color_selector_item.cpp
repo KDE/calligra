@@ -33,7 +33,7 @@ KisColorSelectorItem::KisColorSelectorItem(QDeclarativeItem* parent): QDeclarati
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     setAcceptedMouseButtons(Qt::LeftButton);
   
-    m_component->setConfiguration(KisColorSelector::hslSH, KisColorSelector::Wheel);
+    m_component->setConfiguration(KisColorSelectorSurface::hslSH, KisColorSelectorSurface::Wheel);
 }
 
 const KoColorSpace* KisColorSelectorItem::colorSpace() const

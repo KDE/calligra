@@ -258,7 +258,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
+    cstw->setConfiguration(KisColorSelectorSurface::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
 }
 
 void KisColorSelectorSettings::loadDefaultPreferences()
@@ -323,7 +323,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
+    cstw->setConfiguration(KisColorSelectorSurface::Configuration("3|0|5|0")); // triangle selector
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :

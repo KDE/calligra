@@ -41,7 +41,7 @@ KisColorSelectorComponent::KisColorSelectorComponent(QObject* parent, KisColorSe
     m_lastX(0),
     m_lastY(0)
 {
-    Q_ASSERT(parent);
+    Q_ASSERT(colorSelectorInterface);
 }
 
 void KisColorSelectorComponent::setGeometry(int x, int y, int width, int height)

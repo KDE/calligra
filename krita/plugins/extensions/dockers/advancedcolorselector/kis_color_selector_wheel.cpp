@@ -35,19 +35,19 @@ void KisColorSelectorWheel::setColor(const QColor &c)
     angle *= 2. * M_PI;
     angle -= M_PI;
     switch (m_parameter) {
-    case KisColorSelector::LH:
+    case KisColorSelectorSurface::LH:
         emit paramChanged(c.hueF(), -1, -1, -1, c.lightnessF());
         radius = c.lightnessF();
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorSurface::VH:
         emit paramChanged(c.hueF(), -1, c.valueF(), -1, -1);
         radius=c.valueF();
         break;
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorSurface::hsvSH:
         emit paramChanged(c.hueF(), c.saturationF(), -1, -1, -1);
         radius = c.saturationF();
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorSurface::hslSH:
         emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
         radius = c.hslSaturationF();
         break;
@@ -82,16 +82,16 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
 //    kDebug()<<"angele="<<angle << "   radius="<<radius;
 
     switch (m_parameter) {
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorSurface::hsvSH:
         emit paramChanged(angle, radius, -1, -1, -1);
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorSurface::hslSH:
         emit paramChanged(angle, -1, -1, radius, -1);
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorSurface::VH:
         emit paramChanged(angle, -1, radius, -1, -1);
         break;
-    case KisColorSelector::LH:
+    case KisColorSelectorSurface::LH:
         emit paramChanged(angle, -1, -1, -1, radius);
         break;
     default:
@@ -178,16 +178,16 @@ const QColor& KisColorSelectorWheel::colorAt(int x, int y)
 
 
     switch(m_parameter) {
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorSurface::hsvSH:
         m_qcolor.setHsvF(angle, radius, m_value);
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorSurface::hslSH:
         m_qcolor.setHslF(angle, radius, m_lightness);
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorSurface::VH:
         m_qcolor.setHsvF(angle, m_hsvSaturation, radius);
         break;
-    case KisColorSelector::LH:
+    case KisColorSelectorSurface::LH:
         m_qcolor.setHslF(angle, m_hslSaturation, radius);
         break;
     default:

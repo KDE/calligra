@@ -33,8 +33,8 @@ class KisColorSelectorComponent : public QObject
 {
     Q_OBJECT
 public:
-    typedef KisColorSelector::Parameters Parameter;
-    typedef KisColorSelector::Type Type;
+    typedef KisColorSelectorSurface::Parameters Parameter;
+    typedef KisColorSelectorSurface::Type Type;
 
     explicit KisColorSelectorComponent(QObject* parent, KisColorSelectorInterface* colorSelectorInterface);
     void setGeometry(int x, int y, int width, int height);
