@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Helder Cesar <heldercro@gmail.com>
    Copyright (C) 2011 Yue Liu <yue.liu@mail.com>
 
    This library is free software; you can redistribute it and/or
@@ -19,26 +18,46 @@
 */
 
 #include "VSDXImport.h"
-#include "OutputHandler.h"
-#include "OdfDocumentHandler.hxx"
-#include "OdgGenerator.hxx"
-
-#include <KoFilterChain.h>
-#include <KoGlobal.h>
-#include <KoUnit.h>
-#include <KoOdf.h>
-#include <KoStore.h>
-
-#include <kpluginfactory.h>
-#include <KDebug>
-
-#include <QIODevice>
-#include <QtCore/QString>
-#include <QtCore/QFile>
 
 #include <libvisio/libvisio.h>
-#include <libwpd-stream/libwpd-stream.h>
-#include <iostream>
+
+#include <OutputFileHelper.hxx>
+#include <OdgGenerator.hxx>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
+#include <KoOdf.h>
+
+#include <kpluginfactory.h>
+
+#include <QString>
+#include <QByteArray>
+
+#include <stdio.h>
+
+class OdgOutputFileHelper : public OutputFileHelper
+{
+public:
+    OdgOutputFileHelper(const char *outFileName, const char *password) :
+        OutputFileHelper(outFileName, password) {}
+    ~OdgOutputFileHelper() {}
+
+private:
+    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    {
+        if (!libvisio::VisioDocument::isSupported(input))
+        {
+            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
+            return false;
+        }
+        return true;
+    }
+
+    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    {
+        OdgGenerator exporter(handler, streamType);
+        return libvisio::VisioDocument::parse(input, &exporter);
+    }
+};
 
 K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
 K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
@@ -54,7 +73,10 @@ VSDXImport::~VSDXImport()
 
 KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    //const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
+    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
+        return KoFilter::NotImplemented;
+
+    const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
 
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
@@ -63,66 +85,42 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
             " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
             " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
             "</manifest:manifest>";
-    
-    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
-        return KoFilter::NotImplemented;
 
-    WPXInputStream* input = new WPXFileStream(m_chain->inputFile().toLocal8Bit());
-    if (input->isOLEStream()) {
-        WPXInputStream* olestream = input->getDocumentOLEStream("Anything");
-        if (olestream) {
-            delete input;
-            input = olestream;
-        }
-     }
 
-    if (!libvisio::VisioDocument::isSupported(input)) {
-        kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
-        delete input;
-        return KoFilter::NotImplemented;
+    QByteArray input = m_chain->inputFile().toLocal8Bit();
+    m_inputFile = input.data();
+    QByteArray output = m_chain->outputFile().toLocal8Bit();
+    m_outputFile = output.data();
+
+    OdgOutputFileHelper helper(m_outputFile, 0);
+
+    if (!helper.writeChildFile("mimetype", mimetypeStr, (char)0)) {
+        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
+        return KoFilter::ParsingError;
     }
 
-    // create output store
-    KoStore* output = KoStore::createStore(m_chain->outputFile(), KoStore::Write,
-                        KoOdf::mimeType(KoOdf::Graphics), KoStore::Zip);
-    if (!output) {
-        return KoFilter::StorageCreationError;
+    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
+        fprintf(stderr, "ERROR : Couldn't write manifest\n");
+        return KoFilter::ParsingError;
     }
-/*
-    output->open("mimetype");
-    output->write(QByteArray(mimetypeStr));
-    output->close();
-*/
-    kDebug()<<output->currentPath();
 
-    output->enterDirectory("META-INF");
-    output->open("manifest.xml");
-    output->write(QByteArray(manifestStr));
-    output->close();
-    output->leaveDirectory();
+    if (m_outputFile && !helper.writeConvertedContent("settings.xml", m_inputFile, ODF_SETTINGS_XML))
+    {
+        fprintf(stderr, "ERROR : Couldn't write document settings\n");
+        return KoFilter::ParsingError;
+    }
 
-    kDebug()<<output->currentPath();
+    if (m_outputFile && !helper.writeConvertedContent("styles.xml", m_inputFile, ODF_STYLES_XML))
+    {
+        fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        return KoFilter::ParsingError;
+    }
 
-    writeConvertedContent(output, "settings.xml", input, ODF_SETTINGS_XML);
-    kDebug()<<output;
-
-    writeConvertedContent(output, "styles.xml", input, ODF_STYLES_XML);
-    kDebug()<<output;
-
-    writeConvertedContent(output, "content.xml", input, ODF_CONTENT_XML);
-    kDebug()<<output;
-
+    if (!helper.writeConvertedContent("content.xml", m_inputFile, m_outputFile ? ODF_CONTENT_XML : ODF_FLAT_XML))
+    {
+            fprintf(stderr, "ERROR : Couldn't write document content\n");
+            return KoFilter::ParsingError;
+    }
 
     return KoFilter::OK;
-}
-
-bool VSDXImport::writeConvertedContent(KoStore *output, const char *childFileName, WPXInputStream* input, const OdfStreamType streamType)
-{
-    OutputHandler *handler = new OutputHandler();
-    OdgGenerator exporter(handler, streamType);
-    libvisio::VisioDocument::parse(input, &exporter);
-    output->open(childFileName);
-    output->write(handler->array());
-    output->close();
-    return true;
 }

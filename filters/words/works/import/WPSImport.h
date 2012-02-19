@@ -17,24 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef VSDXIMPORT_H
-#define VSDXIMPORT_H
+#ifndef WPSIMPORT_H
+#define WPSIMPORT_H
 
 #include <KoFilter.h>
 #include <QVariantList>
 
-
-class VsdToOdg;
-
-class VSDXImport : public KoFilter
+class WPSImport : public KoFilter
 {
 
     Q_OBJECT
 
 public:
 
-    VSDXImport(QObject *parent, const QVariantList&);
-    virtual ~VSDXImport();
+    WPSImport(QObject *parent, const QVariantList&);
+    virtual ~WPSImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
@@ -43,4 +40,4 @@ private:
     const char *m_outputFile;
 };
 
-#endif // VSDXIMPORT_H
+#endif // WPSIMPORT_H

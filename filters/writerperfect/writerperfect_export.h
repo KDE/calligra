@@ -17,30 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef VSDXIMPORT_H
-#define VSDXIMPORT_H
+#ifndef WRITERPERFECT_EXPORT_H
+#define WRITERPERFECT_EXPORT_H
 
-#include <KoFilter.h>
-#include <QVariantList>
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
 
+#ifndef WRITERPERFECT_EXPORT
+# if defined(MAKE_WRITERPERFECT_LIB)
+/* We are building this library */
+#  define WRITERPERFECT_EXPORT KDE_EXPORT
+# else
+/* We are using this library */
+#  define WRITERPERFECT_EXPORT KDE_IMPORT
+# endif
+#endif
 
-class VsdToOdg;
+# ifndef WRITERPERFECT_EXPORT_DEPRECATED
+#  define WRITERPERFECT_EXPORT_DEPRECATED KDE_DEPRECATED WRITERPERFECT_EXPORT
+# endif
 
-class VSDXImport : public KoFilter
-{
-
-    Q_OBJECT
-
-public:
-
-    VSDXImport(QObject *parent, const QVariantList&);
-    virtual ~VSDXImport();
-
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
-private:
-    const char *m_inputFile;
-    const char *m_outputFile;
-};
-
-#endif // VSDXIMPORT_H
+#endif

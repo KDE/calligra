@@ -55,7 +55,16 @@ if (NOT TINY)
     macro_optional_find_package(WPD)
     macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
     
+    macro_optional_find_package(LIBWPS)
+    macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
+
     add_subdirectory( html-odf )
+    if(WPD_FOUND)
+        add_subdirectory( wordperfect )
+    endif(WPD_FOUND)
+    if(LIBWPS_FOUND)
+        add_subdirectory( works )
+    endif(LIBWPS_FOUND)
 
     if(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 #        if (TARGET kowmf)
@@ -72,9 +81,6 @@ if (NOT TINY)
 	    add_subdirectory( wml )
         add_subdirectory( abiword )
 	    #add_subdirectory( latex )
-        if(WPD_FOUND)
-    	    add_subdirectory( wordperfect )
-        endif(WPD_FOUND)
     endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 
     

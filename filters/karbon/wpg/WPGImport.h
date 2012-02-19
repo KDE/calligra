@@ -36,6 +36,9 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
+private:
+    const char *m_inputFile;
+    const char *m_outputFile;
 };
 
 #endif // WPGIMPORT_H

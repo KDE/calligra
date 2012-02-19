@@ -17,30 +17,47 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <WPGImport.h>
-#include <WPGImport.moc>
-
-#include <KoFilterChain.h>
-#include <KoGlobal.h>
-#include <KoUnit.h>
-#include <KoXmlWriter.h>
-
-#include <kpluginfactory.h>
-#include <KDebug>
-
-
-#include <QString>
-#include <QFile>
+#include "WPGImport.h"
 
 #include <libwpg/libwpg.h>
-#if LIBWPG_VERSION_MINOR<2
-#include <libwpg/WPGStreamImplementation.h>
-#else
-#include <libwpd-stream/libwpd-stream.h>
-#include <libwpd/libwpd.h>
-#endif
 
-#include <iostream>
+#include <OutputFileHelper.hxx>
+#include <OdgGenerator.hxx>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
+#include <KoOdf.h>
+
+#include <kpluginfactory.h>
+
+#include <QString>
+#include <QByteArray>
+
+#include <stdio.h>
+
+class OdgOutputFileHelper : public OutputFileHelper
+{
+public:
+    OdgOutputFileHelper(const char *outFileName, const char *password) :
+        OutputFileHelper(outFileName, password) {}
+    ~OdgOutputFileHelper() {}
+
+private:
+    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    {
+        if (!libwpg::WPGraphics::isSupported(input))
+        {
+            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect Graphics.\n");
+            return false;
+        }
+        return true;
+    }
+
+    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    {
+        OdgGenerator exporter(handler, streamType);
+        return libwpg::WPGraphics::parse(input, &exporter);
+    }
+};
 
 K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
 K_EXPORT_PLUGIN(WPGImportFactory("calligrafilters"))
@@ -57,55 +74,53 @@ WPGImport::~WPGImport()
 
 KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/x-wpg")
+    if (from != "application/x-wpg" || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
-    if (to != "image/svg+xml")
-        return KoFilter::NotImplemented;
+    const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
 
-#if LIBWPG_VERSION_MINOR<2
-    WPXInputStream* input = new libwpg::WPGFileStream(m_chain->inputFile().toLocal8Bit());
-    if (input->isOLEStream()) {
-        WPXInputStream* olestream = input->getDocumentOLEStream();
-        if (olestream) {
-            delete input;
-            input = olestream;
-        }
-    }
-    libwpg::WPGString output;
-#else
-    WPXInputStream* input = new WPXFileStream(m_chain->inputFile().toLocal8Bit());
-    if (input->isOLEStream()) {
-        WPXInputStream* olestream = input->getDocumentOLEStream("Anything");
-        if (olestream) {
-            delete input;
-            input = olestream;
-        }
-     }
-     ::WPXString output;
-#endif
+    const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
+            " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.graphics\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
+            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
+            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
+            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
+            "</manifest:manifest>";
 
-    if (!libwpg::WPGraphics::isSupported(input)) {
-        kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
-        delete input;
-        return KoFilter::NotImplemented;
-    }
+    QByteArray input = m_chain->inputFile().toLocal8Bit();
+    m_inputFile = input.data();
+    QByteArray output = m_chain->outputFile().toLocal8Bit();
+    m_outputFile = output.data();
 
-    if (!libwpg::WPGraphics::generateSVG(input, output)) {
-        kWarning() << "ERROR: SVG Generation failed!";
-        delete input;
+    OdgOutputFileHelper helper(m_outputFile, 0);
+
+    if (!helper.writeChildFile("mimetype", mimetypeStr, (char)0)) {
+        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
         return KoFilter::ParsingError;
     }
 
-    delete input;
-
-    QFile outputFile(m_chain->outputFile());
-    if(!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        kWarning() << "ERROR: Could not open output file" << m_chain->outputFile();
-        return KoFilter::InternalError;
+    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
+        fprintf(stderr, "ERROR : Couldn't write manifest\n");
+        return KoFilter::ParsingError;
     }
-    outputFile.write(output.cstr());
-    outputFile.close();
+
+    if (m_outputFile && !helper.writeConvertedContent("settings.xml", m_inputFile, ODF_SETTINGS_XML))
+    {
+        fprintf(stderr, "ERROR : Couldn't write document settings\n");
+        return KoFilter::ParsingError;
+    }
+
+    if (m_outputFile && !helper.writeConvertedContent("styles.xml", m_inputFile, ODF_STYLES_XML))
+    {
+        fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        return KoFilter::ParsingError;
+    }
+
+    if (!helper.writeConvertedContent("content.xml", m_inputFile, m_outputFile ? ODF_CONTENT_XML : ODF_FLAT_XML))
+    {
+            fprintf(stderr, "ERROR : Couldn't write document content\n");
+            return KoFilter::ParsingError;
+    }
 
     return KoFilter::OK;
 }
