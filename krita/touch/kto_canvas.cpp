@@ -127,8 +127,6 @@ KtoCanvas::KtoCanvas(QDeclarativeItem* parent): QDeclarativeItem(parent), m_main
     KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
     QString defaultName = paintopid + ".kpp";
     QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
-
-    qDebug() << "=== " << path;
     
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
@@ -171,7 +169,6 @@ void KtoCanvas::imageUpdated(const QRect& rect)
 
 void KtoCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-    qDebug() << "paint";
     painter->fillRect(boundingRect(), Qt::gray);
 //     if(m_mainWindow and m_mainWindow->document()->image())
     {
