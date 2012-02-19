@@ -111,26 +111,32 @@ Rectangle
             id: brushSelector
             anchors.fill: parent
             visible: false
-            model: canvas.brushResourceModel.resourcesInformation
             cellWidth: 110
-            cellHeight: 130
+            cellHeight: 120
+            model: canvas.brushResourceModel.resourcesInformation
             highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-            delegate: Rectangle {
-              height: 120
-              width: 100
-              Icon {
-                  anchors.top: parent.top
-                  height: 100
-                  width: 100
-                  image: model.modelData.image
-              }
-              Text {
-                  height: 20
-                  width: 100
-                  elide: Text.ElideRight
-                  anchors.bottom: parent.bottom
-                  text: model.modelData.name
-              }
+            delegate: Item
+            {
+                height: 120
+                width: 110
+                Icon {
+                    x: 5
+                    y: 5
+                    height: 100
+                    width: 100
+                    image: model.modelData.image
+                }
+                Text {
+                    x: 5
+                    y: 105
+                    width: 100
+                    elide: Text.ElideRight
+                    text: model.modelData.name
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: brushSelector.currentIndex = index
+                }
             }
         }
     }
