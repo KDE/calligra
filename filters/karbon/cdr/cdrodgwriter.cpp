@@ -401,10 +401,10 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
     mBodyWriter->startElement("draw:rect");
 
     writeTransformation( object->transformations() );
-    mBodyWriter->addAttribute("svg:x", odfXCoord(0));
-    mBodyWriter->addAttribute("svg:y", odfYCoord(0));
-    mBodyWriter->addAttribute("svg:width", odfXCoord(object->cornerPoint().x()) );
-    mBodyWriter->addAttribute("svg:height", odfYCoord(object->cornerPoint().y()) );
+    mBodyWriter->addAttributePt("svg:x", odfXCoord(0));
+    mBodyWriter->addAttributePt("svg:y", odfYCoord(0));
+    mBodyWriter->addAttributePt("svg:width", odfLength(object->cornerPoint().x()) );
+    mBodyWriter->addAttributePt("svg:height", odfLength(object->cornerPoint().y()) );
 //     mBodyWriter->addAttribute("rx", object->cornerRoundness());
 //     mBodyWriter->addAttribute("ry", object->cornerRoundness());
     mBodyWriter->addAttribute("draw:layer", mLayerId );
@@ -425,10 +425,15 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     mBodyWriter->startElement( "draw:ellipse" );
 
     writeTransformation( object->transformations() );
-    mBodyWriter->addAttribute( "svg:cx", odfXCoord(object->centerPoint().x()) );
-    mBodyWriter->addAttribute( "svg:cy", odfYCoord(object->centerPoint().y()) );
-    mBodyWriter->addAttribute( "svg:rx", odfLength(object->xRadius()) );
-    mBodyWriter->addAttribute( "svg:ry", odfLength(object->yRadius()) );
+    mBodyWriter->addAttributePt( "svg:x", odfXCoord(0) );
+    mBodyWriter->addAttributePt( "svg:y", odfYCoord(0) );
+    mBodyWriter->addAttributePt( "svg:width", odfLength(object->cornerPoint().x()) );
+    mBodyWriter->addAttributePt( "svg:height", odfLength(object->cornerPoint().y()) );
+    if( object->startAngle() != object->endAngle() )
+    {
+        mBodyWriter->addAttribute( "draw:start-angle", static_cast<qreal>(object->startAngle())/10.0 );
+        mBodyWriter->addAttribute( "draw:end-angle",   static_cast<qreal>(object->endAngle())/10.0 );
+    }
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
@@ -519,8 +524,8 @@ void
 CdrOdgWriter::writeTextObject( const CdrTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
-    mBodyWriter->addAttribute( "svg:x", odfXCoord(0));
-    mBodyWriter->addAttribute( "svg:y", odfYCoord(0));
+    mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));
+    mBodyWriter->addAttributePt( "svg:y", odfYCoord(0));
     writeTransformation( object->transformations() );
         mBodyWriter->startElement( "draw:image" );
         mBodyWriter->addAttribute( "xlink:type", QLatin1String("simple") );

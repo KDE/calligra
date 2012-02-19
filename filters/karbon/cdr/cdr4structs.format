@@ -729,12 +729,15 @@ sample2: other text object linked to same object
 
     <!-- sample data: 4F FA 28 FC 8C 0A 8C 0A 00 00-->
     <record name="Cdr4EllipseData" size="10">
-      <!-- center? or rather corner point?-->
-      <field start="0" end="3" name="centerPoint" type="Cdr4Point" />
-      <!-- x radius?-->
-      <field start="4" end="5" name="xRadius" type="uint16" />
-      <!-- y radius?-->
-      <field start="6" end="7" name="yRadius" type="uint16" />
+      <field start="0" end="3" name="cornerPoint" type="Cdr4Point">
+          <description>The point of the opposite corner of the bounding box of the ellipse, with 0,0 being the base point.</description>
+      </field>
+      <field start="4" end="5" name="startAngle" type="uint16">
+          <description>always 2700, possibly starting angle of section</description>
+      </field>
+      <field start="6" end="7" name="endAngle" type="uint16">
+          <description>always 2700, possibly ending angle of section</description>
+      </field>
       <field start="8" end="9" name="_unknown" type="uint16" />
     </record>
   </records>

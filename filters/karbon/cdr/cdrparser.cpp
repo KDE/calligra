@@ -1172,11 +1172,11 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeListData& argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4EllipseData& ellipseData = argsData.argRef<Cdr4EllipseData>( i );
-            ellipseObject->setCenterPoint( CdrPoint(ellipseData.centerPoint().x(),ellipseData.centerPoint().y()) );
-            ellipseObject->setXRadius(ellipseData.xRadius());
-            ellipseObject->setYRadius(ellipseData.yRadius());
-qDebug() << "ellipse: center"<<ellipseObject->centerPoint().x()<<","<<ellipseObject->centerPoint().x()
-                     <<"xradius"<<ellipseObject->xRadius()<<"yradius"<<ellipseObject->yRadius()
+            ellipseObject->setCornerPoint( CdrPoint(ellipseData.cornerPoint().x(),ellipseData.cornerPoint().y()) );
+            ellipseObject->setStartAngle(ellipseData.startAngle());
+            ellipseObject->setEndAngle(ellipseData.endAngle());
+qDebug() << "ellipse: corner"<<ellipseObject->cornerPoint().x()<<","<<ellipseObject->cornerPoint().x()
+                     <<"start angle"<<ellipseObject->startAngle()<<"end angle"<<ellipseObject->endAngle()
                      <<"unknown"<<ellipseData._unknown();
         }
             break;

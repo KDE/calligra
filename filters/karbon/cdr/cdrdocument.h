@@ -190,17 +190,17 @@ class CdrEllipseObject : public CdrGraphObject
 public:
     CdrEllipseObject() : CdrGraphObject(EllipseObjectId) {}
 public:
-    void setCenterPoint( CdrPoint centerPoint ) { mCenterPoint = centerPoint; }
-    void setXRadius( quint16 xRadius ) { mXRadius = xRadius; }
-    void setYRadius( quint16 yRadius ) { mYRadius = yRadius; }
+    void setCornerPoint( CdrPoint cornerPoint ) { mCornerPoint = cornerPoint; }
+    void setStartAngle( quint16 startAngle ) { mStartAngle = startAngle; }
+    void setEndAngle( quint16 endAngle ) { mEndAngle = endAngle; }
 public:
-    CdrPoint centerPoint() const { return mCenterPoint; }
-    quint16 xRadius() const { return mXRadius; }
-    quint16 yRadius() const { return mYRadius; }
+    CdrPoint cornerPoint() const { return mCornerPoint; }
+    quint16 startAngle() const { return mStartAngle; }
+    quint16 endAngle() const { return mEndAngle; }
 private:
-    CdrPoint mCenterPoint;
-    quint16 mXRadius;
-    quint16 mYRadius;
+    CdrPoint mCornerPoint;
+    quint16 mStartAngle;
+    quint16 mEndAngle;
 };
 
 class CdrPathObject : public CdrGraphObject
