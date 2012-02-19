@@ -24,19 +24,19 @@
 #include <stdio.h>
 
 StdOutHandler::StdOutHandler() :
-	mbIsTagOpened(false)
+    mbIsTagOpened(false)
 {
-	printf("<?xml version=\"1.0\"?>\n");
+    printf("<?xml version=\"1.0\"?>\n");
 }
 
 void StdOutHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
-	if (mbIsTagOpened)
-	{
-		printf(">");
-		mbIsTagOpened = false;
-	}
-	printf("<%s", psName);
+    if (mbIsTagOpened)
+    {
+        printf(">");
+        mbIsTagOpened = false;
+    }
+    printf("<%s", psName);
         WPXPropertyList::Iter i(xPropList);
         for (i.rewind(); i.next(); )
         {
@@ -44,49 +44,49 @@ void StdOutHandler::startElement(const char *psName, const WPXPropertyList &xPro
                 if (strncmp(i.key(), "libwpd", 6) != 0)
                         printf(" %s=\"%s\"", i.key(), i()->getStr().cstr());
         }
-	mbIsTagOpened = true;
-	msOpenedTagName.sprintf("%s", psName);
+    mbIsTagOpened = true;
+    msOpenedTagName.sprintf("%s", psName);
 }
 
 void StdOutHandler::endElement(const char *psName)
 {
-	if (mbIsTagOpened)
-	{
-		if( msOpenedTagName == psName )
-		{
-			printf("/>");
-			mbIsTagOpened = false;
-		}
-		else // should not happen, but handle it
-		{
-			printf(">");
-			printf("</%s>", psName);
-			mbIsTagOpened = false;
-		}
-	}
-	else
-	{
-		printf("</%s>", psName);
-		mbIsTagOpened = false;
-	}
+    if (mbIsTagOpened)
+    {
+        if( msOpenedTagName == psName )
+        {
+            printf("/>");
+            mbIsTagOpened = false;
+        }
+        else // should not happen, but handle it
+        {
+            printf(">");
+            printf("</%s>", psName);
+            mbIsTagOpened = false;
+        }
+    }
+    else
+    {
+        printf("</%s>", psName);
+        mbIsTagOpened = false;
+    }
 }
 
 void StdOutHandler::characters(const WPXString &sCharacters)
 {
-	if (mbIsTagOpened)
-	{
-		printf(">");
-		mbIsTagOpened = false;
-	}
+    if (mbIsTagOpened)
+    {
+        printf(">");
+        mbIsTagOpened = false;
+    }
         WPXString sEscapedCharacters(sCharacters, true);
-	printf("%s", sEscapedCharacters.cstr());
+    printf("%s", sEscapedCharacters.cstr());
 }
 
 void StdOutHandler::endDocument()
 {
-	if (mbIsTagOpened)
-	{
-		printf(">");
-		mbIsTagOpened = false;
-	}
+    if (mbIsTagOpened)
+    {
+        printf(">");
+        mbIsTagOpened = false;
+    }
 }

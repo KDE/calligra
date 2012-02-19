@@ -34,35 +34,35 @@ class OdgGeneratorPrivate;
 
 class WRITERPERFECT_EXPORT OdgGenerator : public libwpg::WPGPaintInterface {
 public:
-	OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
-	~OdgGenerator();
+    OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+    ~OdgGenerator();
 
-	void startGraphics(const ::WPXPropertyList &propList);
-	void endGraphics();
-	void startLayer(const ::WPXPropertyList &propList);
-	void endLayer();
-	void startEmbeddedGraphics(const ::WPXPropertyList&propList);
-	void endEmbeddedGraphics();
+    void startGraphics(const ::WPXPropertyList &propList);
+    void endGraphics();
+    void startLayer(const ::WPXPropertyList &propList);
+    void endLayer();
+    void startEmbeddedGraphics(const ::WPXPropertyList&propList);
+    void endEmbeddedGraphics();
 
-	void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector& gradient);
+    void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector& gradient);
 
-	void drawRectangle(const ::WPXPropertyList &propList);
-	void drawEllipse(const ::WPXPropertyList &propList);
-	void drawPolyline(const ::WPXPropertyListVector& vertices);
-	void drawPolygon(const ::WPXPropertyListVector& vertices);
-	void drawPath(const ::WPXPropertyListVector& path);
-	void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData& binaryData);
+    void drawRectangle(const ::WPXPropertyList &propList);
+    void drawEllipse(const ::WPXPropertyList &propList);
+    void drawPolyline(const ::WPXPropertyListVector& vertices);
+    void drawPolygon(const ::WPXPropertyListVector& vertices);
+    void drawPath(const ::WPXPropertyListVector& path);
+    void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData& binaryData);
 
-	void startTextObject(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &path);
-	void endTextObject();
-	void startTextLine(const ::WPXPropertyList &propList);
-	void endTextLine();
-	void startTextSpan(const ::WPXPropertyList &propList);
-	void endTextSpan();
-	void insertText(const ::WPXString &str);
+    void startTextObject(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &path);
+    void endTextObject();
+    void startTextLine(const ::WPXPropertyList &propList);
+    void endTextLine();
+    void startTextSpan(const ::WPXPropertyList &propList);
+    void endTextSpan();
+    void insertText(const ::WPXString &str);
 
 private:
-	OdgGeneratorPrivate *mpImpl;
+    OdgGeneratorPrivate *mpImpl;
 };
 
 #endif // __ODGEXPORTER_HXX__
