@@ -259,7 +259,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>&lt;span style=&quot;color:gray;&quot;&gt;Thank you for participation! Each version throws new challenges.&lt;/span&gt;</string>
+         <string>&lt;span style=&quot;color:gray;&quot;&gt;Thank you for participating! Each version throws in new challenges.&lt;/span&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
