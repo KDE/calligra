@@ -116,7 +116,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     }
 
     KoOdfWriteStore odfWriter(output);
-    KoXmlWriter* manifest = odfWriter.manifestWriter(KoXmlNS::presentation.toUtf8());
+    KoXmlWriter* manifest = odfWriter.manifestWriter(to);
     //Save the preview picture
     output->enterDirectory(QLatin1String("Thumbnails"));
     output->open(QLatin1String("thumbnail.png"));

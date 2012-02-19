@@ -395,7 +395,7 @@ void InsertProjectTester::testExistingResourceAccount()
     part2.insertProject( part.getProject(), 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
     QVERIFY( part2.getProject().accounts().allAccounts().contains( a ) );
-    QCOMPARE( part2.getProject().resourceGroupAt( 0 )->resourceAt( 0 )->account(), a );
+    QVERIFY( part2.getProject().resourceGroupAt( 0 )->resourceAt( 0 )->account() == 0 );
 }
 
 void InsertProjectTester::testExistingResourceCalendar()
@@ -430,7 +430,7 @@ void InsertProjectTester::testExistingResourceCalendar()
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
     QCOMPARE( part2.getProject().allCalendars().count(), 1 );
     QVERIFY( part2.getProject().allCalendars().contains( c ) );
-    QCOMPARE( part2.getProject().resourceGroupAt( 0 )->resourceAt( 0 )->calendar( true ), c );
+    QVERIFY( part2.getProject().resourceGroupAt( 0 )->resourceAt( 0 )->calendar( true ) == 0 );
 }
 
 void InsertProjectTester::testExistingResourceRequest()

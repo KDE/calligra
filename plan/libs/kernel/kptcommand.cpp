@@ -3252,22 +3252,20 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     QMap<Resource*, QString>::const_iterator end = resaccountmap.constEnd();
     for ( ; it != end; ++it ) {
         Resource *r = it.key();
-        if ( ! allResources.contains( r ) ) {
-            r = existingResources.key( r );
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ResourceModifyAccountCmd( *r, 0, accountsmap.value( it.value() ) ) );
         }
-        Q_ASSERT( allResources.contains( r ) );
-        addCommand( new ResourceModifyAccountCmd( *r, 0, accountsmap.value( it.value() ) ) );
     }}
     // Update resource calendar
     {QMap<Resource*, QString>::const_iterator it = rescalendarmap.constBegin();
     QMap<Resource*, QString>::const_iterator end = rescalendarmap.constEnd();
     for ( ; it != end; ++it ) {
         Resource *r = it.key();
-        if ( ! allResources.contains( r ) ) {
-            r = existingResources.key( r );
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ModifyResourceCalendarCmd( r, calendarsmap.value( it.value() ) ) );
         }
-        Q_ASSERT( allResources.contains( r ) );
-        addCommand( new ModifyResourceCalendarCmd( r, calendarsmap.value( it.value() ) ) );
     }}
     // Requests: clean up requests to resources already in m_project
     int gi = 0;
