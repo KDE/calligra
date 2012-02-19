@@ -37,6 +37,7 @@ public:
     virtual ~KtoResourceInformation();
     QString name() const;
     QImage image() const;
+    KoResource* resource() const;
 signals:
     void nameChanged();
     void imageChanged();
@@ -45,6 +46,7 @@ private:
     KtoResourceInformationList* m_parent;
 };
 
+Q_DECLARE_METATYPE(KtoResourceInformation*)
 Q_DECLARE_METATYPE(QList<KtoResourceInformation*>)
 
 #endif

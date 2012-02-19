@@ -46,4 +46,9 @@ QImage KtoResourceInformation::image() const
     return m_parent->resources()[m_index]->image();
 }
 
+KoResource* KtoResourceInformation::resource() const
+{
+    return m_parent->resources()[m_index];
+}
+
 #include "kto_resource_information.moc"

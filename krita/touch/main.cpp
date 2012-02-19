@@ -41,9 +41,11 @@ int main(int argc, char *argv[])
     
     KApplication app;
 
+    // Initialise metatypes
     qRegisterMetaType<KoCanvasResourceManager*>("KoCanvasResourceManager*");
     qRegisterMetaType<QList<KtoResourceInformation*> >("QList<KtoResourceInformation*>");
-
+    qRegisterMetaType<KtoResourceInformation*>("KtoResourceInformation*");
+    
     // Load dockers
     KoPluginLoader::PluginsConfig config;
     config.blacklist = "QmlPluginsDisabled";

@@ -24,6 +24,7 @@
 #include <QDeclarativeItem>
 #include <kis_types.h>
 
+class KtoResourceInformation;
 class KtoResourceInformationList;
 class QAbstractItemModel;
 class KoResourceModel;
@@ -42,6 +43,7 @@ class KtoCanvas : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY(KoCanvasResourceManager* resourceManager READ resourceManager)
     Q_PROPERTY(QObject* brushResourceModel READ brushResourceModel)
+    Q_PROPERTY(QObject* brushPreset WRITE setBrushPreset)
 public:
     KtoCanvas(QDeclarativeItem* parent = 0);
     virtual ~KtoCanvas();
@@ -51,6 +53,7 @@ public:
     void imageUpdated(const QRect &rect);
     KoCanvasResourceManager* resourceManager() const;
     KtoResourceInformationList* brushResourceModel() const;
+    void setBrushPreset(QObject* _resourceInformation);
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

@@ -135,7 +135,11 @@ Rectangle
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: brushSelector.currentIndex = index
+                    onClicked:
+                    {
+                        brushSelector.currentIndex = index
+                        canvas.brushPreset = model.modelData
+                    }
                 }
             }
         }

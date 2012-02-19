@@ -27,6 +27,7 @@
 #include <kis_paint_layer.h>
 #include "kto_main_window.h"
 #include "kto_resource_information_list.h"
+#include "kto_resource_information.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasResourceManager.h>
 #include <kis_painting_information_builder.h>
@@ -217,6 +218,15 @@ KoCanvasResourceManager* KtoCanvas::resourceManager() const
 KtoResourceInformationList* KtoCanvas::brushResourceModel() const
 {
     return m_brushResourceModel;
+}
+
+void KtoCanvas::setBrushPreset(QObject* _resourceInformation)
+{
+    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(qobject_cast<KtoResourceInformation*>(_resourceInformation)->resource());
+    
+    QVariant v;
+    v.setValue(preset);
+    m_resourceManager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, v);    
 }
 
 #include "kto_canvas.moc"
