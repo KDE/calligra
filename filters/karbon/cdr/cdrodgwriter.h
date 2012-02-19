@@ -42,6 +42,7 @@ class KoStore;
 class KoGenStyle;
 
 template<typename T> class QVector;
+typedef qint16 CdrCoord;
 
 
 class CdrOdgWriter
@@ -82,6 +83,11 @@ private:
     void writeFont( KoGenStyle& style, quint16 styleId );
 
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations );
+
+    /// Returns the CDR x coord as ODF x coord (in pt)
+    double odfXCoord( CdrCoord x ) const;
+    /// Returns the CDR y coord as ODF y coord (in pt)
+    double odfYCoord( CdrCoord y ) const;
 
 private:
     KoOdfWriteStore mOdfWriteStore;

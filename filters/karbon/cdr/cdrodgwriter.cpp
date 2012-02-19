@@ -34,6 +34,32 @@
 #include <QtCore/QString>
 
 
+// Metric conversion
+// DIN A4 page:
+//     cdr     mm     inches      odf (points)
+// w    8268   210.0   8267,7165  595.28
+// h   11694   297.0  11692,913   841.89
+// Hints that CDRv4 uses 1/1000 inches as base unit
+// (ignoring off-by-+1 rounding in height for now)
+// 1 point = 1/72 inches
+// thus:
+// y point = x cdr <=>
+// y * 1/72 inches = x * 1/1000 inches <=>
+// y = 72/1000 * x
+static const double cdr2PtFactor = 0.072;
+
+static inline
+double
+ptUnit( CdrCoord x ){ return static_cast<qreal>(x) * cdr2PtFactor; }
+
+
+/// Returns the CDR length as ODF length (in pt)
+static inline
+double
+odfLength( CdrCoord x )
+{ return ptUnit(x); }
+
+
 CdrOdgWriter::CdrOdgWriter( KoStore* outputStore )
   : mOdfWriteStore( outputStore )
   , mOutputStore( outputStore )
@@ -282,8 +308,8 @@ CdrOdgWriter::writeMasterPage()
     KoGenStyle masterPageLayoutStyle( KoGenStyle::PageLayoutStyle );
     masterPageLayoutStyle.setAutoStyleInStylesDotXml( true );
 
-//     masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-width"), mDocument->width() );
-//     masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-height"), mDocument->height() );
+    masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-width"), odfLength(mDocument->width()) );
+    masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-height"), odfLength(mDocument->height()) );
 //     masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), "landscape" );
 
     const QString masterPageLayoutStyleName =
@@ -375,10 +401,10 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
     mBodyWriter->startElement("draw:rect");
 
     writeTransformation( object->transformations() );
-//     mBodyWriter->addAttribute("x", x);
-//     mBodyWriter->addAttribute("y", y);
-    mBodyWriter->addAttribute("svg:width", object->cornerPoint().x() );
-    mBodyWriter->addAttribute("svg:height", object->cornerPoint().y() );
+    mBodyWriter->addAttribute("svg:x", odfXCoord(0));
+    mBodyWriter->addAttribute("svg:y", odfYCoord(0));
+    mBodyWriter->addAttribute("svg:width", odfXCoord(object->cornerPoint().x()) );
+    mBodyWriter->addAttribute("svg:height", odfYCoord(object->cornerPoint().y()) );
 //     mBodyWriter->addAttribute("rx", object->cornerRoundness());
 //     mBodyWriter->addAttribute("ry", object->cornerRoundness());
     mBodyWriter->addAttribute("draw:layer", mLayerId );
@@ -399,10 +425,10 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     mBodyWriter->startElement( "draw:ellipse" );
 
     writeTransformation( object->transformations() );
-    mBodyWriter->addAttribute( "svg:cx", object->centerPoint().x() );
-    mBodyWriter->addAttribute( "svg:cy", -object->centerPoint().y() );
-    mBodyWriter->addAttribute( "svg:rx", object->xRadius() );
-    mBodyWriter->addAttribute( "svg:ry", object->yRadius() );
+    mBodyWriter->addAttribute( "svg:cx", odfXCoord(object->centerPoint().x()) );
+    mBodyWriter->addAttribute( "svg:cy", odfYCoord(object->centerPoint().y()) );
+    mBodyWriter->addAttribute( "svg:rx", odfLength(object->xRadius()) );
+    mBodyWriter->addAttribute( "svg:ry", odfLength(object->yRadius()) );
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
@@ -414,18 +440,6 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
 
     mBodyWriter->endElement(); // draw:ellipse
 }
-
-
-static inline
-int
-odfXCoord( CdrCoord x )
-{ return x; }
-
-static inline
-int
-odfYCoord( CdrCoord y )
-{ return -y; }
-
 
 void
 CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
@@ -505,6 +519,8 @@ void
 CdrOdgWriter::writeTextObject( const CdrTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
+    mBodyWriter->addAttribute( "svg:x", odfXCoord(0));
+    mBodyWriter->addAttribute( "svg:y", odfYCoord(0));
     writeTransformation( object->transformations() );
         mBodyWriter->startElement( "draw:image" );
         mBodyWriter->addAttribute( "xlink:type", QLatin1String("simple") );
@@ -588,8 +604,8 @@ CdrOdgWriter::writeStrokeWidth( KoGenStyle& odfStyle, quint32 outlineId )
 {
     CdrOutline* outline = mDocument->outline( outlineId );
 
-    const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
-    odfStyle.addProperty( QLatin1String("svg:stroke-width"), lineWidth );
+    const double lineWidth = ( outline ) ? odfLength(outline->lineWidth()) : 0.0;
+    odfStyle.addPropertyPt( QLatin1String("svg:stroke-width"), lineWidth );
     odfStyle.addProperty( QLatin1String("draw:stroke"), "solid" );
 }
 
@@ -612,12 +628,12 @@ CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
 static inline
 double
 odfXTransformCoord( qint32 x )
-{ return x; }
+{ return ptUnit(x); }
 
 static inline
 double
 odfYTransformCoord( qint32 y )
-{ return -y; }
+{ return -ptUnit(y); }
 
 void
 CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations )
@@ -639,3 +655,11 @@ CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& tr
     if( ! tfString.isEmpty() )
         mBodyWriter->addAttribute( "draw:transform", tfString );
 }
+
+double
+CdrOdgWriter::odfXCoord( CdrCoord x ) const
+{ return odfLength(mDocument->width())*0.5 + ptUnit(x); }
+
+double
+CdrOdgWriter::odfYCoord( CdrCoord y ) const
+{ return odfLength(mDocument->height())*0.5 - ptUnit(y); }
