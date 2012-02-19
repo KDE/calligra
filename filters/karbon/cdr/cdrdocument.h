@@ -75,7 +75,7 @@ enum CdrObjectTypeId
     PathObjectId,
     RectangleObjectId,
     EllipseObjectId,
-    TextObjectId,
+    GraphicTextObjectId,
     BlockTextObjectId,
     GroupObjectId
 };
@@ -215,10 +215,10 @@ private:
     QVector<CdrPathPoint> mPathPoints;
 };
 
-class CdrTextObject : public CdrGraphObject
+class CdrGraphicTextObject : public CdrGraphObject
 {
 public:
-    CdrTextObject() : CdrGraphObject(TextObjectId) {}
+    CdrGraphicTextObject() : CdrGraphObject(GraphicTextObjectId) {}
 public:
     void setText( const QString& text ) { mText = text; }
 public:

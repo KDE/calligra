@@ -143,12 +143,12 @@ collectNonOdfObjects( QVector<const CdrAbstractObject*>& nonOdfObjects, const Cd
         foreach( const CdrAbstractObject* object, static_cast<const CdrGroupObject*>(object)->objects() )
             collectNonOdfObjects( nonOdfObjects, object );
     }
-    else if( object->typeId() == TextObjectId )
+    else if( object->typeId() == GraphicTextObjectId )
         nonOdfObjects.append( object );
 }
 
 void
-CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrTextObject* textObject )
+CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject* textObject )
 {
     QTextStream svgStream( device );
 
@@ -216,7 +216,7 @@ CdrOdgWriter::storeSvgImageFiles()
         mOutputStore->open( fileName );
         KoStoreDevice svgFile( mOutputStore );
 
-        writeGraphicTextSvg( &svgFile, static_cast<const CdrTextObject*>(object) );
+        writeGraphicTextSvg( &svgFile, static_cast<const CdrGraphicTextObject*>(object) );
         mOutputStore->close();
 
         const QString filePath = svgImagesName + QLatin1Char('/') + fileName;
@@ -374,8 +374,8 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
         writeRectangleObject( static_cast<const CdrRectangleObject*>(object) );
     else if( typeId == EllipseObjectId )
         writeEllipseObject( static_cast<const CdrEllipseObject*>(object) );
-    else if( typeId == TextObjectId )
-        writeTextObject( static_cast<const CdrTextObject*>(object) );
+    else if( typeId == GraphicTextObjectId )
+        writeGraphicTextObject( static_cast<const CdrGraphicTextObject*>(object) );
     else if( typeId == GroupObjectId )
         writeGroupObject( static_cast<const CdrGroupObject*>(object) );
 }
@@ -521,7 +521,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 }
 
 void
-CdrOdgWriter::writeTextObject( const CdrTextObject* object )
+CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
     mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));

@@ -35,7 +35,7 @@ class CdrGroupObject;
 class CdrEllipseObject;
 class CdrRectangleObject;
 class CdrPathObject;
-class CdrTextObject;
+class CdrGraphicTextObject;
 class CdrBlockTextObject;
 class CdrAbstractObject;
 
@@ -92,7 +92,7 @@ private:
     CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeListData& argsData );
     CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeListData& argsData );
     CdrPathObject* readPathObject( const CdrArgumentWithTypeListData& argsData );
-    CdrTextObject* readTextObject( const CdrArgumentWithTypeListData& argsData );
+    CdrGraphicTextObject* readGraphicTextObject( const CdrArgumentWithTypeListData& argsData );
     CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeListData& argsData );
 
 private:

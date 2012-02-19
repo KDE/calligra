@@ -31,7 +31,7 @@ class CdrGroupObject;
 class CdrRectangleObject;
 class CdrEllipseObject;
 class CdrPathObject;
-class CdrTextObject;
+class CdrGraphicTextObject;
 class CdrBlockTextObject;
 class CdrAbstractObject;
 class CdrParagraph;
@@ -62,7 +62,7 @@ private:
     void storeSettingsXml();
     void storeContentXml();
 
-    void writeGraphicTextSvg( QIODevice* device, const CdrTextObject* object );
+    void writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject* object );
 
     void writeMasterPage();
 
@@ -72,7 +72,7 @@ private:
     void writeRectangleObject( const CdrRectangleObject* object );
     void writeEllipseObject( const CdrEllipseObject* object );
     void writePathObject( const CdrPathObject* pathObject );
-    void writeTextObject( const CdrTextObject* object );
+    void writeGraphicTextObject( const CdrGraphicTextObject* object );
     void writeBlockTextObject( const CdrBlockTextObject* object );
 
     void writeParagraph( const CdrParagraph* paragraph );

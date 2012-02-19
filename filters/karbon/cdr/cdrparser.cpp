@@ -1019,17 +1019,17 @@ CdrParser::readLoda()
         (argsData.chunkType() == CdrRectangleObjectId) ?  "Rectangle" :
         (argsData.chunkType() == CdrEllipseObjectId) ?    "Ellipse" :
         (argsData.chunkType() == CdrPathObjectId) ?       "Path" :
-        (argsData.chunkType() == CdrTextObjectId) ?       "Graphic Text" :
+        (argsData.chunkType() == CdrGraphicTextObjectId) ?"Graphic Text" :
         (argsData.chunkType() == CdrBlockTextObjectId) ?  "Block Text" :
                                                          "" );
 qDebug() << "Reading Loda" << argsData.count() << "args, loda type" << argsData.chunkType() << lodaTypeName;
     object =
-        (argsData.chunkType() == CdrRectangleObjectId) ? (CdrAbstractObject*)readRectangleObject( argsData ) :
-        (argsData.chunkType() == CdrEllipseObjectId) ?   (CdrAbstractObject*)readEllipseObject( argsData ) :
-        (argsData.chunkType() == CdrPathObjectId) ?      (CdrAbstractObject*)readPathObject( argsData ) :
-        (argsData.chunkType() == CdrTextObjectId) ?      (CdrAbstractObject*)readTextObject( argsData ) :
-        (argsData.chunkType() == CdrBlockTextObjectId) ? (CdrAbstractObject*)readBlockTextObject( argsData ) :
-                                                         (CdrAbstractObject*)0;
+        (argsData.chunkType() == CdrRectangleObjectId) ?   (CdrAbstractObject*)readRectangleObject( argsData ) :
+        (argsData.chunkType() == CdrEllipseObjectId) ?     (CdrAbstractObject*)readEllipseObject( argsData ) :
+        (argsData.chunkType() == CdrPathObjectId) ?        (CdrAbstractObject*)readPathObject( argsData ) :
+        (argsData.chunkType() == CdrGraphicTextObjectId) ? (CdrAbstractObject*)readGraphicTextObject( argsData ) :
+        (argsData.chunkType() == CdrBlockTextObjectId) ?   (CdrAbstractObject*)readBlockTextObject( argsData ) :
+                                                           (CdrAbstractObject*)0;
 
     for (int i=0; i < argsData.count(); i++)
     {
@@ -1247,10 +1247,10 @@ qDebug() << "Assumption about path data not met, not creating path object.";
     return pathObject;
 }
 
-CdrTextObject*
-CdrParser::readTextObject( const CdrArgumentWithTypeListData& argsData )
+CdrGraphicTextObject*
+CdrParser::readGraphicTextObject( const CdrArgumentWithTypeListData& argsData )
 {
-    CdrTextObject* textObject = new CdrTextObject;
+    CdrGraphicTextObject* textObject = new CdrGraphicTextObject;
 
     for (int i=0; i < argsData.count(); i++)
     {
@@ -1266,7 +1266,7 @@ CdrParser::readTextObject( const CdrArgumentWithTypeListData& argsData )
             break;
         case CdrObjectSpecificDataArgumentId :
         {
-            const Cdr4TextData& textData = argsData.argRef<Cdr4TextData>( i );
+            const Cdr4GraphicTextData& textData = argsData.argRef<Cdr4GraphicTextData>( i );
             QString text;
             const char* rawCharData = textData.charData();
             for (unsigned int j=0; j<textData.length(); j++)
