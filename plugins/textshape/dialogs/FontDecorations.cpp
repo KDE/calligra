@@ -39,6 +39,7 @@ FontDecorations::FontDecorations(bool uniqueFormat, QWidget* parent)
     connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 
     widget.shadowGroupBox->setVisible(false);
+    widget.positionGroupBox->setVisible(false);
 }
 
 void FontDecorations::backgroundColorChanged()
@@ -71,8 +72,7 @@ void FontDecorations::textToggled(bool state)
 
 void FontDecorations::backgroundToggled(bool state)
 {
-    widget.backgroundColor->setEnabled(state);
-    widget.resetBackground->setEnabled(state);
+    m_hyphenateInherited = false;
 }
 
 void FontDecorations::setDisplay(KoCharacterStyle *style)

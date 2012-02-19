@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>437</width>
-    <height>304</height>
+    <height>429</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -291,7 +291,23 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="positionGroupBox">
+     <property name="title">
+      <string>Position</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="hyphenate">
+        <property name="text">
+         <string>Automatic hyphenation</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

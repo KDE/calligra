@@ -1191,6 +1191,9 @@ void Node::setStartupCost(double cost)
 void Node::setStartupAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_startupAccount ) {
+        m_startupAccount->removeStartup( *this );
+    }
     m_startupAccount = acc;
     changed();
 }
@@ -1204,6 +1207,9 @@ void Node::setShutdownCost(double cost)
 void Node::setShutdownAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_shutdownAccount ) {
+        m_shutdownAccount->removeShutdown( *this );
+    }
     m_shutdownAccount = acc;
     changed();
 }
@@ -1211,6 +1217,9 @@ void Node::setShutdownAccount(Account *acc)
 void Node::setRunningAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_runningAccount ) {
+        m_runningAccount->removeRunning( *this );
+    }
     m_runningAccount = acc;
     changed();
 }

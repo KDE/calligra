@@ -702,7 +702,7 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
         d = "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z";
         break;
     case 6:
-        displayName = "Doble Arrow";
+        displayName = "Double Arrow";
         viewBox = "0 0 1131 1918";//FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
         d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
         break;

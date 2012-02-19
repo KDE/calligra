@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@ class KEXIUTILS_EXPORT KexiContextMessage
 public:
     explicit KexiContextMessage(const QString& text = QString());
 
+    explicit KexiContextMessage(QWidget *contentsWidget);
+
     explicit KexiContextMessage(const KexiContextMessage& other);
 
     ~KexiContextMessage();
@@ -36,10 +38,19 @@ public:
 
     void setText(const QString text);
 
+    //! Alignment of button corresponding to action added in addAction()
+    enum ButtonAlignment {
+        AlignLeft,
+        AlignRight
+    };
+
     //! Adds action. Does not take ownership.
-    void addAction(QAction* action);
+    void addAction(QAction* action, ButtonAlignment alignment = AlignRight);
     
     QList<QAction*> actions() const;
+
+    //! @return alignment of button for action @a action.
+    ButtonAlignment buttonAlignment(QAction* action) const;
 
     //! Sets default action, i.e. button created with this action 
     //! will be the default button of the message.
@@ -47,6 +58,8 @@ public:
     void setDefaultAction(QAction* action);
 
     QAction* defaultAction() const;
+    
+    QWidget* contentsWidget() const;
 
 private:
     class Private;

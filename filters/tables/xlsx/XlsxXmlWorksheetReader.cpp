@@ -229,7 +229,6 @@ public:
     //~Private(){ qDeleteAll( savedStyles ); }
 
     XlsxXmlWorksheetReader* const q;
-    QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     QHash<int, Cell*> sharedFormulas;
@@ -690,7 +689,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                         }
                     }
 
-                    if (cell->valueAttr != Cell::OfficeNone && cell->valueAttrValue) {
+                    if (cell->valueAttrValue) {
                         switch(cell->valueAttr) {
                             case Cell::OfficeNone:
                                 break;
@@ -712,9 +711,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                         }
                     }
 
-                    if (cell->formula && !cell->formula->isEmpty()) {
-                        body->addAttribute("table:formula", *cell->formula);
+                    if (cell->formula) {
+                        QString formula;
+                        if (cell->formula->isShared()) {
+                            Cell *referencedCell = static_cast<SharedFormula*>(cell->formula)->m_referencedCell;
+                            Q_ASSERT(referencedCell);
+                            formula = MSOOXML::convertFormulaReference(referencedCell, cell);
+                        } else  {
+                            formula = static_cast<FormulaImpl*>(cell->formula)->m_formula;
+                        }
+                        if (!formula.isEmpty()) {
+                            body->addAttribute("table:formula", formula);
+                        }
                     }
+
                     if (cell->rowsMerged > 1) {
                         body->addAttribute("table:number-rows-spanned", cell->rowsMerged);
                     }
@@ -1553,7 +1563,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
             delete cell->formula;
-            cell->formula = new QString(Calligra::Tables::MSOOXML::convertFormula(text().toString()));
+            cell->formula = new FormulaImpl(Calligra::Tables::MSOOXML::convertFormula(text().toString()));
         }
     }
 
@@ -1571,11 +1581,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
                 cell.
                 */
                 if (d->sharedFormulas.contains(sharedGroupIndex)) {
-                    if (!cell->formula || cell->formula->isEmpty()) { // don't do anything if the cell already defines a formula
-                        delete cell->formula;
-                        cell->formula = new QString(MSOOXML::convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell));
+                    if (!cell->formula /* || cell->formula->isEmpty() */) { // don't do anything if the cell already defines a formula
+                        QHash<int, Cell*>::iterator it = d->sharedFormulas.find(sharedGroupIndex);
+                        if (it != d->sharedFormulas.end()) {
+                            delete cell->formula;
+                            cell->formula = new SharedFormula(it.value());
+                        }
                     }
-                } else if (cell->formula && !cell->formula->isEmpty()) { // is this cell the master cell?
+                } else if (cell->formula /* && !cell->formula->isEmpty()*/) { // is this cell the master cell?
                     d->sharedFormulas[sharedGroupIndex] = cell;
                 }
             }
@@ -1644,16 +1657,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
 
     readNext();
     READ_EPILOGUE
-}
-
-// 3.8.31 numFmts
-QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& valueFormat)
-{
-    const KoGenStyle style = NumberFormatParser::parse( valueFormat, q->mainStyles );
-    if( style.type() == KoGenStyle::ParagraphAutoStyle )
-         return QString();
-
-    return q->mainStyles->insert( style, "N" );
 }
 
 #undef CURRENT_EL

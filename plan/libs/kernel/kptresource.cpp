@@ -579,6 +579,9 @@ void Resource::addRequiredId(const QString& id)
 
 void Resource::setAccount( Account *account )
 {
+    if ( cost.account ) {
+        cost.account->removeRunning(*this);
+    }
     cost.account = account;
     changed();
 }

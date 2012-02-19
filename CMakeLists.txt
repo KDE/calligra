@@ -194,12 +194,6 @@ endif(OPENGL_FOUND)
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
-## Test for create ressources
-##
-macro_optional_find_package(CreateResources)
-macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for Calligra for optional extra resources.")
-
-##
 ## Test for kdepimlibs
 ##
 macro_optional_find_package(KdepimLibs)
@@ -261,11 +255,14 @@ if( MARBLE_FOUND )
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
         INCLUDE(CheckCXXSourceCompiles)
+        set(CMAKE_REQUIRED_INCLUDES_SWAP ${CMAKE_REQUIRED_INCLUDES})
         set(CMAKE_REQUIRED_LIBRARIES_SWAP ${CMAKE_REQUIRED_LIBRARIES})
+        set(CMAKE_REQUIRED_INCLUDES ${QT_INCLUDE_DIR})
         set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${MARBLE_LIBRARIES})
         CHECK_CXX_SOURCE_COMPILES ( "#include <${MARBLECONTROLBOX_H}>\nint main(){Marble::MarbleControlBox*p; p->setMarbleWidget(0); return 0;}" SETMARBLEWIDGET)
         # subsequent tests will fail if this is not set back.
         set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SWAP})
+        set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SWAP})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)

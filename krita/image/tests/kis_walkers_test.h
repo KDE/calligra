@@ -235,6 +235,7 @@ class KisWalkersTest : public QObject
 
 private slots:
     void testUsualVisiting();
+    void testVisitingWithTopmostMask();
     void testMergeVisiting();
     void testComplexAccessVisiting();
     void testCloneNotificationsVisiting();
@@ -243,7 +244,8 @@ private slots:
     void testCachedVisiting();
     void testMasksVisiting();
     void testMasksOverlapping();
-    void testChecksum();
+    void testRectsChecksum();
+    void testGraphStructureChecksum();
 
 private:
     void verifyResult(KisBaseRectsWalker &walker, QStringList reference,

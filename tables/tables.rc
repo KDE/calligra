@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="KSpread" version="40">
+<gui name="Calligra Tables" version="41">
 <MenuBar>
 <!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="file"><text>&amp;File</text>

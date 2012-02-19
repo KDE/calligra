@@ -3,7 +3,7 @@
  Proposed by jstaniek
 
  Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
- Copyright (C) 2008-2011 Jaroslaw Staniek (staniek at kde.org)
+ Copyright (C) 2008-2012 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -96,6 +96,17 @@ TODO:
 Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
+i18n TODO:
+"Save to Words" -> "Save as Text Document"
+i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet") -> i18n("Save as Spreadsheet")
+i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
+->
+i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Calligra Tables.", cxt.destinationUrl.prettyUrl()) , i18n("Note: do not translate 'Tables'", "Opening in Calligra Tables"));
+
+i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
+->
+i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
+
 ===================== Kexi 2.4  =====================
 
 TODO:
@@ -122,9 +133,64 @@ TODO: kexidb collation: Add Alphanum collation (code at http://www.davekoelle.co
 TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::localeAwareCompare; http://labs.qt.nokia.com/2011/06/14/string-collation-with-locales/
 *ICU enabled in libsqlite3 on debian in 3.6.11-1 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=494987 but then disabled in 3.6.14.2-1
 
+TODO:
+[01:02] <diggy> jstaniek: Kexi's crashing when quiting, after opening a table in design view and opening lookup column page in property editor
+[01:02] <diggy> but I'm too tired to look into it now
+[01:02] <diggy> It seems some problem in d pointer destructor
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
+
+2012-02-18
+Widgets
+*context message widget can contain arbitrary QWidget content
+*buttons in context message widget can be left-aligned, useful for Help button
+*context message widget now displays more modern callout
+*context message widget now has internal widgets colorized using the view theme
+*context message widget now uses the view theme
+*context message widget now uses clean [x] button
+Main Window
+*added access to the feedback via KexiMainWindow::userFeedbackAgent()
+*feedback agent now supports selection of areas
+*feedback agent now handles retrieving redirect URL
+*status bar: HTML replaced with .ui files loaded by quitools and external Qt resources
+
+TODO: implement updating .ui files from network
+TODO: clicking on page title should close the message widget too
+
+2012-02-14
+Widgets
+*kmessagewidget: improve shapes of callouts
+
+2012-02-13
+Main Window
+*feedback format set to 1.2: added os_release, os_machine, screen_count
+General
+*Added stable version information: for 2.3.1 returns 2.3.1, for 2.5.70 returns 2.6.0, for 2.9.70 returns 3.0.0
+
+2012-02-12
+Startup
+*Fixed crash when clicking on "Welcome" action while 'confirm database overwriting' question is displayed
+Widgets
+*kmessagewidget: fix geometry when updating callout pointer
+*kmessagewidget: extend API to support custom widget embedding
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 7 (2.3.87) ~~~~~~~~~~~~~~~~
+
+2012-01-12
+Startup
+*Make the recent database entries of the Welcome Page resize when the window resizes
+
+2012-01-10..11
+Main Window
+*fix possible crash when opening Form or Report design
+*prototype of welcome status bar
+*feedback format++: added JSON-compatible character escaping; added uid
+Widgets
+*Further simpify the gui: added flat icon-based button without background that behaves like a link; use it in all Assistant pages instead of Cancel links
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 6 (2.3.86) ~~~~~~~~~~~~~~~~
 
@@ -132,6 +198,17 @@ TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::loca
 Main Window
 *Simple User Feedback Agent introduced
 TODO: disable by default, inform and ask user for help
+TODO: add Qt version, SQLite version, driver usage stats, migration/import/export stats
+      add git revision with exact date+time if compiled using git checkout
+      project stats: # of objects, size (MB, records), types of objects, data types usage
+      system/architecture (32/64) - /proc/version, /proc/cpuinfo
+      occurence of crashes, sending crash reports
+      length of session
+      KDE settings: font size
+      Desktop Manager/WM: KDE/GNOME/other
+      Size of Kexi window used if not maximized
+      functions usage (frequence by function, by function category)
+TODO: Idea: based on functions usage inform about unused functions in the "Did you know?" box
 
 See sample code at http://lxr.kde.org/source/kde/kde-runtime/drkonqi/bugzillalib.cpp
 See sample code at http://lxr.kde.org/source/extragear/network/choqok/microblogs/twitter/twittermicroblog.cpp
