@@ -46,41 +46,41 @@ SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
 
 void SectionStyle::write(OdfDocumentHandler *pHandler) const
 {
-	TagOpenElement styleOpen("style:style");
-	styleOpen.addAttribute("style:name", getName());
-	styleOpen.addAttribute("style:family", "section");
-	styleOpen.write(pHandler);
+    TagOpenElement styleOpen("style:style");
+    styleOpen.addAttribute("style:name", getName());
+    styleOpen.addAttribute("style:family", "section");
+    styleOpen.write(pHandler);
 
-	// if the number of columns is <= 1, we will never come here. This is only an additional check
-	// style properties
-	pHandler->startElement("style:section-properties", mPropList);
+    // if the number of columns is <= 1, we will never come here. This is only an additional check
+    // style properties
+    pHandler->startElement("style:section-properties", mPropList);
 
-	// column properties
-	WPXPropertyList columnProps;
+    // column properties
+    WPXPropertyList columnProps;
 
-	if (mColumns.count() > 1)
-	{
-		columnProps.insert("fo:column-count", (int)mColumns.count());
- 		pHandler->startElement("style:columns", columnProps);
+    if (mColumns.count() > 1)
+    {
+        columnProps.insert("fo:column-count", (int)mColumns.count());
+        pHandler->startElement("style:columns", columnProps);
 
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
-		{
+        {
                         pHandler->startElement("style:column", i());
                         pHandler->endElement("style:column");
-		}
-	}
-	else
-	{
-		columnProps.insert("fo:column-count", 0);
-		columnProps.insert("fo:column-gap", 0.0);
-		pHandler->startElement("style:columns", columnProps);
-	}
+        }
+    }
+    else
+    {
+        columnProps.insert("fo:column-count", 0);
+        columnProps.insert("fo:column-gap", 0.0);
+        pHandler->startElement("style:columns", columnProps);
+    }
 
-	pHandler->endElement("style:columns");
+    pHandler->endElement("style:columns");
 
 
-	pHandler->endElement("style:section-properties");
+    pHandler->endElement("style:section-properties");
 
-	pHandler->endElement("style:style");
+    pHandler->endElement("style:style");
 }
