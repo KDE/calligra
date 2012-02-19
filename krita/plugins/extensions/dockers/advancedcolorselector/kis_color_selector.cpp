@@ -62,6 +62,9 @@ void KisColorSelector::setConfiguration(KisColorSelectorSurface::Configuration c
 {
     m_surface.setConfiguration(conf);
 
+    QObject::connect(m_surface.mainComponent(), SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
+    QObject::connect(m_surface.subComponent(),  SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
+
     QResizeEvent event(QSize(width(), height()), QSize());
     resizeEvent(&event);
 }
@@ -207,9 +210,6 @@ void KisColorSelector::init()
     m_updateTimer->setSingleShot(true);
 
     connect(m_updateTimer,      SIGNAL(timeout()), this,  SLOT(update()));
-
-    QObject::connect(m_surface.mainComponent(), SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
-    QObject::connect(m_surface.subComponent(),  SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
 
     setMinimumSize(40, 40);
 }
