@@ -257,10 +257,11 @@ public:
     
     QString findFilename(const QString &guiFileName) const
     {
-        QString baseFname
+        const QString baseFname
             = QString("status/%1/%2").arg(Kexi::stableVersionString()).arg(guiFileName);
-        kDebug() << baseFname;
-        return KStandardDirs::locate("data", "kexi/" + baseFname);
+        const QString result = KStandardDirs::locate("data", "kexi/" + baseFname);
+        kDebug() << result;
+        return result;
     }
 
     QWidget* loadGui(const QString &guiFileName, QWidget *parentWidget = 0)
