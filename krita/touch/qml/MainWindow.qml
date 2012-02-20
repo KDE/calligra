@@ -44,9 +44,9 @@ Rectangle
         objectName: "canvas"
         anchors.fill: parent
     }
-    Rectangle {
+    Image {
         id: showWidgetsButton
-        color: "red"
+        source: "image://kicon/dashboard-show"
         width: 64
         height: 64
         anchors.top: parent.top
@@ -56,9 +56,9 @@ Rectangle
             onClicked: mainWindow.state = "toggle-widgets-view"
         }
     }
-    Rectangle {
+    Image {
         id: selectBrush
-        color: "blue"
+        source: "image://kicon/draw-brush"
         width: 64
         height: 64
         anchors.top: parent.top
