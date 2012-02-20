@@ -982,11 +982,19 @@ garbage data? undo data?
     </record>
 
     <record name="CdrTransform8Data" size="24">
-      <field start="0" end="3" name="d1" type="float" />
-      <field start="4" end="7" name="d2" type="float" />
+      <field start="0" end="1" name="value1Fraction" type="uint16">
+          <description>The fraction part of value 1, by division by 65535.</description>
+      </field>
+      <field start="2" end="3" name="value1Integral" type="sint16">
+          <description>The signed integral part of value 1.</description>
+      </field>
+      <field start="4" end="5" name="value2Fraction" type="uint16" />
+      <field start="6" end="7" name="value2Integral" type="sint16" />
       <field start="8" end="11" name="x" type="sint32" />
-      <field start="12" end="15" name="d4" type="float" />
-      <field start="16" end="19" name="d5" type="float" />
+      <field start="12" end="13" name="value3Fraction" type="uint16" />
+      <field start="14" end="15" name="value3Integral" type="sint16" />
+      <field start="16" end="17" name="value4Fraction" type="uint16" />
+      <field start="18" end="19" name="value4Integral" type="sint16" />
       <field start="20" end="23" name="y" type="sint32" />
     </record>
 

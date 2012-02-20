@@ -48,16 +48,48 @@
 // y = 72/1000 * x
 static const double cdr2PtFactor = 0.072;
 
+// The coord system of CDR has 0,0 in the middle of the page and
+// the positive x coordinate increasing upwards,
+// while ODF has 0,0 in the upperleft corner of the page and
+// the positive x coordinate increasing downwards.
+// The transformation from CDR coordinates to ODF coordinates is done in two steps:
+// the scaling of the values is done directly on the x/y/width/length values
+// of the objects, the translation of the offset only as a "transform" operation as
+// attribute. The reason for this is that the CDR transformations use absolute values,
+// so doing the offset adaption already in the written values might complicate things
+// when adapting the values of the CDR transformations.
+
 static inline
 double
-ptUnit( CdrCoord x ){ return static_cast<qreal>(x) * cdr2PtFactor; }
-
+ptUnit( qint32 x )
+{
+    return static_cast<qreal>(x) * cdr2PtFactor;
+}
 
 /// Returns the CDR length as ODF length (in pt)
 static inline
 double
-odfLength( CdrCoord x )
-{ return ptUnit(x); }
+odfLength( qint32 length )
+{
+    return ptUnit( length );
+}
+
+/// Returns the CDR x coord as ODF x coord (in pt), no offset adaption
+static inline
+double
+odfXCoord( qint32 x )
+{
+    return ptUnit( x );
+}
+
+/// Returns the CDR y coord as ODF y coord (in pt), no offset adaption
+static inline
+double
+odfYCoord( qint32 y )
+{
+    return ptUnit( y );
+}
+
 
 
 CdrOdgWriter::CdrOdgWriter( KoStore* outputStore )
@@ -385,7 +417,7 @@ CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
 
-    writeTransformation( groupObject->transformations() );
+    writeTransformation( groupObject->transformations(), NoGlobalTransformation );
 //     set2DGeometry(mBodyWriter, objectElement);
 //     mBodyWriter->addAttribute("draw:style-name", createGraphicStyle(objectElement));
 
@@ -631,40 +663,66 @@ CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
 
 
 static inline
-double
-odfXTransformCoord( qint32 x )
-{ return ptUnit(x); }
+void
+appendMatrix( QString& transformationString,
+              double f1, double f2, double x, double f3, double f4, double y,
+              const QLocale& locale )
+{
+    transformationString =
+        transformationString + QLatin1String("matrix(") +
+        locale.toString(f1) + QLatin1Char(' ') +
+        locale.toString(f3) + QLatin1Char(' ') +
+        locale.toString(f2) + QLatin1Char(' ') +
+        locale.toString(f4) + QLatin1Char(' ') +
+        locale.toString(x) + QLatin1String("pt ") +
+        locale.toString(y) + QLatin1String("pt)");
+}
 
 static inline
-double
-odfYTransformCoord( qint32 y )
-{ return -ptUnit(y); }
+void
+appendTranslation( QString& transformationString,
+                   double x, double y,
+                   const QLocale& locale )
+{
+    transformationString =
+        transformationString + QLatin1String("translate(") +
+        locale.toString(x) + QLatin1String("pt ") +
+        locale.toString(y) + QLatin1String("pt)");
+}
 
 void
-CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations )
+CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
+                                   GlobalTransformationMode transformationMode )
 {
     QLocale cLocale(QLocale::c());
     cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
 
-    QString tfString;
+    QString transformationString;
     foreach( const CdrAbstractTransformation* transformation, transformations )
     {
         const CdrNormalTransformation* normalTrafo =
             dynamic_cast<const CdrNormalTransformation*>(transformation);
 
         if( normalTrafo )
-            tfString = tfString + QLatin1String("translate(") +
-                       cLocale.toString(odfXTransformCoord(normalTrafo->x())) + QLatin1Char(' ') +
-                       cLocale.toString(odfYTransformCoord(normalTrafo->y())) + QLatin1Char(')');
+        {
+            appendMatrix( transformationString,
+                          normalTrafo->f1(), normalTrafo->f2(),
+                          odfXCoord(normalTrafo->x()),
+                          normalTrafo->f3(), normalTrafo->f4(),
+                          odfYCoord(normalTrafo->y()),
+                          cLocale );
+        }
     }
-    if( ! tfString.isEmpty() )
-        mBodyWriter->addAttribute( "draw:transform", tfString );
+
+    // finally transformation between cdr and odf
+    if( transformationMode == DoGlobalTransformation )
+        appendMatrix( transformationString,
+                       1.0, 0.0,
+                       odfLength(mDocument->width())*0.5,
+                       0.0, -1.0,
+                       odfLength(mDocument->height())*0.5,
+                       cLocale );
+
+    if( ! transformationString.isEmpty() )
+        mBodyWriter->addAttribute( "draw:transform", transformationString );
 }
-
-double
-CdrOdgWriter::odfXCoord( CdrCoord x ) const
-{ return odfLength(mDocument->width())*0.5 + ptUnit(x); }
-
-double
-CdrOdgWriter::odfYCoord( CdrCoord y ) const
-{ return odfLength(mDocument->height())*0.5 - ptUnit(y); }

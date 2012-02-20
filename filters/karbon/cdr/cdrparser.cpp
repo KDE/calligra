@@ -958,6 +958,13 @@ qDebug() << "LGOb >>>";
     return object;
 }
 
+static inline
+double
+cdrTrafoFactor( qint16 integralPart, quint16 fractionPart )
+{
+    return static_cast<double>(integralPart) + static_cast<double>(fractionPart) / 65535;
+}
+
 QVector<CdrAbstractTransformation*>
 CdrParser::readTrfl()
 {
@@ -976,20 +983,28 @@ qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData
             for (int i=0; i < trfdData.arguments().count(); i++)
             {
                 const CdrTransformData& transformData = trfdData.arguments().argRef<CdrTransformData>(i);
-//         qDebug() << i << ": type" << transformData.mIndex
-//                  << ((const char*)trfdData->mArguments.argPtr<CdrTransformData>(i+1)-(const char*)transformData)
-//                  << transformData.dataSize()+2;
+                const int dataSize = ((const char*)&trfdData.arguments().argRef<CdrTransformData>(i+1)-(const char*)(&transformData));
+        qDebug() << i << ": type" << transformData.index()
+                 << dataSize;
                 if( transformData.index() == CdrUnknownTransform8Id )
                 {
                     const CdrTransform8Data& data8 = transformData.data8();
                     CdrNormalTransformation* transformation = new CdrNormalTransformation;
-                    transformation->setData( data8.d1(), data8.d2(), data8.x(), data8.d4(), data8.d5(), data8.y() );
+                    transformation->setData(
+                        cdrTrafoFactor(data8.value1Integral(), data8.value1Fraction()),
+                        cdrTrafoFactor(data8.value2Integral(), data8.value2Fraction()),
+                        data8.x(),
+                        cdrTrafoFactor(data8.value3Integral(), data8.value3Fraction()),
+                        cdrTrafoFactor(data8.value4Integral(), data8.value4Fraction()),
+                        data8.y() );
                     result.append( transformation );
 
-//         qDebug() << data8->m1 << data8->m2 << data8->mX << data8->m4 << data8->m5 << data8->mY;
+        qDebug() << "mX:" << transformation->x() << "mY:" << transformation->y()
+                 << "f1" << transformation->f1() << "f2" << transformation->f2()
+                 << "f3" << transformation->f3() << "f4" << transformation->f4();
                 }
                 else
-// qDebug() << QByteArray::fromRawData(transformData.data(), transformData.dataSize()).toHex();
+qDebug() << QByteArray::fromRawData((const char*)(&transformData), dataSize).toHex();
         ;
             }
         }

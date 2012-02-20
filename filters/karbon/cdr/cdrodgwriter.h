@@ -42,11 +42,13 @@ class KoStore;
 class KoGenStyle;
 
 template<typename T> class QVector;
-typedef qint16 CdrCoord;
 
 
 class CdrOdgWriter
 {
+private:
+    enum GlobalTransformationMode { NoGlobalTransformation, DoGlobalTransformation };
+
 public:
     explicit CdrOdgWriter( KoStore* outputStore );
     ~CdrOdgWriter();
@@ -82,12 +84,8 @@ private:
     void writeStrokeWidth( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );
 
-    void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations );
-
-    /// Returns the CDR x coord as ODF x coord (in pt)
-    double odfXCoord( CdrCoord x ) const;
-    /// Returns the CDR y coord as ODF y coord (in pt)
-    double odfYCoord( CdrCoord y ) const;
+    void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
+                              GlobalTransformationMode transformationMode = DoGlobalTransformation );
 
 private:
     KoOdfWriteStore mOdfWriteStore;
