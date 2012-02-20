@@ -137,8 +137,8 @@ void KoTextLayoutNoteArea::postlayout(FrameIterator *cursor)
     d->postLayout->setTextOption(option);
     d->postLayout->beginLayout();
     QTextLine line = d->postLayout->createLine();
-    line.setPosition(QPointF(right() - QFontMetricsF(font).width('x') * contNote.length(), bottom() - 10));
     d->postLayout->endLayout();
+    line.setPosition(QPointF(right() - line.naturalTextWidth(), bottom() - line.height()));
 }
 
 void KoTextLayoutNoteArea::setAsContinuedArea(bool isContinuedArea)
