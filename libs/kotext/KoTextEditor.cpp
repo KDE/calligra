@@ -270,8 +270,10 @@ void KoTextEditor::Private::newLine()
 
     // Mark the CR as a tracked change
     QTextCursor changeCursor(document);
+    changeCursor.beginEditBlock();
     changeCursor.setPosition(startPosition);
     changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+    changeCursor.endEditBlock();
 
     q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
 
@@ -1233,7 +1235,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 
     KoDocumentRdfBase *rdf = 0;
     if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
-        rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+        rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
         saveHelper.setRdfModel(rdf->model());
     }
 

@@ -873,11 +873,11 @@ Sheet* View::activeSheet() const
 
 void View::sheetDestroyed(QObject* obj)
 {
-    Sheet *sheet = dynamic_cast<Sheet*>(obj);
-    Q_ASSERT(sheet);
-    Q_ASSERT(d->sheetViews.contains(sheet));
-    d->sheetViews.remove(sheet);
-    // The SheetView will be proper destroyed already cause it's a QObject-child of the sheet.
+    if (Sheet *sheet = dynamic_cast<Sheet*>(obj)) {
+        Q_ASSERT(d->sheetViews.contains(sheet));
+        d->sheetViews.remove(sheet);
+        // The SheetView will be proper destroyed already cause it's a QObject-child of the sheet.
+    }
 }
 
 SheetView* View::sheetView(const Sheet* sheet) const

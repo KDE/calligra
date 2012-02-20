@@ -145,8 +145,6 @@ public:
 
     QMenu *popupMenu( const QString& name );
 
-    virtual ViewAdaptor* dbusObject();
-
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
 
