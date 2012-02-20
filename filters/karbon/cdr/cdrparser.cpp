@@ -1189,7 +1189,7 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeListData& argsData )
             ellipseObject->setCornerPoint( CdrPoint(ellipseData.cornerPoint().x(),ellipseData.cornerPoint().y()) );
             ellipseObject->setStartAngle(ellipseData.startAngle());
             ellipseObject->setEndAngle(ellipseData.endAngle());
-qDebug() << "ellipse: corner"<<ellipseObject->cornerPoint().x()<<","<<ellipseObject->cornerPoint().x()
+qDebug() << "ellipse: corner"<<ellipseObject->cornerPoint().x()<<","<<ellipseObject->cornerPoint().y()
                      <<"start angle"<<ellipseObject->startAngle()<<"end angle"<<ellipseObject->endAngle()
                      <<"unknown"<<ellipseData._unknown();
         }
