@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>123</height>
+    <width>434</width>
+    <height>211</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,12 +19,14 @@
      <x>10</x>
      <y>30</y>
      <width>371</width>
-     <height>51</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="text">
-    <string>Do you want to share Kexi usage info?
-Click &quot;Help&quot; button for details.</string>
+    <string>&lt;br&gt;&lt;b&gt;Do you want to share Kexi usage info?&lt;/b&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Click &amp;quot;Help&amp;quot; button for details.&lt;/p&gt;
+</string>
    </property>
   </widget>
  </widget>
