@@ -999,9 +999,9 @@ qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData
                         data8.f() );
                     result.append( transformation );
 
-        qDebug() << "mX:" << transformation->x() << "mY:" << transformation->y()
-                 << "f1" << transformation->f1() << "f2" << transformation->f2()
-                 << "f3" << transformation->f3() << "f4" << transformation->f4();
+        qDebug() << "e:" << transformation->e() << "f:" << transformation->f()
+                 << "a" << transformation->a() << "c" << transformation->c()
+                 << "b" << transformation->b() << "d" << transformation->d();
                 }
                 else
 qDebug() << QByteArray::fromRawData((const char*)(&transformData), dataSize).toHex();

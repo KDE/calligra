@@ -706,10 +706,10 @@ CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& tr
         if( normalTrafo )
         {
             appendMatrix( transformationString,
-                          normalTrafo->f1(), normalTrafo->f2(),
-                          odfXCoord(normalTrafo->x()),
-                          normalTrafo->f3(), normalTrafo->f4(),
-                          odfYCoord(normalTrafo->y()),
+                          normalTrafo->a(), normalTrafo->c(),
+                          odfXCoord(normalTrafo->e()),
+                          normalTrafo->b(), normalTrafo->d(),
+                          odfYCoord(normalTrafo->f()),
                           cLocale );
         }
     }
