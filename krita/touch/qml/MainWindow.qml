@@ -47,8 +47,8 @@ Rectangle
     Rectangle {
         id: showWidgetsButton
         color: "red"
-        width: 50
-        height: 50
+        width: 64
+        height: 64
         anchors.top: parent.top
         anchors.right: parent.right
         MouseArea {
@@ -59,8 +59,8 @@ Rectangle
     Rectangle {
         id: selectBrush
         color: "blue"
-        width: 50
-        height: 50
+        width: 64
+        height: 64
         anchors.top: parent.top
         anchors.right: showWidgetsButton.left
 
@@ -72,8 +72,8 @@ Rectangle
     Image {
         id: colorSelectorButton
         source: "image://kicon/format-stroke-color"
-        width: 50
-        height: 50
+        width: 64
+        height: 64
         anchors.top: parent.top
         anchors.right: selectBrush.left
         MouseArea {
