@@ -195,7 +195,7 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
                                 " width=\"") << /*textObject->width()*/10 << QLatin1String("pt\""
                                 " height=\"") << /*textObject->height()*/10 << QLatin1String("pt\">") << endl;
 
-    svgStream << QLatin1String("<text");
+    svgStream << QLatin1String("<text transform=\"scale(1 -1)\"");
 
     CdrAbstractFill* fill = mDocument->fill( textObject->fillId() );
     const QString fillColorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
