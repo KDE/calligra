@@ -984,8 +984,7 @@ qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData
             {
                 const CdrTransformData& transformData = trfdData.arguments().argRef<CdrTransformData>(i);
                 const int dataSize = ((const char*)&trfdData.arguments().argRef<CdrTransformData>(i+1)-(const char*)(&transformData));
-        qDebug() << i << ": type" << transformData.index()
-                 << dataSize;
+//         qDebug() << i << ": type" << transformData.index()<< dataSize;
                 if( transformData.index() == CdrUnknownTransform8Id )
                 {
                     const CdrTransform8Data& data8 = transformData.data8();
@@ -999,12 +998,12 @@ qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData
                         data8.f() );
                     result.append( transformation );
 
-        qDebug() << "e:" << transformation->e() << "f:" << transformation->f()
-                 << "a" << transformation->a() << "c" << transformation->c()
-                 << "b" << transformation->b() << "d" << transformation->d();
+//         qDebug() << "e:" << transformation->e() << "f:" << transformation->f()
+//                  << "a" << transformation->a() << "c" << transformation->c()
+//                  << "b" << transformation->b() << "d" << transformation->d();
                 }
                 else
-qDebug() << QByteArray::fromRawData((const char*)(&transformData), dataSize).toHex();
+// qDebug() << QByteArray::fromRawData((const char*)(&transformData), dataSize).toHex();
         ;
             }
         }
