@@ -30,7 +30,7 @@ class QAbstractItemModel;
 class KoResourceModel;
 class KisPostExecutionUndoAdapter;
 class KisUpdateScheduler;
-class KisUndoStore;
+class KisSurrogateUndoStore;
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KoCanvasResourceManager;
@@ -54,6 +54,8 @@ public:
     KoCanvasResourceManager* resourceManager() const;
     KtoResourceInformationList* brushResourceModel() const;
     void setBrushPreset(QObject* _resourceInformation);
+public slots:
+    void undo();
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -71,7 +73,7 @@ private:
     KisPaintingInformationBuilder*  m_infoBuilder;
     KisToolFreehandHelper*          m_helper;
     KisUpdateScheduler*             m_updateScheduler;
-    KisUndoStore*                   m_undoStore;
+    KisSurrogateUndoStore*          m_undoStore;
     KisPostExecutionUndoAdapter*    m_undoAdapter;
 };
 

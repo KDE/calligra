@@ -229,4 +229,10 @@ void KtoCanvas::setBrushPreset(QObject* _resourceInformation)
     m_resourceManager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, v);    
 }
 
+void KtoCanvas::undo()
+{
+    m_undoStore->undo();
+}
+
+
 #include "kto_canvas.moc"

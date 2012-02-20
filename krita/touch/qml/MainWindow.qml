@@ -81,6 +81,18 @@ Rectangle
             onClicked: toggle_colorSelector()
         }
     }
+    Image {
+        id: undoButton
+        source: "image://kicon/edit-undo"
+        width: 64
+        height: 64
+        anchors.top: parent.top
+        anchors.right: colorSelectorButton.left
+        MouseArea {
+            anchors.fill: parent        
+            onClicked: canvas.undo()
+        }
+    }
     Rectangle {
         id: widgetAreaBackground
         anchors.bottom: parent.bottom
