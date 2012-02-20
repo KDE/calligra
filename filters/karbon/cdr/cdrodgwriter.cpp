@@ -30,6 +30,7 @@
 #include <KoStoreDevice.h>
 #include <KoDocumentInfo.h>
 // Qt
+#include <QtGui/QTextDocument>
 #include <QtCore/QLocale>
 #include <QtCore/QString>
 
@@ -220,7 +221,7 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
         if( font )
             svgStream << QLatin1String(" font-family=\"") << font->name() << QLatin1Char('\"');
     }
-    svgStream << QLatin1String("><tspan>")<<textObject->text() << QLatin1String("</tspan></text>");
+    svgStream << QLatin1String("><tspan>")<<Qt::escape(textObject->text()) << QLatin1String("</tspan></text>");
 
     // end tag:
     svgStream << endl << QLatin1String("</svg>") << endl;
