@@ -663,6 +663,8 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     d->msgWidget->setCalloutPointerDirection(KMessageWidget::Right);
     d->setMessageWidgetCalloutPointerPosition(sender()->objectName());
     d->statusScrollArea->setEnabled(false);
+    d->msgWidget->setMaximumWidth(parentWidget()->width() - width());
+
     /*foreach (QLabel *lbl, d->statusScrollArea->findChildren<QLabel*>()) {
         if (lbl->isEnabled()) {
             //d->enabledLinks.append(w);
