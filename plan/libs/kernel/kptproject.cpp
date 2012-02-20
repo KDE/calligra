@@ -958,10 +958,6 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, resourceList() ) {
-        r->resolveRequiredResources( *this );
-    }
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

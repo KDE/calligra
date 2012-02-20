@@ -1765,20 +1765,20 @@ void ModifyResourceCalendarCmd::unexecute()
     m_resource->setCalendar( m_oldvalue );
 }
 
-ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name )
+ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
 {
-    m_oldvalue = resource->requiredResources();
+    m_oldvalue = resource->requiredIds();
 }
 void ModifyRequiredResourcesCmd::execute()
 {
-    m_resource->setRequiredResources( m_newvalue );
+    m_resource->setRequiredIds( m_newvalue );
 }
 void ModifyRequiredResourcesCmd::unexecute()
 {
-    m_resource->setRequiredResources( m_oldvalue );
+    m_resource->setRequiredIds( m_oldvalue );
 }
 
 AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const QString& name )
@@ -3219,20 +3219,20 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     }
     // map required resources for new resources, do not touch existing resources
     foreach ( Resource *r, newResources ) {
-        QList<Resource*> required;
+        QStringList required;
         foreach ( Resource *rr, r->requiredResources() ) {
             if ( newResources.contains( rr ) ) {
-                required << rr;
+                required << rr->id();
                 kDebug(insertProjectCmdDba())<<"Required (new):"<<r->name()<<rr->name();
                 continue;
             }
             Resource *r2 = existingResources.key( rr );
             if ( r2 ) {
-                required << r2;
+                required << r2->id();
                 kDebug(insertProjectCmdDba())<<"Required (existing):"<<r->name()<<r2->name();
             }
         }
-        r->setRequiredResources( required );
+        r->setRequiredIds( required );
     }
     // map team resources for new resources, do not touch existing resources
     foreach ( Resource *r, newResources ) {

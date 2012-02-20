@@ -477,11 +477,16 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
-    /// Returns the list requiered resources.
+    /// Returns the list of requiered resources.
     /// Note: This list is used as default for allocation dialog, not for scheduling.
-    QList<Resource*> requiredResources() const { return m_required; }
-    /// Set the list of required resources.
-    void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
+    QList<Resource*> requiredResources() const;
+    /// Set the list of the required resources's ids so they can be resolved when used
+    /// A required resource may not exist in the project yet
+    void setRequiredIds( const QStringList &lst );
+    /// Add a resource id to the required ids list
+    void addRequiredId( const QString &id );
+    /// Returns the list of requiered resource ids.
+    QStringList requiredIds() const { return m_requiredIds; }
 
     /// Return the list of team members.
     QList<Resource*> teamMembers() const { return m_teamMembers; }
@@ -491,12 +496,6 @@ public:
     void addTeamMember( Resource *resource );
     /// Remove @p resource to the list of team members.
     void removeTeamMember( Resource *resource );
-
-    /// Used by Project::load() after all resources have been loaded
-    /// to translate resource ids to resources
-    void resolveRequiredResources( Project &project );
-    /// @see resolveRequiredResources
-    void addRequiredId( const QString &id );
 
     /// Return the account
     Account *account() const { return cost.account; }
@@ -563,7 +562,6 @@ private:
     
     Calendar *m_calendar;
     QList<ResourceRequest*> m_requests;
-    QList<Resource*> m_required;
     QStringList m_requiredIds;
     
     QList<Resource*> m_teamMembers;

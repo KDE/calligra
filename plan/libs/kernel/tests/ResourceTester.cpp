@@ -29,7 +29,15 @@
 
 #include <qtest_kde.h>
 
+#include "kptglobal.h"
+#include "kptxmlloaderobject.h"
+
+#include <KoXmlReader.h>
+
 #include "debug.cpp"
+
+#include <QDomDocument>
+#include <QDomElement>
 
 namespace KPlato
 {
@@ -125,6 +133,212 @@ void ResourceTester::team()
     rc.unexecute();
     QVERIFY( team.teamMembers().count() == 1 );
     
+}
+
+void ResourceTester::required()
+{
+    Project p;
+    AddResourceGroupCmd *c1 = new AddResourceGroupCmd( &p, new ResourceGroup() );
+    c1->redo();
+
+    ResourceGroup *g = p.resourceGroups().at( 0 );
+    QVERIFY( g );
+    delete c1;
+
+    AddResourceCmd *c2 = new AddResourceCmd( g, new Resource() );
+    c2->redo();
+    Resource *r1 = g->resourceAt( 0 );
+    QVERIFY( r1 );
+    delete c2;
+    c2 = new AddResourceCmd( g, new Resource() );
+    c2->redo();
+    Resource *r2 = g->resourceAt( 1 );
+    QVERIFY( r2 );
+    delete c2;
+    c2 = new AddResourceCmd( g, new Resource() );
+    c2->redo();
+    Resource *r3 = g->resourceAt( 2 );
+    QVERIFY( r3 );
+    delete c2;
+
+    QVERIFY( r1->requiredIds().isEmpty() );
+    QVERIFY( r1->requiredResources().isEmpty() );
+
+    r1->addRequiredId( "" ); // not allowed to add empty id
+    QVERIFY( r1->requiredIds().isEmpty() );
+
+    r1->addRequiredId( r2->id() );
+    QCOMPARE( r1->requiredIds().count(), 1 );
+    QCOMPARE( r1->requiredResources().count(), 1 );
+    QCOMPARE( r1->requiredResources().at( 0 ), r2 );
+
+    r1->addRequiredId( r3->id() );
+    QCOMPARE( r1->requiredIds().count(), 2 );
+    QCOMPARE( r1->requiredResources().count(), 2 );
+    QCOMPARE( r1->requiredResources().at( 0 ), r2 );
+    QCOMPARE( r1->requiredResources().at( 1 ), r3 );
+
+    r1->addRequiredId( r2->id() ); // not allowed to add existing id
+    QCOMPARE( r1->requiredIds().count(), 2 );
+    QCOMPARE( r1->requiredResources().count(), 2 );
+    QCOMPARE( r1->requiredResources().at( 0 ), r2 );
+    QCOMPARE( r1->requiredResources().at( 1 ), r3 );
+
+    QStringList lst;
+    r1->setRequiredIds( lst );
+    QCOMPARE( r1->requiredIds().count(), 0 );
+    QCOMPARE( r1->requiredIds().count(), 0 );
+
+    lst << r2->id() << r3->id();
+    r1->setRequiredIds( lst );
+    QCOMPARE( r1->requiredIds().count(), 2 );
+    QCOMPARE( r1->requiredResources().count(), 2 );
+    QCOMPARE( r1->requiredResources().at( 0 ), r2 );
+    QCOMPARE( r1->requiredResources().at( 1 ), r3 );
+
+    // copy to different project
+    Project p2;
+    c1 = new AddResourceGroupCmd( &p2, new ResourceGroup( g ) );
+    c1->redo();
+    delete c1;
+
+    ResourceGroup *g1 = p2.resourceGroupAt( 0 );
+    c2 = new AddResourceCmd( g1, new Resource( r1 ) );
+    c2->redo();
+    Resource *r4 = g1->resourceAt( 0 );
+    QVERIFY( r4 );
+    delete c2;
+    c2 = new AddResourceCmd( g1, new Resource( r2 ) );
+    c2->redo();
+    Resource *r5 = g1->resourceAt( 1 );
+    QVERIFY( r5 );
+    delete c2;
+    c2 = new AddResourceCmd( g1, new Resource( r3 ) );
+    c2->redo();
+    Resource *r6 = g1->resourceAt( 2 );
+    QVERIFY( r6 );
+    delete c2;
+
+    QCOMPARE( r4->requiredIds().count(), 2 );
+    QCOMPARE( r4->requiredResources().count(), 2 );
+    QCOMPARE( r4->requiredResources().at( 0 ), r5 );
+    QCOMPARE( r4->requiredResources().at( 1 ), r6 );
+
+    // using xml
+    {
+        QDomDocument qdoc;
+        QDomElement e = qdoc.createElement( "plan" );
+        qdoc.appendChild( e );
+        p2.setId( "p2" );
+        p2.save( e );
+
+        KoXmlDocument xdoc;
+        xdoc.setContent( qdoc.toString() );
+        XMLLoaderObject sts;
+        sts.setProject( &p );
+        sts.setVersion( PLAN_FILE_SYNTAX_VERSION );
+
+        Project p3;
+        KoXmlElement xe = xdoc.documentElement().firstChildElement();
+        p3.load( xe, sts );
+
+        ResourceGroup *g2 = p3.resourceGroupAt( 0 );
+        QVERIFY( g2 );
+        QCOMPARE( g2->numResources(), 3 );
+
+        Resource *r7 = g2->resourceAt( 0 );
+        QVERIFY( r7 );
+        Resource *r8 = g2->resourceAt( 1 );
+        QVERIFY( r8 );
+        Resource *r9 = g2->resourceAt( 2 );
+        QVERIFY( r9 );
+
+        QCOMPARE( r7->requiredIds().count(), 2 );
+        QCOMPARE( r7->requiredResources().count(), 2 );
+        QCOMPARE( r7->requiredResources().at( 0 ), r8 );
+        QCOMPARE( r7->requiredResources().at( 1 ), r9 );
+    }
+    {
+        // required in different group
+        Project p4;
+        p4.setId( "p4" );
+
+        c1 = new AddResourceGroupCmd( &p4, new ResourceGroup() );
+        c1->redo();
+        delete c1;
+
+        ResourceGroup *m = new ResourceGroup();
+        m->setType( ResourceGroup::Type_Material );
+        c1 = new AddResourceGroupCmd( &p4, m );
+        c1->redo();
+        delete c1;
+
+        ResourceGroup *g3 = p4.resourceGroupAt( 0 );
+        c2 = new AddResourceCmd( g3, new Resource() );
+        c2->redo();
+        Resource *r10 = g3->resourceAt( 0 );
+        QVERIFY( r4 );
+        delete c2;
+
+        Resource *r11 = new Resource();
+        r11->setType( Resource::Type_Material );
+        c2 = new AddResourceCmd( m, r11 );
+        c2->redo();
+        QVERIFY( m->resourceAt( 0 ) == r11 );
+        delete c2;
+        Resource *r12 = new Resource();
+        r12->setType( Resource::Type_Material );
+        c2 = new AddResourceCmd( m, r12 );
+        c2->redo();
+        QVERIFY( m->resourceAt( 1 ) == r12 );
+        delete c2;
+
+        r10->addRequiredId( r11->id() );
+        r10->addRequiredId( r12->id() );
+        QCOMPARE( r10->requiredIds().count(), 2 );
+        QCOMPARE( r10->requiredResources().count(), 2 );
+        QCOMPARE( r10->requiredResources().at( 0 ), r11 );
+        QCOMPARE( r10->requiredResources().at( 1 ), r12 );
+
+        // using xml
+        QDomDocument qdoc;
+        QDomElement e = qdoc.createElement( "plan" );
+        qdoc.appendChild( e );
+        p4.save( e );
+
+        KoXmlDocument xdoc;
+        xdoc.setContent( qdoc.toString() );
+        XMLLoaderObject sts;
+        sts.setProject( &p4 );
+        sts.setVersion( PLAN_FILE_SYNTAX_VERSION );
+
+        Project p5;
+        KoXmlElement xe = xdoc.documentElement().firstChildElement();
+        p5.load( xe, sts );
+
+        ResourceGroup *g4 = p5.resourceGroupAt( 0 );
+        QVERIFY( g4 );
+        QCOMPARE( g4->numResources(), 1 );
+
+        ResourceGroup *g5 = p5.resourceGroupAt( 1 );
+        QVERIFY( g5 );
+        QCOMPARE( g5->numResources(), 2 );
+
+        Resource *r13 = g4->resourceAt( 0 );
+        QVERIFY( r13 );
+        QCOMPARE( r13->id(), r10->id() );
+        Resource *r14 = g5->resourceAt( 0 );
+        QVERIFY( r14 );
+        QCOMPARE( r14->id(), r11->id() );
+        Resource *r15 = g5->resourceAt( 1 );
+        QVERIFY( r15 );
+        QCOMPARE( r15->id(), r12->id() );
+
+        QCOMPARE( r13->requiredIds().count(), 2 );
+        QCOMPARE( r13->requiredResources().count(), 2 );
+        QCOMPARE( r13->requiredResources().at( 0 ), r14 );
+        QCOMPARE( r13->requiredResources().at( 1 ), r15 );
+    }
 }
 
 } //namespace KPlato

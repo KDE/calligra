@@ -212,7 +212,7 @@ bool ResourceGroup::load(KoXmlElement &element, XMLLoaderObject &status ) {
             // Load the resource
             Resource *child = new Resource();
             if (child->load(e, status)) {
-                status.project().addResource( this, child );
+                addResource( -1, child, 0 );
             } else {
                 // TODO: Complain about this
                 delete child;
@@ -400,6 +400,7 @@ void Resource::copy(Resource *resource) {
     cost.account = resource->account();
     m_calendar = resource->m_calendar;
 
+    m_requiredIds = resource->requiredIds();
     m_teamMembers = resource->m_teamMembers;
 
     // hmmmm
@@ -530,10 +531,10 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
         if (e.nodeName() == "resource") {
             QString id = e.attribute( "id" );
             if ( id.isEmpty() ) {
-                kWarning()<<"Missing project id";
+                kWarning()<<"Missing resource id";
                 continue;
             }
-            m_requiredIds << id;
+            addRequiredId( id );
         }
     }
     parent = element.namedItem( "external-appointments" ).toElement();
@@ -557,25 +558,31 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     return true;
 }
 
-void Resource::resolveRequiredResources( Project &project )
+QList<Resource*> Resource::requiredResources() const
 {
-    foreach ( const QString &id, m_requiredIds ) {
-        Resource *r = project.resource(id);
-        if (r == 0) {
-            kWarning()<<"The referenced resource does not exist: resource id="<<id;
-        } else {
-            if ( r != this ) {
-                m_required << r;
-            }
+    QList<Resource*> lst;
+    foreach ( const QString &s, m_requiredIds ) {
+        Resource *r = findId( s );
+        if ( r ) {
+            lst << r;
         }
     }
-    m_requiredIds.clear();
+    return lst;
 }
 
-void Resource::addRequiredId(const QString& id)
+void Resource::setRequiredIds( const QStringList &ids )
 {
-    m_requiredIds << id;
+    kDebug()<<ids;
+    m_requiredIds = ids;
 }
+
+void Resource::addRequiredId( const QString &id )
+{
+    if ( ! id.isEmpty() && ! m_requiredIds.contains( id ) ) {
+        m_requiredIds << id;
+    }
+}
+
 
 void Resource::setAccount( Account *account )
 {
@@ -611,13 +618,13 @@ void Resource::save(QDomElement &element) const {
         me.setAttribute("account", cost.account->name());
     }
     
-    if ( ! m_required.isEmpty() ) {
+    if ( ! m_requiredIds.isEmpty() ) {
         QDomElement e = me.ownerDocument().createElement("required-resources");
         me.appendChild(e);
-        foreach ( Resource *r, m_required ) {
+        foreach ( const QString &id, m_requiredIds ) {
             QDomElement el = e.ownerDocument().createElement("resource");
             e.appendChild( el );
-            el.setAttribute( "id", r->id() );
+            el.setAttribute( "id", id );
         }
     }
 

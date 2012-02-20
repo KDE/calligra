@@ -1003,14 +1003,14 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRequiredResourcesCmd : public NamedCommand
 {
 public:
-    ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name = QString() );
+    ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_resource;
-    QList<Resource*> m_newvalue;
-    QList<Resource*> m_oldvalue;
+    QStringList m_newvalue;
+    QStringList m_oldvalue;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceAccountCmd : public NamedCommand
 {

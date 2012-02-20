@@ -147,7 +147,21 @@ void ResourceDialogImpl::slotTeamChanged( const QModelIndex &index ) {
 }
 
 void ResourceDialogImpl::slotTypeChanged( int index ) {
-    ui_stackedWidget->setCurrentIndex( index == Resource::Type_Team ? 1 : 0 );
+    switch ( index ) {
+        case Resource::Type_Work:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( true );
+            slotUseRequiredChanged( useRequired->checkState() );
+            break;
+        case Resource::Type_Material:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( false );
+            slotUseRequiredChanged( false );
+            break;
+        case Resource::Type_Team:
+            ui_stackedWidget->setCurrentIndex( 1 );
+            break;
+    }
     emit changed();
 }
 
@@ -364,12 +378,12 @@ void ResourceDialog::slotOk() {
     m_resource.setAvailableFrom( dia->ui_rbfrom->isChecked() ? dia->availableFrom->dateTime() : QDateTime() );
     m_resource.setAvailableUntil( dia->ui_rbuntil->isChecked() ? dia->availableUntil->dateTime() : QDateTime() );
     ResourceItemSFModel *m = static_cast<ResourceItemSFModel*>( dia->required->model() );
-    QList<Resource*> lst;
+    QStringList lst;
     foreach ( const QModelIndex &i, dia->required->currentIndexes() ) {
         Resource *r = m->resource( i );
-        if ( r ) lst << r;
+        if ( r ) lst << r->id();
     }
-    m_resource.setRequiredResources( lst );
+    m_resource.setRequiredIds( lst );
     accept();
 }
 
@@ -434,9 +448,9 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyResourceCalendarCmd(original, resource.calendar(true)));
     }
-    if (resource.requiredResources() != original->requiredResources()) {
+    if (resource.requiredIds() != original->requiredIds()) {
         if (!m) m = new MacroCommand(n);
-        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredResources()));
+        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredIds()));
     }
     if (resource.account() != original->account()) {
         if (!m) m = new MacroCommand(n);

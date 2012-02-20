@@ -198,10 +198,6 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, project->resourceList() ) {
-        r->resolveRequiredResources( *project );
-    }
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
