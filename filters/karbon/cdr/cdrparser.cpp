@@ -960,9 +960,9 @@ qDebug() << "LGOb >>>";
 
 static inline
 double
-cdrTrafoFactor( qint16 integralPart, quint16 fractionPart )
+cdrTrafoFactor( CdrSomeStrangeFloat strangeFloat )
 {
-    return static_cast<double>(integralPart) + static_cast<double>(fractionPart) / 65535;
+    return static_cast<double>(strangeFloat.integralPart()) + static_cast<double>(strangeFloat.fractionPart()) / 65535;
 }
 
 QVector<CdrAbstractTransformation*>
@@ -991,12 +991,12 @@ qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData
                     const CdrTransform8Data& data8 = transformData.data8();
                     CdrNormalTransformation* transformation = new CdrNormalTransformation;
                     transformation->setData(
-                        cdrTrafoFactor(data8.value1Integral(), data8.value1Fraction()),
-                        cdrTrafoFactor(data8.value2Integral(), data8.value2Fraction()),
-                        data8.x(),
-                        cdrTrafoFactor(data8.value3Integral(), data8.value3Fraction()),
-                        cdrTrafoFactor(data8.value4Integral(), data8.value4Fraction()),
-                        data8.y() );
+                        cdrTrafoFactor(data8.a()),
+                        cdrTrafoFactor(data8.c()),
+                        data8.e(),
+                        cdrTrafoFactor(data8.b()),
+                        cdrTrafoFactor(data8.d()),
+                        data8.f() );
                     result.append( transformation );
 
         qDebug() << "mX:" << transformation->x() << "mY:" << transformation->y()

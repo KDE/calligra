@@ -981,21 +981,27 @@ garbage data? undo data?
       <array start="0" end="69" name="_unknown" type="uint16" length="35" />
     </record>
 
+    <record name="CdrSomeStrangeFloat" size="4">
+      <field start="0" end="1" name="fractionPart" type="uint16">
+          <description>The fraction part of the float value, by division by 65535.</description>
+      </field>
+      <field start="2" end="3" name="integralPart" type="sint16">
+          <description>The signed integral part of the float value.</description>
+      </field>
+    </record>
+
     <record name="CdrTransform8Data" size="24">
-      <field start="0" end="1" name="value1Fraction" type="uint16">
-          <description>The fraction part of value 1, by division by 65535.</description>
+      <description>The data of a transformation matrix [a b c d e f].</description>
+      <field start="0" end="3" name="a" type="CdrSomeStrangeFloat" />
+      <field start="4" end="7" name="c" type="CdrSomeStrangeFloat" />
+      <field start="8" end="11" name="e" type="sint32">
+        <description>The value which results in an x translation.</description>
       </field>
-      <field start="2" end="3" name="value1Integral" type="sint16">
-          <description>The signed integral part of value 1.</description>
+      <field start="12" end="15" name="b" type="CdrSomeStrangeFloat" />
+      <field start="16" end="19" name="d" type="CdrSomeStrangeFloat" />
+      <field start="20" end="23" name="f" type="sint32">
+        <description>The value which results in an y translation.</description>
       </field>
-      <field start="4" end="5" name="value2Fraction" type="uint16" />
-      <field start="6" end="7" name="value2Integral" type="sint16" />
-      <field start="8" end="11" name="x" type="sint32" />
-      <field start="12" end="13" name="value3Fraction" type="uint16" />
-      <field start="14" end="15" name="value3Integral" type="sint16" />
-      <field start="16" end="17" name="value4Fraction" type="uint16" />
-      <field start="18" end="19" name="value4Integral" type="sint16" />
-      <field start="20" end="23" name="y" type="sint32" />
     </record>
 
     <record name="CdrTransformData" size="2" sizeExtended="true">
