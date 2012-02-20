@@ -69,9 +69,9 @@ Rectangle
             onClicked: toggle_brushSelector()
         }
     }
-    Rectangle {
+    Image {
         id: colorSelectorButton
-        color: "green"
+        source: "image://kicon/format-stroke-color"
         width: 50
         height: 50
         anchors.top: parent.top

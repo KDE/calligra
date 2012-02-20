@@ -30,6 +30,7 @@
 
 #include "kto_canvas.h"
 #include "kto_resource_information_list.h"
+#include "kto_icon_provider.h"
 #include <kis_doc2.h>
 #include <kis_layer_manager.h>
 
@@ -39,6 +40,8 @@ KtoMainWindow::KtoMainWindow(QWidget* parent )
     setCentralWidget(m_view);
     
     KGlobal::mainComponent().dirs()->addResourceType("krita_touch_qml", "data", "kritatouch/qml/");
+
+    m_view->engine()->addImageProvider(QLatin1String("kicon"), new KtoIconProvider);
     
     m_view->setSource(QUrl::fromLocalFile(KGlobal::mainComponent().dirs()->findResource("krita_touch_qml", "MainWindow.qml")));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);

@@ -2,17 +2,14 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
 
-set (kritatouch_RCCS KritaTouch.qrc)
-qt4_add_resources(kritatouch_RCC_SRCS ${kritatouch_RCCS})
-
 set(kritatouch_SRCS
     kto_canvas.cpp
     kto_icon_item.cpp
+    kto_icon_provider.cpp
     kto_main_window.cpp
     kto_resource_information.cpp
     kto_resource_information_list.cpp
     main.cpp
-    ${kritatouch_RCCS}
 )
 
 kde4_add_executable(kritatouch ${kritatouch_SRCS})
