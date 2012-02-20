@@ -483,6 +483,8 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 {
     mBodyWriter->startElement( "draw:path" );
 
+    mBodyWriter->addAttribute( "draw:layer", mLayerId );
+
     writeTransformation( pathObject->transformations() );
     const QVector<CdrPathPoint>& pathPoints = pathObject->pathPoints();
 
@@ -556,6 +558,7 @@ void
 CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
+    mBodyWriter->addAttribute( "draw:layer", mLayerId );
     mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));
     mBodyWriter->addAttributePt( "svg:y", odfYCoord(0));
     writeTransformation( object->transformations() );
@@ -563,7 +566,7 @@ CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
         mBodyWriter->addAttribute( "xlink:type", QLatin1String("simple") );
         mBodyWriter->addAttribute( "xlink:show", QLatin1String("embed") );
         mBodyWriter->addAttribute( "xlink:actuate", QLatin1String("onLoad") );
-        mBodyWriter->addAttribute( "xlink:href", mSvgFilePathByObject[object] );
+        mBodyWriter->addAttribute( "xlink:href", mSvgFilePathByObject.value(object) );
 
         mBodyWriter->endElement(); // draw:frame
     mBodyWriter->endElement(); // draw:frame
@@ -573,6 +576,7 @@ void
 CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* object )
 {
     mBodyWriter->startElement("draw:frame");
+    mBodyWriter->addAttribute("draw:layer", mLayerId );
     writeTransformation( object->transformations() );
 //     mBodyWriter->addAttribute( "draw:style-name", blockTextStyle );
 
