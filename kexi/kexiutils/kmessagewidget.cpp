@@ -631,8 +631,11 @@ bool KMessageWidget::event(QEvent* event)
         d->createLayout();
     }
     else if (event->type() == QEvent::Hide) {
-        if (d->autoDelete) {
-            deleteLater();
+        //kDebug() << "QEvent::Hide" << event->spontaneous();
+        if (!event->spontaneous()) {
+            if (d->autoDelete) {
+                deleteLater();
+            }
         }
     }
     return QFrame::event(event);
