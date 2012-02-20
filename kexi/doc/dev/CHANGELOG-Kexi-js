@@ -144,6 +144,12 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
 
+2012-02-19
+Main Window
+*User feedback: fixed grammar and typos
+*Fix cropped "Share usage info" message of the User feedback
+*User feedback: After clicking "Share usage info", "Details" or "Help" and the message is visible, minimizing+restoring hides the message
+
 2012-02-18
 Widgets
 *context message widget can contain arbitrary QWidget content
