@@ -342,10 +342,25 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="8" end="9" name="_unknown4" type="sint16" />
       <field start="10" end="11" name="_unknown5" type="sint16" />
     </record>
-    <!-- 258 bytes (all 00) -->
-    <record name="CdrStyle240ArgumentData" size="258">
-      <array start="0" end="257" name="_unknown" type="char" length="258"/>
+
+    <record name="CdrStyle240Data" size="4">
+      <!-- seen 0, perhaps alignment type? -->
+      <field start="0" end="1" name="_unknown0" type="sint16" />
+<!--
+seen 12 values of 500 increasing by 500 till 6000
+seen 32 values of 894 increasing by 500 till 16394
+(500 cdr units are 36 pt)
+-->
+      <field start="2" end="3" name="_unknown1" type="sint16" />
     </record>
+    <!-- always 258 bytes, seems only partially used (all 00, or with values), tab stops? -->
+    <record name="CdrStyle240ArgumentData" size="2" sizeExtended="true">
+        <!-- number seen was 0, 12, 32 -->
+      <field start="0" end="1" name="someDataSize" type="uint16" />
+      <dynarray start="2" name="someData" type="CdrStyle240Data" length="someDataSize" minLength="0" maxLength="64"/>
+      <!-- rest bytes seem garbage data, TODO: mark with a union or do padding by formula? -->
+    </record>
+
     <!-- 8 bytes (all 0, 250 0 250 250, 500 0 250 250, 750 0 250 250, 0 625 0 0) -->
     <record name="CdrStyle245ArgumentData" size="8">
       <field start="0" end="1" name="_unknown0" type="sint16" />

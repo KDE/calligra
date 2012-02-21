@@ -556,9 +556,13 @@ qDebug() << "Reading Styles...";
             case CdrStyle240ArgumentId:
             {
                 const CdrStyle240ArgumentData& data = styleArgs.argRef<CdrStyle240ArgumentData>( i );
-                argTypeAsString = QLatin1String("some 258 bytes");
-                const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
-                argAsString = QString::fromLatin1(hex.constData(), hex.count());
+                argTypeAsString = QLatin1String("some max 258 bytes");
+                argAsString = QLatin1String("count:") + QString::number(data.someDataSize());
+                if( data.someDataSize() > 0 )
+                    argAsString = argAsString + QLatin1String(", from ") +
+                                  QString::number(data.someData(0)._unknown1()) +
+                                  QLatin1String(" to ") +
+                                  QString::number(data.someData(data.someDataSize()-1)._unknown1());
                 break;
             }
             case CdrStyle235ArgumentId:
