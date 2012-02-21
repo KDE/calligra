@@ -130,7 +130,6 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
             bytes -= temporaryFile->write(buf, bytes);
         } while (bytes > 0);
     }
-    qint64 oldKey = key;
     key = KoImageDataPrivate::generateKey(md5.result());
 
     temporaryFile->close();
