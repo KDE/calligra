@@ -51,7 +51,6 @@ void NotesConfigurationDialog::footnoteSetup(bool on)
     KoOdfNotesConfiguration *notesConfig = KoTextDocument(document).
             styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     if(on && notesConfig) {
-        widget.numStyleCombo->setCurrentIndex(0);
         widget.prefixLineEdit->setText(notesConfig->numberFormat().prefix());
         widget.suffixLineEdit->setText(notesConfig->numberFormat().suffix());
         widget.startAtSpinBox->setValue(notesConfig->startValue());
@@ -105,7 +104,6 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
     KoOdfNotesConfiguration *notesConfig = KoTextDocument(document).
             styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     if(on && notesConfig) {
-        widget.numStyleCombo->setCurrentIndex(5);
         widget.prefixLineEdit->setText(notesConfig->numberFormat().prefix());
         widget.suffixLineEdit->setText(notesConfig->numberFormat().suffix());
         widget.startAtSpinBox->setValue(notesConfig->startValue());
