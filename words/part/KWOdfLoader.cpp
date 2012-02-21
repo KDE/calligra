@@ -46,6 +46,7 @@
 #include <KoProgressUpdater.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoDocumentRdf.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
