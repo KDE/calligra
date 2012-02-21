@@ -330,6 +330,9 @@ CHeaderGenerator::writeRecord( const Record* record )
             getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
                             QLatin1String("Ptr() const { return ")+structMemberAddress.reference()+
                             QLatin1String("; }\n") );
+            getters.append( QLatin1String("int ")+arrayField->name() +
+                            QLatin1String("Count() const { return ")+QString::number(arrayField->arraySize())+
+                            QLatin1String("; }\n") );
             if( typeSize <= maxReturnByValueTypeSize )
                 // return by value
                 getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
@@ -357,6 +360,10 @@ CHeaderGenerator::writeRecord( const Record* record )
             getters.append( QLatin1String("const ")+typeName+QLatin1String("* ")+arrayField->name() +
                             QLatin1String("Ptr() const { return &")+structMemberAddress.reference()+
                             QLatin1String("; }\n") );
+            if( ! lengthFormula.isEmpty() )
+                getters.append( QLatin1String("int ")+arrayField->name() +
+                                QLatin1String("Count() const { return ")+lengthFormula+
+                                QLatin1String("; }\n") );
             if( typeSize <= maxReturnByValueTypeSize )
                 // return by value
                 getters.append( typeName+QLatin1Char(' ')+arrayField->name()+
@@ -409,6 +416,10 @@ CHeaderGenerator::writeRecord( const Record* record )
             if( structMemberAddress.isAbsolute() )
                 members.append( structMemberAddress.memberDeclaration() );
             // access method
+            if( ! lengthFormula.isEmpty() )
+                getters.append( QLatin1String("int ")+blobField->name() +
+                                QLatin1String("Count() const { return ")+lengthFormula+
+                                QLatin1String("; }\n") );
             getters.append( QLatin1String("const char* ")+blobField->name()+
                             QLatin1String("() const { return &")+structMemberAddress.reference()+
                             QLatin1String("; }\n") );
