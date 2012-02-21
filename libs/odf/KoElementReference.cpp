@@ -102,3 +102,8 @@ KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 
     return *this;
 }
+
+void KoElementReference::invalidate()
+{
+    d->xmlid == QString();
+}

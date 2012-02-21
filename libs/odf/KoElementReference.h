@@ -103,12 +103,16 @@ public:
      */
     void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XMLID) const;
 
-
     /**
      * @brief toString creates a QString from the element reference
      * @return a string that represents the element. Can be used in maps etc.
      */
     QString toString() const;
+
+    /**
+     * Invalidate the reference
+     */
+    void invalidate();
 
 
 private:
