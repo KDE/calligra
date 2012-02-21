@@ -517,8 +517,7 @@ switch(argType)
         argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) + QLatin1Char(' ') +
                       QString::number( fontData.fontSize()) + QLatin1Char(' ') +
                       QString::number( fontData._unknown1()) + QLatin1Char(' ') +
-                      QString::number( fontData._unknown2()) + QLatin1Char(' ') +
-                      QString::number( fontData._unknown3());
+                      QString::number( fontData._unknown2());
         break;
     }
     case CdrStyle230ArgumentId:

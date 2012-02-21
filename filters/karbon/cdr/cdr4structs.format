@@ -290,10 +290,11 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="0" end="1" name="fontIndex" type="Cdr4FontIndex">
         <description>The index of the font in the font table.</description>
       </field>
-      <field start="2" end="2" name="fontSize" type="uint8" />
-      <field start="3" end="3" name="_unknown1" type="uint8" />
-      <field start="4" end="4" name="_unknown2" type="uint8" />
-      <field start="5" end="5" name="_unknown3" type="uint8" />
+      <field start="2" end="3" name="fontSize" type="uint16">
+        <description>The size of the font in CDR units.</description>
+      </field>
+      <field start="4" end="4" name="_unknown1" type="uint8" />
+      <field start="5" end="5" name="_unknown2" type="uint8" />
     </record>
 
     <!-- 32bit 02 00 00 00 -->
