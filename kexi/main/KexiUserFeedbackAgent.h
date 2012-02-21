@@ -34,16 +34,35 @@ public:
 
     ~KexiUserFeedbackAgent();
 
-    void setEnabled(bool enabled);
+    enum Area {
+        NoAreas = 0,
+        BasicArea = 1,
+        AnonymousIdentificationArea = 2,
+        SystemInfoArea = 4,
+        ScreenInfoArea = 8,
+        RegionalSettingsArea = 16,
+        AllAreas = 31,
+    };
+    Q_DECLARE_FLAGS(Areas, Area)
 
-    void sendData();
+    void setEnabledAreas(Areas areas);
+
+    Areas enabledAreas() const;
+
+    QVariant value(const QString& key) const;
 
 private slots:
-    void sendJobFinished(KJob* job);
+    void sendDataFinished(KJob* job);
+    void sendRedirectQuestionFinished(KJob* job);
 
-protected:
+private:
+    void sendData();
+    void sendRedirectQuestion();
+
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiUserFeedbackAgent::Areas)
 
 #endif

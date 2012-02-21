@@ -2864,6 +2864,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         return cancelled;
     }
 
+    activateWindow(window);
     //view changed: switch to this view's gui client
     KXMLGUIClient *viewClient = currentWindow()->guiClient();
     updateWindowViewGUIClient(viewClient);
@@ -4475,5 +4476,11 @@ void KexiMainWindow::showTabIfNeeded()
         closeTab("");
     }
 }
+
+KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
+{
+    return &d->userFeedback;
+}
+
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

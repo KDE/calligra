@@ -33,6 +33,7 @@
 #include "XlsxXmlDrawingReader.h"
 
 class Sheet;
+class Cell;
 
 class EmbeddedCellObjects
 {
@@ -44,6 +45,30 @@ public:
     QList< QPair<QString,QString> > oleObjects;
     QList<QString> oleFrameBegins;
     QString hyperlink;
+};
+
+class Formula {
+protected:
+    explicit Formula() {}
+public:
+    virtual ~Formula() {}
+    virtual bool isShared() const = 0;
+};
+
+class FormulaImpl : public Formula {
+public:
+    QString m_formula;
+    explicit FormulaImpl(const QString &formula) : Formula(), m_formula(formula) {}
+    virtual bool isShared() const { return false; }
+    virtual ~FormulaImpl() {}
+};
+
+class SharedFormula : public Formula {
+public:
+    Cell *m_referencedCell;
+    explicit SharedFormula(Cell *referencedCell) : Formula(), m_referencedCell(referencedCell) {}
+    virtual bool isShared() const { return true; }
+    virtual ~SharedFormula() {}
 };
 
 class Cell
@@ -91,7 +116,7 @@ public:
 
     QString *valueAttrValue;
 
-    QString *formula;
+    Formula *formula;
 
     EmbeddedCellObjects* embedded;
 

@@ -167,10 +167,14 @@ bool KoImageData::hasCachedImage() const
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 {
-    Q_ASSERT(!image.isNull());
+  qint64 oldKey = 0;
+  if (d) {
+    oldKey = d->key;
+  }
+  Q_ASSERT(!image.isNull());
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
-        // again and we'll go to the other clause
+        // again and well go to the other clause
         KoImageData *other = collection->createImageData(image);
         this->operator=(*other);
         delete other;
@@ -209,7 +213,12 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             md5.addData(ba);
             d->key = KoImageDataPrivate::generateKey(md5.result());
         }
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
+
     }
+
 }
 
 void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *collection)
