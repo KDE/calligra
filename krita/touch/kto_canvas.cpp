@@ -39,6 +39,8 @@
 #include <kis_undo_stores.h>
 #include <kis_post_execution_undo_adapter.h>
 #include <QGraphicsSceneMouseEvent>
+#include <QFileDialog>
+#include <QDesktopServices>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <kis_paintop_registry.h>
@@ -234,5 +236,33 @@ void KtoCanvas::undo()
     m_undoStore->undo();
 }
 
+void KtoCanvas::open()
+{
+    m_filename = QFileDialog::getOpenFileName(0, i18n("Open Image"), QString(), i18n("Images (*.png)"));
+    if(!m_filename.isEmpty())
+    {
+        
+    }
+}
+
+void KtoCanvas::save()
+{
+    if(m_filename.isEmpty())
+    {
+        saveas();
+        return;
+    }
+
+}
+
+void KtoCanvas::saveas()
+{
+    const QString path = QFileDialog::getSaveFileName(0, i18n("Save Image"), QString(), i18n("Images (*.png)"));
+    if(!path.isEmpty())
+    {
+        m_filename = path;
+        save();
+    }
+}
 
 #include "kto_canvas.moc"

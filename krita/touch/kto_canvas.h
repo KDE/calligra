@@ -56,6 +56,9 @@ public:
     void setBrushPreset(QObject* _resourceInformation);
 public slots:
     void undo();
+    void open();
+    void save();
+    void saveas();
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -75,6 +78,8 @@ private:
     KisUpdateScheduler*             m_updateScheduler;
     KisSurrogateUndoStore*          m_undoStore;
     KisPostExecutionUndoAdapter*    m_undoAdapter;
+    
+    QString m_filename;
 };
 
 #endif

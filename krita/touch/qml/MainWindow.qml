@@ -155,6 +155,54 @@ Rectangle
                 }
             }
         }
+        // Dashboard
+        Item {
+            id: dashboard
+            anchors.fill: parent
+            // Toolbar
+            Item {
+                height: 64
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                Image {
+                    id: buttonOpen
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    source: "image://kicon/document-open"
+                    width: 64
+                    height: 64
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: canvas.open()
+                    }
+                }
+                Image {
+                    id: buttonSave
+                    anchors.right: buttonOpen.left
+                    anchors.top: parent.top
+                    source: "image://kicon/document-save"
+                    width: 64
+                    height: 64
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: canvas.save()
+                    }
+                }
+                Image {
+                    id: buttonSaveAs
+                    anchors.right: buttonSave.left
+                    anchors.top: parent.top
+                    source: "image://kicon/document-save-as"
+                    width: 64
+                    height: 64
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: canvas.saveas()
+                    }
+                }
+            }
+        }
     }
     states : [
         State {
