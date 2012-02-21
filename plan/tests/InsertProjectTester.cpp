@@ -311,9 +311,9 @@ void InsertProjectTester::testTeamResourceRequest()
     r->setType( Resource::Type_Team );
     ResourceGroup *tg = addResourceGroup( part );
     Resource *t1 = addResource( part, tg );
-    r->addTeamMember( t1 );
+    r->addTeamMemberId( t1->id() );
     Resource *t2 = addResource( part, tg );
-    r->addTeamMember( t2 );
+    r->addTeamMemberId( t2->id() );
     addTask( part );
     addGroupRequest( part );
     addResourceRequest( part );
@@ -514,10 +514,10 @@ void InsertProjectTester::testExistingTeamResourceRequest()
     tg->setName( "TG" );
     Resource *t1 = addResource( part, tg );
     t1->setName( "T1" );
-    r->addTeamMember( t1 );
+    r->addTeamMemberId( t1->id() );
     Resource *t2 = addResource( part, tg );
     t2->setName( "T2" );
-    r->addTeamMember( t2 );
+    r->addTeamMemberId( t2->id() );
     addTask( part );
     addGroupRequest( part );
     addResourceRequest( part );

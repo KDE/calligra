@@ -702,7 +702,7 @@ Schedule *Resource::schedule( long id ) const
 bool Resource::isBaselined( long id ) const
 {
     if ( m_type == Resource::Type_Team ) {
-        foreach ( const Resource *r, m_teamMembers ) {
+        foreach ( const Resource *r, teamMembers() ) {
             if ( r->isBaselined( id ) ) {
                 return true;
             }
@@ -867,7 +867,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         m_currentSchedule->logDebug( "Make appointments to team " + m_name );
 #endif
         Duration e;
-        foreach ( Resource *r, m_teamMembers ) {
+        foreach ( Resource *r, teamMembers() ) {
             r->makeAppointment( node, load, required );
         }
         return;
@@ -1442,7 +1442,7 @@ long Resource::allocationSuitability( const DateTime &time, const Duration &dura
     // FIXME: This is not *very* intelligent...
     Duration e;
     if ( m_type == Type_Team ) {
-        foreach ( Resource *r, m_teamMembers ) {
+        foreach ( Resource *r, teamMembers() ) {
             e += r->effort( time, duration, backward );
         }
     } else {
@@ -1483,17 +1483,35 @@ DateTime Resource::endTime( long id ) const
     return dt;
 }
 
-void Resource::addTeamMember( Resource *resource )
+QList<Resource*> Resource::teamMembers() const
 {
-    if ( ! m_teamMembers.contains( resource ) ) {
-        m_teamMembers.append( resource );
+    QList<Resource*> lst;
+    foreach ( const QString &s, m_teamMembers ) {
+        Resource *r = findId( s );
+        if ( r ) {
+            lst << r;
+        }
+    }
+    return lst;
+
+}
+
+QStringList Resource::teamMemberIds() const
+{
+    return m_teamMembers;
+}
+
+void Resource::addTeamMemberId( const QString &id )
+{
+    if ( ! id.isEmpty() && ! m_teamMembers.contains( id ) ) {
+        m_teamMembers.append( id );
     }
 }
 
-void Resource::removeTeamMember( Resource *resource )
+void Resource::removeTeamMemberId( const QString &id )
 {
-    if ( m_teamMembers.contains( resource ) ) {
-        m_teamMembers.removeAt( m_teamMembers.indexOf( resource ) );
+    if ( m_teamMembers.contains( id ) ) {
+        m_teamMembers.removeAt( m_teamMembers.indexOf( id ) );
     }
 }
 

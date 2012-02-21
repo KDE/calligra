@@ -1076,7 +1076,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }
@@ -1173,24 +1173,17 @@ void Project::save( QDomElement &element ) const
         }
     }
     // save resource teams
-    QMap<QString, QString> rmap;
+    QDomElement el = me.ownerDocument().createElement( "resource-teams" );
+    me.appendChild( el );
     foreach ( Resource *r, resourceIdDict ) {
-        if ( r->type() == Resource::Type_Team ) {
-            foreach ( Resource *tm, r->teamMembers() ) {
-                rmap.insertMulti( r->id(), tm->id() );
-            }
+        if ( r->type() != Resource::Type_Team ) {
+            continue;
         }
-    }
-    if ( ! rmap.isEmpty() ) {
-        QDomElement el = me.ownerDocument().createElement( "resource-teams" );
-        me.appendChild( el );
-        QMap<QString, QString>::const_iterator i = rmap.constBegin();
-        while ( i != rmap.constEnd() ) {
+        foreach ( const QString &id, r->teamMemberIds() ) {
             QDomElement e = el.ownerDocument().createElement( "team" );
             el.appendChild( e );
-            e.setAttribute( "team-id", i.key() );
-            e.setAttribute( "member-id", i.value() );
-            ++i;
+            e.setAttribute( "team-id", r->id() );
+            e.setAttribute( "member-id", id );
         }
     }
 }

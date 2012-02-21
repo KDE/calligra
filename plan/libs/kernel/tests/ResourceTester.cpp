@@ -105,34 +105,295 @@ void ResourceTester::testSingleDay() {
 void ResourceTester::team()
 {
     Resource team;
+    team.setId( "team" );
     Resource tm1, tm2;
+    tm1.setId( "tm1" );
+    tm2.setId( "tm2" );
 
-    QVERIFY( team.teamMembers().isEmpty() );
-    team.addTeamMember( &tm1 );
-    QVERIFY( team.teamMembers().count() == 1 );
-    team.removeTeamMember( &tm1 );
-    QVERIFY( team.teamMembers().isEmpty() );
-    team.addTeamMember( &tm1 );
-    team.addTeamMember( &tm2 );
-    QVERIFY( team.teamMembers().count() == 2 );
-    team.addTeamMember( &tm2 );
-    QVERIFY( team.teamMembers().count() == 2 );
-    team.removeTeamMember( &tm1 );
-    team.removeTeamMember( &tm2 );
-    QVERIFY( team.teamMembers().isEmpty() );
+    QVERIFY( team.teamMemberIds().isEmpty() );
+    team.addTeamMemberId( tm1.id() );
+    QVERIFY( team.teamMemberIds().count() == 1 );
+    team.removeTeamMemberId( tm1.id() );
+    QVERIFY( team.teamMemberIds().isEmpty() );
+    team.addTeamMemberId( tm1.id() );
+    team.addTeamMemberId( tm2.id() );
+    QVERIFY( team.teamMemberIds().count() == 2 );
+    team.addTeamMemberId( tm2.id() );
+    QVERIFY( team.teamMemberIds().count() == 2 );
+    team.removeTeamMemberId( tm1.id() );
+    team.removeTeamMemberId( tm2.id() );
+    QVERIFY( team.teamMemberIds().isEmpty() );
 
-    AddResourceTeamCmd ac( &team, &tm1 );
+    AddResourceTeamCmd ac( &team, tm1.id() );
     ac.execute();
-    QVERIFY( team.teamMembers().count() == 1 );
+    QVERIFY( team.teamMemberIds().count() == 1 );
     ac.unexecute();
-    QVERIFY( team.teamMembers().isEmpty() );
+    QVERIFY( team.teamMemberIds().isEmpty() );
     ac.execute();
-    RemoveResourceTeamCmd rc( &team, &tm1 );
+    RemoveResourceTeamCmd rc( &team, tm1.id() );
     rc.execute();
-    QVERIFY( team.teamMembers().isEmpty() );
+    QVERIFY( team.teamMemberIds().isEmpty() );
     rc.unexecute();
-    QVERIFY( team.teamMembers().count() == 1 );
-    
+    QVERIFY( team.teamMemberIds().count() == 1 );
+
+    {
+        Project p1;
+
+        AddResourceGroupCmd *c1 = new AddResourceGroupCmd( &p1, new ResourceGroup() );
+        c1->redo();
+        ResourceGroup *g = p1.resourceGroups().at( 0 );
+        QVERIFY( g );
+        delete c1;
+
+        AddResourceCmd *c2 = new AddResourceCmd( g, new Resource() );
+        c2->redo();
+        Resource *r1 = g->resourceAt( 0 );
+        QVERIFY( r1 );
+        delete c2;
+        c2 = new AddResourceCmd( g, new Resource() );
+        c2->redo();
+        Resource *r2 = g->resourceAt( 1 );
+        QVERIFY( r2 );
+        delete c2;
+        c2 = new AddResourceCmd( g, new Resource() );
+        c2->redo();
+        Resource *r3 = g->resourceAt( 2 );
+        QVERIFY( r3 );
+        delete c2;
+
+        AddResourceTeamCmd *c3 = new AddResourceTeamCmd( r1, r2->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 1 );
+        QCOMPARE( r1->teamMembers().count(), 1 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r2 );
+
+        c3 = new AddResourceTeamCmd( r1, r3->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 2 );
+        QCOMPARE( r1->teamMembers().count(), 2 );
+        QCOMPARE( r1->teamMembers().at( 1 ), r3 );
+
+        RemoveResourceTeamCmd *c4 = new RemoveResourceTeamCmd( r1, r2->id() );
+        c4->redo();
+        delete c4;
+        QCOMPARE( r1->teamMemberIds().count(), 1 );
+        QCOMPARE( r1->teamMembers().count(), 1 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r3 );
+    }
+
+    {
+        Project p1;
+        p1.setId( "p1" );
+
+        AddResourceGroupCmd *c1 = new AddResourceGroupCmd( &p1, new ResourceGroup() );
+        c1->redo();
+        ResourceGroup *g = p1.resourceGroups().at( 0 );
+        QVERIFY( g );
+        delete c1;
+
+        Resource *r1 = new Resource();
+        r1->setType( Resource::Type_Team );
+        AddResourceCmd *c2 = new AddResourceCmd( g, r1 );
+        c2->redo();
+        r1 = g->resourceAt( 0 );
+        QVERIFY( r1 );
+        delete c2;
+        c2 = new AddResourceCmd( g, new Resource() );
+        c2->redo();
+        Resource *r2 = g->resourceAt( 1 );
+        QVERIFY( r2 );
+        delete c2;
+        c2 = new AddResourceCmd( g, new Resource() );
+        c2->redo();
+        Resource *r3 = g->resourceAt( 2 );
+        QVERIFY( r3 );
+        delete c2;
+
+        AddResourceTeamCmd *c3 = new AddResourceTeamCmd( r1, r2->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 1 );
+        QCOMPARE( r1->teamMembers().count(), 1 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r2 );
+
+        c3 = new AddResourceTeamCmd( r1, r3->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 2 );
+        QCOMPARE( r1->teamMembers().count(), 2 );
+        QCOMPARE( r1->teamMembers().at( 1 ), r3 );
+
+        // copy
+        Project p2;
+
+        c1 = new AddResourceGroupCmd( &p2, new ResourceGroup( g ) );
+        c1->redo();
+        ResourceGroup *g2 = p2.resourceGroups().at( 0 );
+        QVERIFY( g2 );
+        delete c1;
+
+        c2 = new AddResourceCmd( g2, new Resource( r1 ) );
+        c2->redo();
+        Resource *r11 = g2->resourceAt( 0 );
+        QVERIFY( r11 );
+        delete c2;
+        c2 = new AddResourceCmd( g2, new Resource( r2 ) );
+        c2->redo();
+        Resource *r12 = g->resourceAt( 1 );
+        QVERIFY( r12 );
+        delete c2;
+        c2 = new AddResourceCmd( g2, new Resource( r3 ) );
+        c2->redo();
+        Resource *r13 = g->resourceAt( 2 );
+        QVERIFY( r13 );
+        delete c2;
+
+        QCOMPARE( r1->teamMemberIds().count(), 2 );
+        QCOMPARE( r1->teamMembers().count(), 2 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r12 );
+        QCOMPARE( r1->teamMembers().at( 1 ), r13 );
+
+        // xml
+        QDomDocument qdoc;
+        QDomElement e = qdoc.createElement( "plan" );
+        qdoc.appendChild( e );
+        p1.save( e );
+
+        KoXmlDocument xdoc;
+        xdoc.setContent( qdoc.toString() );
+        XMLLoaderObject sts;
+
+        Project p3;
+        sts.setProject( &p3 );
+        sts.setVersion( PLAN_FILE_SYNTAX_VERSION );
+        KoXmlElement xe = xdoc.documentElement().firstChildElement();
+        p3.load( xe, sts );
+
+        QCOMPARE( p3.numResourceGroups(), 1 );
+        ResourceGroup *g3 = p3.resourceGroupAt( 0 );
+        QCOMPARE( g3->numResources(), 3 );
+        Resource *r21 = g3->resourceAt( 0 );
+        QCOMPARE( r21->type(), Resource::Type_Team );
+        QCOMPARE( r21->teamMemberIds().count(), 2 );
+        QCOMPARE( r21->teamMembers().count(), 2 );
+        QCOMPARE( r21->teamMembers().at( 0 ), g3->resourceAt( 1 ) );
+        QCOMPARE( r21->teamMembers().at( 1 ), g3->resourceAt( 2 ) );
+    }
+    {
+        // team members in different group
+        Project p1;
+        p1.setId( "p1" );
+
+        AddResourceGroupCmd *c1 = new AddResourceGroupCmd( &p1, new ResourceGroup() );
+        c1->redo();
+        ResourceGroup *g = p1.resourceGroups().at( 0 );
+        QVERIFY( g );
+        delete c1;
+        ResourceGroup *mg = new ResourceGroup();
+        c1 = new AddResourceGroupCmd( &p1, mg );
+        c1->redo();
+        QCOMPARE( mg, p1.resourceGroups().at( 1 ) );
+        delete c1;
+
+        Resource *r1 = new Resource();
+        r1->setType( Resource::Type_Team );
+        AddResourceCmd *c2 = new AddResourceCmd( g, r1 );
+        c2->redo();
+        QCOMPARE( r1, g->resourceAt( 0 ) );
+        delete c2;
+        Resource *r2 = new Resource();
+        c2 = new AddResourceCmd( mg, r2 );
+        c2->redo();
+        QCOMPARE( r2, mg->resourceAt( 0 ) );
+        delete c2;
+        Resource *r3 = new Resource();
+        c2 = new AddResourceCmd( mg, r3 );
+        c2->redo();
+        QCOMPARE( r3, mg->resourceAt( 1 ) );
+        delete c2;
+
+        AddResourceTeamCmd *c3 = new AddResourceTeamCmd( r1, r2->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 1 );
+        QCOMPARE( r1->teamMembers().count(), 1 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r2 );
+
+        c3 = new AddResourceTeamCmd( r1, r3->id() );
+        c3->redo();
+        delete c3;
+        QCOMPARE( r1->teamMemberIds().count(), 2 );
+        QCOMPARE( r1->teamMembers().count(), 2 );
+        QCOMPARE( r1->teamMembers().at( 0 ), r2 );
+        QCOMPARE( r1->teamMembers().at( 1 ), r3 );
+
+        // copy
+        Project p2;
+
+        c1 = new AddResourceGroupCmd( &p2, new ResourceGroup( g ) );
+        c1->redo();
+        ResourceGroup *g2 = p2.resourceGroups().at( 0 );
+        QVERIFY( g2 );
+        delete c1;
+
+        c1 = new AddResourceGroupCmd( &p2, new ResourceGroup( mg ) );
+        c1->redo();
+        ResourceGroup *mg2 = p2.resourceGroups().at( 1 );
+        QVERIFY( mg2 );
+        delete c1;
+
+        c2 = new AddResourceCmd( g2, new Resource( r1 ) );
+        c2->redo();
+        Resource *r11 = g2->resourceAt( 0 );
+        QVERIFY( r11 );
+        delete c2;
+        c2 = new AddResourceCmd( mg2, new Resource( r2 ) );
+        c2->redo();
+        Resource *r12 = mg2->resourceAt( 0 );
+        QVERIFY( r12 );
+        delete c2;
+        c2 = new AddResourceCmd( mg2, new Resource( r3 ) );
+        c2->redo();
+        Resource *r13 = mg2->resourceAt( 1 );
+        QVERIFY( r13 );
+        delete c2;
+
+        QCOMPARE( r11->teamMemberIds().count(), 2 );
+        QCOMPARE( r11->teamMembers().count(), 2 );
+        QCOMPARE( r11->teamMembers().at( 0 ), r12 );
+        QCOMPARE( r11->teamMembers().at( 1 ), r13 );
+
+        // xml
+        QDomDocument qdoc;
+        QDomElement e = qdoc.createElement( "plan" );
+        qdoc.appendChild( e );
+        p1.save( e );
+
+        KoXmlDocument xdoc;
+        xdoc.setContent( qdoc.toString() );
+        XMLLoaderObject sts;
+
+        Project p3;
+        sts.setProject( &p3 );
+        sts.setVersion( PLAN_FILE_SYNTAX_VERSION );
+        KoXmlElement xe = xdoc.documentElement().firstChildElement();
+        p3.load( xe, sts );
+
+        QCOMPARE( p3.numResourceGroups(), 2 );
+        ResourceGroup *g3 = p3.resourceGroupAt( 0 );
+        QCOMPARE( g3->numResources(), 1 );
+        ResourceGroup *mg3 = p3.resourceGroupAt( 1 );
+        QCOMPARE( mg3->numResources(), 2 );
+        Resource *r21 = g3->resourceAt( 0 );
+        QCOMPARE( r21->type(), Resource::Type_Team );
+        QCOMPARE( r21->teamMemberIds().count(), 2 );
+        QCOMPARE( r21->teamMembers().count(), 2 );
+        QCOMPARE( r21->teamMembers().at( 0 ), mg3->resourceAt( 0 ) );
+        QCOMPARE( r21->teamMembers().at( 1 ), mg3->resourceAt( 1 ) );
+    }
+
 }
 
 void ResourceTester::required()

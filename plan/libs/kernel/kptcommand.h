@@ -1027,24 +1027,24 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceTeamCmd : public NamedCommand
 {
 public:
-    AddResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    AddResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 class KPLATOKERNEL_EXPORT RemoveResourceTeamCmd : public NamedCommand
 {
 public:
-    RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand

@@ -489,13 +489,15 @@ public:
     QStringList requiredIds() const { return m_requiredIds; }
 
     /// Return the list of team members.
-    QList<Resource*> teamMembers() const { return m_teamMembers; }
+    QList<Resource*> teamMembers() const;
+    /// Return the list of team members.
+    QStringList teamMemberIds() const;
     /// Clear the list of team members.
     void clearTeamMembers() { m_teamMembers.clear(); }
-    /// Add @p resource to the list of team members.
-    void addTeamMember( Resource *resource );
-    /// Remove @p resource to the list of team members.
-    void removeTeamMember( Resource *resource );
+    /// Add resource @p id to the list of team members.
+    void addTeamMemberId( const QString &id );
+    /// Remove resource @p id from the list of team members.
+    void removeTeamMemberId( const QString &id );
 
     /// Return the account
     Account *account() const { return cost.account; }
@@ -564,7 +566,7 @@ private:
     QList<ResourceRequest*> m_requests;
     QStringList m_requiredIds;
     
-    QList<Resource*> m_teamMembers;
+    QStringList m_teamMembers;
 
     Schedule *m_currentSchedule;
 

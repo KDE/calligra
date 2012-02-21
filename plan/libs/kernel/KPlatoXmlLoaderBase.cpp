@@ -315,7 +315,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }

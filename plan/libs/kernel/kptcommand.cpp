@@ -1781,7 +1781,7 @@ void ModifyRequiredResourcesCmd::unexecute()
     m_resource->setRequiredIds( m_oldvalue );
 }
 
-AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1789,14 +1789,14 @@ AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const 
 }
 void AddResourceTeamCmd::execute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 void AddResourceTeamCmd::unexecute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 
-RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1804,11 +1804,11 @@ RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, 
 }
 void RemoveResourceTeamCmd::execute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 void RemoveResourceTeamCmd::unexecute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
@@ -3215,36 +3215,6 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
                 existingResources[ res ] = r;
                 allResources << res;
             }
-        }
-    }
-    // map required resources for new resources, do not touch existing resources
-    foreach ( Resource *r, newResources ) {
-        QStringList required;
-        foreach ( Resource *rr, r->requiredResources() ) {
-            if ( newResources.contains( rr ) ) {
-                required << rr->id();
-                kDebug(insertProjectCmdDba())<<"Required (new):"<<r->name()<<rr->name();
-                continue;
-            }
-            Resource *r2 = existingResources.key( rr );
-            if ( r2 ) {
-                required << r2->id();
-                kDebug(insertProjectCmdDba())<<"Required (existing):"<<r->name()<<r2->name();
-            }
-        }
-        r->setRequiredIds( required );
-    }
-    // map team resources for new resources, do not touch existing resources
-    foreach ( Resource *r, newResources ) {
-        foreach ( Resource *res, r->teamMembers() ) {
-            if ( ! newResources.contains( res ) ) {
-                r->removeTeamMember( res );
-                Resource *r2 = existingResources.key( res );
-                if ( r2 ) {
-                    r->addTeamMember( r2 );
-                    kDebug(insertProjectCmdDba())<<"Team (existing):"<<r->name()<<r2->name();
-                }
-            } else kDebug(insertProjectCmdDba())<<"Team (new):"<<r->name()<<res->name();
         }
     }
     // Update resource account
