@@ -162,14 +162,6 @@ const T& argRef( int i ) const
   </enums>
 
   <records>
-    <record name="CdrStyleArgumentsData" base="CdrArgumentWithTypeListData" size="18">
-      <field start="8"  end="9"  name="_unknown0" type="sint16" />
-      <field start="10" end="11" name="_unknown1" type="sint16" />
-      <field start="12" end="13" name="_unknown2" type="sint16" />
-      <field start="14" end="15" name="_unknown3" type="sint16" />
-      <field start="16" end="17" name="_unknown4" type="sint16" />
-    </record>
-
     <record name="CdrVersionChunkData" size="2">
       <field start="0" end="1" type="uint16" name="version">
           <description>The version, multiplied with 100, e.g. 401 for version 4.01.</description>
@@ -277,7 +269,14 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="0" end="1" type="Cdr4StyleIndex" name="styleIndex">
         <description>The index of the style in the style table of the document.</description>
       </field>
-      <field start="2" end="19" type="CdrStyleArgumentsData" name="arguments" />
+      <field start="2" end="9" type="CdrArgumentWithTypeListData" name="arguments" />
+      <field start="10"  end="11"  name="baseStyleIndex" type="sint16">
+          <description>The index of the base style in the style table of the document.</description>
+      </field>
+      <field start="12" end="13" name="_unknown1" type="sint16" />
+      <field start="14" end="15" name="_unknown2" type="sint16" />
+      <field start="16" end="17" name="_unknown3" type="sint16" />
+      <field start="18" end="19" name="_unknown4" type="sint16" />
       <extension start="20" />
     </record>
 

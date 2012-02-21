@@ -289,18 +289,30 @@ private:
 class CdrStyle
 {
 public:
-    CdrStyle() : mFontId(-1), mFontSize(18), mTextAlignment(CdrTextAlignmentUnknown) {}
+    CdrStyle() : mBaseStyle(0), mFontId(0), mFontSize(0), mTextAlignment(CdrTextAlignmentUnknown) {}
 public:
+    void setBaseStyle( const CdrStyle* baseStyle ) { mBaseStyle = baseStyle; }
     void setTitle( const QString& title ) { mTitle = title; }
     void setFontId( quint16 fontId ) { mFontId = fontId; }
     void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
     void setTextAlignment( CdrTextAlignment alignment ) { mTextAlignment = alignment; }
 public:
+    const CdrStyle* baseStyle() const { return mBaseStyle; }
+
     const QString& title() const { return mTitle; }
-    quint16 fontId() const { return mFontId; }
-    quint16 fontSize() const { return mFontSize; }
-    CdrTextAlignment textAlignment() const { return mTextAlignment; }
+
+    quint16 fontId() const
+    { return (mFontId!=0) ? mFontId : mBaseStyle ? mBaseStyle->fontId() : 0; }
+    quint16 fontSize() const
+    { return (mFontSize!=0) ? mFontSize : mBaseStyle ? mBaseStyle->fontSize() : 18; }
+    CdrTextAlignment textAlignment() const
+    {
+        return (mTextAlignment!=CdrTextAlignmentUnknown) ? mTextAlignment :
+               mBaseStyle ?                                mBaseStyle->textAlignment() :
+                                                           CdrTextAlignmentUnknown;
+    }
 private:
+    const CdrStyle* mBaseStyle;
     quint16 mFontId;
     quint16 mFontSize;
     CdrTextAlignment mTextAlignment;

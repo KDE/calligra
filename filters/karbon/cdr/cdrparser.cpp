@@ -448,152 +448,176 @@ qDebug() << outlineData.index() << outline->type() << outline->color().name();
     mRiffStreamReader.closeList();
 }
 
+// used to collect base style links, because styles can be referenced before declared
+struct StyleLink
+{
+    StyleLink()  {}
+    StyleLink(CdrStyle* style, quint16 baseStyleIndex)
+    : mStyle(style), mBaseStyleIndex(baseStyleIndex) {}
+    CdrStyle* mStyle; quint16 mBaseStyleIndex;
+};
+
 void
 CdrParser::readDocStyleTable()
 {
     mRiffStreamReader.openList();
 qDebug() << "Reading Styles...";
+
+    QVector<StyleLink> styleLinkList;
+    QHash<quint16,CdrStyle*> styleTable;
+
     while( mRiffStreamReader.readNextChunkHeader() )
     {
         if( mRiffStreamReader.chunkId() == stylId )
         {
-            readDocStyle();
-        }
-    }
+            mRiffStreamReader.openList();
 
-    mRiffStreamReader.closeList();
-}
-
-void
-CdrParser::readDocStyle()
-{
-    mRiffStreamReader.openList();
-
-    while( mRiffStreamReader.readNextChunkHeader() )
-    {
-        if( mRiffStreamReader.chunkId() == stydId )
-        {
-            CdrStyle* style = new CdrStyle;
-
-            const QByteArray styleChunk = mRiffStreamReader.chunkData();
-            const CdrStyleChunkData& styleData = dataRef<CdrStyleChunkData>( styleChunk );
-
-            const CdrStyleArgumentsData& styleArgs = styleData.arguments();
-qDebug()<<"Style id:"<<styleData.styleIndex()<<"args:"<<styleArgs.count()<<"d:"<<styleArgs._unknown0()<<styleArgs._unknown1()<<styleArgs._unknown2()
-                                              <<styleArgs._unknown3()<<styleArgs._unknown4();
-
-            for (int i=0; i < styleArgs.count(); i++)
+            while( mRiffStreamReader.readNextChunkHeader() )
             {
-                const quint16 argType = styleArgs.argType(i);
-QString argAsString;
-QString argTypeAsString;
-switch(argType)
-{
-    case CdrStyle205ArgumentId :
-    case CdrStyle210ArgumentId :
-        argTypeAsString = QLatin1String("some 32-bit");
-        argAsString = QString::number( styleArgs.arg<quint32>(i) );
-        break;
-    case CdrStyleTextAlignmentArgumentId :
-    {
-        const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
+                if( mRiffStreamReader.chunkId() == stydId )
+                {
+                    CdrStyle* style = new CdrStyle;
 
-        const bool isAlignmentTypeKnown = ( (data.type() == CdrStyleTextCenterAlignment) ||
-                                            (data.type() == CdrStyleTextRightAlignment) );
-        if( isAlignmentTypeKnown )
-            style->setTextAlignment( (data.type()==CdrStyleTextCenterAlignment) ?
-                                     CdrTextAlignCenter : CdrTextAlignRight );
+                    const QByteArray styleChunk = mRiffStreamReader.chunkData();
+                    const CdrStyleChunkData& styleData = dataRef<CdrStyleChunkData>( styleChunk );
+                    styleTable.insert( styleData.styleIndex(), style );
+                    if( styleData.baseStyleIndex() > 0 )
+                        styleLinkList.append( StyleLink(style,styleData.baseStyleIndex()) );
 
-        argTypeAsString = QLatin1String("text alignment");
-        argAsString = QString::number( data.type() );
-        if( ! isAlignmentTypeKnown )
-            argAsString.append( QLatin1String("UNKNOWN") );
-        break;
-    }
-    case CdrStyleTitleArgumentId :
-    {
-        const QString title = QLatin1String( styleArgs.argRef<CdrStyleTitleArgumentData>(i).title() );
-        style->setTitle( title );
+                    const CdrArgumentWithTypeListData& styleArgs = styleData.arguments();
+        qDebug()<<"Style id:"<<styleData.styleIndex()<<"Base id:"<<styleData.baseStyleIndex()
+                <<"d:"<<styleData._unknown1()<<styleData._unknown2()
+                    <<styleData._unknown3()<<styleData._unknown4()
+                <<"args:"<<styleArgs.count();
 
-        argTypeAsString = QLatin1String("title");
-        argAsString = title;
-        break;
-    }
-    case CdrStyleFontArgumentId:
-    {
-        const CdrStyleFontArgumentData& fontData = styleArgs.argRef<CdrStyleFontArgumentData>( i );
-        style->setFontId( fontData.fontIndex() );
-        style->setFontSize( fontData.fontSize() );
+                    for (int i=0; i < styleArgs.count(); i++)
+                    {
+                        const quint16 argType = styleArgs.argType(i);
+        QString argAsString;
+        QString argTypeAsString;
+        switch(argType)
+        {
+            case CdrStyle205ArgumentId :
+            case CdrStyle210ArgumentId :
+                argTypeAsString = QLatin1String("some 32-bit");
+                argAsString = QString::number( styleArgs.arg<quint32>(i) );
+                break;
+            case CdrStyleTextAlignmentArgumentId :
+            {
+                const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
 
-        argTypeAsString = QLatin1String("font");
-        argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) + QLatin1Char(' ') +
-                      QString::number( fontData.fontSize()) + QLatin1Char(' ') +
-                      QString::number( fontData._unknown1()) + QLatin1Char(' ') +
-                      QString::number( fontData._unknown2());
-        break;
-    }
-    case CdrStyle230ArgumentId:
-    {
-        const CdrStyle230ArgumentData& data = styleArgs.argRef<CdrStyle230ArgumentData>( i );
-        const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
-        argTypeAsString = QLatin1String("some 20 bytes");
-        argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown1() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown2() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown3() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown4() ) + QLatin1Char(' ') +
-                      QString::fromLatin1(hex.constData(), hex.count());
-        break;
-    }
-    case CdrStyle240ArgumentId:
-    {
-        const CdrStyle240ArgumentData& data = styleArgs.argRef<CdrStyle240ArgumentData>( i );
-        argTypeAsString = QLatin1String("some 258 bytes");
-        const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
-        argAsString = QString::fromLatin1(hex.constData(), hex.count());
-        break;
-    }
-    case CdrStyle235ArgumentId:
-    {
-        const CdrStyle235ArgumentData& data = styleArgs.argRef<CdrStyle235ArgumentData>( i );
+                const bool isAlignmentTypeKnown = ( (data.type() == CdrStyleTextCenterAlignment) ||
+                                                    (data.type() == CdrStyleTextRightAlignment) );
+                if( isAlignmentTypeKnown )
+                    style->setTextAlignment( (data.type()==CdrStyleTextCenterAlignment) ?
+                                            CdrTextAlignCenter : CdrTextAlignRight );
 
-        argTypeAsString = QLatin1String("some 12 bytes");
-        argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown1() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown2() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown3() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown4() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown5() );
-        break;
-    }
-    case CdrStyle245ArgumentId:
-    {
-        const CdrStyle245ArgumentData& data = styleArgs.argRef<CdrStyle245ArgumentData>( i );
-
-        argTypeAsString = QLatin1String("four 16-bit");
-        argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown1() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown2() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown3() );
-        break;
-    }
-    case CdrStyle250ArgumentId :
-    {
-        const CdrStyle250ArgumentData& data = styleArgs.argRef<CdrStyle250ArgumentData>( i );
-
-        argTypeAsString = QLatin1String("two 16-bit");
-        argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                      QString::number( data._unknown1() );
-        break;
-    }
-    default:
-        argTypeAsString = QLatin1String("UNKNOWN!");
-        break;
-}
-qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
+                argTypeAsString = QLatin1String("text alignment");
+                argAsString = QString::number( data.type() );
+                if( ! isAlignmentTypeKnown )
+                    argAsString.append( QLatin1String("UNKNOWN") );
+                break;
             }
-            mDocument->insertStyle( styleData.styleIndex(), style );
+            case CdrStyleTitleArgumentId :
+            {
+                const QString title = QLatin1String( styleArgs.argRef<CdrStyleTitleArgumentData>(i).title() );
+                style->setTitle( title );
+
+                argTypeAsString = QLatin1String("title");
+                argAsString = title;
+                break;
+            }
+            case CdrStyleFontArgumentId:
+            {
+                const CdrStyleFontArgumentData& fontData = styleArgs.argRef<CdrStyleFontArgumentData>( i );
+                style->setFontId( fontData.fontIndex() );
+                style->setFontSize( fontData.fontSize() );
+
+                argTypeAsString = QLatin1String("font");
+                argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) + QLatin1Char(' ') +
+                            QString::number( fontData.fontSize()) + QLatin1Char(' ') +
+                            QString::number( fontData._unknown1()) + QLatin1Char(' ') +
+                            QString::number( fontData._unknown2());
+                break;
+            }
+            case CdrStyle230ArgumentId:
+            {
+                const CdrStyle230ArgumentData& data = styleArgs.argRef<CdrStyle230ArgumentData>( i );
+                const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
+                argTypeAsString = QLatin1String("some 20 bytes");
+                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown1() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown2() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown3() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown4() ) + QLatin1Char(' ') +
+                            QString::fromLatin1(hex.constData(), hex.count());
+                break;
+            }
+            case CdrStyle240ArgumentId:
+            {
+                const CdrStyle240ArgumentData& data = styleArgs.argRef<CdrStyle240ArgumentData>( i );
+                argTypeAsString = QLatin1String("some 258 bytes");
+                const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
+                argAsString = QString::fromLatin1(hex.constData(), hex.count());
+                break;
+            }
+            case CdrStyle235ArgumentId:
+            {
+                const CdrStyle235ArgumentData& data = styleArgs.argRef<CdrStyle235ArgumentData>( i );
+
+                argTypeAsString = QLatin1String("some 12 bytes");
+                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown1() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown2() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown3() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown4() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown5() );
+                break;
+            }
+            case CdrStyle245ArgumentId:
+            {
+                const CdrStyle245ArgumentData& data = styleArgs.argRef<CdrStyle245ArgumentData>( i );
+
+                argTypeAsString = QLatin1String("four 16-bit");
+                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown1() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown2() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown3() );
+                break;
+            }
+            case CdrStyle250ArgumentId :
+            {
+                const CdrStyle250ArgumentData& data = styleArgs.argRef<CdrStyle250ArgumentData>( i );
+
+                argTypeAsString = QLatin1String("two 16-bit");
+                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
+                            QString::number( data._unknown1() );
+                break;
+            }
+            default:
+                argTypeAsString = QLatin1String("UNKNOWN!");
+                break;
         }
+        qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
+                    }
+                    mDocument->insertStyle( styleData.styleIndex(), style );
+                }
+            }
+
+            mRiffStreamReader.closeList();
+        }
+    }
+
+    // set base style links
+    foreach( StyleLink link, styleLinkList )
+    {
+        CdrStyle* baseStyle = styleTable.value(link.mBaseStyleIndex);
+        if( baseStyle == 0 )
+        {
+qDebug() << "base style NOT FOUND:" << link.mBaseStyleIndex;
+            continue;
+        }
+        link.mStyle->setBaseStyle(baseStyle);
     }
 
     mRiffStreamReader.closeList();

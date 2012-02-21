@@ -71,7 +71,6 @@ private:
     void readDocFillTable();
     void readDocOutlineTable();
     void readDocStyleTable();
-    void readDocStyle();
     void readDocBtxTable();
     void readStrl();
     CdrParagraph* readParl();
