@@ -36,6 +36,7 @@ class CdrBlockTextObject;
 class CdrAbstractObject;
 class CdrParagraph;
 class CdrAbstractTransformation;
+class CdrPoint;
 
 class KoXmlWriter;
 class KoStore;
@@ -84,6 +85,7 @@ private:
     void writeStrokeWidth( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );
 
+    void writeCornerPoint( CdrPoint cornerPoint );
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
                               GlobalTransformationMode transformationMode = DoGlobalTransformation );
 

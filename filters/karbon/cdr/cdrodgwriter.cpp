@@ -434,10 +434,7 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
     mBodyWriter->startElement("draw:rect");
 
     writeTransformation( object->transformations() );
-    mBodyWriter->addAttributePt("svg:x", odfXCoord(0));
-    mBodyWriter->addAttributePt("svg:y", odfYCoord(0));
-    mBodyWriter->addAttributePt("svg:width", odfLength(object->cornerPoint().x()) );
-    mBodyWriter->addAttributePt("svg:height", odfLength(object->cornerPoint().y()) );
+    writeCornerPoint(object->cornerPoint());
 //     mBodyWriter->addAttribute("rx", object->cornerRoundness());
 //     mBodyWriter->addAttribute("ry", object->cornerRoundness());
     mBodyWriter->addAttribute("draw:layer", mLayerId );
@@ -458,10 +455,7 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     mBodyWriter->startElement( "draw:ellipse" );
 
     writeTransformation( object->transformations() );
-    mBodyWriter->addAttributePt( "svg:x", odfXCoord(0) );
-    mBodyWriter->addAttributePt( "svg:y", odfYCoord(0) );
-    mBodyWriter->addAttributePt( "svg:width", odfLength(object->cornerPoint().x()) );
-    mBodyWriter->addAttributePt( "svg:height", odfLength(object->cornerPoint().y()) );
+    writeCornerPoint( object->cornerPoint() );
     if( object->startAngle() != object->endAngle() )
     {
         mBodyWriter->addAttribute( "draw:start-angle", static_cast<qreal>(object->startAngle())/10.0 );
@@ -730,4 +724,17 @@ CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& tr
 
     if( ! transformationString.isEmpty() )
         mBodyWriter->addAttribute( "draw:transform", transformationString );
+}
+
+void
+CdrOdgWriter::writeCornerPoint( CdrPoint cornerPoint )
+{
+    const CdrCoord x = (cornerPoint.x() >= 0)? 0 : cornerPoint.x();
+    const CdrCoord y = (cornerPoint.y() >= 0)? 0 : cornerPoint.y();
+    const CdrCoord width = qAbs(cornerPoint.x());
+    const CdrCoord height = qAbs(cornerPoint.y());
+    mBodyWriter->addAttributePt("svg:x", odfXCoord(x));
+    mBodyWriter->addAttributePt("svg:y", odfYCoord(y));
+    mBodyWriter->addAttributePt("svg:width", odfLength(width) );
+    mBodyWriter->addAttributePt("svg:height", odfLength(height) );
 }
