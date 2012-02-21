@@ -214,7 +214,7 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
 
     CdrStyle* style = mDocument->style( textObject->styleId() );
     const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
-    svgStream << QLatin1String(" font-size=\"") << QString::number(fontSize) << QLatin1Char('\"');
+    svgStream << QLatin1String(" font-size=\"") << QString::number(odfLength(fontSize)) << QLatin1String("pt\"");
     if( style )
     {
         CdrFont* font = mDocument->font( style->fontId() );
