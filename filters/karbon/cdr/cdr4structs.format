@@ -141,16 +141,13 @@ const T& argRef( int i ) const
 
   <enums>
     <enum name="CdrStyleArgumentType">
-      <!-- text/title/name -->
       <item name="CdrStyleTitleArgumentId" value="200" />
       <!-- 32bit 02 00 00 00 -->
       <item name="CdrStyle205ArgumentId" value="205" />
       <!-- 32bit 02 00 00 00 -->
       <item name="CdrStyle210ArgumentId" value="210" />
-      <!-- 6 bytes CdrStyleFontArgumentData -->
       <item name="CdrStyleFontArgumentId" value="220" />
-      <!-- 6 bit -->
-      <item name="CdrStyle225ArgumentId" value="225" />
+      <item name="CdrStyleTextAlignmentArgumentId" value="225" />
       <!-- 20 bytes (all 00) -->
       <item name="CdrStyle230ArgumentId" value="230" />
       <!-- 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00) -->
@@ -293,12 +290,75 @@ size |count|aps  | ap1 |apl  |?????|
       <field start="0" end="1" name="fontIndex" type="Cdr4FontIndex">
         <description>The index of the font in the font table.</description>
       </field>
-      <!-- fontsize? -->
       <field start="2" end="2" name="fontSize" type="uint8" />
       <field start="3" end="3" name="_unknown1" type="uint8" />
       <field start="4" end="4" name="_unknown2" type="uint8" />
       <field start="5" end="5" name="_unknown3" type="uint8" />
     </record>
+
+    <!-- 32bit 02 00 00 00 -->
+    <record name="CdrStyle205ArgumentData" size="4">
+      <field start="0" end="3" name="_unknown" type="sint32" />
+    </record>
+    <!-- 32bit 02 00 00 00 -->
+    <record name="CdrStyle210ArgumentData" size="4">
+      <field start="0" end="3" name="_unknown" type="sint32" />
+    </record>
+  </records>
+
+  <enums>
+    <enum name="CdrStyleTextAlignmentType">
+      <!-- ? -->
+      <item name="CdrStyleText0Alignment" value="0" />
+      <!-- ? -->
+      <item name="CdrStyleText1Alignment" value="1" />
+      <item name="CdrStyleTextMiddleAlignment" value="2" />
+      <item name="CdrStyleTextRightAlignment" value="3" />
+      <!-- ? -->
+      <item name="CdrStyleText4Alignment" value="4" />
+    </enum>
+  </enums>
+
+  <records>
+    <!-- 16 bit: seen 0,1,2,3,4 -->
+    <record name="CdrStyleTextAlignmentArgumentData" size="2">
+      <field start="0" end="1" name="type" type="uint16" value="CdrStyleTextAlignmentType" />
+    </record>
+    <!-- 20 bytes (all 00) -->
+    <record name="CdrStyle230ArgumentData" size="20">
+      <field start="0" end="1" name="_unknown0" type="sint16" />
+      <field start="2" end="3" name="_unknown1" type="sint16" />
+      <field start="4" end="5" name="_unknown2" type="sint16" />
+      <field start="6" end="7" name="_unknown3" type="sint16" />
+      <field start="8" end="9" name="_unknown4" type="sint16" />
+      <array start="10" end="19" name="_unknown" type="char" length="10" />
+    </record>
+    <!-- 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00) -->
+    <record name="CdrStyle235ArgumentData" size="12">
+      <field start="0" end="1" name="_unknown0" type="sint16" />
+      <field start="2" end="3" name="_unknown1" type="sint16" />
+      <field start="4" end="5" name="_unknown2" type="sint16" />
+      <field start="6" end="7" name="_unknown3" type="sint16" />
+      <field start="8" end="9" name="_unknown4" type="sint16" />
+      <field start="10" end="11" name="_unknown5" type="sint16" />
+    </record>
+    <!-- 258 bytes (all 00) -->
+    <record name="CdrStyle240ArgumentData" size="258">
+      <array start="0" end="257" name="_unknown" type="char" length="258"/>
+    </record>
+    <!-- 8 bytes (all 0, 250 0 250 250, 500 0 250 250, 750 0 250 250, 0 625 0 0) -->
+    <record name="CdrStyle245ArgumentData" size="8">
+      <field start="0" end="1" name="_unknown0" type="sint16" />
+      <field start="2" end="3" name="_unknown1" type="sint16" />
+      <field start="4" end="5" name="_unknown2" type="sint16" />
+      <field start="6" end="7" name="_unknown3" type="sint16" />
+    </record>
+    <!-- 32bit (0 0, 0 500) -->
+    <record name="CdrStyle250ArgumentData" size="4">
+      <field start="0" end="1" name="_unknown0" type="sint16" />
+      <field start="2" end="3" name="_unknown1" type="sint16" />
+    </record>
+
 
     <record name="CdrFontChunkData" size="2" sizeExtended="true">
       <field start="0" end="1" type="Cdr4FontIndex" name="fontIndex">
