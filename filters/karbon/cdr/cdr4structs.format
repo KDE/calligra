@@ -313,7 +313,7 @@ size |count|aps  | ap1 |apl  |?????|
       <item name="CdrStyleText0Alignment" value="0" />
       <!-- ? -->
       <item name="CdrStyleText1Alignment" value="1" />
-      <item name="CdrStyleTextMiddleAlignment" value="2" />
+      <item name="CdrStyleTextCenterAlignment" value="2" />
       <item name="CdrStyleTextRightAlignment" value="3" />
       <!-- ? -->
       <item name="CdrStyleText4Alignment" value="4" />

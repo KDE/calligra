@@ -132,6 +132,14 @@ struct CdrPathPoint
 };
 
 
+enum CdrTextAlignment
+{
+    CdrTextAlignmentUnknown = 0,
+    CdrTextAlignLeft = 1,
+    CdrTextAlignCenter = 2,
+    CdrTextAlignRight = 3
+};
+
 struct CdrParagraph
 {
 public:
@@ -281,18 +289,21 @@ private:
 class CdrStyle
 {
 public:
-    CdrStyle() : mFontId(-1), mFontSize(18) {}
+    CdrStyle() : mFontId(-1), mFontSize(18), mTextAlignment(CdrTextAlignmentUnknown) {}
 public:
     void setTitle( const QString& title ) { mTitle = title; }
     void setFontId( quint16 fontId ) { mFontId = fontId; }
     void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
+    void setTextAlignment( CdrTextAlignment alignment ) { mTextAlignment = alignment; }
 public:
     const QString& title() const { return mTitle; }
     quint16 fontId() const { return mFontId; }
     quint16 fontSize() const { return mFontSize; }
+    CdrTextAlignment textAlignment() const { return mTextAlignment; }
 private:
     quint16 mFontId;
     quint16 mFontSize;
+    CdrTextAlignment mTextAlignment;
     QString mTitle;
 };
 

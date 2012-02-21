@@ -495,9 +495,21 @@ switch(argType)
         argAsString = QString::number( styleArgs.arg<quint32>(i) );
         break;
     case CdrStyleTextAlignmentArgumentId :
+    {
+        const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
+
+        const bool isAlignmentTypeKnown = ( (data.type() == CdrStyleTextCenterAlignment) ||
+                                            (data.type() == CdrStyleTextRightAlignment) );
+        if( isAlignmentTypeKnown )
+            style->setTextAlignment( (data.type()==CdrStyleTextCenterAlignment) ?
+                                     CdrTextAlignCenter : CdrTextAlignRight );
+
         argTypeAsString = QLatin1String("text alignment");
-        argAsString = QString::number( styleArgs.arg<CdrStyleTextAlignmentArgumentData>(i).type() );
+        argAsString = QString::number( data.type() );
+        if( isAlignmentTypeKnown )
+            argAsString.append( QLatin1String("UNKNOWN") );
         break;
+    }
     case CdrStyleTitleArgumentId :
     {
         const QString title = QLatin1String( styleArgs.argRef<CdrStyleTitleArgumentData>(i).title() );

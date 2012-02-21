@@ -220,6 +220,14 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
         CdrFont* font = mDocument->font( style->fontId() );
         if( font )
             svgStream << QLatin1String(" font-family=\"") << font->name() << QLatin1Char('\"');
+        const CdrTextAlignment textAlignment = style->textAlignment();
+        if( textAlignment != CdrTextAlignmentUnknown )
+        {
+            static struct {const char* name;} alignmentName[3] =
+            { {"start"}, {"middle"}, {"end"} };
+            const QString anchor = QLatin1String( alignmentName[textAlignment-1].name );
+            svgStream << QLatin1String(" text-anchor=\"") << anchor << QLatin1Char('\"');
+        }
     }
     svgStream << QLatin1String("><tspan>")<<Qt::escape(textObject->text()) << QLatin1String("</tspan></text>");
 
