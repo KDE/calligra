@@ -44,6 +44,9 @@
 #include <KoGenStyle.h>
 #include <KoFilterEffectStack.h>
 
+// 3D shape
+#include "Lightsource.h"
+
 
 ThreedShape::ThreedShape()
     : KoShape()
@@ -60,17 +63,17 @@ void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
     //painter.setPen(QPen(QColor(172, 196, 206)));
     painter.setPen(QPen(QColor(0, 0, 0)));
 
-#if 0
+#if 1
+    painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
+#else
     QRectF rect = converter.documentToView(boundingRect());
     QRectF rect = converter.documentToView(QRectF(QPoint(0, 0), size()));
     painter.drawRect(rect);
-#else
-    painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
 #endif
     kDebug(31000) << "boundingRect: " << boundingRect();
     kDebug(31000) << "outlineRect: " << outlineRect();
 
-#if 0
+#if 0 // Taken from the vector shape
     QRectF  rect(QPointF(0,0), m_size);
     painter.save();
 
@@ -95,7 +98,6 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     kDebug(31000) <<"Loading ODF element: " << sceneElement.tagName();
 
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
-
 
 
     // Extract the attributes of dr3d:scene
@@ -124,7 +126,7 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     //    dr3d:ambient-color="#666666"
     //    dr3d:lighting-mode="false"
 
-    // Camera vectors
+    // Camera attributes
     QString vrp          = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
     QString vpn          = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn", "");
     QString vup          = sceneElement.attributeNS(KoXmlNS::dr3d, "vup", "(0.0 0.0 1.0)");
@@ -134,22 +136,16 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     QString shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant", "");
     QString ambientColor = sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888");
 
+    // Rendering attributes
     QString shadeMode    = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
     QString lightingMode = sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "");
     QString transform    = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
 
-    kDebug(31000) 
-        << vrp
-        << vpn
-        << vup
-        << distance
-        << projection
-        << focalLength
-        << shadowSlant
-        << ambientColor
-        << shadeMode
-        << lightingMode
-        << transform;
+    kDebug(31000) << vrp << vpn << vup
+                  << distance << projection << focalLength
+                  << shadowSlant
+                  << ambientColor
+                  << shadeMode << lightingMode << transform;
     // FIXME
 
     // Get the scene itself, i.e. the elements in the scene
@@ -168,11 +164,24 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     forEachElement(elem, sceneElement) {
 
         if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
+#if 0
             // Attributes:
             // dr3d:diffuse-color
             // dr3d:direction
             // dr3d:enabled
             // dr3d:specular
+            QString diffuseColor = elem.attributeNS(KoXmlNS::dr3d, "diffuse-color", "");
+            QString direction    = elem.attributeNS(KoXmlNS::dr3d, "direction", "");
+            QString enabled      = elem.attributeNS(KoXmlNS::dr3d, "enabled", "");
+            QString specular     = elem.attributeNS(KoXmlNS::dr3d, "specular", "");
+            kDebug(31000) << "  Light:" << diffuseColor << direction << enabled << specular;
+#else
+            Lightsource  light(elem);
+            kDebug(31000) << "  Light:" << light.diffuseColor() << light.direction()
+                          << light.enabled() << light.specular();
+            QString foo("(0 1 1)");
+            kDebug(31000) << foo << foo.mid(1, foo.size() - 2);
+#endif
         }
         else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // FIXME: Recursive!

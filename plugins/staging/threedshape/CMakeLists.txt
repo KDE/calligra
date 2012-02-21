@@ -10,6 +10,8 @@ SET (threedshape_LIB_SRCS
     #ThreedTool.cpp
     #ThreedShapeConfigWidget.cpp
 
+    Lightsource.cpp
+
     #ChangeImageCommand.cpp
 )
 
