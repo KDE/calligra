@@ -61,6 +61,7 @@
 #include "KoBibliographyInfo.h"
 #include "KoSection.h"
 #include "KoTextSoftPageBreak.h"
+#include "KoDocumentRdfBase.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -161,6 +162,7 @@ public:
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
+    QStringList rdfIdList;
 
     /// level is between 1 and 10
     void setCurrentList(KoList *currentList, int level);
@@ -469,6 +471,10 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
             kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_LOADING_ID;
             Q_ASSERT(false);
         }
+    }
+
+    if (context.documentRdf()) {
+        d->rdfIdList = qobject_cast<KoDocumentRdfBase*>(context.documentRdf())->idrefList();
     }
 }
 
@@ -1064,6 +1070,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
     // Some paragraph have id's defined which we need to store so that we can eg
     // attach text animations to this specific paragraph later on
     QString id(element.attributeNS(KoXmlNS::text, "id"));
+
     if (!id.isEmpty() && d->shape) {
         QTextBlock block = cursor.block();
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -1075,9 +1082,11 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
     }
 
     // attach Rdf to cursor.block()
-    // remember inline Rdf metadata
+    // remember inline Rdf metadata -- if the xml-id is actually
+    // about rdf.
     if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
-            || element.hasAttribute("id")) {
+            || d->rdfIdList.contains(id))
+    {
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
