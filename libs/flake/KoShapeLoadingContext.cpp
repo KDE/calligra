@@ -61,7 +61,7 @@ public:
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
-    KoDocumentRdfBase *documentRdf;
+    QObject *documentRdf;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
@@ -194,13 +194,13 @@ KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() cons
     return d->documentResources;
 }
 
-KoDocumentRdfBase *KoShapeLoadingContext::documentRdf() const
+QObject *KoShapeLoadingContext::documentRdf() const
 {
     return d->documentRdf;
 }
 
 
-void KoShapeLoadingContext::setDocumentRdf(KoDocumentRdfBase *documentRdf)
+void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
 {
     d->documentRdf = documentRdf;
 }
