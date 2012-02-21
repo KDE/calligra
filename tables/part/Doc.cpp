@@ -54,7 +54,6 @@
 #include <ktemporaryfile.h>
 
 #include <KoApplication.h>
-#include <KoDataCenterBase.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
