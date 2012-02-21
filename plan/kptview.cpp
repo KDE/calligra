@@ -2631,7 +2631,7 @@ void View::slotCreateReport()
 
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
-    ViewListReportsDialog *vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
+    QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
     connect( vd, SIGNAL( viewCreated( ViewBase* ) ), dlg, SLOT( slotViewCreated( ViewBase* ) ) );
     vd->exec();
     delete vd;

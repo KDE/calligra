@@ -42,6 +42,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDomDocument>
+#include <QPointer>
 
 #include <kicon.h>
 #include <kactionmenu.h>
@@ -335,8 +336,8 @@ void View::slotPackageSettings()
     if ( wp == 0 ) {
         return;
     }
-    PackageSettingsDialog *dia = new PackageSettingsDialog( *wp, this );
-    if ( dia->exec() == QDialog::Accepted ) {
+    QPointer<PackageSettingsDialog> dia = new PackageSettingsDialog( *wp, this );
+    if ( dia->exec() == QDialog::Accepted && dia ) {
         KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
             kDebug();
@@ -397,7 +398,7 @@ void View::slotTaskDescription()
     if ( node == 0 ) {
         return;
     }
-    TaskDescriptionDialog *dlg = new TaskDescriptionDialog( *node, this, true );
+    QPointer<TaskDescriptionDialog> dlg = new TaskDescriptionDialog( *node, this, true );
     dlg->exec();
     delete dlg;
 }
@@ -437,10 +438,9 @@ void View::slotTaskProgress()
         return;
     }
     StandardWorktime *w = qobject_cast<Project*>( n->projectNode() )->standardWorktime();
-    TaskProgressDialog dlg( *n, currentScheduleManager(), w, this );
-    if ( dlg.exec() == QDialog::Accepted ) {
-        kDebug();
-        KUndo2Command *cmd = dlg.buildCommand();
+    QPointer<TaskProgressDialog> dlg = new TaskProgressDialog( *n, currentScheduleManager(), w, this );
+    if ( dlg->exec() == QDialog::Accepted && dlg ) {
+        KUndo2Command *cmd = dlg->buildCommand();
         if ( cmd ) {
             cmd->redo(); //FIXME m_part->addCommand( cmd );
         }
@@ -454,9 +454,8 @@ void View::slotTaskCompletion()
     if ( wp == 0 ) {
         return;
     }
-    TaskCompletionDialog *dlg = new TaskCompletionDialog( *wp, currentScheduleManager(), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
-        kDebug();
+    QPointer<TaskCompletionDialog> dlg = new TaskCompletionDialog( *wp, currentScheduleManager(), this );
+    if ( dlg->exec() == QDialog::Accepted && dlg ) {
         KUndo2Command *cmd = dlg->buildCommand();
         if ( cmd ) {
             m_part->addCommand( cmd );
