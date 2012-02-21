@@ -1930,7 +1930,7 @@ private:
 class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand
 {
 public:
-    ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
+    explicit ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
     void execute();
     void unexecute();
 
