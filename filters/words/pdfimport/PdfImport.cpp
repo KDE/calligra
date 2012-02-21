@@ -18,6 +18,10 @@
  */
 
 #include "PdfImport.h"
+#include "OdfOutputDev.h"
+
+#include <poppler/PDFDoc.h>
+#include <poppler/GlobalParams.h>
 
 #include <QTextCodec>
 #include <QFile>
@@ -35,26 +39,12 @@
 #include <KoXmlWriter.h>
 
 #include "ImportDialog.h"
-//#include <poppler/PDFDoc.h>
-//#include <poppler/Page.h>
 #include<poppler/qt4/poppler-qt4.h>
 
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
 K_EXPORT_PLUGIN(PdfImportFactory("wordspdfimportng", "calligrafilters"))
-
-// bool checkEncoding(QTextCodec *codec, QByteArray &data)
-// {
-//     QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
-//     QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
-//     for (int i = 0; i < unicode.size(); ++i) {
-//         if (unicode[i] == 0) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
 
 PdfImport::PdfImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
@@ -65,276 +55,62 @@ PdfImport::~PdfImport()
 {
 }
 
+
 KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    // check for proper conversion
-    if (to != "application/vnd.oasis.opendocument.text" || from != "application/pdf") {
+    kDebug(30516) << "to:" << to << " from:" << from;
+
+    if (from != "application/pdf" || to != "application/vnd.oasis.opendocument.text") {
         return KoFilter::NotImplemented;
     }
 
-    QFile in(m_chain->inputFile());
-    if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
-        in.close();
-        return KoFilter::FileNotFound;
-    }
+    // read config file
+    globalParams = new GlobalParams();
+    if (! globalParams)
+        return KoFilter::NotImplemented;
 
-//     // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
-//     QByteArray data = in.read(100000);
-//     in.seek(0);
-// 
-//     // this code is inspired by the kate encoding guessing
-//     // first try UTF-8
-     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-//     if (!checkEncoding(codec, data)) {
-//         // then try to guess the encoding from the content
-//         KEncodingProber prober(KEncodingProber::Universal);
-//         prober.feed(data);
-//         kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
-//         if (prober.confidence() > 0.5) {
-//             codec = QTextCodec::codecForName(prober.encoding());
-//         }
-//         if (!codec || !checkEncoding(codec, data )) {
-//             // then try the fallback ISO 8859-15
-//             codec = QTextCodec::codecForName("ISO 8859-15");
-//             if (!checkEncoding(codec, data)) {
-//                 // if all failed use UTF-8
-//                 codec = QTextCodec::codecForName("UTF-8");
-//                 kWarning(30502) << "fallback to UTF-8 encoding";
-//             }
-//         }
-//     }
-
-    int paragraphStrategy = 0;
-
-//     if (!m_chain->manager()->getBatchMode()) {
-//         QPointer<PdfImportDialog> dialog = new PdfImportDialog(codec->name(), QApplication::activeWindow());
-//         if (!dialog) {
-//             kError(30502) << "Dialog has not been created! Aborting!" << endl;
-//             in.close();
-//             return KoFilter::StupidError;
-//         }
-//         if (!dialog->exec()) {
-//             kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
-//             in.close();
-//             return KoFilter::UserCancelled;
-//         }
-//         codec = dialog->getCodec();
-//         paragraphStrategy = dialog->getParagraphStrategy();
-//     }
-
-    if (!codec) {
-        kError(30502) << "Could not create QTextCodec! Aborting" << endl;
+    GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
+    if (! pdfDoc) {
+        delete globalParams;
         return KoFilter::StupidError;
     }
 
-    kDebug(30502) << "Charset used:" << codec->name();
-    kDebug(30502) << "Paragraph Strategy used:" << paragraphStrategy;
-
-    QTextStream stream(&in);
-    stream.setCodec(codec);
-
-    //create output files
-    KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
-    if (!store || store->bad()) {
-        kWarning(30502) << "Unable to open output file!";
-        delete store;
-        return KoFilter::FileNotFound;
-    }
-    store->disallowNameExpansion();
-    kDebug(30502) << "created store.";
-    KoOdfWriteStore odfStore(store);
-    odfStore.manifestWriter(to);
-
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
-    if (!contentWriter) {
-        delete store;
-        return KoFilter::CreationError;
+    if (! pdfDoc->isOk()) {
+        delete globalParams;
+        delete pdfDoc;
+        return KoFilter::StupidError;
     }
 
-    KoGenStyles mainStyles;
-    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+    double hDPI = 72.0;
+    double vDPI = 72.0;
 
-    bodyWriter->startElement("office:body");
-    bodyWriter->startElement("office:text");
+    int firstPage = 1;
+    int lastPage = pdfDoc->getNumPages();
 
-    QString styleName("txt");
-    KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-    style.addAttribute("style:display-name", styleName);
-    style.addProperty("fo:font-family", "dejavu sans mono", KoGenStyle::TextType);
-    style.addProperty("fo:font-family-generic", "modern", KoGenStyle::TextType);
-    style.addProperty("fo:font-size", "10pt", KoGenStyle::TextType);
+    kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
 
-    style.addProperty("fo:font-weight", "normal", KoGenStyle::TextType);
-    QString name(QString(QUrl::toPercentEncoding(styleName, "", " ")).replace('%', '_'));
-
-    name = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
-
-    switch (paragraphStrategy) {
-    case 1:
-        convertSentence(stream, bodyWriter, name);
-        break;
-    case 2:
-        convertEmptyLine(stream, bodyWriter, name);
-        break;
-    default:
-        convertAsIs(stream, bodyWriter, name);
-        break;
+    OdfOutputDev * dev = new OdfOutputDev(m_chain->outputFile());
+    if (dev->isOk()) {
+        int rotate = 0;
+        GBool useMediaBox = gTrue;
+        GBool crop = gFalse;
+        GBool printing = gFalse;
+        pdfDoc->displayPages(dev, firstPage, lastPage, hDPI, vDPI, rotate, useMediaBox, crop, printing);
+        dev->dumpContent();
     }
 
-    bodyWriter->endElement(); // office:text
-    bodyWriter->endElement(); // office:body
+    kDebug(30516) << "wrote file to" << m_chain->outputFile();
 
-    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-    odfStore.closeContentWriter();
+    delete dev;
+    delete pdfDoc;
+    delete globalParams;
+    globalParams = 0;
 
-    //add manifest line for content.xml
-    odfStore.manifestWriter()->addManifestEntry("content.xml", "text/xml");
-    if (!mainStyles.saveOdfStylesDotXml(odfStore.store(), odfStore.manifestWriter())) {
-        delete store;
-        return KoFilter::CreationError;
-    }
+    // check for memory leaks
+    Object::memCheck(stderr);
 
-    if (!createMeta(odfStore)) {
-        kWarning() << "Error while trying to write 'meta.xml'. Partition full?";
-        delete store;
-        return KoFilter::CreationError;
-    }
-
-
-    if ( !odfStore.closeManifestWriter() ) {
-      kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
-        delete store;
-        return KoFilter::CreationError;
-    }
-
-    delete store;
     return KoFilter::OK;
 }
 
-void PdfImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-//     while (!stream.atEnd()) {
-//         QString line = stream.readLine();
-//         if (!line.isNull()) {
-//             bodyWriter->startElement("text:p");
-//             bodyWriter->addAttribute("text:style-name", styleName);
-//             if (!line.isEmpty())
-//                 bodyWriter->addTextSpan(line);
-//             bodyWriter->endElement();
-//         }
-//     }
-    //GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
-    
-    Poppler::Document * pdfDoc=Poppler::Document::load(m_chain->inputFile());
-    //pdfDoc->load(m_chain->inputFile(),QByteArray(),QByteArray());
-    int noOfPages=pdfDoc->numPages();
-    for(int j=0; j<noOfPages; j++){
-    Poppler::Page  *pages = pdfDoc->page(j);
-//    kWarning(30502) << "Name of the file is !"<< m_chain->inputFile();
-    QString str=pages->text(QRectF());
-    bodyWriter->startElement("text:p");
-    bodyWriter->addAttribute("text:style-name", styleName);
-    bodyWriter->addTextSpan(str);
-    bodyWriter->endElement();
-    }
-}
-
-void PdfImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-    QString stoppingPunctuation(".!?");
-    QString skippingEnd(" \"')");
-
-    while (!stream.atEnd()) {
-        QString paragraph;
-        for (;;) {
-            const QString line = stream.readLine();
-            if (line.isEmpty()) {
-                break;
-            }
-            paragraph.append(line);
-            paragraph += ' ';
-
-            int lastPos = line.length() - 1;
-            int maxCheck = lastPos >= 10 ? 10: lastPos + 1;
-            QChar lastChar;
-            // Skip a maximum of 10 quotes (or similar) at the end of the line
-            for (int i = 0; i < maxCheck; i++) {
-                lastChar = line[lastPos];
-                if (lastChar.isNull() || skippingEnd.indexOf(lastChar) == -1) {
-                    break;
-                }
-
-                lastPos--;
-            }
-
-            lastChar = line[lastPos];
-            if (lastChar.isNull())
-                continue;
-            else if (stoppingPunctuation.indexOf(lastChar) != -1)
-                break;
-        }
-
-        if (!paragraph.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            QString s = paragraph.simplified();
-            if (!s.isEmpty())
-                bodyWriter->addTextSpan(s);
-            bodyWriter->endElement();
-        }
-    }
-}
-
-void PdfImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-    while (!stream.atEnd()) {
-        QString paragraph;
-        for (int line_no = 0; line_no < MAXLINES; ++line_no) {
-            const QString line = stream.readLine();
-            if (line.isEmpty()) {
-                break;
-            }
-            paragraph.append(line);
-            paragraph += ' ';
-        }
-
-        if (!paragraph.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            QString s = paragraph.simplified();
-            if (!s.isEmpty())
-                bodyWriter->addTextSpan(s);
-            bodyWriter->endElement();
-        }
-    }
-}
-
-bool PdfImport::createMeta(KoOdfWriteStore &store)
-{
-    if (!store.store()->open("meta.xml")) {
-        return false;
-    }
-
-    KoStoreDevice dev(store.store());
-    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
-    xmlWriter->startElement("office:meta");
-
-    xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
-    xmlWriter->endElement();
-
-    xmlWriter->startElement("meta:creation-date");
-    xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));
-    xmlWriter->endElement();
-
-    xmlWriter->endElement();
-    xmlWriter->endElement(); // root element
-    xmlWriter->endDocument(); // root element
-    delete xmlWriter;
-    if (!store.store()->close()) {
-        return false;
-    }
-    store.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
-    return true;
-}
+#include "PdfImport.moc"
