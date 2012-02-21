@@ -506,7 +506,7 @@ switch(argType)
 
         argTypeAsString = QLatin1String("text alignment");
         argAsString = QString::number( data.type() );
-        if( isAlignmentTypeKnown )
+        if( ! isAlignmentTypeKnown )
             argAsString.append( QLatin1String("UNKNOWN") );
         break;
     }
