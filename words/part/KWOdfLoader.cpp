@@ -109,6 +109,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
+    sc.setDocumentRdf(m_document->documentRdf());
 
     // Load user defined variable declarations
     if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
