@@ -69,8 +69,11 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupAlterTablePage();
     setupImportingPage();
     setupFinishPage();
+    setValid(m_srcConnPageItem, false);
     
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+    //! @todo Change this to message prompt when we move to non-dialog wizard.
+    connect(m_srcConnSel, SIGNAL(connectionSelected(bool)), this, SLOT(slotConnPageItemSelected(bool)));
 }
 
 
@@ -586,4 +589,9 @@ bool ImportTableWizard::doImport()
     project->addStoredItem(part->info(), partItemForSavedTable);
     
     return true;
+}
+
+void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
+{
+    setValid(m_srcConnPageItem, isSelected);
 }

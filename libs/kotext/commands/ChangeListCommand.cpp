@@ -28,7 +28,7 @@
 #include <KLocale>
 #include <KDebug>
 
-#define MARGIN_DEFAULT 10 // we consider it the default value
+#define MARGIN_DEFAULT 18 // we consider it the default value
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties,
                                      KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
@@ -48,36 +48,31 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
     if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         style = KoListStyle::None;
 
-    int margin=MARGIN_DEFAULT;
-
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setStyle(style);
+        llp.setListItemPrefix(levelProperties.listItemPrefix());
+        llp.setListItemSuffix(levelProperties.listItemSuffix());
+
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-            llp.setListItemSuffix(".");
+            if (llp.listItemSuffix().isEmpty()) {
+                llp.setListItemSuffix(".");
+            }
         }
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setBulletCharacter(levelProperties.bulletCharacter());
         }
-        else {
-            llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
-        }
 
-        if(m_alignmentMode) {
-            llp.setAlignmentMode(true); // when creating a new list we create it in this mode
-            llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setAlignmentMode(true); // when creating a new list we create it in this mode
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
 
-            llp.setTabStopPosition(margin*(lev+2));
-            llp.setMargin(margin*(lev+1));
-            llp.setTextIndent(margin);
-        }
-
-        if (lev > 1)
-            llp.setIndent((lev-1) * 20); // make this configurable
+        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
+        llp.setMargin(MARGIN_DEFAULT*(lev+2));
+        llp.setTextIndent(- MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
     }

@@ -263,15 +263,16 @@ bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
         args = KRun::processDesktopExec( *service, files );
     } else {
         KUrl::List list;
-        KOpenWithDialog dlg( list, i18n("Edit with:"), QString(), 0 );
-        if ( dlg.exec() == QDialog::Accepted ){
-            args << dlg.text();
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog( list, i18n("Edit with:"), QString(), 0 );
+        if ( dlg->exec() == QDialog::Accepted && dlg ){
+            args << dlg->text();
         }
         if ( args.isEmpty() ) {
             kDebug()<<"No executable selected";
             return false;
         }
         args << url.url();
+        delete dlg;
     }
     kDebug()<<args;
     m_process = new KProcess();

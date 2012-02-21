@@ -2033,6 +2033,8 @@ public:
 
     bool enable_slotPropertyEditorVisibilityChanged;
 
+    KexiUserFeedbackAgent userFeedback;
+
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;
@@ -2041,8 +2043,6 @@ private:
     //todo(threads) QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts
 #endif
     KexiFindDialog *m_findDialog;
-    
-    KexiUserFeedbackAgent userFeedback;
 };
 
 #endif

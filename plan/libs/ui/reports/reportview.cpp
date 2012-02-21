@@ -674,8 +674,11 @@ void ReportDesignDialog::slotButtonClicked( int button )
 
 void ReportDesignDialog::slotSaveToFile()
 {
-    KFileDialog *dialog = new KFileDialog(KUrl(), QString(), this);
+    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), QString(), this);
     dialog->exec();
+    if ( ! dialog ) {
+        return;
+    }
     KUrl url(dialog->selectedUrl());
     delete dialog;
 

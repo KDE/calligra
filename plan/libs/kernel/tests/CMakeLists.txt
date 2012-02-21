@@ -56,7 +56,7 @@ set(ResourceTester_SRCS ResourceTester.cpp )
 kde4_add_unit_test(ResourceTester TESTNAME Plan-ResourceTester ${ResourceTester_SRCS})
  
 target_link_libraries(ResourceTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
-target_link_libraries(ResourceTester kundo2)
+target_link_libraries(ResourceTester kundo2 koodf)
 
 ########### next target ###############
 
