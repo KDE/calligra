@@ -28,6 +28,7 @@
 #include <QImage>
 #include <QTransform>
 #include <QTextBlockUserData>
+#include <KoElementReference.h>
 
 class KoShape;
 class KoXmlWriter;
@@ -150,7 +151,7 @@ public:
      *
      * @return the draw id for the shape or and empty string if it was not found
      */
-    QString drawId(const KoShape *shape, bool insert = true);
+    KoElementReference drawId(const KoShape *shape, bool insert = true);
 
     /**
      * @brief Clear out all given draw ids
@@ -172,7 +173,7 @@ public:
      *
      * @return the sub-item id for the sub-item or and empty string if it was not found
      */
-    QString subId(const QTextBlockUserData *subItem, bool insert = true);
+    KoElementReference subId(const QTextBlockUserData *subItem, bool insert = true);
 
     /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec

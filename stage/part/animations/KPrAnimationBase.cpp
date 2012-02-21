@@ -20,13 +20,16 @@
 #include "KPrAnimationBase.h"
 
 #include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextBlockData.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoElementReference.h>
+
 #include "KPrDurationParser.h"
-#include "KoXmlReader.h"
-#include "KoXmlWriter.h"
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
-#include "KoShapeLoadingContext.h"
-#include "KoTextBlockData.h"
+
 
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
@@ -82,11 +85,11 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
     writer.addAttribute("smil:dur", KPrDurationParser::msToString(m_duration));
     if (m_shapeAnimation->textBlockData()) {
-        writer.addAttribute("smil:targetElement", paContext.subId(m_shapeAnimation->textBlockData(), false));
+        writer.addAttribute("smil:targetElement", paContext.subId(m_shapeAnimation->textBlockData(), false).toString());
         writer.addAttribute("anim:sub-item", "text");
     }
     else {
-        writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false));
+        writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false).toString());
     }
     return true;
 }

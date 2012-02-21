@@ -19,6 +19,9 @@
 
 #include "KoTextWriter_p.h"
 
+
+#include <KoElementReference.h>
+
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
@@ -633,8 +636,6 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
 
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
-
-
     QTextCursor cursor(block);
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
@@ -678,13 +679,16 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
+    KoElementReference xmlid;
+    xmlid.invalidate();
+
     if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
         if (blockData->saveXmlID()) {
             // text:id is deprecated. if present, it must have the same value as
             // xml:id. We only save the id's if the textblockdata is used for
             // animation.
-            writer->addAttribute("xml:id", context.subId(blockData));
-            writer->addAttribute("text:id", context.subId(blockData));
+            xmlid = context.subId(blockData);
+            xmlid.saveOdf(writer, KoElementReference::TEXTID);
         }
     }
 
@@ -714,8 +718,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     QTextBlock::iterator it;
     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(blockCharFormat)) {
         // Write xml:id here for Rdf
-        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-        inlineRdf->saveOdf(context, writer);
+        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId() << "active xml id" << xmlid.toString();
+        inlineRdf->saveOdf(context, writer, xmlid);
     }
 
     QString previousFragmentLink;

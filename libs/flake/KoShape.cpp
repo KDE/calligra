@@ -1749,8 +1749,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            context.xmlWriter().addAttribute("draw:id", context.drawId(this));
-            context.xmlWriter().addAttribute("xml:id", context.drawId(this));
+            KoElementReference ref = context.drawId(this);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DRAWID);
         }
     }
 
