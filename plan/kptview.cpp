@@ -71,6 +71,7 @@
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
+#include <KoProgressUpdater.h>
 
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
@@ -257,21 +258,6 @@ View::View( Part* part, QWidget* parent )
 
     // Add sub views
     createWelcomeView();
-    createViews();
-
-    connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
-    // after createViews() !!
-    connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
-    // after createViews() !!
-    connect( m_viewlist, SIGNAL( viewListItemInserted(ViewListItem*, ViewListItem*, int) ), SLOT( slotViewListItemInserted(ViewListItem*, ViewListItem*, int) ) );
-
-    if ( docker ) {
-        // after createViews() !!
-        connect( m_viewlist, SIGNAL(modified()), docker, SLOT(slotModified()));
-        connect( m_viewlist, SIGNAL(modified()), part, SLOT(viewlistModified()));
-        connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
-    }
-    connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
     // The menu items
     // ------ File
@@ -408,11 +394,15 @@ View::View( Part* part, QWidget* parent )
 
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
-    loadContext();
 
     connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
-    //kDebug()<<" end";
+
+    // hide unused dockers
     QTimer::singleShot( 0, this, SLOT( hideToolDocker() ) );
+    // create views after dockers hidden, views take time for large projects
+    QTimer::singleShot( 100, this, SLOT( initiateViews() ) );
+
+    //kDebug()<<" end";
 }
 
 View::~View()
@@ -446,6 +436,31 @@ void View::hideToolDocker()
             }
         }
     }
+}
+
+void View::initiateViews()
+{
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    createViews();
+
+    connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
+    // after createViews() !!
+    connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
+    // after createViews() !!
+    connect( m_viewlist, SIGNAL( viewListItemInserted(ViewListItem*, ViewListItem*, int) ), SLOT( slotViewListItemInserted(ViewListItem*, ViewListItem*, int) ) );
+
+    QDockWidget *docker = qobject_cast<QDockWidget*>( m_viewlist->parent() );
+    if ( docker ) {
+        // after createViews() !!
+        connect( m_viewlist, SIGNAL(modified()), docker, SLOT(slotModified()));
+        connect( m_viewlist, SIGNAL(modified()), getPart(), SLOT(viewlistModified()));
+        connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
+    }
+    connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
+
+    loadContext();
+
+    QApplication::restoreOverrideCursor();
 }
 
 void View::slotCreateTemplate()
@@ -2022,13 +2037,14 @@ long View::activeScheduleId() const
     return s == 0 ? -1 : s->id();
 }
 
-void View::setActiveSchedule( long id ) const
+void View::setActiveSchedule( long id )
 {
     if ( id != -1 ) {
         QMap<QAction*, Schedule*>::const_iterator it = m_scheduleActions.constBegin();
         for (; it != m_scheduleActions.constEnd(); ++it ) {
             if ( it.value()->id() == id ) {
                 it.key()->setChecked( true );
+                slotViewSchedule( it.key() ); // signal not emitted from group, so trigger it here
                 break;
             }
         }

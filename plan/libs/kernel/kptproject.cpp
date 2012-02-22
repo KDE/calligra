@@ -874,6 +874,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     if ( !s.isEmpty() )
         m_constraintEndTime = DateTime::fromString( s, m_spec );
 
+    status.setProgress( 10 );
+
     // Load the project children
     // Do calendars first, they only refrence other calendars
     //kDebug()<<"Calendars--->";
@@ -939,6 +941,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         kError()<<"All calendars not saved!";
     }
     //kDebug()<<"Calendars<---";
+
+    status.setProgress( 15 );
+
     // Resource groups and resources, can reference calendars
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -958,6 +963,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
+
+    status.setProgress( 20 );
+
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -992,6 +1000,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
+
+    status.setProgress( 70 );
+
     // These go last
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1101,6 +1112,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
     }
     //kDebug()<<"<---";
+
+    status.setProgress( 90 );
+
     return true;
 }
 

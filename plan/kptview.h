@@ -155,7 +155,7 @@ public:
 
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
-    void setActiveSchedule( long id ) const;
+    void setActiveSchedule( long id );
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
@@ -351,6 +351,7 @@ private slots:
     void slotRemoveCommands();
 
     void hideToolDocker();
+    void initiateViews();
 
 private:
     void createViews();
