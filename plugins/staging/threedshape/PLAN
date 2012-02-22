@@ -21,7 +21,7 @@
        - rotate object
 
  * Save the 3D scene
-    + Save Scene attributes
+    + Save Scene attributes                             Done
     + Save Lightsources                                 Done
     + Save Objects
        - sphere
@@ -32,8 +32,13 @@
 ---------------- Milestone 2: Load/Store/Save ----------------
 
  * Paint
-    + Paint just a frame around the shape.
+    + Paint just a frame around the shape.              Done
     + Connect to SiPP and create a SiPP scene
+       - View parameters
+       - sphere
+       - cube
+       - extrude
+       - rotate
     + Render into a QImage
 
  * SiPP

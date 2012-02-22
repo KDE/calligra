@@ -144,7 +144,40 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement)
 void Scene::saveOdf(KoXmlWriter &writer) const
 {
     // 1. Write scene attributes
-    // FIXME
+    // Camera attributes
+    writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(m_vrp.x())
+                        .arg(m_vrp.y()).arg(m_vrp.z()));
+    writer.addAttribute("dr3d:vpn", QString("(%1 %2 %3)").arg(m_vpn.x())
+                        .arg(m_vpn.y()).arg(m_vpn.z()));
+    writer.addAttribute("dr3d:vup", QString("(%1 %2 %3)").arg(m_vup.x())
+                        .arg(m_vup.y()).arg(m_vup.z()));
+
+    writer.addAttribute("dr3d:projection", (m_projection == Parallel) ? "parallel" : "perspective");
+
+    writer.addAttribute("dr3d:distance",     m_distance);
+    writer.addAttribute("dr3d:focal-length", m_focalLength);
+    writer.addAttribute("dr3d:shadow-slant", m_shadowSlant);
+
+    // Rendering attributes
+    writer.addAttribute("dr3d:ambient-color", m_ambientColor.name());
+    switch (m_shadeMode) {
+    case Flat:
+        writer.addAttribute("dr3d:shade-mode", "flat");
+        break;
+    case Phong:
+        writer.addAttribute("dr3d:shade-mode", "phong");
+        break;
+    case Draft:
+        writer.addAttribute("dr3d:shade-mode", "draft");
+        break;
+    case Gouraud:
+    default:
+        writer.addAttribute("dr3d:shade-mode", "gouraud");
+        break;
+    }
+
+    writer.addAttribute("dr3d:lighting-mode", m_lightingMode);
+    writer.addAttribute("dr3d:transform",     m_transform);
 
     // 2. Write scene objects
 
