@@ -191,9 +191,9 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
                                "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">") << endl;
 
     svgStream << QLatin1String("<svg xmlns=\"http://www.w3.org/2000/svg\" "
-                                "xmlns:xlink=\"http://www.w3.org/1999/xlink\""
-                                " width=\"") << /*textObject->width()*/10 << QLatin1String("pt\""
-                                " height=\"") << /*textObject->height()*/10 << QLatin1String("pt\">") << endl;
+                                "xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
+                                /*" width=\"") << textObject->width() << QLatin1String("pt\""
+                                " height=\"") << textObject->height() << QLatin1String("pt\">"*/) << endl;
 
     svgStream << QLatin1String("<text transform=\"scale(1 -1)\"");
 
@@ -229,10 +229,19 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
             svgStream << QLatin1String(" text-anchor=\"") << anchor << QLatin1Char('\"');
         }
     }
-    svgStream << QLatin1String("><tspan>")<<Qt::escape(textObject->text()) << QLatin1String("</tspan></text>");
+    svgStream << QLatin1Char('>') << endl;
 
-    // end tag:
-    svgStream << endl << QLatin1String("</svg>") << endl;
+    const QStringList textLines = textObject->text().split( QLatin1String("\x0D\x0A") );
+    double y = 0.0;
+    for( int i = 0; i < textLines.count(); ++i )
+    {
+        svgStream << QLatin1String("<tspan x=\"0pt\" y=\"") << QString::number(y) << ("pt\">")
+                  << Qt::escape(textLines.at(i)) << QLatin1String("</tspan>") << endl;
+
+        y += odfLength( fontSize );
+    }
+
+    svgStream << endl << QLatin1String("</text></svg>") << endl;
 }
 
 void
