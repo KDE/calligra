@@ -426,6 +426,8 @@ CdrOdgWriter::writeObject( const CdrAbstractObject* object )
         writeEllipseObject( static_cast<const CdrEllipseObject*>(object) );
     else if( typeId == GraphicTextObjectId )
         writeGraphicTextObject( static_cast<const CdrGraphicTextObject*>(object) );
+    else if( typeId == BlockTextObjectId )
+        writeBlockTextObject( static_cast<const CdrBlockTextObject*>(object) );
     else if( typeId == GroupObjectId )
         writeGroupObject( static_cast<const CdrGroupObject*>(object) );
 }
@@ -435,7 +437,7 @@ CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
 
-    writeTransformation( groupObject->transformations(), NoGlobalTransformation );
+    writeTransformation( groupObject->transformations(), QString(), NoGlobalTransformation );
 //     set2DGeometry(mBodyWriter, objectElement);
 //     mBodyWriter->addAttribute("draw:style-name", createGraphicStyle(objectElement));
 
@@ -587,17 +589,20 @@ CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 void
 CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* object )
 {
+    const CdrBlockText* blockText = mDocument->blockTextForObject( object->objectId() );
+    if( blockText == 0 )
+        return; // TODO: rather check on parsing
+
     mBodyWriter->startElement("draw:frame");
     mBodyWriter->addAttribute("draw:layer", mLayerId );
-    writeTransformation( object->transformations() );
+    writeTransformation( object->transformations(), QLatin1String("scale(1 -1)") );
 //     mBodyWriter->addAttribute( "draw:style-name", blockTextStyle );
 
     mBodyWriter->startElement("draw:text-box");
 
     //export every paragraph
-//     foreach( const CdrParagraph* paragraph, paragraphs )
-//         writeParagraph( paragraph );
-//     }
+    foreach( const CdrParagraph* paragraph, blockText->paragraphs() )
+        writeParagraph( paragraph );
 
     mBodyWriter->endElement();//draw:text-box
     mBodyWriter->endElement();//draw:frame
@@ -621,7 +626,7 @@ CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph )
         mBodyWriter->startElement( "text:span" );
 
         mBodyWriter->addAttribute( "text:style-name", textStyleName );
-//         mBodyWriter->addTextNode( text );
+        mBodyWriter->addTextNode( paragraph->text() );
 
         mBodyWriter->endElement();//text:span
 
@@ -708,12 +713,13 @@ appendTranslation( QString& transformationString,
 
 void
 CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
+                                   const QString& baseTransformationString,
                                    GlobalTransformationMode transformationMode )
 {
     QLocale cLocale(QLocale::c());
     cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
 
-    QString transformationString;
+    QString transformationString = baseTransformationString;
     foreach( const CdrAbstractTransformation* transformation, transformations )
     {
         const CdrNormalTransformation* normalTrafo =

@@ -166,19 +166,19 @@ class CdrGraphObject : public CdrAbstractObject
 {
 protected:
     explicit CdrGraphObject(CdrObjectTypeId id)
-    : CdrAbstractObject( id ), mStyleId(0), mOutlineId(0), mFillId(0) {}
+    : CdrAbstractObject( id ), mStyleId(-1), mOutlineId(-1), mFillId(-1) {}
 public:
-    void setStyleId( quint32 styleId ) { mStyleId = styleId; }
-    void setOutlineId( quint32 outlineId ) { mOutlineId = outlineId; }
-    void setFillId( quint32 fillId ) { mFillId = fillId; }
+    void setStyleId( qint32 styleId ) { mStyleId = styleId; }
+    void setOutlineId( qint32 outlineId ) { mOutlineId = outlineId; }
+    void setFillId( qint32 fillId ) { mFillId = fillId; }
 public:
-    quint16 styleId() const { return mStyleId; }
-    quint32 outlineId() const { return mOutlineId; }
-    quint32 fillId() const { return mFillId; }
+    qint16 styleId() const { return mStyleId; }
+    qint32 outlineId() const { return mOutlineId; }
+    qint32 fillId() const { return mFillId; }
 private:
-    quint16 mStyleId; // TODO: make sure that 0 is never an id
-    quint32 mOutlineId; // TODO: make sure that 0 is never an id
-    quint32 mFillId; // TODO: make sure that 0 is never an id
+    qint16 mStyleId;
+    qint32 mOutlineId;
+    qint32 mFillId;
 };
 
 class CdrRectangleObject : public CdrGraphObject
@@ -289,7 +289,7 @@ private:
 class CdrStyle
 {
 public:
-    CdrStyle() : mBaseStyle(0), mFontId(0), mFontSize(0), mTextAlignment(CdrTextAlignmentUnknown) {}
+    CdrStyle() : mBaseStyle(0), mFontId(-1), mFontSize(0), mTextAlignment(CdrTextAlignmentUnknown) {}
 public:
     void setBaseStyle( const CdrStyle* baseStyle ) { mBaseStyle = baseStyle; }
     void setTitle( const QString& title ) { mTitle = title; }
@@ -301,8 +301,8 @@ public:
 
     const QString& title() const { return mTitle; }
 
-    quint16 fontId() const
-    { return (mFontId!=0) ? mFontId : mBaseStyle ? mBaseStyle->fontId() : 0; }
+    qint32 fontId() const
+    { return (mFontId!=-1) ? mFontId : mBaseStyle ? mBaseStyle->fontId() : -1; }
     quint16 fontSize() const
     { return (mFontSize!=0) ? mFontSize : mBaseStyle ? mBaseStyle->fontSize() : 18; }
     CdrTextAlignment textAlignment() const
@@ -313,7 +313,7 @@ public:
     }
 private:
     const CdrStyle* mBaseStyle;
-    quint16 mFontId;
+    qint32 mFontId;
     quint16 mFontSize;
     CdrTextAlignment mTextAlignment;
     QString mTitle;
@@ -382,6 +382,8 @@ private:
     QString mName;
 };
 
+typedef QHash<quint16,quint16> CdrBlockTextLinkTable;
+
 class CdrDocument
 {
 public:
@@ -396,29 +398,32 @@ public:
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
     void setStyleSheetFileName( const QString& styleSheetFileName ) { mStyleSheetFileName = styleSheetFileName; }
+    void setBlockTextLinkTable( const CdrBlockTextLinkTable& blockTextLinkTable ) { mBlockTextLinkTable = blockTextLinkTable; }
 public:
     quint16 fullVersion() const { return mFullVersion; }
     quint16 width() const { return mWidth; }
     quint16 height() const { return mHeight; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QString& styleSheetFileName() const { return mStyleSheetFileName; }
-    CdrStyle* style( quint16 id ) { return mStyleTable.value(id); }
-    CdrOutline* outline( quint32 id ) { return mOutlineTable.value(id); }
-    CdrAbstractFill* fill( quint32 id ) { return mFillTable.value(id); }
+    CdrStyle* style( qint32 id ) { return mStyleTable.value(id); }
+    CdrOutline* outline( qint32 id ) { return mOutlineTable.value(id); }
+    CdrAbstractFill* fill( qint32 id ) { return mFillTable.value(id); }
     CdrFont* font( quint16 id ) { return mFontTable.value(id); }
     CdrBlockText* blockText( quint16 id ) { return mBlockTextTable.value(id); }
+    CdrBlockText* blockTextForObject( quint16 id );
 private:
     quint16 mFullVersion;
     quint16 mWidth;
     quint16 mHeight;
     QString mStyleSheetFileName;
 
-    QHash<quint16, CdrStyle*> mStyleTable;
-    QHash<quint32, CdrOutline*> mOutlineTable;
-    QHash<quint32, CdrAbstractFill*> mFillTable;
+    QHash<qint32, CdrStyle*> mStyleTable;
+    QHash<qint32, CdrOutline*> mOutlineTable;
+    QHash<qint32, CdrAbstractFill*> mFillTable;
     QHash<quint16, CdrFont*> mFontTable;
     QHash<quint16, CdrBlockText*> mBlockTextTable;
     QVector<CdrPage*> mPages;
+    CdrBlockTextLinkTable mBlockTextLinkTable;
 };
 
 #endif

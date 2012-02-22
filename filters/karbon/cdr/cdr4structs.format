@@ -12,7 +12,7 @@
       <description>4-byte unsigned integer is used to reference a fill in the fill table.</description>
     </type>
     <type name="Cdr4StyleIndex" original="uint16">
-      <description>2-byte unsigned integer is used to reference a style in the style table.</description>
+      <description>2-byte unsigned integer is used to reference a style in the style table. 0 is a valid value.</description>
     </type>
     <type name="Cdr4FontIndex" original="uint16">
       <description>2-byte unsigned integer is used to reference a font in the font table.</description>
@@ -333,11 +333,20 @@ size |count|aps  | ap1 |apl  |?????|
     </record>
 <!-- 20 bytes
 (all 00)
-1 49 194 1 33 00000000000000000000
-0 58 333 1 31 00000000000000000000
+0  0   0 0  0 00000000000000000000 Default Paragraph Text
+0 88   0 1  0 00000000000000000000 substyle of above Default Paragraph Text (88: "AvantGarde Bk BT")
+0 88 333 1 31 00000000000000000000 substyle of above Default Paragraph Text (88: "AvantGarde Bk BT")
+1 49 194 1 33 00000000000000000000 with Bullet*            (49: "CommonBullets")
+0 88 333 1  0 00000000000000000000 Default Paragraph Text  (88: "AvantGarde Bk BT")
+0 58 333 1 31 00000000000000000000 with Überschrift, Text  (58: n.e.)
 -->
     <record name="CdrStyle230ArgumentData" size="20">
+      <!-- seen 0,1: 1 for Bullet styles, 0 for all other -->
       <field start="0" end="1" name="_unknown0" type="sint16" />
+<!--
+seen 11,49,58,88
+11,49 matches font id of font "CommonBullets", but 58 not seen, garbage data with _unknown0=0?
+-->
       <field start="2" end="3" name="_unknown1" type="sint16" />
       <!-- seen 194 (~14pt), 333 (~18pt), could be some font size -->
       <field start="4" end="5" name="_unknown2" type="sint16" />
@@ -1128,7 +1137,18 @@ garbage data? undo data?
       <field start="8" end="9" name="_unknown1" type="sint16" />
       <extension start="10" />
     </record>
+  </records>
 
+  <enums>
+    <enum name="CdrLinkType">
+      <item name="CdrUnknown16LinkId" value="16" />
+      <item name="CdrTextPathLinkId" value="64" />
+      <item name="CdrCloneLinkId" value="80" />
+      <item name="CdrBlockTextLinkId" value="97" />
+    </enum>
+  </enums>
+
+  <records>
 <!--
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 02 00 15 01 00 00
 02 is block text id, 277 id of block text object
@@ -1150,17 +1170,17 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
              |     |     |     |     |     |     |     |     |     |
 -->
     <record name="LnkData" size="18" sizeExtended="true">
-      <!-- seen 16,80,97 -->
-      <field start="0" end="1"  name="type" type="uint16" />
+      <!-- seen 16,64,80,97 -->
+      <field start="0" end="1"  name="type" type="uint16" value="CdrLinkType" />
       <!-- seen 0,1,2 -->
       <field start="2" end="3"  name="dataSize" type="uint16">
           <description>The number of whatever 16-bit data is attached.</description>
       </field>
       <field start="4" end="5"  name="_unknown2" type="Cdr4ObjectSpndIndex">
-          <description>With mType=80 the spnd of the object copy?</description>
+          <description>With type=80 the spnd of the object copy?</description>
       </field>
       <field start="6" end="7"  name="_unknown3" type="Cdr4ObjectSpndIndex">
-          <description>With mType=80 the spnd of the original object?</description>
+          <description>With type=80 the spnd of the original object?</description>
       </field>
       <!-- seen 0 -->
       <field start="8" end="9"  name="_unknown4" type="uint16" />
@@ -1168,10 +1188,12 @@ sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
       <field start="10" end="11"  name="_unknown5" type="uint16" />
       <!-- seen 0 -->
       <field start="12" end="13"  name="_unknown6" type="uint16" />
-      <!-- seen 1,2,4 -->
-      <field start="14" end="15"  name="_unknown7" type="uint16" />
-      <!-- seen 30,57,194 -->
-      <field start="16" end="17"  name="_unknown8" type="uint16" />
+      <field start="14" end="15"  name="blockTextIndex" type="uint16">
+          <description>With type=97 the id of the block text?</description>
+      </field>
+      <field start="16" end="17"  name="blockTextObjectIndex" type="uint16">
+          <description>With type=97 the spnd of the block text object?</description>
+      </field>
       <dynarray start="18" name="data" type="uint16" length="dataSize">
           <description>some 16-bit data, number seems defined by mDataSize</description>
       </dynarray>

@@ -20,6 +20,15 @@
 
 #include "cdrdocument.h"
 
+CdrBlockText*
+CdrDocument::blockTextForObject( quint16 id )
+{
+    const CdrBlockTextLinkTable::ConstIterator it = mBlockTextLinkTable.find( id );
+
+    return ( it != mBlockTextLinkTable.constEnd() ) ?
+        mBlockTextTable.value( it.value() ) : 0;
+}
+
 CdrDocument::~CdrDocument()
 {
     qDeleteAll( mPages );

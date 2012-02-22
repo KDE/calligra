@@ -295,6 +295,8 @@ qDebug() << fontData.fontIndex() << font->name();
 void
 CdrParser::readDocLnkTable()
 {
+    CdrBlockTextLinkTable blockTextLinkTable;
+
     const QByteArray lnkTableChunk = mRiffStreamReader.chunkData();
     const CdrLnkTableChunkData& lnkTableData = dataRef<CdrLnkTableChunkData>( lnkTableChunk );
 
@@ -302,13 +304,19 @@ qDebug() << "Reading LnkTable" << lnkTableData.arguments().count() << "args";
     for (int i=0; i < lnkTableData.arguments().count(); i++)
     {
         const LnkData& lnkData = lnkTableData.arguments().argRef<LnkData>(i);
+        if( lnkData.type() == CdrBlockTextLinkId )
+            blockTextLinkTable.insert( lnkData.blockTextObjectIndex(), lnkData.blockTextIndex() );
 qDebug() << i << ": type:" << lnkData.type() << "ed size:" << lnkData.dataSize()<<"other:"
                     << lnkData._unknown2()
                     << lnkData._unknown3() << lnkData._unknown4() << lnkData._unknown5()
-                    << lnkData._unknown6() << lnkData._unknown7() << lnkData._unknown8();
+                    << lnkData._unknown6()
+                    << "block text id:" << lnkData.blockTextIndex()
+                    << "block text object id:"<< lnkData.blockTextObjectIndex();
         for(int j=0; j<lnkData.dataSize(); ++j)
 qDebug() << "    "<<j<<":"<<lnkData.data(j);
     }
+
+    mDocument->setBlockTextLinkTable( blockTextLinkTable );
 }
 
 void
@@ -514,7 +522,7 @@ qDebug() << "Reading Styles...";
                 };
 
                 const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
-                const bool isAlignmentTypeKnown = ( (CdrStyleTextUnknown0Alignment <= data.type()) &&
+                const bool isAlignmentTypeKnown = ( /*(CdrStyleTextUnknown0Alignment <= data.type()) &&*/
                                                     (data.type() <= CdrStyleTextUnknown4Alignment) );
                 if( isAlignmentTypeKnown )
                     style->setTextAlignment( alignData[data.type()].id );

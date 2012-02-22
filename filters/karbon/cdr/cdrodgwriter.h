@@ -87,6 +87,7 @@ private:
 
     void writeCornerPoint( CdrPoint cornerPoint );
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
+                              const QString& baseTransformationString = QString(),
                               GlobalTransformationMode transformationMode = DoGlobalTransformation );
 
 private:
