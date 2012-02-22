@@ -54,7 +54,8 @@
 class ScrollArea : public QScrollArea
 {
 public:
-    ScrollArea() {
+    ScrollArea(QWidget *parent = 0) : QScrollArea(parent)
+    {
         setFrameShape(QFrame::NoFrame);
         setBackgroundRole(QPalette::Base);
         setWidgetResizable(true);
@@ -440,7 +441,7 @@ public:
             else {
                 kWarning() << alignToWidgetName << "not found!";
             }
-            msgWidget->setCalloutPointerPosition(p);
+            msgWidget->setCalloutPointerPosition(p, alignToWidget);
     }
 
     //! Shows message widget taking maximum space within the welcome page
@@ -474,7 +475,6 @@ public:
         msgWidget
             = new KexiContextMessageWidget(q->parentWidget()->parentWidget(), 0, 0, msg);
         msgWidget->setCalloutPointerDirection(KMessageWidget::Right);
-        setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
         msgWidget->setMessageType(KMessageWidget::Information);
         msgWidget->setCloseButtonVisible(true);
         int offset_y = 0;
@@ -486,6 +486,8 @@ public:
             kWarning() << alignToWidgetName << "not found!";
         }
         msgWidget->resize(msgWidth, q->parentWidget()->height() - offset_y);
+        setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
+        msgWidget->setResizeTrackingPolicy(Qt::Horizontal | Qt::Vertical);
         statusScrollArea->setEnabled(false);
         // async show to for speed up
         if (slotToCallAfterShow) {
@@ -494,17 +496,6 @@ public:
         }
         QObject::connect(msgWidget, SIGNAL(animatedHideFinished()),
                          q, SLOT(slotMessageWidgetClosed()));
-    }
-
-    void fixBacktroundBrushInMessageWidget()
-    {
-        foreach (QWidget* w, msgWidget->findChildren<QWidget*>()) {
-            QPalette pal(w->palette());
-            pal.setBrush(QPalette::Base, msgWidget->backgroundBrush());
-            pal.setBrush(QPalette::Window, msgWidget->backgroundBrush());
-            pal.setBrush(QPalette::Button, msgWidget->backgroundBrush());
-            w->setPalette(pal);
-        }
     }
 
     ScrollArea *statusScrollArea;
@@ -562,7 +553,7 @@ void KexiWelcomeStatusBar::init()
         ).arg(title).arg(d->userProgressBar.value());
 #endif
 
-    d->statusScrollArea = new ScrollArea;
+    d->statusScrollArea = new ScrollArea(this);
     d->lyr->addWidget(d->statusScrollArea);
 
     d->updateStatusWidget();
@@ -613,7 +604,7 @@ void KexiWelcomeStatusBar::slotShowContributionHelpContents()
 {
     QWidget *helpWidget = d->loadGui("contribution_help.ui");
     d->contributionHelpLayout->addWidget(helpWidget, 1, 1);
-    d->fixBacktroundBrushInMessageWidget();
+    d->msgWidget->setPaletteInherited();
 }
 
 void KexiWelcomeStatusBar::slotMessageWidgetClosed()
@@ -665,6 +656,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     d->setMessageWidgetCalloutPointerPosition(sender()->objectName());
     d->statusScrollArea->setEnabled(false);
     d->msgWidget->setMaximumWidth(parentWidget()->width() - width());
+    d->msgWidget->setResizeTrackingPolicy(Qt::Horizontal);
 
     /*foreach (QLabel *lbl, d->statusScrollArea->findChildren<QLabel*>()) {
         if (lbl->isEnabled()) {
@@ -750,11 +742,11 @@ void KexiWelcomeStatusBar::showContributionDetails()
 
     d->setProperty(d->contributionDetailsWidget, "label_where_is_info_sent", "visible", false);
     
-    ScrollArea *contributionDetailsArea = new ScrollArea;
+    ScrollArea *contributionDetailsArea = new ScrollArea(d->msgWidget);
     d->contributionDetailsLayout->addWidget(contributionDetailsArea, 1, 1);
     contributionDetailsArea->setWidget(d->contributionDetailsWidget);
     d->msgWidget->animatedShow();
-    d->fixBacktroundBrushInMessageWidget();
+    d->msgWidget->setPaletteInherited();
 }
 
 void KexiWelcomeStatusBar::updateContributionGroupCheckboxes()

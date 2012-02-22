@@ -103,6 +103,28 @@ public:
     //! Useful in modal mode.
     void setNextFocusWidget(QWidget *widget);
 
+    //! Sets global position for callout pointer
+    //! @overload KMessageWidget::setCalloutPointerPosition(const QPoint&)
+    //! Also sets tracked widget @a trackedWidget.
+    //! If the widget changes its local position, the pointer position
+    //! is moved by the same delta.
+    void setCalloutPointerPosition(const QPoint& globalPos,
+                                   QWidget *trackedWidget = 0);
+
+    //! Sets tracking policy for resize of the parent widget.
+    //! When parent is resized in any way, size of the message box
+    //! can be changed in one or two orientations. It is disabled by default
+    //! and does not affect position of the callout pointer.
+    //! Works only when tracked widget is set in setCalloutPointerPosition().
+    void setResizeTrackingPolicy(Qt::Orientations orientations);
+
+    //! @return tracking policy for resize of the parent widget.
+    Qt::Orientations resizeTrackingPolicy() const;
+
+    //! Sets palette of the contents widget inheriting the message palette (background).
+    //! Calling it is needed after delayed insering of the child contents widgets.
+    void setPaletteInherited();
+
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
