@@ -30,7 +30,9 @@
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-//#include <KoXmlWriter.h>
+#include <KoXmlWriter.h>
+#include <KoShape.h>
+#include <KoShapeSavingContext.h>
 
 // Shape
 #include "utils.h"
@@ -139,6 +141,18 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement)
     return true;
 }
 
-void Scene::saveOdf(KoXmlWriter &writer)
+void Scene::saveOdf(KoXmlWriter &writer) const
 {
+    // 1. Write scene attributes
+    // FIXME
+
+    // 2. Write scene objects
+
+    // 2.1 Light sources
+    foreach (const Lightsource &light, m_lights) {
+        light.saveOdf(writer);
+    }
+
+    // 2.2 Objects in the scene
+    // FIXME
 }

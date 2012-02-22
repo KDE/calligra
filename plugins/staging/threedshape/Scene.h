@@ -34,6 +34,7 @@
 #include "Lightsource.h"
 
 class KoXmlWriter;
+class KoShapeSavingContext;
 
 
 class Scene
@@ -55,7 +56,7 @@ public:
     ~Scene();
 
     bool loadOdf(const KoXmlElement &sceneElement);
-    void saveOdf(KoXmlWriter &writer);
+    void saveOdf(KoXmlWriter &writer) const;
 
     // getters
     QVector3D   vrp()          { return m_vrp;          }

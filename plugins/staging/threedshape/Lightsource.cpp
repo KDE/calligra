@@ -30,7 +30,7 @@
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-//#include <KoXmlWriter.h>
+#include <KoXmlWriter.h>
 
 // Shape
 #include "utils.h"
@@ -56,6 +56,15 @@ bool Lightsource::loadOdf(const KoXmlElement &lightElement)
     return true;
 }
 
-void Lightsource::saveOdf(KoXmlWriter &writer)
+void Lightsource::saveOdf(KoXmlWriter &writer) const
 {
+    writer.startElement("dr3d:light");
+
+    writer.addAttribute("dr3d:diffuse-color", m_diffuseColor.name());
+    writer.addAttribute("dr3d:direction", QString("(%1 %2 %3)").arg(m_direction.x())
+                        .arg(m_direction.y()).arg(m_direction.z()));
+    writer.addAttribute("dr3d:enabled", m_enabled);
+    writer.addAttribute("dr3d:specular", m_specular);
+
+    writer.endElement(); // dr3d:light
 }

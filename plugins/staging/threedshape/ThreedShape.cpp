@@ -92,6 +92,15 @@ void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
 
 void ThreedShape::saveOdf(KoShapeSavingContext &context) const
 {
+    KoXmlWriter &writer = context.xmlWriter();
+
+    writer.startElement("dr3d:scene");
+    saveOdfAttributes(context, OdfAllAttributes);
+
+    // Writes the attributes and children of the dr3d:scene element.
+    m_scene.saveOdf(writer);
+
+    writer.endElement(); // dr3d:scene
 }
 
 bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)

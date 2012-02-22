@@ -39,7 +39,7 @@ public:
     ~Lightsource();
 
     bool loadOdf(const KoXmlElement &lightElement);
-    void saveOdf(KoXmlWriter &writer);
+    void saveOdf(KoXmlWriter &writer) const;
 
     // getters
     QColor    diffuseColor() { return m_diffuseColor; }

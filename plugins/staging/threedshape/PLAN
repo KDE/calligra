@@ -21,9 +21,13 @@
        - rotate object
 
  * Save the 3D scene
-    - Save Scene
-    - Save Lightsources
-    - Save Objects
+    + Save Scene attributes
+    + Save Lightsources                                 Done
+    + Save Objects
+       - sphere
+       - cube
+       - extrude
+       - rotate
 
 ---------------- Milestone 2: Load/Store/Save ----------------
 
