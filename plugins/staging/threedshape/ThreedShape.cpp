@@ -164,24 +164,9 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     forEachElement(elem, sceneElement) {
 
         if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
-#if 0
-            // Attributes:
-            // dr3d:diffuse-color
-            // dr3d:direction
-            // dr3d:enabled
-            // dr3d:specular
-            QString diffuseColor = elem.attributeNS(KoXmlNS::dr3d, "diffuse-color", "");
-            QString direction    = elem.attributeNS(KoXmlNS::dr3d, "direction", "");
-            QString enabled      = elem.attributeNS(KoXmlNS::dr3d, "enabled", "");
-            QString specular     = elem.attributeNS(KoXmlNS::dr3d, "specular", "");
-            kDebug(31000) << "  Light:" << diffuseColor << direction << enabled << specular;
-#else
             Lightsource  light(elem);
             kDebug(31000) << "  Light:" << light.diffuseColor() << light.direction()
                           << light.enabled() << light.specular();
-            QString foo("(0 1 1)");
-            kDebug(31000) << foo << foo.mid(1, foo.size() - 2);
-#endif
         }
         else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // FIXME: Recursive!
