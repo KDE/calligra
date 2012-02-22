@@ -20,9 +20,9 @@
 #ifndef KEXIUTILS_P_H
 #define KEXIUTILS_P_H
 
-#include <qtimer.h>
-#include <qapplication.h>
-#include <qdialog.h>
+#include <QTimer>
+#include <QApplication>
+#include <QDialog>
 
 /*! @internal */
 class DelayedCursorHandler : public QObject

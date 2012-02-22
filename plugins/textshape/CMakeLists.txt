@@ -64,9 +64,7 @@ SET ( textshape_SRCS
     dialogs/CharacterHighlighting.cpp
     dialogs/InsertCharacter.cpp
     dialogs/FontDia.cpp
-    dialogs/FontLayoutTab.cpp
     dialogs/FontDecorations.cpp
-    dialogs/FontTab.cpp
     dialogs/LanguageTab.cpp
     dialogs/FormattingPreview.cpp
     dialogs/StyleManagerWelcome.cpp
@@ -86,6 +84,7 @@ SET ( textshape_SRCS
     dialogs/TableOfContentsEntryDelegate.cpp
     dialogs/TableOfContentsEntryModel.cpp
     dialogs/TableOfContentsTemplate.cpp
+    dialogs/ListLevelChooser.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/TextCutCommand.cpp
@@ -123,7 +122,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
-    dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui

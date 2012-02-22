@@ -48,9 +48,9 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QGridLayout>
 
 
 K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)

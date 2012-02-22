@@ -19,7 +19,7 @@
 
 #include "kexiformeventhandler.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <klocale.h>

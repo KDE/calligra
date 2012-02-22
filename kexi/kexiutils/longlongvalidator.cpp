@@ -21,7 +21,7 @@
 
 #include "longlongvalidator.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 using namespace KexiUtils;
 

@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <quuid.h>
+#include <QUuid>
 
 #include "calligra_tables_limits.h"
 

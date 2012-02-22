@@ -35,8 +35,8 @@
 #include <KoXmlWriter.h>
 
 #include <QTime>
-#include <QtCore/QBuffer>
-#include <QtCore/qmath.h>
+#include <QBuffer>
+#include <qmath.h>
 
 //#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER

@@ -72,7 +72,7 @@ extern int qt_defaultDpiY();
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (m_startOfArea == 0) // We have not been layouted yet
+    if (m_startOfArea == 0 || m_endOfArea == 0) // We have not been layouted yet
         return;
 
     /*
@@ -398,7 +398,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
-
         if (! data->counterText().isEmpty()) {
             QFont font(data->labelFormat().font(), m_documentLayout->paintDevice());
 

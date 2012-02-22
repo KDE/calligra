@@ -16,8 +16,8 @@
 
 #include "kplatotj_export.h"
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 #include "FlagList.h"
 #include "CustomAttribute.h"
@@ -39,7 +39,7 @@ class KPLATOTJ_EXPORT CoreAttributes
 {
 public:
     CoreAttributes(Project* p, const QString& i, const QString& n,
-                   CoreAttributes* parent_, const QString& df = QString::null,
+                   CoreAttributes* parent_, const QString& df = QString(),
                    uint dl = 0);
     virtual ~CoreAttributes();
 

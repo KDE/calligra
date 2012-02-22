@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_TEST_VALUEFORMATTER
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace Calligra
 {

@@ -25,6 +25,7 @@
 #include "ustring.h"
 #include "sharedptr.h"
 #include "wv2_export.h"
+#include <QString>
 
 namespace wvWare
 {
@@ -67,6 +68,8 @@ namespace wvWare
     class ListInfo
     {
     public:
+        enum ListType {BulletType, NumberType, PictureType, DefaultType};
+
         ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& listInfoProvider );
 
         /**
@@ -164,6 +167,27 @@ namespace wvWare
          */
         void dump() const;
 
+	/**
+	 * Set the name of the bullet picture.
+	 */
+        void setBulletPictureName(const QString& name ) { m_picName = name; };
+
+        /**
+         * @return bullet picture name.
+         */
+        QString bulletPictureName() const { return m_picName; };
+
+        /**
+         * @return whether the size of the picture changes automatically to
+         * match the size of the text that follows the bullet
+         */
+        bool isBulletPictureAutoSize() const { return m_picAutoSize; };
+
+	/**
+	 * @return list type.
+	 */
+        ListType type() const { return m_type; };
+
     private:
         ListInfo& operator=( const ListInfo& rhs );
 
@@ -182,6 +206,9 @@ namespace wvWare
         S32 m_lsid;
         U16 m_space;
         U16 m_indent;
+        QString m_picName;
+        bool m_picAutoSize;
+        ListType m_type;
     };
 
 

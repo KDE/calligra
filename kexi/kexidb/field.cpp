@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <assert.h>
 

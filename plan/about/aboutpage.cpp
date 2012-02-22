@@ -20,9 +20,9 @@
 
 #include "kptproject.h"
 
-#include <QtCore/QTextCodec>
+#include <QTextCodec>
 #include <QApplication>
-#include <QtCore/QDir>
+#include <QDir>
 #include <QString>
 
 #include <kaboutdata.h>

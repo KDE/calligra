@@ -30,6 +30,8 @@
 #include <QTextCursor>
 #include <QFontMetricsF>
 #include <QFontDatabase>
+#include <QTextTableCell>
+#include <QTextTable>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -351,7 +353,7 @@ void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
     d->stylesPrivate = format.properties();
 }
 
-KoCharacterStyle *KoCharacterStyle::clone(QObject *parent)
+KoCharacterStyle *KoCharacterStyle::clone(QObject *parent) const
 {
     KoCharacterStyle *newStyle = new KoCharacterStyle(parent);
     newStyle->copyProperties(this);
@@ -371,6 +373,11 @@ void KoCharacterStyle::setDefaultStyle(KoCharacterStyle *defaultStyle)
 void KoCharacterStyle::setParentStyle(KoCharacterStyle *parent)
 {
     d->parentStyle = parent;
+}
+
+KoCharacterStyle *KoCharacterStyle::parentStyle() const
+{
+    return d->parentStyle;
 }
 
 QPen KoCharacterStyle::textOutline() const
@@ -490,9 +497,12 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat tcf = KoTableCellStyle::cleanCharFormat(block.charFormat());
-    QTextCharFormat cf = KoTextDocument(block.document()).frameCharFormat();
-    cf.merge(tcf);
+    QTextCharFormat cf = block.charFormat();
+
+    if (!cf.isTableCellFormat()) {
+        cf = KoTextDocument(block.document()).frameCharFormat();
+    }
+
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

@@ -28,7 +28,7 @@
 
 #include <QList>
 #include <QListIterator>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -869,6 +869,7 @@ Node *Node::siblingAfter() {
 Node *Node::childAfter(Node *node)
 {
     //kDebug();
+    Q_ASSERT( m_nodes.contains( node ) );
     int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);
@@ -1191,6 +1192,9 @@ void Node::setStartupCost(double cost)
 void Node::setStartupAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_startupAccount ) {
+        m_startupAccount->removeStartup( *this );
+    }
     m_startupAccount = acc;
     changed();
 }
@@ -1204,6 +1208,9 @@ void Node::setShutdownCost(double cost)
 void Node::setShutdownAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_shutdownAccount ) {
+        m_shutdownAccount->removeShutdown( *this );
+    }
     m_shutdownAccount = acc;
     changed();
 }
@@ -1211,6 +1218,9 @@ void Node::setShutdownAccount(Account *acc)
 void Node::setRunningAccount(Account *acc)
 {
     //kDebug()<<m_name<<"="<<acc;
+    if ( m_runningAccount ) {
+        m_runningAccount->removeRunning( *this );
+    }
     m_runningAccount = acc;
     changed();
 }

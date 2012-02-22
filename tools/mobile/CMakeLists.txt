@@ -59,7 +59,6 @@ set(CalligraMobileMocSrc_SRCS
     FoExternalEditor.h 
     #TODO re-add FoCellEditor.h 
     DigitalSignatureDialog.h
-    FoImageSelectionWidget.h
     ConfirmationDialog.h
     FileChooserDialog.h
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.h

@@ -36,6 +36,7 @@
 #include <QWidget>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
+#include <QPointer>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -372,7 +373,7 @@ void TaskWorkPackageView::slotSplitView()
 void TaskWorkPackageView::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( m_view, this );
     dlg->exec();
     delete dlg;
     saveContext();

@@ -377,7 +377,6 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
 
 void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
 {
-    qDebug() << "KoDocumentRdf::updateXmlIdReferences() m.size:" << m.size();
     Q_ASSERT(d->model);
 
     QList<Soprano::Statement> removeList;
@@ -981,7 +980,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                 = KoTextDocument(handler->document()).inlineTextObjectManager();
     Q_ASSERT(inlineObjectManager);
 
-    KoTextInlineRdf *inlineRdf;
+    KoTextInlineRdf *inlineRdf = 0;
 
     // find the bookmark-start or text:meta inline objects
     const QTextDocument *document = handler->document();

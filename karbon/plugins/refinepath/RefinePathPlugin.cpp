@@ -45,9 +45,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QHBoxLayout>
 
 K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
 K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))

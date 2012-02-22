@@ -17,7 +17,7 @@
 
 #include "kplatotj_export.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QMap>
 
 #include "VacationList.h"
@@ -84,7 +84,7 @@ public:
      */
     QString getId() const
     {
-        return projectIDs.isEmpty() ? QString::null : projectIDs.first();
+        return projectIDs.isEmpty() ? QString() : projectIDs.first();
     }
     /**
      * Returns the current project ID. If the project ID list is empty

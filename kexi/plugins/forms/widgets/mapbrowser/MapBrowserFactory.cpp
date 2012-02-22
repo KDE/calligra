@@ -93,3 +93,4 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
 K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
+

@@ -22,8 +22,8 @@
 #ifndef CAABSTRACTDOCUMENTHANDLER_H
 #define CAABSTRACTDOCUMENTHANDLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QStringList>
 
 class KoDocument;
 class QGraphicsItem;
@@ -34,6 +34,10 @@ class CADocumentController;
 class CAAbstractDocumentHandler : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString topToolbarSource READ topToolbarSource CONSTANT)
+    Q_PROPERTY(QString rightToolbarSource READ rightToolbarSource CONSTANT)
+    Q_PROPERTY(QString bottomToolbarSource READ bottomToolbarSource CONSTANT)
+    Q_PROPERTY(QString leftToolbarSource READ leftToolbarSource CONSTANT)
 
 public:
     explicit CAAbstractDocumentHandler (CADocumentController* documentController);
@@ -45,6 +49,11 @@ public:
 
     bool canOpenDocument (const QString& uri);
     KoCanvasBase* canvas() const;
+
+    virtual QString topToolbarSource() const;
+    virtual QString rightToolbarSource() const;
+    virtual QString bottomToolbarSource() const;
+    virtual QString leftToolbarSource() const;
 
 protected:
     class Private;

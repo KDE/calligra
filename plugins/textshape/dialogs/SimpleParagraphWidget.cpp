@@ -28,6 +28,8 @@
 #include "StylesCombo.h"
 #include "StylesModel.h"
 #include "StylesDelegate.h"
+#include "ListLevelChooser.h"
+#include "commands/ChangeListLevelCommand.h"
 
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
@@ -42,6 +44,9 @@
 
 #include <QTextLayout>
 #include <QFlags>
+#include <QMenu>
+#include <QWidgetAction>
+#include <QSignalMapper>
 
 #include <KDebug>
 
@@ -52,7 +57,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
           m_tool(tool),
           m_directionButtonState(Auto),
           m_thumbnailer(new KoStyleThumbnailer()),
-          m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
+          m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
+          m_mapper(new QSignalMapper(this))
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -70,6 +76,10 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
+
+    widget.moreOptions->setText("...");
+    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
+
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
     connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -79,15 +89,12 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
-    widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
     widget.bulletListButton->setNumColumns(3);
-    widget.numberedListButton->setNumColumns(3);
  
     fillListButtons();
     widget.bulletListButton->addSeparator();
 
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
-    connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
@@ -95,6 +102,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
+
+    connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(changeListLevel(int)));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -147,13 +156,31 @@ void SimpleParagraphWidget::fillListButtons()
 
             KoShapePaintingContext paintContext; //FIXME
             textShape.paintComponent(p, zoomHandler, paintContext);
-            if(KoListStyle::isNumberingStyle(item.style)) {
-                widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
-            } else {
-                widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
-            }
+            widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
         }
     }
+
+    widget.bulletListButton->addSeparator();
+
+    KAction *action = new KAction(i18n("Change List Level"),this);
+
+    //TODO: Uncomment the below line when the string freeze is over
+    //action->setToolTip(i18n("Change the level the list is at"));
+
+    QMenu *listLevelMenu = new QMenu();
+    const int levelIndent = 13;
+    for (int level = 0; level < 10; ++level) {
+        QWidgetAction *wa = new QWidgetAction(listLevelMenu);
+        ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
+        wa->setDefaultWidget(chooserWidget);
+        listLevelMenu->addAction(wa);
+        m_mapper->setMapping(wa,level + 1);
+        connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
+        connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    }
+
+    action->setMenu(listLevelMenu);
+    widget.bulletListButton->addAction(action);
 }
 
 void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
@@ -266,7 +293,10 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(id));
+    KoListLevelProperties llp;
+    llp.setStyle(static_cast<KoListStyle::Style>(id));
+    llp.setLevel(0);
+    m_tool->textEditor()->setListProperties(llp);
 }
 
 void SimpleParagraphWidget::styleSelected(int index)
@@ -283,6 +313,14 @@ void SimpleParagraphWidget::slotShowStyleManager(int index)
     int styleId = m_stylesModel->index(index).internalId();
     emit showStyleManager(styleId);
     emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::changeListLevel(int level)
+{
+    emit doneWithFocus();
+    if (m_blockSignals) return;
+
+    m_tool->setListLevel(level);
 }
 
 #include <SimpleParagraphWidget.moc>

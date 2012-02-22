@@ -45,7 +45,7 @@
 #include <KoProgressUpdater.h>
 
 #include <QApplication>
-#include <qpainter.h>
+#include <QPainter>
 #include <QDir>
 #include <QMutableMapIterator>
 #include <QTreeView>
@@ -84,8 +84,10 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     if ( locale ) {
         locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "kdgantt" );
-        locale->insertCatalog( "kabc" );
         locale->insertCatalog( "timezones4" );
+#ifdef PLAN_KDEPIMLIBS_FOUND
+        locale->insertCatalog( "kabc" );
+#endif
 
         m_config.setLocale( new KLocale( *locale ) );
     }
@@ -181,6 +183,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     if (progressUpdater()) {
         updater = progressUpdater()->startSubtask(1, "Plan::Part::loadXML");
         updater->setProgress(0);
+        m_xmlLoader.setUpdater( updater );
     }
 
     QString value;

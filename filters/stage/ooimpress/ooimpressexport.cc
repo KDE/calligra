@@ -19,7 +19,7 @@
 
 #include "ooimpressexport.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QDateTime>
 

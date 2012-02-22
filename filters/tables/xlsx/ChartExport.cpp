@@ -563,6 +563,18 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         KoGenStyle axisstyle(KoGenStyle::ChartAutoStyle, "chart");
 
+        if (axis->m_reversed)
+            axisstyle.addProperty( "chart:reverse-direction", "true", KoGenStyle::ChartType );
+
+        //FIXME this hits an infinite-looping bug in kdchart it seems... maybe fixed with a newer version
+//         if (axis->m_logarithmic)
+//             axisstyle.addProperty( "chart:logarithmic", "true", KoGenStyle::ChartType );
+
+        if (!axis->m_autoMinimum)
+            axisstyle.addProperty( "chart:minimum", QString::number(axis->m_minimum, 'f'), KoGenStyle::ChartType );
+        if (!axis->m_autoMaximum)
+            axisstyle.addProperty( "chart:maximum", QString::number(axis->m_maximum, 'f'), KoGenStyle::ChartType );
+
         axisstyle.addProperty( "fo:font-size", QString( "%0pt" ).arg( chart()->m_textSize ), KoGenStyle::TextType );
 
         QColor labelColor = labelFontColor();

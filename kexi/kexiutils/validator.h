@@ -22,9 +22,9 @@
 
 #include "kexiutils_export.h"
 
-#include <qvalidator.h>
-#include <qvariant.h>
-#include <qstring.h>
+#include <QValidator>
+#include <QVariant>
+#include <QString>
 
 #include <klocale.h>
 

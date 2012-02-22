@@ -20,7 +20,7 @@
 #ifndef KEXIFIELDLISTVIEW_H
 #define KEXIFIELDLISTVIEW_H
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QListView>
 #include <kexi_export.h>
 #include <kexi.h>

@@ -18,11 +18,11 @@
 #ifndef RTFREADER_RTFOUTPUTSTRATEGY_H
 #define RTFREADER_RTFOUTPUTSTRATEGY_H
 
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
-#include <QtGui/QColor>
-#include <QtGui/QTextImageFormat>
+#include <QDateTime>
+#include <QString>
+#include <QVariant>
+#include <QColor>
+#include <QTextImageFormat>
 
 #include "FontTableEntry.h"
 #include "StyleSheetTableEntry.h"

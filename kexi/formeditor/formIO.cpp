@@ -20,18 +20,18 @@
 
 #include <kdebug.h>
 
-#include <qmetaobject.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qcursor.h>
-#include <qbuffer.h>
-#include <qimage.h>
-#include <qlayout.h>
-#include <qobject.h>
-#include <qdatetime.h>
-#include <qlabel.h>
-#include <qpainter.h>
+#include <QMetaObject>
+#include <QDomDocument>
+#include <QFile>
+#include <QTextStream>
+#include <QCursor>
+#include <QBuffer>
+#include <QImage>
+#include <QLayout>
+#include <QObject>
+#include <QDateTime>
+#include <QLabel>
+#include <QPainter>
 #include <QPaintEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

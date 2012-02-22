@@ -22,11 +22,11 @@
 
 #include <Charting.h>
 
-//#include <QtCore/QString>
-//#include <QtCore/QStringList>
-//#include <QtCore/QRect>
-//#include <QtCore/QMap>
-//#include <QtGui/QColor>
+//#include <QString>
+//#include <QStringList>
+//#include <QRect>
+//#include <QMap>
+//#include <QColor>
 
 class KoStore;
 class KoXmlWriter;

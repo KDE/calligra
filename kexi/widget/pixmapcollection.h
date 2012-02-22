@@ -20,11 +20,11 @@
 #ifndef KFORMDESIGNERPIXMAPCOLLECTION_H
 #define KFORMDESIGNERPIXMAPCOLLECTION_H
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qpair.h>
+#include <QObject>
+#include <QMap>
+#include <QPair>
 #include <q3intdict.h>
-#include <qtoolbutton.h>
+#include <QToolButton>
 //Added by qt3to4:
 #include <QPixmap>
 

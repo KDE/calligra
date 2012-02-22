@@ -22,17 +22,17 @@
 #include <config-kexi.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QEventLoop>
+#include <QFile>
+#include <QTimer>
+#include <QObject>
 #include <QProcess>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qfiledialog.h>
+#include <QToolButton>
+
+#include <QMutex>
+#include <QWaitCondition>
+#include <QFileDialog>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QTextStream>
@@ -2864,6 +2864,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         return cancelled;
     }
 
+    activateWindow(window);
     //view changed: switch to this view's gui client
     KXMLGUIClient *viewClient = currentWindow()->guiClient();
     updateWindowViewGUIClient(viewClient);
@@ -4475,5 +4476,11 @@ void KexiMainWindow::showTabIfNeeded()
         closeTab("");
     }
 }
+
+KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
+{
+    return &d->userFeedback;
+}
+
 #include "KexiMainWindow.moc"
 #include "KexiMainWindow_p.moc"

@@ -43,7 +43,7 @@ class KPLATOTJ_EXPORT Resource : public CoreAttributes
                                                CoreAttributes* c2, int level);
 public:
     Resource(Project* p, const QString& i, const QString& n, Resource* pr,
-             const QString& df = QString::null, uint dl = 0);
+             const QString& df = QString(), uint dl = 0);
     virtual ~Resource();
 
     static void deleteStaticData();
@@ -154,7 +154,7 @@ public:
         const;
 
     bool isAllocated(int sc, const Interval& i,
-                     const QString& prjId = QString::null) const;
+                     const QString& prjId = QString()) const;
 
     bool isAllocated(int sc, const Interval& i, const Task* t) const;
 

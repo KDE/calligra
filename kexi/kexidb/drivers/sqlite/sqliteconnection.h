@@ -20,7 +20,7 @@
 #ifndef KEXIDB_CONN_SQLITE_H
 #define KEXIDB_CONN_SQLITE_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kexidb/connection.h>
 
