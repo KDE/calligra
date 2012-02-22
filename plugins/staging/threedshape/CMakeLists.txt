@@ -11,6 +11,7 @@ SET (threedshape_LIB_SRCS
     #ThreedShapeConfigWidget.cpp
 
     Lightsource.cpp
+    utils.cpp
 
     #ChangeImageCommand.cpp
 )

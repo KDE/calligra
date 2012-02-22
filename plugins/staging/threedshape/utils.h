@@ -18,38 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// Own
-#include "Lightsource.h"
+#ifndef THREED_UTILS_H
+#define THREED_UTILS_H
 
 // Qt
-#include <QString>
-
-// KDE
-#include <KDebug>
-
-// Calligra
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-//#include <KoXmlWriter.h>
-
-// Shape
-#include "utils.h"
+#include <QVector3D>
 
 
-Lightsource::Lightsource(KoXmlElement &lightElem)
-{
-    m_diffuseColor = QColor(lightElem.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
-    QString direction = lightElem.attributeNS(KoXmlNS::dr3d, "direction", "");
-    m_direction    = odfToVector3D(direction);
-    m_enabled      = (lightElem.attributeNS(KoXmlNS::dr3d, "enabled", "") == "true");
-    m_specular     = (lightElem.attributeNS(KoXmlNS::dr3d, "specular", "") == "true");
-}
-
-Lightsource::~Lightsource()
-{
-}
+QVector3D odfToVector3D(QString &string);
 
 
-void Lightsource::saveOdf(KoXmlWriter &writer)
-{
-}
+#endif

@@ -169,7 +169,7 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
                           << light.enabled() << light.specular();
         }
         else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // FIXME: Recursive!
+            // FIXME: Recursive!  How does this work?
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // Attributes:
