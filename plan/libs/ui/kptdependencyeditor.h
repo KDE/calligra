@@ -438,7 +438,9 @@ public:
 
     DependencyScene *itemScene() const { return static_cast<DependencyScene*>( scene() ); }
     void setItemScene(DependencyScene *scene );
-    
+
+    void setActive( bool activate );
+
 signals:
     void selectionChanged();
     void selectionChanged( QGraphicsItem * );
@@ -474,6 +476,8 @@ private slots:
 
 private:
     Project *m_project;
+    bool m_dirty;
+    bool m_active;
 
     QPoint m_cursorPos;
     QTimer m_autoScrollTimer;
