@@ -472,7 +472,7 @@ public:
             delete static_cast<KexiContextMessageWidget*>(msgWidget);
         }
         msgWidget
-            = new KexiContextMessageWidget(q->parentWidget(), 0, 0, msg);
+            = new KexiContextMessageWidget(q->parentWidget()->parentWidget(), 0, 0, msg);
         msgWidget->setCalloutPointerDirection(KMessageWidget::Right);
         setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
         msgWidget->setMessageType(KMessageWidget::Information);

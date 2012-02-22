@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>215</width>
-    <height>315</height>
+    <width>189</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,9 +24,6 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>6</number>
-     </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
      </property>
      <item>
       <widget class="QLabel" name="label">
@@ -125,7 +122,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>6</height>
+       <height>12</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -167,7 +164,7 @@
          </font>
         </property>
         <property name="text">
-         <string/>
+         <string notr="true"/>
         </property>
         <property name="pixmap">
          <pixmap resource="status.qrc">:/icons/add.png</pixmap>
@@ -181,6 +178,9 @@
         </property>
         <property name="text">
          <string>&lt;a href=&quot;link&quot;&gt;Share Usage Info&lt;/a&gt; &lt;span style=&quot;color:gray;&quot;&gt;(+%1%)&lt;/span&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -205,7 +205,7 @@
          </font>
         </property>
         <property name="text">
-         <string/>
+         <string notr="true"/>
         </property>
         <property name="pixmap">
          <pixmap resource="status.qrc">:/icons/add.png</pixmap>
@@ -279,6 +279,9 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
@@ -312,6 +315,9 @@
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
