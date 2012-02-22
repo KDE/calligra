@@ -1625,7 +1625,9 @@ void DependencyScene::setReadWrite( bool on )
 
 DependencyView::DependencyView( QWidget *parent )
     : QGraphicsView( parent ),
-    m_project( 0 )
+    m_project( 0 ),
+    m_dirty( false ),
+    m_active( false )
 {
     setItemScene( new DependencyScene( this ) );
     setAlignment( Qt::AlignLeft | Qt::AlignTop );
@@ -1696,6 +1698,14 @@ void DependencyView::setItemScene( DependencyScene *scene )
         createItems();
     }
 }
+
+void DependencyView::setActive( bool activate )
+{
+    m_active = activate;
+    if ( m_active && m_dirty ) {
+        createItems();
+    }
+}
 void DependencyView::setProject( Project *project )
 {
     if ( m_project ) {
@@ -1707,6 +1717,10 @@ void DependencyView::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
+
+        if ( itemScene() ) {
+            itemScene()->clearScene();
+        }
     }
     m_project = project;
     if ( project ) {
@@ -1720,12 +1734,16 @@ void DependencyView::setProject( Project *project )
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsCodeChanged() ) );
-    }
-    if ( itemScene() ) {
-        itemScene()->setProject( project );
-        createItems();
-    }
 
+        if ( itemScene() ) {
+            itemScene()->setProject( project );
+            if ( m_active ) {
+                createItems();
+            } else {
+                m_dirty = true;
+            }
+        }
+    }
 }
 
 DependencyLinkItem *DependencyView::findItem( const Relation* rel ) const
@@ -1740,6 +1758,9 @@ DependencyNodeItem *DependencyView::findItem( const Node *node ) const
 
 void DependencyView::slotRelationAdded( Relation* rel )
 {
+    if ( m_dirty ) {
+        return;
+    }
     DependencyLinkItem *item = findItem( rel );
     if ( item == 0 ) {
         DependencyNodeItem *p = findItem( rel->parent() );
@@ -1754,6 +1775,9 @@ void DependencyView::slotRelationAdded( Relation* rel )
 
 void DependencyView::slotRelationRemoved( Relation* rel )
 {
+    if ( m_dirty ) {
+        return;
+    }
     DependencyLinkItem *item = findItem( rel );
     if ( item ) {
         scene()->removeItem( item );
@@ -1764,6 +1788,9 @@ void DependencyView::slotRelationRemoved( Relation* rel )
 void DependencyView::slotRelationModified( Relation* rel )
 {
     //kDebug();
+    if ( m_dirty ) {
+        return;
+    }
     slotRelationRemoved( rel );
     slotRelationAdded( rel );
 }
@@ -1771,6 +1798,9 @@ void DependencyView::slotRelationModified( Relation* rel )
 void DependencyView::slotNodeAdded( Node *node )
 {
     //kDebug();
+    if ( m_dirty ) {
+        return;
+    }
     DependencyNodeItem *item = findItem( node );
     if ( item == 0 ) {
         item = createItem( node );
@@ -1784,6 +1814,9 @@ void DependencyView::slotNodeAdded( Node *node )
 
 void DependencyView::slotNodeRemoved( Node *node )
 {
+    if ( m_dirty ) {
+        return;
+    }
     DependencyNodeItem *item = findItem( node );
     if ( item ) {
         //kDebug()<<node->name();
@@ -1794,6 +1827,9 @@ void DependencyView::slotNodeRemoved( Node *node )
 
 void DependencyView::slotNodeChanged( Node *node )
 {
+    if ( m_dirty ) {
+        return;
+    }
     DependencyNodeItem *item = findItem( node );
     if ( item && item->isVisible() ) {
         item->setText();
@@ -1803,6 +1839,9 @@ void DependencyView::slotNodeChanged( Node *node )
 
 void DependencyView::slotWbsCodeChanged()
 {
+    if ( m_dirty ) {
+        return;
+    }
     foreach( DependencyNodeItem *i, itemScene()->nodeItems() ) {
         if ( i->isVisible() ) {
             i->setText();
@@ -1812,6 +1851,9 @@ void DependencyView::slotWbsCodeChanged()
 
 void DependencyView::slotNodeMoved( Node *node )
 {
+    if ( m_dirty ) {
+        return;
+    }
     slotNodeRemoved( node );
     slotNodeAdded( node );
 }
@@ -1823,6 +1865,7 @@ void DependencyView::setItemExpanded( int , bool )
 void DependencyView::createItems()
 {
     itemScene()->clearScene();
+    m_dirty = false;
     if ( m_project == 0 ) {
         return;
     }
@@ -1996,6 +2039,7 @@ void DependencyEditor::setGuiActive( bool activate )
     //kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
+    m_view->setActive( activate );
 /*    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }*/

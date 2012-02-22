@@ -183,6 +183,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     if (progressUpdater()) {
         updater = progressUpdater()->startSubtask(1, "Plan::Part::loadXML");
         updater->setProgress(0);
+        m_xmlLoader.setUpdater( updater );
     }
 
     QString value;

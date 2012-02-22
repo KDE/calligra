@@ -1989,6 +1989,7 @@ void TextTool::insertSpecialCharacter()
 void TextTool::insertString(const QString& string)
 {
     m_textEditor.data()->insertText(string);
+    returnFocusToCanvas();
 }
 
 void TextTool::selectFont()
@@ -2324,6 +2325,21 @@ void TextTool::textDirectionChanged()
         blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
      }
     m_textEditor.data()->mergeBlockFormat(blockFormat);
+}
+
+void TextTool::setListLevel(int level)
+{
+    if (level < 1 || level > 10) {
+        return;
+    }
+
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (textEditor->block().textList()) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::SetLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, level);
+        textEditor->addCommand(cll);
+        editingPluginEvents();
+    }
 }
 
 #include <TextTool.moc>

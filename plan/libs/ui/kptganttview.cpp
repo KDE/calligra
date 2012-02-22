@@ -1113,7 +1113,7 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, c
 void ResourceAppointmentsGanttView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( treeView(), true, this );
+    QPointer<ItemViewSettupDialog> dlg = new ItemViewSettupDialog( treeView(), true, this );
     dlg->exec();
     delete dlg;
 }

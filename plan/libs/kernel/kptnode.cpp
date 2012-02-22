@@ -869,6 +869,7 @@ Node *Node::siblingAfter() {
 Node *Node::childAfter(Node *node)
 {
     //kDebug();
+    Q_ASSERT( m_nodes.contains( node ) );
     int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);
