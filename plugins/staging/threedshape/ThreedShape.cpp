@@ -51,6 +51,7 @@
 
 ThreedShape::ThreedShape()
     : KoShape()
+    , m_scene()
 {
 }
 
@@ -100,60 +101,14 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
-    Scene  scene(sceneElement);
-    kDebug(31000) << scene.vrp() << scene.vpn() << scene.vup()
-                  << scene.distance() << scene.projection() << scene.focalLength()
-                  << scene.shadowSlant()
-                  << scene.ambientColor()
-                  << scene.shadeMode() << scene.lightingMode() << scene.transform();
+    bool result = m_scene.loadOdf(sceneElement);
+    kDebug(31000) << "Camera:" << m_scene.vrp() << m_scene.vpn() << m_scene.vup()
+                  << m_scene.distance() << m_scene.projection() << m_scene.focalLength()
+                  << "\nRendering:" << m_scene.shadowSlant()
+                  << m_scene.ambientColor()
+                  << m_scene.shadeMode() << m_scene.lightingMode() << m_scene.transform();
 
-    // Get the scene itself, i.e. the elements in the scene
-    // From the ODF 1.2 spec section 9.4.1:
-    //
-    // The elements that may be contained in the <dr3d:scene> element are:
-    //  * Title (short accessible name) – see section 9.2.20.
-    //  * Long description (in support of accessibility) – see section 9.2.20.
-    //  * Light – see section 9.4.2.
-    //  * Scene – see section 9.4.1.
-    //  * Extrude – see section 9.4.5.
-    //  * Sphere – see section 9.4.4.
-    //  * Rotate – see section 9.4.6.
-    //  * Cube – see section 9.4.3.
-    KoXmlElement  elem;
-    forEachElement(elem, sceneElement) {
-
-        if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Lightsource  light(elem);
-            kDebug(31000) << "  Light:" << light.diffuseColor() << light.direction()
-                          << light.enabled() << light.specular();
-        }
-        else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // FIXME: Recursive!  How does this work?
-        }
-        else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:center
-            // dr3d:size
-            // + a number of other standard attributes
-        }
-        else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:min-edge
-            // dr3d:max-edge
-            // + a number of other standard attributes
-        }
-        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:
-        }
-        else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:
-        }
-    }
-
-
-    return true;
+    return result;
 }
 
 

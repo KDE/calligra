@@ -35,9 +35,10 @@ class KoXmlWriter;
 class Lightsource
 {
 public:
-    Lightsource(KoXmlElement &lightElem);
+    Lightsource();
     ~Lightsource();
 
+    bool loadOdf(const KoXmlElement &lightElement);
     void saveOdf(KoXmlWriter &writer);
 
     // getters

@@ -36,19 +36,25 @@
 #include "utils.h"
 
 
-Lightsource::Lightsource(KoXmlElement &lightElem)
+Lightsource::Lightsource()
 {
-    m_diffuseColor = QColor(lightElem.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
-    QString direction = lightElem.attributeNS(KoXmlNS::dr3d, "direction", "");
-    m_direction    = odfToVector3D(direction);
-    m_enabled      = (lightElem.attributeNS(KoXmlNS::dr3d, "enabled", "") == "true");
-    m_specular     = (lightElem.attributeNS(KoXmlNS::dr3d, "specular", "") == "true");
 }
 
 Lightsource::~Lightsource()
 {
 }
 
+
+bool Lightsource::loadOdf(const KoXmlElement &lightElement)
+{
+    m_diffuseColor = QColor(lightElement.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
+    QString direction = lightElement.attributeNS(KoXmlNS::dr3d, "direction", "");
+    m_direction    = odfToVector3D(direction);
+    m_enabled      = (lightElement.attributeNS(KoXmlNS::dr3d, "enabled", "") == "true");
+    m_specular     = (lightElement.attributeNS(KoXmlNS::dr3d, "specular", "") == "true");
+
+    return true;
+}
 
 void Lightsource::saveOdf(KoXmlWriter &writer)
 {

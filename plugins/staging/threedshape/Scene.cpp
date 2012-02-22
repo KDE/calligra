@@ -36,9 +36,20 @@
 #include "utils.h"
 
 
-Scene::Scene(const KoXmlElement &sceneElement)
+Scene::Scene()
+{
+}
+
+Scene::~Scene()
+{
+}
+
+
+bool Scene::loadOdf(const KoXmlElement &sceneElement)
 {
     QString dummy;
+
+    // 1. Load the scene attributes.
 
     // Camera attributes
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
@@ -73,17 +84,60 @@ Scene::Scene(const KoXmlElement &sceneElement)
     m_lightingMode = (sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "") == "true");
     m_transform = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
 
-    //m_diffuseColor = QColor(lightElem.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
-    //QString direction = lightElem.attributeNS(KoXmlNS::dr3d, "direction", "");
-    //m_direction    = stringToVector(direction);
-    //m_enabled      = (lightElem.attributeNS(KoXmlNS::dr3d, "enabled", "") == "true");
-    //m_specular     = (lightElem.attributeNS(KoXmlNS::dr3d, "specular", "") == "true");
-}
+    // 2. Load the child elements, i.e the scene itself.
 
-Scene::~Scene()
-{
-}
+    // From the ODF 1.1 spec section 9.4.1:
+    //
+    // The elements that may be contained in the <dr3d:scene> element are:
+    //  * Title (short accessible name) – see section 9.2.20.
+    //  * Long description (in support of accessibility) – see section 9.2.20.
+    //  * Light – see section 9.4.2.
+    //  * Scene – see section 9.4.1.
+    //  * Extrude – see section 9.4.5.
+    //  * Sphere – see section 9.4.4.
+    //  * Rotate – see section 9.4.6.
+    //  * Cube – see section 9.4.3.
+    KoXmlElement  elem;
+    forEachElement(elem, sceneElement) {
 
+        if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            Lightsource  light;
+            light.loadOdf(elem);
+            m_lights.append(light);
+
+#if 1
+            Lightsource  &l = m_lights.back();
+            kDebug(31000) << "  Light:" << l.diffuseColor() << l.direction()
+                          << l.enabled() << l.specular();
+#endif
+        }
+        else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // FIXME: Recursive!  How does this work?
+        }
+        else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:center
+            // dr3d:size
+            // + a number of other standard attributes
+        }
+        else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:min-edge
+            // dr3d:max-edge
+            // + a number of other standard attributes
+        }
+        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+        else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+    }
+
+    return true;
+}
 
 void Scene::saveOdf(KoXmlWriter &writer)
 {

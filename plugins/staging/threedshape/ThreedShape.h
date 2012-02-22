@@ -28,6 +28,9 @@
 //#include <KoTosContainer.h>
 #include <KoShape.h>
 
+// Shape
+#include "Scene.h"
+
 
 #define THREEDSHAPEID "ThreedShape"
 
@@ -53,7 +56,7 @@ public:
 
 
 private:
-    // FIXME: Members here
+    Scene  m_scene;
 };
 
 

@@ -12,7 +12,7 @@
        - rotate
 
  * Store the 3D scene
-    + Scene object
+    + Scene object                                      Done
     + Lightsource object                                Done
     + 3DObject baseclass
        - sphere object

@@ -25,10 +25,13 @@
 #include <QColor>
 #include <QVector3D>
 #include <QString>
+#include <QList>
 
 // Calligra
 #include <KoShape.h>
 
+// Shape
+#include "Lightsource.h"
 
 class KoXmlWriter;
 
@@ -48,9 +51,10 @@ public:
         Draft                   // Wireframe
     };
 
-    Scene(const KoXmlElement &sceneElem);
+    Scene();
     ~Scene();
 
+    bool loadOdf(const KoXmlElement &sceneElement);
     void saveOdf(KoXmlWriter &writer);
 
     // getters
@@ -67,7 +71,7 @@ public:
     QString     transform()    { return m_transform;    } // Not yet used, just saved
 
 private:
-    // Scene attributes
+    // 1. Scene attributes
     // Camera attributes
     QVector3D   m_vrp;          // Camera origin
     QVector3D   m_vpn;          // Camera direction
@@ -82,6 +86,9 @@ private:
     QColor      m_ambientColor;
     bool        m_lightingMode; // True: enable lights, false: disable lights
     QString     m_transform;    // Not yet used, just saved
+
+    // 2. The scene itself.
+    QList<Lightsource>  m_lights;
 };
 
 
