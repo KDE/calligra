@@ -504,18 +504,27 @@ qDebug() << "Reading Styles...";
                 break;
             case CdrStyleTextAlignmentArgumentId :
             {
-                const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
+                static const struct { const char* name; CdrTextAlignment id;} alignData[5] =
+                {
+                    {" left?",   CdrTextAlignmentUnknown},
+                    {" other left?",   CdrTextAlignmentUnknown},
+                    {" center", CdrTextAlignCenter},
+                    {" right",  CdrTextAlignRight},
+                    {" block?",  CdrTextAlignmentUnknown}
+                };
 
-                const bool isAlignmentTypeKnown = ( (data.type() == CdrStyleTextCenterAlignment) ||
-                                                    (data.type() == CdrStyleTextRightAlignment) );
+                const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
+                const bool isAlignmentTypeKnown = ( (CdrStyleTextUnknown0Alignment <= data.type()) &&
+                                                    (data.type() <= CdrStyleTextUnknown4Alignment) );
                 if( isAlignmentTypeKnown )
-                    style->setTextAlignment( (data.type()==CdrStyleTextCenterAlignment) ?
-                                            CdrTextAlignCenter : CdrTextAlignRight );
+                    style->setTextAlignment( alignData[data.type()].id );
 
                 argTypeAsString = QLatin1String("text alignment");
                 argAsString = QString::number( data.type() );
-                if( ! isAlignmentTypeKnown )
-                    argAsString.append( QLatin1String("UNKNOWN") );
+                if( isAlignmentTypeKnown )
+                    argAsString.append( QLatin1String(alignData[data.type()].name) );
+                else
+                    argAsString.append( QLatin1String(" UNKNOWN") );
                 break;
             }
             case CdrStyleTitleArgumentId :
@@ -534,10 +543,10 @@ qDebug() << "Reading Styles...";
                 style->setFontSize( fontData.fontSize() );
 
                 argTypeAsString = QLatin1String("font");
-                argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) + QLatin1Char(' ') +
-                            QString::number( fontData.fontSize()) + QLatin1Char(' ') +
-                            QString::number( fontData._unknown1()) + QLatin1Char(' ') +
-                            QString::number( fontData._unknown2());
+                argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) +
+                              QLatin1String(" size:") + QString::number( fontData.fontSize()) +
+                              QLatin1Char(' ') + QString::number( fontData._unknown1()) +
+                              QLatin1Char(' ') + QString::number( fontData._unknown2());
                 break;
             }
             case CdrStyle230ArgumentId:
@@ -1160,7 +1169,7 @@ switch(argType)
     {
         const CdrObject100ArgumentData data = argsData.arg<CdrObject100ArgumentData>( i );
         argAsString = QString::number(data._unknown0())+QLatin1Char(',')+QString::number(data._unknown1());
-        argTypeAsString = QLatin1String("some 32-bit");
+        argTypeAsString = QLatin1String("z-index?");
         break;
     }
     case CdrObjectStyleIndexArgumentId :
