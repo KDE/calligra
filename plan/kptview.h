@@ -352,6 +352,7 @@ private slots:
 
     void hideToolDocker();
     void initiateViews();
+    void slotViewScheduleManager();
 
 private:
     void createViews();
@@ -382,6 +383,9 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
+    // if multiple changes occure, only issue the last change
+    bool m_trigged;
+    ScheduleManager *m_nextScheduleManager;
 
     QMultiMap<ScheduleManager*, CalculateScheduleCmd*> m_calculationcommands;
     QList<KUndo2Command*> m_undocommands;
