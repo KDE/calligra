@@ -45,6 +45,7 @@
 #include <KoFilterEffectStack.h>
 
 // 3D shape
+#include "Scene.h"
 #include "Lightsource.h"
 
 
@@ -99,54 +100,12 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
-
-    // Extract the attributes of dr3d:scene
-    //
-    // From the ODF 1.2 spec section 9.4.1:
-    // The attributes that may be associated with the <dr3d:scene> element are:
-    //  o Position, Size, Style, Layer, Z-Index, ID and Caption ID – see section 9.2.15
-    //  o Text anchor, table background, draw end position – see section 9.2.16
-    //  * Camera vectors
-    //  * Projection
-    //  * Distance
-    //  * Focal length
-    //  * Shadow slant
-    //  * Shade mode
-    //  * Ambient color
-    //  * Lighting mode
-    //
-    // Example: 
-    //    dr3d:vrp="(0 0 16885.7142857143)"
-    //    dr3d:vpn="(0 0 14285.7142857143)"
-    //    dr3d:projection="perspective"
-    //    dr3d:distance="2.6cm"
-    //    dr3d:focal-length="10cm"
-    //    dr3d:shadow-slant="0"
-    //    dr3d:shade-mode="gouraud"
-    //    dr3d:ambient-color="#666666"
-    //    dr3d:lighting-mode="false"
-
-    // Camera attributes
-    QString vrp          = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
-    QString vpn          = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn", "");
-    QString vup          = sceneElement.attributeNS(KoXmlNS::dr3d, "vup", "(0.0 0.0 1.0)");
-    QString distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance", "");
-    QString projection   = sceneElement.attributeNS(KoXmlNS::dr3d, "projection", "perspective");
-    QString focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length", "");
-    QString shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant", "");
-    QString ambientColor = sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888");
-
-    // Rendering attributes
-    QString shadeMode    = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
-    QString lightingMode = sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "");
-    QString transform    = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
-
-    kDebug(31000) << vrp << vpn << vup
-                  << distance << projection << focalLength
-                  << shadowSlant
-                  << ambientColor
-                  << shadeMode << lightingMode << transform;
-    // FIXME
+    Scene  scene(sceneElement);
+    kDebug(31000) << scene.vrp() << scene.vpn() << scene.vup()
+                  << scene.distance() << scene.projection() << scene.focalLength()
+                  << scene.shadowSlant()
+                  << scene.ambientColor()
+                  << scene.shadeMode() << scene.lightingMode() << scene.transform();
 
     // Get the scene itself, i.e. the elements in the scene
     // From the ODF 1.2 spec section 9.4.1:
