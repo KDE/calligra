@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2012 Pankaj Kumar <me@panks.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,8 +27,6 @@
 #include <KoOdfWriteStore.h>
 
 // class GfxPath;
-// class QColor;
-// class QMatrix;
 class GooString;
 
 /**
@@ -53,35 +51,9 @@ public:
     virtual GBool interpretType3Chars();
 //     virtual void startPage(int pageNum, GfxState *state);
 //     virtual void endPage();
-// 
-//     // path painting
-//     virtual void stroke(GfxState * state);
-//     virtual void fill(GfxState * state);
-//     virtual void eoFill(GfxState *state);
-// 
-//     // text
-//     virtual void drawString(GfxState * state, GooString * s);
-// 
-//     // images
-//     virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-//                            int width, int height, GfxImageColorMap *colorMap,
-//                            int *maskColors, GBool inlineImg);
-//     virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-//                            int width, int height, GfxImageColorMap *colorMap,
-//                            GBool interpolate, int *maskColors, GBool inlineImg);
-// 
-//     // styles
-//     virtual void updateAll(GfxState *state);
-//     virtual void updateFillColor(GfxState *state);
-//     virtual void updateStrokeColor(GfxState *state);
-//     virtual void updateFillOpacity(GfxState *state);
-//     virtual void updateStrokeOpacity(GfxState *state);
-//     virtual void updateLineJoin(GfxState *state);
-//     virtual void updateLineCap(GfxState *state);
-//     virtual void updateMiterLimit(GfxState *state);
-//     virtual void updateLineWidth(GfxState *state);
 
-    /// Dumps content to odf file
+
+    // Dumps content to odf file
     void dumpContent();
     bool createMeta(KoOdfWriteStore &store);
 private:
