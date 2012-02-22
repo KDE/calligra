@@ -650,11 +650,10 @@ void
 CdrOdgWriter::writeStrokeColor( KoGenStyle& odfStyle, quint32 outlineId )
 {
     CdrOutline* outline = mDocument->outline( outlineId );
+    if( outline == 0 ) // TODO: check when this can happen
+        return;
 
-    const QString colorName = ( outline ) ?
-        outline->color().name() :
-        QString::fromLatin1("none");
-    odfStyle.addProperty( QLatin1String("svg:stroke-color"), colorName );
+    odfStyle.addProperty( QLatin1String("svg:stroke-color"), outline->color().name() );
 }
 
 void
