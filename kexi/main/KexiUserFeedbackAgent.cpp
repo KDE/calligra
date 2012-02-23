@@ -51,7 +51,7 @@ public:
      : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
      , areas(KexiUserFeedbackAgent::NoAreas)
      , sentDataInThisSession(KexiUserFeedbackAgent::NoAreas)
-     , url(QLatin1String("http://www.kexi-project.org/feedback/send"))
+     , url(QLatin1String("http://www.kexi-project.org/feedback"))
      , redirectChecked(false)
     {
     }
@@ -231,6 +231,7 @@ inline QString escapeJson(const QString& s)
 
 void KexiUserFeedbackAgent::sendData()
 {
+    kDebug();
     if (d->areas == NoAreas) {
         return;
     }
@@ -253,8 +254,8 @@ void KexiUserFeedbackAgent::sendData()
     }
     kDebug() << postData;
     
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url), KIO::HideProgressInfo);
-    connect(sendJob, SIGNAL(finished(KJob*)), this, SLOT(sendDataFinished(KJob*)));
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
@@ -282,8 +283,8 @@ void KexiUserFeedbackAgent::sendRedirectQuestion()
 {
     QByteArray postData = "get_url";
     kDebug() << postData;
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url), KIO::HideProgressInfo);
-    connect(sendJob, SIGNAL(finished(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
+    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
@@ -307,5 +308,27 @@ void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KJob* job)
         }
     }
     d->redirectChecked = true;
+    emit redirectLoaded();
     sendData();
+}
+
+QString KexiUserFeedbackAgent::serviceUrl() const
+{
+    return d->url;
+}
+
+void KexiUserFeedbackAgent::waitForRedirect(QObject *receiver, const char* slot)
+{
+    if (!receiver) {
+        return;
+    }
+    if (d->redirectChecked) {
+        QMetaObject::invokeMethod(receiver, slot);
+    }
+    else {
+        connect(this, SIGNAL(redirectLoaded()), receiver, slot, Qt::UniqueConnection);
+        if (d->areas == NoAreas) {
+            sendRedirectQuestion();
+        }
+    }
 }

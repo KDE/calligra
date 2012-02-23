@@ -20,18 +20,34 @@
 #ifndef KEXIWELCOMESTATUSBAR_P_H
 #define KEXIWELCOMESTATUSBAR_P_H
 
-#include <QTextDocument>
+#include <QObject>
 
-class KexiStatusTextDocument : public QTextDocument
+class KJob;
+
+//! Web updater for the status bar GUI
+class KexiWelcomeStatusBarGuiUpdater : public QObject
 {
+    Q_OBJECT
 public:
-    explicit KexiStatusTextDocument(KexiWelcomeStatusBar* parent);
+    KexiWelcomeStatusBarGuiUpdater();
+    ~KexiWelcomeStatusBarGuiUpdater();
 
-protected:
-    virtual QVariant loadResource(int type, const QUrl &name);
+public slots:
+    void update();
+
+private slots:
+    void slotRedirectLoaded();
+    void sendRequestListFilesFinished(KJob* job);
+    void filesCopyFinished(KJob* job);
 
 private:
-    KexiWelcomeStatusBar *m_parent;
+    QString uiPath(const QString &fname) const;
+    void checkFile(const QByteArray &hash,
+                   const QString &remoteFname,
+                   QStringList *fileNamesToUpdate);
+
+    class Private;
+    Private * const d;
 };
 
 #endif
