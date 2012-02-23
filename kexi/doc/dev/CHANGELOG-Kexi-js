@@ -144,6 +144,12 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
 
+2012-02-22
+Main Window
+*allow to anchor context message position to given widget on parent resizes
+*allow to resize context message position on parent resizes
+*welcome status bar: fetch the GUI updates from the server if available, every 60 minutes
+
 2012-02-19
 Main Window
 *User feedback: fixed grammar and typos
