@@ -47,9 +47,6 @@ template<typename T> class QVector;
 
 class CdrOdgWriter
 {
-private:
-    enum GlobalTransformationMode { NoGlobalTransformation, DoGlobalTransformation };
-
 public:
     explicit CdrOdgWriter( KoStore* outputStore );
     ~CdrOdgWriter();
@@ -87,8 +84,7 @@ private:
 
     void writeCornerPoint( CdrPoint cornerPoint );
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
-                              const QString& baseTransformationString = QString(),
-                              GlobalTransformationMode transformationMode = DoGlobalTransformation );
+                              const QString& baseTransformationString = QString() );
 
 private:
     KoOdfWriteStore mOdfWriteStore;

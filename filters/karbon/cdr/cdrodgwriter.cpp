@@ -437,7 +437,9 @@ CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
 
-    writeTransformation( groupObject->transformations(), QString(), NoGlobalTransformation );
+    // TODO: why are there transformations on groups if they seem not needed to be applied?
+    // (and draw:g does not allow draw:transform anyway)
+//     writeTransformation( groupObject->transformations(), QString(), NoGlobalTransformation );
 //     set2DGeometry(mBodyWriter, objectElement);
 //     mBodyWriter->addAttribute("draw:style-name", createGraphicStyle(objectElement));
 
@@ -712,8 +714,7 @@ appendTranslation( QString& transformationString,
 
 void
 CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
-                                   const QString& baseTransformationString,
-                                   GlobalTransformationMode transformationMode )
+                                   const QString& baseTransformationString )
 {
     QLocale cLocale(QLocale::c());
     cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
@@ -736,16 +737,14 @@ CdrOdgWriter::writeTransformation( const QVector<CdrAbstractTransformation*>& tr
     }
 
     // finally transformation between cdr and odf
-    if( transformationMode == DoGlobalTransformation )
-        appendMatrix( transformationString,
-                       1.0, 0.0,
-                       odfLength(mDocument->width())*0.5,
-                       0.0, -1.0,
-                       odfLength(mDocument->height())*0.5,
-                       cLocale );
+    appendMatrix( transformationString,
+                  1.0, 0.0,
+                  odfLength(mDocument->width())*0.5,
+                  0.0, -1.0,
+                  odfLength(mDocument->height())*0.5,
+                  cLocale );
 
-    if( ! transformationString.isEmpty() )
-        mBodyWriter->addAttribute( "draw:transform", transformationString );
+    mBodyWriter->addAttribute( "draw:transform", transformationString );
 }
 
 void
