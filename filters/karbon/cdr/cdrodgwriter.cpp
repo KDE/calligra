@@ -386,7 +386,7 @@ CdrOdgWriter::writePage( const CdrPage* page )
 {
     mBodyWriter->startElement( "draw:page" );
 
-    mBodyWriter->addAttribute( "draw:id", QLatin1String("page")+QString::number(mPageCount++) );
+    mBodyWriter->addAttribute( "xml:id", QLatin1String("page")+QString::number(mPageCount++) );
     mBodyWriter->addAttribute( "draw:master-page-name", mMasterPageStyleName );
 
     // layer set
