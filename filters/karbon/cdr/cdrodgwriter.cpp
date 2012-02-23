@@ -506,17 +506,37 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 
     CdrPoint curveControlPoints[2];
     int curveControlPointCount = 0;
+    CdrCoord minX;
+    CdrCoord minY;
+    CdrCoord maxX;
+    CdrCoord maxY;
 
     QString pathData;
     if( pathPoints.count() > 0 )
     {
         const CdrPoint point = pathPoints.at(0).mPoint;
-        pathData = QLatin1Char('M') + QString::number(odfXCoord(point.x())) + QLatin1Char(' ') +
-                   QString::number(odfYCoord(point.y()));
+
+        pathData = QLatin1Char('M') + QString::number(point.x()) + QLatin1Char(' ') +
+                   QString::number(point.y());
+
+        minX = point.x();
+        maxX = point.x();
+        minY = point.y();
+        maxY = point.y();
     }
     for( int j=1; j<pathPoints.count(); j++ )
     {
         const CdrPathPoint& pathPoint = pathPoints.at(j);
+        const CdrCoord x = pathPoint.mPoint.x();
+        const CdrCoord y = pathPoint.mPoint.y();
+        if( x < minX )
+            minX = x;
+        else if( maxX < x )
+            maxX = x;
+        if( y < minY )
+            minY = y;
+        else if( maxY < y )
+            maxY = y;
 
         const quint8 strokeToPointType = (pathPoint.mType&0xC0);
 
@@ -526,8 +546,8 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
             if(( pathPoint.mType&0x04) == 0x04 )  // real point?
             {
                 pathData = pathData + QLatin1String(" M") +
-                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
-                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+                        QString::number(x) + QLatin1Char(' ') +
+                        QString::number(y);
             }
         }
         else if( strokeToPointType == 0xC0 ) // control point?
@@ -540,23 +560,34 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
             if( strokeToPointType == 0x80 ) // curve to point?
             {
                 pathData = pathData + QLatin1String(" C") +
-                        QString::number(odfXCoord(curveControlPoints[0].x())) + QLatin1Char(' ') +
-                        QString::number(odfYCoord(curveControlPoints[0].y())) + QLatin1Char(' ') +
-                        QString::number(odfXCoord(curveControlPoints[1].x())) + QLatin1Char(' ') +
-                        QString::number(odfYCoord(curveControlPoints[1].y())) + QLatin1Char(' ') +
-                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
-                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+                        QString::number(curveControlPoints[0].x()) + QLatin1Char(' ') +
+                        QString::number(curveControlPoints[0].y()) + QLatin1Char(' ') +
+                        QString::number(curveControlPoints[1].x()) + QLatin1Char(' ') +
+                        QString::number(curveControlPoints[1].y()) + QLatin1Char(' ') +
+                        QString::number(x) + QLatin1Char(' ') +
+                        QString::number(y);
                 curveControlPointCount = 0;
             }
             else //if( strokeToPointType == 0x40 )
                 pathData = pathData + QLatin1String(" L") +
-                        QString::number(odfXCoord(pathPoint.mPoint.x())) + QLatin1Char(' ') +
-                        QString::number(odfYCoord(pathPoint.mPoint.y()));
+                        QString::number(x) + QLatin1Char(' ') +
+                        QString::number(y);
             const bool isSubpathClosing = ((pathPoint.mType&0x0C) == 0x08);
             if( isSubpathClosing )
                 pathData.append( QLatin1Char('z') );
         }
     }
+
+    const CdrCoord width = maxX - minX +1;
+    const CdrCoord height = maxY- minY +1;
+    const QString viewBoxString =
+        QString::number(minX) + QLatin1Char(' ') + QString::number(minY) + QLatin1Char(' ') +
+        QString::number(width) + QLatin1Char(' ') + QString::number(height);
+    mBodyWriter->addAttributePt("svg:x", odfXCoord(minX));
+    mBodyWriter->addAttributePt("svg:y", odfYCoord(minY));
+    mBodyWriter->addAttributePt("svg:width", odfLength(width) );
+    mBodyWriter->addAttributePt("svg:height", odfLength(height) );
+    mBodyWriter->addAttribute( "svg:viewBox", viewBoxString );
 
     mBodyWriter->addAttribute( "svg:d", pathData ) ;
 
