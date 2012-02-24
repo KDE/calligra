@@ -75,7 +75,7 @@ public:
     Q_DECLARE_FLAGS(SaveOptions, SaveOption)
 
     KoElementReference();
-    KoElementReference(const QString &prefix);
+    explicit KoElementReference(const QString &prefix);
     KoElementReference(const KoElementReference &other);
     KoElementReference &operator=(const KoElementReference &rhs);
     bool operator==(const KoElementReference &other);
