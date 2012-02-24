@@ -36,6 +36,13 @@
 #include <KAction>
 #include <KStandardGuiItem>
 #include <KFadeWidgetEffect>
+#include <KConfigGroup>
+#include <KIO/Job>
+#include <KIO/CopyJob>
+#include <KCodecs>
+#include <KTemporaryFile>
+#include <KTempDir>
+#include <kde_file.h>
 
 #include <QEvent>
 #include <QLayout>
@@ -47,14 +54,178 @@
 #include <QScrollArea>
 #include <QLabel>
 #include <QResource>
+#include <QTimer>
 
 #define HEADER_SIZE 1.0
+#define GUI_UPDATE_INTERVAL 60 // update interval for GUI, in munites
+
+static QString basePath()
+{
+    return QString("kexi/status/") + Kexi::stableVersionString();
+}
+
+static QString findFilename(const QString &guiFileName)
+{
+    const QString result = KStandardDirs::locate("data", basePath() + '/' + guiFileName);
+    kDebug() << result;
+    return result;
+}
+
+// ---
+
+class KexiWelcomeStatusBarGuiUpdater::Private
+{
+public:
+    Private()
+     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+    {
+    }
+    KConfigGroup configGroup;
+    QStringList fileNamesToUpdate;
+    QString tempDir;
+};
+
+KexiWelcomeStatusBarGuiUpdater::KexiWelcomeStatusBarGuiUpdater()
+ : QObject()
+ , d(new Private)
+{
+}
+
+KexiWelcomeStatusBarGuiUpdater::~KexiWelcomeStatusBarGuiUpdater()
+{
+    delete d;
+}
+
+QString KexiWelcomeStatusBarGuiUpdater::uiPath(const QString &fname) const
+{
+    KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
+    return f->serviceUrl() + QString("/ui/%1/").arg(Kexi::stableVersionString())
+        + fname;
+}
+
+void KexiWelcomeStatusBarGuiUpdater::update()
+{
+    QDateTime lastStatusBarUpdate = d->configGroup.readEntry("LastStatusBarUpdate", QDateTime());
+    if (lastStatusBarUpdate.isValid()) {
+        int minutes = lastStatusBarUpdate.secsTo(QDateTime::currentDateTime()) / 60;
+        
+        if (minutes < GUI_UPDATE_INTERVAL) {
+            kDebug() << "gui updated" << minutes << "min. ago, next auto-update in" 
+                << (GUI_UPDATE_INTERVAL - minutes) << "min.";
+            return;
+        }
+    }
+    
+    d->configGroup.writeEntry("LastStatusBarUpdate", QDateTime::currentDateTime());
+    
+    KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
+    f->waitForRedirect(this, SLOT(slotRedirectLoaded()));
+}
+
+void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
+{
+    QByteArray postData = Kexi::stableVersionString().toLatin1();
+    KIO::Job* sendJob = KIO::storedHttpPost(postData,
+                                            KUrl(uiPath(".list")),
+                                            KIO::HideProgressInfo);
+    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRequestListFilesFinished(KJob*)));
+    sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
+}
+
+void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
+{
+    if (job->error()) {
+        //! @todo error...
+        return;
+    }
+    KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    QString result = sendJob->data();
+    kDebug() << result;
+    QStringList data = result.split(QRegExp("\\s"), QString::SkipEmptyParts);
+    d->fileNamesToUpdate.clear();
+    for (QStringList::ConstIterator it(data.constBegin()); it!=data.constEnd(); ++it) {
+        const QByteArray hash((*it).toLatin1());
+        ++it;
+        if (it==data.constEnd()) {
+            kWarning() << "data ends to early after hash" << hash;
+            break;
+        }
+        const QString remoteFname(*it);
+        checkFile(hash, remoteFname, &d->fileNamesToUpdate);
+    }
+    // update files
+    KUrl::List sourceFiles;
+    foreach (const QString &fname, d->fileNamesToUpdate) {
+        sourceFiles.append(KUrl(uiPath(fname)));
+    }
+    KTempDir tempDir(KStandardDirs::locateLocal("tmp", "kexi-status"));
+    tempDir.setAutoRemove(false);
+    d->tempDir = tempDir.name();
+    kDebug() << tempDir.name();
+    KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
+                                        KUrl("file://" + tempDir.name()),
+                                        KIO::HideProgressInfo | KIO::Overwrite);
+    connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
+        //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
+//            << (dir + fname);
+}
+
+void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
+                                               const QString &remoteFname,
+                                               QStringList *fileNamesToUpdate)
+{
+    QString localFname = findFilename(remoteFname);
+    if (localFname.isEmpty()) {
+        fileNamesToUpdate->append(remoteFname);
+        kDebug() << "missing filename" << remoteFname << "- download it";
+        return;
+    }
+    QFile file(localFname);
+    if (!file.open(QIODevice::ReadOnly)) {
+        kWarning() << "could not open file" << localFname << "- update it";
+        fileNamesToUpdate->append(remoteFname);
+        return;
+    }
+    KMD5 md5("");
+    if (!md5.update(file)) {
+        kWarning() << "could not check MD5 for file" << localFname << "- update it";
+        fileNamesToUpdate->append(remoteFname);
+        return;
+    }
+    if (!md5.verify(hash)) {
+        kDebug() << "not matching file" << localFname << "- update it";
+        fileNamesToUpdate->append(remoteFname);
+    }
+}
+
+void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
+{
+    if (job->error()) {
+        //! @todo error...
+        kDebug() << "ERROR:" << job->errorString();
+        return;
+    }
+    KIO::CopyJob* copyJob = qobject_cast<KIO::CopyJob*>(job);
+    kDebug() << "DONE" << copyJob->destUrl();
+
+    QString dir(KStandardDirs::locateLocal("data", basePath() + '/', true /*create*/));
+    kDebug() << dir;
+    foreach (const QString &fname, d->fileNamesToUpdate) {
+        if (0 != KDE::rename(d->tempDir + fname, dir + fname)) {
+            kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
+        }
+    }
+    KTempDir::removeDir(d->tempDir);
+}
+
+// ---
 
 //! @internal
 class ScrollArea : public QScrollArea
 {
 public:
-    ScrollArea() {
+    ScrollArea(QWidget *parent = 0) : QScrollArea(parent)
+    {
         setFrameShape(QFrame::NoFrame);
         setBackgroundRole(QPalette::Base);
         setWidgetResizable(true);
@@ -255,15 +426,6 @@ public:
         animation->start();
     }
     
-    QString findFilename(const QString &guiFileName) const
-    {
-        const QString baseFname
-            = QString("status/%1/%2").arg(Kexi::stableVersionString()).arg(guiFileName);
-        const QString result = KStandardDirs::locate("data", "kexi/" + baseFname);
-        kDebug() << result;
-        return result;
-    }
-
     QWidget* loadGui(const QString &guiFileName, QWidget *parentWidget = 0)
     {
         QString fname = findFilename(guiFileName);
@@ -440,7 +602,7 @@ public:
             else {
                 kWarning() << alignToWidgetName << "not found!";
             }
-            msgWidget->setCalloutPointerPosition(p);
+            msgWidget->setCalloutPointerPosition(p, alignToWidget);
     }
 
     //! Shows message widget taking maximum space within the welcome page
@@ -472,9 +634,8 @@ public:
             delete static_cast<KexiContextMessageWidget*>(msgWidget);
         }
         msgWidget
-            = new KexiContextMessageWidget(q->parentWidget(), 0, 0, msg);
+            = new KexiContextMessageWidget(q->parentWidget()->parentWidget(), 0, 0, msg);
         msgWidget->setCalloutPointerDirection(KMessageWidget::Right);
-        setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
         msgWidget->setMessageType(KMessageWidget::Information);
         msgWidget->setCloseButtonVisible(true);
         int offset_y = 0;
@@ -486,6 +647,8 @@ public:
             kWarning() << alignToWidgetName << "not found!";
         }
         msgWidget->resize(msgWidth, q->parentWidget()->height() - offset_y);
+        setMessageWidgetCalloutPointerPosition(alignToWidgetName, calloutAlignment);
+        msgWidget->setResizeTrackingPolicy(Qt::Horizontal | Qt::Vertical);
         statusScrollArea->setEnabled(false);
         // async show to for speed up
         if (slotToCallAfterShow) {
@@ -494,17 +657,6 @@ public:
         }
         QObject::connect(msgWidget, SIGNAL(animatedHideFinished()),
                          q, SLOT(slotMessageWidgetClosed()));
-    }
-
-    void fixBacktroundBrushInMessageWidget()
-    {
-        foreach (QWidget* w, msgWidget->findChildren<QWidget*>()) {
-            QPalette pal(w->palette());
-            pal.setBrush(QPalette::Base, msgWidget->backgroundBrush());
-            pal.setBrush(QPalette::Window, msgWidget->backgroundBrush());
-            pal.setBrush(QPalette::Button, msgWidget->backgroundBrush());
-            w->setPalette(pal);
-        }
     }
 
     ScrollArea *statusScrollArea;
@@ -526,6 +678,7 @@ public:
     bool detailsDataVisible;
     int totalFeedbackScore;
 
+    KexiWelcomeStatusBarGuiUpdater guiUpdater;
 private:
     QString rccFname;
     KexiWelcomeStatusBar *q;
@@ -562,10 +715,11 @@ void KexiWelcomeStatusBar::init()
         ).arg(title).arg(d->userProgressBar.value());
 #endif
 
-    d->statusScrollArea = new ScrollArea;
+    d->statusScrollArea = new ScrollArea(this);
     d->lyr->addWidget(d->statusScrollArea);
 
     d->updateStatusWidget();
+    QTimer::singleShot(10, &d->guiUpdater, SLOT(update()));
 }
 
 void KexiWelcomeStatusBar::showContributionHelp()
@@ -613,7 +767,7 @@ void KexiWelcomeStatusBar::slotShowContributionHelpContents()
 {
     QWidget *helpWidget = d->loadGui("contribution_help.ui");
     d->contributionHelpLayout->addWidget(helpWidget, 1, 1);
-    d->fixBacktroundBrushInMessageWidget();
+    d->msgWidget->setPaletteInherited();
 }
 
 void KexiWelcomeStatusBar::slotMessageWidgetClosed()
@@ -665,6 +819,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     d->setMessageWidgetCalloutPointerPosition(sender()->objectName());
     d->statusScrollArea->setEnabled(false);
     d->msgWidget->setMaximumWidth(parentWidget()->width() - width());
+    d->msgWidget->setResizeTrackingPolicy(Qt::Horizontal);
 
     /*foreach (QLabel *lbl, d->statusScrollArea->findChildren<QLabel*>()) {
         if (lbl->isEnabled()) {
@@ -750,11 +905,11 @@ void KexiWelcomeStatusBar::showContributionDetails()
 
     d->setProperty(d->contributionDetailsWidget, "label_where_is_info_sent", "visible", false);
     
-    ScrollArea *contributionDetailsArea = new ScrollArea;
+    ScrollArea *contributionDetailsArea = new ScrollArea(d->msgWidget);
     d->contributionDetailsLayout->addWidget(contributionDetailsArea, 1, 1);
     contributionDetailsArea->setWidget(d->contributionDetailsWidget);
     d->msgWidget->animatedShow();
-    d->fixBacktroundBrushInMessageWidget();
+    d->msgWidget->setPaletteInherited();
 }
 
 void KexiWelcomeStatusBar::updateContributionGroupCheckboxes()
@@ -937,3 +1092,4 @@ void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
 // Contribution Details END
 
 #include "KexiWelcomeStatusBar.moc"
+#include "KexiWelcomeStatusBar_p.moc"

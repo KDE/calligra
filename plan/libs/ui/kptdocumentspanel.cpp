@@ -106,9 +106,9 @@ Document *DocumentsPanel::selectedDocument() const
 
 void DocumentsPanel::slotAddUrl()
 {
-    KUrlRequesterDialog *dlg = new KUrlRequesterDialog( QString(), QString(), this );
+    QPointer<KUrlRequesterDialog> dlg = new KUrlRequesterDialog( QString(), QString(), this );
     dlg->setWindowTitle( i18nc( "@title:window", "Attach Document" ) );
-    if ( dlg->exec() == QDialog::Accepted ) {
+    if ( dlg->exec() == QDialog::Accepted && dlg ) {
         if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
             kWarning()<<"Document (url) already exists: "<<dlg->selectedUrl();
             KMessageBox::sorry( this, i18nc( "@info", "Document is already attached:<br/><filename>%1</filename>", dlg->selectedUrl().prettyUrl() ), i18nc( "@title:window", "Cannot Attach Document" ) );

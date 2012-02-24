@@ -1995,8 +1995,8 @@ void ProjectTester::team()
     Resource *team = new Resource();
     team->setType( Resource::Type_Team );
     team->setName( "Team" );
-    team->addTeamMember( r2 );
     project.addResource( g, team );
+    team->addTeamMemberId( r2->id() );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
     task1->addRequest( gr );
@@ -2059,7 +2059,7 @@ void ProjectTester::team()
     qDebug()<<endl<<"Testing:"<<s;
     
     r1->removeRequests();
-    team->addTeamMember( r1 );
+    team->addTeamMemberId( r1->id() );
     r1->setAvailableFrom( targetstart );
     r1->setAvailableUntil( targetend );
 
@@ -2098,7 +2098,7 @@ void ProjectTester::team()
     gr->takeResourceRequest(tr);
     task1->takeRequest(gr);
     project.takeResource( g, team);
-    team->removeTeamMember(r2);
+    team->removeTeamMemberId( r2->id() );
 
 }
 
