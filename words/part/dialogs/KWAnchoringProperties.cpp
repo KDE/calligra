@@ -562,8 +562,6 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
             anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
             anchorProperties.setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
 
-            ChangeAnchorPropertiesCommand *cmd = new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
-
             KoTextShapeDataBase *textData = 0;
             KoShape *oldParent = anchor->shape()->parent();
             if (oldParent) {
@@ -571,6 +569,8 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
             } else  if (container) {
                 textData = qobject_cast<KoTextShapeDataBase*>(container->userData());
             }
+
+            ChangeAnchorPropertiesCommand *cmd = new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
 
             if (textData) {
                 KoTextDocument doc(textData->document());

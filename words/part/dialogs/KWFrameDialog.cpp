@@ -90,7 +90,7 @@ void KWFrameDialog::okClicked()
                 m_first = false;
                 m_anchoringProperties->save(this);
             }
-           KUndo2Command::redo();
+            KUndo2Command::redo();
         }
         KWAnchoringProperties *m_anchoringProperties;
         bool m_first;
