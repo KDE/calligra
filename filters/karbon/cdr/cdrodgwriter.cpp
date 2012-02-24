@@ -203,11 +203,9 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
         QString::fromLatin1("none");
     svgStream << QLatin1String(" fill=\"") << fillColorName<<QLatin1Char('\"');
 
-    CdrOutline* outline = mDocument->outline( textObject->outlineId() );
-    const QString outlineColorName = ( outline ) ?
-        outline->color().name() :
-        QString::fromLatin1("none");
-    svgStream << QLatin1String(" stroke=\"") << outlineColorName << QLatin1Char('\"');
+    const CdrOutline* const outline = mDocument->outline( textObject->outlineId() );
+    if( outline )
+        svgStream << QLatin1String(" stroke=\"") << outline->color().name() << QLatin1Char('\"');
 
 //     const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
 //     svgStream << QLatin1String(" stroke-width=\"") << QString::number(lineWidth)<<QLatin1Char('\"');
@@ -461,8 +459,7 @@ CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
     mBodyWriter->addAttribute("draw:layer", mLayerId );
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
-    writeStrokeWidth( style, object->outlineId() );
-    writeStrokeColor( style, object->outlineId() );
+    writeStroke( style, object->outlineId() );
     writeFill( style, object->fillId() );
     const QString styleName = mStyleCollector.insert( style, QLatin1String("rectangleStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
@@ -485,8 +482,7 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
-    writeStrokeWidth( style, object->outlineId() );
-    writeStrokeColor( style, object->outlineId() );
+    writeStroke( style, object->outlineId() );
     writeFill( style, object->fillId() );
     const QString styleName = mStyleCollector.insert( style, QLatin1String("ellipseStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
@@ -592,8 +588,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     mBodyWriter->addAttribute( "svg:d", pathData ) ;
 
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
-    writeStrokeWidth( style, pathObject->outlineId() );
-    writeStrokeColor( style, pathObject->outlineId() );
+    writeStroke( style, pathObject->outlineId() );
     writeFill( style, pathObject->fillId() );
     const QString styleName = mStyleCollector.insert( style, QLatin1String("polylineStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
@@ -680,38 +675,45 @@ CdrOdgWriter::writeFill( KoGenStyle& odfStyle, quint32 fillId )
 }
 
 void
-CdrOdgWriter::writeStrokeColor( KoGenStyle& odfStyle, quint32 outlineId )
+CdrOdgWriter::writeStroke( KoGenStyle& odfStyle, quint32 outlineId )
 {
-    CdrOutline* outline = mDocument->outline( outlineId );
+    const CdrOutline* const outline = mDocument->outline( outlineId );
     if( outline == 0 ) // TODO: check when this can happen
         return;
 
     odfStyle.addProperty( QLatin1String("svg:stroke-color"), outline->color().name() );
-}
 
-void
-CdrOdgWriter::writeStrokeWidth( KoGenStyle& odfStyle, quint32 outlineId )
-{
-    CdrOutline* outline = mDocument->outline( outlineId );
-
-    const double lineWidth = ( outline ) ? odfLength(outline->lineWidth()) : 0.0;
-    odfStyle.addPropertyPt( QLatin1String("svg:stroke-width"), lineWidth );
+    odfStyle.addPropertyPt( QLatin1String("svg:stroke-width"), odfLength(outline->strokeWidth()) );
     odfStyle.addProperty( QLatin1String("draw:stroke"), "solid" );
+
+    const char* const linejoin =
+        (outline->strokeJoinType() == CdrStrokeRoundJoin) ?  "round" :
+        (outline->strokeJoinType() == CdrStrokeBevelJoin) ?  "bevel" :
+                                                             "miter";
+    odfStyle.addProperty( QLatin1String("draw:stroke-linejoin"), linejoin );
+
+    const char* const linecap =
+        (outline->strokeCapType() == CdrStrokeRoundCap) ?  "round" :
+        (outline->strokeCapType() == CdrStrokeSquareCap) ? "square" :
+                                                           "butt";
+    odfStyle.addProperty( QLatin1String("svg:stroke-linecap"), linecap );
 }
 
 void
 CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
 {
-    CdrStyle* style = mDocument->style( styleId );
+    const CdrStyle* const style = mDocument->style( styleId );
+    if( style == 0 ) // TODO: check when this can happen
+        return;
 
-    const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
-    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), fontSize );
-    if( style )
-    {
-        CdrFont* font = mDocument->font( style->fontId() );
-        if( font )
-            odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
-    }
+    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), style->fontSize() );
+    const char* const weight =
+        (style->fontWeight() == CdrFontBold) ?  "bold" :
+                                                "normal";
+    odfStyle.addProperty( QLatin1String("fo:font-weight"), weight );
+    const CdrFont* const font = mDocument->font( style->fontId() );
+    if( font )
+        odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
 }
 
 

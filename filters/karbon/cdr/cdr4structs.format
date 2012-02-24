@@ -146,8 +146,7 @@ const T& argRef( int i ) const
       <item name="CdrStyle210ArgumentId" value="210" />
       <item name="CdrStyleFontArgumentId" value="220" />
       <item name="CdrStyleTextAlignmentArgumentId" value="225" />
-      <!-- 20 bytes (all 00) -->
-      <item name="CdrStyle230ArgumentId" value="230" />
+      <item name="CdrStyleBulletSymbolArgumentId" value="230" />
       <!-- 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00) -->
       <item name="CdrStyle235ArgumentId" value="235" />
       <!-- 258 bytes (all 00) -->
@@ -171,7 +170,27 @@ const T& argRef( int i ) const
           <description>Really the block text id?</description>
       </field>
     </record>
+  </records>
 
+  <enums>
+    <enum name="Cdr4StyleFontStyleType">
+      <item name="Cdr4StyleFontNormal" value="1" />
+      <item name="Cdr4StyleFontBold" value="2" />
+    </enum>
+  </enums>
+
+  <records>
+    <record name="Cdr4FontData" size="6">
+      <field start="0" end="1" name="index" type="Cdr4FontIndex">
+        <description>The index of the font in the font table.</description>
+      </field>
+      <field start="2" end="3" name="size" type="uint16">
+        <description>The size of the font in CDR units.</description>
+      </field>
+      <field start="4" end="5" name="style" type="uint16" value="Cdr4StyleFontStyleType">
+        <description>The style of the font.</description>
+      </field>
+    </record>
 <!--
 0C 00 70 02 00 00
 0C 00 24 00 00 00
@@ -231,14 +250,12 @@ const T& argRef( int i ) const
       <field start="0" end="3" type="CdrBlockTextChar" name="character">
           <description>The actual char.</description>
       </field>
-      <!-- ? always 56-->
-      <field start="4" end="5" type="uint16" name="_unknown2" />
-      <!-- ? always 250-->
-      <field start="6" end="7" type="sint16" name="_unknown3" />
-      <!-- ? always 2-->
-      <field start="8" end="11" type="uint32" name="_unknown4" />
-      <!-- ? seen -236, -531, -826, -1121-->
-      <field start="12" end="13" type="sint16" name="_unknown5" />
+      <field start="4" end="9" type="Cdr4FontData" name="font">
+        <description>Font to use.</description>
+      </field>
+      <field start="10" end="13" type="Cdr4Point" name="nextLineOffset">
+        <description>The offset of the next line relative to the begin.</description>
+      </field>
       <!-- ? always 0-->
       <field start="14" end="15" type="sint16" name="_unknown6" />
       <!-- ? seen 0, 4-->
@@ -282,16 +299,10 @@ size |count|aps  | ap1 |apl  |?????|
         <dynbytestring start="0" name="title" />
     </record>
 
-    <!-- 0D 00 16 01 01 00 - also size, bold, italic etc. ?-->
     <record name="CdrStyleFontArgumentData" size="6">
-      <field start="0" end="1" name="fontIndex" type="Cdr4FontIndex">
-        <description>The index of the font in the font table.</description>
+      <field start="0" end="5" name="font" type="Cdr4FontData">
+        <description>The font to use.</description>
       </field>
-      <field start="2" end="3" name="fontSize" type="uint16">
-        <description>The size of the font in CDR units.</description>
-      </field>
-      <field start="4" end="4" name="_unknown1" type="uint8" />
-      <field start="5" end="5" name="_unknown2" type="uint8" />
     </record>
 
     <!-- 32bit seen 1,2, with 200 and 210 only argument in Default Graphic -->
@@ -340,17 +351,13 @@ size |count|aps  | ap1 |apl  |?????|
 0 88 333 1  0 00000000000000000000 Default Paragraph Text  (88: "AvantGarde Bk BT")
 0 58 333 1 31 00000000000000000000 with Überschrift, Text  (58: n.e.)
 -->
-    <record name="CdrStyle230ArgumentData" size="20">
+    <record name="CdrStyleBulletSymbolArgumentData" size="20">
       <!-- seen 0,1: 1 for Bullet styles, 0 for all other -->
-      <field start="0" end="1" name="_unknown0" type="sint16" />
-<!--
-seen 11,49,58,88
-11,49 matches font id of font "CommonBullets", but 58 not seen, garbage data with _unknown0=0?
--->
-      <field start="2" end="3" name="_unknown1" type="sint16" />
-      <!-- seen 194 (~14pt), 333 (~18pt), could be some font size -->
-      <field start="4" end="5" name="_unknown2" type="sint16" />
-      <field start="6" end="7" name="_unknown3" type="sint16" />
+      <field start="0" end="1" name="length" type="sint16" />
+      <field start="2" end="7" name="font" type="Cdr4FontData">
+        <description>The font to use.</description>
+      </field>
+      <!-- index of char? -->
       <field start="8" end="9" name="_unknown4" type="sint16" />
       <array start="10" end="19" name="_unknown" type="char" length="10" />
     </record>
@@ -358,8 +365,9 @@ seen 11,49,58,88
 in Default Artistic Text, not Default Graphic
 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00)
 seen 0, 100, 100, 100, 0, 0
+first 0, -4 for some substyle
 third last 188 for Text and Überschrift, if not 100
-second last 76 for Text and Überschrift
+second last 76 for Text and Überschrift, 150 for Titel, 25 for some substyle
 last 13751 for "Das Schulmagazin" text style
 -->
     <record name="CdrStyle235ArgumentData" size="12">
@@ -401,7 +409,7 @@ not seen for Default Artistic Text, Default Graphic
       <field start="2" end="3" name="_unknown1" type="sint16" />
       <!-- right margin? 0 for default text/überschrift, 250 for bullet points -->
       <field start="4" end="5" name="_unknown2" type="sint16" />
-      <!-- margin after text? 0 for default text/überschrift, 250 for bullet points -->
+      <!-- margin after text? 0 for default text/überschrift, 250 for bullet points. Is 787 for a style with 787 tab -->
       <field start="6" end="7" name="_unknown3" type="sint16" />
     </record>
     <!-- 32bit (0 0, 0 500) -->
@@ -425,6 +433,7 @@ not seen for Default Artistic Text, Default Graphic
     <enum name="CdrFillType">
       <item name="CdrTransparent" value="0" />
       <item name="CdrSolid" value="1" />
+      <item name="CdrUnknown2FillType" value="2" />
       <item name="CdrUnknown7FillType" value="7" />
       <item name="CdrUnknown11FillType" value="11" />
     </enum>
@@ -530,7 +539,50 @@ not seen for Default Artistic Text, Default Graphic
         <field name="unknown11FillData" type="CdrUnknown11FillData" dependValue="CdrUnknown7FillType" />
       </union>
     </record>
+  </records>
+
+  <enums>
+    <enum name="Cdr4StrokeType">
+      <item name="Cdr4StrokeUnknown1" value="1" />
+      <item name="Cdr4StrokeUnknown2Type" value="2" />
+      <item name="Cdr4StrokeUnknown4Type" value="4" />
+      <item name="Cdr4StrokeUnknown34Type" value="34" />
+      <item name="Cdr4StrokeUnknown50Type" value="50" />
+    </enum>
+
+    <enum name="Cdr4StrokeJoinType">
+      <item name="Cdr4StrokeUnknown0Join" value="0" />
+      <item name="Cdr4StrokeRoundJoin" value="1" />
+      <item name="Cdr4StrokeUnknown2Join" value="2" />
+    </enum>
+
+    <enum name="Cdr4StrokeCapType">
+      <item name="Cdr4StrokeUnknown0Cap" value="0" />
+      <item name="Cdr4StrokeRoundCap"  value="1">
+          <description>The stroke ends in a half circle around the endpoint.</description>
+      </item>
+      <item name="Cdr4StrokeUnknown2Cap" value="2" />
+    </enum>
+  </enums>
+
+  <records>
 <!--
+    <bitrecord name="CdrLineType" size="1">
+        <bitfield start="0" end="0" name="_unknown0" value type="boolean"/>
+        <bitfield start="1" end="1" name="_unknown1" value type="boolean"/>
+        <bitfield start="2" end="2" name="_unknown2" value type="boolean"/>
+        <bitfield start="3" end="3" name="_unknown3" value type="boolean"/>
+
+        <bitfield start="4" end="4" name="isScalable" value type="boolean">
+            <description>Controls whether the line width is scaled together with the object.</description>
+        </bitfield>
+        <bitfield start="5" end="5" name="isBehindFill" value type="boolean">
+            <description>controls whether the line should be painted behind the filling</description>
+        </bitfield>
+        <bitfield start="6" end="6" name="_unknown4" value type="boolean"/>
+        <bitfield start="7" end="7" name="_unknown5" value type="boolean"/>
+    </bitrecord>
+
 // 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 // 02 00 00 00 02 00 00 00 00 00 03 00 64 00 00 00 01 00 00 00 00 00 00 00 64 00 00 00 00 00 00 00 C2 01 3C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
@@ -551,18 +603,22 @@ not seen for Default Artistic Text, Default Graphic
       <field start="0" end="3" name="index" type="Cdr4OutlineIndex">
         <description>The index of the outline in the outline table.</description>
       </field>
-      <!-- type (?) seen 1, 2, 50-->
-      <field start="4" end="5" name="type" type="uint16" />
-      <!-- always 00 00 caps-->
-      <field start="6" end="7" name="_unknown0" type="uint16" />
-      <!-- always 00 00 corner-->
-      <field start="8" end="9" name="_unknown1" type="uint16" />
+      <!-- type (?) seen 1, 2, 4, 33, 34, 50   33: 0010 0001 34: 0010 0010 50: 00110010 -->
+      <field start="4" end="5" name="strokeType" type="uint16" value="Cdr4StrokeType" />
+      <!-- seen 0,1,2, cap type? -->
+      <field start="6" end="7" name="strokeCapType" type="uint16" value="Cdr4StrokeCapType" />
+      <!-- seen 0,1, join type? -->
+      <field start="8" end="9" name="strokeJoinType" type="uint16" value="Cdr4StrokeJoinType" />
       <!-- line width? seen 0, 3, 14, 30, 74-->
-      <field start="10" end="11" name="lineWidth" type="uint16" />
-      <!-- seen 0, 10, 100-->
-      <field start="12" end="13" name="_unknown3" type="uint16" />
-      <!-- seen 0, -370-->
-      <field start="14" end="15" name="_unknown4" type="uint16" />
+      <field start="10" end="11" name="strokeWidth" type="uint16" />
+      <!-- seen 0, 10, 71, 76, 78, 80, 83, 93, 95, 100, most often 100 -->
+      <field start="12" end="13" name="strokeThicknessPercentage" type="uint16" minValue="0" maxValue="100">
+          <description>Percentage of the width defining the other diameter of the pen?</description>
+      </field>
+      <!-- seen -900, -850, -726, -680, -440, -370, 0, 147, 235, 324, 301, 680, most often: 0 and -900 -->
+      <field start="14" end="15" name="penAngle" type="sint16" minValue="-900" maxValue="900">
+          <description>Angle of the pen?</description>
+      </field>
       <!-- sample data hints to be like CdrSolidFillData-->
       <field start="16" end="37" name="fillData" type="CdrSolidFillData" />
       <!-- 16..19: seen 0, 1>

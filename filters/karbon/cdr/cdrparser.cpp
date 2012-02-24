@@ -443,11 +443,26 @@ qDebug() << "Reading Outlines...";
             const QByteArray outlineChunk = mRiffStreamReader.chunkData();
             const CdrOutlineChunkData& outlineData = dataRef<CdrOutlineChunkData>( outlineChunk );
 
-            outline->setType( outlineData.type() );
-            outline->setLineWidth( outlineData.lineWidth() );
+            const CdrStrokeCapType capType =
+                (outlineData.strokeCapType() == Cdr4StrokeRoundCap) ? CdrStrokeRoundCap : CdrStrokeButtCap;
+            const CdrStrokeJoinType joinType =
+                (outlineData.strokeJoinType() == Cdr4StrokeRoundJoin) ? CdrStrokeRoundJoin : CdrStrokeMiterJoin;
+            outline->setStrokeType( outlineData.strokeType() );
+            outline->setStrokeCapType( capType );
+            outline->setStrokeJoinType( joinType );
+            outline->setStrokeWidth( outlineData.strokeWidth() );
             outline->setColor( color(outlineData.fillData().color(), outlineData.fillData().colorModel()) );
 
-qDebug() << outlineData.index() << outline->type() << outline->color().name();
+            const QByteArray endData = QByteArray::fromRawData(outlineData._unknown11Ptr(), outlineData._unknown11Count());
+qDebug() << "id:" << outlineData.index()
+         << "stroke type:" << outline->strokeType()
+         << "caps type:" << outline->strokeCapType()
+         << "join type:" << outline->strokeJoinType()
+         << "color:" << outline->color().name()
+         << "stroke width:" << outline->strokeWidth()
+         << "pen thickness (%):" << outlineData.strokeThicknessPercentage()
+         << "pen angle:" << outlineData.penAngle()
+         << endData.toHex();
 
             mDocument->insertOutline( outlineData.index(), outline );
         }
@@ -547,27 +562,30 @@ qDebug() << "Reading Styles...";
             case CdrStyleFontArgumentId:
             {
                 const CdrStyleFontArgumentData& fontData = styleArgs.argRef<CdrStyleFontArgumentData>( i );
-                style->setFontId( fontData.fontIndex() );
-                style->setFontSize( fontData.fontSize() );
+                style->setFontId( fontData.font().index() );
+                style->setFontSize( fontData.font().size() );
+                const CdrFontWeight fontWeight =
+                    (fontData.font().style()==Cdr4StyleFontBold) ? CdrFontBold : CdrFontNormal;
+                style->setFontWeight( fontWeight );
 
                 argTypeAsString = QLatin1String("font");
-                argAsString = QLatin1String("id:") + QString::number( fontData.fontIndex() ) +
-                              QLatin1String(" size:") + QString::number( fontData.fontSize()) +
-                              QLatin1Char(' ') + QString::number( fontData._unknown1()) +
-                              QLatin1Char(' ') + QString::number( fontData._unknown2());
+                argAsString = QLatin1String("id:") + QString::number( style->fontId() ) +
+                              QLatin1String(" size:") + QString::number( style->fontSize()) +
+                              QLatin1String(" style:") + QString::number( fontData.font().style());
                 break;
             }
-            case CdrStyle230ArgumentId:
+            case CdrStyleBulletSymbolArgumentId:
             {
-                const CdrStyle230ArgumentData& data = styleArgs.argRef<CdrStyle230ArgumentData>( i );
+                const CdrStyleBulletSymbolArgumentData& data =
+                    styleArgs.argRef<CdrStyleBulletSymbolArgumentData>( i );
                 const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
-                argTypeAsString = QLatin1String("some 20 bytes");
-                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown1() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown2() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown3() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown4() ) + QLatin1Char(' ') +
-                            QString::fromLatin1(hex.constData(), hex.count());
+                argTypeAsString = QLatin1String("bullet symbol");
+                argAsString = QString::number( data.length() ) +
+                              QLatin1String(" font id:") + QString::number( data.font().index() ) +
+                              QLatin1String(" size:") + QString::number( data.font().size()) +
+                              QLatin1String(" style:") + QString::number( data.font().style()) + QLatin1Char(' ') +
+                              QString::number( data._unknown4() ) + QLatin1Char(' ') +
+                              QString::fromLatin1(hex.constData(), hex.count());
                 break;
             }
             case CdrStyle240ArgumentId:
@@ -739,9 +757,12 @@ qDebug() << "Reading Parl...";
             const unsigned char textChar = bschData.character().character();
             if( textChar >= ' ' )
                 completeText.append( QChar(textChar) );
-            qDebug() << "...bsch:"<<QChar(textChar) <<bschData._unknown2()
-                                  <<bschData._unknown3() <<bschData._unknown4() <<bschData._unknown5()
-                                  <<bschData._unknown6() <<bschData._unknown7() <<bschData._unknown8();
+            qDebug() << "...bsch:"<<((textChar >= ' ')?QString(QChar(textChar)):QString::number(textChar,16))
+                     << "font index:" << bschData.font().index()
+                     << "font size:" << bschData.font().size()
+                     << "font style:" << bschData.font().style()
+                     << "next line:"<< bschData.nextLineOffset().x() << bschData.nextLineOffset().y()
+                     << "d:" << bschData._unknown6() << bschData._unknown7() << bschData._unknown8();
         }
     }
     mRiffStreamReader.closeList();

@@ -78,8 +78,7 @@ private:
     void writeParagraph( const CdrParagraph* paragraph );
 
     void writeFill( KoGenStyle& style, quint32 fillId );
-    void writeStrokeColor( KoGenStyle& style, quint32 outlineId );
-    void writeStrokeWidth( KoGenStyle& style, quint32 outlineId );
+    void writeStroke( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );
 
     void writeCornerPoint( CdrPoint cornerPoint );

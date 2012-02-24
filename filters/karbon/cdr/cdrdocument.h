@@ -285,17 +285,27 @@ private:
     QVector<CdrLayer*> mLayers;
 };
 
+enum CdrFontWeight
+{
+    CdrFontWeightUnknown,
+    CdrFontNormal,
+    CdrFontBold
+};
 
 class CdrStyle
 {
 public:
-    CdrStyle() : mBaseStyle(0), mFontId(-1), mFontSize(0), mTextAlignment(CdrTextAlignmentUnknown) {}
+    CdrStyle()
+    : mBaseStyle(0), mFontId(-1), mFontSize(0),
+      mTextAlignment(CdrTextAlignmentUnknown), mFontWeight(CdrFontWeightUnknown)
+    {}
 public:
     void setBaseStyle( const CdrStyle* baseStyle ) { mBaseStyle = baseStyle; }
     void setTitle( const QString& title ) { mTitle = title; }
     void setFontId( quint16 fontId ) { mFontId = fontId; }
     void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
     void setTextAlignment( CdrTextAlignment alignment ) { mTextAlignment = alignment; }
+    void setFontWeight( CdrFontWeight fontWeight ) { mFontWeight = fontWeight; }
 public:
     const CdrStyle* baseStyle() const { return mBaseStyle; }
 
@@ -311,29 +321,56 @@ public:
                mBaseStyle ?                                mBaseStyle->textAlignment() :
                                                            CdrTextAlignmentUnknown;
     }
+    CdrFontWeight fontWeight() const
+    {
+        return (mFontWeight!=CdrFontWeightUnknown) ? mFontWeight :
+               mBaseStyle ?                          mBaseStyle->fontWeight() :
+                                                     CdrFontWeightUnknown;
+    }
 private:
     const CdrStyle* mBaseStyle;
     qint32 mFontId;
     quint16 mFontSize;
     CdrTextAlignment mTextAlignment;
+    CdrFontWeight mFontWeight;
     QString mTitle;
+};
+
+enum CdrStrokeCapType
+{
+    CdrStrokeButtCap,
+    CdrStrokeRoundCap,
+    CdrStrokeSquareCap
+};
+
+enum CdrStrokeJoinType
+{
+    CdrStrokeMiterJoin,
+    CdrStrokeRoundJoin,
+    CdrStrokeBevelJoin
 };
 
 class CdrOutline
 {
 public:
-    CdrOutline() : mLineWidth(0) {}
+    CdrOutline() : mCapType(CdrStrokeButtCap), mJoinType(CdrStrokeMiterJoin), mStrokeWidth(0) {}
 public:
-    void setType( quint32 type ) { mType = type; }
-    void setLineWidth( quint16 lineWidth ) { mLineWidth = lineWidth; }
+    void setStrokeType( quint32 strokeType ) { mStrokeType = strokeType; }
+    void setStrokeCapType( CdrStrokeCapType capType ) { mCapType = capType; }
+    void setStrokeJoinType( CdrStrokeJoinType joinType ) { mJoinType = joinType; }
+    void setStrokeWidth( quint16 strokeWidth ) { mStrokeWidth = strokeWidth; }
     void setColor( const QColor& color ) { mColor = color; }
 public:
-    quint32 type() const { return mType; }
-    quint16 lineWidth() const { return mLineWidth; }
+    quint32 strokeType() const { return mStrokeType; }
+    CdrStrokeCapType strokeCapType() const { return mCapType; }
+    CdrStrokeJoinType strokeJoinType() const { return mJoinType; }
+    quint16 strokeWidth() const { return mStrokeWidth; }
     const QColor& color() const { return mColor; }
 private:
-    quint32 mType;
-    quint16 mLineWidth;
+    quint32 mStrokeType;
+    CdrStrokeCapType mCapType;
+    CdrStrokeJoinType mJoinType;
+    quint16 mStrokeWidth;
     QColor mColor;
 };
 
