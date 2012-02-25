@@ -207,7 +207,7 @@ const T& argRef( int i ) const
 0C 00 00 00 00 00
 -->
     <record name="CdrBlockTextParagraphChunkData" size="6">
-      <!-- ?, seen 6, 7, 12, 26-->
+      <!-- some flags?, seen 6, 7, 12,14,15,16,17,18, 26 -> 110,111,1100,1110,1111,10000,10001,10010,11010 -->
       <field start="0" end="1" type="uint16" name="_unknown0" />
       <field start="2" end="3" type="uint16" name="length">
           <description>The length of the text in this paragraph?</description>
@@ -1046,6 +1046,7 @@ subpaths start with 04 end with 04. hm, start with two 04, at different points
 <!--
 sample: 00 00 EA 18 37 27 01 00 00 00 3F 05
 sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
+sample: 0     5000  6181  1     0     984
              |     |     |           |
 -->
     <record name="Cdr4BlockTextData" size="12">

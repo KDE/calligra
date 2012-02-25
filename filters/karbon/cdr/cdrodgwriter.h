@@ -35,6 +35,7 @@ class CdrGraphicTextObject;
 class CdrBlockTextObject;
 class CdrAbstractObject;
 class CdrParagraph;
+class CdrStyledTextSpan;
 class CdrAbstractTransformation;
 class CdrPoint;
 
@@ -75,11 +76,12 @@ private:
     void writeGraphicTextObject( const CdrGraphicTextObject* object );
     void writeBlockTextObject( const CdrBlockTextObject* object );
 
-    void writeParagraph( const CdrParagraph* paragraph );
+    void writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextObject* blockTextObject );
 
     void writeFill( KoGenStyle& style, quint32 fillId );
     void writeStroke( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );
+    void writeFont( KoGenStyle& odfStyle, const CdrStyledTextSpan* textSpan );
 
     void writeCornerPoint( CdrPoint cornerPoint );
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,

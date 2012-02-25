@@ -706,6 +706,7 @@ qDebug() << "Reading Strl...";
             const QByteArray btidChunk = mRiffStreamReader.chunkData();
             const CdrBlockTextIdChunkData btidData = data<CdrBlockTextIdChunkData>( btidChunk );
             blockTextId = btidData.id();
+qDebug()<<"BlockText id:"<<blockTextId;
         }
         else if( chunkId == parlId )
         {
@@ -714,9 +715,6 @@ qDebug() << "Reading Strl...";
                 blockText->addParagraph( paragraph );
         }
     }
-qDebug()<<"BlockText id:"<<blockTextId;
-foreach(const CdrParagraph* paragraph, blockText->paragraphs())
-    qDebug() << paragraph->text();
 
     mRiffStreamReader.closeList();
 
@@ -727,9 +725,12 @@ CdrParagraph*
 CdrParser::readParl()
 {
     CdrParagraph* paragraph = new CdrParagraph;
+
+    CdrParagraphLine* paragraphLine = new CdrParagraphLine;
+
     mRiffStreamReader.openList();
 qDebug() << "Reading Parl...";
-    QString completeText;
+
     while( mRiffStreamReader.readNextChunkHeader() )
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
@@ -747,6 +748,7 @@ qDebug() << "Reading Parl...";
             const CdrBlockTextNormalCharChunkData& bnchData =
                 dataRef<CdrBlockTextNormalCharChunkData>( bnchChunk );
 
+            CdrNormalTextSpan* textSpan = new CdrNormalTextSpan;
             QString text;
             const int count = bnchChunk.count() / sizeof(CdrBlockTextChar);
             for( int i = 0; i<count; ++i )
@@ -754,8 +756,12 @@ qDebug() << "Reading Parl...";
                 const unsigned char textChar = bnchData.textChar(i).character();
                 if( textChar >= ' ' )
                     text.append( QChar(textChar) );
+                else
+                    qDebug() << "CONTROL CHAR found:" << textChar;
             }
-            completeText.append(text);
+            textSpan->setText( text );
+            paragraphLine->addTextSpan( textSpan );
+
             qDebug() << "...bnch:"<<text;
         }
         else if( chunkId == bschId )
@@ -763,9 +769,28 @@ qDebug() << "Reading Parl...";
             const QByteArray bschChunk = mRiffStreamReader.chunkData();
             const CdrBlockTextSpecialCharChunkData& bschData =
                 dataRef<CdrBlockTextSpecialCharChunkData>( bschChunk );
+
             const unsigned char textChar = bschData.character().character();
-            if( textChar >= ' ' )
-                completeText.append( QChar(textChar) );
+
+            // is linebreak?
+            if( textChar == 0x0D )
+            {
+                paragraph->addParagraphLine( paragraphLine );
+                paragraphLine = new CdrParagraphLine;
+                paragraphLine->setOffset( CdrPoint(bschData.nextLineOffset().x(), bschData.nextLineOffset().y()) );
+            }
+            else
+            {
+                CdrStyledTextSpan* textSpan = new CdrStyledTextSpan;
+                textSpan->setText( QChar(textChar) );
+                textSpan->setFontId( bschData.font().index() );
+                textSpan->setFontSize( bschData.font().size() );
+                const CdrFontWeight fontWeight =
+                    (bschData.font().style()==Cdr4StyleFontBold) ? CdrFontBold : CdrFontNormal;
+                textSpan->setFontWeight( fontWeight );
+                paragraphLine->addTextSpan( textSpan );
+            }
+
             qDebug() << "...bsch:"<<((textChar >= ' ')?QString(QChar(textChar)):QString::number(textChar,16))
                      << "font index:" << bschData.font().index()
                      << "font size:" << bschData.font().size()
@@ -776,7 +801,7 @@ qDebug() << "Reading Parl...";
     }
     mRiffStreamReader.closeList();
 
-    paragraph->setText(completeText);
+    paragraph->addParagraphLine( paragraphLine );
 
     return paragraph;
 }
@@ -1462,6 +1487,8 @@ CdrParser::readBlockTextObject( const CdrArgumentWithTypeListData& argsData )
         case CdrObjectSpecificDataArgumentId :
         {
             const Cdr4BlockTextData& blockTextData = argsData.argRef<Cdr4BlockTextData>( i );
+            blockTextObject->setWidth( blockTextData.width() );
+            blockTextObject->setHeight( blockTextData.height() );
 qDebug() << "blockTextData:" << blockTextData._unknown0() << blockTextData.width()
                              << blockTextData.height() << blockTextData.index()
                              << blockTextData._unknown4() << blockTextData._unknown5();

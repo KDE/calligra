@@ -111,7 +111,7 @@ typedef quint16 CdrPointType;
 struct CdrPoint
 {
 public:
-    CdrPoint() {}
+    CdrPoint() : mX(0), mY(0) {}
     CdrPoint( CdrCoord x, CdrCoord y ) : mX(x), mY(y) {}
 public:
     CdrCoord x() const { return mX; }
@@ -132,6 +132,13 @@ struct CdrPathPoint
 };
 
 
+enum CdrFontWeight
+{
+    CdrFontWeightUnknown,
+    CdrFontNormal,
+    CdrFontBold
+};
+
 enum CdrTextAlignment
 {
     CdrTextAlignmentUnknown = 0,
@@ -140,14 +147,78 @@ enum CdrTextAlignment
     CdrTextAlignRight = 3
 };
 
-struct CdrParagraph
+class CdrAbstractTextSpan
 {
 public:
+    enum Id { Normal = 0, Styled };
+protected:
+    explicit CdrAbstractTextSpan(Id id) : mId( id ) {}
+private:
+    CdrAbstractTextSpan( const CdrAbstractTextSpan& );
+    CdrAbstractTextSpan& operator=( const CdrAbstractTextSpan& );
+public:
+    virtual ~CdrAbstractTextSpan() {}
     void setText( const QString& text ) { mText = text; }
 public:
+    Id id() const { return mId; }
     const QString& text() const { return mText; }
 private:
+    Id mId;
+protected:
     QString mText;
+};
+
+class CdrNormalTextSpan : public CdrAbstractTextSpan
+{
+public:
+    CdrNormalTextSpan() : CdrAbstractTextSpan(Normal) {}
+};
+
+class CdrStyledTextSpan : public CdrAbstractTextSpan
+{
+public:
+    CdrStyledTextSpan() : CdrAbstractTextSpan(Styled),
+    mFontId(-1), mFontSize(0), mFontWeight(CdrFontWeightUnknown)
+    {}
+    void appendText( const QString& text ) { mText.append(text); }
+    void setFontId( quint16 fontId ) { mFontId = fontId; }
+    void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
+    void setFontWeight( CdrFontWeight fontWeight ) { mFontWeight = fontWeight; }
+public:
+    bool isFontDataEqual( const CdrStyledTextSpan& other ) const
+    { return (mFontId == other.mFontId) && (mFontSize == other.mFontSize) && (mFontWeight == other.mFontWeight); }
+    qint32 fontId() const { return mFontId; }
+    quint16 fontSize() const { return mFontSize; }
+    CdrFontWeight fontWeight() const { return mFontWeight; }
+private:
+    qint32 mFontId;
+    quint16 mFontSize;
+    CdrFontWeight mFontWeight;
+};
+
+class CdrParagraphLine
+{
+public:
+    ~CdrParagraphLine() { qDeleteAll(mTextSpans);}
+    void addTextSpan( CdrAbstractTextSpan* textSpan );
+    void setOffset( CdrPoint offset ) { mOffset = offset; }
+public:
+    const QVector<CdrAbstractTextSpan*>& textSpans() const { return mTextSpans; }
+    CdrPoint offset() const { return mOffset; }
+private:
+    QVector<CdrAbstractTextSpan*> mTextSpans;
+    CdrPoint mOffset;
+};
+
+class CdrParagraph
+{
+public:
+    ~CdrParagraph() { qDeleteAll(mParagraphLines);}
+    void addParagraphLine( CdrParagraphLine* paragraphLine ) { mParagraphLines.append(paragraphLine); }
+public:
+    const QVector<CdrParagraphLine*>& paragraphLines() const { return mParagraphLines; }
+private:
+    QVector<CdrParagraphLine*> mParagraphLines;
 };
 
 class CdrBlockText
@@ -238,7 +309,16 @@ private:
 class CdrBlockTextObject : public CdrGraphObject
 {
 public:
-    CdrBlockTextObject() : CdrGraphObject(BlockTextObjectId) {}
+    CdrBlockTextObject() : CdrGraphObject(BlockTextObjectId), mWidth(0), mHeight(0) {}
+public:
+    void setWidth( quint16 width ) { mWidth = width; }
+    void setHeight( quint16 height ) { mHeight = height; }
+public:
+    quint16 width() const { return mWidth; }
+    quint16 height() const { return mHeight; }
+private:
+    quint16 mWidth;
+    quint16 mHeight;
 };
 
 class CdrGroupObject : public CdrAbstractObject
@@ -283,13 +363,6 @@ public:
     const QVector<CdrLayer*>& layers() const { return mLayers; }
 private:
     QVector<CdrLayer*> mLayers;
-};
-
-enum CdrFontWeight
-{
-    CdrFontWeightUnknown,
-    CdrFontNormal,
-    CdrFontBold
 };
 
 class CdrStyle

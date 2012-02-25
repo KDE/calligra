@@ -589,7 +589,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
     KoGenStyle style( KoGenStyle::GraphicAutoStyle, "graphic" );
     writeStroke( style, pathObject->outlineId() );
     writeFill( style, pathObject->fillId() );
-    const QString styleName = mStyleCollector.insert( style, QLatin1String("polylineStyle") );
+    const QString styleName = mStyleCollector.insert( style, QLatin1String("pathStyle") );
     mBodyWriter->addAttribute( "draw:style-name", styleName );
 
     mBodyWriter->endElement(); // draw:path
@@ -614,50 +614,67 @@ CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 }
 
 void
-CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* object )
+CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* blockTextObject )
 {
-    const CdrBlockText* blockText = mDocument->blockTextForObject( object->objectId() );
+    const CdrBlockText* const blockText =
+        mDocument->blockTextForObject( blockTextObject->objectId() );
     if( blockText == 0 )
         return; // TODO: rather check on parsing
 
     mBodyWriter->startElement("draw:frame");
-    mBodyWriter->addAttribute("draw:layer", mLayerId );
-    writeTransformation( object->transformations(), QLatin1String("scale(1 -1)") );
-//     mBodyWriter->addAttribute( "draw:style-name", blockTextStyle );
+    mBodyWriter->addAttribute( "draw:layer", mLayerId );
+    mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));
+    mBodyWriter->addAttributePt( "svg:y", odfYCoord(0));
+    mBodyWriter->addAttributePt( "svg:width", odfLength(blockTextObject->width()) );
+    mBodyWriter->addAttributePt( "svg:height", odfLength(blockTextObject->height()) );
+    writeTransformation( blockTextObject->transformations(), QLatin1String("scale(1 -1)") );
+
+    KoGenStyle frameStyle( KoGenStyle::GraphicAutoStyle, "graphic" );
+    frameStyle.addProperty( QLatin1String("style:overflow-behavior"), "clip" );
+    const QString frameStyleName =
+        mStyleCollector.insert( frameStyle, QLatin1String("frameStyle") );
+    mBodyWriter->addAttribute( "draw:style-name", frameStyleName );
 
     mBodyWriter->startElement("draw:text-box");
+    mBodyWriter->addAttributePt( "fo:max-width", odfLength(blockTextObject->width()) );
+    mBodyWriter->addAttributePt( "fo:max-height", odfLength(blockTextObject->height()) );
 
-    //export every paragraph
     foreach( const CdrParagraph* paragraph, blockText->paragraphs() )
-        writeParagraph( paragraph );
+        writeParagraph( paragraph, blockTextObject );
 
     mBodyWriter->endElement();//draw:text-box
     mBodyWriter->endElement();//draw:frame
 }
 
 void
-CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph )
+CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextObject* blockTextObject )
 {
     mBodyWriter->startElement( "text:p", false );  //false: we should not indent the inner tags
 
-    KoGenStyle paragraphStyle( KoGenStyle::ParagraphAutoStyle, "paragraph" );
-    const QString paragraphStyleName =
-        mStyleCollector.insert( paragraphStyle, QLatin1String("paragraphStyle") );
+    foreach( const CdrParagraphLine* paragraphLine, paragraph->paragraphLines() )
+    {
+        foreach( const CdrAbstractTextSpan* textSpan, paragraphLine->textSpans() )
+        {
+            mBodyWriter->startElement( "text:span" );
 
-    mBodyWriter->addAttribute( "text:style-name", paragraphStyleName );
+            KoGenStyle textSpanStyle( KoGenStyle::TextAutoStyle, "text" );
+            // block text global style
+            writeFont( textSpanStyle, blockTextObject->styleId() );
+            // span specific style
+            if( textSpan->id() == CdrAbstractTextSpan::Styled )
+                writeFont( textSpanStyle, static_cast<const CdrStyledTextSpan*>(textSpan) );
 
-    KoGenStyle textStyle( KoGenStyle::TextAutoStyle, "text" );
-    const QString textStyleName =
-        mStyleCollector.insert( textStyle, "T" );
+            const QString textSpanStyleName =
+                mStyleCollector.insert( textSpanStyle, QLatin1String("textSpanStyle") );
+            mBodyWriter->addAttribute( "text:style-name", textSpanStyleName );
 
-        mBodyWriter->startElement( "text:span" );
+            mBodyWriter->addTextNode( textSpan->text() );
 
-        mBodyWriter->addAttribute( "text:style-name", textStyleName );
-        mBodyWriter->addTextNode( paragraph->text() );
+            mBodyWriter->endElement(); //text:span
+        }
+    }
 
-        mBodyWriter->endElement();//text:span
-
-    mBodyWriter->endElement();//text:p
+    mBodyWriter->endElement(); //text:p
 }
 
 void
@@ -705,12 +722,25 @@ CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
     if( style == 0 ) // TODO: check when this can happen
         return;
 
-    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), style->fontSize() );
+    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), odfLength(style->fontSize()) );
     const char* const weight =
         (style->fontWeight() == CdrFontBold) ?  "bold" :
                                                 "normal";
     odfStyle.addProperty( QLatin1String("fo:font-weight"), weight );
     const CdrFont* const font = mDocument->font( style->fontId() );
+    if( font )
+        odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
+}
+
+void
+CdrOdgWriter::writeFont( KoGenStyle& odfStyle, const CdrStyledTextSpan* textSpan )
+{
+    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), odfLength(textSpan->fontSize()) );
+    const char* const weight =
+        (textSpan->fontWeight() == CdrFontBold) ?  "bold" :
+                                                   "normal";
+    odfStyle.addProperty( QLatin1String("fo:font-weight"), weight );
+    const CdrFont* const font = mDocument->font( textSpan->fontId() );
     if( font )
         odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
 }

@@ -20,6 +20,25 @@
 
 #include "cdrdocument.h"
 
+
+void CdrParagraphLine::addTextSpan( CdrAbstractTextSpan* textSpan )
+{
+    if( (textSpan->id() == CdrAbstractTextSpan::Styled) &&
+        (mTextSpans.count() > 0) && (mTextSpans.last()->id() == CdrAbstractTextSpan::Styled) )
+    {
+        CdrStyledTextSpan* newStyledSpan = static_cast<CdrStyledTextSpan*>( textSpan );
+        CdrStyledTextSpan* lastStyledSpan = static_cast<CdrStyledTextSpan*>( mTextSpans.last() );
+        if( lastStyledSpan->isFontDataEqual(*newStyledSpan) )
+        {
+            lastStyledSpan->appendText(newStyledSpan->text());
+            delete newStyledSpan;
+            return;
+        }
+    }
+
+    mTextSpans.append(textSpan);
+}
+
 CdrBlockText*
 CdrDocument::blockTextForObject( quint16 id )
 {
