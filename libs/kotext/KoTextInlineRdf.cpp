@@ -24,6 +24,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoElementReference.h>
+
 #include "KoBookmark.h"
 #include "KoTextMeta.h"
 #include "KoTextEditor.h"
@@ -193,11 +195,8 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
 
 QString KoTextInlineRdf::createXmlId()
 {
-    QString uuid = QUuid::createUuid().toString();
-    uuid.remove('{');
-    uuid.remove('}');
-    kDebug(30015) << "createXmlId() ret:" << uuid;
-    return uuid;
+    KoElementReference ref;
+    return ref.toString();
 }
 
 QString KoTextInlineRdf::subject()
