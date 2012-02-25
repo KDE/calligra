@@ -170,42 +170,26 @@ KisImage::~KisImage()
     disconnect(); // in case Qt gets confused
 }
 
-void KisImage::aboutToAddANode(KisNode *parent, int index)
-{
-    SANITY_CHECK_LOCKED("aboutToAddANode");
-    m_d->signalRouter->emitAboutToAddANode(parent, index);
-}
-
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
+    KisNodeGraphListener::nodeHasBeenAdded(parent, index);
+
+    SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter->emitNodeHasBeenAdded(parent, index);
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
+    KisNodeGraphListener::aboutToRemoveANode(parent, index);
+
     SANITY_CHECK_LOCKED("aboutToRemoveANode");
     m_d->signalRouter->emitAboutToRemoveANode(parent, index);
 }
 
-void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
-{
-    // XXX: Temporarily for compatibility
-    m_d->signalRouter->emitNodeHasBeenRemoved(parent, index);
-}
-
-void KisImage::aboutToMoveNode(KisNode *node, int oldIndex, int newIndex)
-{
-    SANITY_CHECK_LOCKED("aboutToMoveNode");
-    m_d->signalRouter->emitAboutToMoveNode(node, oldIndex, newIndex);
-}
-
-void KisImage::nodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex)
-{
-    m_d->signalRouter->emitNodeHasBeenMoved(node, oldIndex, newIndex);
-}
-
 void KisImage::nodeChanged(KisNode* node)
 {
+    KisNodeGraphListener::nodeChanged(node);
+
     m_d->signalRouter->emitNodeChanged(node);
 }
 
@@ -911,28 +895,48 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
     if (!prevLayer) return 0;
 
-
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
     QRect layerProjectionExtent = layer->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
-    lock();
-    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
-    unlock();
+    KisPaintDeviceSP mergedDevice;
 
-    KisPainter gc(mergedDevice);
-    gc.setChannelFlags(layer->channelFlags());
-    gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-    gc.setOpacity(layer->opacity());
-    gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    if (layer->compositeOpId() != prevLayer->compositeOpId() || layer->opacity() != prevLayer->opacity()) {
 
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+        mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
+        KisPainter gc(mergedDevice);
+
+        gc.setChannelFlags(prevLayer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
+        gc.setOpacity(prevLayer->opacity());
+
+        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
+
+
+        gc.setChannelFlags(layer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
+        gc.setOpacity(layer->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    }
+    else {
+        lock();
+        mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        unlock();
+
+        KisPainter gc(mergedDevice);
+        gc.setChannelFlags(layer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
+        gc.setOpacity(layer->opacity());
+        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    }
+
+    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
-    mergedLayer->setCompositeOp(prevLayer->compositeOp()->id());
-    mergedLayer->setOpacity(prevLayer->opacity());
-    mergedLayer->setChannelFlags(prevLayer->channelFlags());
+    mergedLayer->setCompositeOp(COMPOSITE_OVER);
+    mergedLayer->setChannelFlags(layer->channelFlags());
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -980,14 +984,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
     undoAdapter()->beginMacro(i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
-
-    KisNodeSP node = layer->firstChild();
-    while (node) {
-        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node));
-        node = node->nextSibling();
-    }
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
-
 
     QList<const KisMetaData::Store*> srcs;
     srcs.append(layer->metaData());
@@ -1196,8 +1193,10 @@ KisActionRecorder* KisImage::actionRecorder() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    if(m_d->rootLayer)
+    if(m_d->rootLayer) {
+        m_d->rootLayer->setGraphListener(0);
         m_d->rootLayer->disconnect();
+    }
 
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
@@ -1396,6 +1395,8 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
+    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+
     if (m_d->scheduler) {
         m_d->scheduler->updateProjection(node, rect, bounds());
     }

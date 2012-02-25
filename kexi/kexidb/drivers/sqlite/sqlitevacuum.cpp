@@ -29,11 +29,11 @@
 #include <qprogressbar.h>
 #include <kio/global.h>
 
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QApplication>
 #include <QProcess>
-#include <qcursor.h>
+#include <QCursor>
 
 #include <unistd.h>
 

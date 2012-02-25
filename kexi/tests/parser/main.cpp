@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

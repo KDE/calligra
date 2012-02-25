@@ -24,7 +24,7 @@
 #include <QDataStream>
 #include <QObject>
 #include <QVector>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <KoFilter.h>
 #include <KoStore.h>

@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 #include <ktar.h>
-#include <qdir.h>
+#include <QDir>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kfiledialog.h>

@@ -21,7 +21,7 @@
 #define ROUNDCORNERSCOMMAND_H
 
 #include <kundo2command.h>
-#include <QtCore/QPointF>
+#include <QPointF>
 
 class KoPathShape;
 class KoPathSegment;

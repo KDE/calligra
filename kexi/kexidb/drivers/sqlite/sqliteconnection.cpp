@@ -29,9 +29,9 @@
 #include <kexidb/error.h>
 #include <kexiutils/utils.h>
 
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
 
 #include <KDebug>
 #include <KLocale>

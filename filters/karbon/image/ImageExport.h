@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2002 Rob Buis <buis@kde.org>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,33 +21,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kofonttab_h__
-#define __kofonttab_h__
+#ifndef IMAGEEXPORT_H
+#define IMAGEEXPORT_H
 
-#include <QFont>
-#include <QWidget>
+#include <KoFilter.h>
+#include <QVariantList>
 
-#include <kfontchooser.h>
-
-class KoCharacterStyle;
-
-class FontTab : public QWidget
+class ImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    explicit FontTab(bool uniqueFormat, QWidget* parent = 0);
-    ~FontTab() {}
-
-    void setDisplay(const KoCharacterStyle *displayStyle);
-    void save(KoCharacterStyle *style) const;
-
-signals:
-    void fontChanged(const QFont &font);
-
-private:
-    KFontChooser *m_fontChooser;
-    bool m_uniqueFormat;
+    ImageExport(QObject* parent, const QVariantList&);
+    virtual ~ImageExport() {}
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
-#endif
+#endif // IMAGEEXPORT_H

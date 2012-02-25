@@ -20,13 +20,13 @@
 
 #include <stdlib.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qstyle.h>
+#include <QLabel>
+#include <QPushButton>
+#include <QCursor>
+#include <QPoint>
+#include <QApplication>
+#include <QBitmap>
+#include <QStyle>
 #include <QEvent>
 #include <QDropEvent>
 #include <QVBoxLayout>

@@ -22,7 +22,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QStringList>
 
 #include <kdebug.h>

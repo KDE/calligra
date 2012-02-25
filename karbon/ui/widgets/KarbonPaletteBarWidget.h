@@ -22,7 +22,7 @@
 
 #include <KoColorSet.h>
 #include <KoResourceServerAdapter.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QToolButton;
 class KarbonPaletteWidget;

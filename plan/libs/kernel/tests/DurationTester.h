@@ -20,7 +20,7 @@
 #ifndef KPlato_DurationTester_h
 #define KPlato_DurationTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {

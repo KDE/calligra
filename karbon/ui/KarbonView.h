@@ -167,6 +167,7 @@ protected:
     void createColorDock();
 
     virtual KoPrintJob * createPrintJob();
+    virtual KoPrintJob * createPdfPrintJob();
 
 private:
     void initActions();

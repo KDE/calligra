@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 #include "kis_view2.h"
-#include <qprinter.h>
+#include <QPrinter>
 
 #include <QDesktopWidget>
 #include <QGridLayout>
@@ -167,6 +167,8 @@ public:
         if (canvasController) {
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
+
+        delete canvasController;
         delete canvas;
         delete filterManager;
         delete selectionManager;
@@ -322,12 +324,11 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence("Ctrl+h");
+    shortcuts << QKeySequence(Qt::Key_Tab);
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
-
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
@@ -435,10 +436,19 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tmpDoc;
-            tmpDoc.loadNativeFormatFromStore(ba);
+            KisDoc2 tempDoc;
+            tempDoc.loadNativeFormatFromStore(ba);
 
-            node = tmpDoc.image()->rootLayer()->firstChild();
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->rootLayer()->firstChild();
+            tempImage->removeNode(node);
+
+            // layers store a lisk to the image, so update it
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            if(layer) {
+                layer->setImage(kisimage);
+            }
+
             node->setName(i18n("Pasted Layer"));
         }
         else if (event->mimeData()->hasImage()) {
@@ -453,11 +463,6 @@ void KisView2::dropEvent(QDropEvent *event)
 
         if (node) {
 
-            // Set the image on layers before adding them, otherwise we get a crash
-            if (qobject_cast<KisLayer*>(node.data())) {
-                qobject_cast<KisLayer*>(node.data())->setImage(kisimage);
-            }
-
             node->setX(pos.x() - node->projection()->exactBounds().width());
             node->setY(pos.y() - node->projection()->exactBounds().height());
 
@@ -469,9 +474,6 @@ void KisView2::dropEvent(QDropEvent *event)
                                 m_d->nodeManager->activeLayer()->parent(),
                                 m_d->nodeManager->activeLayer());
             }
-            node->setDirty();
-            canvas()->update();
-            nodeManager()->activateNode(node);
         }
 
         return;
@@ -491,6 +493,9 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
+            // XXX: translate after 2.4
+            QAction *replaceCurrentDocument = new KAction("Replace Current Document", &popup);
+
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
@@ -498,6 +503,7 @@ void KisView2::dropEvent(QDropEvent *event)
                     popup.addAction(insertAsNewLayer);
                 }
                 popup.addAction(openInNewDocument);
+                popup.addAction(replaceCurrentDocument);
             } else {
                 if (!image().isNull()) {
                     popup.addAction(insertAsNewLayers);
@@ -515,6 +521,15 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                    }
+                    else if (action == replaceCurrentDocument) {
+                        if (m_d->doc->isModified()) {
+                            m_d->doc->save();
+                        }
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
+                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
@@ -671,7 +686,7 @@ void KisView2::slotLoadingFinished()
     }
 
     if (activeNode) {
-        m_d->nodeManager->activateNode(activeNode);
+        m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
     /**
@@ -1019,8 +1034,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
-
+    pDoc->setSaveInBatchMode(true);
     pDoc->saveAs(fileName);
+    pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
 }
@@ -1125,8 +1141,10 @@ void KisView2::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
+        pDoc->setSaveInBatchMode(true);
         pDoc->saveAs(backupFileName);
         pDoc->saveAs(fileName);
+        pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();
     }
@@ -1230,5 +1248,6 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 }
+
 
 #include "kis_view2.moc"

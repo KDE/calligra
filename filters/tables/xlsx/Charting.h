@@ -20,12 +20,12 @@
 #ifndef CHARTING_H
 #define CHARTING_H
 
-#include <QtCore/QString>
-//#include <QtCore/QStringList>
-#include <QtCore/QRect>
-#include <QtCore/QMap>
-#include <QtGui/QColor>
-#include <QtCore/QDebug>
+#include <QString>
+//#include <QStringList>
+#include <QRect>
+#include <QMap>
+#include <QColor>
+#include <QDebug>
 #include <MsooXmlGlobal.h>
 
 namespace Charting

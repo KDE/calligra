@@ -21,7 +21,7 @@
 #define KSPREAD_CLUSTER_BENCHMARK
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KSpread
 {

@@ -20,12 +20,12 @@
 
 #include "mdbmigrate.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qdatetime.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QDateTime>
+#include <QList>
 #include <kdebug.h>
 
 #include <kexiutils/identifier.h>

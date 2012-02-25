@@ -23,7 +23,7 @@
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 //! @short A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox,

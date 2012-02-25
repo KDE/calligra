@@ -166,7 +166,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     QList<QAction*> list;
-    list.append(this->action("text_default"));
     list.append(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
@@ -853,7 +852,7 @@ void TextTool::copy() const
         rm = canvas()->shapeController()->resourceManager();
     }
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
-        KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+        KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
@@ -918,7 +917,7 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
@@ -937,7 +936,7 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
 
     m_textEditor.data()->clearSelection();
@@ -1990,6 +1989,7 @@ void TextTool::insertSpecialCharacter()
 void TextTool::insertString(const QString& string)
 {
     m_textEditor.data()->insertText(string);
+    returnFocusToCanvas();
 }
 
 void TextTool::selectFont()
@@ -2325,6 +2325,21 @@ void TextTool::textDirectionChanged()
         blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
      }
     m_textEditor.data()->mergeBlockFormat(blockFormat);
+}
+
+void TextTool::setListLevel(int level)
+{
+    if (level < 1 || level > 10) {
+        return;
+    }
+
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (textEditor->block().textList()) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::SetLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, level);
+        textEditor->addCommand(cll);
+        editingPluginEvents();
+    }
 }
 
 #include <TextTool.moc>

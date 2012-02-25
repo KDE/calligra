@@ -21,7 +21,7 @@
 #define KEXIDB_DRIVER_H
 
 #include <QObject>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QList>
 #include <QByteArray>
 

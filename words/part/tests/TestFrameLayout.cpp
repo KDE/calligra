@@ -691,7 +691,7 @@ void TestFrameLayout::testPageStyle()
     QCOMPARE(fsets1.oddHeaders->frameCount(), 1);
     QCOMPARE(fsets2.oddHeaders->frameCount(), 3);
 }
-#include <qdebug.h>
+#include <QDebug>
 void TestFrameLayout::testPageBackground()
 {
     // creating a page with a pagestyle that has a background set should

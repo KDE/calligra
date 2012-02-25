@@ -20,8 +20,8 @@
 #define _WMFIMPORTPARSER_H_
 
 #include <WmfAbstractBackend.h>
-#include <QtGui/QPainter>
-#include <QtGui/QMatrix>
+#include <QPainter>
+#include <QMatrix>
 
 class WmfDeviceContext;
 class KoXmlWriter;

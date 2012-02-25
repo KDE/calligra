@@ -20,7 +20,7 @@
 #ifndef KPlato_ResourceTester_h
 #define KPlato_ResourceTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {
@@ -32,6 +32,7 @@ private slots:
     void testAvailable();
     void testSingleDay();
     void team();
+    void required();
 };
 
 } //namespace KPlato

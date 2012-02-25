@@ -41,6 +41,11 @@
 class CASpreadsheetHandler::Private
 {
 public:
+    Private()
+    {
+        currentSheetNum = 0;
+    }
+    int currentSheetNum;
     Calligra::Tables::Doc* document;
 };
 
@@ -107,6 +112,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
     updateCanvas();
     documentController()->canvasController()->zoomToFit();
+    emit sheetCountChanged();
 
     return true;
 }
@@ -156,6 +162,8 @@ void CASpreadsheetHandler::nextSheet()
     sheet = kspreadDoc->map()->nextSheet (sheet);
     if (!sheet)
         return;
+    d->currentSheetNum++;
+    emit currentSheetNumChanged();
     canvasItem->setActiveSheet (sheet);
     documentController()->canvasController()->updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
 }
@@ -174,6 +182,8 @@ void CASpreadsheetHandler::previousSheet()
     sheet = kspreadDoc->map()->previousSheet (sheet);
     if (!sheet)
         return;
+    d->currentSheetNum--;
+    emit currentSheetNumChanged();
     canvasItem->setActiveSheet (sheet);
     documentController()->canvasController()->updateDocumentSize (sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size(), false);
 }
@@ -196,6 +206,11 @@ QString CASpreadsheetHandler::leftToolbarSource() const
 QString CASpreadsheetHandler::rightToolbarSource() const
 {
     return "SpreadsheetRightToolbar.qml";
+}
+
+int CASpreadsheetHandler::currentSheetNumber() const
+{
+    return d->currentSheetNum + 1;
 }
 
 #include "CASpreadsheetHandler.moc"

@@ -22,7 +22,7 @@
 #include <stdlib.h>  /* for atoi function */
 #include <kdebug.h>  /* for kDebug() stream */
 #include <QStack>  /* for getFormula() */
-#include <qdom.h>
+#include <QDomDocument>
 #include <QTextStream>
 #include "formula.h"
 #include <kapplication.h>

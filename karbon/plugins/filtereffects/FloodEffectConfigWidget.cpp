@@ -25,9 +25,9 @@
 
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QToolButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QToolButton>
 
 FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

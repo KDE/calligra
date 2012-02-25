@@ -36,7 +36,7 @@
 #include <KoGenStyle.h>
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <QtGui/QColor>
+#include <QColor>
 #include <QByteArray>
 
 using namespace wvWare;

@@ -507,16 +507,6 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
         return 0;
     }
     r = new KPlato::Resource( rs->kplatoResource() );
-    r->clearTeamMembers(); // NOTE: also copies team members, so clear to be safe
-    if ( r->type() == KPlato::Resource::Type_Team ) {
-        // assemble team
-        foreach ( KPlato::Resource *tr, rs->kplatoResource()->teamMembers() ) {
-            KPlato::Resource *m = kplatoProject()->findResource( tr->id() );
-            if ( m ) {
-                r->addTeamMember( m );
-            }
-        }
-    }
     KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
     if ( c ) {
         c = kplatoProject()->calendar( c->id() );

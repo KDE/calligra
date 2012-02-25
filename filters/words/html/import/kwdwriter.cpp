@@ -18,9 +18,9 @@
 
 #include "kwdwriter.h"
 #include <stdlib.h>
-#include "qrect.h"
+#include "QRect"
 #include <KoZoomHandler.h>
-#include <qpaintdevice.h>
+#include <QPaintDevice>
 #include <kdebug.h>
 //Added by qt3to4:
 #include <QByteArray>

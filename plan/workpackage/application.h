@@ -34,7 +34,7 @@
 #include <kvbox.h>
 
 #include <QMap>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <QLabel>
 
 class KPlatoWork_MainWindow;

@@ -30,7 +30,7 @@
 
 #include <cstdlib>
 #include <qtest_kde.h>
-#include <QtCore/QDir>
+#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
@@ -428,7 +428,7 @@ void ProjectTester::team()
     Resource *team = new Resource();
     team->setType( Resource::Type_Team );
     team->setName( "Team" );
-    team->addTeamMember( r2 );
+    team->addTeamMemberId( r2->id() );
     project.addResource( g, team );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
@@ -504,7 +504,7 @@ void ProjectTester::team()
     qDebug()<<endl<<"Testing:"<<s;
     
     r1->removeRequests();
-    team->addTeamMember( r1 );
+    team->addTeamMemberId( r1->id() );
     r1->setAvailableFrom( targetstart );
     r1->setAvailableUntil( targetend );
 

@@ -20,8 +20,8 @@
 
 #include "KPrViewModeNotes.h"
 
-#include <QtCore/QEvent>
-#include <QtGui/QPainter>
+#include <QEvent>
+#include <QPainter>
 #include <QGraphicsWidget>
 
 #include <KDebug>

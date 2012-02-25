@@ -21,7 +21,7 @@
 #define _KexiStartupFileDialogBase_win_h_
 
 #include <q3filedialog.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 
 class KexiStartupFileDialogBasePrivate;
 

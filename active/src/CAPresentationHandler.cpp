@@ -39,8 +39,8 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 
-#include <QtCore/QSize>
-#include <QtCore/QTimer>
+#include <QSize>
+#include <QTimer>
 
 class CAPresentationHandler::Private
 {
@@ -54,6 +54,7 @@ public:
     CAPAView* paView;
     int currentSlideNum;
     QTimer slideshowTimer;
+    QList<KoPAPageBase*> slideShow;
 };
 
 CAPresentationHandler::CAPresentationHandler (CADocumentController* documentController)
@@ -120,6 +121,8 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 
     connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
+
+    d->document;
 
     nextSlide();
 
@@ -242,6 +245,10 @@ int CAPresentationHandler::slideshowDelay() const
 
 void CAPresentationHandler::startSlideshow()
 {
+    d->slideShow = d->document->slideShow();
+    d->currentSlideNum = 0;
+    d->paView->doUpdateActivePage(d->slideShow.at(d->currentSlideNum));
+
     d->slideshowTimer.start();
     emit slideshowStarted();
 }
@@ -254,9 +261,9 @@ void CAPresentationHandler::stopSlideshow()
 
 void CAPresentationHandler::advanceSlideshow()
 {
-    nextSlide();
+    d->paView->doUpdateActivePage(d->slideShow.at(++(d->currentSlideNum)));
 
-    if (d->currentSlideNum == d->document->pageCount() - 1) {
+    if (d->currentSlideNum == d->slideShow.count() - 1) {
         stopSlideshow();
     }
 }
@@ -268,7 +275,7 @@ int CAPresentationHandler::currentSlideNumber() const
 
 int CAPresentationHandler::totalNumberOfSlides() const
 {
-     return d->document->pageCount();
+    return d->document->pageCount();
 }
 
 #include "CAPresentationHandler.moc"

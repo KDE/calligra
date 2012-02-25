@@ -35,9 +35,9 @@
 #include <iostream>
 #include <vector>
 
-#include <QtCore/QList>
-#include <QtCore/QRect>
-#include <QtCore/QString>
+#include <QList>
+#include <QRect>
+#include <QString>
 
 namespace MSO
 {

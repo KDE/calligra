@@ -30,10 +30,20 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kdeversion.h>
 
 #include <QHash>
 #include <QMap>
 #include <QApplication>
+
+KPLATOKERNEL_EXPORT int insertProjectCmdDba() {
+#if KDE_IS_VERSION( 4, 3, 80 )
+    static int s_area = KDebug::registerArea( "plan (InsertProjectCmd)" );
+#else
+    static int s_area = 0;
+#endif
+    return s_area;
+}
 
 namespace KPlato
 {
@@ -1755,23 +1765,23 @@ void ModifyResourceCalendarCmd::unexecute()
     m_resource->setCalendar( m_oldvalue );
 }
 
-ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name )
+ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
 {
-    m_oldvalue = resource->requiredResources();
+    m_oldvalue = resource->requiredIds();
 }
 void ModifyRequiredResourcesCmd::execute()
 {
-    m_resource->setRequiredResources( m_newvalue );
+    m_resource->setRequiredIds( m_newvalue );
 }
 void ModifyRequiredResourcesCmd::unexecute()
 {
-    m_resource->setRequiredResources( m_oldvalue );
+    m_resource->setRequiredIds( m_oldvalue );
 }
 
-AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1779,14 +1789,14 @@ AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const 
 }
 void AddResourceTeamCmd::execute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 void AddResourceTeamCmd::unexecute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 
-RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1794,11 +1804,11 @@ RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, 
 }
 void RemoveResourceTeamCmd::execute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 void RemoveResourceTeamCmd::unexecute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
@@ -3159,7 +3169,8 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             continue;
         }
         while ( ResourceGroupRequest *gr = n->requests().requests().value( 0 ) ) {
-            while ( ResourceRequest *rr = gr->resourceRequests().value( 0 ) ) {
+            while ( ResourceRequest *rr = gr->resourceRequests( false ).value( 0 ) ) {
+                kDebug(insertProjectCmdDba())<<"Get resource request:"<<rr;
                 rreqs.insertMulti( gr, QPair<ResourceRequest*, Resource*>( rr, rr->resource() ) );
                 // all resource requests shall be reinserted
                 rr->unregisterRequest();
@@ -3175,6 +3186,9 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
 #endif
         }
     }
+    QList<ResourceGroup*> allGroups;
+    QList<Resource*> allResources;
+    QList<Resource*> newResources;
     QMap<ResourceGroup*, ResourceGroup*> existingGroups;
     QMap<Resource*, Resource*> existingResources;
     foreach ( ResourceGroup *g, project.resourceGroups() ) {
@@ -3182,9 +3196,11 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         if ( gr == 0 ) {
             addCommand( new AddResourceGroupCmd( m_project, g, QString("ResourceGroup") ) );
             gr = g;
+            kDebug(insertProjectCmdDba())<<"AddResourceGroupCmd:"<<gr->name();
         } else {
             existingGroups[ gr ] = g;
         }
+        allGroups << gr;
         foreach ( Resource *r, g->resources() ) {
             while ( Schedule *s = r->schedules().values().value( 0 ) ) {
                 r->deleteSchedule( s ); // schedules not handled
@@ -3192,8 +3208,12 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             Resource *res = m_project->findResource( r->id() );
             if ( res == 0 ) {
                 addCommand( new AddResourceCmd( gr, r, "Resource" ) );
+                allResources << r;
+                newResources << r;
+                kDebug(insertProjectCmdDba())<<"AddResourceCmd:"<<gr->name()<<r->name();
             } else {
                 existingResources[ res ] = r;
+                allResources << res;
             }
         }
     }
@@ -3201,13 +3221,21 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     {QMap<Resource*, QString>::const_iterator it = resaccountmap.constBegin();
     QMap<Resource*, QString>::const_iterator end = resaccountmap.constEnd();
     for ( ; it != end; ++it ) {
-        addCommand( new ResourceModifyAccountCmd( *(it.key()), 0, accountsmap.value( it.value() ) ) );
+        Resource *r = it.key();
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ResourceModifyAccountCmd( *r, 0, accountsmap.value( it.value() ) ) );
+        }
     }}
     // Update resource calendar
     {QMap<Resource*, QString>::const_iterator it = rescalendarmap.constBegin();
     QMap<Resource*, QString>::const_iterator end = rescalendarmap.constEnd();
     for ( ; it != end; ++it ) {
-        addCommand( new ModifyResourceCalendarCmd( it.key(), calendarsmap.value( it.value() ) ) );
+        Resource *r = it.key();
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ModifyResourceCalendarCmd( r, calendarsmap.value( it.value() ) ) );
+        }
     }}
     // Requests: clean up requests to resources already in m_project
     int gi = 0;
@@ -3217,18 +3245,39 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         Node *n = pair.first;
         ResourceGroup *newGroup = pair.second;
         if ( existingGroups.values().contains( newGroup ) ) {
-            newGroup = existingGroups.keys().value( existingGroups.values().indexOf( newGroup ) );
+            newGroup = existingGroups.key( newGroup );
         }
+        Q_ASSERT( allGroups.contains( newGroup ) );
         gr->setGroup( newGroup );
         addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>( *n ), gr, QString("Group %1").arg( ++gi ) ) );
-
+        kDebug(insertProjectCmdDba())<<"Add resource group request:"<<n->name()<<":"<<newGroup->name();
         QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> >::const_iterator i = rreqs.constFind( gr );
         for ( ; i != rreqs.constEnd() && i.key() == gr; ++i ) {
             ResourceRequest *rr = i.value().first;
             Resource *newRes = i.value().second;
             if ( existingResources.values().contains( newRes ) ) {
-                newRes = existingResources.keys().value( existingResources.values().indexOf( newRes ) );
+                newRes = existingResources.key( newRes );
             }
+            kDebug(insertProjectCmdDba())<<"Add resource request:"<<n->name()<<":"<<newGroup->name()<<":"<<newRes->name();
+            if ( ! rr->requiredResources().isEmpty() ) {
+                // the resource request may have required resources that needs mapping
+                QList<Resource*> required;
+                foreach ( Resource *r, rr->requiredResources() ) {
+                    if ( newResources.contains( r ) ) {
+                        required << r;
+                        kDebug(insertProjectCmdDba())<<"Request: required (new)"<<r->name();
+                        continue;
+                    }
+                    Resource *r2 = existingResources.key( r );
+                    Q_ASSERT( allResources.contains( r2 ) );
+                    if ( r2 ) {
+                        kDebug(insertProjectCmdDba())<<"Request: required (existing)"<<r2->name();
+                        required << r2;
+                    }
+                }
+                rr->setRequiredResources( required );
+            }
+            Q_ASSERT( allResources.contains( newRes ) );
             // all resource requests shall be reinserted
             rr->setResource( newRes );
             addCommand( new AddResourceRequestCmd( gr, rr, QString("Resource %1").arg( ++ri ) ) );
@@ -3354,11 +3403,11 @@ void InsertProjectCmd::addAccounts( Account *account, Account *parent, QList<Acc
     }
     Account *acc = accountsmap.value( account->name() );
     if ( acc == 0 ) {
-        qDebug()<<"Move to new project:"<<account<<account->name();
+        kDebug(insertProjectCmdDba())<<"Move to new project:"<<account<<account->name();
         accountsmap.insert( account->name(), account );
-        addCommand( new AddAccountCmd( *m_project, account, par ) );
+        addCommand( new AddAccountCmd( *m_project, account, par, -1, QString( "Add account %1" ).arg( account->name() ) ) );
     } else {
-        qDebug()<<"Already exists:"<<account<<account->name();
+        kDebug(insertProjectCmdDba())<<"Already exists:"<<account<<account->name();
         unused << account;
     }
     while ( ! account->accountList().isEmpty() ) {

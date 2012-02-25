@@ -14,8 +14,8 @@
 #ifndef _TjMessageHandler_h_
 #define _TjMessageHandler_h_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 namespace TJ
 {
@@ -51,7 +51,7 @@ public:
     void errorMessage(const QString& msg, const QString& file,
                       int line = -1);
 
-    void fatalMessage(const QString& msg, const QString& file = QString::null,
+    void fatalMessage(const QString& msg, const QString& file = QString(),
                       int line = -1);
 
     void setConsoleMode(bool cm) { consoleMode = cm; }

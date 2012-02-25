@@ -20,8 +20,8 @@
 #ifndef SQLITE_VACUUM_H
 #define SQLITE_VACUUM_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 #include <kexiutils/tristate.h>
 

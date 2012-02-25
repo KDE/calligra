@@ -22,8 +22,8 @@
 #include <KoPAPageBase.h>
 #include <KoPAPageThumbnailModel.h>
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QListView>
+#include <QVBoxLayout>
+#include <QListView>
 
 KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )

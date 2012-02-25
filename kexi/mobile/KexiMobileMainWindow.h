@@ -21,7 +21,7 @@
 #ifndef KexiMobile_H
 #define KexiMobile_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <core/KexiMainWindowIface.h>
 
 class KexiMobileToolbar;

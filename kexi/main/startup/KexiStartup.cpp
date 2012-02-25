@@ -45,8 +45,8 @@
 
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qlayout.h>
+#include <QApplication>
+#include <QLayout>
 
 //! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION
