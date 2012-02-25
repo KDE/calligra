@@ -339,6 +339,12 @@ void ImportTableWizard::arriveTableSelectPage()
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
+    } else {
+	kDebug() << "No driver for selected source";
+	QString errMessage =result.message.isEmpty() ? i18n("Unknown Error") : result.message;
+	QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+	KMessageBox::error(this, errMessage, errDescription);
+	setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
@@ -457,7 +463,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (sourceDriverName.isEmpty())
         result.setStatus(i18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
-
+  
     
     // Get a source (migration) driver
     KexiMigrate* sourceDriver = 0;
