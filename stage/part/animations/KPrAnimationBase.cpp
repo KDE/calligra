@@ -89,7 +89,7 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
         writer.addAttribute("anim:sub-item", "text");
     }
     else {
-        writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false).toString());
+        writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false));
     }
     return true;
 }

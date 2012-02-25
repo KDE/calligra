@@ -47,6 +47,7 @@ KoPAMasterPage::~KoPAMasterPage()
 
 void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 {
+
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
 
     KoGenStyle pageLayoutStyle = pageLayout().saveOdf();
@@ -74,6 +75,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
     QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     pageMaster.addChildElement( paContext.masterPageElementName(), contentElement );
     paContext.addMasterPage( this, paContext.mainStyles().insert( pageMaster, "Default" ) );
+
 }
 
 void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )

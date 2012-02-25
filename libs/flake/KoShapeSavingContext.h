@@ -151,7 +151,7 @@ public:
      *
      * @return the draw id for the shape or and empty string if it was not found
      */
-    KoElementReference drawId(const KoShape *shape, bool insert = true);
+    QString drawId(const KoShape *shape, bool insert = true);
 
     /**
      * @brief Clear out all given draw ids

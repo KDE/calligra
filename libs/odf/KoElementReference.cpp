@@ -23,8 +23,6 @@
 #include "KoXmlWriter.h"
 #include <KoXmlNS.h>
 
-#include <QDebug>
-
 KoElementReference::KoElementReference()
     : d(new KoElementReferenceData())
 {

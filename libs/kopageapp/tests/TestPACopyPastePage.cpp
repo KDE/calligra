@@ -45,7 +45,6 @@ QMimeData * TestPACopyPastePage::copy( MockDocument * doc, QList<KoPAPageBase *>
     KoPAOdfPageSaveHelper saveHelper( doc, pages );
     KoDrag drag;
     drag.setOdf( KoOdf::mimeType( doc->documentType() ), saveHelper );
-
     return drag.mimeData();
 }
 

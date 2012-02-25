@@ -46,16 +46,15 @@ public:
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
 
-    QMap<const KoShape *, KoElementReference> drawIds;
+    QMap<const KoShape *, QString> drawIds;
     QMap<const QTextBlockUserData*, KoElementReference> subIds;
 
     QList<const KoShapeLayer*> layers;
     QSet<KoDataCenterBase *> dataCenters;
-    int drawId;
-    int subId;
     QMap<QString, KoSharedSavingData*> sharedData;
     QMap<qint64, QString> imageNames;
     int imageId;
+    int drawId;
     QMap<QString, QImage> images;
     QHash<const KoShape *, QTransform> shapeOffsets;
     QMap<const KoMarker *, QString> markerRefs;
@@ -68,9 +67,8 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         KoGenStyles &s, KoEmbeddedDocumentSaver &e)
         : xmlWriter(&w),
         savingOptions(0),
-        drawId(0),
-        subId(0),
         imageId(0),
+        drawId(0),
         mainStyles(s),
         embeddedSaver(e)
 {
@@ -142,15 +140,18 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
         d->savingOptions = d->savingOptions ^ option; // xor to remove it.
 }
 
-KoElementReference KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
+QString KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
 {
-    QMap<const KoShape *, KoElementReference>::iterator it(d->drawIds.find(shape));
+    QMap<const KoShape *, QString>::iterator it(d->drawIds.find(shape));
     if (it == d->drawIds.end()) {
-        Q_ASSERT(insert);
-        KoElementReference ref;
-        it = d->drawIds.insert(shape, ref);
+        if (insert == true) {
+            it = d->drawIds.insert(shape, QString("shape-%1").arg(++d->drawId));
+        }
+        else {
+            return QString();
+        }
     }
-    return it.value().toString();
+    return it.value();
 }
 
 void KoShapeSavingContext::clearDrawIds()
@@ -162,12 +163,18 @@ void KoShapeSavingContext::clearDrawIds()
 KoElementReference KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool insert)
 {
     QMap<const QTextBlockUserData*, KoElementReference>::iterator it(d->subIds.find(subItem));
+    KoElementReference ref;
     if (it == d->subIds.end()) {
-        Q_ASSERT(insert);
         KoElementReference ref;
-        it = d->subIds.insert(subItem, ref);
+        if (insert) {
+            it = d->subIds.insert(subItem, ref);
+        }
+        else {
+            ref.invalidate();
+            return ref;
+        }
     }
-    return it.value().toString();
+    return it.value();
 }
 
 void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)
