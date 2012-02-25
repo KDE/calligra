@@ -24,7 +24,8 @@
 // Koralle
 #include <Koralle0/RiffStreamReader>
 
-class CdrArgumentWithTypeListData;
+class Cdr4ArgumentWithTypeListData;
+
 class CdrDocument;
 class CdrPage;
 class CdrLayer;
@@ -65,15 +66,15 @@ private:
     void readDocMCfg();
     void readDocGuid();
     void readDocFontTable();
-    void readDocLnkTable();
+    void readDocLinkTable();
     void readDocBitmapTable();
     void readDocVecTable();
     void readDocFillTable();
     void readDocOutlineTable();
     void readDocStyleTable();
-    void readDocBtxTable();
-    void readStrl();
-    CdrParagraph* readParl();
+    void readDocBlockTextTable();
+    void readStrList();
+    CdrParagraph* readParagraphList();
 
     CdrLayer* readLayer();
     void readLayerLGOb();
@@ -88,11 +89,11 @@ private:
     QVector<CdrAbstractTransformation*> readTrfl();
     CdrAbstractObject* readLoda();
 
-    CdrRectangleObject* readRectangleObject( const CdrArgumentWithTypeListData& argsData );
-    CdrEllipseObject* readEllipseObject( const CdrArgumentWithTypeListData& argsData );
-    CdrPathObject* readPathObject( const CdrArgumentWithTypeListData& argsData );
-    CdrGraphicTextObject* readGraphicTextObject( const CdrArgumentWithTypeListData& argsData );
-    CdrBlockTextObject* readBlockTextObject( const CdrArgumentWithTypeListData& argsData );
+    CdrRectangleObject* readRectangleObject( const Cdr4ArgumentWithTypeListData& argsData );
+    CdrEllipseObject* readEllipseObject( const Cdr4ArgumentWithTypeListData& argsData );
+    CdrPathObject* readPathObject( const Cdr4ArgumentWithTypeListData& argsData );
+    CdrGraphicTextObject* readGraphicTextObject( const Cdr4ArgumentWithTypeListData& argsData );
+    CdrBlockTextObject* readBlockTextObject( const Cdr4ArgumentWithTypeListData& argsData );
 
 private:
     CdrDocument* mDocument;

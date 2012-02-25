@@ -89,9 +89,9 @@ dataRef( const QByteArray& data, int offset = 0 )
 
 
 static QColor
-color( const CdrColor& cdrColor, quint32 colorModel )
+color( const Cdr4Color& cdrColor, quint32 colorModel )
 {
-    if( colorModel == CdrPantoneId )
+    if( colorModel == Cdr4ColorPantoneId )
         // pantone needs user to supply data it seems, as wikipedia claims the pantone definers are nasty
         // whatever, this formula results in pretty similar grey tones for my check picture
         return QColor::fromCmyk(0, 0, 0, cdrColor.d1()*255/100);
@@ -198,7 +198,7 @@ void
 CdrParser::readVersion()
 {
     const QByteArray versionChunk = mRiffStreamReader.chunkData();
-    const CdrVersionChunkData& versionData = dataRef<CdrVersionChunkData>( versionChunk );
+    const Cdr4VersionChunkData& versionData = dataRef<Cdr4VersionChunkData>( versionChunk );
 
     mDocument->setFullVersion( versionData.version() );
 
@@ -225,7 +225,7 @@ CdrParser::readDoc()
         else if( chunkId == bmptId )
             readDocBitmapTable();
         else if( chunkId == lnktId )
-            readDocLnkTable();
+            readDocLinkTable();
         else if( chunkId == vectId )
             readDocVecTable();
         else if( chunkId == filtId )
@@ -235,7 +235,7 @@ CdrParser::readDoc()
         else if( chunkId == stltId )
             readDocStyleTable();
         else if( chunkId == btxtId )
-            readDocBtxTable();
+            readDocBlockTextTable();
     }
 
     mRiffStreamReader.closeList();
@@ -255,7 +255,7 @@ void
 CdrParser::readDocMCfg()
 {
     const QByteArray mcfgChunk = mRiffStreamReader.chunkData();
-    const MCfgChunkData& mcfgData = dataRef<MCfgChunkData>( mcfgChunk );
+    const Cdr4MCfgChunkData& mcfgData = dataRef<Cdr4MCfgChunkData>( mcfgChunk );
 
     // set the page size
     mDocument->setSize( mcfgData.width(), mcfgData.height() );
@@ -271,7 +271,7 @@ void
 CdrParser::readDocStsh()
 {
     const QByteArray styleSheetChunk = mRiffStreamReader.chunkData();
-    const CdrStyleSheetChunkData& styleSheetData = dataRef<CdrStyleSheetChunkData>( styleSheetChunk );
+    const Cdr4StyleSheetChunkData& styleSheetData = dataRef<Cdr4StyleSheetChunkData>( styleSheetChunk );
 
     mDocument->setStyleSheetFileName( QLatin1String(styleSheetData.fileName()) );
 qDebug() << "Stsh:" << mDocument->styleSheetFileName();
@@ -289,7 +289,7 @@ qDebug() << "Reading fonts...";
             CdrFont* font = new CdrFont;
 
             const QByteArray fontChunk = mRiffStreamReader.chunkData();
-            const CdrFontChunkData& fontData = dataRef<CdrFontChunkData>( fontChunk );
+            const Cdr4FontChunkData& fontData = dataRef<Cdr4FontChunkData>( fontChunk );
 
             font->setName( QLatin1String(fontData.fontName()) );
 
@@ -302,27 +302,27 @@ qDebug() << fontData.fontIndex() << font->name();
 }
 
 void
-CdrParser::readDocLnkTable()
+CdrParser::readDocLinkTable()
 {
     CdrBlockTextLinkTable blockTextLinkTable;
 
-    const QByteArray lnkTableChunk = mRiffStreamReader.chunkData();
-    const CdrLnkTableChunkData& lnkTableData = dataRef<CdrLnkTableChunkData>( lnkTableChunk );
+    const QByteArray linkTableChunk = mRiffStreamReader.chunkData();
+    const Cdr4LinkTableChunkData& linkTableData = dataRef<Cdr4LinkTableChunkData>( linkTableChunk );
 
-qDebug() << "Reading LnkTable" << lnkTableData.arguments().count() << "args";
-    for (int i=0; i < lnkTableData.arguments().count(); i++)
+qDebug() << "Reading LnkTable" << linkTableData.arguments().count() << "args";
+    for (int i=0; i < linkTableData.arguments().count(); i++)
     {
-        const LnkData& lnkData = lnkTableData.arguments().argRef<LnkData>(i);
-        if( lnkData.type() == CdrBlockTextLinkId )
-            blockTextLinkTable.insert( lnkData.blockTextObjectIndex(), lnkData.blockTextIndex() );
-qDebug() << i << ": type:" << lnkData.type() << "ed size:" << lnkData.dataSize()<<"other:"
-                    << lnkData._unknown2()
-                    << lnkData._unknown3() << lnkData._unknown4() << lnkData._unknown5()
-                    << lnkData._unknown6()
-                    << "block text id:" << lnkData.blockTextIndex()
-                    << "block text object id:"<< lnkData.blockTextObjectIndex();
-        for(int j=0; j<lnkData.dataSize(); ++j)
-qDebug() << "    "<<j<<":"<<lnkData.data(j);
+        const Cdr4LinkData& linkData = linkTableData.arguments().argRef<Cdr4LinkData>(i);
+        if( linkData.type() == Cdr4LinkBlockTextId )
+            blockTextLinkTable.insert( linkData.blockTextObjectIndex(), linkData.blockTextIndex() );
+qDebug() << i << ": type:" << linkData.type() << "ed size:" << linkData.dataSize()<<"other:"
+                    << linkData._unknown2()
+                    << linkData._unknown3() << linkData._unknown4() << linkData._unknown5()
+                    << linkData._unknown6()
+                    << "block text id:" << linkData.blockTextIndex()
+                    << "block text object id:"<< linkData.blockTextObjectIndex();
+        for(int j=0; j<linkData.dataSize(); ++j)
+qDebug() << "    "<<j<<":"<<linkData.data(j);
     }
 
     mDocument->setBlockTextLinkTable( blockTextLinkTable );
@@ -396,37 +396,42 @@ qDebug() << "Reading Fills...";
             CdrAbstractFill* fill = 0;
 
             const QByteArray fillChunk = mRiffStreamReader.chunkData();
-            const CdrFillChunkData& fillData = dataRef<CdrFillChunkData>( fillChunk );
+            const Cdr4FillChunkData& fillData = dataRef<Cdr4FillChunkData>( fillChunk );
 
             QString fillDataString;
-            if( fillData.fillType() == CdrTransparent )
+            switch( fillData.fillType() )
             {
+            case Cdr4FillTransparentId:
                 fill = new CdrTransparentFill;
                 // transparent has no other data stored
-            }
-            else if( fillData.fillType() == CdrSolid )
+                break;
+            case Cdr4FillSolidId:
             {
                 CdrSolidFill* solidFill = new CdrSolidFill;
-                const CdrSolidFillData& solidFillData = fillData.solidFillData();
+                const Cdr4FillSolidData& solidFillData = fillData.fillSolidData();
                 solidFill->setColor( color(solidFillData.color(), solidFillData.colorModel()) );
 
                 fill = solidFill;
 
                 fillDataString = solidFill->color().name();
+                break;
             }
-            else if( fillData.fillType() == CdrUnknown11FillType )
+            case Cdr4Fill11Id:
             {
-                const CdrUnknown11FillData& unknown11FillData = fillData.unknown11FillData();
+                const Cdr4Fill11Data& unknown11FillData = fillData.fill11Data();
 
                 fillDataString = QLatin1String(unknown11FillData.originalName())+QLatin1Char('|')+
                     QLatin1String(unknown11FillData.localizedName());
+                break;
+            }
             }
 
             const QString fillTypeName =
-                QLatin1String(fillData.fillType() == CdrTransparent ?       "Transparent" :
-                              fillData.fillType() == CdrSolid ?             "Solid" :
-                              fillData.fillType() == CdrUnknown7FillType ?  "Unknown type 7" :
-                              fillData.fillType() == CdrUnknown11FillType ? "Unknown type 11" :
+                QLatin1String(fillData.fillType() == Cdr4FillTransparentId ? "Transparent" :
+                              fillData.fillType() == Cdr4FillSolidId ?       "Solid" :
+                              fillData.fillType() == Cdr4FillGradientId ?    "Gradient" :
+                              fillData.fillType() == Cdr4Fill7Id ?           "Unknown type 7" :
+                              fillData.fillType() == Cdr4Fill11Id ?          "Unknown type 11" :
                               /*other*/                                      "UNKNOWN!");
 qDebug() << fillData.fillIndex() << fillData.fillType() << fillTypeName << fillDataString;
 
@@ -450,12 +455,12 @@ qDebug() << "Reading Outlines...";
             CdrOutline* outline = new CdrOutline;
 
             const QByteArray outlineChunk = mRiffStreamReader.chunkData();
-            const CdrOutlineChunkData& outlineData = dataRef<CdrOutlineChunkData>( outlineChunk );
+            const Cdr4OutlineChunkData& outlineData = dataRef<Cdr4OutlineChunkData>( outlineChunk );
 
             const CdrStrokeCapType capType =
-                (outlineData.strokeCapType() == Cdr4StrokeRoundCap) ? CdrStrokeRoundCap : CdrStrokeButtCap;
+                (outlineData.strokeCapType() == Cdr4StrokeCapRoundId) ? CdrStrokeRoundCap : CdrStrokeButtCap;
             const CdrStrokeJoinType joinType =
-                (outlineData.strokeJoinType() == Cdr4StrokeRoundJoin) ? CdrStrokeRoundJoin : CdrStrokeMiterJoin;
+                (outlineData.strokeJoinType() == Cdr4StrokeJoinRoundId) ? CdrStrokeRoundJoin : CdrStrokeMiterJoin;
             outline->setStrokeType( outlineData.strokeType() );
             outline->setStrokeCapType( capType );
             outline->setStrokeJoinType( joinType );
@@ -511,12 +516,12 @@ qDebug() << "Reading Styles...";
                     CdrStyle* style = new CdrStyle;
 
                     const QByteArray styleChunk = mRiffStreamReader.chunkData();
-                    const CdrStyleChunkData& styleData = dataRef<CdrStyleChunkData>( styleChunk );
+                    const Cdr4StyleChunkData& styleData = dataRef<Cdr4StyleChunkData>( styleChunk );
                     styleTable.insert( styleData.styleIndex(), style );
                     if( styleData.baseStyleIndex() > 0 )
                         styleLinkList.append( StyleLink(style,styleData.baseStyleIndex()) );
 
-                    const CdrArgumentWithTypeListData& styleArgs = styleData.arguments();
+                    const Cdr4ArgumentWithTypeListData& styleArgs = styleData.arguments();
         qDebug()<<"Style id:"<<styleData.styleIndex()<<"Base id:"<<styleData.baseStyleIndex()
                 <<"d:"<<styleData._unknown1()<<styleData._unknown2()
                     <<styleData._unknown3()<<styleData._unknown4()
@@ -529,12 +534,12 @@ qDebug() << "Reading Styles...";
         QString argTypeAsString;
         switch(argType)
         {
-            case CdrStyle205ArgumentId :
-            case CdrStyle210ArgumentId :
+            case Cdr4StyleArgument205Id :
+            case Cdr4StyleArgument210Id :
                 argTypeAsString = QLatin1String("some 32-bit");
                 argAsString = QString::number( styleArgs.arg<quint32>(i) );
                 break;
-            case CdrStyleTextAlignmentArgumentId :
+            case Cdr4StyleArgumentTextAlignmentId :
             {
                 static const struct { const char* name; CdrTextAlignment id;} alignData[5] =
                 {
@@ -545,9 +550,9 @@ qDebug() << "Reading Styles...";
                     {" block?",  CdrTextAlignmentUnknown}
                 };
 
-                const CdrStyleTextAlignmentArgumentData& data = styleArgs.argRef<CdrStyleTextAlignmentArgumentData>( i );
-                const bool isAlignmentTypeKnown = ( /*(CdrStyleTextUnknown0Alignment <= data.type()) &&*/
-                                                    (data.type() <= CdrStyleTextUnknown4Alignment) );
+                const Cdr4StyleArgumentTextAlignmentData& data = styleArgs.argRef<Cdr4StyleArgumentTextAlignmentData>( i );
+                const bool isAlignmentTypeKnown = ( /*(Cdr4StyleTextAlignment0Id <= data.type()) &&*/
+                                                    (data.type() <= Cdr4TextAlignment4Id) );
                 if( isAlignmentTypeKnown )
                     style->setTextAlignment( alignData[data.type()].id );
 
@@ -559,22 +564,22 @@ qDebug() << "Reading Styles...";
                     argAsString.append( QLatin1String(" UNKNOWN") );
                 break;
             }
-            case CdrStyleTitleArgumentId :
+            case Cdr4StyleArgumentTitleId :
             {
-                const QString title = QLatin1String( styleArgs.argRef<CdrStyleTitleArgumentData>(i).title() );
+                const QString title = QLatin1String( styleArgs.argRef<Cdr4StyleArgumentTitleData>(i).title() );
                 style->setTitle( title );
 
                 argTypeAsString = QLatin1String("title");
                 argAsString = title;
                 break;
             }
-            case CdrStyleFontArgumentId:
+            case Cdr4StyleArgumentFontId:
             {
-                const CdrStyleFontArgumentData& fontData = styleArgs.argRef<CdrStyleFontArgumentData>( i );
+                const Cdr4StyleArgumentFontData& fontData = styleArgs.argRef<Cdr4StyleArgumentFontData>( i );
                 style->setFontId( fontData.font().index() );
                 style->setFontSize( fontData.font().size() );
                 const CdrFontWeight fontWeight =
-                    (fontData.font().style()==Cdr4StyleFontBold) ? CdrFontBold : CdrFontNormal;
+                    (fontData.font().style()==Cdr4StyleFontBoldId) ? CdrFontBold : CdrFontNormal;
                 style->setFontWeight( fontWeight );
 
                 argTypeAsString = QLatin1String("font");
@@ -583,10 +588,10 @@ qDebug() << "Reading Styles...";
                               QLatin1String(" style:") + QString::number( fontData.font().style());
                 break;
             }
-            case CdrStyleBulletSymbolArgumentId:
+            case Cdr4StyleArgumentBulletSymbolId:
             {
-                const CdrStyleBulletSymbolArgumentData& data =
-                    styleArgs.argRef<CdrStyleBulletSymbolArgumentData>( i );
+                const Cdr4StyleArgumentBulletSymbolData& data =
+                    styleArgs.argRef<Cdr4StyleArgumentBulletSymbolData>( i );
                 const QByteArray hex = QByteArray::fromRawData(data._unknownPtr(), data._unknownCount()).toHex();
                 argTypeAsString = QLatin1String("bullet symbol");
                 argAsString = QString::number( data.length() ) +
@@ -597,9 +602,9 @@ qDebug() << "Reading Styles...";
                               QString::fromLatin1(hex.constData(), hex.count());
                 break;
             }
-            case CdrStyle240ArgumentId:
+            case Cdr4StyleArgument240Id:
             {
-                const CdrStyle240ArgumentData& data = styleArgs.argRef<CdrStyle240ArgumentData>( i );
+                const Cdr4StyleArgument240Data& data = styleArgs.argRef<Cdr4StyleArgument240Data>( i );
                 argTypeAsString = QLatin1String("some max 258 bytes");
                 argAsString = QLatin1String("count:") + QString::number(data.someDataSize());
                 if( data.someDataSize() > 0 )
@@ -609,9 +614,9 @@ qDebug() << "Reading Styles...";
                                   QString::number(data.someData(data.someDataSize()-1)._unknown1());
                 break;
             }
-            case CdrStyle235ArgumentId:
+            case Cdr4StyleArgument235Id:
             {
-                const CdrStyle235ArgumentData& data = styleArgs.argRef<CdrStyle235ArgumentData>( i );
+                const Cdr4StyleArgument235Data& data = styleArgs.argRef<Cdr4StyleArgument235Data>( i );
 
                 argTypeAsString = QLatin1String("some 12 bytes");
                 argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
@@ -622,9 +627,9 @@ qDebug() << "Reading Styles...";
                             QString::number( data._unknown5() );
                 break;
             }
-            case CdrStyle245ArgumentId:
+            case Cdr4StyleArgument245Id:
             {
-                const CdrStyle245ArgumentData& data = styleArgs.argRef<CdrStyle245ArgumentData>( i );
+                const Cdr4StyleArgument245Data& data = styleArgs.argRef<Cdr4StyleArgument245Data>( i );
 
                 argTypeAsString = QLatin1String("four 16-bit");
                 argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
@@ -633,9 +638,9 @@ qDebug() << "Reading Styles...";
                             QString::number( data._unknown3() );
                 break;
             }
-            case CdrStyle250ArgumentId :
+            case Cdr4StyleArgument250Id :
             {
-                const CdrStyle250ArgumentData& data = styleArgs.argRef<CdrStyle250ArgumentData>( i );
+                const Cdr4StyleArgument250Data& data = styleArgs.argRef<Cdr4StyleArgument250Data>( i );
 
                 argTypeAsString = QLatin1String("two 16-bit");
                 argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
@@ -673,7 +678,7 @@ qDebug() << "base style NOT FOUND:" << link.mBaseStyleIndex;
 
 
 void
-CdrParser::readDocBtxTable()
+CdrParser::readDocBlockTextTable()
 {
     mRiffStreamReader.openList();
 qDebug() << "Reading Btx Table...";
@@ -681,7 +686,7 @@ qDebug() << "Reading Btx Table...";
     {
         if( mRiffStreamReader.chunkId() == strlId )
         {
-            readStrl();
+            readStrList();
         }
     }
 
@@ -690,7 +695,7 @@ qDebug() << "Reading Btx Table...";
 
 
 void
-CdrParser::readStrl()
+CdrParser::readStrList()
 {
     CdrBlockText* blockText = new CdrBlockText;
     quint16 blockTextId;
@@ -704,13 +709,13 @@ qDebug() << "Reading Strl...";
         if( chunkId == btidId )
         {
             const QByteArray btidChunk = mRiffStreamReader.chunkData();
-            const CdrBlockTextIdChunkData btidData = data<CdrBlockTextIdChunkData>( btidChunk );
+            const Cdr4BlockTextIdChunkData btidData = data<Cdr4BlockTextIdChunkData>( btidChunk );
             blockTextId = btidData.id();
 qDebug()<<"BlockText id:"<<blockTextId;
         }
         else if( chunkId == parlId )
         {
-            CdrParagraph* paragraph = readParl();
+            CdrParagraph* paragraph = readParagraphList();
             if( paragraph )
                 blockText->addParagraph( paragraph );
         }
@@ -722,7 +727,7 @@ qDebug()<<"BlockText id:"<<blockTextId;
 }
 
 CdrParagraph*
-CdrParser::readParl()
+CdrParser::readParagraphList()
 {
     CdrParagraph* paragraph = new CdrParagraph;
 
@@ -738,19 +743,19 @@ qDebug() << "Reading Parl...";
         if( chunkId == paraId )
         {
             const QByteArray paraChunk = mRiffStreamReader.chunkData();
-            const CdrBlockTextParagraphChunkData& paraData = dataRef<CdrBlockTextParagraphChunkData>( paraChunk );
+            const Cdr4BlockTextParagraphChunkData& paraData = dataRef<Cdr4BlockTextParagraphChunkData>( paraChunk );
 
             qDebug() << "...para:"<<paraData._unknown0() <<"length:"<<paraData.length()<<paraData._unknown2();
         }
         else if( chunkId == bnchId )
         {
             const QByteArray bnchChunk = mRiffStreamReader.chunkData();
-            const CdrBlockTextNormalCharChunkData& bnchData =
-                dataRef<CdrBlockTextNormalCharChunkData>( bnchChunk );
+            const Cdr4BlockTextNormalCharChunkData& bnchData =
+                dataRef<Cdr4BlockTextNormalCharChunkData>( bnchChunk );
 
             CdrNormalTextSpan* textSpan = new CdrNormalTextSpan;
             QString text;
-            const int count = bnchChunk.count() / sizeof(CdrBlockTextChar);
+            const int count = bnchChunk.count() / sizeof(Cdr4BlockTextChar);
             for( int i = 0; i<count; ++i )
             {
                 const unsigned char textChar = bnchData.textChar(i).character();
@@ -767,8 +772,8 @@ qDebug() << "Reading Parl...";
         else if( chunkId == bschId )
         {
             const QByteArray bschChunk = mRiffStreamReader.chunkData();
-            const CdrBlockTextSpecialCharChunkData& bschData =
-                dataRef<CdrBlockTextSpecialCharChunkData>( bschChunk );
+            const Cdr4BlockTextSpecialCharChunkData& bschData =
+                dataRef<Cdr4BlockTextSpecialCharChunkData>( bschChunk );
 
             const unsigned char textChar = bschData.character().character();
 
@@ -786,7 +791,7 @@ qDebug() << "Reading Parl...";
                 textSpan->setFontId( bschData.font().index() );
                 textSpan->setFontSize( bschData.font().size() );
                 const CdrFontWeight fontWeight =
-                    (bschData.font().style()==Cdr4StyleFontBold) ? CdrFontBold : CdrFontNormal;
+                    (bschData.font().style()==Cdr4StyleFontBoldId) ? CdrFontBold : CdrFontNormal;
                 textSpan->setFontWeight( fontWeight );
                 paragraphLine->addTextSpan( textSpan );
             }
@@ -935,7 +940,7 @@ qDebug() << "LinkGroup <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-            const CdrLinkGroupSpndChunkData spndData = data<CdrLinkGroupSpndChunkData>( spndChunk );
+            const Cdr4LinkGroupSpndChunkData spndData = data<Cdr4LinkGroupSpndChunkData>( spndChunk );
             group->setObjectId( spndData.id() );
 
 qDebug()<< "...with spnd"<<group->objectId();
@@ -979,7 +984,7 @@ qDebug() << "Group <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-            const CdrGroupSpndChunkData spndData = data<CdrGroupSpndChunkData>( spndChunk );
+            const Cdr4GroupSpndChunkData spndData = data<Cdr4GroupSpndChunkData>( spndChunk );
             group->setObjectId( spndData.id() );
 
 qDebug()<< "...with spnd"<<group->objectId();
@@ -1060,7 +1065,7 @@ qDebug() << "Object <<<";
         if( chunkId == spndId )
         {
             const QByteArray spndChunk = mRiffStreamReader.chunkData();
-            const CdrObjectSpndChunkData spndData = data<CdrObjectSpndChunkData>( spndChunk );
+            const Cdr4ObjectSpndChunkData spndData = data<Cdr4ObjectSpndChunkData>( spndChunk );
             objectId = spndData.id();
 qDebug()<< "...with spnd"<<objectId;
         }
@@ -1118,7 +1123,7 @@ qDebug() << "LGOb >>>";
 
 static inline
 double
-cdrTrafoFactor( CdrSomeStrangeFloat strangeFloat )
+cdrTrafoFactor( Cdr4SomeStrangeFloat strangeFloat )
 {
     return static_cast<double>(strangeFloat.integralPart()) + static_cast<double>(strangeFloat.fractionPart()) / 65535;
 }
@@ -1135,17 +1140,17 @@ CdrParser::readTrfl()
         if( (mRiffStreamReader.chunkId() == trfdId) )
         {
             const QByteArray trfdChunk = mRiffStreamReader.chunkData();
-            const CdrTrflChunkData& trfdData = dataRef<CdrTrflChunkData>( trfdChunk );
+            const Cdr4TransformDataChunkData& trfdData = dataRef<Cdr4TransformDataChunkData>( trfdChunk );
 
 qDebug() << "Reading Trfd" << trfdData.arguments().count() << "args" << trfdData._unknown0() <<trfdData._unknown1();
             for (int i=0; i < trfdData.arguments().count(); i++)
             {
-                const CdrTransformData& transformData = trfdData.arguments().argRef<CdrTransformData>(i);
-                const int dataSize = ((const char*)&trfdData.arguments().argRef<CdrTransformData>(i+1)-(const char*)(&transformData));
+                const Cdr4TransformData& transformData = trfdData.arguments().argRef<Cdr4TransformData>(i);
+                const int dataSize = ((const char*)&trfdData.arguments().argRef<Cdr4TransformData>(i+1)-(const char*)(&transformData));
 //         qDebug() << i << ": type" << transformData.index()<< dataSize;
-                if( transformData.index() == CdrUnknownTransform8Id )
+                if( transformData.index() == Cdr4TransformMatrixId )
                 {
-                    const CdrTransform8Data& data8 = transformData.data8();
+                    const Cdr4TransformMatrixData& data8 = transformData.matrixData();
                     CdrNormalTransformation* transformation = new CdrNormalTransformation;
                     transformation->setData(
                         cdrTrafoFactor(data8.a()),
@@ -1180,76 +1185,78 @@ CdrParser::readLoda()
 
     const QByteArray lodaChunk = mRiffStreamReader.chunkData();
 
-    const CdrObjectArgumentsData& argsData = dataRef<CdrObjectArgumentsData>( lodaChunk );
+    const Cdr4ObjectArgumentsData& argsData = dataRef<Cdr4ObjectArgumentsData>( lodaChunk );
+    const Cdr4ArgumentWithTypeListData& arguments = argsData.arguments();
 
     const QString lodaTypeName = QLatin1String(
-        (argsData.chunkType() == CdrLayerObjectId) ?      "Layer" :
-        (argsData.chunkType() == CdrPixelImageObjectId) ? "PixelImage" :
-        (argsData.chunkType() == CdrGridObjectId) ?       "Grid" :
-        (argsData.chunkType() == CdrGuidesObjectId) ?     "Guides" :
-        (argsData.chunkType() == CdrDesktopObjectId) ?    "Desktop" :
-        (argsData.chunkType() == CdrRectangleObjectId) ?  "Rectangle" :
-        (argsData.chunkType() == CdrEllipseObjectId) ?    "Ellipse" :
-        (argsData.chunkType() == CdrPathObjectId) ?       "Path" :
-        (argsData.chunkType() == CdrGraphicTextObjectId) ?"Graphic Text" :
-        (argsData.chunkType() == CdrBlockTextObjectId) ?  "Block Text" :
-                                                         "" );
-qDebug() << "Reading Loda" << argsData.count() << "args, loda type" << argsData.chunkType() << lodaTypeName;
+        (argsData.chunkType() == Cdr4ObjectLayerId) ?      "Layer" :
+        (argsData.chunkType() == Cdr4ObjectPixelImageId) ? "PixelImage" :
+        (argsData.chunkType() == Cdr4ObjectGridId) ?       "Grid" :
+        (argsData.chunkType() == Cdr4ObjectGuidesId) ?     "Guides" :
+        (argsData.chunkType() == Cdr4ObjectDesktopId) ?    "Desktop" :
+        (argsData.chunkType() == Cdr4ObjectRectangleId) ?  "Rectangle" :
+        (argsData.chunkType() == Cdr4ObjectEllipseId) ?    "Ellipse" :
+        (argsData.chunkType() == Cdr4ObjectPathId) ?       "Path" :
+        (argsData.chunkType() == Cdr4ObjectGraphicTextId) ?"Graphic Text" :
+        (argsData.chunkType() == Cdr4ObjectBlockTextId) ?  "Block Text" :
+                                                           "" );
+qDebug() << "Reading Loda" << arguments.count()
+         << "args, loda type" << argsData.chunkType() << lodaTypeName;
     object =
-        (argsData.chunkType() == CdrRectangleObjectId) ?   (CdrAbstractObject*)readRectangleObject( argsData ) :
-        (argsData.chunkType() == CdrEllipseObjectId) ?     (CdrAbstractObject*)readEllipseObject( argsData ) :
-        (argsData.chunkType() == CdrPathObjectId) ?        (CdrAbstractObject*)readPathObject( argsData ) :
-        (argsData.chunkType() == CdrGraphicTextObjectId) ? (CdrAbstractObject*)readGraphicTextObject( argsData ) :
-        (argsData.chunkType() == CdrBlockTextObjectId) ?   (CdrAbstractObject*)readBlockTextObject( argsData ) :
-                                                           (CdrAbstractObject*)0;
+        (argsData.chunkType() == Cdr4ObjectRectangleId) ?   (CdrAbstractObject*)readRectangleObject( arguments ) :
+        (argsData.chunkType() == Cdr4ObjectEllipseId) ?     (CdrAbstractObject*)readEllipseObject( arguments ) :
+        (argsData.chunkType() == Cdr4ObjectPathId) ?        (CdrAbstractObject*)readPathObject( arguments ) :
+        (argsData.chunkType() == Cdr4ObjectGraphicTextId) ? (CdrAbstractObject*)readGraphicTextObject( arguments ) :
+        (argsData.chunkType() == Cdr4ObjectBlockTextId) ?   (CdrAbstractObject*)readBlockTextObject( arguments ) :
+                                                            (CdrAbstractObject*)0;
 
-    for (int i=0; i < argsData.count(); i++)
+    for (int i=0; i < arguments.count(); i++)
     {
-const quint16 argType = argsData.argType(i);
+const quint16 argType = arguments.argType(i);
 QString argAsString;
 QString argTypeAsString;
 switch(argType)
 {
-    case CdrObjectOutlineIndexArgumentId :
-        argAsString = QString::number( argsData.arg<Cdr4OutlineIndex>(i) );
+    case Cdr4ObjectArgumentOutlineIndexId :
+        argAsString = QString::number( arguments.arg<Cdr4OutlineIndex>(i) );
         argTypeAsString = QLatin1String("outline index");
         break;
-    case CdrObjectFillIndexArgumentId :
-        argAsString = QString::number( argsData.arg<Cdr4FillIndex>(i) );
+    case Cdr4ObjectArgumentFillIndexId :
+        argAsString = QString::number( arguments.arg<Cdr4FillIndex>(i) );
         argTypeAsString = QLatin1String("fill index");
         break;
-    case CdrObjectSpecificDataArgumentId :
+    case Cdr4ObjectArgumentSpecificDataId :
         argTypeAsString = QLatin1String("object specific data");
         break;
-    case CdrObject40ArgumentId :
+    case Cdr4ObjectArgument40Id :
     {
-        const CdrObject40ArgumentData data = argsData.arg<CdrObject40ArgumentData>( i );
+        const Cdr4ObjectArgument40Data data = arguments.arg<Cdr4ObjectArgument40Data>( i );
         argAsString = QString::number( data._unknown0() )+QLatin1Char(',')+QString::number(data._unknown1());
         argTypeAsString = QLatin1String("some 32-bit");
         break;
     }
-    case CdrObject100ArgumentId :
+    case Cdr4ObjectArgument100Id :
     {
-        const CdrObject100ArgumentData data = argsData.arg<CdrObject100ArgumentData>( i );
+        const Cdr4ObjectArgument100Data data = arguments.arg<Cdr4ObjectArgument100Data>( i );
         argAsString = QString::number(data._unknown0())+QLatin1Char(',')+QString::number(data._unknown1());
         argTypeAsString = QLatin1String("z-index?");
         break;
     }
-    case CdrObjectStyleIndexArgumentId :
-        argAsString = QString::number( argsData.arg<Cdr4StyleIndex>(i) );
+    case Cdr4ObjectArgumentStyleIndexId :
+        argAsString = QString::number( arguments.arg<Cdr4StyleIndex>(i) );
         argTypeAsString = QLatin1String("style index");
         break;
-    case CdrObjectTitleArgumentId :
-        argAsString = QLatin1String( argsData.argRef<CdrObjectTitleArgumentData>(i).title() );
+    case Cdr4ObjectArgumentTitleId :
+        argAsString = QLatin1String( arguments.argRef<Cdr4ObjectArgumentTitleData>(i).title() );
         argTypeAsString = QLatin1String("title");
         break;
-    case CdrObject1010ArgumentId :
-        argAsString = QString::number( argsData.arg<CdrObject1010ArgumentData>(i)._unknown0(), 16 );
+    case Cdr4ObjectArgument1010Id :
+        argAsString = QString::number( arguments.arg<Cdr4ObjectArgument1010Data>(i)._unknown0(), 16 );
         argTypeAsString = QLatin1String("some 16-bit");
         break;
-    case CdrObject2000ArgumentId :
+    case Cdr4ObjectArgument2000Id :
     {
-        const CdrObject2000ArgumentData& data = argsData.argRef<CdrObject2000ArgumentData>( i );
+        const Cdr4ObjectArgument2000Data& data = arguments.argRef<Cdr4ObjectArgument2000Data>( i );
         argAsString =
             QString::number(data._unknown0())+QLatin1Char(',')+QString::number(data._unknown1())+QLatin1Char(',') +
             QString::number(data._unknown2())+QLatin1Char(',')+QString::number(data._unknown3())+QLatin1Char(',') +
@@ -1257,22 +1264,22 @@ switch(argType)
         argTypeAsString = QLatin1String("some 12 bytes");
         break;
     }
-    case CdrObject3000ArgumentId :
+    case Cdr4ObjectArgument3000Id :
     {
-        const CdrObject3000ArgumentData& data = argsData.argRef<CdrObject3000ArgumentData>( i );
-        for(unsigned int i=0; i<sizeof(CdrObject3000ArgumentData); ++i )
+        const Cdr4ObjectArgument3000Data& data = arguments.argRef<Cdr4ObjectArgument3000Data>( i );
+        for(unsigned int i=0; i<sizeof(Cdr4ObjectArgument3000Data); ++i )
             argAsString = argAsString + QLatin1Char(' ')+QString::number(data._unknown0(i));
         argTypeAsString = QLatin1String("some 24 bytes");
         break;
     }
-    case CdrObject3010ArgumentId :
+    case Cdr4ObjectArgument3010Id :
     {
         argTypeAsString = QLatin1String("text aligned on path data");
         break;
     }
-    case CdrObject6000ArgumentId :
+    case Cdr4ObjectArgument6000Id :
     {
-        const CdrObject6000ArgumentData& data = argsData.argRef<CdrObject6000ArgumentData>( i );
+        const Cdr4ObjectArgument6000Data& data = arguments.argRef<Cdr4ObjectArgument6000Data>( i );
         argAsString =
             QString::number(data._unknown0())+QLatin1Char(',')+QString::number(data._unknown1())+QLatin1Char(',') +
             QString::number(data._unknown2())+QLatin1Char(',')+QString::number(data._unknown3());
@@ -1292,7 +1299,7 @@ qDebug() << i << ": type" << argType << argTypeAsString << argAsString;
 
 
 CdrRectangleObject*
-CdrParser::readRectangleObject( const CdrArgumentWithTypeListData& argsData )
+CdrParser::readRectangleObject( const Cdr4ArgumentWithTypeListData& argsData )
 {
     CdrRectangleObject* rectangleObject = new CdrRectangleObject;
 
@@ -1302,20 +1309,20 @@ CdrParser::readRectangleObject( const CdrArgumentWithTypeListData& argsData )
 
         switch( argType )
         {
-        case CdrObjectOutlineIndexArgumentId :
+        case Cdr4ObjectArgumentOutlineIndexId :
             rectangleObject->setOutlineId( argsData.arg<Cdr4OutlineIndex>(i) );
             break;
-        case CdrObjectFillIndexArgumentId :
+        case Cdr4ObjectArgumentFillIndexId :
             rectangleObject->setFillId( argsData.arg<Cdr4FillIndex>(i) );
             break;
-        case CdrObjectSpecificDataArgumentId :
+        case Cdr4ObjectArgumentSpecificDataId :
         {
             const Cdr4RectangleData& rectangleData = argsData.argRef<Cdr4RectangleData>( i );
             rectangleObject->setCornerPoint( CdrPoint(rectangleData.cornerPoint().x(),rectangleData.cornerPoint().y()) );
 qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().x()<<","<<rectangleObject->cornerPoint().y()
                  << "unknown" << rectangleData._unknown();
         }
-        case CdrObjectStyleIndexArgumentId :
+        case Cdr4ObjectArgumentStyleIndexId :
             rectangleObject->setStyleId( argsData.arg<Cdr4StyleIndex>(i) );
             break;
         }
@@ -1325,7 +1332,7 @@ qDebug() << "rectangle: corner point" << rectangleObject->cornerPoint().x()<<","
 }
 
 CdrEllipseObject*
-CdrParser::readEllipseObject( const CdrArgumentWithTypeListData& argsData )
+CdrParser::readEllipseObject( const Cdr4ArgumentWithTypeListData& argsData )
 {
     CdrEllipseObject* ellipseObject = new CdrEllipseObject;
 
@@ -1335,13 +1342,13 @@ CdrParser::readEllipseObject( const CdrArgumentWithTypeListData& argsData )
 
         switch( argType )
         {
-        case CdrObjectOutlineIndexArgumentId :
+        case Cdr4ObjectArgumentOutlineIndexId :
             ellipseObject->setOutlineId( argsData.arg<Cdr4OutlineIndex>(i) );
             break;
-        case CdrObjectFillIndexArgumentId :
+        case Cdr4ObjectArgumentFillIndexId :
             ellipseObject->setFillId( argsData.arg<Cdr4FillIndex>(i) );
             break;
-        case CdrObjectSpecificDataArgumentId :
+        case Cdr4ObjectArgumentSpecificDataId :
         {
             const Cdr4EllipseData& ellipseData = argsData.argRef<Cdr4EllipseData>( i );
             ellipseObject->setCornerPoint( CdrPoint(ellipseData.cornerPoint().x(),ellipseData.cornerPoint().y()) );
@@ -1352,7 +1359,7 @@ qDebug() << "ellipse: corner"<<ellipseObject->cornerPoint().x()<<","<<ellipseObj
                      <<"unknown"<<ellipseData._unknown();
         }
             break;
-        case CdrObjectStyleIndexArgumentId :
+        case Cdr4ObjectArgumentStyleIndexId :
             ellipseObject->setStyleId( argsData.arg<Cdr4StyleIndex>(i) );
             break;
         }
@@ -1362,7 +1369,7 @@ qDebug() << "ellipse: corner"<<ellipseObject->cornerPoint().x()<<","<<ellipseObj
 }
 
 CdrPathObject*
-CdrParser::readPathObject( const CdrArgumentWithTypeListData& argsData )
+CdrParser::readPathObject( const Cdr4ArgumentWithTypeListData& argsData )
 {
     CdrPathObject* pathObject = new CdrPathObject();
 
@@ -1372,13 +1379,13 @@ CdrParser::readPathObject( const CdrArgumentWithTypeListData& argsData )
 
         switch( argType )
         {
-        case CdrObjectOutlineIndexArgumentId :
+        case Cdr4ObjectArgumentOutlineIndexId :
             pathObject->setOutlineId( argsData.arg<Cdr4OutlineIndex>(i) );
             break;
-        case CdrObjectFillIndexArgumentId :
+        case Cdr4ObjectArgumentFillIndexId :
             pathObject->setFillId( argsData.arg<Cdr4FillIndex>(i) );
             break;
-        case CdrObjectSpecificDataArgumentId :
+        case Cdr4ObjectArgumentSpecificDataId :
         {
             const Cdr4PointList& points = argsData.argRef<Cdr4PointList>( i );
             int curveControlPointCount = 0;
@@ -1410,7 +1417,7 @@ qDebug() << "Assumption about path data not met, not creating path object.";
             }
         }
             break;
-        case CdrObjectStyleIndexArgumentId :
+        case Cdr4ObjectArgumentStyleIndexId :
             pathObject->setStyleId( argsData.arg<Cdr4StyleIndex>(i) );
             break;
         }
@@ -1420,7 +1427,7 @@ qDebug() << "Assumption about path data not met, not creating path object.";
 }
 
 CdrGraphicTextObject*
-CdrParser::readGraphicTextObject( const CdrArgumentWithTypeListData& argsData )
+CdrParser::readGraphicTextObject( const Cdr4ArgumentWithTypeListData& argsData )
 {
     CdrGraphicTextObject* textObject = new CdrGraphicTextObject;
 
@@ -1430,13 +1437,13 @@ CdrParser::readGraphicTextObject( const CdrArgumentWithTypeListData& argsData )
 
         switch( argType )
         {
-        case CdrObjectOutlineIndexArgumentId :
+        case Cdr4ObjectArgumentOutlineIndexId :
             textObject->setOutlineId( argsData.arg<Cdr4OutlineIndex>(i) );
             break;
-        case CdrObjectFillIndexArgumentId :
+        case Cdr4ObjectArgumentFillIndexId :
             textObject->setFillId( argsData.arg<Cdr4FillIndex>(i) );
             break;
-        case CdrObjectSpecificDataArgumentId :
+        case Cdr4ObjectArgumentSpecificDataId :
         {
             const Cdr4GraphicTextData& textData = argsData.argRef<Cdr4GraphicTextData>( i );
             QString text;
@@ -1458,7 +1465,7 @@ CdrParser::readGraphicTextObject( const CdrArgumentWithTypeListData& argsData )
 qDebug() << "text:" << text << "unknown:"<<textData._unknown();
         }
             break;
-        case CdrObjectStyleIndexArgumentId :
+        case Cdr4ObjectArgumentStyleIndexId :
             textObject->setStyleId( argsData.arg<Cdr4StyleIndex>(i) );
             break;
         }
@@ -1468,7 +1475,7 @@ qDebug() << "text:" << text << "unknown:"<<textData._unknown();
 }
 
 CdrBlockTextObject*
-CdrParser::readBlockTextObject( const CdrArgumentWithTypeListData& argsData )
+CdrParser::readBlockTextObject( const Cdr4ArgumentWithTypeListData& argsData )
 {
     CdrBlockTextObject* blockTextObject = new CdrBlockTextObject;
 
@@ -1478,13 +1485,13 @@ CdrParser::readBlockTextObject( const CdrArgumentWithTypeListData& argsData )
 
         switch( argType )
         {
-        case CdrObjectOutlineIndexArgumentId :
+        case Cdr4ObjectArgumentOutlineIndexId :
             blockTextObject->setOutlineId( argsData.arg<Cdr4OutlineIndex>(i) );
             break;
-        case CdrObjectFillIndexArgumentId :
+        case Cdr4ObjectArgumentFillIndexId :
             blockTextObject->setFillId( argsData.arg<Cdr4FillIndex>(i) );
             break;
-        case CdrObjectSpecificDataArgumentId :
+        case Cdr4ObjectArgumentSpecificDataId :
         {
             const Cdr4BlockTextData& blockTextData = argsData.argRef<Cdr4BlockTextData>( i );
             blockTextObject->setWidth( blockTextData.width() );
@@ -1494,7 +1501,7 @@ qDebug() << "blockTextData:" << blockTextData._unknown0() << blockTextData.width
                              << blockTextData._unknown4() << blockTextData._unknown5();
         }
             break;
-        case CdrObjectStyleIndexArgumentId :
+        case Cdr4ObjectArgumentStyleIndexId :
             blockTextObject->setStyleId( argsData.arg<Cdr4StyleIndex>(i) );
             break;
         }

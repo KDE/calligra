@@ -23,43 +23,43 @@
   </typedefs>
 
   <enums>
-    <enum name="CdrObjectIds">
+    <enum name="Cdr4ObjectType">
       <description>id for the type of the graphical object.</description>
-      <item name="CdrLayerObjectId" value="0">
+      <item name="Cdr4ObjectLayerId" value="0">
         <description>"Ebene1"</description>
       </item>
-      <item name="CdrRectangleObjectId" value="1">
+      <item name="Cdr4ObjectRectangleId" value="1">
         <description>Rectangle</description>
       </item>
-      <item name="CdrEllipseObjectId" value="2">
+      <item name="Cdr4ObjectEllipseId" value="2">
         <description>Ellipse</description>
       </item>
-      <item name="CdrPathObjectId" value="3">
+      <item name="Cdr4ObjectPathId" value="3">
         <description>Path</description>
       </item>
-      <item name="CdrGraphicTextObjectId" value="4">
+      <item name="Cdr4ObjectGraphicTextId" value="4">
         <description>A graphically attributed text</description>
       </item>
-      <item name="CdrPixelImageObjectId" value="5">
+      <item name="Cdr4ObjectPixelImageId" value="5">
         <description>Bitmap</description>
       </item>
-      <item name="CdrBlockTextObjectId" value="6">
+      <item name="Cdr4ObjectBlockTextId" value="6">
         <description>A text block</description>
       </item>
-      <item name="CdrGridObjectId" value="11">
+      <item name="Cdr4ObjectGridId" value="11">
         <description>"Gitter"</description>
       </item>
-      <item name="CdrGuidesObjectId" value="12">
+      <item name="Cdr4ObjectGuidesId" value="12">
         <description>"Hilfslinien"</description>
       </item>
-      <item name="CdrDesktopObjectId" value="17">
+      <item name="Cdr4ObjectDesktopId" value="17">
         <description>"Desktop"</description>
       </item>
     </enum>
   </enums>
 
   <records>
-   <record name="MCfgChunkData" size="54">
+   <record name="Cdr4MCfgChunkData" size="54">
       <field start="0" end="1"  name="width" type="uint16" />
       <field start="2" end="3"  name="height" type="uint16" />
       <array start="4" end="53" name="_unknown" type="char" length="50" />
@@ -84,14 +84,14 @@
       </field>
     </record>
 
-    <record name="CdrColor" size="4">
+    <record name="Cdr4Color" size="4">
       <field start="0" end="0" type="uint8" name="d1" />
       <field start="1" end="1" type="uint8" name="d2" />
       <field start="2" end="2" type="uint8" name="d3" />
       <field start="3" end="3" type="uint8" name="d4" />
     </record>
 
-    <record name="CdrArgumentListData" size="6">
+    <record name="Cdr4ArgumentListData" size="6">
 <!--    // TODO: convert endianness on bigendian system // void convertToBugEndian(); -->
       <method>
 <code><![CDATA[const quint16* argOffsets() const
@@ -119,7 +119,7 @@ const T& argRef( int i ) const
       </field>
     </record>
 
-    <record name="CdrArgumentWithTypeListData" base="CdrArgumentListData" size="8">
+    <record name="Cdr4ArgumentWithTypeListData" base="Cdr4ArgumentListData" size="8">
       <method>
 <code><![CDATA[const qint16* argTypes() const
 { return reinterpret_cast<const qint16*>( reinterpret_cast<const char*>(this)+__startOfArgTypes ); }]]></code>
@@ -132,40 +132,43 @@ const T& argRef( int i ) const
       </field>
     </record>
 
-    <record name="CdrObjectArgumentsData" base="CdrArgumentWithTypeListData" size="10">
+    <record name="Cdr4ObjectArgumentsData" size="10">
+      <field start="0" end="7" name="arguments" type="Cdr4ArgumentWithTypeListData">
+          <description>The type of the object, see Cdr4ObjectType.</description>
+      </field>
       <field start="8" end="9" name="chunkType" type="uint16">
-          <description>The type of the object, see CdrObjectIds.</description>
+          <description>The type of the object, see Cdr4ObjectType.</description>
       </field>
     </record>
   </records>
 
   <enums>
-    <enum name="CdrStyleArgumentType">
-      <item name="CdrStyleTitleArgumentId" value="200" />
-      <item name="CdrStyle205ArgumentId" value="205" />
-      <item name="CdrStyle210ArgumentId" value="210" />
-      <item name="CdrStyleFontArgumentId" value="220" />
-      <item name="CdrStyleTextAlignmentArgumentId" value="225" />
-      <item name="CdrStyleBulletSymbolArgumentId" value="230" />
+    <enum name="Cdr4StyleArgumentType">
+      <item name="Cdr4StyleArgumentTitleId" value="200" />
+      <item name="Cdr4StyleArgument205Id" value="205" />
+      <item name="Cdr4StyleArgument210Id" value="210" />
+      <item name="Cdr4StyleArgumentFontId" value="220" />
+      <item name="Cdr4StyleArgumentTextAlignmentId" value="225" />
+      <item name="Cdr4StyleArgumentBulletSymbolId" value="230" />
       <!-- 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00) -->
-      <item name="CdrStyle235ArgumentId" value="235" />
+      <item name="Cdr4StyleArgument235Id" value="235" />
       <!-- 258 bytes (all 00) -->
-      <item name="CdrStyle240ArgumentId" value="240" />
+      <item name="Cdr4StyleArgument240Id" value="240" />
       <!-- 8 bytes (all 00) -->
-      <item name="CdrStyle245ArgumentId" value="245" />
+      <item name="Cdr4StyleArgument245Id" value="245" />
       <!-- 32bit (00 00 00 00) -->
-      <item name="CdrStyle250ArgumentId" value="250" />
+      <item name="Cdr4StyleArgument250Id" value="250" />
     </enum>
   </enums>
 
   <records>
-    <record name="CdrVersionChunkData" size="2">
+    <record name="Cdr4VersionChunkData" size="2">
       <field start="0" end="1" type="uint16" name="version">
           <description>The version, multiplied with 100, e.g. 401 for version 4.01.</description>
       </field>
     </record>
 
-    <record name="CdrBlockTextIdChunkData" size="2">
+    <record name="Cdr4BlockTextIdChunkData" size="2">
       <field start="0" end="1" type="uint16" name="id">
           <description>Really the block text id?</description>
       </field>
@@ -174,8 +177,8 @@ const T& argRef( int i ) const
 
   <enums>
     <enum name="Cdr4StyleFontStyleType">
-      <item name="Cdr4StyleFontNormal" value="1" />
-      <item name="Cdr4StyleFontBold" value="2" />
+      <item name="Cdr4StyleFontNormalId" value="1" />
+      <item name="Cdr4StyleFontBoldId" value="2" />
     </enum>
   </enums>
 
@@ -206,7 +209,7 @@ const T& argRef( int i ) const
 0C 00 4A 00 00 00
 0C 00 00 00 00 00
 -->
-    <record name="CdrBlockTextParagraphChunkData" size="6">
+    <record name="Cdr4BlockTextParagraphChunkData" size="6">
       <!-- some flags?, seen 6, 7, 12,14,15,16,17,18, 26 -> 110,111,1100,1110,1111,10000,10001,10010,11010 -->
       <field start="0" end="1" type="uint16" name="_unknown0" />
       <field start="2" end="3" type="uint16" name="length">
@@ -216,7 +219,7 @@ const T& argRef( int i ) const
       <field start="4" end="5" type="uint16" name="_unknown2" />
     </record>
 
-    <record name="CdrBlockTextChar" size="4">
+    <record name="Cdr4BlockTextChar" size="4">
       <!-- ?, seen 0 -->
       <field start="0" end="1" type="uint16" name="_unknown0" />
       <field start="2" end="2" type="uchar" name="character">
@@ -226,10 +229,10 @@ const T& argRef( int i ) const
       <field start="3" end="3" type="uint8" name="_unknown1" />
     </record>
 
-    <record name="CdrBlockTextNormalCharChunkData" size="0" sizeExtended="true">
+    <record name="Cdr4BlockTextNormalCharChunkData" size="0" sizeExtended="true">
       <!-- hm, number of chars must be calculated outside this record, by chunk size -->
-      <dynarray start="0" type="CdrBlockTextChar" name="textChar">
-          <description>The array of CdrBlockTextChar as in the text.</description>
+      <dynarray start="0" type="Cdr4BlockTextChar" name="textChar">
+          <description>The array of Cdr4BlockTextChar as in the text.</description>
       </dynarray>
     </record>
 
@@ -246,8 +249,8 @@ const T& argRef( int i ) const
 00 00 FC 00 38 00 FA 00 02 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00
      |     |     |     |           |     |     |           |
 -->
-    <record name="CdrBlockTextSpecialCharChunkData" size="24">
-      <field start="0" end="3" type="CdrBlockTextChar" name="character">
+    <record name="Cdr4BlockTextSpecialCharChunkData" size="24">
+      <field start="0" end="3" type="Cdr4BlockTextChar" name="character">
           <description>The actual char.</description>
       </field>
       <field start="4" end="9" type="Cdr4FontData" name="font">
@@ -264,27 +267,27 @@ const T& argRef( int i ) const
       <field start="20" end="23" type="uint32" name="_unknown8" />
     </record>
 
-    <record name="CdrStyleSheetChunkData" size="0" sizeExtended="true">
+    <record name="Cdr4StyleSheetChunkData" size="0" sizeExtended="true">
       <dynbytestring start="0" name="fileName">
           <description>A \0 terminated string with some file name, e.g. "CORELDRW.CDT".</description>
       </dynbytestring>
     </record>
 <!--
-there are 2 bytes not part of the CdrArgumentListData, behind the arg pointers. also for other CdrArgumentListData usages?
+there are 2 bytes not part of the Cdr4ArgumentListData, behind the arg pointers. also for other Cdr4ArgumentListData usages?
 20 00 01 00 06 00 0C 00 20 00 00 00 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
 22 00 01 00 06 00 0C 00 22 00 22 00 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
 size |count|aps  | ap1 |apl  |?????|
 -->
-    <record name="CdrLnkTableChunkData" size="6" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentListData" name="arguments" />
+    <record name="Cdr4LinkTableChunkData" size="6" sizeExtended="true">
+      <field start="0" end="5" type="Cdr4ArgumentListData" name="arguments" />
       <extension start="6" />
     </record>
 
-    <record name="CdrStyleChunkData" size="20" sizeExtended="true">
+    <record name="Cdr4StyleChunkData" size="20" sizeExtended="true">
       <field start="0" end="1" type="Cdr4StyleIndex" name="styleIndex">
         <description>The index of the style in the style table of the document.</description>
       </field>
-      <field start="2" end="9" type="CdrArgumentWithTypeListData" name="arguments" />
+      <field start="2" end="9" type="Cdr4ArgumentWithTypeListData" name="arguments" />
       <field start="10"  end="11"  name="baseStyleIndex" type="sint16">
           <description>The index of the base style in the style table of the document.</description>
       </field>
@@ -295,43 +298,43 @@ size |count|aps  | ap1 |apl  |?????|
       <extension start="20" />
     </record>
 
-    <record name="CdrStyleTitleArgumentData" size="0" sizeExtended="true">
+    <record name="Cdr4StyleArgumentTitleData" size="0" sizeExtended="true">
         <dynbytestring start="0" name="title" />
     </record>
 
-    <record name="CdrStyleFontArgumentData" size="6">
+    <record name="Cdr4StyleArgumentFontData" size="6">
       <field start="0" end="5" name="font" type="Cdr4FontData">
         <description>The font to use.</description>
       </field>
     </record>
 
     <!-- 32bit seen 1,2, with 200 and 210 only argument in Default Graphic -->
-    <record name="CdrStyle205ArgumentData" size="4">
+    <record name="Cdr4StyleArgument205Data" size="4">
       <field start="0" end="3" name="_unknown" type="sint32" />
     </record>
     <!-- 32bit seen 1,2,3, with 200 and 205 only argument in Default Graphic -->
-    <record name="CdrStyle210ArgumentData" size="4">
+    <record name="Cdr4StyleArgument210Data" size="4">
       <field start="0" end="3" name="_unknown" type="sint32" />
     </record>
   </records>
 
   <enums>
-    <enum name="CdrStyleTextAlignmentType">
+    <enum name="Cdr4TextAlignmentType">
       <!-- Seen with Bullet*, Default Artistic Text, Default Paragraph Text -->
-      <item name="CdrStyleTextUnknown0Alignment" value="0">
+      <item name="Cdr4TextAlignment0Id" value="0">
         <description>.</description>
       </item>
       <!-- Seen with Default Artistic Text, Default Paragraph Text, Überschrift -->
-      <item name="CdrStyleTextUnknown1Alignment" value="1">
+      <item name="Cdr4TextAlignment1Id" value="1">
         <description>Text is left aligned?</description>
       </item>
-      <item name="CdrStyleTextCenterAlignment" value="2">
+      <item name="Cdr4TextAlignmentCenterId" value="2">
         <description>Text is aligned in the middle.</description>
       </item>
-      <item name="CdrStyleTextRightAlignment" value="3">
+      <item name="Cdr4TextAlignmentRightId" value="3">
         <description>Text is right aligned.</description>
       </item>
-      <item name="CdrStyleTextUnknown4Alignment" value="4">
+      <item name="Cdr4TextAlignment4Id" value="4">
         <description>Block alignment? Seen with Text.</description>
       </item>
     </enum>
@@ -339,8 +342,8 @@ size |count|aps  | ap1 |apl  |?????|
 
   <records>
     <!-- 16 bit: seen 0,1,2,3,4 -->
-    <record name="CdrStyleTextAlignmentArgumentData" size="2">
-      <field start="0" end="1" name="type" type="uint16" value="CdrStyleTextAlignmentType" />
+    <record name="Cdr4StyleArgumentTextAlignmentData" size="2">
+      <field start="0" end="1" name="type" type="uint16" value="Cdr4TextAlignmentType" />
     </record>
 <!-- 20 bytes
 (all 00)
@@ -351,7 +354,7 @@ size |count|aps  | ap1 |apl  |?????|
 0 88 333 1  0 00000000000000000000 Default Paragraph Text  (88: "AvantGarde Bk BT")
 0 58 333 1 31 00000000000000000000 with Überschrift, Text  (58: n.e.)
 -->
-    <record name="CdrStyleBulletSymbolArgumentData" size="20">
+    <record name="Cdr4StyleArgumentBulletSymbolData" size="20">
       <!-- seen 0,1: 1 for Bullet styles, 0 for all other -->
       <field start="0" end="1" name="length" type="sint16" />
       <field start="2" end="7" name="font" type="Cdr4FontData">
@@ -370,7 +373,7 @@ third last 188 for Text and Überschrift, if not 100
 second last 76 for Text and Überschrift, 150 for Titel, 25 for some substyle
 last 13751 for "Das Schulmagazin" text style
 -->
-    <record name="CdrStyle235ArgumentData" size="12">
+    <record name="Cdr4StyleArgument235Data" size="12">
       <field start="0" end="1" name="_unknown0" type="sint16" />
       <field start="2" end="3" name="_unknown1" type="sint16" />
       <field start="4" end="5" name="_unknown2" type="sint16" />
@@ -379,7 +382,7 @@ last 13751 for "Das Schulmagazin" text style
       <field start="10" end="11" name="_unknown5" type="sint16" />
     </record>
 
-    <record name="CdrStyle240Data" size="4">
+    <record name="Cdr4Style240Data" size="4">
       <!-- seen 0, perhaps alignment type? -->
       <field start="0" end="1" name="_unknown0" type="sint16" />
 <!--
@@ -390,10 +393,10 @@ seen 32 values of 894 increasing by 500 till 16394
       <field start="2" end="3" name="_unknown1" type="sint16" />
     </record>
     <!-- always 258 bytes, seems only partially used (all 00, or with values), tab stops? -->
-    <record name="CdrStyle240ArgumentData" size="2" sizeExtended="true">
+    <record name="Cdr4StyleArgument240Data" size="2" sizeExtended="true">
         <!-- number seen was 0, 12, 32 -->
       <field start="0" end="1" name="someDataSize" type="uint16" />
-      <dynarray start="2" name="someData" type="CdrStyle240Data" length="someDataSize" minLength="0" maxLength="64"/>
+      <dynarray start="2" name="someData" type="Cdr4Style240Data" length="someDataSize" minLength="0" maxLength="64"/>
       <!-- rest bytes seem garbage data, TODO: mark with a union or do padding by formula? -->
     </record>
 
@@ -401,7 +404,7 @@ seen 32 values of 894 increasing by 500 till 16394
 8 bytes (all 0, 250 0 250 250, 500 0 250 250, 750 0 250 250, 0 625 0 0) margins?
 not seen for Default Artistic Text, Default Graphic
 -->
-    <record name="CdrStyle245ArgumentData" size="8">
+    <record name="Cdr4StyleArgument245Data" size="8">
       <description>margins possibly?</description>
       <!-- left margin, at least increases by 250 for default bullet point styles -->
       <field start="0" end="1" name="_unknown0" type="sint16" />
@@ -413,13 +416,13 @@ not seen for Default Artistic Text, Default Graphic
       <field start="6" end="7" name="_unknown3" type="sint16" />
     </record>
     <!-- 32bit (0 0, 0 500) -->
-    <record name="CdrStyle250ArgumentData" size="4">
+    <record name="Cdr4StyleArgument250Data" size="4">
       <field start="0" end="1" name="_unknown0" type="sint16" />
       <field start="2" end="3" name="_unknown1" type="sint16" />
     </record>
 
 
-    <record name="CdrFontChunkData" size="2" sizeExtended="true">
+    <record name="Cdr4FontChunkData" size="2" sizeExtended="true">
       <field start="0" end="1" type="Cdr4FontIndex" name="fontIndex">
         <description>The index/id/key of the font, seems sorted in the font table.</description>
       </field>
@@ -430,16 +433,16 @@ not seen for Default Artistic Text, Default Graphic
   </records>
 
   <enums>
-    <enum name="CdrFillType">
-      <item name="CdrTransparent" value="0" />
-      <item name="CdrSolid" value="1" />
-      <item name="CdrUnknown2FillType" value="2" />
-      <item name="CdrUnknown7FillType" value="7" />
-      <item name="CdrUnknown11FillType" value="11" />
+    <enum name="Cdr4FillType">
+      <item name="Cdr4FillTransparentId" value="0" />
+      <item name="Cdr4FillSolidId" value="1" />
+      <item name="Cdr4FillGradientId" value="2" />
+      <item name="Cdr4Fill7Id" value="7" />
+      <item name="Cdr4Fill11Id" value="11" />
     </enum>
 
-    <enum name="CdrColorModel">
-      <item name="CdrPantoneId" value="1" />
+    <enum name="Cdr4ColorModelType">
+      <item name="Cdr4ColorPantoneId" value="1" />
     </enum>
   </enums>
 
@@ -457,13 +460,13 @@ not seen for Default Artistic Text, Default Graphic
 // colormd                 CMYK?
 // possible data: color
 -->
-    <record name="CdrSolidFillData" size="22">
+    <record name="Cdr4FillSolidData" size="22">
       <!-- seen 1, color model?-->
       <field start="0" end="3" name="colorModel" type="uint32" />
       <!-- seen 0-->
       <field start="4" end="7" name="_unknown2" type="uint32" />
       <!-- seen 0, 20, 60, 100-->
-      <field start="8" end="11" name="color" type="CdrColor" />
+      <field start="8" end="11" name="color" type="Cdr4Color" />
       <!-- seen 0-->
       <field start="12" end="15" name="_unknown4" type="uint32" />
       <!-- seen 0, C2 01 3C 00 (3932610 oder 450,60 oder 194,1,60,0)-->
@@ -478,7 +481,7 @@ not seen for Default Artistic Text, Default Graphic
 0000:0020 | 00 00 00 00  0A 00 00 00  00 00 00 00  C2 01 3C 00 | ............Â.<.
 0000:0030 | 00 00                                              | ..              
 -->
-    <record name="CdrUnknown7FillData" size="50">
+    <record name="Cdr4Fill7Data" size="50">
       <array start="0" end="49" name="_unknown0" type="char" length="50" />
     </record>
 
@@ -497,10 +500,10 @@ not seen for Default Artistic Text, Default Graphic
 0000:00B0 | 00 00 00 00  00 00 00 00  00 00 00 00  14 00 14 00 | ................
 0000:00C0 | 00 00 00 00  3C 00 14 00  00 00                    | ....<.....      
 -->
-    <record name="CdrUnknown11FillSubData" size="32">
+    <record name="Cdr4Fill11SubData" size="32">
       <array start="0" end="31" name="_unknown" type="sint16" length="16" />
     </record>
-    <record name="CdrUnknown11FillData" size="202">
+    <record name="Cdr4Fill11Data" size="202">
       <!-- seen 11 (happened to be same as type id, but also the same as spnd value of group in vec table), ?-->
       <field start="0" end="1" name="_unknown0" type="uint16" />
       <!-- seen 0-->
@@ -523,45 +526,46 @@ not seen for Default Artistic Text, Default Graphic
        </bytestring>
       <!-- seen 9-->
       <field start="104" end="105" name="_unknown5" type="uint16" />
-      <field start="106" end="137" name="_unknown6" type="CdrUnknown11FillSubData" />
-      <field start="138" end="169" name="_unknown7" type="CdrUnknown11FillSubData" />
-      <field start="170" end="201" name="_unknown8" type="CdrUnknown11FillSubData" />
+      <field start="106" end="137" name="_unknown6" type="Cdr4Fill11SubData" />
+      <field start="138" end="169" name="_unknown7" type="Cdr4Fill11SubData" />
+      <field start="170" end="201" name="_unknown8" type="Cdr4Fill11SubData" />
     </record>
 
-    <record name="CdrFillChunkData" size="8" sizeExtended="true">
+    <record name="Cdr4FillChunkData" size="8" sizeExtended="true">
       <field start="0" end="3" type="Cdr4FillIndex" name="fillIndex">
         <description>The index/id/key of the fill in the fill table of the document.</description>
       </field>
-      <field start="4" end="7" type="uint32" name="fillType" value="CdrFillType" />
+      <field start="4" end="7" type="uint32" name="fillType" value="Cdr4FillType" />
       <union start="8" name="data" depends="fillType">
         <description>The fill specific data, size depends on the type.</description>
-        <field name="solidFillData" type="CdrSolidFillData" dependValue="CdrSolid" />
-        <field name="unknown11FillData" type="CdrUnknown11FillData" dependValue="CdrUnknown7FillType" />
+        <field name="fillSolidData" type="Cdr4FillSolidData" dependValue="Cdr4FillSolidId" />
+        <field name="fill7Data" type="Cdr4Fill7Data" dependValue="Cdr4Fill7Id" />
+        <field name="fill11Data" type="Cdr4Fill11Data" dependValue="Cdr4Fill11Id" />
       </union>
     </record>
   </records>
 
   <enums>
     <enum name="Cdr4StrokeType">
-      <item name="Cdr4StrokeUnknown1" value="1" />
-      <item name="Cdr4StrokeUnknown2Type" value="2" />
-      <item name="Cdr4StrokeUnknown4Type" value="4" />
-      <item name="Cdr4StrokeUnknown34Type" value="34" />
-      <item name="Cdr4StrokeUnknown50Type" value="50" />
+      <item name="Cdr4Stroke1Id" value="1" />
+      <item name="Cdr4Stroke2Id" value="2" />
+      <item name="Cdr4Stroke4Id" value="4" />
+      <item name="Cdr4Stroke34Id" value="34" />
+      <item name="Cdr4Stroke50Id" value="50" />
     </enum>
 
     <enum name="Cdr4StrokeJoinType">
-      <item name="Cdr4StrokeUnknown0Join" value="0" />
-      <item name="Cdr4StrokeRoundJoin" value="1" />
-      <item name="Cdr4StrokeUnknown2Join" value="2" />
+      <item name="Cdr4StrokeJoin0Id" value="0" />
+      <item name="Cdr4StrokeJoinRoundId" value="1" />
+      <item name="Cdr4StrokeJoin2Id" value="2" />
     </enum>
 
     <enum name="Cdr4StrokeCapType">
-      <item name="Cdr4StrokeUnknown0Cap" value="0" />
-      <item name="Cdr4StrokeRoundCap"  value="1">
+      <item name="Cdr4StrokeCap0Id" value="0" />
+      <item name="Cdr4StrokeCapRoundId"  value="1">
           <description>The stroke ends in a half circle around the endpoint.</description>
       </item>
-      <item name="Cdr4StrokeUnknown2Cap" value="2" />
+      <item name="Cdr4StrokeCap2Id" value="2" />
     </enum>
   </enums>
 
@@ -598,7 +602,7 @@ not seen for Default Artistic Text, Default Graphic
 // possible data: line type, line ending type, color, shape of pen
 // 68 bytes:
 -->
-    <record name="CdrOutlineChunkData" size="68">
+    <record name="Cdr4OutlineChunkData" size="68">
       <!-- 0..3: uint32 index/key/id? would match loda-->
       <field start="0" end="3" name="index" type="Cdr4OutlineIndex">
         <description>The index of the outline in the outline table.</description>
@@ -619,8 +623,8 @@ not seen for Default Artistic Text, Default Graphic
       <field start="14" end="15" name="penAngle" type="sint16" minValue="-900" maxValue="900">
           <description>Angle of the pen?</description>
       </field>
-      <!-- sample data hints to be like CdrSolidFillData-->
-      <field start="16" end="37" name="fillData" type="CdrSolidFillData" />
+      <!-- sample data hints to be like Cdr4FillSolidData-->
+      <field start="16" end="37" name="fillData" type="Cdr4FillSolidData" />
       <!-- 16..19: seen 0, 1>
 //     uint32 _unknown5;
       // 20..23: seen 0
@@ -643,7 +647,7 @@ not seen for Default Artistic Text, Default Graphic
 // 000C:8FE0 |                           00 00 00 90              |         ....    
 00000190
 -->
-    <record name="CdrPageFlagChunkData" size="4">
+    <record name="Cdr4PageFlagChunkData" size="4">
         <!-- flags?-->
         <field start="0" end="3" name="_unknown" type="uint32" />
     </record>
@@ -668,39 +672,39 @@ not seen for Default Artistic Text, Default Graphic
 08000198  loda type 17
 00000098  loda type 0
 -->
-    <record name="CdrLayerFlagChunkData" size="4">
+    <record name="Cdr4LayerFlagChunkData" size="4">
         <field start="0" end="3" name="_unknown" type="uint32" />
     </record>
 
-    <record name="CdrLinkGroupSpndChunkData" size="2">
+    <record name="Cdr4LinkGroupSpndChunkData" size="2">
         <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
             <description>might be some object index which is used in lnkt</description>
         </field>
     </record>
 
-    <record name="CdrLinkGroupFlagChunkData" size="4">
+    <record name="Cdr4LinkGroupFlagChunkData" size="4">
         <field start="0" end="3" name="_unknown" type="uint32" />
     </record>
 
-    <record name="CdrGroupSpndChunkData" size="2">
+    <record name="Cdr4GroupSpndChunkData" size="2">
         <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
-            <description>might be some object index which is used in lnkt</description>
+            <description>Identifier of the group, used in the Link table.</description>
         </field>
     </record>
 
     <!-- seen 00000010, 00080010 -->
-    <record name="CdrGroupFlagChunkData" size="4">
+    <record name="Cdr4GroupFlagChunkData" size="4">
         <field start="0" end="3" name="_unknown" type="uint32" />
     </record>
 
-    <record name="CdrObjectSpndChunkData" size="2">
+    <record name="Cdr4ObjectSpndChunkData" size="2">
         <field start="0" end="1" name="id" type="Cdr4ObjectSpndIndex">
-            <description>might be some object index which is used in lnkt</description>
+            <description>Identifier of the object, used in the Link table.</description>
         </field>
     </record>
 
     <!-- seen 00020008-->
-    <record name="CdrObjectFlagChunkData" size="4">
+    <record name="Cdr4ObjectFlagChunkData" size="4">
         <field start="0" end="3" name="_unknown" type="uint32" />
     </record>
   </records>
@@ -757,44 +761,44 @@ not seen for Default Artistic Text, Default Graphic
 //   20:  256    (00 01 00 00)
 //   10: 1024    (00 04 00 00)
 -->
-    <enum name="CdrObjectArgumentType">
-      <item name="CdrObjectOutlineIndexArgumentId" value="10">
+    <enum name="Cdr4ObjectArgumentType">
+      <item name="Cdr4ObjectArgumentOutlineIndexId" value="10">
           <description>The index of the outline in the outline table of the document, of type Cdr4OutlineIndex.</description>
       </item>
-      <item name="CdrObjectFillIndexArgumentId" value="20">
+      <item name="Cdr4ObjectArgumentFillIndexId" value="20">
           <description>The index of the fill in the fill table of the document, of type Cdr4FillIndex.</description>
       </item>
-      <item name="CdrObjectSpecificDataArgumentId" value="30">
+      <item name="Cdr4ObjectArgumentSpecificDataId" value="30">
           <description>The argument with object specific data.</description>
       </item>
-      <item name="CdrObject40ArgumentId" value="40" />
-      <item name="CdrObject100ArgumentId" value="100" />
-      <item name="CdrObjectStyleIndexArgumentId" value="200">
+      <item name="Cdr4ObjectArgument40Id" value="40" />
+      <item name="Cdr4ObjectArgument100Id" value="100" />
+      <item name="Cdr4ObjectArgumentStyleIndexId" value="200">
           <description>The index of the style in the style table of the document, of type Cdr4StyleIndex.</description>
       </item>
-      <item name="CdrObjectTitleArgumentId" value="1000">
+      <item name="Cdr4ObjectArgumentTitleId" value="1000">
           <description>The title of the object.</description>
       </item>
-      <item name="CdrObject1010ArgumentId" value="1010" />
-      <item name="CdrObject2000ArgumentId" value="2000" />
-      <item name="CdrObject3000ArgumentId" value="3000">
+      <item name="Cdr4ObjectArgument1010Id" value="1010" />
+      <item name="Cdr4ObjectArgument2000Id" value="2000" />
+      <item name="Cdr4ObjectArgument3000Id" value="3000">
           <description>Seen with text object.</description>
       </item>
-      <item name="CdrObject3010ArgumentId" value="3010">
+      <item name="Cdr4ObjectArgument3010Id" value="3010">
           <description>Seen with text object, some char info, size is multiple times the length of text.</description>
       </item>
-      <item name="CdrObject6000ArgumentId" value="6000" />
+      <item name="Cdr4ObjectArgument6000Id" value="6000" />
     </enum>
   </enums>
 
   <records>
     <!-- seen only with ellipse so far, rotation center?-->
-    <record name="CdrObject40ArgumentData" size="4">
+    <record name="Cdr4ObjectArgument40Data" size="4">
         <field start="0" end="1" name="_unknown0" type="uint16" />
         <field start="2" end="3" name="_unknown1" type="uint16" />
     </record>
 
-    <record name="CdrObject100ArgumentData" size="4">
+    <record name="Cdr4ObjectArgument100Data" size="4">
         <field start="0" end="1" name="_unknown0" type="uint16">
           <description>value seems unique, is larger for later objects.</description>
         </field>
@@ -805,17 +809,17 @@ not seen for Default Artistic Text, Default Graphic
         </field>
     </record>
 
-    <record name="CdrObjectTitleArgumentData" size="0" sizeExtended="true">
+    <record name="Cdr4ObjectArgumentTitleData" size="0" sizeExtended="true">
         <dynbytestring start="0" name="title" />
     </record>
 
     <!-- 16 bit, seen 0, 80 01(384), 7F FF(-129), 01 40(16385), with all kinds -->
-    <record name="CdrObject1010ArgumentData" size="2">
+    <record name="Cdr4ObjectArgument1010Data" size="2">
         <field start="0" end="1" name="_unknown0" type="uint16" />
     </record>
 
     <!-- sample: 01 00 64 00 64 00 00 00 00 00 00 00-->
-    <record name="CdrObject2000ArgumentData" size="12">
+    <record name="Cdr4ObjectArgument2000Data" size="12">
         <field start="0" end="1" name="_unknown0" type="uint16" />
         <field start="2" end="3" name="_unknown1" type="uint16" />
         <field start="4" end="5" name="_unknown2" type="uint16" />
@@ -828,7 +832,7 @@ not seen for Default Artistic Text, Default Graphic
 sample: 05 00 00 00 01 00 00 00 16 0D 00 00 00 00 00 00 04 00 00 00 01 00 01 00
                    |           |     |     |           |           |     |
 -->
-    <record name="CdrObject3000ArgumentData" size="24">
+    <record name="Cdr4ObjectArgument3000Data" size="24">
         <array start="0" end="23" name="_unknown0" type="uint16" length="12" />
     </record>
 
@@ -857,7 +861,7 @@ sample2: other text object linked to same object
 00 00 00 00  34 00 00 00  EE 12 E1 EB  9A 01
 00 00 00 00  34 00 00 00  56 14 21 ED  E0 01
 -->
-    <record name="CdrObject3010ArgumentItem" size="14">
+    <record name="Cdr4ObjectArgument3010Item" size="14">
         <description>looks like the data of the chars of a text on a path</description>
         <!-- seen 0 -->
         <field start="0" end="3" name="_unknown0" type="sint32" />
@@ -874,13 +878,13 @@ sample2: other text object linked to same object
         <field start="12" end="13" name="rotationDegree" type="sint16" />
     </record>
 
-    <record name="CdrObject3010ArgumentData" size="0" sizeExtended="true">
+    <record name="Cdr4ObjectArgument3010Data" size="0" sizeExtended="true">
         <description>There are as many items in the list as there are chars in the string.</description>
-        <dynarray start="0" name="item" type="CdrObject3010ArgumentItem" />
+        <dynarray start="0" name="item" type="Cdr4ObjectArgument3010Item" />
     </record>
 
     <!-- sample: 00 00 00 00 00 00 00 00, seen with path-->
-    <record name="CdrObject6000ArgumentData" size="8">
+    <record name="Cdr4ObjectArgument6000Data" size="8">
         <field start="0" end="1" name="_unknown0" type="uint16" />
         <field start="2" end="3" name="_unknown1" type="uint16" />
         <field start="4" end="5" name="_unknown2" type="uint16" />
@@ -1018,11 +1022,11 @@ subpaths start with 04 end with 04. hm, start with two 04, at different points
   </typedefs>
 
   <enums>
-    <enum name="PointFlags">
-      <item name="UnknownPointFlag" value="1" />
-      <item name="LineCurved" value="2" />
-      <item name="LineStart" value="4 " />
-      <item name="UnknownPointFlag2" value="8" />
+    <enum name="Cdr4PointFlags">
+      <item name="Cdr4PointFlag1" value="1" />
+      <item name="Cdr4PointLineCurved" value="2" />
+      <item name="Cdr4PointLineStart" value="4 " />
+      <item name="Cdr4PointFlag8" value="8" />
     </enum>
   </enums>
 
@@ -1045,22 +1049,28 @@ subpaths start with 04 end with 04. hm, start with two 04, at different points
 
 <!--
 sample: 00 00 EA 18 37 27 01 00 00 00 3F 05
+              6378  10039 1     0     1343
 sample: 00 00 60 19 E9 28 01 00 00 00 F7 04
+              6496  10473 1     0     1271
 sample: 0     5000  6181  1     0     984
              |     |     |           |
 -->
     <record name="Cdr4BlockTextData" size="12">
+      <!-- seen 0 -->
       <field start="0" end="1" name="_unknown0" type="uint16" />
       <field start="2" end="3" name="width" type="sint16">
-          <description>The width?</description>
+          <description>The width of the block text frame.</description>
       </field>
       <field start="4" end="5" name="height" type="sint16">
-          <description>The height?</description>
+          <description>The height of the block text frame.</description>
       </field>
+      <!-- seen 1 -->
       <field start="6" end="7" name="index" type="uint16">
-          <description>The index of the block text to use?</description>
+          <description>?</description>
       </field>
+      <!-- seen 0 -->
       <field start="8" end="9" name="_unknown4" type="uint16" />
+      <!-- seen 1343, 1271, 984 -->
       <field start="10" end="11" name="_unknown5" type="sint16" />
     </record>
 
@@ -1136,23 +1146,23 @@ garbage data? undo data?
 // Also seen: 01 00, size 42 bytes
 -->
   <enums>
-    <enum name="CdrTransformDataType">
-      <item name="CdrUnknownTransform1Id" value="1" />
-      <item name="CdrUnknownTransform2Id" value="2" />
-      <item name="CdrUnknownTransform8Id" value="8" />
+    <enum name="Cdr4TransformType">
+      <item name="Cdr4Transform1Id" value="1" />
+      <item name="Cdr4Transform2Id" value="2" />
+      <item name="Cdr4TransformMatrixId" value="8" />
     </enum>
   </enums>
 
   <records>
-    <record name="CdrTransform1Data" size="40">
+    <record name="Cdr4Transform1Data" size="40">
       <array start="0" end="39" name="_unknown" type="uint32" length="10" />
     </record>
 
-    <record name="CdrTransform2Data" size="70">
+    <record name="Cdr4Transform2Data" size="70">
       <array start="0" end="69" name="_unknown" type="uint16" length="35" />
     </record>
 
-    <record name="CdrSomeStrangeFloat" size="4">
+    <record name="Cdr4SomeStrangeFloat" size="4">
       <field start="0" end="1" name="fractionPart" type="uint16">
           <description>The fraction part of the float value, by division by 65535.</description>
       </field>
@@ -1161,33 +1171,33 @@ garbage data? undo data?
       </field>
     </record>
 
-    <record name="CdrTransform8Data" size="24">
+    <record name="Cdr4TransformMatrixData" size="24">
       <description>The data of a transformation matrix [a b c d e f].</description>
-      <field start="0" end="3" name="a" type="CdrSomeStrangeFloat" />
-      <field start="4" end="7" name="c" type="CdrSomeStrangeFloat" />
+      <field start="0" end="3" name="a" type="Cdr4SomeStrangeFloat" />
+      <field start="4" end="7" name="c" type="Cdr4SomeStrangeFloat" />
       <field start="8" end="11" name="e" type="sint32">
         <description>The value which results in an x translation.</description>
       </field>
-      <field start="12" end="15" name="b" type="CdrSomeStrangeFloat" />
-      <field start="16" end="19" name="d" type="CdrSomeStrangeFloat" />
+      <field start="12" end="15" name="b" type="Cdr4SomeStrangeFloat" />
+      <field start="16" end="19" name="d" type="Cdr4SomeStrangeFloat" />
       <field start="20" end="23" name="f" type="sint32">
         <description>The value which results in an y translation.</description>
       </field>
     </record>
 
-    <record name="CdrTransformData" size="2" sizeExtended="true">
+    <record name="Cdr4TransformData" size="2" sizeExtended="true">
       <field start="0" end="1" name="index" type="uint16">
-          <description>could be some kind of index or type id, CdrTransformDataType</description>
+          <description>could be some kind of index or type id, Cdr4TransformType</description>
       </field>
       <union start="2" name="data" depends="index">
-          <field name="data1" type="CdrTransform1Data" dependValue="CdrUnknownTransform1Id" />
-          <field name="data2" type="CdrTransform2Data" dependValue="CdrUnknownTransform2Id" />
-          <field name="data8" type="CdrTransform8Data" dependValue="CdrUnknownTransform8Id" />
+          <field name="data1" type="Cdr4Transform1Data" dependValue="Cdr4Transform1Id" />
+          <field name="data2" type="Cdr4Transform2Data" dependValue="Cdr4Transform2Id" />
+          <field name="matrixData" type="Cdr4TransformMatrixData" dependValue="Cdr4TransformMatrixId" />
       </union>
     </record>
 
-    <record name="CdrTrflChunkData" size="10" sizeExtended="true">
-      <field start="0" end="5" type="CdrArgumentListData" name="arguments" />
+    <record name="Cdr4TransformDataChunkData" size="10" sizeExtended="true">
+      <field start="0" end="5" type="Cdr4ArgumentListData" name="arguments" />
       <!-- ? seen FF FF-->
       <field start="6" end="7" name="_unknown0" type="sint16" />
       <!-- ? seen 00 00-->
@@ -1197,11 +1207,11 @@ garbage data? undo data?
   </records>
 
   <enums>
-    <enum name="CdrLinkType">
-      <item name="CdrUnknown16LinkId" value="16" />
-      <item name="CdrTextPathLinkId" value="64" />
-      <item name="CdrCloneLinkId" value="80" />
-      <item name="CdrBlockTextLinkId" value="97" />
+    <enum name="Cdr4LinkType">
+      <item name="Cdr4Link16Id" value="16" />
+      <item name="Cdr4LinkTextPathId" value="64" />
+      <item name="Cdr4LinkCloneId" value="80" />
+      <item name="Cdr4LinkBlockTextId" value="97" />
     </enum>
   </enums>
 
@@ -1226,9 +1236,9 @@ in next is 1F link group, 3B text object, 25 text object
 sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
              |     |     |     |     |     |     |     |     |     |
 -->
-    <record name="LnkData" size="18" sizeExtended="true">
+    <record name="Cdr4LinkData" size="18" sizeExtended="true">
       <!-- seen 16,64,80,97 -->
-      <field start="0" end="1"  name="type" type="uint16" value="CdrLinkType" />
+      <field start="0" end="1"  name="type" type="uint16" value="Cdr4LinkType" />
       <!-- seen 0,1,2 -->
       <field start="2" end="3"  name="dataSize" type="uint16">
           <description>The number of whatever 16-bit data is attached.</description>
