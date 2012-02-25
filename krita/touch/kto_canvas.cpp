@@ -41,11 +41,14 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QMessageBox>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <kis_paintop_registry.h>
+#include <kis_group_layer.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_resource_server_provider.h>
+#include <kis_png_converter.h>
 #include <KStandardDirs>
 
 class KtoCanvasNodeListener : public KisNodeGraphListener
@@ -241,7 +244,22 @@ void KtoCanvas::open()
     m_filename = QFileDialog::getOpenFileName(0, i18n("Open Image"), QString(), i18n("Images (*.png)"));
     if(!m_filename.isEmpty())
     {
+        KisPNGConverter kpc(0);
         
+        if(kpc.buildImage(m_filename) != KisImageBuilder_RESULT_OK)
+        {
+            QMessageBox::critical(0, i18n("Loading failed"), i18n("Failed to load file."), QMessageBox::Close);
+            return;
+        }
+        
+        kpc.image()->refreshGraph();
+        m_paintDevice->clear();
+        
+        KisPainter gc(m_paintDevice);
+        QRect rect(0, 0, kpc.image()->width(), kpc.image()->height());
+        gc.bitBlt(rect.topLeft(), kpc.image()->projection(), rect);
+        
+        update();
     }
 }
 
@@ -252,7 +270,24 @@ void KtoCanvas::save()
         saveas();
         return;
     }
+    KisDumbUndoStore undoStore;
+    QRect rect = m_paintDevice->exactBounds();
+    KisImageSP dst = new KisImage(&undoStore, rect.width(), rect.height(), m_paintLayer->colorSpace(), "");
+    
+    KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);
+    KisPainter gc(paintLayer->paintDevice());
+    gc.bitBlt(QPoint(0, 0), m_paintLayer->projection(), rect);
+    dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
+    dst->refreshGraph();
+    
+    KisPNGConverter kpc(0);
+    
+    KisPNGOptions po;
+    if(kpc.buildFile(m_filename, dst, dst->projection(), dst->beginAnnotations(), dst->endAnnotations(), po, m_paintLayer->metaData()) != KisImageBuilder_RESULT_OK)
+    {
+        QMessageBox::critical(0, i18n("Saving failed"), i18n("Failed to save to file."), QMessageBox::Close);
+    }
 }
 
 void KtoCanvas::saveas()
