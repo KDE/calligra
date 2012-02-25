@@ -185,6 +185,7 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
 
 void KoShapeSavingContext::clearXmlIds(const QString &prefix)
 {
+
     if (d->prefixedReferences.contains(prefix)) {
         foreach(const void* ptr, d->prefixedReferences[prefix]) {
             d->references.remove(ptr);
