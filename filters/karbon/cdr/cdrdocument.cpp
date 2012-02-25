@@ -32,6 +32,7 @@ CdrDocument::blockTextForObject( quint16 id )
 CdrDocument::~CdrDocument()
 {
     qDeleteAll( mPages );
+    delete mMasterPage;
     qDeleteAll( mStyleTable );
     qDeleteAll( mOutlineTable );
     qDeleteAll( mFillTable );

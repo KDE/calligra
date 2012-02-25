@@ -161,6 +161,7 @@ CdrParser::readCDR()
 {
     mRiffStreamReader.openList();
 
+    bool isFirstPage = true;
     while( mRiffStreamReader.readNextChunkHeader() )
     {
         const Koralle::FourCharCode chunkId = mRiffStreamReader.chunkId();
@@ -176,9 +177,17 @@ CdrParser::readCDR()
             readDoc();
         else if( chunkId == pageId )
         {
-            CdrPage* page = readPage();
+            CdrPage* const page = readPage();
             if( page )
-                mDocument->addPage( page );
+            {
+                if( isFirstPage )
+                {
+                    mDocument->setMasterPage( page );
+                    isFirstPage = false;
+                }
+                else
+                    mDocument->addPage( page );
+            }
         }
     }
 

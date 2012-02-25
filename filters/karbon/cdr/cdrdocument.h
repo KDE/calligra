@@ -424,6 +424,7 @@ typedef QHash<quint16,quint16> CdrBlockTextLinkTable;
 class CdrDocument
 {
 public:
+    CdrDocument() : mMasterPage(0) {}
     ~CdrDocument();
 public:
     void insertStyle( quint16 id, CdrStyle* style ) { mStyleTable.insert(id, style); }
@@ -431,6 +432,7 @@ public:
     void insertFill( quint32 id, CdrAbstractFill* fill ) { mFillTable.insert(id, fill); }
     void insertFont( quint16 id, CdrFont* font ) { mFontTable.insert(id, font); }
     void insertBlockText( quint16 id, CdrBlockText* blockText ) { mBlockTextTable.insert(id, blockText); }
+    void setMasterPage( CdrPage* page ) { mMasterPage = page; }
     void addPage( CdrPage* page ) { mPages.append(page); }
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
@@ -440,6 +442,7 @@ public:
     quint16 fullVersion() const { return mFullVersion; }
     quint16 width() const { return mWidth; }
     quint16 height() const { return mHeight; }
+    const CdrPage* masterPage() const { return mMasterPage; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QString& styleSheetFileName() const { return mStyleSheetFileName; }
     CdrStyle* style( qint32 id ) { return mStyleTable.value(id); }
@@ -460,6 +463,7 @@ private:
     QHash<quint16, CdrFont*> mFontTable;
     QHash<quint16, CdrBlockText*> mBlockTextTable;
     QVector<CdrPage*> mPages;
+    CdrPage* mMasterPage;
     CdrBlockTextLinkTable mBlockTextLinkTable;
 };
 

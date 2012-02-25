@@ -331,9 +331,8 @@ CdrOdgWriter::storeContentXml()
 
     writeMasterPage();
 
-    writePage(mDocument->pages().at(1));
-//     foreach( const CdrPage* page, mDocument->pages() )
-//         writePage( page );
+    foreach( const CdrPage* page, mDocument->pages() )
+        writePage( page );
 
     mBodyWriter->endElement(); //office:drawing
     mBodyWriter->endElement(); //office:body
