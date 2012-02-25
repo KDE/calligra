@@ -152,8 +152,7 @@ const T& argRef( int i ) const
       <item name="Cdr4StyleArgumentBulletSymbolId" value="230" />
       <!-- 12 bytes (00 00 64 00 64 00 64 00 00 00 00 00) -->
       <item name="Cdr4StyleArgument235Id" value="235" />
-      <!-- 258 bytes (all 00) -->
-      <item name="Cdr4StyleArgument240Id" value="240" />
+      <item name="Cdr4StyleArgumentTabStopsId" value="240" />
       <!-- 8 bytes (all 00) -->
       <item name="Cdr4StyleArgument245Id" value="245" />
       <!-- 32bit (00 00 00 00) -->
@@ -382,7 +381,7 @@ last 13751 for "Das Schulmagazin" text style
       <field start="10" end="11" name="_unknown5" type="sint16" />
     </record>
 
-    <record name="Cdr4Style240Data" size="4">
+    <record name="Cdr4TabStop" size="4">
       <!-- seen 0, perhaps alignment type? -->
       <field start="0" end="1" name="_unknown0" type="sint16" />
 <!--
@@ -390,13 +389,13 @@ seen 12 values of 500 increasing by 500 till 6000
 seen 32 values of 894 increasing by 500 till 16394
 (500 cdr units are 36 pt)
 -->
-      <field start="2" end="3" name="_unknown1" type="sint16" />
+      <field start="2" end="3" name="offset" type="Cdr4Coord" />
     </record>
     <!-- always 258 bytes, seems only partially used (all 00, or with values), tab stops? -->
-    <record name="Cdr4StyleArgument240Data" size="2" sizeExtended="true">
+    <record name="Cdr4StyleArgumentTabStopsData" size="2" sizeExtended="true">
         <!-- number seen was 0, 12, 32 -->
-      <field start="0" end="1" name="someDataSize" type="uint16" />
-      <dynarray start="2" name="someData" type="Cdr4Style240Data" length="someDataSize" minLength="0" maxLength="64"/>
+      <field start="0" end="1" name="count" type="uint16" minValue="0" maxValue="64" />
+      <dynarray start="2" name="tabStop" type="Cdr4TabStop" length="count" />
       <!-- rest bytes seem garbage data, TODO: mark with a union or do padding by formula? -->
     </record>
 

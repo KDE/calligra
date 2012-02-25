@@ -602,16 +602,16 @@ qDebug() << "Reading Styles...";
                               QString::fromLatin1(hex.constData(), hex.count());
                 break;
             }
-            case Cdr4StyleArgument240Id:
+            case Cdr4StyleArgumentTabStopsId:
             {
-                const Cdr4StyleArgument240Data& data = styleArgs.argRef<Cdr4StyleArgument240Data>( i );
+                const Cdr4StyleArgumentTabStopsData& data = styleArgs.argRef<Cdr4StyleArgumentTabStopsData>( i );
                 argTypeAsString = QLatin1String("some max 258 bytes");
-                argAsString = QLatin1String("count:") + QString::number(data.someDataSize());
-                if( data.someDataSize() > 0 )
+                argAsString = QLatin1String("count:") + QString::number(data.count());
+                if( data.count() > 0 )
                     argAsString = argAsString + QLatin1String(", from ") +
-                                  QString::number(data.someData(0)._unknown1()) +
+                                  QString::number(data.tabStop(0).offset()) +
                                   QLatin1String(" to ") +
-                                  QString::number(data.someData(data.someDataSize()-1)._unknown1());
+                                  QString::number(data.tabStop(data.count()-1).offset());
                 break;
             }
             case Cdr4StyleArgument235Id:
