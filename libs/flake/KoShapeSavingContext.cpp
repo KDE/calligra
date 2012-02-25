@@ -46,21 +46,24 @@ public:
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
 
-    QMap<const KoShape *, QString> drawIds;
-    QMap<const QTextBlockUserData*, KoElementReference> subIds;
-
     QList<const KoShapeLayer*> layers;
     QSet<KoDataCenterBase *> dataCenters;
     QMap<QString, KoSharedSavingData*> sharedData;
+
     QMap<qint64, QString> imageNames;
     int imageId;
-    int drawId;
     QMap<QString, QImage> images;
+
     QHash<const KoShape *, QTransform> shapeOffsets;
     QMap<const KoMarker *, QString> markerRefs;
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedSaver;
+
+    QMap<const void*, KoElementReference> references;
+    QMap<QString, int> referenceCounters;
+    QMap<QString, QList<const void*> > prefixedReferences;
+
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
@@ -68,7 +71,6 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         : xmlWriter(&w),
         savingOptions(0),
         imageId(0),
-        drawId(0),
         mainStyles(s),
         embeddedSaver(e)
 {
@@ -140,41 +142,59 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
         d->savingOptions = d->savingOptions ^ option; // xor to remove it.
 }
 
-QString KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
+KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, bool counter, bool insert)
 {
-    QMap<const KoShape *, QString>::iterator it(d->drawIds.find(shape));
-    if (it == d->drawIds.end()) {
-        if (insert == true) {
-            it = d->drawIds.insert(shape, QString("shape-%1").arg(++d->drawId));
-        }
-        else {
-            return QString();
-        }
+    if (counter) {
+        Q_ASSERT(!prefix.isEmpty());
     }
-    return it.value();
-}
 
-void KoShapeSavingContext::clearDrawIds()
-{
-    d->drawIds.clear();
-    d->drawId = 0;
-}
+    if (d->references.contains(referent)) {
+        return d->references[referent];
+    }
 
-KoElementReference KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool insert)
-{
-    QMap<const QTextBlockUserData*, KoElementReference>::iterator it(d->subIds.find(subItem));
     KoElementReference ref;
-    if (it == d->subIds.end()) {
-        KoElementReference ref;
-        if (insert) {
-            it = d->subIds.insert(subItem, ref);
-        }
-        else {
-            ref.invalidate();
-            return ref;
+
+    if (!d->references.contains(referent) && !insert) {
+        ref.invalidate();
+        return ref;
+    }
+
+    if (counter) {
+        int referenceCounter = d->referenceCounters[prefix]++;
+        if (!d->references.contains(referent)) {
+            ref = KoElementReference(prefix, referenceCounter);
+            d->references.insert(referent, ref);
+            d->referenceCounters[prefix] = referenceCounter;
         }
     }
-    return it.value();
+    else {
+        if (!d->references.contains(referent)) {
+            if (!prefix.isEmpty()) {
+                ref = KoElementReference(prefix);
+            }
+            d->references.insert(referent, ref);
+        }
+    }
+
+    if (!prefix.isNull()) {
+        d->prefixedReferences[prefix].append(referent);
+    }
+
+    return ref;
+}
+
+void KoShapeSavingContext::clearXmlIds(const QString &prefix)
+{
+    if (d->prefixedReferences.contains(prefix)) {
+        foreach(const void* ptr, d->prefixedReferences[prefix]) {
+            d->references.remove(ptr);
+        }
+        d->prefixedReferences.remove(prefix);
+    }
+
+    if (d->referenceCounters.contains(prefix)) {
+        d->referenceCounters[prefix] = 0;
+    }
 }
 
 void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)

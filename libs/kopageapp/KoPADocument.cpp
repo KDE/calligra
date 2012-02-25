@@ -355,7 +355,7 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
         if ( paContext.isSetClearDrawIds() ) {
-            paContext.clearDrawIds();
+            paContext.clearXmlIds("shape");
         }
         page->saveOdf( paContext );
     }

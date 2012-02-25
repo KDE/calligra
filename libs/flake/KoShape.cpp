@@ -50,6 +50,7 @@
 #include "KoFilterEffectStack.h"
 #include <KoElementReference.h>
 #include <KoSnapData.h>
+#include <KoElementReference.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -1749,8 +1750,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            context.xmlWriter().addAttribute("draw:id", context.drawId(this));
-            context.xmlWriter().addAttribute("xml:id", context.drawId(this));
+            KoElementReference ref = context.xmlid(this, "shape", false, true);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DRAWID);
         }
     }
 

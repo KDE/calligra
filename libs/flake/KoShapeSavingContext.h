@@ -141,39 +141,28 @@ public:
      */
     ShapeSavingOptions options() const;
 
+
     /**
-     * @brief Get the xml:id for a shape
-     *
-     * The xml:id is globally unique.
-     *
-     * @param shape for which the xml id should be returned
-     * @param insert if true a new xml id will be generated if there is none yet
-     *
-     * @return the draw id for the shape or and empty string if it was not found
+     * @brief xmlid returns an element reference that can be related to the given referent. If there is a
+     *   prefix given, this prefix will be used in addition to either the counter or the uuid.
+     * @param referent the object we are referring to
+     * @param prefix a prefix for the xml:id string
+     * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
+     * @param insert if true, a new xml:id will be generated if there is none yet for the referent
+     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
      */
-    QString drawId(const KoShape *shape, bool insert = true);
+    KoElementReference xmlid(const void *referent, const QString& prefix = QString::null, bool counter=false, bool insert=true);
 
     /**
      * @brief Clear out all given draw ids
+     * @param prefix: removes all xml:id's that have the given prefix.
      *
      * This is needed for checking if master pages are the same. In normal saving
      * this should not be called.
      *
      * @see KoPAPastePage::process
      */
-    void clearDrawIds();
-
-    /**
-     * @brief Get the xml:id for a sub-item
-     *
-     * The xml:id is globally unique.
-     *
-     * @param subitem for which the sub-item id should be returned
-     * @param insert if true a new sub-item id will be generated if there is non yet
-     *
-     * @return the sub-item id for the sub-item or and empty string if it was not found
-     */
-    KoElementReference subId(const QTextBlockUserData *subItem, bool insert = true);
+    void clearXmlIds(const QString &prefix);
 
     /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec

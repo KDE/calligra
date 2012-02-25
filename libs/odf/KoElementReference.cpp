@@ -34,6 +34,12 @@ KoElementReference::KoElementReference(const QString &prefix)
     d->xmlid = prefix + "-" + d->xmlid;
 }
 
+KoElementReference::KoElementReference(const QString &prefix, int counter)
+    : d(new KoElementReferenceData)
+{
+    d->xmlid = prefix + "-" + counter;
+}
+
 KoElementReference::KoElementReference(const KoElementReference &other)
     : d(other.d)
 {

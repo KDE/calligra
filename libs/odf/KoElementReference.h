@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011-2012 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -76,6 +76,7 @@ public:
 
     KoElementReference();
     explicit KoElementReference(const QString &prefix);
+    KoElementReference(const QString &prefix, int counter);
     KoElementReference(const KoElementReference &other);
     KoElementReference &operator=(const KoElementReference &rhs);
     bool operator==(const KoElementReference &other);
