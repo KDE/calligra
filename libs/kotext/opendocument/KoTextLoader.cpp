@@ -496,6 +496,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->defaultBlockFormat = cursor.blockFormat();
         d->defaultCharFormat = cursor.charFormat();
         KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
+        KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
     }
     rootCallChecker++;
 

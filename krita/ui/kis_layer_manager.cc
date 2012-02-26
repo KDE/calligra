@@ -407,13 +407,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     KisLayerSP l = activeLayer();
 
     KisPaintDeviceSP dev = l->projection();
-
-    KisSelectionSP selection;
-    if (l->selection())
-        selection = l->selection();
-    else
-        selection = image->globalSelection();
-
+    KisSelectionSP selection = l->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
 
     KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), image->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
@@ -724,9 +718,10 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
+    if (!layer->prevSibling()) return;
+
     if (layer->metaData()->isEmpty() && layer->prevSibling() && dynamic_cast<KisLayer*>(layer->prevSibling().data())->metaData()->isEmpty()) {
-        const KisMetaData::MergeStrategy* strategy = KisMetaData::MergeStrategyRegistry::instance()->get("Drop");
-        image->mergeDown(layer, strategy);
+        image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     }
     else {
         const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
