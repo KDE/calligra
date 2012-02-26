@@ -142,11 +142,9 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
         d->savingOptions = d->savingOptions ^ option; // xor to remove it.
 }
 
-KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, bool counter, bool insert)
+KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, KoElementReference::GenerationOption counter)
 {
-    if (counter) {
-        Q_ASSERT(!prefix.isEmpty());
-    }
+    Q_ASSERT(counter == KoElementReference::UUID || (counter == KoElementReference::COUNTER && !prefix.isEmpty()));
 
     if (d->references.contains(referent)) {
         return d->references[referent];
@@ -154,12 +152,7 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
 
     KoElementReference ref;
 
-    if (!d->references.contains(referent) && !insert) {
-        ref.invalidate();
-        return ref;
-    }
-
-    if (counter) {
+    if (counter == KoElementReference::COUNTER) {
         int referenceCounter = d->referenceCounters[prefix]++;
         if (!d->references.contains(referent)) {
             ref = KoElementReference(prefix, referenceCounter);
@@ -181,6 +174,18 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
     }
 
     return ref;
+}
+
+KoElementReference KoShapeSavingContext::existingXmlid(const void *referent)
+{
+    if (d->references.contains(referent)) {
+        return d->references[referent];
+    }
+    else {
+        KoElementReference ref;
+        ref.invalidate();
+        return ref;
+    }
 }
 
 void KoShapeSavingContext::clearXmlIds(const QString &prefix)

@@ -148,10 +148,14 @@ public:
      * @param referent the object we are referring to
      * @param prefix a prefix for the xml:id string
      * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
-     * @param insert if true, a new xml:id will be generated if there is none yet for the referent
      * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
      */
-    KoElementReference xmlid(const void *referent, const QString& prefix = QString::null, bool counter=false, bool insert=true);
+    KoElementReference xmlid(const void *referent, const QString& prefix = QString::null, KoElementReference::GenerationOption counter = KoElementReference::UUID);
+
+    /**
+     * @brief existingXmlid retrieve an existing xml id or invalid xml id if the referent object doesn't exist
+     */
+    KoElementReference existingXmlid(const void *referent);
 
     /**
      * @brief Clear out all given draw ids

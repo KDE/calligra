@@ -24,7 +24,6 @@
 #include <QByteArray>
 #include <QClipboard>
 #include <QMimeData>
-
 #include <QString>
 
 #include <kdebug.h>

@@ -36,13 +36,13 @@ private:
     void addShape( KoPAPageBase * page );
 
     QPointF m_pos;
-    void copyPasteSinglePage();
-    void copyPasteSingleMasterPage();
-    void copyPasteMulipleMasterPages();
-    void copyPasteMixedPages();
 
 private slots:
-    void copyPasteMuliplePages();
+    void copyPasteMultiplePages();
+    void copyPasteSinglePage();
+    void copyPasteSingleMasterPage();
+    void copyPasteMultipleMasterPages();
+    void copyPasteMixedPages();
 };
 
 #endif /* TESTPACOPYPASTEPAGE_H */

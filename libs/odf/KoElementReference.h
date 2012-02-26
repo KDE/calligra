@@ -67,6 +67,11 @@ class KOODF_EXPORT KoElementReference
 {
 public:
 
+    enum GenerationOption {
+        UUID = 0,
+        COUNTER = 1
+    };
+
     enum SaveOption {
         XMLID = 0x0,
         DRAWID = 0x1,

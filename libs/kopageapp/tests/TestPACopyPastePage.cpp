@@ -173,7 +173,7 @@ void TestPACopyPastePage::copyPasteSingleMasterPage()
     QVERIFY( doc.pages( true )[3] == master2 );
 }
 
-void TestPACopyPastePage::copyPasteMuliplePages()
+void TestPACopyPastePage::copyPasteMultiplePages()
 {
     MockDocument doc;
 
@@ -256,7 +256,7 @@ void TestPACopyPastePage::copyPasteMuliplePages()
     QVERIFY( page9->masterPage() == master1 );
 }
 
-void TestPACopyPastePage::copyPasteMulipleMasterPages()
+void TestPACopyPastePage::copyPasteMultipleMasterPages()
 {
     MockDocument doc;
 

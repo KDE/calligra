@@ -48,7 +48,6 @@
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
-#include <KoElementReference.h>
 #include <KoSnapData.h>
 #include <KoElementReference.h>
 
@@ -1750,7 +1749,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            KoElementReference ref = context.xmlid(this, "shape", true, true);
+            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::COUNTER);
             ref.saveOdf(&context.xmlWriter(), KoElementReference::DRAWID);
         }
     }

@@ -104,6 +104,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
             }
         }
 
+        // update pages which have a duplicate master page
         foreach ( KoPAPageBase * page, newPages )
         {
             KoPAPage * p = dynamic_cast<KoPAPage*>( page );

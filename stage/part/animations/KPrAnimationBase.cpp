@@ -86,11 +86,11 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
     writer.addAttribute("smil:dur", KPrDurationParser::msToString(m_duration));
     if (m_shapeAnimation->textBlockData()) {
-        writer.addAttribute("smil:targetElement", paContext.xmlid(m_shapeAnimation->textBlockData(), "shape", true, false).toString());
+        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockData()).toString());
         writer.addAttribute("anim:sub-item", "text");
     }
     else {
-        writer.addAttribute("smil:targetElement", paContext.xmlid(m_shapeAnimation->shape(), "shape", true, false).toString());
+        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->shape()).toString());
     }
     return true;
 }
