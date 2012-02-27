@@ -1856,7 +1856,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 continue;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
-            context.xmlWriter().addAttribute("xml:id", QString("%1").arg(cp.key()));
             if (cp.value().alignment == KoConnectionPoint::AlignNone) {
                 // convert to percent from center
                 const qreal x = cp.value().position.x() * 100.0 - 50.0;
