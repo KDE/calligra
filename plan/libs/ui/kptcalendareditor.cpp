@@ -672,6 +672,7 @@ void CalendarEditor::slotAddSubCalendar ()
 
 void CalendarEditor::insertCalendar ( Calendar *calendar, Calendar *parent, int pos )
 {
+    m_calendarview->closePersistentEditor( m_calendarview->selectionModel()->currentIndex() );
     QModelIndex i = m_calendarview->model()->insertCalendar ( calendar, pos, parent );
     if ( i.isValid() ) {
         QModelIndex p = m_calendarview->model()->parent( i );

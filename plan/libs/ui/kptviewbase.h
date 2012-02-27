@@ -462,6 +462,7 @@ public:
     ~DoubleTreeViewBase();
 
     void setReadWrite( bool rw );
+    void closePersistentEditor( const QModelIndex &index );
 
     void setModel( QAbstractItemModel *model );
     QAbstractItemModel *model() const;

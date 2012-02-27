@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with Calligra Libraries.
@@ -227,7 +227,10 @@ private:
     bool m_implicitPrimaryKeyAdded : 1; //!< (temp) used for importing
     bool m_allRowsLoadedInPreview : 1; //!< we need to know whether all rows were loaded or it's just a partial data preview
     bool m_stoppedAt_MAX_BYTES_TO_PREVIEW : 1; //!< used to compute m_allRowsLoadedInPreview
-    const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //! used for importing boolean values
+    const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //!< used for importing boolean values
+    int m_prevColumnForSetText; //!< used for non-gui tracking of skipped clolumns,
+                                //!< so can be saved to the database,
+                                //!< e.g. first three columns are saved for ,,,"abc" line in the CSV data
 
 private slots:
     void fillTable();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -147,8 +147,8 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 0);
 
     //update widgets
+    m_encodingComboBox->setSelectedEncoding(options.encoding);
     if (options.defaultEncodingExplicitySet) {
-        m_encodingComboBox->setSelectedEncoding(options.encoding);
         m_chkAlwaysUseThisEncoding->setChecked(true);
     }
     m_comboDateFormat->setCurrentIndex((int)options.dateFormat);

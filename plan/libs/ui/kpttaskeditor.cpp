@@ -335,7 +335,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
-    Q_ASSERT(connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool))));
+    connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool)));
 }
 
 void TaskEditor::slotProjectShown( bool on )
@@ -704,6 +704,7 @@ void TaskEditor::slotAddTask()
 {
     kDebug();
     if ( selectedRowCount() == 0 || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
+        m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
@@ -714,6 +715,7 @@ void TaskEditor::slotAddTask()
     if ( sib == 0 ) {
         return;
     }
+    m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
@@ -725,6 +727,7 @@ void TaskEditor::slotAddMilestone()
     kDebug();
     if ( selectedRowCount() == 0  || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
         // None selected or only project selected: insert under main project
+        m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
         Task *t = m_view->project()->createTask();
         t->estimate()->clear();
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
@@ -736,6 +739,7 @@ void TaskEditor::slotAddMilestone()
     if ( sib == 0 ) {
         return;
     }
+    m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     Task *t = m_view->project()->createTask();
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
@@ -754,6 +758,7 @@ void TaskEditor::slotAddSubMilestone()
     if ( parent == 0 ) {
         return;
     }
+    m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
@@ -772,6 +777,7 @@ void TaskEditor::slotAddSubtask()
     if ( parent == 0 ) {
         return;
     }
+    m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
