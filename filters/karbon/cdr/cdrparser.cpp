@@ -308,21 +308,39 @@ CdrParser::readDocLinkTable()
 
     const QByteArray linkTableChunk = mRiffStreamReader.chunkData();
     const Cdr4LinkTableChunkData& linkTableData = dataRef<Cdr4LinkTableChunkData>( linkTableChunk );
+    const Cdr4ArgumentListData& arguments = linkTableData.arguments();
 
-qDebug() << "Reading LnkTable" << linkTableData.arguments().count() << "args";
-    for (int i=0; i < linkTableData.arguments().count(); i++)
+qDebug() << "Reading LnkTable" << arguments.count() << "args";
+    for (int i=0; i < arguments.count(); i++)
     {
-        const Cdr4LinkData& linkData = linkTableData.arguments().argRef<Cdr4LinkData>(i);
-        if( linkData.type() == Cdr4LinkBlockTextId )
-            blockTextLinkTable.insert( linkData.blockTextObjectIndex(), linkData.blockTextIndex() );
-qDebug() << i << ": type:" << linkData.type() << "ed size:" << linkData.dataSize()<<"other:"
-                    << linkData._unknown2()
-                    << linkData._unknown3() << linkData._unknown4() << linkData._unknown5()
-                    << linkData._unknown6()
-                    << "block text id:" << linkData.blockTextIndex()
-                    << "block text object id:"<< linkData.blockTextObjectIndex();
-        for(int j=0; j<linkData.dataSize(); ++j)
-qDebug() << "    "<<j<<":"<<linkData.data(j);
+        const Cdr4LinkData& linkData = arguments.argRef<Cdr4LinkData>(i);
+
+qDebug() << i << ": type:" << linkData.type();
+        switch( linkData.type() )
+        {
+        case Cdr4LinkBlockTextId:
+        {
+            const Cdr4LinkBlockTextData& blockTextData = linkData.blockTextData();
+
+            QString objectIndizes;
+            for( int s = 0; s<blockTextData.objectCount(); ++s )
+            {
+                blockTextLinkTable.insert( blockTextData.objectIndex(s),
+                                           CdrBlockTextPartIndex(blockTextData.textIndex(),s) );
+                objectIndizes += QString::number(blockTextData.objectIndex(s)) + QLatin1Char(' ');
+            }
+qDebug() << "block text:" << blockTextData.textIndex() << "in" << objectIndizes <<"other:"
+                    << blockTextData._unknown1() << blockTextData._unknown2() << blockTextData._unknown3()
+                    << blockTextData._unknown4() << blockTextData._unknown5() << blockTextData._unknown6();
+            break;
+        }
+        default:
+        {
+            const char* const argumentData = &arguments.argRef<char>(i);
+            const int dataSize = &arguments.argRef<char>(i+1) - argumentData;
+qDebug() << QByteArray::fromRawData(argumentData, dataSize).toHex();
+        }
+        }
     }
 
     mDocument->setBlockTextLinkTable( blockTextLinkTable );
@@ -575,17 +593,21 @@ qDebug() << "Reading Styles...";
             }
             case Cdr4StyleArgumentFontId:
             {
-                const Cdr4StyleArgumentFontData& fontData = styleArgs.argRef<Cdr4StyleArgumentFontData>( i );
-                style->setFontId( fontData.font().index() );
-                style->setFontSize( fontData.font().size() );
+                const Cdr4StyleArgumentFontData& fontDataArgument =
+                    styleArgs.argRef<Cdr4StyleArgumentFontData>( i );
+
+                CdrFontData* fontData = new CdrFontData;
+                fontData->setFontId( fontDataArgument.font().index() );
+                fontData->setFontSize( fontDataArgument.font().size() );
                 const CdrFontWeight fontWeight =
-                    (fontData.font().style()==Cdr4StyleFontBoldId) ? CdrFontBold : CdrFontNormal;
-                style->setFontWeight( fontWeight );
+                    (fontDataArgument.font().style()==Cdr4StyleFontBoldId) ? CdrFontBold : CdrFontNormal;
+                fontData->setFontWeight( fontWeight );
+                style->setFontData( fontData );
 
                 argTypeAsString = QLatin1String("font");
-                argAsString = QLatin1String("id:") + QString::number( style->fontId() ) +
-                              QLatin1String(" size:") + QString::number( style->fontSize()) +
-                              QLatin1String(" style:") + QString::number( fontData.font().style());
+                argAsString = QLatin1String("id:") + QString::number( fontData->fontId() ) +
+                              QLatin1String(" size:") + QString::number( fontData->fontSize()) +
+                              QLatin1String(" style:") + QString::number( fontDataArgument.font().style());
                 break;
             }
             case Cdr4StyleArgumentBulletSymbolId:
@@ -627,15 +649,22 @@ qDebug() << "Reading Styles...";
                             QString::number( data._unknown5() );
                 break;
             }
-            case Cdr4StyleArgument245Id:
+            case Cdr4StyleArgumentTextMarginsId:
             {
-                const Cdr4StyleArgument245Data& data = styleArgs.argRef<Cdr4StyleArgument245Data>( i );
+                const Cdr4StyleArgumentTextMarginsData& data =
+                    styleArgs.argRef<Cdr4StyleArgumentTextMarginsData>( i );
 
-                argTypeAsString = QLatin1String("four 16-bit");
-                argAsString = QString::number( data._unknown0() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown1() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown2() ) + QLatin1Char(' ') +
-                            QString::number( data._unknown3() );
+                CdrTextMargins* textMargins = new CdrTextMargins;
+                textMargins->setLeftMargin( data.leftMargin() );
+                textMargins->setTopMargin( data.topMargin() );
+                textMargins->setBottomMargin( data.bottomMargin() );
+                textMargins->setRightMargin( data.rightMargin() );
+
+                argTypeAsString = QLatin1String("margins?");
+                argAsString = QLatin1String("left:") + QString::number( data.leftMargin() ) +
+                              QLatin1String(" top:") + QString::number( data.topMargin() ) +
+                              QLatin1String(" bottom:") + QString::number( data.bottomMargin() ) +
+                              QLatin1String(" right:") + QString::number( data.rightMargin() );
                 break;
             }
             case Cdr4StyleArgument250Id :
@@ -731,7 +760,7 @@ CdrParser::readParagraphList()
 {
     CdrParagraph* paragraph = new CdrParagraph;
 
-    CdrParagraphLine* paragraphLine = new CdrParagraphLine;
+    CdrParagraphLine* currentParagraphLine = new CdrParagraphLine;
 
     mRiffStreamReader.openList();
 qDebug() << "Reading Parl...";
@@ -745,7 +774,8 @@ qDebug() << "Reading Parl...";
             const QByteArray paraChunk = mRiffStreamReader.chunkData();
             const Cdr4BlockTextParagraphChunkData& paraData = dataRef<Cdr4BlockTextParagraphChunkData>( paraChunk );
 
-            qDebug() << "...para:"<<paraData._unknown0() <<"length:"<<paraData.length()<<paraData._unknown2();
+            paragraph->setStyleId( paraData.styleIndex() );
+            qDebug() << "...para: style:"<<paraData.styleIndex() <<"length:"<<paraData.length()<<paraData._unknown2();
         }
         else if( chunkId == bnchId )
         {
@@ -759,13 +789,13 @@ qDebug() << "Reading Parl...";
             for( int i = 0; i<count; ++i )
             {
                 const unsigned char textChar = bnchData.textChar(i).character();
-                if( textChar >= ' ' )
+                if( (textChar >= ' ') || (textChar==0x09)  )
                     text.append( QChar(textChar) );
                 else
                     qDebug() << "CONTROL CHAR found:" << textChar;
             }
             textSpan->setText( text );
-            paragraphLine->addTextSpan( textSpan );
+            currentParagraphLine->addTextSpan( textSpan );
 
             qDebug() << "...bnch:"<<text;
         }
@@ -780,9 +810,10 @@ qDebug() << "Reading Parl...";
             // is linebreak?
             if( textChar == 0x0D )
             {
-                paragraph->addParagraphLine( paragraphLine );
-                paragraphLine = new CdrParagraphLine;
-                paragraphLine->setOffset( CdrPoint(bschData.nextLineOffset().x(), bschData.nextLineOffset().y()) );
+                currentParagraphLine->setNextLineOffset( CdrPoint(bschData.nextLineOffset().x(),
+                                                                  bschData.nextLineOffset().y()) );
+                paragraph->addParagraphLine( currentParagraphLine );
+                currentParagraphLine = new CdrParagraphLine;
             }
             else
             {
@@ -793,7 +824,7 @@ qDebug() << "Reading Parl...";
                 const CdrFontWeight fontWeight =
                     (bschData.font().style()==Cdr4StyleFontBoldId) ? CdrFontBold : CdrFontNormal;
                 textSpan->setFontWeight( fontWeight );
-                paragraphLine->addTextSpan( textSpan );
+                currentParagraphLine->addTextSpan( textSpan );
             }
 
             qDebug() << "...bsch:"<<((textChar >= ' ')?QString(QChar(textChar)):QString::number(textChar,16))
@@ -806,7 +837,10 @@ qDebug() << "Reading Parl...";
     }
     mRiffStreamReader.closeList();
 
-    paragraph->addParagraphLine( paragraphLine );
+    if( currentParagraphLine->textSpans().isEmpty() )
+        delete currentParagraphLine;
+    else
+        paragraph->addParagraphLine( currentParagraphLine );
 
     return paragraph;
 }

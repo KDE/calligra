@@ -144,7 +144,8 @@ enum CdrTextAlignment
     CdrTextAlignmentUnknown = 0,
     CdrTextAlignLeft = 1,
     CdrTextAlignCenter = 2,
-    CdrTextAlignRight = 3
+    CdrTextAlignRight = 3,
+    CdrTextAlignBlock = 4
 };
 
 class CdrAbstractTextSpan
@@ -201,35 +202,61 @@ class CdrParagraphLine
 public:
     ~CdrParagraphLine() { qDeleteAll(mTextSpans);}
     void addTextSpan( CdrAbstractTextSpan* textSpan );
-    void setOffset( CdrPoint offset ) { mOffset = offset; }
+    void setNextLineOffset( CdrPoint nextLineOffset ) { mNextLineOffset = nextLineOffset; }
 public:
     const QVector<CdrAbstractTextSpan*>& textSpans() const { return mTextSpans; }
-    CdrPoint offset() const { return mOffset; }
+    CdrPoint nextLineOffset() const { return mNextLineOffset; }
 private:
     QVector<CdrAbstractTextSpan*> mTextSpans;
-    CdrPoint mOffset;
+    CdrPoint mNextLineOffset;
 };
 
 class CdrParagraph
 {
 public:
+    CdrParagraph() : mStyleId(-1) {}
     ~CdrParagraph() { qDeleteAll(mParagraphLines);}
+    void setStyleId( qint32 styleId ) { mStyleId = styleId; }
     void addParagraphLine( CdrParagraphLine* paragraphLine ) { mParagraphLines.append(paragraphLine); }
 public:
+    qint16 styleId() const { return mStyleId; }
     const QVector<CdrParagraphLine*>& paragraphLines() const { return mParagraphLines; }
 private:
+    qint16 mStyleId;
     QVector<CdrParagraphLine*> mParagraphLines;
+};
+
+struct CdrParagraphLineIndex
+{
+    CdrParagraphLineIndex() : mParagraphIndex(0), mLineIndex(0) {} // TODO: set maxint
+    CdrParagraphLineIndex( quint16 paragraphIndex, quint16 lineIndex)
+    : mParagraphIndex(paragraphIndex), mLineIndex(lineIndex) {}
+
+    quint16 mParagraphIndex;
+    quint16 mLineIndex;
+};
+
+struct CdrBlockTextPartSpan
+{
+    CdrBlockTextPartSpan() {}
+    CdrBlockTextPartSpan( CdrParagraphLineIndex begin, CdrParagraphLineIndex end)
+    : mBegin(begin), mEnd(end) {}
+
+    CdrParagraphLineIndex mBegin;
+    CdrParagraphLineIndex mEnd;
 };
 
 class CdrBlockText
 {
 public:
     ~CdrBlockText() { qDeleteAll(mParagraphs);}
-    void addParagraph( CdrParagraph* paragraph ) { mParagraphs.append(paragraph); }
+    void addParagraph( CdrParagraph* paragraph );
 public:
     const QVector<CdrParagraph*>& paragraphs() const { return mParagraphs; }
+    CdrBlockTextPartSpan partSpan( quint16 id ) const;
 private:
     QVector<CdrParagraph*> mParagraphs;
+    QVector<CdrParagraphLineIndex> mParagraphPartStarts;
 };
 
 
@@ -365,47 +392,80 @@ private:
     QVector<CdrLayer*> mLayers;
 };
 
+class CdrFontData
+{
+public:
+    CdrFontData()
+    : mFontId(-1), mFontSize(0), mFontWeight(CdrFontWeightUnknown)
+    {}
+public:
+    void setFontId( quint16 fontId ) { mFontId = fontId; }
+    void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
+    void setFontWeight( CdrFontWeight fontWeight ) { mFontWeight = fontWeight; }
+public:
+    qint32 fontId() const { return mFontId; }
+    quint16 fontSize() const { return mFontSize; }
+    CdrFontWeight fontWeight() const { return mFontWeight; }
+private:
+    qint32 mFontId;
+    quint16 mFontSize;
+    CdrFontWeight mFontWeight;
+};
+
+class CdrTextMargins
+{
+public:
+    CdrTextMargins()
+    : mLeftMargin(0), mRightMargin(0), mTopMargin(0), mBottomMargin(0)
+    {}
+public:
+    void setLeftMargin( qint16 leftMargin ) { mLeftMargin = leftMargin; }
+    void setRightMargin( qint16 rightMargin ) { mRightMargin = rightMargin; }
+    void setTopMargin( qint16 topMargin ) { mTopMargin = topMargin; }
+    void setBottomMargin( qint16 bottomMargin ) { mBottomMargin = bottomMargin; }
+public:
+    qint32 leftMargin() const { return mLeftMargin; }
+    qint32 rightMargin() const { return mRightMargin; }
+    qint32 topMargin() const { return mTopMargin; }
+    qint32 bottomMargin() const { return mBottomMargin; }
+private:
+    qint32 mLeftMargin;
+    qint32 mRightMargin;
+    qint32 mTopMargin;
+    qint32 mBottomMargin;
+};
+
 class CdrStyle
 {
 public:
     CdrStyle()
-    : mBaseStyle(0), mFontId(-1), mFontSize(0),
-      mTextAlignment(CdrTextAlignmentUnknown), mFontWeight(CdrFontWeightUnknown)
+    : mBaseStyle(0), mFontData(0), mTextMargins(0), mTextAlignment(CdrTextAlignmentUnknown)
     {}
+    ~CdrStyle() { delete mFontData; delete mTextMargins; }
 public:
     void setBaseStyle( const CdrStyle* baseStyle ) { mBaseStyle = baseStyle; }
     void setTitle( const QString& title ) { mTitle = title; }
-    void setFontId( quint16 fontId ) { mFontId = fontId; }
-    void setFontSize( quint16 fontSize ) { mFontSize = fontSize; }
+    void setFontData( CdrFontData* fontData ) { delete mFontData; mFontData = fontData; }
+    void setTextMargins( CdrTextMargins* textMargins ) { delete mTextMargins; mTextMargins = textMargins; }
     void setTextAlignment( CdrTextAlignment alignment ) { mTextAlignment = alignment; }
-    void setFontWeight( CdrFontWeight fontWeight ) { mFontWeight = fontWeight; }
 public:
     const CdrStyle* baseStyle() const { return mBaseStyle; }
-
     const QString& title() const { return mTitle; }
-
-    qint32 fontId() const
-    { return (mFontId!=-1) ? mFontId : mBaseStyle ? mBaseStyle->fontId() : -1; }
-    quint16 fontSize() const
-    { return (mFontSize!=0) ? mFontSize : mBaseStyle ? mBaseStyle->fontSize() : 18; }
+    const CdrFontData* fontData() const
+    { return mFontData ? mFontData : mBaseStyle ? mBaseStyle->fontData() : 0; }
+    const CdrTextMargins* textMargins() const
+    { return mTextMargins ? mTextMargins : mBaseStyle ? mBaseStyle->textMargins() : 0; }
     CdrTextAlignment textAlignment() const
     {
         return (mTextAlignment!=CdrTextAlignmentUnknown) ? mTextAlignment :
                mBaseStyle ?                                mBaseStyle->textAlignment() :
                                                            CdrTextAlignmentUnknown;
     }
-    CdrFontWeight fontWeight() const
-    {
-        return (mFontWeight!=CdrFontWeightUnknown) ? mFontWeight :
-               mBaseStyle ?                          mBaseStyle->fontWeight() :
-                                                     CdrFontWeightUnknown;
-    }
 private:
     const CdrStyle* mBaseStyle;
-    qint32 mFontId;
-    quint16 mFontSize;
+    CdrFontData* mFontData;
+    CdrTextMargins* mTextMargins;
     CdrTextAlignment mTextAlignment;
-    CdrFontWeight mFontWeight;
     QString mTitle;
 };
 
@@ -492,7 +552,17 @@ private:
     QString mName;
 };
 
-typedef QHash<quint16,quint16> CdrBlockTextLinkTable;
+struct CdrBlockTextPartIndex
+{
+    CdrBlockTextPartIndex() {}
+    CdrBlockTextPartIndex( quint16 blockTextId, quint16 partId )
+    : mBlockTextId(blockTextId), mPartId(partId) {}
+
+    quint16 mBlockTextId;
+    quint16 mPartId;
+};
+
+typedef QHash<quint16,CdrBlockTextPartIndex> CdrBlockTextLinkTable;
 
 class CdrDocument
 {
@@ -518,12 +588,12 @@ public:
     const CdrPage* masterPage() const { return mMasterPage; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QString& styleSheetFileName() const { return mStyleSheetFileName; }
-    CdrStyle* style( qint32 id ) { return mStyleTable.value(id); }
-    CdrOutline* outline( qint32 id ) { return mOutlineTable.value(id); }
-    CdrAbstractFill* fill( qint32 id ) { return mFillTable.value(id); }
-    CdrFont* font( quint16 id ) { return mFontTable.value(id); }
-    CdrBlockText* blockText( quint16 id ) { return mBlockTextTable.value(id); }
-    CdrBlockText* blockTextForObject( quint16 id );
+    const CdrStyle* style( qint32 id ) { return mStyleTable.value(id); }
+    const CdrOutline* outline( qint32 id ) { return mOutlineTable.value(id); }
+    const CdrAbstractFill* fill( qint32 id ) { return mFillTable.value(id); }
+    const CdrFont* font( quint16 id ) { return mFontTable.value(id); }
+    const CdrBlockText* blockText( quint16 id ) { return mBlockTextTable.value(id); }
+    CdrBlockTextPartIndex blockTextPartIndex( CdrObjectId id ) { return mBlockTextLinkTable.value(id); }
 private:
     quint16 mFullVersion;
     quint16 mWidth;

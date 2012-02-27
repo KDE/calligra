@@ -21,7 +21,8 @@
 #include "cdrdocument.h"
 
 
-void CdrParagraphLine::addTextSpan( CdrAbstractTextSpan* textSpan )
+void
+CdrParagraphLine::addTextSpan( CdrAbstractTextSpan* textSpan )
 {
     if( (textSpan->id() == CdrAbstractTextSpan::Styled) &&
         (mTextSpans.count() > 0) && (mTextSpans.last()->id() == CdrAbstractTextSpan::Styled) )
@@ -39,13 +40,61 @@ void CdrParagraphLine::addTextSpan( CdrAbstractTextSpan* textSpan )
     mTextSpans.append(textSpan);
 }
 
-CdrBlockText*
-CdrDocument::blockTextForObject( quint16 id )
-{
-    const CdrBlockTextLinkTable::ConstIterator it = mBlockTextLinkTable.find( id );
 
-    return ( it != mBlockTextLinkTable.constEnd() ) ?
-        mBlockTextTable.value( it.value() ) : 0;
+void
+CdrBlockText::addParagraph( CdrParagraph* paragraph )
+{
+    // Heuristic approach: the lines are continued on the next text box,
+    // if the nextline y is not below the previous one
+    // TODO: adapt approach to text sizes
+    CdrCoord lastLineNextLineY;
+    // first paragraph?
+    if( mParagraphs.isEmpty() )
+    {
+        mParagraphPartStarts.append( CdrParagraphLineIndex(0,0) );
+        lastLineNextLineY = 0;
+    }
+    else
+        lastLineNextLineY = mParagraphs.last()->paragraphLines().last()->nextLineOffset().y();
+
+    const quint16 paragraphIndex = mParagraphs.count();
+
+    const QVector<CdrParagraphLine*>& paragraphLines = paragraph->paragraphLines();
+    for( int i = 0; i < paragraphLines.count(); ++i )
+    {
+        const CdrCoord nextLineY = paragraphLines.at(i)->nextLineOffset().y();
+        if( nextLineY > lastLineNextLineY )
+        {
+            mParagraphPartStarts.append( CdrParagraphLineIndex(paragraphIndex,i) );
+        }
+        lastLineNextLineY = nextLineY;
+    }
+
+    mParagraphs.append(paragraph);
+}
+
+CdrBlockTextPartSpan
+CdrBlockText::partSpan( quint16 id ) const
+{
+    const CdrParagraphLineIndex startIndex = mParagraphPartStarts.value(id);
+    CdrParagraphLineIndex endIndex;
+    // is last span?
+    if( id+1 >= mParagraphPartStarts.count() )
+        endIndex = CdrParagraphLineIndex(mParagraphs.count()-1, mParagraphs.last()->paragraphLines().count()-1);
+    else
+    {
+        // get end by next
+        endIndex = mParagraphPartStarts.value( id + 1 );
+        if( endIndex.mLineIndex == 0 )
+        {
+            --endIndex.mParagraphIndex;
+            endIndex.mLineIndex = mParagraphs.at(endIndex.mParagraphIndex)->paragraphLines().count() - 1;
+        }
+        else
+            --endIndex.mLineIndex;
+    }
+
+    return CdrBlockTextPartSpan(startIndex, endIndex);
 }
 
 CdrDocument::~CdrDocument()

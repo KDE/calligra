@@ -76,8 +76,9 @@ private:
     void writeGraphicTextObject( const CdrGraphicTextObject* object );
     void writeBlockTextObject( const CdrBlockTextObject* object );
 
-    void writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextObject* blockTextObject );
+    void writeParagraph( const CdrParagraph* paragraph, int start, int end );
 
+    void writeParagraphStyle( KoGenStyle& odfStyle, quint16 styleId );
     void writeFill( KoGenStyle& style, quint32 fillId );
     void writeStroke( KoGenStyle& style, quint32 outlineId );
     void writeFont( KoGenStyle& style, quint16 styleId );

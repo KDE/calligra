@@ -154,7 +154,7 @@ const T& argRef( int i ) const
       <item name="Cdr4StyleArgument235Id" value="235" />
       <item name="Cdr4StyleArgumentTabStopsId" value="240" />
       <!-- 8 bytes (all 00) -->
-      <item name="Cdr4StyleArgument245Id" value="245" />
+      <item name="Cdr4StyleArgumentTextMarginsId" value="245" />
       <!-- 32bit (00 00 00 00) -->
       <item name="Cdr4StyleArgument250Id" value="250" />
     </enum>
@@ -209,8 +209,7 @@ const T& argRef( int i ) const
 0C 00 00 00 00 00
 -->
     <record name="Cdr4BlockTextParagraphChunkData" size="6">
-      <!-- some flags?, seen 6, 7, 12,14,15,16,17,18, 26 -> 110,111,1100,1110,1111,10000,10001,10010,11010 -->
-      <field start="0" end="1" type="uint16" name="_unknown0" />
+      <field start="0" end="1" type="Cdr4StyleIndex" name="styleIndex" />
       <field start="2" end="3" type="uint16" name="length">
           <description>The length of the text in this paragraph?</description>
       </field>
@@ -403,16 +402,16 @@ seen 32 values of 894 increasing by 500 till 16394
 8 bytes (all 0, 250 0 250 250, 500 0 250 250, 750 0 250 250, 0 625 0 0) margins?
 not seen for Default Artistic Text, Default Graphic
 -->
-    <record name="Cdr4StyleArgument245Data" size="8">
+    <record name="Cdr4StyleArgumentTextMarginsData" size="8">
       <description>margins possibly?</description>
       <!-- left margin, at least increases by 250 for default bullet point styles -->
-      <field start="0" end="1" name="_unknown0" type="sint16" />
+      <field start="0" end="1" name="leftMargin" type="sint16" />
       <!-- upper margin? only for default paragraph text and title 625, 0 for others. or first line left margin? -->
-      <field start="2" end="3" name="_unknown1" type="sint16" />
+      <field start="2" end="3" name="topMargin" type="sint16" />
       <!-- right margin? 0 for default text/überschrift, 250 for bullet points -->
-      <field start="4" end="5" name="_unknown2" type="sint16" />
+      <field start="4" end="5" name="bottomMargin" type="sint16" />
       <!-- margin after text? 0 for default text/überschrift, 250 for bullet points. Is 787 for a style with 787 tab -->
-      <field start="6" end="7" name="_unknown3" type="sint16" />
+      <field start="6" end="7" name="rightMargin" type="sint16" />
     </record>
     <!-- 32bit (0 0, 0 500) -->
     <record name="Cdr4StyleArgument250Data" size="4">
@@ -1215,6 +1214,50 @@ garbage data? undo data?
   </enums>
 
   <records>
+    <record name="Cdr4LinkBlockTextData" size="16" sizeExtended="true">
+      <!-- seen 0,1,2 -->
+      <field start="0" end="1"  name="objectCount" type="uint16" minValue="1">
+          <description>The number of whatever 16-bit data is attached.</description>
+      </field>
+      <!-- seen 0 -->
+      <field start="2" end="3"  name="_unknown1" type="uint16" />
+      <!-- seen 0 -->
+      <field start="4" end="5"  name="_unknown2" type="uint16" />
+      <!-- seen 0 -->
+      <field start="6" end="7"  name="_unknown3" type="uint16" />
+      <!-- seen 0 -->
+      <field start="8" end="9"  name="_unknown4" type="uint16" />
+      <!-- seen 0 -->
+      <field start="10" end="11"  name="_unknown5" type="uint16" />
+      <field start="12" end="13"  name="textIndex" type="uint16">
+          <description>The id of the block text.</description>
+      </field>
+      <dynarray start="14" name="objectIndex" type="uint16" length="objectCount">
+          <description>the spnd of the block text objects</description>
+      </dynarray>
+      <field name="_unknown6" type="uint16">
+          <description>With type=97 the spnd of the block text object?</description>
+      </field>
+    </record>
+
+    <record name="Cdr4LinkCloneData" size="16" sizeExtended="true">
+      <!-- seen 0 -->
+      <field start="0" end="1"  name="_unknown0" type="uint16" />
+      <field start="2" end="3"  name="cloneIndex" type="Cdr4ObjectSpndIndex">
+          <description>The spnd of the object clone.</description>
+      </field>
+      <field start="4" end="5"  name="originalIndex" type="Cdr4ObjectSpndIndex">
+          <description>The spnd of the original object.</description>
+      </field>
+      <!-- seen 0 -->
+      <field start="6" end="7"  name="_unknown1" type="uint16" />
+      <!-- seen 0 -->
+      <field start="8" end="9"  name="_unknown2" type="uint16" />
+      <!-- seen 0 -->
+      <field start="10" end="11"  name="_unknown3" type="uint16" />
+      <field start="12" end="13"  name="_unknown4" type="uint16" />
+      <field start="14" end="15"  name="_unknown5" type="uint16" />
+    </record>
 <!--
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 02 00 15 01 00 00
 02 is block text id, 277 id of block text object
@@ -1223,6 +1266,7 @@ sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 1E 00 00 00
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 01 00 4A 00 00 00
 sample: 61 00 01 00 00 00 00 00 00 00 00 00 00 00 02 00 15 01 00 00
 sample: 61 00 02 00 00 00 00 00 00 00 00 00 00 00 02 00 39 00 37 00 00 00
+
 sample: 50 00 00 00 12 01 BD 00 00 00 00 00 00 00 00 00 00 00
 sample: 50 00 00 00 CE 00 BD 00 00 00 00 00 00 00 00 00 00 00
 sample: 50 00 00 00 13 01 BD 00 00 00 00 00 00 00 00 00 00 00
@@ -1235,34 +1279,14 @@ in next is 1F link group, 3B text object, 25 text object
 sample: 10 00 00 00 1F 00 3B 00 25 00 00 00 00 00 00 00 00 00
              |     |     |     |     |     |     |     |     |     |
 -->
-    <record name="Cdr4LinkData" size="18" sizeExtended="true">
+    <record name="Cdr4LinkData" size="2" sizeExtended="true">
       <!-- seen 16,64,80,97 -->
       <field start="0" end="1"  name="type" type="uint16" value="Cdr4LinkType" />
-      <!-- seen 0,1,2 -->
-      <field start="2" end="3"  name="dataSize" type="uint16">
-          <description>The number of whatever 16-bit data is attached.</description>
-      </field>
-      <field start="4" end="5"  name="_unknown2" type="Cdr4ObjectSpndIndex">
-          <description>With type=80 the spnd of the object copy?</description>
-      </field>
-      <field start="6" end="7"  name="_unknown3" type="Cdr4ObjectSpndIndex">
-          <description>With type=80 the spnd of the original object?</description>
-      </field>
-      <!-- seen 0 -->
-      <field start="8" end="9"  name="_unknown4" type="uint16" />
-      <!-- seen 0 -->
-      <field start="10" end="11"  name="_unknown5" type="uint16" />
-      <!-- seen 0 -->
-      <field start="12" end="13"  name="_unknown6" type="uint16" />
-      <field start="14" end="15"  name="blockTextIndex" type="uint16">
-          <description>With type=97 the id of the block text?</description>
-      </field>
-      <field start="16" end="17"  name="blockTextObjectIndex" type="uint16">
-          <description>With type=97 the spnd of the block text object?</description>
-      </field>
-      <dynarray start="18" name="data" type="uint16" length="dataSize">
-          <description>some 16-bit data, number seems defined by mDataSize</description>
-      </dynarray>
+      <union start="2" name="data" depends="type">
+        <description>The link type specific data.</description>
+        <field name="cloneData" type="Cdr4LinkCloneData" dependValue="Cdr4LinkCloneId" />
+        <field name="blockTextData" type="Cdr4LinkBlockTextData" dependValue="Cdr4LinkBlockTextId" />
+      </union>
     </record>
   </records>
 </format>

@@ -197,9 +197,9 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
 
     svgStream << QLatin1String("<text transform=\"scale(1 -1)\"");
 
-    CdrAbstractFill* fill = mDocument->fill( textObject->fillId() );
+    const CdrAbstractFill* fill = mDocument->fill( textObject->fillId() );
     const QString fillColorName = ( fill && fill->id() == CdrAbstractFill::Solid ) ?
-        static_cast<CdrSolidFill*>( fill )->color().name() :
+        static_cast<const CdrSolidFill*>( fill )->color().name() :
         QString::fromLatin1("none");
     svgStream << QLatin1String(" fill=\"") << fillColorName<<QLatin1Char('\"');
 
@@ -210,20 +210,29 @@ CdrOdgWriter::writeGraphicTextSvg( QIODevice* device, const CdrGraphicTextObject
 //     const quint16 lineWidth = ( outline ) ? outline->lineWidth() : 0;
 //     svgStream << QLatin1String(" stroke-width=\"") << QString::number(lineWidth)<<QLatin1Char('\"');
 
-    CdrStyle* style = mDocument->style( textObject->styleId() );
-    const quint16 fontSize = ( style ) ? style->fontSize() : 18; // TODO: default font size?
-    svgStream << QLatin1String(" font-size=\"") << QString::number(odfLength(fontSize)) << QLatin1String("pt\"");
-    if( style )
+    const CdrStyle* const style = mDocument->style( textObject->styleId() );
+    const CdrFontData* const fontData = ( style ) ? style->fontData() : 0;
+
+    const quint16 fontSize = ( fontData ) ? fontData->fontSize() : 18; // TODO: default font size?
+
+    if( fontData )
     {
-        CdrFont* font = mDocument->font( style->fontId() );
+        svgStream << QLatin1String(" font-size=\"") << QString::number(odfLength(fontSize)) << QLatin1String("pt\"");
+        const char* const weight = (fontData->fontWeight() == CdrFontBold) ?  "bold" : "normal";
+        svgStream << QLatin1String(" font-weight=\"") << QLatin1String(weight) << QLatin1Char('\"');
+
+        const CdrFont* const font = mDocument->font( fontData->fontId() );
         if( font )
             svgStream << QLatin1String(" font-family=\"") << font->name() << QLatin1Char('\"');
+    }
+    if( style )
+    {
         const CdrTextAlignment textAlignment = style->textAlignment();
         if( textAlignment != CdrTextAlignmentUnknown )
         {
-            static struct {const char* name;} alignmentName[3] =
-            { {"start"}, {"middle"}, {"end"} };
-            const QString anchor = QLatin1String( alignmentName[textAlignment-1].name );
+            static const char* const alignmentName[3] =
+            { "start", "middle", "end" };
+            const QString anchor = QLatin1String( alignmentName[textAlignment-1] );
             svgStream << QLatin1String(" text-anchor=\"") << anchor << QLatin1Char('\"');
         }
     }
@@ -616,8 +625,10 @@ CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 void
 CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* blockTextObject )
 {
-    const CdrBlockText* const blockText =
-        mDocument->blockTextForObject( blockTextObject->objectId() );
+    const CdrBlockTextPartIndex blockTextPartIndex =
+        mDocument->blockTextPartIndex( blockTextObject->objectId() );
+    // TODO: check on parsing if existing
+    const CdrBlockText* const blockText = mDocument->blockText( blockTextPartIndex.mBlockTextId );
     if( blockText == 0 )
         return; // TODO: rather check on parsing
 
@@ -639,27 +650,49 @@ CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* blockTextObject )
     mBodyWriter->addAttributePt( "fo:max-width", odfLength(blockTextObject->width()) );
     mBodyWriter->addAttributePt( "fo:max-height", odfLength(blockTextObject->height()) );
 
-    foreach( const CdrParagraph* paragraph, blockText->paragraphs() )
-        writeParagraph( paragraph, blockTextObject );
+    const QVector<CdrParagraph*>& paragraphs = blockText->paragraphs();
+
+    const CdrBlockTextPartSpan partSpan = blockText->partSpan( blockTextPartIndex.mPartId );
+
+    for( int p = partSpan.mBegin.mParagraphIndex; p <= partSpan.mEnd.mParagraphIndex; ++p )
+    {
+        const CdrParagraph* paragraph = paragraphs.at( p );
+
+        const int startLine = (p==partSpan.mBegin.mParagraphIndex) ?
+            partSpan.mBegin.mLineIndex : 0;
+        const int endLine = (p==partSpan.mEnd.mParagraphIndex) ?
+            partSpan.mEnd.mLineIndex : paragraph->paragraphLines().count()-1;
+
+        writeParagraph( paragraph, startLine, endLine );
+    }
 
     mBodyWriter->endElement();//draw:text-box
     mBodyWriter->endElement();//draw:frame
 }
 
 void
-CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextObject* blockTextObject )
+CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph, int startLine, int endLine )
 {
     mBodyWriter->startElement( "text:p", false );  //false: we should not indent the inner tags
 
-    foreach( const CdrParagraphLine* paragraphLine, paragraph->paragraphLines() )
+    KoGenStyle paragraphStyle( KoGenStyle::ParagraphAutoStyle, "paragraph" );
+    writeParagraphStyle( paragraphStyle, paragraph->styleId() );
+
+    const QString paragraphStyleName =
+        mStyleCollector.insert( paragraphStyle, QLatin1String("paragraphStyle") );
+    mBodyWriter->addAttribute( "text:style-name", paragraphStyleName );
+
+    for( int l = startLine; l <= endLine; ++l )
     {
+        const CdrParagraphLine* paragraphLine = paragraph->paragraphLines().at( l );
+
         foreach( const CdrAbstractTextSpan* textSpan, paragraphLine->textSpans() )
         {
             mBodyWriter->startElement( "text:span" );
 
             KoGenStyle textSpanStyle( KoGenStyle::TextAutoStyle, "text" );
             // block text global style
-            writeFont( textSpanStyle, blockTextObject->styleId() );
+            writeFont( textSpanStyle, paragraph->styleId() );
             // span specific style
             if( textSpan->id() == CdrAbstractTextSpan::Styled )
                 writeFont( textSpanStyle, static_cast<const CdrStyledTextSpan*>(textSpan) );
@@ -668,7 +701,19 @@ CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextO
                 mStyleCollector.insert( textSpanStyle, QLatin1String("textSpanStyle") );
             mBodyWriter->addAttribute( "text:style-name", textSpanStyleName );
 
-            mBodyWriter->addTextNode( textSpan->text() );
+            const QStringList textSections = textSpan->text().split( QLatin1Char('\x09') );
+            bool isFirstSection = true;
+            foreach( const QString& textSection, textSections )
+            {
+                if( isFirstSection )
+                    isFirstSection = false;
+                else
+                {
+                    mBodyWriter->startElement( "text:tab" );
+                    mBodyWriter->endElement(); //text:tab
+                }
+                mBodyWriter->addTextNode( textSection );
+            }
 
             mBodyWriter->endElement(); //text:span
         }
@@ -680,14 +725,15 @@ CdrOdgWriter::writeParagraph( const CdrParagraph* paragraph, const CdrBlockTextO
 void
 CdrOdgWriter::writeFill( KoGenStyle& odfStyle, quint32 fillId )
 {
-    CdrAbstractFill* fill = mDocument->fill( fillId );
+    const CdrAbstractFill* fill = mDocument->fill( fillId );
 
     const bool isSolid = ( fill && fill->id() == CdrAbstractFill::Solid );
 
     odfStyle.addProperty( QLatin1String("draw:fill"), isSolid ? "solid" : "none" );
 
     if( isSolid )
-        odfStyle.addProperty( QLatin1String("draw:fill-color"), static_cast<CdrSolidFill*>( fill )->color().name() );
+        odfStyle.addProperty( QLatin1String("draw:fill-color"),
+                              static_cast<const CdrSolidFill*>( fill )->color().name() );
 }
 
 void
@@ -719,15 +765,14 @@ void
 CdrOdgWriter::writeFont( KoGenStyle& odfStyle, quint16 styleId )
 {
     const CdrStyle* const style = mDocument->style( styleId );
-    if( style == 0 ) // TODO: check when this can happen
+    const CdrFontData* const fontData = (style) ? style->fontData() : 0;
+    if( fontData == 0 ) // TODO: check when this can happen
         return;
 
-    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), odfLength(style->fontSize()) );
-    const char* const weight =
-        (style->fontWeight() == CdrFontBold) ?  "bold" :
-                                                "normal";
+    odfStyle.addPropertyPt( QLatin1String("fo:font-size"), odfLength(fontData->fontSize()) );
+    const char* const weight = (fontData->fontWeight() == CdrFontBold) ?  "bold" : "normal";
     odfStyle.addProperty( QLatin1String("fo:font-weight"), weight );
-    const CdrFont* const font = mDocument->font( style->fontId() );
+    const CdrFont* const font = mDocument->font( fontData->fontId() );
     if( font )
         odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
 }
@@ -745,6 +790,59 @@ CdrOdgWriter::writeFont( KoGenStyle& odfStyle, const CdrStyledTextSpan* textSpan
         odfStyle.addProperty( QLatin1String("style:font-name"), font->name() );
 }
 
+
+void
+CdrOdgWriter::writeParagraphStyle( KoGenStyle& odfStyle, quint16 styleId )
+{
+    const CdrStyle* const style = mDocument->style( styleId );
+    if( style == 0 ) // TODO: check when this can happen
+        return;
+
+    const CdrTextAlignment textAlignment = style->textAlignment();
+    if( textAlignment != CdrTextAlignmentUnknown )
+    {
+        static const char* const alignmentName[4] =
+        { "start", "center", "end", "justify" };
+        const QString alignment = QLatin1String( alignmentName[textAlignment-1] );
+
+        odfStyle.addProperty( QLatin1String("fo:text-align"), alignment );
+    }
+    const CdrTextMargins* const textMargins = style->textMargins();
+    if( textMargins )
+    {
+        odfStyle.addPropertyPt( QLatin1String("fo:margin-left"), odfLength(textMargins->leftMargin()) );
+        odfStyle.addPropertyPt( QLatin1String("fo:margin-right"), odfLength(textMargins->rightMargin()) );
+//         odfStyle.addPropertyPt( QLatin1String("fo:text-indent"), indents.attribute("first").toDouble());
+
+        odfStyle.addPropertyPt( QLatin1String("fo:margin-top"), odfLength(textMargins->topMargin()) );
+        odfStyle.addPropertyPt( QLatin1String("fo:margin-bottom"), odfLength(textMargins->bottomMargin()) );
+    }
+#if 0
+    QString lineHeight;
+    double lineSpacingDouble = -1;
+    double lineHeightAtLeast = -1;
+    if (type == "single") {
+        lineHeight = "100%";
+    } else if (type == "oneandhalf") {
+        lineHeight = "150%";
+    } else if (type == "double") {
+        lineHeight = "200%";
+    } else if (type == "multiple") {
+        lineHeight = QString("%1%").arg(lineSpacing.attribute("spacingvalue").toInt() * 100);
+    } else if (type == "custom") {
+        lineSpacingDouble = lineSpacing.attribute("spacingvalue").toDouble();
+    } else if (type == "atleast") {
+        lineHeightAtLeast = lineSpacing.attribute("spacingvalue").toDouble();
+    }
+
+    if (!lineHeight.isNull()) {
+        odfStyle.addProperty( QLatin1String("fo:line-height"), lineHeight);
+    }
+    if (lineSpacingDouble != -1) {
+        odfStyle.addPropertyPt( QLatin1String("text:line-spacing"), lineSpacingDouble);
+        odfStyle.addPropertyPt( QLatin1String("style:line-height-at-least"), lineHeightAtLeast);
+#endif
+}
 
 static inline
 void
