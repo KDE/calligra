@@ -193,6 +193,8 @@ void ImportTableWizard::setupTableSelectPage() {
 
     m_tableListWidget = new QListWidget(this);
     m_tableListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(m_tableListWidget, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotTableListWidgetSelectionChanged()));
     
     vbox->addWidget(m_tableListWidget);
     
@@ -326,6 +328,7 @@ void ImportTableWizard::arriveTableSelectPage()
 {
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
+    m_tableListWidget->clear();
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
@@ -335,9 +338,11 @@ void ImportTableWizard::arriveTableSelectPage()
         }
         
         QStringList tableNames;
-        m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
+        }
+        if (m_tableListWidget->item(0)) {
+            m_tableListWidget->item(0)->setSelected(true);
         }
     } else {
 	kDebug() << "No driver for selected source";
@@ -600,4 +605,9 @@ bool ImportTableWizard::doImport()
 void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
 {
     setValid(m_srcConnPageItem, isSelected);
+}
+
+void ImportTableWizard::slotTableListWidgetSelectionChanged()
+{
+    setValid(m_tablesPageItem, !m_tableListWidget->selectedItems().isEmpty());
 }
