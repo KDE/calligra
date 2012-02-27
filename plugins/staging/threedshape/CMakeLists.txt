@@ -12,6 +12,7 @@ SET (threedshape_LIB_SRCS
 
     Scene.cpp
     Lightsource.cpp
+    Objects.cpp
     utils.cpp
 
     #ChangeImageCommand.cpp
