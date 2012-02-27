@@ -698,10 +698,9 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     } else {
         m_file->seek(0); //always seek at 0 because loadRows() is called many times
         m_inputStream = new QTextStream(m_file);
-        if (m_options.defaultEncodingExplicitySet) {
-            QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
-            if (codec)
-                m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
+        QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
+        if (codec) {
+            m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
         }
         if (m_detectDelimiter) {
             const QString delimiter(detectDelimiterByLookingAtFirstBytesOfFile(*m_inputStream));
