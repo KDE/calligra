@@ -267,6 +267,7 @@ void AccountsEditor::slotAddSubAccount()
 
 void AccountsEditor::insertAccount( Account *account, Account *parent, int row )
 {
+    m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     QModelIndex i = m_view->model()->insertAccount( account, parent, row );
     if ( i.isValid() ) {
         QModelIndex p = m_view->model()->parent( i );

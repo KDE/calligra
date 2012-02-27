@@ -1679,6 +1679,12 @@ void DoubleTreeViewBase::setReadWrite( bool rw )
     m_rightview->setReadWrite( rw );
 }
 
+void DoubleTreeViewBase::closePersistentEditor( const QModelIndex &index )
+{
+    m_leftview->closePersistentEditor( index );
+    m_rightview->closePersistentEditor( index );
+}
+
 void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
 {
     m_leftview->setModel( model );
