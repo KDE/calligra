@@ -345,11 +345,11 @@ void ImportTableWizard::arriveTableSelectPage()
             m_tableListWidget->item(0)->setSelected(true);
         }
     } else {
-	kDebug() << "No driver for selected source";
-	QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
-	QString errDescription = result.description.isEmpty() ? errMessage : result.description;
-	KMessageBox::error(this, errMessage, errDescription);
-	setValid(m_tablesPageItem, false);
+        kDebug() << "No driver for selected source";
+        QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+        QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+        KMessageBox::error(this, errMessage, errDescription);
+        setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
