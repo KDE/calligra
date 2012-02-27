@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,7 +81,9 @@ bool SQLitePreparedStatement::execute()
     int arg = 1; //arg index counted from 1
     Field::ListIterator itFields(fieldList->constBegin());
     for (QList<QVariant>::ConstIterator it = m_args.constBegin();
-            itFields != fieldList->constEnd(); ++it, ++itFields, arg++) {
+            itFields != fieldList->constEnd();
+            it += (it == m_args.constEnd() ? 0 : 1), ++itFields, arg++)
+    {
         KexiDB::Field *field = *itFields;
         if (it == m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL
             res = sqlite3_bind_null(prepared_st_handle, arg);
