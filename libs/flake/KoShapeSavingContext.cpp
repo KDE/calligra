@@ -153,18 +153,15 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
     KoElementReference ref;
 
     if (counter == KoElementReference::COUNTER) {
-        int referenceCounter = d->referenceCounters[prefix]++;
-        if (!d->references.contains(referent)) {
-            ref = KoElementReference(prefix, referenceCounter);
-            d->references.insert(referent, ref);
-            d->referenceCounters[prefix] = referenceCounter;
-        }
+        int referenceCounter = d->referenceCounters[prefix];
+        referenceCounter++;
+        ref = KoElementReference(prefix, referenceCounter);
+        d->references.insert(referent, ref);
+        d->referenceCounters[prefix] = referenceCounter;
     }
     else {
-        if (!d->references.contains(referent)) {
-            if (!prefix.isEmpty()) {
-                ref = KoElementReference(prefix);
-            }
+        if (!prefix.isEmpty()) {
+            ref = KoElementReference(prefix);
             d->references.insert(referent, ref);
         }
     }
@@ -172,7 +169,6 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
     if (!prefix.isNull()) {
         d->prefixedReferences[prefix].append(referent);
     }
-
     return ref;
 }
 
