@@ -329,7 +329,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
 
-    KoElementReference elementRef;
+    KoElementReference elementRef("page", 1);
     elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DRAWID);
 
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
