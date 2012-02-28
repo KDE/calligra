@@ -447,6 +447,7 @@ void
 CdrOdgWriter::writeGroupObject( const CdrGroupObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
+    writeName( groupObject );
 
     // TODO: why are there transformations on groups if they seem not needed to be applied?
     // (and draw:g does not allow draw:transform anyway)
@@ -464,7 +465,7 @@ void
 CdrOdgWriter::writeRectangleObject( const CdrRectangleObject* object )
 {
     mBodyWriter->startElement("draw:rect");
-
+    writeName( object );
     writeTransformation( object->transformations() );
     writeCornerPoint(object->cornerPoint());
 //     mBodyWriter->addAttribute("rx", object->cornerRoundness());
@@ -485,6 +486,7 @@ CdrOdgWriter::writeEllipseObject( const CdrEllipseObject* object )
 {
     mBodyWriter->startElement( "draw:ellipse" );
 
+    writeName( object );
     writeTransformation( object->transformations() );
     writeCornerPoint( object->cornerPoint() );
     if( object->startAngle() != object->endAngle() )
@@ -508,6 +510,7 @@ CdrOdgWriter::writePathObject( const CdrPathObject* pathObject )
 {
     mBodyWriter->startElement( "draw:path" );
 
+    writeName( pathObject );
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
 
     writeTransformation( pathObject->transformations() );
@@ -613,6 +616,7 @@ void
 CdrOdgWriter::writeGraphicTextObject( const CdrGraphicTextObject* object )
 {
     mBodyWriter->startElement( "draw:frame" );
+    writeName( object );
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
     mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));
     mBodyWriter->addAttributePt( "svg:y", odfYCoord(0));
@@ -638,6 +642,7 @@ CdrOdgWriter::writeBlockTextObject( const CdrBlockTextObject* blockTextObject )
         return; // TODO: rather check on parsing
 
     mBodyWriter->startElement("draw:frame");
+    writeName( blockTextObject );
     mBodyWriter->addAttribute( "draw:layer", mLayerId );
     mBodyWriter->addAttributePt( "svg:x", odfXCoord(0));
     mBodyWriter->addAttributePt( "svg:y", odfYCoord(0));
@@ -863,6 +868,13 @@ appendMatrix( QString& transformationString,
         locale.toString(f4) + QLatin1Char(' ') +
         locale.toString(x) + QLatin1String("pt ") +
         locale.toString(y) + QLatin1String("pt)");
+}
+
+void
+CdrOdgWriter::writeName( const CdrAbstractObject* object )
+{
+    if( object->objectId() != cdrObjectInvalidId )
+        mBodyWriter->addAttribute("draw:name", QString::number(object->objectId()) );
 }
 
 static inline

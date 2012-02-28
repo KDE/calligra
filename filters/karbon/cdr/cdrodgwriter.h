@@ -84,6 +84,7 @@ private:
     void writeFont( KoGenStyle& style, quint16 styleId );
     void writeFont( KoGenStyle& odfStyle, const CdrStyledTextSpan* textSpan );
 
+    void writeName( const CdrAbstractObject* object );
     void writeCornerPoint( CdrPoint cornerPoint );
     void writeTransformation( const QVector<CdrAbstractTransformation*>& transformations,
                               const QString& baseTransformationString = QString() );
