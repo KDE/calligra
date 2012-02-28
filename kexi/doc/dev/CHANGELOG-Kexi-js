@@ -107,6 +107,10 @@ i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications
 ->
 i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
 
+CSV Import TODO:
+*add "Skip empty rows" option
+*add "Skip empty columns" option
+
 ===================== Kexi 2.4  =====================
 
 TODO:
@@ -143,6 +147,28 @@ TODO:
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
+
+TODO: after db creating and opening the main menu is invisible
+
+2012-02-27
+CSV Import
+*Update the progress bar less frequently
+
+2012-02-26
+KexiDB
+*SQLite Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+TODO: port to Predicate
+CSV Import
+*Fixed bug: crash while importing CSV rows that start with empty cells (only delimiters)
+**Example row: ,,,"a"
+BUG:279980
+CSV Import
+*Fixed bug: encoding selection misbehaves when importing a CSV file
+**encoding selection was not retained between first and another displaying of the CSV Import Options dialog
+**encoding selection made in the CSV Import Options dialog was not applied to the importing preview and process
+BUG:294636
 
 2012-02-22
 Main Window
