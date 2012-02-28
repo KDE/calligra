@@ -27,6 +27,8 @@
 
 #include <QDomDocument>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -274,7 +276,7 @@ void SchedulerPlugin::updateResource( const Resource *tr, Resource *r, XMLLoader
     if ( cr == 0 || c == 0 ) {
         return;
     }
-    kDebug()<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
+    kDebug(planDbg())<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
     c->setCacheVersion( cr->cacheVersion() );
 }
 
@@ -370,7 +372,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
 {
-//     kDebug()<<log;
+//     kDebug(planDbg())<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }

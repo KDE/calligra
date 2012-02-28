@@ -29,6 +29,8 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -62,7 +64,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
-    kDebug()<<includeColumn0<<c;
+    kDebug(planDbg())<<includeColumn0<<c;
     for ( ; c < model->columnCount(); ++c ) {
         Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
         item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
@@ -92,7 +94,7 @@ void ItemViewSettup::slotChanged()
 
 void ItemViewSettup::slotOk()
 {
-    kDebug();
+    kDebug(planDbg());
     QListWidget *lst = selector->availableListWidget();
     for ( int r = 0; r < lst->count(); ++r ) {
         int c = static_cast<Item*>( lst->item( r ) )->column();
@@ -109,7 +111,7 @@ void ItemViewSettup::slotOk()
 
 void ItemViewSettup::setDefault()
 {
-    kDebug();
+    kDebug(planDbg());
     selector->availableListWidget()->clear();
     selector->selectedListWidget()->clear();
     QAbstractItemModel *model = m_view->model();

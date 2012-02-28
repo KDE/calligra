@@ -30,6 +30,8 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -39,7 +41,7 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
       m_completion( task.completion() )
 
 {
-    kDebug();
+    kDebug(planDbg());
     finished->setChecked(m_completion.isFinished());
     finishTime->setDateTime(m_completion.finishTime());
     enableWidgets();

@@ -34,6 +34,8 @@
 #include <KMessageBox>
 #include <kptschedulerplugin.h>
 
+extern int planDbg();
+
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
 using namespace KPlato;
@@ -41,7 +43,7 @@ using namespace KPlato;
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    kDebug()<<rcps_version();
+    kDebug(planDbg())<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "planrcpsplugin" );

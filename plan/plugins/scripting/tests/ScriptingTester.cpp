@@ -83,7 +83,7 @@ void ScriptingTester::cleanupTestCase()
 
 void ScriptingTester::test()
 {
-    kDebug()<<m_tests;
+    qDebug()<<m_tests;
     foreach ( Kross::Action *a, m_tests ) {
         m_result->setResult( false );
         m_result->message = QString( "%1: Failed to run test" ).arg( a->objectName() );

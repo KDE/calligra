@@ -44,6 +44,8 @@
 
 #include <KoDocument.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -126,7 +128,7 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
 
 void DocumentsEditor::updateReadWrite( bool readwrite )
 {
-    kDebug()<<isReadWrite()<<"->"<<readwrite;
+    kDebug(planDbg())<<isReadWrite()<<"->"<<readwrite;
     ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
     updateActionsEnabled( readwrite );
@@ -143,7 +145,7 @@ void DocumentsEditor::draw()
 
 void DocumentsEditor::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -153,7 +155,7 @@ void DocumentsEditor::setGuiActive( bool activate )
 
 void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         Document *obj = m_view->model()->document( index );
@@ -166,7 +168,7 @@ void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint&
 
 void DocumentsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -180,13 +182,13 @@ Document *DocumentsEditor::currentDocument() const
 
 void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void DocumentsEditor::slotSelectionChanged( const QModelIndexList list )
 {
-    kDebug()<<list.count();
+    kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );
 }
 
@@ -236,7 +238,7 @@ void DocumentsEditor::setupGui()
 
 void DocumentsEditor::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     ItemViewSettupDialog dlg( m_view/*->masterView()*/ );
     dlg.exec();
 }
@@ -247,7 +249,7 @@ void DocumentsEditor::slotEditDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug()<<dl;
+    kDebug(planDbg())<<dl;
     emit editDocument( dl.first() );
 }
 
@@ -257,13 +259,13 @@ void DocumentsEditor::slotViewDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug()<<dl;
+    kDebug(planDbg())<<dl;
     emit viewDocument( dl.first() );
 }
 
 void DocumentsEditor::slotAddDocument()
 {
-    //kDebug();
+    //kDebug(planDbg());
     QList<Document*> dl = m_view->selectedDocuments();
     Document *after = 0;
     if ( dl.count() > 0 ) {
@@ -280,7 +282,7 @@ void DocumentsEditor::slotAddDocument()
 void DocumentsEditor::slotDeleteSelection()
 {
     QList<Document*> lst = m_view->selectedDocuments();
-    //kDebug()<<lst.count()<<" objects";
+    //kDebug(planDbg())<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteDocumentList( lst );
     }

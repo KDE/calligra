@@ -45,6 +45,8 @@
 
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -105,7 +107,7 @@ const QMetaEnum CalendarItemModel::columnMap() const
 
 void CalendarItemModel::slotCalendarToBeInserted( const Calendar *parent, int row )
 {
-    //kDebug()<<(parent?parent->name():"Top level")<<","<<row;
+    //kDebug(planDbg())<<(parent?parent->name():"Top level")<<","<<row;
     Q_ASSERT( m_calendar == 0 );
     m_calendar = const_cast<Calendar *>(parent);
     beginInsertRows( index( parent ), row, row );
@@ -113,7 +115,7 @@ void CalendarItemModel::slotCalendarToBeInserted( const Calendar *parent, int ro
 
 void CalendarItemModel::slotCalendarInserted( const Calendar *calendar )
 {
-    //kDebug()<<calendar->name();
+    //kDebug(planDbg())<<calendar->name();
     Q_ASSERT( calendar->parentCal() == m_calendar );
 #ifdef NDEBUG
     Q_UNUSED(calendar)
@@ -125,14 +127,14 @@ void CalendarItemModel::slotCalendarInserted( const Calendar *calendar )
 
 void CalendarItemModel::slotCalendarToBeRemoved( const Calendar *calendar )
 {
-    //kDebug()<<calendar->name();
+    //kDebug(planDbg())<<calendar->name();
     int row = index( calendar ).row();
     beginRemoveRows( index( calendar->parentCal() ), row, row );
 }
 
 void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 {
-    //kDebug()<<calendar->name();
+    //kDebug(planDbg())<<calendar->name();
     endRemoveRows();
 }
 
@@ -197,7 +199,7 @@ QModelIndex CalendarItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     Calendar *a = calendar( index );
     if ( a == 0 ) {
         return QModelIndex();
@@ -211,7 +213,7 @@ QModelIndex CalendarItemModel::parent( const QModelIndex &index ) const
         } else {
             row = m_project->indexOf( par );
         }
-        //kDebug()<<par->name()<<":"<<row;
+        //kDebug(planDbg())<<par->name()<<":"<<row;
         return createIndex( row, 0, par );
     }
     return QModelIndex();
@@ -272,7 +274,7 @@ int CalendarItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant CalendarItemModel::name( const Calendar *a, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug(planDbg())<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -324,7 +326,7 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
 
 QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug(planDbg())<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -386,7 +388,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
         case Name: result = name( a, role ); break;
         case TimeZone: result = timeZone( a, role ); break;
         default:
-            kDebug()<<"data: invalid display value column"<<index.column();
+            kDebug(planDbg())<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
     return result;
@@ -473,7 +475,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            kDebug()<<index.row();
+            kDebug(planDbg())<<index.row();
             Calendar *c = calendar( index );
             if ( c ) {
                 stream << c->id();
@@ -486,7 +488,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    kDebug()<<action<<row;
+    kDebug(planDbg())<<action<<row;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -494,7 +496,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        kDebug()<<"MoveAction";
+        kDebug(planDbg())<<"MoveAction";
 
         QByteArray encodedData = data->data( "application/x-vnd.kde.plan.calendarid.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -517,7 +519,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             emit executeCommand( cmd );
             return true;
         }
-        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
     }
     return false;
 }
@@ -538,7 +540,7 @@ QList<Calendar*> CalendarItemModel::calendarList( QDataStream &stream ) const
 
 bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 {
-    kDebug()<<on<<data->hasFormat("application/x-vnd.kde.plan.calendarid.internal");
+    kDebug(planDbg())<<on<<data->hasFormat("application/x-vnd.kde.plan.calendarid.internal");
     if ( !data->hasFormat("application/x-vnd.kde.plan.calendarid.internal") ) {
         return false;
     }
@@ -564,7 +566,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 
 QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, int pos, Calendar *parent )
 {
-    //kDebug()<<calendar<<pos<<parent;
+    //kDebug(planDbg())<<calendar<<pos<<parent;
     emit executeCommand( new CalendarAddCmd( m_project, calendar, pos, parent, i18nc( "(qtundo-format)", "Add calendar" ) ) );
     int row = -1;
     if ( parent ) {
@@ -573,7 +575,7 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, int pos, Cal
         row = m_project->indexOf( calendar );
     }
     if ( row != -1 ) {
-        //kDebug()<<"Inserted:"<<calendar->name()<<"row="<<row;
+        //kDebug(planDbg())<<"Inserted:"<<calendar->name()<<"row="<<row;
         return createIndex( row, 0, calendar );
     }
     return QModelIndex();
@@ -605,7 +607,7 @@ CalendarDayItemModel::~CalendarDayItemModel()
 void CalendarDayItemModel::slotWorkIntervalAdded( CalendarDay *day, TimeInterval *ti )
 {
     Q_UNUSED(ti);
-    //kDebug()<<day<<","<<ti;
+    //kDebug(planDbg())<<day<<","<<ti;
     int c = m_calendar->indexOfWeekday( day );
     if ( c == -1 ) {
         return;
@@ -629,7 +631,7 @@ void CalendarDayItemModel::slotDayChanged( CalendarDay *day )
     if ( c == -1 ) {
         return;
     }
-    kDebug()<<day<<", "<<c;
+    kDebug(planDbg())<<day<<", "<<c;
     emit dataChanged( createIndex( 0, c, day ), createIndex( 0, c, day ) );
 }
 
@@ -646,7 +648,7 @@ void CalendarDayItemModel::slotTimeIntervalChanged( TimeInterval *ti )
 
 void CalendarDayItemModel::setCalendar( Calendar *calendar )
 {
-    //kDebug()<<m_calendar<<" -->"<<calendar;
+    //kDebug(planDbg())<<m_calendar<<" -->"<<calendar;
     if ( m_calendar ) {
         disconnect( m_calendar, SIGNAL( changed( CalendarDay*) ), this, SLOT( slotDayChanged( CalendarDay* ) ) );
         disconnect( m_calendar, SIGNAL( changed( TimeInterval* ) ), this, SLOT( slotTimeIntervalChanged( TimeInterval* ) ) );
@@ -682,7 +684,7 @@ QModelIndex CalendarDayItemModel::parent( const QModelIndex &index ) const
 
 bool CalendarDayItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    //kDebug()<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
+    //kDebug(planDbg())<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
     if ( m_project == 0 || m_calendar == 0 ) {
         return false;
     }
@@ -731,7 +733,7 @@ int CalendarDayItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant CalendarDayItemModel::name( int weekday, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug(planDbg())<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
             if ( weekday >= 1 && weekday <= 7 ) {
@@ -783,7 +785,7 @@ QVariant CalendarDayItemModel::dayState( const CalendarDay *d, int role ) const
 }
 bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, int role )
 {
-    //kDebug();
+    //kDebug(planDbg());
     switch ( role ) {
         case Qt::EditRole:
             int v = value.toInt();
@@ -795,7 +797,7 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
 
 QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) const
 {
-    //kDebug()<<day->date()<<","<<role;
+    //kDebug(planDbg())<<day->date()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole: {
             if ( day->state() == CalendarDay::Working ) {
@@ -1015,7 +1017,7 @@ QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int r
 
 QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
-    //kDebug()<<date<<role<<dataType;
+    //kDebug(planDbg())<<date<<role<<dataType;
     if ( role ==  Qt::ToolTipRole ) {
         if ( m_calendar == 0 ) {
             return QVariant();
@@ -1090,11 +1092,11 @@ DateTableDateDelegate::DateTableDateDelegate( QObject *parent )
 
 QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
-    //kDebug()<<date;
+    //kDebug(planDbg())<<date;
     QRectF r;
     StyleOptionViewItem style = option;
     style.font.setPointSize( style.font.pointSize() - 2 );
-    //kDebug()<<" fonts: "<<option.font.pointSize()<<style.font.pointSize();
+    //kDebug(planDbg())<<" fonts: "<<option.font.pointSize()<<style.font.pointSize();
     r = KDateTableDateDelegate::paint( painter, style, date, model );
     if ( model == 0 ) {
         return r;
@@ -1104,7 +1106,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );
-    //kDebug()<<" rects: "<<r<<rect;
+    //kDebug(planDbg())<<" rects: "<<r<<rect;
 
     QString text = model->data( date, Qt::DisplayRole, 0 ).toString();
     int align = model->data( date, Qt::TextAlignmentRole, 0 ).toInt();
@@ -1176,7 +1178,7 @@ QVariant CalendarExtendedItemModel::data( const QModelIndex &index, int role ) c
     }
     switch ( col ) {
         default:
-            kDebug()<<"Fetching data from weekdays and date is not supported";
+            kDebug(planDbg())<<"Fetching data from weekdays and date is not supported";
             break;
     }
     return result;
