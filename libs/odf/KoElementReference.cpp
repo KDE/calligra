@@ -37,7 +37,7 @@ KoElementReference::KoElementReference(const QString &prefix)
 KoElementReference::KoElementReference(const QString &prefix, int counter)
     : d(new KoElementReferenceData)
 {
-    d->xmlid = prefix + "-" + counter;
+    d->xmlid = QString("%1-%2").arg(prefix).arg(counter);
 }
 
 KoElementReference::KoElementReference(const KoElementReference &other)
