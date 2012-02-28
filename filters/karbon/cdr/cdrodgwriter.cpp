@@ -366,7 +366,12 @@ CdrOdgWriter::writeMasterPage()
 
     masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-width"), odfLength(mDocument->width()) );
     masterPageLayoutStyle.addPropertyPt( QLatin1String("fo:page-height"), odfLength(mDocument->height()) );
-//     masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), "landscape" );
+    const char* const orientation =
+        (mDocument->pageOrientation()==CdrPagePortrait) ?  "portrait":
+        (mDocument->pageOrientation()==CdrPageLandscape) ? "landscape":
+                                                           0;
+    if( orientation != 0 )
+        masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), orientation );
 
     const QString masterPageLayoutStyleName =
         mStyleCollector.insert( masterPageLayoutStyle, QLatin1String("masterPageLayoutStyle") );

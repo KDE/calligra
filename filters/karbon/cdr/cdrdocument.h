@@ -564,10 +564,28 @@ struct CdrBlockTextPartIndex
 
 typedef QHash<quint16,CdrBlockTextPartIndex> CdrBlockTextLinkTable;
 
+enum CdrPageOrientation
+{
+    CdrPageOrientationUnknown,
+    CdrPagePortrait,
+    CdrPageLandscape
+};
+
+enum CdrPageSizeType
+{
+    CdrPageSizeTypeUnknown,
+    CdrPageSizeDinA4,
+    CdrPageSizeDinA5
+};
+
 class CdrDocument
 {
 public:
-    CdrDocument() : mMasterPage(0) {}
+    CdrDocument()
+    : mWidth(0), mHeight(0),
+      mPageOrientation(CdrPageOrientationUnknown), mPageSizeType(CdrPageSizeTypeUnknown),
+      mMasterPage(0)
+    {}
     ~CdrDocument();
 public:
     void insertStyle( quint16 id, CdrStyle* style ) { mStyleTable.insert(id, style); }
@@ -580,6 +598,8 @@ public:
     void setFullVersion( quint16 fullVersion ) { mFullVersion = fullVersion; }
     void setSize( quint16 width, quint16 height ) { mWidth = width; mHeight = height; }
     void setStyleSheetFileName( const QString& styleSheetFileName ) { mStyleSheetFileName = styleSheetFileName; }
+    void setPageOrientation( CdrPageOrientation pageOrientation ) { mPageOrientation = pageOrientation; }
+    void setPageSizeType( CdrPageSizeType pageSizeType ) { mPageSizeType = pageSizeType; }
     void setBlockTextLinkTable( const CdrBlockTextLinkTable& blockTextLinkTable ) { mBlockTextLinkTable = blockTextLinkTable; }
 public:
     quint16 fullVersion() const { return mFullVersion; }
@@ -588,6 +608,8 @@ public:
     const CdrPage* masterPage() const { return mMasterPage; }
     const QVector<CdrPage*>& pages() const { return mPages; }
     const QString& styleSheetFileName() const { return mStyleSheetFileName; }
+    CdrPageOrientation pageOrientation() const { return mPageOrientation; }
+    CdrPageSizeType pageSizeType() const { return mPageSizeType; }
     const CdrStyle* style( qint32 id ) { return mStyleTable.value(id); }
     const CdrOutline* outline( qint32 id ) { return mOutlineTable.value(id); }
     const CdrAbstractFill* fill( qint32 id ) { return mFillTable.value(id); }
@@ -599,6 +621,8 @@ private:
     quint16 mWidth;
     quint16 mHeight;
     QString mStyleSheetFileName;
+    CdrPageOrientation mPageOrientation;
+    CdrPageSizeType mPageSizeType;
 
     QHash<qint32, CdrStyle*> mStyleTable;
     QHash<qint32, CdrOutline*> mOutlineTable;

@@ -56,13 +56,79 @@
         <description>"Desktop"</description>
       </item>
     </enum>
+
+    <enum name="Cdr4PageSizeType">
+      <description>id for the type of the paper size.</description>
+      <item name="Cdr4PageSizeDinA4Id" value="5">
+        <description>DIN A4</description>
+      </item>
+      <item name="Cdr4PageSizeDinA5Id" value="6">
+        <description>DIN A5</description>
+      </item>
+    </enum>
+
+    <enum name="Cdr4PageOrientationType">
+      <description>id for the type of the paper size.</description>
+      <item name="Cdr4PageOrientationPortraitId" value="0">
+        <description>Portrait mode</description>
+      </item>
+      <item name="Cdr4PageOrientationLandscapeId" value="1">
+        <description>Landscape mode</description>
+      </item>
+    </enum>
   </enums>
 
   <records>
    <record name="Cdr4MCfgChunkData" size="54">
       <field start="0" end="1"  name="width" type="uint16" />
       <field start="2" end="3"  name="height" type="uint16" />
-      <array start="4" end="53" name="_unknown" type="char" length="50" />
+      <field start="4" end="5"  name="format" type="uint16" value="Cdr4PageSizeType" />
+      <field start="6" end="7"  name="orientation" type="uint16" value="Cdr4PageOrientationType" />
+      <!-- seen 1 -->
+      <field start="8" end="9"  name="_unknown0" type="uint16" />
+      <!-- seen 0 -->
+      <field start="10" end="11"  name="_unknown1" type="uint16" />
+      <!-- seen 0 -->
+      <field start="12" end="13"  name="_unknown2" type="uint16" />
+      <!-- seen 0 -->
+      <field start="14" end="15"  name="_unknown3" type="uint16" />
+      <!-- seen 0 -->
+      <field start="16" end="17"  name="_unknown4" type="uint16" />
+      <!-- seen c88f -->
+      <field start="18" end="19"  name="_unknown5" type="uint16" />
+      <!-- seen 1 -->
+      <field start="20" end="21"  name="_unknown6" type="uint16" />
+      <!-- seen 1,3 -->
+      <field start="22" end="23"  name="somePageSetting" type="uint16" />
+      <!-- seen 0,1 -->
+      <field start="24" end="25"  name="showTwoPages" type="uint16" />
+      <!-- seen 0 -->
+      <field start="26" end="27"  name="_unknown8" type="uint16" />
+      <!-- seen 0, -4134 (width 8268), -5847 (width 11694), -2914 (width 5828), 1969 (width 8268) -->
+      <field start="28" end="29"  name="someX" type="sint16" />
+      <!-- seen -4134 (height 8268), -5847 (height 11694), 5846 (height 11694), 5059 (height 11694) -->
+      <field start="30" end="31"  name="someY" type="sint16" />
+      <!-- seen 0000,cccc -->
+      <field start="32" end="33"  name="_unknown9" type="uint16" />
+      <!-- seen 0040,4c3e,803f,003f -->
+      <field start="34" end="35"  name="_unknown10" type="uint16" />
+      <!-- seen always same as unknown9 and _unknown10 -->
+      <field start="36" end="37"  name="_unknown13" type="uint16" />
+      <field start="38" end="39"  name="_unknown14" type="uint16" />
+      <!-- seen 2 -->
+      <field start="40" end="41"  name="_unknown16" type="uint16" />
+      <!-- seen 2 -->
+      <field start="42" end="43"  name="_unknown17" type="uint16" />
+      <!-- seen 2 -->
+      <field start="44" end="45"  name="_unknown18" type="uint16" />
+      <!-- seen 1 -->
+      <field start="46" end="47"  name="_unknown19" type="uint16" />
+      <!-- seen 2 -->
+      <field start="48" end="49"  name="_unknown20" type="uint16" />
+      <!-- seen 0 -->
+      <field start="50" end="51"  name="_unknown21" type="uint16" />
+      <!-- seen 0 -->
+      <field start="52" end="53"  name="_unknown22" type="uint16" />
     </record>
 
     <record name="Cdr4Point" size="4">

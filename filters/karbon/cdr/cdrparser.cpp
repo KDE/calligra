@@ -262,6 +262,37 @@ CdrParser::readDocMCfg()
 
     // set the page size
     mDocument->setSize( mcfgData.width(), mcfgData.height() );
+    const CdrPageSizeType pageSizeType =
+        (mcfgData.format()==Cdr4PageSizeDinA4Id) ? CdrPageSizeDinA4:
+        (mcfgData.format()==Cdr4PageSizeDinA5Id) ? CdrPageSizeDinA5:
+                                                   CdrPageSizeTypeUnknown;
+    mDocument->setPageSizeType( pageSizeType );
+    const char* const format =
+        (mcfgData.format()==Cdr4PageSizeDinA4Id) ? "DINA4":
+        (mcfgData.format()==Cdr4PageSizeDinA5Id) ? "DINA5":
+                                                   "UNKNOWN";
+    const CdrPageOrientation pageOrientation =
+        (mcfgData.orientation()==Cdr4PageOrientationPortraitId) ?  CdrPagePortrait:
+        (mcfgData.orientation()==Cdr4PageOrientationLandscapeId) ? CdrPageLandscape:
+                                                                   CdrPageOrientationUnknown;
+    mDocument->setPageOrientation( pageOrientation );
+    const char* const orientation =
+        (mcfgData.orientation()==Cdr4PageOrientationPortraitId) ?  "portrait":
+        (mcfgData.orientation()==Cdr4PageOrientationLandscapeId) ? "landscape":
+                                                                   "UNKNOWN";
+
+qDebug() << "width:"<< mDocument->width() << "height:" << mDocument->height()
+         << "format:" << mcfgData.format() << format
+         << "orientation:"<<mcfgData.orientation() << orientation
+         << "pagebla:"<<mcfgData.somePageSetting()<<mcfgData.showTwoPages()
+         << "some xy:"<<mcfgData.someX() << mcfgData.someY()
+         << "pairs:" << mcfgData._unknown9() << mcfgData._unknown10()
+                     << mcfgData._unknown13() << mcfgData._unknown14()
+         << "other:" << mcfgData._unknown0() << mcfgData._unknown1() << mcfgData._unknown2()
+                     << mcfgData._unknown3() << mcfgData._unknown4() << mcfgData._unknown5()
+                     << mcfgData._unknown16() << mcfgData._unknown17() << mcfgData._unknown18()
+                     << mcfgData._unknown19() << mcfgData._unknown20() << mcfgData._unknown21()
+                     << mcfgData._unknown22();
 }
 
 void
