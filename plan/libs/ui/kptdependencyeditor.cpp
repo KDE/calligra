@@ -1027,6 +1027,7 @@ DependencyScene::DependencyScene( QWidget *parent )
     m_model( 0 ),
     m_readwrite( false )
 {
+    setSceneRect( QRectF() );
     m_connectionitem = new DependencyCreatorItem();
     addItem( m_connectionitem );
     //kDebug();
@@ -1159,6 +1160,7 @@ void DependencyScene::clearScene()
     qDeleteAll( its );
     removeItem( m_connectionitem );
     qDeleteAll( items() );
+    setSceneRect( QRectF() );
     addItem( m_connectionitem );
     //kDebug();
 }
