@@ -652,13 +652,7 @@ protected:
     ResourceRequestCollection m_requests;
 
 private:
-    void init();
-        
-#ifndef NDEBUG
-public:
-    virtual void printDebug(bool children, const QByteArray& indent);
-#endif
-
+    void init();        
 };
 
 ////////////////////////////////   Estimate   ////////////////////////////////
@@ -854,12 +848,6 @@ private:
     
     /// Calendar may be used when Type is Type_Duration
     Calendar *m_calendar;
-    
-#ifndef NDEBUG
-public:
-    void printDebug(const QByteArray& indent);
-#endif
-
 };
 
 }  //KPlato namespace

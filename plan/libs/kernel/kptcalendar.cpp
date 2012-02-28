@@ -1676,47 +1676,6 @@ void StandardWorktime::save(QDomElement &element) const {
     
 }
 
-#ifndef NDEBUG
-void CalendarDay::printDebug(const QString& _indent) {
-    QString indent = _indent;
-    QString s[] = {"None", "Non-working", "Working"};
-    qDebug()<<indent<<""<<m_date.toString()<<" ="<<s[m_state];
-    if (m_state == CalendarDay::Working) {
-        indent += "  ";
-        foreach (TimeInterval *i, m_timeIntervals) {
-            QString end = i->endsMidnight() ? "midnight" : i->endTime().toString( Qt::ISODate );
-            qDebug()<<indent<<" Interval:"<<i->first.toString( Qt::ISODate )<<"to"<<end;
-        }
-    }
-    
-}
-void CalendarWeekdays::printDebug(const QString& indent) {
-    qDebug()<<indent<<"Weekdays ------";
-    int c=1;
-    foreach ( CalendarDay *d, m_weekdays ) {
-        d->printDebug(indent + "  Day " + c++ + ": ");
-    }
-
-}
-void Calendar::printDebug(const QString& indent) {
-    qDebug()<<indent<<"Calendar"<<m_id<<":"<<m_name<<(isDefault()?" (Default calendar)":"");
-    qDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() :"No parent");
-    m_weekdays->printDebug(indent + "  ");
-    qDebug()<<indent<<"  Days --------";
-    foreach (CalendarDay *d, m_days) {
-        d->printDebug(indent + "  ");
-    }
-}
-
-void StandardWorktime::printDebug(const QString& indent) {
-    qDebug()<<indent<<"Estimate conversion";
-    qDebug()<<indent<<"Year:"<<m_year.toString()<<"("<<year()<<"hours )";
-    qDebug()<<indent<<"Month:"<<m_month.toString()<<"("<<month()<<"hours )";
-    qDebug()<<indent<<"Week:"<<m_week.toString()<<"("<<week()<<"hours )";
-    qDebug()<<indent<<"Day:"<<m_day.toString()<<"("<<day()<<"hours )";
-}
-
-#endif
 
 }  //KPlato namespace
 

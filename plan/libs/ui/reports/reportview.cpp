@@ -912,8 +912,8 @@ QDomDocument ReportDesignPanel::document() const
         m_sourceeditor->sourceData( e );
     }
     e.appendChild( m_designer->document() );
-/*    qDebug()<<"ReportDesignerView::document:";
-    qDebug()<<document.toString();*/
+/*    kDebug(planDbg())<<"ReportDesignerView::document:";
+    kDebug(planDbg())<<document.toString();*/
     return document;
 }
 

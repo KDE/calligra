@@ -273,11 +273,6 @@ private:
     AppointmentIntervalList m_intervals;
     
     QString m_auxcilliaryInfo;
-
-#ifndef NDEBUG
-public:
-        void printDebug(const QString& ident);
-#endif
 };
 
 

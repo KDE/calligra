@@ -85,7 +85,7 @@ KLocale *PlanTJScheduler::locale() const
 
 void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttributes *object )
 {
-//     qDebug()<<"PlanTJScheduler::slotMessage:"<<msg;
+//     kDebug(planDbg())<<"PlanTJScheduler::slotMessage:"<<msg;
     Schedule::Log log;
     if ( object &&  object->getType() == CA_Task && m_taskmap.contains( static_cast<TJ::Task*>( object ) ) ) {
         log = Schedule::Log( static_cast<Node*>( m_taskmap[ static_cast<TJ::Task*>( object ) ] ), type, msg );
@@ -172,14 +172,14 @@ void PlanTJScheduler::run()
     logInfo( m_project, 0, "Start scheduling", 1 );
     bool r = solve();
     if ( ! r ) {
-        qDebug()<<"Scheduling failed";
+        kDebug(planDbg())<<"Scheduling failed";
         result = 2;
         logError( m_project, 0, i18nc( "@info/plain" , "Failed to schedule project" ) );
         setProgress( PROGRESS_MAX_VALUE );
         return;
     }
     if ( m_haltScheduling ) {
-        qDebug()<<"Scheduling halted";
+        kDebug(planDbg())<<"Scheduling halted";
         logInfo( m_project, 0, "Scheduling halted" );
         deleteLater();
         return;
@@ -202,7 +202,7 @@ bool PlanTJScheduler::check()
 
 bool PlanTJScheduler::solve()
 {
-    qDebug()<<"PlanTJScheduler::solve()";
+    kDebug(planDbg())<<"PlanTJScheduler::solve()";
     TJ::Scenario *sc = m_tjProject->getScenario( 0 );
     if ( ! sc ) {
         if ( locale() ) {
@@ -348,7 +348,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
-    qDebug()<<"taskFromTJ:"<<task<<task->name()<<cs->id();
+    kDebug(planDbg())<<"taskFromTJ:"<<task<<task->name()<<cs->id();
     task->setStartTime( DateTime( QDateTime::fromTime_t( job->getStart( 0 ) ) ) );
     task->setEndTime( DateTime( QDateTime::fromTime_t( job->getEnd( 0 ) ).addSecs( 1 ) ) );
     task->setDuration( task->endTime() - task->startTime() );

@@ -364,25 +364,6 @@ View::View( Part* part, QWidget* parent )
     // Viewlist popup
     connect( m_viewlist, SIGNAL( createView() ), SLOT( slotCreateView() ) );
 
-#ifndef NDEBUG
-    //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
-    QAction *action  = new KAction("Print Debug", this);
-    actionCollection()->addAction("print_debug", action );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintSelectedDebug() ) );
-    action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_P ) );
-    action  = new KAction("Print Calendar Debug", this);
-    actionCollection()->addAction("print_calendar_debug", action );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintCalendarDebug() ) );
-    action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
-    //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
-
-    action  = new KAction("Toggle Debug Info Mode", this);
-    actionCollection()->addAction("toggle_debug_info", action );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotToggleDebugInfo() ) );
-    action->setShortcut( QKeySequence( Qt::META + Qt::Key_T ) );
-
-#endif
-
     m_estlabel = new QLabel( "", 0 );
     if ( statusBar() ) {
         addStatusBarItem( m_estlabel, 0, true );
@@ -3100,64 +3081,6 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
-#ifndef NDEBUG
-void View::slotPrintDebug()
-{
-    qDebug() <<"-------- Debug printout: Project";
-    getPart() ->getProject().printDebug( true, "" );
-}
-void View::slotPrintSelectedDebug()
-{
-    qDebug()<<"View::slotPrintSelectedDebug:"<<m_tab->currentWidget();
-    if ( currentTask() ) {
-        qDebug() <<"-------- Debug printout: Selected node";
-        currentTask()->printDebug( true, "" );
-        return;
-    }
-    if ( currentResource() ) {
-        qDebug() <<"-------- Debug printout: Selected resource";
-        currentResource()->printDebug("  !");
-        return;
-    }
-    if ( currentResourceGroup() ) {
-        qDebug() <<"-------- Debug printout: Selected group";
-        currentResourceGroup()->printDebug("  !");
-        return;
-    }
-    slotPrintDebug();
-}
-void View::slotPrintCalendarDebug()
-{
-    QDate date = QDate::currentDate();
-    KDateTime z( date, QTime(0,0,0), KDateTime::UTC );
-    KDateTime t( date, QTime(0,0,0), KDateTime::LocalZone );
-
-    qDebug()<<"Offset:"<<date<<z<<t<<z.secsTo_long( t );
-    getPart() ->getProject().printCalendarDebug( "" );
-}
-void View::slotPrintTestDebug()
-{
-    const QStringList & lst = getPart() ->xmlLoader().log();
-
-    for ( QStringList::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
-        kDebug(planDbg()) << *it;
-    }
-}
-
-void View::slotToggleDebugInfo()
-{
-    QList<ScheduleLogTreeView*> lst = findChildren<ScheduleLogTreeView*>();
-    foreach ( ScheduleLogTreeView *v, lst ) {
-        QString f = v->filterRegExp().isEmpty() ? "[^0]" : "";
-        v->setFilterWildcard( f );
-    }
-    QList<GanttView*> ls = findChildren<GanttView*>();
-    foreach ( GanttView *v, ls ) {
-        v->setShowSpecialInfo( ! v->showSpecialInfo() );
-    }
-}
-
-#endif
 
 }  //KPlato namespace
 

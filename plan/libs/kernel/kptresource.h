@@ -884,11 +884,6 @@ public:
 private:
     Task *m_task;
     QList<ResourceGroupRequest*> m_requests;
-
-#ifndef NDEBUG
-public:
-    void printDebug( const QString& ident );
-#endif
 };
 
 }  //KPlato namespace
