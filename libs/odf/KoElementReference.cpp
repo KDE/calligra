@@ -66,7 +66,7 @@ bool KoElementReference::operator!=(const KoElementReference &other)
 
 bool KoElementReference::isValid() const
 {
-    return (d->xmlid.isEmpty());
+    return (!d->xmlid.isEmpty());
 }
 
 void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) const
