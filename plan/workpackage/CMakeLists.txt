@@ -23,6 +23,8 @@ set(planworkfactory_LIB_SRCS
     packagesettings.cpp
     taskcompletiondialog.cpp
 
+    debugarea.cpp
+
     ../KPlatoXmlLoader.cpp #NB
 )
 

@@ -45,6 +45,8 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -195,7 +197,7 @@ void ResourceDialogImpl::slotUseRequiredChanged( int state )
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
         disconnect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
-        //kDebug()<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
+        //kDebug(planDbg())<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
         availableUntil->setDateTime(availableFrom->dateTime());
         connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
     }
@@ -204,7 +206,7 @@ void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
         disconnect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
-        //kDebug()<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
+        //kDebug(planDbg())<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
         availableFrom->setDateTime(availableUntil->dateTime());
         connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
     }
@@ -455,7 +457,7 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
     }
     if ( resource.type() == Resource::Type_Team ) {
-        //kDebug()<<original->teamMembers()<<resource.teamMembers();
+        //kDebug(planDbg())<<original->teamMembers()<<resource.teamMembers();
         foreach ( const QString &id, resource.teamMemberIds() ) {
             if ( ! original->teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);

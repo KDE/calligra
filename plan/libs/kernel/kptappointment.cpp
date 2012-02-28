@@ -34,6 +34,8 @@
 
 #include <cassert>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -42,7 +44,7 @@ class Resource;
 AppointmentInterval::AppointmentInterval()
     : d( new AppointmentIntervalData() )
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 AppointmentInterval::AppointmentInterval( const AppointmentInterval &interval )
@@ -53,14 +55,14 @@ AppointmentInterval::AppointmentInterval( const AppointmentInterval &interval )
 AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime &end, double load )
     : d( new AppointmentIntervalData() )
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
     setStartTime( start );
     setEndTime( end );
     setLoad( load );
 }
 
 AppointmentInterval::~AppointmentInterval() {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 const DateTime &AppointmentInterval::startTime() const
@@ -114,14 +116,14 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) 
 
 Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
     DateTime t( time );
-    //kDebug()<<time<<upto<<t<<d->start<<d->end;
+    //kDebug(planDbg())<<time<<upto<<t<<d->start<<d->end;
     if (upto) {
         if (t <= d->start) {
             return Duration::zeroDuration;
         }
         DateTime e = (t < d->end ? t : d->end);
         Duration eff = (e - d->start) * d->load / 100;
-        //kDebug()<<d->toString();
+        //kDebug(planDbg())<<d->toString();
         return eff;
     }
     // from time till end
@@ -133,7 +135,7 @@ Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
 }
 
 bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status) {
-    //kDebug();
+    //kDebug(planDbg());
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty())
@@ -165,7 +167,7 @@ bool AppointmentInterval::isValid() const {
 }
 
 AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval &interval, const DateTime &from) const {
-    //kDebug()<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
+    //kDebug(planDbg())<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
     DateTime f = from;
     DateTime s1 = d->start;
     DateTime e1 = d->end;
@@ -209,7 +211,7 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
             a.setEndTime(e2);
         a.setLoad(d->load + interval.load());
     }
-    //kDebug()<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
+    //kDebug(planDbg())<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
     return a;
 }
 
@@ -302,7 +304,7 @@ void AppointmentIntervalList::subtract( const DateTime &st, const DateTime &et, 
 
 void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
 {
-    //kDebug()<<st<<et<<load;
+    //kDebug(planDbg())<<st<<et<<load;
     if ( m_map.isEmpty() ) {
         return;
     }
@@ -564,7 +566,7 @@ QDebug operator<<( QDebug dbg, const KPlato::AppointmentIntervalList &i )
 ////
 Appointment::Appointment()
     : m_extraRepeats(), m_skipRepeats() {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     m_resource=0;
     m_node=0;
     m_calculationMode = Schedule::Scheduling;
@@ -575,7 +577,7 @@ Appointment::Appointment()
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -588,7 +590,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -606,7 +608,7 @@ Appointment::Appointment( const Appointment &app)
 
 
 Appointment::~Appointment() {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     detach();
 }
 
@@ -617,14 +619,14 @@ void Appointment::clear()
 
 AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
 {
-    //kDebug()<<start<<end;
+    //kDebug(planDbg())<<start<<end;
     AppointmentIntervalList lst;
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start.date() );
     for ( ; it != m_intervals.map().constEnd() && it.key() <= end.date(); ++it ) {
         AppointmentInterval ai = it.value().interval( start, end );
         if ( ai.isValid() ) {
             lst.add( ai );
-            //kDebug()<<ai.startTime().toString()<<ai.endTime().toString();
+            //kDebug(planDbg())<<ai.startTime().toString()<<ai.endTime().toString();
         }
     }
     return lst;
@@ -640,7 +642,7 @@ void Appointment::setIntervals(const AppointmentIntervalList &lst) {
 void Appointment::addInterval(const AppointmentInterval &a) {
     Q_ASSERT( a.isValid() );
     m_intervals.add(a);
-    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug()<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a.startTime()<<a.endTime();
+    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug(planDbg())<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a.startTime()<<a.endTime();
 }
 void Appointment::addInterval(const DateTime &start, const DateTime &end, double load) {
     Q_ASSERT( start < end );
@@ -663,7 +665,7 @@ double Appointment::maxLoad() const {
 
 DateTime Appointment::startTime() const {
     if ( isEmpty() ) {
-        //kDebug()<<"empty list";
+        //kDebug(planDbg())<<"empty list";
         return DateTime();
     }
     return m_intervals.map().values().first().startTime();
@@ -671,7 +673,7 @@ DateTime Appointment::startTime() const {
 
 DateTime Appointment::endTime() const {
     if ( isEmpty() ) {
-        //kDebug()<<"empty list";
+        //kDebug(planDbg())<<"empty list";
         return DateTime();
     }
     return m_intervals.map().values().last().endTime();
@@ -688,7 +690,7 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 }
 
 bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch) {
-    //kDebug()<<project.name();
+    //kDebug(planDbg())<<project.name();
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
         kError()<<"The referenced task does not exists: "<<element.attribute("task-id");
@@ -708,7 +710,7 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
         m_resource->takeAppointment(this);
         return false;
     }
-    //kDebug()<<"res="<<m_resource->resource()->name()<<" node="<<m_node->node()->name();
+    //kDebug(planDbg())<<"res="<<m_resource->resource()->name()<<" node="<<m_node->node()->name();
     m_intervals.loadXML( element, status );
     if (isEmpty()) {
         kError()<<"Appointment is empty (added anyway): "<<node->name()<<res->name();
@@ -729,13 +731,13 @@ void Appointment::saveXML(QDomElement &element) const {
         kError()<<"Incomplete appointment data: No node";
         return; // shouldn't happen
     }
-    //kDebug();
+    //kDebug(planDbg());
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
     me.setAttribute("resource-id", m_resource->resource()->id());
     me.setAttribute("task-id", m_node->node()->id());
-    //kDebug()<<m_resource->resource()->name()<<m_node->node()->name();
+    //kDebug(planDbg())<<m_resource->resource()->name()<<m_node->node()->name();
     m_intervals.saveXML( me );
 }
 
@@ -787,7 +789,7 @@ Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationTy
             d += i.effort(e, true); // upto e, not including
         }
     }
-    //kDebug()<<date<<d.toString();
+    //kDebug(planDbg())<<date<<d.toString();
     return d;
 }
 
@@ -800,17 +802,17 @@ Duration Appointment::plannedEffortTo( const Resource *resource, const QDate& da
 }
 
 EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, EffortCostCalculationType type) const {
-    //kDebug()<<m_node->id()<<","<<m_resource->id();
+    //kDebug(planDbg())<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
     QDate start = pstart.isValid() ? pstart : startTime().date();
     QDate end = pend.isValid() ? pend : endTime().date();
     double rate = m_resource && m_resource->resource() ? m_resource->normalRatePrHour() : 0.0;
     Resource::Type rt = m_resource && m_resource->resource() ? m_resource->resource()->type() : Resource::Type_Work;
     Duration zero;
-    //kDebug()<<rate<<m_intervals.count();
+    //kDebug(planDbg())<<rate<<m_intervals.count();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start );
     for ( ; it != m_intervals.map().constEnd() && it.key() <= end; ++it ) {
-        //kDebug()<<start<<end<<dt;
+        //kDebug(planDbg())<<start<<end<<dt;
         Duration eff;
         switch ( type ) {
             case ECCT_All:
@@ -883,7 +885,7 @@ double Appointment::plannedCostTo(const QDate &date, EffortCostCalculationType t
 }
 
 bool Appointment::attach() {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     if (m_resource && m_node) {
         m_resource->attatch(this);
         m_node->attatch(this);
@@ -895,7 +897,7 @@ bool Appointment::attach() {
 }
 
 void Appointment::detach() {
-    //kDebug()<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
+    //kDebug(planDbg())<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
     if (m_resource) {
         m_resource->takeAppointment(this, m_calculationMode); // takes from node also
     }
@@ -960,7 +962,7 @@ void Appointment::copy(const Appointment &app) {
 }
 
 void Appointment::merge(const Appointment &app) {
-    //kDebug()<<this<<(m_node ? m_node->node()->name() : "no node")<<(app.node() ? app.node()->node()->name() : "no node");
+    //kDebug(planDbg())<<this<<(m_node ? m_node->node()->name() : "no node")<<(app.node() ? app.node()->node()->name() : "no node");
     if ( app.isEmpty() ) {
         return;
     }
@@ -972,7 +974,7 @@ void Appointment::merge(const Appointment &app) {
     QList<AppointmentInterval> lst1 = m_intervals.map().values();
     AppointmentInterval i1;
     QList<AppointmentInterval> lst2 = app.intervals().map().values();
-    //kDebug()<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
+    //kDebug(planDbg())<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
     AppointmentInterval i2;
     int index1 = 0, index2 = 0;
     DateTime from;
@@ -982,7 +984,7 @@ void Appointment::merge(const Appointment &app) {
             if (!from.isValid() || from < i2.startTime())
                 from = i2.startTime();
             result.append(AppointmentInterval(from, i2.endTime(), i2.load()));
-            //kDebug()<<"Interval+ (i2):"<<from<<" -"<<i2.endTime();
+            //kDebug(planDbg())<<"Interval+ (i2):"<<from<<" -"<<i2.endTime();
             from = i2.endTime();
             ++index2;
             continue;
@@ -992,7 +994,7 @@ void Appointment::merge(const Appointment &app) {
             if (!from.isValid() || from < i1.startTime())
                 from = i1.startTime();
             result.append(AppointmentInterval(from, i1.endTime(), i1.load()));
-            //kDebug()<<"Interval+ (i1):"<<from<<" -"<<i1.endTime();
+            //kDebug(planDbg())<<"Interval+ (i1):"<<from<<" -"<<i1.endTime();
             from = i1.endTime();
             ++index1;
             continue;
@@ -1005,7 +1007,7 @@ void Appointment::merge(const Appointment &app) {
         }
         result.append(AppointmentInterval(i)); 
         from = i.endTime();
-        //kDebug()<<"Interval+ (i):"<<i.startTime()<<" -"<<i.endTime()<<" load="<<i.load();
+        //kDebug(planDbg())<<"Interval+ (i):"<<i.startTime()<<" -"<<i.endTime()<<" load="<<i.load();
         if (i.endTime() >= i1.endTime()) {
             ++index1;
         }
@@ -1017,7 +1019,7 @@ void Appointment::merge(const Appointment &app) {
     foreach ( const AppointmentInterval &i, result ) {
         m_intervals.add( i );
     }
-    //kDebug()<<this<<":"<<m_intervals.count();
+    //kDebug(planDbg())<<this<<":"<<m_intervals.count();
     return;
 }
 
@@ -1034,30 +1036,30 @@ Appointment Appointment::extractIntervals( const DateTimeInterval& interval ) co
 void Appointment::printDebug(const QString& _indent)
 {
     QString indent = _indent;
-    //kDebug()<<indent<<"  + Appointment:"<<this;
+    //kDebug(planDbg())<<indent<<"  + Appointment:"<<this;
     bool err = false;
     if (m_node == 0) {
-        //kDebug()<<indent<<"   No node schedule";
+        //kDebug(planDbg())<<indent<<"   No node schedule";
         err = true;
     } else if (m_node->node() == 0) {
-        //kDebug()<<indent<<"   No node";
+        //kDebug(planDbg())<<indent<<"   No node";
         err = true;
     }
     if (m_resource == 0) {
-        //kDebug()<<indent<<"   No resource schedule";
+        //kDebug(planDbg())<<indent<<"   No resource schedule";
         err = true;
     } else if (m_resource->resource() == 0) {
-        //kDebug()<<indent<<"   No resource";
+        //kDebug(planDbg())<<indent<<"   No resource";
         err = true;
     }
     if (!err) {
-        kDebug()<<indent<<"  + Appointment to schedule:"<<m_node->name()<<" ("<<m_node->type()<<"):"<<" task="<<m_node->node()->name()<<", resource="<<m_resource->resource()->name();
+        kDebug(planDbg())<<indent<<"  + Appointment to schedule:"<<m_node->name()<<" ("<<m_node->type()<<"):"<<" task="<<m_node->node()->name()<<", resource="<<m_resource->resource()->name();
     } else {
-        kDebug()<<indent<<"  +"<<m_intervals.map().count()<<" appointment intervals:";
+        kDebug(planDbg())<<indent<<"  +"<<m_intervals.map().count()<<" appointment intervals:";
     }
     indent += "  + ";
     foreach (const AppointmentInterval &i, m_intervals.map() ) {
-        kDebug()<<indent<<"----"<<i.startTime().toString()<<" -"<<i.endTime().toString()<<" load="<<i.load();
+        kDebug(planDbg())<<indent<<"----"<<i.startTime().toString()<<" -"<<i.endTime().toString()<<" load="<<i.load();
     }
 }
 #endif

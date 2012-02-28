@@ -53,6 +53,8 @@
 
 #define PROGRESS_MAX_VALUE 100
 
+extern int planDbg();
+
 
 PlanTJScheduler::PlanTJScheduler( Project *project, ScheduleManager *sm, QObject *parent )
     : SchedulerThread( project, sm, parent ),
@@ -426,7 +428,7 @@ Duration PlanTJScheduler::calcPositiveFloat( Task *task )
 void PlanTJScheduler::calcPertValues( Task *t )
 {
     // NOTE: no need for milliseconds as TJ works with seconds
-    kDebug()<<t->name()<<t->startTime()<<t->endTime();
+    kDebug(planDbg())<<t->name()<<t->startTime()<<t->endTime();
     qint64 startfloat = 0, freefloat = 0, negativefloat = 0;
     foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
         qint64 f = (qint64)(r->parent()->endTime().secsTo( t->startTime() ) - r->lag().seconds());
@@ -466,7 +468,7 @@ bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
     if ( m_resourcemap.values().contains( r ) ) {
-        kDebug()<<r->name()<<"already exist";
+        kDebug(planDbg())<<r->name()<<"already exist";
         return m_resourcemap.key( r );
     }
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
@@ -547,7 +549,7 @@ TJ::Task *PlanTJScheduler::addTask( KPlato::Task *task )
 
 void PlanTJScheduler::addTasks()
 {
-    kDebug();
+    kDebug(planDbg());
     QList<Node*> list = m_project->allNodes();
     for (int i = 0; i < list.count(); ++i) {
         Node *n = list.at(i);
@@ -681,7 +683,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
 
 void PlanTJScheduler::addRequests()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<TJ::Task*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -690,7 +692,7 @@ void PlanTJScheduler::addRequests()
 
 void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
 {
-    kDebug();
+    kDebug(planDbg());
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         job->setMilestone( true );
         job->setDuration( 0, 0.0 );

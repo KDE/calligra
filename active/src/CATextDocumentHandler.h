@@ -31,6 +31,7 @@ class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
     Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+    Q_PROPERTY (int totalPages READ totalPages)
 
 public:
     explicit CATextDocumentHandler (CADocumentController* documentController);
@@ -46,6 +47,9 @@ public:
 
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
+    virtual QString leftToolbarSource() const;
+
+    int totalPages() const;
 
 public slots:
     void updateCanvas();
@@ -54,6 +58,7 @@ public slots:
     void findNext();
     void findPrevious();
     void copy();
+    void gotoPage(int pageNumber);
 
 signals:
     void searchStringChanged();

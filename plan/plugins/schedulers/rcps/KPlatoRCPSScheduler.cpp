@@ -53,6 +53,8 @@
 #define GROUP_TARGETTIME    1
 #define GROUP_CONSTRAINT    2
 
+extern int planDbg();
+
 class ProgressInfo
 {
 public:
@@ -223,7 +225,7 @@ void *KPlatoRCPSScheduler::fitness_callback_init( void *arg )
     Q_ASSERT( info );
     fitness_info *finfo = new fitness_info;
     finfo->self = info->self;
-//     kDebug()<<info->self;
+//     kDebug(planDbg())<<info->self;
     return finfo;
 }
 
@@ -241,7 +243,7 @@ int KPlatoRCPSScheduler::fitness( struct rcps_fitness *fit, KPlatoRCPSScheduler:
     std::cout << "Sequence: ";
     foreach ( Task *t, info->jobs ) { std::cout << (t ? t->name().toLocal8Bit().data() : "End") << ", "; }
     std::cout << "\n";
-    kDebug()<<info->map;*/
+    kDebug(planDbg())<<info->map;*/
     QMultiMap<int, QPair<int, Task*> >::const_iterator it = info->map.constFind( GROUP_CONSTRAINT );
     if ( it != info->map.constEnd() ) {
         // constraint
@@ -382,8 +384,8 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
     if ( finfo ) {
         finfo->map.insert( f.group, QPair<int, Task*>( f.weight, info->task ) );
         finfo->jobs << info->task;
-//         kDebug()<<s<<":"<<finfo->map;
-    }// else kDebug()<<s<<":"<<"No finfo!";
+//         kDebug(planDbg())<<s<<":"<<finfo->map;
+    }// else kDebug(planDbg())<<s<<":"<<"No finfo!";
 /*    std::cout << "Weight: " << s.toLocal8Bit().data() << ": group=" << f.group << " weight=" << f.weight << "\n";*/
     return 0;
 }
@@ -987,7 +989,7 @@ struct rcps_resource *KPlatoRCPSScheduler::addResource( KPlato::Resource *r)
 
 void KPlatoRCPSScheduler::addResources()
 {
-    kDebug();
+    kDebug(planDbg());
     QList<Resource*> list = m_project->resourceList();
     for (int i = 0; i < list.count(); ++i) {
         addResource( list.at(i) );
@@ -1015,7 +1017,7 @@ struct rcps_job *KPlatoRCPSScheduler::addTask( KPlato::Task *task )
 
 void KPlatoRCPSScheduler::addTasks()
 {
-    kDebug();
+    kDebug(planDbg());
     // Add a start job
     m_jobstart = rcps_job_new();
     rcps_job_setname( m_jobstart, "RCPS start job" );
@@ -1056,7 +1058,7 @@ void KPlatoRCPSScheduler::addTasks()
     m_weight_info_list[ m_jobend ] = info;
 
     for( int i = 0; i < rcps_job_count( m_problem ); ++i ) {
-        kDebug()<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
+        kDebug(planDbg())<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
     }
 }
 
@@ -1185,7 +1187,7 @@ void KPlatoRCPSScheduler::addDependenciesBackward( struct rcps_job *job, KPlato:
 
 void KPlatoRCPSScheduler::addDependencies()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<struct rcps_job*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         if ( m_backward ) {
@@ -1198,7 +1200,7 @@ void KPlatoRCPSScheduler::addDependencies()
 
 void KPlatoRCPSScheduler::addRequests()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<struct rcps_job*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -1207,7 +1209,7 @@ void KPlatoRCPSScheduler::addRequests()
 
 void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
 {
-    kDebug();
+    kDebug(planDbg());
     struct rcps_mode *mode = rcps_mode_new();
     rcps_mode_add( job, mode );
     // add a weight callback argument

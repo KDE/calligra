@@ -76,7 +76,7 @@ void AccountsTester::init()
     gr->addResourceRequest( rr );
     t->estimate()->setType( Estimate::Type_Effort );
     
-    //kDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
+    //qDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
     project->setConstraintStartTime( DateTime( today, QTime() ) );
     project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     sm->createSchedules();
@@ -111,12 +111,12 @@ void AccountsTester::defaultAccount() {
     project->accounts().setDefaultAccount( a );
     
     EffortCostMap ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 800.0 );
 
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
@@ -207,25 +207,25 @@ void AccountsTester::startupDefault() {
     project->accounts().setDefaultAccount( a );
     
     EffortCostMap ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 800.0 );
 
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     t->setStartupCost( 25.0 );
 
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 825.0 );
 
     qDebug()<< t->completion().entryModeToString();
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QVERIFY( ! t->completion().isStarted() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
@@ -262,25 +262,25 @@ void AccountsTester::startupAccount() {
     
     // planned wo startup cost
     EffortCostMap ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     // planned with startup cost, no running cost
     t->setStartupCost( 25.0 );
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 25.0 );
 
     // actual, task not started
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QVERIFY( ! t->completion().isStarted() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
@@ -317,25 +317,25 @@ void AccountsTester::startupAccount() {
     t->setStartupCost( 0.0 );
 
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 800.0 );
 
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     // planned with startup cost
     t->setStartupCost( 25.0 );
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 825.0 );
 
     // actual, task not started
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QVERIFY( ! t->completion().isStarted() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
@@ -369,25 +369,25 @@ void AccountsTester::shutdownAccount() {
 
     // planned wo shutdown cost
     EffortCostMap ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     // planned with shutdown cost, no running account
     t->setShutdownCost( 25.0 );
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 25.0 );
 
     // actual, task not finished
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QVERIFY( ! t->completion().isFinished() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
@@ -436,13 +436,13 @@ void AccountsTester::shutdownAccount() {
     // planned with startup cost
     t->setShutdownCost( 25.0 );
     ec = project->accounts().plannedCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 825.0 );
 
     // actual, task not finished
     ec = project->accounts().actualCost( *a, t->startTime().date(), t->endTime().date() );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QVERIFY( ! t->completion().isFinished() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
@@ -481,12 +481,12 @@ void AccountsTester::subaccounts()
     QCOMPARE( ec.totalCost(), 800.0 );
 
     ec = project->accounts().actualCost( *a2 );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 
     ec = project->accounts().actualCost( *a1 );
-    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    qDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 0.0 );
 

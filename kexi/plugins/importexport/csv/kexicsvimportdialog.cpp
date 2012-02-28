@@ -96,6 +96,7 @@
 #define MAX_BYTES_TO_PREVIEW 10240 //max 10KB is reasonable
 #define MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER 4096
 #define MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW 1930
+#define PROGRESS_STEP_MS (1000/5) // 5 updates per second
 
 class KexiCSVImportDialogTable : public Q3Table
 {
@@ -710,21 +711,20 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     }
     const QChar delimiter(m_delimiterWidget->delimiter()[0]);
     m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
-    int progressStep = 0;
     if (m_importingProgressDlg) {
-        progressStep = qMax(
-            1,
-            (m_importingProgressDlg->progressBar()->maximum() - m_importingProgressDlg->progressBar()->minimum() + 1) / 200
-        );
+        m_elapsedTimer.start();
+        m_elapsedMs = m_elapsedTimer.elapsed();
     }
     int offset = 0;
     for (;!m_inputStream->atEnd(); offset++) {
 //disabled: this breaks wide spreadsheets
 // if (column >= m_maximumRowsForPreview)
 //  return true;
-
-        if (m_importingProgressDlg && ((offset % progressStep) < 5)) {
+        if (m_importingProgressDlg && (offset % 0x100) == 0
+            && (m_elapsedMs + PROGRESS_STEP_MS) < m_elapsedTimer.elapsed())
+        {
             //update progr. bar dlg on final exporting
+            m_elapsedMs = m_elapsedTimer.elapsed();
             m_importingProgressDlg->progressBar()->setValue(offset);
             qApp->processEvents();
             if (m_importingProgressDlg->wasCancelled()) {
