@@ -1852,7 +1852,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 id.loadOdf(ts);
 
                 if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
-                        || (id.isValid() && rdfIdList.contains(id.toString()))) {
+                        || (id.isValid() && d->rdfIdList.contains(id.toString()))) {
                     KoTextInlineRdf* inlineRdf =
                             new KoTextInlineRdf((QTextDocument*)document, startmark);
                     if (inlineRdf->loadOdf(ts)) {
