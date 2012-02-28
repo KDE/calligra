@@ -26,6 +26,7 @@
 #include <Koralle0/FourCharCode>
 // Qt
 #include <QtGui/QColor>
+#include <QtCore/QTextCodec>
 #include <QtCore/QFile>
 #include <QtCore/QByteArray>
 #include <QtCore/QSizeF>
@@ -104,12 +105,14 @@ color( const Cdr4Color& cdrColor, quint32 colorModel )
 
 CdrParser::CdrParser()
 {
-
+    QTextCodec* codec = QTextCodec::codecForName("Windows-1250");
+    mTextDecoder = codec->makeDecoder();
 }
 
 
 CdrParser::~CdrParser()
 {
+    delete mTextDecoder;
 }
 
 // TODO: make this a static method, and have parsing done by CdrParser constructor,
@@ -291,7 +294,8 @@ qDebug() << "Reading fonts...";
             const QByteArray fontChunk = mRiffStreamReader.chunkData();
             const Cdr4FontChunkData& fontData = dataRef<Cdr4FontChunkData>( fontChunk );
 
-            font->setName( QLatin1String(fontData.fontName()) );
+            const int fontNameLength = fontChunk.count() - 2; // TODO: have this method created from format
+            font->setName( mTextDecoder->toUnicode(fontData.fontName(), fontNameLength) );
 
 qDebug() << fontData.fontIndex() << font->name();
             mDocument->insertFont( fontData.fontIndex(), font );
@@ -437,9 +441,12 @@ qDebug() << "Reading Fills...";
             case Cdr4Fill11Id:
             {
                 const Cdr4Fill11Data& unknown11FillData = fillData.fill11Data();
-
-                fillDataString = QLatin1String(unknown11FillData.originalName())+QLatin1Char('|')+
-                    QLatin1String(unknown11FillData.localizedName());
+                const int originalNameLength = qstrlen( unknown11FillData.originalName() );
+                const int localizedNameLength = qstrlen( unknown11FillData.localizedName() );
+                fillDataString =
+                    mTextDecoder->toUnicode(unknown11FillData.originalName(),originalNameLength) +
+                    QLatin1Char('|') +
+                    mTextDecoder->toUnicode(unknown11FillData.localizedName(),localizedNameLength);
                 break;
             }
             }
@@ -584,7 +591,9 @@ qDebug() << "Reading Styles...";
             }
             case Cdr4StyleArgumentTitleId :
             {
-                const QString title = QLatin1String( styleArgs.argRef<Cdr4StyleArgumentTitleData>(i).title() );
+                const Cdr4StyleArgumentTitleData& titleData = styleArgs.argRef<Cdr4StyleArgumentTitleData>( i );
+                const int titleLength = qstrlen( titleData.title() );
+                const QString title = mTextDecoder->toUnicode( titleData.title(), titleLength );
                 style->setTitle( title );
 
                 argTypeAsString = QLatin1String("title");
@@ -788,9 +797,9 @@ qDebug() << "Reading Parl...";
             const int count = bnchChunk.count() / sizeof(Cdr4BlockTextChar);
             for( int i = 0; i<count; ++i )
             {
-                const unsigned char textChar = bnchData.textChar(i).character();
-                if( (textChar >= ' ') || (textChar==0x09)  )
-                    text.append( QChar(textChar) );
+                const char textChar = bnchData.textChar(i).character();
+                if( (textChar<0) || (' '<=textChar) || (textChar==0x09)  )
+                    text.append( mTextDecoder->toUnicode(&textChar,1) );
                 else
                     qDebug() << "CONTROL CHAR found:" << textChar;
             }
@@ -805,7 +814,7 @@ qDebug() << "Reading Parl...";
             const Cdr4BlockTextSpecialCharChunkData& bschData =
                 dataRef<Cdr4BlockTextSpecialCharChunkData>( bschChunk );
 
-            const unsigned char textChar = bschData.character().character();
+            const char textChar = bschData.character().character();
 
             // is linebreak?
             if( textChar == 0x0D )
@@ -818,7 +827,7 @@ qDebug() << "Reading Parl...";
             else
             {
                 CdrStyledTextSpan* textSpan = new CdrStyledTextSpan;
-                textSpan->setText( QChar(textChar) );
+                textSpan->setText( mTextDecoder->toUnicode(&textChar,1) );
                 textSpan->setFontId( bschData.font().index() );
                 textSpan->setFontSize( bschData.font().size() );
                 const CdrFontWeight fontWeight =
@@ -827,7 +836,8 @@ qDebug() << "Reading Parl...";
                 currentParagraphLine->addTextSpan( textSpan );
             }
 
-            qDebug() << "...bsch:"<<((textChar >= ' ')?QString(QChar(textChar)):QString::number(textChar,16))
+            qDebug() << "...bsch:"
+                     << ((textChar >= ' ') ? mTextDecoder->toUnicode(&textChar,1):QString::number(textChar,16))
                      << "font index:" << bschData.font().index()
                      << "font size:" << bschData.font().size()
                      << "font style:" << bschData.font().style()
@@ -1281,9 +1291,14 @@ switch(argType)
         argTypeAsString = QLatin1String("style index");
         break;
     case Cdr4ObjectArgumentTitleId :
-        argAsString = QLatin1String( arguments.argRef<Cdr4ObjectArgumentTitleData>(i).title() );
+    {
+        const Cdr4ObjectArgumentTitleData& titleData = arguments.argRef<Cdr4ObjectArgumentTitleData>( i );
+
+        const int titleLength = qstrlen( titleData.title() );
+        argAsString = mTextDecoder->toUnicode( titleData.title(), titleLength );
         argTypeAsString = QLatin1String("title");
         break;
+    }
     case Cdr4ObjectArgument1010Id :
         argAsString = QString::number( arguments.arg<Cdr4ObjectArgument1010Data>(i)._unknown0(), 16 );
         argTypeAsString = QLatin1String("some 16-bit");
@@ -1485,7 +1500,8 @@ CdrParser::readGraphicTextObject( const Cdr4ArgumentWithTypeListData& argsData )
             for (unsigned int j=0; j<textData.length(); j++)
             {
                 const Cdr4CharData* charData = reinterpret_cast<const Cdr4CharData*>(rawCharData);
-                text.append( QLatin1Char(charData->character()) );
+                const char character = charData->character();
+                text.append( mTextDecoder->toUnicode(&character,1) );
                 switch( charData->type() )
                 {
                 default:

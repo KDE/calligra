@@ -40,6 +40,7 @@ class CdrGraphicTextObject;
 class CdrBlockTextObject;
 class CdrAbstractObject;
 
+class QTextDecoder;
 class QPointF;
 class QFile;
 template<typename T> class QVector;
@@ -100,6 +101,7 @@ private:
 
     int mCdrVersion;
 
+    QTextDecoder* mTextDecoder;
     Koralle::RiffStreamReader mRiffStreamReader;
 };
 
