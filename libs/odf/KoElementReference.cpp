@@ -71,7 +71,7 @@ bool KoElementReference::isValid() const
 
 void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) const
 {
-    if (d->xmlid.isNull()) return;
+    if (d->xmlid.isEmpty()) return;
 
     writer->addAttribute("xml:id", d->xmlid);
 
@@ -91,7 +91,7 @@ QString KoElementReference::toString() const
 
 KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
-    QString xmlid = QString();
+    QString xmlid = QString::null;
 
     if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
         xmlid = element.attributeNS(KoXmlNS::xml, "id");
@@ -110,5 +110,5 @@ KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 
 void KoElementReference::invalidate()
 {
-    d->xmlid == QString();
+    d->xmlid == QString::null;
 }
