@@ -1383,9 +1383,9 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
 
     if (attributes & OdfId) {
         KoElementReference ref;
-        QString id = ref.loadOdf(element).toString();
-        if (!id.isNull()) {
-            context.addShapeId(this, id);
+        ref.loadOdf(element);
+        if (ref.isValid()) {
+            context.addShapeId(this, ref.toString());
         }
     }
 
