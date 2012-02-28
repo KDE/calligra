@@ -26,6 +26,7 @@
 KoElementReference::KoElementReference()
     : d(new KoElementReferenceData())
 {
+    d->xmlid = "id-" + d->xmlid;
 }
 
 KoElementReference::KoElementReference(const QString &prefix)
