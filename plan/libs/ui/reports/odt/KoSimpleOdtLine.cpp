@@ -123,11 +123,4 @@ void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
     }
 
     bodyWriter->endElement(); // draw:frame
-<<<<<<< HEAD
-
-    kDebug();
-=======
-    
-    kDebug(planDbg());
->>>>>>> master
 }
