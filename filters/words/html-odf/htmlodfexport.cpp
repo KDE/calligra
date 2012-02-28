@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QString>
 #include <QBuffer>
-//Added by qt3to4:
 #include <QByteArray>
 #include <QFileInfo>
 #include <QDir>
@@ -77,6 +76,9 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
+//    QFile::copy(inputFile, inputFile + ".odt");
+//    qDebug() << "inputFile" << inputFile << "outputFile" << outputFile;
+
     /* TODO Reimplement export dialog when future functionality could benefit from user input.
      * The options of encoding and stylesheets have no effect on the export process at present.
      * The dialog was been disabled in the interest of reducing user confusion, avoiding
@@ -101,7 +103,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         return KoFilter::FileNotFound;
     }
 
-    QFileInfo base(outputFile);
     QString filenameWithoutExtension = outputFile.left(outputFile.lastIndexOf('.'));
 
     KoFilter::ConversionStatus error;
@@ -111,11 +112,15 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         return error;
     }
 
-    QString directory=base.absolutePath();
     QDir dir(outputFile);
     dir.mkdir(filenameWithoutExtension);
 
-    QString stylesheet=filenameWithoutExtension+"/style.css";
+    error = extractImages(inputFile, filenameWithoutExtension+"/");
+    if (error != KoFilter::OK) {
+        return error;
+    }
+
+    QString stylesheet = filenameWithoutExtension+"/style.css";
     QFile css(stylesheet);
     if (!css.open(QIODevice::WriteOnly)) {
         kError(30501) << "Unable to open stylesheet!";
@@ -123,36 +128,10 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         return KoFilter::FileNotFound;
     }
 
-    error = extractImages(inputFile, filenameWithoutExtension+"/");
-    if (error != KoFilter::OK) {
-        return error;
-    }
-
     out.close();
     css.close();
 
-
-    struct Finalizer {
-    public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0)
-        {
-        }
-        ~Finalizer()
-        {
-            delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
-        }
-
-        KoStore *m_store;
-        KoGenStyles *m_genStyles;
-        Document *m_document;
-        KoXmlWriter *m_contentWriter;
-        KoXmlWriter *m_bodyWriter;
-    };
-
-
-    kDebug(30503) << "######################## HTMLOdfExport::convert done ####################";
-
-    return KoFilter::OK;
+   return KoFilter::OK;
 }
 
 
