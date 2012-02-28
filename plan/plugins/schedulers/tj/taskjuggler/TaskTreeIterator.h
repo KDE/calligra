@@ -18,7 +18,7 @@
 class TaskTreeIterator : public virtual CoreAttributesTreeIterator
 {
 public:
-    TaskTreeIterator(Task* r, IterationMode m = leavesOnly)
+    explicit TaskTreeIterator(Task* r, IterationMode m = leavesOnly)
         : CoreAttributesTreeIterator(r, m) { }
     virtual ~TaskTreeIterator() { }
 

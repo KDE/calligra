@@ -31,5 +31,7 @@ QString MSOOXML::convertFormulaReference(Cell* referencedCell, Cell* thisCell)
 {
     if (!referencedCell->formula)
         return QString();
-    return Calligra::Tables::Util::adjustFormulaReference(*referencedCell->formula, referencedCell->row, referencedCell->column, thisCell->row, thisCell->column);
+    Q_ASSERT(!referencedCell->formula->isShared());
+    QString formula = static_cast<FormulaImpl*>(referencedCell->formula)->m_formula;
+    return Calligra::Tables::Util::adjustFormulaReference(formula, referencedCell->row, referencedCell->column, thisCell->row, thisCell->column);
 }

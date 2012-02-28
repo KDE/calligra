@@ -1153,7 +1153,7 @@ Task::getSchedulingText() const
         }
         return text;
     }
-    return QString::null;
+    return QString();
 }
 
 QString

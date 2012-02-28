@@ -34,6 +34,7 @@ class KexiProjectSelectorWidget;
 class KCategorizedView;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
+class KexiWelcomeStatusBar;
 
 class KexiMainWelcomePage : public KexiAssistantPage
 {
@@ -55,6 +56,7 @@ private:
     KexiCategorizedView* m_recentProjects;
     KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
     KexiWelcomeAssistant* m_assistant;
+    KexiWelcomeStatusBar* m_statusBar;
 };
 
 class KexiProjectData;
@@ -89,6 +91,9 @@ signals:
      instance of Kexi. Receiver should set value pointed by @a opened to true if the
      database has been opened successfully. */
     void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
+    
+// protected:
+//     virtual void mousePressEvent(QMouseEvent* e);
 
 private:
     void createProject(

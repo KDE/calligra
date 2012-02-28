@@ -25,9 +25,12 @@
 #include "kptproject.h"
 #include "kptdatetime.h"
 
+#include "KoUpdater.h"
+
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
+#include <QPointer>
 
 namespace KPlato 
 {
@@ -108,7 +111,10 @@ public:
     // help to handle version < 0.6
     void setBaseCalendar( Calendar *cal ) { m_baseCalendar = cal; }
     Calendar *baseCalendar() const { return m_baseCalendar; }
-    
+
+    void setUpdater( KoUpdater *updater ) { m_updater = updater; }
+    void setProgress( int value ) { if ( m_updater ) m_updater->setProgress( value ); }
+
 protected:
     Project *m_project;
     int m_errors;
@@ -124,6 +130,8 @@ protected:
     KDateTime::Spec m_projectSpec;
     
     Calendar *m_baseCalendar; // help to handle version < 0.6
+
+    QPointer<KoUpdater> m_updater;
 };
 
 } //namespace KPlato

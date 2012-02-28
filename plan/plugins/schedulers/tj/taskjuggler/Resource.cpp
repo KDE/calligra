@@ -88,7 +88,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthStart = 0;
         bool weekStartsMonday = project->getWeekStartsMonday();
         for (time_t ts = p->getStart(); i < (long) sbSize; ts +=
-             p->getScheduleGranularity(), i++)
+             p->getScheduleGranularity(), ++i)
         {
             if (ts == midnight(ts))
                 dayStart = i;
@@ -112,7 +112,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthEnd = i;
         // WTF does p->getEnd not return the 1st sec after the time frame!!!
         for (time_t ts = p->getEnd() + 1; i >= 0;
-             ts -= p->getScheduleGranularity(), i--)
+             ts -= p->getScheduleGranularity(), --i)
         {
             DayEndIndex[i] = dayEnd;
             if (ts - midnight(ts) < (int) p->getScheduleGranularity())

@@ -17,19 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PNGEXPORTOPTIONSWIDGET_H
-#define PNGEXPORTOPTIONSWIDGET_H
+#ifndef IMAGEEXPORTOPTIONSWIDGET_H
+#define IMAGEEXPORTOPTIONSWIDGET_H
 
-#include "ui_PngExportOptionsWidget.h"
+#include "ui_ImageExportOptionsWidget.h"
 
 #include <QWidget>
 
-class PngExportOptionsWidget : public QWidget
+class ImageExportOptionsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PngExportOptionsWidget(QSizeF pointSize, QWidget *parent = 0);
+    explicit ImageExportOptionsWidget(QSizeF pointSize, QWidget *parent = 0);
 
     /// Sets the initial unit to use
     void setUnit(const KoUnit &unit);
@@ -46,6 +46,9 @@ public:
     /// Returns the chosen background color
     QColor backgroundColor() const;
 
+    /// Enables/disables setting the background opacity
+    void enableBackgroundOpacity(bool enable);
+
 private slots:
     void unitWidthChanged(qreal);
     void unitHeightChanged(qreal);
@@ -60,8 +63,8 @@ private:
 
     void blockChildSignals(bool block);
 
-    Ui_PngExportOptionsWidget widget;
+    Ui_ImageExportOptionsWidget widget;
     QSizeF m_pointSize;
 };
 
-#endif // PNGEXPORTOPTIONSWIDGET_H
+#endif // IMAGEEXPORTOPTIONSWIDGET_H

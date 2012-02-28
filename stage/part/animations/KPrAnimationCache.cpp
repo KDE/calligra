@@ -188,10 +188,10 @@ void KPrAnimationCache::startStep(int step)
 
 void KPrAnimationCache::endStep(int step)
 {
-    if (m_shapeValuesStack.size() > step) {
+    if (m_shapeValuesStack.size() > step+1) {
         m_currentShapeValues = m_shapeValuesStack[step+1];
     }
-    if (m_textBlockDataValuesStack.size() > step) {
+    if (m_textBlockDataValuesStack.size() > step+1) {
         m_currentTextBlockDataValues = m_textBlockDataValuesStack[step+1];
     }
 }

@@ -74,7 +74,7 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
         QList<QStandardItem *> items;
         QStandardItem *item = new QStandardItem( r->name() );
         item->setCheckable( true );
-        item->setCheckState( m_resource.teamMembers().contains( r ) ? Qt::Checked : Qt::Unchecked );
+        item->setCheckState( m_resource.teamMemberIds().contains( r->id() ) ? Qt::Checked : Qt::Unchecked );
         items << item;
         item = new QStandardItem( r->parentGroup()->name() );
         items << item;
@@ -134,20 +134,32 @@ void ResourceDialogImpl::slotTeamChanged( const QModelIndex &index ) {
     bool checked = (bool)(index.data( Qt::CheckStateRole ).toInt());
     int idCol = index.model()->columnCount() - 1;
     QString id = index.model()->index( index.row(), idCol ).data().toString();
-    Resource *r = m_project.findResource( id );
-    Q_ASSERT( r );
     if ( checked ) {
-        if ( ! m_resource.teamMembers().contains( r ) ) {
-            m_resource.addTeamMember( r );
+        if ( ! m_resource.teamMemberIds().contains( id ) ) {
+            m_resource.addTeamMemberId( id );
         }
     } else {
-        m_resource.removeTeamMember( r );
+        m_resource.removeTeamMemberId( id );
     }
     emit changed();
 }
 
 void ResourceDialogImpl::slotTypeChanged( int index ) {
-    ui_stackedWidget->setCurrentIndex( index == Resource::Type_Team ? 1 : 0 );
+    switch ( index ) {
+        case Resource::Type_Work:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( true );
+            slotUseRequiredChanged( useRequired->checkState() );
+            break;
+        case Resource::Type_Material:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( false );
+            slotUseRequiredChanged( false );
+            break;
+        case Resource::Type_Team:
+            ui_stackedWidget->setCurrentIndex( 1 );
+            break;
+    }
     emit changed();
 }
 
@@ -364,12 +376,12 @@ void ResourceDialog::slotOk() {
     m_resource.setAvailableFrom( dia->ui_rbfrom->isChecked() ? dia->availableFrom->dateTime() : QDateTime() );
     m_resource.setAvailableUntil( dia->ui_rbuntil->isChecked() ? dia->availableUntil->dateTime() : QDateTime() );
     ResourceItemSFModel *m = static_cast<ResourceItemSFModel*>( dia->required->model() );
-    QList<Resource*> lst;
+    QStringList lst;
     foreach ( const QModelIndex &i, dia->required->currentIndexes() ) {
         Resource *r = m->resource( i );
-        if ( r ) lst << r;
+        if ( r ) lst << r->id();
     }
-    m_resource.setRequiredResources( lst );
+    m_resource.setRequiredIds( lst );
     accept();
 }
 
@@ -434,9 +446,9 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyResourceCalendarCmd(original, resource.calendar(true)));
     }
-    if (resource.requiredResources() != original->requiredResources()) {
+    if (resource.requiredIds() != original->requiredIds()) {
         if (!m) m = new MacroCommand(n);
-        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredResources()));
+        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredIds()));
     }
     if (resource.account() != original->account()) {
         if (!m) m = new MacroCommand(n);
@@ -444,18 +456,16 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
     }
     if ( resource.type() == Resource::Type_Team ) {
         //kDebug()<<original->teamMembers()<<resource.teamMembers();
-        foreach ( Resource *r, resource.teamMembers() ) {
-            if ( ! original->teamMembers().contains( r ) ) {
+        foreach ( const QString &id, resource.teamMemberIds() ) {
+            if ( ! original->teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);
-                m->addCommand( new AddResourceTeamCmd( original, r ) );
-                //kDebug()<<original->name()<<"added member"<<r->name();
+                m->addCommand( new AddResourceTeamCmd( original, id ) );
             }
         }
-        foreach ( Resource *r, original->teamMembers() ) {
-            if ( ! resource.teamMembers().contains( r ) ) {
+        foreach ( const QString &id, original->teamMemberIds() ) {
+            if ( ! resource.teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);
-                m->addCommand( new RemoveResourceTeamCmd( original, r ) );
-                //kDebug()<<original->name()<<"removed member"<<r->name();
+                m->addCommand( new RemoveResourceTeamCmd( original, id ) );
             }
         }
     }

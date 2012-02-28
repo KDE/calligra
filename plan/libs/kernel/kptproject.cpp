@@ -874,6 +874,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     if ( !s.isEmpty() )
         m_constraintEndTime = DateTime::fromString( s, m_spec );
 
+    status.setProgress( 10 );
+
     // Load the project children
     // Do calendars first, they only refrence other calendars
     //kDebug()<<"Calendars--->";
@@ -939,6 +941,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         kError()<<"All calendars not saved!";
     }
     //kDebug()<<"Calendars<---";
+
+    status.setProgress( 15 );
+
     // Resource groups and resources, can reference calendars
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -958,10 +963,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, resourceList() ) {
-        r->resolveRequiredResources( *this );
-    }
+
+    status.setProgress( 20 );
+
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -996,6 +1000,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
+
+    status.setProgress( 70 );
+
     // These go last
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1080,7 +1087,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }
@@ -1105,6 +1112,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
     }
     //kDebug()<<"<---";
+
+    status.setProgress( 90 );
+
     return true;
 }
 
@@ -1177,24 +1187,17 @@ void Project::save( QDomElement &element ) const
         }
     }
     // save resource teams
-    QMap<QString, QString> rmap;
+    QDomElement el = me.ownerDocument().createElement( "resource-teams" );
+    me.appendChild( el );
     foreach ( Resource *r, resourceIdDict ) {
-        if ( r->type() == Resource::Type_Team ) {
-            foreach ( Resource *tm, r->teamMembers() ) {
-                rmap.insertMulti( r->id(), tm->id() );
-            }
+        if ( r->type() != Resource::Type_Team ) {
+            continue;
         }
-    }
-    if ( ! rmap.isEmpty() ) {
-        QDomElement el = me.ownerDocument().createElement( "resource-teams" );
-        me.appendChild( el );
-        QMap<QString, QString>::const_iterator i = rmap.constBegin();
-        while ( i != rmap.constEnd() ) {
+        foreach ( const QString &id, r->teamMemberIds() ) {
             QDomElement e = el.ownerDocument().createElement( "team" );
             el.appendChild( e );
-            e.setAttribute( "team-id", i.key() );
-            e.setAttribute( "member-id", i.value() );
-            ++i;
+            e.setAttribute( "team-id", r->id() );
+            e.setAttribute( "member-id", id );
         }
     }
 }

@@ -69,8 +69,11 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupAlterTablePage();
     setupImportingPage();
     setupFinishPage();
+    setValid(m_srcConnPageItem, false);
     
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+    //! @todo Change this to message prompt when we move to non-dialog wizard.
+    connect(m_srcConnSel, SIGNAL(connectionSelected(bool)), this, SLOT(slotConnPageItemSelected(bool)));
 }
 
 
@@ -336,6 +339,12 @@ void ImportTableWizard::arriveTableSelectPage()
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
+    } else {
+	kDebug() << "No driver for selected source";
+	QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+	QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+	KMessageBox::error(this, errMessage, errDescription);
+	setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
@@ -454,7 +463,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (sourceDriverName.isEmpty())
         result.setStatus(i18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
-
+  
     
     // Get a source (migration) driver
     KexiMigrate* sourceDriver = 0;
@@ -586,4 +595,9 @@ bool ImportTableWizard::doImport()
     project->addStoredItem(part->info(), partItemForSavedTable);
     
     return true;
+}
+
+void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
+{
+    setValid(m_srcConnPageItem, isSelected);
 }

@@ -194,12 +194,6 @@ endif(OPENGL_FOUND)
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
-## Test for create ressources
-##
-macro_optional_find_package(CreateResources)
-macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for Calligra for optional extra resources.")
-
-##
 ## Test for kdepimlibs
 ##
 macro_optional_find_package(KdepimLibs)
@@ -260,15 +254,8 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-        INCLUDE(CheckCXXSourceCompiles)
-        set(CMAKE_REQUIRED_INCLUDES_SWAP ${CMAKE_REQUIRED_INCLUDES})
-        set(CMAKE_REQUIRED_LIBRARIES_SWAP ${CMAKE_REQUIRED_LIBRARIES})
-        set(CMAKE_REQUIRED_INCLUDES ${QT_QTCORE_INCLUDES} ${QT_QTGUI_INCLUDES})
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${MARBLE_LIBRARIES})
-        CHECK_CXX_SOURCE_COMPILES ( "#include <${MARBLECONTROLBOX_H}>\nint main(){Marble::MarbleControlBox*p; p->setMarbleWidget(0); return 0;}" SETMARBLEWIDGET)
-        # subsequent tests will fail if this is not set back.
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SWAP})
-        set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SWAP})
+	file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+	string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
@@ -534,7 +521,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.10)
     set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
@@ -613,9 +600,15 @@ if(SHOULD_BUILD_ACTIVE)
 endif(SHOULD_BUILD_ACTIVE)
 
 
-if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+if(   NOT SHOULD_BUILD_TABLES OR NOT BUILD_tables
+   OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+   OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+  )
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+endif(   NOT SHOULD_BUILD_TABLES OR NOT BUILD_tables
+      OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+      OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+     )
 
 if(SHOULD_BUILD_KOABSTRACTION)
     # koabstraction depends on kotext & flake

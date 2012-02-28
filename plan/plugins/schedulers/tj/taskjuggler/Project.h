@@ -84,7 +84,7 @@ public:
      */
     QString getId() const
     {
-        return projectIDs.isEmpty() ? QString::null : projectIDs.first();
+        return projectIDs.isEmpty() ? QString() : projectIDs.first();
     }
     /**
      * Returns the current project ID. If the project ID list is empty
