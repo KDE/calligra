@@ -154,7 +154,7 @@ EpsExport::visitVDocument(KarbonDocument& document)
     rect.top()    << " " <<
     rect.right()  << " " <<
     rect.bottom() << "\n"
-    "%%Creator: Karbon14 EPS Exportfilter 0.5"
+    "%%Creator: Calligra Karbon EPS Exportfilter 0.5"
     << endl;
 
     // We do not need the selection anymore.
