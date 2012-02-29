@@ -2,6 +2,7 @@
 add_subdirectory( tests )
 
 include_directories(${KOODF_INCLUDES}
+                    ${KOMAIN_INCLUDES}
                    ${KUNDO2_INCLUDES})
 
 

@@ -29,6 +29,7 @@
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
 #include <commands/ChangeAnchorPropertiesCommand.h>
+#include <KoTextDocument.h>
 
 #include <kundo2command.h>
 
@@ -561,7 +562,22 @@ void KWAnchoringProperties::save(KUndo2Command *macro)
             anchorProperties.setHorizontalPos(KoTextAnchor::HorizontalPos(m_horizPos));
             anchorProperties.setVerticalPos(KoTextAnchor::VerticalPos(m_vertPos));
 
-            new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
+            KoTextShapeDataBase *textData = 0;
+            KoShape *oldParent = anchor->shape()->parent();
+            if (oldParent) {
+                textData = qobject_cast<KoTextShapeDataBase*>(oldParent->userData());
+            } else  if (container) {
+                textData = qobject_cast<KoTextShapeDataBase*>(container->userData());
+            }
+
+            ChangeAnchorPropertiesCommand *cmd = new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
+
+            if (textData) {
+                KoTextDocument doc(textData->document());
+                doc.textEditor()->addCommand(cmd); //will call redo too
+            } else {
+                cmd->redo();
+            }
         }
     }
 

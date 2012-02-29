@@ -25,6 +25,8 @@
 #include <KServiceTypeTrader>
 #include <KDebug>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -39,7 +41,7 @@ SchedulerPluginLoader::~SchedulerPluginLoader()
  
 void SchedulerPluginLoader::loadAllPlugins()
 {
-    kDebug() << "Load all plugins";
+    kDebug(planDbg()) << "Load all plugins";
     KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
  
     KService::List::const_iterator iter;
@@ -59,12 +61,12 @@ void SchedulerPluginLoader::loadAllPlugins()
         SchedulerPlugin *plugin = factory->create<SchedulerPlugin>(this);
  
         if (plugin) {
-            kDebug() << "Load plugin:" << service->name()<<", "<<service->comment();
+            kDebug(planDbg()) << "Load plugin:" << service->name()<<", "<<service->comment();
             plugin->setName( service->name() );
             plugin->setComment( service->comment() );
             emit pluginLoaded( service->library(), plugin);
         } else {
-           kDebug() << error;
+           kDebug(planDbg()) << error;
         }
     }
 }

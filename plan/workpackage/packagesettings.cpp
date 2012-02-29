@@ -35,7 +35,7 @@ PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<&p;
+    //kDebug(planworkDbg())<<&p;
 
     dia = new PackageSettingsPanel(p, this);
 
@@ -47,7 +47,7 @@ PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
 
 KUndo2Command *PackageSettingsDialog::buildCommand()
 {
-    //kDebug();
+    //kDebug(planworkDbg());
     return dia->buildCommand();
 }
 
@@ -67,7 +67,7 @@ PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
 
 KUndo2Command *PackageSettingsPanel::buildCommand()
 {
-    //kDebug();
+    //kDebug(planworkDbg());
     WorkPackageSettings s = settings();
     if ( s == m_package.settings() ) {
         return 0;

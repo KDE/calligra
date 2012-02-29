@@ -740,13 +740,6 @@ private:
 
     WorkPackage m_workPackage;
     QList<WorkPackage*> m_packageLog;
-
-#ifndef NDEBUG
-public:
-    void printDebug(bool children, const QByteArray& indent);
-    EffortCost n(long int arg1, QDate arg2);
-#endif
-
 };
 
 }  //KPlato namespace

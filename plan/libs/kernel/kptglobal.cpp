@@ -23,7 +23,7 @@
 #include <kdeversion.h>
 #include <KDebug>
 
-int planDebugArea() {
+KPLATOKERNEL_EXPORT int planDbg() {
 #if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan" );
 #else

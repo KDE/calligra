@@ -37,6 +37,7 @@
 #include <KConfigGroup>
 #include <KStandardDirs>
 
+extern int planDbg();
 
 namespace KPlato {
 
@@ -355,7 +356,7 @@ MacroCommand *LocaleConfigMoney::buildCommand()
     if ( m_locale->negativeMonetarySignPosition() != m_cmbMonNegMonSignPos->currentIndex() ) {
         m->addCommand( new ModifyNegativeMonetarySignPositionCmd( m_locale, m_cmbMonNegMonSignPos->currentIndex() ) );
     }
-    qDebug()<<"buildCommand:"<<m->isEmpty();
+    kDebug(planDbg())<<"buildCommand:"<<m->isEmpty();
     if ( m->isEmpty() ) {
         delete m;
         return 0;

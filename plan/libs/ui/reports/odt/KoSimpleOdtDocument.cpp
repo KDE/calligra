@@ -35,6 +35,8 @@
 #include <QLayout>
 #include <QVarLengthArray>
 
+extern int planDbg();
+
 KoSimpleOdtDocument::KoSimpleOdtDocument()
     : manifestWriter(0)
 {
@@ -65,7 +67,7 @@ QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
     KoStore *store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.text", KoStore::Zip);
     if (!store) {
-        kDebug() << "Couldn't open the requested file.";
+        kDebug(planDbg()) << "Couldn't open the requested file.";
         return QFile::OpenError;
     }
 
@@ -80,7 +82,7 @@ QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
             p->saveData(store, manifestWriter);
         }
     }
-    kDebug()<<"data saved";
+    kDebug(planDbg())<<"data saved";
     KoGenStyles coll;
     createStyles(coll); // create basic styles
     bool ok = createContent(&oasisStore, coll);
@@ -105,8 +107,8 @@ void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
     qreal rightMargin = m_pageOptions.getMarginRight() / KoDpi::dpiX();
     QString orientation = m_pageOptions.isPortrait() ? "portrait" : "landscape";
     
-    kDebug()<<"Page:"<<pw<<ph<<orientation;
-    kDebug()<<"Margin:"<<topMargin<<bottomMargin<<leftMargin<<rightMargin;
+    kDebug(planDbg())<<"Page:"<<pw<<ph<<orientation;
+    kDebug(planDbg())<<"Margin:"<<topMargin<<bottomMargin<<leftMargin<<rightMargin;
 
     KoGenStyle page(KoGenStyle::PageLayoutStyle, "page-layout");
     page.addProperty("style:num-format", "1");
@@ -146,7 +148,7 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     KoXmlWriter* contentWriter = store->contentWriter();
 
     if (!bodyWriter || !contentWriter || !manifestWriter) {
-        kDebug() << "Bad things happened";
+        kDebug(planDbg()) << "Bad things happened";
         return false;
     }
 

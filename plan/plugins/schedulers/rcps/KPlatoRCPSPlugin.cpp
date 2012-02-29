@@ -34,6 +34,8 @@
 #include <KMessageBox>
 #include <kptschedulerplugin.h>
 
+extern int planDbg();
+
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
 using namespace KPlato;
@@ -41,7 +43,7 @@ using namespace KPlato;
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    kDebug()<<rcps_version();
+    kDebug(planDbg())<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "planrcpsplugin" );
@@ -122,7 +124,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 
 void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
+//    kDebug(planDbg())<<"KPlatoRCPSPlugin::slotStarted:";
 }
 
 void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
@@ -130,7 +132,7 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     KPlatoRCPSScheduler *job = static_cast<KPlatoRCPSScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //kDebug(planDbg())<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {
