@@ -164,6 +164,9 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
             ref = KoElementReference(prefix);
             d->references.insert(referent, ref);
         }
+        else {
+            d->references.insert(referent, ref);
+        }
     }
 
     if (!prefix.isNull()) {
