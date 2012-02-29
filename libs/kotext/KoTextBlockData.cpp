@@ -215,6 +215,5 @@ KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 bool KoTextBlockData::saveXmlID() const
 {
     // as suggested by boemann, http://lists.kde.org/?l=calligra-devel&m=132396354701553&w=2
-    qDebug() << "KoTextBlockData::saveXmlID()" << (d->paintStrategy != 0);
     return d->paintStrategy != 0;
 }

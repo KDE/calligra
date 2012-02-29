@@ -102,7 +102,6 @@ void KoShapeLoadingContext::clearLayers()
 
 void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 {
-    qDebug() << "addShapeID" << shape << shape->name() << id;
     d->drawIds.insert(id, shape);
     QMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
     while (it != d->updaterById.end() && it.key() == id) {
@@ -113,13 +112,11 @@ void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 
 KoShape * KoShapeLoadingContext::shapeById(const QString &id)
 {
-    qDebug() << "shapeById" << id << d->drawIds.contains(id) << d->drawIds.value(id, 0);
     return d->drawIds.value(id, 0);
 }
 
 void KoShapeLoadingContext::addShapeSubItemId(KoShape *shape, const QVariant &subItem, const QString &id)
 {
-    qDebug() << "addShapeSubItemId" << shape << shape->name() << subItem << id;
     d->subIds.insert(id, QPair<KoShape *, QVariant>(shape, subItem));
 }
 
