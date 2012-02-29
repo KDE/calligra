@@ -24,7 +24,7 @@
  */
 
 #include "KWDocument.h"
-#include "KWFactory.h"
+#include "KWFactory.h"<
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWCanvasItem.h"
@@ -116,11 +116,11 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     if (documentRdfBase()) {
         documentRdfBase()->linkToResourceManager(resourceManager());
     }
-
+/* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
     resourceManager()->setResource(KoText::ChangeTracker, variant);
-
+*/
     m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {

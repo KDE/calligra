@@ -98,7 +98,7 @@ const KComponentData &KWFactory::componentData()
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
 #ifdef SHOULD_BUILD_RDF
-        dockRegistry->add(new KWRdfDockerFactory());
+// TODO reenable after release        dockRegistry->add(new KWRdfDockerFactory());
 #endif
 
     }
