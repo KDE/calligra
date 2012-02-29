@@ -842,7 +842,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
         cc.costproxy.setZeroColumns( czc );
         cc.costproxy.setRejectColumns( crc );
     }
-#if 1
+#if 0
     kDebug(planDbg())<<"Effort:"<<info.showEffort;
     if ( info.showEffort && cc.effortproxy.rowCount() > 0 ) {
         kDebug(planDbg())<<"Effort:"<<info.showEffort<<"columns ="<<cc.effortproxy.columnCount()
@@ -867,7 +867,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     foreach( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
         kDebug(planDbg())<<p<<"refrences:"<<p->referenceCoordinatePlane();
         foreach ( AbstractDiagram *d, p->diagrams() ) {
-            qDebug()<<p<<"diagram:"<<d;
+            kDebug(planDbg())<<p<<"diagram:"<<d;
         }
     }
 #endif

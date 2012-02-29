@@ -2547,60 +2547,6 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     return (end>time?end-time:time-end);
 }
 
-#ifndef NDEBUG
-
-void ResourceGroup::printDebug(const QString& _indent)
-{
-    QString indent = _indent;
-    qDebug()<<indent<<"  + Resource group:"<<m_name<<" id="<<m_id;
-    indent += "   !";
-    foreach (Resource *r, m_resources)
-        r->printDebug(indent);
-}
-void Resource::printDebug(const QString& _indent)
-{
-    QString indent = _indent;
-    qDebug()<<indent<<"  + Resource:"<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/;
-    indent += "      ";
-    foreach (ResourceRequest *r, m_requests) {
-        r->printDebug(indent);
-    }
-    foreach (Schedule *s, m_schedules) {
-        s->printDebug(indent);
-    }
-    qDebug()<<indent<<"  + External appointments:"<<m_externalAppointments.count();
-    foreach ( Appointment *a, m_externalAppointments ) {
-        qDebug()<<indent<<"  ! Appointment to:"<<a->auxcilliaryInfo();
-        a->printDebug(indent);
-    }
-    indent += "  !";
-}
-
-void ResourceGroupRequest::printDebug(const QString& _indent)
-{
-    QString indent = _indent;
-    qDebug()<<indent<<"  + Request to group:"<<(m_group ? m_group->name() :"None")<<" units="<<m_units<<"%";
-    indent += "  !";
-    
-    foreach (ResourceRequest *r, m_resourceRequests) {
-        r->printDebug(indent);
-    }
-}
-
-void ResourceRequest::printDebug(const QString& indent)
-{
-    qDebug()<<indent<<"  + Request to resource:"<<(m_resource ? m_resource->name() :"None")<<" units="<<m_units<<"%";
-}
-
-void ResourceRequestCollection::printDebug(const QString& indent)
-{
-    qDebug()<<indent<<"  + Resource requests:";
-    foreach (ResourceGroupRequest *r, m_requests) {
-        r->printDebug(indent+"  ");
-    }
-}
-
-#endif
 
 }  //KPlato namespace
 

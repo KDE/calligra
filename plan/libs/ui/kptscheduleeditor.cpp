@@ -107,7 +107,7 @@ ScheduleManager *ScheduleTreeView::currentManager() const
 QModelIndexList ScheduleTreeView::selectedRows() const
 {
     QModelIndexList lst = selectionModel()->selectedRows();
-    qDebug()<<lst;
+    kDebug(planDbg())<<lst;
     return lst;
 }
 

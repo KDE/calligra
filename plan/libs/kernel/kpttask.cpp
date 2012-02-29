@@ -3738,38 +3738,6 @@ bool WorkPackageSettings::operator!=( const WorkPackageSettings &s ) const
 }
 
 
-//----------------------------------
-#ifndef NDEBUG
-void Task::printDebug(bool children, const QByteArray& _indent) {
-    QByteArray indent = _indent;
-    qDebug()<<indent<<"+ Task node:"<<name()<<" type="<<typeToString()<<"("<<type()<<") id="<<id();
-    indent += "!  ";
-    m_requests.printDebug(indent);
-
-    completion().printDebug( indent );
-
-    Node::printDebug(children, indent);
-
-}
-
-void Completion::printDebug(const QByteArray& _indent) const {
-    QByteArray indent = _indent;
-    qDebug()<<indent<<"+ Completion: ("<<m_entries.count()<<" entries)";
-    indent += "!  ";
-    qDebug()<<indent<<"Started:"<<m_started<<""<<m_startTime.toString();
-    qDebug()<<indent<<"Finished:"<<m_finished<<""<<m_finishTime.toString();
-    indent += "  ";
-    foreach( const QDate &d, m_entries.keys() ) {
-        Entry *e = m_entries[ d ];
-        qDebug()<<indent<<"Date:"<<d;
-        qDebug()<<(indent+" !")<<"% Finished:"<<e->percentFinished;
-        qDebug()<<(indent+" !")<<"Remaining:"<<e->remainingEffort.toString();
-        qDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
-    }
-}
-#endif
-
-
 }  //KPlato namespace
 
 #ifndef QT_NO_DEBUG_STREAM

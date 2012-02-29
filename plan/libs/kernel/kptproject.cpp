@@ -2673,31 +2673,6 @@ void Project::emitLocaleChanged()
     emit localeChanged();
 }
 
-#ifndef NDEBUG
-void Project::printDebug( bool children, const QByteArray& _indent )
-{
-    QByteArray indent = _indent;
-    qDebug() << indent <<"+ Project node:" << Node::name()<<" id="<<id();
-    indent += '!';
-    QListIterator<ResourceGroup*> it( resourceGroups() );
-    while ( it.hasNext() )
-        it.next() ->printDebug( indent );
-
-    Node::printDebug( children, indent );
-}
-void Project::printCalendarDebug( const QByteArray& _indent )
-{
-    QByteArray indent = _indent;
-    qDebug() << indent <<"-------- Calendars debug printout --------";
-    foreach ( Calendar *c, calendarIdDict ) {
-        c->printDebug( indent + "--" );
-        qDebug();
-    }
-    if ( m_standardWorktime )
-        m_standardWorktime->printDebug();
-}
-#endif
-
 
 }  //KPlato namespace
 

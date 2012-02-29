@@ -1415,7 +1415,7 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 
 void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
 {
-    qDebug()<<"ResourceAppointmentsRowModel::setScheduleManager:"<<sm;
+    kDebug(planDbg())<<"ResourceAppointmentsRowModel::setScheduleManager:"<<sm;
     if ( sm == 0 || sm != m_manager || sm->expected() != m_schedule ) {
         m_manager = sm;
         m_schedule = sm ? sm->expected() : 0;
@@ -1506,7 +1506,7 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
 QModelIndex ResourceAppointmentsRowModel::parent( const QModelIndex &idx ) const
 {
     if ( !idx.isValid() || m_project == 0 ) {
-        kWarning()<<"No data "<<idx;
+        kWarning(planDbg())<<"No data "<<idx;
         return QModelIndex();
     }
 

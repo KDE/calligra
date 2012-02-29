@@ -22,6 +22,8 @@
 #include "reportdata.h"
 #include <kglobal.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -103,7 +105,7 @@ QVariant ProjectAccess::CPI() const
 
 QVariant ProjectAccess::SPI() const
 {
-    qDebug()<<"ProjectAccess::SPI:";
+    kDebug(planDbg())<<"ProjectAccess::SPI:";
     if ( m_reportdata && m_reportdata->project() ) {
         int id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->schedulePerformanceIndex( QDate::currentDate(), id );

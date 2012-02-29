@@ -750,7 +750,7 @@ QVariant Scripting::Project::calendarData(const KPlato::Calendar* calendar, cons
     if ( r < 0 ) {
         return QVariant(); // invalid role
     }
-    qDebug()<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, r );
+    kDebug(planScriptingDebugArea())<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, r );
     return m_calendarModel.data( idx, r );
 }
 
@@ -776,7 +776,7 @@ QVariant Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const 
 int Scripting::Project::calendarColumnNumber(const QString& property) const
 {
     int col = m_calendarModel.columnNumber( property );
-    qDebug()<<"calendarColumnNumber:"<<property<<"="<<col;
+    kDebug(planScriptingDebugArea())<<"calendarColumnNumber:"<<property<<"="<<col;
     return col;
 }
 

@@ -124,7 +124,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 
 void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
+//    kDebug(planDbg())<<"KPlatoRCPSPlugin::slotStarted:";
 }
 
 void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
@@ -132,7 +132,7 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     KPlatoRCPSScheduler *job = static_cast<KPlatoRCPSScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //kDebug(planDbg())<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {
