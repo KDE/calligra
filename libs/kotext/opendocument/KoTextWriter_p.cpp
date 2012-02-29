@@ -685,7 +685,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
         if (blockData->saveXmlID()) {
             xmlid = context.xmlid(blockData);
-            xmlid.saveOdf(writer, KoElementReference::TEXTID);
+            xmlid.saveOdf(writer, KoElementReference::TextId);
         }
     }
 

@@ -69,13 +69,13 @@ public:
 
     enum GenerationOption {
         UUID = 0,
-        COUNTER = 1
+        Counter = 1
     };
 
     enum SaveOption {
-        XMLID = 0x0,
-        DRAWID = 0x1,
-        TEXTID = 0x2
+        XmlId = 0x0,
+        DrawId = 0x1,
+        TextId = 0x2
     };
     Q_DECLARE_FLAGS(SaveOptions, SaveOption)
 
@@ -107,7 +107,7 @@ public:
      * @param writer the writer we save to
      * @param saveOptions determins which attributes we save. We always save the xml:id.
      */
-    void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XMLID) const;
+    void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XmlId) const;
 
     /**
      * @brief toString creates a QString from the element reference

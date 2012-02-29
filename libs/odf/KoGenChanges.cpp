@@ -75,16 +75,13 @@ QString KoGenChanges::insert(const KoGenChange& change)
 
 QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const KoGenChange &change)
 {
-
     QString changeName;
-    if (changeName.isEmpty()) {
-        switch (change.type()) {
-        case KoGenChange::InsertChange: changeName = 'I'; break;
-        case KoGenChange::FormatChange: changeName = 'F'; break;
-        case KoGenChange::DeleteChange: changeName = 'D'; break;
-        default:
-            changeName = 'C';
-        }
+    switch (change.type()) {
+    case KoGenChange::InsertChange: changeName = 'I'; break;
+    case KoGenChange::FormatChange: changeName = 'F'; break;
+    case KoGenChange::DeleteChange: changeName = 'D'; break;
+    default:
+        changeName = 'C';
     }
     KoElementReference ref(changeName);
     changeName = ref.toString();

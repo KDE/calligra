@@ -162,7 +162,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     shapeContext.xmlWriter().addAttribute("draw:name", "");
 
     KoElementReference elementRef;
-    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DRAWID);
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
 
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 

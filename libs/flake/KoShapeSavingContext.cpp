@@ -144,7 +144,7 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
 
 KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, KoElementReference::GenerationOption counter)
 {
-    Q_ASSERT(counter == KoElementReference::UUID || (counter == KoElementReference::COUNTER && !prefix.isEmpty()));
+    Q_ASSERT(counter == KoElementReference::UUID || (counter == KoElementReference::Counter && !prefix.isEmpty()));
 
     if (d->references.contains(referent)) {
         return d->references[referent];
@@ -152,7 +152,7 @@ KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QStri
 
     KoElementReference ref;
 
-    if (counter == KoElementReference::COUNTER) {
+    if (counter == KoElementReference::Counter) {
         int referenceCounter = d->referenceCounters[prefix];
         referenceCounter++;
         ref = KoElementReference(prefix, referenceCounter);

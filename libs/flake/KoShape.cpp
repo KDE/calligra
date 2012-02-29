@@ -1571,8 +1571,10 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         if (child.localName() != "glue-point")
             continue;
 
-        KoElementReference ref;
-        const QString id = ref.loadOdf(child).toString();
+        // NOTE: this uses draw:id, but apparently while ODF 1.2 has deprecated
+        // all use of draw:id for xml:id, it didn't specify that here, so it
+        // doesn't support xml:id (and so, maybe, shouldn't use KoElementReference.
+        const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
         const int index = id.toInt();
         if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
             kWarning(30006) << "glue-point with no or invalid id";
@@ -1749,8 +1751,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::COUNTER);
-            ref.saveOdf(&context.xmlWriter(), KoElementReference::DRAWID);
+            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::Counter);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DrawId);
         }
     }
 

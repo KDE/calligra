@@ -75,10 +75,10 @@ void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) co
 
     writer->addAttribute("xml:id", d->xmlid);
 
-    if (saveOptions & DRAWID) {
+    if (saveOptions & DrawId) {
         writer->addAttribute("draw:id", d->xmlid);
     }
-    if (saveOptions & TEXTID) {
+    if (saveOptions & TextId) {
         writer->addAttribute("text:id", d->xmlid);
     }
 }
