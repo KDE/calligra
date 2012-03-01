@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Fix bug 292931: Crash when scheduling task of type Duration.
+
 * Fix crash in reports due incorrect use of KoXml to QDom conversion
 
 * Fix bug 291056 - Dates are sorted alphabetically and not by date / time
