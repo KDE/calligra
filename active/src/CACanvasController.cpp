@@ -118,11 +118,15 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    int y = rect.center().y() - height()/2;
-    if (y<0) {
-        y = 0;
+    if (smooth) {
+        setCameraY(rect.center().y());
+    } else {
+        int y = rect.center().y() - height()/2;
+        if (y<0) {
+            y = 0;
+        }
+        setCameraY(y);
     }
-    setCameraY(y);
 }
 
 int CACanvasController::canvasOffsetY() const
