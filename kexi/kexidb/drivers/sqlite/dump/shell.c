@@ -35,6 +35,7 @@
 #include "sqlite3.h"
 #include <ctype.h>
 #include <stdarg.h>
+#include <fcntl.h>
 
 #if !defined(_WIN32) && !defined(WIN32) && !defined(__OS2__)
 # include <signal.h>
@@ -1127,6 +1128,7 @@ static int shell_exec(
         fprintf(pArg->out, "%s\n", zStmtSql ? zStmtSql : zSql);
       }
 
+#if 0
       /* Output TESTCTRL_EXPLAIN text of requested */
       if( pArg && pArg->mode==MODE_Explain ){
         const char *zExplain = 0;
@@ -1135,6 +1137,7 @@ static int shell_exec(
           fprintf(pArg->out, "%s", zExplain);
         }
       }
+#endif
 
       /* perform the first step.  this will tell us if we
       ** have a result set or not and how wide it is.
@@ -1494,6 +1497,38 @@ static int booleanValue(char *zArg){
   return val;
 }
 
+static int tableSize(struct callback_data *p, const char* table)
+{
+  sqlite3_stmt *pSelect;
+  const char *sqlPref = "SELECT COUNT() FROM ";
+  char *sql = malloc(strlen(sqlPref) + 1 + strlen(table));
+  strcpy(sql, sqlPref);
+  strcat(sql, table);
+  /*fprintf(stderr, "%s", sql);*/
+  int rc = sqlite3_prepare(p->db, sql, -1, &pSelect, 0);
+  if( rc!=SQLITE_OK || !pSelect ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    return -1;
+  }
+  rc = sqlite3_step(pSelect);
+  if( rc==SQLITE_ROW ){
+    const unsigned char *countStr = sqlite3_column_text(pSelect, 0);
+    int res = atoi(countStr);
+    rc = sqlite3_finalize(pSelect);
+    if( rc!=SQLITE_OK ){
+        fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+        return -1;
+    }
+    /*fprintf(stderr, "\n%d?\n", res);*/
+    return res;
+  }
+  rc = sqlite3_finalize(pSelect);
+  if( rc!=SQLITE_OK ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+  }
+  return -1;
+}
+
 /*
 ** If an input line begins with "." then invoke this routine to
 ** process that line.
@@ -1502,11 +1537,16 @@ static int booleanValue(char *zArg){
 */
 static int do_meta_command(char *zLine, struct callback_data *p){
   int i = 1;
+#if 0
   int nArg = 0;
+#endif
   int n, c;
   int rc = 0;
+#if 0
   char *azArg[50];
+#endif
 
+#if 0
   /* Parse the input line into tokens.
   */
   while( zLine[i] && nArg<ArraySize(azArg) ){
@@ -1593,6 +1633,8 @@ static int do_meta_command(char *zLine, struct callback_data *p){
   }else
 
   if( c=='d' && strncmp(azArg[0], "dump", n)==0 && nArg<3 ){
+#endif
+      
     open_db(p);
     /* When playing back a "dump", the content might appear in an order
     ** which causes immediate foreign key constraints to be violated.
@@ -1602,11 +1644,109 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     p->writableSchema = 0;
     sqlite3_exec(p->db, "SAVEPOINT dump; PRAGMA writable_schema=ON", 0, 0, 0);
     p->nErr = 0;
+#if 0
     if( nArg==1 ){
+#endif
+
+  sqlite3_stmt *pSelect;
+  /* get table sizes */
+  rc = sqlite3_prepare(p->db, 
+        "SELECT name FROM sqlite_master "
+        "WHERE sql NOT NULL AND type=='table' AND name!='sqlite_sequence'", -1, &pSelect, 0);
+  if( rc!=SQLITE_OK || !pSelect ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    return rc;
+  }
+  rc = sqlite3_step(pSelect);
+  int totalRecords = 0;
+  for(i=0; rc==SQLITE_ROW; i++){
+    int size = tableSize(p, sqlite3_column_text(pSelect, 0));
+    if (size < 0) {
+      sqlite3_finalize(pSelect);
+      return 1;
+    }
+    totalRecords += size;
+    rc = sqlite3_step(pSelect);
+  }
+  /*fprintf(stderr, "totalRecords=%d\n", totalRecords);*/
+  rc = sqlite3_finalize(pSelect);
+  if( rc!=SQLITE_OK ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    return 1;
+  }
+
+#if 0
+  rc = sqlite3_prepare(p->db, 
+        "SELECT COUNT(name) FROM sqlite_master "
+        "WHERE sql NOT NULL AND type=='table' AND name!='sqlite_sequence'", -1, &pSelect, 0);
+/*        "SELECT name FROM sqlite_master "
+        "WHERE sql NOT NULL AND type=='table' AND name!='sqlite_sequence'", -1, &pSelect, 0);*/
+  if( rc!=SQLITE_OK || !pSelect ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    p->nErr++;
+    return rc;
+  }
+  rc = sqlite3_step(pSelect);
+  int tablesCount;
+  if( rc==SQLITE_ROW ){
+    char *tablesCountStr = sqlite3_column_text(pSelect, 0);
+    tablesCount = atoi(tablesCountStr);
+  }
+  rc = sqlite3_finalize(pSelect);
+  if( rc!=SQLITE_OK ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    p->nErr++;
+  }
+#endif
+  /* dump tables */
+  rc = sqlite3_prepare(p->db, 
+        "SELECT name FROM sqlite_master "
+        "WHERE sql NOT NULL AND type=='table' AND name!='sqlite_sequence'", -1, &pSelect, 0);
+  if( rc!=SQLITE_OK || !pSelect ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    return rc;
+  }
+  rc = sqlite3_step(pSelect);
+  int prevPercent = -1;
+  for(i=0; rc==SQLITE_ROW;){
+    zShellStatic = sqlite3_column_text(pSelect, 0);
+    run_schema_dump_query(p,
+      "SELECT name, type, sql FROM sqlite_master "
+      "WHERE tbl_name LIKE shellstatic() AND type=='table'"
+      "  AND sql NOT NULL");
+    run_table_dump_query(p,
+      "SELECT sql FROM sqlite_master "
+      "WHERE sql NOT NULL"
+      "  AND type IN ('index','trigger','view')"
+      "  AND tbl_name LIKE shellstatic()", 0
+    );
+
+    int size = tableSize(p, sqlite3_column_text(pSelect, 0));
+    if (size < 0) {
+      sqlite3_finalize(pSelect);
+      return 1;
+    }
+    int percent = 100 * i / totalRecords;
+    if(prevPercent < percent){
+      fprintf(stderr, "DUMP: %d%\n", percent);
+      prevPercent = percent;
+    }
+    i += size;
+    rc = sqlite3_step(pSelect);
+  }
+  zShellStatic = 0;
+  rc = sqlite3_finalize(pSelect);
+  if( rc!=SQLITE_OK ){
+    fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
+    return 1;
+  }
+
+#if 0
       run_schema_dump_query(p, 
         "SELECT name, type, sql FROM sqlite_master "
         "WHERE sql NOT NULL AND type=='table' AND name!='sqlite_sequence'"
       );
+#endif
       run_schema_dump_query(p, 
         "SELECT name, type, sql FROM sqlite_master "
         "WHERE name=='sqlite_sequence'"
@@ -1615,6 +1755,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
         "SELECT sql FROM sqlite_master "
         "WHERE sql NOT NULL AND type IN ('index','trigger','view')", 0
       );
+#if 0
     }else{
       int i;
       for(i=1; i<nArg; i++){
@@ -1632,6 +1773,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
         zShellStatic = 0;
       }
     }
+#endif
     if( p->writableSchema ){
       fprintf(p->out, "PRAGMA writable_schema=OFF;\n");
       p->writableSchema = 0;
@@ -1639,6 +1781,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     sqlite3_exec(p->db, "PRAGMA writable_schema=OFF;", 0, 0, 0);
     sqlite3_exec(p->db, "RELEASE dump;", 0, 0, 0);
     fprintf(p->out, p->nErr ? "ROLLBACK; -- due to errors\n" : "COMMIT;\n");
+#if 0    
   }else
 
   if( c=='e' && strncmp(azArg[0], "echo", n)==0 && nArg>1 && nArg<3 ){
@@ -2374,6 +2517,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
       " \"%s\". Enter \".help\" for help\n", azArg[0]);
     rc = 1;
   }
+#endif
 
   return rc;
 }
@@ -2615,6 +2759,7 @@ static char *find_home_dir(void){
   return home_dir;
 }
 
+#if 0
 /*
 ** Read input from the file given by sqliterc_override.  Or if that
 ** parameter is NULL, take input from ~/.sqliterc
@@ -2702,6 +2847,7 @@ static void usage(int showDetail){
   }
   exit(1);
 }
+#endif
 
 /*
 ** Initialize the state information in data
@@ -2718,21 +2864,28 @@ static void main_init(struct callback_data *data) {
   sqlite3_config(SQLITE_CONFIG_SINGLETHREAD);
 }
 
-int main(int argc, char **argv){
+int shell_main(const char *inFilename) {
   char *zErrMsg = 0;
   struct callback_data data;
   const char *zInitFile = 0;
+#if 0
   char *zFirstCmd = 0;
+#endif
   int i;
   int rc = 0;
 
+#if 0
   if( strcmp(sqlite3_sourceid(),SQLITE_SOURCE_ID)!=0 ){
     fprintf(stderr, "SQLite header and source version mismatch\n%s\n%s\n",
             sqlite3_sourceid(), SQLITE_SOURCE_ID);
     exit(1);
   }
   Argv0 = argv[0];
+#endif
   main_init(&data);
+  data.zDbFilename = inFilename;
+  stdin_is_interactive = 0;
+#if 0
   stdin_is_interactive = isatty(0);
 
   /* Make sure we have a valid signal handler early, before anything
@@ -2834,6 +2987,7 @@ int main(int argc, char **argv){
     return 1;
   }
 #endif
+#endif
 
   /* Go ahead and open the database file if it already exists.  If the
   ** file does not exist, delay opening it.  This prevents empty database
@@ -2844,6 +2998,7 @@ int main(int argc, char **argv){
     open_db(&data);
   }
 
+#if 0
   /* Process the initialization file if there is one.  If no -init option
   ** is given on the command line, look for a file named ~/.sqliterc and
   ** try to process it.
@@ -2980,6 +3135,10 @@ int main(int argc, char **argv){
       rc = process_input(&data, stdin);
     }
   }
+#endif
+  data.out = stdout;
+  rc = do_meta_command(0, &data);
+
   set_table_name(&data, 0);
   if( data.db ){
     sqlite3_close(data.db);
