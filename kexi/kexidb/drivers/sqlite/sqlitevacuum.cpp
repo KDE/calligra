@@ -56,6 +56,7 @@ SQLiteVacuum::~SQLiteVacuum()
     if (m_dlg)
         m_dlg->close();
     delete m_dlg;
+    QFile::remove(m_tmpFilePath);
 }
 
 tristate SQLiteVacuum::run()
@@ -112,6 +113,14 @@ tristate SQLiteVacuum::run()
     delete tempFile;
     kDebug() << m_tmpFilePath;
     m_sqliteProcess->start(sqlite_app, QStringList() << m_tmpFilePath);
+    if (!m_sqliteProcess->waitForStarted()) {
+        delete m_dumpProcess;
+        m_dumpProcess = 0;
+        delete m_sqliteProcess;
+        m_sqliteProcess = 0;
+        m_result = false;
+        return m_result;
+    }
     
     m_dlg = new KProgressDialog(0, i18n("Compacting database"),
                                 "<qt>" + i18n("Compacting database \"%1\"...",
@@ -124,10 +133,14 @@ tristate SQLiteVacuum::run()
     m_dlg->setAutoClose(true);
     m_dlg->progressBar()->setRange(0, 100);
     m_dlg->exec();
-    while (m_dumpProcess->state() == QProcess::Running) {
+    while (m_dumpProcess->state() == QProcess::Running
+           && m_sqliteProcess->state()  == QProcess::Running)
+    {
         readFromStdErr();
-        usleep(50000);
+        qApp->processEvents(QEventLoop::AllEvents, 50000);
+        //kDebug() << "READ..." << ~m_result;
     }
+
     readFromStdErr();
 
     return m_result;
@@ -154,7 +167,6 @@ void SQLiteVacuum::readFromStdErr()
             } else if (s.mid(8, 1) == "%") {
                 m_percent = s.mid(6, 2).toInt();
             }
-            //m_dumpProcess->write(" ");
             m_dlg->progressBar()->setValue(m_percent);
         }
     }
@@ -178,6 +190,7 @@ void SQLiteVacuum::sqliteProcessFinished(int exitCode, QProcess::ExitStatus exit
 
     if (0 != KDE::rename(m_tmpFilePath, m_filePath)) {
         kWarning() << "Rename" << m_tmpFilePath << "to" << m_filePath << "failed.";
+        m_result == false;
     }
 
     if (m_result == true) {
@@ -189,10 +202,10 @@ void SQLiteVacuum::sqliteProcessFinished(int exitCode, QProcess::ExitStatus exit
 
 void SQLiteVacuum::cancelClicked()
 {
-    if (!(m_dumpProcess->exitStatus() == QProcess::NormalExit)) {
-        m_dumpProcess->write("q"); //quit
+        //m_dumpProcess->terminate();
+        m_sqliteProcess->terminate();
         m_result = cancelled;
-    }
+        QFile::remove(m_tmpFilePath);
 }
 
 #include "sqlitevacuum.moc"
