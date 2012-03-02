@@ -37,8 +37,7 @@ using namespace MSO;
 /**
  * Return the bounding rectangle for this object.
  **/
-QRectF
-ODrawToOdf::getRect(const OfficeArtFSPGR &r)
+QRectF ODrawToOdf::getRect(const OfficeArtFSPGR &r)
 {
     return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
 }
@@ -398,18 +397,22 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:min-height
     // fo:min-width
     // fo:padding
-    // fo:padding-bottom
     // fo:padding-left
-    // fo:padding-right
     // fo:padding-top
+    // fo:padding-right
+    // fo:padding-bottom
     if (!ds.fAutoTextMargin() && ds.iTxid()) {
-        // Internal margins only make sense for shapes that contain text.
-        // TODO: Else the containing shape SHOULD use a set of default internal
-        // margins for text on shapes (test files required)
-        style.addPropertyPt("fo:padding-bottom", EMU_TO_POINT(ds.dyTextBottom()), gt);
+        // internal margins only make sense for shapes containing text
         style.addPropertyPt("fo:padding-left", EMU_TO_POINT(ds.dxTextLeft()), gt);
-        style.addPropertyPt("fo:padding-right", EMU_TO_POINT(ds.dxTextRight()), gt);
         style.addPropertyPt("fo:padding-top", EMU_TO_POINT(ds.dyTextTop()), gt);
+        style.addPropertyPt("fo:padding-right", EMU_TO_POINT(ds.dxTextRight()), gt);
+        style.addPropertyPt("fo:padding-bottom", EMU_TO_POINT(ds.dyTextBottom()), gt);
+    } else {
+        // default internal margins for text on shapes
+        style.addPropertyPt("fo:padding-left", EMU_TO_POINT(0x00016530), gt);
+        style.addPropertyPt("fo:padding-top", EMU_TO_POINT(0x0000B298), gt);
+        style.addPropertyPt("fo:padding-right", EMU_TO_POINT(0x00016530), gt);
+        style.addPropertyPt("fo:padding-bottom", EMU_TO_POINT(0x0000B298), gt);
     }
     // fo:wrap-option
     // style:background-transparency
