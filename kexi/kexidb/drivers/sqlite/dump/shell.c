@@ -985,6 +985,7 @@ static char *save_err_msg(
   return zErrMsg;
 }
 
+#if 0
 /*
 ** Display memory stats.
 */
@@ -1075,6 +1076,7 @@ static int display_stats(
 
   return 0;
 }
+#endif
 
 /*
 ** Execute a statement or set of statements.  Print 
@@ -1192,10 +1194,12 @@ static int shell_exec(
         }
       }
 
+#if 0
       /* print usage stats if stats on */
       if( pArg && pArg->statsOn ){
         display_stats(db, pArg, 0);
       }
+#endif
 
       /* Finalize the statement just executed. If this fails, save a 
       ** copy of the error message. Otherwise, set zSql to point to the
