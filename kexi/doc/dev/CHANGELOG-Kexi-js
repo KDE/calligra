@@ -200,9 +200,6 @@ Main Window
 *feedback agent now handles retrieving redirect URL
 *status bar: HTML replaced with .ui files loaded by quitools and external Qt resources
 
-TODO: implement updating .ui files from network
-TODO: clicking on page title should close the message widget too
-
 2012-02-14
 Widgets
 *kmessagewidget: improve shapes of callouts
@@ -239,7 +236,6 @@ Widgets
 2012-01-05
 Main Window
 *Simple User Feedback Agent introduced
-TODO: disable by default, inform and ask user for help
 TODO: add Qt version, SQLite version, driver usage stats, migration/import/export stats
       add git revision with exact date+time if compiled using git checkout
       project stats: # of objects, size (MB, records), types of objects, data types usage
