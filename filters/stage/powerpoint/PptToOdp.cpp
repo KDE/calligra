@@ -512,7 +512,35 @@ void PptToOdp::DrawClient::addTextStyles(
         //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     }
 #endif
+
+    bool isCustomShape = false;
+    switch (m_currentShapeType) {
+    case msosptPictureFrame:
+    case msosptTextBox:
+    case msosptLine:
+        break;
+    case msosptRectangle:
+        if (!clientData || !processRectangleAsTextBox(*clientData)) {
+            isCustomShape = true;
+        }
+        break;
+    default:
+        isCustomShape = true;
+        break;
+    }
+
+    // NOTE: Workaround: Set padding to ZERO until the fo:wrap-option support
+    // arrives and other text on shape related issues get fixed.
+    if (isCustomShape) {
+        style.removeProperty("fo:padding-left");
+        style.removeProperty("fo:padding-right");
+        style.removeProperty("fo:padding-top");
+        style.removeProperty("fo:padding-bottom");
+        style.addPropertyPt("fo:padding", 0);
+    }
+
     const QString styleName = out.styles.insert(style);
+
     if (isPlaceholder(clientData)) {
         out.xml.addAttribute("presentation:style-name", styleName);
         QString className = getPresentationClass(cd->placeholderAtom.data());
