@@ -466,6 +466,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:auto-grow-width", "true");
     }
 
+    // --------------------
+    // padding
+    // --------------------
 #ifdef VMLREADER_DEBUG
     kDebug() << this << "padding-left:" << m_currentVMLProperties.internalMarginLeft;
     kDebug() << this << "padding-top:" << m_currentVMLProperties.internalMarginTop;
@@ -476,6 +479,38 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     m_currentDrawStyle->addProperty("fo:padding-right", m_currentVMLProperties.internalMarginRight);
     m_currentDrawStyle->addProperty("fo:padding-top", m_currentVMLProperties.internalMarginTop);
     m_currentDrawStyle->addProperty("fo:padding-bottom", m_currentVMLProperties.internalMarginBottom);
+
+    // --------------------
+    // margins
+    // --------------------
+    QString *p_margin = &m_currentVMLProperties.marginLeft;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-left")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-left");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginTop;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-top")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-top");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginRight;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-right")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-right");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginBottom;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-bottom")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-bottom");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.marginLeft);
+    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.marginTop);
+    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.marginRight);
+    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.marginBottom);
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
@@ -510,6 +545,11 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.internalMarginRight = "0.1in";
     m_currentVMLProperties.internalMarginTop = "0.05in";
     m_currentVMLProperties.internalMarginBottom = "0.05in";
+    // default margins (according to MS Word UI NOT MS-ODRAW defaults)
+    m_currentVMLProperties.marginLeft = "0.13in";
+    m_currentVMLProperties.marginRight = "0.13in";
+    m_currentVMLProperties.marginTop = "0in";
+    m_currentVMLProperties.marginBottom = "0in";
     m_currentVMLProperties.fitTextToShape = false;
     m_currentVMLProperties.fitShapeToText = false;
 }

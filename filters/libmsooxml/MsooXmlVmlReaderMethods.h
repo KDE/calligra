@@ -120,6 +120,11 @@ public:
         QString internalMarginTop;
         QString internalMarginBottom;
 
+        QString marginLeft;
+        QString marginTop;
+        QString marginRight;
+        QString marginBottom;
+
         bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation
