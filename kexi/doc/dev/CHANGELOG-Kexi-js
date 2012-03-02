@@ -146,7 +146,11 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
+2012-01-01
+KexiDB
+*SQLite Driver
+*Ported database compacting code to the new Kexi that uses system SQLite version
+BUG:293548
 
 TODO: after db creating and opening the main menu is invisible
 
