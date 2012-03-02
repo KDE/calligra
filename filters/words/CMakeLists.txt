@@ -55,7 +55,7 @@ if (NOT TINY)
     macro_optional_find_package(WPD)
     macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
     
-    macro_optional_find_package(LIBWPS)
+    macro_optional_find_package(LibWPS)
     macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
 
     add_subdirectory( html-odf )
