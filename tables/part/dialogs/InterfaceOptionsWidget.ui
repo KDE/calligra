@@ -58,8 +58,7 @@
    <item row="2" column="1">
     <widget class="KComboBox" name="m_unit">
      <property name="whatsThis">
-      <string>Choose the default unit that will be used in your sheets.
-Note that you can overwrite the unit for the current sheet using the Format -&gt; Page Layout... dialog.</string>
+      <string>Choose the default unit that will be used in your sheets.</string>
      </property>
     </widget>
    </item>
@@ -76,7 +75,7 @@ Note that you can overwrite the unit for the current sheet using the Format -&gt
    <item row="3" column="1">
     <widget class="KoUnitDoubleSpinBox" name="m_indentationStep">
      <property name="whatsThis">
-      <string>Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu.</string>
+      <string>Lets you define the amount of indenting used by the Increase Indent and Decrease Indent actions.</string>
      </property>
     </widget>
    </item>
