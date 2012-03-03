@@ -173,7 +173,7 @@
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Opened Database Objects Area / Tabbed Windows</emphasis></term>
     <listitem>
-    <para>A central area of the application taking most of the screen space. For IDEAl user interface mode it contains switchable tabs with windows that are always maximized. For Childframe user interface mode it contains floating windows.</para>
+      <para>A central area of the application taking most of the screen space. <!--FIXME not in 2.4 For IDEAl user interface mode-->The userinterface contains switchable tabs with windows that are always maximized.<!--FIXME not in 2.4  For Childframe user interface mode it contains floating windows.--></para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Property Editor pane</emphasis></term>
@@ -663,8 +663,9 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 <para><note>
 <itemizedlist>
   <listitem><para>If you want to remove widget's data source assignment for a form widget, you can use the little black icon with a 
-white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!--FIXME not in master/2.4 <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.--></para></listitem>
-<listitem><para>Use the <guilabel>Go to selected form's data source</guilabel> button to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
+white cross at the right in the <guilabel>Widget's data source</guilabel> box. Similarly, you can remove the formular's data source assignment. <!--FIXME not in master/2.4 <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.--></para></listitem>
+<listitem><para>Use the <inlinemediaobject><imageobject><imagedata fileref="oxygen-22x22-actions-go-jump.png" format="PNG"/></imageobject>
+</inlinemediaobject> icon to the right of the <guilabel>Form's data source</guilabel> label to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
 </itemizedlist>
 </note></para>
 </sect2>
@@ -943,7 +944,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
 <sect1 id="entering-data-using-forms"><title>Entering Data Using Forms</title> 
 <para>Data entering and editing is usually the task of the user of the database application. The designer of the database should check the form in terms of valid data entry, and see whether the form works as expected.
 </para>
-<para>To test your form, switch to its data view. A single database row (record) of data will be displayed and a text cursor will be set inside the first data field. You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>OK</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
+<para>To test your form, switch to its data view. A single database row (record) of data will be displayed and a text cursor will be set inside the first data field. You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>Save Record</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel Record Changes</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
 </para>
 </sect1>
 </chapter>
@@ -1143,7 +1144,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Import Tables</guilabel></emphasis></term>
     <listitem>
-    <para><guilabel>Import Tables</guilabel>, opens the <guilabel>Table Importing Wizard</guilabel> that allows you to import data either from a <filename>fods</filename>, <filename>mdb</filename>, <filename>ods</filename>, <filename>tsv</filename> file or from another database server, to a new table in your project.</para>
+      <para><guilabel>Import Tables</guilabel>, opens the <guilabel>Table Importing Wizard</guilabel> that allows you to import data either from a <!--FIXME no fods in 2.4 here--><filename>fods</filename>, <filename>mdb</filename>, <filename>ods</filename>, <filename>tsv</filename> file or from another database server, to a new table in your project.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Export Data to File</guilabel></emphasis></term>
@@ -1172,6 +1173,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
 <para>From the <guilabel>Tools</guilabel> tab you can you can manipulate your projects.
 </para>
 <variablelist>
+  <!--FIXME no aktion Import Database in the toolbar in kexi 2.4 here-->
   <varlistentry><term><emphasis role="bold"><guilabel>Import Database</guilabel></emphasis></term>
     <listitem>
     <para><guilabel>Import Database</guilabel>, opens the <guilabel>Database Importing Wizard</guilabel> that allows to import complete data from an <filename>mdb</filename> file or another database server.</para>
@@ -1219,7 +1221,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Image Box</guilabel></emphasis></term>
     <listitem>
-    <para>An <guilabel>Image Box</guilabel> holds an image, bound to a field in a table.</para>
+      <para>An <guilabel>Image Box</guilabel> holds an image, bound to a field in a table.<!--FIXME can also display an image loaded from file--></para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Text Box</guilabel></emphasis></term>
@@ -1319,7 +1321,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box.<!
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Check</emphasis></term>
     <listitem>
-    <para>A <guilabel>Check</guilabel> widget holds two or three states of data (&eg; On/Off)</para>
+      <para>A <guilabel>Check</guilabel> widget holds two or three states of data (&eg; On/Off)</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Line</emphasis></term>
