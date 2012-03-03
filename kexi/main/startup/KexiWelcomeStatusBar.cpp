@@ -56,8 +56,9 @@
 #include <QResource>
 #include <QTimer>
 
-#define HEADER_SIZE 1.0
-#define GUI_UPDATE_INTERVAL 60 // update interval for GUI, in munites
+static const int GUI_UPDATE_INTERVAL = 60; // update interval for GUI, in minutes
+static const int UPDATE_FILES_LIST_SIZE_LIMIT = 1024 * 128;
+static const int UPDATE_FILES_COUNT_LIMIT = 128;
 
 static QString basePath()
 {
@@ -135,23 +136,54 @@ void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
 {
     if (job->error()) {
+        kWarning() << "Error while receiving .list file - no files will be updated";
         //! @todo error...
         return;
     }
     KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
     QString result = sendJob->data();
+    if (result.length() > UPDATE_FILES_LIST_SIZE_LIMIT) { // anit-DOS protection
+        kWarning() << "Too large .list file (" << result.length()
+            << "); the limit is" << UPDATE_FILES_LIST_SIZE_LIMIT
+            << "- no files will be updated";
+        return;
+    }
     kDebug() << result;
-    QStringList data = result.split(QRegExp("\\s"), QString::SkipEmptyParts);
+    QStringList data = result.split(QRegExp("\n"), QString::SkipEmptyParts);
+    result.clear();
     d->fileNamesToUpdate.clear();
-    for (QStringList::ConstIterator it(data.constBegin()); it!=data.constEnd(); ++it) {
-        const QByteArray hash((*it).toLatin1());
-        ++it;
-        if (it==data.constEnd()) {
-            kWarning() << "data ends to early after hash" << hash;
-            break;
+    if (data.count() > UPDATE_FILES_COUNT_LIMIT) { // anti-DOS protection
+        kWarning() << "Too many files to update (" << data.count()
+            << "); the limit is" << UPDATE_FILES_COUNT_LIMIT
+            << "- no files will be updated";
+        return;
+    }
+    // OK, try to update (stage 1: check, stage 2: checking)
+    for (int stage = 1; stage <= 2; stage++) {
+        int i = 0;
+        for (QStringList::ConstIterator it(data.constBegin()); it!=data.constEnd(); ++it, i++) {
+            const QByteArray hash((*it).left(32).toLatin1());
+            const QString remoteFname((*it).mid(32 + 2));
+            if (stage == 1) {
+                if (hash.length() != 32) {
+                    kWarning() << "Invalid hash" << hash << "in line" << i+1 << "- no files will be updated";
+                    return;
+                }
+                if ((*it).mid(32, 2) != "  ") {
+                    kWarning() << "Two spaces expected but found" << (*it).mid(32, 2)
+                        << "in line" << i+1 << "- no files will be updated";
+                    return;
+                }
+                if (remoteFname.contains(QRegExp("\\s"))) {
+                    kWarning() << "Filename expected without whitespace but found" << remoteFname
+                        << "in line" << i+1 << "- no files will be updated";
+                    return;
+                }
+            }
+            else if (stage == 2) {
+                checkFile(hash, remoteFname, &d->fileNamesToUpdate);
+            }
         }
-        const QString remoteFname(*it);
-        checkFile(hash, remoteFname, &d->fileNamesToUpdate);
     }
     // update files
     KUrl::List sourceFiles;
