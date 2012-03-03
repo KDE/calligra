@@ -9,7 +9,7 @@ set(flowdockers_SRCS
     Plugin.cpp
     
     stencilboxdocker/StencilBoxDocker.cpp
-    stencilboxdocker/StencilBoxView.cpp
+    stencilboxdocker/StencilBoxTreeView.cpp
     stencilboxdocker/CollectionItemModel.cpp
     stencilboxdocker/StencilShapeFactory.cpp
     #shapehelperdocker/ShapeCreationHelperDocker.cpp
