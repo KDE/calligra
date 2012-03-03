@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Application
 Name=Karbon
+Name[de]=Karbon
+Name[nl]=Karbon
+Name[pt]=Karbon
+Name[pt_BR]=Karbon
+Name[sv]=Karbon
+Name[uk]=Karbon
+Name[x-test]=xxKarbonxx
 Exec=karbon %u
 GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka

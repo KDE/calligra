@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon Illustrator Import Filter
+Name[de]=Karbon Illustrator-Importfilter
+Name[nl]=Illustrator-importfilter voor Karbon
+Name[pt]=Filtro de Importação de Illustrator para o Karbon
+Name[pt_BR]=Filtro de importação de Illustrator para o Karbon
+Name[sv]=Karbon Illustrator-importfilter
+Name[uk]=Фільтр імпорту Illustrator для Karbon
+Name[x-test]=xxKarbon Illustrator Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=application/illustrator
 X-KDE-Weight=1

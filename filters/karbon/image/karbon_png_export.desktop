@@ -1,6 +1,13 @@
 [Desktop Entry]
 Icon=
 Name=Karbon PNG Export Filter
+Name[de]=Karbon PNG-Exportfilter
+Name[nl]=PNG-exportfilter voor Karbon
+Name[pt]=Filtro de Exportação de PNG para o Karbon
+Name[pt_BR]=Filtro de exportação de PNG para o Karbon
+Name[sv]=Karbon PNG-exportfilter
+Name[uk]=Фільтр експорту SVG для Karbon
+Name[x-test]=xxKarbon PNG Export Filterxx
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/png
