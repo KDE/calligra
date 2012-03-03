@@ -629,21 +629,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
         body->addAttribute("xml:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
-        //! @todo presentation:use-date-time-name //optional; CASE #P304
-
-        // First check if we have properties from the slide, then from layout, then from master
-        if (m_currentDrawStyle->isEmpty()) {
-            KoGenStyle::copyPropertiesFromStyle(m_context->slideLayoutProperties->m_drawingPageProperties,
-                                                    *m_currentDrawStyle, KoGenStyle::DrawingPageType);
-            // Only get properties from master page if they were not defined in the layout
-            if (m_currentDrawStyle->isEmpty()) {
-                KoGenStyle::copyPropertiesFromStyle(m_context->slideMasterProperties->m_drawingPageProperties,
-                                                        *m_currentDrawStyle, KoGenStyle::DrawingPageType);
-            }
-        } else {
-            m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
-        }
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
