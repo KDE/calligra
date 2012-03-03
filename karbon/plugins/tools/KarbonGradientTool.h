@@ -58,8 +58,6 @@ public:
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QWidget * createOptionWidget();
-    /// reimplemented from KoToolBase
     virtual QList<QWidget *> createOptionWidgets();
 
 private Q_SLOTS:
