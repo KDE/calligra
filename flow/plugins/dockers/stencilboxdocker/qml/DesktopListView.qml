@@ -20,6 +20,49 @@
 import QtQuick 1.1
 
 Rectangle {
-    width: 100
-    height: 62
+    width: 300
+    height: 500
+
+    ListModel {
+        id: appModel
+        ListElement { name: "Stencil 1"; Item { ListModel {} } }
+    }
+
+    ListModel {
+        id: stencilModel
+        ListElement { name: "Music"; icon: "tmp.png" }
+        ListElement { name: "Movies"; icon: "tmp.png" }
+        ListElement { name: "Camera"; icon: "tmp.png" }
+        ListElement { name: "Calendar"; icon: "tmp.png" }
+        ListElement { name: "Messaging"; icon: "tmp.png" }
+        ListElement { name: "Todo List"; icon: "tmp.png" }
+        ListElement { name: "Contacts"; icon: "tmp.png" }
+        ListElement { name: "Music"; icon: "tmp.png" }
+        ListElement { name: "Movies"; icon: "tmp.png" }
+        ListElement { name: "Camera"; icon: "tmp.png" }
+        ListElement { name: "Calendar"; icon: "tmp.png" }
+        ListElement { name: "Messaging"; icon: "tmp.png" }
+        ListElement { name: "Todo List"; icon: "tmp.png" }
+        ListElement { name: "Contacts"; icon: "tmp.png" }
+    }
+
+    Component {
+        id: stencilDelegate
+        Item {
+            anchors.fill: parent
+            Column {
+                StencilHeader {}
+                StencilGridView {}
+            }
+        }
+    }
+
+    Column {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        spacing: 2
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        focus: true
+    }
 }

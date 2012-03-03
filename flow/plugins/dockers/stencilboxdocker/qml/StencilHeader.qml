@@ -22,7 +22,7 @@ import QtQuick 1.1
 Rectangle {
     width: parent.width; height: 20
     radius: 5
-    color: 'blue'
+    color: "lightsteelblue"
 
     Text {
         anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }

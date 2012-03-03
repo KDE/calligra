@@ -23,24 +23,6 @@ Rectangle {
     anchors.fill: parent
     color: "white"
 
-    ListModel {
-        id: appModel
-        ListElement { name: "Music"; icon: "tmp.png" }
-        ListElement { name: "Movies"; icon: "tmp.png" }
-        ListElement { name: "Camera"; icon: "tmp.png" }
-        ListElement { name: "Calendar"; icon: "tmp.png" }
-        ListElement { name: "Messaging"; icon: "tmp.png" }
-        ListElement { name: "Todo List"; icon: "tmp.png" }
-        ListElement { name: "Contacts"; icon: "tmp.png" }
-        ListElement { name: "Music"; icon: "tmp.png" }
-        ListElement { name: "Movies"; icon: "tmp.png" }
-        ListElement { name: "Camera"; icon: "tmp.png" }
-        ListElement { name: "Calendar"; icon: "tmp.png" }
-        ListElement { name: "Messaging"; icon: "tmp.png" }
-        ListElement { name: "Todo List"; icon: "tmp.png" }
-        ListElement { name: "Contacts"; icon: "tmp.png" }
-    }
-
     Component {
         id: shapeDelegate
 
