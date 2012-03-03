@@ -19,9 +19,9 @@
  */
 
 #include "StencilBoxDocker.h"
-
+#include "StencilListModel.h"
 #include "StencilShapeFactory.h"
-#include "StencilBoxView.h"
+#include "StencilBoxTreeView.h"
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
@@ -281,7 +281,7 @@ void StencilBoxDocker::loadDefaultShapes()
     while(i.hasNext())
     {
         i.next();
-        CollectionItemModel* model = new CollectionItemModel(this);
+        StencilListModel* model = new StencilListModel(this);
         model->setShapeTemplateList(i.value());
         m_modelMap.insert(i.key(), model);
     }
@@ -317,11 +317,11 @@ bool StencilBoxDocker::addCollection(const QString& path)
     if(type != "odg-collection")
         return false;
     if(!m_modelMap.contains(family)) {
-        CollectionItemModel* model = new CollectionItemModel(this);
+        StencilListModel* model = new StencilListModel(this);
         m_modelMap.insert(family, model);
     }
 
-    CollectionItemModel* model = m_modelMap[family];
+    StencilListModel* model = m_modelMap[family];
     QList<KoCollectionItem> templateList = model->shapeTemplateList();
     QStringList stencils = dir.entryList(QStringList("*.desktop"));
     foreach(const QString & stencil, stencils) {
@@ -356,7 +356,7 @@ void StencilBoxDocker::removeCollection(const QString& family)
 {
     if(m_modelMap.contains(family))
     {
-        CollectionItemModel* model = m_modelMap[family];
+        StencilListModel* model = m_modelMap[family];
         QList<KoCollectionItem> list = model->shapeTemplateList();
         foreach(const KoCollectionItem & temp, list)
         {
@@ -373,7 +373,7 @@ void StencilBoxDocker::removeCollection(const QString& family)
 
 void StencilBoxDocker::setViewMode(QListView::ViewMode iconMode)
 {
-    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
+    QMapIterator<QString, StencilListModel*> i(m_modelMap);
     while(i.hasNext())
     {
         i.next();

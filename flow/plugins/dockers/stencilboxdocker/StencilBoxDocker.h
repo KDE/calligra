@@ -20,15 +20,13 @@
 #ifndef KOSTENCILBOXDOCKER_H
 #define KOSTENCILBOXDOCKER_H
 
-#include "CollectionItemModel.h"
-
 #include <QDockWidget>
 #include <QMap>
 #include <QIcon>
 
 #include <KoDockFactoryBase.h>
 
-class CollectionItemModel;
+class StencilListModel;
 class CollectionTreeWidget;
 class KoShape;
 
@@ -75,7 +73,7 @@ class StencilBoxDocker : public QDockWidget
         void locationChanged(Qt::DockWidgetArea area);
 	
     private:
-        QMap<QString, CollectionItemModel*> m_modelMap;
+        QMap<QString, StencilListModel*> m_modelMap;
         //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
 
         CollectionTreeWidget *m_treeWidget;

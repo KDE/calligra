@@ -7,11 +7,13 @@ include_directories(${KDE4_INCLUDE_DIR}
 
 set(flowdockers_SRCS
     Plugin.cpp
-    
+
     stencilboxdocker/StencilBoxDocker.cpp
-    stencilboxdocker/StencilBoxTreeView.cpp
-    stencilboxdocker/CollectionItemModel.cpp
+    stencilboxdocker/StencilBoxTreeWidget.cpp
+    stencilboxdocker/StencilListView.cpp
+    stencilboxdocker/StencilListModel.cpp
     stencilboxdocker/StencilShapeFactory.cpp
+
     #shapehelperdocker/ShapeCreationHelperDocker.cpp
     #shapehelperdocker/ShapeCreationHelperDockerFactory.cpp
 )

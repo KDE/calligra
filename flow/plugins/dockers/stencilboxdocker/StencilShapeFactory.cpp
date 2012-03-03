@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2012 Yue Liu <yue.liu@mail.com>
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or

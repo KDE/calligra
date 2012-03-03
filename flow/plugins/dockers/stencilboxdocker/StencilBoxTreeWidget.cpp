@@ -18,7 +18,7 @@
 
 */
 
-#include "StencilBoxTreeView.h"
+#include "StencilBoxTreeWidget.h"
 #include "CollectionItemModel.h"
 
 #include <kdebug.h>
@@ -94,66 +94,7 @@ QSize SheetDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelIndex
     return sz;
 }
 
-ShapeListView::ShapeListView(QWidget* parent) :
-    QListView(parent)
-{
-    setFocusPolicy(Qt::NoFocus);
-    setFrameShape(QFrame::NoFrame);
-    setIconSize(QSize(32, 32));
-    setMovement(QListView::Static);
-    setSpacing(1);
-    setViewMode(QListView::IconMode);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setResizeMode(QListView::Adjust);
-    setUniformItemSizes(true);
-
-    //setSelectionMode(QAbstractItemView::NoSelection);
-    setDragDropMode(QAbstractItemView::DragDrop);
-    setDropIndicatorShown(true);
-
-    //connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(slotPressed(QModelIndex)));
-    setEditTriggers(QAbstractItemView::AnyKeyPressed);
-}
-
-/*void ShapeListView::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        m_startPos = event->pos();
-    }
-    QListView::mousePressEvent(event);
-}
-
-void ShapeListView::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() & Qt::LeftButton)
-    {
-        int distance = (event->pos() - m_startPos).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-        {
-            ;//performDrag();
-        }
-    }
-    QListView::mouseMoveEvent(event);
-}
-
-void ShapeListView::performDrag()
-{
-    QListViewItem *item = currentItem();
-    if (item) {
-        QMimeData *mimeData = new QMimeData;
-        mimeData->setText(item->text());
-
-        QDrag *drag = new QDrag(this);
-        drag->setMimeData(mimeData);
-        drag->setPixmap(QPixmap(":/images/person.png"));
-        if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
-            delete item;
-    }
-}*/
-
-CollectionTreeWidget::CollectionTreeWidget(QWidget* parent): QTreeWidget(parent)
+StencilBoxTreeWidget::StencilBoxTreeWidget(QWidget* parent): QTreeWidget(parent)
 {
     header()->hide();
     header()->setResizeMode(QHeaderView::Stretch);
@@ -173,17 +114,17 @@ CollectionTreeWidget::CollectionTreeWidget(QWidget* parent): QTreeWidget(parent)
             this, SLOT(handleMousePress(QTreeWidgetItem*)));
 }
 
-CollectionTreeWidget::~CollectionTreeWidget()
+StencilBoxTreeWidget::~StencilBoxTreeWidget()
 {
     saveViewMode();
 }
 
-void CollectionTreeWidget::setFamilyMap(QMap<QString, CollectionItemModel*> map)
+void StencilBoxTreeWidget::setFamilyMap(QMap<QString, CollectionItemModel*> map)
 {
     m_familyMap = map;
 }
 
-void CollectionTreeWidget::regenerateFilteredMap()
+void StencilBoxTreeWidget::regenerateFilteredMap()
 {
     QMapIterator<QString, CollectionItemModel*> i(m_familyMap);
     while(i.hasNext())
@@ -209,7 +150,7 @@ void CollectionTreeWidget::regenerateFilteredMap()
 }
 
 //Link a ShapeListView to each TreeWidgetItem
-void CollectionTreeWidget::addCategoryView(QTreeWidgetItem *parent,
+void StencilBoxTreeWidget::addCategoryView(QTreeWidgetItem *parent,
                                                      bool iconMode, QSortFilterProxyModel *model)
 {
     QTreeWidgetItem *embed_item = new QTreeWidgetItem(parent);
@@ -220,7 +161,7 @@ void CollectionTreeWidget::addCategoryView(QTreeWidgetItem *parent,
     categoryView->setModel(model);
 }
 
-ShapeListView* CollectionTreeWidget::categoryViewAt(int idx) const
+ShapeListView* StencilBoxTreeWidget::categoryViewAt(int idx) const
 {
     ShapeListView *rc = 0;
     if (QTreeWidgetItem *cat_item = topLevelItem(idx))
@@ -234,18 +175,18 @@ ShapeListView* CollectionTreeWidget::categoryViewAt(int idx) const
     return rc;
 }
 
-void CollectionTreeWidget::saveViewMode()
+void StencilBoxTreeWidget::saveViewMode()
 {
     //FIXME
 }
 
-void  CollectionTreeWidget::restoreViewMode()
+void  StencilBoxTreeWidget::restoreViewMode()
 {
     //FIXME
     m_viewMode = QListView::IconMode;
 }
 
-void CollectionTreeWidget::handleMousePress(QTreeWidgetItem *item)
+void StencilBoxTreeWidget::handleMousePress(QTreeWidgetItem *item)
 {
     if (item == 0)
         return;
@@ -259,19 +200,19 @@ void CollectionTreeWidget::handleMousePress(QTreeWidgetItem *item)
     }
 }
 
-void CollectionTreeWidget::slotListMode()
+void StencilBoxTreeWidget::slotListMode()
 {
     m_viewMode = QListView::ListMode;
     updateViewMode();
 }
 
-void CollectionTreeWidget::slotIconMode()
+void StencilBoxTreeWidget::slotIconMode()
 {
     m_viewMode = QListView::IconMode;
     updateViewMode();
 }
 
-void CollectionTreeWidget::updateViewMode()
+void StencilBoxTreeWidget::updateViewMode()
 {
     QMapIterator<QString, CollectionItemModel*> i(m_familyMap);
     while(i.hasNext())
@@ -298,7 +239,7 @@ void CollectionTreeWidget::updateViewMode()
     updateGeometries();
 }
 
-void CollectionTreeWidget::adjustSubListSize(QTreeWidgetItem *cat_item)
+void StencilBoxTreeWidget::adjustSubListSize(QTreeWidgetItem *cat_item)
 {
     QTreeWidgetItem *embedItem = cat_item->child(0);
     if (embedItem == 0)
@@ -312,7 +253,7 @@ void CollectionTreeWidget::adjustSubListSize(QTreeWidgetItem *cat_item)
     embedItem->setSizeHint(0, QSize(-1, height - 1));
 }
 
-void CollectionTreeWidget::setFilter(QRegExp regExp)
+void StencilBoxTreeWidget::setFilter(QRegExp regExp)
 {
     QMapIterator<QString, QSortFilterProxyModel*> j(m_filteredMap);
     while (j.hasNext())
@@ -337,7 +278,7 @@ void CollectionTreeWidget::setFilter(QRegExp regExp)
     updateGeometries();
 }
 
-void CollectionTreeWidget::resizeEvent(QResizeEvent *e)
+void StencilBoxTreeWidget::resizeEvent(QResizeEvent *e)
 {
     QTreeWidget::resizeEvent(e);
     if (const int numTopLevels = topLevelItemCount()) {
@@ -348,7 +289,7 @@ void CollectionTreeWidget::resizeEvent(QResizeEvent *e)
     }
 }
 
-void CollectionTreeWidget::contextMenuEvent(QContextMenuEvent *e)
+void StencilBoxTreeWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     QMenu menu;
     menu.addAction(i18n("Expand all"), this, SLOT(expandAll()));

@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOSTENCILSHAPEFACTORY_H
-#define KOSTENCILSHAPEFACTORY_H
+#ifndef STENCILSHAPEFACTORY_H
+#define STENCILSHAPEFACTORY_H
 
 #include <KoShapeFactoryBase.h>
 #include <KoDocumentResourceManager.h>
@@ -40,4 +40,4 @@ class StencilShapeFactory : public KoShapeFactoryBase
         QString m_path;
 };
 
-#endif //KOSTENCILSHAPEFACTORY_H
+#endif //STENCILSHAPEFACTORY_H

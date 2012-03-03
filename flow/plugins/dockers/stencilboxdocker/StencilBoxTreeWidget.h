@@ -18,8 +18,8 @@
 
 */
 
-#ifndef STENCILBOXTREEVIEW_H
-#define STENCILBOXTREEVIEW_H
+#ifndef STENCILBOXTREEWIDGET_H
+#define STENCILBOXTREEWIDGET_H
 
 //#include "CollectionItemModel.h"
 
@@ -30,7 +30,7 @@
 class QIcon;
 class QSortFilterProxyModel;
 class ShapeListView;
-class CollectionItemModel;
+class StencilListModel;
 
 /// A delegate from qt designer, used to paint stencil header.
 class SheetDelegate: public QItemDelegate
@@ -46,43 +46,13 @@ private:
     QTreeView *m_view;
 };
 
-/// The listview of a stencil
-class ShapeListView : public QListView
-{
-    Q_OBJECT
-
-public:
-    using QListView::contentsSize;
-
-    explicit ShapeListView(QWidget *parent = 0);
-
-signals:
-    void pressed(const QString &name, const QString &xml, const QPoint &globalPos);
-    //void itemRemoved();
-    //void lastItemRemoved();
-
-protected:
-    //void mousePressEvent(QMouseEvent *event);
-    //void mouseMoveEvent(QMouseEvent *event);
-
-//private slots:
-    //void removeCurrentItem();
-    //void editCurrentItem();
-
-private:
-    //void performDrag();
-    //QPoint m_startPos;
-    //int mapRowToSource(int filterRow) const;
-    //CollectionItemModel *m_model;
-};
-
-class CollectionTreeWidget : public QTreeWidget
+class StencilBoxTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 
     public:
-        explicit CollectionTreeWidget(QWidget *parent);
-        ~CollectionTreeWidget();
+        explicit StencilBoxTreeWidget(QWidget *parent);
+        ~StencilBoxTreeWidget();
         bool loadContents(const QString &contents);
         bool save();
         void setFamilyMap(QMap<QString, CollectionItemModel*> map);
@@ -111,4 +81,4 @@ class CollectionTreeWidget : public QTreeWidget
         void slotIconMode();
 };
 
-#endif // STENCILBOXTREEVIEW_H
+#endif // STENCILBOXTREEWIDGET_H
