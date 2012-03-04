@@ -1,6 +1,13 @@
 [Desktop Entry]
 Icon=
 Name=Karbon WMF Export Filter
+Name[de]=Karbon WMF-Exportfilter
+Name[nl]=WMF-exportfilter voor Karbon
+Name[pt]=Filtro de Exportação de WMF para o Karbon
+Name[pt_BR]=Filtro de exportação de WMF para o Karbon
+Name[sv]=Karbon WMF-exportfilter
+Name[uk]=Фільтр експорту WMF у Karbon
+Name[x-test]=xxKarbon WMF Export Filterxx
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/x-wmf

@@ -2,7 +2,6 @@
 Icon=kde_events
 Name=KDE Events
 Name[ca]=Esdeveniments del KDE
-Name[ca@valencia]=Esdeveniments del KDE
 Name[cs]=Události KDE
 Name[da]=KDE Events
 Name[de]=KDE-Termine
@@ -29,7 +28,6 @@ Name[x-test]=xxKDE Eventsxx
 Name[zh_TW]=KDE 事件
 Comment=KDE Events
 Comment[ca]=Esdeveniments del KDE
-Comment[ca@valencia]=Esdeveniments del KDE
 Comment[cs]=Události KDE
 Comment[da]=KDE-arrangementer
 Comment[de]=KDE-Termine

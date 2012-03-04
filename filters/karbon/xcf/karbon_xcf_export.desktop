@@ -1,6 +1,13 @@
 [Desktop Entry]
 Icon=
 Name=Karbon Gimp Export Filter
+Name[de]=Karbon Gimp-Exportfilter
+Name[nl]=Gimp-exportfilter voor Karbon
+Name[pt]=Filtro de Exportação de Gimp para o Karbon
+Name[pt_BR]=Filtro de exportação de Gimp para o Karbon
+Name[sv]=Karbon Gimp-exportfilter
+Name[uk]=Фільтр експорту Gimp для Karbon
+Name[x-test]=xxKarbon Gimp Export Filterxx
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/x-xcf-gimp

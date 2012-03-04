@@ -2,7 +2,6 @@
 Name=MS Access
 Name[bg]=MS Access
 Name[ca]=MS Access
-Name[ca@valencia]=MS Access
 Name[cs]=MS Access
 Name[da]=MS Access
 Name[de]=MS Access
@@ -43,7 +42,6 @@ Name[zh_CN]=MS Access
 Name[zh_TW]=MS Access
 Comment=MS Access (MDB) Import Plugin for Kexi
 Comment[ca]=Connector d'importació de MS Access (MDB) per al Kexi
-Comment[ca@valencia]=Connector d'importació de MS Access (MDB) per al Kexi
 Comment[cs]=Modul Kexi pro import MS Access (MDB)
 Comment[de]=MS-Access (MDB) Importmodul für Kexi
 Comment[es]=Complemento de importación de MS Access (MDB) de Kexi

@@ -2,7 +2,6 @@
 Icon=strange_far_hills
 Name=Strange Far Hills
 Name[ca]=Estranyes muntanyes llunyanes
-Name[ca@valencia]=Estranyes muntanyes llunyanes
 Name[da]=Strange Far Hills
 Name[de]=Geheimnisvolle Berge in der Ferne
 Name[el]=Παράξενοι μακρινοί λόφοι
@@ -27,7 +26,6 @@ Name[x-test]=xxStrange Far Hillsxx
 Name[zh_TW]=Strange Far Hills
 Comment=Strange Far Hills
 Comment[ca]=Estranyes muntanyes llunyanes
-Comment[ca@valencia]=Estranyes muntanyes llunyanes
 Comment[da]=Mærkelige bjerge i det fjerne
 Comment[de]=Geheimnisvolle Berge in der Ferne
 Comment[el]=Παράξενοι μακρινοί λόφοι

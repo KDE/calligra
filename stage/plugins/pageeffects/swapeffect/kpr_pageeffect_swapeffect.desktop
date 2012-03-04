@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Swap Effect
 Name[ca]=Efecte d'escombrat
-Name[ca@valencia]=Efecte d'escombrat
 Name[da]=Ombytningseffekt
 Name[de]=Wechseleffekt
 Name[el]=Εφέ ανταλλαγής
@@ -27,8 +26,8 @@ Name[x-test]=xxSwap Effectxx
 Name[zh_TW]=變換效果
 Comment=Swap Page Effect
 Comment[ca]=Efecte d'escombrat de pàgina
-Comment[ca@valencia]=Efecte d'escombrat de pàgina
 Comment[da]=Sideombytningseffekt
+Comment[de]=Seitenwechseleffekt
 Comment[el]=Εφέ ανταλλαγής σελίδας
 Comment[en_GB]=Swap Page Effect
 Comment[es]=Efecto de página de intercambio

@@ -2,7 +2,6 @@
 Name=Calligra Spreadsheet Component
 Name[bg]=Компонент за електронни таблици в Calligra
 Name[ca]=Component de full de càlcul del Calligra
-Name[ca@valencia]=Component de full de càlcul del Calligra
 Name[cs]=Komponenta Calligra pro tabulky
 Name[da]=Caligra-komponent til regneark
 Name[de]=Calligra-Komponente für Tabellenkalkulation
@@ -33,7 +32,6 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-templa
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици
 GenericName[ca]=Full de càlcul
-GenericName[ca@valencia]=Full de càlcul
 GenericName[cs]=Sešit
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation

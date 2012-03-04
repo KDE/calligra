@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Calligra Formula Component
 Name[ca]=Component de fórmules del Calligra
-Name[ca@valencia]=Component de fórmules del Calligra
 Name[cs]=Komponenta Calligra pro vzorce
 Name[da]=Calligra-komponent til formler
 Name[de]=Calligra-Formel-Komponente
@@ -32,7 +31,6 @@ GenericName[af]=Formule Redigeerder
 GenericName[bg]=Редактор на формули
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
-GenericName[ca@valencia]=Editor de fórmules
 GenericName[cs]=Editor vzorců
 GenericName[cy]=Golygydd Fformiwla
 GenericName[da]=Formeleditor
@@ -80,7 +78,6 @@ GenericName[tr]=Formül Düzenleyici
 GenericName[ug]=فورمۇلا تەھرىرلىگۈچ
 GenericName[uk]=Редактор формул
 GenericName[uz]=Formula tahrirchi
-GenericName[uz@cyrillic]=Формула таҳрирчи
 GenericName[wa]=Aspougneu d' formules
 GenericName[xh]=Umhleli wendlela yokubala
 GenericName[x-test]=xxFormula Editorxx

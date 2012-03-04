@@ -2,7 +2,6 @@
 Type=Service
 Name=OpenDocument Presentation Document
 Name[ca]=Document de presentacions OpenDocument
-Name[ca@valencia]=Document de presentacions OpenDocument
 Name[da]=OpenDocument præsentationsdokument
 Name[de]=OpenDocument-Präsentations-Dokument
 Name[el]=Έγγραφο OpenDocument Presentation
@@ -31,7 +30,6 @@ Name[zh_TW]=OpenDocument 簡報文件...
 Comment=Odp for okular
 Comment[bg]=Odp за okular
 Comment[ca]=Odp per a okular
-Comment[ca@valencia]=Odp per a okular
 Comment[cs]=Odp pro Okular
 Comment[da]=ODP til Okular
 Comment[de]=ODP für Okular

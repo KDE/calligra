@@ -3,7 +3,6 @@ Type=Service
 Name=Words RTF Export Filter
 Name[bg]=Филтър за изнасяне от Words в RTF
 Name[ca]=Filtre d'exportació RTF per al Words
-Name[ca@valencia]=Filtre d'exportació RTF per al Words
 Name[cs]=Exportní filtr formátu RTF pro Words
 Name[da]=RTF-eksportfilter til Words
 Name[de]=Words RTF-Exportfilter

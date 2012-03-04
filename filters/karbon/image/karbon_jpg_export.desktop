@@ -1,6 +1,13 @@
 [Desktop Entry]
 Icon=
 Name=Karbon JPEG Export Filter
+Name[de]=Karbon JPEG-Exportfilter
+Name[nl]=JPEG-exportfilter voor Karbon
+Name[pt]=Filtro de Exportação de JPEG para o Karbon
+Name[pt_BR]=Filtro de exportação de JPEG para o Karbon
+Name[sv]=Karbon JPEG-exportfilter
+Name[uk]=Фільтр експорту JPEG для Karbon
+Name[x-test]=xxKarbon JPEG Export Filterxx
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/jpeg

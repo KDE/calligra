@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Preset Docker
 Name[ca]=Amarrador de prearranjament
-Name[ca@valencia]=Amarrador de prearranjament
 Name[cs]=Dok předvoleb
 Name[da]=Forudindstilling-dokker
 Name[en_GB]=Preset Docker
@@ -21,7 +20,6 @@ Name[x-test]=xxPreset Dockerxx
 Name[zh_TW]=預設定嵌入器
 Comment=Docker for selecting presets
 Comment[ca]=Amarrador per prearranjaments seleccionats
-Comment[ca@valencia]=Amarrador per prearranjaments seleccionats
 Comment[da]=Dokker til at vælge forudindstillinger
 Comment[en_GB]=Docker for selecting presets
 Comment[es]=Acoplable de predefiniciones seleccionadas

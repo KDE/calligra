@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Calligra Tables
 Name[ca]=Taules del Calligra
-Name[ca@valencia]=Taules del Calligra
 Name[cs]=Calligra Tables
 Name[da]=Calligra Tables
 Name[de]=Calligra Tables
@@ -29,7 +28,6 @@ Exec=calligratables %u
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици
 GenericName[ca]=Full de càlcul
-GenericName[ca@valencia]=Full de càlcul
 GenericName[cs]=Sešit
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation
@@ -71,7 +69,6 @@ GenericName[zh_TW]=工作表
 Comment=Write spreadsheet documents
 Comment[bg]=Писане на електронни таблици
 Comment[ca]=Escriu documents de full de càlcul
-Comment[ca@valencia]=Escriu documents de full de càlcul
 Comment[da]=Skriv regnearksdokumenter
 Comment[de]=Tabellendokumente verfassen
 Comment[el]=Γραφή εγγράφων φύλλου εργασίας

@@ -2,7 +2,6 @@
 Name=Sybase
 Name[bg]=Sybase
 Name[ca]=Sybase
-Name[ca@valencia]=Sybase
 Name[cs]=Sybase
 Name[da]=Sybase
 Name[de]=Sybase
@@ -44,7 +43,6 @@ Name[zh_CN]=Sybase
 Name[zh_TW]=Sybase
 Comment=Sybase Import Plugin for Kexi
 Comment[ca]=Connector d'importació de Sybase per al Kexi
-Comment[ca@valencia]=Connector d'importació de Sybase per al Kexi
 Comment[de]=Sybase-Importmodul für Kexi
 Comment[es]=Complemento de importación de Sybase de Kexi
 Comment[et]=Kexi Sybase'i impordiplugin

@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Plan
 Name[ca]=Plan
-Name[ca@valencia]=Plan
 Name[cs]=Plan
 Name[da]=Plan
 Name[de]=Plan
@@ -27,7 +26,6 @@ GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
 GenericName[ca]=Gestió de projectes
-GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů
 GenericName[cy]=Rheoli Cywaith
 GenericName[da]=Projektstyring
@@ -74,7 +72,6 @@ GenericName[tr]=Proje Yönetimi
 GenericName[ug]=قۇرۇلۇش باشقۇرۇش
 GenericName[uk]=Керування проектами
 GenericName[uz]=Loyiha boshqaruvi
-GenericName[uz@cyrillic]=Лойиҳа бошқаруви
 GenericName[wa]=Manaedjmint di pordjet
 GenericName[x-test]=xxProject Managementxx
 GenericName[zh_CN]=项目管理

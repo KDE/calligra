@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Plan Scheduler Plugin
 Name[ca]=Connector de planificador del Plan
-Name[ca@valencia]=Connector de planificador del Plan
 Name[da]=Skemalægnings-plugin til Plan
 Name[de]=Plan-Planermodul
 Name[es]=Complemento de planificador de Plan
@@ -23,7 +22,6 @@ Type=ServiceType
 X-KDE-ServiceType=Plan/SchedulerPlugin
 Comment=A plugin that calculates a project schedule
 Comment[ca]=Un connector que calcula un planificador de projectes
-Comment[ca@valencia]=Un connector que calcula un planificador de projectes
 Comment[da]=Et plugin som udregner et projektskema
 Comment[de]=Ein Modul, das einen Projektzeitplan berechnet
 Comment[el]=Ένα πρόσθετο που υπολογίζει το χρονοπρογραμματισμό ενός έργου

@@ -2,7 +2,6 @@
 Icon=skyline_night
 Name=Skyline Night
 Name[ca]=Horitzó nocturn
-Name[ca@valencia]=Horitzó nocturn
 Name[da]=Skyline Night
 Name[de]=Horizont bei Nacht
 Name[el]=Γραμμή ορίζοντα νύχτα
@@ -27,7 +26,6 @@ Name[x-test]=xxSkyline Nightxx
 Name[zh_TW]=Skyline Night
 Comment=Skyline Night
 Comment[ca]=Horitzó nocturn
-Comment[ca@valencia]=Horitzó nocturn
 Comment[da]=Skyline Night
 Comment[de]=Horizont bei Nacht
 Comment[el]=Γραμμή ορίζοντα νύχτα
