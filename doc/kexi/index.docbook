@@ -173,7 +173,7 @@
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Opened Database Objects Area / Tabbed Windows</emphasis></term>
     <listitem>
-      <para>A central area of the application taking most of the screen space. <!--FIXME not in 2.4 For IDEAl user interface mode-->The userinterface contains switchable tabs with windows that are always maximized.<!--FIXME not in 2.4  For Childframe user interface mode it contains floating windows.--></para>
+      <para>A central area of the application taking most of the screen space. <!--FIXME not in 2.4 For IDEAl user interface mode-->The user interface contains switchable tabs with windows that are always maximized.<!--FIXME not in 2.4  For Childframe user interface mode it contains floating windows.--></para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Property Editor pane</emphasis></term>
@@ -663,7 +663,7 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 <para><note>
 <itemizedlist>
   <listitem><para>If you want to remove widget's data source assignment for a form widget, you can use the little black icon with a 
-white cross at the right in the <guilabel>Widget's data source</guilabel> box. Similarly, you can remove the formular's data source assignment. <!--FIXME not in master/2.4 <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.--></para></listitem>
+white cross at the right in the <guilabel>Widget's data source</guilabel> box. Similarly, you can remove the form's data source assignment. <!--FIXME not in master/2.4 <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.--></para></listitem>
 <listitem><para>Use the <inlinemediaobject><imageobject><imagedata fileref="oxygen-22x22-actions-go-jump.png" format="PNG"/></imageobject>
 </inlinemediaobject> icon to the right of the <guilabel>Form's data source</guilabel> label to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
 </itemizedlist>

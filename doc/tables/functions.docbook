@@ -394,7 +394,7 @@ all changes will be overwritten on the next script run
 
 <sect3 id="NUM2STRING">
 <title>NUM2STRING</title>
-<para>The NUM2STRING() function returns a string value for a given number. Note that KSpread can auto-convert numbers to strings if needed, so this function should rarely be needed.</para>
+<para>The NUM2STRING() function returns a string value for a given number. Note that Calligra Tables can auto-convert numbers to strings if needed, so this function should rarely be needed.</para>
 <para><segmentedlist><segtitle>Return type</segtitle>
 <seglistitem><seg>Text</seg></seglistitem></segmentedlist></para>
 <variablelist>
@@ -4505,7 +4505,7 @@ all changes will be overwritten on the next script run
 
 <sect3 id="INFO">
 <title>INFO</title>
-<para>The INFO() function returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns the path of the current directory, "numfile" returns the number of active documents, "release" returns the version of KSpread as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns the name of the operating environment, "osversion" returns the current operating system.</para>
+<para>The INFO() function returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns the path of the current directory, "numfile" returns the number of active documents, "release" returns the version of Calligra Tables as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns the name of the operating environment, "osversion" returns the current operating system.</para>
 <para><segmentedlist><segtitle>Return type</segtitle>
 <seglistitem><seg>Text</seg></seglistitem></segmentedlist></para>
 <variablelist>
@@ -5905,7 +5905,7 @@ all changes will be overwritten on the next script run
 <listitem><para>0.5*EPS() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</para></listitem>
 </varlistentry>
 <varlistentry><term>Examples</term>
-<listitem><para>EPS() is so small that KSpread displays 1+eps() as 1</para></listitem>
+<listitem><para>EPS() is so small that Calligra Tables displays 1+eps() as 1</para></listitem>
 </varlistentry>
 <varlistentry><term>Examples</term>
 <listitem><para>Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 or EPS() by using the equation (1+x)-1</para></listitem>

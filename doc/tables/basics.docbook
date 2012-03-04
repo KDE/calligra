@@ -621,7 +621,7 @@ of the page borders.</para>
 <para>The <guilabel>Sheet</guilabel> provides more options.
 The <guilabel>Print settings</guilabel> section lets you select whether or not to print the grid,
 comment indicators and formula indicators, objects and charts.
-The <guilabel>Repititons on each page</guilabel> section allows you to repeat selected column(s) or row(s) on each printed
+The <guilabel>Repetitions on each page</guilabel> section allows you to repeat selected column(s) or row(s) on each printed
 page. 
 In the section <guilabel>Scaling</guilabel> you can set a scalefactor 
 or the page limits for the print.</para>
