@@ -258,7 +258,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 #ifdef KEXI_DEBUG_GUI
     QWidget* debugWindow = 0;
     if (GUIenabled) {
-        KConfigGroup generalGroup = d->config->group("General");
+        KConfigGroup generalGroup = KGlobal::config()->group("General");
         if (generalGroup.readEntry("ShowInternalDebugger", false)) {
             debugWindow = KexiUtils::createDebugWindow(win);
             debugWindow->show();
