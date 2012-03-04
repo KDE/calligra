@@ -142,11 +142,23 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
+
+2012-03-03
+Main Window
+*User feedback: added anti-DOS protection when updating feedback ui
+*User feedback: added checking format of the .list files to avoid erroneous HTTP requests
+*make sure that after closing project, and then opening tabbed toolbar activates its first tab
+*do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
+TODO: backport to 2.4
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-2012-01-01
+2012-03-01
 KexiDB
 *SQLite Driver
 *Ported database compacting code to the new Kexi that uses system SQLite version
