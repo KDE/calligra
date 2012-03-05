@@ -441,7 +441,7 @@ void View::Private::initActions()
             view, SLOT(showTabBar(bool)));
 
     actions->preference = KStandardAction::preferences(view, SLOT(preference()), view);
-    actions->preference->setToolTip(i18n("Set various KSpread options"));
+    actions->preference->setToolTip(i18n("Set various Calligra Tables options"));
     ac->addAction("preference", actions->preference);
 
     KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
