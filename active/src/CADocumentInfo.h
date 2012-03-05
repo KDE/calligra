@@ -36,7 +36,7 @@ class CADocumentInfo : public QObject
     Q_PROPERTY (QString path READ path NOTIFY pathChanged)
 
 public:
-    enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
+    enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation, Graphics };
 
     explicit CADocumentInfo (QObject* parent = 0);
     explicit CADocumentInfo (DocumentType type, QString name, QString path, QObject* parent = 0);

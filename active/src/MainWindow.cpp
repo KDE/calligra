@@ -53,6 +53,7 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentTextDocs;
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
+    QList<QObject*> recentGraphics;
     QSettings settings;
     foreach (QString string, settings.value ("recentFiles").toStringList()) {
         CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
@@ -67,6 +68,9 @@ MainWindow::MainWindow (QWidget* parent)
         case CADocumentInfo::Presentation:
             recentPresentations.append (docInfo);
             break;
+        case CADocumentInfo::Graphics:
+            recentGraphics.append (docInfo);
+            break;
         }
     }
 
@@ -79,6 +83,7 @@ MainWindow::MainWindow (QWidget* parent)
     m_view->rootContext()->setContextProperty ("recentTextDocsModel", QVariant::fromValue (recentTextDocs));
     m_view->rootContext()->setContextProperty ("recentSpreadsheetsModel", QVariant::fromValue (recentSpreadsheets));
     m_view->rootContext()->setContextProperty ("recentPresentationsModel", QVariant::fromValue (recentPresentations));
+    m_view->rootContext()->setContextProperty ("recentGraphicsModel", QVariant::fromValue (recentGraphics));
     m_view->rootContext()->setContextProperty ("mainwindow", this);
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()

@@ -27,14 +27,14 @@
 
 class KoCanvasController;
 class KoZoomMode;
-class KPrDocument;
+class KoPADocument;
 class KoPACanvasBase;
 
 class CAPAView : public QObject, public KoPAViewBase
 {
     Q_OBJECT
 public:
-    CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
+    CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KoPADocument* paDocument);
     virtual ~CAPAView();
     virtual void setShowRulers (bool show);
     virtual void editPaste();
@@ -53,7 +53,7 @@ public:
 private:
     KoCanvasController* m_canvasController;
     KoPACanvasBase* m_paCanvas;
-    KPrDocument* m_prDocument;
+    KoPADocument* m_paDocument;
     KoZoomController* m_zoomController;
     KoPAPageBase* m_page;
 

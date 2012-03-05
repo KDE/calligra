@@ -29,7 +29,6 @@
 #include <KoPACanvasBase.h>
 #include <libs/kopageapp/KoPAPageBase.h>
 #include <libs/kopageapp/KoPAViewModeNormal.h>
-#include <stage/part/KPrDocument.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoSelection.h>
@@ -40,13 +39,13 @@
 #include <KoPACanvasItem.h>
 #include <KoZoomHandler.h>
 
-CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
-    : m_canvasController (canvasController), m_paCanvas (canvas), m_prDocument (prDocument), m_page (0)
+CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KoPADocument *paDocument)
+    : m_canvasController (canvasController), m_paCanvas (canvas), m_paDocument (paDocument), m_page (0)
 {
     KoPAViewModeNormal* mode = new KoPAViewModeNormal (this, m_paCanvas);
     setViewMode (mode);
     m_zoomController = new KoZoomController (canvasController, static_cast<KoZoomHandler*> (viewConverter()),
-            prDocument->actionCollection());
+            paDocument->actionCollection());
     connect (m_zoomController, SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
 }
 
@@ -127,7 +126,7 @@ void CAPAView::setActivePage (KoPAPageBase* page)
     }
 
     // Set the current page number in the canvas resource provider
-    m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::CurrentPage, m_prDocument->pageIndex (page) + 1);
+    m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::CurrentPage, m_paDocument->pageIndex (page) + 1);
 }
 
 void CAPAView::doUpdateActivePage (KoPAPageBase* page)
@@ -158,7 +157,7 @@ KoZoomController* CAPAView::zoomController() const
 
 KoPADocument* CAPAView::kopaDocument() const
 {
-    return m_prDocument;
+    return m_paDocument;
 }
 
 KoPACanvasBase* CAPAView::kopaCanvas() const

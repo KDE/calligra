@@ -25,6 +25,7 @@
 #include "CATextDocumentHandler.h"
 #include "CASpreadsheetHandler.h"
 #include "CAPresentationHandler.h"
+#include "CAGraphicsHandler.h"
 
 class CADocumentController::Private
 {
@@ -47,6 +48,7 @@ CADocumentController::CADocumentController (QObject* parent)
     d->documentHandlers.append (new CATextDocumentHandler (this));
     d->documentHandlers.append (new CASpreadsheetHandler (this));
     d->documentHandlers.append (new CAPresentationHandler (this));
+    d->documentHandlers.append (new CAGraphicsHandler (this));
 }
 
 CADocumentController::~CADocumentController()

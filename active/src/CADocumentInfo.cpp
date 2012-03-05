@@ -79,6 +79,7 @@ QHash< CADocumentInfo::DocumentType, QString > CADocumentInfo::typeNameHash()
     hash[TextDocument] = "TextDocument";
     hash[Spreadsheet] = "Spreadsheet";
     hash[Presentation] = "Presentation";
+    hash[Graphics] = "Graphics";
     return hash;
 }
 
