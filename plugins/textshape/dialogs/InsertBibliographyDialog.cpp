@@ -98,6 +98,9 @@ void InsertBibliographyDialog::addField()
     int row = dialog.availableFields->currentRow();
 
     if (row != -1) {
+
+        disconnect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
+
         QString newDataField = dialog.availableFields->takeItem(row)->text();
         QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
         bibField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::BIBLIOGRAPHY));
@@ -106,6 +109,7 @@ void InsertBibliographyDialog::addField()
         newEntry->dataField = newDataField;
 
         m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(newEntry));
+        connect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
     }
 }
 
