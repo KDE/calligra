@@ -116,7 +116,12 @@ void CalligraCreator::slotCompleted()
 
 ThumbCreator::Flags CalligraCreator::flags() const
 {
-    return (Flags)(DrawFrame | BlendIcon);
+    if (m_doc->mimeType() == "image/openraster" || m_doc->mimeType() == "application/x-krita") {
+        return (Flags)(DrawFrame);
+    }
+    else {
+        return (Flags)(DrawFrame | BlendIcon);
+    }
 }
 
 #include "calligracreator.moc"
