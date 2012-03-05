@@ -1,7 +1,7 @@
 /*
-    Copyright (C) 2001, Rob Buis <rwlbuis@wanadoo.nl>
-    Copyright (C) 2003, Rob Buis <buis@kde.org>
-    This file is part of the KDE project
+    This file is part of the Calligra project, made within the KDE community.
+
+    Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,18 +16,13 @@
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-
-DESCRIPTION
+    Boston, MA 02110-1301, USA.
 */
 
-#include "xfigimport_factory.h"
-#include "xfigimport_factory.moc"
-#include "xfigimport.h"
+// plugin
+#include "xfigimportfilter.h"
+// KDE
+#include <KPluginFactory>
 
-#include <kcomponentdata.h>
-#include <kdebug.h>
-
-K_PLUGIN_FACTORY(XFIGImportFactory, registerPlugin<XFIGImport>();)
-K_EXPORT_PLUGIN(XFIGImportFactory("xfigimport"))
-
+K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
+K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
