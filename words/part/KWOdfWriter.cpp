@@ -79,7 +79,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
     KoXmlWriter &savedWriter = context.xmlWriter();
 
     KoShapeSavingContext::ShapeSavingOptions options = context.options();
-    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml);
+    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml | KoShapeSavingContext::ZIndex);
     context.setXmlWriter(writer);
 
     Q_ASSERT(!fs->frames().isEmpty());
@@ -225,13 +225,8 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
 
-    if (!changeTracker || !changeTracker->recordChanges()) {
-        changes.setTrackChanges(false);
-    } else {
-        changes.setTrackChanges(true);
-    }
-
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
+    context.addOption(KoShapeSavingContext::ZIndex);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -323,12 +318,20 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     //we save the changes before starting the page sequence element because odf validator insist on having <tracked-changes> right after the <office:text> tag
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
-    changes.saveOdfChanges(changeWriter);
+
+    if (!changeTracker || !changeTracker->recordChanges()) {
+        changes.saveOdfChanges(changeWriter, false);
+    }
+    else {
+        changes.saveOdfChanges(changeWriter, true);
+    }
+
 
     delete changeWriter;
     changeWriter = 0;
 
     tmpChangeFile.close();
+
     bodyWriter->addCompleteElement(&tmpChangeFile);
 
     // Do not write out text:page-sequence, if there is a maintTextFrame

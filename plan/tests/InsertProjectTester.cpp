@@ -170,7 +170,7 @@ void InsertProjectTester::testTeamResource()
     ResourceGroup *tg = addResourceGroup( part );
     Resource *t1 = addResource( part, tg );
     Resource *t2 = addResource( part, tg );
-    r->setRequiredResources( QList<Resource*>() << t1 << t2 );
+    r->setRequiredIds( QStringList() << t1->id() << t2->id() );
     Project &p = part.getProject();
     QVERIFY( p.resourceGroupAt( 0 )->numResources() == 1 );
     QVERIFY( p.resourceGroupAt( 1 )->numResources() == 2 );
@@ -311,9 +311,9 @@ void InsertProjectTester::testTeamResourceRequest()
     r->setType( Resource::Type_Team );
     ResourceGroup *tg = addResourceGroup( part );
     Resource *t1 = addResource( part, tg );
-    r->addTeamMember( t1 );
+    r->addTeamMemberId( t1->id() );
     Resource *t2 = addResource( part, tg );
-    r->addTeamMember( t2 );
+    r->addTeamMemberId( t2->id() );
     addTask( part );
     addGroupRequest( part );
     addResourceRequest( part );
@@ -470,7 +470,7 @@ void InsertProjectTester::testExistingRequiredResourceRequest()
     g->setType( ResourceGroup::Type_Material );
     QList<Resource*> m; m << addResource( part, g );
     m.first()->setType( Resource::Type_Material );
-    r->setRequiredResources( m );
+    r->setRequiredIds( QStringList() << m.first()->id() );
     addTask( part );
     addGroupRequest( part );
     addResourceRequest( part );
@@ -514,10 +514,10 @@ void InsertProjectTester::testExistingTeamResourceRequest()
     tg->setName( "TG" );
     Resource *t1 = addResource( part, tg );
     t1->setName( "T1" );
-    r->addTeamMember( t1 );
+    r->addTeamMemberId( t1->id() );
     Resource *t2 = addResource( part, tg );
     t2->setName( "T2" );
-    r->addTeamMember( t2 );
+    r->addTeamMemberId( t2->id() );
     addTask( part );
     addGroupRequest( part );
     addResourceRequest( part );

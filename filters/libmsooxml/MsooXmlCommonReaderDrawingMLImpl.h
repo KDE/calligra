@@ -757,6 +757,8 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
+    bool isCustomShape = false;
+
 #ifdef PPTXXMLSLIDEREADER_CPP
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
@@ -783,6 +785,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else if (m_contentType == "custom") { // custGeom
         body->startElement("draw:custom-shape");
+        isCustomShape = true;
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -797,7 +800,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
+        isCustomShape = true;
     }
+
     if (!m_cNvPrName.isEmpty()) {
         body->addAttribute("draw:name", m_cNvPrName);
     }
@@ -812,6 +817,17 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
+
+    // NOTE: Workaround: Set padding to ZERO until the fo:wrap-option support
+    // arrives and other text on shape related issues get fixed.
+    if (isCustomShape) {
+        m_currentDrawStyle->removeProperty("fo:padding-left");
+        m_currentDrawStyle->removeProperty("fo:padding-right");
+        m_currentDrawStyle->removeProperty("fo:padding-top");
+        m_currentDrawStyle->removeProperty("fo:padding-bottom");
+        m_currentDrawStyle->addPropertyPt("fo:padding", 0);
+    }
+
 #elif defined DOCXXMLDOCREADER_CPP
     if (m_moveToStylesXml) {
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);

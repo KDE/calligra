@@ -148,7 +148,7 @@ void KexiAssistantPage::setNextButtonVisible(bool set)
 void KexiAssistantPage::setContents(QWidget* widget)
 {
     widget->setContentsMargins(0, 0, 0, 0);
-    d->mainLyr->addWidget(widget, 2, 1);
+    d->mainLyr->addWidget(widget, 2, 1, 2, 2);
 }
 
 void KexiAssistantPage::setContents(QLayout* layout)

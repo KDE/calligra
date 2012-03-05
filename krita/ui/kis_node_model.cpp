@@ -173,8 +173,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*, int)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int, const QString&)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*, int, QString)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
@@ -189,13 +189,15 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     reset();
 }
 
-void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index)
+void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
 {
     int row = 0;
     QModelIndex parentIndex;
 
     bool willAdd =
-        m_d->indexConverter->indexFromAddedDummy(parent, index, parentIndex, row);
+        m_d->indexConverter->indexFromAddedDummy(parent, index,
+                                                 metaObjectType,
+                                                 parentIndex, row);
 
     if(willAdd) {
         beginInsertRows(parentIndex, row, row);
@@ -205,9 +207,8 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index)
 
 void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 {
-    connectDummy(dummy, true);
-
     if(m_d->needFinishInsertRows) {
+        connectDummy(dummy, true);
         endInsertRows();
         m_d->needFinishInsertRows = false;
     }
@@ -215,8 +216,6 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 {
-    connectDummy(dummy, false);
-
     // FIXME: is it really what we want?
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
@@ -231,6 +230,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     QModelIndex itemIndex = m_d->indexConverter->indexFromDummy(dummy);
 
     if(itemIndex.isValid()) {
+        connectDummy(dummy, false);
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
@@ -426,26 +426,27 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     Q_ASSERT(indexes.count() == 1); // we only allow one node at a time to be stored as mimedata
 
     KisNodeSP node = nodeFromIndex(indexes.first());
-    KisMimeData* data = new KisMimeData();
-    data->setNode(node);
+    KisMimeData* data = new KisMimeData(node);
+
     return data;
 }
 
-void KisNodeModel::correctNewNodeLocation(KisNodeSP node,
+bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
                                           KisNodeDummy* &parentDummy,
                                           KisNodeDummy* &aboveThisDummy)
 {
     KisNodeSP parentNode = parentDummy->node();
+    bool result = true;
 
     if(!parentDummy->node()->allowAsChild(node)) {
-        // root layer must accept all the layers
-        Q_ASSERT(parentDummy->parent());
-
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 
-        correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+        result = (!parentDummy) ? false :
+            correctNewNodeLocation(node, parentDummy, aboveThisDummy);
     }
+
+    return result;
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -455,7 +456,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     KisNodeSP node = mimedata ? mimedata->node() : 0;
 
-    if(!node) return false;
+    if (!node) return false;
 
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
@@ -464,14 +465,16 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         m_d->indexConverter->dummyFromIndex(parent) :
         m_d->dummiesFacade->rootDummy();
 
-    if(row == -1) {
+    if (row == -1) {
         aboveThisDummy = parent.isValid() ? parentDummy->lastChild() : 0;
     }
     else {
         aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
 
-    correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+    if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
+        return false;
+    }
 
     Q_ASSERT(parentDummy);
     KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
@@ -479,10 +482,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     bool result = true;
 
-    if(action == Qt::CopyAction) {
+    if (action == Qt::CopyAction) {
         emit requestAddNode(node->clone(), parentDummy->node(), aboveThisNode);
     }
-    else if(action == Qt::MoveAction) {
+    else if (action == Qt::MoveAction) {
         emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
     }
     else {

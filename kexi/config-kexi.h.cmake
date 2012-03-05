@@ -3,3 +3,5 @@
 
 /* define if you have libreadline available */
 /* TODO: detect #define HAVE_READLINE 1 */
+
+#cmakedefine HAVE_UNAME 1

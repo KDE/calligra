@@ -95,6 +95,8 @@ protected:
 
 
 protected:
+    bool specialHoverModeActive() const;
+
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -158,6 +160,7 @@ private:
 
 private:
 
+    bool m_specialHoverModifier;
     QGridLayout *m_optionWidgetLayout;
 
     bool m_supportOutline;
@@ -168,9 +171,6 @@ private:
     bool m_toForegroundColor;
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
-    KAction* m_lighterColor;
-    KAction* m_darkerColor;
-
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

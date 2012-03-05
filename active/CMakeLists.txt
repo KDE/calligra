@@ -48,6 +48,7 @@ target_link_libraries(calligraactive
     wordsprivate
     calligratablescommon
     kopageapp
+    calligrastageprivate
 )
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)

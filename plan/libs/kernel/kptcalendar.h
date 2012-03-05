@@ -675,11 +675,6 @@ private:
     Duration m_month;
     Duration m_week;
     Duration m_day;
-    
-#ifndef NDEBUG
-public:
-    void printDebug(const QString& indent=QString());
-#endif
 };
 
 }  //KPlato namespace

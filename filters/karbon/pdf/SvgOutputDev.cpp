@@ -122,7 +122,7 @@ void SvgOutputDev::dumpContent()
     stream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    stream << "<!-- Created using Karbon14, part of calligra: http://www.calligra.org/karbon -->" << endl;
+    stream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << endl;
 
     stream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
     stream << "width=\"" << d->pageSize.width() << "px\" height=\"" << d->pageSize.height() << "px\">" << endl;

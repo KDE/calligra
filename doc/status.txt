@@ -65,7 +65,7 @@ Flow
 
 Screenshots are missing, a toolbars and menus description should be added.
 
-Karbon14
+Karbon
 
 Easy: no documentation at all.
 

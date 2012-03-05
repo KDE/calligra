@@ -487,7 +487,7 @@ int sqlite3IcuInit(sqlite3 *db){
   return rc;
 }
 
-#if !SQLITE_CORE
+#if !defined SQLITE_CORE || !SQLITE_CORE
 int sqlite3_extension_init(
   sqlite3 *db, 
   char **pzErrMsg,

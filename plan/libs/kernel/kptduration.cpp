@@ -28,6 +28,8 @@
 #include <QRegExp>
 #include <QStringList>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -76,7 +78,7 @@ void Duration::add(const Duration &delta) {
 void Duration::add(qint64 delta) {
     qint64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kDebug()<<"Underflow"<<(long int)delta<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<(long int)delta<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -85,7 +87,7 @@ void Duration::add(qint64 delta) {
 
 void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
-        kDebug()<<"Underflow"<<delta.toString()<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<delta.toString()<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -95,7 +97,7 @@ void Duration::subtract(const Duration &delta) {
 Duration Duration::operator*(int value) const {
     Duration dur(*this);
     if (value < 0) {
-        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms * value; //FIXME
@@ -106,7 +108,7 @@ Duration Duration::operator*(int value) const {
 Duration Duration::operator/(int value) const {
     Duration dur(*this);
     if (value <= 0) {
-        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms / value; //FIXME
@@ -128,7 +130,7 @@ Duration Duration::operator*(const Duration value) const {
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kDebug()<<"Divide by zero:"<<this->toString();
+        kDebug(planDbg())<<"Divide by zero:"<<this->toString();
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);

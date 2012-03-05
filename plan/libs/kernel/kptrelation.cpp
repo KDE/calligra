@@ -27,6 +27,8 @@
 
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -35,7 +37,7 @@ Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_child=child;
     m_type=type;
     m_lag=lag;
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::Relation(Node *parent, Node *child, Type type) {
@@ -43,7 +45,7 @@ Relation::Relation(Node *parent, Node *child, Type type) {
     m_child=child;
     m_type=type;
     m_lag=Duration();
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::Relation(Relation *rel) {
@@ -51,11 +53,11 @@ Relation::Relation(Relation *rel) {
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::~Relation() {
-    //kDebug()<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
+    //kDebug(planDbg())<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)
@@ -113,11 +115,11 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<"child == parent";
+        kDebug(planDbg())<<"child == parent";
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<"child == parent";
+        kDebug(planDbg())<<"child == parent";
         return false;
     }
     if (!m_parent->legalToLink(m_child))
@@ -137,7 +139,7 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
 
-    //kDebug()<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
+    //kDebug(planDbg())<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
     return true;
 }
 
@@ -170,9 +172,9 @@ void Relation::save(QDomElement &element) const {
 void Relation::printDebug(const QByteArray& _indent) { 
     QString indent = _indent;
     indent += "  ";
-    kDebug()<<indent<<"  Parent:"<<m_parent->name();
-    kDebug()<<indent<<"  Child:"<<m_child->name();
-    kDebug()<<indent<<"  Type:"<<m_type;
+    kDebug(planDbg())<<indent<<"  Parent:"<<m_parent->name();
+    kDebug(planDbg())<<indent<<"  Child:"<<m_child->name();
+    kDebug(planDbg())<<indent<<"  Type:"<<m_type;
 }
 #endif
 

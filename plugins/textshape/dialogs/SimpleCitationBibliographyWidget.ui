@@ -49,7 +49,7 @@
    <item>
     <widget class="QToolButton" name="configureBibliography">
      <property name="toolTip">
-      <string>Configure bibiliography</string>
+      <string>Configure bibliography</string>
      </property>
      <property name="text">
       <string>Configure Bibliography</string>

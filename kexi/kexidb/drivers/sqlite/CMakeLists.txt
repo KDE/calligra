@@ -4,6 +4,9 @@ include_directories( ${SQLITE_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOUR
 
 ADD_DEFINITIONS( -D__KEXIDB__= )
 
+set(KEXI_SQLITE_DUMP_TOOL kexi_sqlite3_dump)
+ADD_DEFINITIONS( -DKEXI_SQLITE_DUMP_TOOL=\\"${KEXI_SQLITE_DUMP_TOOL}\\" )
+
 ########### next target ###############
 
 set(kexidb_sqlite3driver_PART_SRCS 
@@ -29,3 +32,4 @@ install(TARGETS kexidb_sqlite3driver  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kexidb_sqlite3driver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory(icu)
+add_subdirectory(dump)

@@ -49,6 +49,7 @@ private slots:
     void removeSelectedItem();
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
     void addToPresets();
+    void removeFromPresets();
     void presetSelected(KoResource *resource);
     void filterChanged();
     void sceneSelectionChanged();
