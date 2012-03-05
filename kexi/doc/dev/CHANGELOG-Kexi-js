@@ -158,6 +158,10 @@ TODO: backport to 2.4
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
+2012-03-05
+Main Window
+*User feedback: set anonymous identification as mandatory, needed even for basic statistics
+
 2012-03-01
 KexiDB
 *SQLite Driver
