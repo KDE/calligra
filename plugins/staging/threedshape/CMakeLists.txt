@@ -15,6 +15,8 @@ SET (threedshape_LIB_SRCS
     Objects.cpp
     utils.cpp
 
+    GraphicsProperties.cpp
+
     #ChangeImageCommand.cpp
 )
 
