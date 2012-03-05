@@ -697,7 +697,7 @@ void
 XFigOdgWriter::writeParagraphStyle( KoGenStyle& odfStyle, const XFigTextObject* textObject )
 {
     const XFigTextAlignment textAlignment = textObject->textAlignment();
-    static const char* const alignmentName =
+    const char* const alignmentName =
         (textAlignment == XFigTextCenterAligned) ? "center" :
         (textAlignment == XFigTextRightAligned) ?  "right" :
         /* XFigTextLeftAligned */                  "left";
