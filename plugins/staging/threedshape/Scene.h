@@ -59,17 +59,17 @@ public:
     void saveOdf(KoXmlWriter &writer) const;
 
     // getters
-    QVector3D   vrp()          { return m_vrp;          }
-    QVector3D   vpn()          { return m_vpn;          }
-    QVector3D   vup()          { return m_vup;          }
-    Projection  projection()   { return m_projection;   }
-    QString     distance()     { return m_distance;     } // Not yet used, just saved
-    QString     focalLength()  { return m_focalLength;  } // Not yet used, just saved
-    QString     shadowSlant()  { return m_shadowSlant;  } // Not yet used, just saved
-    Shademode   shadeMode()    { return m_shadeMode;    }
-    QColor      ambientColor() { return m_ambientColor; }
-    bool        lightingMode() { return m_lightingMode; }
-    QString     transform()    { return m_transform;    } // Not yet used, just saved
+    QVector3D   vrp()          const { return m_vrp;          }
+    QVector3D   vpn()          const { return m_vpn;          }
+    QVector3D   vup()          const { return m_vup;          }
+    Projection  projection()   const { return m_projection;   }
+    QString     distance()     const { return m_distance;     } // Not yet used, just saved
+    QString     focalLength()  const { return m_focalLength;  } // Not yet used, just saved
+    QString     shadowSlant()  const { return m_shadowSlant;  } // Not yet used, just saved
+    Shademode   shadeMode()    const { return m_shadeMode;    }
+    QColor      ambientColor() const { return m_ambientColor; }
+    bool        lightingMode() const { return m_lightingMode; }
+    QString     transform()    const { return m_transform;    } // Not yet used, just saved
 
 private:
     // 1. Scene attributes

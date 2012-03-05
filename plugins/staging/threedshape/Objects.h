@@ -57,8 +57,8 @@ class Sphere : protected Object3D
     virtual void saveOdf(KoXmlWriter &writer) const;
 
     // getters
-    QVector3D center() { return m_center; }
-    QVector3D size()   { return m_size;   }
+    QVector3D center() const { return m_center; }
+    QVector3D size()   const { return m_size;   }
 
 private:
     QVector3D  m_center;
