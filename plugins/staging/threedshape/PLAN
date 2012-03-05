@@ -4,9 +4,13 @@
 
  * Load 3D scene
     + Load Scene Attributes                             Done
+    + Load Scene style
     + Load Lightsources                                 Done
-    + Load Objects
-       - sphere
+    + Load generic scene object stuff
+       - Load generic object attributes
+       - Load object style
+    + Load object specific attributes
+       - sphere                                         done
        - cube
        - extrude
        - rotate
@@ -22,9 +26,13 @@
 
  * Save the 3D scene
     + Save Scene attributes                             Done
+    + Save Scene style
     + Save Lightsources                                 Done
-    + Save Objects
-       - sphere
+    + Save generic scene object stuff
+       - Save generic object attributes
+       - Save object style
+    + Save object specific attributes
+       - sphere                                         done
        - cube
        - extrude
        - rotate
