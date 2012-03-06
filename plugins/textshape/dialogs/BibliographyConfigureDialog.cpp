@@ -106,8 +106,8 @@ void BibliographyConfigureDialog::sortMethodChanged(bool sortByPosition)
 SortKeyWidget::SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent) :
     QWidget(parent),
     m_dataFields(new QComboBox),
-    m_ascButton(new QRadioButton("Ascending")),
-    m_dscButton(new QRadioButton("Descending")),
+    m_ascButton(new QRadioButton(i18n("Ascending"))),
+    m_dscButton(new QRadioButton(i18n("Descending"))),
     m_layout(new QHBoxLayout)
 {
     setLayout(m_layout);

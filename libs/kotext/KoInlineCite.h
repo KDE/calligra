@@ -51,9 +51,9 @@ public:
 
     virtual ~KoInlineCite();
 
-    bool operator!= ( const KoInlineCite &cite ) const;
+    bool operator!= (const KoInlineCite &cite) const;
 
-    KoInlineCite &operator= ( const KoInlineCite &cite );
+    KoInlineCite &operator= (const KoInlineCite &cite);
 
     Type type() const;        //return type of cite
 

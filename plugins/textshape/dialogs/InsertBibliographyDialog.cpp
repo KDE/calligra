@@ -40,7 +40,7 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     connect(dialog.add, SIGNAL(clicked()), this, SLOT(addField()));
     connect(dialog.remove, SIGNAL(clicked()), this, SLOT(removeField()));
     connect(dialog.span, SIGNAL(clicked()), this, SLOT(addSpan()));
-    connect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
+    connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(spanChanged(QListWidgetItem *)));
 
     /*  To do : handle tab stops
     */
@@ -56,7 +56,7 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 
 QString InsertBibliographyDialog::bibliographyType()
 {
-    return dialog.bibTypes->currentItem()->text().remove(" ").toLower();
+    return dialog.bibTypes->currentItem()->text().remove(' ').toLower();
 }
 
 void InsertBibliographyDialog::insert()
@@ -99,7 +99,7 @@ void InsertBibliographyDialog::addField()
 
     if (row != -1) {
 
-        disconnect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
+        disconnect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(spanChanged(QListWidgetItem *)));
 
         QString newDataField = dialog.availableFields->takeItem(row)->text();
         QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
