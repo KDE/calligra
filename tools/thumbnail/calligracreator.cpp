@@ -116,7 +116,7 @@ void CalligraCreator::slotCompleted()
 
 ThumbCreator::Flags CalligraCreator::flags() const
 {
-    if (m_doc->mimeType() == "image/openraster" || m_doc->mimeType() == "application/x-krita") {
+    if (m_doc && (m_doc->mimeType() == "image/openraster" || m_doc->mimeType() == "application/x-krita")) {
         return (Flags)(DrawFrame);
     }
     else {
