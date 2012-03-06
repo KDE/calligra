@@ -146,12 +146,34 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
-
 2012-03-03
 Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
+
+~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+2012-03-07
+KexiDB
+*SQLite Driver
+**Fixed crashes when compacting database fails
+**Fixed error when attempting to compact database opened from recent lists
+*MySQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+
+2012-03-06
+Main Window
+*User feedback: added home page and forum links
+
+2012-03-05
+Main Window
+*User feedback: set anonymous identification as mandatory, needed even for basic statistics
+
+2012-03-03
+Main Window
 *make sure that after closing project, and then opening tabbed toolbar activates its first tab
 *do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
 
