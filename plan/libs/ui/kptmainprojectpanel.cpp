@@ -44,6 +44,8 @@
 #include "kptschedule.h"
 #include "kpttaskdescriptiondialog.h"
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -183,7 +185,7 @@ void MainProjectPanel::slotEndDateClicked()
 
 void MainProjectPanel::enableDateTime()
 {
-    kDebug();
+    kDebug(planDbg());
     startTime->setEnabled(true);
     startDate->setEnabled(true);
     endTime->setEnabled(true);

@@ -165,6 +165,7 @@ void KWTextFrameSet::setupDocument()
     KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
     doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_wordsDocument->resourceManager()->undoStack());
+    doc.setShapeController(m_wordsDocument->shapeController());
 
     doc.setRelativeTabs(true);
     doc.setParaTableSpacingAtStart(true);

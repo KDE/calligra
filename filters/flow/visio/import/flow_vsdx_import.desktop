@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Name=Flow Visio Import Filter
+Name[it]=Filtro di importazione Visio per Flow
+Name[nl]=Visio-importfilter voor Flow
+Name[pt]=Filtro de Importação de Visio para o Flow
+Name[pt_BR]=Filtro de importação de Visio para o Flow
+Name[sv]=Flow Visio importfilter
+Name[uk]=Фільтр імпортування даних Visio для Flow
+Name[x-test]=xxFlow Visio Import Filterxx
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
+X-KDE-Import=application/vnd.visio
+X-KDE-Weight=1
+X-KDE-Library=vsdximport
+X-KDE-ServiceTypes=CalligraFilter

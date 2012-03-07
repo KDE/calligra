@@ -51,6 +51,14 @@ public:
 
     QVariant value(const QString& key) const;
 
+    QString serviceUrl() const;
+
+signals:
+    void redirectLoaded();
+
+public slots:
+    void waitForRedirect(QObject *receiver, const char* slot);
+
 private slots:
     void sendDataFinished(KJob* job);
     void sendRedirectQuestionFinished(KJob* job);

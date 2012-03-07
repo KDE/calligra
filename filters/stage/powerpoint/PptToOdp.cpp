@@ -512,7 +512,35 @@ void PptToOdp::DrawClient::addTextStyles(
         //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     }
 #endif
+
+    bool isCustomShape = false;
+    switch (m_currentShapeType) {
+    case msosptPictureFrame:
+    case msosptTextBox:
+    case msosptLine:
+        break;
+    case msosptRectangle:
+        if (!clientData || !processRectangleAsTextBox(*clientData)) {
+            isCustomShape = true;
+        }
+        break;
+    default:
+        isCustomShape = true;
+        break;
+    }
+
+    // NOTE: Workaround: Set padding to ZERO until the fo:wrap-option support
+    // arrives and other text on shape related issues get fixed.
+    if (isCustomShape) {
+        style.removeProperty("fo:padding-left");
+        style.removeProperty("fo:padding-right");
+        style.removeProperty("fo:padding-top");
+        style.removeProperty("fo:padding-bottom");
+        style.addPropertyPt("fo:padding", 0);
+    }
+
     const QString styleName = out.styles.insert(style);
+
     if (isPlaceholder(clientData)) {
         out.xml.addAttribute("presentation:style-name", styleName);
         QString className = getPresentationClass(cd->placeholderAtom.data());
@@ -552,7 +580,7 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 #endif
 }
 
-const MSO::OfficeArtSpContainer* 
+const MSO::OfficeArtSpContainer*
 PptToOdp::DrawClient::getMasterShapeContainer(quint32 spid)
 {
     const OfficeArtSpContainer* sp = 0;
@@ -563,7 +591,7 @@ PptToOdp::DrawClient::getMasterShapeContainer(quint32 spid)
 QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     //Have to handle the case when OfficeArtCOLORREF/fSchemeIndex == true.
-    
+
     //NOTE: If the hspMaster property (0x0301) is provided by the shape, the
     //colorScheme of the master slide containing the master shape could be
     //required.  Testing required to implement the correct logic.
@@ -748,7 +776,7 @@ bool PptToOdp::DrawClient::placeholderAllowed(const MSO::PlaceholderAtom* pa) co
  * ************************************************
  * PptToOdp
  * ************************************************
- */  
+ */
 PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgress)(const int))
 : p(0),
   m_filter(filter),
@@ -758,6 +786,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentMaster(0),
   m_currentSlide(0),
   m_processingMasters(false),
+  m_firstChunkSymbolAtStart(false),
   m_isList(false),
   m_previousListLevel(0)
 {
@@ -1139,12 +1168,15 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
                                     const PptTextCFRun& cf,
                                     const TextCFException9* /*cf9*/,
                                     const TextCFException10* /*cf10*/,
-                                    const TextSIException* /*si*/)
+                                    const TextSIException* /*si*/,
+                                    const bool isSymbol)
 {
-    //getting information for all the possible attributes in
-    //style:text-properties for clarity in alphabetical order
-
+    // Getting information for all the possible attributes in
+    // style:text-properties for clarity in alphabetical order.
     const KoGenStyle::PropertyType text = KoGenStyle::TextType;
+
+    // symbol font has precedence
+    bool isSymbolFont = false;
 
     // fo:background-color
     // fo:color
@@ -1155,10 +1187,27 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     // fo:country
     // fo:font-family
-    const FontEntityAtom* font = getFont(cf.fontRef());
+    const FontEntityAtom* font = 0;
+    if (cf.symbolFontRef() && isSymbol) {
+        if ( (font = getFont(cf.symbolFontRef())) != 0 ) {
+            isSymbolFont = true;
+        }
+    }
+    if (!font) {
+        font = getFont(cf.fontRef());
+    }
     if (font) {
-        const QString name = QString::fromUtf16(font->lfFaceName.data(),
-                                                font->lfFaceName.size());
+#ifdef DEBUG_PPTTOODP_FONTS
+        qDebug() << "DEBUG: FontEntityAtom";
+        qDebug() << "> IfCharSet:" << font->lfCharSet;
+        qDebug() << "> fEmbedSubsetted:" << font->fEmbedSubsetted;
+        qDebug() << "> rasterFontType:" << font->rasterFontType;
+        qDebug() << "> deviceFontType:" << font->deviceFontType;
+        qDebug() << "> truetypeFontType:" << font->truetypeFontType;
+        qDebug() << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
+        qDebug() << "DEBUG END: FontEntityAtom";
+#endif
+        const QString name = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
@@ -1182,6 +1231,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:country-asian
     // style:country-complex
     // style:font-charset
+    if (isSymbolFont) {
+        style.addProperty("fo:font-charset", "x-symbol", text);
+    }
     // style:font-family-asian
     // style:font-family-complex
     // style:font-family-generic
@@ -1537,8 +1589,7 @@ getBulletChar(const PptTextPFRun& pf)
  * @param value to convert
  * @return processed value in points or percentage
  */
-QString
-bulletSizeToSizeString(qint16 value)
+QString bulletSizeToSizeString(qint16 value)
 {
     QString ret;
     if (value >= 25 && value <= 400) {
@@ -1666,19 +1717,28 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
                 ts.addProperty("fo:color", color.name(), text);
             }
         }
-        //default value doesn't make sense
-        if (i.pf.fBulletHasFont()) {
-            quint16 fontRef = i.pf.bulletFontRef();
-            //MSPowerPoint: UI does not enable to change font of a numbered lists.
-            const MSO::FontEntityAtom* font = getFont(fontRef);
-            if (font && !i.pf.fBulletHasAutoNumber()) {
-                QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
-                ts.addProperty("fo:font-family", family, text);
-            }
+
+        const MSO::FontEntityAtom* font = 0;
+
+        //MSPowerPoint: UI does NOT enable to change font of a
+        //numbered lists label.
+        if (i.pf.fBulletHasFont() && !i.pf.fBulletHasAutoNumber()) {
+            font = getFont(i.pf.bulletFontRef());
         }
 
-        //MSPowerPoint: A label does NOT inherit Underline from text-properties
-        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        //A list label should NOT inherit a symbol font.
+        if (!font && m_firstChunkSymbolAtStart) {
+            font = getFont(m_firstChunkFontRef);
+        }
+
+        if (font) {
+            QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+            ts.addProperty("fo:font-family", family, text);
+        }
+
+        //MSPowerPoint: A label does NOT inherit Underline from
+        //text-properties of the 1st text chunk.  A bullet does NOT
+        //inherit properties in {Italics, Bold}.
         if (!i.pf.fBulletHasAutoNumber()) {
             ts.addProperty("fo:font-style", "normal");
             ts.addProperty("fo:font-weight", "normal");
@@ -1857,7 +1917,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         if (hfc) {
             hf = hfc->hfAtom;
         } else {
-            //Default values saved by MS Office 2003 require corrections. 
+            //Default values saved by MS Office 2003 require corrections.
             const SlideHeadersFootersContainer* dhfc = getSlideHF();
             if (dhfc) {
                 hf = dhfc->hfAtom;
@@ -2341,32 +2401,54 @@ void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
                               const QString& text, const int start, int end, quint16* p_fs)
 {
-    //num. of chars already formatted by this TextCFRun
-    quint32 num = 0;
-
-    int count = cf.addCurrentCFRun(tc, start, num);
-    *p_fs = cf.fontSize();
-
-#ifdef DEBUG_PPTTOODP
-    qDebug() << "(CFRun) # of characters:" << count;
-    qDebug() << "start:" << start << "| end:" << end;
-    qDebug() << "font size:" << *p_fs;
-#endif
-
     if (!tc) {
         qDebug() << "processTextSpan: TextContainer missing!";
         return -1;
     }
 
+    //num. of chars already formatted by this TextCFRun
+    quint32 num = 0;
+
+    const int count = cf.addCurrentCFRun(tc, start, num);
+    *p_fs = cf.fontSize();
+
 #ifdef DEBUG_PPTTOODP
-    qDebug() << "Characters already formatted by this TextCFRun:" << num;
+    qDebug() << "(TextCFRun) num. of characters:" << count;
+    qDebug() << "(TextCFRun) formatted characters:" << num;
+    qDebug() << "(Text position) start:" << start << "| end:" << end;
+    qDebug() << "font size:" << *p_fs;
 #endif
 
-    //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
-    //TextMasterStyleLevel, handle this case. (uzak)
+    bool isSymbol = false;
 
-    //NOTE: TextSIException data are not processed in the defineTextProperties
-    //function at the moment, so keep it simple! (uzak)
+    // detect symbol inside one character text chunk
+    if ( end == 1 || count == 1 ) {
+        QChar c = text.at(start);
+        if ( c.category() == QChar::Other_PrivateUse ) {
+            isSymbol = true;
+        }
+    }
+    // detect first symbol inside of several characters text chunk
+    else {
+        QString substr = text.mid(start, (end - start));
+        for (int i = 0; i < substr.length(); i++) {
+            if ((substr.at(i)).category() == QChar::Other_PrivateUse) {
+                if (i == 0) {
+                    end = start + 1;
+                    isSymbol = true;
+                } else {
+                    end = start + i;
+                }
+                break;
+            }
+        }
+    }
+
+    // TODO: There's no TextCFRun in case of TextCFExceptionAtom or
+    // TextMasterStyleLevel, handle this case. (uzak)
+
+    // NOTE: TextSIException not processed by defineTextProperties at
+    // the moment, so let's keep it simple!  (uzak)
     const TextSIException* si = 0;
 
 #ifdef SI_EXCEPTION_SUPPORT
@@ -2456,16 +2538,15 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineTextProperties(style, cf, 0, 0, si);
+    defineTextProperties(style, cf, 0, 0, si, isSymbol);
     out.xml.startElement("text:span", false);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
     if (mouseclick) {
-        /**
-        * [MS-PPT].PDF states exHyperlinkIdRef must be ignored unless action is
-        * equal to II_JumpAction (0x3), II_HyperlinkAction (0x4), or
-        * II_CustomShowAction (0x7).
-        */
+        // The [MS-PPT] spec. states that exHyperlinkIdRef must be
+        // ignored unless action is equal to II_JumpAction (0x3),
+        // II_HyperlinkAction (0x4), or II_CustomShowAction (0x7).
+
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
                 mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
@@ -2484,11 +2565,11 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else {
-        //count specifies the number of characters of the corresponding text to
-        //which this character formatting applies
+        // count - specifies the number of characters of the
+        // corresponding text to which current TextCFException apply
         if (count > 0) {
             int tmp = start + (count - num);
-            //moved to left by one character in the processTextForBody function
+            // moved to left by one character in processTextForBody
             if (tmp <= end) {
                 end = tmp;
             }
@@ -2512,7 +2593,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 } //end processTextSpan()
 
 int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
-			       const QString& text, int start, int end, quint16* p_fs)
+			       const QString& text, const int start, int end, quint16* p_fs)
 {
     quint16 font_size = 0;
     int pos = start;
@@ -2551,14 +2632,15 @@ PptToOdp::processParagraph(Writer& out,
                            const MSO::TextRuler* tr,
                            const bool isPlaceHolder,
                            const QString& text,
-                           int start,
+                           const int start,
                            int end)
 {
     //TODO: support for notes master slide required!
 
+    const QString substr = text.mid(start, (end - start));
 #ifdef DEBUG_PPTTOODP
-    QString txt = text.mid(start, (end - start));
-    qDebug() << "> current paragraph:" << txt;
+    qDebug() << "> current paragraph:" << substr;
+    qDebug() << "> (hex):" << hex << substr.toUcs4() << dec;
 #endif
 
     const PptOfficeArtClientData* pcd = 0;
@@ -2605,11 +2687,19 @@ PptToOdp::processParagraph(Writer& out,
         int depth = pf.level() + 1;
         quint32 num = 0;
 
-        //TextCFException for the 1st run of text are required to specify the
-        //font-size of the label in case it's not provided by TextPFException.
+        //TextCFException of the 1st run of text required to specify
+        //the label font-size in case not provided by TextPFException.
         cf.addCurrentCFRun(tc, start, num);
         m_firstChunkFontSize = cf.fontSize();
+        m_firstChunkFontRef = cf.fontRef();
         cf.removeCurrentCFRun();
+
+        //A list label should NOT inherit a symbol font.
+        if ((substr.at(0)).category() == QChar::Other_PrivateUse) {
+            m_firstChunkSymbolAtStart = true;
+        } else {
+            m_firstChunkSymbolAtStart = false;
+        }
 
         QString listStyle = defineAutoListStyle(out, pf, cf);
 	//check if we have the corresponding style for this level, if not then
@@ -3408,7 +3498,7 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
     notesDeclaration.insertMulti(type, item);
 }
 
-// @brief check if the provided groupShape contains the master shape 
+// @brief check if the provided groupShape contains the master shape
 // @param spid identifier of the master shape
 // @return pointer to the OfficeArtSpContainer
 const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, quint32 spid)
@@ -3473,7 +3563,7 @@ const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
         }
     }
 #endif
-#ifdef CHECK_NOTES 
+#ifdef CHECK_NOTES
     //check all notes slides
     for (int c = 0; c < p->notes.size(); c++) {
         const NotesContainer* notes = p->notes[c];

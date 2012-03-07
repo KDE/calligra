@@ -6,6 +6,12 @@ macro_log_feature(LIBXML2_FOUND "LibXML2" "LibXml2 library" "http://xmlsoft.org/
 macro_optional_find_package(LibXslt)
 macro_log_feature(LIBXSLT_FOUND "LibXslt" "LibXslt Library" "http://xmlsoft.org/XSLT/" FALSE "" "Required by the xslt filter")
 
+macro_optional_find_package(WPD)
+macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
+
+macro_optional_find_package(WPG)
+macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+
 # for xsltfilter:
 check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(sys/stat.h HAVE_SYS_STAT_H)
@@ -36,6 +42,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 
 set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
+set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
 
 add_subdirectory(libmso)
 
@@ -68,7 +75,7 @@ if(SHOULD_BUILD_KARBON)
 endif(SHOULD_BUILD_KARBON)
 
 if(SHOULD_BUILD_FLOW)
-    #macro_optional_add_subdirectory(flow)
+    macro_optional_add_subdirectory(flow)
 endif(SHOULD_BUILD_FLOW)
 
 if(SHOULD_BUILD_PLAN)
@@ -79,4 +86,7 @@ if(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE
 	add_subdirectory(xsltfilter)
 endif(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 
+if(NOT TINY AND WPD_FOUND AND LIBWPG_FOUND)
+    macro_optional_add_subdirectory( writerperfect )
+endif(NOT TINY AND WPD_FOUND AND LIBWPG_FOUND)
 ########### install files ###############

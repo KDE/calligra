@@ -47,6 +47,7 @@ class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
 class KoShapeContainer;
+class KoShapeController;
 
 class KLocalizedString;
 class QIODevice;
@@ -188,6 +189,10 @@ public:
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
+    /// returns the document's shapeController. This controller should only be used for deleting shapes.
+    //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
+    KoShapeController *shapeController() const { return m_shapeController; }
+
 public slots:
     /**
      * Relayout the pages or frames within the framesets.
@@ -263,6 +268,7 @@ private:
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
+    KoShapeController *m_shapeController;
 };
 
 #endif

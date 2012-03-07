@@ -53,6 +53,8 @@
 #define GROUP_TARGETTIME    1
 #define GROUP_CONSTRAINT    2
 
+extern int planDbg();
+
 class ProgressInfo
 {
 public:
@@ -105,19 +107,19 @@ int KPlatoRCPSScheduler::progress_callback( int generations, struct rcps_fitness
         return -1;
     }
     KPlatoRCPSScheduler *self = static_cast<KPlatoRCPSScheduler*>( arg );
-    //qDebug()<<"KPlatoRCPSScheduler::progress_callback"<<generations<<fitness<<arg;
+    //kDebug(planDbg())<<"KPlatoRCPSScheduler::progress_callback"<<generations<<fitness<<arg;
     return self->progress( generations, fitness );
 }
 
 int KPlatoRCPSScheduler::progress( int generations, struct rcps_fitness fitness )
 {
     if ( m_haltScheduling ) {
-        qDebug()<<"KPlatoRCPSScheduler::progress:"<<"halt";
+        kDebug(planDbg())<<"KPlatoRCPSScheduler::progress:"<<"halt";
         return -1;
     }
     if ( m_stopScheduling ) {
         m_schedule->logWarning( i18n( "Scheduling halted after %1 generations", generations ), 1 );
-        qDebug()<<"KPlatoRCPSScheduler::progress:"<<"stop";
+        kDebug(planDbg())<<"KPlatoRCPSScheduler::progress:"<<"stop";
         return -1;
     }
 //     std::cout << "Progress after: " << generations << " generations\n";
@@ -143,7 +145,7 @@ int KPlatoRCPSScheduler::progress( int generations, struct rcps_fitness fitness 
     // stop if fitness does not change in GENERATION_MIN_LIMIT generations
 /*    int result = ( generations >= m_progressinfo->base + GENERATION_MIN_LIMIT ? 1 : 0 );
     if ( result ) {
-        //qDebug()<<"KPlatoRCPSScheduler::progress, stop after"<<generations<<"generations, progress:"<<m_progressinfo->progress;
+        //kDebug(planDbg())<<"KPlatoRCPSScheduler::progress, stop after"<<generations<<"generations, progress:"<<m_progressinfo->progress;
         m_schedule->logDebug( QString( "Acceptable solution found after %1 generations" ).arg( generations ), 1 );
         std::cout << "Acceptable solution found after " << generations << " generations\n";
     }*/
@@ -152,7 +154,7 @@ int KPlatoRCPSScheduler::progress( int generations, struct rcps_fitness fitness 
 
 int KPlatoRCPSScheduler::duration_callback( int direction, int time, int nominal_duration, void *arg )
 {
-    //qDebug()<<"kplato_duration:"<<direction<<time<<nominal_duration<<arg;
+    //kDebug(planDbg())<<"kplato_duration:"<<direction<<time<<nominal_duration<<arg;
     if ( arg == 0 ) {
         return nominal_duration;
     }
@@ -189,7 +191,7 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
                         0, /*no schedule*/
                         m_backward ? ! direction : direction
                     ).seconds() / m_timeunit;
-            //qDebug()<<info->task->name()<< QString( "duration_callback effort: backward=%5, direction=%6 (direction=%7); Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ).arg( m_backward ).arg( direction ).arg( m_backward ? !direction : direction );
+            //kDebug(planDbg())<<info->task->name()<< QString( "duration_callback effort: backward=%5, direction=%6 (direction=%7); Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ).arg( m_backward ).arg( direction ).arg( m_backward ? !direction : direction );
         }
     } else {
         dur = info->task->length( 
@@ -206,7 +208,7 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
 
 int KPlatoRCPSScheduler::weight_callback( int time, int duration, struct rcps_fitness *nominal_weight, void* weight_arg, void* fitness_arg )
 {
-    //qDebug()<<"kplato_weight:"<<time<<nominal_weight<<arg;
+    //kDebug(planDbg())<<"kplato_weight:"<<time<<nominal_weight<<arg;
     if ( weight_arg == 0 ) {
         nominal_weight->weight *= time;
         return 0;
@@ -223,7 +225,7 @@ void *KPlatoRCPSScheduler::fitness_callback_init( void *arg )
     Q_ASSERT( info );
     fitness_info *finfo = new fitness_info;
     finfo->self = info->self;
-//     kDebug()<<info->self;
+//     kDebug(planDbg())<<info->self;
     return finfo;
 }
 
@@ -241,7 +243,7 @@ int KPlatoRCPSScheduler::fitness( struct rcps_fitness *fit, KPlatoRCPSScheduler:
     std::cout << "Sequence: ";
     foreach ( Task *t, info->jobs ) { std::cout << (t ? t->name().toLocal8Bit().data() : "End") << ", "; }
     std::cout << "\n";
-    kDebug()<<info->map;*/
+    kDebug(planDbg())<<info->map;*/
     QMultiMap<int, QPair<int, Task*> >::const_iterator it = info->map.constFind( GROUP_CONSTRAINT );
     if ( it != info->map.constEnd() ) {
         // constraint
@@ -382,8 +384,8 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
     if ( finfo ) {
         finfo->map.insert( f.group, QPair<int, Task*>( f.weight, info->task ) );
         finfo->jobs << info->task;
-//         kDebug()<<s<<":"<<finfo->map;
-    }// else kDebug()<<s<<":"<<"No finfo!";
+//         kDebug(planDbg())<<s<<":"<<finfo->map;
+    }// else kDebug(planDbg())<<s<<":"<<"No finfo!";
 /*    std::cout << "Weight: " << s.toLocal8Bit().data() << ": group=" << f.group << " weight=" << f.weight << "\n";*/
     return 0;
 }
@@ -486,7 +488,7 @@ int KPlatoRCPSScheduler::check()
 
 void KPlatoRCPSScheduler::solve()
 {
-    qDebug()<<"KPlatoRCPSScheduler::solve()";
+    kDebug(planDbg())<<"KPlatoRCPSScheduler::solve()";
     struct rcps_solver *s = rcps_solver_new();
     rcps_solver_set_progress_callback(s, PROGRESS_CALLBACK_FREQUENCY, this, &KPlatoRCPSScheduler::progress_callback);
     rcps_solver_set_duration_callback(s, &KPlatoRCPSScheduler::duration_callback );
@@ -618,7 +620,7 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
 
 void KPlatoRCPSScheduler::kplatoFromRCPSForward()
 {
-    //qDebug()<<"KPlatoRCPSScheduler::kplatoFromRCPSForward:";
+    //kDebug(planDbg())<<"KPlatoRCPSScheduler::kplatoFromRCPSForward:";
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
     QMap<Node*, QList<ResourceRequest*> > resourcemap;
     int count = rcps_job_count(m_problem);
@@ -753,7 +755,7 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
 
 void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
 {
-    //qDebug()<<"KPlatoRCPSScheduler::kplatoFromRCPSBackward:";
+    //kDebug(planDbg())<<"KPlatoRCPSScheduler::kplatoFromRCPSBackward:";
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
     QMap<Node*, QList<ResourceRequest*> > resourcemap;
     int count = rcps_job_count( m_problem );
@@ -987,7 +989,7 @@ struct rcps_resource *KPlatoRCPSScheduler::addResource( KPlato::Resource *r)
 
 void KPlatoRCPSScheduler::addResources()
 {
-    kDebug();
+    kDebug(planDbg());
     QList<Resource*> list = m_project->resourceList();
     for (int i = 0; i < list.count(); ++i) {
         addResource( list.at(i) );
@@ -1015,7 +1017,7 @@ struct rcps_job *KPlatoRCPSScheduler::addTask( KPlato::Task *task )
 
 void KPlatoRCPSScheduler::addTasks()
 {
-    kDebug();
+    kDebug(planDbg());
     // Add a start job
     m_jobstart = rcps_job_new();
     rcps_job_setname( m_jobstart, "RCPS start job" );
@@ -1056,7 +1058,7 @@ void KPlatoRCPSScheduler::addTasks()
     m_weight_info_list[ m_jobend ] = info;
 
     for( int i = 0; i < rcps_job_count( m_problem ); ++i ) {
-        kDebug()<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
+        kDebug(planDbg())<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
     }
 }
 
@@ -1127,11 +1129,11 @@ void KPlatoRCPSScheduler::addDependenciesBackward( struct rcps_job *job, KPlato:
 {
     if ( task->dependParentNodes().isEmpty() && task->parentProxyRelations().isEmpty() ) {
         rcps_job_successor_add( job, m_jobend, SUCCESSOR_FINISH_START );
-        //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_jobend );
+        //kDebug(planDbg())<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_jobend );
     }
     if ( task->dependChildNodes().isEmpty() && task->childProxyRelations().isEmpty() ) {
         rcps_job_successor_add( m_jobstart, job, SUCCESSOR_FINISH_START );
-        //qDebug()<<rcps_job_getname( m_jobstart )<<"->"<<rcps_job_getname( job );
+        //kDebug(planDbg())<<rcps_job_getname( m_jobstart )<<"->"<<rcps_job_getname( job );
     }
     foreach ( Relation *r, task->dependParentNodes() ) {
         Node *n = r->parent();
@@ -1146,15 +1148,15 @@ void KPlatoRCPSScheduler::addDependenciesBackward( struct rcps_job *job, KPlato:
         }
         if ( r->lag() == Duration::zeroDuration ) {
             rcps_job_successor_add( job, m_taskmap.key( static_cast<Task*>( n ) ), type );
-            //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
+            //kDebug(planDbg())<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
         } else {
             // Add a dummy job to represent the lag
             struct rcps_job *dummy = addJob( r->lag().toString(), r->lag().seconds() / m_timeunit );
             rcps_job_successor_add( job, dummy, type );
-            qDebug()<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
+            kDebug(planDbg())<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
             int t = type == SUCCESSOR_FINISH_FINISH ? type : SUCCESSOR_FINISH_START;
             rcps_job_successor_add( dummy, m_taskmap.key( static_cast<Task*>( n ) ), t );
-            //qDebug()<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
+            //kDebug(planDbg())<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
         }
     }
     foreach ( Relation *r, task->parentProxyRelations() ) {
@@ -1170,22 +1172,22 @@ void KPlatoRCPSScheduler::addDependenciesBackward( struct rcps_job *job, KPlato:
         }
         if ( r->lag() == Duration::zeroDuration ) {
             rcps_job_successor_add( job, m_taskmap.key( static_cast<Task*>( n ) ), type );
-            //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
+            //kDebug(planDbg())<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
         } else {
             // Add a dummy job to represent the lag
             struct rcps_job *dummy = addJob( r->lag().toString(), r->lag().seconds() / m_timeunit );
             rcps_job_successor_add( job, dummy, type );
-            qDebug()<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
+            kDebug(planDbg())<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
             int t = type == SUCCESSOR_FINISH_FINISH ? type : SUCCESSOR_FINISH_START;
             rcps_job_successor_add( dummy, m_taskmap.key( static_cast<Task*>( n ) ), t );
-            //qDebug()<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
+            //kDebug(planDbg())<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
         }
     }
 }
 
 void KPlatoRCPSScheduler::addDependencies()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<struct rcps_job*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         if ( m_backward ) {
@@ -1198,7 +1200,7 @@ void KPlatoRCPSScheduler::addDependencies()
 
 void KPlatoRCPSScheduler::addRequests()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<struct rcps_job*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -1207,7 +1209,7 @@ void KPlatoRCPSScheduler::addRequests()
 
 void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
 {
-    kDebug();
+    kDebug(planDbg());
     struct rcps_mode *mode = rcps_mode_new();
     rcps_mode_add( job, mode );
     // add a weight callback argument

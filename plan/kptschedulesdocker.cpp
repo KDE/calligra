@@ -34,6 +34,8 @@
 #include <QVBoxLayout>
 #include <QTimer>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -71,7 +73,7 @@ void SchedulesDocker::slotSelectionChanged()
 
 void SchedulesDocker::setProject( Project *project )
 {
-    kDebug()<<project;
+    kDebug(planDbg())<<project;
     m_model.setProject( project );
 }
 

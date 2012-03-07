@@ -22,10 +22,10 @@
 
 #include <QObject>
 #include <QString>
+#include <QProcess>
 
 #include <kexiutils/tristate.h>
 
-class QProcess;
 class KProgressDialog;
 
 //! @short Helper class performing interactive compacting (VACUUM) of the SQLite database
@@ -54,13 +54,16 @@ public:
     tristate run();
 
 public slots:
-    void readFromStdout();
-    void processExited();
+    void readFromStdErr();
+    void dumpProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void sqliteProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void cancelClicked();
 
 protected:
     QString m_filePath;
-    QProcess *m_process;
+    QString m_tmpFilePath;
+    QProcess *m_dumpProcess;
+    QProcess *m_sqliteProcess;
     KProgressDialog* m_dlg;
     int m_percent;
     tristate m_result;

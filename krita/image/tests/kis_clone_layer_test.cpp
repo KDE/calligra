@@ -184,5 +184,113 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     image->waitForDone();
 }
 
+void KisCloneLayerTest::testUndoingRemovingSource()
+{
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_p1", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1);
+    image->addNode(cloneLayer1);
+
+    QCOMPARE(image->root()->lastChild(), KisNodeSP(cloneLayer1));
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QCOMPARE(image->root()->firstChild()->name(), QString("paint1"));
+
+    KUndo2Command *cmd1 = new KisImageLayerRemoveCommand(image, paintLayer1);
+    cmd1->redo();
+
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
+
+    KisNodeSP reincarnatedLayer = image->root()->lastChild();
+
+    KUndo2Command *cmd2 = new KisImageLayerRemoveCommand(image, reincarnatedLayer);
+    cmd2->redo();
+
+    cmd2->undo();
+    cmd1->undo();
+
+    cmd1->redo();
+
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QCOMPARE(image->root()->lastChild(), reincarnatedLayer);
+    QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
+
+    cmd2->redo();
+
+    delete cmd1;
+    delete cmd2;
+}
+
+struct CyclingTester {
+    CyclingTester() {
+        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+        groupLayer1 = new KisGroupLayer(image, "group1", OPACITY_OPAQUE_U8);
+        groupLayer2 = new KisGroupLayer(image, "group2", OPACITY_OPAQUE_U8);
+
+        cloneOfGroup1 = new KisCloneLayer(groupLayer1, image, "clone_of_g1", OPACITY_OPAQUE_U8);
+        cloneOfGroup2 = new KisCloneLayer(groupLayer2, image, "clone_of_g2", OPACITY_OPAQUE_U8);
+    }
+
+    void reset() {
+        image->removeNode(groupLayer1);
+        image->removeNode(groupLayer2);
+        image->removeNode(cloneOfGroup1);
+        image->removeNode(cloneOfGroup2);
+    }
+
+    KisImageSP image;
+    KisLayerSP groupLayer1;
+    KisLayerSP groupLayer2;
+    KisLayerSP cloneOfGroup1;
+    KisLayerSP cloneOfGroup2;
+};
+
+inline void addIfNotPresent(KisNodeSP node, CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child)
+{
+    if(node != group1Child && node != group2Child) {
+        t.image->addNode(node);
+    }
+}
+
+/**
+ * group1 <-- adding \p group1Child here
+ * group2  -- has \p group2Child before addition
+ */
+inline void testCyclingCase(CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child, bool expected)
+{
+    addIfNotPresent(t.groupLayer2, t, group1Child, group2Child);
+    addIfNotPresent(t.cloneOfGroup1, t, group1Child, group2Child);
+    addIfNotPresent(t.cloneOfGroup2, t, group1Child, group2Child);
+
+    t.image->addNode(t.groupLayer1);
+
+    if(group2Child) {
+        t.image->addNode(group2Child, t.groupLayer2);
+    }
+
+    QCOMPARE(t.groupLayer1->allowAsChild(group1Child), expected);
+    t.reset();
+}
+
+void KisCloneLayerTest::testCyclingGroupLayer()
+{
+    CyclingTester t;
+
+    testCyclingCase(t, t.groupLayer2, 0, true);
+    testCyclingCase(t, t.groupLayer2, t.cloneOfGroup1, false);
+
+    testCyclingCase(t, t.cloneOfGroup1, 0, false);
+    testCyclingCase(t, t.cloneOfGroup1, t.cloneOfGroup2, false);
+
+    testCyclingCase(t, t.cloneOfGroup2, 0, true);
+    testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
+}
+
 QTEST_KDEMAIN(KisCloneLayerTest, GUI)
 #include "kis_clone_layer_test.moc"

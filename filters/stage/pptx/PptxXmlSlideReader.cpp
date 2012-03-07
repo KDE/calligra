@@ -628,6 +628,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
         body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
+        body->addAttribute("xml:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302

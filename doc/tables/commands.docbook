@@ -875,7 +875,7 @@ Validity Checking</link> for more details.
 <guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or amend the special series of words recognized 
-by &tables;.</action>
+  by &tables;. These list can be used to insert special <link linkend="series">series</link> into the worksheet.</action>
 </para></listitem>
 </varlistentry>
 

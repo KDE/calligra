@@ -39,6 +39,8 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
+extern int planDbg();
+
 KoSimpleOdtLine::KoSimpleOdtLine(OROLine *primitive)
     : KoSimpleOdtPrimitive(primitive)
 {
@@ -67,7 +69,7 @@ void KoSimpleOdtLine::createStyle(KoGenStyles &coll)
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
     gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
-    
+
     QPen pen;
     qreal weight = line()->lineStyle().weight;
     if (weight < 1.0) {
@@ -79,8 +81,7 @@ void KoSimpleOdtLine::createStyle(KoGenStyles &coll)
     KoOdfGraphicStyles::saveOdfStrokeStyle(gs, coll, pen);
 
     m_frameStyleName = coll.insert(gs, "F");
-    
-    kDebug()<<coll;
+    kDebug(planDbg())<<coll;
 }
 
 void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
@@ -93,10 +94,11 @@ void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
     qreal width = ex - sx;
     qreal height = ey - sy;
 
-    kDebug()<<line()->startPoint()<<line()->endPoint();
+    kDebug(planDbg())<<line()->startPoint()<<line()->endPoint();
 
     bodyWriter->startElement("draw:rect");
     bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("xml:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
@@ -121,6 +123,4 @@ void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
     }
 
     bodyWriter->endElement(); // draw:frame
-    
-    kDebug();
 }

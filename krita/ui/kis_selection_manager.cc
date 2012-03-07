@@ -165,7 +165,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_copyToNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
     collection->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
-    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);
@@ -237,12 +237,11 @@ bool KisSelectionManager::havePixelsSelected()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
     KisSelectionSP activeSelection;
-    if(activeLayer && !activeLayer->userLocked()
+    if (activeLayer && !activeLayer->userLocked()
        && activeLayer->visible()) {
 
         activeSelection = activeLayer->selection();
         return activeSelection &&
-            !activeSelection->isDeselected() &&
             !activeSelection->selectedRect().isEmpty();
     }
     return false;
@@ -290,12 +289,13 @@ void KisSelectionManager::updateGUI()
     bool haveDevice = m_view->activeDevice();
 
     KisLayerSP activeLayer = m_view->activeLayer();
-    KisSelectionSP activeSelection;
-    bool canReselect = activeLayer && !activeLayer->userLocked() &&
-        activeLayer->visible() &&
-        (activeSelection = activeLayer->selection()) &&
-        activeSelection->isDeselected() &&
-        !activeSelection->selectedRect().isEmpty();
+    KisImageWSP image = activeLayer ? activeLayer->image() : 0;
+    bool canReselect =
+        activeLayer && activeLayer->isEditable() &&
+        image && image->canReselectGlobalSelection();
+
+    bool canDeselect = activeLayer && activeLayer->isEditable() &&
+        image && image->globalSelection();
 
 
     m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
@@ -318,7 +318,7 @@ void KisSelectionManager::updateGUI()
     m_fillPattern->setEnabled(haveDevice);
 
     m_selectAll->setEnabled(true);
-    m_deselect->setEnabled(havePixelsSelected);
+    m_deselect->setEnabled(canDeselect);
     m_reselect->setEnabled(canReselect);
 
 
@@ -354,7 +354,7 @@ void KisSelectionManager::cut()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->cut();
     }
     else {
@@ -382,7 +382,7 @@ void KisSelectionManager::copy()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->copy();
     }
     else {
@@ -433,7 +433,7 @@ void KisSelectionManager::paste()
     if (clip) {
         // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
         QRect exactBounds = clip->exactBounds();
-        if(!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
+        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
             clip->setX(clip->x() - exactBounds.x());
             clip->setY(clip->y() - exactBounds.y());
         }
@@ -500,7 +500,7 @@ void KisSelectionManager::selectAll()
     undoAdapter->beginMacro(i18n("Select All"));
 
     if (!image->globalSelection()) {
-        KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, 0);
+        KUndo2Command *cmd = new KisSetEmptyGlobalSelectionCommand(image);
         undoAdapter->addCommand(cmd);
     }
 
@@ -532,7 +532,7 @@ void KisSelectionManager::reselect()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    if (image->globalSelection()) {
+    if (image->canReselectGlobalSelection()) {
         KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
         selectionChanged();

@@ -31,12 +31,14 @@
 
 #include <QBrush>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
 Config::Config()
 {
-    kDebug()<<"Leader:"<<KPlatoSettings::leader();
+    kDebug(planDbg())<<"Leader:"<<KPlatoSettings::leader();
 }
 
 Config::~Config()

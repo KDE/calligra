@@ -258,7 +258,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 #ifdef KEXI_DEBUG_GUI
     QWidget* debugWindow = 0;
     if (GUIenabled) {
-        KConfigGroup generalGroup = d->config->group("General");
+        KConfigGroup generalGroup = KGlobal::config()->group("General");
         if (generalGroup.readEntry("ShowInternalDebugger", false)) {
             debugWindow = KexiUtils::createDebugWindow(win);
             debugWindow->show();
@@ -325,6 +325,9 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupContextHelp();
         setupPropertyEditor();
     }
+
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
@@ -1381,10 +1384,14 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
     d->tabbedToolBar->showTab("data");
     d->tabbedToolBar->showTab("external");
+    d->tabbedToolBar->showTab("tools");
     d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
     d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
     //d->tabbedToolBar->showTab("form");
     //d->tabbedToolBar->showTab("report");
+
+    // make sure any tab is activated
+    d->tabbedToolBar->setCurrentTab(0);
     return true;
 }
 
@@ -1714,12 +1721,13 @@ tristate KexiMainWindow::closeProject()
     updateAppCaption();
 
     emit projectClosed();
+/*
     d->tabbedToolBar->hideTab("create");
     d->tabbedToolBar->hideTab("data");
     d->tabbedToolBar->hideTab("external");
     d->tabbedToolBar->hideTab("tools");
     d->tabbedToolBar->hideTab("form");
-    d->tabbedToolBar->hideTab("report");
+    d->tabbedToolBar->hideTab("report");*/
     return true;
 }
 

@@ -136,6 +136,11 @@ void KMessageWidgetFrame::setCalloutPointerPosition(const QPoint& globalPos)
     updateCalloutPointerPosition();
 }
 
+QPoint KMessageWidgetFrame::calloutPointerPosition() const
+{
+    return m_calloutPointerGlobalPosition;
+}
+
 void KMessageWidgetFrame::updateCalloutPointerPosition() const
 {
     if (m_calloutPointerGlobalPosition == QPoint(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX))
@@ -781,6 +786,11 @@ void KMessageWidget::animatedHide()
 void KMessageWidget::setCalloutPointerPosition(const QPoint& globalPos)
 {
     d->content->setCalloutPointerPosition(globalPos);
+}
+
+QPoint KMessageWidget::calloutPointerPosition() const
+{
+    return d->content->calloutPointerPosition();
 }
 
 QBrush KMessageWidget::backgroundBrush() const
