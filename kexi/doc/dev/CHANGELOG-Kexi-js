@@ -182,7 +182,7 @@ Main Window
 2012-03-01
 KexiDB
 *SQLite Driver
-*Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported database compacting code to the new Kexi that uses system SQLite version
 BUG:293548
 
 TODO: after db creating and opening the main menu is invisible
