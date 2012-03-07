@@ -156,7 +156,10 @@ TODO: backport to 2.4
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+2012-03-07
+KexiDB
+*SQLite Driver
+**Fixed crashes when compacting database fails
 
 2012-03-06
 Main Window
@@ -166,10 +169,12 @@ Main Window
 Main Window
 *User feedback: set anonymous identification as mandatory, needed even for basic statistics
 
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
 2012-03-01
 KexiDB
 *SQLite Driver
-*Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported database compacting code to the new Kexi that uses system SQLite version
 BUG:293548
 
 TODO: after db creating and opening the main menu is invisible
