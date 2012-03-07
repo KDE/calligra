@@ -158,7 +158,13 @@ KexiDB
 *SQLite Driver
 **Fixed crashes when compacting database fails
 **Fixed error when attempting to compact database opened from recent lists
+TODO: port to Predicate
 *MySQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+*PostgreSQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
 CCBUG:279980
 CCBUG:254068
@@ -184,6 +190,7 @@ KexiDB
 *SQLite Driver
 **Ported database compacting code to the new Kexi that uses system SQLite version
 BUG:293548
+TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 
