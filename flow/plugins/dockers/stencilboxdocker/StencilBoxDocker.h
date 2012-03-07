@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
+ * Copyright (C) 2010-2012 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOSTENCILBOXDOCKER_H
-#define KOSTENCILBOXDOCKER_H
+#ifndef STENCILBOXDOCKER_H
+#define STENCILBOXDOCKER_H
 
 #include <QDockWidget>
 #include <QMap>
@@ -26,82 +26,84 @@
 
 #include <KoDockFactoryBase.h>
 
-class StencilListModel;
-class CollectionTreeWidget;
+class StencilBoxTreeWidget;
 class KoShape;
 
 class KLineEdit;
 
+class QActionGroup;
 class QToolButton;
 class QMenu;
 class QVBoxLayout;
 class QHBoxLayout;
-class QSortFilterProxyModel;
+//class QSortFilterProxyModel;
 
 class StencilBoxDockerFactory : public KoDockFactoryBase
 {
-    public:
-        StencilBoxDockerFactory();
+public:
+    StencilBoxDockerFactory();
 
-        QString id() const;
-        QDockWidget* createDockWidget();
-        DockPosition defaultDockPosition() const
-        {
-            return DockLeft;
-        }
+    QString id() const;
+    QDockWidget* createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
+        return DockLeft;
+    }
 };
 
 class StencilBoxDocker : public QDockWidget
 {
     Q_OBJECT
-    public:
-        explicit StencilBoxDocker(QWidget* parent = 0);
-        void setViewMode(QListView::ViewMode iconMode);
+public:
+    explicit StencilBoxDocker(QWidget* parent = 0);
 
-    protected:
-        /// Load the default calligra shapes
-        void loadDefaultShapes();
+protected slots:
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
 
-        /// Load odf shape collections
-        void loadShapeCollections();
+private:
+    void updateStencilMap();
+    void updateMenu();
 
-        bool addCollection(const QString& path);
-        void removeCollection(const QString& family);
+    QMap<QString, QStringList> m_stencilMap; //Key: Stencil Name, Value: Stencil ID
+    QActionGroup* m_stencilActionGroup;
 
-    protected slots:
-        /// Called when the docker changes area
-        void locationChanged(Qt::DockWidgetArea area);
-	
-    private:
-        QMap<QString, StencilListModel*> m_modelMap;
-        //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
+    StencilBoxTreeWidget* m_treeWidget;
+    QMenu* m_menu;
+    QToolButton* m_button;
+    KLineEdit* m_filterLineEdit;
+    QVBoxLayout* m_layout;
+    QHBoxLayout* m_subLayout;
 
-        CollectionTreeWidget *m_treeWidget;
-        QMenu *m_moreStencilMenu;
-        QMenu *m_stencilListMenu;
-        QToolButton *m_addButton;
-        QToolButton *m_showButton;
-        KLineEdit *m_filterLineEdit;
-        QVBoxLayout *m_layout;
-        QHBoxLayout *m_subLayout;
+private slots:
+    void reapplyFilter();
 
-    private slots:
-        void reapplyFilter();
-        void getHotNewStuff();
+    /// Get stencils from GHNS service
+    void getHotNewStuff();
 
-        /// Install stencil files
-        void installStencil();
+    /// Install stencil files
+    void installStencil();
 
-        /// Remove stencil files
-        //bool removeStencil();
+    /// Create new stencil
+    void createStencil();
 
-        /// Open stencil in the docker
-        bool openStencil(const QString &stencilId);
+    /// Edit stencil name
+    void editStencil();
 
-        /// Close stencil in the docker
-        bool closeStencil(const QString &stencilId);
+    /// Remove stencil files
+    void removeStencil();
 
-        //void regenerateProxyMap();
+    /// Create new shape
+    void createShape();
+
+    /// Edit shape
+    void editShape();
+
+    /// Remove a shape from a user-created stencil
+    void removeShape(const QString &stencilId, const QString &shapeId);
+
+    /// Open stencil in the docker
+    void openStencil(QAction* action);
 };
 
-#endif //KOSHAPECOLLECTIONDOCKER_H
+#endif //STENCILBOXDOCKER_H

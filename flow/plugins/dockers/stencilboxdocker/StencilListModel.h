@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Yue Liu <yue.liu@mail.com>
+ * Copyright (C) 2012  Yue Liu <yue.liu@mail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 #ifndef STENCILLISTMODEL_H
 #define STENCILLISTMODEL_H
 
-#include <QAbstractListModel>
+#include <KoProperties.h>
 
-class KoProperties;
-class QList;
-class QString;
-class QIcon;
+#include <QAbstractListModel>
+#include <QList>
+#include <QIcon>
+#include <QString>
 
 /**
  * Struct containing the information of a shape item in a stencil

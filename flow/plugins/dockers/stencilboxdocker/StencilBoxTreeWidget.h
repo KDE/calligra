@@ -24,16 +24,16 @@
 //#include "CollectionItemModel.h"
 
 #include <QTreeWidget>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QListView>
 
 class QIcon;
-class QSortFilterProxyModel;
-class ShapeListView;
+class QHash;
+class StencilListView;
 class StencilListModel;
 
 /// A delegate from qt designer, used to paint stencil header.
-class SheetDelegate: public QItemDelegate
+class SheetDelegate: public QStyledItemDelegate
 {
     Q_OBJECT
 public:
@@ -50,35 +50,24 @@ class StencilBoxTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 
-    public:
-        explicit StencilBoxTreeWidget(QWidget *parent);
-        ~StencilBoxTreeWidget();
-        bool loadContents(const QString &contents);
-        bool save();
-        void setFamilyMap(QMap<QString, CollectionItemModel*> map);
-        void regenerateFilteredMap();
-        void setFilter(QRegExp regExp);
+public:
+    explicit StencilBoxTreeWidget(QWidget *parent);
+    ~StencilBoxTreeWidget();
+    bool addStencil(const QStringList& parameters);
 
-    protected:
+protected:
     void contextMenuEvent(QContextMenuEvent *e);
     void resizeEvent(QResizeEvent *e);
 
-    private:
-        QListView::ViewMode m_viewMode;
-        QMap<QString, CollectionItemModel*> m_familyMap;
-        QMap<QString, QSortFilterProxyModel*> m_filteredMap;
-        ShapeListView* categoryViewAt(int idx) const;
-        void addCategoryView(QTreeWidgetItem *parent, bool iconMode, QSortFilterProxyModel *model);
+private:
     void adjustSubListSize(QTreeWidgetItem *cat_item);
-    void updateViewMode();
-    void saveViewMode();
-    void restoreViewMode();
-    void addWidgetItem(QString itemPath);
+    void saveLastStencils();
+    void loadLastStencils();
 
-    private slots:
+    QHash<QString, StencilListModel*>* m_stencilHash;
+
+private slots:
     void handleMousePress(QTreeWidgetItem *item);
-    void slotListMode();
-        void slotIconMode();
 };
 
 #endif // STENCILBOXTREEWIDGET_H

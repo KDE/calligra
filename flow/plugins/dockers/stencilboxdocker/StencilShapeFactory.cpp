@@ -37,11 +37,12 @@
 #include <QMimeData>
 #include <QBuffer>
 
-StencilShapeFactory::StencilShapeFactory(const QString &id, const QString &name, const QString &source, KoProperties* params)
+StencilShapeFactory::StencilShapeFactory(const QString &id, const QString &type, const QString &name, KoProperties* params)
     : KoShapeFactoryBase(id, name), m_shape(0)
 {
     m_params = params;
-    m_path = QString(source);
+    m_path = QString(id + "." + type);
+    m_type = type;
 }
 
 StencilShapeFactory::~StencilShapeFactory()
