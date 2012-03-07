@@ -160,6 +160,7 @@ TODO: backport to 2.4
 KexiDB
 *SQLite Driver
 **Fixed crashes when compacting database fails
+**Fixed error when attempting to compact database opened from recent lists
 
 2012-03-06
 Main Window
