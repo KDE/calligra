@@ -22,7 +22,7 @@
 
 #include "koabstraction_export.h"
 
-#include <tables/part/CellTool.h>
+#include <sheets/part/CellTool.h>
 
 #include <QPair>
 

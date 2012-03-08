@@ -23,7 +23,7 @@
 #include <KoDocument.h>
 #include <KoPADocument.h>
 #include <KWDocument.h>
-#include <tables/part/Doc.h>
+#include <sheets/part/Doc.h>
 
 #include <KMimeType>
 #include <kmimetypetrader.h>

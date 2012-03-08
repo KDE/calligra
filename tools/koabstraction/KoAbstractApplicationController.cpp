@@ -48,11 +48,11 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include <tables/part/View.h>
-#include <tables/Sheet.h>
-#include <tables/ui/Selection.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
+#include <sheets/part/View.h>
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
 #include <words/part/KWView.h>
 
 #include <KMimeType>

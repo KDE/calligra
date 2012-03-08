@@ -23,12 +23,12 @@
 
 #include "CSThumbProviderTables.h"
 
-#include <tables/part/Doc.h>
-#include <tables/Sheet.h>
-#include <tables/Map.h>
-#include <tables/PrintSettings.h>
-#include <tables/ui/SheetView.h>
-#include <tables/SheetPrint.h>
+#include <sheets/part/Doc.h>
+#include <sheets/Sheet.h>
+#include <sheets/Map.h>
+#include <sheets/PrintSettings.h>
+#include <sheets/ui/SheetView.h>
+#include <sheets/SheetPrint.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
 #include <KoPAUtil.h>

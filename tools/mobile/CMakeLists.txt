@@ -21,8 +21,8 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${KOPAGEAPP_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
-    ${CMAKE_SOURCE_DIR}/tables/part
-    ${CMAKE_SOURCE_DIR}/tables
+    ${CMAKE_SOURCE_DIR}/sheets/part
+    ${CMAKE_SOURCE_DIR}/sheets
     ${LIBXML2_INCLUDE_DIR}
     ${KDE4_INCLUDES}
 )

@@ -19,8 +19,8 @@
 
 #include <kundo2command.h>
 
-#include <tables/Sheet.h>
-#include <tables/Map.h>
+#include <sheets/Sheet.h>
+#include <sheets/Map.h>
 
 namespace Calligra { namespace Tables {
     class Sheet;

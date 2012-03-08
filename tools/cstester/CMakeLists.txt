@@ -7,7 +7,7 @@ configure_file(config_cstester.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_cstest
 include_directories(
     ${KOMAIN_INCLUDES}
     ${KOPAGEAPP_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/tables
+    ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/karbon/ui
 )
