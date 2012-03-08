@@ -1180,6 +1180,9 @@ void View::createTemplate()
 
     Factory::global().dirs()->addResourceType("tables_template",
             "data", "tables/templates/");
+
+    QDir d;
+    d.remove(fileName);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
