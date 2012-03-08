@@ -1162,15 +1162,18 @@ void View::createTemplate()
     int height = 60;
     QPixmap pix = doc()->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kst");
+    KTemporaryFile *tempFile = new KTemporaryFile;
+    tempFile->setSuffix(".kst");
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close();
+    delete tempFile;
 
-    doc()->saveNativeFormat(tempFile.fileName());
+    doc()->saveNativeFormat(fileName);
 
     KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
                                         tempFile.fileName(), pix, this);
