@@ -516,21 +516,27 @@ void KWView::createTemplate()
     int height = 60;
     QPixmap pix = m_document->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".ott");
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".ott");
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close();
+    delete tempFile;
 
-    m_document->saveNativeFormat(tempFile.fileName());
+    m_document->saveNativeFormat(fileName);
 
     KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     KWFactory::componentData().dirs()->addResourceType("words_template",
             "data", "words/templates/");
+
+    QDir d;
+    d.remove(fileName);
 }
 
 void KWView::insertFrameBreak()
