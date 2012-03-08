@@ -994,13 +994,16 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
-    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
-    // OfficeArtClientTextBox.
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide
+    // an OfficeArtClientTextBox.
+    bool textIdValid = false;
     quint32 textId = 0;
+
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
             textId = tb->clientTextBox;
+            textIdValid = true;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
@@ -1009,9 +1012,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             kDebug(30513) << "lTxid property - negative text identifier!";
         } else {
             textId = (quint32)ds.iTxid();
+            textIdValid = true;
         }
     }
-    emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+    if (textIdValid) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+    }
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }

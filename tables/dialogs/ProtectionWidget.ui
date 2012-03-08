@@ -28,10 +28,10 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </rect>
   </property>
   <property name="whatsThis" >
-   <string>This tab enables you to set Cell Protection. All cells are protected by default (that means cell content cannot be changed) and for the cell protection to be active you also need to protect the sheet using the Tools -> Protect Document -> Protect Sheet... menu and to provide a password.
+   <string>This tab enables you to set Cell Protection. All cells are protected by default (that means cell content cannot be changed) and for the cell protection to be active you also need to protect the sheet using the Tools -> Protect Sheet... menu and to provide a password.
 You can also hide the cell formula in order to protect the way you calculate the formula. This also needs to enable sheet protection to work.
 You can hide the cell content with Hide all and again this needs sheet protection.
-You can learn more about all these settings in the User Manual in the Advanced KSpread chapter.</string>
+You can learn more about all these settings in the User Manual in the Advanced Calligra Tables chapter.</string>
   </property>
   <layout class="QGridLayout" >
    <item row="1" column="0" >
@@ -93,7 +93,7 @@ Note that you can print it even if the cell is protected</string>
           <item>
            <widget class="QCheckBox" name="m_bIsProtected" >
             <property name="whatsThis" >
-             <string>If checked, the cell content will be protected. This is the default behavior. You need to protect the whole sheet using the Tools->Protect document->Protect Sheet... menu option for this individual cell protection to work. See the manual for more details in the Advanced KSpread chapter. When a cell is protected, its content cannot be changed.</string>
+             <string>If checked, the cell content will be protected. This is the default behavior. You need to protect the whole sheet using the Tools -> Protect Sheet... menu option for this individual cell protection to work. See the manual for more details in the Advanced Calligra Tables chapter. When a cell is protected, its content cannot be changed.</string>
             </property>
             <property name="text" >
              <string>&amp;Protected</string>

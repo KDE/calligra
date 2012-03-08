@@ -20,7 +20,9 @@
  */
 
 import QtQuick 1.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.qtextracomponents 0.1 as QtExtraComponents
 
 Item
 {
@@ -37,25 +39,30 @@ Item
 
     function initializePageIcons() {
         for ( i=1; i <= root.documentController.documentHandler().totalPages; i++ ) {
-              displayText = "Page " + i;
+              displayText = i;
               viewModel.append({"name": displayText});
         }
     }
 
     Component {
-       id: customText
-       Item {
-         width: 100; height: 50
-         Column {
-             Text {
+        id: customText
+
+        QtExtraComponents.QIconItem {
+            icon: QIcon("mail-signed")
+            width: parent.width
+            height: width
+
+            Text {
+                anchors.centerIn: parent
+                font.pointSize: 16
                 text: name
-                MouseArea {
-                   anchors.fill: parent
-                   onClicked: root.documentController.documentHandler().gotoPage(index+1)
-                }
-             }
-         }
-       }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.documentController.documentHandler().gotoPage(index+1)
+            }
+        }
     }
 
     ListView {
@@ -63,5 +70,6 @@ Item
        model: viewModel
        delegate: customText
        focus: true
+       spacing: 10
     }
 }

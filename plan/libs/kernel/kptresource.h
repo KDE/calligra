@@ -524,6 +524,7 @@ public:
         bool load( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
         void save( QDomElement &element ) const;
     };
+    const WorkInfoCache &workInfoCache() const { return m_workinfocache; }
 
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );

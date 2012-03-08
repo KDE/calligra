@@ -142,11 +142,59 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
+
+2012-03-03
+Main Window
+*User feedback: added anti-DOS protection when updating feedback ui
+*User feedback: added checking format of the .list files to avoid erroneous HTTP requests
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+2012-03-07
+KexiDB
+*SQLite Driver
+**Fixed crashes when compacting database fails
+**Fixed error when attempting to compact database opened from recent lists
+TODO: port to Predicate
+*MySQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+*PostgreSQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+Reports
+*Fix crash in assigning data source that uses reserved words as field names
+**Tables/queries with reserved words still do not work in reports though
+CCBUG:278052
+
+2012-03-06
+Main Window
+*User feedback: added home page and forum links
+
+2012-03-05
+Main Window
+*User feedback: set anonymous identification as mandatory, needed even for basic statistics
+
+2012-03-03
+Main Window
+*make sure that after closing project, and then opening tabbed toolbar activates its first tab
+*do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
 
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4 Beta 8 (2.3.88) ~~~~~~~~~~~~~~~~
+2012-03-01
+KexiDB
+*SQLite Driver
+**Ported database compacting code to the new Kexi that uses system SQLite version
+BUG:293548
+TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 
@@ -196,9 +244,6 @@ Main Window
 *feedback agent now handles retrieving redirect URL
 *status bar: HTML replaced with .ui files loaded by quitools and external Qt resources
 
-TODO: implement updating .ui files from network
-TODO: clicking on page title should close the message widget too
-
 2012-02-14
 Widgets
 *kmessagewidget: improve shapes of callouts
@@ -235,7 +280,6 @@ Widgets
 2012-01-05
 Main Window
 *Simple User Feedback Agent introduced
-TODO: disable by default, inform and ask user for help
 TODO: add Qt version, SQLite version, driver usage stats, migration/import/export stats
       add git revision with exact date+time if compiled using git checkout
       project stats: # of objects, size (MB, records), types of objects, data types usage

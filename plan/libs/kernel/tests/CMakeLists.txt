@@ -103,3 +103,11 @@ set(CommandsTester_SRCS CommandsTester.cpp )
 kde4_add_unit_test(CommandsTester TESTNAME Plan-CommandsTester  ${CommandsTester_SRCS})
 
 target_link_libraries(CommandsTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel kundo2 ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(WorkInfoCacheTester_SRCS WorkInfoCacheTester.cpp )
+
+kde4_add_unit_test(WorkInfoCacheTester TESTNAME Plan-WorkInfoCacheTester  ${WorkInfoCacheTester_SRCS})
+
+target_link_libraries(WorkInfoCacheTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})

@@ -219,7 +219,7 @@ int CATextDocumentHandler::totalPages() const {
 void CATextDocumentHandler::gotoPage(int pageNumber)
 {
      d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
-     documentController()->canvasController()->ensureVisible(d->currentTextDocPage.rect());
+     documentController()->canvasController()->ensureVisible(d->currentTextDocPage.rect(), true);
 }
 
 void CATextDocumentHandler::findNoMatchFound()

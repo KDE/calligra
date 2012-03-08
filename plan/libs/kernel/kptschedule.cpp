@@ -1159,7 +1159,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
 void ResourceSchedule::logError( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Error, msg, phase );
+        Schedule::Log log( m_nodeSchedule ? m_nodeSchedule->node() : 0, m_resource, Log::Type_Error, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -1167,7 +1167,7 @@ void ResourceSchedule::logError( const QString &msg, int phase )
 void ResourceSchedule::logWarning( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Warning, msg, phase );
+        Schedule::Log log( m_nodeSchedule ? m_nodeSchedule->node() : 0, m_resource, Log::Type_Warning, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -1175,7 +1175,7 @@ void ResourceSchedule::logWarning( const QString &msg, int phase )
 void ResourceSchedule::logInfo( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Info, msg, phase );
+        Schedule::Log log( m_nodeSchedule ? m_nodeSchedule->node() : 0, m_resource, Log::Type_Info, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -1183,7 +1183,7 @@ void ResourceSchedule::logInfo( const QString &msg, int phase )
 void ResourceSchedule::logDebug( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Debug, msg, phase );
+        Schedule::Log log( m_nodeSchedule ? m_nodeSchedule->node() : 0, m_resource, Log::Type_Debug, msg, phase );
         m_parent->addLog( log );
     }
 }

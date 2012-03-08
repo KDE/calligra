@@ -61,7 +61,7 @@
             <Type range="false">Float</Type>
         </Parameter>
         <Help>
-            <Text>The NUM2STRING() function returns a string value for a given number. Note that KSpread can auto-convert numbers to strings if needed, so this function should rarely be needed.</Text>
+            <Text>The NUM2STRING() function returns a string value for a given number. Note that Calligra Tables can auto-convert numbers to strings if needed, so this function should rarely be needed.</Text>
             <Syntax>NUM2STRING(value)</Syntax>
             <Example>NUM2STRING(10) returns "10"</Example>
             <Example>NUM2STRING(2.05) returns "2.05"</Example>

@@ -79,7 +79,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
     KoXmlWriter &savedWriter = context.xmlWriter();
 
     KoShapeSavingContext::ShapeSavingOptions options = context.options();
-    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml);
+    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml | KoShapeSavingContext::ZIndex);
     context.setXmlWriter(writer);
 
     Q_ASSERT(!fs->frames().isEmpty());
@@ -226,6 +226,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
 
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
+    context.addOption(KoShapeSavingContext::ZIndex);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
