@@ -75,6 +75,8 @@ install( FILES
     MsooXmlDiagramReader_p.h
     MsooXmlDrawingTableStyleReader.h
     MsooXmlDrawingTableStyle.h
+    MsooXmlDrawingMLShared.h
+    MsooXmlDrawingMLSharedImpl.h
     VmlDrawingReader.h
     ComplexShapeHandler.h
     PredefinedShapeHelper.h

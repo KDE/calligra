@@ -491,7 +491,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
-    // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
+    // m_currentDrawStyle defined in "MsooXmlCommonReader.h"
     m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
 
     MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
