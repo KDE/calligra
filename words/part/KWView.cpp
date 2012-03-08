@@ -57,6 +57,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
+#include <KoTemplateCreateDia.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
@@ -95,6 +96,8 @@
 #include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
+#include <KStandardDirs>
+#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
@@ -378,16 +381,16 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    // -------------- File menu
+    m_actionCreateTemplate = new KAction(i18n("Create Template From Document..."), this);
+    m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
+    m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
+    actionCollection()->addAction("extra_template", m_actionCreateTemplate);
+    connect(m_actionCreateTemplate, SIGNAL(triggered()), this, SLOT(createTemplate()));
+
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
-
-        // -------------- File menu
-        m_actionExtraCreateTemplate = new KAction(i18n("Create Template From Document..."), 0,
-        this, SLOT(extraCreateTemplate()),
-        actionCollection(), "extra_template");
-        m_actionExtraCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
-        m_actionExtraCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
 
         (void) new KAction(i18n("Configure Mail Merge..."), "configure",0,
         this, SLOT(editMailMergeDataBase()),
@@ -505,6 +508,29 @@ KoPrintJob *KWView::createPrintJob()
                               .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
+}
+
+void KWView::createTemplate()
+{
+    int width = 60;
+    int height = 60;
+    QPixmap pix = m_document->generatePreview(QSize(width, height));
+
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".ott");
+    //Check that creation of temp file was successful
+    if (!tempFile.open()) {
+        qWarning("Creation of temporary file to store template failed.");
+        return;
+    }
+
+    m_document->saveNativeFormat(tempFile.fileName());
+
+    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
+                                        tempFile.fileName(), pix, this);
+
+    KWFactory::componentData().dirs()->addResourceType("words_template",
+            "data", "words/templates/");
 }
 
 void KWView::insertFrameBreak()

@@ -138,6 +138,8 @@ private:
     KoShape *selectedShape() const;
 
 private slots:
+    /// create a template from document
+    void createTemplate();
     /// displays the KWFrameDialog that allows to alter the frameset properties
     void editFrameProperties();
     /// called if another shape got selected
@@ -198,6 +200,7 @@ private:
     KWPage m_currentPage;
     KoFindText *m_find;
 
+    KAction *m_actionCreateTemplate;
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
     KAction *m_actionAddBookmark;
