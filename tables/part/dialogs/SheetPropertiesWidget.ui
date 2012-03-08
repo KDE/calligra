@@ -51,7 +51,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        <item>
         <widget class="KComboBox" name="directionComboBox" >
          <property name="whatsThis" >
-          <string>Defaut is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the others added from right to left.</string>
+          <string>Default is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the others added from right to left.</string>
          </property>
          <item>
           <property name="text" >

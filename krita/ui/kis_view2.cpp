@@ -295,7 +295,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
@@ -923,22 +923,26 @@ void KisView2::slotCreateTemplate()
     int height = 60;
     QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kra");
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".kra");
 
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close(); // need to close on Windows before we can open it again to save
+    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
 
-    m_d->doc->saveNativeFormat(tempFile.fileName());
-
+    m_d->doc->saveNativeFormat(fileName);
     KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+    QDir d;
+    d.remove(fileName);
 }
 
 void KisView2::slotDocumentSaved()

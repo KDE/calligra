@@ -401,8 +401,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-top
     // fo:padding-right
     // fo:padding-bottom
-    if (!ds.fAutoTextMargin() && ds.iTxid()) {
-        // internal margins only make sense for shapes containing text
+    if (!ds.fAutoTextMargin()) {
         style.addPropertyPt("fo:padding-left", EMU_TO_POINT(ds.dxTextLeft()), gt);
         style.addPropertyPt("fo:padding-top", EMU_TO_POINT(ds.dyTextTop()), gt);
         style.addPropertyPt("fo:padding-right", EMU_TO_POINT(ds.dxTextRight()), gt);

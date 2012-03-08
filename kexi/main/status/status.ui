@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>189</width>
-    <height>311</height>
+    <height>421</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -312,12 +312,112 @@
     </layout>
    </item>
    <item>
+    <widget class="QWidget" name="spacer31" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>24</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>6</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="visit_label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Visit</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="home_page_link">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="toolTip">
+      <string>Visit http://kexi-project home page</string>
+     </property>
+     <property name="text">
+      <string>&lt;a href=&quot;http://kexi-project.org&quot;&gt;&lt;nobr&gt;&lt;b&gt;Home page &amp;raquo;&lt;/b&gt;&lt;/nobr&gt;&lt;/a&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>4</number>
+     </property>
+     <property name="indent">
+      <number>6</number>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="forum_link">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="toolTip">
+      <string>Visit http://kexi-project.org/forum</string>
+     </property>
+     <property name="text">
+      <string>&lt;a href=&quot;http://kexi-project.org/forum/&quot;&gt;&lt;b&gt;Forum&lt;/b&gt; for help and discussions &amp;raquo;&lt;/a&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>4</number>
+     </property>
+     <property name="indent">
+      <number>6</number>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

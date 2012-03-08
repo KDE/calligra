@@ -70,7 +70,7 @@ QString HeaderFooter::localizeHeadFootLine(const QString &_text) const
     /*
       i18n:
       Please use the same words (even upper/lower case) as in
-      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+      KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
     */
     replaceHeadFootLineMacro(tmp, "page",   i18n("page"));
     replaceHeadFootLineMacro(tmp, "pages",  i18n("pages"));
@@ -93,7 +93,7 @@ QString HeaderFooter::delocalizeHeadFootLine(const QString &_text) const
     /*
       i18n:
       Please use the same words (even upper/lower case) as in
-      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+      KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
     */
     replaceHeadFootLineMacro(tmp, i18n("page"),   "page");
     replaceHeadFootLineMacro(tmp, i18n("pages"),  "pages");

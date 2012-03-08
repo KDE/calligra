@@ -149,7 +149,7 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
         return;
     }
     kDebug() << result;
-    QStringList data = result.split(QRegExp("\n"), QString::SkipEmptyParts);
+    QStringList data = result.split('\n', QString::SkipEmptyParts);
     result.clear();
     d->fileNamesToUpdate.clear();
     if (data.count() > UPDATE_FILES_COUNT_LIMIT) { // anti-DOS protection
@@ -366,7 +366,6 @@ public:
         }
 
         scores.insert(KexiUserFeedbackAgent::BasicArea, 4);
-        scores.insert(KexiUserFeedbackAgent::AnonymousIdentificationArea, 6);
         scores.insert(KexiUserFeedbackAgent::SystemInfoArea, 4);
         scores.insert(KexiUserFeedbackAgent::ScreenInfoArea, 2);
         scores.insert(KexiUserFeedbackAgent::RegionalSettingsArea, 2);
@@ -900,12 +899,6 @@ void KexiWelcomeStatusBar::showContributionDetails()
 
     updateContributionGroupCheckboxes();
     
-    d->setProperty(d->contributionDetailsWidget, "group_id", "title",
-                   d->property(d->contributionDetailsWidget, "group_id", "title")
-                       .toString().arg(d->scores.value(KexiUserFeedbackAgent::AnonymousIdentificationArea)));
-    d->connect(d->contributionDetailsWidget, "group_id", SIGNAL(toggled(bool)),
-               this, SLOT(slotShareContributionDetailsGroupToggled(bool)));
-
     d->setProperty(d->contributionDetailsWidget, "group_system", "title",
                    d->property(d->contributionDetailsWidget, "group_system", "title")
                        .toString().arg(d->scores.value(KexiUserFeedbackAgent::SystemInfoArea)));
@@ -947,8 +940,6 @@ void KexiWelcomeStatusBar::showContributionDetails()
 void KexiWelcomeStatusBar::updateContributionGroupCheckboxes()
 {
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
-    d->setProperty(d->contributionDetailsWidget, "group_id", "checked",
-                   bool(f->enabledAreas() & KexiUserFeedbackAgent::AnonymousIdentificationArea));
     d->setProperty(d->contributionDetailsWidget, "group_system", "checked",
                    bool(f->enabledAreas() & KexiUserFeedbackAgent::SystemInfoArea));
     d->setProperty(d->contributionDetailsWidget, "group_screen", "checked",
@@ -1055,10 +1046,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     KexiUserFeedbackAgent::Areas areas = f->enabledAreas();
     //kDebug() << areas;
-    if (name == "group_id") {
-        setArea(&areas, KexiUserFeedbackAgent::AnonymousIdentificationArea, on);
-    }
-    else if (name == "group_system") {
+    if (name == "group_system") {
         setArea(&areas, KexiUserFeedbackAgent::SystemInfoArea, on);
     }
     else if (name == "group_screen") {
@@ -1066,6 +1054,9 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
     }
     else if (name == "group_regional_settings") {
         setArea(&areas, KexiUserFeedbackAgent::RegionalSettingsArea, on);
+    }
+    if (areas) {
+        areas |= KexiUserFeedbackAgent::AnonymousIdentificationArea;
     }
     f->setEnabledAreas(areas);
     kDebug() << f->enabledAreas();

@@ -85,7 +85,7 @@ static const Money lMoney[] = {
     { "ADP", I18N_NOOP("Andorra"), I18N_NOOP("Andorran Peseta"), I18N_NOOP("ADP") },
     { "AOA", I18N_NOOP("Angola"), I18N_NOOP("Kwanza"), I18N_NOOP("AOA") },
     { "XCD", I18N_NOOP("Anguilla"), I18N_NOOP("East Caribbean Dollar"), I18N_NOOP("XCD") },
-    { "XCD", I18N_NOOP("Antigua And Barbuda"), I18N_NOOP("East Carribean Dollar"), I18N_NOOP("XCD") },
+    { "XCD", I18N_NOOP("Antigua And Barbuda"), I18N_NOOP("East Caribbean Dollar"), I18N_NOOP("XCD") },
     { "ARS", I18N_NOOP("Argentina"), I18N_NOOP("Argentine Peso"), I18N_NOOP("ARS") },
     { "AMD", I18N_NOOP("Armenia"), I18N_NOOP("Armenian Dram"), I18N_NOOP("AMD") },
     { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Florin"), I18N_NOOP("AWG") },

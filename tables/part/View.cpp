@@ -1162,21 +1162,27 @@ void View::createTemplate()
     int height = 60;
     QPixmap pix = doc()->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kst");
+    KTemporaryFile *tempFile = new KTemporaryFile;
+    tempFile->setSuffix(".ots");
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close();
+    delete tempFile;
 
-    doc()->saveNativeFormat(tempFile.fileName());
+    doc()->saveNativeFormat(fileName);
 
-    KoTemplateCreateDia::createTemplate("kspread_template", Factory::global(),
-                                        tempFile.fileName(), pix, this);
+    KoTemplateCreateDia::createTemplate("tables_template", Factory::global(),
+                                        fileName, pix, this);
 
-    Factory::global().dirs()->addResourceType("kspread_template",
-            "data", "kspread/templates/");
+    Factory::global().dirs()->addResourceType("tables_template",
+            "data", "tables/templates/");
+
+    QDir d;
+    d.remove(fileName);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
