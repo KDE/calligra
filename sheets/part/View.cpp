@@ -1163,7 +1163,7 @@ void View::createTemplate()
     QPixmap pix = doc()->generatePreview(QSize(width, height));
 
     KTemporaryFile *tempFile = new KTemporaryFile;
-    tempFile->setSuffix(".kst");
+    tempFile->setSuffix(".ots");
     //Check that creation of temp file was successful
     if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
