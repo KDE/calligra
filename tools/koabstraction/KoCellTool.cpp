@@ -26,10 +26,10 @@
 #include "FoCellEditor.h"
 
 // Calligra
-#include <tables/Cell.h>
-#include <tables/Style.h>
-#include <tables/CellStorage.h>
-#include <tables/Sheet.h>
+#include <sheets/Cell.h>
+#include <sheets/Style.h>
+#include <sheets/CellStorage.h>
+#include <sheets/Sheet.h>
 
 #include "KoColor.h"
 #include "KoCanvasBase.h"

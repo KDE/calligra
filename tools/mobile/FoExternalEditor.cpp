@@ -25,9 +25,9 @@
 #include "FoExternalEditor.h"
 
 // Tables
-#include <tables/ui/CellToolBase.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
+#include <sheets/ui/CellToolBase.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 
 #include <FoCellEditor.h>
 

@@ -18,13 +18,13 @@
 */
 #include "FoCellEditor.h"
 
-#include <tables/ui/Selection.h>
-#include <tables/ui/CellToolBase.h>
-#include <tables/Cell.h>
+#include <sheets/ui/Selection.h>
+#include <sheets/ui/CellToolBase.h>
+#include <sheets/Cell.h>
 #include <KoViewConverter.h>
 #include <KoDpi.h>
 #include <KoUnit.h>
-#include <tables/ui/CellEditorBase.h>
+#include <sheets/ui/CellEditorBase.h>
 
 #include <QGtkStyle>
 #include <QScrollBar>
