@@ -31,6 +31,11 @@ KoFilter::ConversionStatus read_extLst();
 KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_solidFill();
 
+#ifndef MSOOXML_THEMESREADER_H
+KoFilter::ConversionStatus read_fillRef();
+KoFilter::ConversionStatus read_fontRef();
+#endif
+
 KoFilter::ConversionStatus read_hslClr();
 KoFilter::ConversionStatus read_prstClr();
 KoFilter::ConversionStatus read_schemeClr();
@@ -56,3 +61,5 @@ qreal m_currentShadeLevel;
 qreal m_currentSatMod; //value of current saturation modulation
 
 qreal* m_currentDoubleValue;
+
+QString m_referredFontName;

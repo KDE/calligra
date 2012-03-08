@@ -1350,8 +1350,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     READ_EPILOGUE
 }
 
-#if !defined MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-
 // ================================================================
 //                             NameSpace "c"
 // ================================================================
@@ -1514,8 +1512,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
     READ_EPILOGUE
 }
 
-#endif // MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-
 // ================================================================
 //                             NameSpace "a"
 // ================================================================
@@ -1523,118 +1519,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
-
-#undef CURRENT_EL
-#define CURRENT_EL fillRef
-//! fillREf handler (Fill reference)
-/*
- Parent elements:
- - [done] style (§21.3.2.24);
- - [done] style (§21.4.2.28);
- - [done] style (§20.1.2.2.37);
- - [done] style (§20.5.2.31);
- - [done] style (§19.3.1.46);
- - [done] tblBg (§20.1.4.2.25);
- - [done] tcStyle (§20.1.4.2.29)
-
- Child elements:
- - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - [done] prstClr (Preset Color) §20.1.2.3.22
- - [done] schemeClr (Scheme Color) §20.1.2.3.29
- - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
- - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - [done] sysClr (System Color) §20.1.2.3.33
-
-*/
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
-{
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(idx)
-    int index = idx.toInt();
-
-    // If it has draw:fill it means that the style has already been defined
-    if (!m_currentDrawStyle->property("draw:fill").isEmpty()) {
-        skipCurrentElement();
-        READ_EPILOGUE
-    }
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            TRY_READ_IF(schemeClr)
-            ELSE_TRY_READ_IF(scrgbClr)
-            ELSE_TRY_READ_IF(sysClr)
-            ELSE_TRY_READ_IF(srgbClr)
-            ELSE_TRY_READ_IF(prstClr)
-            ELSE_TRY_READ_IF(hslClr)
-            ELSE_WRONG_FORMAT
-        }
-    }
-
-    MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
-    if (fillBase) {
-        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, m_currentColor);
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL fontRef
-//! fontRef handler (Font reference)
-/*
- Parent elements:
- - [done] style (§21.3.2.24);
- - [done] style (§21.4.2.28);
- - [done] style (§20.1.2.2.37);
- - [done] style (§20.5.2.31);
- - [done] style (§19.3.1.46);
- - [done] tcTxStyle (§20.1.4.2.30)
-
- Child elements:
- - [done] hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - [done] prstClr (Preset Color) §20.1.2.3.22
- - [done] schemeClr (Scheme Color) §20.1.2.3.29
- - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
- - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - [done] sysClr (System Color) §20.1.2.3.33
-*/
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
-{
-    READ_PROLOGUE
-
-    const QXmlStreamAttributes attrs(attributes());
-
-    TRY_READ_ATTR_WITHOUT_NS(idx)
-
-    if (!idx.isEmpty()) {
-        if (idx.startsWith("major")) {
-            m_referredFontName = m_context->themes->fontScheme.majorFonts.latinTypeface;
-        }
-        else if (idx.startsWith("minor")) {
-            m_referredFontName = m_context->themes->fontScheme.minorFonts.latinTypeface;
-        }
-    }
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            TRY_READ_IF(schemeClr)
-            ELSE_TRY_READ_IF(srgbClr)
-            ELSE_TRY_READ_IF(sysClr)
-            ELSE_TRY_READ_IF(scrgbClr)
-            ELSE_TRY_READ_IF(prstClr)
-            ELSE_TRY_READ_IF(hslClr)
-            ELSE_WRONG_FORMAT
-        }
-    }
-
-    READ_EPILOGUE
-}
 
 #undef CURRENT_EL
 #define CURRENT_EL lnRef
@@ -1665,11 +1549,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 
     TRY_READ_ATTR_WITHOUT_NS(idx)
 
+    const QList<KoGenStyle> *lst = &m_context->themes->formatScheme.lnStyleLst;
     const KoGenStyle *lnStyle = 0;
 
-    if (!idx.isEmpty()) {
+    if (!idx.isEmpty() && !lst->empty()) {
 
-        const QList<KoGenStyle> *lst = &m_context->themes->formatScheme.lnStyleLst;
         int index = idx.toInt();
 
         if (index >= lst->size()) {
@@ -2693,7 +2577,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
         BREAK_IF_END_OF(CURRENT_EL)
     }
 
-#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
+#if defined(PPTXXMLSLIDEREADER_CPP)
     // Where there is a hyperlink, hlink value should be used by default
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     QString valTransformed = m_context->colorMap.value("hlink");
@@ -3617,12 +3501,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
-#if !defined MSOOXMLDRAWINGTABLESTYLEREADER_CPP
             // Charting diagram
             ELSE_TRY_READ_IF_NS(c, chart)
             // DrawingML diagram
             ELSE_TRY_READ_IF_NS(dgm, relIds)
-#endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl)
