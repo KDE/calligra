@@ -169,6 +169,10 @@ TODO: port to Predicate
 CCBUG:279980
 CCBUG:254068
 TODO: port to Predicate
+Reports
+*Fix crash in assigning data source that uses reserved words as field names
+**Tables/queries with reserved words still do not work in reports though
+CCBUG:278052
 
 2012-03-06
 Main Window

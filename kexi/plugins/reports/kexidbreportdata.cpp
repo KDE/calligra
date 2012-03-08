@@ -131,7 +131,9 @@ bool KexiDBReportData::getSchema()
             m_parser->parse(m_connection->selectStatement(*m_originalSchema));
             m_copySchema = m_parser->query();
             
-            kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
+            if (m_copySchema) {
+                kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
+            }
         }
         
         return true;
