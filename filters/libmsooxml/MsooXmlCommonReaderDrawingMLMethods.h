@@ -47,11 +47,8 @@ KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller);
 KoFilter::ConversionStatus read_cNvPicPr();
 KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_style();
-KoFilter::ConversionStatus read_fillRef();
 
 KoGenStyle m_referredFont;
-QString m_referredFontName;
-KoFilter::ConversionStatus read_fontRef();
 
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
