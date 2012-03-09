@@ -33,7 +33,7 @@
 
 #include <QTextFrame>
 
-static QList<SortKeyPair> sortKeys;
+QList<SortKeyPair> sortKeys;
 
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
@@ -55,7 +55,7 @@ BibliographyGenerator::~BibliographyGenerator()
     delete m_bibInfo;
 }
 
-static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
+bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
     if ( keyIndex == sortKeys.size() ) return false;
     else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
@@ -69,12 +69,12 @@ static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
     return false;
 }
 
-static bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
+bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
 {
     return compare_on(0, c1, c2);
 }
 
-static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair> keys)
+QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair> keys)
 {
     sortKeys = keys;
     sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
