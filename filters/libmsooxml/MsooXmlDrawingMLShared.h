@@ -50,6 +50,9 @@ KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
 
+KoFilter::ConversionStatus read_tailEnd();
+KoFilter::ConversionStatus read_headEnd();
+
 //! set by one of the color readers, read by read_solidFill. Read and
 //! set by one of the color transformations.
 QColor m_currentColor;
@@ -59,6 +62,7 @@ int m_currentAlpha; // current alpha color value
 qreal m_currentTint; // value of current tint
 qreal m_currentShadeLevel;
 qreal m_currentSatMod; //value of current saturation modulation
+qreal m_currentLineWidth;
 
 qreal* m_currentDoubleValue;
 

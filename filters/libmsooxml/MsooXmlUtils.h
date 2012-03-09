@@ -390,6 +390,11 @@ MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, 
 //! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
 MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
 
+//! Marker related utils
+MSOOXML_EXPORT QString defineMarkerStyle(KoGenStyles& mainStyles, const QString& markerType);
+
+MSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal lineWidth);
+
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is
     based on XML elements parsed later.  In such case the information cannot be
