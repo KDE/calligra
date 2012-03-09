@@ -661,7 +661,7 @@ bool KoTextDocumentLayout::doLayout()
             d->provider->doPostLayout(rootArea, false);
             updateProgress(rootArea->startTextFrameIterator());
 
-            if (finished) {
+            if (finished && !passFootNoteCursorToNext) {
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
@@ -677,7 +677,7 @@ bool KoTextDocumentLayout::doLayout()
         } else {
             delete d->layoutPosition;
             d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
-            if (d->layoutPosition->it == document()->rootFrame()->end()) {
+            if (d->layoutPosition->it == document()->rootFrame()->end() && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
@@ -691,7 +691,7 @@ bool KoTextDocumentLayout::doLayout()
                                                // 50 just to seperate pages
     }
 
-    while (d->layoutPosition->it != document()->rootFrame()->end()) {
+    while (passFootNoteCursorToNext || d->layoutPosition->it != document()->rootFrame()->end()) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
