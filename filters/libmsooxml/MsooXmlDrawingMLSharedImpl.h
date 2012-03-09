@@ -25,9 +25,6 @@
 #ifndef MSOOXML_DRAWINGML_SHARED_IMPL_H
 #define MSOOXML_DRAWINGML_SHARED_IMPL_H
 
-/* #include <MsooXmlReader.h> */
-//#include <MsooXmlCommonReader.h>
-
 #undef CURRENT_EL
 #define CURRENT_EL extLst
 //! extLst (Extension List)
@@ -62,37 +59,37 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_extLst()
  Parent Elements:
 
  Child Elements:
- - bevel (Line Join Bevel) §20.1.8.9
+ - [done] bevel (Line Join Bevel) §20.1.8.9
  - custDash (Custom Dash) §20.1.8.21
  - extLst (Extension List) §20.1.2.2.15
  - gradFill (Gradient Fill) §20.1.8.33
- - headEnd (Line Head/End Style) §20.1.8.38
- - miter (Miter Line Join) §20.1.8.43
+ - [done] headEnd (Line Head/End Style) §20.1.8.38
+ - [done] miter (Miter Line Join) §20.1.8.43
  - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - [done] prstDash (Preset Dash) §20.1.8.48
- - round (Round Line Join) §20.1.8.52
- - solidFill (Solid Fill) §20.1.8.54
- - tailEnd (Tail line end style) §20.1.8.57
+ - [done] round (Round Line Join) §20.1.8.52
+ - [done] solidFill (Solid Fill) §20.1.8.54
+ - [done] tailEnd (Tail line end style) §20.1.8.57
 
  Attributes:
  - algn (Stroke Alignment)
- - cap (Line Ending Cap Style)
+ - [done] cap (Line Ending Cap Style)
  - cmpd (Compound Line Type)
- - w (Line Width)
+ - [done] w (Line Width)
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 {
     READ_PROLOGUE
     QXmlStreamAttributes attrs(attributes());
 
-    //align
+    //TODO: align
     TRY_READ_ATTR_WITHOUT_NS(algn)
     //center
     if (algn.isEmpty() || algn == "ctr") {
     }
     //inset
-    else if(algn == "in") {
+    else if (algn == "in") {
     }
 
     //line ending cap
@@ -109,10 +106,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 
     //TODO: compound line type
     TRY_READ_ATTR_WITHOUT_NS(cmpd)
-    //double lines
+
+    //single line
     if( cmpd.isEmpty() || cmpd == "sng" ) {
     }
-    //single line
+    //double lines
     else if (cmpd == "dbl") {
     }
     //thick thin double lines
@@ -125,54 +123,60 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     else if (cmpd == "tri") {
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(w) //width
-    qreal penWidth = 0;
+    TRY_READ_ATTR_WITHOUT_NS(w)
+
     if (!w.isEmpty()) {
-        penWidth = EMU_TO_POINT(w.toDouble());
-        m_currentDrawStyle->addPropertyPt("svg:stroke-width", penWidth);
-        // defaults..for now
+        m_currentLineWidth = EMU_TO_POINT(w.toDouble());
+        m_currentDrawStyle->addPropertyPt("svg:stroke-width", m_currentLineWidth);
         m_currentDrawStyle->addProperty("draw:stroke", "solid");
-        m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
     }
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if( isStartElement() ) {
-            //Line join bevel
-//             if(qualifiedName() == QLatin1String("a:bevel")) {
-//                 TRY_READ()
-//             }
-//             //custom dash
-//             else if(qualifiedName() == QLatin1String("a:custDash")) {
-//             }
-//             //extension list
-//             else if(qualifiedName() == QLatin1String("a:extLst")) {
-//             }
-//             //gradient fill
-//             else if(qualifiedName() == QLatin1String("a:gradFill")) {
-//             }
-//             //line head/end style
-//             else if(qualifiedName() == QLatin1String("a:headEnd")) {
-//             }
-//             //miter line join
-//             else if(qualifiedName() == QLatin1String("a:miter")) {
-//             }
-//             //pattern fill
-//             else if(qualifiedName() == QLatin1String("a:pattFill")) {
-//             }
-//             //round line join
-//             else if(qualifiedName() == QLatin1String("a:round")) {
-//             }
+        if ( isStartElement() ) {
+
+            // line head/tail end
+            TRY_READ_IF(headEnd)
+            ELSE_TRY_READ_IF(tailEnd)
+
+            // linejoin
+            else if (qualifiedName() == QLatin1String("a:bevel")) {
+                m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
+            }
+            else if (qualifiedName() == QLatin1String("a:miter")) {
+                m_currentDrawStyle->addProperty("draw:stroke-linejoin", "miter");
+            }
+            else if (qualifiedName() == QLatin1String("a:round")) {
+                m_currentDrawStyle->addProperty("draw:stroke-linejoin", "round");
+            }
+
+            // //custom dash
+            // else if(qualifiedName() == QLatin1String("a:custDash")) {
+            // }
+            // //extension list
+            // else if(qualifiedName() == QLatin1String("a:extLst")) {
+            // }
+            // //gradient fill
+            // else if(qualifiedName() == QLatin1String("a:gradFill")) {
+            // }
+
+            // //pattern fill
+            // else if(qualifiedName() == QLatin1String("a:pattFill")) {
+            // }
+
             //solid fill
-            if (qualifiedName() == QLatin1String("a:solidFill")) {
+            else if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
-                // Opacity is currently disabled as there's a bug somewhere which makes even 1% opacity hide lines.
-                /*
-                if (m_currentAlpha > 0) {
-                    m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
-                }*/
+
+                // Opacity is disabled becasue there's a bug somewhere
+                // which makes even 1% opacity hide lines.
+
+                // if (m_currentAlpha > 0) {
+                //     m_currentDrawStyle->addProperty("svg:stroke-opacity",
+                //     QString("%1%").arg(m_currentAlpha/100.0));
+                // }
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addProperty("draw:stroke", "none");
@@ -181,7 +185,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
                 attrs = attributes();
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 QPen pen;
-                pen.setWidthF(penWidth);
+                pen.setWidthF(m_currentLineWidth);
                 if (val == "dash") {
                     pen.setStyle(Qt::DashLine);
                     m_currentDrawStyle->addProperty("draw:stroke", "dash");
@@ -197,16 +201,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
                     }
                     QString dashStyleName = mainStyles->insert(dashStyle, "dash");
                     m_currentDrawStyle->addProperty("draw:stroke-dash", dashStyleName);
+                    // NOTE: A "dash" looks wrong in Calligra/LO when
+                    // svg:stroke-linecap is applied.
+                    m_currentDrawStyle->removeProperty("svg:stroke-linecap");
                 }
             }
             SKIP_UNKNOWN
-            //tail line end style
-//             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
-//             }
         }
     }
-
-    kDebug() << m_currentDrawStyle->property("svg:stroke-width", KoGenStyle::GraphicType);
 
     READ_EPILOGUE
 }
@@ -1005,6 +1007,75 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
     *m_currentDoubleValue = MSOOXML::Utils::ST_Percentage_withMsooxmlFix_to_double(val, ok);
     if (!ok)
         return KoFilter::WrongFormat;
+
+    readNext();
+    READ_EPILOGUE
+}
+
+//! tailEnd (Tail line end style)
+//! DrawingML ECMA-376 20.1.8.57, p.3232
+/*!
+  This element specifies decorations which can be added to the tail of
+  a line.
+
+  Parent Elements:
+  - [done] ln (§20.1.2.2.24);
+  - lnB (§21.1.3.5);
+  - lnBlToTr (§21.1.3.6);
+  - lnL (§21.1.3.7);
+  - lnR (§21.1.3.8);
+  - lnT (§21.1.3.9);
+  - lnTlToBr (§21.1.3.10);
+  - uLn (§21.1.2.3.14)
+
+  Attributes:
+  - len (Length of Head/End)
+  - [done] type (Line Head/End Type)
+  - w (Width of Head/End)
+
+  TODO: merge the following two readers
+*/
+#undef CURRENT_EL
+#define CURRENT_EL tailEnd
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tailEnd()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(w)
+
+    if (!type.isEmpty() && type != "none") {
+        // draw:marker-end
+        m_currentDrawStyle->addProperty("draw:marker-end", MSOOXML::Utils::defineMarkerStyle(*mainStyles, type));
+        // draw:marker-end-center
+        m_currentDrawStyle->addProperty("draw:marker-end-center", "false");
+        // draw:marker-end-width
+        m_currentDrawStyle->addPropertyPt("draw:marker-end-width",
+                                          MSOOXML::Utils::defineMarkerWidth(w, m_currentLineWidth));
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL headEnd
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_headEnd()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(w)
+
+    if (!type.isEmpty() && type != "none") {
+        // draw:marker-start
+        m_currentDrawStyle->addProperty("draw:marker-start", MSOOXML::Utils::defineMarkerStyle(*mainStyles, type));
+        // draw:marker-start-center
+        m_currentDrawStyle->addProperty("draw:marker-start-center", "false");
+        // draw:marker-start-width
+        m_currentDrawStyle->addPropertyPt("draw:marker-start-width",
+                                          MSOOXML::Utils::defineMarkerWidth(w, m_currentLineWidth));
+    }
 
     readNext();
     READ_EPILOGUE

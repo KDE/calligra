@@ -1585,17 +1585,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
     }
 
     if (lnStyle) {
+        QString prop;
         if (m_currentDrawStyle->property("draw:stroke").isEmpty()) {
-            m_currentDrawStyle->addProperty("draw:stroke", lnStyle->property("draw:stroke"));
+            prop = lnStyle->property("draw:stroke");
+            if (!prop.isEmpty()) {
+                m_currentDrawStyle->addProperty("draw:stroke", prop);
+            } else {
+                // MSOOXML default
+                m_currentDrawStyle->addProperty("draw:stroke", "none");
+            }
         }
         if (m_currentDrawStyle->property("svg:stroke-width").isEmpty()) {
-            m_currentDrawStyle->addProperty("svg:stroke-width", lnStyle->property("svg:stroke-width"));
+            prop = lnStyle->property("svg:stroke-width");
+            if (!prop.isEmpty()) {
+                m_currentDrawStyle->addProperty("svg:stroke-width", prop);
+            } else {
+                // MSOOXML default
+                m_currentDrawStyle->addPropertyPt("svg:stroke-width", 0);
+            }
         }
         if (m_currentDrawStyle->property("svg:stroke-color").isEmpty()) {
-            m_currentDrawStyle->addProperty("svg:stroke-color", lnStyle->property("svg:stroke-color"));
+            prop = lnStyle->property("svg:stroke-color");
+            if (!prop.isEmpty()) {
+                m_currentDrawStyle->addProperty("svg:stroke-color", prop);
+            }
         }
         if (m_currentDrawStyle->property("draw:stroke-linejoin").isEmpty()) {
-            m_currentDrawStyle->addProperty("draw:stroke-linejoin", lnStyle->property("draw:stroke-linejoin"));
+            prop = lnStyle->property("draw:stroke-linejoin");
+            if (!prop.isEmpty()) {
+                m_currentDrawStyle->addProperty("draw:stroke-linejoin", prop);
+            } else {
+                // MSOOXML default
+                m_currentDrawStyle->addProperty("draw:stroke-linejoin", "round");
+            }
         }
     }
 
