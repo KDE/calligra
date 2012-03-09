@@ -81,5 +81,5 @@ Comment[x-test]=xxNew Words document:xx
 Comment[zh_CN]=新建 Words 文档：
 Comment[zh_TW]=新建 Words 文件：
 Type=Link
-URL=.source/TextDocument.kwt
+URL=.source/TextDocument.odt
 Icon=application-vnd.oasis.opendocument.text
