@@ -39,12 +39,13 @@
 #include <QColor>
 #include <QByteArray>
 
+//#define USE_OFFICEARTDGG_CONTAINER
+//#define DEBUG_GHANDLER
+
 using namespace wvWare;
 using namespace MSO;
 
 using Conversion::twipsToPt;
-
-//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -956,7 +957,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1036,7 +1042,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1095,7 +1106,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+    DrawStyle ds(dgg, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1175,7 +1190,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

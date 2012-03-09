@@ -1972,24 +1972,6 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
     }
 } //end defineAutomaticDrawingPageStyles()
 
-/**
- * Define the standard arrows used in PPT files.
- */
-void defineArrow(KoGenStyles& styles)
-{
-    KoGenStyle marker(KoGenStyle::MarkerStyle);
-    marker.addAttribute("draw:display-name", "msArrowEnd 5");
-    marker.addAttribute("svg:viewBox", "0 0 210 210");
-    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
-    styles.insert(marker, "msArrowEnd_20_5", KoGenStyles::DontAddNumberToName);
-    // TODO: define proper styles for these arrows
-    KoGenStyles::InsertionFlags flags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
-    styles.insert(marker, "msArrowStealthEnd_20_5", flags);
-    styles.insert(marker, "msArrowDiamondEnd_20_5", flags);
-    styles.insert(marker, "msArrowOvalEnd_20_5", flags);
-    styles.insert(marker, "msArrowOpenEnd_20_5", flags);
-}
-
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function follows the flow of the styles.xml file.
@@ -2016,9 +1998,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // draw:fill-image
     FillImageCollector fillImageCollector(styles, *this);
     collectGlobalObjects(fillImageCollector, *p);
-    // draw:marker
-    defineArrow(styles);
-    // draw:stroke-dash
+    // draw:marker (libmso)
+    // TODO: draw:stroke-dash
 //     StrokeDashCollector strokeDashCollector(styles, *this);
 //     collectGlobalObjects(strokeDashCollector, *p);
     // TODO: draw:opacity
@@ -2028,13 +2009,14 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     */
     // TODO:
 
-    /*
-       Define default styles for some of the 12 style families.
-       No default styles for the families 'text' and 'paragraph'
-       are defined, since these have higher precedence than the text and
-       paragraph settings for the other style families that may contain text and
-       paragraph settings, like 'graphic' and 'presentation'.
-    */
+
+    // Define default styles for some of the 12 style families.  No
+    // default styles for the families 'text' and 'paragraph' are
+    // defined, since these have higher precedence than the text and
+    // paragraph settings for the other style families that may
+    // contain text and paragraph settings, like 'graphic' and
+    // 'presentation'.
+
     //defineDefaultTextStyle(styles);
     //defineDefaultParagraphStyle(styles);
     defineDefaultSectionStyle(styles);
@@ -2050,10 +2032,11 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         (m_filter->*m_setProgress)(55);
     }
 
-    // NOTE: kpresenter specific: default graphic style and drawing-page style
-    // have higher precedence than those defined by the corresponding
-    // <master-page> element.  This is the case when the presentation slide
-    // inherits background objects from the master slide.
+    // NOTE: kpresenter specific: default graphic style and
+    // drawing-page style have higher precedence than those defined by
+    // the corresponding <master-page> element.  This is the case when
+    // the presentation slide inherits background objects from the
+    // master slide.
 
 //     defineDefaultGraphicStyle(styles);
 //     defineDefaultDrawingPageStyle(styles);

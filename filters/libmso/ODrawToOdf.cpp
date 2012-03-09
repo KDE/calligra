@@ -126,29 +126,24 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
 
 namespace
 {
-const char* arrowHeads[6] = {
-    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-};
+    QString format(double v)
+    {
+        static const QString f("%1");
+        static const QString e("");
+        static const QRegExp r("\\.?0+$");
+        return f.arg(v, 0, 'f').replace(r, e);
+    }
 
-QString format(double v)
-{
-    static const QString f("%1");
-    static const QString e("");
-    static const QRegExp r("\\.?0+$");
-    return f.arg(v, 0, 'f').replace(r, e);
-}
+    QString pt(double v)
+    {
+        static const QString pt("pt");
+        return format(v) + pt;
+    }
 
-QString pt(double v)
-{
-    static const QString pt("pt");
-    return format(v) + pt;
-}
-
-QString percent(double v)
-{
-    return format(v) + '%';
-}
+    QString percent(double v)
+    {
+        return format(v) + '%';
+    }
 } //namespace
 
 void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
@@ -284,26 +279,32 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
+
+    // TODO: improve marker width calculation
     qreal lineWidthPt = EMU_TO_POINT(ds.lineWidth());
-    if (ds.fLine()) {
-        // draw:marker-end
+    // markers are shape specific and thus do NOT belong into the
+    // default graphic style
+    if (ds.fLine() && ( ds.shapeType() != msosptNil )) {
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
         if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
-            style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
+            // draw:marker-end
+            style.addProperty("draw:marker-end", defineMarkerStyle(styles, lineEndArrowhead), gt);
+            // draw:marker-end-center
+            style.addProperty("draw:marker-end-center", "false", gt);
+            // draw:marker-end-width
+            style.addPropertyPt("draw:marker-end-width",
+                                lineWidthPt * 2 + ds.lineEndArrowWidth(), gt);
         }
-        // draw:marker-end-center
-        // draw:marker-end-width
-        style.addPropertyPt("draw:marker-end-width",
-                            lineWidthPt * 2 + ds.lineEndArrowWidth(), gt);
-        // draw:marker-start
         quint32 lineStartArrowhead = ds.lineStartArrowhead();
         if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
-            style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead], gt);
+            // draw:marker-start
+            style.addProperty("draw:marker-start", defineMarkerStyle(styles, lineStartArrowhead), gt);
+            // draw:marker-start-center
+            style.addProperty("draw:marker-start-center", "false", gt);
+            // draw:marker-start-width
+            style.addPropertyPt("draw:marker-start-width",
+                                lineWidthPt * 2 + ds.lineStartArrowWidth(), gt);
         }
-        // draw:marker-start-center
-        // draw:marker-start-width
-        style.addPropertyPt("draw:marker-start-width",
-                            lineWidthPt * 2 + ds.lineStartArrowWidth(), gt);
     }
     // draw:measure-align
     // draw:measure-vertical-align
@@ -320,9 +321,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
             QColor clr = processOfficeArtCOLORREF(ds.shadowColor(), ds);
             style.addProperty("draw:shadow-color", clr.name(), gt);
         }
-        // NOTE: shadowOffset* properties MUST exist if shadowType property
-        // equals msoshadowOffset or msoshadowDouble, otherwise MUST be
-        // ignored, MS-ODRAW 2.3.13.6
+        // NOTE: shadowOffset* properties MUST exist if shadowType
+        // property equals msoshadowOffset or msoshadowDouble,
+        // otherwise MUST be ignored, MS-ODRAW 2.3.13.6
         quint32 type = ds.shadowType();
         if ((type == 0) || (type == 1)) {
             // draw:shadow-offset-x
@@ -341,29 +342,47 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
     // draw:stroke ('dash', 'none' or 'solid')
-
-    // FIXME: More test files required to comprehend the logic (Bug 278545).
-//     if (!ds.fLine() && ds.fNoLineDrawDash()) {
-//         style.addProperty("draw:stroke", "dash", gt);
-//         style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
-//     }
     if (ds.fLine()) {
         quint32 lineDashing = ds.lineDashing();
-        // NOTE: OOo interprets solid line of width 0 as hairline, so if width
-        // == 0, stroke *must* be none to avoid OOo from displaying a line
+
+        // NOTE: OOo interprets solid line of width 0 as hairline, so
+        // stroke *must* be "none" in order to be NOT display in OOo.
         if (lineWidthPt == 0) {
             style.addProperty("draw:stroke", "none", gt);
         } else if (lineDashing > 0 && lineDashing < 11) {
+            // NOTE: A "dash" looks wrong in Calligra/LO when
+            // svg:stroke-linecap is applied.
             style.addProperty("draw:stroke", "dash", gt);
-            style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
+            style.addProperty("draw:stroke-dash", defineDashStyle(styles, lineDashing), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
+            // svg:stroke-linecap
+            style.addProperty("svg:stroke-linecap", getStrokeLineCap(ds.lineEndCapStyle()), gt);
         }
-    } else {
+        if (lineWidthPt != 0) {
+            // draw:stroke-linejoin
+            style.addProperty("draw:stroke-linejoin", getStrokeLineJoin(ds.lineJoinStyle()), gt);
+            // svg:stroke-color
+            if (client) {
+                QColor clr = processOfficeArtCOLORREF(ds.lineColor(), ds);
+                style.addProperty("svg:stroke-color", clr.name(), gt);
+            }
+            // svg:stroke-opacity
+            style.addProperty("svg:stroke-opacity", percent(100.0 * ds.lineOpacity() / 0x10000), gt);
+            // svg:stroke-width
+            style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
+        }
+    }
+    // NOTE: Seems to be only relevant for master shapes. A usecase
+    // would be a user editing a master slide.
+    // else if (ds.fNoLineDrawDash()) {
+    //     style.addProperty("draw:stroke", "dash", gt);
+    //     style.addProperty("draw:stroke-dash", defineDashStyle(styles, msolineDashSys), gt);
+    // }
+    else {
         style.addProperty("draw:stroke", "none", gt);
     }
     // draw:stroke-dash-names
-    // draw:stroke-linejoin
     // draw:symbol-color
     // draw:textarea-horizontal-align
     style.addProperty("draw:textarea-horizontal-align", getHorizontalAlign(ds.anchorText()), gt);
@@ -457,18 +476,6 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         style.addProperty("svg:fill-rule" ,fillRule, gt);
     }
     // svg:height
-    if (ds.fLine() || ds.fNoLineDrawDash()) {
-        if (client) {
-            // svg:stroke-color from 2.3.8.1 lineColor
-            QColor clr = processOfficeArtCOLORREF(ds.lineColor(), ds);
-            style.addProperty("svg:stroke-color", clr.name(), gt);
-        }
-        // svg:stroke-opacity from 2.3.8.2 lineOpacity
-        style.addProperty("svg:stroke-opacity",
-                          percent(100.0 * ds.lineOpacity() / 0x10000), gt);
-        // svg:stroke-width from 2.3.8.14 lineWidth
-        style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
-    }
     // svg:width
     // svg:x
     // svg:y
@@ -481,6 +488,56 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // text:animation-start-inside
     // text:animation-steps
     // text:animation-stop-inside
+}
+
+namespace
+{
+    const char* markerStyles[6] = {
+        "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+        "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+    };
+}
+
+QString ODrawToOdf::defineMarkerStyle(KoGenStyles& styles, const quint32 arrowType)
+{
+    if ( !(arrowType > msolineNoEnd && arrowType < msolineArrowChevronEnd) ) {
+        return QString();
+    }
+
+    const QString name(markerStyles[arrowType]);
+
+    if (styles.style(name)) {
+        return name;
+    }
+
+    KoGenStyle marker(KoGenStyle::MarkerStyle);
+    marker.addAttribute("draw:display-name",  QString(markerStyles[arrowType]).replace("_20_", " "));
+
+    // sync with LO
+    switch (arrowType) {
+    case msolineArrowStealthEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 318-159-127-159 127z");
+        break;
+    case msolineArrowDiamondEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 159-159 159-159-159z");
+        break;
+    case msolineArrowOvalEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m318 0c0-87-72-159-159-159s-159 72-159 159 72 159 159 159 159-72 159-159z");
+        break;
+    case msolineArrowOpenEnd:
+        marker.addAttribute("svg:viewBox", "0 0 477 477");
+        marker.addAttribute("svg:d", "m239 0 238 434-72 43-166-305-167 305-72-43z");
+        break;
+    case msolineArrowEnd:
+    default:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 318h-318z");
+        break;
+    }
+    return styles.insert(marker, name, KoGenStyles::DontAddNumberToName);
 }
 
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
@@ -646,7 +703,7 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     style.addChildElement("svg:stop", elementContents);
 }
 
-QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+QString ODrawToOdf::defineDashStyle(KoGenStyles& styles, const quint32 lineDashing)
 {
     if (lineDashing <= 0 || lineDashing > 10) {
         return QString();
@@ -1055,5 +1112,31 @@ const char* getVerticalAlign(quint32 anchorText)
         return "bottom";
     default:
         return "top";
+    }
+}
+
+const char* getStrokeLineCap(quint32 capStyle)
+{
+    switch (capStyle) {
+    case msolineEndCapRound:
+        return "round";
+    case msolineEndCapSquare:
+        return "square";
+    case msolineEndCapFlat:
+    default:
+        return "butt";
+    }
+}
+
+const char* getStrokeLineJoin(quint32 joinStyle)
+{
+    switch (joinStyle) {
+    case msolineJoinBevel:
+        return "bevel";
+    case msolineJoinMiter:
+        return "miter";
+    case msolineJoinRound:
+    default:
+        return "round";
     }
 }
