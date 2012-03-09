@@ -119,8 +119,27 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + lastRow + 1;
         int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
-        QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
-        return d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
+        column = qBound(0, column, d->table->columns() - 1);
+        KoPointedAt pointedAt;
+        if (qAbs(d->columnPositions[column] - point.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+        } else if (qAbs(d->columnPositions[column+1] - point.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+            ++column;
+        } else {
+            QTextTableCell cell = d->table->cellAt(row, column);
+            pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
+        }
+        if (column > 0) {
+            pointedAt.tableLeadSize = d->columnPositions[column] - d->columnPositions[column-1];
+        }
+        if (column < d->table->columns()) {
+            pointedAt.tableTrailSize = d->columnPositions[column+1] - d->columnPositions[column];
+        }
+        pointedAt.table = d->table;
+        pointedAt.tableRowDivider = row;
+        pointedAt.tableColumnDivider = column;
+        return pointedAt;
     }
 
     // Test header row cells.
@@ -130,8 +149,21 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         QVector<qreal>::const_iterator end = d->headerRowPositions.constBegin() + d->headerRows;
         int row = qLowerBound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
-        QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
-        return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
+        column = qBound(0, column, d->table->columns() - 1);
+        KoPointedAt pointedAt;
+        if (qAbs(d->columnPositions[column] - headerPoint.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+        } else if (qAbs(d->columnPositions[column+1] - headerPoint.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+            ++column;
+        } else {
+            QTextTableCell cell = d->table->cellAt(row, column);
+            pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
+        }
+        pointedAt.table = d->table;
+        pointedAt.tableRowDivider = row;
+        pointedAt.tableColumnDivider = column;
+        return pointedAt;
     }
 
     return KoPointedAt();

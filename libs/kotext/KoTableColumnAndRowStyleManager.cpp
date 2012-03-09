@@ -94,10 +94,10 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableCo
         return;
     }
 
-    while (column > d->tableColumnStyles.size())
+    while (column >= d->tableColumnStyles.size())
         d->tableColumnStyles.append(KoTableColumnStyle());
 
-    d->tableColumnStyles.insert(column, columnStyle);
+    d->tableColumnStyles.replace(column, columnStyle);
 }
 
 void KoTableColumnAndRowStyleManager::insertColumns(int column, int numberColumns, const KoTableColumnStyle &columnStyle)

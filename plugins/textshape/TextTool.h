@@ -360,6 +360,10 @@ private:
     bool m_delayedEnsureVisible;
     TextToolSelection *m_toolSelection;
 
+    KoPointedAt m_draggingTable;
+    bool m_tableDraggedOnce;
+    qreal m_draggingOrigin;
+
     mutable QRectF m_lastImMicroFocus;
 };
 

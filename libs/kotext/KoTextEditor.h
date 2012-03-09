@@ -373,6 +373,10 @@ public slots:
      */
     void splitTableCells();
 
+    void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
+
+    void adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight);
+
     /**
      * Insert a footnote at the current cursor position
      * @return a pointer to the inserted footnote

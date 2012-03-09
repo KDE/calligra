@@ -64,6 +64,7 @@
 #include <KoBookmarkManager.h>
 #include <KoListLevelProperties.h>
 #include <KoTextLayoutRootArea.h>
+//#include <ResizeTableCommand.h>
 
 #include <kdebug.h>
 #include <KRun>
@@ -727,34 +728,49 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    const bool canMoveCaret = !m_textEditor.data()->hasSelection() || event->button() !=  Qt::RightButton;
-    if (canMoveCaret) {
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection(); // will erase selection
-        else
-            repaintCaret();
+    if (m_textEditor.data()->hasSelection())
+        repaintSelection(); // will erase selection
+    else
+        repaintCaret();
 
-        updateSelectedShape(event->point);
+    updateSelectedShape(event->point);
 
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
-            selection->deselectAll();
-            selection->select(m_textShape);
-        }
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
+        selection->deselectAll();
+        selection->select(m_textShape);
+    }
 
-        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
-        KoPointedAt pointedAt = hitTest(event->point);
-        if (pointedAt.position != -1) {
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+    KoPointedAt pointedAt = hitTest(event->point);
+    m_tableDraggedOnce = false;
+    if (pointedAt.position != -1) {
+        if(event->button() == Qt::LeftButton || !m_textEditor.data()->hasSelection()) {
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        } else if (false /*within previous selection*/) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
-        if (shiftPressed) // altered selection.
-            repaintSelection();
-        else
-            repaintCaret();
+        m_draggingTable.tableHit = KoPointedAt::None;
+    } else {
+        m_draggingTable = pointedAt;
+        if (event->button() == Qt::RightButton) {
+            KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+            if (plugin)
+                plugin->setCurrentCursorPosition(m_textEditor.data()->document(), -1);
 
-        updateSelectionHandler();
-        updateStyleManager();
+            event->ignore();
+        }
+
+        return;
     }
+    if (shiftPressed) // altered selection.
+        repaintSelection();
+    else
+        repaintCaret();
+
+    updateSelectionHandler();
+    updateStyleManager();
+
     updateActions();
 
     //activate context-menu for spelling-suggestions
@@ -919,7 +935,6 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return mousePressEvent(event);
     }
 
-    int pos = m_textEditor.data()->position();
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
     repaintSelection();
@@ -937,8 +952,6 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
-
-    int pos = m_textEditor.data()->position();
 
     m_textEditor.data()->clearSelection();
     m_textEditor.data()->movePosition(QTextCursor::StartOfBlock);
@@ -964,9 +977,16 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     KoPointedAt pointedAt = hitTest(event->point);
 
     if (event->buttons() == Qt::NoButton) {
-        //if (!m_textShapeData ){//FIXME|| m_textShapeData->endPosition() == position) {
         if (!m_textShapeData || pointedAt.position < 0) {
-            useCursor(Qt::IBeamCursor);
+            if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+                useCursor(Qt::SplitHCursor);
+                m_draggingOrigin = event->point.x();
+            } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
+                useCursor(Qt::SplitVCursor);
+                m_draggingOrigin = event->point.y();
+            } else {
+                useCursor(Qt::IBeamCursor);
+            }
             return;
         }
 
@@ -993,20 +1013,62 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         useCursor(Qt::IBeamCursor);
         return;
     } else {
-        useCursor(Qt::IBeamCursor);
-        if (pointedAt.position == m_textEditor.data()->position()) return;
-        if (pointedAt.position >= 0) {
-            if (m_textEditor.data()->hasSelection())
-                repaintSelection(); // will erase selection
-            else
-                repaintCaret();
+        if (m_draggingTable.tableHit != KoPointedAt::None) {
+            bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+            bool ctrlPressed = event->modifiers() & Qt::ControlModifier;
+            if (m_draggingTable.tableHit == KoPointedAt::ColumnDivider) {
+                if(m_tableDraggedOnce) {
+                    canvas()->shapeController()->resourceManager()->undoStack()->undo();
+                }
+                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
+                qreal dx = m_draggingOrigin - event->point.x();
+                if (m_draggingTable.tableColumnDivider < m_draggingTable.table->columns()
+                        && m_draggingTable.tableTrailSize + dx < 0) {
+                    dx = -m_draggingTable.tableTrailSize;
+                }
+                if (m_draggingTable.tableColumnDivider > 0) {
+                    if (m_draggingTable.tableLeadSize - dx < 0) {
+                        dx = m_draggingTable.tableLeadSize;
+                    }
+                    m_textEditor.data()->adjustTableColumnWidth(m_draggingTable.table,
+                        m_draggingTable.tableColumnDivider - 1,
+                        m_draggingTable.tableLeadSize - dx, topCmd);
+                } else {
+                    m_textEditor.data()->adjustTableWidth(m_draggingTable.table, -dx, 0.0);
+                }
+                if (m_draggingTable.tableColumnDivider < m_draggingTable.table->columns()) {
+                    if (!shiftPressed && !ctrlPressed) {
+                        m_textEditor.data()->adjustTableColumnWidth(m_draggingTable.table,
+                            m_draggingTable.tableColumnDivider,
+                            m_draggingTable.tableTrailSize + dx, topCmd);
+                    }
+                } else {
+                    shiftPressed = false; // shift shouldn't work in this case
+                }
+                if (!shiftPressed) {
+                    m_textEditor.data()->adjustTableWidth(m_draggingTable.table, 0.0, dx);
+                }
+                m_textEditor.data()->endEditBlock();
+                m_tableDraggedOnce = true;
+            } else if (m_draggingTable.tableHit == KoPointedAt::RowDivider) {
 
-            m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
+            }
+        } else {
+            useCursor(Qt::IBeamCursor);
+            if (pointedAt.position == m_textEditor.data()->position()) return;
+            if (pointedAt.position >= 0) {
+                if (m_textEditor.data()->hasSelection())
+                    repaintSelection(); // will erase selection
+                else
+                    repaintCaret();
 
-            if (m_textEditor.data()->hasSelection())
-                repaintSelection();
-            else
-                repaintCaret();
+                m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
+
+                if (m_textEditor.data()->hasSelection())
+                    repaintSelection();
+                else
+                    repaintCaret();
+            }
         }
 
         updateSelectionHandler();
