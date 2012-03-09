@@ -46,7 +46,7 @@ target_link_libraries(calligraactive
     kdeclarative
     komain
     wordsprivate
-    calligratablescommon
+    calligrasheetscommon
     kopageapp
     calligrastageprivate
 )

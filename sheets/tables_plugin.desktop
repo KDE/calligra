@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=CalligraTables/Plugin
-Comment=Plugin for Calligra Tables
+X-KDE-ServiceType=CalligraSheets/Plugin
+Comment=Plugin for Calligra Sheets
 Comment[bg]=Приставка за Calligra Tables
 Comment[ca]=Connector per a les taules del Calligra
 Comment[ca@valencia]=Connector per a les taules del Calligra
@@ -27,5 +27,5 @@ Comment[uk]=Додаток до Tables Calligra
 Comment[x-test]=xxPlugin for Calligra Tablesxx
 Comment[zh_CN]=Calligra Tables 插件
 Comment[zh_TW]=Calligra Tables 的外掛程式
-[PropertyDef::X-CalligraTables-InterfaceVersion]
+[PropertyDef::X-CalligraSheets-InterfaceVersion]
 Type=int

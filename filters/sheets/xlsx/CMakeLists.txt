@@ -27,7 +27,7 @@ target_link_libraries(
     msooxml
     koodf
     komain
-    calligratablescommon
+    calligrasheetscommon
 )
 
 install(TARGETS xlsximport DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -48,4 +48,4 @@ set(TestFormulaParser_SRCS
 )
 
 kde4_add_unit_test(TestFormulaParser TESTNAME kspread-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser msooxml calligratablescommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestFormulaParser msooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

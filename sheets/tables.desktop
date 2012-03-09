@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Calligra Tables
+Name=Calligra Sheets
 Name[ca]=Taules del Calligra
 Name[ca@valencia]=Taules del Calligra
 Name[cs]=Calligra Tables
@@ -26,7 +26,7 @@ Name[uk]=Tables Calligra
 Name[x-test]=xxCalligra Tablesxx
 Name[zh_CN]=Calligra Tables
 Name[zh_TW]=Calligra Tables
-Exec=calligratables %u
+Exec=calligrasheets %u
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици
 GenericName[ca]=Full de càlcul
@@ -106,7 +106,7 @@ X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.spreadsheet,application/x-kspread,application/vnd.ms-excel,text/csv,application/x-quattropro,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-DBUS-StartupType=multi
-X-DBUS-ServiceName=org.calligra.tables
+X-DBUS-ServiceName=org.calligra.sheets
 X-DocPath=tables/index.html
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;

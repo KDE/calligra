@@ -1,4 +1,4 @@
-project(calligra-tables)
+project(calligra-sheets)
 
 add_subdirectory( data )
 add_subdirectory( shape )
@@ -185,7 +185,7 @@ SET (ui_DIR_SRCS
     ui/SheetView.cpp
 )
 
-SET (calligratablescommon_LIB_SRCS
+SET (calligrasheetscommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
@@ -200,7 +200,7 @@ SET (calligratablescommon_LIB_SRCS
     ${ui_DIR_SRCS}
     )
 
-set (calligratablesodf_LIB_SRCS
+set (calligrasheetsodf_LIB_SRCS
     part/Digest.cpp
     ApplicationSettings.cpp
     Binding.cpp
@@ -249,7 +249,7 @@ set (calligratablesodf_LIB_SRCS
     database/DatabaseManager.cpp
     database/Filter.cpp
 
-    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligratablesodf
+    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
     Function.cpp
     FunctionDescription.cpp
     FunctionModule.cpp
@@ -262,72 +262,72 @@ set (calligratablesodf_LIB_SRCS
     )
 
 
-kde4_add_library(calligratablesodf SHARED ${calligratablesodf_LIB_SRCS})
+kde4_add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
 
-target_link_libraries(calligratablesodf komain)
-target_link_libraries(calligratablesodf LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(calligrasheetsodf komain)
+target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(calligratablesodf PROPERTIES
+set_target_properties(calligrasheetsodf PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligratablesodf ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-kde4_add_library(calligratablescommon SHARED ${calligratablescommon_LIB_SRCS})
+kde4_add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 
-target_link_libraries(calligratablescommon
+target_link_libraries(calligrasheetscommon
     komain
-    calligratablesodf
+    calligrasheetsodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 if(KDE4_KCMUTILS_LIBS)
-    target_link_libraries(calligratablescommon ${KDE4_KCMUTILS_LIBS} )
+    target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
 else()
-    target_link_libraries(calligratablescommon ${KDE4_KUTILS_LIBS} )
+    target_link_libraries(calligrasheetscommon ${KDE4_KUTILS_LIBS} )
 endif()
 
-target_link_libraries(calligratablescommon LINK_INTERFACE_LIBRARIES komain calligratablesodf )
+target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
 
-set_target_properties(calligratablescommon PROPERTIES
+set_target_properties(calligrasheetscommon PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligratablescommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
 
-SET (calligratablespart_PART_SRCS part/Factory_init.cpp )
+SET (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
-kde4_add_plugin(calligratablespart ${calligratablespart_PART_SRCS})
+kde4_add_plugin(calligrasheetspart ${calligrasheetspart_PART_SRCS})
 
 
 
-target_link_libraries(calligratablespart calligratablescommon )
+target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligratablespart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
 
-SET (calligratables_KDEINIT_SRCS part/Main.cpp )
+SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligratables_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
 
-kde4_add_kdeinit_executable( calligratables ${calligratables_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.tables")
-set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Tables 2")
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.sheets")
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_calligratables komain )
+target_link_libraries(kdeinit_calligrasheets komain )
 
-install(TARGETS kdeinit_calligratables  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( calligratables kdeinit_calligratables )
-install(TARGETS calligratables  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries( calligrasheets kdeinit_calligrasheets )
+install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
