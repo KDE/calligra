@@ -6,7 +6,7 @@ set(csvimport_PART_SRCS csvimport.cc)
 
 kde4_add_plugin(csvimport ${csvimport_PART_SRCS})
 
-target_link_libraries(csvimport calligratablescommon kowidgets)
+target_link_libraries(csvimport calligrasheetscommon kowidgets)
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -18,7 +18,7 @@ kde4_add_ui_files(csvexport_PART_SRCS exportdialogui.ui )
 
 kde4_add_plugin(csvexport ${csvexport_PART_SRCS})
 
-target_link_libraries(csvexport calligratablescommon)
+target_link_libraries(csvexport calligrasheetscommon)
 
 install(TARGETS csvexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -20,7 +20,7 @@ SET (tableshape_LIB_SRCS
 kde4_add_plugin(spreadsheetshape-deferred ${tableshape_LIB_SRCS})
 kde4_add_plugin(spreadsheetshape TableShapeFactory.cpp)
 
-target_link_libraries(spreadsheetshape-deferred calligratablescommon)
+target_link_libraries(spreadsheetshape-deferred calligrasheetscommon)
 target_link_libraries(spreadsheetshape flake)
 
 install(TARGETS spreadsheetshape-deferred DESTINATION ${PLUGIN_INSTALL_DIR})

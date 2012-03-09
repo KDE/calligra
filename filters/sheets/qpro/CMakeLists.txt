@@ -16,7 +16,7 @@ kde4_add_plugin(qproimport ${qproimport_PART_SRCS})
 
 
 
-target_link_libraries(qproimport calligratablescommon)
+target_link_libraries(qproimport calligrasheetscommon)
 
 install(TARGETS qproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

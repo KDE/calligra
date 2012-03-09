@@ -138,7 +138,7 @@ target_link_libraries(calligramobile
     komain
     kopageapp
     wordsprivate
-    calligratablescommon
+    calligrasheetscommon
 )
 
 if (QT_QTOPENGL_FOUND)
