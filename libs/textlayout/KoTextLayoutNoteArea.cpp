@@ -57,10 +57,10 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     KoTextLayoutArea::paint(painter, context);
-    d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
     if (d->postLayout) {
         d->postLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
     }
+    d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
 }
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
@@ -110,35 +110,30 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     }
     d->labelIndent += pStyle.leftMargin();
 
-    return KoTextLayoutArea::layout(cursor);
-}
+    bool contNotNeeded = KoTextLayoutArea::layout(cursor);
 
-void KoTextLayoutNoteArea::postlayout(FrameIterator *cursor)
-{
-    KoOdfNotesConfiguration *notesConfig = KoTextDocument(d->note->textFrame()->document()).
-            styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
-    QString contNote = notesConfig->footnoteContinuationForward();
-    QPaintDevice *pd = documentLayout()->paintDevice();
-    QTextCharFormat format = cursor->it.currentBlock().charFormat();
-    QFont font(format.font(), pd);
-    font.setBold(true);
-    d->postLayout = new QTextLayout(contNote, font, pd);
-    QList<QTextLayout::FormatRange> layouts;
-    QTextLayout::FormatRange range;
-    range.start = 0;
-    range.length = contNote.length();
-    range.format = format;
-    range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
-    layouts.append(range);
-    d->postLayout->setAdditionalFormats(layouts);
+    if(!contNotNeeded) {
+        QString contNote = notesConfig->footnoteContinuationForward();
+        font.setBold(true);
+        d->postLayout = new QTextLayout(contNote, font, pd);
+        QList<QTextLayout::FormatRange> contTextLayouts;
+        QTextLayout::FormatRange contTextRange;
+        contTextRange.start = 0;
+        contTextRange.length = contNote.length();
+        contTextRange.format = format;
+        contTextRange.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+        contTextLayouts.append(contTextRange);
+        d->postLayout->setAdditionalFormats(contTextLayouts);
 
-    QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-    //option.setTextDirection();
-    d->postLayout->setTextOption(option);
-    d->postLayout->beginLayout();
-    QTextLine line = d->postLayout->createLine();
-    d->postLayout->endLayout();
-    line.setPosition(QPointF(right() - line.naturalTextWidth(), bottom() - line.height()));
+        QTextOption contTextOption(Qt::AlignLeft | Qt::AlignAbsolute);
+        //option.setTextDirection();
+        d->postLayout->setTextOption(contTextOption);
+        d->postLayout->beginLayout();
+        QTextLine contTextLine = d->postLayout->createLine();
+        d->postLayout->endLayout();
+        contTextLine.setPosition(QPointF(right() - contTextLine.naturalTextWidth(), bottom() - contTextLine.height()));
+    }
+    return contNotNeeded;
 }
 
 void KoTextLayoutNoteArea::setAsContinuedArea(bool isContinuedArea)
