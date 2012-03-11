@@ -45,7 +45,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "BindingModel.h"
 #include "CalculationSettings.h"
 #include "Map.h"

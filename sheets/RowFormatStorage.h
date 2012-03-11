@@ -22,7 +22,7 @@
 
 #include <Qt>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 namespace Calligra {
 namespace Sheets {

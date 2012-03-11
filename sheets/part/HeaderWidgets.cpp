@@ -70,7 +70,7 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "View.h"

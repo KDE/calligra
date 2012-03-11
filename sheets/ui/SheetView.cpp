@@ -34,7 +34,7 @@
 #include <KoViewConverter.h>
 
 #include "CellView.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "PointStorage.h"
 #include "RectStorage.h"
 #include "Region.h"

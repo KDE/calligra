@@ -24,7 +24,7 @@
 #include "PrintSettings.h"
 
 // KSpread
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "Region.h"
 
 // Calligra

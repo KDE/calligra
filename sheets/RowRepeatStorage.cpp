@@ -22,7 +22,7 @@
 #include <QPair>
 #include <QDebug>
 
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 

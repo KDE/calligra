@@ -28,7 +28,7 @@
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
 #include <QtDBus/QtDBus>
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 #include <QString>
 
 namespace Calligra

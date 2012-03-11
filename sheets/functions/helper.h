@@ -20,7 +20,7 @@
 #define kspread_functions_helper_h_
 // helper functions for other functions
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 class QDate;
 

@@ -28,7 +28,7 @@
 
 #include <KoRTree.h>
 
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.

@@ -23,7 +23,7 @@
 #include <qtest_kde.h>
 
 #include "../RowRepeatStorage.h"
-#include "../calligra_tables_limits.h"
+#include "../calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 

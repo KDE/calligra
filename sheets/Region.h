@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 inline uint qHash(const QPoint& point)
 {

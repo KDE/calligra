@@ -47,7 +47,7 @@
 #include <sheets/Cell.h>
 #include <sheets/part/Doc.h>
 #include <sheets/HeaderFooter.h>
-#include <sheets/calligra_tables_limits.h>
+#include <sheets/calligra_sheets_limits.h>
 #include <sheets/Map.h>
 #include <sheets/NamedAreaManager.h>
 #include <sheets/PrintSettings.h>

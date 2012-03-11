@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_NUMBER_H
 #define CALLIGRA_SHEETS_NUMBER_H
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 // #define CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 

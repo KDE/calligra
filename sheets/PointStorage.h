@@ -25,7 +25,7 @@
 #include <QVector>
 
 #include "Region.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 
 // #define KSPREAD_POINT_STORAGE_HASH
 

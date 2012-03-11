@@ -28,7 +28,7 @@
 #include <QString>
 #include <KPluginFactory>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 namespace Calligra
 {
