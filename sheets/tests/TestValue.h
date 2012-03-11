@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestValue: public QObject
@@ -45,7 +45,7 @@ private Q_SLOTS:
     void testAssignment();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_VALUE

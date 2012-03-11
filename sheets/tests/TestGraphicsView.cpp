@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     QApplication qapp(argc, argv);
     KComponentData cd("graphicsview-test");
 
-    Calligra::Tables::Doc doc;
+    Calligra::Sheets::Doc doc;
     bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     QFont font(KoGlobal::defaultFont());
 
-    Calligra::Tables::CanvasItem* canvas = new Calligra::Tables::CanvasItem(&doc);
+    Calligra::Sheets::CanvasItem* canvas = new Calligra::Sheets::CanvasItem(&doc);
 
     QRect usedArea = canvas->activeSheet()->usedArea(true);
     QFontMetricsF fm(font, 0);
@@ -55,11 +55,11 @@ int main(int argc, char** argv)
     canvas->resize(size);
     canvas->setPos(0, 0);
 
-    Calligra::Tables::ColumnHeaderItem* columnHeader = static_cast<Calligra::Tables::ColumnHeaderItem*>(canvas->columnHeader());
+    Calligra::Sheets::ColumnHeaderItem* columnHeader = static_cast<Calligra::Sheets::ColumnHeaderItem*>(canvas->columnHeader());
     static_cast<QGraphicsWidget*>(columnHeader)->resize(size.width(), fm.height() + 3);
     columnHeader->setPos(0, -columnHeader->height());
 
-    Calligra::Tables::RowHeaderItem* rowHeader = static_cast<Calligra::Tables::RowHeaderItem*>(canvas->rowHeader());
+    Calligra::Sheets::RowHeaderItem* rowHeader = static_cast<Calligra::Sheets::RowHeaderItem*>(canvas->rowHeader());
     static_cast<QGraphicsWidget*>(rowHeader)->resize(fm.width(QString::fromLatin1("99999")) + 3, size.height());
     rowHeader->setPos(-rowHeader->width(), 0);
 

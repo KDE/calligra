@@ -52,7 +52,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class OdfLoadingContext;
 class ValueConverter;
@@ -197,10 +197,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Validity)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Validity, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Validity)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Validity, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_VALIDITY

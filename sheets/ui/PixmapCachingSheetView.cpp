@@ -34,7 +34,7 @@
 #include <ThreadWeaver/Weaver>
 #endif
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 #define TILESIZE 256
 

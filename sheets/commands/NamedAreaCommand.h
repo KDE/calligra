@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -59,7 +59,7 @@ private:
     Region m_oldArea;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_NAMED_AREA_COMMAND

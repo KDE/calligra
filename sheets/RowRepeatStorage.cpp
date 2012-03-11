@@ -24,7 +24,7 @@
 
 #include "calligra_tables_limits.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 RowRepeatStorage::RowRepeatStorage()
 {

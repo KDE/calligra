@@ -31,7 +31,7 @@ class QAbstractItemModel;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -67,10 +67,10 @@ private:
     QExplicitlySharedDataPointer<Private> d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Binding)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Binding, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Binding)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Binding, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_BINDING

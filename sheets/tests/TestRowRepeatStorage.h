@@ -23,7 +23,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestRowRepeatStorage : public QObject
@@ -53,7 +53,7 @@ private slots:
     void testRemoveShiftLeft();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // TESTROWREPEATSTORAGE_H

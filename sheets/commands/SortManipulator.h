@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CellStorage;
 
@@ -100,7 +100,7 @@ protected:
     QHash<Cell, Style> m_styles; // temporary
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif  // CALLIGRA_TABLES_SORT_MANIPULATOR

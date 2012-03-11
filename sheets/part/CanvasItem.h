@@ -58,7 +58,7 @@ class QScrollBar;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class CellEditor;
@@ -126,7 +126,7 @@ public Q_SLOTS:
     void handleDamages(const QList<Damage*>& damages);
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
-    void obscuredRangeChanged(const Calligra::Tables::Sheet* sheet, const QSize&);
+    void obscuredRangeChanged(const Calligra::Sheets::Sheet* sheet, const QSize&);
 
 public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
@@ -196,7 +196,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS_ITEM

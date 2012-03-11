@@ -33,7 +33,7 @@
 #include "Style.h"
 #include "StyleStorage.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 StyleCommand::StyleCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)

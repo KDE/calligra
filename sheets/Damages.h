@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Map;
@@ -85,8 +85,8 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    CellDamage(const Calligra::Tables::Cell& cell, Changes changes);
-    CellDamage(Calligra::Tables::Sheet* sheet, const Region& region, Changes changes);
+    CellDamage(const Calligra::Sheets::Cell& cell, Changes changes);
+    CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes);
 
     virtual ~CellDamage();
 
@@ -94,7 +94,7 @@ public:
         return Damage::Cell;
     }
 
-    Calligra::Tables::Sheet* sheet() const;
+    Calligra::Sheets::Sheet* sheet() const;
     const Region& region() const;
 
     Changes changes() const;
@@ -128,7 +128,7 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    SheetDamage(Calligra::Tables::Sheet* sheet, Changes changes);
+    SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes);
 
     virtual ~SheetDamage();
 
@@ -136,7 +136,7 @@ public:
         return Damage::Sheet;
     }
 
-    Calligra::Tables::Sheet* sheet() const;
+    Calligra::Sheets::Sheet* sheet() const;
 
     Changes changes() const;
 
@@ -163,13 +163,13 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    WorkbookDamage(Calligra::Tables::Map* map, Changes changes);
+    WorkbookDamage(Calligra::Sheets::Map* map, Changes changes);
     virtual ~WorkbookDamage();
 
     virtual Type type() const {
         return Damage::Workbook;
     }
-    Calligra::Tables::Map* map() const;
+    Calligra::Sheets::Map* map() const;
     Changes changes() const;
 
 private:
@@ -204,7 +204,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 
@@ -212,9 +212,9 @@ private:
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SelectionDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
 
 #endif // CALLIGRA_TABLES_DAMAGES

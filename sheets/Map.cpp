@@ -72,7 +72,7 @@
 // database
 #include "database/DatabaseManager.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Map::Private
 {
@@ -237,8 +237,8 @@ bool Map::completeLoading(KoStore *store)
 
     QPointer<KoUpdater> dependencyUpdater, recalcUpdater;
     if (doc() && doc()->progressUpdater()) {
-        dependencyUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Tables::DependencyManager::updateAllDependencies");
-        recalcUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Tables::RecalcManager::recalc");
+        dependencyUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Sheets::DependencyManager::updateAllDependencies");
+        recalcUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Sheets::RecalcManager::recalc");
     }
 
     // Initial build of all cell dependencies.

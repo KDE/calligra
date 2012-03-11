@@ -67,7 +67,7 @@ class KoUnitDoubleSpinBox;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 class CustomStyle;
@@ -719,7 +719,7 @@ protected:
     void applyStyle();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LAYOUT_DIALOG

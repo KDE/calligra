@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestStyleStorage : public QObject
@@ -34,7 +34,7 @@ private slots:
     void testGarbageCollection();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_STYLESTORAGE

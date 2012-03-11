@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class ColumnFormat;
 class RowFormat;
@@ -74,7 +74,7 @@ protected:
     Mode m_mode;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DELETE_COMMAND

@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 
@@ -48,7 +48,7 @@ private:
     PrintSettings m_settings;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PAGE_LAYOUT_COMMAND

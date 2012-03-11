@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class SheetAccessModel::Private
@@ -132,5 +132,5 @@ void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
     }
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra

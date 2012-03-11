@@ -27,7 +27,7 @@ class KoXmlDocument;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CellTest : public QObject
@@ -39,7 +39,7 @@ private:
     KoXmlDocument xmlDocument(const QString &content);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_STORAGE_TEST

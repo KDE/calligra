@@ -28,7 +28,7 @@
 // Calligra includes
 // KSpread includes
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 SheetSelectPage::SheetSelectPage(QWidget *parent)
         : QWidget(parent)

@@ -45,7 +45,7 @@
 #include <kdebug.h>
 #include <QDomDocument>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -574,7 +574,7 @@ bool Conditions::operator==(const Conditions& other) const
     return true;
 }
 
-uint Calligra::Tables::qHash(const Conditions &c)
+uint Calligra::Sheets::qHash(const Conditions &c)
 {
     uint res = 0;
     foreach (const Conditional& co, c.conditionList()) {
@@ -583,7 +583,7 @@ uint Calligra::Tables::qHash(const Conditions &c)
     return res;
 }
 
-uint Calligra::Tables::qHash(const Conditional& c)
+uint Calligra::Sheets::qHash(const Conditional& c)
 {
     return qHash(c.value1);
 }

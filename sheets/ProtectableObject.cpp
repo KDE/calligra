@@ -32,7 +32,7 @@
 
 #include <QPointer>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void ProtectableObject::password(QByteArray & password) const
 {

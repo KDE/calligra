@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <KStandardGuiItem>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class CharacterSelectDialog::Private
 {

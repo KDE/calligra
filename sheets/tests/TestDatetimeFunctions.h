@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestDatetimeFunctions: public QObject
@@ -73,7 +73,7 @@ private:
     Value evaluate(const QString&, Value& ex);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_DATETIME_FUNCTIONS

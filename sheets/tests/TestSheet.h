@@ -23,7 +23,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Doc;
@@ -51,7 +51,7 @@ private:
     Doc* m_doc;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_TEST

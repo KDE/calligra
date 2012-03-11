@@ -25,7 +25,7 @@
 #include "calligra_tables_export.h"
 
 namespace Calligra {
-namespace Tables {
+namespace Sheets {
 
 class Sheet;
 
@@ -86,7 +86,7 @@ private:
 };
 
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROWFORMATSTORAGE_H

@@ -26,7 +26,7 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void TestSelection::initialize()
 {

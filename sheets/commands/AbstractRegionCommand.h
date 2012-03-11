@@ -28,7 +28,7 @@ class KoCanvasBase;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 
@@ -143,7 +143,7 @@ protected:
     bool    m_checkLock : 1;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND

@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestUtil: public QObject
@@ -36,7 +36,7 @@ private Q_SLOTS:
     void testDecodeFormula();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_UTIL

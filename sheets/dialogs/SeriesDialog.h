@@ -33,7 +33,7 @@ class KDoubleNumInput;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 class Sheet;
@@ -67,7 +67,7 @@ protected:
     QPoint  marker;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SERIES_DIALOG

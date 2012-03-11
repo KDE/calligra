@@ -30,7 +30,7 @@ class QWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -62,7 +62,7 @@ protected Q_SLOTS:
 };
 
 } // namespace Plugins
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

@@ -37,7 +37,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
 Value func_address(valVector args, ValueCalc *calc, FuncExtra *);
@@ -250,7 +250,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     QString ref;
     for (int i = 1; i < l; ++i) {
         if (s[i] == ',' || s[i] == ')') {
-            if (!Calligra::Tables::Region(ref).isValid())
+            if (!Calligra::Sheets::Region(ref).isValid())
                 return Value::errorVALUE();
             else {
                 ++num;
@@ -285,7 +285,7 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
         return func_sheet(args, calc, &extra);
     }
     if (type == "address") {
-        const Calligra::Tables::Region &region = args.count() ? extra.regions[0] : Calligra::Tables::Region(QPoint(e->mycol, e->myrow), e->sheet);
+        const Calligra::Sheets::Region &region = args.count() ? extra.regions[0] : Calligra::Sheets::Region(QPoint(e->mycol, e->myrow), e->sheet);
         QString s;
         if (region.firstSheet() && region.firstSheet() != e->sheet)
             s += "'" + region.firstSheet()->sheetName() + "'!";
@@ -422,7 +422,7 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
         ref = ref;
     }
 
-    const Calligra::Tables::Region region(ref, e->sheet->map(), e->sheet);
+    const Calligra::Sheets::Region region(ref, e->sheet->map(), e->sheet);
     if (!region.isValid() || !region.isSingular())
         return Value::errorVALUE();
 
@@ -570,12 +570,12 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // Doesn't take references to other sheets into account
     //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
-    //const Calligra::Tables::Region region(rect, e->sheet);
+    //const Calligra::Sheets::Region region(rect, e->sheet);
 
     if (e->regions.isEmpty())
         return Value::errorVALUE();
 
-    const Calligra::Tables::Region &region = e->regions[0];
+    const Calligra::Sheets::Region &region = e->regions[0];
 
     if (!region.isValid() /* || !region.isSingular() */)
         return Value::errorVALUE();
@@ -621,7 +621,7 @@ Value func_sheet(valVector args, ValueCalc *, FuncExtra *e)
 {
     Sheet *sheet = e->sheet;
     if (!e->regions.isEmpty()) {
-        const Calligra::Tables::Region &region = e->regions[0];
+        const Calligra::Sheets::Region &region = e->regions[0];
         if (region.isValid())
             sheet = region.firstSheet();
     }
@@ -634,10 +634,10 @@ Value func_sheet(valVector args, ValueCalc *, FuncExtra *e)
 Value func_sheets(valVector args, ValueCalc *, FuncExtra *e)
 {
     if (!e->regions.isEmpty()) {
-        const Calligra::Tables::Region &region = e->regions[0];
+        const Calligra::Sheets::Region &region = e->regions[0];
         if (region.isValid()) {
-            QList<Calligra::Tables::Sheet*> sheets;
-            Calligra::Tables::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
+            QList<Calligra::Sheets::Sheet*> sheets;
+            Calligra::Sheets::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
             for(; it != end; ++it)
                 if (!sheets.contains((*it)->sheet()))
                     sheets.append((*it)->sheet());

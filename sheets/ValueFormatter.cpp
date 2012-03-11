@@ -34,7 +34,7 @@
 #include <float.h>
 #include <math.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ValueFormatter::ValueFormatter(const ValueConverter* converter)
         : m_converter(converter)

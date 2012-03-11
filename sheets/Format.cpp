@@ -20,7 +20,7 @@
 
 #include "Format.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 bool Format::isDate(Type fmt)
 {

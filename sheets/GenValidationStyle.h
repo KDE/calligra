@@ -31,7 +31,7 @@ class KoXmlWriter;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Validity;
 class ValueConverter;
@@ -109,7 +109,7 @@ private:
 
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

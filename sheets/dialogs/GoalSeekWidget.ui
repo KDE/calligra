@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 </comment>
- <class>Calligra::Tables::GoalSeekWidget</class>
- <widget class="QWidget" name="Calligra::Tables::GoalSeekWidget">
+ <class>Calligra::Sheets::GoalSeekWidget</class>
+ <widget class="QWidget" name="Calligra::Sheets::GoalSeekWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="Calligra::Tables::RegionSelector" name="selector1" native="true"/>
+    <widget class="Calligra::Sheets::RegionSelector" name="selector1" native="true"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label2">
@@ -50,7 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="Calligra::Tables::RegionSelector" name="selector2" native="true"/>
+    <widget class="Calligra::Sheets::RegionSelector" name="selector2" native="true"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label3">
@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="Calligra::Tables::RegionSelector" name="selector3" native="true"/>
+    <widget class="Calligra::Sheets::RegionSelector" name="selector3" native="true"/>
    </item>
    <item row="3" column="0" colspan="2">
     <widget class="QWidget" name="preview" native="true">
@@ -110,7 +110,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Calligra::Tables::RegionSelector</class>
+   <class>Calligra::Sheets::RegionSelector</class>
    <extends>QWidget</extends>
    <header location="global">ui/RegionSelector.h</header>
    <container>1</container>

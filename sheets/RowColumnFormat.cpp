@@ -47,7 +47,7 @@
 #include "StyleManager.h"
 
 using namespace std;
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /*****************************************************************************
  *

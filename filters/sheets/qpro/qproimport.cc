@@ -40,7 +40,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(QPROImportFactory, registerPlugin<QpImport>();)
 K_EXPORT_PLUGIN(QPROImportFactory("calligrafilters"))
@@ -103,8 +103,8 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
     kDebug(30523) << "here we go..." << document->metaObject()->className();
 
-    if (!::qobject_cast<const Calligra::Tables::Doc *>(document)) {   // it's safer that way :)
-        kWarning(30501) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!::qobject_cast<const Calligra::Sheets::Doc *>(document)) {   // it's safer that way :)
+        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (from != "application/x-quattropro" || to != "application/x-kspread") {

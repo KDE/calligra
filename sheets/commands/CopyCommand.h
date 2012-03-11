@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Region;
 
@@ -60,7 +60,7 @@ QDomDocument saveAsHtml(const Region& region);
 QString saveAsCSV(const Region& region);
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_COPY_COMMAND

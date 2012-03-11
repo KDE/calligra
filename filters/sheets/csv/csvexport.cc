@@ -42,7 +42,7 @@
 
 #include <csvexportdialog.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(CSVExportFactory, registerPlugin<CSVExport>();)
 K_EXPORT_PLUGIN(CSVExportFactory("calligrafilters"))
@@ -67,7 +67,7 @@ CSVExport::CSVExport(QObject* parent, const QVariantList &)
 {
 }
 
-QString CSVExport::exportCSVCell(const Calligra::Tables::Doc* doc, Sheet const * const sheet,
+QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const * const sheet,
                                  int col, int row, QChar const & textQuote, QChar csvDelimiter)
 {
     // This function, given a cell, returns a string corresponding to its export in CSV format
@@ -77,7 +77,7 @@ QString CSVExport::exportCSVCell(const Calligra::Tables::Doc* doc, Sheet const *
     //  - enclosing the cell in quotes if the cell is non empty
 
     Q_UNUSED(doc);
-    const Calligra::Tables::Cell cell(sheet, col, row);
+    const Calligra::Sheets::Cell cell(sheet, col, row);
     QString text;
 
     if (!cell.isDefault() && !cell.isEmpty()) {
@@ -126,8 +126,8 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {
-        kWarning(30501) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
+        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if ((to != "text/csv" && to != "text/plain") || from != "application/x-kspread") {
@@ -209,7 +209,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
         for (int idxRow = 1, row = selection.top(); row <= bottom; ++row, ++idxRow) {
             for (int idxCol = 1, col = selection.left(); col <= right; ++col, ++idxCol) {
-                if (!Calligra::Tables::Cell(sheet, col, row).isEmpty()) {
+                if (!Calligra::Sheets::Cell(sheet, col, row).isEmpty()) {
                     if (idxRow > CSVMaxRow)
                         CSVMaxRow = idxRow;
 
@@ -253,7 +253,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
             for (int row = 1 ; row <= sheetMaxRow ; ++row) {
                 for (int col = 1 ; col <= sheetMaxCol ; col++) {
-                    if (!Calligra::Tables::Cell(sheet, col, row).isEmpty()) {
+                    if (!Calligra::Sheets::Cell(sheet, col, row).isEmpty()) {
                         if (row > CSVMaxRow)
                             CSVMaxRow = row;
 

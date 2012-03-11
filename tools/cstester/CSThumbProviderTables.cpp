@@ -34,7 +34,7 @@
 #include <KoPAUtil.h>
 #include <QPainter>
 
-CSThumbProviderTables::CSThumbProviderTables(Calligra::Tables::Doc *doc)
+CSThumbProviderTables::CSThumbProviderTables(Calligra::Sheets::Doc *doc)
 : m_doc(doc)
 {
 }
@@ -47,7 +47,7 @@ QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
     QList<QImage> thumbnails;
     if (0 != m_doc->map()) {
-        foreach(Calligra::Tables::Sheet* sheet, m_doc->map()->sheetList()) {
+        foreach(Calligra::Sheets::Sheet* sheet, m_doc->map()->sheetList()) {
             QImage thumbnail(thumbSize, QImage::Format_RGB32);
             thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);
@@ -61,7 +61,7 @@ QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
             sheet->printSettings()->setPageLayout(pageLayout);
             sheet->print()->setSettings(*sheet->printSettings(), true);
 
-            Calligra::Tables::SheetView sheetView(sheet);
+            Calligra::Sheets::SheetView sheetView(sheet);
 
             // only paint first page for now
             KoZoomHandler zoomHandler;

@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 
 //
@@ -670,8 +670,8 @@ Value ValueCalc::log(const Value &number,
     if (logbase <= 0.0)
         return Value::errorNA();
 
-    logbase = Calligra::Tables::log(logbase, 10);
-    Value res = Value(Calligra::Tables::log(converter->toFloat(number), 10) / logbase);
+    logbase = Calligra::Sheets::log(logbase, 10);
+    Value res = Value(Calligra::Sheets::log(converter->toFloat(number), 10) / logbase);
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -697,7 +697,7 @@ Value ValueCalc::log(const Value &number, Number base)
         return Value::errorDIV0();
 
     Number num = converter->toFloat(number);
-    Value res = Value(Calligra::Tables::log(num, base));
+    Value res = Value(Calligra::Sheets::log(num, base));
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());

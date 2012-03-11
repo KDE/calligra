@@ -29,7 +29,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -153,7 +153,7 @@ static inline QItemSelection fromRegion(const Region &region)
     return selection;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_MODEL_SUPPORT

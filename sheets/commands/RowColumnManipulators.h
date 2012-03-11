@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class ColumnFormat;
 class RowFormat;
@@ -207,7 +207,7 @@ private:
     RowFormat *m_template;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROW_COLUMN_MANIPULATORS

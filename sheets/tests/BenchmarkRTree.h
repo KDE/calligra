@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class RTreeBenchmark : public QObject
@@ -45,7 +45,7 @@ private:
     RTree<double> m_tree;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RTREE_BENCHMARK_H

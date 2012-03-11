@@ -51,7 +51,7 @@ extern "C" {
 class ScriptingModule::Private
 {
 public:
-    QPointer<Calligra::Tables::Doc> doc;
+    QPointer<Calligra::Sheets::Doc> doc;
     QHash< QString, ScriptingFunction* > functions;
     QStringList functionnames;
 };
@@ -69,18 +69,18 @@ ScriptingModule::~ScriptingModule()
     delete d;
 }
 
-Calligra::Tables::View* ScriptingModule::kspreadView()
+Calligra::Sheets::View* ScriptingModule::kspreadView()
 {
-    return dynamic_cast< Calligra::Tables::View* >(KoScriptingModule::view());
+    return dynamic_cast< Calligra::Sheets::View* >(KoScriptingModule::view());
 }
 
-Calligra::Tables::Doc* ScriptingModule::kspreadDoc()
+Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
 {
     if (! d->doc) {
-        if (Calligra::Tables::View* v = kspreadView())
+        if (Calligra::Sheets::View* v = kspreadView())
             d->doc = v->doc();
         if (! d->doc)
-            d->doc = new Calligra::Tables::Doc(0, this);
+            d->doc = new Calligra::Sheets::Doc(0, this);
     }
     return d->doc;
 }
@@ -92,28 +92,28 @@ KoDocument* ScriptingModule::doc()
 
 QObject* ScriptingModule::map()
 {
-    return kspreadDoc()->map()->findChild< Calligra::Tables::MapAdaptor* >();
+    return kspreadDoc()->map()->findChild< Calligra::Sheets::MapAdaptor* >();
 }
 
 QObject* ScriptingModule::view()
 {
-    Calligra::Tables::View* v = kspreadView();
-    return v ? v->findChild< Calligra::Tables::ViewAdaptor* >() : 0;
+    Calligra::Sheets::View* v = kspreadView();
+    return v ? v->findChild< Calligra::Sheets::ViewAdaptor* >() : 0;
 }
 
 QObject* ScriptingModule::currentSheet()
 {
-    Calligra::Tables::View* v = kspreadView();
-    Calligra::Tables::Sheet* s = v ? v->activeSheet() : 0;
-    return s ? s->findChild< Calligra::Tables::SheetAdaptor* >() : 0;
+    Calligra::Sheets::View* v = kspreadView();
+    Calligra::Sheets::Sheet* s = v ? v->activeSheet() : 0;
+    return s ? s->findChild< Calligra::Sheets::SheetAdaptor* >() : 0;
 }
 
 QObject* ScriptingModule::sheetByName(const QString& name)
 {
     if (kspreadDoc()->map())
-        foreach(Calligra::Tables::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
+        foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
         if (sheet->sheetName() == name) {
-            return sheet->findChild< Calligra::Tables::SheetAdaptor* >(); {
+            return sheet->findChild< Calligra::Sheets::SheetAdaptor* >(); {
             }
         }
     }
@@ -123,7 +123,7 @@ QObject* ScriptingModule::sheetByName(const QString& name)
 QStringList ScriptingModule::sheetNames()
 {
     QStringList names;
-    foreach(Calligra::Tables::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
+    foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
         names.append(sheet->sheetName());
     }
     return names;
@@ -147,11 +147,11 @@ QObject* ScriptingModule::function(const QString& name)
 
 QObject* ScriptingModule::createListener(const QString& sheetname, const QString& range)
 {
-    Calligra::Tables::Sheet* sheet = kspreadDoc()->map()->findSheet(sheetname);
+    Calligra::Sheets::Sheet* sheet = kspreadDoc()->map()->findSheet(sheetname);
     if (! sheet) return 0;
-    Calligra::Tables::Region region(range, kspreadDoc()->map(), sheet);
+    Calligra::Sheets::Region region(range, kspreadDoc()->map(), sheet);
     QRect r = region.firstRange();
-    return new Calligra::Tables::ScriptingCellListener(sheet, r.isNull() ? sheet->usedArea() : r);
+    return new Calligra::Sheets::ScriptingCellListener(sheet, r.isNull() ? sheet->usedArea() : r);
 }
 
 bool ScriptingModule::fromXML(const QString& xml)

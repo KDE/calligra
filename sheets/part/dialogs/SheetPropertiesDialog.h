@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
@@ -103,7 +103,7 @@ private:
     SheetPropertiesWidget* m_widget;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif /* SHEET_PROPERTIES_DIALOG */

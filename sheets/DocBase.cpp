@@ -53,7 +53,7 @@
 
 #include "part/View.h" // TODO: get rid of this dependency
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 QList<DocBase*> DocBase::Private::s_docs;
 int DocBase::Private::s_docId = 0;
@@ -214,7 +214,7 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "Calligra::Tables::DocBase::loadOdf");
+        updater = progressUpdater()->startSubtask(1, "Calligra::Sheets::DocBase::loadOdf");
         updater->setProgress(0);
     }
 

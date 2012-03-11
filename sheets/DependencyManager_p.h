@@ -33,7 +33,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Formula;
 class Map;
@@ -163,7 +163,7 @@ public:
     QMap<Cell, int> depths;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_DEPENDENCY_MANAGER_P

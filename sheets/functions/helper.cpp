@@ -68,7 +68,7 @@ void subMonths( QDate & date, int months )
 
 */
 
-int Calligra::Tables::daysPerYear(QDate const & date, int basis)
+int Calligra::Sheets::daysPerYear(QDate const & date, int basis)
 {
     switch (basis) {
     case 0:
@@ -90,7 +90,7 @@ int Calligra::Tables::daysPerYear(QDate const & date, int basis)
     return -1;
 }
 
-int Calligra::Tables::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
+int Calligra::Sheets::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
 {
     int day1, day2, month1, month2, year1, year2;
     bool isLeapYear = false;
@@ -136,7 +136,7 @@ int Calligra::Tables::daysBetweenDates(QDate const & date1, QDate const & date2,
 }
 
 // the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
-int Calligra::Tables::days360(int day1, int month1, int year1, bool leapYear1,
+int Calligra::Sheets::days360(int day1, int month1, int year1, bool leapYear1,
                      int day2, int month2, int year2, bool leapYear2,
                      bool usaMethod)
 {
@@ -169,7 +169,7 @@ int Calligra::Tables::days360(int day1, int month1, int year1, bool leapYear1,
 
 
 // days360
-int Calligra::Tables::days360(const QDate& _date1, const QDate& _date2, bool european)
+int Calligra::Sheets::days360(const QDate& _date1, const QDate& _date2, bool european)
 {
     int day1, month1, year1, day2, month2, year2;
 
@@ -188,7 +188,7 @@ int Calligra::Tables::days360(const QDate& _date1, const QDate& _date2, bool eur
 
 
 // // days360
-// int Calligra::Tables::days360( const QDate& _date1, const QDate& _date2, bool european )
+// int Calligra::Sheets::days360( const QDate& _date1, const QDate& _date2, bool european )
 // {
 //   int day1, day2;
 //   int month1, month2;
@@ -242,7 +242,7 @@ int Calligra::Tables::days360(const QDate& _date1, const QDate& _date2, bool eur
 // }
 
 // yearFrac
-long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
+long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
 {
     Q_UNUSED(refDate);
     QDate date1 = startDate;
@@ -321,7 +321,7 @@ long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startD
 }
 
 // pow1p calculate (1+x)^y accurately
-long double Calligra::Tables::pow1p(const long double& x, const long double& y)
+long double Calligra::Sheets::pow1p(const long double& x, const long double& y)
 {
     if (fabs(x) > 0.5)
         return pow(1 + x, y);
@@ -330,7 +330,7 @@ long double Calligra::Tables::pow1p(const long double& x, const long double& y)
 }
 
 // pow1pm1 calculate ((1+x)^y)-1 accurately
-long double Calligra::Tables::pow1pm1(const long double& x, const long double& y)
+long double Calligra::Sheets::pow1pm1(const long double& x, const long double& y)
 {
     if (x <= -1)
         return pow(1 + x, y) - 1;
@@ -338,7 +338,7 @@ long double Calligra::Tables::pow1pm1(const long double& x, const long double& y
         return expm1(y * log1p(x));
 }
 
-long double Calligra::Tables::duration(const QDate& refDate, const QDate& settlement, const QDate& maturity,
+long double Calligra::Sheets::duration(const QDate& refDate, const QDate& settlement, const QDate& maturity,
                               const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups)
 {
     long double yield = yield_;

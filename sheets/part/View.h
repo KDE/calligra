@@ -51,7 +51,7 @@ class KoZoomHandler;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class ColumnHeaderWidget;
@@ -385,7 +385,7 @@ private:
     void setHeaderMinima();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VIEW

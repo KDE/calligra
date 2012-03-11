@@ -59,7 +59,7 @@ class KoXmlWriter;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 class Doc;
@@ -199,7 +199,7 @@ private:
     void loadPaper(KoXmlElement const & paper);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif /* CALLIGRA_TABLES_DOC */

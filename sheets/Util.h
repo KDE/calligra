@@ -42,7 +42,7 @@ bool util_isRectValid(const QRect& rect);
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Map;
@@ -188,7 +188,7 @@ namespace MSOOXML
 CALLIGRA_TABLES_ODF_EXPORT QString convertFormula(const QString& formula);
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_UTIL

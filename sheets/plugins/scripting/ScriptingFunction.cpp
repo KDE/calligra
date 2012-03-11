@@ -42,11 +42,11 @@
  */
 
 /// \internal implementation of the ScriptingFunction
-class ScriptingFunctionImpl : public Calligra::Tables::Function
+class ScriptingFunctionImpl : public Calligra::Sheets::Function
 {
 public:
 
-    static Calligra::Tables::Value callback(Calligra::Tables::valVector args, Calligra::Tables::ValueCalc* calc, Calligra::Tables::FuncExtra* extra) {
+    static Calligra::Sheets::Value callback(Calligra::Sheets::valVector args, Calligra::Sheets::ValueCalc* calc, Calligra::Sheets::FuncExtra* extra) {
         Q_UNUSED(calc);
         Q_ASSERT(extra && extra->function);
         ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >(extra->function);
@@ -55,33 +55,33 @@ public:
 
         if (! funcimpl->m_function) {
             kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
-            Calligra::Tables::Value err = Calligra::Tables::Value::errorNA();
+            Calligra::Sheets::Value err = Calligra::Sheets::Value::errorNA();
             err.setError('#' + i18n("No such script."));
             return err;
         }
 
         kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
 
-        Calligra::Tables::FunctionDescription *description = Calligra::Tables::FunctionRepository::self()->functionInfo(funcimpl->name());
+        Calligra::Sheets::FunctionDescription *description = Calligra::Sheets::FunctionRepository::self()->functionInfo(funcimpl->name());
         kDebug(36005) << "name=" << description->name() << " type=" << description->type();
 
         QVariantList list;
         for (int i = 0; i < args.size(); ++i) {
             switch (description->param(i).type()) {
-            case Calligra::Tables::KSpread_Int:
+            case Calligra::Sheets::KSpread_Int:
                 list << int(args[i].asInteger());
                 break;
-            case Calligra::Tables::KSpread_Float: {
+            case Calligra::Sheets::KSpread_Float: {
                 list << double(args[i].asFloat());
             }
             break;
-            case Calligra::Tables::KSpread_String:
+            case Calligra::Sheets::KSpread_String:
                 list << args[i].asString();
                 break;
-            case Calligra::Tables::KSpread_Boolean:
+            case Calligra::Sheets::KSpread_Boolean:
                 list << args[i].asBoolean();
                 break;
-            case Calligra::Tables::KSpread_Any:
+            case Calligra::Sheets::KSpread_Any:
             default:
                 list << args[i].asVariant();
                 break;
@@ -101,67 +101,67 @@ public:
         funcimpl->m_function->setResult(QVariant());
 
         if (! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list))) {
-            Calligra::Tables::Value err = Calligra::Tables::Value::errorVALUE(); //errorNAME();
+            Calligra::Sheets::Value err = Calligra::Sheets::Value::errorVALUE(); //errorNAME();
             err.setError('#' + i18n("No such script function."));
             return err;
         }
 
         const QString error = funcimpl->m_function->error();
         if (! error.isEmpty()) {
-            Calligra::Tables::Value err = Calligra::Tables::Value::errorVALUE(); //errorNAME();
+            Calligra::Sheets::Value err = Calligra::Sheets::Value::errorVALUE(); //errorNAME();
             err.setError('#' + error);
             return err;
         }
 
         QVariant result = funcimpl->m_function->result();
         if (! result.isValid()) {
-            Calligra::Tables::Value err = Calligra::Tables::Value::errorVALUE(); //errorNAME();
+            Calligra::Sheets::Value err = Calligra::Sheets::Value::errorVALUE(); //errorNAME();
             err.setError('#' + i18n("No return value."));
             return err;
         }
 
-        Calligra::Tables::Value resultvalue;
+        Calligra::Sheets::Value resultvalue;
         switch (description->type()) {
-        case Calligra::Tables::KSpread_Int:
-            resultvalue = Calligra::Tables::Value(result.toInt());
+        case Calligra::Sheets::KSpread_Int:
+            resultvalue = Calligra::Sheets::Value(result.toInt());
             break;
-        case Calligra::Tables::KSpread_Float:
-            resultvalue = Calligra::Tables::Value((double) result.toDouble());
+        case Calligra::Sheets::KSpread_Float:
+            resultvalue = Calligra::Sheets::Value((double) result.toDouble());
             break;
-        case Calligra::Tables::KSpread_String:
-            resultvalue = Calligra::Tables::Value(result.toString());
+        case Calligra::Sheets::KSpread_String:
+            resultvalue = Calligra::Sheets::Value(result.toString());
             break;
-        case Calligra::Tables::KSpread_Boolean:
-            resultvalue = Calligra::Tables::Value(result.toBool());
+        case Calligra::Sheets::KSpread_Boolean:
+            resultvalue = Calligra::Sheets::Value(result.toBool());
             break;
-        case Calligra::Tables::KSpread_Any:
+        case Calligra::Sheets::KSpread_Any:
         default:
             //TODO make more generic
-            //resultvalue = Calligra::Tables::Value( result );
-            resultvalue = Calligra::Tables::Value(result.toString());
+            //resultvalue = Calligra::Sheets::Value( result );
+            resultvalue = Calligra::Sheets::Value(result.toString());
             break;
         }
 
         //kDebug() <<"result=" << result.toString();
-        //return Calligra::Tables::Value( result.toString() );
+        //return Calligra::Sheets::Value( result.toString() );
         return resultvalue;
     }
 
     ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
-            : Calligra::Tables::Function(function->name(), ScriptingFunctionImpl::callback)
+            : Calligra::Sheets::Function(function->name(), ScriptingFunctionImpl::callback)
             , m_function(function) {
         setNeedsExtra(true);
 
         // if there exists no "Scripts" group yet, add it
-        Calligra::Tables::FunctionRepository* repo = Calligra::Tables::FunctionRepository::self();
+        Calligra::Sheets::FunctionRepository* repo = Calligra::Sheets::FunctionRepository::self();
         if (! repo->groups().contains(i18n("Scripts")))
             repo->addGroup(i18n("Scripts"));
 
         // register ourself at the repository
-        repo->add(QSharedPointer<Calligra::Tables::Function>(this));
+        repo->add(QSharedPointer<Calligra::Sheets::Function>(this));
 
         // create a new description for the function
-        Calligra::Tables::FunctionDescription* desc = new Calligra::Tables::FunctionDescription(description);
+        Calligra::Sheets::FunctionDescription* desc = new Calligra::Sheets::FunctionDescription(description);
         desc->setGroup(i18n("Scripts"));
         repo->add(desc);
     }

@@ -38,7 +38,7 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 typedef QMap<QString, QDomDocument> SavedDocParts;
 
 namespace Calligra {
-namespace Tables {
+namespace Sheets {
 class Map;
 class SheetAccessModel;
 
@@ -57,7 +57,7 @@ public:
     KoDocumentResourceManager *resourceManager;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_DOCBASE_P_H

@@ -29,7 +29,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Binding;
 
@@ -68,7 +68,7 @@ private:
     Binding* m_binding;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_BINDING_MODEL

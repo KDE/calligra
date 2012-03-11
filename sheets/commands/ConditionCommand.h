@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -50,7 +50,7 @@ private:
     QList< QPair<QRectF, Conditions> > m_undoData;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CONDITION_COMMAND

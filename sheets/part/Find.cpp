@@ -29,7 +29,7 @@
 #include "ValueStorage.h"
 #include "ui/SheetView.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Find::Private
 {

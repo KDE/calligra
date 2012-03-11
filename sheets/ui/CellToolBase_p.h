@@ -51,7 +51,7 @@ class KReplace;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CharacterSelectDialog;
 class CellEditor;
@@ -121,7 +121,7 @@ public:
     /**
      * returns the rect that needs to be redrawn
      */
-    QRect moveDirection(Calligra::Tables::MoveTo direction, bool extendSelection);
+    QRect moveDirection(Calligra::Sheets::MoveTo direction, bool extendSelection);
 
     void paintSelection(QPainter &painter, const QRectF &viewRect);
 
@@ -168,7 +168,7 @@ private:
     CellToolBase* q;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_TOOL_BASE

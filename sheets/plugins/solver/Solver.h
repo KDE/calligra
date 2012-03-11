@@ -33,7 +33,7 @@ class QObject;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 namespace Plugins
 {
@@ -84,7 +84,7 @@ private:
 };
 
 } // namespace Plugins
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

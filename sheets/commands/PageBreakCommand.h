@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -48,7 +48,7 @@ private:
     Mode m_mode;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PAGE_BREAK_COMMAND

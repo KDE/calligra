@@ -46,7 +46,7 @@
 
 #include <knuminput.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

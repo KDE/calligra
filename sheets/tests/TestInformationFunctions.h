@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 class Cell;
@@ -82,7 +82,7 @@ private:
     Map* m_map;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

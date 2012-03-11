@@ -31,7 +31,7 @@
 #include "database/Database.h"
 #include "database/Filter.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ApplyFilterCommand::ApplyFilterCommand()
         : AbstractRegionCommand()

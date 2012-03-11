@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -48,7 +48,7 @@ public:
     virtual void undo();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTOFILTER_COMMAND

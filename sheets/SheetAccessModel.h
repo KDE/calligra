@@ -23,7 +23,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Damage;
@@ -67,5 +67,5 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra

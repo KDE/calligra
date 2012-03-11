@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -157,8 +157,8 @@ public:
      */
     void setCompletionMode(KGlobalSettings::Completion mode);
 
-    Calligra::Tables::MoveTo moveToValue() const;
-    void setMoveToValue(Calligra::Tables::MoveTo moveTo);
+    Calligra::Sheets::MoveTo moveToValue() const;
+    void setMoveToValue(Calligra::Sheets::MoveTo moveTo);
 
     /**
      * Method of calc
@@ -177,7 +177,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREADAPPLICATIONSETTINGS

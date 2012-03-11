@@ -27,7 +27,7 @@
 #include "AboutData.h"
 #include "Doc.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 KComponentData* Factory::s_global = 0;
 KAboutData* Factory::s_aboutData = 0;

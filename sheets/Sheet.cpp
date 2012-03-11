@@ -98,7 +98,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 template<typename T> class IntervalMap
@@ -1474,7 +1474,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     QPointer<KoUpdater> updater;
     if (doc() && doc()->progressUpdater()) {
         updater = doc()->progressUpdater()->startSubtask(1,
-                                                     "Calligra::Tables::Sheet::loadOdf");
+                                                     "Calligra::Sheets::Sheet::loadOdf");
         updater->setProgress(0);
     }
 
@@ -3221,7 +3221,7 @@ bool Sheet::loadChildren(KoStore* _store)
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
         if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
-            kDebug() << "Calligra::Tables::Sheet::loadChildren";
+            kDebug() << "Calligra::Sheets::Sheet::loadChildren";
             if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->loadDocument(_store))
                 return false;
         }
@@ -3494,7 +3494,7 @@ void Sheet::printDebug()
 }
 #endif
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #include "Sheet.moc"

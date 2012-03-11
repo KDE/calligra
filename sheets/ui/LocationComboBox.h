@@ -30,7 +30,7 @@ class QKeyEvent;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CellToolBase;
 
@@ -75,7 +75,7 @@ private:
     KCompletion completionList;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LOCATION_COMBOBOX

@@ -45,7 +45,7 @@ class KPushButton;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -138,7 +138,7 @@ private:
     QString getWhereCondition(QString const &, QString const &, int);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DATABASE_DIALOG

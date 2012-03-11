@@ -23,7 +23,7 @@
 
 #include <qtest_kde.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void DatabaseFilterTest::testIsEmpty()
 {

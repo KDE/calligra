@@ -31,7 +31,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -108,7 +108,7 @@ PointStorageUndoCommand<T>& PointStorageUndoCommand<T>::operator<<(const QVector
     return *this;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_POINT_STORAGE_UNDO_COMMAND

@@ -28,7 +28,7 @@
 
 #include <KIcon>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class MapModel::Private
 {

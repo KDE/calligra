@@ -34,7 +34,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -129,7 +129,7 @@ CALLIGRA_TABLES_ODF_EXPORT bool isTime(Type type);
 CALLIGRA_TABLES_ODF_EXPORT bool isFraction(Type type);
 
 } // namespace Format
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FORMAT

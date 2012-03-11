@@ -34,7 +34,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Region::Private : public QSharedData
@@ -1295,7 +1295,7 @@ Region::Range::Range(const QRect& rect)
         m_range.setBottom(KS_rowMax);
 }
 
-Region::Range::Range(const Calligra::Tables::Region::Point& ul, const Calligra::Tables::Region::Point& lr)
+Region::Range::Range(const Calligra::Sheets::Region::Point& ul, const Calligra::Sheets::Region::Point& lr)
         : Region::Element()
         , m_fixedTop(false)
         , m_fixedLeft(false)
@@ -1389,5 +1389,5 @@ QString Region::Range::name(Sheet* originSheet) const
     return name;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra

@@ -29,7 +29,7 @@
 #include "ui/Selection.h" // FIXME detach from ui
 #include "Sheet.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 MergeCommand::MergeCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent),

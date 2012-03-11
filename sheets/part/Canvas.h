@@ -57,7 +57,7 @@ class QScrollBar;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class CellEditor;
@@ -97,7 +97,7 @@ public:
     }
 
     virtual Sheet* activeSheet() const;
-    virtual Calligra::Tables::Selection* selection() const;
+    virtual Calligra::Sheets::Selection* selection() const;
     virtual void setCursor(const QCursor &cursor);
 
 public Q_SLOTS:
@@ -188,7 +188,7 @@ private:
     Private * const cd;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS

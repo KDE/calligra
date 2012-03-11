@@ -38,7 +38,7 @@
 
 #include "commands/StyleCommand.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
         : KDialog(parent)

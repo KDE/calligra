@@ -46,7 +46,7 @@ class KLineEdit;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CellEditorBase;
 class FunctionDescription;
@@ -188,10 +188,10 @@ private:
      */
     bool refresh_result;
 
-    Calligra::Tables::FunctionDescription* m_desc;
+    Calligra::Sheets::FunctionDescription* m_desc;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FORMULA_DIALOG

@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Sheet;
@@ -58,16 +58,16 @@ private:
     };
 
     void dateInit();
-    QString convertVars(QString const & str, Calligra::Tables::Sheet * table) const;
-    void ParsePrintInfo(QDomNode const & printInfo, Calligra::Tables::Sheet * table);
-    void ParseFormat(QString const & formatString, const Calligra::Tables::Cell& kspread_cell);
-    void setStyleInfo(QDomNode * sheet, Calligra::Tables::Sheet * table);
-    bool setType(const Calligra::Tables::Cell& kspread_cell, QString const & formatString, QString & cell_content);
+    QString convertVars(QString const & str, Calligra::Sheets::Sheet * table) const;
+    void ParsePrintInfo(QDomNode const & printInfo, Calligra::Sheets::Sheet * table);
+    void ParseFormat(QString const & formatString, const Calligra::Sheets::Cell& kspread_cell);
+    void setStyleInfo(QDomNode * sheet, Calligra::Sheets::Sheet * table);
+    bool setType(const Calligra::Sheets::Cell& kspread_cell, QString const & formatString, QString & cell_content);
     void convertFormula(QString & formula) const;
-    void importBorder(QDomElement  border, borderStyle _style, const Calligra::Tables::Cell&cell);
-    void ParseBorder(QDomElement & gmr_styleborder, const Calligra::Tables::Cell& kspread_cell);
+    void importBorder(QDomElement  border, borderStyle _style, const Calligra::Sheets::Cell&cell);
+    void ParseBorder(QDomElement & gmr_styleborder, const Calligra::Sheets::Cell& kspread_cell);
     double parseAttribute(const QDomElement &_element);
 
-    void setText(Calligra::Tables::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+    void setText(Calligra::Sheets::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
 #endif // GNUMERICFILTER_H

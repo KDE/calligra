@@ -31,7 +31,7 @@ class KComboBox;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -123,7 +123,7 @@ private:
     FindOption *m_findOptions;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FIND_DIALOG

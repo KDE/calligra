@@ -37,12 +37,12 @@
 
 #include <QPen>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 
 //used in Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
-int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
+int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
 {
     int col = 0;
     const int offset = 'a' - 'A';
@@ -71,7 +71,7 @@ int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
     return col;
 }
 
-int Calligra::Tables::Util::decodeRowLabelText(const QString &labelText)
+int Calligra::Sheets::Util::decodeRowLabelText(const QString &labelText)
 {
     QRegExp rx("(|\\$)([A-Za-z]+)(|\\$)([0-9]+)");
     if(rx.exactMatch(labelText))
@@ -79,12 +79,12 @@ int Calligra::Tables::Util::decodeRowLabelText(const QString &labelText)
     return 0;
 }
 
-QString Calligra::Tables::Util::encodeColumnLabelText(int column)
+QString Calligra::Sheets::Util::encodeColumnLabelText(int column)
 {
     return Cell::columnName(column);
 }
 
-bool Calligra::Tables::Util::isCellReference(const QString &text, int startPos)
+bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
 {
     int length = text.length();
     if (length < 1 || startPos >= length)
@@ -134,7 +134,7 @@ bool Calligra::Tables::Util::isCellReference(const QString &text, int startPos)
     return numberFound && data->isNull(); // we found the number and reached end
 }
 
-QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
+QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagName));
 
@@ -154,7 +154,7 @@ QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagNam
     return e;
 }
 
-QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
+QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
@@ -163,7 +163,7 @@ QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagnam
     return e;
 }
 
-QFont Calligra::Tables::NativeFormat::toFont(KoXmlElement & element)
+QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement & element)
 {
     QFont f;
     f.setFamily(element.attribute("family"));
@@ -201,7 +201,7 @@ QFont Calligra::Tables::NativeFormat::toFont(KoXmlElement & element)
     return f;
 }
 
-QPen Calligra::Tables::NativeFormat::toPen(KoXmlElement & element)
+QPen Calligra::Sheets::NativeFormat::toPen(KoXmlElement & element)
 {
     bool ok;
     QPen p;
@@ -243,7 +243,7 @@ bool util_isRectValid(const QRect& rect)
 
 
 //not used anywhere
-int Calligra::Tables::Util::penCompare(QPen const & pen1, QPen const & pen2)
+int Calligra::Sheets::Util::penCompare(QPen const & pen1, QPen const & pen2)
 {
     if (pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen)
         return 0;
@@ -276,7 +276,7 @@ int Calligra::Tables::Util::penCompare(QPen const & pen1, QPen const & pen2)
 }
 
 
-QString Calligra::Tables::Odf::convertRefToBase(const QString & sheet, const QRect & rect)
+QString Calligra::Sheets::Odf::convertRefToBase(const QString & sheet, const QRect & rect)
 {
     QPoint bottomRight(rect.bottomRight());
 
@@ -290,7 +290,7 @@ QString Calligra::Tables::Odf::convertRefToBase(const QString & sheet, const QRe
     return s;
 }
 
-QString Calligra::Tables::Odf::convertRefToRange(const QString & sheet, const QRect & rect)
+QString Calligra::Sheets::Odf::convertRefToRange(const QString & sheet, const QRect & rect)
 {
     QPoint topLeft(rect.topLeft());
     QPoint bottomRight(rect.bottomRight());
@@ -314,12 +314,12 @@ QString Calligra::Tables::Odf::convertRefToRange(const QString & sheet, const QR
 
 // e.g.: Sheet4.A1:Sheet4.E28
 //used in Sheet::saveOdf
-QString Calligra::Tables::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
+QString Calligra::Sheets::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
 {
     return sheetName + '.' + Cell::name(_area.left(), _area.top()) + ':' + sheetName + '.' + Cell::name(_area.right(), _area.bottom());
 }
 
-QString Calligra::Tables::Odf::encodePen(const QPen & pen)
+QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
 {
 //     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
@@ -355,7 +355,7 @@ QString Calligra::Tables::Odf::encodePen(const QPen & pen)
     return s;
 }
 
-QPen Calligra::Tables::Odf::decodePen(const QString &border)
+QPen Calligra::Sheets::Odf::decodePen(const QString &border)
 {
     QPen pen;
     //string like "0.088cm solid #800000"
@@ -395,7 +395,7 @@ QPen Calligra::Tables::Odf::decodePen(const QString &border)
 }
 
 //Return true when it's a reference to cell from sheet.
-bool Calligra::Tables::Util::localReferenceAnchor(const QString &_ref)
+bool Calligra::Sheets::Util::localReferenceAnchor(const QString &_ref)
 {
     bool isLocalRef = (_ref.indexOf("http://") != 0 &&
                        _ref.indexOf("https://") != 0 &&
@@ -406,7 +406,7 @@ bool Calligra::Tables::Util::localReferenceAnchor(const QString &_ref)
 }
 
 
-QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const KLocale *locale, const QString &namespacePrefix)
+QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const KLocale *locale, const QString &namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -505,7 +505,7 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
                 case '[': // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
                     state = InReference;
                     ++data;
-                    // NOTE: As long as Calligra::Tables does not support fixed sheets eat the dollar sign.
+                    // NOTE: As long as Calligra::Sheets does not support fixed sheets eat the dollar sign.
                     if (*data == QChar('$', 0)) {
                         ++data;
                     }
@@ -592,7 +592,7 @@ QString Calligra::Tables::Odf::decodeFormula(const QString& expression_, const K
     return result;
 }
 
-QString Calligra::Tables::Odf::encodeFormula(const QString& expr, const KLocale* locale)
+QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale* locale)
 {
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -670,20 +670,20 @@ static void replaceFormulaReference(int referencedRow, int referencedColumn, int
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
     QRegExp rx("(|\\$)[A-Za-z]+(|\\$)[0-9]+");
     if (rx.exactMatch(ref)) {
-        int c = Calligra::Tables::Util::decodeColumnLabelText(ref);
-        int r = Calligra::Tables::Util::decodeRowLabelText(ref);
+        int c = Calligra::Sheets::Util::decodeColumnLabelText(ref);
+        int r = Calligra::Sheets::Util::decodeRowLabelText(ref);
         if (rx.cap(1) != "$") // absolute or relative column?
             c += thisColumn - referencedColumn;
         if (rx.cap(2) != "$") // absolute or relative row?
             r += thisRow - referencedRow;
         result = result.replace(cellReferenceStart,
                                 cellReferenceLength,
-                                rx.cap(1) + Calligra::Tables::Util::encodeColumnLabelText(c) +
+                                rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
                                 rx.cap(2) + QString::number(r) );
     }
 }
 
-QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
+QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
 {
     QString result = formula;
     if (result.isEmpty())
@@ -732,7 +732,7 @@ QString Calligra::Tables::Util::adjustFormulaReference(const QString& formula, i
     return result;
 }
 
-QString Calligra::Tables::MSOOXML::convertFormula(const QString& formula)
+QString Calligra::Sheets::MSOOXML::convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();

@@ -33,9 +33,9 @@
 #include "Value.h"
 #include "ValueConverter.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
-class Calligra::Tables::AbstractCondition
+class Calligra::Sheets::AbstractCondition
 {
 public:
     virtual ~AbstractCondition() {}

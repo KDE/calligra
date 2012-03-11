@@ -37,7 +37,7 @@ using namespace std;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CalculationSettings;
 class ValueStorage;
@@ -507,25 +507,25 @@ private:
 
 uint qHash(const Value& value);
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Value)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Value, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Value)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Value, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
-CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value::Type type);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
-QDebug operator<<(QDebug stream, const Calligra::Tables::Value::Format& f);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);
+QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f);
 
 #endif // CALLIGRA_TABLES_VALUE_H

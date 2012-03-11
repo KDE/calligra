@@ -31,7 +31,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CalculationSettings;
 class Value;
@@ -114,7 +114,7 @@ private:
     const CalculationSettings* m_settings;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_PARSER

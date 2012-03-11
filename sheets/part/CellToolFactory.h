@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -45,7 +45,7 @@ public:
     void setIcon(const QString& icon);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_TOOL_FACTORY

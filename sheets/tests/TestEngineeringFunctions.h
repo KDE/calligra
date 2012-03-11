@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestEngineeringFunctions: public QObject
@@ -87,7 +87,7 @@ private:
     Value evaluate(const QString&);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_ENGINEERING_FUNCTIONS

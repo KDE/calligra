@@ -50,7 +50,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TabBarPrivate
@@ -853,7 +853,7 @@ void TabBar::wheelEvent(QWheelEvent * e)
     emit tabChanged(d->tabs[ d->activeTab-1]);
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #include "TabBar.moc"

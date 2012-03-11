@@ -36,7 +36,7 @@ class ConfigWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class View;
 
@@ -74,7 +74,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PREFERENCE_DIALOG

@@ -33,7 +33,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Damage;
 class Sheet;
@@ -187,7 +187,7 @@ private:
     QByteArray ident;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_ADAPTOR

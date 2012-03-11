@@ -25,7 +25,7 @@
 #include "../RowRepeatStorage.h"
 #include "../calligra_tables_limits.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void TestRowRepeatStorage::testEmptyStorage()
 {

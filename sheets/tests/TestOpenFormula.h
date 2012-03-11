@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Value;
 
@@ -48,7 +48,7 @@ private:
     QString convertFromOpenFormula(const QString& expr);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_OPENFORMULA

@@ -22,7 +22,7 @@
 
 #include <QDomDocument>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 Localization::Localization()
         : KLocale("calligra")

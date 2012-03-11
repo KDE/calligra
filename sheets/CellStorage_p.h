@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CellStorageUndoData
@@ -84,7 +84,7 @@ public:
     QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_CELL_STORAGE_P

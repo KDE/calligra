@@ -31,7 +31,7 @@ class QDomDocument;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CALLIGRA_TABLES_ODF_EXPORT Localization : public KLocale
@@ -44,7 +44,7 @@ public:
     void defaultSystemConfig();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LOCALIZATION

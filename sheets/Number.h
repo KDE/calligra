@@ -37,7 +37,7 @@ inline long double numToDouble(Number n)
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 inline Number log(const Number &n, Number base)
@@ -65,7 +65,7 @@ inline Number atgh(const Number &n)
     return ::atanh(n);
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #else // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
@@ -78,7 +78,7 @@ using namespace std;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -232,7 +232,7 @@ Number asinh(const Number &n);
 Number acosh(const Number &n);
 Number atgh(const Number &n);
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT

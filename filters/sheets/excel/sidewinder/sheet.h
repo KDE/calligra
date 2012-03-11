@@ -188,8 +188,8 @@ public:
     void addConditionalFormat(ConditionalFormat* format);
     QList<ConditionalFormat*> conditionalFormats() const;
 
-    void setAutoFilters(const Calligra::Tables::Filter& filter);
-    Calligra::Tables::Filter autoFilters() const;
+    void setAutoFilters(const Calligra::Sheets::Filter& filter);
+    Calligra::Sheets::Filter autoFilters() const;
 
     void setRightToLeft(bool rtl);
     bool isRightToLeft() const;

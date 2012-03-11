@@ -27,7 +27,7 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 RowStyleCommand::RowStyleCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)

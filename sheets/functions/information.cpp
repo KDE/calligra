@@ -43,7 +43,7 @@
 
 #include <KoDocument.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
 Value func_errortype(valVector args, ValueCalc *calc, FuncExtra *);
@@ -304,7 +304,7 @@ Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ISFORMULA
 Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
 {
-    const Calligra::Tables::Region &region = e->regions[0];
+    const Calligra::Sheets::Region &region = e->regions[0];
     QPoint p = region.firstRange().topLeft();
     CellStorage *s = region.firstSheet()->cellStorage();
     Formula formula = s->formula(p.x(), p.y());
@@ -360,7 +360,7 @@ Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
     if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
         return Value::errorVALUE();
-    const Calligra::Tables::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
+    const Calligra::Sheets::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
     if (c.isNull())
         return Value::errorVALUE();
     if (!c.isFormula())

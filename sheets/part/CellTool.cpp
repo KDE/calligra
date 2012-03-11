@@ -77,7 +77,7 @@
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class CellTool::Private
 {
@@ -125,7 +125,7 @@ void CellTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     CellToolBase::activate(toolActivation, shapes);
 }
 
-Calligra::Tables::Selection* CellTool::selection()
+Calligra::Sheets::Selection* CellTool::selection()
 {
     return d->canvas->selection();
 }

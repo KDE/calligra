@@ -39,7 +39,7 @@ class KoStyleStack;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Conditions;
 class CustomStyle;
@@ -554,11 +554,11 @@ public:
     Value1 value1;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_TYPEINFO(Calligra::Tables::Style, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(Calligra::Tables::CustomStyle, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(Calligra::Tables::SharedSubStyle, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Style, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Sheets::CustomStyle, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Sheets::SharedSubStyle, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_STYLE

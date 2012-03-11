@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 }
@@ -48,15 +48,15 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    QDomElement GetCellStyle(QDomDocument gnumeric_doc, const Calligra::Tables::Cell& cell, int currentcolumn, int currentrow);
-    QDomElement GetBorderStyle(QDomDocument gnumeric_doc, const Calligra::Tables::Cell& cell, int currentcolumn, int currentrow);
-    QDomElement GetFontStyle(QDomDocument gnumeric_doc, const Calligra::Tables::Cell& cell, int currentcolumn, int currentrow);
+    QDomElement GetCellStyle(QDomDocument gnumeric_doc, const Calligra::Sheets::Cell& cell, int currentcolumn, int currentrow);
+    QDomElement GetBorderStyle(QDomDocument gnumeric_doc, const Calligra::Sheets::Cell& cell, int currentcolumn, int currentrow);
+    QDomElement GetFontStyle(QDomDocument gnumeric_doc, const Calligra::Sheets::Cell& cell, int currentcolumn, int currentrow);
     QDomElement GetLinkStyle(QDomDocument gnumeric_doc);
-    QDomElement GetValidity(QDomDocument gnumeric_doc, const Calligra::Tables::Cell& cell);
+    QDomElement GetValidity(QDomDocument gnumeric_doc, const Calligra::Sheets::Cell& cell);
 
     void addAttributeItem(QDomDocument gnumeric_doc, QDomElement attributes, const QString& type, const QString& name, bool value);
     void addSummaryItem(QDomDocument gnumeric_doc, QDomElement summary, const QString& name, const QString& value);
-    bool hasBorder(const Calligra::Tables::Cell&cell, int currentcolumn, int currentrow);
+    bool hasBorder(const Calligra::Sheets::Cell&cell, int currentcolumn, int currentrow);
     const QString ColorToString(int red, int green, int blue);
     QString convertVariable(QString headerFooter);
     QString convertRefToRange(const QString & table, const QRect & rect);

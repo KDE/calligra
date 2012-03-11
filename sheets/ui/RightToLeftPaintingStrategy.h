@@ -26,7 +26,7 @@ class KoCanvasBase;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -59,7 +59,7 @@ private:
     Private *const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RIGHTTOLEFT_PAINTING_STRATEGY

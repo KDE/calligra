@@ -45,7 +45,7 @@
 #include <sheets/Value.h>
 #include <sheets/ValueConverter.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // hehe >:->
 
@@ -71,8 +71,8 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {
-        kWarning(30501) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
+        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if ((from != "text/csv" && from != "text/plain") || to != "application/x-kspread") {

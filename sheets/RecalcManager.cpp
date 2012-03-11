@@ -38,7 +38,7 @@
 #include <QHash>
 #include <QMap>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class RecalcManager::Private
 {

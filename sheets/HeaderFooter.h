@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 
@@ -157,7 +157,7 @@ private:
     QString m_footMid;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_HEADER_FOOTER

@@ -23,7 +23,7 @@
 
 #include "Value.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Function::Private
 {

@@ -34,7 +34,7 @@
 #include <Map.h>
 #include <TableShape.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
 K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))

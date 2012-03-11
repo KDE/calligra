@@ -26,10 +26,10 @@
 
 #include <qtest_kde.h>
 
-Q_DECLARE_METATYPE(Calligra::Tables::Format::Type)
-Q_DECLARE_METATYPE(Calligra::Tables::Style::FloatFormat)
+Q_DECLARE_METATYPE(Calligra::Sheets::Format::Type)
+Q_DECLARE_METATYPE(Calligra::Sheets::Style::FloatFormat)
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class PublicValueFormatter : public ValueFormatter
 {

@@ -29,7 +29,7 @@ class KIconLoader;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CALLIGRA_TABLES_COMMON_EXPORT Factory : public KPluginFactory
@@ -51,7 +51,7 @@ private:
     static KAboutData* s_aboutData;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

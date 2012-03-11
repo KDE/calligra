@@ -116,7 +116,7 @@ QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
         tp = new CSThumbProviderStage(doc);
     }
-    else if (Calligra::Tables::Doc *doc = qobject_cast<Calligra::Tables::Doc*>(document)) {
+    else if (Calligra::Sheets::Doc *doc = qobject_cast<Calligra::Sheets::Doc*>(document)) {
         tp = new CSThumbProviderTables(doc);
     }
     else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {

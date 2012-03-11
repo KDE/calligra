@@ -28,7 +28,7 @@
 #include "Validity.h"
 #include "ValueConverter.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 GenValidationStyles::GenValidationStyles()
 {

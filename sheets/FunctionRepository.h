@@ -29,7 +29,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Function;
 class FunctionDescription;
@@ -83,7 +83,7 @@ private:
     FunctionRepository& operator=(const FunctionRepository&);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTION_REPOSITORY

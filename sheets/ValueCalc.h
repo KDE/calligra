@@ -38,7 +38,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Doc;
@@ -347,7 +347,7 @@ inline double approxFloor(double a)
     return b;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 

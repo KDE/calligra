@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CalculationSettings;
 class ValueParser;
@@ -107,7 +107,7 @@ private:
     const ValueParser* m_parser;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_CONVERTER

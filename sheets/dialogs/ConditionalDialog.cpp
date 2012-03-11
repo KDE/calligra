@@ -48,7 +48,7 @@
 //Added by qt3to4:
 #include <QGridLayout>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::WFlags fl)
         : QWidget(parent, fl)

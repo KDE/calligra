@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
@@ -90,7 +90,7 @@ KAboutData * newAboutData()
     return aboutData;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

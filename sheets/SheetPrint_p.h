@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class HeaderFooter;
 class Sheet;
@@ -159,7 +159,7 @@ public:
     int m_maxCheckedNewPageY;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_PRINT_P

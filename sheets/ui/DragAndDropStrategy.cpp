@@ -38,7 +38,7 @@
 
 #include "commands/CopyCommand.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class DragAndDropStrategy::Private
 {

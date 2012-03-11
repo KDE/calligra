@@ -32,7 +32,7 @@ class KoCanvasBase;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CanvasItem;
 class Selection;
@@ -137,7 +137,7 @@ private Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

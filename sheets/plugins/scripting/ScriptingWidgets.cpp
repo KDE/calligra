@@ -88,11 +88,11 @@ void ScriptingSheetsListView::initialize()
 
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
     model->setHorizontalHeaderLabels(headers);
-    Calligra::Tables::Doc* doc = m_module->kspreadDoc();
-    Calligra::Tables::View* view = m_module->kspreadView();
-    Calligra::Tables::Sheet* activeSheet = view ? view->activeSheet() : 0;
+    Calligra::Sheets::Doc* doc = m_module->kspreadDoc();
+    Calligra::Sheets::View* view = m_module->kspreadView();
+    Calligra::Sheets::Sheet* activeSheet = view ? view->activeSheet() : 0;
     if (doc && doc->map()) {
-        foreach(Calligra::Tables::Sheet* sheet, doc->map()->sheetList()) {
+        foreach(Calligra::Sheets::Sheet* sheet, doc->map()->sheetList()) {
             if (! sheet || sheet->isHidden())
                 continue;
             QRect area = sheet->usedArea();
@@ -123,8 +123,8 @@ void ScriptingSheetsListView::initialize()
                             const QRect rect = l[i].toRect();
                             if (rect.isNull())
                                 continue;
-                            Calligra::Tables::Region region(rect, sheet);
-                            for (Calligra::Tables::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+                            Calligra::Sheets::Region region(rect, sheet);
+                            for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                                 const QString n = (*it)->name(sheet);
                                 if (! n.isEmpty())
                                     rangelist.append(n);
@@ -135,7 +135,7 @@ void ScriptingSheetsListView::initialize()
                     break;
                 }
                 if (range.isEmpty() && area.isValid())
-                    range = Calligra::Tables::Region(area, sheet).name(sheet);
+                    range = Calligra::Sheets::Region(area, sheet).name(sheet);
                 if (m_editortype == Cell) {
                     int p = range.indexOf(':');
                     range = p > 0 ? range.left(p) : "A1";
@@ -207,7 +207,7 @@ QVariantList ScriptingSheetsListView::sheets()
         bool enabled = nameitem->checkState() == Qt::Checked;
 
         const QString sheetname = nameitem->text();
-        Calligra::Tables::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Sheets::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! sheet)
             continue;
 
@@ -217,8 +217,8 @@ QVariantList ScriptingSheetsListView::sheets()
         QStandardItem* rangeitem = model->item(row, 1);
         if (rangeitem) {
             const QString range = rangeitem->text();
-            Calligra::Tables::Region region(range, m_module->kspreadDoc()->map(), sheet);
-            for (Calligra::Tables::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+            Calligra::Sheets::Region region(range, m_module->kspreadDoc()->map(), sheet);
+            for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();
                 if (! rect.isNull())
                     l << rect;

@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CellStorage;
 class Map;
@@ -47,7 +47,7 @@ private:
     Sheet* m_sheet;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_DEPENDENCIES

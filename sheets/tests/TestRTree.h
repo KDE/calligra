@@ -5,7 +5,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestRTree: public QObject
@@ -24,7 +24,7 @@ private Q_SLOTS:
     void testPrimitive();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_RTREE

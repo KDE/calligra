@@ -29,7 +29,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class SelectionStrategy::Private
 {

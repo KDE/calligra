@@ -34,7 +34,7 @@ class KoXmlWriter;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Filter;
@@ -137,10 +137,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Database)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Database, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Database)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Database, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_DATABASE

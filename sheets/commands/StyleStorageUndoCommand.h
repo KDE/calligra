@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -92,7 +92,7 @@ StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const QList<Pair>& 
     return *this;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_STYLE_STORAGE_UNDO_COMMAND

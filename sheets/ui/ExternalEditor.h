@@ -32,7 +32,7 @@ class QWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CellToolBase;
 
@@ -71,7 +71,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_EXTERNAL_EDITOR

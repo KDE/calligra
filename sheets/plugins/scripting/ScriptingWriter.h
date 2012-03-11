@@ -99,7 +99,7 @@ public Q_SLOTS:
     * is returned.
     */
     bool setSheet(const QString& sheetname) {
-        Calligra::Tables::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Sheets::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! s) return false;
         clearAll();
         m_sheet = s;
@@ -113,7 +113,7 @@ public Q_SLOTS:
     * explicit cell.
     */
     QString cell() {
-        return Calligra::Tables::Cell::name(m_column, m_row);
+        return Calligra::Sheets::Cell::name(m_column, m_row);
     }
 
     /**
@@ -123,7 +123,7 @@ public Q_SLOTS:
     */
     bool setCell(const QString& cellname) {
         if (! m_sheet) return false;
-        const Calligra::Tables::Region region(cellname, m_sheet->doc()->map(), m_sheet);
+        const Calligra::Sheets::Region region(cellname, m_sheet->doc()->map(), m_sheet);
         if (region.firstRange().isNull()) return false;
         QPoint point = region.firstRange().topLeft();
         m_column = point.x();
@@ -200,27 +200,27 @@ public Q_SLOTS:
     * false is returned.
     */
     bool setValue(const QVariant& value, bool parse = true) {
-        Calligra::Tables::Value v;
+        Calligra::Sheets::Value v;
         if (parse)
-            v = Calligra::Tables::Value(value.toString());
+            v = Calligra::Sheets::Value(value.toString());
         else {
-            const Calligra::Tables::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
+            const Calligra::Sheets::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
             switch (value.type()) {
-            case QVariant::Invalid:     v = Calligra::Tables::Value(); break;
-            case QVariant::Bool:        v = Calligra::Tables::Value(value.toBool()); break;
-            case QVariant::Int:         v = Calligra::Tables::Value(value.toInt()); break;
-            case QVariant::ULongLong:   v = Calligra::Tables::Value(value.toLongLong()); break;
-            case QVariant::Double:      v = Calligra::Tables::Value(value.toDouble()); break;
-            case QVariant::String:      v = Calligra::Tables::Value(value.toString()); break;
-            case QVariant::Date:        v = Calligra::Tables::Value(value.toDate(), settings); break;
-            case QVariant::Time:        v = Calligra::Tables::Value(value.toTime(), settings); break;
-            case QVariant::DateTime:    v = Calligra::Tables::Value(value.toDateTime(), settings); break;
+            case QVariant::Invalid:     v = Calligra::Sheets::Value(); break;
+            case QVariant::Bool:        v = Calligra::Sheets::Value(value.toBool()); break;
+            case QVariant::Int:         v = Calligra::Sheets::Value(value.toInt()); break;
+            case QVariant::ULongLong:   v = Calligra::Sheets::Value(value.toLongLong()); break;
+            case QVariant::Double:      v = Calligra::Sheets::Value(value.toDouble()); break;
+            case QVariant::String:      v = Calligra::Sheets::Value(value.toString()); break;
+            case QVariant::Date:        v = Calligra::Sheets::Value(value.toDate(), settings); break;
+            case QVariant::Time:        v = Calligra::Sheets::Value(value.toTime(), settings); break;
+            case QVariant::DateTime:    v = Calligra::Sheets::Value(value.toDateTime(), settings); break;
             default: return false;
             }
         }
-        //Calligra::Tables::Cell* c = getCell();
+        //Calligra::Sheets::Cell* c = getCell();
         //c->setValue(v);
-        Calligra::Tables::Cell cell(m_sheet, m_column, m_row);
+        Calligra::Sheets::Cell cell(m_sheet, m_column, m_row);
         if (!parse) {
             cell.setUserInput(value.toString());
             cell.setValue(v);
@@ -260,14 +260,14 @@ private:
     Q_DISABLE_COPY(ScriptingWriter)
 
     ScriptingModule* const m_module;
-    Calligra::Tables::Sheet* m_sheet;
+    Calligra::Sheets::Sheet* m_sheet;
     int m_column, m_row;
-    Calligra::Tables::Cell* m_cell;
+    Calligra::Sheets::Cell* m_cell;
 
-    Calligra::Tables::Cell* getCell() {
+    Calligra::Sheets::Cell* getCell() {
         Q_ASSERT(m_sheet);
         if (m_cell) return m_cell;
-        m_cell = new Calligra::Tables::Cell(m_sheet, m_column, m_row);
+        m_cell = new Calligra::Sheets::Cell(m_sheet, m_column, m_row);
         return m_cell;
     }
 

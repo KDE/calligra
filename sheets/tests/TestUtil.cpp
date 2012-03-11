@@ -23,7 +23,7 @@
 #include "TestKspreadCommon.h"
 #include <Util.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void TestUtil::testDecodeFormula_data()
 {

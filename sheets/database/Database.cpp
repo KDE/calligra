@@ -30,7 +30,7 @@
 #include "Map.h"
 #include "Region.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Sort;
 class SubtotalRules;
@@ -157,7 +157,7 @@ void Database::setDisplayFilterButtons(bool enable)
     d->displayFilterButtons = enable;
 }
 
-const Calligra::Tables::Region& Database::range() const
+const Calligra::Sheets::Region& Database::range() const
 {
     return d->targetRangeAddress;
 }

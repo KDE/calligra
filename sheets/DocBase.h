@@ -40,7 +40,7 @@ class KoDocumentResourceManager;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 class Sheet;
@@ -160,7 +160,7 @@ private:
     void loadOdfIgnoreList(const KoOasisSettings& settings);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DOCBASE_H

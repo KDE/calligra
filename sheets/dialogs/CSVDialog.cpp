@@ -47,7 +47,7 @@
 
 #include "commands/CSVDataCommand.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         : KoCsvImportDialog(parent),

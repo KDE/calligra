@@ -77,7 +77,7 @@
 #include "commands/StyleCommand.h"
 #include "commands/RowColumnManipulators.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /***************************************************************************
  *

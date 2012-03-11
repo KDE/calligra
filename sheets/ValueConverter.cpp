@@ -24,7 +24,7 @@
 #include "Localization.h"
 #include "ValueParser.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ValueConverter::ValueConverter(const ValueParser* parser)
         : m_parser(parser)

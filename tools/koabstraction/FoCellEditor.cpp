@@ -30,7 +30,7 @@
 #include <QScrollBar>
 #include <QFocusEvent>
 
-FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *parent)
+FoCellEditor::FoCellEditor(Calligra::Sheets::CellToolBase *cellTool, QWidget *parent)
     :QTextEdit(parent),
     m_cellTool(cellTool)
 {
@@ -41,7 +41,7 @@ FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *pa
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
     document()->setDocumentMargin(0);
-    const Calligra::Tables::Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
+    const Calligra::Sheets::Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
     const bool wrapText = cell.style().wrapText();
     Q_UNUSED(wrapText);
     setWordWrapMode(QTextOption::WordWrap);
@@ -211,7 +211,7 @@ void FoCellEditor::focusInEvent(QFocusEvent *event)
 {
     if (event->reason() != Qt::OtherFocusReason) {
         kDebug() << "induced by user";
-        m_cellTool->setLastEditorWithFocus(Calligra::Tables::CellToolBase::EmbeddedEditor);
+        m_cellTool->setLastEditorWithFocus(Calligra::Sheets::CellToolBase::EmbeddedEditor);
     }
     QTextEdit::focusInEvent(event);
 }

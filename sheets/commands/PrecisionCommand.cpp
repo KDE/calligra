@@ -28,7 +28,7 @@
 #include "Sheet.h"
 #include "Style.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 PrecisionCommand::PrecisionCommand()
         : AbstractRegionCommand()

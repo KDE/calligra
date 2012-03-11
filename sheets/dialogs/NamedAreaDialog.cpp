@@ -54,7 +54,7 @@
 
 #include "commands/NamedAreaCommand.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

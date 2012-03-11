@@ -47,7 +47,7 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 typedef QHash<Sheet *, SheetPrint *> PageManagerMap;
 

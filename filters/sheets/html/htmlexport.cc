@@ -41,7 +41,7 @@
 #include <sheets/part/Doc.h>
 #include <sheets/Util.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(HTMLExportFactory, registerPlugin<HTMLExport>();)
 K_EXPORT_PLUGIN(HTMLExportFactory("calligrafilters"))
@@ -93,8 +93,8 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
     if (!document)
         return KoFilter::StupidError;
 
-    if (!::qobject_cast<const Calligra::Tables::Doc *>(document)) {   // it's safer that way :)
-        kWarning(30501) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!::qobject_cast<const Calligra::Sheets::Doc *>(document)) {   // it's safer that way :)
+        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 

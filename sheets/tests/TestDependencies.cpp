@@ -30,7 +30,7 @@
 #include "Sheet.h"
 #include "Value.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void TestDependencies::initTestCase()
 {
