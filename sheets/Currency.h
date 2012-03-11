@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CURRENCY
-#define CALLIGRA_TABLES_CURRENCY
+#ifndef CALLIGRA_SHEETS_CURRENCY
+#define CALLIGRA_SHEETS_CURRENCY
 
 #include <QHash>
 #include <QMetaType>
@@ -36,7 +36,7 @@ namespace Sheets
  * \class Currency
  * Currency format information.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Currency
+class CALLIGRA_SHEETS_ODF_EXPORT Currency
 {
 public:
     enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };

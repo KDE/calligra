@@ -23,7 +23,7 @@
 #include <QCache>
 #include <QRect>
 #include <QPainter>
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 #include <QMutex>
 #include <QMutexLocker>
 #include <QReadWriteLock>
@@ -60,7 +60,7 @@ class SheetView::Private
 {
 public:
     Private()
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
         : cacheMutex(QMutex::Recursive)
 #endif
     {}
@@ -68,7 +68,7 @@ public:
     const KoViewConverter* viewConverter;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutex cacheMutex;
 #endif
     QRegion cachedArea;
@@ -77,13 +77,13 @@ public:
     QSize accessedCellRange;
     FusionStorage* obscuredInfo;
     QSize obscuredRange; // size of the bounding box of obscuredInfo
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock obscuredLock;
 #endif
 
     PointStorage<bool> highlightedCells;
     QPoint activeHighlight;
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock highlightLock;
 #endif
     QColor highlightColor;
@@ -91,7 +91,7 @@ public:
     QColor activeHighlightColor;
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     CellView cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
                                SheetView* sheetView, const QRect& visRect);
 #else
@@ -132,7 +132,7 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
     return cell;
 }
 
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
         QSet<Cell>& processedObscuredCells, SheetView* sheetView, const QRect& visRect)
 #else
@@ -143,7 +143,7 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
     const int col = cell.column();
     const int row = cell.row();
     const QPoint cellPos = cell.cellPosition();
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     CellView cellView = sheetView->cellView(col, row);
 #else
     const CellView& cellView = sheetView->cellView(col, row);
@@ -219,7 +219,7 @@ const KoViewConverter* SheetView::viewConverter() const
     return d->viewConverter;
 }
 
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 CellView SheetView::cellView(const QPoint& pos)
 #else
 const CellView& SheetView::cellView(const QPoint& pos)
@@ -228,7 +228,7 @@ const CellView& SheetView::cellView(const QPoint& pos)
     return cellView(pos.x(), pos.y());
 }
 
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 CellView SheetView::cellView(int col, int row)
 #else
 const CellView& SheetView::cellView(int col, int row)
@@ -236,7 +236,7 @@ const CellView& SheetView::cellView(int col, int row)
 {
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && col <= KS_rowMax);
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     CellView *v = d->cache.object(QPoint(col, row));
@@ -245,7 +245,7 @@ const CellView& SheetView::cellView(int col, int row)
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     // create a copy as long as the mutex is locked
     CellView cellViewCopy = *v;
     return cellViewCopy;
@@ -256,7 +256,7 @@ const CellView& SheetView::cellView(int col, int row)
 
 void SheetView::setPaintCellRange(const QRect& rect)
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
@@ -284,7 +284,7 @@ void SheetView::invalidateRegion(const Region& region)
 
 void SheetView::invalidate()
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     delete d->defaultCellView;
@@ -520,7 +520,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
 void SheetView::invalidateRange(const QRect& range)
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     QRegion obscuredRegion;
@@ -547,7 +547,7 @@ void SheetView::invalidateRange(const QRect& range)
 
 void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCells)
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->obscuredLock);
 #endif
     // Start by un-obscuring cells that we might be obscuring right now
@@ -568,7 +568,7 @@ void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCell
 
 QPoint SheetView::obscuringCell(const QPoint &obscuredCell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(obscuredCell);
@@ -581,7 +581,7 @@ QPoint SheetView::obscuringCell(const QPoint &obscuredCell) const
 
 QSize SheetView::obscuredRange(const QPoint &obscuringCell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(obscuringCell);
@@ -597,7 +597,7 @@ QSize SheetView::obscuredRange(const QPoint &obscuringCell) const
 
 QRect SheetView::obscuredArea(const QPoint &cell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
@@ -611,7 +611,7 @@ QRect SheetView::obscuredArea(const QPoint &cell) const
 
 bool SheetView::isObscured(const QPoint &cell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
@@ -627,7 +627,7 @@ bool SheetView::isObscured(const QPoint &cell) const
 
 bool SheetView::obscuresCells(const QPoint &cell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
@@ -643,13 +643,13 @@ bool SheetView::obscuresCells(const QPoint &cell) const
 
 QSize SheetView::totalObscuredRange() const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->obscuredLock);
 #endif
     return d->obscuredRange;
 }
 
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 CellView SheetView::defaultCellView() const
 #else
 const CellView& SheetView::defaultCellView() const
@@ -683,7 +683,7 @@ CellView* SheetView::createCellView(int col, int row)
 
 bool SheetView::isHighlighted(const QPoint &cell) const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->highlightLock);
 #endif
     return d->highlightedCells.lookup(cell.x(), cell.y());
@@ -691,7 +691,7 @@ bool SheetView::isHighlighted(const QPoint &cell) const
 
 void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->highlightLock);
 #endif
     bool oldHadHighlights = d->highlightedCells.count() > 0;
@@ -710,7 +710,7 @@ void SheetView::setHighlighted(const QPoint &cell, bool isHighlighted)
 
 bool SheetView::hasHighlightedCells() const
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QReadLocker(&d->highlightLock);
 #endif
     return d->highlightedCells.count() > 0;
@@ -718,7 +718,7 @@ bool SheetView::hasHighlightedCells() const
 
 void SheetView::clearHighlightedCells()
 {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->highlightLock);
 #endif
     d->activeHighlight = QPoint();

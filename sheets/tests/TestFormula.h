@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TEST_FORMULA
-#define CALLIGRA_TABLES_TEST_FORMULA
+#ifndef CALLIGRA_SHEETS_TEST_FORMULA
+#define CALLIGRA_SHEETS_TEST_FORMULA
 
 #include <QtGui>
 #include <QtTest>
@@ -54,4 +54,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TEST_FORMULA
+#endif // CALLIGRA_SHEETS_TEST_FORMULA

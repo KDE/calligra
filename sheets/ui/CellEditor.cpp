@@ -493,7 +493,7 @@ void CellEditor::slotTextChanged()
     // removed on applying the user input. If the style changes afterwards,
     // the user input is still indicating a percent value. If the digit gets
     // deleted while editing the percent char also stays. Disabling for now.
-#if 0 // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
+#if 0 // CALLIGRA_SHEETS_WIP_EDITOR_OVERHAUL
     const Cell cell(d->selection->activeSheet(), d->selection->marker());
     if ((cell.style().formatType()) == Format::Percentage) {
         if ((text.length() == 1) && text[0].isDigit()) {
@@ -502,7 +502,7 @@ void CellEditor::slotTextChanged()
             return;
         }
     }
-#endif // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
+#endif // CALLIGRA_SHEETS_WIP_EDITOR_OVERHAUL
 
     // update the external editor, but only if we have focus
     if (hasFocus()) {

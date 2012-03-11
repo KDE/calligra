@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DELETE_COMMAND
-#define CALLIGRA_TABLES_DELETE_COMMAND
+#ifndef CALLIGRA_SHEETS_DELETE_COMMAND
+#define CALLIGRA_SHEETS_DELETE_COMMAND
 
 #include "DataManipulators.h"
 
@@ -77,4 +77,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DELETE_COMMAND
+#endif // CALLIGRA_SHEETS_DELETE_COMMAND

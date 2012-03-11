@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FORMAT
-#define CALLIGRA_TABLES_FORMAT
+#ifndef CALLIGRA_SHEETS_FORMAT
+#define CALLIGRA_SHEETS_FORMAT
 
 #include "calligra_tables_export.h"
 
@@ -124,12 +124,12 @@ enum Type {
 };
 
 //helper functions for the formatting
-CALLIGRA_TABLES_ODF_EXPORT bool isDate(Type type);
-CALLIGRA_TABLES_ODF_EXPORT bool isTime(Type type);
-CALLIGRA_TABLES_ODF_EXPORT bool isFraction(Type type);
+CALLIGRA_SHEETS_ODF_EXPORT bool isDate(Type type);
+CALLIGRA_SHEETS_ODF_EXPORT bool isTime(Type type);
+CALLIGRA_SHEETS_ODF_EXPORT bool isFraction(Type type);
 
 } // namespace Format
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FORMAT
+#endif // CALLIGRA_SHEETS_FORMAT

@@ -123,7 +123,7 @@ Value func_ztest(valVector args, ValueCalc *calc, FuncExtra *);
 typedef QList<double> List;
 
 
-CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("statistical", StatisticalModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("statistical", StatisticalModule)
 
 
 StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)

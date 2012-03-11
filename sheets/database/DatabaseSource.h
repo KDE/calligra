@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DATABASE_SOURCE
-#define CALLIGRA_TABLES_DATABASE_SOURCE
+#ifndef CALLIGRA_SHEETS_DATABASE_SOURCE
+#define CALLIGRA_SHEETS_DATABASE_SOURCE
 
 namespace Calligra
 {
@@ -51,4 +51,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DATABASE_SOURCE
+#endif // CALLIGRA_SHEETS_DATABASE_SOURCE

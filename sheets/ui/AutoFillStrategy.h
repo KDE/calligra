@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_AUTOFILL_STRATEGY
-#define CALLIGRA_TABLES_AUTOFILL_STRATEGY
+#ifndef CALLIGRA_SHEETS_AUTOFILL_STRATEGY
+#define CALLIGRA_SHEETS_AUTOFILL_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "calligra_tables_export.h"
@@ -34,7 +34,7 @@ namespace Sheets
  * Created, when the user presses the left mouse button on the selection handle.
  * Nothing happens, if the selection did not change.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_COMMON_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -57,4 +57,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_AUTOFILL_STRATEGY
+#endif // CALLIGRA_SHEETS_AUTOFILL_STRATEGY

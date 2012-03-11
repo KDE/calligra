@@ -1,5 +1,5 @@
-#ifndef CALLIGRA_TABLES_TEST_RTREE
-#define CALLIGRA_TABLES_TEST_RTREE
+#ifndef CALLIGRA_SHEETS_TEST_RTREE
+#define CALLIGRA_SHEETS_TEST_RTREE
 
 #include <QtTest>
 
@@ -27,4 +27,4 @@ private Q_SLOTS:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TEST_RTREE
+#endif // CALLIGRA_SHEETS_TEST_RTREE

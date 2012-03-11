@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DEPENDENCY_MANAGER
-#define CALLIGRA_TABLES_DEPENDENCY_MANAGER
+#ifndef CALLIGRA_SHEETS_DEPENDENCY_MANAGER
+#define CALLIGRA_SHEETS_DEPENDENCY_MANAGER
 
 #include <QObject>
 
@@ -38,7 +38,7 @@ class Region;
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */
-class CALLIGRA_TABLES_ODF_EXPORT DependencyManager : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT DependencyManager : public QObject
 {
     Q_OBJECT
     friend class TestDependencies;
@@ -135,4 +135,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DEPENDENCY_MANAGER
+#endif // CALLIGRA_SHEETS_DEPENDENCY_MANAGER

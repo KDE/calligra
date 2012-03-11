@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_HYPERLINK_STRATEGY
-#define CALLIGRA_TABLES_HYPERLINK_STRATEGY
+#ifndef CALLIGRA_SHEETS_HYPERLINK_STRATEGY
+#define CALLIGRA_SHEETS_HYPERLINK_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 
@@ -63,4 +63,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_HYPERLINK_STRATEGY
+#endif // CALLIGRA_SHEETS_HYPERLINK_STRATEGY

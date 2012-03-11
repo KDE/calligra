@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_RECALC_MANAGER
-#define CALLIGRA_TABLES_RECALC_MANAGER
+#ifndef CALLIGRA_SHEETS_RECALC_MANAGER
+#define CALLIGRA_SHEETS_RECALC_MANAGER
 
 #include <Region.h>
 
@@ -52,7 +52,7 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class CALLIGRA_TABLES_ODF_EXPORT RecalcManager : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT RecalcManager : public QObject
 {
     Q_OBJECT
 public:
@@ -133,4 +133,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_RECALC_MANAGER
+#endif // CALLIGRA_SHEETS_RECALC_MANAGER

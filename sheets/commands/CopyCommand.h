@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_COPY_COMMAND
-#define CALLIGRA_TABLES_COPY_COMMAND
+#ifndef CALLIGRA_SHEETS_COPY_COMMAND
+#define CALLIGRA_SHEETS_COPY_COMMAND
 
 #include <QDomDocument>
 
@@ -63,4 +63,4 @@ QString saveAsCSV(const Region& region);
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_COPY_COMMAND
+#endif // CALLIGRA_SHEETS_COPY_COMMAND

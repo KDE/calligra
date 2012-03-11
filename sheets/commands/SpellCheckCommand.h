@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SPELLCHECK_COMMAND
-#define CALLIGRA_TABLES_SPELLCHECK_COMMAND
+#ifndef CALLIGRA_SHEETS_SPELLCHECK_COMMAND
+#define CALLIGRA_SHEETS_SPELLCHECK_COMMAND
 
 #include <sonnet/backgroundchecker.h>
 
@@ -63,4 +63,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SPELLCHECK_COMMAND
+#endif // CALLIGRA_SHEETS_SPELLCHECK_COMMAND

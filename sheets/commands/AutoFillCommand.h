@@ -24,8 +24,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_AUTOFILL_COMMAND
-#define CALLIGRA_TABLES_AUTOFILL_COMMAND
+#ifndef CALLIGRA_SHEETS_AUTOFILL_COMMAND
+#define CALLIGRA_SHEETS_AUTOFILL_COMMAND
 
 #include "DataManipulators.h"
 
@@ -91,4 +91,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_AUTOFILL_COMMAND
+#endif // CALLIGRA_SHEETS_AUTOFILL_COMMAND

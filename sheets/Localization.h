@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_LOCALIZATION
-#define CALLIGRA_TABLES_LOCALIZATION
+#ifndef CALLIGRA_SHEETS_LOCALIZATION
+#define CALLIGRA_SHEETS_LOCALIZATION
 
 #include <klocale.h>
 #include <KoXmlReader.h>
@@ -34,7 +34,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CALLIGRA_TABLES_ODF_EXPORT Localization : public KLocale
+class CALLIGRA_SHEETS_ODF_EXPORT Localization : public KLocale
 {
 public:
     Localization();
@@ -47,4 +47,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_LOCALIZATION
+#endif // CALLIGRA_SHEETS_LOCALIZATION

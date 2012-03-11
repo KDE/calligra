@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_BORDER_COLOR_COMMAND
-#define CALLIGRA_TABLES_BORDER_COLOR_COMMAND
+#ifndef CALLIGRA_SHEETS_BORDER_COLOR_COMMAND
+#define CALLIGRA_SHEETS_BORDER_COLOR_COMMAND
 
 #include <QPair>
 #include <QColor>
@@ -55,4 +55,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_BORDER_COLOR_COMMAND
+#endif // CALLIGRA_SHEETS_BORDER_COLOR_COMMAND

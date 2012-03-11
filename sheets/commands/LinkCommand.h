@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_LINK_COMMAND
-#define CALLIGRA_TABLES_LINK_COMMAND
+#ifndef CALLIGRA_SHEETS_LINK_COMMAND
+#define CALLIGRA_SHEETS_LINK_COMMAND
 
 #include <QString>
 #include <kundo2command.h>
@@ -54,4 +54,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_LINK_COMMAND
+#endif // CALLIGRA_SHEETS_LINK_COMMAND

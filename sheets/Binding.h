@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_BINDING
-#define CALLIGRA_TABLES_BINDING
+#ifndef CALLIGRA_SHEETS_BINDING
+#define CALLIGRA_SHEETS_BINDING
 
 #include <QSharedDataPointer>
 #include <QVariant>
@@ -41,7 +41,7 @@ namespace Sheets
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Binding
+class CALLIGRA_SHEETS_ODF_EXPORT Binding
 {
 public:
     Binding();
@@ -73,4 +73,4 @@ private:
 Q_DECLARE_METATYPE(Calligra::Sheets::Binding)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Binding, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_BINDING
+#endif // CALLIGRA_SHEETS_BINDING

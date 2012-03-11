@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __CALLIGRA_TABLES_LATEX_SPREADSHEET_H__
-#define __CALLIGRA_TABLES_LATEX_SPREADSHEET_H__
+#ifndef __CALLIGRA_SHEETS_LATEX_SPREADSHEET_H__
+#define __CALLIGRA_SHEETS_LATEX_SPREADSHEET_H__
 
 #include <QList>
 #include <QTextStream>
@@ -91,4 +91,4 @@ private:
     void  generateTypeFooter(QTextStream&);
 };
 
-#endif /* __CALLIGRA_TABLES_LATEX_SPREADSHEET_H__ */
+#endif /* __CALLIGRA_SHEETS_LATEX_SPREADSHEET_H__ */

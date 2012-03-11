@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_LOCATION_COMBOBOX
-#define CALLIGRA_TABLES_LOCATION_COMBOBOX
+#ifndef CALLIGRA_SHEETS_LOCATION_COMBOBOX
+#define CALLIGRA_SHEETS_LOCATION_COMBOBOX
 
 #include <kcombobox.h>
 
@@ -78,4 +78,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_LOCATION_COMBOBOX
+#endif // CALLIGRA_SHEETS_LOCATION_COMBOBOX

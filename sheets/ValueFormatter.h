@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALUE_FORMATTER
-#define CALLIGRA_TABLES_VALUE_FORMATTER
+#ifndef CALLIGRA_SHEETS_VALUE_FORMATTER
+#define CALLIGRA_SHEETS_VALUE_FORMATTER
 
 #include <QDateTime>
 
@@ -39,7 +39,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ValueFormatter
+class CALLIGRA_SHEETS_ODF_EXPORT ValueFormatter
 {
 public:
     /**
@@ -144,4 +144,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  //CALLIGRA_TABLES_VALUE_FORMATTER
+#endif  //CALLIGRA_SHEETS_VALUE_FORMATTER

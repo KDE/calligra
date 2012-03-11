@@ -18,15 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_RECT_STORAGE
-#define CALLIGRA_TABLES_RECT_STORAGE
+#ifndef CALLIGRA_SHEETS_RECT_STORAGE
+#define CALLIGRA_SHEETS_RECT_STORAGE
 
 #include <QCache>
 #include <QRegion>
 #include <QTimer>
 #include <QRunnable>
 #include <QTime>
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 #include <QMutex>
 #include <QMutexLocker>
 #endif
@@ -181,7 +181,7 @@ private:
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
     QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     mutable QMutex m_mutex;
 #endif
     mutable QRegion m_cachedArea;
@@ -233,7 +233,7 @@ template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
     ensureLoaded();
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&m_mutex);
 #endif
     if (!usedArea().contains(point))
@@ -531,7 +531,7 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
 {
     if (m_loader && !m_loader->isFinished())
         return;
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&m_mutex);
 #endif
     const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
@@ -629,7 +629,7 @@ protected Q_SLOTS:
 
 
 
-class CALLIGRA_TABLES_ODF_EXPORT FusionStorage : public QObject, public RectStorage<bool>
+class CALLIGRA_SHEETS_ODF_EXPORT FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
@@ -666,4 +666,4 @@ protected Q_SLOTS:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_RECT_STORAGE
+#endif // CALLIGRA_SHEETS_RECT_STORAGE

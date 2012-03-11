@@ -31,8 +31,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CELL_VIEW
-#define CALLIGRA_TABLES_CELL_VIEW
+#ifndef CALLIGRA_SHEETS_CELL_VIEW
+#define CALLIGRA_SHEETS_CELL_VIEW
 
 // Qt
 #include <QExplicitlySharedDataPointer>
@@ -60,7 +60,7 @@ class Style;
  * corresponding SheetView. If the content of a Cell has changed, the CellView
  * will be destroyed and a new one will be created.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT CellView
+class CALLIGRA_SHEETS_COMMON_EXPORT CellView
 {
     friend class SheetView;
     friend class PixmapCachingSheetView;

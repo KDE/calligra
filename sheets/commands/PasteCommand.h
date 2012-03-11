@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PASTE_COMMAND
-#define CALLIGRA_TABLES_PASTE_COMMAND
+#ifndef CALLIGRA_SHEETS_PASTE_COMMAND
+#define CALLIGRA_SHEETS_PASTE_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -40,7 +40,7 @@ namespace Sheets
  * \ingroup Commands
  * \brief Command to paste cell data.
  */
-class CALLIGRA_TABLES_COMMON_TEST_EXPORT PasteCommand : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_TEST_EXPORT PasteCommand : public AbstractRegionCommand
 {
 public:
     PasteCommand(KUndo2Command *parent = 0);
@@ -109,4 +109,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PASTE_COMMAND
+#endif // CALLIGRA_SHEETS_PASTE_COMMAND

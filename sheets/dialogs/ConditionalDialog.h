@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CONDITIONAL_DIALOG
-#define CALLIGRA_TABLES_CONDITIONAL_DIALOG
+#ifndef CALLIGRA_SHEETS_CONDITIONAL_DIALOG
+#define CALLIGRA_SHEETS_CONDITIONAL_DIALOG
 
 #include <kdialog.h>
 #include <QWidget>
@@ -108,4 +108,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CONDITIONAL_DIALOG
+#endif // CALLIGRA_SHEETS_CONDITIONAL_DIALOG

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEETSELECTPAGE
-#define CALLIGRA_TABLES_SHEETSELECTPAGE
+#ifndef CALLIGRA_SHEETS_SHEETSELECTPAGE
+#define CALLIGRA_SHEETS_SHEETSELECTPAGE
 
 #include "ui_SheetSelectWidget.h"
 
@@ -108,4 +108,4 @@ protected slots:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEETSELECTPAGE
+#endif // CALLIGRA_SHEETS_SHEETSELECTPAGE

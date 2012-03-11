@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_ROWFORMATSTORAGE_H
-#define CALLIGRA_TABLES_ROWFORMATSTORAGE_H
+#ifndef CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
+#define CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
 
 #include <Qt>
 
@@ -30,7 +30,7 @@ namespace Sheets {
 class Sheet;
 
 /** first and last row are both inclusive in all functions */
-class CALLIGRA_TABLES_ODF_EXPORT RowFormatStorage
+class CALLIGRA_SHEETS_ODF_EXPORT RowFormatStorage
 {
 public:
     RowFormatStorage(Sheet* sheet);
@@ -89,5 +89,5 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_ROWFORMATSTORAGE_H
+#endif // CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
-#define CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
+#ifndef CALLIGRA_SHEETS_TABLE_SHAPE_FACTORY
+#define CALLIGRA_SHEETS_TABLE_SHAPE_FACTORY
 
 #include <QVariantList>
 
@@ -47,4 +47,4 @@ public:
     virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 };
 
-#endif // CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
+#endif // CALLIGRA_SHEETS_TABLE_SHAPE_FACTORY

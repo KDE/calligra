@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_HEADERS
-#define CALLIGRA_TABLES_HEADERS
+#ifndef CALLIGRA_SHEETS_HEADERS
+#define CALLIGRA_SHEETS_HEADERS
 
 #include <QWidget>
 
@@ -38,7 +38,7 @@ class View;
 /**
  * Base class for the widget above the cells showing the column headers.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT ColumnHeader
+class CALLIGRA_SHEETS_COMMON_EXPORT ColumnHeader
 {
 public:
     ColumnHeader(CanvasBase *_canvas);
@@ -131,7 +131,7 @@ protected:
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT RowHeader
+class CALLIGRA_SHEETS_COMMON_EXPORT RowHeader
 {
 public:
     RowHeader(CanvasBase *_canvas);

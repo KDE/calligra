@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CALCULATION_SETTINGS
-#define CALLIGRA_TABLES_CALCULATION_SETTINGS
+#ifndef CALLIGRA_SHEETS_CALCULATION_SETTINGS
+#define CALLIGRA_SHEETS_CALCULATION_SETTINGS
 
 #include "calligra_tables_export.h"
 
@@ -49,7 +49,7 @@ namespace Sheets
  * Calculation settings
  * \ingroup Value
  */
-class CALLIGRA_TABLES_ODF_EXPORT CalculationSettings
+class CALLIGRA_SHEETS_ODF_EXPORT CalculationSettings
 {
 public:
     /**
@@ -168,4 +168,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CALCULATION_SETTINGS
+#endif // CALLIGRA_SHEETS_CALCULATION_SETTINGS

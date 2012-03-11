@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_POINT_STORAGE
-#define CALLIGRA_TABLES_POINT_STORAGE
+#ifndef CALLIGRA_SHEETS_POINT_STORAGE
+#define CALLIGRA_SHEETS_POINT_STORAGE
 
 #include <QRect>
 #include <QString>
@@ -877,4 +877,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_POINT_STORAGE
+#endif // CALLIGRA_SHEETS_POINT_STORAGE

@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VIEW_ADAPTOR
-#define CALLIGRA_TABLES_VIEW_ADAPTOR
+#ifndef CALLIGRA_SHEETS_VIEW_ADAPTOR
+#define CALLIGRA_SHEETS_VIEW_ADAPTOR
 
 #include <QColor>
 #include <QRect>
@@ -42,7 +42,7 @@ class CellProxy;
 /**
 * The ViewAdaptor class provides access to a view on a KSpread document.
 */
-class CALLIGRA_TABLES_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_SHEETS_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.view")
@@ -260,4 +260,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_VIEW_ADAPTOR
+#endif // CALLIGRA_SHEETS_VIEW_ADAPTOR

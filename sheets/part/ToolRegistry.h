@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TOOL_REGISTRY
-#define CALLIGRA_TABLES_TOOL_REGISTRY
+#ifndef CALLIGRA_SHEETS_TOOL_REGISTRY
+#define CALLIGRA_SHEETS_TOOL_REGISTRY
 
 #include <QObject>
 
@@ -33,7 +33,7 @@ namespace Sheets
  * Registry for tools.
  * \ingroup Plugin
  */
-class CALLIGRA_TABLES_COMMON_EXPORT ToolRegistry : public QObject
+class CALLIGRA_SHEETS_COMMON_EXPORT ToolRegistry : public QObject
 {
 public:
     /**
@@ -62,4 +62,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TOOL_REGISTRY
+#endif // CALLIGRA_SHEETS_TOOL_REGISTRY

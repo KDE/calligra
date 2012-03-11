@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FACTORY_H
-#define CALLIGRA_TABLES_FACTORY_H
+#ifndef CALLIGRA_SHEETS_FACTORY_H
+#define CALLIGRA_SHEETS_FACTORY_H
 
 #include <KPluginFactory>
 
@@ -32,7 +32,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CALLIGRA_TABLES_COMMON_EXPORT Factory : public KPluginFactory
+class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:

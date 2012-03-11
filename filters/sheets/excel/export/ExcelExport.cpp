@@ -616,7 +616,7 @@ static int opPrecedence(Calligra::Sheets::Token::Op op)
     case Calligra::Sheets::Token::Greater      : prec = 1; break;
     case Calligra::Sheets::Token::LessEqual    : prec = 1; break;
     case Calligra::Sheets::Token::GreaterEqual : prec = 1; break;
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
         // FIXME Stefan: I don't know whether zero is right for this case. :-(
     case Calligra::Sheets::Token::CurlyBra     : prec = 0; break;
     case Calligra::Sheets::Token::CurlyKet     : prec = 0; break;
@@ -662,7 +662,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Sheets::Tokens &
                 }
         }
 
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
         // are we entering an inline array ?
         // if stack already has: {
         if (syntaxStack.itemCount() >= 1) {
@@ -836,7 +836,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Sheets::Tokens &
                                     }
                         }
 
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
                     // rule for inline array elements, if token is ; or | or }
                     // { arg1 ; arg2 -> { arg
                     if (!ruleFound)

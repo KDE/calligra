@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_FUNCTION_DESCRIPTION
-#define CALLIGRA_TABLES_FUNCTION_DESCRIPTION
+#ifndef CALLIGRA_SHEETS_FUNCTION_DESCRIPTION
+#define CALLIGRA_SHEETS_FUNCTION_DESCRIPTION
 
 #include <QList>
 #include <QStringList>
@@ -40,7 +40,7 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
  * \ingroup Value
  * A function parameter.
  */
-class CALLIGRA_TABLES_ODF_EXPORT FunctionParameter
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionParameter
 {
 public:
     FunctionParameter();
@@ -67,7 +67,7 @@ private:
  * \ingroup Value
  * A function description.
  */
-class CALLIGRA_TABLES_ODF_EXPORT FunctionDescription
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();
@@ -123,4 +123,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FUNCTION_DESCRIPTION
+#endif // CALLIGRA_SHEETS_FUNCTION_DESCRIPTION

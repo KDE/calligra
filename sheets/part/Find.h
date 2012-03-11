@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALLIGRA_TABLES_FIND_H
-#define CALLIGRA_TABLES_FIND_H
+#ifndef CALLIGRA_SHEETS_FIND_H
+#define CALLIGRA_SHEETS_FIND_H
 
 #include "calligra_tables_export.h"
 #include "Cell.h"
@@ -45,7 +45,7 @@ class SheetView;
  * TODO: Support searching through all Sheets in a document.
  * TODO: Search within the displayed text or the user input.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT Find : public KoFindBase
+class CALLIGRA_SHEETS_COMMON_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:
@@ -91,4 +91,4 @@ private Q_SLOTS:
 Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
 Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
 
-#endif // CALLIGRA_TABLES_FIND_H
+#endif // CALLIGRA_SHEETS_FIND_H

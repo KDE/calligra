@@ -25,8 +25,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SORT_DIALOG
-#define CALLIGRA_TABLES_SORT_DIALOG
+#ifndef CALLIGRA_SHEETS_SORT_DIALOG
+#define CALLIGRA_SHEETS_SORT_DIALOG
 
 #include <KDialog>
 
@@ -74,4 +74,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SORT_DIALOG
+#endif // CALLIGRA_SHEETS_SORT_DIALOG

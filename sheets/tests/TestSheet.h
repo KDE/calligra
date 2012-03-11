@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CALLIGRA_TABLES_SHEET_TEST
-#define CALLIGRA_TABLES_SHEET_TEST
+#ifndef CALLIGRA_SHEETS_SHEET_TEST
+#define CALLIGRA_SHEETS_SHEET_TEST
 
 #include <QtTest>
 
@@ -54,4 +54,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEET_TEST
+#endif // CALLIGRA_SHEETS_SHEET_TEST

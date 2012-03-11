@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_STYLE
-#define CALLIGRA_TABLES_STYLE
+#ifndef CALLIGRA_SHEETS_STYLE
+#define CALLIGRA_SHEETS_STYLE
 
 #include <QFont>
 #include <QSharedDataPointer>
@@ -55,13 +55,13 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
-CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
+CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
  * A cell style.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Style
+class CALLIGRA_SHEETS_ODF_EXPORT Style
 {
 public:
     enum HAlign {
@@ -348,7 +348,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
+    friend CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
@@ -389,7 +389,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class CALLIGRA_TABLES_ODF_EXPORT CustomStyle : public Style
+class CALLIGRA_SHEETS_ODF_EXPORT CustomStyle : public Style
 {
 public:
     /**
@@ -460,7 +460,7 @@ private:
  * \ingroup Style
  * A single style attribute.
  */
-class CALLIGRA_TABLES_ODF_TEST_EXPORT SubStyle : public QSharedData
+class CALLIGRA_SHEETS_ODF_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
     SubStyle() {}
@@ -561,4 +561,4 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Style, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::CustomStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::SharedSubStyle, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_STYLE
+#endif // CALLIGRA_SHEETS_STYLE

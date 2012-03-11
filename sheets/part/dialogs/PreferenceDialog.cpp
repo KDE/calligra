@@ -170,7 +170,7 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         oldPageBorderColor = pageBorderColor;
     }
 
-#if 0 // CALLIGRA_TABLES_COMPLETION_MODE_SETTING
+#if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
     KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionNone;
     switch (typeCompletion->currentIndex()) {
     case 0:
@@ -207,7 +207,7 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
     interfaceOptions.m_captureAllArrowKeys->setChecked(true);
     interfaceOptions.m_gridColor->setColor(Qt::lightGray);
     interfaceOptions.m_pageBorderColor->setColor(Qt::red);
-#if 0 // CALLIGRA_TABLES_COMPLETION_MODE_SETTING
+#if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
     typeCompletion->setCurrentIndex(3);
 #endif
 }
@@ -450,7 +450,7 @@ void PreferenceDialog::unitChanged(int index)
 }
 
 
-#if 0 // CALLIGRA_TABLES_COMPLETION_MODE_SETTING
+#if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
 QLabel *label = new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
 typeCompletion = new KComboBox(tmpQGroupBox);

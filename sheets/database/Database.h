@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DATABASE
-#define CALLIGRA_TABLES_DATABASE
+#ifndef CALLIGRA_SHEETS_DATABASE
+#define CALLIGRA_SHEETS_DATABASE
 
 #include <QSharedDataPointer>
 #include <QVariant>
@@ -44,7 +44,7 @@ class Region;
 /**
  * OpenDocument, 8.6.1 Database Range
  */
-class CALLIGRA_TABLES_ODF_EXPORT Database
+class CALLIGRA_SHEETS_ODF_EXPORT Database
 {
 public:
     /**
@@ -143,4 +143,4 @@ private:
 Q_DECLARE_METATYPE(Calligra::Sheets::Database)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Database, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_DATABASE
+#endif // CALLIGRA_SHEETS_DATABASE

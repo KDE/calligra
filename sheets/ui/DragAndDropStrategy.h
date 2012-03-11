@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
-#define CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
+#ifndef CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY
+#define CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "calligra_tables_export.h"
@@ -34,7 +34,7 @@ namespace Sheets
  * The drag starts, if the mouse leaves the cell, where the mouse press occurred.
  * If this cell is not left, the cell becomes selected.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_COMMON_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -60,4 +60,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
+#endif // CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY

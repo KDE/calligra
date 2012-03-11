@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALUECALC
-#define CALLIGRA_TABLES_VALUECALC
+#ifndef CALLIGRA_SHEETS_VALUECALC
+#define CALLIGRA_SHEETS_VALUECALC
 
 #include <map>
 
@@ -71,7 +71,7 @@ the Number object directly for that. This class is to be used for computations
 of more complicated and ranged functions.
 */
 
-class CALLIGRA_TABLES_ODF_EXPORT ValueCalc
+class CALLIGRA_SHEETS_ODF_EXPORT ValueCalc
 {
 public:
     explicit ValueCalc(ValueConverter* c);
@@ -351,5 +351,5 @@ inline double approxFloor(double a)
 } // namespace Calligra
 
 
-#endif // CALLIGRA_TABLES_VALUECALC
+#endif // CALLIGRA_SHEETS_VALUECALC
 

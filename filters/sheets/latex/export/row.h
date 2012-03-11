@@ -18,8 +18,8 @@
 **
 */
 
-#ifndef __CALLIGRA_TABLES_LATEX_ROW_H__
-#define __CALLIGRA_TABLES_LATEX_ROW_H__
+#ifndef __CALLIGRA_SHEETS_LATEX_ROW_H__
+#define __CALLIGRA_SHEETS_LATEX_ROW_H__
 
 #include <QString>
 //Added by qt3to4:
@@ -93,5 +93,5 @@ private:
 
 };
 
-#endif /* __CALLIGRA_TABLES_LATEX_ROW_H__ */
+#endif /* __CALLIGRA_SHEETS_LATEX_ROW_H__ */
 

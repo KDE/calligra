@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY
-#define CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY
+#ifndef CALLIGRA_SHEETS_FUNCTION_MODULE_REGISTRY
+#define CALLIGRA_SHEETS_FUNCTION_MODULE_REGISTRY
 
 #include <QObject>
 
@@ -37,7 +37,7 @@ namespace Sheets
  * \ingroup Value
  * Registry for function modules.
  */
-class CALLIGRA_TABLES_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
 {
 public:
     /**
@@ -72,4 +72,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY
+#endif // CALLIGRA_SHEETS_FUNCTION_MODULE_REGISTRY

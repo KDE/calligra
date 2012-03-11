@@ -282,7 +282,7 @@ Value::Value(long double f)
 }
 
 
-#ifdef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
+#ifdef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 // create a floating-point value
 Value::Value(Number f)
         : d(Private::null())
@@ -291,7 +291,7 @@ Value::Value(Number f)
     d->f = f;
     d->format = fmt_Number;
 }
-#endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
+#endif // CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
 // create a complex number value
 Value::Value(const complex<Number>& c)

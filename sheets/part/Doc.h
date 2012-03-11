@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DOC
-#define CALLIGRA_TABLES_DOC
+#ifndef CALLIGRA_SHEETS_DOC
+#define CALLIGRA_SHEETS_DOC
 
 #include <QList>
 #include <QMap>
@@ -72,7 +72,7 @@ class SheetAccessModel;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT Doc : public DocBase
+class CALLIGRA_SHEETS_COMMON_EXPORT Doc : public DocBase
 {
     Q_OBJECT
     Q_PROPERTY(int syntaxVersion READ syntaxVersion)
@@ -202,4 +202,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif /* CALLIGRA_TABLES_DOC */
+#endif /* CALLIGRA_SHEETS_DOC */

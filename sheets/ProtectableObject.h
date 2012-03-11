@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PROTECTABLE_OBJECT
-#define CALLIGRA_TABLES_PROTECTABLE_OBJECT
+#ifndef CALLIGRA_SHEETS_PROTECTABLE_OBJECT
+#define CALLIGRA_SHEETS_PROTECTABLE_OBJECT
 
 #include <KoXmlReader.h>
 
@@ -37,7 +37,7 @@ namespace Sheets
  * The inheriting object decides which of its data should be protected.
  * It has to use isProtected() to check wether it's protected.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ProtectableObject
+class CALLIGRA_SHEETS_ODF_EXPORT ProtectableObject
 {
 public:
     enum Mode {
@@ -94,4 +94,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PROTECTABLE_OBJECT
+#endif // CALLIGRA_SHEETS_PROTECTABLE_OBJECT

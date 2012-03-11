@@ -17,8 +17,8 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
    MA  02110-1301  USA
 */
-#ifndef CALLIGRA_TABLES_RTREE_BENCHMARK_H
-#define CALLIGRA_TABLES_RTREE_BENCHMARK_H
+#ifndef CALLIGRA_SHEETS_RTREE_BENCHMARK_H
+#define CALLIGRA_SHEETS_RTREE_BENCHMARK_H
 
 #include <QObject>
 #include "RTree.h"
@@ -48,4 +48,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_RTREE_BENCHMARK_H
+#endif // CALLIGRA_SHEETS_RTREE_BENCHMARK_H

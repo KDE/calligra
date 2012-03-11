@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALUE_CONVERTER
-#define CALLIGRA_TABLES_VALUE_CONVERTER
+#ifndef CALLIGRA_SHEETS_VALUE_CONVERTER
+#define CALLIGRA_SHEETS_VALUE_CONVERTER
 
 #include "Value.h"
 
@@ -33,7 +33,7 @@ class ValueParser;
  * \ingroup Value
  * Converts between the different Value types.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ValueConverter
+class CALLIGRA_SHEETS_ODF_EXPORT ValueConverter
 {
 public:
     /**
@@ -110,4 +110,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  //CALLIGRA_TABLES_VALUE_CONVERTER
+#endif  //CALLIGRA_SHEETS_VALUE_CONVERTER

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CALENDAR_TOOL
-#define CALLIGRA_TABLES_CALENDAR_TOOL
+#ifndef CALLIGRA_SHEETS_CALENDAR_TOOL
+#define CALLIGRA_SHEETS_CALENDAR_TOOL
 
 #include <part/CellTool.h>
 
@@ -59,4 +59,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CALENDAR_TOOL
+#endif // CALLIGRA_SHEETS_CALENDAR_TOOL

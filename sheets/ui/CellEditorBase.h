@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CALLIGRA_TABLES_CELLEDITORBASE_H
-#define CALLIGRA_TABLES_CELLEDITORBASE_H
+#ifndef CALLIGRA_SHEETS_CELLEDITORBASE_H
+#define CALLIGRA_SHEETS_CELLEDITORBASE_H
 
 #include <sheets/calligra_tables_export.h>
 
@@ -32,7 +32,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CALLIGRA_TABLES_COMMON_EXPORT CellEditorBase
+class CALLIGRA_SHEETS_COMMON_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();
@@ -53,4 +53,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CELLEDITORBASE_H
+#endif // CALLIGRA_SHEETS_CELLEDITORBASE_H

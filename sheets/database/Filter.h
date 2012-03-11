@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FILTER
-#define CALLIGRA_TABLES_FILTER
+#ifndef CALLIGRA_SHEETS_FILTER
+#define CALLIGRA_SHEETS_FILTER
 
 #include <QHash>
 #include <QString>
@@ -40,7 +40,7 @@ class AbstractCondition;
 /**
  * OpenDocument, 8.7.1 Table Filter
  */
-class CALLIGRA_TABLES_ODF_EXPORT Filter
+class CALLIGRA_SHEETS_ODF_EXPORT Filter
 {
 public:
     enum Comparison {
@@ -128,4 +128,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FILTER
+#endif // CALLIGRA_SHEETS_FILTER

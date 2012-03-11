@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
-#define CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
+#ifndef CALLIGRA_SHEETS_ABSTRACT_REGION_COMMAND
+#define CALLIGRA_SHEETS_ABSTRACT_REGION_COMMAND
 
 #include <kundo2command.h>
 
@@ -37,7 +37,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT AbstractRegionCommand : public Region, public KUndo2Command
+class CALLIGRA_SHEETS_COMMON_EXPORT AbstractRegionCommand : public Region, public KUndo2Command
 {
 public:
     /**
@@ -146,4 +146,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
+#endif // CALLIGRA_SHEETS_ABSTRACT_REGION_COMMAND

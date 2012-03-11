@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PRINT_SETTINGS
-#define CALLIGRA_TABLES_PRINT_SETTINGS
+#ifndef CALLIGRA_SHEETS_PRINT_SETTINGS
+#define CALLIGRA_SHEETS_PRINT_SETTINGS
 
 #include <KoPageLayout.h>
 
@@ -40,7 +40,7 @@ class Sheet;
 /**
  * Settings used for printing.
  */
-class CALLIGRA_TABLES_ODF_EXPORT PrintSettings
+class CALLIGRA_SHEETS_ODF_EXPORT PrintSettings
 {
 public:
     enum PageOrder { TopToBottom, LeftToRight };
@@ -262,4 +262,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PRINT_SETTINGS
+#endif // CALLIGRA_SHEETS_PRINT_SETTINGS
