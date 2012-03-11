@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class SheetSelectWidget;
 
@@ -105,7 +105,7 @@ protected slots:
     void moveBottom();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEETSELECTPAGE

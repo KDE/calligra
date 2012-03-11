@@ -31,7 +31,7 @@ class KComboBox;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 class StyleManager;
@@ -66,7 +66,7 @@ private:
     KComboBox*      m_displayBox;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_MANAGER_DIALOG

@@ -62,7 +62,7 @@ class KoShapeLoadingContext;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Doc;
 class Formula;
@@ -653,19 +653,19 @@ inline uint qHash(const Cell& cell)
     return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_TYPEINFO(Calligra::Tables::Cell, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const Calligra::Tables::Cell& cell)
+inline QDebug operator<<(QDebug str, const Calligra::Sheets::Cell& cell)
 {
-    return str << qPrintable(Calligra::Tables::Cell::columnName(cell.column()) + QString::number(cell.row()));
+    return str << qPrintable(Calligra::Sheets::Cell::columnName(cell.column()) + QString::number(cell.row()));
 }
 
 #endif  // CALLIGRA_TABLES_CELL

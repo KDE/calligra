@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Doc;
@@ -55,7 +55,7 @@ private:
     Value evaluate(const QString&, Value& ex);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

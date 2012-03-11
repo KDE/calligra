@@ -20,7 +20,7 @@
 
 #include "CellEditorBase.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 CellEditorBase::CellEditorBase()
 {

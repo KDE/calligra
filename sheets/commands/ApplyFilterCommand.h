@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Filter;
 
@@ -59,7 +59,7 @@ private:
     QHash<int, bool> m_undoData;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_APPLYFILTER_COMMAND

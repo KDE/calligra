@@ -33,7 +33,7 @@
 #include <KDebug>
 #include <KMessageBox>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 SheetPrint::SheetPrint(Sheet *sheet)
         : d(new Private(this))

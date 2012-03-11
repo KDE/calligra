@@ -82,7 +82,7 @@
 // ui
 #include "ui/Selection.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /****************************************************************
  *

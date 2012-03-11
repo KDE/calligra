@@ -51,7 +51,7 @@ class KoOasisSettings;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class ApplicationSettings;
 class BindingManager;
@@ -413,7 +413,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

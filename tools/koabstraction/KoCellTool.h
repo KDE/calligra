@@ -26,7 +26,7 @@
 
 #include <QPair>
 
-namespace Calligra { namespace Tables
+namespace Calligra { namespace Sheets
 {
     class Cell;
     class CellTool;
@@ -42,7 +42,7 @@ class KoCanvasBase;
 /**
  * The tool to change cell ranges.
  */
-class KOABSTRACTION_EXPORT KoCellTool : public Calligra::Tables::CellTool
+class KOABSTRACTION_EXPORT KoCellTool : public Calligra::Sheets::CellTool
 {
     Q_OBJECT
 
@@ -88,7 +88,7 @@ public:
     bool isFontUnderline();
 
     // custom cell editor
-    virtual Calligra::Tables::CellEditorBase* editor() const;
+    virtual Calligra::Sheets::CellEditorBase* editor() const;
     virtual bool createEditor(bool clear=true, bool focus=true);
 
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);

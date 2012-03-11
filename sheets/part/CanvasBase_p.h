@@ -31,7 +31,7 @@ class KoToolProxy;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class View;
 
@@ -53,7 +53,7 @@ public:
     QPointer<KoToolProxy> toolProxy;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

@@ -34,7 +34,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class View;
 class CellProxy;
@@ -257,7 +257,7 @@ private:
     CellProxy* m_proxy;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VIEW_ADAPTOR

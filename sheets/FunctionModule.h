@@ -32,7 +32,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Function;
 
@@ -92,7 +92,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 /**

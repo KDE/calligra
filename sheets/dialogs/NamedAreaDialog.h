@@ -37,7 +37,7 @@ class KListWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Region;
 class Selection;
@@ -96,7 +96,7 @@ private:
     QString     m_initialAreaName;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_NAMED_AREA_DIALOG

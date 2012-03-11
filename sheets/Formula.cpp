@@ -80,7 +80,7 @@ TODO - optimizations:
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Opcode
@@ -103,11 +103,11 @@ public:
 struct stackEntry {
     void reset() {
         row1 = col1 = row2 = col2 = -1;
-        reg = Calligra::Tables::Region();
+        reg = Calligra::Sheets::Region();
         regIsNamedOrLabeled = false;
     }
     Value val;
-    Calligra::Tables::Region reg;
+    Calligra::Sheets::Region reg;
     bool regIsNamedOrLabeled;
     int row1, col1, row2, col2;
 };
@@ -137,17 +137,17 @@ public:
     const Token& top(unsigned index);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // for null token
 const Token Token::null;
 
 // helper function: return operator of given token text
 // e.g. '*' yields Operator::Asterisk, and so on
-Token::Op Calligra::Tables::matchOperator(const QString& text)
+Token::Op Calligra::Sheets::matchOperator(const QString& text)
 {
     Token::Op result = Token::InvalidOp;
 
@@ -196,7 +196,7 @@ Token::Op Calligra::Tables::matchOperator(const QString& text)
     return result;
 }
 
-bool Calligra::Tables::parseOperator(const QChar *&data, QChar *&out)
+bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
 {
     bool retval = true;
     switch(data->unicode()) {
@@ -503,7 +503,7 @@ const Token& TokenStack::top(unsigned index)
  **********************/
 
 // helper function: return true for valid identifier character
-bool Calligra::Tables::isIdentifier(QChar ch)
+bool Calligra::Sheets::isIdentifier(QChar ch)
 {
     switch(ch.unicode()) {
     case '_':

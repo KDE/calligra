@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Style;
 
@@ -58,7 +58,7 @@ private:
     QList<Style> m_styles;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTO_FORMAT_COMMAND

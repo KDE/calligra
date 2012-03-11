@@ -33,7 +33,7 @@ class QRadioButton;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -62,7 +62,7 @@ private:
     Mode insRem;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_INSERT_DIALOG

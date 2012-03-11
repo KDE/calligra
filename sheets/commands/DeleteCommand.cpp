@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 DeleteCommand::DeleteCommand(KUndo2Command *parent)
         : AbstractDataManipulator(parent)

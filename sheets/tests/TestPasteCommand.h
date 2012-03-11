@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class PasteCommandTest : public QObject
@@ -34,7 +34,7 @@ private Q_SLOTS:
     void testKSpreadSnippet();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PASTE_COMMAND_TEST

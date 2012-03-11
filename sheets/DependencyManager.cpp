@@ -40,7 +40,7 @@
 
 #include <KoUpdater.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // This is currently not called - but it's really convenient to call it from
 // gdb or from debug output to check that everything is set up ok.
@@ -226,12 +226,12 @@ QMap<Cell, int> DependencyManager::depths() const
     return d->depths;
 }
 
-Calligra::Tables::Region DependencyManager::consumingRegion(const Cell& cell) const
+Calligra::Sheets::Region DependencyManager::consumingRegion(const Cell& cell) const
 {
     return d->consumingRegion(cell);
 }
 
-Calligra::Tables::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
+Calligra::Sheets::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
 {
     Region providingRegion;
     QList< QPair<QRectF, Cell> > pairs;
@@ -318,7 +318,7 @@ void DependencyManager::Private::reset()
     consumers.clear();
 }
 
-Calligra::Tables::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
+Calligra::Sheets::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
     QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
     if (cit == consumers.constEnd()) {

@@ -36,7 +36,7 @@
 #include <QResizeEvent>
 #include <QToolButton>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class CellToolOptionWidget::Private
 {

@@ -45,7 +45,7 @@
 
 #include <math.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 QStringList *AutoFillCommand::month = 0;
 QStringList *AutoFillCommand::shortMonth = 0;
@@ -61,7 +61,7 @@ QStringList *AutoFillCommand::other = 0;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 /**
  * A cell content for auto-filling.
@@ -98,7 +98,7 @@ protected:
     int     m_otherEnd;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 
@@ -449,7 +449,7 @@ Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 /**
  * A sequence of cell contents for auto-filling.
@@ -464,7 +464,7 @@ public:
     QList<Value> createDeltaSequence(int intervalLength) const;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 AutoFillSequence::AutoFillSequence()

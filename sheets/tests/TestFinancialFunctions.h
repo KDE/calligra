@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TestFinancialFunctions: public QObject
@@ -107,7 +107,7 @@ private slots:
 //   Value evaluateShort(const QString&);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_FINANCIAL_FUNCTIONS

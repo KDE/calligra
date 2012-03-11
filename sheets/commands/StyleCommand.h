@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Style;
 
@@ -181,7 +181,7 @@ private:
     QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_COMMAND

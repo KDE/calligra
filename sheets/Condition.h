@@ -40,7 +40,7 @@ class KoGenStyle;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class ValueConverter;
@@ -214,10 +214,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Conditions)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Conditions, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Conditions)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Conditions, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_CONDITION_H

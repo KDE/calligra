@@ -120,7 +120,7 @@
 
 #define MIN_SIZE 10
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Canvas::Private
 {
@@ -366,7 +366,7 @@ SheetView* Canvas::sheetView(const Sheet* sheet) const
     return view()->sheetView(sheet);
 }
 
-Calligra::Tables::Selection* Canvas::selection() const
+Calligra::Sheets::Selection* Canvas::selection() const
 {
     return view()->selection();
 }

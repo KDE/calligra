@@ -46,7 +46,7 @@
     } while(0)
 
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 HeaderFooter::HeaderFooter(Sheet *sheet)
         : m_pSheet(sheet)

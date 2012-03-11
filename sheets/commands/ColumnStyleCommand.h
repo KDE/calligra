@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class ColumnFormat;
 
@@ -53,7 +53,7 @@ private:
     QMap<int, ColumnFormat *> m_columnFormats;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_COLUMN_STYLE_COMMAND

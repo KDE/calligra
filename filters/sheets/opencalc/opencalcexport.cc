@@ -59,7 +59,7 @@
 #include <sheets/Util.h>
 #include <sheets/part/View.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 typedef QList<QString> AreaList;
 
@@ -99,8 +99,8 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {
-        kWarning(30518) << "document isn't a Calligra::Tables::Doc but a "
+    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
+        kWarning(30518) << "document isn't a Calligra::Sheets::Doc but a "
         << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
@@ -187,7 +187,7 @@ bool OpenCalcExport::exportDocInfo(KoStore * store, const Doc* ksdoc)
 
     QDomElement data = meta.createElement("meta:generator");
     QString app("KSpread ");
-    app += Calligra::Tables::version;
+    app += Calligra::Sheets::version;
     data.appendChild(meta.createTextNode(app));
     officeMeta.appendChild(data);
 
@@ -558,7 +558,7 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
     while (i <= maxCols) {
         int  repeated = 1;
         const Cell cell(sheet, i, row);
-        const Calligra::Tables::Style style = cell.style();
+        const Calligra::Sheets::Style style = cell.style();
         QDomElement cellElem;
 
         if (!cell.isPartOfMerged())

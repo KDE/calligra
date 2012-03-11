@@ -33,7 +33,7 @@ class KoXmlDocument;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -106,7 +106,7 @@ private:
     bool                m_pasteFC;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PASTE_COMMAND

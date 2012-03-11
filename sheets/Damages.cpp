@@ -27,26 +27,26 @@
 #include "Sheet.h"
 #include "Region.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class WorkbookDamage::Private
 {
 public:
-    Calligra::Tables::Map* map;
+    Calligra::Sheets::Map* map;
     Changes changes;
 };
 
 class SheetDamage::Private
 {
 public:
-    Calligra::Tables::Sheet* sheet;
+    Calligra::Sheets::Sheet* sheet;
     Changes changes;
 };
 
 class CellDamage::Private
 {
 public:
-    Calligra::Tables::Sheet* sheet;
+    Calligra::Sheets::Sheet* sheet;
     Region region;
     Changes changes;
 };
@@ -57,7 +57,7 @@ public:
     Region region;
 };
 
-CellDamage::CellDamage(const Calligra::Tables::Cell& cell, Changes changes)
+CellDamage::CellDamage(const Calligra::Sheets::Cell& cell, Changes changes)
         : d(new Private)
 {
     d->sheet = cell.sheet();
@@ -66,7 +66,7 @@ CellDamage::CellDamage(const Calligra::Tables::Cell& cell, Changes changes)
     d->changes = changes;
 }
 
-CellDamage::CellDamage(Calligra::Tables::Sheet* sheet, const Region& region, Changes changes)
+CellDamage::CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes)
         : d(new Private)
 {
     d->sheet = sheet;
@@ -84,7 +84,7 @@ Sheet* CellDamage::sheet() const
     return d->sheet;
 }
 
-const Calligra::Tables::Region& CellDamage::region() const
+const Calligra::Sheets::Region& CellDamage::region() const
 {
     return d->region;
 }
@@ -95,7 +95,7 @@ CellDamage::Changes CellDamage::changes() const
 }
 
 
-SheetDamage::SheetDamage(Calligra::Tables::Sheet* sheet, Changes changes)
+SheetDamage::SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes)
         : d(new Private)
 {
     d->sheet = sheet;
@@ -118,7 +118,7 @@ SheetDamage::Changes SheetDamage::changes() const
 }
 
 
-WorkbookDamage::WorkbookDamage(Calligra::Tables::Map* map, Changes changes)
+WorkbookDamage::WorkbookDamage(Calligra::Sheets::Map* map, Changes changes)
         : d(new Private)
 {
     d->map = map;
@@ -152,7 +152,7 @@ SelectionDamage::~SelectionDamage()
     delete d;
 }
 
-const Calligra::Tables::Region& SelectionDamage::region() const
+const Calligra::Sheets::Region& SelectionDamage::region() const
 {
     return d->region;
 }
@@ -162,7 +162,7 @@ const Calligra::Tables::Region& SelectionDamage::region() const
   kDebug support
 ****************************************************************************/
 
-QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d)
+QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d)
 {
     switch (d.type()) {
     case Damage::Nothing:   return str << "NoDamage";
@@ -176,7 +176,7 @@ QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d)
     return str;
 }
 
-QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d)
+QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d)
 {
     str << "CellDamage: " << d.region().name(d.sheet());
     if (d.changes() & CellDamage::Appearance) str << " Appearance";
@@ -186,7 +186,7 @@ QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d)
     return str;
 }
 
-QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d)
+QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d)
 {
     str << "SheetDamage: " << (d.sheet() ? d.sheet()->sheetName() : "NULL POINTER!");
     switch (d.changes()) {
@@ -202,7 +202,7 @@ QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d)
     return str;
 }
 
-QDebug operator<<(QDebug str, const Calligra::Tables::SelectionDamage& d)
+QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d)
 {
     str << "SelectionDamage: " << d.region().name();
     return str;

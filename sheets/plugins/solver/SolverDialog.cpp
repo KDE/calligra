@@ -22,7 +22,7 @@
 
 #include "ui/RegionSelector.h"
 
-using namespace Calligra::Tables::Plugins;
+using namespace Calligra::Sheets::Plugins;
 
 SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
         : KDialog(parent)

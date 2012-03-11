@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -52,7 +52,7 @@ private:
     QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_BORDER_COLOR_COMMAND

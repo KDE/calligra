@@ -29,7 +29,7 @@ class KoPointerEvent;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CanvasBase;
 class Selection;
@@ -213,7 +213,7 @@ protected:
     bool m_cellToolIsActive;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

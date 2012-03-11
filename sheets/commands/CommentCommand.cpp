@@ -27,7 +27,7 @@
 #include "Sheet.h"
 #include "RectStorage.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 CommentCommand::CommentCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)

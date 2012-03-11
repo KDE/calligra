@@ -30,7 +30,7 @@ class KTextEdit;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -53,7 +53,7 @@ protected:
     KTextEdit *multiLine;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_COMMENT_DIALOG

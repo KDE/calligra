@@ -32,7 +32,7 @@ class QCloseEvent;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -66,7 +66,7 @@ private:
     void startCalc(double _start, double _goal);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_GOALSEEK_DIALOG

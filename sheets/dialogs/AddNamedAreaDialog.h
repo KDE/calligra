@@ -30,7 +30,7 @@ class KLineEdit;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -54,7 +54,7 @@ protected:
     KLineEdit*  m_areaName;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ADD_NAMED_AREA_DIALOG

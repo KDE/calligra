@@ -41,7 +41,7 @@
 
 #include <math.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted)
 Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *);

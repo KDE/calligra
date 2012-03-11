@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 }
@@ -47,7 +47,7 @@ public:
     void InitTableName(int pIdx, QString& pResult);
 
 protected:
-    void setText(Calligra::Tables::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+    void setText(Calligra::Sheets::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
 
 class QpTableList : public QpTableNames
@@ -56,10 +56,10 @@ public:
     QpTableList();
     ~QpTableList();
 
-    void          table(unsigned pIdx, Calligra::Tables::Sheet* pTable);
-    Calligra::Tables::Sheet* table(unsigned pIdx);
+    void          table(unsigned pIdx, Calligra::Sheets::Sheet* pTable);
+    Calligra::Sheets::Sheet* table(unsigned pIdx);
 protected:
-    Calligra::Tables::Sheet* cTable[cNameCnt];
+    Calligra::Sheets::Sheet* cTable[cNameCnt];
 };
 
 #endif // QPROIMPORT_H

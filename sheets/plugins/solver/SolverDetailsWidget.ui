@@ -18,8 +18,8 @@ License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  <exportmacro></exportmacro>
- <class>Calligra::Tables::Plugins::SolverDetails</class>
- <widget class="QWidget" name="Calligra::Tables::Plugins::SolverDetails" >
+ <class>Calligra::Sheets::Plugins::SolverDetails</class>
+ <widget class="QWidget" name="Calligra::Sheets::Plugins::SolverDetails" >
   <property name="geometry" >
    <rect>
     <x>0</x>

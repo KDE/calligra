@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class DatabaseFilterTest : public QObject
@@ -40,7 +40,7 @@ private Q_SLOTS:
     void testOrEquals();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DATABASE_FILTER_TEST

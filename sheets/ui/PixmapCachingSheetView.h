@@ -27,7 +27,7 @@ namespace ThreadWeaver {
 }
 
 namespace Calligra {
-namespace Tables {
+namespace Sheets {
 
 class PixmapCachingSheetView : public SheetView
 {
@@ -54,7 +54,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // PIXMAPCACHINGSHEETVIEW_H

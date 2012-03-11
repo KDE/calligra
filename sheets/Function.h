@@ -36,7 +36,7 @@ class QDomElement;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 class ValueCalc;
@@ -118,7 +118,7 @@ public:
     Value exec(const valVector &args);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTIONS

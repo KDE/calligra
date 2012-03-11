@@ -40,7 +40,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Inspector::Private
@@ -61,10 +61,10 @@ public:
     void handleDep();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 static QString boolAsString(bool b)
 {

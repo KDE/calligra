@@ -39,7 +39,7 @@
 #include <QItemSelectionRange>
 #include <QSize>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class SheetModel::Private
 {

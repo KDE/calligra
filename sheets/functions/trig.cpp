@@ -27,7 +27,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sort alphabetically)
 Value func_acos(valVector args, ValueCalc *calc, FuncExtra *);

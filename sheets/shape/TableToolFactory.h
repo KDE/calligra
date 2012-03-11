@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TableToolFactory : public KoToolFactoryBase
@@ -37,7 +37,7 @@ public:
     KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TABLE_TOOL_FACTORY

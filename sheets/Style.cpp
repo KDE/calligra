@@ -44,7 +44,7 @@
 #include "StyleManager.h"
 #include "Util.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -54,7 +54,7 @@ using namespace Calligra::Tables;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 static uint calculateValue(QPen const & pen)
@@ -134,7 +134,7 @@ QString SubStyle::name(Style::Key key)
 
 SharedSubStyle SharedSubStyle::s_defaultStyle(new SubStyle());
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1208,7 +1208,7 @@ QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
     } else
         keysToStore = QSet<Key>::fromList(d->subStyles.keys());
 
-    // Calligra::Tables::Style is definitly an OASIS auto style,
+    // Calligra::Sheets::Style is definitly an OASIS auto style,
     // but don't overwrite it, if it already exists
     if (style.isEmpty())
         style = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -2477,7 +2477,7 @@ bool Style::operator==(const Style& other) const
     return true;
 }
 
-uint Calligra::Tables::qHash(const Style& style)
+uint Calligra::Sheets::qHash(const Style& style)
 {
     uint hash = 0;
     foreach (const SharedSubStyle& ss, style.subStyles()) {

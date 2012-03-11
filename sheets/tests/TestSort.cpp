@@ -29,7 +29,7 @@
 #include "ui/Selection.h"
 #include "../commands/SortManipulator.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void TestSort::AscendingOrder()
 {

@@ -27,7 +27,7 @@
 #include "Style.h"
 #include "Value.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ValueParser::ValueParser(const CalculationSettings* settings)
         : m_settings(settings)

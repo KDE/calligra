@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 
@@ -108,7 +108,7 @@ private:
     bool m_loadTemplate;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif /* KPRLOADINGINFO_H */

@@ -31,7 +31,7 @@ class KoShape;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -58,7 +58,7 @@ struct ShapeLoadingData {
     QPointF endPoint;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_ODF_LOADING_CONTEXT

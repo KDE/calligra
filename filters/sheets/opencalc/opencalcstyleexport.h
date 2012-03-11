@@ -32,7 +32,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 }
@@ -94,7 +94,7 @@ public:
     static bool isEqual(CellStyle const * const t1, CellStyle const & t2);
 
     // all except the number style
-    static void loadData(CellStyle & cs, const Calligra::Tables::Cell& cell);
+    static void loadData(CellStyle & cs, const Calligra::Sheets::Cell& cell);
 
     QString     name;
 
@@ -115,8 +115,8 @@ public:
     bool        hideFormula;
     bool        notProtected;
 
-    Calligra::Tables::Style::HAlign  alignX;
-    Calligra::Tables::Style::VAlign  alignY;
+    Calligra::Sheets::Style::HAlign  alignX;
+    Calligra::Sheets::Style::VAlign  alignY;
 };
 
 class ColumnStyle : public Style

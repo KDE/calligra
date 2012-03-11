@@ -28,7 +28,7 @@
 #include "NamedAreaManager.h"
 #include "Sheet.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 NamedAreaCommand::NamedAreaCommand(KUndo2Command* parent)
         : AbstractRegionCommand(parent)

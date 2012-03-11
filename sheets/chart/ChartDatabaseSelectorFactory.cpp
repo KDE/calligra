@@ -26,7 +26,7 @@
 
 #include "ChartDatabaseSelector.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 KoShapeConfigWidgetBase* ChartDatabaseSelectorFactory::createConfigWidget(KoShape* shape)
 {

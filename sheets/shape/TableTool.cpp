@@ -56,7 +56,7 @@
 
 #include "TableShape.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class TableTool::Private
 {

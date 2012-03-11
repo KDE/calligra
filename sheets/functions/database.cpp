@@ -29,7 +29,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes
 Value func_daverage(valVector args, ValueCalc *calc, FuncExtra *);

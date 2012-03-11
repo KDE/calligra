@@ -23,7 +23,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 namespace QuattroPro
 {

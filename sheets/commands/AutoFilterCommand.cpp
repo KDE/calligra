@@ -29,7 +29,7 @@
 #include "database/Database.h"
 #include "database/DatabaseManager.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 AutoFilterCommand::AutoFilterCommand()
         : AbstractRegionCommand()

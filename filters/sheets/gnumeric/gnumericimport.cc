@@ -59,7 +59,7 @@
 #define SECS_PER_DAY 86400
 #define HALF_SEC (0.5 / SECS_PER_DAY)
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // copied from gnumeric: src/format.c:
 static const int g_dateSerial_19000228 = 59;
@@ -235,7 +235,7 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
             rect.setTop(top);
             rect.setBottom(top);
         }
-        ksdoc->map()->namedAreaManager()->insert(Calligra::Tables::Region(rect, ksdoc->map()->findSheet(tableName)), _name);
+        ksdoc->map()->namedAreaManager()->insert(Calligra::Sheets::Region(rect, ksdoc->map()->findSheet(tableName)), _name);
     }
 }
 
@@ -307,11 +307,11 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
         } else if (gmr_name.toElement().text() == "comments") {
             DocumentInfo->setAboutInfo("comments", gmr_value.toElement().text());
         } else if (gmr_name.toElement().text() == "category") {
-            /* Not supported by Calligra::Tables */
+            /* Not supported by Calligra::Sheets */
         } else if (gmr_name.toElement().text() == "manager") {
-            /* Not supported by Calligra::Tables */
+            /* Not supported by Calligra::Sheets */
         } else if (gmr_name.toElement().text() == "application") {
-            /* Not supported by Calligra::Tables */
+            /* Not supported by Calligra::Sheets */
         } else if (gmr_name.toElement().text() == "author") {
             DocumentInfo->setAuthorInfo("creator", gmr_value.toElement().text());
         } else if (gmr_name.toElement().text() == "company") {
@@ -437,7 +437,7 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
         QDomElement e = gmr_cellcomment.toElement(); // try to convert the node to an element.
         if (e.hasAttribute("Text")) {
             if (e.hasAttribute("ObjectBound")) {
-                const Calligra::Tables::Region region(e.attribute("ObjectBound"));
+                const Calligra::Sheets::Region region(e.attribute("ObjectBound"));
                 Cell cell = Cell(table, region.firstRange().topLeft());
                 cell.setComment(e.attribute("Text"));
             }
@@ -479,7 +479,7 @@ void convertToPen(QPen & pen, int style)
         pen.setWidth(1);
         break;
     case 7:
-        // very thin dots => no match in Calligra::Tables
+        // very thin dots => no match in Calligra::Sheets
         pen.setStyle(Qt::DotLine);
         pen.setWidth(1);
         break;
@@ -566,7 +566,7 @@ void GNUMERICFilter::ParseBorder(QDomElement & gmr_styleborder, const Cell& kspr
 }
 
 
-void GNUMERICFilter::importBorder(QDomElement border, borderStyle _style, const Calligra::Tables::Cell& cell)
+void GNUMERICFilter::importBorder(QDomElement border, borderStyle _style, const Calligra::Sheets::Cell& cell)
 {
     if (!border.isNull()) {
         QDomElement e = border.toElement(); // try to convert the node to an element.
@@ -867,7 +867,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     if (!repeateColumn.isNull()) {
         QString repeate = repeateColumn.attribute("value");
         if (!repeate.isEmpty()) {
-            const Calligra::Tables::Region region(repeate);
+            const Calligra::Sheets::Region region(repeate);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             table->printSettings()->setRepeatedRows(qMakePair(region.firstRange().top(), region.firstRange().bottom()));
         }
@@ -879,7 +879,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
         if (!repeate.isEmpty()) {
             //fix row too high
             repeate = repeate.replace("65536", "32500");
-            const Calligra::Tables::Region region(repeate);
+            const Calligra::Sheets::Region region(repeate);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             table->printSettings()->setRepeatedColumns(qMakePair(region.firstRange().left(), region.firstRange().right()));
         }
@@ -1683,8 +1683,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
     kDebug(30521) << "here we go..." << document->metaObject()->className();
 
-    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {    // it's safer that way :)
-        kWarning(30521) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
+        kWarning(30521) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (from != "application/x-gnumeric" || to != "application/x-kspread") {
@@ -1973,7 +1973,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         while (!mergedRegion.isNull()) {
             QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.
             QString cell_merge_area(e.text());
-            const Calligra::Tables::Region region(cell_merge_area);
+            const Calligra::Sheets::Region region(cell_merge_area);
             //kDebug()<<"text !!! :"<<cell_merge_area<<"range :start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             Cell cell = Cell(table, region.firstRange().left(), region.firstRange().top());
             cell.mergeCells(region.firstRange().left(), region.firstRange().top(),
@@ -2013,7 +2013,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         return KoFilter::StupidError;
 }
 
-void GNUMERICFilter::setText(Calligra::Tables::Sheet* sheet, int _row, int _column, const QString& _text,
+void GNUMERICFilter::setText(Calligra::Sheets::Sheet* sheet, int _row, int _column, const QString& _text,
                              bool asString)
 {
     Cell cell(sheet, _column, _row);

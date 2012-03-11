@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Sheet;
@@ -56,7 +56,7 @@ class ScriptingCellListener : public QObject
 {
     Q_OBJECT
 public:
-    explicit ScriptingCellListener(Calligra::Tables::Sheet *sheet, const QRect& area);
+    explicit ScriptingCellListener(Calligra::Sheets::Sheet *sheet, const QRect& area);
     virtual ~ScriptingCellListener();
 
 Q_SIGNALS:
@@ -83,7 +83,7 @@ private:
     Private* const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

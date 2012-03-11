@@ -23,7 +23,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Map;
@@ -56,7 +56,7 @@ private:
     Sheet* m_sheet;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // TESTROWFORMATSTORAGE_H

@@ -45,7 +45,7 @@
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class LinkDialog::Private
 {

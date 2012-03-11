@@ -40,7 +40,7 @@
 #include <QToolTip>
 #include <QVBoxLayout>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class FunctionCompletion::Private
 {
@@ -109,8 +109,8 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
         }
     }
 
-    Calligra::Tables::FunctionDescription* desc;
-    desc = Calligra::Tables::FunctionRepository::self()->functionInfo(item);
+    Calligra::Sheets::FunctionDescription* desc;
+    desc = Calligra::Sheets::FunctionRepository::self()->functionInfo(item);
     if (!desc) {
         d->hintLabel->hide();
         return;

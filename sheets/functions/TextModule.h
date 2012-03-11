@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class TextModule : public FunctionModule
@@ -38,7 +38,7 @@ public:
     QString descriptionFileName() const;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_TEXT_MODULE

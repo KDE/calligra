@@ -31,7 +31,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 class OdfSavingContext;
@@ -234,7 +234,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_STORAGE

@@ -48,7 +48,7 @@
 // commands
 #include "commands/ValidityCommand.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 Q_DECLARE_METATYPE(Conditional::Type)
 Q_DECLARE_METATYPE(Validity::Action)

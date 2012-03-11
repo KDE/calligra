@@ -34,7 +34,7 @@ class KoStore;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Doc;
 class Sheet;
@@ -56,35 +56,35 @@ private:
     enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
     OpenCalcStyles m_styles;
 
-    bool writeFile(const Calligra::Tables::Doc * ksdoc);
+    bool writeFile(const Calligra::Sheets::Doc * ksdoc);
 
-    bool exportDocInfo(KoStore * store, const Calligra::Tables::Doc * ksdoc);
-    bool exportStyles(KoStore * store, const Calligra::Tables::Doc * ksdoc);
-    bool exportContent(KoStore * store, const Calligra::Tables::Doc * ksdoc);
-    bool exportSettings(KoStore * store, const Calligra::Tables::Doc * ksdoc);
+    bool exportDocInfo(KoStore * store, const Calligra::Sheets::Doc * ksdoc);
+    bool exportStyles(KoStore * store, const Calligra::Sheets::Doc * ksdoc);
+    bool exportContent(KoStore * store, const Calligra::Sheets::Doc * ksdoc);
+    bool exportSettings(KoStore * store, const Calligra::Sheets::Doc * ksdoc);
 
-    bool exportBody(QDomDocument & doc, QDomElement & content, const Calligra::Tables::Doc * ksdoc);
+    bool exportBody(QDomDocument & doc, QDomElement & content, const Calligra::Sheets::Doc * ksdoc);
     void exportSheet(QDomDocument & doc, QDomElement & tabElem,
-                     const Calligra::Tables::Sheet * sheet, int maxCols, int maxRows);
+                     const Calligra::Sheets::Sheet * sheet, int maxCols, int maxRows);
     void exportCells(QDomDocument & doc, QDomElement & rowElem,
-                     const Calligra::Tables::Sheet * sheet, int row, int maxCols);
+                     const Calligra::Sheets::Sheet * sheet, int row, int maxCols);
     void exportDefaultCellStyle(QDomDocument & doc, QDomElement & officeStyles);
     void exportPageAutoStyles(QDomDocument & doc, QDomElement & autoStyles,
-                              const Calligra::Tables::Doc * ksdoc);
+                              const Calligra::Sheets::Doc * ksdoc);
     void exportMasterStyles(QDomDocument & doc, QDomElement & masterStyles,
-                            const Calligra::Tables::Doc *ksdoc);
+                            const Calligra::Sheets::Doc *ksdoc);
 
     bool writeMetaFile(KoStore * store, uint filesWritten);
 
     void convertPart(QString const & part, QDomDocument & doc,
-                     QDomElement & parent, const Calligra::Tables::Doc * ksdoc);
+                     QDomElement & parent, const Calligra::Sheets::Doc * ksdoc);
     void addText(QString const & text, QDomDocument & doc,
                  QDomElement & parent);
 
     void createDefaultStyles();
     QString convertFormula(QString const & formula) const;
 private:
-    /// Pointer to the Calligra::Tables locale
+    /// Pointer to the Calligra::Sheets locale
     KLocale* m_locale;
 };
 

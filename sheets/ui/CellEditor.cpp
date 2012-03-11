@@ -45,7 +45,7 @@
 #include <QScrollBar>
 #include <QTimer>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class CellEditor::Private
 {
@@ -311,12 +311,12 @@ void CellEditor::triggerFunctionAutoComplete()
     int curPos = textCursor().position();
     QString subtext = toPlainText().left(curPos);
 
-    Calligra::Tables::Formula f;
-    Calligra::Tables::Tokens tokens = f.scan(subtext);
+    Calligra::Sheets::Formula f;
+    Calligra::Sheets::Tokens tokens = f.scan(subtext);
     if (!tokens.valid()) return;
     if (tokens.count() < 1) return;
 
-    Calligra::Tables::Token lastToken = tokens[ tokens.count()-1 ];
+    Calligra::Sheets::Token lastToken = tokens[ tokens.count()-1 ];
 
     // last token must be an identifier
     if (!lastToken.isIdentifier()) return;
@@ -324,7 +324,7 @@ void CellEditor::triggerFunctionAutoComplete()
     if (id.length() < 1) return;
 
     // find matches in function names
-    QStringList fnames = Calligra::Tables::FunctionRepository::self()->functionNames();
+    QStringList fnames = Calligra::Sheets::FunctionRepository::self()->functionNames();
     QStringList choices;
     for (int i = 0; i < fnames.count(); i++)
         if (fnames[i].startsWith(id, Qt::CaseInsensitive))
@@ -351,12 +351,12 @@ void CellEditor::functionAutoComplete(const QString& item)
     int curPos = textCursor.position();
     QString subtext = toPlainText().left(curPos);
 
-    Calligra::Tables::Formula f;
-    Calligra::Tables::Tokens tokens = f.scan(subtext);
+    Calligra::Sheets::Formula f;
+    Calligra::Sheets::Tokens tokens = f.scan(subtext);
     if (!tokens.valid()) return;
     if (tokens.count() < 1) return;
 
-    Calligra::Tables::Token lastToken = tokens[ tokens.count()-1 ];
+    Calligra::Sheets::Token lastToken = tokens[ tokens.count()-1 ];
     if (!lastToken.isIdentifier()) return;
 
     blockSignals(true);

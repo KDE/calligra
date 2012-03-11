@@ -42,7 +42,7 @@
 // commands
 #include "commands/RowColumnManipulators.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
         : KDialog(parent)

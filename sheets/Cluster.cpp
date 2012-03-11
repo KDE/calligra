@@ -28,7 +28,7 @@
 #include "Cell.h"
 #include "RowColumnFormat.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 #if 0
 /****************************************************

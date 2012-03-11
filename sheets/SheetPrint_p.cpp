@@ -29,7 +29,7 @@
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
 {

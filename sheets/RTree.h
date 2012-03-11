@@ -36,7 +36,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -1102,7 +1102,7 @@ void RTree<T>::NonLeafNode::operator=(const NonLeafNode& other)
     }
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_RTREE

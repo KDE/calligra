@@ -43,7 +43,7 @@
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
         : KDialog(parent)

@@ -31,7 +31,7 @@ class QListWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -54,7 +54,7 @@ private:
     QListWidget *m_listWidget;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHOW_DIALOG

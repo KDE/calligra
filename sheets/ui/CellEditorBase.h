@@ -29,7 +29,7 @@ class QWidget;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CALLIGRA_TABLES_COMMON_EXPORT CellEditorBase
@@ -50,7 +50,7 @@ public:
     virtual void setActiveSubRegion(int index) = 0;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELLEDITORBASE_H

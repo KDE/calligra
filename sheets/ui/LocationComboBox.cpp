@@ -38,7 +38,7 @@
 #include <QKeyEvent>
 #include <QLineEdit>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 LocationComboBox::LocationComboBox(CellToolBase *cellTool, QWidget *_parent)
         : KComboBox(true, _parent)

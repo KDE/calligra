@@ -36,7 +36,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class ElapsedTime
@@ -120,7 +120,7 @@ enum Operation {
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

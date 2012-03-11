@@ -31,7 +31,7 @@ class KDatePicker;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -145,7 +145,7 @@ signals:
     void insertCalendar(const QDate &from, const QDate &to);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET

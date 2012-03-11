@@ -38,7 +38,7 @@ class KLocale;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 typedef QHash<Cell, Cell> CellIndirection;
@@ -454,10 +454,10 @@ inline uint qHash(const Formula& formula)
     return qHash(formula.expression());
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Formula)
-Q_DECLARE_TYPEINFO(Calligra::Tables::Formula, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Formula)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Formula, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_FORMULA

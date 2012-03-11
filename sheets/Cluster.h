@@ -30,7 +30,7 @@ class QPoint;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class ColumnFormat;
@@ -344,7 +344,7 @@ private:
     bool m_autoDelete;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif

@@ -31,7 +31,7 @@
 #include <QVariantList>
 
 namespace Calligra {
-namespace Tables {
+namespace Sheets {
     class Sheet;
     class Tokens;
 }
@@ -54,11 +54,11 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-    QList<Swinder::FormulaToken> compileFormula(const Calligra::Tables::Tokens& tokens, Calligra::Tables::Sheet* sheet) const;
+    QList<Swinder::FormulaToken> compileFormula(const Calligra::Sheets::Tokens& tokens, Calligra::Sheets::Sheet* sheet) const;
 
-    void convertSheet(Calligra::Tables::Sheet* sheet, const QHash<QString, unsigned>& sst);
-    void buildStringTable(Calligra::Tables::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
-    void collectStyles(Calligra::Tables::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
+    void convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QString, unsigned>& sst);
+    void buildStringTable(Calligra::Sheets::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
+    void collectStyles(Calligra::Sheets::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 private:
     class Private;
     Private* d;

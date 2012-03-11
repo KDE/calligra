@@ -19,7 +19,7 @@
 
 #include "ApplicationSettings.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class ApplicationSettings::Private
 {
@@ -27,7 +27,7 @@ public:
     QColor gridColor;
     QColor pageBorderColor;
     KGlobalSettings::Completion completionMode;
-    Calligra::Tables::MoveTo moveTo;
+    Calligra::Sheets::MoveTo moveTo;
     MethodOfCalc calcMethod;
     double indentValue;
     bool verticalScrollBar      : 1;
@@ -160,12 +160,12 @@ bool ApplicationSettings::showTabBar()const
     return d->showTabBar;
 }
 
-Calligra::Tables::MoveTo ApplicationSettings::moveToValue() const
+Calligra::Sheets::MoveTo ApplicationSettings::moveToValue() const
 {
     return d->moveTo;
 }
 
-void ApplicationSettings::setMoveToValue(Calligra::Tables::MoveTo moveTo)
+void ApplicationSettings::setMoveToValue(Calligra::Sheets::MoveTo moveTo)
 {
     d->moveTo = moveTo;
 }

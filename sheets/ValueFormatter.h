@@ -29,7 +29,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class CalculationSettings;
 class Value;
@@ -141,7 +141,7 @@ private:
     const ValueConverter* m_converter;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_FORMATTER

@@ -38,7 +38,7 @@
 // Calligra
 #include <KoDocumentInfo.h>
 
-// Calligra::Tables
+// Calligra::Sheets
 #include <sheets/ApplicationSettings.h>
 #include <sheets/part/Canvas.h>
 #include <sheets/CellStorage.h>
@@ -55,7 +55,7 @@
 #include <sheets/ValueConverter.h>
 #include <sheets/part/View.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
 K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
@@ -924,8 +924,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {    // it's safer that way :)
-        kWarning(30521) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
+        kWarning(30521) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread") {

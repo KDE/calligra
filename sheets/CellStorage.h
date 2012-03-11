@@ -36,7 +36,7 @@ class KUndo2Command;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Binding;
 class BindingStorage;
@@ -446,7 +446,7 @@ public:
     }
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_STORAGE

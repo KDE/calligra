@@ -1127,38 +1127,38 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
 
 void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord *record)
 {
-    Calligra::Tables::Filter filter;
+    Calligra::Sheets::Filter filter;
 
     int fieldNumber = record->entry();
 
     if (record->isTopN()) {
         // TODO: top-N filters
     } else {
-        Calligra::Tables::Filter::Composition compos =
+        Calligra::Sheets::Filter::Composition compos =
             record->join() == AutoFilterRecord::JoinAnd ?
-                Calligra::Tables::Filter::AndComposition :
-                Calligra::Tables::Filter::OrComposition;
+                Calligra::Sheets::Filter::AndComposition :
+                Calligra::Sheets::Filter::OrComposition;
 
         for (int i = 0; i < 2; i++) {
-            Calligra::Tables::Filter::Comparison compar = Calligra::Tables::Filter::Match;
+            Calligra::Sheets::Filter::Comparison compar = Calligra::Sheets::Filter::Match;
             switch (record->operation(i)) {
                 case AutoFilterRecord::Less:
-                    compar = Calligra::Tables::Filter::Less;
+                    compar = Calligra::Sheets::Filter::Less;
                     break;
                 case AutoFilterRecord::Equal:
-                    compar = Calligra::Tables::Filter::Match;
+                    compar = Calligra::Sheets::Filter::Match;
                     break;
                 case AutoFilterRecord::LEqual:
-                    compar = Calligra::Tables::Filter::LessOrEqual;
+                    compar = Calligra::Sheets::Filter::LessOrEqual;
                     break;
                 case AutoFilterRecord::Greater:
-                    compar = Calligra::Tables::Filter::Greater;
+                    compar = Calligra::Sheets::Filter::Greater;
                     break;
                 case AutoFilterRecord::NotEqual:
-                    compar = Calligra::Tables::Filter::NotMatch;
+                    compar = Calligra::Sheets::Filter::NotMatch;
                     break;
                 case AutoFilterRecord::GEqual:
-                    compar = Calligra::Tables::Filter::GreaterOrEqual;
+                    compar = Calligra::Sheets::Filter::GreaterOrEqual;
                     break;
             }
 
@@ -1169,12 +1169,12 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
                     decodeRK(record->rkValue(i), isInt, iv, dv);
                     if (isInt) dv = iv;
                     filter.addCondition(compos, fieldNumber, compar, QString::number(dv),
-                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                        Qt::CaseInsensitive, Calligra::Sheets::Filter::Number);
                     break;
                 }
                 case AutoFilterRecord::XNumber:
                     filter.addCondition(compos, fieldNumber, compar, QString::number(record->floatValue(i)),
-                        Qt::CaseInsensitive, Calligra::Tables::Filter::Number);
+                        Qt::CaseInsensitive, Calligra::Sheets::Filter::Number);
                     break;
                 case AutoFilterRecord::String:
                     filter.addCondition(compos, fieldNumber, compar, record->string(i));
@@ -1183,10 +1183,10 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
                     // TODO
                     break;
                 case AutoFilterRecord::Blanks:
-                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::Match, "");
+                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::Filter::Match, "");
                     break;
                 case AutoFilterRecord::NonBlanks:
-                    filter.addCondition(compos, fieldNumber, Calligra::Tables::Filter::NotMatch, "");
+                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::Filter::NotMatch, "");
                     break;
                 case AutoFilterRecord::UndefinedType:
                 default:
@@ -1195,8 +1195,8 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
         }
     }
 
-    Calligra::Tables::Filter oldFilter = d->sheet->autoFilters();
-    oldFilter.addSubFilter(Calligra::Tables::Filter::AndComposition, filter);
+    Calligra::Sheets::Filter oldFilter = d->sheet->autoFilters();
+    oldFilter.addSubFilter(Calligra::Sheets::Filter::AndComposition, filter);
     d->sheet->setAutoFilters(oldFilter);
 }
 

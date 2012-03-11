@@ -29,7 +29,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
 Value func_bitand(valVector args, ValueCalc *calc, FuncExtra *);

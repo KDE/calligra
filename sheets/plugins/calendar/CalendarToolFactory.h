@@ -27,7 +27,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CalendarToolFactory : public QObject, public CellToolFactory
@@ -40,7 +40,7 @@ public:
     KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CALENDAR_TOOL_FACTORY

@@ -29,7 +29,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 class Doc;
@@ -47,7 +47,7 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);
 
 private:
-    QString exportCSVCell(const Calligra::Tables::Doc* doc, Calligra::Tables::Sheet const * const sheet,
+    QString exportCSVCell(const Calligra::Sheets::Doc* doc, Calligra::Sheets::Sheet const * const sheet,
                           int col, int row, QChar const & textQuote, QChar csvDelimiter);
 
 private:

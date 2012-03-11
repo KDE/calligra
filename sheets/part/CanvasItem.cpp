@@ -127,7 +127,7 @@
 
 #define MIN_SIZE 10
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class CanvasItem::Private
 {

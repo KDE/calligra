@@ -49,7 +49,7 @@ class KoZoomHandler;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Canvas;
 class ColumnHeader;
@@ -97,7 +97,7 @@ public:
     /**
      * @return the usual selection of cells
      */
-    virtual Calligra::Tables::Selection* selection() const = 0;
+    virtual Calligra::Sheets::Selection* selection() const = 0;
 
     QPointF offset() const;
 
@@ -207,7 +207,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS

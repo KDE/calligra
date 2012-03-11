@@ -23,7 +23,7 @@
 
 #include <math.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class Number::Private : public QSharedData
 {
@@ -281,7 +281,7 @@ Number Number::atgh() const
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 long double numToDouble(Number n)
@@ -434,7 +434,7 @@ Number atgh(const Number &n)
     return n.atgh();
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT

@@ -39,7 +39,7 @@
 #include "Map.h"
 #include "Style.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 StyleManager::StyleManager()
         : m_defaultStyle(new CustomStyle())

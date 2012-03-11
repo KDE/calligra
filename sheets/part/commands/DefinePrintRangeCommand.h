@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 
@@ -48,7 +48,7 @@ private:
     Region m_oldPrintRegion;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DEFINE_PRINT_RANGE_COMMAND

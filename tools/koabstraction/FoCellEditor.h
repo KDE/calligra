@@ -27,18 +27,18 @@ class QString;
 class QFont;
 class KoViewConverter;
 
-namespace Calligra { namespace Tables
+namespace Calligra { namespace Sheets
 {
     class CellToolBase;
     class Selection;
 } }
 
-class FoCellEditor : public QTextEdit, public Calligra::Tables::CellEditorBase
+class FoCellEditor : public QTextEdit, public Calligra::Sheets::CellEditorBase
 {
     Q_OBJECT
 
 public:
-    explicit FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *parent=0);
+    explicit FoCellEditor(Calligra::Sheets::CellToolBase *cellTool, QWidget *parent=0);
     ~FoCellEditor();
 
     QWidget* widget() { return this; }
@@ -66,9 +66,9 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
 
 private:
-    Calligra::Tables::Selection *m_selection;
+    Calligra::Sheets::Selection *m_selection;
     QTextEdit *m_editor;
-    Calligra::Tables::CellToolBase *m_cellTool;
+    Calligra::Sheets::CellToolBase *m_cellTool;
 };
 
 #endif // FO_CELLEDITOR_H

@@ -38,7 +38,7 @@ inline uint qHash(const QPoint& point)
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Map;
@@ -418,7 +418,7 @@ private:
 ****************************************************************************/
 /**
  * Base class for region elements, which can be points or ranges.
- * This class is used by Calligra::Tables::Region and could not be used outside of it.
+ * This class is used by Calligra::Sheets::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -504,7 +504,7 @@ protected:
 
 /**
  * A point in a region.
- * This class is used by Calligra::Tables::Region and could not be used outside of it.
+ * This class is used by Calligra::Sheets::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -587,7 +587,7 @@ private:
 
 /**
  * A range in a region.
- * This class is used by Calligra::Tables::Region and could not be used outside of it.
+ * This class is used by Calligra::Sheets::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -652,17 +652,17 @@ private:
     bool m_fixedRight;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_TYPEINFO(Calligra::Tables::Region, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Region, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const Calligra::Tables::Region& r)
+inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region& r)
 {
     return str << qPrintable(r.name());
 }

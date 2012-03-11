@@ -28,28 +28,28 @@
 
 #include <QAbstractItemModel>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 /// \internal d-pointer class.
 class ScriptingCellListener::Private
 {
 public:
-    Calligra::Tables::Sheet* sheet;
-    Calligra::Tables::Binding* cellbinding;
+    Calligra::Sheets::Sheet* sheet;
+    Calligra::Sheets::Binding* cellbinding;
 };
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-ScriptingCellListener::ScriptingCellListener(Calligra::Tables::Sheet *sheet, const QRect& area)
+ScriptingCellListener::ScriptingCellListener(Calligra::Sheets::Sheet *sheet, const QRect& area)
         : QObject()
         , d(new Private())
 {
     d->sheet = sheet;
-    d->cellbinding = new Calligra::Tables::Binding(Region(area, sheet));
+    d->cellbinding = new Calligra::Sheets::Binding(Region(area, sheet));
     connect(d->cellbinding->model(), SIGNAL(changed(const Region&)), this, SLOT(slotChanged(const Region&)));
     sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }

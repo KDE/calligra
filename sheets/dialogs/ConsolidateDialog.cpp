@@ -63,7 +63,7 @@
 #include "ui_ConsolidateWidget.h"
 #include "ui_ConsolidateDetailsWidget.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class ConsolidateDialog::Private
 {

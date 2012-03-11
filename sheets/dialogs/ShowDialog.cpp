@@ -39,7 +39,7 @@
 // commands
 #include "commands/SheetCommands.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

@@ -26,7 +26,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 class Sheet;
@@ -182,7 +182,7 @@ protected:
     bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_COMMANDS

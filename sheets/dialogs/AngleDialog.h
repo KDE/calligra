@@ -30,7 +30,7 @@ class KIntNumInput;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -52,7 +52,7 @@ protected:
     KIntNumInput *m_pAngle;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ANGLE_DIALOG

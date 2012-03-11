@@ -52,9 +52,9 @@ public:
     QHash<unsigned, unsigned> maxCellsInRow;
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
-    Calligra::Tables::PointStorage<Hyperlink> hyperlinks;
-    Calligra::Tables::PointStorage<QList<ChartObject*> > charts;
-    Calligra::Tables::PointStorage<QList<OfficeArtObject*> > drawObjects;
+    Calligra::Sheets::PointStorage<Hyperlink> hyperlinks;
+    Calligra::Sheets::PointStorage<QList<ChartObject*> > charts;
+    Calligra::Sheets::PointStorage<QList<OfficeArtObject*> > drawObjects;
 
     bool visible;
     bool protect;
@@ -93,7 +93,7 @@ public:
 
     QList<ConditionalFormat*> conditionalFormats;
 
-    Calligra::Tables::Filter* autoFilters;
+    Calligra::Sheets::Filter* autoFilters;
 };
 
 }
@@ -601,17 +601,17 @@ QList<ConditionalFormat*> Sheet::conditionalFormats() const
     return d->conditionalFormats;
 }
 
-void Sheet::setAutoFilters(const Calligra::Tables::Filter& filter)
+void Sheet::setAutoFilters(const Calligra::Sheets::Filter& filter)
 {
-    d->autoFilters = new Calligra::Tables::Filter(filter);
+    d->autoFilters = new Calligra::Sheets::Filter(filter);
 }
 
-Calligra::Tables::Filter Sheet::autoFilters() const
+Calligra::Sheets::Filter Sheet::autoFilters() const
 {
     if (d->autoFilters) {
         return *d->autoFilters;
     } else {
-        return Calligra::Tables::Filter();
+        return Calligra::Sheets::Filter();
     }
 }
 

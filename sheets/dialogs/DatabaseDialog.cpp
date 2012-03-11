@@ -58,7 +58,7 @@
 #include <QListWidget>
 #include <QTreeWidget>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 #ifndef QT_NO_SQL
 

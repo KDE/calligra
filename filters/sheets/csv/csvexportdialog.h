@@ -29,7 +29,7 @@ class QValidator;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 }
@@ -58,7 +58,7 @@ public:
     QString getSheetDelimiter() const;
     bool    exportSelectionOnly() const;
 
-    void  fillSheet(Calligra::Tables::Map * map);
+    void  fillSheet(Calligra::Sheets::Map * map);
     QString getEndOfLine(void) const;
     QTextCodec* getCodec(void) const;
 

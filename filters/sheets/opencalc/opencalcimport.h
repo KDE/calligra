@@ -36,7 +36,7 @@ class KoStore;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class Conditional;
@@ -74,15 +74,15 @@ private:
 
     enum bPos { Left, Top, Right, Bottom, Fall, GoUp, Border };
 
-    Calligra::Tables::Doc *    m_doc;
-    Calligra::Tables::Style *  m_defaultStyle;
+    Calligra::Sheets::Doc *    m_doc;
+    Calligra::Sheets::Style *  m_defaultStyle;
 
     KoXmlDocument   m_content;
     KoXmlDocument   m_meta;
     KoXmlDocument   m_settings;
 
     QHash<QString, KoXmlElement*>   m_styles;
-    QHash<QString, Calligra::Tables::Style*> m_defaultStyles;
+    QHash<QString, Calligra::Sheets::Style*> m_defaultStyles;
     QHash<QString, QString*>        m_formats;
     QMap<QString, KoXmlElement> m_validationList;
 
@@ -93,31 +93,31 @@ private:
     void insertStyles(KoXmlElement const & element);
     bool createStyleMap(KoXmlDocument const & styles);
     bool readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowStyle,
-                       Calligra::Tables::Sheet * table, int & row, int & number, bool last);
-    bool readColLayouts(KoXmlElement & content, Calligra::Tables::Sheet * table);
-    bool readRowsAndCells(KoXmlElement & content, Calligra::Tables::Sheet * table);
-    bool readCells(KoXmlElement & rowNode, Calligra::Tables::Sheet  * table, int row, int & columns);
+                       Calligra::Sheets::Sheet * table, int & row, int & number, bool last);
+    bool readColLayouts(KoXmlElement & content, Calligra::Sheets::Sheet * table);
+    bool readRowsAndCells(KoXmlElement & content, Calligra::Sheets::Sheet * table);
+    bool readCells(KoXmlElement & rowNode, Calligra::Sheets::Sheet  * table, int row, int & columns);
     void convertFormula(QString & text, QString const & f) const;
-    void loadFontStyle(Calligra::Tables::Style * layout, KoXmlElement const * font) const;
-    void readInStyle(Calligra::Tables::Style * layout, KoXmlElement const & style);
-    void loadStyleProperties(Calligra::Tables::Style * layout, KoXmlElement const & property) const;
-    void loadBorder(Calligra::Tables::Style * layout, QString const & borderDef, bPos pos) const;
-    void loadTableMasterStyle(Calligra::Tables::Sheet * table, QString const & stylename);
+    void loadFontStyle(Calligra::Sheets::Style * layout, KoXmlElement const * font) const;
+    void readInStyle(Calligra::Sheets::Style * layout, KoXmlElement const & style);
+    void loadStyleProperties(Calligra::Sheets::Style * layout, KoXmlElement const & property) const;
+    void loadBorder(Calligra::Sheets::Style * layout, QString const & borderDef, bPos pos) const;
+    void loadTableMasterStyle(Calligra::Sheets::Sheet * table, QString const & stylename);
     QString * loadFormat(KoXmlElement * element,
-                         Calligra::Tables::Format::Type & formatType,
+                         Calligra::Sheets::Format::Type & formatType,
                          QString name);
     void checkForNamedAreas(QString & formula) const;
-    void loadOasisCellValidation(const KoXmlElement&body, const Calligra::Tables::ValueParser *parser);
-    void loadOasisValidation(Calligra::Tables::Validity val, const QString& validationName, const Calligra::Tables::ValueParser *parser);
-    void loadOasisValidationCondition(Calligra::Tables::Validity val, QString &valExpression, const Calligra::Tables::ValueParser *parser);
+    void loadOasisCellValidation(const KoXmlElement&body, const Calligra::Sheets::ValueParser *parser);
+    void loadOasisValidation(Calligra::Sheets::Validity val, const QString& validationName, const Calligra::Sheets::ValueParser *parser);
+    void loadOasisValidationCondition(Calligra::Sheets::Validity val, QString &valExpression, const Calligra::Sheets::ValueParser *parser);
     void loadOasisAreaName(const KoXmlElement&body);
-    void loadOasisMasterLayoutPage(Calligra::Tables::Sheet * table, KoStyleStack &styleStack);
-    void loadOasisValidationValue(Calligra::Tables::Validity val, const QStringList &listVal, const Calligra::Tables::ValueParser *parser);
+    void loadOasisMasterLayoutPage(Calligra::Sheets::Sheet * table, KoStyleStack &styleStack);
+    void loadOasisValidationValue(Calligra::Sheets::Validity val, const QStringList &listVal, const Calligra::Sheets::ValueParser *parser);
     QString translatePar(QString & par) const;
-    void loadCondition(const Calligra::Tables::Cell& cell, const KoXmlElement &property);
-    void loadOasisCondition(const Calligra::Tables::Cell& cell, const KoXmlElement &property);
-    void loadOasisConditionValue(const QString &styleCondition, Calligra::Tables::Conditional &newCondition, const Calligra::Tables::ValueParser *parser);
-    void loadOasisCondition(QString &valExpression, Calligra::Tables::Conditional &newCondition, const Calligra::Tables::ValueParser *parser);
+    void loadCondition(const Calligra::Sheets::Cell& cell, const KoXmlElement &property);
+    void loadOasisCondition(const Calligra::Sheets::Cell& cell, const KoXmlElement &property);
+    void loadOasisConditionValue(const QString &styleCondition, Calligra::Sheets::Conditional &newCondition, const Calligra::Sheets::ValueParser *parser);
+    void loadOasisCondition(QString &valExpression, Calligra::Sheets::Conditional &newCondition, const Calligra::Sheets::ValueParser *parser);
     KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc, const QString& fileName, KoStore *m_store);
 
     KoFilter::ConversionStatus openFile();

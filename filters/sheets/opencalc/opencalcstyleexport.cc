@@ -30,7 +30,7 @@
 
 #include <QDomDocument>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 OpenCalcStyles::OpenCalcStyles()
 {
@@ -212,23 +212,23 @@ void OpenCalcStyles::addCellStyles(QDomDocument & doc, QDomElement & autoStyles)
         if (t->bgColor.name() != "#ffffff")
             prop.setAttribute("fo:background-color", t->bgColor.name());
 
-        if (t->alignX != Calligra::Tables::Style::HAlignUndefined) {
+        if (t->alignX != Calligra::Sheets::Style::HAlignUndefined) {
             QString value;
-            if (t->alignX == Calligra::Tables::Style::Center)
+            if (t->alignX == Calligra::Sheets::Style::Center)
                 value = "center";
-            else if (t->alignX == Calligra::Tables::Style::Right)
+            else if (t->alignX == Calligra::Sheets::Style::Right)
                 value = "end";
-            else if (t->alignX == Calligra::Tables::Style::Left)
+            else if (t->alignX == Calligra::Sheets::Style::Left)
                 value = "start";
             prop.setAttribute("fo:text-align", value);
         }
 
-        if (t->alignY != Calligra::Tables::Style::Bottom)   // default in OpenCalc
-            prop.setAttribute("fo:vertical-align", (t->alignY == Calligra::Tables::Style::Middle ? "middle" : "top"));
+        if (t->alignY != Calligra::Sheets::Style::Bottom)   // default in OpenCalc
+            prop.setAttribute("fo:vertical-align", (t->alignY == Calligra::Sheets::Style::Middle ? "middle" : "top"));
 
         if (t->indent > 0.0) {
             prop.setAttribute("fo:margin-left", QString("%1pt").arg(t->indent));
-            if (t->alignX == Calligra::Tables::Style::HAlignUndefined)
+            if (t->alignX == Calligra::Sheets::Style::HAlignUndefined)
                 prop.setAttribute("fo:text-align", "start");
         }
 
@@ -361,8 +361,8 @@ CellStyle::CellStyle()
         hideAll(false),
         hideFormula(false),
         notProtected(false),
-        alignX(Calligra::Tables::Style::HAlignUndefined),
-        alignY(Calligra::Tables::Style::Middle)
+        alignX(Calligra::Sheets::Style::HAlignUndefined),
+        alignY(Calligra::Sheets::Style::Middle)
 {
 }
 
@@ -408,8 +408,8 @@ bool CellStyle::isEqual(CellStyle const * const t1, CellStyle const & t2)
 // all except the number style
 void CellStyle::loadData(CellStyle & cs, const Cell& cell)
 {
-    const Calligra::Tables::Style style = cell.style();
-    const Calligra::Tables::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
+    const Calligra::Sheets::Style style = cell.style();
+    const Calligra::Sheets::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
 
     QFont font = style.font();
     if (font != defaultStyle->font())
@@ -423,46 +423,46 @@ void CellStyle::loadData(CellStyle & cs, const Cell& cell)
     if (bgColor != defaultStyle->backgroundColor())
         cs.bgColor = bgColor;
 
-    if (style.hasAttribute(Calligra::Tables::Style::HorizontalAlignment))
+    if (style.hasAttribute(Calligra::Sheets::Style::HorizontalAlignment))
         cs.alignX = style.halign();
 
-    if (style.hasAttribute(Calligra::Tables::Style::VerticalAlignment))
+    if (style.hasAttribute(Calligra::Sheets::Style::VerticalAlignment))
         cs.alignY = style.valign();
 
-    if (style.hasAttribute(Calligra::Tables::Style::Indentation))
+    if (style.hasAttribute(Calligra::Sheets::Style::Indentation))
         cs.indent = style.indentation();
 
-    if (style.hasAttribute(Calligra::Tables::Style::Angle))
+    if (style.hasAttribute(Calligra::Sheets::Style::Angle))
         cs.angle  = -style.angle();
 
-    if (style.hasAttribute(Calligra::Tables::Style::MultiRow))
+    if (style.hasAttribute(Calligra::Sheets::Style::MultiRow))
         cs.wrap   = style.wrapText();
 
-    if (style.hasAttribute(Calligra::Tables::Style::VerticalText))
+    if (style.hasAttribute(Calligra::Sheets::Style::VerticalText))
         cs.vertical = style.verticalText();
 
-    if (style.hasAttribute(Calligra::Tables::Style::DontPrintText))
+    if (style.hasAttribute(Calligra::Sheets::Style::DontPrintText))
         cs.print = style.printText();
 
-    if (style.hasAttribute(Calligra::Tables::Style::LeftPen))
+    if (style.hasAttribute(Calligra::Sheets::Style::LeftPen))
         cs.left  = style.leftBorderPen();
 
-    if (style.hasAttribute(Calligra::Tables::Style::RightPen))
+    if (style.hasAttribute(Calligra::Sheets::Style::RightPen))
         cs.right = style.rightBorderPen();
 
-    if (style.hasAttribute(Calligra::Tables::Style::TopPen))
+    if (style.hasAttribute(Calligra::Sheets::Style::TopPen))
         cs.top  = style.topBorderPen();
 
-    if (style.hasAttribute(Calligra::Tables::Style::BottomPen))
+    if (style.hasAttribute(Calligra::Sheets::Style::BottomPen))
         cs.bottom  = style.bottomBorderPen();
 
-    if (style.hasAttribute(Calligra::Tables::Style::NotProtected))
+    if (style.hasAttribute(Calligra::Sheets::Style::NotProtected))
         cs.notProtected = style.notProtected();
 
-    if (style.hasAttribute(Calligra::Tables::Style::HideAll))
+    if (style.hasAttribute(Calligra::Sheets::Style::HideAll))
         cs.hideAll = style.hideAll();
 
-    if (style.hasAttribute(Calligra::Tables::Style::HideFormula))
+    if (style.hasAttribute(Calligra::Sheets::Style::HideFormula))
         cs.hideFormula = style.hideFormula();
 }
 

@@ -33,7 +33,7 @@ class KLineEdit;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 class Style;
@@ -105,7 +105,7 @@ private:
 
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CONDITIONAL_DIALOG

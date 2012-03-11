@@ -36,7 +36,7 @@
 #include <QList>
 #include <QMap>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted!)
 Value func_arrang(valVector args, ValueCalc *calc, FuncExtra *);

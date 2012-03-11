@@ -34,7 +34,7 @@ class KoOdfStylesReader;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Conditions;
 class Map;
@@ -128,7 +128,7 @@ private:
     QHash<QString, QString>  m_oasisStyles;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_MANAGER

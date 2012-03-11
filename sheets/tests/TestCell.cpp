@@ -36,7 +36,7 @@
 
 #include <qtest_kde.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 KoXmlDocument CellTest::xmlDocument(const QString &content)
 {

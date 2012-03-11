@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -88,9 +88,9 @@ static inline uint qHash(const Currency& cur) {
     return ::qHash(cur.code());
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Currency)
+Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
 
 #endif

@@ -35,7 +35,7 @@ class KoGenStyle;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Sheet;
 class RowFormatStorage;
@@ -208,7 +208,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROW_COLUMN_FORMAT

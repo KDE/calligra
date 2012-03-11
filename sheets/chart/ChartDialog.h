@@ -35,7 +35,7 @@ class ChartShape;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Map;
 
@@ -110,7 +110,7 @@ public:
     State m_state; ///< the current state
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CHART_DIALOG

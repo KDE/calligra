@@ -47,7 +47,7 @@
 //#include <dom/html_table.h>
 //#include <dom/html_misc.h>
 
-//using namespace Calligra::Tables;
+//using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
 K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))

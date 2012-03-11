@@ -31,7 +31,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -105,7 +105,7 @@ RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const QList<Pai
     return *this;
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_RECT_STORAGE_UNDO_COMMAND

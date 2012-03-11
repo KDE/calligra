@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 namespace Currency_LNS
 {

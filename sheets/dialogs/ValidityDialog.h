@@ -36,7 +36,7 @@ class QCheckBox;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -82,7 +82,7 @@ protected:
     QLabel *validityLabelList;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VALIDITY_DIALOG

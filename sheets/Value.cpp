@@ -33,7 +33,7 @@
 #include <math.h>
 #include <limits.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 class ValueArray
 {
@@ -952,7 +952,7 @@ QTextStream& operator<<(QTextStream& ts, Value value)
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 uint qHash(const Value& value)
 {
@@ -977,14 +977,14 @@ uint qHash(const Value& value)
     }
     return 0;
 }
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-QDebug operator<<(QDebug str, const Calligra::Tables::Value& v)
+QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v)
 {
     QString string;
     QTextStream stream(&string);
@@ -993,18 +993,18 @@ QDebug operator<<(QDebug str, const Calligra::Tables::Value& v)
     return str;
 }
 
-QDebug operator<<(QDebug stream, const Calligra::Tables::Value::Format& f)
+QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f)
 {
     switch (f) {
-    case Calligra::Tables::Value::fmt_None:     stream << "None";     break;
-    case Calligra::Tables::Value::fmt_Boolean:  stream << "Boolean";  break;
-    case Calligra::Tables::Value::fmt_Number:   stream << "Number";   break;
-    case Calligra::Tables::Value::fmt_Percent:  stream << "Percent";  break;
-    case Calligra::Tables::Value::fmt_Money:    stream << "Money";    break;
-    case Calligra::Tables::Value::fmt_DateTime: stream << "DateTime"; break;
-    case Calligra::Tables::Value::fmt_Date:     stream << "Date";     break;
-    case Calligra::Tables::Value::fmt_Time:     stream << "Time";     break;
-    case Calligra::Tables::Value::fmt_String:   stream << "String";   break;
+    case Calligra::Sheets::Value::fmt_None:     stream << "None";     break;
+    case Calligra::Sheets::Value::fmt_Boolean:  stream << "Boolean";  break;
+    case Calligra::Sheets::Value::fmt_Number:   stream << "Number";   break;
+    case Calligra::Sheets::Value::fmt_Percent:  stream << "Percent";  break;
+    case Calligra::Sheets::Value::fmt_Money:    stream << "Money";    break;
+    case Calligra::Sheets::Value::fmt_DateTime: stream << "DateTime"; break;
+    case Calligra::Sheets::Value::fmt_Date:     stream << "Date";     break;
+    case Calligra::Sheets::Value::fmt_Time:     stream << "Time";     break;
+    case Calligra::Sheets::Value::fmt_String:   stream << "String";   break;
     }
     return stream;
 }

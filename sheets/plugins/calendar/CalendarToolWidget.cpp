@@ -31,7 +31,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 CalendarToolWidget::CalendarToolWidget(QWidget* parent)
@@ -134,7 +134,7 @@ QDate CalendarToolWidget::endDate() const
     return this->m_endDateWidget->date();
 }
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #include "CalendarToolWidget.moc"

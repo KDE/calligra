@@ -44,7 +44,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 /************************************************
  *

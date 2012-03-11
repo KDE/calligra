@@ -28,7 +28,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
 Value func_and(valVector args, ValueCalc *calc, FuncExtra *);

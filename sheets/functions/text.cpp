@@ -38,7 +38,7 @@
 
 #include <KLocale>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 // Functions DOLLAR and FIXED convert data to double, hence they will not
 // support arbitrary precision, when it will be introduced.

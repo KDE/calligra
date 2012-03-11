@@ -36,7 +36,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class AutoFillSequence;
 class Cell;
@@ -88,7 +88,7 @@ private:
     QRect m_targetRange;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTOFILL_COMMAND

@@ -34,14 +34,14 @@
 
 #include "SolverDialog.h"
 
-using namespace Calligra::Tables::Plugins;
+using namespace Calligra::Sheets::Plugins;
 
 // make the plugin available
-K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Tables::Plugins::Solver>();)
+K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
 K_EXPORT_PLUGIN(SolverFactory("kspreadsolver"))
 
-Calligra::Tables::View* s_view = 0;
-Calligra::Tables::Formula* s_formula = 0;
+Calligra::Sheets::View* s_view = 0;
+Calligra::Sheets::Formula* s_formula = 0;
 double function(const gsl_vector* vector, void *params);
 
 
@@ -61,7 +61,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);
     if (!d->view) {
-        kError() << "Solver: Parent object is not a Calligra::Tables::View! Quitting." << endl;
+        kError() << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
         return;
     }
 
@@ -199,7 +199,7 @@ double function(const gsl_vector* vector, void *params)
     Solver::Parameters* parameters = static_cast<Solver::Parameters*>(params);
 
     for (int i = 0; i < parameters->cells.count(); ++i) {
-        parameters->cells[i].setValue(Calligra::Tables::Value(gsl_vector_get(vector, i)));
+        parameters->cells[i].setValue(Calligra::Sheets::Value(gsl_vector_get(vector, i)));
     }
 
     // TODO check for errors/correct type

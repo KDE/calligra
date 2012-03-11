@@ -25,7 +25,7 @@
 #include "TableShape.h"
 #include "TableTool.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 TableToolFactory::TableToolFactory()
     : KoToolFactoryBase("TableToolFactoryId")

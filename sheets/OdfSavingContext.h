@@ -34,7 +34,7 @@ class KoShape;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 /**
@@ -107,7 +107,7 @@ private:
     AnchoredShapes m_cellAnchoredShapes;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // KSPREAD_ODF_SAVING_CONTEXT

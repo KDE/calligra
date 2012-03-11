@@ -24,7 +24,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class CellStorageTest : public QObject
@@ -34,7 +34,7 @@ private Q_SLOTS:
     void testMergedCellsInsertRowBug();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_STORAGE_TEST

@@ -81,7 +81,7 @@
 #include "Value.h"
 #include "ValueFormatter.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 const int s_borderSpace = 1;
 

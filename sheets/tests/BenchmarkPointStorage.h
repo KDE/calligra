@@ -25,7 +25,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class PointStorageBenchmark : public QObject
@@ -48,7 +48,7 @@ private Q_SLOTS:
     void testIterationPerformance();
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_POINT_STORAGE_BENCHMARK

@@ -26,7 +26,7 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 PageBreakCommand::PageBreakCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)

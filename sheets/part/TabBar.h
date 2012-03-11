@@ -34,7 +34,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class TabBarPrivate;
 
@@ -267,7 +267,7 @@ private:
     TabBar& operator=(const TabBar&);
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // TABBAR_H

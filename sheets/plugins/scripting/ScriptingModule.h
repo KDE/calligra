@@ -30,7 +30,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Doc;
 class View;
@@ -38,7 +38,7 @@ class ViewAdaptor;
 //class Sheet;
 class SheetAdaptor;
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 /**
@@ -68,33 +68,33 @@ public:
     * be for example the case if the KSpread scripting functionality is used
     * without running a KSpread instance.
     */
-    Calligra::Tables::View* kspreadView();
+    Calligra::Sheets::View* kspreadView();
 
     /**
-    * \return The \a Calligra::Tables::Doc instance that provides access to a
-    * document. This method always returns a valid \a Calligra::Tables::Doc instance.
+    * \return The \a Calligra::Sheets::Doc instance that provides access to a
+    * document. This method always returns a valid \a Calligra::Sheets::Doc instance.
     */
-    Calligra::Tables::Doc* kspreadDoc();
+    Calligra::Sheets::Doc* kspreadDoc();
 
     /**
     * \return The \a KoDocument instance that provides access to a
     * document. This method is essential the same as the kspreadDoc()
-    * method above since a \a Calligra::Tables::Doc just extends a \a KoDocument .
+    * method above since a \a Calligra::Sheets::Doc just extends a \a KoDocument .
     *
     * This method overwrites the one from the \a KoScriptingModule class
-    * to allow us to return our \a Calligra::Tables::Doc here.
+    * to allow us to return our \a Calligra::Sheets::Doc here.
     */
     virtual KoDocument* doc();
 
 public slots:
 
     /**
-    * Returns the \a Calligra::Tables::MapAdaptor object.
+    * Returns the \a Calligra::Sheets::MapAdaptor object.
     */
     QObject* map();
 
     /**
-    * Returns the \a Calligra::Tables::ViewAdaptor object in which the document is
+    * Returns the \a Calligra::Sheets::ViewAdaptor object in which the document is
     * displayed. Such a ViewAdaptor is only available if the script runs
     * embedded in a running KSpread instance. If the script runs for example
     * from within the commandline by using the kross-application there is no
@@ -103,13 +103,13 @@ public slots:
     QObject* view();
 
     /**
-    * Returns the \a Calligra::Tables::SheetAdaptor object currently active in the
+    * Returns the \a Calligra::Sheets::SheetAdaptor object currently active in the
     * document.
     */
     QObject* currentSheet();
 
     /**
-    * Returns a \a Calligra::Tables::SheetAdaptor object by the name \p name . The name
+    * Returns a \a Calligra::Sheets::SheetAdaptor object by the name \p name . The name
     * should be listened in the list returned by the \a sheetNames() method.
     * If there exists no sheet with such a name NULL is returned.
     */

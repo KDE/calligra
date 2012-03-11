@@ -32,7 +32,7 @@ class KoUnitDoubleSpinBox;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Selection;
 
@@ -78,7 +78,7 @@ protected:
     KoUnitDoubleSpinBox *m_pWidth;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RESIZE2_DIALOG

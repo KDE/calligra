@@ -28,7 +28,7 @@
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 
 class Sheet;
@@ -38,8 +38,8 @@ class SheetView;
  *
  * This class implements a KoFind-backend for searching in spreadsheets.
  *
- * Matches found by this class will use Calligra::Tables::Sheet* as container
- * and Calligra::Tables::Cell as location.
+ * Matches found by this class will use Calligra::Sheets::Sheet* as container
+ * and Calligra::Sheets::Cell as location.
  *
  * TODO: Add support for searching in notes/comments.
  * TODO: Support searching through all Sheets in a document.
@@ -85,10 +85,10 @@ private Q_SLOTS:
     void setActiveMatch(const KoFindMatch &match);
 };
 
-} //namespace Tables
+} //namespace Sheets
 } //namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Tables::Cell)
-Q_DECLARE_METATYPE(Calligra::Tables::Sheet*)
+Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
+Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
 
 #endif // CALLIGRA_TABLES_FIND_H

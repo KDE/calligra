@@ -56,7 +56,7 @@ class KoXmlWriter;
 
 namespace Calligra
 {
-namespace Tables
+namespace Sheets
 {
 class Cell;
 class CellStorage;
@@ -970,7 +970,7 @@ private:
     Private * const d;
 };
 
-} // namespace Tables
+} // namespace Sheets
 } // namespace Calligra
 
 #endif  // CALLIGRA_TABLES_SHEET

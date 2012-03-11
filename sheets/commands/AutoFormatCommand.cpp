@@ -28,7 +28,7 @@
 
 #include <QPen>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 AutoFormatCommand::AutoFormatCommand()
 {
