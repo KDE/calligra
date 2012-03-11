@@ -118,7 +118,7 @@
             <Syntax>EPS()</Syntax>
             <Example>On most systems, this returns 2^-52=2.2204460492503131e-16</Example>
             <Example>0.5*EPS() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</Example>
-            <Example>EPS() is so small that Calligra Tables displays 1+eps() as 1</Example>
+            <Example>EPS() is so small that Calligra Sheets displays 1+eps() as 1</Example>
             <Example>Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 or EPS() by using the equation (1+x)-1</Example>
         </Help>
     </Function>

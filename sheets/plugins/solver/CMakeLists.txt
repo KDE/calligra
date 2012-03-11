@@ -36,6 +36,6 @@ install(TARGETS kspreadsolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/tables/kpartplugins)
+install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/kpartplugins)
 
 endif(GSL_FOUND)

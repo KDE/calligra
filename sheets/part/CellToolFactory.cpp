@@ -31,7 +31,7 @@ CellToolFactory::CellToolFactory(const QString& id)
 {
     setToolTip(i18n("Cell Tool"));
     setIcon("kspread");
-    setToolType("CalligraTables");
+    setToolType("CalligraSheets");
     setPriority(0);
     setActivationShapeId("flake/always");
 }
