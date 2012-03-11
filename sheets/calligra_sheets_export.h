@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef CALLIGRA_SHEETS_ODF_EXPORT
-# if defined(MAKE_CALLIGRATABLESODF_LIB)
+# if defined(MAKE_CALLIGRASHEETSODF_LIB)
 /* We are building this library */
 #  define CALLIGRA_SHEETS_ODF_EXPORT KDE_EXPORT
 # else
@@ -34,7 +34,7 @@
 #endif
 
 #ifndef CALLIGRA_SHEETS_COMMON_EXPORT
-# if defined(MAKE_CALLIGRATABLESCOMMON_LIB)
+# if defined(MAKE_CALLIGRASHEETSCOMMON_LIB)
 /* We are building this library */
 #  define CALLIGRA_SHEETS_COMMON_EXPORT KDE_EXPORT
 # else
@@ -60,7 +60,7 @@
 // now for tests
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_CALLIGRATABLESCOMMON_LIB)
+# if defined(MAKE_CALLIGRASHEETSCOMMON_LIB)
 #       define CALLIGRA_SHEETS_COMMON_TEST_EXPORT KDE_EXPORT
 #   else
 #       define CALLIGRA_SHEETS_COMMON_TEST_EXPORT KDE_IMPORT
@@ -74,7 +74,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_CALLIGRATABLESODF_LIB)
+# if defined(MAKE_CALLIGRASHEETSODF_LIB)
 #       define CALLIGRA_SHEETS_ODF_TEST_EXPORT KDE_EXPORT
 #   else
 #       define CALLIGRA_SHEETS_ODF_TEST_EXPORT KDE_IMPORT
