@@ -331,12 +331,12 @@ install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  tables.rc tables_readonly.rc tables.notifyrc DESTINATION ${DATA_INSTALL_DIR}/tables)
-install( FILES  tablespart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  tables.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  tables.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  tables_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-install( FILES  tablesrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  sheets.rc sheets_readonly.rc sheets.notifyrc DESTINATION ${DATA_INSTALL_DIR}/sheets)
+install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
+install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
