@@ -164,7 +164,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
             this, SLOT(addCommand(KUndo2Command *)));
 
     setComponentData(Factory::global(), false);
-    setTemplateType("tables_template");
+    setTemplateType("sheets_template");
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -265,7 +265,7 @@ QDomDocument Doc::saveXML()
 
     QDomDocument doc = KoDocument::createDomDocument("tables", "spreadsheet", CURRENT_DTD_VERSION);
     QDomElement spread = doc.documentElement();
-    spread.setAttribute("editor", "Calligra Tables");
+    spread.setAttribute("editor", "Calligra Sheets");
     spread.setAttribute("mime", "application/x-kspread");
     spread.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
 
@@ -334,8 +334,8 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     map()->setSyntaxVersion(ok ? version : 0);
     if (map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n("This document was created with a newer version of Calligra Tables (syntax version: %1)\n"
-                              "When you open it with this version of Calligra Tables, some information may be lost.", map()->syntaxVersion()),
+                      0, i18n("This document was created with a newer version of Calligra Sheets (syntax version: %1)\n"
+                              "When you open it with this version of Calligra Sheets, some information may be lost.", map()->syntaxVersion()),
                       i18n("File Format Mismatch"), KStandardGuiItem::cont());
         if (ret == KMessageBox::Cancel) {
             setErrorMessage("USER_CANCELED");

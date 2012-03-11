@@ -26,7 +26,7 @@
 #include <float.h> // DBL_EPSILON
 #include <math.h>
 
-using namespace Calligra::Tables;
+using namespace Calligra::Sheets;
 
 
 namespace QTest

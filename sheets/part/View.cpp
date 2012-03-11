@@ -441,7 +441,7 @@ void View::Private::initActions()
             view, SLOT(showTabBar(bool)));
 
     actions->preference = KStandardAction::preferences(view, SLOT(preference()), view);
-    actions->preference->setToolTip(i18n("Set various Calligra Tables options"));
+    actions->preference->setToolTip(i18n("Set various Calligra Sheets options"));
     ac->addAction("preference", actions->preference);
 
     KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
@@ -568,9 +568,9 @@ View::View(QWidget *_parent, Doc *_doc)
 
     setComponentData(Factory::global());
     if (doc()->isReadWrite())
-        setXMLFile("tables.rc");
+        setXMLFile("sheets.rc");
     else
-        setXMLFile("tables_readonly.rc");
+        setXMLFile("sheets_readonly.rc");
 
     // GUI Initializations
     initView();
@@ -1172,11 +1172,11 @@ void View::createTemplate()
 
     doc()->saveNativeFormat(tempFile.fileName());
 
-    KoTemplateCreateDia::createTemplate("kspread_template", Factory::global(),
+    KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
                                         tempFile.fileName(), pix, this);
 
-    Factory::global().dirs()->addResourceType("kspread_template",
-            "data", "kspread/templates/");
+    Factory::global().dirs()->addResourceType("sheets_template",
+            "data", "sheets/templates/");
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)

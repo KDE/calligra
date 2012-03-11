@@ -89,8 +89,8 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
     const quint32 minKSpreadVersion = CALLIGRA_MAKE_VERSION(2, 1, 0);
-    const QString serviceType = QLatin1String("CalligraTables/Plugin");
-    const QString query = QLatin1String("([X-CalligraTables-InterfaceVersion] == 0) and "
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
                                         "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
@@ -102,7 +102,7 @@ void FunctionModuleRegistry::loadFunctionModules()
         // Let's be paranoid: do not believe the service type.
         if (loader.pluginVersion() < minKSpreadVersion) {
             kDebug(36002) << pluginInfo.name()
-            << "was built against Caligra Tables" << loader.pluginVersion()
+            << "was built against Caligra Sheets" << loader.pluginVersion()
             << "; required version >=" << minKSpreadVersion;
             continue;
         }

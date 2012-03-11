@@ -104,6 +104,6 @@ X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.spreadsheet,appli
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-DBUS-StartupType=multi
 X-DBUS-ServiceName=org.calligra.sheets
-X-DocPath=tables/index.html
+X-DocPath=sheets/index.html
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;

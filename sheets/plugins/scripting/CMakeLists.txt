@@ -24,4 +24,4 @@ install(TARGETS krossmodulekspread DESTINATION ${PLUGIN_INSTALL_DIR})
 
 #install( FILES  kspreadscripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krossmodulekspread.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/tables/kpartplugins)
+install( FILES  scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/kpartplugins)
