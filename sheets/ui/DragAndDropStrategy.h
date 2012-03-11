@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 namespace Calligra
 {

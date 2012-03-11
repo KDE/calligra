@@ -63,7 +63,7 @@
 #include "Cell.h"
 #include "Canvas.h"
 #include "Doc.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "PrintSettings.h"
 #include "Sheet.h"
 #include "StyleManager.h"

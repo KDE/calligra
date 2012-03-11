@@ -26,7 +26,7 @@
 
 #include "HeaderFooter.h"
 #include "PrintSettings.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "Region.h"
 #include "Sheet.h"
 

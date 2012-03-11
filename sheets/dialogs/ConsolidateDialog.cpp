@@ -47,7 +47,7 @@
 
 //KSpread Includes
 #include <Global.h>
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include <Localization.h>
 #include <Map.h>
 #include "ui/Selection.h"

@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_CELLEDITORBASE_H
 #define CALLIGRA_SHEETS_CELLEDITORBASE_H
 
-#include <sheets/calligra_tables_export.h>
+#include <sheets/calligra_sheets_export.h>
 
 class QFont;
 class KoViewConverter;

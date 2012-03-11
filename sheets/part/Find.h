@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_SHEETS_FIND_H
 #define CALLIGRA_SHEETS_FIND_H
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 #include "Cell.h"
 
 #include <KoFindBase.h>

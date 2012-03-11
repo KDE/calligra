@@ -23,7 +23,7 @@
 #include <QGraphicsWidget>
 #include "Headers.h"
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 class QLabel;
 class QRubberBand;

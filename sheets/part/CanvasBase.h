@@ -36,7 +36,7 @@
 
 #include <KoCanvasBase.h>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 #include "Global.h"
 

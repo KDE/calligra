@@ -20,7 +20,7 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 
 #include <QMap>
 #include <QPoint>

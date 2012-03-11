@@ -25,7 +25,7 @@
 #include <QTextDocument>
 
 #include "Cell.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "PointStorage.h"
 
 #include "database/Database.h"

@@ -340,8 +340,8 @@ install( FILES  tablesrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
-    calligra_tables_export.h
-    calligra_tables_limits.h
+    calligra_sheets_export.h
+    calligra_sheets_limits.h
 
     Cell.h
     CellStorage.h

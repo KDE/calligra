@@ -21,7 +21,7 @@
 
 #include "qtest_kde.h"
 
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"

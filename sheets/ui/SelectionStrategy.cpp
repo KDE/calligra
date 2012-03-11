@@ -21,7 +21,7 @@
 
 #include "CellEditor.h"
 #include "CellToolBase.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "Selection.h"
 #include "Sheet.h"
 

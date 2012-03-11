@@ -23,7 +23,7 @@
 #include <qtest_kde.h>
 
 #include "../RowFormatStorage.h"
-#include "../calligra_tables_limits.h"
+#include "../calligra_sheets_limits.h"
 #include "../Map.h"
 #include "../Sheet.h"
 #include "../RowColumnFormat.h"

@@ -23,7 +23,7 @@
 #include "Cell.h"
 #include "GenValidationStyle.h"
 #include "Sheet.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 
 #include <KoShapeSavingContext.h>
 

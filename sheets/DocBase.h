@@ -33,7 +33,7 @@
 
 #include <KoDocument.h>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 class KoOasisSettings;
 class KoDocumentResourceManager;

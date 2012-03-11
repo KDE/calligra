@@ -40,7 +40,7 @@
 #include <RowFormatStorage.h>
 #include <StyleStorage.h>
 #include <ValueStorage.h>
-#include <calligra_tables_limits.h>
+#include <calligra_sheets_limits.h>
 
 #include <swinder.h>
 #include <XlsRecordOutputStream.h>

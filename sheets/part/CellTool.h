@@ -22,7 +22,7 @@
 
 #include <sheets/ui/CellToolBase.h>
 
-#include <sheets/calligra_tables_export.h>
+#include <sheets/calligra_sheets_export.h>
 
 namespace Calligra
 {

@@ -25,7 +25,7 @@
 #include <QPointF>
 #include <QRect>
 
-#include "calligra_tables_export.h"
+#include "calligra_sheets_export.h"
 
 class QPainter;
 class QRect;

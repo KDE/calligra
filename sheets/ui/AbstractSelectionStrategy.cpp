@@ -20,7 +20,7 @@
 #include "AbstractSelectionStrategy.h"
 
 #include "CellToolBase.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Selection.h"

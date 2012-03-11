@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 #include "Formula.h"
-#include "calligra_tables_limits.h"
+#include "calligra_sheets_limits.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
