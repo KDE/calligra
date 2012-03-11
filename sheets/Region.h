@@ -18,8 +18,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_REGION
-#define CALLIGRA_TABLES_REGION
+#ifndef CALLIGRA_SHEETS_REGION
+#define CALLIGRA_SHEETS_REGION
 
 #include <QList>
 #include <QRect>
@@ -50,7 +50,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class CALLIGRA_TABLES_ODF_EXPORT Region
+class CALLIGRA_SHEETS_ODF_EXPORT Region
 {
 public:
     class Element;
@@ -512,7 +512,7 @@ protected:
  * m_point: 8 bytes
  * sum: 16 bytes
  */
-class CALLIGRA_TABLES_ODF_EXPORT Region::Point : public Region::Element
+class CALLIGRA_SHEETS_ODF_EXPORT Region::Point : public Region::Element
 {
 public:
     Point() : Element(), m_point() {}
@@ -595,7 +595,7 @@ private:
  * m_range: 16 bytes
  * sum: 24 bytes
  */
-class CALLIGRA_TABLES_ODF_EXPORT Region::Range : public Region::Element
+class CALLIGRA_SHEETS_ODF_EXPORT Region::Range : public Region::Element
 {
 public:
     Range(const QRect&);
@@ -667,4 +667,4 @@ inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region& r)
     return str << qPrintable(r.name());
 }
 
-#endif // CALLIGRA_TABLES_REGION
+#endif // CALLIGRA_SHEETS_REGION

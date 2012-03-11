@@ -97,7 +97,7 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("engineering", EngineeringModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("engineering", EngineeringModule)
 
 
 EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)

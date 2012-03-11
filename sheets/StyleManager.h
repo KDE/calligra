@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_STYLE_MANAGER
-#define CALLIGRA_TABLES_STYLE_MANAGER
+#ifndef CALLIGRA_SHEETS_STYLE_MANAGER
+#define CALLIGRA_SHEETS_STYLE_MANAGER
 
 #include "calligra_tables_export.h"
 #include <KoXmlReader.h>
@@ -48,7 +48,7 @@ class ValueParser;
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */
-class CALLIGRA_TABLES_ODF_EXPORT StyleManager
+class CALLIGRA_SHEETS_ODF_EXPORT StyleManager
 {
     friend class StyleManagerDialog;
 
@@ -131,4 +131,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_STYLE_MANAGER
+#endif // CALLIGRA_SHEETS_STYLE_MANAGER

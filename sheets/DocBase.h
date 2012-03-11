@@ -28,8 +28,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DOCBASE_H
-#define CALLIGRA_TABLES_DOCBASE_H
+#ifndef CALLIGRA_SHEETS_DOCBASE_H
+#define CALLIGRA_SHEETS_DOCBASE_H
 
 #include <KoDocument.h>
 
@@ -46,7 +46,7 @@ class Map;
 class Sheet;
 class SheetAccessModel;
 
-class CALLIGRA_TABLES_ODF_EXPORT DocBase : public KoDocument
+class CALLIGRA_SHEETS_ODF_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
@@ -163,4 +163,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DOCBASE_H
+#endif // CALLIGRA_SHEETS_DOCBASE_H

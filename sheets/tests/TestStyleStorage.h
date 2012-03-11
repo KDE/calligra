@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TEST_STYLESTORAGE
-#define CALLIGRA_TABLES_TEST_STYLESTORAGE
+#ifndef CALLIGRA_SHEETS_TEST_STYLESTORAGE
+#define CALLIGRA_SHEETS_TEST_STYLESTORAGE
 
 #include <QObject>
 
@@ -37,4 +37,4 @@ private slots:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TEST_STYLESTORAGE
+#endif // CALLIGRA_SHEETS_TEST_STYLESTORAGE

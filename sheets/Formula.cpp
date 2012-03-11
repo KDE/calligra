@@ -45,7 +45,7 @@
 
 #include <klocale.h>
 
-#define CALLIGRA_TABLES_UNICODE_OPERATORS
+#define CALLIGRA_SHEETS_UNICODE_OPERATORS
 
 /*
   To understand how this formula engine works, please refer to the documentation
@@ -170,12 +170,12 @@ Token::Op Calligra::Sheets::matchOperator(const QString& text)
         case '>': result = Token::Greater; break;
         case '%': result = Token::Percent; break;
         case '~': result = Token::Union; break;
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
         case '{': result = Token::CurlyBra; break;
         case '}': result = Token::CurlyKet; break;
         case '|': result = Token::Pipe; break;
 #endif
-#ifdef CALLIGRA_TABLES_UNICODE_OPERATORS
+#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
         case 0x2212: result = Token::Minus; break;
         case 0x00D7: result = Token::Asterisk; break;
         case 0x00F7: result = Token::Slash; break;
@@ -213,12 +213,12 @@ bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
     case '&':
     case '%':
     case '~':
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
     case '{':
     case '}':
     case '|':
 #endif
-#ifdef CALLIGRA_TABLES_UNICODE_OPERATORS
+#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
     case 0x2212:
     case 0x00D7:
     case 0x00F7:
@@ -298,7 +298,7 @@ static int opPrecedence(Token::Op op)
     case Token::Greater      : prec = 1; break;
     case Token::LessEqual    : prec = 1; break;
     case Token::GreaterEqual : prec = 1; break;
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
         // FIXME Stefan: I don't know whether zero is right for this case. :-(
     case Token::CurlyBra     : prec = 0; break;
     case Token::CurlyKet     : prec = 0; break;
@@ -1106,7 +1106,7 @@ void Formula::compile(const Tokens& tokens) const
                 }
         }
 
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
         // are we entering an inline array ?
         // if stack already has: {
         if (syntaxStack.itemCount() >= 1) {
@@ -1250,7 +1250,7 @@ void Formula::compile(const Tokens& tokens) const
                                     }
                         }
 
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
                     // rule for inline array elements, if token is ; or | or }
                     // { arg1 ; arg2 -> { arg
                     if (!ruleFound)
@@ -1868,7 +1868,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             break;
 
-#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
             // creating an array
         case Opcode::Array: {
             const int cols = d->constants[index].asInteger();

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FORMULA
-#define CALLIGRA_TABLES_FORMULA
+#ifndef CALLIGRA_SHEETS_FORMULA
+#define CALLIGRA_SHEETS_FORMULA
 
 #include <QHash>
 #include <QSharedDataPointer>
@@ -32,7 +32,7 @@
 #include "Cell.h"
 #include "Value.h"
 
-#define CALLIGRA_TABLES_INLINE_ARRAYS
+#define CALLIGRA_SHEETS_INLINE_ARRAYS
 
 class KLocale;
 
@@ -47,7 +47,7 @@ typedef QHash<Cell, Cell> CellIndirection;
  * \ingroup Value
  * A formula token.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Token
+class CALLIGRA_SHEETS_ODF_EXPORT Token
 {
 public:
     /**
@@ -295,7 +295,7 @@ protected:
  *
  *
  */
-class CALLIGRA_TABLES_ODF_EXPORT Formula
+class CALLIGRA_SHEETS_ODF_EXPORT Formula
 {
 public:
     /**
@@ -460,4 +460,4 @@ inline uint qHash(const Formula& formula)
 Q_DECLARE_METATYPE(Calligra::Sheets::Formula)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Formula, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_FORMULA
+#endif // CALLIGRA_SHEETS_FORMULA

@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CONDITION_H
-#define CALLIGRA_TABLES_CONDITION_H
+#ifndef CALLIGRA_SHEETS_CONDITION_H
+#define CALLIGRA_SHEETS_CONDITION_H
 
 #include "Style.h"
 #include "Value.h"
@@ -53,7 +53,7 @@ class ValueParser;
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Conditional
+class CALLIGRA_SHEETS_ODF_EXPORT Conditional
 {
 public:
     enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
@@ -82,7 +82,7 @@ uint qHash(const Conditional& condition);
  * \ingroup Style
  * Manages a set of conditions for a cell.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Conditions
+class CALLIGRA_SHEETS_ODF_EXPORT Conditions
 {
 public:
     /**
@@ -220,4 +220,4 @@ private:
 Q_DECLARE_METATYPE(Calligra::Sheets::Conditions)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Conditions, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_CONDITION_H
+#endif // CALLIGRA_SHEETS_CONDITION_H

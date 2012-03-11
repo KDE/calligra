@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_ROW_COLUMN_FORMAT
-#define CALLIGRA_TABLES_ROW_COLUMN_FORMAT
+#ifndef CALLIGRA_SHEETS_ROW_COLUMN_FORMAT
+#define CALLIGRA_SHEETS_ROW_COLUMN_FORMAT
 
 #include <QBrush>
 
@@ -43,7 +43,7 @@ class RowFormatStorage;
 /**
  * A row style.
  */
-class CALLIGRA_TABLES_ODF_EXPORT RowFormat
+class CALLIGRA_SHEETS_ODF_EXPORT RowFormat
 {
 public:
     RowFormat();
@@ -129,7 +129,7 @@ private:
 /**
  * A column style.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ColumnFormat
+class CALLIGRA_SHEETS_ODF_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();
@@ -211,4 +211,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_ROW_COLUMN_FORMAT
+#endif // CALLIGRA_SHEETS_ROW_COLUMN_FORMAT

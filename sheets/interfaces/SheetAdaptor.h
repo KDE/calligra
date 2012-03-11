@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEET_ADAPTOR
-#define CALLIGRA_TABLES_SHEET_ADAPTOR
+#ifndef CALLIGRA_SHEETS_SHEET_ADAPTOR
+#define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
 #include <QtDBus/QtDBus>
 #include "calligra_tables_export.h"
@@ -39,7 +39,7 @@ class Damage;
 class Sheet;
 class CellProxy;
 
-class CALLIGRA_TABLES_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.sheet")
@@ -190,4 +190,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEET_ADAPTOR
+#endif // CALLIGRA_SHEETS_SHEET_ADAPTOR

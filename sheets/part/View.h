@@ -26,8 +26,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VIEW
-#define CALLIGRA_TABLES_VIEW
+#ifndef CALLIGRA_SHEETS_VIEW
+#define CALLIGRA_SHEETS_VIEW
 
 #include <QList>
 #include <QPoint>
@@ -81,7 +81,7 @@ class TabBar;
  *  \li tab bar to select active worksheet
  *  \li status bar to show status messages
  */
-class CALLIGRA_TABLES_COMMON_EXPORT View : public KoView
+class CALLIGRA_SHEETS_COMMON_EXPORT View : public KoView
 {
     Q_OBJECT
 
@@ -388,4 +388,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_VIEW
+#endif // CALLIGRA_SHEETS_VIEW

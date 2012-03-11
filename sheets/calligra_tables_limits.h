@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_LIMITS
-#define CALLIGRA_TABLES_LIMITS
+#ifndef CALLIGRA_SHEETS_LIMITS
+#define CALLIGRA_SHEETS_LIMITS
 
 /* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
 #ifndef KS_rowMax
@@ -45,4 +45,4 @@
 #define KS_spanMax 0xFFF
 #endif
 
-#endif // CALLIGRA_TABLES_LIMITS
+#endif // CALLIGRA_SHEETS_LIMITS

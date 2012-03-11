@@ -60,7 +60,7 @@ Value func_sheets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("reference", ReferenceModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("reference", ReferenceModule)
 
 
 ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)

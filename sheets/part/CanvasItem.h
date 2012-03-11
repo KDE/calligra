@@ -30,8 +30,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CANVAS_ITEM
-#define CALLIGRA_TABLES_CANVAS_ITEM
+#ifndef CALLIGRA_SHEETS_CANVAS_ITEM
+#define CALLIGRA_SHEETS_CANVAS_ITEM
 
 #include <QList>
 #include <QGraphicsWidget>
@@ -75,7 +75,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
+class CALLIGRA_SHEETS_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
 {
     friend class ColumnHeaderItem;
     friend class RowHeaderItem;
@@ -199,4 +199,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CANVAS_ITEM
+#endif // CALLIGRA_SHEETS_CANVAS_ITEM

@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALUE_PARSER
-#define CALLIGRA_TABLES_VALUE_PARSER
+#ifndef CALLIGRA_SHEETS_VALUE_PARSER
+#define CALLIGRA_SHEETS_VALUE_PARSER
 
 #include <QDateTime>
 
@@ -41,7 +41,7 @@ class Value;
  * Generates a Value by parsing an user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ValueParser
+class CALLIGRA_SHEETS_ODF_EXPORT ValueParser
 {
 public:
     /**
@@ -117,4 +117,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  //CALLIGRA_TABLES_VALUE_PARSER
+#endif  //CALLIGRA_SHEETS_VALUE_PARSER

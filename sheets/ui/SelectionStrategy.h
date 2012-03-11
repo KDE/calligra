@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SELECTION_STRATEGY
-#define CALLIGRA_TABLES_SELECTION_STRATEGY
+#ifndef CALLIGRA_SHEETS_SELECTION_STRATEGY
+#define CALLIGRA_SHEETS_SELECTION_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "calligra_tables_export.h"
@@ -38,7 +38,7 @@ namespace Sheets
  *
  * \see AbstractSelectionStrategy
  */
-class CALLIGRA_TABLES_COMMON_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_COMMON_EXPORT SelectionStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -61,4 +61,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SELECTION_STRATEGY
+#endif // CALLIGRA_SHEETS_SELECTION_STRATEGY

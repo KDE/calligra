@@ -69,7 +69,7 @@ Value func_na(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
-CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("information", InformationModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("information", InformationModule)
 
 
 InformationModule::InformationModule(QObject* parent, const QVariantList&)

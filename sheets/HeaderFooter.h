@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_HEADER_FOOTER
-#define CALLIGRA_TABLES_HEADER_FOOTER
+#ifndef CALLIGRA_SHEETS_HEADER_FOOTER
+#define CALLIGRA_SHEETS_HEADER_FOOTER
 
 #include <KoPageLayout.h>
 
@@ -34,7 +34,7 @@ namespace Sheets
 {
 class Sheet;
 
-class CALLIGRA_TABLES_ODF_EXPORT HeaderFooter
+class CALLIGRA_SHEETS_ODF_EXPORT HeaderFooter
 {
 public:
     explicit HeaderFooter(Sheet* sheet);
@@ -160,4 +160,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_HEADER_FOOTER
+#endif // CALLIGRA_SHEETS_HEADER_FOOTER

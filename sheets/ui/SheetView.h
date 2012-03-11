@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEET_VIEW
-#define CALLIGRA_TABLES_SHEET_VIEW
+#ifndef CALLIGRA_SHEETS_SHEET_VIEW
+#define CALLIGRA_SHEETS_SHEET_VIEW
 
 #include <QObject>
 #include <QPoint>
@@ -50,7 +50,7 @@ class CanvasBase;
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT SheetView : public QObject
+class CALLIGRA_SHEETS_COMMON_EXPORT SheetView : public QObject
 {
     Q_OBJECT
 
@@ -88,7 +88,7 @@ public:
      *
      * \return the CellView for the position
      */
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     CellView cellView(int col, int row);
     CellView cellView(const QPoint& pos);
 #else
@@ -166,7 +166,7 @@ protected:
      * Returns the default CellView.
      * Used by CellView.
      */
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     CellView defaultCellView() const;
 #else
     const CellView& defaultCellView() const;
@@ -182,4 +182,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEET_VIEW
+#endif // CALLIGRA_SHEETS_SHEET_VIEW

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALIDITY_COMMAND
-#define CALLIGRA_TABLES_VALIDITY_COMMAND
+#ifndef CALLIGRA_SHEETS_VALIDITY_COMMAND
+#define CALLIGRA_SHEETS_VALIDITY_COMMAND
 
 #include "Validity.h"
 
@@ -52,4 +52,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_VALIDITY_COMMAND
+#endif // CALLIGRA_SHEETS_VALIDITY_COMMAND

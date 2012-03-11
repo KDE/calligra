@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEET_MODEL
-#define CALLIGRA_TABLES_SHEET_MODEL
+#ifndef CALLIGRA_SHEETS_SHEET_MODEL
+#define CALLIGRA_SHEETS_SHEET_MODEL
 
 #include <QAbstractTableModel>
 
@@ -36,7 +36,7 @@ class Sheet;
  * A model for a sheet.
  * \ingroup Model
  */
-class CALLIGRA_TABLES_ODF_EXPORT SheetModel : public QAbstractTableModel
+class CALLIGRA_SHEETS_ODF_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
     explicit SheetModel(Sheet* sheet);
@@ -66,4 +66,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEET_MODEL
+#endif // CALLIGRA_SHEETS_SHEET_MODEL

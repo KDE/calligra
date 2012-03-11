@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_GENVALIDATIONSTYLE
-#define CALLIGRA_TABLES_GENVALIDATIONSTYLE
+#ifndef CALLIGRA_SHEETS_GENVALIDATIONSTYLE
+#define CALLIGRA_SHEETS_GENVALIDATIONSTYLE
 
 #include "calligra_tables_export.h"
 
@@ -88,7 +88,7 @@ private:
  * \class GenValidationStyles
  * \ingroup OpenDocument
  */
-class CALLIGRA_TABLES_ODF_EXPORT GenValidationStyles
+class CALLIGRA_SHEETS_ODF_EXPORT GenValidationStyles
 {
 public:
     GenValidationStyles();

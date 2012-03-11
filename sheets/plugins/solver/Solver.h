@@ -42,7 +42,7 @@ namespace Plugins
  * \class Solver Function Optimizer
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_SOLVER_EXPORT Solver : public KParts::Plugin
+class CALLIGRA_SHEETS_SOLVER_EXPORT Solver : public KParts::Plugin
 {
     Q_OBJECT
 

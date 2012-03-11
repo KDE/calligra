@@ -35,7 +35,7 @@ namespace Sheets
   * Current implementation doesn't have very optimal insertRows/removeRows functions, but the rest of
   * the methods are quite okay.
   */
-class CALLIGRA_TABLES_ODF_TEST_EXPORT RowRepeatStorage
+class CALLIGRA_SHEETS_ODF_TEST_EXPORT RowRepeatStorage
 {
 public:
     RowRepeatStorage();

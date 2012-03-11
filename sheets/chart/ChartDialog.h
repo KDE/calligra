@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CHART_DIALOG
-#define CALLIGRA_TABLES_CHART_DIALOG
+#ifndef CALLIGRA_SHEETS_CHART_DIALOG
+#define CALLIGRA_SHEETS_CHART_DIALOG
 
 #include <KoShapeConfigFactoryBase.h>
 
@@ -113,4 +113,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CHART_DIALOG
+#endif // CALLIGRA_SHEETS_CHART_DIALOG

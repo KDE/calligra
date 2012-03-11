@@ -31,8 +31,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_VALIDITY
-#define CALLIGRA_TABLES_VALIDITY
+#ifndef CALLIGRA_SHEETS_VALIDITY
+#define CALLIGRA_SHEETS_VALIDITY
 
 // Qt
 #include <QDate>
@@ -66,7 +66,7 @@ class ValueParser;
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_ODF_EXPORT Validity
+class CALLIGRA_SHEETS_ODF_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.
@@ -203,4 +203,4 @@ private:
 Q_DECLARE_METATYPE(Calligra::Sheets::Validity)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Validity, Q_MOVABLE_TYPE);
 
-#endif // CALLIGRA_TABLES_VALIDITY
+#endif // CALLIGRA_SHEETS_VALIDITY

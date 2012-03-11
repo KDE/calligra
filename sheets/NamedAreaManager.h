@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_NAMED_AREA_MANAGER
-#define CALLIGRA_TABLES_NAMED_AREA_MANAGER
+#ifndef CALLIGRA_SHEETS_NAMED_AREA_MANAGER
+#define CALLIGRA_SHEETS_NAMED_AREA_MANAGER
 
 #include <QList>
 #include <QObject>
@@ -44,7 +44,7 @@ class Region;
 /**
  * Manages named cell areas.
  */
-class CALLIGRA_TABLES_ODF_EXPORT NamedAreaManager : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT NamedAreaManager : public QObject
 {
     Q_OBJECT
 
@@ -108,4 +108,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_NAMED_AREA_MANAGER
+#endif // CALLIGRA_SHEETS_NAMED_AREA_MANAGER

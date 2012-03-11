@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHAPE_APPLICATION_DATA
-#define CALLIGRA_TABLES_SHAPE_APPLICATION_DATA
+#ifndef CALLIGRA_SHEETS_SHAPE_APPLICATION_DATA
+#define CALLIGRA_SHEETS_SHAPE_APPLICATION_DATA
 
 #include <KoShapeApplicationData.h>
 #include "calligra_tables_export.h"
@@ -32,7 +32,7 @@ namespace Sheets
  * \ingroup Embedding
  * KSpread specific data attached to each shape.
  */
-class CALLIGRA_TABLES_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
+class CALLIGRA_SHEETS_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
 {
 public:
     /**
@@ -56,4 +56,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHAPE_APPLICATION_DATA
+#endif // CALLIGRA_SHEETS_SHAPE_APPLICATION_DATA

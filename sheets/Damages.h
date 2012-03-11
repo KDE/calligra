@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DAMAGES
-#define CALLIGRA_TABLES_DAMAGES
+#ifndef CALLIGRA_SHEETS_DAMAGES
+#define CALLIGRA_SHEETS_DAMAGES
 
 
 #include "kdebug.h"
@@ -39,7 +39,7 @@ class Region;
  * \ingroup Damages
  * An abstract damage.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Damage
+class CALLIGRA_SHEETS_ODF_EXPORT Damage
 {
 public:
     virtual ~Damage() {}
@@ -63,7 +63,7 @@ public:
  * \ingroup Damages
  * A cell range damage.
  */
-class CALLIGRA_TABLES_ODF_EXPORT CellDamage : public Damage
+class CALLIGRA_SHEETS_ODF_EXPORT CellDamage : public Damage
 {
 public:
     enum Change {
@@ -112,7 +112,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
  * \ingroup Damages
  * A sheet damage.
  */
-class CALLIGRA_TABLES_ODF_EXPORT SheetDamage : public Damage
+class CALLIGRA_SHEETS_ODF_EXPORT SheetDamage : public Damage
 {
 public:
 
@@ -185,7 +185,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
  * \ingroup Damages
  * A selection damage.
  */
-class CALLIGRA_TABLES_ODF_EXPORT SelectionDamage : public Damage
+class CALLIGRA_SHEETS_ODF_EXPORT SelectionDamage : public Damage
 {
 public:
     SelectionDamage(const Region& region);
@@ -212,9 +212,9 @@ private:
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
-CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
 
-#endif // CALLIGRA_TABLES_DAMAGES
+#endif // CALLIGRA_SHEETS_DAMAGES

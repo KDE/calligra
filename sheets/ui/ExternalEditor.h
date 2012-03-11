@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_EXTERNAL_EDITOR
-#define CALLIGRA_TABLES_EXTERNAL_EDITOR
+#ifndef CALLIGRA_SHEETS_EXTERNAL_EDITOR
+#define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
 #include <KTextEdit>
 
@@ -74,4 +74,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_EXTERNAL_EDITOR
+#endif // CALLIGRA_SHEETS_EXTERNAL_EDITOR

@@ -51,7 +51,7 @@
 #include <QTextLayout>
 #include <QTextCursor>
 #include <QAbstractTextDocumentLayout>
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
 #include <QMutex>
 #include <QMutexLocker>
 #include <QThread>
@@ -107,7 +107,7 @@ public:
             , obscuredCellsX(0)
             , obscuredCellsY(0)
             , richText(0)
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
             , mutex(new QMutex())
 #endif
     {}
@@ -147,7 +147,7 @@ public:
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
     QString displayText;
     QSharedPointer<QTextDocument> richText;
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QSharedPointer<QMutex> mutex;
 #endif
 public:
@@ -305,12 +305,12 @@ void CellView::detach()
 {
     d.detach();
     if (!d->richText.isNull()) {
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
         QMutexLocker(d->mutex.data());
 #endif
         d->richText = QSharedPointer<QTextDocument>(d->richText->clone());
     }
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     d->mutex = QSharedPointer<QMutex>(new QMutex());
 #endif
 }
@@ -757,7 +757,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
         int dt = 0;
         int db = 0;
 
-#if 0 // CALLIGRA_TABLES_WIP_STYLE_BORDER
+#if 0 // CALLIGRA_SHEETS_WIP_STYLE_BORDER
         if (cellRef.x() > 1) {
             Cell  *cell_west = Cell(cell.sheet(), cellRef.x() - 1,
                                     cellRef.y());
@@ -793,7 +793,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
         int dl = 0;
         int dr = 0;
 
-#if 0 // CALLIGRA_TABLES_WIP_STYLE_BORDER
+#if 0 // CALLIGRA_SHEETS_WIP_STYLE_BORDER
         if (cellRef.y() > 1) {
             Cell  *cell_north = Cell(cell.sheet(), cellRef.x(),
                                      cellRef.y() - 1);
@@ -830,7 +830,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
         int dt = 0;
         int db = 0;
 
-#if 0 // CALLIGRA_TABLES_WIP_STYLE_BORDER
+#if 0 // CALLIGRA_SHEETS_WIP_STYLE_BORDER
         if (cellRef.x() < KS_colMax) {
             Cell  *cell_east = Cell(cell.sheet(), cellRef.x() + 1,
                                     cellRef.y());
@@ -867,7 +867,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
     if (paintBorder & BottomBorder) {
         int dl = 0;
         int dr = 0;
-#if 0 // CALLIGRA_TABLES_WIP_STYLE_BORDER
+#if 0 // CALLIGRA_SHEETS_WIP_STYLE_BORDER
         if (cellRef.y() < KS_rowMax) {
             Cell  *cell_south = Cell(cell.sheet(), cellRef.x(),
                                      cellRef.y() + 1);
@@ -1228,7 +1228,7 @@ void CellView::paintText(QPainter& painter,
         }
     } else if (tmpRichText) {
         // Case 5: Rich text.
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
         QMutexLocker(d->mutex.data());
 #endif
         QTextDocument* doc = d->richText->clone();
@@ -2185,7 +2185,7 @@ void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMe
 void CellView::Private::calculateRichTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
 {
     Q_UNUSED(fontMetrics);
-#ifdef CALLIGRA_TABLES_MT
+#ifdef CALLIGRA_SHEETS_MT
     QMutexLocker(mutex.data());
 #endif
     richText->setDefaultFont(font);

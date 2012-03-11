@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_DATABASE_MANAGER
-#define CALLIGRA_TABLES_DATABASE_MANAGER
+#ifndef CALLIGRA_SHEETS_DATABASE_MANAGER
+#define CALLIGRA_SHEETS_DATABASE_MANAGER
 
 #include <QObject>
 
@@ -34,7 +34,7 @@ namespace Sheets
 {
 class Map;
 
-class CALLIGRA_TABLES_ODF_EXPORT DatabaseManager : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT DatabaseManager : public QObject
 {
     Q_OBJECT
 
@@ -74,4 +74,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_DATABASE_MANAGER
+#endif // CALLIGRA_SHEETS_DATABASE_MANAGER

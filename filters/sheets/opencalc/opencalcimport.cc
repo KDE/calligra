@@ -793,7 +793,7 @@ bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
             table->rowFormats()->setHidden(backupRow, backupRow, true);
 
         for (i = 1; i < number; ++i) {
-            // FIXME CALLIGRA_TABLES_NEW_STYLE_STORAGE
+            // FIXME CALLIGRA_SHEETS_NEW_STYLE_STORAGE
 //       layout = table->nonDefaultRowFormat( backupRow + i );
 //
 //       table->setStyle( Calligra::Sheets::Region(QRect(1,backupRow + i,KS_colMax,1)), srcLayout );

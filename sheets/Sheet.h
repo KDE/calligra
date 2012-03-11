@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEET
-#define CALLIGRA_TABLES_SHEET
+#ifndef CALLIGRA_SHEETS_SHEET
+#define CALLIGRA_SHEETS_SHEET
 
 #include <QClipboard>
 #include <QHash>
@@ -89,7 +89,7 @@ template<typename T> class IntervalMap;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeBasedDocumentBase,
+class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeBasedDocumentBase,
         public ProtectableObject
 {
     Q_OBJECT
@@ -973,4 +973,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  // CALLIGRA_TABLES_SHEET
+#endif  // CALLIGRA_SHEETS_SHEET

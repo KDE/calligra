@@ -49,7 +49,7 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
     Sheet *const sheet = this->selection()->activeSheet();
     Selection *const selection = this->selection();
 
-#if 0 // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#if 0 // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
     // Check, if the selected area was hit.
     bool hitSelection = false;
     const Region::ConstIterator end(selection->constEnd());
@@ -64,7 +64,7 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
             break;
         }
     }
-#endif // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#endif // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
 
     // In which cell did the user click?
     qreal xpos;
@@ -94,11 +94,11 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
             } else if (modifiers & Qt::ControlModifier) {
                 // Extend selection, if control modifier is pressed.
                 selection->extend(QPoint(col, row), sheet);
-#if 0 // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#if 0 // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
             } else if (hitSelection) {
                 // start cell is already set above
                 // No change; the range will be moved
-#endif // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#endif // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
             } else {
                 selection->initialize(QPoint(col, row), sheet);
             }
@@ -125,7 +125,7 @@ SelectionStrategy::~SelectionStrategy()
 void SelectionStrategy::handleMouseMove(const QPointF &documentPos,
                                         Qt::KeyboardModifiers modifiers)
 {
-#if 0 // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#if 0 // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
     Q_UNUSED(modifiers);
     //const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
@@ -148,6 +148,6 @@ void SelectionStrategy::handleMouseMove(const QPointF &documentPos,
             return;
         }
     }
-#endif // CALLIGRA_TABLES_WIP_DRAG_REFERENCE_SELECTION
+#endif // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
     AbstractSelectionStrategy::handleMouseMove(documentPos, modifiers);
 }

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_INSPECTOR
-#define CALLIGRA_TABLES_INSPECTOR
+#ifndef CALLIGRA_SHEETS_INSPECTOR
+#define CALLIGRA_SHEETS_INSPECTOR
 
 #include <kpagedialog.h>
 
@@ -45,4 +45,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_INSPECTOR
+#endif // CALLIGRA_SHEETS_INSPECTOR

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TABLE_SHAPE
-#define CALLIGRA_TABLES_TABLE_SHAPE
+#ifndef CALLIGRA_SHEETS_TABLE_SHAPE
+#define CALLIGRA_SHEETS_TABLE_SHAPE
 
 #include <QObject>
 
@@ -90,4 +90,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TABLE_SHAPE
+#endif // CALLIGRA_SHEETS_TABLE_SHAPE

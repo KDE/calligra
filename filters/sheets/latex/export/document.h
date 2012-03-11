@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __CALLIGRA_TABLES_LATEX_DOCUMENT_H__
-#define __CALLIGRA_TABLES_LATEX_DOCUMENT_H__
+#ifndef __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__
+#define __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__
 
 #include <QFile>   /* for QFile class */
 #include <QTextStream> /* for QTextStream class */
@@ -62,4 +62,4 @@ private:
 
 };
 
-#endif /* __CALLIGRA_TABLES_LATEX_DOCUMENT_H__ */
+#endif /* __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__ */

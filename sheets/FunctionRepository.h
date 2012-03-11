@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_FUNCTION_REPOSITORY
-#define CALLIGRA_TABLES_FUNCTION_REPOSITORY
+#ifndef CALLIGRA_SHEETS_FUNCTION_REPOSITORY
+#define CALLIGRA_SHEETS_FUNCTION_REPOSITORY
 
 #include <QSharedPointer>
 #include <QStringList>
@@ -38,7 +38,7 @@ class FunctionDescription;
  * \ingroup Value
  * The function repository.
  */
-class CALLIGRA_TABLES_ODF_EXPORT FunctionRepository
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionRepository
 {
 public:
     FunctionRepository();
@@ -86,4 +86,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FUNCTION_REPOSITORY
+#endif // CALLIGRA_SHEETS_FUNCTION_REPOSITORY

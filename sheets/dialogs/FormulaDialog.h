@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FORMULA_DIALOG
-#define CALLIGRA_TABLES_FORMULA_DIALOG
+#ifndef CALLIGRA_SHEETS_FORMULA_DIALOG
+#define CALLIGRA_SHEETS_FORMULA_DIALOG
 
 #include <QCloseEvent>
 #include <QLabel>
@@ -194,4 +194,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FORMULA_DIALOG
+#endif // CALLIGRA_SHEETS_FORMULA_DIALOG

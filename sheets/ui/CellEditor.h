@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_CELL_EDITOR
-#define CALLIGRA_TABLES_CELL_EDITOR
+#ifndef CALLIGRA_SHEETS_CELL_EDITOR
+#define CALLIGRA_SHEETS_CELL_EDITOR
 
 #include <KGlobalSettings>
 #include <KTextEdit>
@@ -115,4 +115,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CELL_EDITOR
+#endif // CALLIGRA_SHEETS_CELL_EDITOR

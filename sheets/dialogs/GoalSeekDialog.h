@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_GOALSEEK_DIALOG
-#define CALLIGRA_TABLES_GOALSEEK_DIALOG
+#ifndef CALLIGRA_SHEETS_GOALSEEK_DIALOG
+#define CALLIGRA_SHEETS_GOALSEEK_DIALOG
 
 #include <kdialog.h>
 
@@ -69,4 +69,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_GOALSEEK_DIALOG
+#endif // CALLIGRA_SHEETS_GOALSEEK_DIALOG

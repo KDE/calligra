@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PREFERENCE_DIALOG
-#define CALLIGRA_TABLES_PREFERENCE_DIALOG
+#ifndef CALLIGRA_SHEETS_PREFERENCE_DIALOG
+#define CALLIGRA_SHEETS_PREFERENCE_DIALOG
 
 #include <kpagedialog.h>
 
@@ -77,4 +77,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PREFERENCE_DIALOG
+#endif // CALLIGRA_SHEETS_PREFERENCE_DIALOG

@@ -19,7 +19,7 @@
 
 #include "Number.h"
 
-#ifdef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
+#ifdef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
 #include <math.h>
 
@@ -437,4 +437,4 @@ Number atgh(const Number &n)
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
+#endif // CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT

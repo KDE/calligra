@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CELL_TOOL
-#define CALLIGRA_TABLES_CELL_TOOL
+#ifndef CALLIGRA_SHEETS_CELL_TOOL
+#define CALLIGRA_SHEETS_CELL_TOOL
 
 #include <sheets/ui/CellToolBase.h>
 
@@ -32,7 +32,7 @@ namespace Sheets
 /**
  * The tool to change cell ranges.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT CellTool : public CellToolBase
+class CALLIGRA_SHEETS_COMMON_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT
 
@@ -68,4 +68,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CELL_TOOL
+#endif // CALLIGRA_SHEETS_CELL_TOOL

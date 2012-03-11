@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SORT_MANIPULATOR
-#define CALLIGRA_TABLES_SORT_MANIPULATOR
+#ifndef CALLIGRA_SHEETS_SORT_MANIPULATOR
+#define CALLIGRA_SHEETS_SORT_MANIPULATOR
 
 #include "CellStorage.h"
 #include "DataManipulators.h"
@@ -33,7 +33,7 @@ class CellStorage;
  * \ingroup Commands
  * \brief Sorts the values in a cell range.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT SortManipulator : public AbstractDFManipulator
+class CALLIGRA_SHEETS_COMMON_EXPORT SortManipulator : public AbstractDFManipulator
 {
 public:
     SortManipulator();
@@ -103,4 +103,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  // CALLIGRA_TABLES_SORT_MANIPULATOR
+#endif  // CALLIGRA_SHEETS_SORT_MANIPULATOR

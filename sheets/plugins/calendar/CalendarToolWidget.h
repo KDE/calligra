@@ -21,8 +21,8 @@
 *   OTHER DEALINGS IN THE SOFTWARE.                                       *
 ***************************************************************************/
 
-#ifndef CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET
-#define CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET
+#ifndef CALLIGRA_SHEETS_CALENDAR_TOOL_WIDGET
+#define CALLIGRA_SHEETS_CALENDAR_TOOL_WIDGET
 
 #include <ui_CalendarToolWidget.h>
 
@@ -148,4 +148,4 @@ signals:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET
+#endif // CALLIGRA_SHEETS_CALENDAR_TOOL_WIDGET

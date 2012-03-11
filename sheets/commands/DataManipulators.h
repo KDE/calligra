@@ -18,8 +18,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_DATA_MANIPULATORS
-#define CALLIGRA_TABLES_DATA_MANIPULATORS
+#ifndef CALLIGRA_SHEETS_DATA_MANIPULATORS
+#define CALLIGRA_SHEETS_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
 #include "Global.h"
@@ -38,7 +38,7 @@ namespace Sheets
  * \ingroup Commands
  * \brief Abstract command for setting values.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT AbstractDataManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
     AbstractDataManipulator(KUndo2Command* parent = 0);
@@ -252,4 +252,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  // CALLIGRA_TABLES_DATA_MANIPULATORS
+#endif  // CALLIGRA_SHEETS_DATA_MANIPULATORS

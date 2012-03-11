@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CELL_TOOL_FACTORY
-#define CALLIGRA_TABLES_CELL_TOOL_FACTORY
+#ifndef CALLIGRA_SHEETS_CELL_TOOL_FACTORY
+#define CALLIGRA_SHEETS_CELL_TOOL_FACTORY
 
 #include <KoToolFactoryBase.h>
 
@@ -32,7 +32,7 @@ namespace Sheets
 /**
  * The Factory, that creates a CellTool.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
+class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
     explicit CellToolFactory(const QString& id);
@@ -48,4 +48,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CELL_TOOL_FACTORY
+#endif // CALLIGRA_SHEETS_CELL_TOOL_FACTORY

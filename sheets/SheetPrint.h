@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SHEET_PRINT
-#define CALLIGRA_TABLES_SHEET_PRINT
+#ifndef CALLIGRA_SHEETS_SHEET_PRINT
+#define CALLIGRA_SHEETS_SHEET_PRINT
 
 #include <QRectF>
 
@@ -43,7 +43,7 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class CALLIGRA_TABLES_ODF_EXPORT SheetPrint
+class CALLIGRA_SHEETS_ODF_EXPORT SheetPrint
 {
 public:
     explicit SheetPrint(Sheet * sheet = 0);
@@ -159,4 +159,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SHEET_PRINT
+#endif // CALLIGRA_SHEETS_SHEET_PRINT

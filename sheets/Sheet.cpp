@@ -266,7 +266,7 @@ Sheet::Sheet(const Sheet &other)
     d->columns = other.d->columns;
 
     // flake
-#if 0 // CALLIGRA_TABLES_WIP_COPY_SHEET_(SHAPES)
+#if 0 // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
     //FIXME This does not work as copySettings does not work. Also createDefaultShapeAndInit without the correct settings can not work
     //I think this should use saveOdf and loadOdf for copying
     KoShape* shape;
@@ -276,7 +276,7 @@ Sheet::Sheet(const Sheet &other)
         shape->copySettings(shapes[i]);
         addShape(shape);
     }
-#endif // CALLIGRA_TABLES_WIP_COPY_SHEET_(SHAPES)
+#endif // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
 
     d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
 
@@ -1259,7 +1259,7 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
             styleIndex = styleStorage()->nextColumnStyleIndex(styleIndex);
         }
     }
-#if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
+#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
         if (object->sheet() == this) {
             QDomElement e = object->save(dd);
@@ -1269,7 +1269,7 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
             sheet.appendChild(e);
         }
     }
-#endif // CALLIGRA_TABLES_KOPART_EMBEDDING
+#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
     return sheet;
 }
 
@@ -3166,7 +3166,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
                 else
                     delete cl;
             }
-#if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
+#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
             else if (tagName == "object") {
                 EmbeddedCalligraObject *ch = new EmbeddedCalligraObject(doc(), this);
                 if (ch->load(e))
@@ -3184,7 +3184,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
                     delete ch;
                 }
             }
-#endif // CALLIGRA_TABLES_KOPART_EMBEDDING
+#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
         }
         n = n.nextSibling();
     }
@@ -3218,7 +3218,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
 bool Sheet::loadChildren(KoStore* _store)
 {
     Q_UNUSED(_store);
-#if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
+#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
         if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
             kDebug() << "Calligra::Sheets::Sheet::loadChildren";
@@ -3226,7 +3226,7 @@ bool Sheet::loadChildren(KoStore* _store)
                 return false;
         }
     }
-#endif // CALLIGRA_TABLES_KOPART_EMBEDDING
+#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
     return true;
 }
 
@@ -3319,7 +3319,7 @@ bool Sheet::saveChildren(KoStore* _store, const QString &_path)
 {
     Q_UNUSED(_store);
     Q_UNUSED(_path);
-#if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
+#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
     int i = 0;
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
         if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
@@ -3328,7 +3328,7 @@ bool Sheet::saveChildren(KoStore* _store, const QString &_path)
                 return false;
         }
     }
-#endif // CALLIGRA_TABLES_KOPART_EMBEDDING
+#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
     return true;
 }
 

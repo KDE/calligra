@@ -7,7 +7,7 @@ add_subdirectory( plugins )
 add_subdirectory( dtd )
 add_subdirectory( functions )
 
-#add_definitions(-DCALLIGRA_TABLES_MT)
+#add_definitions(-DCALLIGRA_SHEETS_MT)
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${CMAKE_SOURCE_DIR}/kchart

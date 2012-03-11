@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_ABOUTDATA
-#define CALLIGRA_TABLES_ABOUTDATA
+#ifndef CALLIGRA_SHEETS_ABOUTDATA
+#define CALLIGRA_SHEETS_ABOUTDATA
 
 #include <kaboutdata.h>
 #include <klocale.h>

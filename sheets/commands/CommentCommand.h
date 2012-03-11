@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_COMMENT_COMMAND
-#define CALLIGRA_TABLES_COMMENT_COMMAND
+#ifndef CALLIGRA_SHEETS_COMMENT_COMMAND
+#define CALLIGRA_SHEETS_COMMENT_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -50,4 +50,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_COMMENT_COMMAND
+#endif // CALLIGRA_SHEETS_COMMENT_COMMAND

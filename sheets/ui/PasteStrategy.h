@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PASTE_STRATEGY
-#define CALLIGRA_TABLES_PASTE_STRATEGY
+#ifndef CALLIGRA_SHEETS_PASTE_STRATEGY
+#define CALLIGRA_SHEETS_PASTE_STRATEGY
 
 #include "SelectionStrategy.h"
 #include "calligra_tables_export.h"
@@ -35,7 +35,7 @@ namespace Sheets
  *
  * \see QClipboard::Selection
  */
-class CALLIGRA_TABLES_COMMON_EXPORT PasteStrategy : public SelectionStrategy
+class CALLIGRA_SHEETS_COMMON_EXPORT PasteStrategy : public SelectionStrategy
 {
 public:
     /**
@@ -58,4 +58,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PASTE_STRATEGY
+#endif // CALLIGRA_SHEETS_PASTE_STRATEGY

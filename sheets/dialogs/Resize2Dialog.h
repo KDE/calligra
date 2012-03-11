@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_RESIZE2_DIALOG
-#define CALLIGRA_TABLES_RESIZE2_DIALOG
+#ifndef CALLIGRA_SHEETS_RESIZE2_DIALOG
+#define CALLIGRA_SHEETS_RESIZE2_DIALOG
 
 #include <kdialog.h>
 
@@ -81,4 +81,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_RESIZE2_DIALOG
+#endif // CALLIGRA_SHEETS_RESIZE2_DIALOG

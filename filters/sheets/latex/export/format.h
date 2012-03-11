@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __CALLIGRA_TABLES_LATEX_FORMAT_H__
-#define __CALLIGRA_TABLES_LATEX_FORMAT_H__
+#ifndef __CALLIGRA_SHEETS_LATEX_FORMAT_H__
+#define __CALLIGRA_SHEETS_LATEX_FORMAT_H__
 
 #include <QTextStream>
 #include <QString>
@@ -251,4 +251,4 @@ public:
     void generateColor(QTextStream& out);
 };
 
-#endif /* __CALLIGRA_TABLES_LATEX_FORMAT_H__ */
+#endif /* __CALLIGRA_SHEETS_LATEX_FORMAT_H__ */

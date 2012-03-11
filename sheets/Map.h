@@ -77,7 +77,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
+class CALLIGRA_SHEETS_ODF_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:

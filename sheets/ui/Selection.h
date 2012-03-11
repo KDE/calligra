@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_SELECTION
-#define CALLIGRA_TABLES_SELECTION
+#ifndef CALLIGRA_SHEETS_SELECTION
+#define CALLIGRA_SHEETS_SELECTION
 
 #include <QColor>
 #include <QList>
@@ -46,7 +46,7 @@ class CellEditor;
  * \author Torben Weis <weis@kde.org>
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_COMMON_EXPORT Selection : public KoToolSelection, public Region
+class CALLIGRA_SHEETS_COMMON_EXPORT Selection : public KoToolSelection, public Region
 {
     Q_OBJECT
 
@@ -413,4 +413,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SELECTION
+#endif // CALLIGRA_SHEETS_SELECTION

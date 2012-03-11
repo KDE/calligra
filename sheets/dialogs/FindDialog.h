@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_FIND_DIALOG
-#define CALLIGRA_TABLES_FIND_DIALOG
+#ifndef CALLIGRA_SHEETS_FIND_DIALOG
+#define CALLIGRA_SHEETS_FIND_DIALOG
 
 
 #include <kfinddialog.h>
@@ -126,4 +126,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FIND_DIALOG
+#endif // CALLIGRA_SHEETS_FIND_DIALOG

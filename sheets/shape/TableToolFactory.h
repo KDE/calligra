@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TABLE_TOOL_FACTORY
-#define CALLIGRA_TABLES_TABLE_TOOL_FACTORY
+#ifndef CALLIGRA_SHEETS_TABLE_TOOL_FACTORY
+#define CALLIGRA_SHEETS_TABLE_TOOL_FACTORY
 
 
 #include <KoToolFactoryBase.h>
@@ -40,4 +40,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TABLE_TOOL_FACTORY
+#endif // CALLIGRA_SHEETS_TABLE_TOOL_FACTORY

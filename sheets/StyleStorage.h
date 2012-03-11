@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_STYLE_STORAGE
-#define CALLIGRA_TABLES_STYLE_STORAGE
+#ifndef CALLIGRA_SHEETS_STYLE_STORAGE
+#define CALLIGRA_SHEETS_STYLE_STORAGE
 
 #include <QObject>
 #include <QPair>
@@ -48,7 +48,7 @@ class StyleStorageLoaderJob;
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
  */
-class CALLIGRA_TABLES_ODF_EXPORT StyleStorage : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT StyleStorage : public QObject
 {
     Q_OBJECT
 
@@ -237,4 +237,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_STYLE_STORAGE
+#endif // CALLIGRA_SHEETS_STYLE_STORAGE

@@ -34,7 +34,7 @@ K_EXPORT_PLUGIN(CalendarToolPluginFactory("CalendarTool"))
 
 
 CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList&)
-        : CellToolFactory(CALLIGRA_TABLES_CALENDAR_TOOL_ID)
+        : CellToolFactory(CALLIGRA_SHEETS_CALENDAR_TOOL_ID)
 {
     setToolTip(i18n("Calendar Tool"));
 }

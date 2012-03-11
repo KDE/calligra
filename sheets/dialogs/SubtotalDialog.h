@@ -20,8 +20,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_SUBTOTAL_DIALOG
-#define CALLIGRA_TABLES_SUBTOTAL_DIALOG
+#ifndef CALLIGRA_SHEETS_SUBTOTAL_DIALOG
+#define CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 
 #include <KDialog>
 
@@ -64,4 +64,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_SUBTOTAL_DIALOG
+#endif // CALLIGRA_SHEETS_SUBTOTAL_DIALOG

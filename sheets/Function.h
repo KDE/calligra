@@ -19,8 +19,8 @@
 */
 
 
-#ifndef CALLIGRA_TABLES_FUNCTIONS
-#define CALLIGRA_TABLES_FUNCTIONS
+#ifndef CALLIGRA_SHEETS_FUNCTIONS
+#define CALLIGRA_SHEETS_FUNCTIONS
 
 #include <QList>
 #include <QSharedPointer>
@@ -68,7 +68,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
  * \ingroup Value
  * A function pointer and context.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Function
+class CALLIGRA_SHEETS_ODF_EXPORT Function
 {
 public:
     Function(const QString& name, FunctionPtr ptr);
@@ -106,7 +106,7 @@ private:
  * \ingroup Value
  * A helper-class to call a function.
  */
-class CALLIGRA_TABLES_ODF_EXPORT FunctionCaller {
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionCaller {
 public:
     FunctionPtr m_ptr;
     valVector m_args;
@@ -121,4 +121,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_FUNCTIONS
+#endif // CALLIGRA_SHEETS_FUNCTIONS

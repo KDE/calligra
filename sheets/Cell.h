@@ -32,8 +32,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CELL
-#define CALLIGRA_TABLES_CELL
+#ifndef CALLIGRA_SHEETS_CELL
+#define CALLIGRA_SHEETS_CELL
 
 #include <QDate>
 #include <QSharedDataPointer>
@@ -79,7 +79,7 @@ class CellTest;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class CALLIGRA_TABLES_ODF_EXPORT Cell
+class CALLIGRA_SHEETS_ODF_EXPORT Cell
 {
 public:
     /**
@@ -668,4 +668,4 @@ inline QDebug operator<<(QDebug str, const Calligra::Sheets::Cell& cell)
     return str << qPrintable(Calligra::Sheets::Cell::columnName(cell.column()) + QString::number(cell.row()));
 }
 
-#endif  // CALLIGRA_TABLES_CELL
+#endif  // CALLIGRA_SHEETS_CELL

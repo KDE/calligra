@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_PAGE_MANAGER
-#define CALLIGRA_TABLES_PAGE_MANAGER
+#ifndef CALLIGRA_SHEETS_PAGE_MANAGER
+#define CALLIGRA_SHEETS_PAGE_MANAGER
 
 #include "calligra_tables_export.h"
 
@@ -38,7 +38,7 @@ class Sheet;
  * printing, and TablePageManager, which does the same for the table shape in
  * page based hosting apps.
  */
-class CALLIGRA_TABLES_COMMON_EXPORT PageManager
+class CALLIGRA_SHEETS_COMMON_EXPORT PageManager
 {
 public:
     /**
@@ -102,4 +102,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_PAGE_MANAGER
+#endif // CALLIGRA_SHEETS_PAGE_MANAGER

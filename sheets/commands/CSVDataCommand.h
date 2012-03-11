@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_CSV_DATA_COMMAND
-#define CALLIGRA_TABLES_CSV_DATA_COMMAND
+#ifndef CALLIGRA_SHEETS_CSV_DATA_COMMAND
+#define CALLIGRA_SHEETS_CSV_DATA_COMMAND
 
 #include "DataManipulators.h"
 
@@ -69,4 +69,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_CSV_DATA_COMMAND
+#endif // CALLIGRA_SHEETS_CSV_DATA_COMMAND

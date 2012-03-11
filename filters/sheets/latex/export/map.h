@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __CALLIGRA_TABLES_LATEX_MAP_H__
-#define __CALLIGRA_TABLES_LATEX_MAP_H__
+#ifndef __CALLIGRA_SHEETS_LATEX_MAP_H__
+#define __CALLIGRA_SHEETS_LATEX_MAP_H__
 
 #include <QString>
 #include <QStack>  /* historic list */
@@ -86,4 +86,4 @@ private:
 
 };
 
-#endif /* __CALLIGRA_TABLES_LATEX_MAP_H__ */
+#endif /* __CALLIGRA_SHEETS_LATEX_MAP_H__ */
