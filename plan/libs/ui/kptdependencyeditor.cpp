@@ -53,7 +53,7 @@
 #include <kactioncollection.h>
 #include <kdeversion.h>
 
-KPLATOMODELS_EXPORT int planDependencyEditorDbg() {
+KPLATOUI_EXPORT int planDependencyEditorDbg() {
 #if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
 #else
