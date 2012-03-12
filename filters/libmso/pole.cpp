@@ -1,6 +1,6 @@
 /* POLE - Portable C++ library to access OLE Storage
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
+   Copyright (C) 2011-2012 Matus Uzak <matus.uzak@ixonos.com>
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -34,11 +34,11 @@
 #include <list>
 #include <string>
 #include <vector>
-#include <ios>       // for std::hex
 #include <string.h>
 
 #include <QList>
 #include <QString>
+#include <QtDebug>
 
 //Enable to activate debugging output.
 //#define POLE_DEBUG
@@ -301,6 +301,7 @@ bool Header::valid(const unsigned max_sbat_block, const unsigned max_bbat_block)
     if (num_sbat > max_sbat_block) return false;
     if (num_bat > max_bbat_block) return false;
 
+#ifdef POLE_DEBUG
     const unsigned ENDOFCHAIN = 0xfffffffe;
     const unsigned FREESECT = 0xffffffff;
 
@@ -308,8 +309,10 @@ bool Header::valid(const unsigned max_sbat_block, const unsigned max_bbat_block)
         sbat_start != ENDOFCHAIN &&
         sbat_start != FREESECT)
     {
-        std::cerr << "There aren't any minifat sectors, but there are links to some!";
+        qDebug() << Q_FUNC_INFO <<
+            "There aren't any minifat sectors, but there are links to some!";
     }
+#endif
 
     return true;
 }
@@ -358,21 +361,22 @@ void Header::save(unsigned char* buffer)
 
 void Header::debug()
 {
-    std::cout << std::endl;
-    std::cout << "b_shift " << b_shift << std::endl;
-    std::cout << "s_shift " << s_shift << std::endl;
-    std::cout << "num_bat " << num_bat << std::endl;
-    std::cout << "dirent_start " << std::hex << dirent_start << std::endl;
-    std::cout << "threshold " << std::dec << threshold << std::endl;
-    std::cout << "sbat_start " << std::hex << sbat_start << std::endl;
-    std::cout << "num_sbat " << std::dec << num_sbat << std::endl;
-    std::cout << "mbat_start " << std::hex << mbat_start << std::endl;
-    std::cout << "num_mbat " << std::dec << num_mbat << std::endl;
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "b_shift:" << b_shift;
+    qDebug() << "s_shift:" << s_shift;
+    qDebug() << "num_bat:" << num_bat;
+    qDebug() << "dirent_start: 0x" << hex << dirent_start;
+    qDebug() << "threshold:" << dec << threshold;
+    qDebug() << "sbat_start: 0x" << hex << sbat_start;
+    qDebug() << "num_sbat:" << dec << num_sbat;
+    qDebug() << "mbat_start: 0x" << hex << mbat_start;
+    qDebug() << "num_mbat:" << dec << num_mbat;
 
     unsigned s = (num_bat <= 109) ? num_bat : 109;
-    std::cout << "bat blocks: ";
-    for (unsigned i = 0; i < s; i++)
-        std::cout << std::hex << bb_blocks[i] << " ";
+    std::cout << "bat blocks:";
+    for (unsigned i = 0; i < s; i++) {
+        std::cout << "0x" << std::hex << bb_blocks[i] << " ";
+    }
     std::cout << std::dec << std::endl;
 }
 
@@ -407,8 +411,8 @@ bool AllocTable::valid(const unsigned long filesize, const unsigned shift, const
             }
             if (offset > filesize) {
 #ifdef POLE_DEBUG
-                std::cout << "Invalid location of sector in the stream!" << std::endl;
-                std::cout << "offset:" << offset << " | filesize:" << filesize << std::endl;
+                qDebug() << "Invalid location of sector in the stream!" <<
+                    "offset:" << offset << " | filesize:" << filesize;
 #endif
                 return false;
             }
@@ -467,7 +471,9 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
     std::vector<unsigned long> chain;
 
     if (start >= count()) {
-        std::cerr << "AllocTable::follow start >= count()!" << std::endl;
+#ifdef POLE_DEBUG
+        qDebug() << Q_FUNC_INFO << "start >= count()!";
+#endif
         fail = true;
         return chain;
     }
@@ -476,24 +482,26 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
     while (p < count()) {
         if (p == (unsigned long)Eof) {
 #ifdef POLE_DEBUG
-            std::cout << "AllocTable::follow Eof detected!" << std::endl;
+            qDebug() << Q_FUNC_INFO << "Eof detected!";
 #endif
             break;
         }
         if (p == (unsigned long)Bat) {
 #ifdef POLE_DEBUG
-            std::cout << "AllocTable::follow Bat detected!" << std::endl;
+            qDebug() << Q_FUNC_INFO << "Bat detected!";
 #endif
             break;
         }
         if (p == (unsigned long)MetaBat) {
 #ifdef POLE_DEBUG
-            std::cout << "AllocTable::follow MetaBat detected!" << std::endl;
+            qDebug() << Q_FUNC_INFO << "MetaBat detected!";
 #endif
             break;
         }
         if (p >= count()) {
-            std::cerr << "AllocTable::follow Invalid index detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << Q_FUNC_INFO << "Invalid index detected!";
+#endif
             fail = true;
             break;
         }
@@ -501,15 +509,19 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
 
         // break if the chain is longer than the total sector count
         if (chain.size() > count()) {
-            std::cerr << "AllocTable::follow Probably a loop detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << Q_FUNC_INFO << "Probably a loop detected!";
+#endif
             fail = true;
             break;
         }
         p = data[ p ];
     }
     if (p != (unsigned long)AllocTable::Eof) {
-        std::cerr << "AllocTable::follow Last chain entry MUST be 0x" << std::hex <<
-                      AllocTable::Eof << ", detected: 0x" << std::hex << p << std::endl;
+#ifdef POLE_DEBUG
+        qDebug() << Q_FUNC_INFO << "Last chain entry MUST be 0x" << hex << AllocTable::Eof <<
+            ", detected: 0x" << hex << p;
+#endif
         fail = true;
     }
 
@@ -550,7 +562,7 @@ void AllocTable::save(unsigned char* buffer)
 
 void AllocTable::debug()
 {
-    std::cout << "block size " << data.size() << std::endl;
+    qDebug() << "block size " << data.size();
     for (unsigned i = 0; i < data.size(); i++) {
         if (data[i] == Avail) continue;
         std::cout << i << ": ";
@@ -589,15 +601,19 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
 #ifdef POLE_DEBUG
     if (chi.size()) {
-        std::cout << "[KIDS]:" << std::endl;
+        qDebug() << "---------------------";
+        qDebug() << Q_FUNC_INFO;
+        qDebug() << "[KIDS]:";
     }
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
         if (!e->valid) std::cout << "[INVALID] ";
-        printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+        printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
                e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
     }
-    std::cout << "---------------------" << std::endl;
+    if (chi.size()) {
+        qDebug() << "---------------------";
+    }
 #endif
 
     for (unsigned i = 0; i < chi.size(); i++) {
@@ -617,30 +633,40 @@ bool DirTree::valid() const
 {
     const DirEntry* e;
     QString str1, str2;
+
+#ifdef POLE_DEBUG
+        qDebug() << Q_FUNC_INFO;
+#endif
     for (unsigned i = 0; i < entries.size(); i++) {
         e = &entries[i];
 
 #ifdef POLE_DEBUG
         if (!e->valid) std::cout << "[INVALID] ";
-        printf("DirEntry::valid name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+        printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
                e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
 #endif
 #ifdef POLE_FAIL_ON_NEMPTY_NVALID_OBJS
         if (!e->valid && e->size) {
-            std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << "Invalid DirEntry detected!";
+#endif
             return false;
         }
 #endif
         //Looking for invalid stream objects.
 #ifdef POLE_FAIL_ON_NVALID_STREAM_OBJS
         if (!e->valid && !e->dir) {
-            std::cerr << "DirTree::valid Invalid stream object detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << "Invalid DirEntry (stream object) detected!";
+#endif
             return false;
         }
 #endif
         //Looking for invalid storage objects.
         if (!e->valid && e->dir) {
-            std::cerr << "DirTree::valid Invalid storage object detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << "Invalid DirEntry (storage object) detected!";
+#endif
             return false;
         }
 
@@ -652,14 +678,18 @@ bool DirTree::valid() const
         if ((e->valid && e->dir) && (i > 0) &&
             ((e->start != 0) || (e->size != 0)))
         {
-            std::cerr << "DirTree::valid Invalid storage object detected!" << std::endl;
+#ifdef POLE_DEBUG
+            qDebug() << "Invalid DirEntry (storage object) detected!";
+#endif
             return false;
         }
 #endif
         //Looking for duplicate DirEntries in the storage object.
         if (e->valid && e->dir) {
             if (!valid_enames(const_cast<DirTree*>(this), i)) {
-                std::cerr << "DirTree::valid Invalid storage object detected!" << std::endl;
+#ifdef POLE_DEBUG
+                qDebug() << "Invalid DirEntry (storage object) detected!";
+#endif
                 return false;
             }
         }
@@ -674,7 +704,9 @@ bool DirTree::valid() const
         }
         if (!str1.isEmpty() && !str2.isEmpty()) {
             if (ename_cmp(str1, str2) > 0) {
-                std::cerr << "DirTree::valid [name, position] mismatch detected!" << std::endl;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: [name, position] mismatch!";
+#endif
                 return false;
             }
         }
@@ -871,6 +903,11 @@ std::vector<unsigned> DirTree::children(unsigned index)
 void DirTree::load(unsigned char* buffer, unsigned size, const unsigned threshold,
                    const unsigned max_sbat, const unsigned max_bbat)
 {
+#ifdef POLE_DEBUG
+    qDebug() << "-------------------------------";
+    qDebug() << Q_FUNC_INFO;
+#endif
+
     entries.clear();
     unsigned n = (size / 128); //num. of directory entries
 
@@ -881,8 +918,10 @@ void DirTree::load(unsigned char* buffer, unsigned size, const unsigned threshol
         // parse name of this entry, which stored as Unicode 16-bit
         int name_len = readU16(buffer + 0x40 + p);
         if (name_len > 64) {
-            std::cout << "DirTree::load  Warning: Invalid name length!" << std::endl;
             name_len = 64;
+#ifdef POLE_DEBUG
+            qDebug() << "DirEntry: Invalid length of name!";
+#endif
         }
         std::string name;
         for (int j = 0; (buffer[j+p]) && (j < name_len); j += 2) {
@@ -915,49 +954,64 @@ void DirTree::load(unsigned char* buffer, unsigned size, const unsigned threshol
 
         // sanity checks
         if ((type != 0) && (type != 1) && (type != 2) && (type != 5)) {
-            std::cerr << "[FAILED] check object type!\n";
             e.valid = false;
+#ifdef POLE_DEBUG
+            qDebug() << "DirEntry: invalid type!";
+#endif
         }
         if ((type != 0) && (name_len < 1)) {
-            std::cerr << "[FAILED] check object name!\n";
             e.valid = false;
+#ifdef POLE_DEBUG
+            qDebug() << "DirEntry: invalid (type,name) pair!";
+#endif
         }
         // unknown object
         if (type == 0) {
             if ((e.child != End) || (e.prev != End) || (e.next != End)) {
-                std::cerr << "[FAILED] reference to prev/next/child != NOSTREAM\n";
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: reference to prev/next/child != NOSTREAM";
+#endif
             }
             if ((e.start != 0) || (e.size != 0)) {
-                std::cerr << "[FAILED] start/size != ZERO\n";
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: start/size != ZERO";
+#endif
             }
         }
         // storage objects
         if (type == 1) {
             if (((e.prev != End) && (e.prev >= n)) ||
                 ((e.next != End) && (e.next >= n)) ||
-                ((e.child != End) && (e.child >= n)))
-            {
-                std::cerr << "[FAILED] reference to prev/next/child > object num. (" << n << ")\n";
+                ((e.child != End) && (e.child >= n))) {
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: reference to prev/next/child > object num. (" << n << ")";
+#endif
             }
         }
         // stream object
         if (type == 2) {
             //check stream position
             if ((e.size >= threshold) && (e.start >= max_bbat)) {
-                std::cerr << "[FAILED] (e.start >= max_bbat)\n";
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: (e.start >= max_bbat)";
+#endif
             }
             else if (e.start >= max_sbat) {
-                std::cerr << "[FAILED] (e.start >= max_sbat)\n";
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: (e.start >= max_sbat)";
+#endif
             }
             //check stream object
             if (e.child != End) {
-                std::cerr << "[FAILED] (e.child != End)!\n";
                 e.valid = false;
+#ifdef POLE_DEBUG
+                qDebug() << "DirEntry: (e.child != End)";
+#endif
             }
             //NOTE: Disabled because of too many false positives.
 //             if ((e->prev != End) || (e->next != End)) {
@@ -969,15 +1023,17 @@ void DirTree::load(unsigned char* buffer, unsigned size, const unsigned threshol
         // this entry is a storage or root storage.  In a stream object, this
         // field MUST be set to all zeroes.
 #ifdef POLE_DEBUG
-        if (!e.valid) std::cout << "[INVALID] ";
-        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
+        if (!e.valid) {
+            std::cout << "[INVALID] ";
+        }
+        printf("DirEntry: name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
                name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p),
                readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 #endif
         entries.push_back(e);
     }
 #ifdef POLE_DEBUG
-    std::cout << "DirTree::load ---------------------" << std::endl;
+    qDebug() << "-------------------------------";
 #endif
 }
 
@@ -1171,7 +1227,7 @@ void StorageIO::load()
         buffer = new unsigned char[ buflen ];
         unsigned long r = loadBigBlocks(blocks, buffer, buflen);
         if (r != buflen) {
-            std::cerr << "StorageIO:load SAT construction failed!" << std::endl;
+            qCritical() << Q_FUNC_INFO << "SAT construction failed!";
             delete[] buffer;
             return;
         }
@@ -1193,7 +1249,7 @@ void StorageIO::load()
         buffer = new unsigned char[ buflen ];
         unsigned long r = loadBigBlocks(blocks, buffer, buflen);
         if (r != buflen) {
-            std::cerr << "StorageIO::load SSAT construction failed!" << std::endl;
+            qCritical() << Q_FUNC_INFO << "SSAT construction failed!";
             delete[] buffer;
             return;
         }
@@ -1212,7 +1268,7 @@ void StorageIO::load()
     buffer = new unsigned char[ buflen ];
     unsigned long r = loadBigBlocks(blocks, buffer, buflen);
     if (r != buflen) {
-        std::cerr << "StorageIO::load DirTree construction failed!" << std::endl;
+        qCritical() << Q_FUNC_INFO << "DirTree construction failed!";
         delete[] buffer;
         return;
     }
@@ -1220,6 +1276,7 @@ void StorageIO::load()
     unsigned sb_start = readU32(buffer + 0x74);
     delete[] buffer;
     if (!dirtree->valid()) {
+        qCritical() << Q_FUNC_INFO << "Invalid DirTree!";
         return;
     }
 
@@ -1245,7 +1302,7 @@ void StorageIO::create()
 
     file.open(filename.c_str(), std::ios::out | std::ios::binary);
     if (!file.good()) {
-        std::cerr << "StorageIO::create Can't create " << filename << std::endl;
+        qCritical() << Q_FUNC_INFO << "Can't create file:" << filename.c_str();
         result = Storage::OpenFailed;
         return;
     }
@@ -1279,7 +1336,7 @@ void StorageIO::close()
 StreamIO* StorageIO::streamIO(const std::string& name)
 {
 #ifdef POLE_DEBUG
-    std::cout << "preparing stream: " << name << std::endl;
+    qDebug() << Q_FUNC_INFO << "preparing stream:" << name.c_str();
 #endif
     // sanity check
     if (!name.length()) return (StreamIO*)0;
