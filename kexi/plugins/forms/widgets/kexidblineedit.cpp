@@ -254,6 +254,11 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         setInputMask(inputMask);
 
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
+
+    if (cinfo->field->isTextType()) {
+        if (!designMode())
+            setMaxLength(cinfo->field->length());
+    }
 }
 
 /*todo
