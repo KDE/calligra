@@ -37,8 +37,10 @@ public:
     }
 };
 
-KisTextureOption::KisTextureOption(QObject *parent) :
-    KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::textureCategory(), true)
+KisTextureOption::KisTextureOption(QObject *parent)
+    : KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::textureCategory(), true)
+    , m_pattern(0)
+    , m_ownsPattern(false)
 {
     setChecked(false);
     m_optionWidget = new KisTextureOptionWidget;
@@ -84,8 +86,13 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     if (name.isEmpty()) {
         QString name = setting->getString("Texture/Pattern/FileName");
     }
-    m_pattern = new KisPattern(img, name);
-    m_ownsPattern = true;
+    if (!img.isNull()) {
+        m_pattern = new KisPattern(img, name);
+        m_ownsPattern = true;
+    }
+    else {
+        m_pattern = 0;
+    }
     m_scale = setting->getDouble("Texture/Pattern/Scale");
     m_rotation = setting->getDouble("Texture/Pattern/Rotation");
     m_offset = setting->getInt("Texture/Pattern/Offset");
