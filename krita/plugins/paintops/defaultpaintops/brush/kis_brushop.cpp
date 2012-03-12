@@ -75,6 +75,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
+    m_mirrorOption.readOptionSetting(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -147,6 +148,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     }
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
+
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
     } else {
@@ -176,7 +178,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 
-    if(m_spacingOption.isChecked())
+    if (m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));
     
     return spacing(scale);
