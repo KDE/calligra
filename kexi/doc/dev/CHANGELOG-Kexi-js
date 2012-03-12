@@ -153,6 +153,11 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-03-12
+Reports
+*Fixed bug: setting a field's data source to a calculated value, results international characters not displaying correctly
+BUG:277731
+
 2012-03-07
 KexiDB
 *SQLite Driver
