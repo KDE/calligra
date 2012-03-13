@@ -131,7 +131,7 @@ private:
     DataSourceLabel *m_dataSourceLabel;
 
     //! Text length allowed
-    uint m_Length;
+    uint m_length;
 };
 
 #endif

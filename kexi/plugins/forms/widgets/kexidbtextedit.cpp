@@ -123,9 +123,9 @@ void KexiDBTextEdit::slotTextChanged()
     if (!m_slotTextChanged_enabled)
         return;
 
-    if (m_Length > 0) {
-        if (toPlainText().length() > m_Length) {
-            setPlainText(toPlainText().left(m_Length));
+    if (m_length > 0) {
+        if (toPlainText().length() > m_length) {
+            setPlainText(toPlainText().left(m_length));
             moveCursorToEnd();
         }
     }
@@ -202,8 +202,9 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     }
 
     if (cinfo->field->isTextType()) {
-        if (!designMode())
-            m_Length = cinfo->field->length();
+        if (!designMode()) {
+            m_length = cinfo->field->length();
+        }
     }
 
     KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
