@@ -59,7 +59,6 @@ enum TabLC {
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
-QString Paragraph::m_fontColor;
 
 //definition of local functions
 const char* getStrokeValue(const uint brcType);
@@ -69,7 +68,8 @@ const char* getTextUnderlineType(const uint kul);
 const char* getTextUnderlineWidth(const uint kul);
 
 
-Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
+Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inStylesDotXml, bool isHeading,
+                     bool inHeaderFooter, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
         m_characterProperties(0),
@@ -89,11 +89,11 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
     kDebug(30513);
     m_mainStyles = mainStyles;
     m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+
     if (inStylesDotXml) {
         kDebug(30513) << "this paragraph is in styles.xml";
-        m_inStylesDotXml = true;
-        //if we're writing to styles.xml, the style should go there, too
         m_odfParagraphStyle->setAutoStyleInStylesDotXml(true);
+        m_inStylesDotXml = true;
     }
 
     if (isHeading)     {
@@ -103,11 +103,16 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_outlineLevel = -1;
     }
 
-    //clear the background-color stack
-    Q_ASSERT(m_bgColors.size() == 1);
-    while (m_bgColors.size() > 1) {
-        kWarning(30513) << "Stack size does not match!";
-        rmBgColor();
+    //init the background-color stack to page background-color
+    if (m_bgColors.size() > 0) {
+        kWarning(30513) << "BUG: m_bgColors stack NOT emty, clearing!";
+        m_bgColors.clear();
+    }
+
+    if (!bgColor.isEmpty()) {
+        pushBgColor(bgColor);
+    } else {
+        kWarning(30513) << "Warning: page background-color information missing!";
     }
 }
 
@@ -115,13 +120,61 @@ Paragraph::~Paragraph()
 {
     delete m_odfParagraphStyle;
     m_odfParagraphStyle = 0;
+
+    m_bgColors.clear();
 }
 
+void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
+{
+    m_paragraphStyle = paragraphStyle;
+    m_odfParagraphStyle->addAttribute("style:parent-style-name",
+                                      Conversion::styleName2QString(m_paragraphStyle->name()));
+}
 
-void Paragraph::rmBgColor(void)
+void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> props)
+{
+    m_paragraphProperties = props;
+
+    const wvWare::Word97::PAP* refPap = 0;
+    if (m_paragraphStyle) {
+        refPap = &m_paragraphStyle->paragraphProperties().pap();
+    }
+    const wvWare::Word97::PAP& pap = props->pap();
+
+    QString color;
+
+    //process the background-color information in order to calculate a
+    //proper fo:color for the text in case of cvAuto.
+    if (!refPap ||
+        (refPap->shd.cvBack != pap.shd.cvBack) ||
+        (refPap->shd.isShdAuto() != pap.shd.isShdAuto()) ||
+        (refPap->shd.isShdNil() != pap.shd.isShdNil()))
+    {
+        color = Conversion::shdToColorStr(pap.shd, currentBgColor(), QString());
+    }
+    //Check the background-color of the named paragraph style.
+    else {
+        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()));
+        if (pStyle) {
+            color = pStyle->property("fo:background-color", KoGenStyle::ParagraphType);
+            if (color.isEmpty() || color == "transparent") {
+                color = pStyle->property("fo:background-color", KoGenStyle::TextType);
+            }
+            if (color == "transparent") {
+                color.clear();
+            }
+        }
+    }
+
+    if (!color.isEmpty()) {
+        pushBgColor(color);
+    }
+}
+
+void Paragraph::popBgColor(void)
 {
     if (m_bgColors.isEmpty()) {
-        kWarning(30513) << "Stack already empty!";
+        kWarning(30513) << "Warning: m_bgColors stack already empty!";
     } else {
         m_bgColors.pop();
     }
@@ -144,8 +197,6 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
 
     //I think this break always comes at the beginning of the text string
     if (colBreak == 0) {
-        kDebug(30513) << "colBreak = " << colBreak;
-
         // Add needed attribute to paragraph style.
         //
         // NOTE: This logic breaks down if this isn't the first string in the
@@ -466,21 +517,12 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     return textStyleName;
 }
 
-void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
-{
-    kDebug(30513);
-    m_paragraphStyle = paragraphStyle;
-    m_odfParagraphStyle->addAttribute("style:parent-style-name",
-                                      Conversion::styleName2QString(m_paragraphStyle->name()));
-}
-
-//open/closeInnerParagraph functions:
-//lets us process a paragraph inside another paragraph,
-//as in the case of footnotes. openInnerParagraph should
-//be called from texthandler.paragraphStart, and
-//closeInnerParagraph should be called from paragraphEnd,
-//but only after calling writeToFile to write the content
-//to another xml writer (eg. m_footnoteWriter).
+// open/closeInnerParagraph: enables us to process a paragraph inside
+// another paragraph, as in the case of footnotes.  openInnerParagraph
+// should be called from texthandler.paragraphStart, and
+// closeInnerParagraph should be called from paragraphEnd, but only
+// after calling writeToFile to write the content to another xml
+// writer (eg. m_footnoteWriter).
 void Paragraph::openInnerParagraph()
 {
     kDebug(30513);
@@ -574,13 +616,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("style:writing-mode", "lr-tb", pt);
     }
 
-    // If there is no parent style OR the parent and child background color
-    // don't match OR parent color was invalid, childs color is valid
+    // If there is no parent style OR the parent and child background
+    // color don't match.
     if ( !refPap ||
          (refPap->shd.cvBack != pap.shd.cvBack) ||
-         (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
+         (refPap->shd.isShdAuto() != pap.shd.isShdAuto()) ||
+         (refPap->shd.isShdNil() != pap.shd.isShdNil()) )
     {
-        QString color = Conversion::shdToColorStr(pap.shd, currentBgColor(), m_fontColor);
+        QString color = Conversion::shdToColorStr(pap.shd, currentBgColor(), QString());
         if (!color.isNull()) {
             updateBgColor(color);
         } else {
@@ -824,7 +867,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 } //end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor, bool preserveFontColor)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor)
 {
     //TODO: Also compare against the CHPs of the paragraph style.  At the
     //moment comparing against CHPs of the referred built-in character style.
@@ -843,22 +886,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     if (!bgColor.isNull()) {
         updateBgColor(bgColor);
     }
-    if (!m_fontColor.isNull()) {
-        m_fontColor.clear();
-    }
 
-    //ico = color of text, but this has been replaced by cv
-    if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
-        QString color;
-        //use the color context to set the proper font color
-        if (chp->cv == wvWare::Word97::cvAuto) {
-            color = Conversion::computeAutoColor(chp->shd, currentBgColor(), QString());
-        } else {
-            color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
-        }
-        style->addProperty(QString("fo:color"), color, tt);
-        m_fontColor = color;
-    }
+    const quint8 bgColorsSize_bkp = m_bgColors.size();
 
     //fHighlight = when 1, characters are highlighted with color specified by
     //chp.icoHighlight icoHighlight = highlight color (see chp.ico)
@@ -869,22 +898,48 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         QString color("transparent");
         if (chp->fHighlight) {
             color = Conversion::color(chp->icoHighlight, -1);
-            addBgColor(color);
+            pushBgColor(color);
         }
         style->addProperty("fo:background-color", color, tt);
     }
 
     if (!refChp ||
         (refChp->shd.cvBack != chp->shd.cvBack) ||
-        (refChp->shd.shdAutoOrNill && !chp->shd.shdAutoOrNill))
+        (refChp->shd.isShdAuto() != chp->shd.isShdAuto()) ||
+        (refChp->shd.isShdNil() != chp->shd.isShdNil()))
     {
-        QString color = Conversion::shdToColorStr(chp->shd, currentBgColor(), m_fontColor);
+        QString color = Conversion::shdToColorStr(chp->shd, currentBgColor(), QString());
         if (!color.isNull()) {
-            addBgColor(color);
+            pushBgColor(color);
         } else {
             color = "transparent";
         }
         style->addProperty("fo:background-color", color, tt);
+    }
+
+    //TODO: Check fo:background-color of the named character style
+
+    //ico = color of text, but this has been replaced by cv
+    if (!refChp ||
+        (refChp->cv != chp->cv) ||
+        (chp->cv == wvWare::Word97::cvAuto))
+    {
+        QString color;
+        if (chp->cv == wvWare::Word97::cvAuto) {
+            //use the color context to set the proper font color
+            color = Conversion::computeAutoColor(chp->shd, currentBgColor(), QString());
+
+            // NOTE: Have to specify fo:color explicitly becasue only
+            // basic support of style:use-window-font-color is
+            // implemented in calligra.  No support for text in shapes
+            // with solid fill.
+            //
+            // style->addProperty("style:use-window-font-color", "true", tt);
+        } else {
+            color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
+        }
+        style->addProperty("fo:color", color, tt);
+        // m_fontColor = color;
     }
 
     //hps = font size in half points
@@ -1003,12 +1058,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //remove the background-colors collected for this text chunk
-    while (m_bgColors.size() > 1) {
-        rmBgColor();
-    }
-    //reset the fo:color value
-    if (!preserveFontColor) {
-        m_fontColor = QString();
+    while (m_bgColors.size() > bgColorsSize_bkp) {
+        popBgColor();
     }
 }
 

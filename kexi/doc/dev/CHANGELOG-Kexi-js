@@ -153,6 +153,18 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-03-13
+KexiDB
+*Fix deep copying of query schema and ORDER BY structures
+**This removes crashes related, e.g. in reports based on queries with joins
+BUG:246928
+BUG:281737
+
+2012-03-12
+Reports
+*Fixed bug: setting a field's data source to a calculated value, results international characters not displaying correctly
+BUG:277731
+
 2012-03-07
 KexiDB
 *SQLite Driver

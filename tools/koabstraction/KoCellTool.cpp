@@ -26,10 +26,10 @@
 #include "FoCellEditor.h"
 
 // Calligra
-#include <tables/Cell.h>
-#include <tables/Style.h>
-#include <tables/CellStorage.h>
-#include <tables/Sheet.h>
+#include <sheets/Cell.h>
+#include <sheets/Style.h>
+#include <sheets/CellStorage.h>
+#include <sheets/Sheet.h>
 
 #include "KoColor.h"
 #include "KoCanvasBase.h"
@@ -46,7 +46,7 @@
                                      cell.link().contains(m_searchString,exactMatch)
 
 KoCellTool::KoCellTool(KoAbstractApplicationController *controller, KoCanvasBase* canvas)
-    : Calligra::Tables::CellTool(canvas),
+    : Calligra::Sheets::CellTool(canvas),
       m_editor(0),
       m_currentfindPosition(0),
       m_searchCaseSensitive(false)
@@ -88,36 +88,36 @@ KoExternalEditorInterface* KoCellTool::externalEditor() const
 }
 
 int KoCellTool::getFontSize() {
-    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+    const Calligra::Sheets::Style style = Calligra::Sheets::Cell(
         selection()->activeSheet(), selection()->marker()).style();
     return style.fontSize();
 }
 
 QString KoCellTool::getFontType() {
-    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+    const Calligra::Sheets::Style style = Calligra::Sheets::Cell(
         selection()->activeSheet(), selection()->marker()).style();
     return style.fontFamily();
 }
 
 bool KoCellTool::isFontBold() {
-    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+    const Calligra::Sheets::Style style = Calligra::Sheets::Cell(
         selection()->activeSheet(), selection()->marker()).style();
     return style.bold();
 }
 
 bool KoCellTool::isFontItalic() {
-    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+    const Calligra::Sheets::Style style = Calligra::Sheets::Cell(
         selection()->activeSheet(), selection()->marker()).style();
     return style.italic();
 }
 
 bool KoCellTool::isFontUnderline() {
-    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+    const Calligra::Sheets::Style style = Calligra::Sheets::Cell(
         selection()->activeSheet(), selection()->marker()).style();
     return style.underline();
 }
 
-Calligra::Tables::CellEditorBase* KoCellTool::editor() const
+Calligra::Sheets::CellEditorBase* KoCellTool::editor() const
 {
    return m_editor;
 }
@@ -125,7 +125,7 @@ Calligra::Tables::CellEditorBase* KoCellTool::editor() const
 bool KoCellTool::createEditor(bool clear, bool /*focus*/)
 {
     bool status=false;
-    const Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->marker());
+    const Calligra::Sheets::Cell cell(selection()->activeSheet(), selection()->marker());
 
     if (selection()->activeSheet()->isProtected() && !cell.style().notProtected())
         return false;
@@ -170,7 +170,7 @@ bool KoCellTool::createEditor(bool clear, bool /*focus*/)
         ypos += canvas()->viewConverter()->viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
 
         // Setup the editor's palette.
-        const Calligra::Tables::Style style = cell.effectiveStyle();
+        const Calligra::Sheets::Style style = cell.effectiveStyle();
         QPalette editorPalette(m_editor->palette());
         QColor color = style.fontColor();
         if (!color.isValid())
@@ -245,7 +245,7 @@ void KoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
     m_editorContents=m_editor->toPlainText();
 
     if (saveChanges) {
-        Calligra::Tables::CellToolBase::applyUserInput(m_editorContents, expandMatrix);
+        Calligra::Sheets::CellToolBase::applyUserInput(m_editorContents, expandMatrix);
     } else {
         selection()->update();
     }
@@ -259,14 +259,14 @@ void KoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
 
 void KoCellTool::keyPressEvent(QKeyEvent *event)
 {
-    Calligra::Tables::CellTool::keyPressEvent(event);
+    Calligra::Sheets::CellTool::keyPressEvent(event);
     if(event->key() == Qt::Key_Up ||
        event->key() == Qt::Key_Down ||
        event->key() == Qt::Key_Left ||
        event->key() == Qt::Key_Right ||
        event->key() == Qt::Key_Enter ||
        event->key() == Qt::Key_Return) {
-        Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->cursor());
+        Calligra::Sheets::Cell cell(selection()->activeSheet(), selection()->cursor());
         m_externalEditor->setPlainText(cell.displayText());
 //        cancelCurrentStrategy();
 //        createEditor(false,false);
@@ -275,9 +275,9 @@ void KoCellTool::keyPressEvent(QKeyEvent *event)
 
 void KoCellTool::mousePressEvent(KoPointerEvent* event)
 {
-    Calligra::Tables::CellTool::mousePressEvent(event);
+    Calligra::Sheets::CellTool::mousePressEvent(event);
     if (selection()->isSingular()) {
-        Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->cursor());
+        Calligra::Sheets::Cell cell(selection()->activeSheet(), selection()->cursor());
         m_externalEditor->setPlainText(cell.displayText());
     } else {
         m_externalEditor->setPlainText("");
@@ -299,7 +299,7 @@ void KoCellTool::slotSearchTextChanged(const QString &text)
 
 void KoCellTool::initializeFind()
 {
-    Calligra::Tables::Sheet * currentSheet = selection()->activeSheet();
+    Calligra::Sheets::Sheet * currentSheet = selection()->activeSheet();
     QRect filledRect = currentSheet->usedArea(true);
     m_matchedPosition.clear();
     m_currentfindPosition=-1;
@@ -314,9 +314,9 @@ int KoCellTool::find()
 {
     //search row wise i.e reading order
     int row=m_findArea.left();
-    Calligra::Tables::Sheet * currentSheet = selection()->activeSheet();
+    Calligra::Sheets::Sheet * currentSheet = selection()->activeSheet();
     while(row<=m_findArea.bottom()) {
-        Calligra::Tables::Cell cell = currentSheet->cellStorage()->firstInRow(row);
+        Calligra::Sheets::Cell cell = currentSheet->cellStorage()->firstInRow(row);
         if(cell.isNull()) {
             row++;
             continue;
@@ -346,7 +346,7 @@ void KoCellTool::slotHighlight(QPoint goToCell)
 {
     //here we select the cell where the string was found.
     selection()->initialize(goToCell);
-    Calligra::Tables::CellToolBase::scrollToCell(goToCell);
+    Calligra::Sheets::CellToolBase::scrollToCell(goToCell);
 }
 
 void KoCellTool::findNext()
