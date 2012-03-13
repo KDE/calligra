@@ -33,7 +33,7 @@ KAboutData * newKritaAboutData()
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
                                             ki18n("(c) 1999-2012 The Krita team.\n"),
-                                            KLocalizedString(),
+                                            ki18n("This release of Krita is dedicated to the memory of Jean Giraud - Moebius, whose work will always be an inspiration."),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
