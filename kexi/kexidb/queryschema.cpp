@@ -76,7 +76,7 @@ public:
             , internalFields(0)
             , fieldsExpandedWithInternalAndRowID(0)
             , fieldsExpandedWithInternal(0)
-            //, orderByColumnList(copy->orderByColumnList)
+            , orderByColumnList(0)
             , autoincFields(0)
             , columnsOrder(0)
             , columnsOrderWithoutAsterisks(0)
@@ -97,35 +97,30 @@ public:
         if (copy) {
             // deep copy
             *this = *copy;
-            if (copy->fieldsExpanded)
-                fieldsExpanded = new QueryColumnInfo::Vector(*copy->fieldsExpanded);
-            if (copy->internalFields)
-                internalFields = new QueryColumnInfo::Vector(*copy->internalFields);
-            if (copy->fieldsExpandedWithInternalAndRowID)
-                fieldsExpandedWithInternalAndRowID = new QueryColumnInfo::Vector(
-                    *copy->fieldsExpandedWithInternalAndRowID);
-            if (copy->fieldsExpandedWithInternal)
-                fieldsExpandedWithInternal = new QueryColumnInfo::Vector(
-                    *copy->fieldsExpandedWithInternal);
-            if (copy->autoincFields)
-                autoincFields = new QueryColumnInfo::List(*copy->autoincFields);
-            if (copy->columnsOrder)
-                columnsOrder = new QHash<QueryColumnInfo*, int>(*copy->columnsOrder);
-            if (copy->columnsOrderWithoutAsterisks)
-                columnsOrderWithoutAsterisks = new QHash<QueryColumnInfo*, int>(
-                    *copy->columnsOrderWithoutAsterisks);
-            if (copy->columnsOrderExpanded)
-                columnsOrderExpanded = new QHash<QueryColumnInfo*, int>(*copy->columnsOrderExpanded);
-            if (copy->pkeyFieldsOrder)
-                pkeyFieldsOrder = new QVector<int>(*copy->pkeyFieldsOrder);
-            if (copy->whereExpr)
+            // <clear, so computeFieldsExpanded() will re-create it>
+            fieldsExpanded = 0;
+            internalFields = 0;
+            columnsOrder = 0;
+            columnsOrderWithoutAsterisks = 0;
+            columnsOrderExpanded = 0;
+            autoincFields = 0;
+            autoIncrementSQLFieldsList.clear();
+            columnInfosByNameExpanded.clear();
+            columnInfosByName.clear();
+            ownedVisibleColumns = 0;
+            fieldsExpandedWithInternalAndRowID = 0;
+            fieldsExpandedWithInternal = 0;
+            pkeyFieldsOrder = 0;
+            fakeRowIDCol = 0;
+            fakeRowIDField = 0;
+            ownedVisibleColumns = 0;
+            // </clear, so computeFieldsExpanded() will re-create it>
+            if (copy->whereExpr) {
                 whereExpr = copy->whereExpr->copy();
-            if (copy->fakeRowIDCol)
-                fakeRowIDCol = new QueryColumnInfo(*copy->fakeRowIDCol);
-            if (copy->fakeRowIDField)
-                fakeRowIDField = new Field(*copy->fakeRowIDField);
-            if (copy->ownedVisibleColumns)
-                ownedVisibleColumns = new Field::List(*copy->ownedVisibleColumns);
+            }
+        }
+        else {
+            orderByColumnList = new OrderByColumnList;
         }
     }
     ~QuerySchemaPrivate() {
@@ -166,7 +161,9 @@ public:
     }
 
     void clearCachedData() {
-        orderByColumnList.clear();
+        if (orderByColumnList) {
+            orderByColumnList->clear();
+        }
         if (fieldsExpanded) {
             qDeleteAll(*fieldsExpanded);
             delete fieldsExpanded;
@@ -316,7 +313,7 @@ public:
     QueryColumnInfo::Vector *fieldsExpandedWithInternal;
 
     /*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
-    OrderByColumnList orderByColumnList;
+    OrderByColumnList* orderByColumnList;
 
     /*! A cache for autoIncrementFields(). */
     QueryColumnInfo::List *autoincFields;
@@ -409,6 +406,33 @@ OrderByColumn::OrderByColumn(Field& field, bool ascending)
 {
 }
 
+OrderByColumn* OrderByColumn::copy(QuerySchema* fromQuery, QuerySchema* toQuery) const
+{
+    if (m_field) {
+        return new OrderByColumn(*m_field, m_ascending);
+    }
+    if (m_column) {
+        QueryColumnInfo* columnInfo;
+        if (fromQuery && toQuery) {
+            int columnIndex = fromQuery->columnsOrder().value(m_column);
+            if (columnIndex < 0) {
+                kDebug() << "index not found for column" << m_column->debugString();
+                return 0;
+            }
+            columnInfo = toQuery->expandedOrInternalField(columnIndex);
+            if (!columnInfo) {
+                kDebug() << "column info not found at index" << columnIndex << "in toQuery";
+                return 0;
+            }
+        }
+        else {
+            columnInfo = m_column;
+        }
+        return new OrderByColumn(*columnInfo, m_ascending, m_pos);
+    }
+    return 0;
+}
+
 OrderByColumn::~OrderByColumn()
 {
 }
@@ -465,11 +489,15 @@ OrderByColumnList::OrderByColumnList()
 {
 }
 
-OrderByColumnList::OrderByColumnList(const OrderByColumnList& other)
+OrderByColumnList::OrderByColumnList(const OrderByColumnList& other,
+                                     QuerySchema* fromQuery, QuerySchema* toQuery)
         : OrderByColumnListBase()
 {
     for (QList<OrderByColumn*>::ConstIterator it(other.constBegin()); it != other.constEnd(); ++it) {
-        appendColumn(**it);
+        OrderByColumn* order = (*it)->copy(fromQuery, toQuery);
+        if (order) {
+            append(order);
+        }
     }
 }
 
@@ -543,11 +571,6 @@ bool OrderByColumnList::appendField(QuerySchema& querySchema,
     KexiDBWarn << "OrderByColumnList::addColumn(QuerySchema& querySchema, "
     "const QString& column, bool ascending): no such field \"" << fieldName << "\"";
     return false;
-}
-
-void OrderByColumnList::appendColumn(const OrderByColumn& column)
-{
-    append(new OrderByColumn(column));
 }
 
 QString OrderByColumnList::debugString() const
@@ -634,6 +657,9 @@ QuerySchema::QuerySchema(const QuerySchema& querySchema)
             copiedField = f;
         addField(copiedField);
     }
+    // this deep copy must be after the 'd' initialization because fieldsExpanded() is used there
+    d->orderByColumnList = new OrderByColumnList(*querySchema.d->orderByColumnList,
+                                                 const_cast<QuerySchema*>(&querySchema), this);
 }
 
 QuerySchema::~QuerySchema()
@@ -1738,16 +1764,14 @@ BaseExpr *QuerySchema::whereExpression() const
 
 void QuerySchema::setOrderByColumnList(const OrderByColumnList& list)
 {
-    d->orderByColumnList.clear();
-    for (QList<OrderByColumn*>::ConstIterator it(list.constBegin()); it != list.constEnd(); ++it) {
-        d->orderByColumnList.appendColumn(**it);
-    }
+    delete d->orderByColumnList;
+    d->orderByColumnList = new OrderByColumnList(list, 0, 0);
 // all field names should be found, exit otherwise ..........?
 }
 
 OrderByColumnList& QuerySchema::orderByColumnList() const
 {
-    return d->orderByColumnList;
+    return *d->orderByColumnList;
 }
 
 QuerySchemaParameterList QuerySchema::parameters()
