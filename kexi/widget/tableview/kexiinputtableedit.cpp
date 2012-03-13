@@ -115,8 +115,9 @@ void KexiInputTableEdit::init()
         m_lineedit->setAlignment(Qt::AlignRight);
     }
 
-    if (field()->isTextType())
+    if (field()->isTextType()) {
         m_lineedit->setMaxLength(field()->length());
+    }
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 
