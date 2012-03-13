@@ -25,9 +25,9 @@
 #include "FoExternalEditor.h"
 
 // Tables
-#include <tables/ui/CellToolBase.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
+#include <sheets/ui/CellToolBase.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 
 #include <FoCellEditor.h>
 
@@ -36,7 +36,7 @@
 #include <QKeyEvent>
 #include <QTextCursor>
 
-FoExternalEditor::FoExternalEditor(Calligra::Tables::CellToolBase* cellToolBase, QWidget *parent)
+FoExternalEditor::FoExternalEditor(Calligra::Sheets::CellToolBase* cellToolBase, QWidget *parent)
     : QTextEdit(parent),
     KoExternalEditorInterface(cellToolBase),
     cellTool(cellToolBase),
@@ -60,7 +60,7 @@ FoExternalEditor::~FoExternalEditor()
 {
 }
 
-void FoExternalEditor::setCellTool(Calligra::Tables::CellToolBase* cellToolBase)
+void FoExternalEditor::setCellTool(Calligra::Sheets::CellToolBase* cellToolBase)
 {
     cellTool=cellToolBase;
 }
@@ -134,7 +134,7 @@ void FoExternalEditor::focusInEvent(QFocusEvent* event)
 {
     Q_ASSERT(cellTool);
     if (event->reason() != Qt::OtherFocusReason) {
-        cellTool->setLastEditorWithFocus(Calligra::Tables::CellToolBase::ExternalEditor);
+        cellTool->setLastEditorWithFocus(Calligra::Sheets::CellToolBase::ExternalEditor);
     }
    // grabKeyboard();
     // when the external editor gets focus, create also the internal editor
