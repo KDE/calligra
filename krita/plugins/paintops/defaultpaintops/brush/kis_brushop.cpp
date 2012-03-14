@@ -42,7 +42,7 @@
 #include <KoColorSpaceRegistry.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
+        : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -59,9 +59,9 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
-        if(option->isChecked() && !m_hsvTransfo)
+        if(option->isChecked() && !m_hsvTransformation)
         {
-            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
 
@@ -91,7 +91,7 @@ KisBrushOp::~KisBrushOp()
 {
     qDeleteAll(m_hsvOptions);
     delete m_colorSource;
-    delete m_hsvTransfo;
+    delete m_hsvTransformation;
 }
 
 qreal KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -138,29 +138,32 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
 
-    if(m_hsvTransfo)
+    if (m_hsvTransformation)
     {
         foreach(KisPressureHSVOption* option, m_hsvOptions)
         {
-            option->apply(m_hsvTransfo, info);
+            option->apply(m_hsvTransformation, info);
         }
-        m_colorSource->applyColorTransformation(m_hsvTransfo);
+        m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
-    } else {
-        if(m_colorSource->isUniformColor())
+    }
+    else {
+        if (m_colorSource->isUniformColor())
         {
             KoColor color = m_colorSource->uniformColor();
             color.convertTo(dab->colorSpace());
             brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        } else {
+        }
+        else {
             if (!m_colorSourceDevice) {
                 m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
-            } else {
+            }
+            else {
                 m_colorSourceDevice->clear();
             }
             m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
