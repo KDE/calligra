@@ -29,10 +29,12 @@
 #include <kmessagebox.h>
 
 #include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
+#endif
 #endif
 
 #include <kdebug.h>
@@ -42,6 +44,8 @@
 #include "kptschedule.h"
 #include "kpttaskdescriptiondialog.h"
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -50,6 +54,10 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
       project(p)
 {
     setupUi(this);
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
 #if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
@@ -132,6 +140,7 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 
 void MainProjectPanel::slotChooseLeader()
 {
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
@@ -157,6 +166,7 @@ void MainProjectPanel::slotChooseLeader()
         }
     }
 #endif
+#endif
 }
 
 
@@ -175,7 +185,7 @@ void MainProjectPanel::slotEndDateClicked()
 
 void MainProjectPanel::enableDateTime()
 {
-    kDebug();
+    kDebug(planDbg());
     startTime->setEnabled(true);
     startDate->setEnabled(true);
     endTime->setEnabled(true);

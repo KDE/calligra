@@ -45,6 +45,9 @@ class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
+class KoTextAnchor;
+class KoShapeContainer;
+class KoShapeController;
 
 class KLocalizedString;
 class QIODevice;
@@ -64,10 +67,13 @@ public:
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
-    void addShape(KoShape *shape);
+    virtual void addShape(KoShape *shape);
     /// reimplemented from KoShapeBasedDocumentBase
-    void removeShape(KoShape *shape);
+    virtual void removeShape(KoShape *shape);
+    // reimplemented from KoShapeBasedDocumentBase
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
+    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -176,6 +182,17 @@ public:
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
+    /// find the frame closest to the given shape or return 0
+    KWFrame *findClosestFrame(KoShape *shape) const;
+
+    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+
+    KWFrame *frameOfShape(KoShape *shape) const;
+
+    /// returns the document's shapeController. This controller should only be used for deleting shapes.
+    //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
+    KoShapeController *shapeController() const { return m_shapeController; }
+
 public slots:
     /**
      * Relayout the pages or frames within the framesets.
@@ -251,6 +268,7 @@ private:
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
+    KoShapeController *m_shapeController;
 };
 
 #endif

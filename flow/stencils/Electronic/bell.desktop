@@ -2,8 +2,11 @@
 Name=bell
 Name[bg]=звънец
 Name[ca]=campana
+Name[ca@valencia]=campana
 Name[cs]=zvonek
+Name[et]=Kell
 Name[it]=bell
+Name[kk]=қоңырау
 Name[nb]=klokke
 Name[nds]=Pingel
 Name[nl]=bel

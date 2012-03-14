@@ -22,17 +22,17 @@
 #include <config-kexi.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QEventLoop>
+#include <QFile>
+#include <QTimer>
+#include <QObject>
 #include <QProcess>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qfiledialog.h>
+#include <QToolButton>
+
+#include <QMutex>
+#include <QWaitCondition>
+#include <QFileDialog>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QTextStream>
@@ -258,7 +258,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 #ifdef KEXI_DEBUG_GUI
     QWidget* debugWindow = 0;
     if (GUIenabled) {
-        KConfigGroup generalGroup = d->config->group("General");
+        KConfigGroup generalGroup = KGlobal::config()->group("General");
         if (generalGroup.readEntry("ShowInternalDebugger", false)) {
             debugWindow = KexiUtils::createDebugWindow(win);
             debugWindow->show();
@@ -326,8 +326,12 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupPropertyEditor();
     }
 
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
+    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -1377,6 +1381,17 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
+    d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
+    d->tabbedToolBar->showTab("data");
+    d->tabbedToolBar->showTab("external");
+    d->tabbedToolBar->showTab("tools");
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    //d->tabbedToolBar->showTab("form");
+    //d->tabbedToolBar->showTab("report");
+
+    // make sure any tab is activated
+    d->tabbedToolBar->setCurrentTab(0);
     return true;
 }
 
@@ -1706,6 +1721,13 @@ tristate KexiMainWindow::closeProject()
     updateAppCaption();
 
     emit projectClosed();
+/*
+    d->tabbedToolBar->hideTab("create");
+    d->tabbedToolBar->hideTab("data");
+    d->tabbedToolBar->hideTab("external");
+    d->tabbedToolBar->hideTab("tools");
+    d->tabbedToolBar->hideTab("form");
+    d->tabbedToolBar->hideTab("report");*/
     return true;
 }
 
@@ -2850,6 +2872,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         return cancelled;
     }
 
+    activateWindow(window);
     //view changed: switch to this view's gui client
     KXMLGUIClient *viewClient = currentWindow()->guiClient();
     updateWindowViewGUIClient(viewClient);
@@ -2861,6 +2884,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
+    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
     return true;
 }
 
@@ -3104,7 +3128,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     }
 
     const int window_id = window->id(); //remember now, because removeObject() can destruct partitem object
-
+    const QString window_partClass = window->partItem()->partClass();
     if (remove_on_closing) {
         //we won't save this object, and it was never saved -remove it
         if (!removeObject(window->partItem(), true)) {
@@ -3195,6 +3219,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
+    showTabIfNeeded();
     return true;
 }
 
@@ -3377,6 +3402,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
+    showDesignTabIfNeeded(item->partClass(), viewMode);
+    setDesignTabIfNeeded(item->partClass());
     return window;
 }
 
@@ -4403,6 +4430,64 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+{
+    closeTab("");
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: 
+            d->tabbedToolBar->showTab("form");
+            break;
+        case KexiPart::ReportObjectType: 
+            d->tabbedToolBar->showTab("report");
+            break;
+        default: ;
+        }
+    }
+}
+
+void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->setCurrentTab("form"); 
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->setCurrentTab("report"); 
+        break;
+    default:;
+    }  
+}
+
+void KexiMainWindow::closeTab(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->hideTab("form");
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->hideTab("report");
+        break;
+    default:
+        d->tabbedToolBar->hideTab("form");
+        d->tabbedToolBar->hideTab("report");
+    }
+}
+
+void KexiMainWindow::showTabIfNeeded()
+{
+    if (currentWindow()) {
+        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+    } else {
+        closeTab("");
+    }
+}
+
+KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
+{
+    return &d->userFeedback;
 }
 
 #include "KexiMainWindow.moc"

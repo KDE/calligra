@@ -104,6 +104,9 @@ Q_OBJECT
         void arriveAlterTablePage();
         void arriveImportingPage();
         void arriveFinishPage();
+    private slots:
+        void slotConnPageItemSelected(bool isSelected);
+        void slotTableListWidgetSelectionChanged();
 };
 }
 #endif // IMPORTTABLEWIZARD_H

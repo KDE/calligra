@@ -26,11 +26,11 @@
 #include <KComboBox>
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTableView>
-#include <QtGui/QHeaderView>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStackedWidget>
+#include <QTableView>
+#include <QHeaderView>
 
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

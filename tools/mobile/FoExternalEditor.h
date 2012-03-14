@@ -29,7 +29,7 @@
 
 #include <KoExternalEditorInterface.h>
 
-namespace Calligra { namespace Tables
+namespace Calligra { namespace Sheets
 {
     class CellToolBase;
     class CellEditorBase;
@@ -39,10 +39,10 @@ class FoExternalEditor : public QTextEdit, public KoExternalEditorInterface
 {
     Q_OBJECT
 public:
-    FoExternalEditor(Calligra::Tables::CellToolBase* cellToolBase, QWidget* parent = 0);
+    FoExternalEditor(Calligra::Sheets::CellToolBase* cellToolBase, QWidget* parent = 0);
     ~FoExternalEditor();
 
-    void setCellTool(Calligra::Tables::CellToolBase* cellTool);
+    void setCellTool(Calligra::Sheets::CellToolBase* cellTool);
     void insertOperator(QString opreatorCharacter);
 
     //! Implements KoExternalEditorInterface
@@ -77,7 +77,7 @@ private slots:
     void slotCursorPositionChanged();
 
 private:
-    Calligra::Tables::CellToolBase* cellTool;
+    Calligra::Sheets::CellToolBase* cellTool;
     bool isArray;
 };
 

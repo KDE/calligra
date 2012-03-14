@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
 Name[ca]=Gestor de paquets de feina del Plan
+Name[ca@valencia]=Gestor de paquets de faena del Plan
 Name[da]=Håndtering af WorkPackage til Plan
+Name[de]=Plan-Arbeitspaketverwaltung
 Name[el]=Χειριστής πακέτου εργασίας Plan
+Name[es]=Gestor de paquetes de trabajo de Plan
 Name[et]=Plani töölõikude käitleja
 Name[it]=Gestore dei pacchetti di lavoro di Plan
+Name[kk]=Plan жұмыс дестесінің өңдеуіші
 Name[nb]=Plan arbeidspakkestyring
 Name[nl]=Plan werkpakketbeheerder
 Name[pl]=Program obsługujący pakiety pracy Plan
@@ -75,7 +79,7 @@ GenericName[zh_TW]=專案管理
 Exec=calligraplanwork %u
 MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Application
-Icon=planwork
+Icon=calligraplanwork
 X-KDE-ServiceTypes=Calligra/Application
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true

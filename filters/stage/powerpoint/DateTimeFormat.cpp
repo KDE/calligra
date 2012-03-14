@@ -29,7 +29,7 @@
 #include <iostream>
 
 // Qt
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QBuffer>
 #include <QString>
 

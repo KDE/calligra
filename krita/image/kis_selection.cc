@@ -27,18 +27,19 @@
 
 struct KisSelection::Private {
     Private()
-        : isDeselected(false),
-          isVisible(true),
+        : isVisible(true),
           shapeSelection(0)
     {
     }
 
-    bool isDeselected; // true if the selection is empty, no pixels are selected
+    // used for forwarding setDirty signals only
+    KisNodeWSP parentNode;
+
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
-    KisSelectionComponent* shapeSelection;
+    KisSelectionComponent *shapeSelection;
 
     KisPixelSelectionSP getProjection()
     {
@@ -69,9 +70,9 @@ KisSelection::KisSelection(const KisSelection& rhs)
     : KisShared(),
       m_d(new Private)
 {
-    m_d->isDeselected = rhs.m_d->isDeselected;
     m_d->isVisible = rhs.m_d->isVisible;
     m_d->defaultBounds = rhs.m_d->defaultBounds;
+    m_d->parentNode = 0; // not supposed to be shared
 
     if(rhs.m_d->projection) {
         m_d->projection = new KisPixelSelection(*rhs.m_d->projection);
@@ -96,9 +97,9 @@ KisSelection::KisSelection(const KisSelection& rhs)
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
 {
     if (&rhs != this) {
-        m_d->isDeselected = rhs.m_d->isDeselected;
         m_d->isVisible = rhs.m_d->isVisible;
         m_d->defaultBounds = rhs.m_d->defaultBounds;
+        m_d->parentNode = 0; // not supposed to be shared
 
         if(rhs.m_d->projection) {
             m_d->projection = new KisPixelSelection(*rhs.m_d->projection);
@@ -126,6 +127,27 @@ KisSelection::~KisSelection()
 {
     delete m_d->shapeSelection;
     delete m_d;
+}
+
+void KisSelection::setParentNode(KisNodeWSP node)
+{
+    m_d->parentNode = node;
+
+    if(m_d->pixelSelection) {
+        m_d->pixelSelection->setParentNode(node);
+    }
+
+    /**
+     * NOTE: We shouldn't set the parent node for the projection
+     * device because noone is considered to be painting on the
+     * projection
+     */
+}
+
+// for testing purposes only
+KisNodeWSP KisSelection::parentNode() const
+{
+    return m_d->parentNode;
 }
 
 bool KisSelection::hasPixelSelection() const
@@ -156,6 +178,9 @@ KisSelectionComponent* KisSelection::shapeSelection() const
 void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
 {
     m_d->pixelSelection = pixelSelection;
+    if(m_d->pixelSelection) {
+        m_d->pixelSelection->setParentNode(m_d->parentNode);
+    }
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
@@ -167,6 +192,7 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
 {
     if (!m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
+        m_d->pixelSelection->setParentNode(m_d->parentNode);
     }
 
     return m_d->pixelSelection;
@@ -226,16 +252,6 @@ void KisSelection::updateProjection()
     if(m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(currentProjection.data());
     }
-}
-
-void KisSelection::setDeselected(bool deselected)
-{
-    m_d->isDeselected = deselected;
-}
-
-bool KisSelection::isDeselected()
-{
-    return m_d->isDeselected;
 }
 
 void KisSelection::setVisible(bool visible)
@@ -322,6 +338,16 @@ void KisSelection::clear()
     KisPixelSelectionSP currentProjection = m_d->getProjection();
     if(currentProjection != m_d->pixelSelection) {
         currentProjection->clear();
+    }
+}
+
+void KisSelection::flatten()
+{
+    if (hasShapeSelection()) {
+        updateProjection();
+        m_d->pixelSelection = m_d->projection;
+        delete m_d->shapeSelection;
+        m_d->shapeSelection = 0;
     }
 }
 

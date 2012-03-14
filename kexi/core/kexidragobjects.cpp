@@ -20,7 +20,7 @@
 
 #include "kexidragobjects.h"
 
-#include <qdatastream.h>
+#include <QDataStream>
 #include <QStringList>
 #include <QDragMoveEvent>
 #include <QDropEvent>

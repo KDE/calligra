@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>textBrowser</class>
+ <widget class="QTextBrowser" name="textBrowser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::NoFrame</enum>
+  </property>
+  <property name="lineWidth">
+   <number>0</number>
+  </property>
+  <property name="html">
+   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Nokia Pure Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:600;&quot;&gt;Your Support for the Kexi Project.&lt;br /&gt;In No Time. At No Cost.&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Most products appreciate your close participation during beta testing stages of development. In the Kexi Project you can participate at any stage, it does not matter if it is a shiny final release or early beta, you can join us to influence the shape of your software. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Before going further please note one thing, this application is developed by its community, its creators &lt;span style=&quot; font-weight:600;&quot;&gt;and&lt;/span&gt; users are one group, they are not separate. We refer to this group as the Project. &lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Power to You&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can have substantial influence on the future releases of this software by: &lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Voicing your opinion. You can share your thoughts on any function of the application. You can have your say about extras like documentation, translation or example files.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Asking for help. Yes, doing so in the application's support channel is a great way for us to understand areas for improvement.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Telling others how you use the application. You can easily give feedback about your experience with this software, for example your favourite or missing functions. &lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;We at the Project came to the idea to reuse the capabilities of the Internet for the purpose of improving the application you use. We are using in-app connectivity with the Project web site &lt;a href=&quot;http://www.kexi-project.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;www.kexi-project.org&lt;/span&gt;&lt;/a&gt; to allow you to quickly and easily voice your opinion, ask for help or provide feedback. All without leaving the application. The third option, providing feedback, is special. We would like you to share some of the information on how you use the application - automatically. &lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;We Adapt to You&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;While software developers of course welcome to join, it is no problem if you can't do software programming. Other members of the Project handle that for you. So equally well you may be user of the app who agrees to share any feedback regarding the app in use. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can for example:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Share simple statistical data like software version or operating system version. &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The shared information is anonymous if you wish it to be.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The shared information can be statistical if you wish it to be.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The shared information may skip any regional settings like language or country settings you use on your computer. Even if you provide this data, localization like your IP number or geographic location are not shared. (Note: sharing geographic location could be offered in the future as an extra option that you can enable, e.g. if you wish to show usage of the app at your location in the global statistics)&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;As you can imagine, the more information you give, the more chances are for the Project to take your special needs into account. &lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Safe and Transparent Participation&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;We propose simple but clear ideas for the participation: &lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Participation is optional. You can still use the app as before. You do not share any information just because you use the app, so nothing changes. You start later, when and if you choose to participate.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Easy opt-in. It's a no-brainer to start participation.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Easy and real opt-out at any time. When you opt-out any statistical data you shared can be removed if you want. You can also disable connecting with the Project for some time without opting-out. (Note: in version 2.4 opting-out is not available)&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You always know the reasoning. For any information you share, you know what is the benefit of doing that for the Project and directly for you.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can always see what information will be sent.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;No information is (and will never be) passed on to third-parties.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;No real data from your databases or files is (and will never be) transmitted along with the &amp;quot;usage&amp;quot; data.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;No cost. Your participation is not tied to on any payments. Neither you are expected to devote your time. This information you share can be sent automatically while you use the app.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;No need to be permanently online. The feedback and statistical data can be sent when you are online. In the future, the data may be noted while you are offline and sent later.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Wide availability. While at least partial access to the Internet is needed it does not matter what operating system you use or in what country. Your participation is equally welcome. Participants can contribute at any time. At initial stage it is required to communicate in English but later other languages, if there are contributors to support this option.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You decide on the level of openness. You can provide some of your personal data like real name to have better recognition for your efforts and connect with others who do the same. If you prefer you can stick with a nickname. (Note: in version 2.4 only anonymous access is possible using anonymous identification number)&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Minimal overhead. Only small amounts of text are transferred, usually smaller than the text you are reading now. No complex computation is performed and performance of your applications should not suffer.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You decide for yourself. If you opt-in, only you become the participant to the Project. Other users of the same computer (if there are any and assuming they use separate accounts) are unaffected -- they will have to opt-in separately to become participants.&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;No limits for computers. You can use multiple computers and operating systems and use the same participant's nickname or name. You can enable participation from one computer (e.g. at home) and decide not to participate from another computer (e.g. at work).&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:10px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Only for one purpose. The collected data is used only to improve the Project. &lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;We plan to improve and extend ways of participation so stay tuned. Feel free to share you ideas on the matter by sending feedback to &lt;a href=&quot;mailto:calligra-devel@kde.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;calligra-devel@kde.org&lt;/span&gt;&lt;/a&gt;. This is another good way to start participation!&lt;/p&gt;
+&lt;p style=&quot; margin-top:20px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;-- Love, the Kexi Project Team&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+  </property>
+  <property name="openExternalLinks">
+   <bool>true</bool>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

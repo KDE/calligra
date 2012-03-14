@@ -54,7 +54,7 @@ void TestResult::setResult( bool ok)
 
 void TestResult::setMessage( const QString &m )
 {
-    kDebug()<<m;
+    qDebug()<<m;
     message = m;
 }
 

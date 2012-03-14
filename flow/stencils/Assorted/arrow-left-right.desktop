@@ -2,12 +2,15 @@
 Name=Left-Right Arrow
 Name[bg]=Стрелка наляво-надясно
 Name[ca]=Fletxa de esquerra-dreta
+Name[ca@valencia]=Fletxa d'esquerra-dreta
 Name[da]=Pil til venstre-højre
 Name[de]=Pfeil nach links und rechts
 Name[el]=Αριστερό-δεξί βέλος
 Name[es]=Flecha izquierda-derecha
 Name[et]=Nool paremale-vasakule
+Name[hu]=Balra-jobbra nyíl
 Name[it]=Freccia a sinistra e a destra
+Name[kk]=Сол-Оң жақты жебесі
 Name[nb]=Pil venstre-høyre
 Name[nds]=Piel links-rechts
 Name[nl]=Pijl links-rechts

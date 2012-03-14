@@ -18,6 +18,7 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
+#include "MsooXmlThemesReader.h"
 
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
@@ -35,8 +36,6 @@
 #include <KoXmlWriter.h>
 
 #include <QString>
-
-#define MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 using namespace MSOOXML;
 
@@ -640,13 +639,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
         }
     }
 
-    TRY_READ_ATTR(b)
-    TRY_READ_ATTR(i)
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(i)
     if (b == "on") {
-        m_currentTextStyle.addProperty("svg:font-weight", "bold");
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
     }
     if (i == "on") {
-        m_currentTextStyle.addProperty("svg:font-style", "italic");
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
     }
     if (m_currentColor.isValid()) {
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
@@ -991,11 +990,5 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
     READ_EPILOGUE
 }
 
-#define blipFill_NS "a"
+#include "MsooXmlDrawingMLSharedImpl.h"
 
-#include <MsooXmlCommonReaderImpl.h>
-
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-
-#include <MsooXmlCommonReaderDrawingMLImpl.h>

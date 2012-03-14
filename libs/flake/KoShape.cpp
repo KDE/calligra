@@ -49,6 +49,7 @@
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
+#include <KoElementReference.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -461,42 +462,77 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
+KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
+{
+    return ChildZDefault;
+}
+
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    bool foundCommonParent = false;
-    KoShape *parentShapeS1 = s1;
-    KoShape *parentShapeS2 = s2;
-    int index1 = parentShapeS1->zIndex();
-    int index2 = parentShapeS2->zIndex();
-    int runThrough1 = parentShapeS1->runThrough();
-    int runThrough2 = parentShapeS2->runThrough();
-    while (parentShapeS1 && !foundCommonParent) {
-        parentShapeS2 = s2;
-        index2 = parentShapeS2->zIndex();
-        runThrough2 = parentShapeS2->runThrough();
-        while (parentShapeS2) {
-            if (parentShapeS2 == parentShapeS1) {
-                foundCommonParent = true;
-                break;
-            }
-            index2 = parentShapeS2->zIndex();
-            runThrough2 = parentShapeS2->runThrough();
-            parentShapeS2 = parentShapeS2->parent();
-        }
-
-        if (!foundCommonParent) {
-            index1 = parentShapeS1->zIndex();
+    // First sort according to runThrough which is sort of a master level
+    KoShape *parentShapeS1 = s1->parent();
+    KoShape *parentShapeS2 = s2->parent();
+    int runThrough1 = s1->runThrough();
+    int runThrough2 = s2->runThrough();
+    while (parentShapeS1) {
+        if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
             runThrough1 = parentShapeS1->runThrough();
-            parentShapeS1 = parentShapeS1->parent();
+        } else {
+            runThrough1 = runThrough1 + parentShapeS1->runThrough();
         }
+        parentShapeS1 = parentShapeS1->parent();
     }
 
-    // If the shape runs through the foreground or background.
+    while (parentShapeS2) {
+        if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+            runThrough2 = parentShapeS2->runThrough();
+        } else {
+            runThrough2 = runThrough2 + parentShapeS2->runThrough();
+        }
+        parentShapeS2 = parentShapeS2->parent();
+    }
+
     if (runThrough1 > runThrough2) {
         return false;
     }
     if (runThrough1 < runThrough2) {
         return true;
+    }
+
+    // If on the same runThrough level then the zIndex is all that matters.
+    //
+    // We basically walk up through the parents until we find a common base parent
+    // To do that we need two loops where the inner loop walks up through the parents
+    // of s2 every time we step up one parent level on s1
+    //
+    // We don't update the index value until after we have seen that it's not a common base
+    // That way we ensure that two children of a common base are sorted according to their respective
+    // z value
+    bool foundCommonParent = false;
+    int index1 = s1->zIndex();
+    int index2 = s2->zIndex();
+    parentShapeS1 = s1;
+    parentShapeS2 = s2;
+    while (parentShapeS1 && !foundCommonParent) {
+        parentShapeS2 = s2;
+        index2 = parentShapeS2->zIndex();
+        while (parentShapeS2) {
+            if (parentShapeS2 == parentShapeS1) {
+                foundCommonParent = true;
+                break;
+            }
+            if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index2 = parentShapeS2->zIndex();
+            }
+            parentShapeS2 = parentShapeS2->parent();
+        }
+
+        if (!foundCommonParent) {
+            if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index1 = parentShapeS1->zIndex();
+            }
+            parentShapeS1 = parentShapeS1->parent();
+        }
     }
 
     // If the one shape is a parent/child of the other then sort so.
@@ -844,7 +880,7 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
     return d->textRunAroundSide;
 }
 
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrought)
 {
     Q_D(KoShape);
 
@@ -1346,11 +1382,10 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfId) {
-        if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
-            QString id = element.attributeNS(KoXmlNS::draw, "id");
-            if (!id.isNull()) {
-                context.addShapeId(this, id);
-            }
+        KoElementReference ref;
+        ref.loadOdf(element);
+        if (ref.isValid()) {
+            context.addShapeId(this, ref.toString());
         }
     }
 
@@ -1536,6 +1571,9 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         if (child.localName() != "glue-point")
             continue;
 
+        // NOTE: this uses draw:id, but apparently while ODF 1.2 has deprecated
+        // all use of draw:id for xml:id, it didn't specify that here, so it
+        // doesn't support xml:id (and so, maybe, shouldn't use KoElementReference.
         const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
         const int index = id.toInt();
         if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
@@ -1713,8 +1751,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            context.xmlWriter().addAttribute("draw:id", context.drawId(this));
-            context.xmlWriter().addAttribute("xml:id", context.drawId(this));
+            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::Counter);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DrawId);
         }
     }
 
@@ -1732,6 +1770,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             }
             parent = parent->parent();
         }
+    }
+
+    if (attributes & OdfZIndex && context.isSet(KoShapeSavingContext::ZIndex)) {
+        context.xmlWriter().addAttribute("draw:z-index", zIndex());
     }
 
     if (attributes & OdfSize) {
@@ -1816,7 +1858,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 continue;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
-            context.xmlWriter().addAttribute("xml:id", QString("%1").arg(cp.key()));
             if (cp.value().alignment == KoConnectionPoint::AlignNone) {
                 // convert to percent from center
                 const qreal x = cp.value().position.x() * 100.0 - 50.0;

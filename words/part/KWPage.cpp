@@ -223,6 +223,20 @@ QRectF KWPage::rect() const
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
+QRectF KWPage::contentRect() const
+{
+    if (! isValid())
+        return QRectF();
+    return priv->pages[n].contentRect;
+}
+
+void KWPage::setContentRect(const QRectF &rect)
+{
+    if (isValid()) {
+        priv->pages[n].contentRect = rect;
+    }
+}
+
 KoPageFormat::Orientation KWPage::orientationHint() const
 {
     if (! isValid())

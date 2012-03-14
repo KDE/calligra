@@ -36,15 +36,16 @@
 #include <KoGenStyle.h>
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <QtGui/QColor>
+#include <QColor>
 #include <QByteArray>
+
+//#define USE_OFFICEARTDGG_CONTAINER
+//#define DEBUG_GHANDLER
 
 using namespace wvWare;
 using namespace MSO;
 
 using Conversion::twipsToPt;
-
-//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -238,7 +239,7 @@ void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
     emit textBoxFound(index, stylesxml);
 }
 
-void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
+QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture)
 {
     //TODO: The globalCP might be required to obtain the SPA structure for
     //inline MS-ODRAW shapes with missing OfficeArtClientAnchor.
@@ -249,6 +250,7 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     //msosptPictureFrame shapes is stored in the PICF struture.
 
     kDebug(30513) ;
+    QString ret;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
 #ifdef DEBUG_GHANDLER
@@ -260,22 +262,24 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     //the picture is store in some external file
     if (data.picf->mfp.mm == MM_SHAPEFILE) {
-        DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
-        m_objectType = Inline;
-        m_picf = data.picf;
-        insertEmptyInlineFrame(out);
-        return;
+        if (!isBulletPicture) {
+            DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
+            m_objectType = Inline;
+            m_picf = data.picf;
+            insertEmptyInlineFrame(out);
+        }
+        return ret;
     }
 
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
     if (!in) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
-        return;
+        return ret;
     }
     if (data.fcPic > in->getSize()) {
         kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
-        return;
+        return ret;
     }
 
 #ifdef DEBUG_GHANDLER
@@ -294,11 +298,11 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     } catch (const IOException& e) {
         kDebug(30513) << e.msg;
         in->rewind(_zero);
-        return;
+        return ret;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
         in->rewind(_zero);
-        return;
+        return ret;
     }
     in->rewind(_zero);
 
@@ -318,6 +322,7 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
+                ref.name = m_picNames[fbse->rgbUid];
                 continue;
             } else {
                 ref = savePicture(block, m_store);
@@ -332,6 +337,10 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
     m_store->leaveDirectory();
 
+    if (isBulletPicture) {
+        return ref.name;
+    }
+
     bool inStylesXml = m_document->writingHeader();
     DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
@@ -342,6 +351,8 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     const OfficeArtSpContainer* o = &(co.shape);
     processDrawingObject(*o, out);
+
+    return ret;
 }
 
 void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
@@ -531,7 +542,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     ODrawToOdf odrawtoodf(drawclient);
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
+    kDebug(30513) << "shapeType: 0x" << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
@@ -946,7 +957,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -984,13 +1000,16 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
-    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
-    // OfficeArtClientTextBox.
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide
+    // an OfficeArtClientTextBox.
+    bool textIdValid = false;
     quint32 textId = 0;
+
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
             textId = tb->clientTextBox;
+            textIdValid = true;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
@@ -999,12 +1018,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             kDebug(30513) << "lTxid property - negative text identifier!";
         } else {
             textId = (quint32)ds.iTxid();
+            textIdValid = true;
         }
     }
-    if (textId) {
+    if (textIdValid) {
         emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
-
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }
@@ -1023,7 +1042,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1082,7 +1106,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+    DrawStyle ds(dgg, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1162,7 +1190,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

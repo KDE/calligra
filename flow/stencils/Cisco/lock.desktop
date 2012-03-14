@@ -2,9 +2,13 @@
 Name=Lock
 Name[bg]=Заключване
 Name[ca]=Lock
+Name[ca@valencia]=Lock
 Name[cs]=Uzamknout
 Name[el]=Κλειδαριά
+Name[et]=Lukk
+Name[hu]=Zárolás
 Name[it]=Lucchetto
+Name[kk]=Құлып
 Name[nb]=Lås
 Name[nds]=Slott
 Name[nl]=Vergrendelen

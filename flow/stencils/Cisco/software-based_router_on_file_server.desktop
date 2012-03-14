@@ -2,9 +2,12 @@
 Name=Software based server
 Name[bg]=Софтуерно базиран сървър
 Name[ca]=Servidor basat en programari
+Name[ca@valencia]=Servidor basat en programari
 Name[de]=Software-basierter Server
 Name[el]=Εξυπηρετητής με λογισμικό
 Name[et]=Tarkvaraline server
+Name[it]=Server basato su software
+Name[kk]=Бағдарламалық сервері
 Name[nb]=Programvarebasert tjener
 Name[nds]=Programm-baseert Server
 Name[nl]=Op software gebaseerde server

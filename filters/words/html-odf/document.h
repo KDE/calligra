@@ -24,7 +24,7 @@
 #include "generated/leinputstream.h"
 
 #include <QString>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QObject>
 #include <QStringList>
 #include <QRectF>

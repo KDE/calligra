@@ -116,15 +116,15 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     }
 
     KoOdfWriteStore odfWriter(output);
-    KoXmlWriter* manifest = odfWriter.manifestWriter(KoXmlNS::presentation.toUtf8());
+    KoXmlWriter* manifest = odfWriter.manifestWriter(to);
     //Save the preview picture
-    output->enterDirectory("Thumbnails");
-    output->open("thubnail.png");
+    output->enterDirectory(QLatin1String("Thumbnails"));
+    output->open(QLatin1String("thumbnail.png"));
     output->write(*preview);
     output->close();
     output->leaveDirectory();
-    manifest->addManifestEntry("Thubnails/", "");
-    manifest->addManifestEntry("Thubnails/thubnail.png", "");
+    manifest->addManifestEntry(QLatin1String("Thumbnails/"), QString());
+    manifest->addManifestEntry(QLatin1String("Thumbnails/thumbnail.png"), QString());
     delete preview;
 
     //Write the Pictures directory and its children, also fill the m_pictures hash
@@ -148,7 +148,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     output->open("settings.xml");
     KoStoreDevice device(output);
     KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter(&device, "office:document-settings");
-    
+
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
     settings->startElement("config:config-item");
@@ -157,7 +157,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     settings->addTextSpan("false"); // ODF=true, MSOffice=false
     settings->endElement(); // config-item
     settings->endElement(); // config-item-set
-    
+
     settings->endElement();//office:document-settings
     settings->endDocument();
     output->close();
@@ -293,7 +293,9 @@ void Filterkpr2odf::convertContent(KoXmlWriter* content)
         content->addAttribute("draw:name", title.toElement().attribute("title"));
         content->addAttribute("draw:style-name", createPageStyle(pageBackground));
         pageBackground = pageBackground.nextSibling().toElement();//next background
+
         content->addAttribute("draw:id", QString("page%1").arg(m_currentPage));
+        content->addAttribute("xml:id", QString("page%1").arg(m_currentPage));
         content->addAttribute("draw:master-page-name", masterPageStyleName);
 
         //convert the objects (text, images, charts...) in this page
@@ -729,6 +731,7 @@ void Filterkpr2odf::appendPie(KoXmlWriter* content, const KoXmlElement& objectEl
         content->addAttribute("draw:name", nameStr);
     }
     content->addAttribute("draw:id", QString("object%1").arg(m_objectIndex));
+    content->addAttribute("xml:id", QString("object%1").arg(m_objectIndex));
     content->addAttributePt("svg:x", realOrig.x());
     content->addAttributePt("svg:y",  realOrig.y());
     content->addAttributePt("svg:width", realSize.width());
@@ -1193,6 +1196,7 @@ void Filterkpr2odf::appendArrow(KoXmlWriter* content, const KoXmlElement& object
         content->addAttribute("draw:name", nameStr);
     }
     content->addAttribute("draw:id", QString("object%1").arg(m_objectIndex));
+    content->addAttribute("xml:id", QString("object%1").arg(m_objectIndex));
     content->addAttribute("draw:style-name", createGraphicStyle(objectElement));
     content->addAttribute("svg:x", "0pt");
     content->addAttribute("svg:y", "0pt");
@@ -1392,6 +1396,7 @@ void Filterkpr2odf::set2DGeometry(KoXmlWriter* content, const KoXmlElement& obje
     QPointF o(orig.attribute("x").toDouble(), y);
 
     content->addAttribute("draw:id", QString("object%1").arg(m_objectIndex));
+    content->addAttribute("xml:id", QString("object%1").arg(m_objectIndex));
 
     QSizeF s(size.attribute("width").toDouble(), size.attribute("height").toDouble());
     content->addAttributePt("svg:width", s.width());

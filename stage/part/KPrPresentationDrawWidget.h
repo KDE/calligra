@@ -25,7 +25,7 @@
 
 #include "KPrPresentationToolEventForwarder.h"
 
-#include <QtGui/QLabel>
+#include <QLabel>
 #include <QVarLengthArray>
 
 class QAction;

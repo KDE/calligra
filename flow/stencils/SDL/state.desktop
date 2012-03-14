@@ -2,12 +2,17 @@
 Name=State
 Name[bg]=Състояние
 Name[ca]=Estat
+Name[ca@valencia]=Estat
 Name[cs]=Stav
+Name[de]=Status
 Name[es]=Estado
 Name[et]=Olek
+Name[fr]=État
 Name[it]=Stato
+Name[kk]=Күй-жай
 Name[nb]=Tilstand
 Name[nds]=Status
+Name[nl]=Status
 Name[pl]=Stan
 Name[pt]=Estado
 Name[pt_BR]=Estado

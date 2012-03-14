@@ -81,6 +81,14 @@ public:
      */
     virtual ~KisSelection();
 
+    /**
+     * The paint device of the pixel selection should report
+     * about it's setDirty events to its parent. The creator
+     * should set the parent manually if he wants to get the
+     * signals
+     */
+    void setParentNode(KisNodeWSP node);
+
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 
@@ -123,9 +131,6 @@ public:
     void updateProjection(const QRect& rect);
     void updateProjection();
 
-    void setDeselected(bool deselected);
-    bool isDeselected();
-
     void setVisible(bool visible);
     bool isVisible();
 
@@ -148,8 +153,21 @@ public:
 
     void clear();
 
+    /**
+     * @brief flatten creates a new pixel selection component from the shape selection
+     * and throws away the shape selection. This has no effect if there is no
+     * shape selection.
+     */
+    void flatten();
+
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
+
+private:
+    friend class KisSelectionTest;
+    friend class KisMaskTest;
+    friend class KisAdjustmentLayerTest;
+    KisNodeWSP parentNode() const;
 
 private:
 

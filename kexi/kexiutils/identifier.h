@@ -22,7 +22,7 @@
 #define KEXIUTILS_IDENTIFIER_H
 
 #include "validator.h"
-#include <qstring.h>
+#include <QString>
 
 namespace KexiUtils
 {

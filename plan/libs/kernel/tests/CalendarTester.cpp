@@ -27,7 +27,7 @@
 
 #include <cstdlib>
 #include <qtest_kde.h>
-#include <QtCore/QDir>
+#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>

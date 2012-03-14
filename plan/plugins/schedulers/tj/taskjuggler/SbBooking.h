@@ -12,7 +12,7 @@
 #ifndef _SbBooking_h_
 #define _SbBooking_h_
 
-#include <qstring.h>
+#include <QString>
 
 namespace TJ
 {

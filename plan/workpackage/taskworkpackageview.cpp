@@ -36,6 +36,7 @@
 #include <QWidget>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
+#include <QPointer>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -48,6 +49,7 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
+extern int planworkDbg();
 
 using namespace KPlato;
 
@@ -98,7 +100,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     slaveView()->setDefaultColumns( show );
     masterView()->setFocus();
 
-    kDebug()<<PlanWorkSettings::self()->taskWorkPackageView();
+    kDebug(planworkDbg())<<PlanWorkSettings::self()->taskWorkPackageView();
     masterView()->header()->setClickable( true );
     slaveView()->header()->setSortIndicatorShown( true );
 
@@ -172,7 +174,7 @@ void TaskWorkPackageTreeView::setProject( Project *project )
 
 void TaskWorkPackageTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<index.column();
+    kDebug(planworkDbg())<<index.column();
 }
 
 void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
@@ -221,7 +223,7 @@ void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     : QWidget( parent )
 {
-    kDebug()<<"-------------------- creating TaskWorkPackageView -------------------";
+    kDebug(planworkDbg())<<"-------------------- creating TaskWorkPackageView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskWorkPackageTreeView( part, this );
@@ -269,7 +271,7 @@ Document *TaskWorkPackageView::currentDocument() const
 
 void TaskWorkPackageView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planworkDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
@@ -278,7 +280,7 @@ void TaskWorkPackageView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug()<<index<<pos;
+    kDebug(planworkDbg())<<index<<pos;
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -307,7 +309,7 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, co
 
 void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug()<<node->name()<<" :"<<pos;
+    kDebug(planworkDbg())<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -322,7 +324,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& po
         default:
             break;
     }
-    kDebug()<<name;
+    kDebug(planworkDbg())<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -332,7 +334,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& po
 
 void TaskWorkPackageView::slotContextMenuRequested( Document *doc, const QPoint& pos )
 {
-    kDebug()<<doc->url()<<" :"<<pos;
+    kDebug(planworkDbg())<<doc->url()<<" :"<<pos;
     QString name;
     switch ( doc->type() ) {
         case Document::Type_Product:
@@ -342,7 +344,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Document *doc, const QPoint&
             name = "viewdocument_popup";
             break;
     }
-    kDebug()<<name;
+    kDebug(planworkDbg())<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -363,7 +365,7 @@ void TaskWorkPackageView::setupGui()
 
 void TaskWorkPackageView::slotSplitView()
 {
-    kDebug();
+    kDebug(planworkDbg());
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     saveContext();
 }
@@ -371,8 +373,8 @@ void TaskWorkPackageView::slotSplitView()
 
 void TaskWorkPackageView::slotOptions()
 {
-    kDebug();
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    kDebug(planworkDbg());
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( m_view, this );
     dlg->exec();
     delete dlg;
     saveContext();
@@ -389,7 +391,7 @@ bool TaskWorkPackageView::loadContext()
     doc.setContent( PlanWorkSettings::self()->taskWorkPackageView() );
     KoXmlElement context = doc.namedItem( "TaskWorkPackageViewSettings" ).toElement();
     if ( context.isNull() ) {
-        kDebug()<<"No settings";
+        kDebug(planworkDbg())<<"No settings";
         return false;
     }
     return m_view->loadContext( itemModel()->columnMap(), context );
@@ -403,7 +405,7 @@ void TaskWorkPackageView::saveContext()
     m_view->saveContext( itemModel()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
-    kDebug()<<endl<<doc.toString();
+    kDebug(planworkDbg())<<endl<<doc.toString();
 }
 
 KoPrintJob *TaskWorkPackageView::createPrintJob()

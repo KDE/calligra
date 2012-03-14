@@ -2,10 +2,13 @@
 Name=Stop
 Name[bg]=Спиране
 Name[ca]=Atura
+Name[ca@valencia]=Atura
 Name[cs]=Zastavit
 Name[el]=Διακοπή
 Name[es]=Parar
+Name[et]=Peatamine
 Name[it]=Stop
+Name[kk]=Тоқтату
 Name[nb]=Stopp
 Name[nds]=Anhollen
 Name[nl]=Stoppen

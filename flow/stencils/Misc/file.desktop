@@ -2,12 +2,15 @@
 Name=File
 Name[bg]=Файл
 Name[ca]=Fitxer
+Name[ca@valencia]=Fitxer
 Name[cs]=Soubor
 Name[de]=Datei
 Name[el]=Αρχείο
 Name[es]=Archivo
 Name[et]=Fail
+Name[fr]=Fichier
 Name[it]=File
+Name[kk]=Файл
 Name[nb]=Fil
 Name[nds]=Datei
 Name[nl]=Bestand

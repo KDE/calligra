@@ -24,7 +24,7 @@
 #include <QTextCodec>
 #include <QFile>
 #include <QFileInfo>
-#include <qfontinfo.h>
+#include <QFontInfo>
 #include <QFontDatabase>
 #include <QImage>
 #include <QRegExp>

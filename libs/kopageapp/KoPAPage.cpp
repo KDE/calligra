@@ -51,7 +51,6 @@ KoPAPage::~KoPAPage()
 void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
-
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:name", paContext.pageName( this ) );
     if (!name().isEmpty() && name() != paContext.pageName( this )) {
@@ -162,6 +161,27 @@ bool KoPAPage::displayShape(KoShape *shape) const
 {
     Q_UNUSED(shape);
     return true;
+}
+
+QImage KoPAPage::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+    KoZoomHandler zoomHandler;
+    const KoPageLayout & layout = pageLayout();
+    KoPAUtil::setZoom(layout, size, zoomHandler);
+    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
+
+    QImage image(size, QImage::Format_RGB32);
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setClipRect(pageRect);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.translate(pageRect.topLeft());
+
+    paintPage(painter, zoomHandler);
+    return image;
 }
 
 QPixmap KoPAPage::generateThumbnail( const QSize& size )

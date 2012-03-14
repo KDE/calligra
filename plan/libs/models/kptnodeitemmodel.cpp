@@ -48,6 +48,8 @@
 #include <kdganttglobal.h>
 #include <math.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -69,13 +71,13 @@ const QMetaEnum NodeModel::columnMap() const
 
 void NodeModel::setProject( Project *project )
 {
-    kDebug()<<m_project<<"->"<<project;
+    kDebug(planDbg())<<m_project<<"->"<<project;
     m_project = project;
 }
 
 void NodeModel::setManager( ScheduleManager *sm )
 {
-    kDebug()<<m_manager<<"->"<<sm;
+    kDebug(planDbg())<<m_manager<<"->"<<sm;
     m_manager = sm;
 }
 
@@ -201,7 +203,7 @@ QVariant NodeModel::description( const Node *node, int role ) const
 
 QVariant NodeModel::type( const Node *node, int role ) const
 {
-    //kDebug()<<node->name()<<", "<<role;
+    //kDebug(planDbg())<<node->name()<<", "<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -649,14 +651,14 @@ QVariant NodeModel::startupAccount( const Node *node, int role ) const
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Account *a = node->startupAccount();
-                //kDebug()<<node->name()<<": "<<a;
+                //kDebug(planDbg())<<node->name()<<": "<<a;
                 return a == 0 ? i18n( "None" ) : a->name();
             }
             break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Account *a = node->startupAccount();
-                //kDebug()<<node->name()<<": "<<a;
+                //kDebug(planDbg())<<node->name()<<": "<<a;
                 return a ? i18nc( "@info:tooltip", "Account for task startup cost: %1", a->name() )
                          : i18nc( "@info:tooltip", "Account for task startup cost" );
             }
@@ -755,7 +757,7 @@ QVariant NodeModel::startTime( const Node *node, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( node->startTime( id() ) );
         case Qt::ToolTipRole:
-            //kDebug()<<node->name()<<", "<<role;
+            //kDebug(planDbg())<<node->name()<<", "<<role;
             return i18nc( "@info:tooltip", "Scheduled start: %1", KGlobal::locale()->formatDateTime( node->startTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
             return node->startTime( id() );
@@ -772,7 +774,7 @@ QVariant NodeModel::endTime( const Node *node, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( node->endTime( id() ) );
         case Qt::ToolTipRole:
-            //kDebug()<<node->name()<<", "<<role;
+            //kDebug(planDbg())<<node->name()<<", "<<role;
             return i18nc( "@info:tooltip", "Scheduled finish: %1", KGlobal::locale()->formatDateTime( node->endTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
             return node->endTime( id() );
@@ -857,7 +859,7 @@ QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = est->variance( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v );
         }
         case Qt::EditRole: {
@@ -892,7 +894,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+                //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -913,7 +915,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return i18nc( "@info:tooltip", "PERT optimistic duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
@@ -999,7 +1001,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -1019,7 +1021,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return i18nc( "@info:tooltip", "PERT pessimistic duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
@@ -1527,7 +1529,7 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
         case Qt::DisplayRole:
             return node->actualEffortTo( m_now ).format();
         case Qt::ToolTipRole:
-            //kDebug()<<m_now<<node;
+            //kDebug(planDbg())<<m_now<<node;
             return i18nc( "@info:tooltip", "Actual effort used up to %1: %2", l->formatDate( m_now ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
@@ -2206,7 +2208,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case WPTransmitionTime: result = wpTransmitionTime( n, role ); break;
 
         default:
-            //kDebug()<<"Invalid property number: "<<property;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;;
             return result;
     }
     return result;
@@ -2625,7 +2627,7 @@ KUndo2Command *NodeModel::setConstraint( Node *node, const QVariant &value, int 
             } else {
                 v = Node::ConstraintType( value.toInt() );
             }
-            //kDebug()<<v;
+            //kDebug(planDbg())<<v;
             if ( v != node->constraint() ) {
                 return new NodeModifyConstraintCmd( *node, v, i18nc( "(qtundo-format)", "Modify constraint type" ) );
             }
@@ -2742,7 +2744,7 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
             } else {
                 return 0;
             }
-            //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
+            //kDebug(planDbg())<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
                 if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
@@ -2826,7 +2828,7 @@ KUndo2Command *NodeModel::setRunningAccount( Node *node, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = runningAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
@@ -2847,12 +2849,12 @@ KUndo2Command *NodeModel::setStartupAccount( Node *node, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = startupAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
                 Account *old = node->startupAccount();
-                //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
+                //kDebug(planDbg())<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
                 if ( old != a ) {
                     return new NodeModifyStartupAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify startup account" ) );
                 }
@@ -2885,7 +2887,7 @@ KUndo2Command *NodeModel::setShutdownAccount( Node *node, const QVariant &value,
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = shutdownAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
@@ -3027,7 +3029,7 @@ void NodeItemModel::setShowProject( bool on )
 
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
-    //kDebug()<<parent->name()<<"; "<<row;
+    //kDebug(planDbg())<<parent->name()<<"; "<<row;
     Q_ASSERT( m_node == 0 );
     m_node = parent;
     beginInsertRows( index( parent ), row, row );
@@ -3035,7 +3037,7 @@ void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 
 void NodeItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<node->parentNode()->name()<<"-->"<<node->name();
+    //kDebug(planDbg())<<node->parentNode()->name()<<"-->"<<node->name();
     Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
@@ -3044,7 +3046,7 @@ void NodeItemModel::slotNodeInserted( Node *node )
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     Q_ASSERT( m_node == 0 );
     m_node = node;
     int row = index( node ).row();
@@ -3053,7 +3055,7 @@ void NodeItemModel::slotNodeToBeRemoved( Node *node )
 
 void NodeItemModel::slotNodeRemoved( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     Q_ASSERT( node == m_node );
 #ifdef NDEBUG
     Q_UNUSED(node)
@@ -3064,13 +3066,13 @@ void NodeItemModel::slotNodeRemoved( Node *node )
 
 void NodeItemModel::slotNodeToBeMoved( Node *node )
 {
-    kDebug();
+    kDebug(planDbg());
     slotNodeToBeRemoved( node );
 }
 
 void NodeItemModel::slotNodeMoved( Node *node )
 {
-    kDebug();
+    kDebug(planDbg());
     slotNodeRemoved( node );
     slotNodeToBeInserted( node->parentNode(), node->parentNode()->indexOf( node ) );
     slotNodeInserted( node );
@@ -3078,14 +3080,14 @@ void NodeItemModel::slotNodeMoved( Node *node )
 
 void NodeItemModel::slotLayoutChanged()
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
 
 void NodeItemModel::slotWbsDefinitionChanged()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( m_project == 0 ) {
         return;
     }
@@ -3118,7 +3120,7 @@ void NodeItemModel::setProject( Project *project )
         //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
-    kDebug()<<this<<m_project<<"->"<<project;
+    kDebug(planDbg())<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
@@ -3144,7 +3146,7 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
-    kDebug()<<this<<sm;
+    kDebug(planDbg())<<this<<sm;
     reset();
 }
 
@@ -3158,7 +3160,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         return flags;
     }
     if ( isColumnReadOnly( index.column() ) ) {
-        //kDebug()<<"Column is readonly:"<<index.column();
+        //kDebug(planDbg())<<"Column is readonly:"<<index.column();
         return flags;
     }
     Node *n = node( index );
@@ -3328,9 +3330,9 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     if ( parent.isValid() ) {
         Q_ASSERT( parent.model() == this );
     }
-    //kDebug()<<parent<<row<<column;
+    //kDebug(planDbg())<<parent<<row<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
+        //kDebug(planDbg())<<m_project<<parent<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     if ( m_projectshown && ! parent.isValid() ) {
@@ -3344,7 +3346,7 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     // now get the internal pointer for the index
     Node *n = p->childNode( row );
     QModelIndex idx = createIndex(row, column, n);
-    //kDebug()<<idx;
+    //kDebug(planDbg())<<idx;
     return idx;
 }
 
@@ -3355,13 +3357,13 @@ QModelIndex NodeItemModel::index( const Node *node, int column ) const
     }
     Node *par = node->parentNode();
     if ( par ) {
-        //kDebug()<<par<<"-->"<<node;
+        //kDebug(planDbg())<<par<<"-->"<<node;
         return createIndex( par->indexOf( node ), column, const_cast<Node*>(node) );
     }
     if ( m_projectshown && node == m_project ) {
         return createIndex( 0, column, m_project );
     }
-    //kDebug()<<node;
+    //kDebug(planDbg())<<node;
     return QModelIndex();
 }
 
@@ -3398,12 +3400,12 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
                     cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
-                    //kDebug()<<"add group:"<<pargr->name();
+                    //kDebug(planDbg())<<"add group:"<<pargr->name();
                 }
                 r = new Resource();
                 r->setName( s.trimmed() );
                 cmd->addCommand( new AddResourceCmd( pargr, r ) );
-                //kDebug()<<"add resource:"<<r->name();
+                //kDebug(planDbg())<<"add resource:"<<r->name();
                 emit executeCommand( cmd );
                 cmd = 0;
             }
@@ -3417,7 +3419,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     ResourceRequest *r = node->resourceRequest( s );
                     if ( r ) {
                         if ( cmd == 0 ) cmd = new MacroCommand( c );
-                        //kDebug()<<"delete request:"<<r->resource()->name()<<" group:"<<r->parent()->group()->name();
+                        //kDebug(planDbg())<<"delete request:"<<r->resource()->name()<<" group:"<<r->parent()->group()->name();
                         cmd->addCommand( new RemoveResourceRequestCmd( r->parent(), r ) );
                     }
                 }
@@ -3436,17 +3438,17 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                             pargr = new ResourceGroup();
                             pargr->setName( i18n( "Resources" ) );
                             cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
-                            //kDebug()<<"add group:"<<pargr->name();
+                            //kDebug(planDbg())<<"add group:"<<pargr->name();
                         }
                         r = new Resource();
                         r->setName( s );
                         cmd->addCommand( new AddResourceCmd( pargr, r ) );
-                        //kDebug()<<"add resource:"<<r->name();
+                        //kDebug(planDbg())<<"add resource:"<<r->name();
                         emit executeCommand( cmd );
                         cmd = 0;
                     } else {
                         pargr = r->parentGroup();
-                        //kDebug()<<"add '"<<r->name()<<"' to group:"<<pargr;
+                        //kDebug(planDbg())<<"add '"<<r->name()<<"' to group:"<<pargr;
                     }
                     // add request
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
@@ -3459,11 +3461,11 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( *task, g ) );
                         groupmap.insert( pargr, g );
-                        //kDebug()<<"add group request:"<<g;
+                        //kDebug(planDbg())<<"add group request:"<<g;
                     }
                     if ( cmd == 0 ) cmd = new MacroCommand( c );
                     cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, r->units() ) ) );
-                    //kDebug()<<"add request:"<<r->name()<<" group:"<<g;
+                    //kDebug(planDbg())<<"add request:"<<r->name()<<" group:"<<g;
                 }
             }
             if ( cmd ) {
@@ -3477,7 +3479,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
 
 bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
-    kDebug()<<node->name()<<value<<role;
+    kDebug(planDbg())<<node->name()<<value<<role;
     if ( role != Qt::EditRole ) {
         return 0;
     }
@@ -3499,7 +3501,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
-            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            kDebug(planDbg())<<planned.toString()<<value.toInt()<<actual.toString();
             NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
             cmd->execute();
             m->addCommand( cmd );
@@ -3537,7 +3539,7 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
-        //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<result;
+        //kDebug(planDbg())<<n->name()<<": "<<index.column()<<", "<<role<<result;
     }
     if ( role == Qt::EditRole ) {
         switch ( index.column() ) {
@@ -3655,7 +3657,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug()<<index.row();
+            //kDebug(planDbg())<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -3669,7 +3671,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_projectshown && ! index.isValid() ) {
         return false;
     }
@@ -3741,13 +3743,13 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
         bool ins = true;
         foreach ( Node *n, lst ) {
             if ( node->isChildOf( n ) ) {
-                //kDebug()<<node->name()<<" is child of"<<n->name();
+                //kDebug(planDbg())<<node->name()<<" is child of"<<n->name();
                 ins = false;
                 break;
             }
         }
         if ( ins ) {
-            //kDebug()<<" insert"<<node->name();
+            //kDebug(planDbg())<<" insert"<<node->name();
             lst << node;
         }
     }
@@ -3756,7 +3758,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     foreach ( Node *node, nl ) {
         foreach ( Node *n, nlst ) {
             if ( n->isChildOf( node ) ) {
-                //kDebug()<<n->name()<<" is child of"<<node->name();
+                //kDebug(planDbg())<<n->name()<<" is child of"<<node->name();
                 int i = nodes.indexOf( n );
                 lst.removeAt( i );
             }
@@ -3767,7 +3769,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
 
 bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    //kDebug()<<action;
+    //kDebug(planDbg())<<action;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -3775,7 +3777,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        //kDebug()<<"MoveAction";
+        //kDebug(planDbg())<<"MoveAction";
 
         QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -3789,7 +3791,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
         foreach ( Node *n, nodes ) {
             if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug()<<"Can't move task:"<<n->name();
+                //kDebug(planDbg())<<"Can't move task:"<<n->name();
                 return false;
             }
         }
@@ -3805,7 +3807,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         if ( cmd ) {
             emit executeCommand( cmd );
         }
-        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;
     }
     return false;
@@ -3815,7 +3817,7 @@ Node *NodeItemModel::node( const QModelIndex &index ) const
 {
     Node *n = m_project;
     if ( index.isValid() ) {
-        //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+        //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
         n = static_cast<Node*>( index.internalPointer() );
         Q_ASSERT( n );
     }
@@ -3844,10 +3846,10 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<"Inserted: "<<node->name()<<"; "<<row;
+        //kDebug(planDbg())<<"Inserted: "<<node->name()<<"; "<<row;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<"Can't find "<<node->name();
+    //kDebug(planDbg())<<"Can't find "<<node->name();
     return QModelIndex();
 }
 
@@ -3859,13 +3861,32 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<node->parentNode()<<" inserted: "<<node->name()<<"; "<<row;
+        //kDebug(planDbg())<<node->parentNode()<<" inserted: "<<node->name()<<"; "<<row;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<"Can't find "<<node->name();
+    //kDebug(planDbg())<<"Can't find "<<node->name();
     return QModelIndex();
 }
 
+int NodeItemModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
+}
 
 //----------------------------
 class GeneralNodeItemModel::Object
@@ -3938,7 +3959,7 @@ void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
     }
     if ( m_modus & Flat ) {
         int pos = nodeObjects().count();
-        kDebug()<<pos;
+        kDebug(planDbg())<<pos;
         beginInsertRows( QModelIndex(), pos, pos );
         return;
     }
@@ -3955,7 +3976,7 @@ void GeneralNodeItemModel::slotNodeInserted( Node *node )
 //     connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
 //     connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
 
-    kDebug()<<node<<"at row"<<m_objects.count()-1;
+    kDebug(planDbg())<<node<<"at row"<<m_objects.count()-1;
     endInsertRows();
 }
 
@@ -4005,7 +4026,7 @@ void GeneralNodeItemModel::slotWorkPackageToBeRemoved( Node *node, int row )
         Object *o = findWPObject( row, parent );
         if ( o ) {
             beginRemoveRows( index( node ), row, row );
-            kDebug()<<node->name()<<row<<m_objects.at( row )->isWorkPackage();
+            kDebug(planDbg())<<node->name()<<row<<m_objects.at( row )->isWorkPackage();
             m_objects.removeAt( m_objects.indexOf( o ) );
             delete o;
             endRemoveRows();
@@ -4032,7 +4053,7 @@ void GeneralNodeItemModel::slotNodeToBeMoved( Node *node )
 
 void GeneralNodeItemModel::slotNodeMoved( Node *node )
 {
-    kDebug()<<node<<m_modus;
+    kDebug(planDbg())<<node<<m_modus;
     if ( m_modus == 0 ) {
         NodeItemModel::slotNodeMoved( node );
     } else {
@@ -4456,7 +4477,7 @@ void MilestoneItemModel::slotNodeInserted( Node *node )
 void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
 {
     Q_UNUSED(node);
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
 /*    int row = m_nodemap.values().indexOf( node );
     if ( row != -1 ) {
         Q_ASSERT( m_nodemap.contains( node->wbsCode() ) );
@@ -4476,7 +4497,7 @@ void MilestoneItemModel::slotNodeRemoved( Node *node )
 
 void MilestoneItemModel::slotLayoutChanged()
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
@@ -4497,7 +4518,7 @@ void MilestoneItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     m_project = project;
-    //kDebug()<<m_project<<"->"<<project;
+    //kDebug(planDbg())<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
@@ -4522,7 +4543,7 @@ void MilestoneItemModel::setScheduleManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
-    //kDebug()<<sm;
+    //kDebug(planDbg())<<sm;
     resetModel();
 }
 
@@ -4613,13 +4634,13 @@ QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<parent<<row<<", "<<m_nodemap.count();
+    //kDebug(planDbg())<<parent<<row<<", "<<m_nodemap.count();
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
+        //kDebug(planDbg())<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() || row >= m_nodemap.count() ) {
-        //kDebug()<<"No index for"<<parent<<row<<","<<column;
+        //kDebug(planDbg())<<"No index for"<<parent<<row<<","<<column;
         return QModelIndex();
     }
     return createIndex( row, column, m_nodemap.values().at( row ) );
@@ -4715,11 +4736,11 @@ int MilestoneItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 
 int MilestoneItemModel::rowCount( const QModelIndex &parent ) const
 {
-    //kDebug()<<parent;
+    //kDebug(planDbg())<<parent;
     if ( parent.isValid() ) {
         return 0;
     }
-    //kDebug()<<m_nodemap.count();
+    //kDebug(planDbg())<<m_nodemap.count();
     return m_nodemap.count();
 }
 
@@ -4742,7 +4763,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug()<<index.row();
+            //kDebug(planDbg())<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -4756,7 +4777,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool MilestoneItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    //kDebug();
+    //kDebug(planDbg());
     Node *dn = node( index );
     if ( dn == 0 ) {
         kError()<<"no node to drop on!";
@@ -4822,13 +4843,13 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
         bool ins = true;
         foreach ( Node *n, lst ) {
             if ( node->isChildOf( n ) ) {
-                //kDebug()<<node->name()<<" is child of"<<n->name();
+                //kDebug(planDbg())<<node->name()<<" is child of"<<n->name();
                 ins = false;
                 break;
             }
         }
         if ( ins ) {
-            //kDebug()<<" insert"<<node->name();
+            //kDebug(planDbg())<<" insert"<<node->name();
             lst << node;
         }
     }
@@ -4837,7 +4858,7 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
     foreach ( Node *node, nl ) {
         foreach ( Node *n, nlst ) {
             if ( n->isChildOf( node ) ) {
-                //kDebug()<<n->name()<<" is child of"<<node->name();
+                //kDebug(planDbg())<<n->name()<<" is child of"<<node->name();
                 int i = nodes.indexOf( n );
                 lst.removeAt( i );
             }
@@ -4848,7 +4869,7 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
 
 bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    //kDebug()<<action;
+    //kDebug(planDbg())<<action;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -4856,7 +4877,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        //kDebug()<<"MoveAction";
+        //kDebug(planDbg())<<"MoveAction";
 
         QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -4870,7 +4891,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
         foreach ( Node *n, nodes ) {
             if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug()<<"Can't move task:"<<n->name();
+                //kDebug(planDbg())<<"Can't move task:"<<n->name();
                 return false;
             }
         }
@@ -4886,7 +4907,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         if ( cmd ) {
             emit executeCommand( cmd );
         }
-        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;
     }
     return false;
@@ -4896,7 +4917,7 @@ Node *MilestoneItemModel::node( const QModelIndex &index ) const
 {
     Node *n = 0;
     if ( index.isValid() ) {
-        //kDebug()<<index;
+        //kDebug(planDbg())<<index;
         n = static_cast<Node*>( index.internalPointer() );
     }
     return n;
@@ -4904,7 +4925,7 @@ Node *MilestoneItemModel::node( const QModelIndex &index ) const
 
 void MilestoneItemModel::slotNodeChanged( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     if ( node == 0 ) {
         return;
     }
@@ -4918,13 +4939,13 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
         return;
 /*    }
     int row = m_nodemap.values().indexOf( node );
-    kDebug()<<node->name()<<": "<<node->typeToString()<<row;
+    kDebug(planDbg())<<node->name()<<": "<<node->typeToString()<<row;
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );*/
 }
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_project == 0 ) {
         return;
     }
@@ -4956,20 +4977,20 @@ void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
 
 bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
 {
-    //kDebug()<<sourceModel()<<row<<parent;
+    //kDebug(planDbg())<<sourceModel()<<row<<parent;
     if ( itemModel()->project() == 0 ) {
-        //kDebug()<<itemModel()->project();
+        //kDebug(planDbg())<<itemModel()->project();
         return false;
     }
     if ( m_filterUnscheduled ) {
         QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
         if ( s == "true" ) {
-            //kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
+            //kDebug(planDbg())<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
             return false;
         }
     }
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
-    //kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    //kDebug(planDbg())<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
 

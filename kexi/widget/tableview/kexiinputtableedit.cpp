@@ -21,13 +21,12 @@
 #include "kexiinputtableedit.h"
 #include <kexi_global.h>
 
-#include <qregexp.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qtooltip.h>
+#include <QRegExp>
+#include <QEvent>
+#include <QTimer>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 #include <QHBoxLayout>
 
 #include <kglobal.h>
@@ -116,6 +115,9 @@ void KexiInputTableEdit::init()
         m_lineedit->setAlignment(Qt::AlignRight);
     }
 
+    if (field()->isTextType()) {
+        m_lineedit->setMaxLength(field()->length());
+    }
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 

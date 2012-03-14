@@ -2,9 +2,14 @@
 Name=field
 Name[bg]=поле
 Name[ca]=camp
+Name[ca@valencia]=camp
 Name[cs]=pole
+Name[de]=Feld
 Name[el]=πεδίο
+Name[es]=campo
+Name[et]=Väli
 Name[it]=campo
+Name[kk]=өріс
 Name[nb]=felt
 Name[nds]=Feld
 Name[nl]=veld

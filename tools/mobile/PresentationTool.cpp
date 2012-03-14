@@ -24,8 +24,8 @@
  *
  */
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
+#include <QPainter>
+#include <QPaintEvent>
 #include <QPen>
 #ifndef Q_OS_ANDROID
 #include <QDBusConnection>

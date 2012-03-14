@@ -277,7 +277,6 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     int count = 0;
     for ( ; it != masterStyles.constEnd(); ++it )
     {
-        kDebug(30010) << "Master:" << it.key();
         KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );
@@ -356,7 +355,7 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
         if ( paContext.isSetClearDrawIds() ) {
-            paContext.clearDrawIds();
+            paContext.clearXmlIds("shape");
         }
         page->saveOdf( paContext );
     }
@@ -630,6 +629,13 @@ QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
     return page->thumbnail(size);
 }
 
+QImage KoPADocument::pageThumbImage(KoPAPageBase* page, const QSize& size)
+{
+    int pageNumber = pageIndex(page) + 1;
+    d->pageProvider->setPageData(pageNumber, page);
+    return page->thumbImage(size);
+}
+
 void KoPADocument::initEmpty()
 {
     d->masterPages.clear();
@@ -763,6 +769,8 @@ void KoPADocument::loadConfig()
         KConfigGroup configGroup = config->group( "Grid" );
         bool showGrid = configGroup.readEntry<bool>( "ShowGrid", defGrid.showGrid() );
         gridData().setShowGrid(showGrid);
+        bool paintGridInBackground = configGroup.readEntry("PaintGridInBackground", defGrid.paintGridInBackground());
+        gridData().setPaintGridInBackground(paintGridInBackground);
         bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
         gridData().setSnapToGrid(snapToGrid);
         qreal spacingX = configGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );

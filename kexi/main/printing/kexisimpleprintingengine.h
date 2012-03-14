@@ -32,8 +32,8 @@ class KexiSimplePrintingSettings;
 #include <KoUnit.h>
 
 #include <q3paintdevicemetrics.h>
-#include <qfontmetrics.h>
-#include <qfont.h>
+#include <QFontMetrics>
+#include <QFont>
 
 //! @short Settings data for simple printing engine.
 class KexiSimplePrintingSettings

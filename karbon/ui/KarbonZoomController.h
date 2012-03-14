@@ -22,7 +22,7 @@
 #define KARBONZOOMCONTROLLER_H
 
 #include <KoZoomMode.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 class KoCanvasController;
 class KActionCollection;
@@ -89,6 +89,12 @@ private slots:
 
     /// so we know when the page size changed
     void resourceChanged(int key, const QVariant & value);
+
+    /// zoom in relative to current zoom
+    void zoomInRelative();
+
+    /// zoom out relative to current zoom
+    void zoomOutRelative();
 
 private:
     class Private;

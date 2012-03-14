@@ -812,7 +812,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 /*
  Parents elements:
  - [done] sectPr (§17.6.17)
- - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.18)
  - [done] sectPr (§17.6.19)
 
  Child elements:
@@ -858,11 +858,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lnNumType()
 /*
  Parent elements:
  - [done] sectPr (§17.6.17)
- - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.18)
  - [done] sectPr (§17.6.19)
 
  Child elements:
- - [done] numFmt (Footnote Numbering Format) §17.11.18
+ - [done] numFmt (Footnote Numbering Format) §17.11.18
  - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
  - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
  - pos (Footnote Placement) §17.11.21
@@ -907,11 +907,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 /*
  Parent elements:
  - [done] sectPr (§17.6.17)
- - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.18)
  - [done] sectPr (§17.6.19)
 
  Child elements:
- - [done] numFmt (Footnote Numbering Format) §17.11.18
+ - [done] numFmt (Footnote Numbering Format) §17.11.18
  - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
  - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
  - pos (Footnote Placement) §17.11.21
@@ -957,14 +957,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 //! w:numFmt handler (Footnote Numbering format)
 /*
  Parent elements:
- - [done] footnotePr (§17.11.12)
- - [done] footnotePr (§17.11.11)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
 
  Child elements:
  - none
 
 */
-//! @toodo support all elements
+//! @toodo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 {
     READ_PROLOGUE
@@ -1441,7 +1441,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
 
     /*
     # example endnote from odt document converted with OpenOffice
-    <text:note text:id="ftn1" text:note-class="endnote">
+    <text:note xml:id="ftn1" text:id="ftn1" text:note-class="endnote">
     <text:note-citation>1</text:note-citation>
     <text:note-body>
     <text:p text:style-name="P2">
@@ -1453,6 +1453,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
 
     body->startElement("text:note");
     body->addAttribute("text:id", QString("endn").append(id));
+    body->addAttribute("xml:id", QString("endn").append(id));
     body->addAttribute("text:note-class", "endnote");
 
     body->startElement("text:note-citation");
@@ -1497,7 +1498,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 
     /*
     # example endnote from odt document converted with OpenOffice
-    <text:note text:id="ftn1" text:note-class="footnote">
+    <text:note text:id="ftn1" xml:id="ftn1" text:note-class="footnote">
     <text:note-citation>1</text:note-citation>
     <text:note-body>
     <text:p text:style-name="P2">
@@ -1509,6 +1510,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 
     body->startElement("text:note");
     body->addAttribute("text:id", QString("ftn").append(id));
+    body->addAttribute("xml:id", QString("ftn").append(id));
     body->addAttribute("text:note-class", "footnote");
 
     body->startElement("text:note-citation");
@@ -3533,9 +3535,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
 /*
  Parent elements:
  - [done] pPr (§17.3.1.26)
- - [done] pPr (§17.3.1.25)
- - [done] pPr (§17.7.5.2)
- - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
  - [done] pPr (§17.9.23)
  - [done] pPr (§17.7.8.2)
 
@@ -4041,7 +4043,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
  - [done] tblPr (§17.4.60)
  - [done] tblPr (§17.4.59)
  - [done] tblPr (§17.7.6.4)
- - [done] tblPr (§17.7.6.3)
+ - [done] tblPr (§17.7.6.3)
 
  Child elements:
  - ...
@@ -5214,19 +5216,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 		kDebug() << "insideH:" << m_currentDefaultCellStyle->insideH.style;
 		kDebug() << "insideV:" << m_currentDefaultCellStyle->insideV.style;
 #endif
-                //reference to the default parent style from styles.xml
-                if (m_currentTableStyleName.isEmpty() &&
-                    m_context->m_namedDefaultStyles.contains("table"))
-                {
-                    m_currentTableStyleName = m_context->m_namedDefaultStyles.value("table");
-                    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
-                    Q_ASSERT(tableStyle);
-                    if (tableStyle) {
-                        m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
-                    }
-                }
-                m_currentTableStyleBase = m_currentTableStyleName;
-                m_currentTableStyleName.clear();
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
@@ -5234,6 +5223,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 //             ELSE_TRY_READ_IF(bookmarkStart)
 //             ELSE_TRY_READ_IF(bookmarkEnd)
 //             ELSE_WRONG_FORMAT
+        }
+    }
+
+    //reference to the default parent style from styles.xml
+    if (m_currentTableStyleName.isEmpty() &&
+        m_context->m_namedDefaultStyles.contains("table"))
+    {
+        m_currentTableStyleName = m_context->m_namedDefaultStyles.value("table");
+        MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
+        Q_ASSERT(tableStyle);
+        if (tableStyle) {
+            m_tableMainStyle->setHorizontalAlign(tableStyle->mainStyle->horizontalAlign());
         }
     }
 
@@ -5294,7 +5295,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
-    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     QPair<int, int> spans;
 

@@ -19,10 +19,10 @@
 
 #include "KPrPresenterViewToolWidget.h"
 
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QToolButton>
-#include <QtCore/QTimer>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QToolButton>
+#include <QTimer>
 
 #include <KIcon>
 

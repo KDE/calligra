@@ -160,7 +160,7 @@ CoreAttributes::getHierarchLevel() const
 void
 CoreAttributes::getFullName(QString& fullName) const
 {
-    fullName = QString::null;
+    fullName.clear();
     for (const CoreAttributes* c = this; c != 0; c = c->parent)
         fullName = c->name + "." + fullName;
     // Remove trailing dot.

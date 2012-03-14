@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,13 +24,13 @@
 #include <QStringList>
 #include <QVariant>
 
-CADocumentInfo::CADocumentInfo(QObject* parent): QObject(parent)
+CADocumentInfo::CADocumentInfo (QObject* parent) : QObject (parent)
 {
 
 }
 
-CADocumentInfo::CADocumentInfo(CADocumentInfo::DocumentType type, QString name, QString path, QObject* parent)
-    : QObject(parent), m_type(type), m_name(name), m_path(path)
+CADocumentInfo::CADocumentInfo (CADocumentInfo::DocumentType type, QString name, QString path, QObject* parent)
+    : QObject (parent), m_type (type), m_name (name), m_path (path)
 {
 
 }
@@ -50,25 +50,25 @@ CADocumentInfo::DocumentType CADocumentInfo::type() const
     return m_type;
 }
 
-CADocumentInfo::DocumentType CADocumentInfo::documentTypeFromString(QString type)
+CADocumentInfo::DocumentType CADocumentInfo::documentTypeFromString (QString type)
 {
-    return typeNameHash().key(type);
+    return typeNameHash().key (type);
 }
 
-QString CADocumentInfo::stringFromDocumentType(CADocumentInfo::DocumentType type)
+QString CADocumentInfo::stringFromDocumentType (CADocumentInfo::DocumentType type)
 {
-    return typeNameHash()[type];
+    return typeNameHash() [type];
 }
 
-CADocumentInfo* CADocumentInfo::fromStringList(QStringList list)
+CADocumentInfo* CADocumentInfo::fromStringList (QStringList list)
 {
-    return new CADocumentInfo(documentTypeFromString(list.at(0)), list.at(1), list.at(2));
+    return new CADocumentInfo (documentTypeFromString (list.at (0)), list.at (1), list.at (2));
 }
 
 QStringList CADocumentInfo::toStringList() const
 {
     QStringList list;
-    list << stringFromDocumentType(type()) << name() << path();
+    list << stringFromDocumentType (type()) << name() << path();
     return list;
 }
 
@@ -82,7 +82,7 @@ QHash< CADocumentInfo::DocumentType, QString > CADocumentInfo::typeNameHash()
     return hash;
 }
 
-bool CADocumentInfo::operator==(const CADocumentInfo& docInfo)
+bool CADocumentInfo::operator== (const CADocumentInfo& docInfo)
 {
     return (docInfo.path() == m_path);
 }

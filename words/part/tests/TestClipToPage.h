@@ -2,7 +2,7 @@
 #define TESTCLIPTOPAGE_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestClipToPage : public QObject
 {

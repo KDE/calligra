@@ -20,7 +20,7 @@
 #ifndef KIS_MEMENTO_H_
 #define KIS_MEMENTO_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QRect>
 
 #include "kis_global.h"
@@ -40,18 +40,19 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 class KisMemento : public KisShared
 {
 public:
-    inline KisMemento(KisMementoManager* mementoManager) {
+    inline KisMemento(KisMementoManager* /*mementoManager*/) {
         m_extentMinX = qint32_MAX;
         m_extentMinY = qint32_MAX;
         m_extentMaxX = qint32_MIN;
         m_extentMaxY = qint32_MIN;
 
-        m_oldDefaultPixel = m_newDefaultPixel = 0;
+        m_oldDefaultPixel = 0;
+        m_newDefaultPixel = 0;
     }
 
     inline ~KisMemento() {
-        delete m_oldDefaultPixel;
-        delete m_newDefaultPixel;
+        delete[] m_oldDefaultPixel;
+        delete[] m_newDefaultPixel;
     }
 
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) {

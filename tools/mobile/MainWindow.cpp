@@ -120,10 +120,10 @@
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <kundo2stack.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include <tables/part/View.h>
-#include <tables/Sheet.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
+#include <sheets/part/View.h>
+#include <sheets/Sheet.h>
 
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),

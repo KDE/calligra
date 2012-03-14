@@ -20,10 +20,10 @@
 
 #include "connectiondialog.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qregexp.h>
-#include <qmetaobject.h>
+#include <QLayout>
+#include <QLabel>
+#include <QRegExp>
+#include <QMetaObject>
 
 #include <kpushbutton.h>
 #include <kiconloader.h>

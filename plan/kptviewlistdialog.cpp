@@ -26,6 +26,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -172,14 +174,14 @@ void AddViewPanel::viewtypeChanged( int idx )
 
 void AddViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -371,14 +373,14 @@ void EditViewPanel::changed()
 
 void EditViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void EditViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -471,7 +473,7 @@ void EditCategoryPanel::changed()
 
 void EditCategoryPanel::fillAfter()
 {
-    kDebug();
+    kDebug(planDbg());
     widget.insertAfter->clear();
     widget.insertAfter->addItem( i18n( "Top" ) );
     int idx = 0;
@@ -590,14 +592,14 @@ void AddReportsViewPanel::viewtypeChanged( int idx )
 
 void AddReportsViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddReportsViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );

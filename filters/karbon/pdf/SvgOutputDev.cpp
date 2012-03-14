@@ -24,14 +24,14 @@
 #include <poppler/GfxFont.h>
 
 #include <KDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtCore/QSizeF>
-#include <QtCore/QBuffer>
-#include <QtGui/QColor>
-#include <QtGui/QBrush>
-#include <QtGui/QPen>
-#include <QtGui/QImage>
+#include <QFile>
+#include <QTextStream>
+#include <QSizeF>
+#include <QBuffer>
+#include <QColor>
+#include <QBrush>
+#include <QPen>
+#include <QImage>
 
 class SvgOutputDev::Private
 {
@@ -122,7 +122,7 @@ void SvgOutputDev::dumpContent()
     stream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    stream << "<!-- Created using Karbon14, part of calligra: http://www.calligra.org/karbon -->" << endl;
+    stream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << endl;
 
     stream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
     stream << "width=\"" << d->pageSize.width() << "px\" height=\"" << d->pageSize.height() << "px\">" << endl;

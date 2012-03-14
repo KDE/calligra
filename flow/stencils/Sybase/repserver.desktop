@@ -2,13 +2,16 @@
 Name=Replication Server
 Name[bg]=Репликиращ сървър
 Name[ca]=Servidor de rèplica
+Name[ca@valencia]=Servidor de rèplica
 Name[de]=Replikations-Server
 Name[el]=Εξυπηρετητής αντιγράφων
-Name[es]=Servidor de replicación
+Name[es]=Servidor de replica
 Name[et]=Replikatsiooniserver
 Name[it]=Server di replica
+Name[kk]=Репликациялау сервері
 Name[nb]=Replikeringstjener
 Name[nds]=Replikatschoonserver
+Name[nl]=Replicatieserver
 Name[pl]=Serwer replikacji
 Name[pt]=Servidor Replicação
 Name[pt_BR]=Servidor de replicação

@@ -2,10 +2,15 @@
 Name=light
 Name[bg]=светлина
 Name[ca]=llum
+Name[ca@valencia]=llum
 Name[cs]=světlo
+Name[es]=luz
+Name[et]=Valgus
 Name[it]=luce
+Name[kk]=ашықтау
 Name[nb]=lys
 Name[nds]=Licht
+Name[nl]=licht
 Name[pl]=światło
 Name[pt]=luz
 Name[pt_BR]=luz

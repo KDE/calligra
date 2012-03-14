@@ -48,13 +48,13 @@
 #include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
 #include <kmenu.h>
 
 #include <kdebug.h>
 
 #include <KoDocument.h>
+
+extern int planDbg();
 
 namespace KPlato
 {
@@ -78,40 +78,40 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
 
 void CalendarTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    kDebug(planDbg())<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void CalendarTreeView::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
 void CalendarTreeView::focusInEvent ( QFocusEvent *event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     TreeViewBase::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarTreeView::focusOutEvent ( QFocusEvent * event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     TreeViewBase::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    //kDebug()<<sel.indexes().count();
-    //foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
+    //kDebug(planDbg())<<sel.indexes().count();
+    //foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) { kDebug(planDbg())<<i.row()<<","<<i.column(); }
     TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void CalendarTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    //kDebug();
+    //kDebug(planDbg());
     TreeViewBase::currentChanged( current, previous );
     // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
     selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
@@ -216,7 +216,7 @@ QSize CalendarDayView::sizeHint() const
 
 void CalendarDayView::slotSetWork()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
@@ -263,7 +263,7 @@ void CalendarDayView::slotIntervalEditDialogFinished( int result )
 
 void CalendarDayView::slotSetVacation()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
@@ -293,7 +293,7 @@ void CalendarDayView::slotSetVacation()
 
 void CalendarDayView::slotSetUndefined()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
         return;
     }
@@ -328,12 +328,12 @@ void CalendarDayView::setCurrentCalendar( Calendar *calendar )
 
 void CalendarDayView::headerContextMenuRequested( const QPoint &/*pos*/ )
 {
-//    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+//    kDebug(planDbg())<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( ! isReadWrite() ) {
         return;
     }
@@ -349,29 +349,29 @@ void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 
 void CalendarDayView::focusInEvent ( QFocusEvent *event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     QTableView::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarDayView::focusOutEvent ( QFocusEvent * event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     QTableView::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarDayView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    //kDebug()<<sel.indexes().count();
-    //foreach( QModelIndex i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
+    //kDebug(planDbg())<<sel.indexes().count();
+    //foreach( QModelIndex i, selectionModel()->selectedIndexes() ) { kDebug(planDbg())<<i.row()<<","<<i.column(); }
     QTableView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void CalendarDayView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    //kDebug();
+    //kDebug(planDbg());
     QTableView::currentChanged( current, previous );
 //    selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     emit currentChanged( current );
@@ -490,7 +490,7 @@ void CalendarEditor::draw()
 
 void CalendarEditor::setGuiActive( bool activate )
 {
-    //kDebug()<<activate;
+    //kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate ) {
@@ -518,7 +518,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates
 
 void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
 {
-    kDebug()<<menu<<date;
+    kDebug(planDbg())<<menu<<date;
     if ( ! isReadWrite() || ! date.isValid() ) {
         return;
     }
@@ -533,7 +533,7 @@ void CalendarEditor::slotContextMenuCalendar( QModelIndex /*index*/, const QPoin
     if ( ! isReadWrite() ) {
         return;
     }
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
 /*    if ( index.isValid() ) {
         Calendar *a = m_calendarview->model()->calendar( index );
@@ -541,7 +541,7 @@ void CalendarEditor::slotContextMenuCalendar( QModelIndex /*index*/, const QPoin
             name = "calendareditor_calendar_popup";
         }
     }*/
-    //kDebug()<<name;
+    //kDebug(planDbg())<<name;
     if ( name.isEmpty() ) {
         return;
     }
@@ -553,14 +553,14 @@ void CalendarEditor::slotContextMenuDay( QModelIndex index, const QPoint& pos )
     if ( ! isReadWrite() ) {
         return;
     }
-    kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 /*    QString name;
     if ( index.isValid() ) {
         if ( m_dayview->model()->day( index ) ) {
             name = "calendareditor_day_popup";
         }
     }
-    kDebug()<<name;
+    kDebug(planDbg())<<name;
     if ( name.isEmpty() ) {
         return;
     }
@@ -574,7 +574,7 @@ Calendar *CalendarEditor::currentCalendar() const
 
 void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
     m_dayview->setCurrentCalendar( currentCalendar() );
     if ( m_model ) {
         m_model->setCalendar( currentCalendar() );
@@ -583,18 +583,18 @@ void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
 
 void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList /*list */)
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );
 }
 
 void CalendarEditor::slotCurrentDayChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
 void CalendarEditor::slotDaySelectionChanged( const QModelIndexList )
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );
 }
 
@@ -655,7 +655,7 @@ void CalendarEditor::updateReadWrite( bool readwrite )
 
 void CalendarEditor::slotAddCalendar ()
 {
-    //kDebug();
+    //kDebug(planDbg());
     // get parent through sibling
     Calendar *cal = m_calendarview->selectedCalendar();
     Calendar *parent = cal ? cal->parentCal() : 0;
@@ -668,17 +668,18 @@ void CalendarEditor::slotAddCalendar ()
 
 void CalendarEditor::slotAddSubCalendar ()
 {
-    //kDebug();
+    //kDebug(planDbg());
     insertCalendar ( new Calendar (), m_calendarview->selectedCalendar () );
 }
 
 void CalendarEditor::insertCalendar ( Calendar *calendar, Calendar *parent, int pos )
 {
+    m_calendarview->closePersistentEditor( m_calendarview->selectionModel()->currentIndex() );
     QModelIndex i = m_calendarview->model()->insertCalendar ( calendar, pos, parent );
     if ( i.isValid() ) {
         QModelIndex p = m_calendarview->model()->parent( i );
-        //if (parent) kDebug()<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
-        //kDebug()<<i.row()<<","<<i.column();
+        //if (parent) kDebug(planDbg())<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
+        //kDebug(planDbg())<<i.row()<<","<<i.column();
         m_calendarview->setExpanded( p, true );
         m_calendarview->setCurrentIndex( i );
         m_calendarview->edit( i );
@@ -687,13 +688,13 @@ void CalendarEditor::insertCalendar ( Calendar *calendar, Calendar *parent, int 
 
 void CalendarEditor::slotDeleteCalendar()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendarview->model()->removeCalendar( m_calendarview->selectedCalendar() );
 }
 
 void CalendarEditor::slotAddInterval ()
 {
-    //kDebug();
+    //kDebug(planDbg());
 /*    CalendarDay *parent = m_dayview->selectedDay ();
     if ( parent == 0 ) {
         TimeInterval *ti = m_dayview->selectedInterval();
@@ -716,7 +717,7 @@ void CalendarEditor::slotAddInterval ()
 
 void CalendarEditor::slotDeleteDaySelection()
 {
-    //kDebug();
+    //kDebug(planDbg());
 /*    TimeInterval *ti = m_dayview->selectedInterval();
     if ( ti != 0 ) {
         m_dayview->model()->removeInterval( ti );
@@ -730,7 +731,7 @@ void CalendarEditor::slotDeleteDaySelection()
 
 void CalendarEditor::slotAddDay ()
 {
-    //kDebug();
+    //kDebug(planDbg());
 /*    Calendar *c = currentCalendar();
     if ( c == 0 ) {
         return;
@@ -750,7 +751,7 @@ void CalendarEditor::slotAddDay ()
 
 void CalendarEditor::slotSetWork()
 {
-    kDebug()<<currentCalendar()<<m_currentMenuDateList;
+    kDebug(planDbg())<<currentCalendar()<<m_currentMenuDateList;
     if ( currentCalendar() == 0 || m_currentMenuDateList.isEmpty() ) {
         return;
     }
@@ -779,14 +780,14 @@ void CalendarEditor::slotIntervalEditDialogFinished( int result )
 
 void CalendarEditor::slotSetVacation()
 {
-    kDebug()<<m_currentMenuDateList;
+    kDebug(planDbg())<<m_currentMenuDateList;
     if ( m_currentMenuDateList.isEmpty() || currentCalendar() == 0 ) {
         return;
     }
     bool mod = false;
     MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Calendar" ) );
     foreach ( const QDate &date, m_currentMenuDateList ) {
-        kDebug()<<"handle:"<<date;
+        kDebug(planDbg())<<"handle:"<<date;
         CalendarDay *day = currentCalendar()->findDay( date );
         if ( day == 0 ) {
             mod = true;
@@ -813,7 +814,7 @@ void CalendarEditor::slotSetVacation()
 
 void CalendarEditor::slotSetUndefined()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( m_currentMenuDateList.isEmpty() || currentCalendar() == 0 ) {
         return;
     }

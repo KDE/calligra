@@ -49,10 +49,10 @@
 #include <KMenu>
 #include <KConfigGroup>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QToolButton>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QToolButton>
 
 enum ButtonIds {
     Button_New,

@@ -2,11 +2,14 @@
 Name=diode zener
 Name[bg]=ценеров диод
 Name[ca]=diode zener
+Name[ca@valencia]=diode zener
 Name[cs]=Zenerova dioda
+Name[de]=Zener-Diode
 Name[el]=δίοδος zener
 Name[es]=diodo zener
-Name[et]=tunneldiood
+Name[et]=Stabilitron
 Name[it]=diodo zener
+Name[kk]=стабилитрон
 Name[nb]=zenerdiode
 Name[nds]=Z-Diood
 Name[nl]=diode zener

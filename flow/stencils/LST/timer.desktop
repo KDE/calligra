@@ -2,9 +2,13 @@
 Name=Timer
 Name[bg]=Хронометър
 Name[ca]=Temporitzador
+Name[ca@valencia]=Temporitzador
 Name[cs]=Časovač
 Name[el]=Χρονόμετρο
+Name[es]=Temporizador
+Name[et]=Taimer
 Name[it]=Temporizzatore
+Name[kk]=Таймер
 Name[nb]=Tidsur
 Name[nl]=Timer
 Name[pl]=Czasomierz

@@ -28,12 +28,12 @@
 #include <KIcon>
 #include <KInputDialog>
 
-#include <QtGui/QSpinBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QLabel>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QToolButton>
 
 /*
 Profiles are saved in karboncalligraphyrc

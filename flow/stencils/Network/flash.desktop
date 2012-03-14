@@ -2,12 +2,15 @@
 Name=WAN Connection
 Name[bg]=Връзка WAN
 Name[ca]=Connexió WAN
+Name[ca@valencia]=Connexió WAN
 Name[cs]=WAN připojení
 Name[de]=WAN-Verbindung
 Name[el]=Σύνδεση WAN
 Name[es]=Conexión WAN
 Name[et]=WAN-ühendus
+Name[hu]=WAN kapcsolat
 Name[it]=Connessione WAN
+Name[kk]=WAN қосылымы
 Name[nb]=WAN-forbindelse
 Name[nl]=WAN-verbinding
 Name[pl]=Połączenie WAN

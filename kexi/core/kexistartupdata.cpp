@@ -23,7 +23,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 KexiStartupData::KexiStartupData()
         : m_projectData(0)

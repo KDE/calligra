@@ -491,7 +491,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
-    // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
+    // m_currentDrawStyle defined in "MsooXmlCommonReader.h"
     m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
 
     MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
@@ -628,6 +628,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
         body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
+        body->addAttribute("xml:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302

@@ -22,7 +22,7 @@
 
 #include "ui_FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoShape;
 class KoCanvasBase;
@@ -49,6 +49,7 @@ private slots:
     void removeSelectedItem();
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
     void addToPresets();
+    void removeFromPresets();
     void presetSelected(KoResource *resource);
     void filterChanged();
     void sceneSelectionChanged();

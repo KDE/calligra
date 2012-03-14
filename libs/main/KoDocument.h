@@ -23,8 +23,8 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
-#include <QtCore/QDateTime>
-#include <QtGui/QTransform>
+#include <QDateTime>
+#include <QTransform>
 #include <QList>
 
 #include <kparts/part.h>
@@ -808,9 +808,9 @@ public:
     bool loadNativeFormatFromStore(QByteArray &data);
 
     /**
-    Adds a new version and then saves the whole document.
-    * @param comment the comment for the version
-    * @return true on success, otherwise false
+     * Adds a new version and then saves the whole document.
+     * @param comment the comment for the version
+     * @return true on success, otherwise false
     */
     bool addVersion(const QString& comment);
 

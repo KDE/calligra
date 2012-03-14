@@ -200,6 +200,9 @@ public:
     quint32 lineEndArrowhead() const;
     quint32 lineStartArrowWidth() const;
     quint32 lineEndArrowWidth() const;
+    quint32 lineEndArrowLength() const;
+    quint32 lineJoinStyle() const;
+    quint32 lineEndCapStyle() const;
     // Line Style Boolean Properties
     bool fNoLineDrawDash() const;
     bool fLineFillShape() const;

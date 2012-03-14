@@ -23,13 +23,15 @@
 #include "kptaccountsmodel.h"
 
 #include <QCheckBox>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
 
 #include <kdatewidget.h>
 #include <klocale.h>
 
 #include <kdebug.h>
+
+extern int planDbg();
 
 namespace KPlato
 {
@@ -81,7 +83,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
 
 void AccountsviewConfigDialog::slotOk()
 {
-    kDebug();
+    kDebug(planDbg());
     m_view->setPeriodType( m_panel->ui_periodBox->currentIndex() );
     m_view->setCumulative( m_panel->ui_cumulative->isChecked() );
     m_view->setShowMode( m_panel->ui_showBox->currentIndex() );

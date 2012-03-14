@@ -22,9 +22,9 @@
 
 #include "../kplatomodels_export.h"
 
-#include <QtGui/QValidator>
-#include <QtGui/QLineEdit>
-#include <QtCore/QDateTime>
+#include <QValidator>
+#include <QLineEdit>
+#include <QDateTime>
 #include <QHash>
 #include <QList>
 #include <QStyleOptionViewItem>

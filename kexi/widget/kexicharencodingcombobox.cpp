@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +19,7 @@
 
 #include "kexicharencodingcombobox.h"
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -68,8 +68,7 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
         insertItem(0, desc);
         if (_selectedEncoding == defaultEncoding) {
             setCurrentIndex(0);
-        } else
-            setCurrentIndex(currentIndex() + 1);
+        }
         m_encodingDescriptionForName.insert(defaultEncoding, desc);
     }
 }

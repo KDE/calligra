@@ -19,7 +19,7 @@
 
 #include <QApplication>
 #include <QDateTime> // For creation date/time.
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QString>
 #include <QList>
@@ -154,7 +154,7 @@ EpsExport::visitVDocument(KarbonDocument& document)
     rect.top()    << " " <<
     rect.right()  << " " <<
     rect.bottom() << "\n"
-    "%%Creator: Karbon14 EPS Exportfilter 0.5"
+    "%%Creator: Calligra Karbon EPS Exportfilter 0.5"
     << endl;
 
     // We do not need the selection anymore.

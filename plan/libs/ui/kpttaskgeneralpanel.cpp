@@ -36,13 +36,15 @@
 #include <kdatewidget.h>
 
 #include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
+#endif
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QPushButton>
 
 #include <kdebug.h>
@@ -106,7 +108,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
-    //kDebug()<<"Estimate:"<<task.estimate()->expected().toString();
+    //kDebug(planDbg())<<"Estimate:"<<task.estimate()->expected().toString();
     setEstimate(task.estimate()->expectedEstimate());
     setOptimistic(task.estimate()->optimisticRatio());
     setPessimistic(task.estimate()->pessimisticRatio());
@@ -224,6 +226,10 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
 
     setObjectName(n);
     setupUi(this);
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
 #if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
@@ -259,6 +265,7 @@ int TaskGeneralPanelImpl::schedulingType() const
 
 void TaskGeneralPanelImpl::changeLeader()
 {
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
@@ -283,6 +290,7 @@ void TaskGeneralPanelImpl::changeLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
+#endif
 #endif
 }
 

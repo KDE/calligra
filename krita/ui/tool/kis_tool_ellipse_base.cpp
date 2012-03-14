@@ -49,6 +49,7 @@ void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolEllipseBase::deactivate()
 {
     updateArea();
+    KisToolShape::deactivate();
 }
 
 
@@ -67,7 +68,7 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
         event->accept();
     }
     else {
-        KisTool::mousePressEvent(event);
+        KisToolShape::mousePressEvent(event);
     }
 }
 
@@ -107,7 +108,7 @@ void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
     else {
-        KisTool::mouseMoveEvent(event);
+        KisToolShape::mouseMoveEvent(event);
     }
 }
 
@@ -123,7 +124,7 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
         event->accept();
     }
     else {
-        KisTool::mouseReleaseEvent(event);
+        KisToolShape::mouseReleaseEvent(event);
     }
 }
 

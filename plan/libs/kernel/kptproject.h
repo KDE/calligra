@@ -684,13 +684,6 @@ private:
     QList<Task*> m_softConstraints;
     QList<Task*> m_terminalNodes;
     
-#ifndef NDEBUG
-public:
-    void printDebug( bool children, const QByteArray& indent );
-    void printCalendarDebug( const QByteArray& indent = "" );
-
-	
-#endif
 };
 
 

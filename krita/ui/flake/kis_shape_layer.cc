@@ -21,7 +21,6 @@
 
 #include "kis_shape_layer.h"
 
-
 #include <QPainter>
 #include <QPainterPath>
 #include <QRect>
@@ -39,6 +38,7 @@
 #include <kicon.h>
 #include <kdebug.h>
 
+#include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoDataCenterBase.h>
@@ -107,10 +107,14 @@ private:
 struct KisShapeLayer::Private
 {
 public:
+    Private() : x(0), y(0) {}
+
     KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
     KoShapeBasedDocumentBase* controller;
+    int x;
+    int y;
 };
 
 
@@ -175,7 +179,10 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;
 
-    connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+
+    connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -200,32 +207,47 @@ KisPaintDeviceSP KisShapeLayer::paintDevice() const
 
 qint32 KisShapeLayer::x() const
 {
-    return m_d->paintDevice->x();
+    return m_d->x;
 }
 
 qint32 KisShapeLayer::y() const
 {
-    return m_d->paintDevice->y();
+    return m_d->y;
 }
 
 void KisShapeLayer::setX(qint32 x)
 {
     qint32 delta = x - this->x();
-    m_d->paintDevice->setX(x);
-    foreach (KoShape* shape, shapeManager()->shapes()) {
-        QPointF pos = shape->position();
-        shape->setPosition(QPointF(pos.x() + m_d->converter->viewToDocumentX(delta), pos.y()));
-    }
+    QPointF diff = QPointF(m_d->converter->viewToDocumentX(delta), 0);
+    emit sigMoveShapes(diff);
+
+    // Save new value to satisfy LSP
+    m_d->x = x;
 }
 
 void KisShapeLayer::setY(qint32 y)
 {
     qint32 delta = y - this->y();
-    m_d->paintDevice->setY(y);
+    QPointF diff = QPointF(0, m_d->converter->viewToDocumentY(delta));
+    emit sigMoveShapes(diff);
+
+    // Save new value to satisfy LSP
+    m_d->y = y;
+}
+
+void KisShapeLayer::slotMoveShapes(const QPointF &diff)
+{
+    QList<QPointF> prevPos;
+    QList<QPointF> newPos;
+
     foreach (KoShape* shape, shapeManager()->shapes()) {
         QPointF pos = shape->position();
-        shape->setPosition(QPointF(pos.x(), pos.y() + m_d->converter->viewToDocumentY(delta)));
+        prevPos << pos;
+        newPos << pos + diff;
     }
+
+    KoShapeMoveCommand cmd(shapeManager()->shapes(), prevPos, newPos);
+    cmd.redo();
 }
 
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
@@ -306,7 +328,10 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef("page", 1);
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);
@@ -432,11 +457,6 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
     return true;
 
-}
-
-void KisShapeLayer::selectionChanged()
-{
-    emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
 }
 
 void KisShapeLayer::resetCache()

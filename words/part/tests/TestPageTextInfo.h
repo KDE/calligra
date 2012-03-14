@@ -21,7 +21,7 @@
 #define KWPAGETEXTINFO_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <qtest_kde.h>
 
 class TestPageTextInfo : public QObject

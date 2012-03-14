@@ -2,10 +2,14 @@
 Name=Router with Firewall
 Name[bg]=Маршрутизатор със защитна стена
 Name[ca]=Encaminador amb tallafocs
+Name[ca@valencia]=Encaminador amb tallafocs
 Name[cs]=Router s firewallem
+Name[de]=Router mit Firewall
 Name[el]=Δρομολογητής με τείχος προστασίας
 Name[et]=Tulemüüriga ruuter
+Name[fr]=Routeur avec pare-feu
 Name[it]=Router con firewall
+Name[kk]=Маршруттауыш желіаралық қалқанымен
 Name[nb]=Ruter med brannmur
 Name[nds]=Nettweger mit Nettdiek
 Name[nl]=Router met firewall

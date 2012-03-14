@@ -2,10 +2,14 @@
 Name=property
 Name[bg]=свойство
 Name[ca]=propietat
+Name[ca@valencia]=propietat
 Name[cs]=vlastnost
+Name[de]=Eigenschaft
 Name[el]=ιδιότητα
-Name[et]=omadus
+Name[es]=propiedad
+Name[et]=Omadus
 Name[it]=proprietà
+Name[kk]=қасиет
 Name[nb]=egenskap
 Name[nds]=Egenschap
 Name[nl]=eigenschap

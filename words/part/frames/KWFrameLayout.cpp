@@ -317,23 +317,21 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
        |  1  [ header ]  |
        |  2              | <- pageStyle->headerDistance()
        |  3  [ maintxt ] |
-       |  4              | <- pageStyle->endNoteDistance()
-       |  5  [ endnote ] |
-       |  6              | <- pageStyle->footerDistance()
-       |  7  [ footer ]  |
-       |  8              | <- pageStyle->pageLayout()->bottomMargin + layout->bottomPadding
+       |  4              | <- pageStyle->footerDistance()
+       |  5  [ footer ]  |
+       |  6              | <- pageStyle->pageLayout()->bottomMargin + layout->bottomPadding
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
     int minZIndex = INT_MAX;
-    qreal requestedHeight[9], minimumHeight[9], resultingPositions[9];
-    for (int i = 0; i < 9; i++) { // zero fill.
+    qreal requestedHeight[7], minimumHeight[7], resultingPositions[7];
+    for (int i = 0; i < 7; i++) { // zero fill.
         requestedHeight[i] = 0;
         minimumHeight[i] = 0;
         resultingPositions[i] = 0;
     }
     minimumHeight[0] = page.topMargin() + page.topPadding();
-    minimumHeight[8] = page.bottomMargin() + page.bottomPadding();
+    minimumHeight[6] = page.bottomMargin() + page.bottomPadding();
 
     KoPageLayout layout = page.pageStyle().pageLayout();
     layout.leftMargin = page.leftMargin();
@@ -359,7 +357,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     int columnsCount = columns;
     int columnIndex = 0;
     KWFrame **main;
-    KWFrame *footer = 0, *endnote = 0, *header = 0;
+    KWFrame *footer = 0, *header = 0;
     KWFrame *pageBackground = 0;
     main = new KWFrame*[columnsCount];
     if (columns > 0)
@@ -403,17 +401,23 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case Words::OddPagesHeaderTextFrameSet:
         case Words::EvenPagesHeaderTextFrameSet: {
             header = frame;
-            minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight());
             minimumHeight[2] = pageStyle.headerDistance();
-            requestedHeight[1] = qMax(pageStyle.headerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
+            minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight() - pageStyle.headerDistance());
+            requestedHeight[1] = qMax(minimumHeight[1], textFrameSet->frames().first()->minimumFrameHeight());
+            if (pageStyle.headerDynamicSpacing()) {
+                minimumHeight[2] = qMax((qreal)0, minimumHeight[1] - requestedHeight[1]);
+            }
             break;
         }
         case Words::OddPagesFooterTextFrameSet:
         case Words::EvenPagesFooterTextFrameSet: {
             footer = frame;
-            minimumHeight[7] = qMax((qreal)10, pageStyle.footerMinimumHeight());
-            minimumHeight[6] = pageStyle.footerDistance();
-            requestedHeight[7] = qMax(pageStyle.footerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
+            minimumHeight[4] = pageStyle.footerDistance();
+            minimumHeight[5] = qMax((qreal)10, pageStyle.footerMinimumHeight() - pageStyle.footerDistance());
+            requestedHeight[5] = qMax(minimumHeight[5], textFrameSet->frames().first()->minimumFrameHeight());
+            if (pageStyle.headerDynamicSpacing()) {
+                minimumHeight[4] = qMax((qreal)0, minimumHeight[5] - requestedHeight[5]);
+            }
             break;
         }
         case Words::MainTextFrameSet: {
@@ -439,9 +443,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
 
     --minZIndex;
-    if (endnote) {
-        endnote->shape()->setZIndex(minZIndex--);
-    }
     for (int i = 0; i < columns; ++i) {
         Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
         Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
@@ -449,10 +450,14 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             main[i]->shape()->setZIndex(minZIndex);
     }
     if (footer && footer->shape()) {
-        footer->shape()->setZIndex(--minZIndex);
+        footer->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        footer->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
     if (header && header->shape()) {
-        header->shape()->setZIndex(--minZIndex);
+        header->shape()->setZIndex(minZIndex);
+        // Make us compatible with ms word (seems saner too). Compatible with LO would be 0
+        header->shape()->setRunThrough(-3); //so children will be <= -2 and thus below main text
     }
 
     if (pageBackground) {
@@ -464,27 +469,23 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     // spread space across items.
     qreal heightLeft = page.height();
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 7; i++)
         heightLeft -= qMax(minimumHeight[i], requestedHeight[i]);
     if (heightLeft >= 0) { // easy; plenty of space
-        if (minimumHeight[5] > 0) // if we have an endnote
-            minimumHeight[6] += heightLeft; // add space below endnote
-        else
-            minimumHeight[3] += heightLeft; // add space to main text frame
+        minimumHeight[3] += heightLeft; // add space to main text frame
         qreal y = page.offsetInDocument();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 7; i++) {
             resultingPositions[i] = y;
             y += qMax(minimumHeight[i], requestedHeight[i]);
         }
     } else {
         // for situations where the header + footer are too big to fit together with a
         // minimum sized main text frame.
-        minimumHeight[5] = 0; // no end note
         heightLeft = page.height();
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 7; i++)
             heightLeft -= minimumHeight[i];
         qreal y = page.offsetInDocument();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 7; i++) {
             resultingPositions[i] = y;
             qreal row = minimumHeight[i];
             if (requestedHeight[i] > row) {
@@ -496,11 +497,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     // actually move / size the frames.
     if (columns > 0 && main[0]) {
-        const qreal columnWidth = textWidth / columns;
+        const qreal columnWidth = (textWidth
+                - page.pageStyle().columns().columnSpacing * (columns- 1 ))/ columns;
+        const qreal columnStep = columnWidth + page.pageStyle().columns().columnSpacing;
         QPointF *points = new QPointF[columns];
-        for (int i = columns - 1; i >= 0; i--)
-            points[i] = QPointF(left + layout.leftMargin + layout.leftPadding
-                                + columnWidth * i, resultingPositions[3]);
+        for (int i = 0; i < columns; i++)
+            points[i] = QPointF(left + layout.leftMargin + layout.leftPadding +columnStep * i, resultingPositions[3]);
         for (int i = 0; i < columns; i++) {
             for (int f = 0; f < columns; f++) {
                 if (f == i) continue;
@@ -511,23 +513,18 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             }
         }
 
-        bool first = true;
         for (int i = columns - 1; i >= 0; i--) {
             main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(points[i]);
-            shape->setSize(QSizeF(columnWidth -
-                                  (first ? 0 : page.pageStyle().columns().columnSpacing),
-                                  resultingPositions[4] - resultingPositions[3]));
-            first = false;
+            shape->setSize(QSizeF(columnWidth, resultingPositions[4] - resultingPositions[3]));
         }
         delete[] points;
-    }
-    if (endnote) {
-        endnote->shape()->setPosition(
-            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[5]));
-        endnote->shape()->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
+
+        // We need to store the content rect so layout can place it's anchored shapes
+        // correctly
+        page.setContentRect(QRectF(QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[3]), QSizeF(textWidth ,resultingPositions[4] - resultingPositions[3])));
     }
     if (header) {
         header->shape()->setPosition(
@@ -536,8 +533,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
     if (footer) {
         footer->shape()->setPosition(
-            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[7]));
-        footer->shape()->setSize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
+            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[5]));
+        footer->shape()->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if (pageBackground) {
         pageBackground->shape()->setPosition(
@@ -571,10 +568,10 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words:
             }
         } break;
         case KWPageStyle::LeftPages:
-            *origin = Words::EvenPagesHeaderTextFrameSet;
+            *origin = header ? Words::EvenPagesHeaderTextFrameSet : Words::EvenPagesFooterTextFrameSet;
             break;
         case KWPageStyle::RightPages:
-            *origin = Words::OddPagesHeaderTextFrameSet;
+            *origin = header ? Words::OddPagesHeaderTextFrameSet : Words::OddPagesFooterTextFrameSet;
             break;
     }
     return true;

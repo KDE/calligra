@@ -44,6 +44,8 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 
+extern int planDbg();
+
 using namespace KPlato;
 
 K_PLUGIN_FACTORY(ICalendarExportFactory, registerPlugin<ICalendarExport>();)
@@ -56,7 +58,7 @@ ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
 
 KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug() << from << to;
+    kDebug(planDbg()) << from << to;
     if ( ( from != "application/x-vnd.kde.plan" ) || ( to != "text/calendar" ) ) {
         return KoFilter::NotImplemented;
     }
@@ -66,10 +68,10 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
     }
     if ( batch ) {
         //TODO
-        kDebug() << "batch";
+        kDebug(planDbg()) << "batch";
         return KoFilter::UsageError;
     }
-    kDebug()<<"online:"<<m_chain->inputDocument();
+    kDebug(planDbg())<<"online:"<<m_chain->inputDocument();
     Part *part = dynamic_cast<Part*>( m_chain->inputDocument() );
     if (part == 0) {
         kError() << "Cannot open Plan document";
@@ -87,7 +89,7 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
 
     KoFilter::ConversionStatus status = convert(part->getProject(), file);
     file.close();
-    //kDebug() << "Finished with status:"<<status;
+    //kDebug(planDbg()) << "Finished with status:"<<status;
     return status;
 }
 
@@ -102,16 +104,16 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
     foreach(const ScheduleManager *m, lst) {
         if (! baselined) {
             id = lst.last()->scheduleId();
-            //kDebug()<<"last:"<<id;
+            //kDebug(planDbg())<<"last:"<<id;
             break;
         }
         if (m->isBaselined()) {
             id = m->scheduleId();
-            //kDebug()<<"baselined:"<<id;
+            //kDebug(planDbg())<<"baselined:"<<id;
             break;
         }
     }
-    //kDebug()<<id;
+    //kDebug(planDbg())<<id;
     createTodos(cal, &project, id);
 
     KCal::ICalFormat format;

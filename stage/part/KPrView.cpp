@@ -62,7 +62,7 @@
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
 #include "ui/KPrHtmlExportDialog.h"
-#include <QtGui/QDesktopWidget>
+#include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
 

@@ -22,7 +22,7 @@ target_link_libraries(koabstraction ${extra_libs}
     kotext
     kopageapp
     wordsprivate
-    calligratablescommon
+    calligrasheetscommon
     ${MISSING_LIBS}
 )
 
@@ -31,7 +31,7 @@ target_link_libraries(koabstraction LINK_INTERFACE_LIBRARIES
     flake
     komain
     kotext
-    calligratablescommon
+    calligrasheetscommon
     ${KDE4_KPARTS_LIBS}
     ${QT_LIBRARIES}
 )
