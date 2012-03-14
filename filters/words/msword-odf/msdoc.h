@@ -219,9 +219,9 @@ enum BrcType
  * Specifies the type of the section break that is being described.
  * [MS-DOC] — v20101219
  */
-enum SBkcOperand 
+enum SBkcOperand
 {
-    bkcContinuous = 0x00, 
+    bkcContinuous = 0x00,
     bkcNewColumn,
     bkcNewPage,
     bkcEvenPage,
