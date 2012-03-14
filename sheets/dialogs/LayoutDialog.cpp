@@ -890,7 +890,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     grid->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
     generic = new QRadioButton(i18n("Generic"), grp);
-    generic->setWhatsThis(i18n("This is the default format and Tables autodetects the actual data type depending on the current cell data. By default, Tables right justifies numbers, dates and times within a cell and left justifies anything else."));
+    generic->setWhatsThis(i18n("This is the default format and Calligra Sheets autodetects the actual data type depending on the current cell data. By default, Calligra Sheets right justifies numbers, dates and times within a cell and left justifies anything else."));
     grid->addWidget(generic, 1, 0);
 
     number = new QRadioButton(i18n("Number"), grp);
@@ -918,11 +918,11 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     grid->addWidget(date, 7, 0);
 
     time = new QRadioButton(i18n("Time"), grp);
-    time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, Tables will display 00:00 in the global format you have in System Settings."));
+    time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
     grid->addWidget(time, 8, 0);
 
     datetime = new QRadioButton(i18n("Date and Time"), grp);
-    datetime->setWhatsThis(i18n("This formats your cell content as date and time. To enter a date and a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available date format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a date and time, Tables will display 00:00 in the global format you have in System Settings."));
+    datetime->setWhatsThis(i18n("This formats your cell content as date and time. To enter a date and a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available date format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a date and time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
     grid->addWidget(datetime, 9, 0);
 
     textFormat = new QRadioButton(i18n("Text"), grp);

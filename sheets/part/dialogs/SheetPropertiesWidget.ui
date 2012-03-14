@@ -156,7 +156,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      <item row="2" column="1" >
       <widget class="QCheckBox" name="showFormulaCheckBox" >
        <property name="whatsThis" >
-        <string>If this box is checked Calligra Tables will display the actual formulae in cells rather than the results.</string>
+        <string>If this box is checked Calligra Sheets will display the actual formulae in cells rather than the results.</string>
        </property>
        <property name="text" >
         <string>Show &amp;formula</string>
@@ -176,7 +176,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      <item row="3" column="1" >
       <widget class="QCheckBox" name="showFormulaIndicatorCheckBox" >
        <property name="whatsThis" >
-        <string>If this box is checked Calligra Tables will display a small blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
+        <string>If this box is checked Calligra Sheets will display a small blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
        </property>
        <property name="text" >
         <string>Show formula &amp;indicator</string>

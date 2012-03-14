@@ -304,7 +304,7 @@
            <Syntax>FIND(find_text;within_text;start_num)</Syntax>
            <Example>FIND("Cal";"Calligra") returns 1</Example>
            <Example>FIND("i";"Calligra") returns 5</Example>
-           <Example>FIND("a";"Tables in Calligra";4) returns 12</Example>
+           <Example>FIND("a";"Sheets in Calligra";4) returns 12</Example>
            <Related>FINDB</Related>
            <Related>SEARCH</Related>
            <Related>REPLACE</Related>
@@ -466,7 +466,7 @@
        <Help>
            <Text>The CONCATENATE() function returns a string which is the concatenation of the strings passed as parameters.</Text>
            <Syntax>CONCATENATE(value;value;...)</Syntax>
-           <Example>CONCATENATE("Tables";"Calligra";"KDE") returns "TablesCalligraKDE"</Example>
+           <Example>CONCATENATE("Sheets";"Calligra";"KDE") returns "SheetsCalligraKDE"</Example>
        </Help>
    </Function>
 
