@@ -26,6 +26,8 @@
 
 class KisTextureOptionWidget;
 class KisPattern;
+class KoResource;
+class KisPropertiesConfiguration;
 
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
@@ -39,7 +41,7 @@ public:
         LIGHT
     };
 
-    explicit KisTextureOption(QObject *parent = 0);
+    explicit KisTextureOption(QObject *parent= 0);
     virtual ~KisTextureOption();
 signals:
     
@@ -48,17 +50,14 @@ public slots:
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+private slots:
+
+    void resetGUI(KoResource*); /// called when a new pattern is selected
+
 private:
     KisTextureOptionWidget *m_optionWidget;
 
-    KisPattern *m_pattern;
-    qreal m_scale;
-    qreal m_rotation;
-    int m_offset;
-    qreal m_strength;
-    bool m_invert;
-    TextureChannel m_activeChannel;
-    bool m_ownsPattern;
+
 };
 
 #endif // KIS_TEXTURE_OPTION_H
