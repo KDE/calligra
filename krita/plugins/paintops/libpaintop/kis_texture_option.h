@@ -43,7 +43,6 @@ public:
 
     explicit KisTextureOption(QObject *parent= 0);
     virtual ~KisTextureOption();
-signals:
     
 public slots:
     
