@@ -38,7 +38,7 @@ public:
     KoResource *currentResource();
     void setCurrentPattern(KoResource *resource);
     void setCurrentItem(int row, int column);
-
+    void setGrayscalePreview(bool grayscale);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
 
