@@ -24,10 +24,9 @@
 
 
 KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
-                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0), m_parser(0)
+                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0)
 {
     m_qstrQuery = qstrSQL;
-    m_parser = new KexiDB::Parser(m_connection);
     getSchema();
 }
 
@@ -61,7 +60,6 @@ void KexiDBReportData::addExpression(const QString& field, const QVariant& value
 KexiDBReportData::~KexiDBReportData()
 {
     close();
-    delete m_parser;
     delete m_copySchema;
     delete m_originalSchema;
     delete m_cursor;    
@@ -120,20 +118,17 @@ bool KexiDBReportData::getSchema()
         else if ( m_connection->querySchema ( m_qstrQuery ) )
         {
             kDebug() << m_qstrQuery <<  " is a query..";
+            m_connection->querySchema(m_qstrQuery)->debug();
             m_originalSchema = new KexiDB::QuerySchema(*(m_connection->querySchema ( m_qstrQuery )));
         }
 
         if (m_originalSchema) {
             kDebug() << "Original:" << m_connection->selectStatement(*m_originalSchema);
+            m_originalSchema->debug();
             
-            //m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
-            
-            m_parser->parse(m_connection->selectStatement(*m_originalSchema));
-            m_copySchema = m_parser->query();
-            
-            if (m_copySchema) {
-                kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
-            }
+            m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
+            m_copySchema->debug();
+            kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
         }
         
         return true;
