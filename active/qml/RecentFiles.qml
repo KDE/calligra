@@ -22,7 +22,7 @@
 import QtQuick 1.0
 import CalligraActive 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.metadatamodels 0.1 as MetadataModels
+//import org.kde.metadatamodels 0.1 as MetadataModels
 
 ListView {
     id: recentFilesListView
@@ -35,7 +35,7 @@ ListView {
 
     PlasmaCore.SortFilterModel {
         id: metadataModel
-        sourceModel: MetadataModels.MetadataModel {
+        sourceModel: ListModel {} /*MetadataModels.MetadataModel {
             id: metadataInternalModel
             resourceType: "nfo:" + typeFilter
             sortOrder: Qt.AscendingOrder
@@ -49,7 +49,7 @@ ListView {
                     metadataModel.filterRegExp = "";
                 }
             }
-        }
+        }*/
     }
 
     model: metadataModel

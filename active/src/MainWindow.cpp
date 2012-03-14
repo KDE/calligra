@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent)
     foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
         m_view->engine()->addImportPath(importPath);
     }
+    
+    m_view->engine()->addImportPath("/data/data/org.kde.calligra.mobile/files/imports");
 
 
     m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));

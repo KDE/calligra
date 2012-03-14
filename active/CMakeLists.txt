@@ -31,7 +31,12 @@ set(calligra-active_SRCS
 
 qt4_automoc(${calligra-active_SRCS})
 
+if(ANDROID)
+add_library(calligraactive SHARED ${calligra-active_SRCS} qtmain_android.cpp)
+target_link_libraries(calligraactive log)
+else(ANDROID)
 add_executable(calligraactive ${calligra-active_SRCS})
+endif(ANDROID)
 
 target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
@@ -42,7 +47,7 @@ target_link_libraries(calligraactive
     kopageapp
 )
 
-install(TARGETS calligraactive RUNTIME DESTINATION bin)
+install(TARGETS calligraactive RUNTIME DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES calligraactive.desktop DESTINATION share/applications)
 install(DIRECTORY qml DESTINATION share/calligraactive)
 install(DIRECTORY templates DESTINATION share/calligraactive)

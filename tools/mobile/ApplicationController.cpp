@@ -266,7 +266,7 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
 #endif
 
     QMenuBar* menu = m_mainWindow->menuBar();
-#ifdef Q_WS_MAEMO_5
+#if defined(Q_WS_MAEMO_5) || defined(Q_OS_ANDROID)
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
     menu->addAction(m_ui->actionSave);

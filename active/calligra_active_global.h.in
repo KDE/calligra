@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_ACTIVE_GLOBAL
 #define CALLIGRA_ACTIVE_GLOBAL
 
-#define CALLIGRA_ACTIVE_INSTALL_PREFIX    QString("${CMAKE_INSTALL_PREFIX}")
+#define CALLIGRA_ACTIVE_INSTALL_PREFIX    QString("/data/data/org.kde.calligra.mobile/files/")
 
 namespace CalligraActive
 {

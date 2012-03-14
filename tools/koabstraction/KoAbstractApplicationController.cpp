@@ -62,7 +62,7 @@
 #include <kparts/event.h>
 #include <kundo2stack.h>
 #include <kmimetypetrader.h>
-
+#include <KStandardDirs>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QFile>

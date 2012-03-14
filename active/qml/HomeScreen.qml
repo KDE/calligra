@@ -68,7 +68,8 @@ Image {
         anchors.bottom: aboutCalligraButton.top
         anchors.margins: 10
 
-        onClicked: mainwindow.openFileDialog()
+        onClicked: homeScreen.state = "showing-file-browser"
+        //onClicked: mainwindow.openFileDialog()
     }
 
     Button {
@@ -110,6 +111,14 @@ Image {
 
     AboutCalligraActive {
         id: aboutScreen
+
+        width: parent.width; height: parent.height;
+        anchors.left: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
+    FileBrowser {
+        id: fileBrowser
 
         width: parent.width; height: parent.height;
         anchors.left: parent.right
@@ -175,6 +184,33 @@ Image {
             }
             AnchorChanges {
                 target: aboutScreen
+                anchors.left: parent.left
+            }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutCalligraButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+        },
+        State {
+            name: "showing-file-browser"
+            AnchorChanges {
+                target: docTypeSelector
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: recentFiles
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: fileBrowser
                 anchors.left: parent.left
             }
             AnchorChanges {
