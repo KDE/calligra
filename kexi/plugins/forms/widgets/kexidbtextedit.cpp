@@ -74,7 +74,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_menuExtender(this, this)
         , m_slotTextChanged_enabled(true)
         , m_dataSourceLabel(0)
-        , m_Length(0)
+        , m_length(0)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -197,7 +197,7 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     if (!cinfo) {
-        m_Length = 0;
+        m_length = 0;
         return;
     }
 
