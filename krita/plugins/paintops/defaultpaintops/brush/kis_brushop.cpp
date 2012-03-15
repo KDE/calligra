@@ -169,7 +169,12 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
             m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
             brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
         }
+
+        // after applying the coloring information, apply the texturing
+        m_textureOption->apply(dab, info.pos().toPoint());
     }
+
+
 
     MirrorProperties mirrors = m_mirrorOption.apply(info);
     dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
