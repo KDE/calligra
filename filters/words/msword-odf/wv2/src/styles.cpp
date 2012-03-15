@@ -623,11 +623,6 @@ void Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
 #endif
         m_std->istdNext = stiNormal;
     }
-    //TODO: Why did I disable this one ???
-    // if (m_std->istdNext == istd) {
-    //     wvlog << "istdNext MUST NOT be same as istd!" << endl;
-    //     return false;
-    // }
     if ((m_std->istdNext != 0x0fff) &&
         styles[m_std->istdNext]->isEmpty()) {
         wvlog << "istdNext - style definition EMPTY!" << endl;
