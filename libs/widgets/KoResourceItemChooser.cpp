@@ -421,10 +421,11 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         gc.drawRect(img.rect());
         image = img;
     }
+
     if (d->grayscalePreview) {
         QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
-        for( int row = 0; row < image.height(); ++row ) {
-            for( int col = 0; col < image.width(); ++col ){
+        for (int row = 0; row < image.height(); ++row ) {
+            for (int col = 0; col < image.width(); ++col ){
                 const QRgb currentPixel = pixel[row * image.width() + col];
                 const int red = qRed(currentPixel);
                 const int green = qGreen(currentPixel);
@@ -433,7 +434,6 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
                 pixel[row * image.width() + col] = qRgb(grayValue, grayValue, grayValue);
             }
         }
-
     }
     d->previewLabel->setPixmap(QPixmap::fromImage(image));
 
