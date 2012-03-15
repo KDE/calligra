@@ -1,5 +1,11 @@
 [Desktop Entry]
 Name=Calligra Sheets
+Name[kk]=Calligra Sheets
+Name[pt]=Calligra Sheets
+Name[pt_BR]=Calligra Sheets
+Name[sv]=Calligra Sheets
+Name[uk]=Calligra Sheets
+Name[x-test]=xxCalligra Sheetsxx
 Exec=calligrasheets %u
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици
