@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Calligra Sheets
 Name[nl]=Calligra Sheets
+Name[pt]=Calligra Sheets
+Name[sv]=Calligra Sheets
 Name[uk]=Calligra Sheets
 Name[x-test]=xxCalligra Sheetsxx
 Exec=calligrasheets %u
