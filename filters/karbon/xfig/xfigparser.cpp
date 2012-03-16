@@ -646,6 +646,11 @@ qDebug()<<"polyline";
 qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
          << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
 
+    // ignore line with useless point number
+    if (npoints < 1) {
+        return 0;
+    }
+
     if (sub_type==XFig3_2PolylinePolylineId) {
         XFigPolylineObject* polylineObject = new XFigPolylineObject;
         polylineObject->setCapType(capType(cap_style));
@@ -743,6 +748,11 @@ qDebug()<<"spline";
         >> forward_arrow >> backward_arrow >> npoints;
 qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
          << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
+
+    // ignore line with useless point number
+    if (npoints < 1) {
+        return 0;
+    }
 
     // TODO: no idea yet how to translate the xfig splines to odf ones
     // thus simply creating polygones/polylines for now :/
