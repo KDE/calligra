@@ -312,8 +312,8 @@ XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
     writeZIndex(ellipseObject);
 
     const XFigPoint centerPoint = ellipseObject->centerPoint();
-    mBodyWriter->addAttribute("svg:cx", "0");
-    mBodyWriter->addAttribute("svg:cy", "0");
+    mBodyWriter->addAttribute("svg:cx", "0pt");
+    mBodyWriter->addAttribute("svg:cy", "0pt");
     mBodyWriter->addAttributePt("svg:rx", odfLength(ellipseObject->xRadius()));
     mBodyWriter->addAttributePt("svg:ry", odfLength(ellipseObject->yRadius()));
 
