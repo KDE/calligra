@@ -90,6 +90,7 @@ private:
     void writeCapType( KoGenStyle& odfStyle, int capType );
     void writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType);
 
+    void writeComment(const XFigAbstractObject* object);
     void writePoints( const QVector<XFigPoint>& points );
     /// Writes z-index and sets layer name
     void writeZIndex( const XFigAbstractGraphObject* graphObject );

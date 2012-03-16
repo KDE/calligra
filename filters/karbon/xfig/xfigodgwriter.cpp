@@ -164,14 +164,15 @@ void
 XFigOdgWriter::storeMetaXml()
 {
     KoDocumentInfo documentInfo;
-    // TODO
-//     documentInfo.load( m_documentInfo );
+    documentInfo.setOriginalGenerator(QLatin1String("Calligra XFig filter"));
+    documentInfo.setAboutInfo(QLatin1String("comments"), mDocument->comment());
 
     const QString documentInfoFilePath = QLatin1String( "meta.xml" );
 
     mOutputStore->open( documentInfoFilePath );
     documentInfo.saveOasis( mOutputStore );
     mOutputStore->close();
+
     // TODO: "text/xml" could be a static string
     mManifestWriter->addManifestEntry( documentInfoFilePath, QLatin1String("text/xml") );
 }
@@ -323,6 +324,7 @@ XFigOdgWriter::writeCompoundObject( const XFigCompoundObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
     mBodyWriter->addAttribute("draw:layer", mLayerId );
+    writeComment(groupObject);
 
     foreach( const XFigAbstractObject* object, groupObject->objects() )
         writeObject( object );
@@ -358,6 +360,8 @@ XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
         mBodyWriter->addAttribute("draw:style-name", ellipseStyleName);
     }
 
+    writeComment(ellipseObject);
+
     mBodyWriter->endElement(); // draw:ellipse
 }
 
@@ -383,6 +387,8 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
         mBodyWriter->addAttribute("draw:style-name", polylineStyleName);
     }
 
+    writeComment(polylineObject);
+
     mBodyWriter->endElement(); // draw:polyline
 }
 
@@ -404,6 +410,8 @@ XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
             mStyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
         mBodyWriter->addAttribute("draw:style-name", polygonStyleName);
     }
+
+    writeComment(polygonObject);
 
     mBodyWriter->endElement(); // draw:polygon
 }
@@ -436,6 +444,8 @@ XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
         const QString boxStyleName = mStyleCollector.insert(boxStyle, QLatin1String("boxStyle"));
         mBodyWriter->addAttribute("draw:style-name", boxStyleName);
     }
+
+    writeComment(boxObject);
 
     mBodyWriter->endElement(); // draw:rect
 }
@@ -496,6 +506,9 @@ XFigOdgWriter::writeTextObject( const XFigTextObject* textObject )
     mBodyWriter->endElement(); //text:p
 
     mBodyWriter->endElement();//draw:text-box
+
+    writeComment(textObject);
+
     mBodyWriter->endElement();//draw:frame
 }
 
@@ -522,6 +535,17 @@ XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
         pointsString += QLatin1Char(' ');
     }
     mBodyWriter->addAttribute("draw:points", pointsString );
+}
+
+void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
+{
+    const QString& comment = object->comment();
+    if (comment.isEmpty())
+        return;
+
+    mBodyWriter->startElement("svg:desc");
+    mBodyWriter->addTextNode(comment);
+    mBodyWriter->endElement(); // svg:desc
 }
 
 void
