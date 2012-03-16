@@ -66,7 +66,6 @@ public:
 private:
     void storePixelImageFiles();
     void storeMetaXml();
-    void storeSettingsXml();
     void storeContentXml();
 
     void writeMasterPage();

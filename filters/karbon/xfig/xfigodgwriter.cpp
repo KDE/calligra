@@ -131,9 +131,6 @@ XFigOdgWriter::write( XFigDocument* document )
     // Create the styles.xml file
     mStyleCollector.saveOdfStylesDotXml( mOutputStore, mManifestWriter );
 
-    // Create settings.xml
-    storeSettingsXml();
-
     // Create meta.xml
     storeMetaXml();
 
@@ -177,35 +174,6 @@ XFigOdgWriter::storeMetaXml()
 
     // TODO: "text/xml" could be a static string
     mManifestWriter->addManifestEntry( documentInfoFilePath, QLatin1String("text/xml") );
-}
-
-void
-XFigOdgWriter::storeSettingsXml()
-{
-    const QString documentSettingsFilePath = QLatin1String( "settings.xml" );
-
-    mOutputStore->open( documentSettingsFilePath );
-
-    KoStoreDevice device( mOutputStore );
-    KoXmlWriter* settingsWriter =
-        KoOdfWriteStore::createOasisXmlWriter( &device, "office:document-settings" );
-
-        settingsWriter->startElement( "config:config-item-set" );
-            settingsWriter->addAttribute( "config:name", "ooo:configuration-settings" );
-            settingsWriter->startElement( "config:config-item" );
-                settingsWriter->addAttribute( "config:name", "TabsRelativeToIndent" );
-                settingsWriter->addAttribute( "config:type", "boolean" );
-                settingsWriter->addTextSpan( QLatin1String("false") ); // ODF=true, MSOffice=false
-            settingsWriter->endElement(); // config-item
-        settingsWriter->endElement(); // config-item-set
-
-    settingsWriter->endElement();//office:document-settings
-    settingsWriter->endDocument();
-
-    mOutputStore->close();
-
-    // TODO: "text/xml" could be a static string
-    mManifestWriter->addManifestEntry( documentSettingsFilePath, QLatin1String("text/xml") );
 }
 
 void
