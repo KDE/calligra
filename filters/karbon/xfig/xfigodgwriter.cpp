@@ -501,18 +501,48 @@ XFigOdgWriter::writeZIndex( const XFigAbstractGraphObject* graphObject )
 void
 XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
 {
+    XFigCoord minX;
+    XFigCoord minY;
+    XFigCoord maxX;
+    XFigCoord maxY;
+    {
+        const XFigPoint& firstPoint = points.at(0);
+        minX = maxX = firstPoint.x();
+        minY = maxY = firstPoint.y();
+    }
+
     QString pointsString;
     int i = 0;
     while (true) {
         const XFigPoint& point = points.at(i);
-        const double x = odfXCoord(point.x());
-        const double y = odfXCoord(point.y());
+        const XFigCoord x = point.x();
+        const XFigCoord y = point.y();
+        if( x < minX )
+            minX = x;
+        else if( maxX < x )
+            maxX = x;
+        if( y < minY )
+            minY = y;
+        else if( maxY < y )
+            maxY = y;
+
         pointsString +=  mCLocale.toString(x)+QLatin1Char(',')+mCLocale.toString(y);
         ++i;
         if (i >= points.count())
             break;
         pointsString += QLatin1Char(' ');
     }
+    const XFigCoord width =  maxX - minX + 1;
+    const XFigCoord height = maxY - minY + 1;
+    const QString viewBoxString =
+        QString::number(minX) + QLatin1Char(' ') + QString::number(minY) + QLatin1Char(' ') +
+        QString::number(width) + QLatin1Char(' ') + QString::number(height);
+
+    mBodyWriter->addAttributePt("svg:x", odfXCoord(minX));
+    mBodyWriter->addAttributePt("svg:y", odfYCoord(minY));
+    mBodyWriter->addAttributePt("svg:width", odfLength(width) );
+    mBodyWriter->addAttributePt("svg:height", odfLength(height) );
+    mBodyWriter->addAttribute("svg:viewBox", viewBoxString);
     mBodyWriter->addAttribute("draw:points", pointsString );
 }
 
