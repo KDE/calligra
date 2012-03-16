@@ -251,14 +251,6 @@ XFigOdgWriter::writePage( const XFigPage* page )
     mBodyWriter->addAttribute( "xml:id", QLatin1String("page")+QString::number(mPageCount++) );
     mBodyWriter->addAttribute( "draw:master-page-name", mMasterPageStyleName );
 
-    // there is only one layer
-    mLayerId = QLatin1String("Layer");
-    mBodyWriter->startElement( "draw:layer-set" );
-        mBodyWriter->startElement( "draw:layer" );
-        mBodyWriter->addAttribute( "draw:name", mLayerId );
-        mBodyWriter->endElement(); //draw:layer
-    mBodyWriter->endElement(); //draw:layer-set
-
     // objects
     foreach( const XFigAbstractObject* object, page->objects() )
         writeObject( object );
@@ -295,7 +287,7 @@ void
 XFigOdgWriter::writeCompoundObject( const XFigCompoundObject* groupObject )
 {
     mBodyWriter->startElement("draw:g");
-    mBodyWriter->addAttribute("draw:layer", mLayerId );
+
     writeComment(groupObject);
 
     foreach( const XFigAbstractObject* object, groupObject->objects() )
@@ -495,7 +487,6 @@ void
 XFigOdgWriter::writeZIndex( const XFigAbstractGraphObject* graphObject )
 {
     mBodyWriter->addAttribute( "draw:z-index", (1000-graphObject->depth()) );
-    mBodyWriter->addAttribute( "draw:layer", mLayerId );
 }
 
 void
