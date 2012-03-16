@@ -59,6 +59,7 @@ struct PageSize
 // Metric conversion
 // 1 point = 1/72 inches
 static const double inchtoPtFactor = 72;
+// TODO: check that support for both inch and metric system works
 
 static inline
 double
@@ -142,6 +143,7 @@ XFigOdgWriter::write( XFigDocument* document )
 void
 XFigOdgWriter::storePixelImageFiles()
 {
+    // TODO: store pixel files linked from XFigPictureBoxObject
 #if 0
     // TODO: as mManifestWriter needs full rel path, perhaps drop enterDirectory/leaveDirectory
     mOutputStore->enterDirectory( QLatin1String("Pictures") );
@@ -309,6 +311,8 @@ XFigOdgWriter::writeObject( const XFigAbstractObject* object )
         writePolygonObject( static_cast<const XFigPolygonObject*>(object) );
     else if (typeId == XFigAbstractObject::BoxId)
         writeBoxObject( static_cast<const XFigBoxObject*>(object) );
+    else if (typeId == XFigAbstractObject::PictureBoxId)
+        writePictureBoxObject( static_cast<const XFigPictureBoxObject*>(object) );
     else if (typeId == XFigAbstractObject::SplineId)
         writeSplineObject( static_cast<const XFigSplineObject*>(object) );
     else if (typeId == XFigAbstractObject::ArcId)
@@ -451,6 +455,12 @@ XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
 }
 
 void
+XFigOdgWriter::writePictureBoxObject( const XFigPictureBoxObject* /*pictureBoxObject*/ )
+{
+    // TODO
+}
+
+void
 XFigOdgWriter::writeSplineObject( const XFigSplineObject* /*object*/ )
 {
 }
@@ -458,6 +468,7 @@ XFigOdgWriter::writeSplineObject( const XFigSplineObject* /*object*/ )
 void
 XFigOdgWriter::writeArcObject( const XFigArcObject* /*object*/ )
 {
+    // TODO
 }
 
 

@@ -34,6 +34,7 @@ class XFigEllipseObject;
 class XFigPolylineObject;
 class XFigPolygonObject;
 class XFigBoxObject;
+class XFigPictureBoxObject;
 class XFigSplineObject;
 class XFigArcObject;
 class XFigTextObject;
@@ -77,6 +78,7 @@ private:
     void writePolylineObject( const XFigPolylineObject* object );
     void writePolygonObject( const XFigPolygonObject* object );
     void writeBoxObject( const XFigBoxObject* object );
+    void writePictureBoxObject( const XFigPictureBoxObject* object );
     void writeSplineObject( const XFigSplineObject* pathObject );
     void writeArcObject( const XFigArcObject* pathObject );
     void writeTextObject( const XFigTextObject* object );
