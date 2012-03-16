@@ -168,6 +168,7 @@ private:
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget* mainWidget)
         : KTabWidget(parent)
         , m_mainWidget(mainWidget)
+        , tabIndex(-1)
 {
     m_closeAction = new KAction(KIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
@@ -202,7 +203,7 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 
 void KexiMainWindowTabWidget::closeTab()
 {
-    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeCurrentWindow();
+    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(tabIndex);
 }
 
 void KexiMainWindowTabWidget::tabInserted(int index)
@@ -216,10 +217,20 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     QMenu menu;
     menu.addAction(m_closeAction);
 //! @todo add "&Detach Tab"
+    setTabIndexFromContextMenu(index);
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
     
+void KexiMainWindowTabWidget::setTabIndexFromContextMenu(const int clickedIndex)
+{
+    if (currentIndex() == -1) {
+        tabIndex = -1;
+        return;
+    }
+    tabIndex = clickedIndex;
+}
+
 //-------------------------------------------------
 
 //static

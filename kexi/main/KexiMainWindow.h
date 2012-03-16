@@ -75,6 +75,10 @@ protected:
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
 
+private:
+    int tabIndex;
+
+    void setTabIndexFromContextMenu(const int clickedIndex);
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
