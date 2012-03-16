@@ -24,9 +24,11 @@
 // filter
 #include "xfigdocument.h"
 // Qt
+#include <QTextStream>
 #include <QTextCodec>
 #include <QIODevice>
 #include <QFont>
+#include <QScopedPointer>
 
 #include <KDebug>
 
@@ -316,12 +318,12 @@ XFigParser::parse( QIODevice* device )
 
 XFigParser::XFigParser( QIODevice* device )
   : mDocument(0)
-  , mTextStream( device )
+  , m_XFigStreamLineReader( device )
 {
-    if( (device == 0) || (mTextStream.status() != QTextStream::Ok) )
+    if( (device == 0) || (m_XFigStreamLineReader.hasError()) )
         return;
 
-    QTextCodec* codec = QTextCodec::codecForName("ISO 8859-1");
+    const QTextCodec* codec = QTextCodec::codecForName("ISO 8859-1");
     mTextDecoder = codec->makeDecoder();
 
     // setup
@@ -330,9 +332,9 @@ XFigParser::XFigParser( QIODevice* device )
 
     XFigPage* page = new XFigPage;
 
-    while (! mTextStream.atEnd()) {
-        int objectCode;
-        mTextStream >> objectCode;
+    while (! m_XFigStreamLineReader.readNextObjectLine()) {
+        const int objectCode = m_XFigStreamLineReader.objectCode();
+        const QString objectComment = m_XFigStreamLineReader.comment();
 
         if (objectCode == XFig3_2ColorObjectId) {
             parseColorObject();
@@ -344,8 +346,10 @@ XFigParser::XFigParser( QIODevice* device )
                 (objectCode == XFig3_2TextObjectId) ?     parseText() :
                 (objectCode == XFig3_2ArcObjectId) ?      parseArc() :
                 /*else XFig3_2CompoundObjectId)*/         parseCompoundObject();
-            if (object != 0)
+            if (object != 0) {
+                object->setComment(objectComment);
                 page->addObject(object);
+            }
         } else {
             // should not occur
             kDebug() << "unknown object type:" << objectCode;
@@ -365,7 +369,8 @@ bool
 XFigParser::parseHeader()
 {
     // start to parse
-    const QString versionString = mTextStream.readLine();
+    m_XFigStreamLineReader.readNextLine(XFigStreamLineReader::TakeComment);
+    const QString versionString = m_XFigStreamLineReader.line();
     if (! versionString.startsWith(QLatin1String("#FIG 3.")) ||
         (versionString.length() < 8)) {
         kDebug() << "ERROR: no xfig file or wrong header";
@@ -384,73 +389,110 @@ XFigParser::parseHeader()
 
     mDocument = new XFigDocument;
 
-    // orientation
-    {
-        const QString orientationString = mTextStream.readLine();
-        const XFigPageOrientation pageOrientation =
-            (orientationString == QLatin1String("Landscape")) ? XFigPageLandscape :
-            (orientationString == QLatin1String("Portrait")) ?  XFigPagePortrait :
-                                                                XFigPageOrientationUnknown;
+    // assume header is broken by default
+    bool isHeaderCorrect = false;
+    do {
+        // orientation
+        if (m_XFigStreamLineReader.readNextLine()) {
+            const QString orientationString = m_XFigStreamLineReader.line();
+            const XFigPageOrientation pageOrientation =
+                (orientationString == QLatin1String("Landscape")) ? XFigPageLandscape :
+                (orientationString == QLatin1String("Portrait")) ?  XFigPagePortrait :
+                                                                    XFigPageOrientationUnknown;
 qDebug()<<"orientation:"<<orientationString<<pageOrientation;
-        if (pageOrientation == XFigPageOrientationUnknown)
-            kDebug() << "ERROR: invalid orientation";
+            if (pageOrientation == XFigPageOrientationUnknown)
+                kDebug() << "ERROR: invalid orientation";
 
-        mDocument->setPageOrientation( pageOrientation );
-    }
+            mDocument->setPageOrientation( pageOrientation );
+        } else {
+            break;
+        }
 
-    // justification, ("Center" or "Flush Left")
-    mTextStream.readLine();
+        // justification, ("Center" or "Flush Left")
+        if (! m_XFigStreamLineReader.readNextLine()) {
+            break;
+        }
 
-    // units
-    {
-        const QString unitTypeString = mTextStream.readLine();
-        const XFigUnitType unitType =
-            (unitTypeString == QLatin1String("Metric")) ? XFigUnitMetric :
-            (unitTypeString == QLatin1String("Inches")) ? XFigUnitInches :
-                                                          XFigUnitTypeUnknown;
-qDebug() << "unittype:"<<unitTypeString<<unitType;
-        if (unitType == XFigUnitTypeUnknown)
-            kDebug() << "ERROR: invalid units";
+        // units
+        if (m_XFigStreamLineReader.readNextLine()) {
+            const QString unitTypeString = m_XFigStreamLineReader.line();
+            const XFigUnitType unitType =
+                (unitTypeString == QLatin1String("Metric")) ? XFigUnitMetric :
+                (unitTypeString == QLatin1String("Inches")) ? XFigUnitInches :
+                                                            XFigUnitTypeUnknown;
+    qDebug() << "unittype:"<<unitTypeString<<unitType;
+            if (unitType == XFigUnitTypeUnknown)
+                kDebug() << "ERROR: invalid units";
 
-        mDocument->setUnitType( unitType );
-    }
+            mDocument->setUnitType( unitType );
+        } else {
+            break;
+        }
 
-    if (mXFigVersion == 320) {
-        const QString pageSizeString = mTextStream.readLine();
-        const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
+        if (mXFigVersion == 320) {
+            if (m_XFigStreamLineReader.readNextLine()) {
+                const QString pageSizeString = m_XFigStreamLineReader.line();
+                const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
 qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
-        mDocument->setPageSizeType(pageSizeType);
+                mDocument->setPageSizeType(pageSizeType);
+            } else {
+                break;
+            }
 
-        // export and print magnification, %
-        const QString magnificationString = mTextStream.readLine();
-        const float magnification = magnificationString.toFloat();
+            // export and print magnification, %
+            if (m_XFigStreamLineReader.readNextLine()) {
+                const QString magnificationString = m_XFigStreamLineReader.line();
+                const float magnification = magnificationString.toFloat();
 qDebug() << "magnification:"<<magnificationString<<magnification;
+            } else {
+                break;
+            }
 
-        // singe or multiple page
-        /*const QString singleOrMultiplePagesString =*/ mTextStream.readLine();
+            // singe or multiple page
+            /*const QString singleOrMultiplePagesString =*/
+            if (! m_XFigStreamLineReader.readNextLine()) {
+                break;
+            }
 
-        // transparent color for GIF export: -3=background, -2=None, -1=Default, 0-31 for standard colors, 32- for user colors
-        const QString transparentColorString = mTextStream.readLine();
-        const int transparentColor = transparentColorString.toInt();
+            // transparent color for GIF export: -3=background, -2=None, -1=Default, 0-31 for standard colors, 32- for user colors
+            if (m_XFigStreamLineReader.readNextLine()) {
+                const QString transparentColorString = m_XFigStreamLineReader.line();
+                const int transparentColor = transparentColorString.toInt();
 qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
+            } else {
+                break;
+            }
+        }
+
+        // resolution and coordinate system
+        if (m_XFigStreamLineReader.readNextLine(XFigStreamLineReader::CollectComments)) {
+            qint32 coordinateSystemType;
+            qint32 resolution;
+            QString line = m_XFigStreamLineReader.line();
+            QTextStream textStream(&line, QIODevice::ReadOnly);
+            textStream >> resolution >> coordinateSystemType;
+
+            const XFigCoordSystemOriginType coordSystemOriginType =
+                (coordinateSystemType == 1) ? XFigCoordSystemOriginLowerLeft :
+                (coordinateSystemType == 2) ? XFigCoordSystemOriginUpperLeft :
+                                            XFigCoordSystemOriginTypeUnknown;
+            mDocument->setCoordSystemOriginType( coordSystemOriginType ); // said to be ignored and always upper-left
+            mDocument->setResolution(resolution);
+            mDocument->setComment(m_XFigStreamLineReader.comment());
+
+    qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
+        } else {
+            break;
+        }
+        isHeaderCorrect = true;
+    } while (false);
+
+    if (! isHeaderCorrect) {
+        delete mDocument;
+        mDocument = 0;
     }
 
-    // resolution and coordinate system
-    {
-        qint32 coordinateSystemType;
-        qint32 resolution;
-        mTextStream >> resolution >> coordinateSystemType;
-        mTextStream.readLine();
-        const XFigCoordSystemOriginType coordSystemOriginType =
-            (coordinateSystemType == 1) ? XFigCoordSystemOriginLowerLeft :
-            (coordinateSystemType == 2) ? XFigCoordSystemOriginUpperLeft :
-                                          XFigCoordSystemOriginTypeUnknown;
-        mDocument->setCoordSystemOriginType( coordSystemOriginType ); // said to be ignored and always upper-left
-        mDocument->setResolution(resolution);
-
-qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
-    }
-    return true;
+    return isHeaderCorrect;
 }
 
 
@@ -481,19 +523,19 @@ void XFigParser::parseColorObject()
 {
     int colorNumber;
 
-    mTextStream >> colorNumber;
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream >> colorNumber;
     if ((colorNumber < 32) || (543 < colorNumber)) {
         kDebug() << "bad colorNumber:" << colorNumber;
-        mTextStream.readLine();
         return;
     }
 
     QChar hashChar;
-    mTextStream >> ws >> hashChar;
-    const int red = parseTwoDigitHexValue(mTextStream);
-    const int green = parseTwoDigitHexValue(mTextStream);
-    const int blue = parseTwoDigitHexValue(mTextStream);
-    mTextStream.readLine();
+    textStream >> ws >> hashChar;
+    const int red = parseTwoDigitHexValue(textStream);
+    const int green = parseTwoDigitHexValue(textStream);
+    const int blue = parseTwoDigitHexValue(textStream);
 
     mDocument->setUserColor(colorNumber, QColor(red, green, blue));
 }
@@ -502,7 +544,8 @@ XFigAbstractObject*
 XFigParser::parseArc()
 {
 qDebug()<<"arc";
-    XFigArcObject* arcObject = new XFigArcObject;
+
+    QScopedPointer<XFigArcObject> arcObject(new XFigArcObject);
 
     int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, cap_style, direction,
@@ -511,21 +554,26 @@ qDebug()<<"arc";
     float style_val;
 
     // first line
-    mTextStream
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream
         >> sub_type >> line_style >> thickness >> pen_color >> fill_color
         >> depth >> pen_style >> area_fill >> style_val >> cap_style
         >> direction >> forwardArrow >> backwardArrow
         >> center_x >> center_y >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
-    mTextStream.readLine();
 
     if (forwardArrow > 0) {
-        // forward arrow line
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
     }
 
     if (backwardArrow > 0) {
-        // backward arrow line
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
     }
 
 // TODO
@@ -533,7 +581,7 @@ qDebug()<<"arc";
     arcObject->setFill( area_fill, fill_color );
     arcObject->setLine( lineType(line_style), thickness, style_val, pen_color );
 
-    return arcObject;
+    return arcObject.take();
 }
 
 XFigAbstractObject*
@@ -541,7 +589,7 @@ XFigParser::parseEllipse()
 {
 qDebug()<<"ellipse";
 
-    XFigEllipseObject* ellipseObject = new XFigEllipseObject;
+    QScopedPointer<XFigEllipseObject> ellipseObject(new XFigEllipseObject);
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color,
            depth, pen_style/*not used*/, area_fill, direction/*always 1*/,
@@ -549,11 +597,13 @@ qDebug()<<"ellipse";
     float style_val, angle;
 
     // ellipse data line
-    mTextStream >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-    >> depth >> pen_style >> area_fill >> style_val >> direction
-    >> angle >> center_x >> center_y >> radius_x >> radius_y
-    >> start_x >> start_y >> end_x >> end_y;
-    mTextStream.readLine();
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream
+        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+        >> depth >> pen_style >> area_fill >> style_val >> direction
+        >> angle >> center_x >> center_y >> radius_x >> radius_y
+        >> start_x >> start_y >> end_x >> end_y;
 
     const XFigEllipseObject::Subtype subtype =
         (sub_type==1) ?   XFigEllipseObject::EllipseByRadii :
@@ -570,7 +620,7 @@ qDebug()<<"ellipse";
     ellipseObject->setFill( area_fill, fill_color);
     ellipseObject->setLine( lineType(line_style), thickness, style_val, pen_color );
 
-    return ellipseObject;
+    return ellipseObject.take();
 }
 
 XFigAbstractObject*
@@ -578,102 +628,92 @@ XFigParser::parsePolyline()
 {
 qDebug()<<"polyline";
 
-    XFigAbstractPolylineObject* abstractPolylineObject = 0;
+    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color,
            depth, pen_style, area_fill, join_style, cap_style, radius,
            forward_arrow, backward_arrow, npoints;
     float style_val;
 
-    // first line
-    mTextStream >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-    >> depth >> pen_style >> area_fill >> style_val >> join_style
-    >> cap_style >> radius >> forward_arrow >> backward_arrow
-    >> npoints;
-    mTextStream.readLine();
+    // polyline data line
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream
+        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+        >> depth >> pen_style >> area_fill >> style_val >> join_style
+        >> cap_style >> radius >> forward_arrow >> backward_arrow
+        >> npoints;
 qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
          << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
 
     if (sub_type==XFig3_2PolylinePolylineId) {
         XFigPolylineObject* polylineObject = new XFigPolylineObject;
         polylineObject->setCapType(capType(cap_style));
-        abstractPolylineObject = polylineObject;
+        abstractPolylineObject.reset(polylineObject);
     } else if (sub_type==XFig3_2PolylinePolygonId) {
-        abstractPolylineObject = new XFigPolygonObject;
+        abstractPolylineObject.reset(new XFigPolygonObject);
     } else if (sub_type==XFig3_2PolylineBoxId) {
-        abstractPolylineObject = new XFigBoxObject;
+        abstractPolylineObject.reset(new XFigBoxObject);
     } else if (sub_type==XFig3_2PolylineArcBoxId) {
         XFigBoxObject* boxObject = new XFigBoxObject;
         boxObject->setRadius(radius);
-        abstractPolylineObject = boxObject;
+        abstractPolylineObject.reset(boxObject);
     } else if (sub_type==XFig3_2PolylinePictureBoundingBoxId) {
         XFigPictureBoxObject* pictureBoxObject = new XFigPictureBoxObject;
+        if (! m_XFigStreamLineReader.readNextLine()) {
+            return 0;
+        }
+
+        QString line = m_XFigStreamLineReader.line();
+        QTextStream textStream(&line, QIODevice::ReadOnly);
+
         int flipped;
         QString fileName;
-        mTextStream >> flipped >> fileName;
-        mTextStream.readLine();
+        textStream >> flipped >> fileName;
+
         pictureBoxObject->setIsFlipped( flipped != 0 );
         pictureBoxObject->setFileName( fileName );
-        abstractPolylineObject = pictureBoxObject;
+
+        abstractPolylineObject.reset(pictureBoxObject);
     } else {
     }
 
     if (forward_arrow > 0) {
-        int arrow_type, arrow_style;
-        float arrow_thickness, arrow_width, arrow_height;
-
-        mTextStream >> arrow_type >> arrow_style >> arrow_thickness
-                    >> arrow_width >> arrow_height;
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigArrowHead* arrowHead = new XFigArrowHead;
-            arrowHead->setType(arrowHeadType(arrow_style));
-            arrowHead->setIsHollow((arrow_style == 0));
-            arrowHead->setThickness(thickness);
-            arrowHead->setSize(arrow_width, arrow_height);
-
             XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject);
-            polylineObject->setForwardArrow(arrowHead);
+                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            polylineObject->setForwardArrow(arrowHead.take());
         }
     }
 
     if (backward_arrow > 0) {
-        int arrow_type, arrow_style;
-        float arrow_thickness, arrow_width, arrow_height;
-
-        mTextStream >> arrow_type >> arrow_style >> arrow_thickness
-                    >> arrow_width >> arrow_height;
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigArrowHead* arrowHead = new XFigArrowHead;
-            arrowHead->setType(arrowHeadType(arrow_style));
-            arrowHead->setIsHollow((arrow_style == 0));
-            arrowHead->setThickness(thickness);
-            arrowHead->setSize(arrow_width, arrow_height);
-
             XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject);
-            polylineObject->setBackwardArrow(arrowHead);
+                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            polylineObject->setBackwardArrow(arrowHead.take());
         }
     }
+
     // points line
-    QVector<XFigPoint> points;
-    for (int i = 0; i < npoints; i++) {
-        qint32 x, y;
-        mTextStream >> x >> y;
-qDebug() << "point:" << i << x << y;
-        points.append(XFigPoint(x,y));
+    const QVector<XFigPoint> points = parsePoints(npoints);
+    if (points.count() != npoints) {
+        return 0;
     }
-    mTextStream.readLine();
 
     // check box:
     if ((abstractPolylineObject->typeId()==XFigAbstractObject::BoxId) &&
         (points.count()!=5)) {
         kDebug() << "box object does not have 5 points, but points:" << points.count();
-        delete abstractPolylineObject;
         return 0;
     }
     abstractPolylineObject->setPoints(points);
@@ -682,7 +722,7 @@ qDebug() << "point:" << i << x << y;
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(joinType(join_style));
 
-    return abstractPolylineObject;
+    return abstractPolylineObject.take();
 }
 
 XFigAbstractObject*
@@ -695,85 +735,63 @@ qDebug()<<"spline";
     float style_val;
 
     // this should be a spline
-    mTextStream >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-    >>  depth >> pen_style >> area_fill >> style_val >> cap_style
-    >> forward_arrow >> backward_arrow >> npoints;
-    mTextStream.readLine();
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream
+        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+        >>  depth >> pen_style >> area_fill >> style_val >> cap_style
+        >> forward_arrow >> backward_arrow >> npoints;
 qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
          << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
 
     // TODO: no idea yet how to translate the xfig splines to odf ones
     // thus simply creating polygones/polylines for now :/
-    XFigAbstractPolylineObject* abstractPolylineObject = 0;
+    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
+
     if ((sub_type==XFig3_2SplineOpenApproximatedId) ||
         (sub_type==XFig3_2SplineOpenInterpolatedId) ||
         (sub_type==XFig3_2SplineOpenXId)) {
         XFigPolylineObject* polylineObject = new XFigPolylineObject;
         polylineObject->setCapType(capType(cap_style));
-        abstractPolylineObject = polylineObject;
+        abstractPolylineObject.reset(polylineObject);
     } else {
-        abstractPolylineObject = new XFigPolygonObject;
+        abstractPolylineObject.reset(new XFigPolygonObject);
     }
 
     if (forward_arrow > 0) {
-        int arrow_type, arrow_style;
-        float arrow_thickness, arrow_width, arrow_height;
-
-        mTextStream >> arrow_type >> arrow_style >> arrow_thickness
-                    >> arrow_width >> arrow_height;
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigArrowHead* arrowHead = new XFigArrowHead;
-            arrowHead->setType(arrowHeadType(arrow_style));
-            arrowHead->setIsHollow((arrow_style == 0));
-            arrowHead->setThickness(thickness);
-            arrowHead->setSize(arrow_width, arrow_height);
-
             XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject);
-            polylineObject->setForwardArrow(arrowHead);
+                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            polylineObject->setForwardArrow(arrowHead.take());
         }
     }
 
     if (backward_arrow > 0) {
-        int arrow_type, arrow_style;
-        float arrow_thickness, arrow_width, arrow_height;
-
-        mTextStream >> arrow_type >> arrow_style >> arrow_thickness
-                    >> arrow_width >> arrow_height;
-        mTextStream.readLine();
+        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead.isNull()) {
+            return 0;
+        }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigArrowHead* arrowHead = new XFigArrowHead;
-            arrowHead->setType(arrowHeadType(arrow_style));
-            arrowHead->setIsHollow((arrow_style == 0));
-            arrowHead->setThickness(thickness);
-            arrowHead->setSize(arrow_width, arrow_height);
-
             XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject);
-            polylineObject->setBackwardArrow(arrowHead);
+                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            polylineObject->setBackwardArrow(arrowHead.take());
         }
     }
 
     // points line
-    QVector<XFigPoint> points;
-    for (int i = 0; i < npoints; i++) {
-        qint32 x, y;
-        mTextStream >> x >> y;
-qDebug() << "point:" << i << x << y;
-        points.append(XFigPoint(x,y));
+    const QVector<XFigPoint> points = parsePoints(npoints);
+    if (points.count() != npoints) {
+        return 0;
     }
-    mTextStream.readLine();
 
     // control points line
-    for (int i = 0; i < npoints; i++) {
-        float fac;
-        mTextStream >> fac;
-        // read and ignored for now
-    }
-    mTextStream.readLine();
+    parseFactors(npoints);
 
     abstractPolylineObject->setPoints(points);
     abstractPolylineObject->setDepth(depth);
@@ -781,7 +799,7 @@ qDebug() << "point:" << i << x << y;
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(XFigJoinRound);
 
-    return abstractPolylineObject;
+    return abstractPolylineObject.take();
 }
 
 XFigAbstractObject*
@@ -789,13 +807,16 @@ XFigParser::parseText()
 {
 qDebug()<<"text";
 
-    XFigTextObject* textObject = new XFigTextObject;
+    QScopedPointer<XFigTextObject> textObject(new XFigTextObject);
 
     qint32 sub_type, color, depth, pen_style, font, font_flags, x, y;
     float font_size, angle, height, length;
 
-    mTextStream >> sub_type >> color >> depth >> pen_style >> font >> font_size
-                >> angle >> font_flags >> height >> length >> x >> y;
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+    textStream
+        >> sub_type >> color >> depth >> pen_style >> font >> font_size
+        >> angle >> font_flags >> height >> length >> x >> y;
 
     const XFigTextAlignment textAlignment =
         (sub_type == XFig3_2TextCenterAligned) ? XFigTextCenterAligned :
@@ -839,53 +860,59 @@ qDebug()<<"text";
     fontData.mSize = font_size;
     textObject->setFontData(fontData);
 
-    bool finished = false;
+    // read text
+    // skip one space char used as separator
+    char dummy;
+    textStream >> dummy;
+
     QString text;
-    while (! finished) {
-        char c;
-        mTextStream >> c;
-        if (c == '\\') {
-            const QString ocode = mTextStream.read(3);
+    while (! textStream.atEnd()) {
+        char textChar;
+        textStream >> textChar;
+        if (textChar == '\\') {
+            const QString ocode = textStream.read(3);
             unsigned char charValue =
                 (ocode.at(0).toLatin1() - '0') * 64 +
                 (ocode.at(1).toLatin1() - '0') * 8 +
                 (ocode.at(2).toLatin1() - '0');
+            // \001 is used as end marker
             if (charValue == 1) {
                 break;
             }
-            const char textChar = static_cast<char>(charValue);
-            text.append( mTextDecoder->toUnicode(&textChar,1) );
-        } else
-            text.append(QLatin1Char(c));
+            textChar = static_cast<char>(charValue);
+        }
+        text.append( mTextDecoder->toUnicode(&textChar,1) );
     }
     textObject->setText(text);
 
-    return textObject;
+    return textObject.take();
 }
 
 XFigAbstractObject*
 XFigParser::parseCompoundObject()
 {
 qDebug()<<"compound";
-    XFigCompoundObject* compoundObject = new XFigCompoundObject;
+
+    QScopedPointer<XFigCompoundObject> compoundObject(new XFigCompoundObject);
+
     {
         qint32 upperLeftX, upperLeftY, lowerRightX, lowerRightY;
 
-        mTextStream >> upperLeftX >> upperLeftY >> lowerRightX >> lowerRightY;
-        mTextStream.readLine();
+        QString line = m_XFigStreamLineReader.line();
+        QTextStream textStream(&line, QIODevice::ReadOnly);
+        textStream >> upperLeftX >> upperLeftY >> lowerRightX >> lowerRightY;
 
         const XFigBoundingBox boundingBox( XFigPoint(upperLeftX, upperLeftY),
                                     XFigPoint(lowerRightX, lowerRightY) );
         compoundObject->setBoundingBox( boundingBox );
     }
 
-    while (! mTextStream.atEnd()) {
-        int objectCode;
-        mTextStream >> objectCode;
+    while (! m_XFigStreamLineReader.readNextObjectLine()) {
+        const int objectCode = m_XFigStreamLineReader.objectCode();
+        const QString objectComment = m_XFigStreamLineReader.comment();
 
         // end reached?
         if (objectCode == XFig3_2CompoundObjectEndId) {
-            mTextStream.readLine();
             break;
         }
 
@@ -899,8 +926,10 @@ qDebug()<<"compound";
                 (objectCode == XFig3_2TextObjectId) ?     parseText() :
                 (objectCode == XFig3_2ArcObjectId) ?      parseArc() :
                 /*else XFig3_2CompoundObjectId)*/         parseCompoundObject();
-            if (object != 0)
+            if (object != 0) {
+                object->setComment(objectComment);
                 compoundObject->addObject(object);
+            }
         } else {
             // should not occur
             kDebug() << "unknown object type:" << objectCode;
@@ -908,5 +937,86 @@ qDebug()<<"compound";
     }
 qDebug()<<"compound end";
 
-    return compoundObject;
+    return compoundObject.take();
+}
+
+XFigArrowHead* XFigParser::parseArrowHead()
+{
+    if (! m_XFigStreamLineReader.readNextLine()) {
+        return 0;
+    }
+
+    QString line = m_XFigStreamLineReader.line();
+    QTextStream textStream(&line, QIODevice::ReadOnly);
+
+    int arrow_type, arrow_style;
+    float arrow_thickness, arrow_width, arrow_height;
+    textStream
+        >> arrow_type >> arrow_style >> arrow_thickness
+        >> arrow_width >> arrow_height;
+
+    XFigArrowHead* arrowHead = new XFigArrowHead;
+    arrowHead->setType(arrowHeadType(arrow_style));
+    arrowHead->setIsHollow((arrow_style == 0));
+    arrowHead->setThickness(arrow_thickness );
+    arrowHead->setSize(arrow_width, arrow_height);
+
+    return arrowHead;
+}
+
+QVector<XFigPoint> XFigParser::parsePoints(int pointCount)
+{
+    QVector<XFigPoint> result;
+
+    QString pointsText;
+    QTextStream pointsTextStream(&pointsText, QIODevice::ReadOnly);
+    for (int i = 0; i < pointCount; i++) {
+        if (pointsTextStream.atEnd()) {
+            if (! m_XFigStreamLineReader.readNextLine()) {
+                return QVector<XFigPoint>();
+            }
+
+            pointsText = m_XFigStreamLineReader.line();
+            pointsTextStream.setString(&pointsText, QIODevice::ReadOnly);
+        }
+
+        qint32 x;
+        qint32 y;
+        pointsTextStream >> x >> y;
+// qDebug() << "point:" << i << x << y;
+
+        result.append(XFigPoint(x, y));
+
+        pointsTextStream.skipWhiteSpace();
+    }
+
+    return result;
+}
+
+QVector<double> XFigParser::parseFactors(int pointCount)
+{
+    QVector<double> result;
+
+    QString factorsText;
+    QTextStream factorsTextStream(&factorsText, QIODevice::ReadOnly);
+    for (int i = 0; i < pointCount; i++) {
+        if (factorsTextStream.atEnd()) {
+            if (! m_XFigStreamLineReader.readNextLine()) {
+                return QVector<double>();
+            }
+
+            factorsText = m_XFigStreamLineReader.line();
+            factorsTextStream.setString(&factorsText, QIODevice::ReadOnly);
+        }
+
+        double factor;
+        factorsTextStream >> factor;
+// qDebug() << "factor:" << i << factor;
+
+        result.append(factor);
+
+        factorsTextStream.skipWhiteSpace();
+    }
+
+    return result;
 }

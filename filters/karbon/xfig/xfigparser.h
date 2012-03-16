@@ -22,13 +22,17 @@
 #ifndef XFIGPARSER_H
 #define XFIGPARSER_H
 
-// Qt
-#include <QTextStream>
+// filter
+#include "xfigstreamlinereader.h"
 
 class XFigDocument;
 class XFigAbstractObject;
+class XFigArrowHead;
 class QTextDecoder;
 class QIODevice;
+struct XFigPoint;
+
+template<typename T> class QVector;
 
 
 class XFigParser
@@ -54,13 +58,17 @@ private:
     XFigAbstractObject* parseText();
     XFigAbstractObject* parseCompoundObject();
 
+    XFigArrowHead* parseArrowHead();
+    QVector<XFigPoint> parsePoints(int pointCount);
+    QVector<double> parseFactors(int pointCount);
+
 private:
     XFigDocument* mDocument;
 
     int mXFigVersion;
 
     QTextDecoder* mTextDecoder;
-    QTextStream mTextStream;
+    XFigStreamLineReader m_XFigStreamLineReader;
 };
 
 #endif

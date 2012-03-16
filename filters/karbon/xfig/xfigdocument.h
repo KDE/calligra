@@ -113,9 +113,13 @@ private:
 public:
     virtual ~XFigAbstractObject() {}
 public:
+    void setComment(const QString& comment) { m_Comment = comment; }
+
     TypeId typeId() const { return mTypeId; }
+    const QString& comment() const { return m_Comment; }
 private:
     TypeId mTypeId;
+    QString m_Comment;
 };
 
 
@@ -484,6 +488,7 @@ public:
     void setUnitType( XFigUnitType unitType ) { mUnitType = unitType; }
     void setPageSizeType( XFigPageSizeType pageSizeType ) { mPageSizeType = pageSizeType; }
     void setResolution( qint32 resolution ) { mResolution = resolution; }
+    void setComment(const QString& comment) { m_Comment = comment; }
     void addPage( XFigPage* page ) { mPages.append(page); }
     void setUserColor( int id, const QColor& color )
     { if ((32<=id) && (id<=543)) mColorTable.insert(id, color); }
@@ -493,6 +498,7 @@ public:
     XFigUnitType unitType() const { return mUnitType; }
     XFigPageSizeType pageSizeType() const { return mPageSizeType; }
     qint32 resolution() const { return mResolution; }
+    const QString& comment() const { return m_Comment; }
     const QVector<XFigPage*>& pages() const { return mPages; }
     const QColor* color( int id ) const;
 private:
@@ -501,6 +507,7 @@ private:
     XFigUnitType mUnitType;
     XFigPageSizeType mPageSizeType;
     qint32 mResolution;
+    QString m_Comment;
 
     QHash<int, QColor> mColorTable;
 

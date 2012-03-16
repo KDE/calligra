@@ -1,5 +1,6 @@
 set( karbonxfigimport_PLUGIN_SRCS
     xfigdocument.cpp
+    xfigstreamlinereader.cpp
     xfigparser.cpp
     xfigodgwriter.cpp
     xfigimportfilter.cpp
