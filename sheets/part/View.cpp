@@ -1176,7 +1176,7 @@ void View::createTemplate()
     doc()->saveNativeFormat(fileName);
 
     KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     Factory::global().dirs()->addResourceType("sheets_template",
             "data", "sheets/templates/");
