@@ -3045,6 +3045,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
 
+        //A test file is attached to Bug 286700.
+        if (sourceName.endsWith("NULL")) {
+            skipCurrentElement();
+            READ_EPILOGUE
+        }
+
         m_context->import->imageSize(sourceName, m_imageSize);
 
         if (sourceName.isEmpty()) {
