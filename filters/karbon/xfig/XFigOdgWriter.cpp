@@ -36,22 +36,40 @@ struct PageSize
 {
     const char* width;
     const char* height;
-} pageSizeTable[14] =
+} pageSizeTable[29] =
 {
     {  "8.5in",  "11in"}, // letter
     {  "8.5in",  "14in"}, // legal
     { "11in",    "17in"}, // tabloid
+
     {  "8.5in",  "11in"}, // A
     { "11in",    "17in"}, // B
     { "17in",    "22in"}, // C
     { "22in",    "34in"}, // D
     { "34in",    "44in"}, // E
+
+    { "37mm",    "52mm"}, // A9
+    { "52mm",    "74mm"}, // A8
+    { "74mm",   "105mm"}, // A7
+    {"105mm",   "148mm"}, // A6
+    {"148mm",   "297mm"}, // A5
     {"210mm",   "297mm"}, // A4
     {"297mm",   "420mm"}, // A3
     {"420mm",   "594mm"}, // A2
     {"594mm",   "841mm"}, // A1
     {"841mm",  "1189mm"}, // A0
-    {"176mm",   "250mm"}, // B5
+
+    {  "32mm",    "45mm"}, // B10
+    {  "45mm",    "64mm"}, // B9
+    {  "64mm",    "91mm"}, // B8
+    {  "91mm",   "128mm"}, // B7
+    { "128mm",   "182mm"}, // B6
+    { "182mm",   "257mm"}, // B5
+    { "257mm",   "364mm"}, // B4
+    { "364mm",   "515mm"}, // B3
+    { "515mm",   "728mm"}, // B2
+    { "728mm",  "1030mm"}, // B1
+    {"1030mm",  "1456mm"}  // B0
 };
 
 

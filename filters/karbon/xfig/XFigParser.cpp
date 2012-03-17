@@ -278,17 +278,35 @@ struct PaperSizeIdMap {
     { "Legal",   XFigPageSizeLegal },
     { "Ledger",  XFigPageSizeTabloid },
     { "Tabloid", XFigPageSizeTabloid },
-    { "A",  XFigPageSizeA },
-    { "B",  XFigPageSizeB },
-    { "C",  XFigPageSizeC },
-    { "D",  XFigPageSizeD },
-    { "E",  XFigPageSizeE },
+
+    { "A", XFigPageSizeA },
+    { "B", XFigPageSizeB },
+    { "C", XFigPageSizeC },
+    { "D", XFigPageSizeD },
+    { "E", XFigPageSizeE },
+
+    { "A9", XFigPageSizeA9 },
+    { "A8", XFigPageSizeA8 },
+    { "A7", XFigPageSizeA7 },
+    { "A6", XFigPageSizeA6 },
+    { "A5", XFigPageSizeA5 },
     { "A4", XFigPageSizeA4 },
     { "A3", XFigPageSizeA3 },
     { "A2", XFigPageSizeA2 },
     { "A1", XFigPageSizeA1 },
     { "A0", XFigPageSizeA0 },
-    { "B5", XFigPageSizeB5 }
+
+    { "B10", XFigPageSizeB10 },
+    { "B9",  XFigPageSizeB9 },
+    { "B8",  XFigPageSizeB8 },
+    { "B7",  XFigPageSizeB7 },
+    { "B6",  XFigPageSizeB6 },
+    { "B5",  XFigPageSizeB5 },
+    { "B4",  XFigPageSizeB4 },
+    { "B3",  XFigPageSizeB3 },
+    { "B2",  XFigPageSizeB2 },
+    { "B1",  XFigPageSizeB1 },
+    { "B0",  XFigPageSizeB0 }
 };
 static const int paperSizeCount = sizeof(paperSizeTable)/sizeof(paperSizeTable[0]);
 

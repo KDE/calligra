@@ -462,17 +462,35 @@ enum XFigPageSizeType
     XFigPageSizeLetter,
     XFigPageSizeLegal,
     XFigPageSizeTabloid,
+
     XFigPageSizeA,
     XFigPageSizeB,
     XFigPageSizeC,
     XFigPageSizeD,
     XFigPageSizeE,
+
+    XFigPageSizeA9,
+    XFigPageSizeA8,
+    XFigPageSizeA7,
+    XFigPageSizeA6,
+    XFigPageSizeA5,
     XFigPageSizeA4,
     XFigPageSizeA3,
     XFigPageSizeA2,
     XFigPageSizeA1,
     XFigPageSizeA0,
-    XFigPageSizeB5
+
+    XFigPageSizeB10,
+    XFigPageSizeB9,
+    XFigPageSizeB8,
+    XFigPageSizeB7,
+    XFigPageSizeB6,
+    XFigPageSizeB5,
+    XFigPageSizeB4,
+    XFigPageSizeB3,
+    XFigPageSizeB2,
+    XFigPageSizeB1,
+    XFigPageSizeB0
 };
 
 class XFigDocument
