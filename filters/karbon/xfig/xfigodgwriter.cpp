@@ -444,11 +444,30 @@ XFigOdgWriter::writeTextObject( const XFigTextObject* textObject )
 
     writeZIndex(textObject);
 
+    const double length = odfLength(textObject->length()) * 1.3; // 1.3 to adapt to wider fonts being used
+    const double height = odfLength(textObject->height())*1.3;
+
+    const XFigTextAlignment alignment = textObject->textAlignment();
     const XFigPoint point = textObject->baselineStartPoint();
-    mBodyWriter->addAttributePt( "svg:x", odfXCoord(point.x()));
-    mBodyWriter->addAttributePt( "svg:y", odfYCoord(point.y())-textObject->fontData().mSize); // TODO: get baseline
-    mBodyWriter->addAttributePt( "svg:width", odfLength(textObject->length()) );
-    mBodyWriter->addAttributePt( "svg:height", odfLength(textObject->height()) );
+    double xCoord = odfXCoord(point.x());
+    if (alignment == XFigTextCenterAligned) {
+        xCoord -= length * 0.5;
+    } else if (alignment == XFigTextRightAligned) {
+        xCoord -= length;
+    }
+    // given point is at baseline, with height the ascend of the font
+    double yCoord = odfYCoord(point.y() - textObject->height());
+
+    mBodyWriter->addAttribute("svg:x", "0pt");
+    mBodyWriter->addAttribute("svg:y", "0pt");
+    mBodyWriter->addAttributePt("svg:width", length);
+    mBodyWriter->addAttributePt("svg:height", height);
+    const QString transformationString =
+        QLatin1String("rotate(") + mCLocale.toString(textObject->xAxisAngle()) +
+        QLatin1String(")translate(") +
+        mCLocale.toString(xCoord) + QLatin1String("pt ") +
+        mCLocale.toString(yCoord) + QLatin1String("pt)");
+    mBodyWriter->addAttribute("draw:transform", transformationString);
 
     KoGenStyle frameStyle( KoGenStyle::GraphicAutoStyle, "graphic" );
     frameStyle.addProperty( QLatin1String("style:overflow-behavior"), "clip" );
@@ -731,4 +750,7 @@ XFigOdgWriter::writeParagraphStyle( KoGenStyle& odfStyle, const XFigTextObject* 
         (textAlignment == XFigTextRightAligned) ?  "right" :
         /* XFigTextLeftAligned */                  "left";
     odfStyle.addProperty( QLatin1String("fo:text-align"), QLatin1String(alignmentName) );
+
+    odfStyle.addProperty(QLatin1String("fo:margin"), "0pt");
+    odfStyle.addProperty(QLatin1String("fo:padding"), "0pt");
 }
