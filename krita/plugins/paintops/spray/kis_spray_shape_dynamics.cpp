@@ -41,22 +41,7 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
     connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followCursorWeight, SLOT(setEnabled(bool)));
     connect(m_options->drawingAngle, SIGNAL(toggled(bool)), m_options->drawingAngleWeight, SLOT(setEnabled(bool)));
     
-    setupBrushPreviewSignals();
     setConfigurationPage(m_options);
-}
-
-
-void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
-{
-    connect(m_options->randomSizeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedRotation, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedAngleBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->randomRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomAngleWeight,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursorWeight,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->drawingAngle, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->drawingAngleWeight,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
 }
 
 

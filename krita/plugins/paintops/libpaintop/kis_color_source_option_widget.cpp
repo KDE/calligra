@@ -90,5 +90,4 @@ void KisColorSourceOptionWidget::sourceChanged()
             break;
         }
     }
-    emit sigSettingChanged();
 }

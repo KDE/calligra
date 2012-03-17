@@ -138,7 +138,6 @@ void KisFilterOption::setCurrentFilter( const KoID& id)
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     m_options->filtersList->setCurrent(id);
     updateFilterConfigWidget();
-    emit sigSettingChanged();
 }
 
 
@@ -161,7 +160,6 @@ void KisFilterOption::updateFilterConfigWidget()
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
-            connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }
 
     }

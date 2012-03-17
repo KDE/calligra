@@ -82,13 +82,6 @@ public slots:
         Q_UNUSED(setting);
     }
 
-signals:
-
-    /**
-     * emit this whenever a setting has changed. It will update the preview
-     */
-    void sigSettingChanged();
-
 protected:
 
     bool m_checkable;

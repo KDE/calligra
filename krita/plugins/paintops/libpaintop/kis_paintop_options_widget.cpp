@@ -84,9 +84,6 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
     if (!option->configurationPage()) return;
     
     m_d->model->addPaintOpOption(option, m_d->optionsStack->count());
-
-    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
-
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
 }
@@ -122,7 +119,6 @@ void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
     
     if(m_d->model->entryAt(info, index.row())) {
         m_d->optionsStack->setCurrentIndex(info.index);
-        emit sigConfigurationItemChanged();
     }
 }
 

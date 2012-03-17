@@ -40,16 +40,6 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_checkable = false;
     m_options = new KisBrushSizeOptionsWidget();
 
-    connect(m_options->diameter,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->scale,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->aspectBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->spacing,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->rotationBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);
 }

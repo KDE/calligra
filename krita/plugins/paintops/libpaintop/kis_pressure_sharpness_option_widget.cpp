@@ -61,5 +61,4 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 void KisPressureSharpnessOptionWidget::setThreshold(int threshold)
 {
     static_cast<KisPressureSharpnessOption*>(KisCurveOptionWidget::curveOption())->setThreshold(threshold);
-    emit sigSettingChanged();
 }

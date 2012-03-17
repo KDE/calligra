@@ -43,12 +43,6 @@ KisCurveOpOption::KisCurveOpOption()
     m_checkable = false;
     m_options = new KisCurveOpOptionsWidget();
 
-    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->smoothingCHBox, SIGNAL(toggled(bool)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->historySizeSlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->lineWidthSlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
-    connect(m_options->curvesOpacitySlider, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigSettingChanged()));
-
     setConfigurationPage(m_options);
 }
 

@@ -45,11 +45,6 @@ KisExperimentOpOption::KisExperimentOpOption()
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();
     
-    connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->speed, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 

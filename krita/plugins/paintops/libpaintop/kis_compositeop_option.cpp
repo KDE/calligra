@@ -84,7 +84,6 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
         m_bnEraser->blockSignals(false);
     }
     
-    emit sigSettingChanged();
 }
 
 

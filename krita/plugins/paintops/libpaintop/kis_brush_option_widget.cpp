@@ -94,7 +94,6 @@ QSizeF KisBrushOptionWidget::brushSize() const
 void KisBrushOptionWidget::brushChanged()
 {
     m_brushOption.setBrush(brush());
-    emit sigSettingChanged();
 }
 
 bool KisBrushOptionWidget::presetIsValid()

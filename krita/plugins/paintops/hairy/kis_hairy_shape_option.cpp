@@ -35,11 +35,6 @@ KisHairyShapeOption::KisHairyShapeOption()
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
 
-    connect(m_options->oneDimBrushBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->twoDimBrushBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->sigmaSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-
     setConfigurationPage(m_options);
 }
 

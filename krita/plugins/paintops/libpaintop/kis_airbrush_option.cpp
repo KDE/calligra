@@ -44,7 +44,6 @@ KisAirbrushOption::KisAirbrushOption(bool enabled)
 {
     m_checkable = true;
     m_optionWidget = new KisAirbrushWidget();
-    connect(m_optionWidget->sliderRate, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     
     setConfigurationPage(m_optionWidget);
 }
