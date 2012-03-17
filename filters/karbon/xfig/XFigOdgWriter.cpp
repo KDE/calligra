@@ -85,43 +85,43 @@ odfLineThickness( qint32 xfigLineThickness )
 double
 XFigOdgWriter::odfLength( qint32 length ) const
 {
-    return ptUnit( static_cast<double>(length) / mDocument->resolution() );
+    return ptUnit( static_cast<double>(length) / m_Document->resolution() );
 }
 
 double
 XFigOdgWriter::odfXCoord( qint32 x ) const
 {
-    return ptUnit( static_cast<double>(x) / mDocument->resolution() );
+    return ptUnit( static_cast<double>(x) / m_Document->resolution() );
 }
 
 double
 XFigOdgWriter::odfYCoord( qint32 y ) const
 {
-    return ptUnit( static_cast<double>(y) / mDocument->resolution() );
+    return ptUnit( static_cast<double>(y) / m_Document->resolution() );
 }
 
 
 
 XFigOdgWriter::XFigOdgWriter( KoStore* outputStore )
-  : mCLocale(QLocale::c())
-  , mOdfWriteStore( outputStore )
-  , mOutputStore( outputStore )
-  , mPageCount( 0 )
+  : m_CLocale(QLocale::c())
+  , m_OdfWriteStore( outputStore )
+  , m_OutputStore( outputStore )
+  , m_PageCount( 0 )
 {
-    mCLocale.setNumberOptions(QLocale::OmitGroupSeparator);
-    mManifestWriter = mOdfWriteStore.manifestWriter( KoOdf::mimeType(KoOdf::Graphics) );
+    m_CLocale.setNumberOptions(QLocale::OmitGroupSeparator);
+    m_ManifestWriter = m_OdfWriteStore.manifestWriter( KoOdf::mimeType(KoOdf::Graphics) );
 }
 
 XFigOdgWriter::~XFigOdgWriter()
 {
-    mOdfWriteStore.closeManifestWriter();
-    delete mOutputStore;
+    m_OdfWriteStore.closeManifestWriter();
+    delete m_OutputStore;
 }
 
 bool
 XFigOdgWriter::write( XFigDocument* document )
 {
-    mDocument = document;
+    m_Document = document;
 
     storePixelImageFiles();
 
@@ -129,7 +129,7 @@ XFigOdgWriter::write( XFigDocument* document )
     storeContentXml();
 
     // Create the styles.xml file
-    mStyleCollector.saveOdfStylesDotXml( mOutputStore, mManifestWriter );
+    m_StyleCollector.saveOdfStylesDotXml( m_OutputStore, m_ManifestWriter );
 
     // Create meta.xml
     storeMetaXml();
@@ -164,42 +164,42 @@ XFigOdgWriter::storeMetaXml()
 {
     KoDocumentInfo documentInfo;
     documentInfo.setOriginalGenerator(QLatin1String("Calligra XFig filter"));
-    documentInfo.setAboutInfo(QLatin1String("comments"), mDocument->comment());
+    documentInfo.setAboutInfo(QLatin1String("comments"), m_Document->comment());
 
     const QString documentInfoFilePath = QLatin1String( "meta.xml" );
 
-    mOutputStore->open( documentInfoFilePath );
-    documentInfo.saveOasis( mOutputStore );
-    mOutputStore->close();
+    m_OutputStore->open( documentInfoFilePath );
+    documentInfo.saveOasis( m_OutputStore );
+    m_OutputStore->close();
 
     // TODO: "text/xml" could be a static string
-    mManifestWriter->addManifestEntry( documentInfoFilePath, QLatin1String("text/xml") );
+    m_ManifestWriter->addManifestEntry( documentInfoFilePath, QLatin1String("text/xml") );
 }
 
 void
 XFigOdgWriter::storeContentXml()
 {
-    KoXmlWriter* contentWriter = mOdfWriteStore.contentWriter();
-    mBodyWriter = mOdfWriteStore.bodyWriter();
+    KoXmlWriter* contentWriter = m_OdfWriteStore.contentWriter();
+    m_BodyWriter = m_OdfWriteStore.bodyWriter();
 
-    mBodyWriter->startElement( "office:body" );
-    mBodyWriter->startElement( KoOdf::bodyContentElement(KoOdf::Graphics, true));
+    m_BodyWriter->startElement( "office:body" );
+    m_BodyWriter->startElement( KoOdf::bodyContentElement(KoOdf::Graphics, true));
 
     writeMasterPage();
 
-    foreach( const XFigPage* page, mDocument->pages() )
+    foreach( const XFigPage* page, m_Document->pages() )
         writePage( page );
 
-    mBodyWriter->endElement(); //office:drawing
-    mBodyWriter->endElement(); //office:body
-    mBodyWriter->endDocument();
+    m_BodyWriter->endElement(); //office:drawing
+    m_BodyWriter->endElement(); //office:body
+    m_BodyWriter->endDocument();
 
-    mStyleCollector.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
+    m_StyleCollector.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
 
-    mOdfWriteStore.closeContentWriter();
+    m_OdfWriteStore.closeContentWriter();
 
     // TODO: mOdfWriteStore.closeContentWriter() should do that, or? also "text/xml" could be a static string
-    mManifestWriter->addManifestEntry( QLatin1String("content.xml"), QLatin1String("text/xml") );
+    m_ManifestWriter->addManifestEntry( QLatin1String("content.xml"), QLatin1String("text/xml") );
 }
 
 
@@ -211,21 +211,21 @@ XFigOdgWriter::writeMasterPage()
     KoGenStyle masterPageLayoutStyle( KoGenStyle::PageLayoutStyle );
     masterPageLayoutStyle.setAutoStyleInStylesDotXml( true );
 
-    if (mDocument->pageSizeType() != XFigPageSizeUnknown) {
-        const PageSize& pageSize = pageSizeTable[mDocument->pageSizeType()-1];
+    if (m_Document->pageSizeType() != XFigPageSizeUnknown) {
+        const PageSize& pageSize = pageSizeTable[m_Document->pageSizeType()-1];
         masterPageLayoutStyle.addProperty( QLatin1String("fo:page-width"), pageSize.width );
         masterPageLayoutStyle.addProperty( QLatin1String("fo:page-height"), pageSize.height );
     }
 
     const char* const orientation =
-        (mDocument->pageOrientation()==XFigPagePortrait) ?  "portrait":
-        (mDocument->pageOrientation()==XFigPageLandscape) ? "landscape":
+        (m_Document->pageOrientation()==XFigPagePortrait) ?  "portrait":
+        (m_Document->pageOrientation()==XFigPageLandscape) ? "landscape":
                                                             0;
     if( orientation != 0 )
         masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), orientation );
 
     const QString masterPageLayoutStyleName =
-        mStyleCollector.insert( masterPageLayoutStyle, QLatin1String("masterPageLayoutStyle") );
+        m_StyleCollector.insert( masterPageLayoutStyle, QLatin1String("masterPageLayoutStyle") );
 
     masterPageStyle.addAttribute( QLatin1String("style:page-layout-name"), masterPageLayoutStyleName );
 
@@ -235,27 +235,27 @@ XFigOdgWriter::writeMasterPage()
     drawingMasterPageStyle.addProperty( QLatin1String("draw:fill"), "none" );
 
     const QString drawingMasterPageStyleName =
-        mStyleCollector.insert( drawingMasterPageStyle, QLatin1String("drawingMasterPageStyle") );
+        m_StyleCollector.insert( drawingMasterPageStyle, QLatin1String("drawingMasterPageStyle") );
 
     masterPageStyle.addAttribute( QLatin1String("draw:style-name"), drawingMasterPageStyleName );
 
-    mMasterPageStyleName =
-        mStyleCollector.insert( masterPageStyle, QLatin1String("masterPageStyle") );
+    m_MasterPageStyleName =
+        m_StyleCollector.insert( masterPageStyle, QLatin1String("masterPageStyle") );
 }
 
 void
 XFigOdgWriter::writePage( const XFigPage* page )
 {
-    mBodyWriter->startElement( "draw:page" );
+    m_BodyWriter->startElement( "draw:page" );
 
-    mBodyWriter->addAttribute( "xml:id", QLatin1String("page")+QString::number(mPageCount++) );
-    mBodyWriter->addAttribute( "draw:master-page-name", mMasterPageStyleName );
+    m_BodyWriter->addAttribute( "xml:id", QLatin1String("page")+QString::number(m_PageCount++) );
+    m_BodyWriter->addAttribute( "draw:master-page-name", m_MasterPageStyleName );
 
     // objects
     foreach( const XFigAbstractObject* object, page->objects() )
         writeObject( object );
 
-    mBodyWriter->endElement(); //draw:page
+    m_BodyWriter->endElement(); //draw:page
 }
 
 void
@@ -304,40 +304,40 @@ XFigOdgWriter::writeCompoundObject( const XFigCompoundObject* groupObject )
 void
 XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
 {
-    mBodyWriter->startElement("draw:ellipse");
+    m_BodyWriter->startElement("draw:ellipse");
 
     writeZIndex(ellipseObject);
 
     const XFigPoint centerPoint = ellipseObject->centerPoint();
-    mBodyWriter->addAttribute("svg:cx", "0pt");
-    mBodyWriter->addAttribute("svg:cy", "0pt");
-    mBodyWriter->addAttributePt("svg:rx", odfLength(ellipseObject->xRadius()));
-    mBodyWriter->addAttributePt("svg:ry", odfLength(ellipseObject->yRadius()));
+    m_BodyWriter->addAttribute("svg:cx", "0pt");
+    m_BodyWriter->addAttribute("svg:cy", "0pt");
+    m_BodyWriter->addAttributePt("svg:rx", odfLength(ellipseObject->xRadius()));
+    m_BodyWriter->addAttributePt("svg:ry", odfLength(ellipseObject->yRadius()));
 
     const QString transformationString =
-        QLatin1String("rotate(") + mCLocale.toString(ellipseObject->xAxisAngle()) +
+        QLatin1String("rotate(") + m_CLocale.toString(ellipseObject->xAxisAngle()) +
         QLatin1String(")translate(") +
-        mCLocale.toString(odfXCoord(centerPoint.x())) + QLatin1String("pt ") +
-        mCLocale.toString(odfYCoord(centerPoint.y())) + QLatin1String("pt)");
-    mBodyWriter->addAttribute("draw:transform", transformationString);
+        m_CLocale.toString(odfXCoord(centerPoint.x())) + QLatin1String("pt ") +
+        m_CLocale.toString(odfYCoord(centerPoint.y())) + QLatin1String("pt)");
+    m_BodyWriter->addAttribute("draw:transform", transformationString);
 
     {
         KoGenStyle ellipseStyle(KoGenStyle::GraphicAutoStyle, "graphic");
         writeStroke(ellipseStyle, ellipseObject );
         writeFill(ellipseStyle, ellipseObject );
-        const QString ellipseStyleName = mStyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
-        mBodyWriter->addAttribute("draw:style-name", ellipseStyleName);
+        const QString ellipseStyleName = m_StyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
+        m_BodyWriter->addAttribute("draw:style-name", ellipseStyleName);
     }
 
     writeComment(ellipseObject);
 
-    mBodyWriter->endElement(); // draw:ellipse
+    m_BodyWriter->endElement(); // draw:ellipse
 }
 
 void
 XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
 {
-    mBodyWriter->startElement("draw:polyline");
+    m_BodyWriter->startElement("draw:polyline");
 
     writeZIndex(polylineObject);
 
@@ -352,19 +352,19 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
         writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
         writeArrow(polylineStyle, polylineObject->forwardArrow(), LineEnd);
         const QString polylineStyleName =
-            mStyleCollector.insert(polylineStyle, QLatin1String("polylineStyle"));
-        mBodyWriter->addAttribute("draw:style-name", polylineStyleName);
+            m_StyleCollector.insert(polylineStyle, QLatin1String("polylineStyle"));
+        m_BodyWriter->addAttribute("draw:style-name", polylineStyleName);
     }
 
     writeComment(polylineObject);
 
-    mBodyWriter->endElement(); // draw:polyline
+    m_BodyWriter->endElement(); // draw:polyline
 }
 
 void
 XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
 {
-    mBodyWriter->startElement("draw:polygon");
+    m_BodyWriter->startElement("draw:polygon");
 
     writeZIndex(polygonObject);
 
@@ -376,33 +376,33 @@ XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
         writeFill(polygonStyle, polygonObject);
         writeJoinType(polygonStyle, polygonObject->joinType());
         const QString polygonStyleName =
-            mStyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
-        mBodyWriter->addAttribute("draw:style-name", polygonStyleName);
+            m_StyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
+        m_BodyWriter->addAttribute("draw:style-name", polygonStyleName);
     }
 
     writeComment(polygonObject);
 
-    mBodyWriter->endElement(); // draw:polygon
+    m_BodyWriter->endElement(); // draw:polygon
 }
 
 void
 XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
 {
-    mBodyWriter->startElement("draw:rect");
+    m_BodyWriter->startElement("draw:rect");
 
     writeZIndex( boxObject );
 
     const XFigPoint upperleft = boxObject->upperLeft();
-    mBodyWriter->addAttributePt("svg:x", odfXCoord(upperleft.x()));
-    mBodyWriter->addAttributePt("svg:y", odfYCoord(upperleft.y()));
-    mBodyWriter->addAttributePt("svg:width", odfLength(boxObject->width()));
-    mBodyWriter->addAttributePt("svg:height", odfLength(boxObject->height()));
+    m_BodyWriter->addAttributePt("svg:x", odfXCoord(upperleft.x()));
+    m_BodyWriter->addAttributePt("svg:y", odfYCoord(upperleft.y()));
+    m_BodyWriter->addAttributePt("svg:width", odfLength(boxObject->width()));
+    m_BodyWriter->addAttributePt("svg:height", odfLength(boxObject->height()));
 
     const qint32 radius = boxObject->radius();
     if (radius != 0) {
         const double odfRadius = odfCornerRadius(radius);
-        mBodyWriter->addAttributePt("svg:rx", odfRadius);
-        mBodyWriter->addAttributePt("svg:ry", odfRadius);
+        m_BodyWriter->addAttributePt("svg:rx", odfRadius);
+        m_BodyWriter->addAttributePt("svg:ry", odfRadius);
     }
 
     {
@@ -410,13 +410,13 @@ XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
         writeStroke(boxStyle, boxObject);
         writeFill(boxStyle, boxObject);
         writeJoinType(boxStyle, boxObject->joinType());
-        const QString boxStyleName = mStyleCollector.insert(boxStyle, QLatin1String("boxStyle"));
-        mBodyWriter->addAttribute("draw:style-name", boxStyleName);
+        const QString boxStyleName = m_StyleCollector.insert(boxStyle, QLatin1String("boxStyle"));
+        m_BodyWriter->addAttribute("draw:style-name", boxStyleName);
     }
 
     writeComment(boxObject);
 
-    mBodyWriter->endElement(); // draw:rect
+    m_BodyWriter->endElement(); // draw:rect
 }
 
 void
@@ -440,7 +440,7 @@ XFigOdgWriter::writeArcObject( const XFigArcObject* /*object*/ )
 void
 XFigOdgWriter::writeTextObject( const XFigTextObject* textObject )
 {
-    mBodyWriter->startElement("draw:frame");
+    m_BodyWriter->startElement("draw:frame");
 
     writeZIndex(textObject);
 
@@ -458,59 +458,59 @@ XFigOdgWriter::writeTextObject( const XFigTextObject* textObject )
     // given point is at baseline, with height the ascend of the font
     double yCoord = odfYCoord(point.y() - textObject->height());
 
-    mBodyWriter->addAttribute("svg:x", "0pt");
-    mBodyWriter->addAttribute("svg:y", "0pt");
-    mBodyWriter->addAttributePt("svg:width", length);
-    mBodyWriter->addAttributePt("svg:height", height);
+    m_BodyWriter->addAttribute("svg:x", "0pt");
+    m_BodyWriter->addAttribute("svg:y", "0pt");
+    m_BodyWriter->addAttributePt("svg:width", length);
+    m_BodyWriter->addAttributePt("svg:height", height);
     const QString transformationString =
-        QLatin1String("rotate(") + mCLocale.toString(textObject->xAxisAngle()) +
+        QLatin1String("rotate(") + m_CLocale.toString(textObject->xAxisAngle()) +
         QLatin1String(")translate(") +
-        mCLocale.toString(xCoord) + QLatin1String("pt ") +
-        mCLocale.toString(yCoord) + QLatin1String("pt)");
-    mBodyWriter->addAttribute("draw:transform", transformationString);
+        m_CLocale.toString(xCoord) + QLatin1String("pt ") +
+        m_CLocale.toString(yCoord) + QLatin1String("pt)");
+    m_BodyWriter->addAttribute("draw:transform", transformationString);
 
     KoGenStyle frameStyle( KoGenStyle::GraphicAutoStyle, "graphic" );
     frameStyle.addProperty( QLatin1String("style:overflow-behavior"), "clip" );
     const QString frameStyleName =
-        mStyleCollector.insert( frameStyle, QLatin1String("frameStyle") );
-    mBodyWriter->addAttribute( "draw:style-name", frameStyleName );
+        m_StyleCollector.insert( frameStyle, QLatin1String("frameStyle") );
+    m_BodyWriter->addAttribute( "draw:style-name", frameStyleName );
 
-    mBodyWriter->startElement("draw:text-box");
+    m_BodyWriter->startElement("draw:text-box");
 
-    mBodyWriter->startElement( "text:p", false );  //false: we should not indent the inner tags
+    m_BodyWriter->startElement( "text:p", false );  //false: we should not indent the inner tags
 
     KoGenStyle paragraphStyle( KoGenStyle::ParagraphAutoStyle, "paragraph" );
     writeParagraphStyle( paragraphStyle, textObject );
 
     const QString paragraphStyleName =
-        mStyleCollector.insert( paragraphStyle, QLatin1String("paragraphStyle") );
-    mBodyWriter->addAttribute( "text:style-name", paragraphStyleName );
+        m_StyleCollector.insert( paragraphStyle, QLatin1String("paragraphStyle") );
+    m_BodyWriter->addAttribute( "text:style-name", paragraphStyleName );
 
-    mBodyWriter->startElement( "text:span" );
+    m_BodyWriter->startElement( "text:span" );
 
     KoGenStyle textSpanStyle( KoGenStyle::TextAutoStyle, "text" );
     writeFont( textSpanStyle, textObject );
 
     const QString textSpanStyleName =
-        mStyleCollector.insert( textSpanStyle, QLatin1String("textSpanStyle") );
-    mBodyWriter->addAttribute( "text:style-name", textSpanStyleName );
+        m_StyleCollector.insert( textSpanStyle, QLatin1String("textSpanStyle") );
+    m_BodyWriter->addAttribute( "text:style-name", textSpanStyleName );
 
-    mBodyWriter->addTextNode( textObject->text() );
+    m_BodyWriter->addTextNode( textObject->text() );
 
-    mBodyWriter->endElement(); //text:span
-    mBodyWriter->endElement(); //text:p
+    m_BodyWriter->endElement(); //text:span
+    m_BodyWriter->endElement(); //text:p
 
-    mBodyWriter->endElement();//draw:text-box
+    m_BodyWriter->endElement();//draw:text-box
 
     writeComment(textObject);
 
-    mBodyWriter->endElement();//draw:frame
+    m_BodyWriter->endElement();//draw:frame
 }
 
 void
 XFigOdgWriter::writeZIndex( const XFigAbstractGraphObject* graphObject )
 {
-    mBodyWriter->addAttribute( "draw:z-index", (1000-graphObject->depth()) );
+    m_BodyWriter->addAttribute( "draw:z-index", (1000-graphObject->depth()) );
 }
 
 void
@@ -541,7 +541,7 @@ XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
         else if( maxY < y )
             maxY = y;
 
-        pointsString +=  mCLocale.toString(x)+QLatin1Char(',')+mCLocale.toString(y);
+        pointsString +=  m_CLocale.toString(x)+QLatin1Char(',')+m_CLocale.toString(y);
         ++i;
         if (i >= points.count())
             break;
@@ -553,12 +553,12 @@ XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
         QString::number(minX) + QLatin1Char(' ') + QString::number(minY) + QLatin1Char(' ') +
         QString::number(width) + QLatin1Char(' ') + QString::number(height);
 
-    mBodyWriter->addAttributePt("svg:x", odfXCoord(minX));
-    mBodyWriter->addAttributePt("svg:y", odfYCoord(minY));
-    mBodyWriter->addAttributePt("svg:width", odfLength(width) );
-    mBodyWriter->addAttributePt("svg:height", odfLength(height) );
-    mBodyWriter->addAttribute("svg:viewBox", viewBoxString);
-    mBodyWriter->addAttribute("draw:points", pointsString );
+    m_BodyWriter->addAttributePt("svg:x", odfXCoord(minX));
+    m_BodyWriter->addAttributePt("svg:y", odfYCoord(minY));
+    m_BodyWriter->addAttributePt("svg:width", odfLength(width) );
+    m_BodyWriter->addAttributePt("svg:height", odfLength(height) );
+    m_BodyWriter->addAttribute("svg:viewBox", viewBoxString);
+    m_BodyWriter->addAttribute("draw:points", pointsString );
 }
 
 void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
@@ -567,9 +567,9 @@ void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
     if (comment.isEmpty())
         return;
 
-    mBodyWriter->startElement("svg:desc");
-    mBodyWriter->addTextNode(comment);
-    mBodyWriter->endElement(); // svg:desc
+    m_BodyWriter->startElement("svg:desc");
+    m_BodyWriter->addTextNode(comment);
+    m_BodyWriter->endElement(); // svg:desc
 }
 
 void
@@ -598,7 +598,7 @@ XFigOdgWriter::writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable )
             colorString = QColor(value, value, value).name();
         } else {
             //TODO: tint blackness/whiteness of color
-            const QColor* color = mDocument->color(fillColorId);
+            const QColor* color = m_Document->color(fillColorId);
             if (color != 0)
                 colorString = color->name();
         }
@@ -613,7 +613,7 @@ XFigOdgWriter::writeDotDash( KoGenStyle& odfStyle, int lineType, double distance
     const double odfDistance = odfLineThickness(distance);
     odfStyle.addAttribute(QLatin1String("draw:style"), "rect");
     odfStyle.addAttribute(QLatin1String("draw:distance"),
-                          mCLocale.toString(odfDistance)+QLatin1String("pt"));
+                          m_CLocale.toString(odfDistance)+QLatin1String("pt"));
 
     const char* displayName = 0;
     bool isFirstDot = false;
@@ -645,7 +645,7 @@ XFigOdgWriter::writeDotDash( KoGenStyle& odfStyle, int lineType, double distance
     odfStyle.addAttribute(QLatin1String("draw:dots1"), "1");
     odfStyle.addAttribute(QLatin1String("draw:dots1-length"),
                           isFirstDot ? QString::fromLatin1("100%") :
-                                       mCLocale.toString(odfDistance)+QLatin1String("pt"));
+                                       m_CLocale.toString(odfDistance)+QLatin1String("pt"));
     if (secondDotsNumber!=0) {
         odfStyle.addAttribute(QLatin1String("draw:dots2"), QLatin1String(secondDotsNumber));
         odfStyle.addAttribute(QLatin1String("draw:dots2-length"), "100%");
@@ -657,7 +657,7 @@ XFigOdgWriter::writeStroke( KoGenStyle& odfStyle, const XFigLineable* lineable )
 {
     const qint32 colorId = lineable->lineColorId();
     if (colorId >= 0) {
-        const QColor* color = mDocument->color(colorId);
+        const QColor* color = m_Document->color(colorId);
         if (color != 0)
             odfStyle.addProperty( QLatin1String("svg:stroke-color"), color->name() );
     }
@@ -670,7 +670,7 @@ XFigOdgWriter::writeStroke( KoGenStyle& odfStyle, const XFigLineable* lineable )
     if (isDashed) {
         KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
         writeDotDash(dashStyle, lineType, lineable->lineStyleValue());
-        const QString dashStyleName = mStyleCollector.insert( dashStyle, QLatin1String("dashStyle") );
+        const QString dashStyleName = m_StyleCollector.insert( dashStyle, QLatin1String("dashStyle") );
         odfStyle.addProperty(QLatin1String("draw:stroke-dash"), dashStyleName);
     }
 }
@@ -709,7 +709,7 @@ XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, Line
         arrowStyle.addAttribute(QLatin1String("svg:viewBox"), viewBox);
         arrowStyle.addAttribute(QLatin1String("svg:d"), d);
         const QString arrowStyleName =
-            mStyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
+            m_StyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
 
         const char* const markerStart =
             (lineEndType==LineStart) ? "draw:marker-start" : "draw:marker-end";

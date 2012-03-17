@@ -54,16 +54,15 @@ template<typename T> class QVector;
 
 class XFigOdgWriter
 {
-private:
-    enum LineEndType { LineStart, LineEnd };
 public:
     explicit XFigOdgWriter( KoStore* outputStore );
     ~XFigOdgWriter();
 
-public:
     bool write( XFigDocument* document );
 
 private:
+    enum LineEndType { LineStart, LineEnd };
+
     void storePixelImageFiles();
     void storeMetaXml();
     void storeContentXml();
@@ -104,18 +103,17 @@ private:
     double odfLength( qint32 length ) const;
 
 private:
-    QLocale mCLocale;
-    KoOdfWriteStore mOdfWriteStore;
-    KoStore* mOutputStore;
-    KoXmlWriter* mManifestWriter;
-    KoXmlWriter* mBodyWriter;
+    QLocale m_CLocale;
+    KoOdfWriteStore m_OdfWriteStore;
+    KoStore* m_OutputStore;
+    KoXmlWriter* m_ManifestWriter;
+    KoXmlWriter* m_BodyWriter;
 
-    KoGenStyles mStyleCollector;
-    QString mMasterPageStyleName;
-    int mPageCount;
-    QString mLayerId;
+    KoGenStyles m_StyleCollector;
+    QString m_MasterPageStyleName;
+    int m_PageCount;
 
-    XFigDocument* mDocument;
+    XFigDocument* m_Document;
 };
 
 #endif

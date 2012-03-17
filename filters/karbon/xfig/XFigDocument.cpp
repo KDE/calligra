@@ -49,9 +49,9 @@ XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
             maxY = y;
         }
     }
-    mUpperLeftCorner = XFigPoint(minX, minY);
-    mWidth = (maxX - minX + 1);
-    mHeight = (maxY - minY + 1);
+    m_UpperLeftCorner = XFigPoint(minX, minY);
+    m_Width = (maxX - minX + 1);
+    m_Height = (maxY - minY + 1);
 }
 
 static void
@@ -89,18 +89,18 @@ fillColorTable( QHash<int, QColor>& colorTable )
 
 
 XFigDocument::XFigDocument()
-  : mPageOrientation(XFigPageOrientationUnknown)
-  , mCoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
-  , mUnitType(XFigUnitTypeUnknown)
-  , mPageSizeType(XFigPageSizeUnknown)
-  , mResolution(1200)
+  : m_PageOrientation(XFigPageOrientationUnknown)
+  , m_CoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
+  , m_UnitType(XFigUnitTypeUnknown)
+  , m_PageSizeType(XFigPageSizeUnknown)
+  , m_Resolution(1200)
 {
-    fillColorTable( mColorTable );
+    fillColorTable( m_ColorTable );
 }
 
 const QColor*
 XFigDocument::color(int id) const
 {
-    QHash<int, QColor>::ConstIterator it = mColorTable.constFind(id);
-    return (it!=mColorTable.constEnd()) ? &it.value() : 0;
+    QHash<int, QColor>::ConstIterator it = m_ColorTable.constFind(id);
+    return (it!=m_ColorTable.constEnd()) ? &it.value() : 0;
 }

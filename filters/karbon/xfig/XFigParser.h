@@ -44,9 +44,8 @@ private:
     explicit XFigParser( QIODevice* device );
     ~XFigParser();
 
-    XFigDocument* takeDocument() { XFigDocument* result = mDocument; mDocument = 0; return result; }
+    XFigDocument* takeDocument() { XFigDocument* result = m_Document; m_Document = 0; return result; }
 
-private:
     bool parseHeader();
 
     void parseColorObject();
@@ -63,11 +62,11 @@ private:
     QVector<double> parseFactors(int pointCount);
 
 private:
-    XFigDocument* mDocument;
+    XFigDocument* m_Document;
 
-    int mXFigVersion;
+    int m_XFigVersion;
 
-    QTextDecoder* mTextDecoder;
+    QTextDecoder* m_TextDecoder;
     XFigStreamLineReader m_XFigStreamLineReader;
 };
 

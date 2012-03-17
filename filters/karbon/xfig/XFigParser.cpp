@@ -317,14 +317,14 @@ XFigParser::parse( QIODevice* device )
 
 
 XFigParser::XFigParser( QIODevice* device )
-  : mDocument(0)
+  : m_Document(0)
   , m_XFigStreamLineReader( device )
 {
     if( (device == 0) || (m_XFigStreamLineReader.hasError()) )
         return;
 
     const QTextCodec* codec = QTextCodec::codecForName("ISO 8859-1");
-    mTextDecoder = codec->makeDecoder();
+    m_TextDecoder = codec->makeDecoder();
 
     // setup
     if (! parseHeader())
@@ -356,13 +356,13 @@ XFigParser::XFigParser( QIODevice* device )
         }
     }
 
-    mDocument->addPage( page );
+    m_Document->addPage( page );
 }
 
 XFigParser::~XFigParser()
 {
-    delete mTextDecoder;
-    delete mDocument;
+    delete m_TextDecoder;
+    delete m_Document;
 }
 
 bool
@@ -379,15 +379,15 @@ XFigParser::parseHeader()
 
     const QChar minorVersion = versionString.at(7);
     if (minorVersion == QLatin1Char('2')) {
-        mXFigVersion = 320;
+        m_XFigVersion = 320;
     } else if (minorVersion == QLatin1Char('1')) {
-        mXFigVersion = 310;
+        m_XFigVersion = 310;
     } else {
         kDebug() << "ERROR: unsupported xfig version";
         return false;
     }
 
-    mDocument = new XFigDocument;
+    m_Document = new XFigDocument;
 
     // assume header is broken by default
     bool isHeaderCorrect = false;
@@ -403,7 +403,7 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (pageOrientation == XFigPageOrientationUnknown)
                 kDebug() << "ERROR: invalid orientation";
 
-            mDocument->setPageOrientation( pageOrientation );
+            m_Document->setPageOrientation( pageOrientation );
         } else {
             break;
         }
@@ -424,17 +424,17 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (unitType == XFigUnitTypeUnknown)
                 kDebug() << "ERROR: invalid units";
 
-            mDocument->setUnitType( unitType );
+            m_Document->setUnitType( unitType );
         } else {
             break;
         }
 
-        if (mXFigVersion == 320) {
+        if (m_XFigVersion == 320) {
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString pageSizeString = m_XFigStreamLineReader.line();
                 const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
 qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
-                mDocument->setPageSizeType(pageSizeType);
+                m_Document->setPageSizeType(pageSizeType);
             } else {
                 break;
             }
@@ -476,9 +476,9 @@ qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
                 (coordinateSystemType == 1) ? XFigCoordSystemOriginLowerLeft :
                 (coordinateSystemType == 2) ? XFigCoordSystemOriginUpperLeft :
                                             XFigCoordSystemOriginTypeUnknown;
-            mDocument->setCoordSystemOriginType( coordSystemOriginType ); // said to be ignored and always upper-left
-            mDocument->setResolution(resolution);
-            mDocument->setComment(m_XFigStreamLineReader.comment());
+            m_Document->setCoordSystemOriginType( coordSystemOriginType ); // said to be ignored and always upper-left
+            m_Document->setResolution(resolution);
+            m_Document->setComment(m_XFigStreamLineReader.comment());
 
     qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
         } else {
@@ -488,8 +488,8 @@ qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
     } while (false);
 
     if (! isHeaderCorrect) {
-        delete mDocument;
-        mDocument = 0;
+        delete m_Document;
+        m_Document = 0;
     }
 
     return isHeaderCorrect;
@@ -537,7 +537,7 @@ void XFigParser::parseColorObject()
     const int green = parseTwoDigitHexValue(textStream);
     const int blue = parseTwoDigitHexValue(textStream);
 
-    mDocument->setUserColor(colorNumber, QColor(red, green, blue));
+    m_Document->setUserColor(colorNumber, QColor(red, green, blue));
 }
 
 XFigAbstractObject*
@@ -891,7 +891,7 @@ qDebug()<<"text";
             }
             textChar = static_cast<char>(charValue);
         }
-        text.append( mTextDecoder->toUnicode(&textChar,1) );
+        text.append( m_TextDecoder->toUnicode(&textChar,1) );
     }
     textObject->setText(text);
 
