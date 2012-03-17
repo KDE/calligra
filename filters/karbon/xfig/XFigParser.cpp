@@ -449,8 +449,13 @@ qDebug() << "magnification:"<<magnificationString<<magnification;
             }
 
             // singe or multiple page
-            /*const QString singleOrMultiplePagesString =*/
-            if (! m_XFigStreamLineReader.readNextLine()) {
+            if (m_XFigStreamLineReader.readNextLine()) {
+                const QString singleOrMultiplePagesString = m_XFigStreamLineReader.line();
+                // multiple pages not yet supported
+                if (singleOrMultiplePagesString != QLatin1String("Single")) {
+                    break;
+                }
+            } else {
                 break;
             }
 
