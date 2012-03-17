@@ -877,26 +877,51 @@ qDebug()<<"text";
 
     // read text
     // skip one space char used as separator
-    char dummy;
-    textStream >> dummy;
+    const QString textData = line.mid(textStream.pos()+1);
 
+    // TODO: improve this, not really sane yet
     QString text;
-    while (! textStream.atEnd()) {
-        char textChar;
-        textStream >> textChar;
-        if (textChar == '\\') {
-            const QString ocode = textStream.read(3);
-            unsigned char charValue =
-                (ocode.at(0).toLatin1() - '0') * 64 +
-                (ocode.at(1).toLatin1() - '0') * 8 +
-                (ocode.at(2).toLatin1() - '0');
-            // \001 is used as end marker
-            if (charValue == 1) {
+    for (int i = 0; i < textData.length(); ++i) {
+        const QChar textChar = textData.at(i);
+        if (textChar == QLatin1Char('\\')) {
+
+            if ((i+3) >= textData.length()) {
+                // encoded char, especially end marker not possible, is broken
                 break;
             }
-            textChar = static_cast<char>(charValue);
+            // read digits and check this is really about an octal encoded char
+            int digitValues[3];
+            bool isOctalEncodedChar = true;
+            for (int d = 0; d < 3; ++d) {
+                const int digitValue = textData.at(i+1+d).digitValue();
+                if ((digitValue < 0) || (7 < digitValue)) {
+                    isOctalEncodedChar = false;
+                    break;
+                }
+                digitValues[d] = digitValue;
+            }
+            if (isOctalEncodedChar) {
+                unsigned char charValue =
+                    digitValues[0] * 64 +
+                    digitValues[1] * 8 +
+                    digitValues[2];
+                // \001 is used as end marker
+                if (charValue == 1) {
+                    break;
+                }
+                const char encodedChar = static_cast<char>(charValue);
+                text.append( m_TextDecoder->toUnicode(&encodedChar,1) );
+
+                // digits are consumed
+                i += 3;
+            } else if (textData.at(i+1) == QLatin1Char('\\')) {
+                text.append( textChar );
+                // double \ is consumed
+                ++i;
+            }
+        } else {
+            text.append( textChar );
         }
-        text.append( m_TextDecoder->toUnicode(&textChar,1) );
     }
     textObject->setText(text);
 
