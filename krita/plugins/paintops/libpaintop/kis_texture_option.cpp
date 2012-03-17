@@ -79,7 +79,7 @@ public:
         formLayout->addRow(i18n("Vertical Offset:"), offsetSliderY);
 
         strengthSlider = new KisDoubleSliderSpinBox(this);
-        strengthSlider->setRange(0.0, 1.0);
+        strengthSlider->setRange(0.0, 1.0, 2);
         strengthSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         formLayout->addRow(i18n("Strength:"), strengthSlider);
 
@@ -129,11 +129,13 @@ KisTextureOption::KisTextureOption(QObject *)
 
 KisTextureOption::~KisTextureOption()
 {
-    qDebug() << "parent" << parent();
+    qDebug() << "deleting" << this << "parent:" << parent();
+    delete m_optionWidget;
 }
 
-void KisTextureOption::apply(KisFixedPaintDeviceSP /*dab*/, const QPoint &/*offset*/)
+void KisTextureOption::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
 {
+    if (!isChecked()) return;
 }
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -235,6 +237,8 @@ void KisTextureOption::resetGUI(KoResource* res)
 
 void KisTextureOption::recalculateMask()
 {
+    return;
+
     if (!m_optionWidget->chooser->currentResource()) return;
 
     delete m_mask;
@@ -277,4 +281,7 @@ void KisTextureOption::recalculateMask()
             cs->setOpacity(maskData + (row * width + col), maskValue, 1);
         }
     }
+    static int i = 0;
+    m_mask->convertToQImage(0).save(QString("mask_%1.png").arg(i));
+    i++;
 }
