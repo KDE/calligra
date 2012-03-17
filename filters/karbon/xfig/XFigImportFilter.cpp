@@ -18,18 +18,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "xfigimportfilter.h"
+#include "XFigImportFilter.h"
 
 // filter
-#include "xfigparser.h"
-#include "xfigdocument.h"
-#include "xfigodgwriter.h"
+#include "XFigParser.h"
+#include "XFigDocument.h"
+#include "XFigOdgWriter.h"
 // Calligra core
 #include <KoOdf.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
+// KDE
+#include <KPluginFactory>
 // Qt
 #include <QtCore/QFile>
+
+
+K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
+K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
 
 
 XFigImportFilter::XFigImportFilter( QObject* parent, const QVariantList& )

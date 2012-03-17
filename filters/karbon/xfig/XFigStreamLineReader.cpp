@@ -19,7 +19,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "xfigstreamlinereader.h"
+#include "XFigStreamLineReader.h"
 
 // Qt
 #include <QIODevice>

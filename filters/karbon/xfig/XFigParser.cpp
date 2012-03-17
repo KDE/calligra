@@ -19,10 +19,10 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "xfigparser.h"
+#include "XFigParser.h"
 
 // filter
-#include "xfigdocument.h"
+#include "XFigDocument.h"
 // Qt
 #include <QTextStream>
 #include <QTextCodec>

@@ -18,10 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "xfigodgwriter.h"
+#include "XFigOdgWriter.h"
 
 // filter
-#include "xfigdocument.h"
+#include "XFigDocument.h"
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

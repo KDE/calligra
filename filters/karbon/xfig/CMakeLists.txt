@@ -1,10 +1,9 @@
 set( karbonxfigimport_PLUGIN_SRCS
-    xfigdocument.cpp
-    xfigstreamlinereader.cpp
-    xfigparser.cpp
-    xfigodgwriter.cpp
-    xfigimportfilter.cpp
-    main.cpp
+    XFigDocument.cpp
+    XFigStreamLineReader.cpp
+    XFigParser.cpp
+    XFigOdgWriter.cpp
+    XFigImportFilter.cpp
 )
 
 kde4_add_plugin( karbonxfigimport ${karbonxfigimport_PLUGIN_SRCS} )

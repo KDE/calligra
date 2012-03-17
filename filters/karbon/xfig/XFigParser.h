@@ -23,7 +23,7 @@
 #define XFIGPARSER_H
 
 // filter
-#include "xfigstreamlinereader.h"
+#include "XFigStreamLineReader.h"
 
 class XFigDocument;
 class XFigAbstractObject;
