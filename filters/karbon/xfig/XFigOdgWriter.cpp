@@ -115,6 +115,7 @@ XFigOdgWriter::XFigOdgWriter( KoStore* outputStore )
 XFigOdgWriter::~XFigOdgWriter()
 {
     m_OdfWriteStore.closeManifestWriter();
+
     delete m_OutputStore;
 }
 
@@ -220,7 +221,7 @@ XFigOdgWriter::writeMasterPage()
     const char* const orientation =
         (m_Document->pageOrientation()==XFigPagePortrait) ?  "portrait":
         (m_Document->pageOrientation()==XFigPageLandscape) ? "landscape":
-                                                            0;
+                                                             0;
     if( orientation != 0 )
         masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), orientation );
 
@@ -252,8 +253,9 @@ XFigOdgWriter::writePage( const XFigPage* page )
     m_BodyWriter->addAttribute( "draw:master-page-name", m_MasterPageStyleName );
 
     // objects
-    foreach( const XFigAbstractObject* object, page->objects() )
+    foreach( const XFigAbstractObject* object, page->objects() ) {
         writeObject( object );
+    }
 
     m_BodyWriter->endElement(); //draw:page
 }
@@ -295,8 +297,9 @@ XFigOdgWriter::writeCompoundObject( const XFigCompoundObject* groupObject )
 
 //     writeComment(groupObject);
 
-    foreach( const XFigAbstractObject* object, groupObject->objects() )
+    foreach( const XFigAbstractObject* object, groupObject->objects() ) {
         writeObject( object );
+    }
 
 //     mBodyWriter->endElement(); //draw:g
 }
@@ -321,13 +324,11 @@ XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
         m_CLocale.toString(odfYCoord(centerPoint.y())) + QLatin1String("pt)");
     m_BodyWriter->addAttribute("draw:transform", transformationString);
 
-    {
-        KoGenStyle ellipseStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-        writeStroke(ellipseStyle, ellipseObject );
-        writeFill(ellipseStyle, ellipseObject );
-        const QString ellipseStyleName = m_StyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
-        m_BodyWriter->addAttribute("draw:style-name", ellipseStyleName);
-    }
+    KoGenStyle ellipseStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    writeStroke(ellipseStyle, ellipseObject );
+    writeFill(ellipseStyle, ellipseObject );
+    const QString ellipseStyleName = m_StyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
+    m_BodyWriter->addAttribute("draw:style-name", ellipseStyleName);
 
     writeComment(ellipseObject);
 
@@ -343,18 +344,16 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
 
     writePoints(polylineObject->points());
 
-    {
-        KoGenStyle polylineStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-        writeStroke(polylineStyle, polylineObject);
-        writeFill(polylineStyle, polylineObject);
-        writeJoinType(polylineStyle, polylineObject->joinType());
-        writeCapType(polylineStyle, polylineObject->capType());
-        writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
-        writeArrow(polylineStyle, polylineObject->forwardArrow(), LineEnd);
-        const QString polylineStyleName =
-            m_StyleCollector.insert(polylineStyle, QLatin1String("polylineStyle"));
-        m_BodyWriter->addAttribute("draw:style-name", polylineStyleName);
-    }
+    KoGenStyle polylineStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    writeStroke(polylineStyle, polylineObject);
+    writeFill(polylineStyle, polylineObject);
+    writeJoinType(polylineStyle, polylineObject->joinType());
+    writeCapType(polylineStyle, polylineObject->capType());
+    writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
+    writeArrow(polylineStyle, polylineObject->forwardArrow(), LineEnd);
+    const QString polylineStyleName =
+        m_StyleCollector.insert(polylineStyle, QLatin1String("polylineStyle"));
+    m_BodyWriter->addAttribute("draw:style-name", polylineStyleName);
 
     writeComment(polylineObject);
 
@@ -370,15 +369,13 @@ XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
 
     writePoints(polygonObject->points());
 
-    {
-        KoGenStyle polygonStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-        writeStroke(polygonStyle, polygonObject);
-        writeFill(polygonStyle, polygonObject);
-        writeJoinType(polygonStyle, polygonObject->joinType());
-        const QString polygonStyleName =
-            m_StyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
-        m_BodyWriter->addAttribute("draw:style-name", polygonStyleName);
-    }
+    KoGenStyle polygonStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    writeStroke(polygonStyle, polygonObject);
+    writeFill(polygonStyle, polygonObject);
+    writeJoinType(polygonStyle, polygonObject->joinType());
+    const QString polygonStyleName =
+        m_StyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
+    m_BodyWriter->addAttribute("draw:style-name", polygonStyleName);
 
     writeComment(polygonObject);
 
@@ -516,15 +513,12 @@ XFigOdgWriter::writeZIndex( const XFigAbstractGraphObject* graphObject )
 void
 XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
 {
-    XFigCoord minX;
-    XFigCoord minY;
-    XFigCoord maxX;
-    XFigCoord maxY;
-    {
-        const XFigPoint& firstPoint = points.at(0);
-        minX = maxX = firstPoint.x();
-        minY = maxY = firstPoint.y();
-    }
+    const XFigPoint& firstPoint = points.at(0);
+
+    XFigCoord minX = firstPoint.x();
+    XFigCoord minY = firstPoint.y();
+    XFigCoord maxX = firstPoint.x();
+    XFigCoord maxY = firstPoint.y();
 
     QString pointsString;
     int i = 0;
@@ -532,19 +526,23 @@ XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
         const XFigPoint& point = points.at(i);
         const XFigCoord x = point.x();
         const XFigCoord y = point.y();
-        if( x < minX )
+
+        if( x < minX ) {
             minX = x;
-        else if( maxX < x )
+        } else if( maxX < x ) {
             maxX = x;
-        if( y < minY )
+        }
+        if( y < minY ) {
             minY = y;
-        else if( maxY < y )
+        } else if( maxY < y ) {
             maxY = y;
+        }
 
         pointsString +=  m_CLocale.toString(x)+QLatin1Char(',')+m_CLocale.toString(y);
         ++i;
-        if (i >= points.count())
+        if (i >= points.count()) {
             break;
+        }
         pointsString += QLatin1Char(' ');
     }
     const XFigCoord width =  maxX - minX + 1;
@@ -564,8 +562,9 @@ XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
 void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
 {
     const QString& comment = object->comment();
-    if (comment.isEmpty())
+    if (comment.isEmpty()) {
         return;
+    }
 
     m_BodyWriter->startElement("svg:desc");
     m_BodyWriter->addTextNode(comment);
@@ -599,8 +598,9 @@ XFigOdgWriter::writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable )
         } else {
             //TODO: tint blackness/whiteness of color
             const QColor* color = m_Document->color(fillColorId);
-            if (color != 0)
+            if (color != 0) {
                 colorString = color->name();
+            }
         }
 
         odfStyle.addProperty( QLatin1String("draw:fill-color"), colorString );
@@ -658,19 +658,23 @@ XFigOdgWriter::writeStroke( KoGenStyle& odfStyle, const XFigLineable* lineable )
     const qint32 colorId = lineable->lineColorId();
     if (colorId >= 0) {
         const QColor* color = m_Document->color(colorId);
-        if (color != 0)
+        if (color != 0) {
             odfStyle.addProperty( QLatin1String("svg:stroke-color"), color->name() );
+        }
     }
 
     odfStyle.addPropertyPt( QLatin1String("svg:stroke-width"), odfLineThickness(lineable->lineThickness()) );
 
     const XFigLineType lineType = lineable->lineType();
     const bool isDashed = (lineType != XFigLineSolid) && (lineType != XFigLineDefault);
+
     odfStyle.addProperty( QLatin1String("draw:stroke"), (isDashed) ? "dash" : "solid" );
+
     if (isDashed) {
         KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
         writeDotDash(dashStyle, lineType, lineable->lineStyleValue());
         const QString dashStyleName = m_StyleCollector.insert( dashStyle, QLatin1String("dashStyle") );
+
         odfStyle.addProperty(QLatin1String("draw:stroke-dash"), dashStyleName);
     }
 }

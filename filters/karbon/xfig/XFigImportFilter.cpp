@@ -54,6 +54,7 @@ XFigImportFilter::convert( const QByteArray& from, const QByteArray& to )
         (to   != "application/vnd.oasis.opendocument.graphics")) {
         return KoFilter::NotImplemented;
     }
+
     // prepare input
     QFile inputFile( m_chain->inputFile() );
     if( ! inputFile.open(QIODevice::ReadOnly) )

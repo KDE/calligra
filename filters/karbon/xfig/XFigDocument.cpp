@@ -24,8 +24,9 @@
 void
 XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
 {
-    if (points.count()!=5)
+    if (points.count()!=5) {
         return;
+    }
 
     // format does not specify in which order the corner points are given,
     // so just get the box from all points
@@ -36,12 +37,14 @@ XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
     qint32 maxY = firstPoint.y();
     for (int i = 1; i < 5; ++i) {
         const XFigPoint point = points.at(i);
+
         const qint32 x = point.x();
         if (x < minX) {
             minX = x;
         } else if (maxX < x) {
             maxX = x;
         }
+
         const qint32 y = point.y();
         if (y < minY) {
             minY = y;
@@ -49,6 +52,7 @@ XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
             maxY = y;
         }
     }
+
     m_UpperLeftCorner = XFigPoint(minX, minY);
     m_Width = (maxX - minX + 1);
     m_Height = (maxY - minY + 1);
@@ -102,5 +106,6 @@ const QColor*
 XFigDocument::color(int id) const
 {
     QHash<int, QColor>::ConstIterator it = m_ColorTable.constFind(id);
+
     return (it!=m_ColorTable.constEnd()) ? &it.value() : 0;
 }
