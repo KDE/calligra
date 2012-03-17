@@ -276,7 +276,7 @@ struct PaperSizeIdMap {
 } paperSizeTable[] = {
     { "Letter",  XFigPageSizeLetter },
     { "Legal",   XFigPageSizeLegal },
-    { "Ledger",  XFigPageSizeLedger },
+    { "Ledger",  XFigPageSizeTabloid },
     { "Tabloid", XFigPageSizeTabloid },
     { "A",  XFigPageSizeA },
     { "B",  XFigPageSizeB },
@@ -394,7 +394,7 @@ XFigParser::parseHeader()
     do {
         // orientation
         if (m_XFigStreamLineReader.readNextLine()) {
-            const QString orientationString = m_XFigStreamLineReader.line();
+            const QString orientationString = m_XFigStreamLineReader.line().trimmed();
             const XFigPageOrientation pageOrientation =
                 (orientationString == QLatin1String("Landscape")) ? XFigPageLandscape :
                 (orientationString == QLatin1String("Portrait")) ?  XFigPagePortrait :
@@ -415,7 +415,7 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
 
         // units
         if (m_XFigStreamLineReader.readNextLine()) {
-            const QString unitTypeString = m_XFigStreamLineReader.line();
+            const QString unitTypeString = m_XFigStreamLineReader.line().trimmed();
             const XFigUnitType unitType =
                 (unitTypeString == QLatin1String("Metric")) ? XFigUnitMetric :
                 (unitTypeString == QLatin1String("Inches")) ? XFigUnitInches :
@@ -431,7 +431,7 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
 
         if (m_XFigVersion == 320) {
             if (m_XFigStreamLineReader.readNextLine()) {
-                const QString pageSizeString = m_XFigStreamLineReader.line();
+                const QString pageSizeString = m_XFigStreamLineReader.line().trimmed();
                 const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
 qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
                 m_Document->setPageSizeType(pageSizeType);
@@ -450,7 +450,7 @@ qDebug() << "magnification:"<<magnificationString<<magnification;
 
             // singe or multiple page
             if (m_XFigStreamLineReader.readNextLine()) {
-                const QString singleOrMultiplePagesString = m_XFigStreamLineReader.line();
+                const QString singleOrMultiplePagesString = m_XFigStreamLineReader.line().trimmed();
                 // multiple pages not yet supported
                 if (singleOrMultiplePagesString != QLatin1String("Single")) {
                     break;

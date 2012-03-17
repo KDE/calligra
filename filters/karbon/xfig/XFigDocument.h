@@ -461,7 +461,6 @@ enum XFigPageSizeType
     XFigPageSizeUnknown,
     XFigPageSizeLetter,
     XFigPageSizeLegal,
-    XFigPageSizeLedger,
     XFigPageSizeTabloid,
     XFigPageSizeA,
     XFigPageSizeB,

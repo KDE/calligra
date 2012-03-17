@@ -36,11 +36,10 @@ struct PageSize
 {
     const char* width;
     const char* height;
-} pageSizeTable[15] =
+} pageSizeTable[14] =
 {
     {  "8.5in",  "11in"}, // letter
     {  "8.5in",  "14in"}, // legal
-    { "17in",    "11in"}, // ledger
     { "11in",    "17in"}, // tabloid
     {  "8.5in",  "11in"}, // A
     { "11in",    "17in"}, // B
@@ -214,16 +213,14 @@ XFigOdgWriter::writeMasterPage()
 
     if (m_Document->pageSizeType() != XFigPageSizeUnknown) {
         const PageSize& pageSize = pageSizeTable[m_Document->pageSizeType()-1];
-        masterPageLayoutStyle.addProperty( QLatin1String("fo:page-width"), pageSize.width );
-        masterPageLayoutStyle.addProperty( QLatin1String("fo:page-height"), pageSize.height );
-    }
 
-    const char* const orientation =
-        (m_Document->pageOrientation()==XFigPagePortrait) ?  "portrait":
-        (m_Document->pageOrientation()==XFigPageLandscape) ? "landscape":
-                                                             0;
-    if( orientation != 0 )
-        masterPageLayoutStyle.addProperty( QLatin1String("style:print-orientation"), orientation );
+        // defaults to portrait in case orientation is unknown
+        const bool isLandscape = (m_Document->pageOrientation() == XFigPageLandscape);
+        masterPageLayoutStyle.addProperty( QLatin1String("fo:page-width"),
+                                           isLandscape ? pageSize.height : pageSize.width );
+        masterPageLayoutStyle.addProperty( QLatin1String("fo:page-height"),
+                                           isLandscape ? pageSize.width : pageSize.height );
+    }
 
     const QString masterPageLayoutStyleName =
         m_StyleCollector.insert( masterPageLayoutStyle, QLatin1String("masterPageLayoutStyle") );
