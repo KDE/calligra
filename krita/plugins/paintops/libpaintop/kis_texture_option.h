@@ -43,6 +43,8 @@ public:
 
     explicit KisTextureOption(QObject *parent= 0);
     virtual ~KisTextureOption();
+
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& _offset);
     
 public slots:
     
@@ -52,10 +54,10 @@ public slots:
 private slots:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
-
+    void recalculateMask();
 private:
     KisTextureOptionWidget *m_optionWidget;
-
+    KisFixedPaintDevice *m_mask;
 
 };
 

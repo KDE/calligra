@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2012
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,14 +26,21 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QComboBox>
+#include <QTransform>
+#include <QPainter>
 
 #include <klocale.h>
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
+#include <kis_fixed_paint_device.h>
 #include <kis_resource_server_provider.h>
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
 #include <kis_pattern.h>
+#include <kis_paint_device.h>
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -42,7 +49,7 @@ public:
     KisTextureOptionWidget(QWidget *parent = 0)
         : QWidget(parent)
     {
-        QFormLayout *formLayout = new QFormLayout;
+        QFormLayout *formLayout = new QFormLayout(this);
         chooser = new KisPatternChooser(this);
         chooser->setGrayscalePreview(true);
         chooser->setMaximumHeight(250);
@@ -89,8 +96,6 @@ public:
 
         setLayout(formLayout);
     }
-
-
     KisPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
     KisDoubleSliderSpinBox *rotationSlider;
@@ -103,6 +108,7 @@ public:
 
 KisTextureOption::KisTextureOption(QObject *)
     : KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::textureCategory(), true)
+    , m_mask(0)
 {
     setChecked(false);
     m_optionWidget = new KisTextureOptionWidget;
@@ -112,17 +118,29 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
 
     resetGUI(m_optionWidget->chooser->currentResource());
+
+    // only these options directly influence the calculation of the mask
+    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
+    connect(m_optionWidget->rotationSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
+    connect(m_optionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
+    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SLOT(recalculateMask()));
+
 }
 
 KisTextureOption::~KisTextureOption()
 {
+    qDebug() << "parent" << parent();
 }
 
+void KisTextureOption::apply(KisFixedPaintDeviceSP /*dab*/, const QPoint &/*offset*/)
+{
+}
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-
+    if (!m_optionWidget->chooser->currentResource()) return;
     KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
+
     qreal scale = m_optionWidget->scaleSlider->value();
     qreal rotation = m_optionWidget->rotationSlider->value();
     int offsetX = m_optionWidget->offsetSliderX->value();
@@ -211,4 +229,52 @@ void KisTextureOption::resetGUI(KoResource* res)
     m_optionWidget->strengthSlider->setValue(1.0);
     m_optionWidget->chkInvert->setChecked(false);
     m_optionWidget->cmbChannel->setCurrentIndex(0);
+
+    recalculateMask();
+}
+
+void KisTextureOption::recalculateMask()
+{
+    if (!m_optionWidget->chooser->currentResource()) return;
+
+    delete m_mask;
+    m_mask = 0;
+
+    KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
+
+    QImage mask = pattern->image();
+
+    if (!qFuzzyCompare(m_optionWidget->rotationSlider->value(), 0.0)) {
+        // do rotation
+    }
+    if (!qFuzzyCompare(m_optionWidget->scaleSlider->value(), 0.0)) {
+        // do scaling
+    }
+
+    // convert to grayscale mask and apply the strength
+    float strength = m_optionWidget->strengthSlider->value();
+
+    QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
+    int width = mask.width();
+    int height = mask.height();
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    m_mask = new KisFixedPaintDevice(cs);
+    m_mask->setRect(mask.rect());
+    m_mask->initialize(0);
+    quint8 *maskData = m_mask->data();
+
+    for (int row = 0; row < height; ++row ) {
+        for (int col = 0; col < width; ++col ){
+            const QRgb currentPixel = pixel[row * width + col];
+
+            const int red = qRed(currentPixel);
+            const int green = qGreen(currentPixel);
+            const int blue = qBlue(currentPixel);
+
+            const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
+            float maskValue = (grayValue / 255.0) * strength;
+            cs->setOpacity(maskData + (row * width + col), maskValue, 1);
+        }
+    }
 }
