@@ -286,14 +286,19 @@ XFigOdgWriter::writeObject( const XFigAbstractObject* object )
 void
 XFigOdgWriter::writeCompoundObject( const XFigCompoundObject* groupObject )
 {
-    mBodyWriter->startElement("draw:g");
+// for now compounds are not written as groups, as in OpenDocument groups
+// are kind of sublayers with an automatically assigned z-index
+// while in XFig objects from different compounds can be intertwined in the z-order
+// losing the grouping seems the less tragic solution over wrong order of objects
+// TODO: find if a compound really needs to be dissolved, or if it does not overlap with others
+//     mBodyWriter->startElement("draw:g");
 
-    writeComment(groupObject);
+//     writeComment(groupObject);
 
     foreach( const XFigAbstractObject* object, groupObject->objects() )
         writeObject( object );
 
-    mBodyWriter->endElement(); //draw:g
+//     mBodyWriter->endElement(); //draw:g
 }
 
 void
