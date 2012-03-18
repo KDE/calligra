@@ -69,8 +69,8 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
-    KisTextureOption m_textureOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
+    KisTextureProperties m_textureProperties;
 
     KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_dab;

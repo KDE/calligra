@@ -44,8 +44,6 @@ public:
     explicit KisTextureOption(QObject *parent= 0);
     virtual ~KisTextureOption();
 
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& _offset);
-    
 public slots:
     
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
@@ -54,11 +52,39 @@ public slots:
 private slots:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
-    void recalculateMask();
+
 private:
     KisTextureOptionWidget *m_optionWidget;
+
+
+};
+
+class PAINTOP_EXPORT KisTextureProperties
+{
+public:
+    KisTextureProperties()
+        : pattern(0)
+        , m_mask(0)
+    {}
+
+    bool enabled;
+    qreal scale;
+    qreal rotation;
+    int offsetX;
+    int offsetY;
+    qreal strength;
+    bool invert;
+    KisTextureOption::TextureChannel activeChannel;
+    KisPattern *pattern;
+
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& _offset);
+    void fillProperties(const KisPropertiesConfiguration *setting);
+
+private:
+
     KisFixedPaintDevice *m_mask;
 
+    void recalculateMask();
 };
 
 #endif // KIS_TEXTURE_OPTION_H

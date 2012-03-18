@@ -108,7 +108,6 @@ public:
 
 KisTextureOption::KisTextureOption(QObject *)
     : KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::textureCategory(), true)
-    , m_mask(0)
 {
     setChecked(false);
     m_optionWidget = new KisTextureOptionWidget;
@@ -118,23 +117,11 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
 
     resetGUI(m_optionWidget->chooser->currentResource());
-
-    // only these options directly influence the calculation of the mask
-    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
-    connect(m_optionWidget->rotationSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
-    connect(m_optionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
-    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SLOT(recalculateMask()));
 }
 
 KisTextureOption::~KisTextureOption()
 {
-    qDebug() << "deleting" << this << "parent:" << parent();
     delete m_optionWidget;
-}
-
-void KisTextureOption::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
-{
-    if (!isChecked()) return;
 }
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -167,6 +154,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
+
+    setting->setProperty("Texture/Pattern/Enabled", isChecked());
 }
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -215,7 +204,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
     m_optionWidget->cmbChannel->setCurrentIndex(setting->getInt("Texture/Pattern/Channel"));
 
-    recalculateMask();
+    setChecked(setting->getBool("Texture/Pattern/Enabled"));
 }
 
 void KisTextureOption::resetGUI(KoResource* res)
@@ -230,34 +219,27 @@ void KisTextureOption::resetGUI(KoResource* res)
     m_optionWidget->strengthSlider->setValue(1.0);
     m_optionWidget->chkInvert->setChecked(false);
     m_optionWidget->cmbChannel->setCurrentIndex(0);
-
-    recalculateMask();
 }
 
-void KisTextureOption::recalculateMask()
+void KisTextureProperties::recalculateMask()
 {
-    if (!m_optionWidget->chooser->currentResource()) return;
+    if (!pattern) return;
 
     delete m_mask;
     m_mask = 0;
 
-    KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
-
     QImage mask = pattern->image();
 
-    if (!qFuzzyCompare(m_optionWidget->rotationSlider->value(), 0.0)) {
+    if (!qFuzzyCompare(rotation, 0.0)) {
         // do rotation
     }
-    if (!qFuzzyCompare(m_optionWidget->scaleSlider->value(), 0.0)) {
+    if (!qFuzzyCompare(scale, 0.0)) {
 
         QTransform tf;
-        tf.scale(m_optionWidget->scaleSlider->value(), m_optionWidget->scaleSlider->value());
+        tf.scale(scale, scale);
         QRect rc = tf.mapRect(mask.rect());
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-
-    // convert to grayscale mask and apply the strength
-    float strength = m_optionWidget->strengthSlider->value();
 
     QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
     int width = mask.width();
@@ -282,7 +264,50 @@ void KisTextureOption::recalculateMask()
             cs->setOpacity(maskData + (row * width + col), maskValue, 1);
         }
     }
-    static int i = 0;
-    m_mask->convertToQImage(0).save(QString("mask_%1.png").arg(i));
-    i++;
+//    static int i = 0;
+//    m_mask->convertToQImage(0).save(QString("mask_%1.png").arg(i));
+//    i++;
 }
+
+
+void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
+{
+    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toAscii());
+    QImage img;
+    img.loadFromData(ba, "PNG");
+    QString name = setting->getString("Texture/Pattern/Name");
+    if (name.isEmpty()) {
+        name = setting->getString("Texture/Pattern/FileName");
+    }
+
+    pattern = 0;
+    if (!img.isNull()) {
+        pattern = new KisPattern(img, name);
+    }
+    if (pattern) {
+        foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
+            KisPattern *pat = static_cast<KisPattern *>(res);
+            if (pat == pattern) {
+                delete pattern;
+                pattern = pat;
+                break;
+            }
+        }
+    }
+
+    enabled = setting->getBool("Texture/Pattern/Enabled", false);
+    scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
+    rotation = setting->getDouble("Texture/Pattern/Rotation");
+    offsetX = setting->getInt("Texture/Pattern/OffsetX");
+    offsetY = setting->getInt("Texture/Pattern/OffsetY");
+    strength = setting->getDouble("Texture/Pattern/Strength");
+    invert = setting->getBool("Texture/Pattern/Invert");
+    activeChannel = (KisTextureOption::TextureChannel)setting->getInt("Texture/Pattern/Channel");
+
+    recalculateMask();
+}
+
+void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
+{
+}
+

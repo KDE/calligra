@@ -76,7 +76,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
-    m_textureOption.readOptionSetting(settings);
+    m_textureProperties.fillProperties(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -172,7 +172,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         }
 
         // after applying the coloring information, apply the texturing
-        m_textureOption.apply(dab, info.pos().toPoint());
+        m_textureProperties.apply(dab, info.pos().toPoint());
     }
 
     MirrorProperties mirrors = m_mirrorOption.apply(info);
