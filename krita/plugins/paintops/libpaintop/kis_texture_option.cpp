@@ -249,7 +249,11 @@ void KisTextureOption::recalculateMask()
         // do rotation
     }
     if (!qFuzzyCompare(m_optionWidget->scaleSlider->value(), 0.0)) {
-        // do scaling
+
+        QTransform tf;
+        tf.scale(m_optionWidget->scaleSlider->value(), m_optionWidget->scaleSlider->value());
+        QRect rc = tf.mapRect(mask.rect());
+        mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     // convert to grayscale mask and apply the strength
@@ -266,7 +270,7 @@ void KisTextureOption::recalculateMask()
     quint8 *maskData = m_mask->data();
 
     for (int row = 0; row < height; ++row ) {
-        for (int col = 0; col < width; ++col ){
+        for (int col = 0; col < width; ++col ) {
             const QRgb currentPixel = pixel[row * width + col];
 
             const int red = qRed(currentPixel);
