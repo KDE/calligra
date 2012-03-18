@@ -76,7 +76,7 @@ protected:
     KAction *m_closeAction;
 
 private:
-    int tabIndex;
+    int m_tabIndex;
 
     void setTabIndexFromContextMenu(const int clickedIndex);
 };
