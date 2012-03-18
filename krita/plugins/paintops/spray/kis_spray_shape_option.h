@@ -52,6 +52,7 @@ private:
     int m_maxSize;
     
 private:
+    void setupBrushPreviewSignals();
     void computeAspect();
 
 private slots:

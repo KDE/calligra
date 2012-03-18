@@ -65,4 +65,5 @@ void KisPressureRateOptionWidget::readOptionSetting(const KisPropertiesConfigura
 void KisPressureRateOptionWidget::rateChanged(int rate)
 {
     static_cast<KisPressureRateOption*>(curveOption())->setRate(rate);
+    emit sigSettingChanged();
 }

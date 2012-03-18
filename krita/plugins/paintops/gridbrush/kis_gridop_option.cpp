@@ -36,6 +36,15 @@ KisGridOpOption::KisGridOpOption()
     m_checkable = false;
     m_options = new KisGridOpOptionsWidget();
 
+    connect(m_options->gridWidthSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->gridHeightSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->divisionLevelSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->divisionPressureCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->vertBorderDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->horizBorderDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterBorderCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 

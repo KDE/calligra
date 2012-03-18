@@ -38,6 +38,18 @@ KisSprayOpOption::KisSprayOpOption()
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
+    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->coverageSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMovementSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->spacingSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->particlesSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
 
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));

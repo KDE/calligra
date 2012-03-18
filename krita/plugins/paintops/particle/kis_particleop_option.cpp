@@ -39,6 +39,13 @@ KisParticleOpOption::KisParticleOpOption()
     m_checkable = false;
     m_options = new KisParticleOpOptionsWidget();
 
+    connect(m_options->particleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->itersSPBox,SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gravSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->weightSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->dxSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->dySPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 

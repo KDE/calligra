@@ -79,6 +79,7 @@ bool KisPaintOpOption::isChecked() const
 void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checked = checked;
+    emit sigSettingChanged();
 }
 
 void KisPaintOpOption::setImage(KisImageWSP image)

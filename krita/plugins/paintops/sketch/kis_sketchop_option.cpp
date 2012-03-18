@@ -33,6 +33,16 @@ KisSketchOpOption::KisSketchOpOption()
 {
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
+    connect(m_options->offsetSPBox,SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->lineWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->densitySPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->simpleModeCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->connectionCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->magnetifyCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomRGBCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomOpacityCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->distanceDensityCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->distanceOpacityCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     
     setConfigurationPage(m_options);
 }

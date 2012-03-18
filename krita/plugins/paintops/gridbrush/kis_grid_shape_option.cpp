@@ -35,7 +35,7 @@ KisGridShapeOption::KisGridShapeOption()
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
-
+    connect(m_options->shapeCBox,SIGNAL(currentIndexChanged(int)),SIGNAL( sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 

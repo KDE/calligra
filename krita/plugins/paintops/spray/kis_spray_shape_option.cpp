@@ -51,8 +51,24 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
     
+    setupBrushPreviewSignals();
     setConfigurationPage(m_options);
 }
+
+
+void KisSprayShapeOption::setupBrushPreviewSignals()
+{
+    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+   
+    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),SIGNAL(sigSettingChanged()));
+}
+
 
 KisSprayShapeOption::~KisSprayShapeOption()
 {

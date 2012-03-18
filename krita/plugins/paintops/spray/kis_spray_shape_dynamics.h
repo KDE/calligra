@@ -58,6 +58,9 @@ public:
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+private:
+    void setupBrushPreviewSignals();
     
 private:
     KisShapeDynamicsOptionsWidget * m_options;
