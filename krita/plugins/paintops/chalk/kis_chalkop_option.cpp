@@ -33,6 +33,7 @@ KisChalkOpOption::KisChalkOpOption()
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
+    m_options->hide();
     setConfigurationPage(m_options);
 }
 
