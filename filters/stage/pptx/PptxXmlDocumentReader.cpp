@@ -875,6 +875,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
     }
 
     if (!m_context->firstReadRound) {
+        kDebug() << "======> Second reading round <======";
         while (!atEnd()) {
             readNext();
             kDebug() << *this;
@@ -932,14 +933,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
             }
             d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
-            const QString masterPageStyleName(
-                mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
+            const QString masterPageStyleName(mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
     } else {
         m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
-            m_context->relationships->targetCountWithWord("notesMasters") +
-            m_context->relationships->targetCountWithWord("slides");
+                                   m_context->relationships->targetCountWithWord("notesMasters") +
+                                   m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

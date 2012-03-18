@@ -1477,8 +1477,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
-    MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
-
     bool potentiallyAddToLayoutFrames = false;
 
     QBuffer* shapeBuf = 0;
@@ -1519,9 +1517,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
                 potentiallyAddToLayoutFrames = false;
             }
             if (m_context->type == SlideLayout) {
-                // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
-                // An alternative approach is to put these to masterslides, but it could in practice mean that there are
-                // slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
+                // Checking, whether we are in layout. If yes, we may have to forward some shapes to slides.
+                // An alternative approach is to put these to masterslides, but it could in practice mean
+                // that there are slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
                 if (potentiallyAddToLayoutFrames) {
                     potentiallyAddToLayoutFrames = false;
                     if (!d->phRead) {
@@ -1542,7 +1540,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
-    placeholderElWriterSetter.release();
+
     delete m_placeholderElWriter;
     m_placeholderElWriter = 0;
 
