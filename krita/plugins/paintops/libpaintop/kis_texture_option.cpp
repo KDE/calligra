@@ -124,7 +124,6 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->rotationSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
     connect(m_optionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(recalculateMask()));
     connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SLOT(recalculateMask()));
-
 }
 
 KisTextureOption::~KisTextureOption()
@@ -142,6 +141,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
 {
     if (!m_optionWidget->chooser->currentResource()) return;
     KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
+    if (!pattern) return;
 
     qreal scale = m_optionWidget->scaleSlider->value();
     qreal rotation = m_optionWidget->rotationSlider->value();
@@ -151,7 +151,13 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
     TextureChannel activeChannel = (TextureChannel)m_optionWidget->cmbChannel->currentIndex();
 
-    if (!pattern) return;
+    setting->setProperty("Texture/Pattern/Scale", scale);
+    setting->setProperty("Texture/Pattern/Rotation", rotation);
+    setting->setProperty("Texture/Pattern/OffsetX", offsetX);
+    setting->setProperty("Texture/Pattern/OffsetY", offsetY);
+    setting->setProperty("Texture/Pattern/Strength", strength);
+    setting->setProperty("Texture/Pattern/Invert", invert);
+    setting->setProperty("Texture/Pattern/Channel", int(activeChannel));
 
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -161,13 +167,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
-    setting->setProperty("Texture/Pattern/Scale", scale);
-    setting->setProperty("Texture/Pattern/Rotation", rotation);
-    setting->setProperty("Texture/Pattern/OffsetX", offsetX);
-    setting->setProperty("Texture/Pattern/OffsetY", offsetY);
-    setting->setProperty("Texture/Pattern/Strength", strength);
-    setting->setProperty("Texture/Pattern/Invert", invert);
-    setting->setProperty("Texture/Pattern/Channel", int(activeChannel));
 }
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -179,12 +178,10 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     if (name.isEmpty()) {
         name = setting->getString("Texture/Pattern/FileName");
     }
-    KisPattern *pattern;
+
+    KisPattern *pattern = 0;
     if (!img.isNull()) {
         pattern = new KisPattern(img, name);
-    }
-    else {
-        pattern = 0;
     }
     // now check whether the pattern already occurs, if not, add it to the
     // resources.
@@ -208,6 +205,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     else {
         pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
     }
+    m_optionWidget->chooser->setCurrentPattern(pattern);
 
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
     m_optionWidget->rotationSlider->setValue(setting->getDouble("Texture/Pattern/Rotation"));
@@ -217,6 +215,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
     m_optionWidget->cmbChannel->setCurrentIndex(setting->getInt("Texture/Pattern/Channel"));
 
+    recalculateMask();
 }
 
 void KisTextureOption::resetGUI(KoResource* res)
@@ -237,8 +236,6 @@ void KisTextureOption::resetGUI(KoResource* res)
 
 void KisTextureOption::recalculateMask()
 {
-    return;
-
     if (!m_optionWidget->chooser->currentResource()) return;
 
     delete m_mask;
