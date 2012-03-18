@@ -153,13 +153,16 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-03-18
+Reports
+*Fixed bug: Data source property in report field do not show proper list of fields
+
 2012-03-17
 KexiDB
 *Properly deep-copy query asterisks when cloning query objects
 **This fixes crash for reports based on queries
 CCBUG:246928
-
-TODO: Data source property in report field do not show proper list of fields
+CCBUG:281737
 
 2012-03-13
 KexiDB
