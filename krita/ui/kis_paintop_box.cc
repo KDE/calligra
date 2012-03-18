@@ -246,8 +246,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
 
-    //Needed to connect canvas to favoriate resource manager
+    //Needed to connect canvas to favorite resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
+    connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -283,15 +284,15 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
-    dbgUI << "preset " << preset->name() << "selected";
+    KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    if (preset) {
+        if(!preset->settings()->isLoadable())
+            return;
 
-    if(!preset->settings()->isLoadable())
-        return;
-
-    setCurrentPaintop(preset->paintOp(), preset->clone());
-    m_presetsPopup->setPresetImage(preset->image());
-    m_presetsPopup->resourceSelected(resource);
+        setCurrentPaintop(preset->paintOp(), preset->clone());
+        m_presetsPopup->setPresetImage(preset->image());
+        m_presetsPopup->resourceSelected(resource);
+    }
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
@@ -488,6 +489,8 @@ void KisPaintopBox::slotSaveActivePreset()
     if (!curPreset)
         return;
 
+    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(true);
+
     KisPaintOpPreset* newPreset = curPreset->clone();
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
@@ -510,6 +513,7 @@ void KisPaintopBox::slotSaveActivePreset()
     foreach(const QString& tag, tags) {
         rServer->addTag(newPreset, tag);
     }
+    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(false);
 }
 
 void KisPaintopBox::slotUpdatePreset()
@@ -688,4 +692,14 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         }
     }
     else setWidgetState(DISABLE_ALL);
+}
+
+void KisPaintopBox::slotOpacityChanged(qreal opacity)
+{
+    for (int i = 0; i < 2; ++i) {
+        KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
+        opacitySlider->blockSignals(true);
+        opacitySlider->setValue(opacity);
+        opacitySlider->blockSignals(false);
+    }
 }

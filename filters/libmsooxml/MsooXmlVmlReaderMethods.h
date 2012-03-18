@@ -114,7 +114,17 @@ public:
         QString viewBox;
         QString shapePath;
         int extraFormulaIndex;
-        QString leftMargin, rightMargin, topMargin, bottomMargin;
+
+        QString internalMarginLeft;
+        QString internalMarginRight;
+        QString internalMarginTop;
+        QString internalMarginBottom;
+
+        QString marginLeft;
+        QString marginTop;
+        QString marginRight;
+        QString marginBottom;
+
         bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation

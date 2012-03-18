@@ -24,7 +24,7 @@
  */
 
 #include "KWDocument.h"
-#include "KWFactory.h"
+#include "KWFactory.h"<
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWCanvasItem.h"
@@ -52,6 +52,7 @@
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
+#include <KoShapeController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoStyleManager.h>
@@ -115,10 +116,12 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     if (documentRdfBase()) {
         documentRdfBase()->linkToResourceManager(resourceManager());
     }
-
+/* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
     resourceManager()->setResource(KoText::ChangeTracker, variant);
+*/
+    m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {
         connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
@@ -203,8 +206,8 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
             }
         }
     }
-    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.begin());
-    for (; it != anchors.end(); ++it) {
+    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.constBegin());
+    for (; it != anchors.constEnd(); ++it) {
         it.key()->removeAnchors(it.value(), command);
     }
 }

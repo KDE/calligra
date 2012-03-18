@@ -17,7 +17,6 @@
  */
 
 #include "kis_paintop_registry.h"
-#include <QPixmap>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -75,7 +74,6 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
                 factory->processAfterLoading();
             }
         }
-        kWarning() << "The following brush engines do not provide a default brush and are removed" << toBeRemoved;
         foreach(const QString id, toBeRemoved) {
             s_instance->remove(id);
         }

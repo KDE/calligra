@@ -295,7 +295,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
@@ -329,7 +329,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
-
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
@@ -494,6 +493,8 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
+            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
+
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
@@ -501,6 +502,7 @@ void KisView2::dropEvent(QDropEvent *event)
                     popup.addAction(insertAsNewLayer);
                 }
                 popup.addAction(openInNewDocument);
+                popup.addAction(replaceCurrentDocument);
             } else {
                 if (!image().isNull()) {
                     popup.addAction(insertAsNewLayers);
@@ -518,6 +520,15 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                    }
+                    else if (action == replaceCurrentDocument) {
+                        if (m_d->doc->isModified()) {
+                            m_d->doc->save();
+                        }
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
+                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
@@ -912,22 +923,26 @@ void KisView2::slotCreateTemplate()
     int height = 60;
     QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kra");
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".kra");
 
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close(); // need to close on Windows before we can open it again to save
+    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
 
-    m_d->doc->saveNativeFormat(tempFile.fileName());
-
+    m_d->doc->saveNativeFormat(fileName);
     KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+    QDir d;
+    d.remove(fileName);
 }
 
 void KisView2::slotDocumentSaved()
@@ -1022,8 +1037,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
-
+    pDoc->setSaveInBatchMode(true);
     pDoc->saveAs(fileName);
+    pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
 }
@@ -1128,8 +1144,10 @@ void KisView2::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
+        pDoc->setSaveInBatchMode(true);
         pDoc->saveAs(backupFileName);
         pDoc->saveAs(fileName);
+        pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();
     }
@@ -1233,5 +1251,6 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 }
+
 
 #include "kis_view2.moc"

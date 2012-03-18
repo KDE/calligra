@@ -1003,14 +1003,14 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRequiredResourcesCmd : public NamedCommand
 {
 public:
-    ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name = QString() );
+    ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_resource;
-    QList<Resource*> m_newvalue;
-    QList<Resource*> m_oldvalue;
+    QStringList m_newvalue;
+    QStringList m_oldvalue;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceAccountCmd : public NamedCommand
 {
@@ -1027,24 +1027,24 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceTeamCmd : public NamedCommand
 {
 public:
-    AddResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    AddResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 class KPLATOKERNEL_EXPORT RemoveResourceTeamCmd : public NamedCommand
 {
 public:
-    RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand
@@ -1930,7 +1930,7 @@ private:
 class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand
 {
 public:
-    ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
+    explicit ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
     void execute();
     void unexecute();
 

@@ -43,7 +43,7 @@ class PackageInfoWidget : public QFrame
 {
     Q_OBJECT
 public:
-    PackageInfoWidget( Package *package, QWidget *parent = 0 );
+    explicit PackageInfoWidget( Package *package, QWidget *parent = 0 );
 
 protected slots:
     void slotUsedEffortChanged( int state );

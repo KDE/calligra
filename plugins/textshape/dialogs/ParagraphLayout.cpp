@@ -34,6 +34,7 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.keepTogether, SIGNAL(stateChanged(int)), this, SLOT(slotKeepTogetherChanged()));
     connect(widget.breakAfter, SIGNAL(stateChanged(int)), this, SLOT(breakAfterChanged()));
     connect(widget.breakBefore, SIGNAL(stateChanged(int)), this, SLOT(breakBeforeChanged()));
+    connect(widget.threshold, SIGNAL(valueChanged(int)), this, SLOT(thresholdValueChanged()));
 }
 
 void ParagraphLayout::slotAlignChanged()
@@ -76,6 +77,11 @@ void ParagraphLayout::breakBeforeChanged()
     }
 }
 
+void ParagraphLayout::thresholdValueChanged()
+{
+    m_orphanThresholdInherited = false;
+}
+
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)
 {
     m_ignoreSignals = true;
@@ -92,10 +98,13 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
     m_breakAfterInherited = !style->hasProperty(KoParagraphStyle::BreakAfter);
     m_breakBeforeInherited = !style->hasProperty(KoParagraphStyle::BreakBefore);
     m_nonBreakableLineInherited = !style->hasProperty(QTextFormat::BlockNonBreakableLines);
+    m_orphanThresholdInherited = !style->hasProperty(KoParagraphStyle::OrphanThreshold);
 
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
     widget.breakAfter->setChecked(style->breakAfter());
+    widget.threshold->setValue(style->orphanThreshold());
+
     m_ignoreSignals = false;
 }
 
@@ -128,6 +137,9 @@ void ParagraphLayout::save(KoParagraphStyle *style)
             style->setBreakAfter(KoText::PageBreak);
         else
             style->setBreakAfter(KoText::NoBreak);
+    }
+    if (!m_orphanThresholdInherited) {
+        style->setOrphanThreshold(widget.threshold->value());
     }
 }
 

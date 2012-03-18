@@ -132,6 +132,7 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
+        deferredClosingEvent = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -209,6 +210,8 @@ public:
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+
+    QCloseEvent *deferredClosingEvent;
 
 };
 
@@ -739,6 +742,10 @@ void KoMainWindow::slotSaveCompleted()
     disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     disconnect(pDoc, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
+
+    if (d->deferredClosingEvent) {
+        KParts::MainWindow::closeEvent(d->deferredClosingEvent);
+    }
 }
 
 // returns true if we should save, false otherwise.
@@ -1042,6 +1049,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         return;
     }
     if (queryClose()) {
+        d->deferredClosingEvent = e;
         if (d->docToOpen) {
             // The open pane is visible
             d->docToOpen->deleteOpenPane(true);
@@ -1057,9 +1065,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
             foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
-        KParts::MainWindow::closeEvent(e);
-    } else
+    } else {
         e->setAccepted(false);
+    }
 }
 
 void KoMainWindow::saveWindowSettings()
@@ -1140,7 +1148,7 @@ bool KoMainWindow::queryClose()
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (d->rootDoc->outputMimeType() == d->rootDoc->nativeFormatMimeType());
-            if (! saveDocument(!isNative))
+            if (!saveDocument(!isNative))
                 return false;
             break;
         }
@@ -1712,18 +1720,24 @@ void KoMainWindow::slotEmailFile()
         bool const tmp_modified = rootDocument()->isModified();
         KUrl const tmp_url = rootDocument()->url();
         QByteArray const tmp_mimetype = rootDocument()->outputMimeType();
-        KTemporaryFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
-        tmpfile.setAutoRemove(false);
-        tmpfile.open();
+
+        // a little open, close, delete dance to make sure we have a nice filename
+        // to use, but won't block windows from creating a new file with this name.
+        KTemporaryFile *tmpfile = new KTemporaryFile();
+        tmpfile->open();
+        QString fileName = tmpfile->fileName();
+        tmpfile->close();
+        delete tmpfile;
+
         KUrl u;
-        u.setPath(tmpfile.fileName());
+        u.setPath(fileName);
         rootDocument()->setUrl(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
 
         saveDocument(false, true);
 
-        fileURL = tmpfile.fileName();
+        fileURL = fileName;
         theSubject = i18n("Document");
         urls.append(fileURL);
 

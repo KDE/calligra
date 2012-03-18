@@ -102,13 +102,13 @@ void Scripting::Resource::setChildren( const QList<QObject*> &children )
         return;
     }
     KPlato::MacroCommand *cmd = new KPlato::MacroCommand( i18nc( "(qtundo_format)", "Set resource team members" ) );
-    foreach ( KPlato::Resource *r, team->teamMembers() ) {
-       cmd->addCommand( new KPlato::RemoveResourceTeamCmd( team, r ) );
+    foreach ( const QString &id, team->teamMemberIds() ) {
+       cmd->addCommand( new KPlato::RemoveResourceTeamCmd( team, id ) );
     }
     foreach ( QObject *o, children ) {
-       Resource *r = qobject_cast<Resource*>( o );
-       if ( r && r->kplatoResource() ) {
-        cmd->addCommand( new KPlato::AddResourceTeamCmd( team, r->kplatoResource() ) );
+        Resource *r = qobject_cast<Resource*>( o );
+        if ( r && r->kplatoResource() ) {
+            cmd->addCommand( new KPlato::AddResourceTeamCmd( team, r->kplatoResource()->id() ) );
         }
     }
     if ( ! cmd->isEmpty() ) {

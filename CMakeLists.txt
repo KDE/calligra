@@ -40,7 +40,7 @@ option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -59,7 +59,7 @@ IF (TINY)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
     set(SHOULD_BUILD_STAGE FALSE)
-    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_SHEETS FALSE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -78,7 +78,7 @@ ELSEIF (CREATIVEONLY)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
@@ -148,7 +148,7 @@ find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
-    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
 endif (NOT Boost_FOUND)
 
 if (APPLE)
@@ -254,15 +254,8 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-        INCLUDE(CheckCXXSourceCompiles)
-        set(CMAKE_REQUIRED_INCLUDES_SWAP ${CMAKE_REQUIRED_INCLUDES})
-        set(CMAKE_REQUIRED_LIBRARIES_SWAP ${CMAKE_REQUIRED_LIBRARIES})
-        set(CMAKE_REQUIRED_INCLUDES ${QT_INCLUDE_DIR})
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${MARBLE_LIBRARIES})
-        CHECK_CXX_SOURCE_COMPILES ( "#include <${MARBLECONTROLBOX_H}>\nint main(){Marble::MarbleControlBox*p; p->setMarbleWidget(0); return 0;}" SETMARBLEWIDGET)
-        # subsequent tests will fail if this is not set back.
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SWAP})
-        set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SWAP})
+	file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+	string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
@@ -482,7 +475,7 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 ### Tables: eigen2, boost
 if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
@@ -490,10 +483,10 @@ if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 
-### Active needs tables, stage and words
-if (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+### Active needs sheets, stage and words
+if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_ACTIVE FALSE)
-endif (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
 ### Active: only build with Qt 4.7.0 or better 
@@ -528,7 +521,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.10)
     set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
@@ -586,9 +579,9 @@ if(SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
 
-if(SHOULD_BUILD_TABLES)
-    macro_optional_add_subdirectory(tables)
-endif(SHOULD_BUILD_TABLES)
+if(SHOULD_BUILD_SHEETS)
+    macro_optional_add_subdirectory(sheets)
+endif(SHOULD_BUILD_SHEETS)
 
 if(SHOULD_BUILD_KRITA)
   macro_optional_add_subdirectory(krita)
@@ -607,9 +600,15 @@ if(SHOULD_BUILD_ACTIVE)
 endif(SHOULD_BUILD_ACTIVE)
 
 
-if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+if(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
+   OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+   OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+  )
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
+      OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+      OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+     )
 
 if(SHOULD_BUILD_KOABSTRACTION)
     # koabstraction depends on kotext & flake
@@ -623,11 +622,11 @@ else(SHOULD_BUILD_KOABSTRACTION)
     set(SHOULD_BUILD_MOBILE FALSE)
 endif(SHOULD_BUILD_KOABSTRACTION)
 
-if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
-else(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_CSTESTER FALSE)
-endif(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+endif(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
 
 macro_optional_add_subdirectory(doc)
 
@@ -653,7 +652,7 @@ endmacro(macro_display_application_enabled)
 message(STATUS "---------------- The following applications will be built ----------------" )
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
+macro_display_application_enabled(sheets ${SHOULD_BUILD_SHEETS})
 macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})

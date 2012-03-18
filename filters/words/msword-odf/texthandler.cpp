@@ -863,18 +863,17 @@ void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         kDebug(30513) << "Unable to determine which list contains the paragraph";
     }
 
-    // Now that the bookkeeping is taken care of for old paragraphs, then
-    // actually create the new one.
+    // Now that the bookkeeping is taken care of for old paragraphs,
+    // then actually create the new one.
     kDebug(30513) << "create new Paragraph";
-    m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
+    m_paragraph = new Paragraph(m_mainStyles, m_document->currentBgColor(), inStylesDotXml, isHeading,
+                                m_document->writingHeader(), outlineLevel);
 
+    //set current named style in m_paragraph
+    m_paragraph->setParagraphStyle(paragraphStyle);
     //set paragraph and character properties of the paragraph
     m_paragraph->setParagraphProperties(paragraphProperties);
     m_paragraph->setCharacterProperties(chp);
-    //set current named style in m_paragraph
-    m_paragraph->setParagraphStyle(paragraphStyle);
-    //provide the background color information
-    m_paragraph->updateBgColor(m_document->currentBgColor());
 
     KoGenStyle* style = m_paragraph->koGenStyle();
 

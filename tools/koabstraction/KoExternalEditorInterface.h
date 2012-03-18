@@ -31,7 +31,7 @@
 #include <QString>
 #include <QWidget>
 
-namespace Calligra { namespace Tables
+namespace Calligra { namespace Sheets
 {
     class CellToolBase;
     class CellEditorBase;
@@ -43,7 +43,7 @@ namespace Calligra { namespace Tables
 class KOABSTRACTION_EXPORT KoExternalEditorInterface
 {
 public:
-    KoExternalEditorInterface(Calligra::Tables::CellToolBase*) {}
+    KoExternalEditorInterface(Calligra::Sheets::CellToolBase*) {}
     virtual ~KoExternalEditorInterface() {}
 
     //! Inserts operator @a operatorCharacter in the editor

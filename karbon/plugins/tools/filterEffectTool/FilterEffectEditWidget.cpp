@@ -78,6 +78,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 
     removePreset->setIcon(KIcon("list-remove"));
     removePreset->setToolTip(i18n("Remove filter preset"));
+    connect(removePreset, SIGNAL(clicked()), this, SLOT(removeFromPresets()));
 
     view->setScene(m_scene);
     view->setRenderHint(QPainter::Antialiasing, true);
@@ -369,6 +370,28 @@ void FilterEffectEditWidget::addToPresets()
 
     if (!server->addResource(resource))
         delete resource;
+}
+
+void FilterEffectEditWidget::removeFromPresets()
+{
+    if (!presets->count()) {
+        return;
+    }
+    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    if (!serverProvider) {
+        return;
+    }
+    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    if (!server) {
+        return;
+    }
+
+    FilterEffectResource *resource = server->resources().at(presets->currentIndex());
+    if (!resource) {
+        return;
+    }
+
+    server->removeResource(resource);
 }
 
 void FilterEffectEditWidget::presetSelected(KoResource *resource)

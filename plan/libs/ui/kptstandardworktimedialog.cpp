@@ -31,6 +31,8 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -89,7 +91,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<&p;
+    //kDebug(planDbg())<<&p;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
 
@@ -102,7 +104,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 }
 
 MacroCommand *StandardWorktimeDialog::buildCommand() {
-    //kDebug();
+    //kDebug(planDbg());
     QString n = i18n("Modify Estimate Conversions");
     MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
@@ -143,7 +145,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_week = m_std->week();
     m_day = m_std->day();
 
-    kDebug()<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
+    kDebug(planDbg())<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
     year->setValue(m_year);
     month->setValue(m_month);
     week->setValue(m_week);
@@ -166,7 +168,7 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 }
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
-    //kDebug()<<value;
+    //kDebug(planDbg())<<value;
     m_year = value;
     if (month->value() > value)
         month->setValue(value);

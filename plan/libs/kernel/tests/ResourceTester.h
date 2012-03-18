@@ -32,6 +32,7 @@ private slots:
     void testAvailable();
     void testSingleDay();
     void team();
+    void required();
 };
 
 } //namespace KPlato

@@ -29,6 +29,8 @@
 #include <QString>
 #include <QStringList>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -53,7 +55,7 @@ bool ReportData::open()
     ItemModelBase *m = itemModel();
     if ( m ) {
         m->setScheduleManager( m_schedulemanager );
-        kDebug()<<this<<m_schedulemanager;
+        kDebug(planDbg())<<this<<m_schedulemanager;
     } else kError()<<"No item model";
     return true;
 }
@@ -210,7 +212,7 @@ void ReportData::setModel( QAbstractItemModel *model )
         m->setProject( m_project );
         m->setScheduleManager( m_schedulemanager );
     }
-    kDebug()<<this<<model<<m<<m_project<<m_schedulemanager;
+    kDebug(planDbg())<<this<<model<<m<<m_project<<m_schedulemanager;
 }
 
 QAbstractItemModel *ReportData::model() const
@@ -275,10 +277,10 @@ bool ChartReportData::open()
     } else {
         m_startdate = m_model.headerData( 0, Qt::Vertical, Qt::EditRole ).toDate();
     }
-    kDebug()<<m_expressions;
+    kDebug(planDbg())<<m_expressions;
     m_firstrow = firstRow();
     m_lastrow = lastRow();
-    kDebug()<<m_firstrow<<"-"<<m_lastrow<<":"<<recordCount();
+    kDebug(planDbg())<<m_firstrow<<"-"<<m_lastrow<<":"<<recordCount();
     return true;
 }
 
@@ -296,7 +298,7 @@ int ChartReportData::firstRow()
             row = m_startdate.daysTo( s );
             m_startdate = s;
         }
-        kDebug()<<s<<row;
+        kDebug(planDbg())<<s<<row;
     }
     return row;
 }
@@ -325,7 +327,7 @@ int ChartReportData::lastRow() const
         if ( last.isValid() && e < last ) {
             row -= ( e.daysTo( last ) );
         }
-        kDebug()<<last<<e<<row;
+        kDebug(planDbg())<<last<<e<<row;
     }
     return row > m_firstrow ? row : m_firstrow;
 }
@@ -384,7 +386,7 @@ QVariant ChartReportData::value ( unsigned int i ) const
         } else {
             // data
             value = m_model.index( row, i - 1 ).data();
-            kDebug()<<this<<row<<m_model.headerData( row, Qt::Vertical, Qt::EditRole )<<i<<"="<<value;
+            kDebug(planDbg())<<this<<row<<m_model.headerData( row, Qt::Vertical, Qt::EditRole )<<i<<"="<<value;
         }
     }
     return value;
@@ -392,7 +394,7 @@ QVariant ChartReportData::value ( unsigned int i ) const
 
 QVariant ChartReportData::value( const QString &name ) const
 {
-    kDebug()<<name;
+    kDebug(planDbg())<<name;
     if ( m_expressions.contains( name ) ) {
         return m_expressions[ name ];
     }
@@ -412,17 +414,17 @@ QStringList ChartReportData::fieldNames() const
     } else {
         int count = m_model.columnCount();
         for ( int i = 0; i < count; ++i ) {
-//             kDebug()<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
+//             kDebug(planDbg())<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
             names << m_model.headerData( i, Qt::Horizontal ).toString();
         }
     }
-//     kDebug()<<this<<names;
+//     kDebug(planDbg())<<this<<names;
     return names;
 }
 
 void ChartReportData::addExpression( const QString &field, const QVariant &/*value*/, int /*relation*/ )
 {
-//     kDebug()<<field<<value<<relation;
+//     kDebug(planDbg())<<field<<value<<relation;
     QStringList lst = field.split( '=', QString::SkipEmptyParts );
     if ( lst.count() == 2 ) {
         QString key = lst[ 0 ].trimmed().toLower();

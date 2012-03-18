@@ -44,6 +44,7 @@ private slots:
     void breakAfterChanged();
     void breakBeforeChanged();
     void slotKeepTogetherChanged();
+    void thresholdValueChanged();
 
 private:
     Ui::ParagraphLayout widget;
@@ -51,6 +52,7 @@ private:
     bool m_breakAfterInherited;
     bool m_breakBeforeInherited;
     bool m_nonBreakableLineInherited;
+    bool m_orphanThresholdInherited;
 
     bool m_ignoreSignals;
 };

@@ -334,11 +334,6 @@ protected:
     Duration positiveFloat;
     Duration negativeFloat;
     Duration freeFloat;
-
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -382,11 +377,6 @@ protected:
 
 private:
     Node *m_node;
-
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -427,11 +417,6 @@ private:
     Resource *m_resource;
     Schedule *m_parent;
     const Schedule *m_nodeSchedule; // used during scheduling
-    
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -537,11 +522,6 @@ private:
     
     QList<Schedule::Log> m_log;
     QMap<int, QString> m_logPhase;
-    
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**

@@ -155,7 +155,7 @@ public:
 
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
-    void setActiveSchedule( long id ) const;
+    void setActiveSchedule( long id );
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
@@ -288,20 +288,6 @@ protected slots:
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
-#ifndef NDEBUG
-    void slotPrintDebug();
-    void slotPrintSelectedDebug();
-    void slotPrintCalendarDebug();
-    void slotPrintTestDebug();
-    void slotToggleDebugInfo();
-#else
-    static void slotPrintDebug() { };
-    static void slotPrintSelectedDebug() { };
-    static void slotPrintCalendarDebug() { };
-    static void slotPrintTestDebug() { };
-    static void slotToggleDebugInfo() { };
-#endif
-
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
@@ -351,6 +337,8 @@ private slots:
     void slotRemoveCommands();
 
     void hideToolDocker();
+    void initiateViews();
+    void slotViewScheduleManager();
 
 private:
     void createViews();
@@ -381,6 +369,9 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
+    // if multiple changes occure, only issue the last change
+    bool m_trigged;
+    ScheduleManager *m_nextScheduleManager;
 
     QMultiMap<ScheduleManager*, CalculateScheduleCmd*> m_calculationcommands;
     QList<KUndo2Command*> m_undocommands;

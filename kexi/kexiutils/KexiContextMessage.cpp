@@ -118,7 +118,12 @@ QWidget* KexiContextMessage::contentsWidget() const
 class KexiContextMessageWidget::Private
 {
 public:
-    Private() : hasActions(false), eventBlocking(true) {}
+    Private()
+     : resizeTrackingPolicy(0)
+     , hasActions(false)
+     , eventBlocking(true)
+    {
+    }
     ~Private() {}
 
     void setDisabledColorsForPage()
@@ -146,6 +151,15 @@ public:
     QPointer<QWidget> context;
     QPointer<QWidget> nextFocusWidget;
     QPointer<QWidget> contentsWidget;
+
+    //!< For updating the callout position
+    QPointer<QWidget> trackedWidget;
+    QPoint origCalloutPointerPosition;
+    QSize origSize;
+    QSize origPageSize;
+    QPoint trackedWidgetOriginalPos;
+    Qt::Orientations resizeTrackingPolicy;
+
     bool hasActions;
     bool eventBlocking;
 };
@@ -195,7 +209,7 @@ void KexiContextMessageWidget::init(
     if ((d->page && d->hasActions) || d->contentsWidget) {
         d->setDisabledColorsForPage();
         foreach (KexiLinkWidget* w, d->page->findChildren<KexiLinkWidget*>()) {
-            kDebug() << w << w->isEnabled();
+            //kDebug() << w << w->isEnabled();
             if (w->isEnabled()) {
                 d->enabledLinks.append(w);
                 w->setEnabled(false);
@@ -268,13 +282,40 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
         // hide the message when clicking outside when contents widget is present
         QMouseEvent *me = static_cast<QMouseEvent*>(event);
         QWidget *w = QApplication::widgetAt(me->globalPos());
-        kDebug() << watched << w << w->parentWidget();
+        //kDebug() << watched << w << w->parentWidget();
         if (!KexiUtils::hasParent(this, w)) {
             actionTriggered();
             return true;
         }
     }
     
+    if (watched == d->page && event->type() == QEvent::Resize) {
+        //kDebug() << "RESIZE:" << watched;
+        if (d->trackedWidget) {
+            if (d->resizeTrackingPolicy != 0) {
+                // update size
+                //kDebug() << d->origSize << d->page->size() << d->origPageSize;
+                if (!d->origSize.isValid()) {
+                    d->origSize = size();
+                }
+                QSize newSize(d->origSize + d->page->size() - d->origPageSize);
+                QSize sizeToSet = size();
+                if (d->resizeTrackingPolicy & Qt::Horizontal) {
+                    sizeToSet.setWidth(newSize.width());
+                }
+                if (d->resizeTrackingPolicy & Qt::Vertical) {
+                    sizeToSet.setHeight(newSize.height());
+                    setFixedHeight(newSize.height());
+                }
+                resize(sizeToSet);
+                setPaletteInherited();
+            }
+            // update position
+            QPoint delta(d->trackedWidget->mapToGlobal(QPoint(0, 0)) - d->trackedWidgetOriginalPos);
+            KMessageWidget::setCalloutPointerPosition(d->origCalloutPointerPosition + delta);
+        }
+    }
+
     switch (event->type()) {
     case QEvent::ActivationChange:
     case QEvent::CloseSoftwareInputPanel:
@@ -336,6 +377,46 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
 void KexiContextMessageWidget::setNextFocusWidget(QWidget *widget)
 {
     d->nextFocusWidget = widget;
+}
+
+void KexiContextMessageWidget::setCalloutPointerPosition(const QPoint& globalPos,
+                                                         QWidget *trackedWidget)
+{
+    KMessageWidget::setCalloutPointerPosition(globalPos);
+    // save current position so delta can be easier computed in the future
+    // (see KexiContextMessageWidget::eventFilter())
+    d->trackedWidget = trackedWidget;
+    if (d->trackedWidget) {
+        d->origCalloutPointerPosition = globalPos;
+        d->origSize = QSize(-1, -1);
+        d->origPageSize = d->page->size();
+        d->trackedWidgetOriginalPos = d->trackedWidget->mapToGlobal(QPoint(0, 0));
+    }
+}
+
+void KexiContextMessageWidget::setResizeTrackingPolicy(Qt::Orientations orientations)
+{
+    d->resizeTrackingPolicy = orientations;
+}
+
+Qt::Orientations KexiContextMessageWidget::resizeTrackingPolicy() const
+{
+    return d->resizeTrackingPolicy;
+}
+
+void KexiContextMessageWidget::setPaletteInherited()
+{
+    if (d->contentsWidget) {
+        // fix palette that gets messed after resize
+        const QBrush bbrush(backgroundBrush());
+        foreach (QWidget* w, findChildren<QWidget*>()) {
+            QPalette pal(w->palette());
+            pal.setBrush(QPalette::Base, bbrush);
+            pal.setBrush(QPalette::Window, bbrush);
+            pal.setBrush(QPalette::Button, bbrush);
+            w->setPalette(pal);
+        }
+    }
 }
 
 #include "KexiContextMessage.moc"

@@ -805,6 +805,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         KoTextDocument document(m_textShapeData->document());
         foreach (QAction *action, document.inlineTextObjectManager()->createInsertVariableActions(canvas())) {
             m_variableMenu->addAction(action);
+            connect(action, SIGNAL(triggered()), this, SLOT(returnFocusToCanvas()));
         }
 
         connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
@@ -867,7 +868,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+    m_textEditor.data()->deleteChar();
     editingPluginEvents();
 }
 
@@ -1068,7 +1069,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
-            textEditor->deleteChar(KoTextEditor::PreviousChar, canvas()->shapeController());
+            textEditor->deletePreviousChar();
 
             editingPluginEvents();
         }
@@ -1090,7 +1091,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+        textEditor->deleteChar();
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1249,7 +1250,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+            textEditor->deleteChar();
         }
     }
     if (!event->commitString().isEmpty()) {
@@ -1531,7 +1532,9 @@ void TextTool::repaintSelection()
 QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
     QTextCursor tmpCursor(*cursor);
+    tmpCursor.beginEditBlock(); //needed to work around qt4.8 bug
     tmpCursor.setPosition(cursor->position()); // looses the anchor
+    tmpCursor.endEditBlock();
 
     QRectF rect = textRect(tmpCursor);
     if (rect.size() == QSizeF(0,0)) {
@@ -1593,7 +1596,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    // Connect to/with simple table widget (docker)
+    // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
@@ -1845,13 +1848,12 @@ void TextTool::splitTableCells()
 
 void TextTool::formatParagraph()
 {
-    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor.data()->cursor());//TODO  check this with KoTextEditor
+    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor.data());
     dia->setUnit(canvas()->unit());
-    connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));//TODO
-    connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 
     dia->exec();
     delete dia;
+    returnFocusToCanvas();
 }
 
 void TextTool::testSlot(bool on)
@@ -1989,15 +1991,15 @@ void TextTool::insertSpecialCharacter()
 void TextTool::insertString(const QString& string)
 {
     m_textEditor.data()->insertText(string);
+    returnFocusToCanvas();
 }
 
 void TextTool::selectFont()
 {
-    FontDia *fontDlg = new FontDia(m_textEditor.data()->cursor());//TODO check this with KoTextEditor
-    connect(fontDlg, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
-    connect(fontDlg, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+    FontDia *fontDlg = new FontDia(m_textEditor.data());
     fontDlg->exec();
     delete fontDlg;
+    returnFocusToCanvas();
 }
 
 void TextTool::shapeAddedToCanvas()
@@ -2324,6 +2326,21 @@ void TextTool::textDirectionChanged()
         blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
      }
     m_textEditor.data()->mergeBlockFormat(blockFormat);
+}
+
+void TextTool::setListLevel(int level)
+{
+    if (level < 1 || level > 10) {
+        return;
+    }
+
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (textEditor->block().textList()) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::SetLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, level);
+        textEditor->addCommand(cll);
+        editingPluginEvents();
+    }
 }
 
 #include <TextTool.moc>

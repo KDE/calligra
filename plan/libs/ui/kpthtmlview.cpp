@@ -37,6 +37,8 @@
 
 #include <kdebug.h>
 
+extern int planDbg();
+
 namespace KPlato
 {
 
@@ -77,12 +79,12 @@ void HtmlView::updateReadWrite( bool /*readwrite */)
 
 void HtmlView::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
 }
 
 void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
 void HtmlView::slotEnableActions( bool on )

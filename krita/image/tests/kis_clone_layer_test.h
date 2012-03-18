@@ -32,6 +32,8 @@ private slots:
     void testOriginalRefresh();
 
     void testRemoveSourceLayer();
+    void testUndoingRemovingSource();
+    void testCyclingGroupLayer();
 };
 
 #endif

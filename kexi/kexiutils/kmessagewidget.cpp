@@ -136,6 +136,11 @@ void KMessageWidgetFrame::setCalloutPointerPosition(const QPoint& globalPos)
     updateCalloutPointerPosition();
 }
 
+QPoint KMessageWidgetFrame::calloutPointerPosition() const
+{
+    return m_calloutPointerGlobalPosition;
+}
+
 void KMessageWidgetFrame::updateCalloutPointerPosition() const
 {
     if (m_calloutPointerGlobalPosition == QPoint(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX))
@@ -631,8 +636,11 @@ bool KMessageWidget::event(QEvent* event)
         d->createLayout();
     }
     else if (event->type() == QEvent::Hide) {
-        if (d->autoDelete) {
-            deleteLater();
+        //kDebug() << "QEvent::Hide" << event->spontaneous();
+        if (!event->spontaneous()) {
+            if (d->autoDelete) {
+                deleteLater();
+            }
         }
     }
     return QFrame::event(event);
@@ -778,6 +786,11 @@ void KMessageWidget::animatedHide()
 void KMessageWidget::setCalloutPointerPosition(const QPoint& globalPos)
 {
     d->content->setCalloutPointerPosition(globalPos);
+}
+
+QPoint KMessageWidget::calloutPointerPosition() const
+{
+    return d->content->calloutPointerPosition();
 }
 
 QBrush KMessageWidget::backgroundBrush() const

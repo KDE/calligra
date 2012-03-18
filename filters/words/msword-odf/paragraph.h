@@ -35,7 +35,8 @@
 class Paragraph
 {
 public:
-    explicit Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, bool inHeader = false, int outlineLevel = 0);
+    explicit Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inStylesDotXml = false,
+                       bool isHeading = false, bool inHeader = false, int outlineLevel = 0);
     ~Paragraph();
 
     /**
@@ -75,9 +76,7 @@ public:
     /**
      * Set the paragraph properties (PAP) that apply to the paragraph.
      */
-    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap) {
-        m_paragraphProperties = pap;
-    }
+    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> pap);
 
     /**
      * Set the character properties (CHP) that apply to the paragraph.
@@ -143,25 +142,24 @@ public:
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph,
-                                         QChar* tabLeader=0,
-                                         const QString& bgColor=QString());
+                                         QChar* tabLeader = 0,
+                                         const QString& bgColor = QString());
 
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         bool suppressFontSize=false, bool combineCharacters=false,
-                                         const QString& bgColor=QString(),
-                                         bool preserveFontColor = false);
+                                         bool suppressFontSize = false, bool combineCharacters = false,
+                                         const QString& bgColor = QString());
 
     /**
      * Add a color item to the backgroud-color stack.
      * @param color in the format "#RRGGBB"
      */
-    static void addBgColor(const QString& val) { m_bgColors.push(val); }
+    static void pushBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
      * Remove the last item from the backgroud-color stack.
      */
-    static void rmBgColor(void);
+    static void popBgColor(void);
 
     /**
      * Update the last item of the background-color stack.
@@ -203,8 +201,8 @@ private:
     QList<QString> m_textStrings2; // original list when in inner paragraph
     QList<const KoGenStyle*> m_textStyles;  // list of styles for text within a paragraph
     QList<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
-    std::vector<bool> m_addCompleteElement;         // list of flags if we should output the complete parahraph instead of processing it
-    std::vector<bool> m_addCompleteElement2;        // original list when in inner paragraph
+    std::vector<bool> m_addCompleteElement; // flags controlling if the paragraph should be processed
+    std::vector<bool> m_addCompleteElement2; // original list when in inner paragraph
 
     bool m_inStylesDotXml; //let us know if we're in content.xml or styles.xml
     bool m_isHeading; //information for writing a heading instead of a paragraph
@@ -212,7 +210,7 @@ private:
 
     int m_outlineLevel;
 
-    DropCapStatus  m_dropCapStatus; // True if this paragraph has a dropcap 
+    DropCapStatus  m_dropCapStatus; // True if this paragraph has a dropcap
     QString m_dropCapStyleName;
     qreal m_dropCapDistance;
     int m_dcs_fdct;
@@ -224,9 +222,6 @@ private:
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     static QStack<QString> m_bgColors;
-
-    //The font color, which represents the context for automatic colors.
-    static QString m_fontColor;
 
 }; //end class Paragraph
 #endif //PARAGRAPH_H

@@ -22,16 +22,17 @@
  */
 
 // This is not a normal header, *don't* add include guards to it.
-// This will cause the compiler to get wrong offsets and to corrupt the stack.
-
-// included by DocxXmlDocumentReader
+// This will cause the compiler to get wrong offsets and to corrupt
+// the stack.
 
 protected:
 
 void initDrawingML();
 
+#include "MsooXmlDrawingMLShared.h"
+
 // All the readers
-#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
+#if !defined MSOOXMLDRAWINGTABLESTYLEREADER_H
 KoFilter::ConversionStatus read_relIds();
 KoFilter::ConversionStatus read_chart();
 #endif
@@ -46,18 +47,15 @@ KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller);
 KoFilter::ConversionStatus read_cNvPicPr();
 KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_style();
-KoFilter::ConversionStatus read_fillRef();
+
 KoGenStyle m_referredFont;
-QString m_referredFontName;
-KoFilter::ConversionStatus read_fontRef();
+
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
 KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
 bool unsupportedPredefinedShape();
-
-KoFilter::ConversionStatus read_extLst();
 
 KoFilter::ConversionStatus read_grpSpPr();
 void preReadSp();
@@ -77,10 +75,7 @@ KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
 KoFilter::ConversionStatus read_duotone();
-KoFilter::ConversionStatus read_tint();
-KoFilter::ConversionStatus read_alpha();
 
-KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_srcRect();
 
@@ -116,7 +111,6 @@ KoFilter::ConversionStatus read_DrawingML_highlight();
 KoFilter::ConversionStatus read_DrawingML_txBody();
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
-KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
 KoFilter::ConversionStatus read_gradFillRpr();
@@ -130,28 +124,14 @@ bool m_contentAvLstExists; // whether avLst exists
 QMap<QString, QString> m_avModifiers;
 KoFilter::ConversionStatus read_avLst();
 KoFilter::ConversionStatus read_noFill();
-KoFilter::ConversionStatus read_schemeClr();
-KoFilter::ConversionStatus read_prstClr();
-KoFilter::ConversionStatus read_hslClr();
-KoFilter::ConversionStatus read_sysClr();
-KoFilter::ConversionStatus read_lumMod();
-KoFilter::ConversionStatus read_lumOff();
-KoFilter::ConversionStatus read_shade();
-KoFilter::ConversionStatus read_ln();
+
 KoFilter::ConversionStatus read_effectLst();
 KoFilter::ConversionStatus read_outerShdw();
-KoFilter::ConversionStatus read_srgbClr();
-KoFilter::ConversionStatus read_scrgbClr();
 
 QString m_customPath;
 QString m_customEquations;
 QString m_textareas;
 KoFilter::ConversionStatus read_custGeom();
-
-qreal m_currentShadeLevel;
-qreal m_currentTint; // value of current tint
-int m_currentAlpha; // current alpha color value
-qreal m_currentSatMod; //value of current saturation modulation
 
 QString m_contentType; // read in prstGeom
 
@@ -274,10 +254,6 @@ enum ColorType {
     GradientColor
 };
 
-//! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
-QColor m_currentColor;
-
-qreal* m_currentDoubleValue;
 
 bool    m_hyperLink;
 QString m_hyperLinkTarget;

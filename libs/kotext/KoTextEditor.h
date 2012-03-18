@@ -2,6 +2,7 @@
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
 * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+* Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -63,12 +64,6 @@ class KOTEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:
-
-    enum MoveOperation {
-        PreviousChar,
-        NextChar
-    };
-
     enum ChangeListFlag {
         NoFlags = 0,
         ModifyExistingList = 1,
@@ -211,6 +206,10 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
@@ -248,9 +247,6 @@ public slots:
      */
     void insertFrameBreak();
 
-    /// delete all inline objects in current cursor position or selection
-    bool deleteInlineObjects(bool backward = false);
-
     /**
      * paste the given mimedata object at the current position
      * @param mimeData: the mimedata containing text, html or odf
@@ -274,13 +270,6 @@ public slots:
     bool paste(KoTextEditor *editor,
                KoShapeController *shapeController,
                bool pasteAsText = false);
-
-    /**
-     * Delete one character in the specified direction.
-     * @param direction the direction into which we delete. Valid values are
-     * @param shapeController the canvas' shapeController
-     */
-    void deleteChar(MoveOperation direction, KoShapeController *shapeController);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
@@ -307,8 +296,6 @@ public slots:
 
     bool atStart() const;
 
-    void beginEditBlock();
-
     QTextBlock block() const;
 
     QTextCharFormat blockCharFormat() const;
@@ -329,19 +316,15 @@ public slots:
 
     const QTextDocument *document() const;
 
+    //Starts a new custom command. Everything between these two is one custom command. These should not be called from whithin a KUndo2Command
+//    void beginCustomCommand();
+//    void endCustomCommand();
+
+    //Same as Qt, only to be used inside KUndo2Commands
+    KUndo2Command *beginEditBlock(QString title = QString());
     void endEditBlock();
 
     bool hasComplexSelection() const;
-
-    void insertBlock();
-
-    void insertBlock(const QTextBlockFormat &format);
-
-    void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
-
-// NOT part of the api, since QTextDocumentFragment translates to html, losing all formatting.
-// so intentionally not exposed.
-//    void insertFragment(const QTextDocumentFragment &fragment);
 
      /**
      * Insert a table at the current cursor position.
@@ -412,30 +395,21 @@ public slots:
      */
     void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
 
-    void insertBibliography();
+    void insertBibliography(KoBibliographyInfo *info);
 
     KoInlineCite *insertCitation();
 
     void insertText(const QString &text);
 
-    void insertText(const QString &text, const QTextCharFormat &format);
-
     void insertHtml(const QString &html);
-//    void joinPreviousEditBlock ();
-
-    void mergeBlockCharFormat( const QTextCharFormat &modifier);
 
     void mergeBlockFormat( const QTextBlockFormat &modifier);
-
-    void mergeCharFormat(const QTextCharFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
     void newLine();
 
     int position() const;
-
-    void removeSelectedText();
 
     void select(QTextCursor::SelectionType selection);
 
@@ -447,15 +421,9 @@ public slots:
 
     int selectionStart() const;
 
-// intentionally commented out: these  are unimplemented.
+    void setBlockFormat(const QTextBlockFormat &format);
 
-//    void setBlockCharFormat(const QTextCharFormat &format);
-
-   void setBlockFormat(const QTextBlockFormat &format);
-
-   void setCharFormat(const QTextCharFormat &format);
-
-//    void setTableFormat(const QTextTableFormat &format);
+    void setCharFormat(const QTextCharFormat &format);
 
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
@@ -472,6 +440,12 @@ signals:
     void textFormatChanged();
 
 protected:
+    /**
+     * Delete one character in the specified direction or a selection.
+     * @param previous should be true if act like backspace
+     */
+    void deleteChar(bool previous, KUndo2Command *parent = 0);
+
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:

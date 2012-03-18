@@ -321,7 +321,7 @@ be placed into the target cells rather than the formulae to calculate them.
 data.</para>
 <para>First enable <guilabel>Add Shape</guilabel> docker using the <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Dockers</guimenuitem>
-</menuchoice>.</para>
+</menuchoice> menu item.</para>
 <para>Then select the area of cells containing the data and choose 
 <guilabel>Chart</guilabel> in the <guilabel>Add Shape</guilabel>. Drag the cursor across the sheet while holding the 
 <mousebutton>left</mousebutton> mouse button down to define the area where you want the 
@@ -362,7 +362,7 @@ chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. The chart <interface>Tools Options</interface> 
+click twice within the chart area. The chart <guilabel>Tools Options</guilabel> 
 should appear in the docker. You can then 
 use these tools to change the chart.</para>
 </sect1>

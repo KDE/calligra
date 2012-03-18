@@ -58,6 +58,9 @@ Item {
                 onClicked: docToolbars.toggle()
             }
         }
+
+        onCameraXChanged: if (docFlickable.contentX != cameraX) docFlickable.contentX = cameraX
+        onCameraYChanged: if (docFlickable.contentY != cameraY) docFlickable.contentY = cameraY
     }
 
     Toolbars {

@@ -156,6 +156,8 @@ public:
 
     QSize minimumSizeHint() const;
 
+    QPoint calloutPointerPosition() const;
+
 public Q_SLOTS:
     void setText(const QString &text);
 
@@ -167,6 +169,7 @@ public Q_SLOTS:
 
     void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
 
+    //! Sets global position for callout pointer
     void setCalloutPointerPosition(const QPoint& globalPos);
 
     QBrush backgroundBrush() const;

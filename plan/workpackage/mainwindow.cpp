@@ -79,10 +79,12 @@
 #include <KoView.h>
 #include <KoFilterManager.h>
 
+extern int planworkDbg();
+
 KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     : KParts::MainWindow()
 {
-    kDebug()<<this;
+    kDebug(planworkDbg())<<this;
 
     m_part = new KPlatoWork::Part( this, this );
 
@@ -110,7 +112,7 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 
 KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
 {
-    kDebug();
+    kDebug(planworkDbg());
 }
 
 void KPlatoWork_MainWindow::setCaption( const QString & )
@@ -143,7 +145,7 @@ QString KPlatoWork_MainWindow::configFile() const
 //called from slotFileSave(), slotFileSaveAs(), queryClose(), slotEmailFile()
 bool KPlatoWork_MainWindow::saveDocument( bool saveas, bool silent )
 {
-    kDebug()<<saveas<<silent;
+    kDebug(planworkDbg())<<saveas<<silent;
     KPlatoWork::Part *doc = rootDocument();
     if ( doc == 0 ) {
         return true;

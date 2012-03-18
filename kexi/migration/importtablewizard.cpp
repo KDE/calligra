@@ -193,6 +193,8 @@ void ImportTableWizard::setupTableSelectPage() {
 
     m_tableListWidget = new QListWidget(this);
     m_tableListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(m_tableListWidget, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotTableListWidgetSelectionChanged()));
     
     vbox->addWidget(m_tableListWidget);
     
@@ -326,6 +328,7 @@ void ImportTableWizard::arriveTableSelectPage()
 {
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
+    m_tableListWidget->clear();
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
@@ -335,10 +338,18 @@ void ImportTableWizard::arriveTableSelectPage()
         }
         
         QStringList tableNames;
-        m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
+        if (m_tableListWidget->item(0)) {
+            m_tableListWidget->item(0)->setSelected(true);
+        }
+    } else {
+        kDebug() << "No driver for selected source";
+        QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+        QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+        KMessageBox::error(this, errMessage, errDescription);
+        setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
@@ -457,7 +468,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (sourceDriverName.isEmpty())
         result.setStatus(i18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
-
+  
     
     // Get a source (migration) driver
     KexiMigrate* sourceDriver = 0;
@@ -594,4 +605,9 @@ bool ImportTableWizard::doImport()
 void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
 {
     setValid(m_srcConnPageItem, isSelected);
+}
+
+void ImportTableWizard::slotTableListWidgetSelectionChanged()
+{
+    setValid(m_tablesPageItem, !m_tableListWidget->selectedItems().isEmpty());
 }
