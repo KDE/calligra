@@ -58,7 +58,7 @@ public:
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
-    KisColorSource* m_colorSource;
+    KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureMirrorOption m_mirrorOption;
@@ -72,7 +72,7 @@ private:
     KisTextureOption m_textureOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
 
-    KoColorTransformation* m_hsvTransformation;
+    KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_colorSourceDevice;
 };
