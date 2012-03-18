@@ -43,10 +43,10 @@ KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*options*/): QAbstractTableModel(parent)
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
                                       , d(new Private())
 {
-
+    d->options = options;
 }
 
 KexiFieldListModel::~KexiFieldListModel()
