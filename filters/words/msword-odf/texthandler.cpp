@@ -2165,25 +2165,8 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
         }
         m_paragraph->applyCharacterProperties(chp, &textStyle, 0);
     } else {
-        kDebug(30513) << "Missing CHPs for the bullet/number!";
+        kDebug(30513) << "Missing CHPs for the label!";
     }
-    //NOTE: Setting a num. of text-properties to default values if not provided
-    //for the list style to maintain compatibility with both ODF and MSOffice.
-
-    //MSWord: A label does NOT inherit Underline from text-properties of the
-    //paragraph style.  A bullet does not inherit {Italics, Bold}.
-    if (listInfo->type() != wvWare::ListInfo::NumberType) {
-        if ((textStyle.property("fo:font-style")).isEmpty()) {
-            textStyle.addProperty("fo:font-style", "normal");
-        }
-        if ((textStyle.property("fo:font-weight")).isEmpty()) {
-            textStyle.addProperty("fo:font-weight", "normal");
-        }
-    }
-    if ((textStyle.property("style:text-underline-style")).isEmpty()) {
-        textStyle.addProperty("style:text-underline-style", "none");
-    }
-
     out.addAttribute("text:style-name", m_mainStyles->insert(textStyle, "T"));
 
     //---------------------------------------------
