@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2006 - 2007 Frederic BECQUIER <frederic.becquier@gmail.com>
+  Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,10 +25,9 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptrelation.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
-
-#include <kdebug.h>
 
 #include <QWidget>
 #include <QSplitter>
@@ -37,8 +37,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-
-extern int planDbg();
 
 namespace KPlato
 {

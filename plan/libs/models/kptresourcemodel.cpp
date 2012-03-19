@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
-  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 #include <QMimeData>
 #include <QObject>
@@ -44,14 +45,12 @@
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kio/job.h>
-#include <kdebug.h>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
 #endif
 
-extern int planDbg();
 
 namespace KPlato
 {

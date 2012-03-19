@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "KPlatoRCPSPlugin.h"
 
 #include "kptschedulerplugin_macros.h"
+#include "kptdebug.h"
 
 #include "KPlatoRCPSScheduler.h"
 
@@ -28,13 +29,11 @@
 
 #include <librcps.h>
 
-#include <KDebug>
 
 #include <QApplication>
 #include <KMessageBox>
 #include <kptschedulerplugin.h>
 
-extern int planDbg();
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 

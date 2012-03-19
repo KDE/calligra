@@ -27,8 +27,8 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
+#include <kptdebug.h>
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
 
@@ -36,7 +36,6 @@
 #include <QMap>
 #include <QApplication>
 
-extern int planDbg();
 
 static int insertProjectCmdDba() {
 #if KDE_IS_VERSION( 4, 3, 80 )

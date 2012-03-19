@@ -41,10 +41,10 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptschedulemodel.h"
+#include <kptdebug.h>
 
 #include <assert.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
