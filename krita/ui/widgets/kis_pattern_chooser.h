@@ -42,6 +42,8 @@ public:
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
 
+    virtual void showEvent(QShowEvent* );
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);

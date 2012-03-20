@@ -19,6 +19,7 @@
 
 #include "widgets/kis_pattern_chooser.h"
 
+#include <math.h>
 #include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
@@ -104,6 +105,16 @@ void KisPatternChooser::setGrayscalePreview(bool grayscale)
 {
     m_itemChooser->setGrayscalePreview(grayscale);
 }
+
+void KisPatternChooser::showEvent(QShowEvent* )
+{
+    int width = m_itemChooser->viewSize().width();
+    int maxColums = width/50;
+    int cols = width/50 + 1;
+    m_itemChooser->setRowHeight(floor((double)width/cols));
+    m_itemChooser->setColumnCount(cols);
+}
+
 
 #include "kis_pattern_chooser.moc"
 
