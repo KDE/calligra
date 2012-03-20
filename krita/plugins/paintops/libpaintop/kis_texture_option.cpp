@@ -54,7 +54,7 @@ public:
         chooser->setGrayscalePreview(true);
         chooser->setMaximumHeight(250);
         chooser->setCurrentItem(0, 0);
-        formLayout->addRow(i18n("Pattern:"), chooser);
+        formLayout->addRow(chooser);
 
         scaleSlider = new KisMultipliersDoubleSliderSpinBox(this);
         scaleSlider->setRange(0.0, 2.0, 2);
