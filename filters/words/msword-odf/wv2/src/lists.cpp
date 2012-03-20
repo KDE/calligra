@@ -978,14 +978,13 @@ ListText ListInfoProvider::text(const Word97::CHP& chp) const
     Style style( chp );
 
     // Get the appropriate style for this paragraph
-//     const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
-//     if ( !style ) {
-//         wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << endl;
-//         ret.chp = new Word97::CHP;
-//     } else {
-//         ret.chp = new Word97::CHP( style->chp() );
-//     }
-
+    // const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
+    // if ( !style ) {
+    //     wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << endl;
+    //     ret.chp = new Word97::CHP;
+    // } else {
+    //     ret.chp = new Word97::CHP( style->chp() );
+    // }
 
     formattingListLevel()->applyGrpprlChpx( ret.chp, &style, m_styleSheet );
     return ret;

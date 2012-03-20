@@ -1975,19 +1975,8 @@ void setListLevelProperties(KoXmlWriter& out,
     //text:label-followed-by
     switch (listInfo.followingChar()) {
     case 0: //A tab follows the number text.
-    {
         out.addAttribute("text:label-followed-by", "listtab");
-        //TODO: text:list-tab-stop-position - Fine tuning on complex files required!
-//         Q_ASSERT(pap.itbdMac == 1);
-        qreal position = 0;
-        if (pap.itbdMac) {
-            position = Conversion::twipsToPt(pap.rgdxaTab[0].dxaTab);
-        }
-        if (position != 0) {
-            out.addAttributePt("text:list-tab-stop-position", position);
-        }
         break;
-    }
     case 1: //A space follows the number text.
         out.addAttribute("text:label-followed-by", "space");
         break;
