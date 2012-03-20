@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 using namespace KPlato;
 

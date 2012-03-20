@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 - 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,15 +27,13 @@
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
-
-#include <kdebug.h>
+#include "kptdebug.h"
 
 #include <QDateTime>
 #include <QMutableMapIterator>
 
 #include <cassert>
 
-extern int planDbg();
 
 namespace KPlato
 {

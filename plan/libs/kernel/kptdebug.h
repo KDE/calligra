@@ -17,14 +17,14 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "debugarea.h"
-#include <kdeversion.h>
+#ifndef KPLATO_DEBUG
+#define KPLATO_DEBUG
 
-int planworkDbg() {
-#if KDE_IS_VERSION( 4, 3, 80 )
-    static int s_area = KDebug::registerArea( "planwork" );
-#else
-    static int s_area = 0;
+#include "kplatokernel_export.h"
+#include <KDebug>
+
+KPLATOKERNEL_EXPORT int planDbg();
+
+KPLATOKERNEL_EXPORT int planDependencyEditorDbg();
+
 #endif
-    return s_area;
-}

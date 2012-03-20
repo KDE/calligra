@@ -1,7 +1,7 @@
 /*
  * KPlato Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2010, 2011 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2010, 2011, 2012 by Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@
 #include "reportexportpanel.h"
 #include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
+#include "kptdebug.h"
 
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
@@ -73,7 +74,6 @@
 #include <QStandardItemModel>
 #include <QActionGroup>
 
-extern int planDbg();
 
 namespace KPlato
 {

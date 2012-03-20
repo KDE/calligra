@@ -69,7 +69,7 @@
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 KPlatoWork_Application::KPlatoWork_Application()
     : KUniqueApplication(),

@@ -1,6 +1,6 @@
 /*
    KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,9 +36,8 @@
 #include <QImage>
 
 #include <kmimetype.h>
-#include <kdebug.h>
 
-extern int planDbg();
+#include "kptdebug.h"
 
 KoSimpleOdtCheckBox::KoSimpleOdtCheckBox(OROCheck *primitive)
     : KoSimpleOdtPrimitive(primitive)
