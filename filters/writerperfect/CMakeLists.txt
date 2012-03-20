@@ -3,7 +3,7 @@ include_directories(
     ${LIBWPG_INCLUDE_DIR}
     ${QT_INCLUDES}
 )
-add_library(writerperfect SHARED
+kde4_add_library(writerperfect SHARED
             DiskDocumentHandler.cxx
             DocumentElement.cxx
             FemtoZip.cxx
