@@ -139,10 +139,8 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
 
-    if (m_hsvTransformation)
-    {
-        foreach(KisPressureHSVOption* option, m_hsvOptions)
-        {
+    if (m_hsvTransformation) {
+        foreach(KisPressureHSVOption* option, m_hsvOptions) {
             option->apply(m_hsvTransformation, info);
         }
         m_colorSource->applyColorTransformation(m_hsvTransformation);
@@ -154,8 +152,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
     }
     else {
-        if (m_colorSource->isUniformColor())
-        {
+        if (m_colorSource->isUniformColor()) {
             KoColor color = m_colorSource->uniformColor();
             color.convertTo(dab->colorSpace());
             brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
