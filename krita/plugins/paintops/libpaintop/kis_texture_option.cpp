@@ -34,14 +34,16 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_fixed_paint_device.h>
 #include <kis_resource_server_provider.h>
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
+#include <kis_fill_painter.h>
 #include <kis_painter.h>
+#include <kis_iterator_ng.h>
+#include <kis_fixed_paint_device.h>
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -233,10 +235,9 @@ void KisTextureProperties::recalculateMask()
     int height = mask.height();
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
-    m_mask = new KisFixedPaintDevice(cs);
-    m_mask->setRect(mask.rect());
-    m_mask->initialize(0);
-    quint8 *maskData = m_mask->data();
+    m_mask = new KisPaintDevice(cs);
+
+    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
 
     for (int row = 0; row < height; ++row ) {
         for (int col = 0; col < width; ++col ) {
@@ -251,12 +252,12 @@ void KisTextureProperties::recalculateMask()
             if (invert) {
                 maskValue = 1 - maskValue;
             }
-            cs->setOpacity(maskData + (row * width + col), maskValue, 1);
+            cs->setOpacity(iter->rawData(), maskValue, 1);
+            iter->nextPixel();
         }
+        iter->nextRow();
     }
-//    static int i = 0;
-//    m_mask->convertToQImage(0).save(QString("mask_%1.png").arg(i));
-//    i++;
+    m_mask->convertToQImage(0).save("bla.png");
 }
 
 
@@ -293,10 +294,36 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     invert = setting->getBool("Texture/Pattern/Invert");
     activeChannel = (KisTextureOption::TextureChannel)setting->getInt("Texture/Pattern/Channel");
 
+    qDebug() << "fillproperties Enabled:" << enabled;
+
     recalculateMask();
 }
 
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
 {
+    if (!enabled) return;
+
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    QRect bounds = m_mask->exactBounds();
+    QRect rect = dab->bounds();
+
+    int x = offset.x() % bounds.width() - offsetX;
+    int y = offset.y() % bounds.height() - offsetY;
+
+    fillDevice->setX(x);
+    fillDevice->setY(y);
+
+    KisFillPainter fillPainter(fillDevice);
+    fillPainter.fillRect(x, y, rect.width(), rect.height(), m_mask, bounds);
+
+    fillDevice->setX(0);
+    fillDevice->setY(0);
+
+    quint8 *alphaBytes = new quint8(rect.width() * rect.height());
+    fillDevice->readBytes(alphaBytes, rect);
+
+    dab->colorSpace()->applyAlphaU8Mask(dab->data(), alphaBytes, rect.width() * rect.height());
+
+    dab->convertToQImage(0).save("result.png");
 }
 

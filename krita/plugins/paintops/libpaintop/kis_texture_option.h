@@ -22,7 +22,10 @@
 
 #include <krita_export.h>
 
+#include <kis_paint_device.h>
+#include <kis_types.h>
 #include "kis_paintop_option.h"
+
 
 class KisTextureOptionWidget;
 class KisPattern;
@@ -64,7 +67,6 @@ class PAINTOP_EXPORT KisTextureProperties
 public:
     KisTextureProperties()
         : pattern(0)
-        , m_mask(0)
     {}
 
     bool enabled;
@@ -76,13 +78,17 @@ public:
     KisTextureOption::TextureChannel activeChannel;
     KisPattern *pattern;
 
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& _offset);
+    /**
+     * @brief apply combine the texture map with the dab
+     * @param dab the colored, final representation of the dab, after mirroring and everything.
+     * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
+     */
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset);
     void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:
 
-    KisFixedPaintDevice *m_mask;
-
+    KisPaintDeviceSP m_mask;
     void recalculateMask();
 };
 
