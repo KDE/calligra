@@ -257,7 +257,6 @@ void KisTextureProperties::recalculateMask()
         }
         iter->nextRow();
     }
-    m_mask->convertToQImage(0).save("bla.png");
 }
 
 
@@ -294,8 +293,6 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     invert = setting->getBool("Texture/Pattern/Invert");
     activeChannel = (KisTextureOption::TextureChannel)setting->getInt("Texture/Pattern/Channel");
 
-    qDebug() << "fillproperties Enabled:" << enabled;
-
     recalculateMask();
 }
 
@@ -319,11 +316,22 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     fillDevice->setX(0);
     fillDevice->setY(0);
 
-    quint8 *alphaBytes = new quint8(rect.width() * rect.height());
-    fillDevice->readBytes(alphaBytes, rect);
+    KisHLineConstIteratorSP iter = fillDevice->createHLineConstIteratorNG(0, 0, rect.width());
+    for (int row = 0; row < rect.height(); ++row) {
+        for (int col = 0; col < rect.width(); ++col) {
+            dab->colorSpace()->applyAlphaU8Mask(dab->data() + (row * rect.width() + col), iter->oldRawData(), 1);
+            iter->nextPixel();
+        }
+        iter->nextRow();
+    }
 
-    dab->colorSpace()->applyAlphaU8Mask(dab->data(), alphaBytes, rect.width() * rect.height());
 
-    dab->convertToQImage(0).save("result.png");
+//    qDebug() << 1;
+//    quint8 *alphaBytes = new quint8(rect.width() * rect.height());
+//    qDebug() << 2;
+//    fillDevice->readBytes(alphaBytes, 0, 0, rect.width(), rect.height());
+//    qDebug() << 3;
+//    dab->colorSpace()->applyAlphaU8Mask(dab->data(), alphaBytes, rect.width() * rect.height());
+//    qDebug() << 4;
 }
 
