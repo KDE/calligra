@@ -23,6 +23,8 @@
 #include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QResizeEvent>
+#include <QShowEvent>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -57,11 +59,16 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SIGNAL(resourceSelected(KoResource *)));
 
+    connect(m_itemChooser, SIGNAL(splitterMoved()),
+            this, SLOT(updateItemSize()));
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
     mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
+
+
 
     setLayout(mainLayout);
 }
@@ -106,14 +113,8 @@ void KisPatternChooser::setGrayscalePreview(bool grayscale)
     m_itemChooser->setGrayscalePreview(grayscale);
 }
 
-void KisPatternChooser::showEvent(QShowEvent* )
+void KisPatternChooser::showEvent(QShowEvent*)
 {
-    updateItemSize();
-}
-
-void KisPatternChooser::resizeEvent(QResizeEvent* e)
-{
-    QFrame::resizeEvent(e);
     updateItemSize();
 }
 

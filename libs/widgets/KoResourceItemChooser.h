@@ -110,7 +110,7 @@ public:
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
-
+    void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
     

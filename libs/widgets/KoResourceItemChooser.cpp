@@ -101,6 +101,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->splitter->addWidget(d->view);
     d->splitter->addWidget(d->previewScroller);
+    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
