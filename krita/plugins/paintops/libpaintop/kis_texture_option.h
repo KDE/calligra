@@ -69,7 +69,6 @@ public:
 
     bool enabled;
     qreal scale;
-    qreal rotation;
     int offsetX;
     int offsetY;
     qreal strength;

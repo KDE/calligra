@@ -41,6 +41,7 @@
 #include <kis_multipliers_double_slider_spinbox.h>
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
+#include <kis_painter.h>
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -64,11 +65,6 @@ public:
         scaleSlider->addMultiplier(10);
 
         formLayout->addRow(i18n("Scale:"), scaleSlider);
-
-        rotationSlider = new KisDoubleSliderSpinBox(this);
-        rotationSlider->setRange(0.0, 360.0, 2);
-        rotationSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        formLayout->addRow(i18n("Rotation:"), rotationSlider);
 
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -98,7 +94,6 @@ public:
     }
     KisPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
-    KisDoubleSliderSpinBox *rotationSlider;
     KisSliderSpinBox *offsetSliderX;
     KisSliderSpinBox *offsetSliderY;
     KisDoubleSliderSpinBox *strengthSlider;
@@ -131,7 +126,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     if (!pattern) return;
 
     qreal scale = m_optionWidget->scaleSlider->value();
-    qreal rotation = m_optionWidget->rotationSlider->value();
     int offsetX = m_optionWidget->offsetSliderX->value();
     int offsetY = m_optionWidget->offsetSliderY->value();
     qreal strength = m_optionWidget->strengthSlider->value();
@@ -139,7 +133,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     TextureChannel activeChannel = (TextureChannel)m_optionWidget->cmbChannel->currentIndex();
 
     setting->setProperty("Texture/Pattern/Scale", scale);
-    setting->setProperty("Texture/Pattern/Rotation", rotation);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/Strength", strength);
@@ -197,7 +190,6 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->chooser->setCurrentPattern(pattern);
 
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
-    m_optionWidget->rotationSlider->setValue(setting->getDouble("Texture/Pattern/Rotation"));
     m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_optionWidget->strengthSlider->setValue(setting->getDouble("Texture/Pattern/Strength"));
@@ -211,7 +203,6 @@ void KisTextureOption::resetGUI(KoResource* res)
 {
     KisPattern *pattern = static_cast<KisPattern *>(res);
     m_optionWidget->scaleSlider->setValue(1.0);
-    m_optionWidget->rotationSlider->setValue(0.0);
     m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
     m_optionWidget->offsetSliderX->setValue(0);
     m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
@@ -230,11 +221,7 @@ void KisTextureProperties::recalculateMask()
 
     QImage mask = pattern->image();
 
-    if (!qFuzzyCompare(rotation, 0.0)) {
-        // do rotation
-    }
     if (!qFuzzyCompare(scale, 0.0)) {
-
         QTransform tf;
         tf.scale(scale, scale);
         QRect rc = tf.mapRect(mask.rect());
@@ -261,6 +248,9 @@ void KisTextureProperties::recalculateMask()
 
             const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
             float maskValue = (grayValue / 255.0) * strength;
+            if (invert) {
+                maskValue = 1 - maskValue;
+            }
             cs->setOpacity(maskData + (row * width + col), maskValue, 1);
         }
     }
@@ -297,7 +287,6 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
 
     enabled = setting->getBool("Texture/Pattern/Enabled", false);
     scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
-    rotation = setting->getDouble("Texture/Pattern/Rotation");
     offsetX = setting->getInt("Texture/Pattern/OffsetX");
     offsetY = setting->getInt("Texture/Pattern/OffsetY");
     strength = setting->getDouble("Texture/Pattern/Strength");
