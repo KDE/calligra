@@ -43,14 +43,15 @@ public:
     void setPreviewOrientation(Qt::Orientation orientation);
 
     virtual void showEvent(QShowEvent* );
-
+    virtual void resizeEvent(QResizeEvent* e);
 signals:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);
 
 private slots:
     void update(KoResource *resource);
-
+private:
+    void updateItemSize();
 private:
     QLabel *m_lbName;
     KoResourceItemChooser *m_itemChooser;

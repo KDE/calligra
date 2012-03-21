@@ -108,13 +108,22 @@ void KisPatternChooser::setGrayscalePreview(bool grayscale)
 
 void KisPatternChooser::showEvent(QShowEvent* )
 {
+    updateItemSize();
+}
+
+void KisPatternChooser::resizeEvent(QResizeEvent* e)
+{
+    QFrame::resizeEvent(e);
+    updateItemSize();
+}
+
+void KisPatternChooser::updateItemSize()
+{
     int width = m_itemChooser->viewSize().width();
-    int maxColums = width/50;
     int cols = width/50 + 1;
     m_itemChooser->setRowHeight(floor((double)width/cols));
     m_itemChooser->setColumnCount(cols);
 }
-
 
 #include "kis_pattern_chooser.moc"
 
