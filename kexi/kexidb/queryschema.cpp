@@ -138,6 +138,7 @@ public:
         }
         delete fieldsExpandedWithInternalAndRowID;
         delete fieldsExpandedWithInternal;
+        delete orderByColumnList;
         delete autoincFields;
         delete columnsOrder;
         delete columnsOrderWithoutAsterisks;
