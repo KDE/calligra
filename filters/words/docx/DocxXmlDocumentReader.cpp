@@ -2218,10 +2218,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     }
 
     // rPr (Run Properties for the Paragraph Mark), ECMA-376, 17.3.1.29, p.253
-    // The paragraph glyph's formatting is stored in the rPr element under the
-    // paragraph properties, since there is no run saved for the paragraph mark
-    // itself.  ODF: The paragraph mark formatting does not affect other runs
-    // of text so it can't be save into text-properties of the paragraph style.
+    // This element specifies the set of run properties applied to the
+    // glyph used to represent the physical location of the paragraph
+    // mark for this paragraph.  ODF: The paragraph mark formatting
+    // does not affect other runs of text so it can NOT be saved into
+    // text-properties of the paragraph style.
+    //
     if (!textPBuf.isEmpty()) {
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }

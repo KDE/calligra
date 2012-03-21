@@ -45,7 +45,7 @@
 #include <klocale.h>
 #include <knotification.h>
 
-extern int planDbg();
+#include "kptdebug.h"
 
 #include "kdatepicker.moc"
 

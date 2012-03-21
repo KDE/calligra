@@ -24,9 +24,9 @@
 #include "KoSimpleOdtLine.h"
 #include "KoSimpleOdtCheckBox.h"
 #include "renderobjects.h"
-#include <kdebug.h>
 
-extern int planDbg();
+#include "kptdebug.h"
+
 
 ReportODTRenderer::ReportODTRenderer()
 {

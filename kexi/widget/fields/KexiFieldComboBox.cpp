@@ -179,6 +179,7 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
     } else {
         setCurrentIndex(index);
         d->fieldOrExpression = itemData(currentIndex(), Qt::DisplayRole).toString();
+        setEditText(d->fieldOrExpression);
     }
 }
 
