@@ -120,10 +120,15 @@ void KisPatternChooser::showEvent(QShowEvent*)
 
 void KisPatternChooser::updateItemSize()
 {
+    KisPattern* current = static_cast<KisPattern*>(currentResource());
     int width = m_itemChooser->viewSize().width();
     int cols = width/50 + 1;
     m_itemChooser->setRowHeight(floor((double)width/cols));
     m_itemChooser->setColumnCount(cols);
+    //restore current pattern
+    if(current) {
+        setCurrentPattern(current);
+    }
 }
 
 #include "kis_pattern_chooser.moc"
