@@ -269,8 +269,6 @@ void KisTextureProperties::recalculateMask()
         }
         iter->nextRow();
     }
-
-    m_mask->convertToQImage(0).save(QString("converted_mask_%1.png").arg(i));
     i++;
 
 }
@@ -333,23 +331,19 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
 
     KisFillPainter fillPainter(fillDevice);
     fillPainter.fillRect(x, y, rect.width(), rect.height(), m_mask, bounds);
+    fillPainter.end();
 
-    fillDevice->setX(0);
-    fillDevice->setY(0);
+    quint8 *dabData = dab->data();
 
-    fillDevice->convertToQImage(0).save(QString("%1_fill_device.png").arg(i));
-
-    KisHLineConstIteratorSP iter = fillDevice->createHLineConstIteratorNG(0, 0, rect.width());
+    KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
-            dab->colorSpace()->setOpacity(dab->data() + (row * rect.width() + col), *iter->oldRawData(), 1);
+            dab->colorSpace()->multiplyAlpha(dabData, *iter->oldRawData(), 1);
             iter->nextPixel();
+            dabData += dab->pixelSize();
         }
         iter->nextRow();
     }
 
-    dab->convertToQImage(0).save(QString("%1_masked_dab.png").arg(i));
-
-    i++;
 }
 
