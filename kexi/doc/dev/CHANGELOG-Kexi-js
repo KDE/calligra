@@ -153,6 +153,11 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-03-22
+Tables
+*Fixed bug: Details of lookup column not visible
+BUG:296528
+
 2012-03-19
 KexiDB
 *SQLite Driver
