@@ -2,8 +2,9 @@ include_directories(
     ${WPD_INCLUDE_DIR}
     ${LIBWPG_INCLUDE_DIR}
     ${QT_INCLUDES}
+    ${KDE4_INCLUDE_DIR}
 )
-add_library(writerperfect SHARED
+kde4_add_library(writerperfect SHARED
             DiskDocumentHandler.cxx
             DocumentElement.cxx
             FemtoZip.cxx

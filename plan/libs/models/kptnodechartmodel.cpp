@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <danders@get2net.dk>
+ * Copyright (c) 2008, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,17 +22,16 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
+#include "kptdebug.h"
 
 #include <QPointF>
 #include <QVariant>
 #include <QColor>
 #include <QPen>
 
-#include <kdebug.h>
-
 #include "KDChartGlobal"
 
-extern int planDbg();
+
 
 namespace KPlato
 {

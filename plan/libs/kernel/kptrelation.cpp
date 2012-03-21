@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,11 @@
 
 #include "kptnode.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
 #include <QDomDocument>
 #include <QStringList>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {

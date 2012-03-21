@@ -2051,7 +2051,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2072,7 +2072,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 0, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2091,7 +2091,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2381,7 +2381,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.setName( "resourceConflictMustStartOn" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01T00:00:00", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2465,7 +2465,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2490,7 +2490,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2547,7 +2547,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );

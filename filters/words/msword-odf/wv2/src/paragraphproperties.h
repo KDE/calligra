@@ -57,8 +57,10 @@ namespace wvWare
 
         /**
          * @internal
+         * @param list info provider
+         * @param pragraph mark's CHPs
          */
-        void createListInfo( ListInfoProvider& listInfoProvider, const Word97::CHP& chp );
+        void createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp );
 
     private:
         ParagraphProperties& operator=( const ParagraphProperties& rhs );

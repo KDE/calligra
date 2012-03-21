@@ -70,7 +70,12 @@ namespace wvWare
     public:
         enum ListType {BulletType, NumberType, PictureType, DefaultType};
 
-        ListInfo( Word97::PAP& pap, const Word97::CHP& chp, ListInfoProvider& listInfoProvider );
+        /**
+         * @param current paragraph's PAP
+         * @param paragraph mark's CHP
+         * @param ListInfoProvider
+         */
+        ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listInfoProvider );
 
         /**
          * The istd linked to the current list/level, istdNil (4095) if none (LSTF::rgistd)
@@ -121,22 +126,23 @@ namespace wvWare
         bool isWord6() const { return m_isWord6; }
 
         /**
-         * The most important method, returning the text template and the
-         * corresponding CHP.
+         * The most important method, returning the text template and
+         * the corresponding CHP.
          *
-         * The returned string contains place holders for the real list
-         * counter text. The place holders are the values 0...8, representing
-         * the corresponding list levels (pap->ilvl). To illustrate that,
-         * consider the following example (<0>, <1>,... represent the ASCII
-         * values 0, 1,...):
-         *     "<0>.<1>.<2>)"
-         * The <0> should be replaced with the current counter value of level 0,
-         * then we should display a '.', <1> should be the counter value of level 1,
-         * and so forth.
+         * The returned string contains place holders for the real
+         * list counter text.  The place holders are the values 0...8,
+         * representing the corresponding list levels (pap->ilvl).
+         * For example: (<0>, <1>,... represent the ASCII values 0,
+         * 1,...): "<0>.<1>.<2>)"
+
+         * The <0> should be replaced with the current counter value
+         * of level 0, then we should display a '.', <1> should be the
+         * counter value of level 1, and so forth.
          *
-         * The CHP provides the character formatting properties; information about
-         * the alignment and optional spaces/tabs after the counter text is
-         * also available here (alignment, followingChar,...)
+         * The CHP provides the character formatting properties for
+         * the list label.  Information about the alignment and
+         * optional spaces/tabs after the counter text is also
+         * available here (alignment, followingChar,...)
          */
         const ListText& text() const { return m_text; }
 

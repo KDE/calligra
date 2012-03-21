@@ -118,6 +118,11 @@ public:
             if (copy->whereExpr) {
                 whereExpr = copy->whereExpr->copy();
             }
+            // "*this = *copy" causes copying pointers; pull of them without destroying,
+            // will be deep-copied in the QuerySchema ctor.
+            asterisks.setAutoDelete(false);
+            asterisks.clear();
+            asterisks.setAutoDelete(true);
         }
         else {
             orderByColumnList = new OrderByColumnList;
@@ -651,10 +656,13 @@ QuerySchema::QuerySchema(const QuerySchema& querySchema)
         Field *copiedField;
         if (dynamic_cast<QueryAsterisk*>(f)) {
             copiedField = f->copy();
-            if (static_cast<const KexiDB::FieldList *>(f->m_parent) == &querySchema)
+            if (static_cast<const KexiDB::FieldList *>(f->m_parent) == &querySchema) {
                 copiedField->m_parent = this;
-        } else
+            }
+        }
+        else {
             copiedField = f;
+        }
         addField(copiedField);
     }
     // this deep copy must be after the 'd' initialization because fieldsExpanded() is used there
@@ -715,6 +723,8 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
     d->clearCachedData();
     FieldList::insertField(position, field);
     if (field->isQueryAsterisk()) {
+        //kDebug() << "d->asterisks.append:" << field;
+        //field->debug();
         d->asterisks.append(field);
         //if this is single-table asterisk,
         //add a table to list if doesn't exist there:
@@ -790,6 +800,8 @@ void QuerySchema::removeField(KexiDB::Field *field)
         return;
     d->clearCachedData();
     if (field->isQueryAsterisk()) {
+        //kDebug() << "d->asterisks.removeAt:" << field;
+        //field->debug();
         d->asterisks.removeAt(d->asterisks.indexOf(field));   //this will destroy this asterisk
     }
 //TODO: should we also remove table for this field or asterisk?
@@ -1849,8 +1861,15 @@ QueryAsterisk::QueryAsterisk(QuerySchema *query, TableSchema *table)
     setType(Field::Asterisk);
 }
 
+QueryAsterisk::QueryAsterisk(const QueryAsterisk& asterisk)
+        : Field(asterisk)
+        , m_table(asterisk.table())
+{
+}
+
 QueryAsterisk::~QueryAsterisk()
 {
+    //kDebug() << this << debugString();
 }
 
 Field* QueryAsterisk::copy() const
