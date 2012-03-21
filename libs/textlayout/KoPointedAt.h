@@ -24,6 +24,7 @@
 
 #include <QString>
 #include <QTextCursor>
+#include <QPointF>
 
 class KoBookmark;
 class QTextDocument;
@@ -51,6 +52,7 @@ public:
     int tableColumnDivider;
     qreal tableLeadSize;
     qreal tableTrailSize;
+    QPointF tableDividerPos;
     QTextTable *table;
 };
 
