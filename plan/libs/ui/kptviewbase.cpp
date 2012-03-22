@@ -159,11 +159,11 @@ QWidget *PrintingDialog::createPageLayoutWidget() const
 
     KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
     w->showPageSpread( false );
-    lay->addWidget( w );
+    lay->addWidget( w, 1 );
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
     prev->setPageLayout( m_view->pageLayout() );
-    lay->addWidget( prev );
+    lay->addWidget( prev, 1 );
 
     connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
 
