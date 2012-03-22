@@ -367,6 +367,7 @@ private:
     bool m_tableDragWithShift;
     QPointF m_draggingOrigin;
     qreal m_dx;
+    qreal m_dy;
     mutable QRectF m_lastImMicroFocus;
 };
 

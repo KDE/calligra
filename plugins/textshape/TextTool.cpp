@@ -626,8 +626,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
 
     // Possibly draw table dragging visual cues
-    if (m_tableDragInfo.tableHit != KoPointedAt::None) {
-        qreal boxHeight = 20;
+    const qreal boxHeight = 20;
+    if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
         QPointF anchorPos = m_tableDragInfo.tableDividerPos - QPointF(m_dx, 0.0);
         if (m_tableDragInfo.tableColumnDivider > 0) {
             //let's draw left
@@ -691,6 +691,36 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                     painter.drawText(drawRect, Qt::AlignCenter, label);
                 }
             }
+        }
+    }
+    // Possibly draw table dragging visual cues
+    if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
+        QPointF anchorPos = m_tableDragInfo.tableDividerPos - QPointF(0.0, m_dy);
+        if (m_tableDragInfo.tableRowDivider > 0) {
+            qreal h = m_tableDragInfo.tableLeadSize - m_dy;
+            QRectF rect(anchorPos - QPointF(0.0, h), QSizeF(0.0, h));
+            QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
+            drawRect.setWidth(boxHeight);
+            drawRect.moveLeft(drawRect.left() - 1.5 * boxHeight);
+            QString label = m_unit.toUserStringValue(h);
+            QRectF labelRect = QFontMetrics(QToolTip::font()).boundingRect(label);
+            labelRect.setHeight(boxHeight);
+            labelRect.setWidth(labelRect.width() + 10);
+            labelRect.moveTopLeft(drawRect.center() - QPointF(labelRect.width(), labelRect.height())/2);
+            painter.fillRect(drawRect, QColor(64, 255, 64, 196));
+            painter.fillRect(labelRect, QColor(64, 255, 64, 196));
+            painter.setPen(QColor(0, 0, 0, 196));
+            if (labelRect.height() + 10 < drawRect.height()) {
+                QPointF centerTop(drawRect.center().x(), drawRect.top());
+                QPointF centerBottom(drawRect.center().x(), drawRect.bottom());
+                painter.drawLine(centerTop, drawRect.center() - QPointF(0.0, labelRect.height()/2+5));
+                painter.drawLine(centerTop, centerTop + QPointF(-5, 7));
+                painter.drawLine(centerTop, centerTop + QPointF(5, 7));
+                painter.drawLine(drawRect.center() + QPointF(0.0, labelRect.height()/2+5), centerBottom);
+                painter.drawLine(centerBottom, centerBottom + QPointF(-5, -7));
+                painter.drawLine(centerBottom, centerBottom + QPointF(5, -7));
+            }
+            painter.drawText(labelRect, Qt::AlignCenter, label);
         }
     }
     if (m_caretTimerState) {
@@ -824,6 +854,12 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
         m_tableDragInfo.tableHit = KoPointedAt::None;
+        if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
+            m_caretTimer.stop();
+            m_caretTimer.setInterval(50);
+            m_caretTimer.start();
+            m_caretTimerState = true; // turn caret instantly on on click
+        }
     } else {
         m_tableDragInfo = pointedAt;
         if (event->button() == Qt::RightButton) {
@@ -1055,8 +1091,11 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 useCursor(Qt::SplitHCursor);
                 m_draggingOrigin = event->point;
             } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
-                useCursor(Qt::SplitVCursor);
-                m_draggingOrigin = event->point;
+                if (pointedAt.tableRowDivider > 0) {
+                    useCursor(Qt::SplitVCursor);
+                    m_draggingOrigin = event->point;
+                } else
+                    useCursor(Qt::IBeamCursor);
             } else {
                 useCursor(Qt::IBeamCursor);
             }
@@ -1086,43 +1125,69 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         useCursor(Qt::IBeamCursor);
         return;
     } else {
-        if (m_tableDragInfo.tableHit != KoPointedAt::None) {
+        if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
             m_tableDragWithShift = event->modifiers() & Qt::ShiftModifier;
             bool ctrlPressed = event->modifiers() & Qt::ControlModifier;
-            if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
-                if(m_tableDraggedOnce) {
-                    canvas()->shapeController()->resourceManager()->undoStack()->undo();
+            if(m_tableDraggedOnce) {
+                canvas()->shapeController()->resourceManager()->undoStack()->undo();
+            }
+            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
+            m_dx = m_draggingOrigin.x() - event->point.x();
+            if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()
+                    && m_tableDragInfo.tableTrailSize + m_dx < 0) {
+                m_dx = -m_tableDragInfo.tableTrailSize;
+            }
+            if (m_tableDragInfo.tableColumnDivider > 0) {
+                if (m_tableDragInfo.tableLeadSize - m_dx < 0) {
+                    m_dx = m_tableDragInfo.tableLeadSize;
                 }
-                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
-                m_dx = m_draggingOrigin.x() - event->point.x();
-                if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()
-                        && m_tableDragInfo.tableTrailSize + m_dx < 0) {
-                    m_dx = -m_tableDragInfo.tableTrailSize;
-                }
-                if (m_tableDragInfo.tableColumnDivider > 0) {
-                    if (m_tableDragInfo.tableLeadSize - m_dx < 0) {
-                        m_dx = m_tableDragInfo.tableLeadSize;
-                    }
+                m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
+                    m_tableDragInfo.tableColumnDivider - 1,
+                    m_tableDragInfo.tableLeadSize - m_dx, topCmd);
+            } else {
+                m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, -m_dx, 0.0);
+            }
+            if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()) {
+                if (!m_tableDragWithShift && !ctrlPressed) {
                     m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
-                        m_tableDragInfo.tableColumnDivider - 1,
-                        m_tableDragInfo.tableLeadSize - m_dx, topCmd);
-                } else {
-                    m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, -m_dx, 0.0);
+                        m_tableDragInfo.tableColumnDivider,
+                        m_tableDragInfo.tableTrailSize + m_dx, topCmd);
                 }
-                if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()) {
-                    if (!m_tableDragWithShift && !ctrlPressed) {
-                        m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
-                            m_tableDragInfo.tableColumnDivider,
-                            m_tableDragInfo.tableTrailSize + m_dx, topCmd);
-                    }
-                } else {
-                    m_tableDragWithShift = true; // act like shift pressed
+            } else {
+                m_tableDragWithShift = true; // act like shift pressed
+            }
+            if (m_tableDragWithShift) {
+                m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, 0.0, m_dx);
+            }
+            m_textEditor.data()->endEditBlock();
+            m_tableDragInfo.tableDividerPos.setY(m_textShape->convertScreenPos(event->point).y());
+            if (m_tableDraggedOnce) {
+                //we need to redraw like this so we update outside the textshape too
+                if (canvas()->canvasWidget())
+                    canvas()->canvasWidget()->update();
+                if (canvas()->canvasItem())
+                    canvas()->canvasItem()->update();
+            }
+            m_tableDraggedOnce = true;
+        } else if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
+            if(m_tableDraggedOnce) {
+                canvas()->shapeController()->resourceManager()->undoStack()->undo();
+            }
+            if (m_tableDragInfo.tableRowDivider > 0) {
+                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Row Height"));
+                m_dy = m_draggingOrigin.y() - event->point.y();
+
+                if (m_tableDragInfo.tableLeadSize - m_dy < 0) {
+                    m_dy = m_tableDragInfo.tableLeadSize;
                 }
-                if (m_tableDragWithShift) {
-                    m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, 0.0, m_dx);
-                }
+
+                m_textEditor.data()->adjustTableRowHeight(m_tableDragInfo.table,
+                    m_tableDragInfo.tableRowDivider - 1,
+                    m_tableDragInfo.tableLeadSize - m_dy, topCmd);
+
                 m_textEditor.data()->endEditBlock();
-                m_tableDragInfo.tableDividerPos.setY(m_textShape->convertScreenPos(event->point).y());
+
+                m_tableDragInfo.tableDividerPos.setX(m_textShape->convertScreenPos(event->point).x());
                 if (m_tableDraggedOnce) {
                     //we need to redraw like this so we update outside the textshape too
                     if (canvas()->canvasWidget())
@@ -1131,9 +1196,8 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                         canvas()->canvasItem()->update();
                 }
                 m_tableDraggedOnce = true;
-            } else if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
-
             }
+
         } else {
             useCursor(Qt::IBeamCursor);
             if (pointedAt.position == m_textEditor.data()->position()) return;

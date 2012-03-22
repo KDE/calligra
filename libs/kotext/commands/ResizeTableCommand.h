@@ -22,16 +22,15 @@
 
 #include <kundo2qstack.h>
 #include <QList>
-#include <KoTableRowStyle.h>
-#include <KoTableRowStyle.h>
 
 class QTextDocument;
+class QTextTable;
 class KoTableColumnStyle;
+class KoTableRowStyle;
 
 class ResizeTableCommand : public KUndo2Command
 {
 public:
-
     ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent = 0);
     virtual ~ResizeTableCommand();
 
@@ -47,6 +46,8 @@ private:
     qreal m_size;
     KoTableColumnStyle *m_oldColumnStyle;
     KoTableColumnStyle *m_newColumnStyle;
+    KoTableRowStyle *m_oldRowStyle;
+    KoTableRowStyle *m_newRowStyle;
 };
 
 #endif // RESIZETABLECOMMAND_H

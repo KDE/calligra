@@ -1205,6 +1205,13 @@ void KoTextEditor::adjustTableColumnWidth(QTextTable *table, int column, qreal w
 }
 
 
+void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal height, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, false, column, height, parentCommand);
+
+    addCommand(cmd);
+}
+
 void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Adjust Table Width"));

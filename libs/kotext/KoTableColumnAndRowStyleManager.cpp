@@ -153,10 +153,10 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle
         return;
     }
 
-    while (row > d->tableRowStyles.size())
+    while (row >= d->tableRowStyles.size())
         d->tableRowStyles.append(KoTableRowStyle());
 
-    d->tableRowStyles.insert(row, rowStyle);
+    d->tableRowStyles.replace(row, rowStyle);
 }
 
 void KoTableColumnAndRowStyleManager::insertRows(int row, int numberRows, const KoTableRowStyle &rowStyle)
