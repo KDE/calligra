@@ -112,7 +112,13 @@ KisTextureOption::KisTextureOption(QObject *)
     setConfigurationPage(m_optionWidget);
 
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
-
+    connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cmbChannel, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     resetGUI(m_optionWidget->chooser->currentResource());
 }
 
@@ -216,12 +222,16 @@ void KisTextureOption::resetGUI(KoResource* res)
 
 void KisTextureProperties::recalculateMask()
 {
+    static int i = 0;
+
     if (!pattern) return;
 
     delete m_mask;
     m_mask = 0;
 
     QImage mask = pattern->image();
+
+    mask.save(QString("original_mask_%1.png").arg(i));
 
     if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
@@ -246,9 +256,11 @@ void KisTextureProperties::recalculateMask()
             const int red = qRed(currentPixel);
             const int green = qGreen(currentPixel);
             const int blue = qBlue(currentPixel);
+            float alpha = qAlpha(currentPixel) / 255;
 
             const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
-            float maskValue = (grayValue / 255.0) * strength;
+
+            float maskValue = (grayValue / 255.0) * strength * alpha;
             if (invert) {
                 maskValue = 1 - maskValue;
             }
@@ -257,11 +269,16 @@ void KisTextureProperties::recalculateMask()
         }
         iter->nextRow();
     }
+
+    m_mask->convertToQImage(0).save(QString("converted_mask_%1.png").arg(i));
+    i++;
+
 }
 
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
+
     QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toAscii());
     QImage img;
     img.loadFromData(ba, "PNG");
@@ -300,6 +317,10 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
 {
     if (!enabled) return;
 
+    static int i = 0;
+
+    dab->convertToQImage(0).save(QString("%1_original_dab.png").arg(i));
+
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect bounds = m_mask->exactBounds();
     QRect rect = dab->bounds();
@@ -316,22 +337,19 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     fillDevice->setX(0);
     fillDevice->setY(0);
 
+    fillDevice->convertToQImage(0).save(QString("%1_fill_device.png").arg(i));
+
     KisHLineConstIteratorSP iter = fillDevice->createHLineConstIteratorNG(0, 0, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
-            dab->colorSpace()->applyAlphaU8Mask(dab->data() + (row * rect.width() + col), iter->oldRawData(), 1);
+            dab->colorSpace()->setOpacity(dab->data() + (row * rect.width() + col), *iter->oldRawData(), 1);
             iter->nextPixel();
         }
         iter->nextRow();
     }
 
+    dab->convertToQImage(0).save(QString("%1_masked_dab.png").arg(i));
 
-//    qDebug() << 1;
-//    quint8 *alphaBytes = new quint8(rect.width() * rect.height());
-//    qDebug() << 2;
-//    fillDevice->readBytes(alphaBytes, 0, 0, rect.width(), rect.height());
-//    qDebug() << 3;
-//    dab->colorSpace()->applyAlphaU8Mask(dab->data(), alphaBytes, rect.width() * rect.height());
-//    qDebug() << 4;
+    i++;
 }
 
