@@ -231,8 +231,6 @@ void KisTextureProperties::recalculateMask()
 
     QImage mask = pattern->image();
 
-    mask.save(QString("original_mask_%1.png").arg(i));
-
     if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
         tf.scale(scale, scale);
@@ -316,8 +314,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     if (!enabled) return;
 
     static int i = 0;
-
-    dab->convertToQImage(0).save(QString("%1_original_dab.png").arg(i));
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect bounds = m_mask->exactBounds();
