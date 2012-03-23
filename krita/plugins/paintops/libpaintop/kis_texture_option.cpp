@@ -254,11 +254,10 @@ void KisTextureProperties::recalculateMask()
             const int red = qRed(currentPixel);
             const int green = qGreen(currentPixel);
             const int blue = qBlue(currentPixel);
-            float alpha = qAlpha(currentPixel) / 255;
+            float alpha = qAlpha(currentPixel) / 255.0;
 
             const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
-
-            float maskValue = (grayValue / 255.0) * strength * alpha;
+            float maskValue = (grayValue / 255.0) * strength * alpha + (1 - alpha);
             if (invert) {
                 maskValue = 1 - maskValue;
             }
@@ -268,7 +267,6 @@ void KisTextureProperties::recalculateMask()
         iter->nextRow();
     }
     i++;
-
 }
 
 
