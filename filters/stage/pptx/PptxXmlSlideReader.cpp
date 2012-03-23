@@ -3014,11 +3014,7 @@ PptxXmlSlideReader::processParagraphSpacing(const qreal margin, const qreal font
     return (margin * lineHeight) / 100;
 }
 
-#define blipFill_NS "a"
-
 // END NAMESPACE p
-
-// BEGIN NAMESPACE a
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"

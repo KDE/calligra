@@ -6247,14 +6247,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
 
 // ---------------------------------------------------------------------------
 
-#define blipFill_NS "pic"
-
 #include <MsooXmlCommonReaderImpl.h> // this adds w:p, w:pPr, w:t, w:r, etc.
 
 // ---------------------------------------------------------------------------
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "o" // urn:schemas-microsoft-com:office:office
+
 #undef CURRENT_EL
 #define CURRENT_EL OLEObject
 //! Reads an OLE object
