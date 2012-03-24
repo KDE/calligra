@@ -92,7 +92,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {
     KexiFieldListModelItem *item = 0;
 
-    if (index.row() < d->items.count()) {
+    if (index.isValid() && index.row() < d->items.count()) {
         item = d->items[index.row()];
     }
 

@@ -3569,6 +3569,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
     }
 
+    // TODO: Values in {none, first-line, hanging) are from the
+    // "Special" field of the Paragraph dialog in MS Word.  The
+    // tab-stop position in case of a list item and the implicit
+    // tab-stop for a paragraph with hanging indent depend on this.
+    // Check the MsooXmlUtils::convertToListProperties function.
     TRY_READ_ATTR(firstLine)
     TRY_READ_ATTR(hanging)
     if (!hanging.isEmpty()) {
@@ -3576,7 +3581,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
         if (ok) {
            m_currentParagraphStyle.addPropertyPt("fo:text-indent", -firstInd);
         }
-
     }
     else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
@@ -4537,7 +4541,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 #undef CURRENT_EL
 #define CURRENT_EL tabs
 //! tabs handler (Set of Custom Tab Stops)
-/*!
+/*! ECMA-376, 17.3.1.38, p.269
+
+ This element specifies a sequence of custom tab stops which shall be
+ used for any tab characters in the current paragraph.
+
+ If this element is omitted on a given paragraph, its value is
+ determined by the setting previously set at any level of the style
+ hierarchy (i.e. that previous setting remains unchanged).  If this
+ setting is never specified in the style hierarchy, then no custom tab
+ stops shall be used for this paragraph.
+
+ As well, this property is additive - tab stops at each level in the
+ style hierarchy are added to each other to determine the full set of
+ tab stops for the paragraph.  A hanging indent specified via the
+ hanging attribute on the ind element (§17.3.1.12) shall also always
+ implicitly create a custom tab stop at its location.
 
  Parent elements:
  - [done] pPr (§17.3.1.26)
@@ -4590,8 +4609,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
 #undef CURRENT_EL
 #define CURRENT_EL tab
-//! tab handler (Custom Tab Stop)
-/*!
+//! tab (Custom Tab Stop)
+/*! ECMA-376, 17.3.1.37, p.267
+
+ Specifies a single custom tab stop defined within a set of paragraph
+ properties in a document. A tab stop location shall always be
+ measured relative to the leading edge of the paragraph in which it
+ is used (that is, the left edge for a left-to-right paragraph, and
+ the right edge for a right-to-left paragraph).
 
  Parent elements:
  - [done] tabs (§17.3.1.38)
@@ -4609,21 +4634,70 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
     TRY_READ_ATTR(pos)
     TRY_READ_ATTR(val)
 
+    // "clear" - Specifies that the current tab stop is cleared and
+    // shall be removed and ignored when processing the contents of
+    // this document.
+    //
+    // NOTE: This is a workaround!  The correct approach would be to
+    // clear the tab-stop inherited from the parent named style at the
+    // specified position.  But this must be done during ODF loading
+    // and it's not supported by ODF.  The solution for a viewer would
+    // be to not save tab-stop elements to the named style and only
+    // save the final set into each "child" style.
+    if (val == "clear") {
+        readNext();
+        READ_EPILOGUE
+    }
+
     body->startElement("style:tab-stop");
-    body->addAttribute("style:type", val);
+
+    // ST_TabJc (Custom Tab Stop Type) in {bar, center, clear,
+    // decimal, end, num, start} - there's (left, right) instead of
+    // (start, end) according to test files.
+    //
+    // ODF: The default value for this attribute is left.
+    if (!val.isEmpty()) {
+        if (val == "center") {
+            body->addAttribute("style:type", "center");
+        }
+        else if (val == "decimal") {
+            body->addAttribute("style:type", "char");
+        }
+        else if (val == "end" || val == "right") {
+            body->addAttribute("style:type", "right");
+        }
+        else if (val == "bar" || val == "num") {
+            kDebug() << "Unhandled tab justification code:" << val;
+        }
+    }
+
     bool ok = false;
     const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
     if (ok) {
         body->addAttributePt("style:position", value);
     }
+
+    // ST_TabTlc (Custom Tab Stop Leader Character) in {dot, heavy,
+    // hyphen, middleDot, none, underscore}
+    //
+    // ODF: The default value for this attribute is “ “ (U+0020).
+    QChar text;
     if (!leader.isEmpty()) {
-        if (leader == "dot") {
-            body->addAttribute("style:leader-text", ".");
+        if (leader == "dot" || leader == "middleDot") {
+            text = QChar('.');
+        }
+        else if (leader == "hyphen") {
+            text = QChar('-');
+        }
+        else if (leader == "underscore" || leader == "heavy") {
+            text = QChar('_');
+        }
+        else if (leader == "none") {
+            text = QChar();
         }
     }
+    body->addAttribute("style:leader-text", text);
     body->endElement(); // style:tab-stop
-
-//! @todo: support leader attribute
 
     readNext();
     READ_EPILOGUE
