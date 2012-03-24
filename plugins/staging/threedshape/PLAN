@@ -4,7 +4,7 @@
 
  * Load 3D scene
     + Load Scene Attributes                             Done
-    + Load Scene style
+    + Load Scene style                                  Done
     + Load Lightsources                                 Done
     + Load generic scene object stuff
        - Load generic object attributes
@@ -58,4 +58,4 @@
 
  * Edit a scene
 
----------------- Milestone 4: Full editing ----------------
+---------------- Milestone 4: Full 3D support ----------------

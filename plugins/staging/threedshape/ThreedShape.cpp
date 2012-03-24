@@ -110,7 +110,7 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
-    bool result = m_scene.loadOdf(sceneElement);
+    bool result = m_scene.loadOdf(sceneElement, context);
     kDebug(31000) << "Camera:" << m_scene.vrp() << m_scene.vpn() << m_scene.vup()
                   << m_scene.distance() << m_scene.projection() << m_scene.focalLength()
                   << "\nRendering:" << m_scene.shadowSlant()

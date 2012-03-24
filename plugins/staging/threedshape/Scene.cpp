@@ -31,12 +31,14 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <KoShape.h>
+//#include <KoShape.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 
 // Shape
 #include "utils.h"
-
+#include "GraphicsProperties.h"
 
 Scene::Scene()
 {
@@ -47,10 +49,29 @@ Scene::~Scene()
 }
 
 
-bool Scene::loadOdf(const KoXmlElement &sceneElement)
+bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
 {
     QString dummy;
 
+    // FIXME: Get the style and load it.
+    const KoOdfStylesReader &styles    = context.odfLoadingContext().stylesReader();
+    const QString            styleName = sceneElement.attributeNS(KoXmlNS::draw, "style-name", QString());
+    const KoXmlElement      *styleElement = styles.findStyle(styleName, "graphic");
+
+    kDebug(31000) << styleName << styleElement;
+
+    // Get the 
+    GraphicsProperties  sceneProperties;
+    if (styleElement && !styleElement->isNull()) {
+        kDebug(31000) << "loading style" << styleName;
+
+        // Look up graphic-properties in the style.
+        const KoXmlElement  properties = KoXml::namedItemNS(*styleElement, KoXmlNS::style, "graphic-properties");
+        kDebug(31000) << "isNull:" << properties.isNull();
+        if (!properties.isNull())
+            sceneProperties.loadOdf(properties);
+    }
+    
     // 1. Load the scene attributes.
 
     // Camera attributes

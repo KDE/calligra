@@ -44,9 +44,10 @@ class GraphicsProperties
 {
 public:
     enum Attribute {
-        AttributeFill = 0x0001, 
-        AttributeFillColor = 0x0002,
+        AttributeFill               = 0x0001, 
+        AttributeFillColor          = 0x0002,
         AttributeSecondaryFillColor = 0x0004,
+        // Many many more here.
     };
 
     enum Fill {
@@ -65,11 +66,11 @@ public:
      * @param style  the element containing the style to read from
      * @return true when border attributes were found
      */
-    bool loadOdf(const KoXmlElement &style);
+    bool loadOdf(const KoXmlElement &properties);
     void saveOdf(KoXmlWriter &writer) const;
 
     // getters
-    Fill fill() const                 { return m_fill; }
+    Fill   fill() const               { return m_fill; }
     QColor fillColor() const          { return m_fillColor; }
     QColor secondaryFillColor() const { return m_secondaryFillColor; }
 

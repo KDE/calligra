@@ -50,17 +50,17 @@ GraphicsProperties::~GraphicsProperties()
 }
 
 
-bool GraphicsProperties::loadOdf(const KoXmlElement &style)
+bool GraphicsProperties::loadOdf(const KoXmlElement &properties)
 {
     QString dummy;
     QColor  dummyColor;
 
-    // FIXME: Should we look up the graphic-properties element in the
-    //        style or should we assume that it's given to us in loadodf?
+    m_attributes = 0x0;
 
     // draw:fill
-    dummy = style.attributeNS(KoXmlNS::draw, "fill", "");
-    if (dummy.isEmpty()) {
+    dummy = properties.attributeNS(KoXmlNS::draw, "fill", "");
+    if (!dummy.isEmpty()) {
+        kDebug(31000) << "draw:fill" << dummy;
         m_attributes |= AttributeFill;
         if (dummy == "solid") {
             m_fill = Solid;
@@ -69,24 +69,31 @@ bool GraphicsProperties::loadOdf(const KoXmlElement &style)
     }
 
     // draw:fill-color
-    dummy = style.attributeNS(KoXmlNS::draw, "fill-color", "");
+    dummy = properties.attributeNS(KoXmlNS::draw, "fill-color", "");
     if (!dummy.isEmpty()) {
+        kDebug(31000) << "draw:fill-color" << dummy;
         dummyColor = QColor(dummy);
         if (dummyColor.isValid()) {
             m_fillColor = dummyColor;
             m_attributes |= AttributeFillColor;
         }
+        else
+            return false;
     }
 
     // draw:secondary-fill-color
-    dummy = style.attributeNS(KoXmlNS::draw, "secondary-fill-color", "");
+    dummy = properties.attributeNS(KoXmlNS::draw, "secondary-fill-color", "");
     if (!dummy.isEmpty()) {
+        kDebug(31000) << "draw:secondary-fill-color" << dummy;
         dummyColor = QColor(dummy);
         if (dummyColor.isValid()) {
             m_secondaryFillColor = dummyColor;
             m_attributes |= AttributeSecondaryFillColor;
         }
     }
+
+    kDebug(31000) << "attributes:" << hex << m_attributes << dec;
+    return true;
 }
 
 void GraphicsProperties::saveOdf(KoXmlWriter &writer) const

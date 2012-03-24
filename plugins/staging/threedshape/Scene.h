@@ -34,6 +34,7 @@
 #include "Lightsource.h"
 
 class KoXmlWriter;
+class KoShapeLoadingContext;
 class KoShapeSavingContext;
 
 
@@ -55,7 +56,7 @@ public:
     Scene();
     ~Scene();
 
-    bool loadOdf(const KoXmlElement &sceneElement);
+    bool loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context);
     void saveOdf(KoXmlWriter &writer) const;
 
     // getters
