@@ -288,20 +288,6 @@ protected slots:
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
-#ifndef NDEBUG
-    void slotPrintDebug();
-    void slotPrintSelectedDebug();
-    void slotPrintCalendarDebug();
-    void slotPrintTestDebug();
-    void slotToggleDebugInfo();
-#else
-    static void slotPrintDebug() { };
-    static void slotPrintSelectedDebug() { };
-    static void slotPrintCalendarDebug() { };
-    static void slotPrintTestDebug() { };
-    static void slotToggleDebugInfo() { };
-#endif
-
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );

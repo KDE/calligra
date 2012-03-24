@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 
 #include "kptaccountsview.h"
 #include "kptaccountsmodel.h"
+#include "kptdebug.h"
 
 #include <QCheckBox>
 #include <QDateTime>
@@ -29,7 +30,6 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -81,7 +81,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
 
 void AccountsviewConfigDialog::slotOk()
 {
-    kDebug();
+    kDebug(planDbg());
     m_view->setPeriodType( m_panel->ui_periodBox->currentIndex() );
     m_view->setCumulative( m_panel->ui_cumulative->isChecked() );
     m_view->setShowMode( m_panel->ui_showBox->currentIndex() );

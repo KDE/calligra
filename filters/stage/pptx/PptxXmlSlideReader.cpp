@@ -491,7 +491,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
-    // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
+    // m_currentDrawStyle defined in "MsooXmlCommonReader.h"
     m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
 
     MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
@@ -628,6 +628,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
         body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
+        body->addAttribute("xml:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
@@ -1476,8 +1477,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
-    MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
-
     bool potentiallyAddToLayoutFrames = false;
 
     QBuffer* shapeBuf = 0;
@@ -1518,9 +1517,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
                 potentiallyAddToLayoutFrames = false;
             }
             if (m_context->type == SlideLayout) {
-                // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
-                // An alternative approach is to put these to masterslides, but it could in practice mean that there are
-                // slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
+                // Checking, whether we are in layout. If yes, we may have to forward some shapes to slides.
+                // An alternative approach is to put these to masterslides, but it could in practice mean
+                // that there are slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
                 if (potentiallyAddToLayoutFrames) {
                     potentiallyAddToLayoutFrames = false;
                     if (!d->phRead) {
@@ -1541,7 +1540,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
-    placeholderElWriterSetter.release();
+
     delete m_placeholderElWriter;
     m_placeholderElWriter = 0;
 
@@ -3015,11 +3014,7 @@ PptxXmlSlideReader::processParagraphSpacing(const qreal margin, const qreal font
     return (margin * lineHeight) / 100;
 }
 
-#define blipFill_NS "a"
-
 // END NAMESPACE p
-
-// BEGIN NAMESPACE a
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"

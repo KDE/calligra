@@ -108,7 +108,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
-    //kDebug()<<"Estimate:"<<task.estimate()->expected().toString();
+    //kDebug(planDbg())<<"Estimate:"<<task.estimate()->expected().toString();
     setEstimate(task.estimate()->expectedEstimate());
     setOptimistic(task.estimate()->optimisticRatio());
     setPessimistic(task.estimate()->pessimisticRatio());

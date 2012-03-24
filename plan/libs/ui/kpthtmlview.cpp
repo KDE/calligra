@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 #include <kxmlguifactory.h>
 #include <khtmlview.h>
 
-#include <kdebug.h>
+#include "kptdebug.h"
 
 namespace KPlato
 {
@@ -77,12 +77,12 @@ void HtmlView::updateReadWrite( bool /*readwrite */)
 
 void HtmlView::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
 }
 
 void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
 void HtmlView::slotEnableActions( bool on )

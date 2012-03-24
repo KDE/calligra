@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006-2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006-2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
 #include "kptrecalculatedialog.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -53,7 +54,7 @@
 
 #include <KMenu>
 #include <KToggleAction>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -74,10 +75,10 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
 
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    //kDebug()<<sel.indexes().count();
+    //kDebug(planDbg())<<sel.indexes().count();
     foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) {
         Q_UNUSED(i);
-        //kDebug()<<i.row()<<","<<i.column();
+        //kDebug(planDbg())<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -85,7 +86,7 @@ void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemS
 
 void ScheduleTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    //kDebug()<<current.row()<<","<<current.column();
+    //kDebug(planDbg())<<current.row()<<","<<current.column();
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
     // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
@@ -105,7 +106,7 @@ ScheduleManager *ScheduleTreeView::currentManager() const
 QModelIndexList ScheduleTreeView::selectedRows() const
 {
     QModelIndexList lst = selectionModel()->selectedRows();
-    qDebug()<<lst;
+    kDebug(planDbg())<<lst;
     return lst;
 }
 
@@ -177,7 +178,7 @@ void ScheduleEditor::draw()
 
 void ScheduleEditor::setGuiActive( bool activate )
 {
-    //kDebug()<<activate;
+    //kDebug(planDbg())<<activate;
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->currentIndex().isValid() ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
@@ -186,24 +187,24 @@ void ScheduleEditor::setGuiActive( bool activate )
 
 void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug()<<name;
+    kDebug(planDbg())<<name;
     emit requestPopupMenu( name, pos );
 }
 
 void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
 void ScheduleEditor::slotSelectionChanged( const QModelIndexList /*list*/)
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     // Note: Don't use list as it includes all columns in a row
     QModelIndexList lst = m_view->selectedRows(); // gets column 0 in each row (should be 1 or 0 rows)
     if ( lst.count() == 1 ) {
@@ -218,7 +219,7 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList /*list*/)
 
 void ScheduleEditor::updateActionsEnabled( const QModelIndex &index )
 {
-    kDebug()<<index;
+    kDebug(planDbg())<<index;
     slotEnableActions();
 }
 
@@ -315,7 +316,7 @@ void ScheduleEditor::setupGui()
 
 void ScheduleEditor::updateReadWrite( bool readwrite )
 {
-    kDebug()<<readwrite;
+    kDebug(planDbg())<<readwrite;
     ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
     slotEnableActions();
@@ -323,7 +324,7 @@ void ScheduleEditor::updateReadWrite( bool readwrite )
 
 void ScheduleEditor::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_view, true, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -333,7 +334,7 @@ void ScheduleEditor::slotOptions()
 
 void ScheduleEditor::slotCalculateSchedule()
 {
-    //kDebug();
+    //kDebug(planDbg());
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm == 0 ) {
         return;
@@ -351,7 +352,7 @@ void ScheduleEditor::slotCalculateSchedule()
 
 void ScheduleEditor::slotAddSchedule()
 {
-    //kDebug();
+    //kDebug(planDbg());
     int idx = -1;
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
@@ -388,7 +389,7 @@ void ScheduleEditor::slotAddSchedule()
 
 void ScheduleEditor::slotAddSubSchedule()
 {
-    //kDebug();
+    //kDebug(planDbg());
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         int row = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : m_view->project()->indexOf( sm );
@@ -410,7 +411,7 @@ void ScheduleEditor::slotAddSubSchedule()
 
 void ScheduleEditor::slotBaselineSchedule()
 {
-    //kDebug();
+    //kDebug(planDbg());
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         emit baselineSchedule( m_view->project(), sm );
@@ -419,7 +420,7 @@ void ScheduleEditor::slotBaselineSchedule()
 
 void ScheduleEditor::slotDeleteSelection()
 {
-    //kDebug();
+    //kDebug(planDbg());
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         emit deleteScheduleManager( m_view->project(), sm );
@@ -436,14 +437,14 @@ void ScheduleEditor::slotMoveLeft()
                  index = m->project().indexOf( m ) + 1;
             }
         }
-        kDebug()<<sm->name()<<index;
+        kDebug(planDbg())<<sm->name()<<index;
         emit moveScheduleManager( sm, 0, index );
     }
 }
 
 bool ScheduleEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug();
+    kDebug(planDbg());
     return m_view->loadContext( model()->columnMap(), context );
 }
 
@@ -500,13 +501,13 @@ void ScheduleLogTreeView::slotShowDebug( bool on )
 
 void ScheduleLogTreeView::contextMenuEvent ( QContextMenuEvent *e )
 {
-    kDebug()<<indexAt(e->pos())<<" at"<<e->pos();
+    kDebug(planDbg())<<indexAt(e->pos())<<" at"<<e->pos();
     emit contextMenuRequested( indexAt( e->pos() ), e->globalPos() );
 }
 
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    //kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    //kDebug(planDbg())<<header()->logicalIndexAt(pos)<<" at"<<pos;
     KMenu *m = new KMenu( this );
     m->addAction( actionShowDebug );
     m->exec( mapToGlobal( pos ) );
@@ -515,10 +516,10 @@ void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 
 void ScheduleLogTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    //kDebug()<<sel.indexes().count();
+    //kDebug(planDbg())<<sel.indexes().count();
     foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) {
         Q_UNUSED(i);
-        //kDebug()<<i.row()<<","<<i.column();
+        //kDebug(planDbg())<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -526,7 +527,7 @@ void ScheduleLogTreeView::selectionChanged( const QItemSelection &sel, const QIt
 
 void ScheduleLogTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    //kDebug()<<current.row()<<","<<current.column();
+    //kDebug(planDbg())<<current.row()<<","<<current.column();
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
 //    selectionModel()->select( current, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
@@ -595,7 +596,7 @@ void ScheduleLogView::draw( Project &project )
 
 void ScheduleLogView::setGuiActive( bool activate )
 {
-    //kDebug()<<activate;
+    //kDebug(planDbg())<<activate;
     ViewBase::setGuiActive( activate );
 /*    if ( activate && !m_view->currentIndex().isValid() ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
@@ -648,17 +649,17 @@ void ScheduleLogView::slotScheduleSelectionChanged( ScheduleManager *sm )
 
 void ScheduleLogView::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
 void ScheduleLogView::slotSelectionChanged( const QModelIndexList list)
 {
-    kDebug()<<list.count();
+    kDebug(planDbg())<<list.count();
 }
 
 void ScheduleLogView::updateActionsEnabled( const QModelIndex &index )
 {
-    kDebug()<<index;
+    kDebug(planDbg())<<index;
 }
 
 void ScheduleLogView::slotEnableActions( const ScheduleManager * )
@@ -673,7 +674,7 @@ void ScheduleLogView::setupGui()
 
 void ScheduleLogView::updateReadWrite( bool readwrite )
 {
-    kDebug()<<readwrite;
+    kDebug(planDbg())<<readwrite;
     ViewBase::updateReadWrite( readwrite );
 //    m_view->setReadWrite( readwrite );
     //slotEnableActions( m_view->currentManager() );
@@ -681,7 +682,7 @@ void ScheduleLogView::updateReadWrite( bool readwrite )
 
 void ScheduleLogView::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
 }
 
 void ScheduleLogView::slotEditCopy()
@@ -691,7 +692,7 @@ void ScheduleLogView::slotEditCopy()
 
 bool ScheduleLogView::loadContext( const KoXmlElement &/*context */)
 {
-    kDebug();
+    kDebug(planDbg());
     return true;//m_view->loadContext( model()->columnMap(), context );
 }
 
@@ -706,7 +707,7 @@ void ScheduleLogView::saveContext( QDomElement &/*context */) const
 ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     : SplitterView( part, parent )
 {
-    kDebug()<<"---------------- Create ScheduleHandlerView ------------------";
+    kDebug(planDbg())<<"---------------- Create ScheduleHandlerView ------------------";
     m_scheduleEditor = new ScheduleEditor( part, this );
     m_scheduleEditor->setObjectName( "ScheduleEditor" );
     addView( m_scheduleEditor );
@@ -737,7 +738,7 @@ void ScheduleHandlerView::currentTabChanged( int )
 
 ViewBase *ScheduleHandlerView::hitView( const QPoint &/*glpos */)
 {
-    //kDebug()<<this<<glpos<<"->"<<mapFromGlobal( glpos )<<"in"<<frameGeometry();
+    //kDebug(planDbg())<<this<<glpos<<"->"<<mapFromGlobal( glpos )<<"in"<<frameGeometry();
     return this;
 }
 
@@ -766,7 +767,7 @@ QStringList ScheduleHandlerView::actionListNames() const
 
 QList<QAction*> ScheduleHandlerView::actionList( const QString name ) const
 {
-    //kDebug()<<name;
+    //kDebug(planDbg())<<name;
     QList<QAction*> lst;
     foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
         lst += v->actionList( name );

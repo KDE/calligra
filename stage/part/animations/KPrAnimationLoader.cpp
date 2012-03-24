@@ -178,12 +178,10 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                     QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
                     shape = pair.first;
                     textBlockData = pair.second.value<KoTextBlockData *>();
-                    kDebug() << "subitem text" << textBlockData;
                 }
                 else {
                     shape = context.shapeById(targetElement);
                 }
-                kDebug() << "shape:" << shape << "textBlockData" << textBlockData;
 
                 if (shape) {
                     shapeAnimation = new KPrShapeAnimation(shape, textBlockData);

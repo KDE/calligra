@@ -48,11 +48,11 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include <tables/part/View.h>
-#include <tables/Sheet.h>
-#include <tables/ui/Selection.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
+#include <sheets/part/View.h>
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
 #include <words/part/KWView.h>
 
 #include <KMimeType>
@@ -318,7 +318,7 @@ bool KoAbstractApplicationController::openDocuments(
     if (m_type == SpreadsheetDocument) {
         KoToolManager::instance()->addController(m_canvasController);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+        Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(m_view);
         m_cellTool = dynamic_cast<KoCellTool *>(
             KoToolManager::instance()->toolById(tablesView->selection()->canvas(), cellToolFactoryId()));
         tablesView->showTabBar(false);
@@ -596,7 +596,7 @@ int KoAbstractApplicationController::pageCount() const
     if (!m_doc)
         return 0;
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+        Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(m_doc);
         return kspreadDoc->map()->count();
     }
     return m_doc->pageCount();
@@ -700,13 +700,13 @@ void KoAbstractApplicationController::goToNextPage()
 
 void KoAbstractApplicationController::goToNextSheet()
 {
-    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+    Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(m_view);
     if (!tablesView)
         return;
-    Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
+    Calligra::Sheets::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+    Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(m_doc);
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->nextSheet(sheet);
@@ -727,13 +727,13 @@ void KoAbstractApplicationController::goToPreviousSlide()
 
 void KoAbstractApplicationController::goToPreviousSheet()
 {
-    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+    Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(m_view);
     if (!tablesView)
         return;
-    Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
+    Calligra::Sheets::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+    Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(m_doc);
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->previousSheet(sheet);
@@ -875,7 +875,7 @@ void KoAbstractApplicationController::addSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         setDocumentModified(true);
-        Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+        Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(m_view);
         tablesView->insertSheet();
     }
 }
@@ -884,12 +884,12 @@ bool KoAbstractApplicationController::removeCurrentSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         if (askQuestion(ConfirmSheetDeleteQuestion, i18n("Do you want to delete the sheet?")) == QMessageBox::Yes) {
-            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-            Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+            Calligra::Sheets::View *kspreadView = qobject_cast<Calligra::Sheets::View*>(m_view);
+            Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(m_doc);
             kspreadView->selection()->emitCloseEditor(false); // discard changes
             kspreadDoc->setModified(true);
             setDocumentModified(true);
-            Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
+            Calligra::Sheets::Sheet* tbl = kspreadView->activeSheet();
             KUndo2Command* command = new RemoveSheetCommand(tbl);
             kspreadDoc->addCommand(command);
             return true;
@@ -901,7 +901,7 @@ bool KoAbstractApplicationController::removeCurrentSheet()
 QString KoAbstractApplicationController::currentSheetName() const
 {
     if (documentType() == SpreadsheetDocument && m_view) {
-            Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+            Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(m_view);
         return tablesView->activeSheet()->sheetName();
     }
     return QString();
@@ -952,7 +952,7 @@ void KoAbstractApplicationController::setHorizontalScrollBarVisible(bool set)
 {
     if (canvasControllerWidget())
         canvasControllerWidget()->setHorizontalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
-    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
+    Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(view());
     if (tablesView) {
 //! @todo not enough
 // this breaks panning!        tablesView->showHorizontalScrollBar(set);
@@ -963,7 +963,7 @@ void KoAbstractApplicationController::setVerticalScrollBarVisible(bool set)
 {
     if (canvasControllerWidget())
         canvasControllerWidget()->setVerticalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
-    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
+    Calligra::Sheets::View *tablesView = qobject_cast<Calligra::Sheets::View*>(view());
     if (tablesView) {
 //! @todo not enough
 // this breaks panning!        tablesView->showVerticalScrollBar(false);

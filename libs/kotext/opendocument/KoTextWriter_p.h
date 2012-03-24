@@ -140,7 +140,7 @@ public:
                      QTextTable *currentTable = 0,
                      QTextList *currentList = 0);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
-    void saveChange(int changeId);
+    void saveAllChanges();
 
 private:
 
@@ -156,7 +156,6 @@ private:
         TableCell
     };
 
-    void saveChange(QTextCharFormat format);
 
     void saveODF12Change(QTextCharFormat format);
     QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
@@ -271,7 +270,7 @@ private:
 
     int splitEndBlockNumber;
     bool splitRegionOpened;
-    bool splitIdCounter;
+    int splitIdCounter;
 
     //For saving of delete-changes that result in a merge between two elements
     bool deleteMergeRegionOpened;

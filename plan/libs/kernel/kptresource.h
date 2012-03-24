@@ -524,6 +524,7 @@ public:
         bool load( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
         void save( QDomElement &element ) const;
     };
+    const WorkInfoCache &workInfoCache() const { return m_workinfocache; }
 
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
@@ -884,11 +885,6 @@ public:
 private:
     Task *m_task;
     QList<ResourceGroupRequest*> m_requests;
-
-#ifndef NDEBUG
-public:
-    void printDebug( const QString& ident );
-#endif
 };
 
 }  //KPlato namespace

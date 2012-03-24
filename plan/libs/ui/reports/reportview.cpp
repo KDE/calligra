@@ -1,7 +1,7 @@
 /*
  * KPlato Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2010, 2011 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2010, 2011, 2012 by Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@
 #include "reportexportpanel.h"
 #include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
+#include "kptdebug.h"
 
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
@@ -72,6 +73,7 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QActionGroup>
+
 
 namespace KPlato
 {
@@ -139,7 +141,7 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 ReportView::ReportView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-//    kDebug()<<"--------------- ReportView ------------------";
+//    kDebug(planDbg())<<"--------------- ReportView ------------------";
 
     m_preRenderer = 0;
     setObjectName("ReportView");
@@ -349,7 +351,7 @@ void ReportView::slotExportFinished( int result )
 
 void ReportView::exportToOdt( KoReportRendererContext &context )
 {
-    kDebug()<<"Export to odt:"<<context.destinationUrl;
+    kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
     KoReportRendererBase *renderer = new ReportODTRenderer();
 //    renderer = m_factory.createInstance("odt");
     if ( renderer == 0 ) {
@@ -363,7 +365,7 @@ void ReportView::exportToOdt( KoReportRendererContext &context )
 
 void ReportView::exportToOds( KoReportRendererContext &context )
 {
-    kDebug()<<"Export to ods:"<<context.destinationUrl;
+    kDebug(planDbg())<<"Export to ods:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("ods");
     if ( renderer == 0 ) {
@@ -377,7 +379,7 @@ void ReportView::exportToOds( KoReportRendererContext &context )
 
 void ReportView::exportToHtml( KoReportRendererContext &context )
 {
-    kDebug()<<"Export to html:"<<context.destinationUrl;
+    kDebug(planDbg())<<"Export to html:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmltable");
     if ( renderer == 0 ) {
@@ -391,7 +393,7 @@ void ReportView::exportToHtml( KoReportRendererContext &context )
 
 void ReportView::exportToXHtml( KoReportRendererContext &context )
 {
-    kDebug()<<"Export to xhtml:"<<context.destinationUrl;
+    kDebug(planDbg())<<"Export to xhtml:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmlcss");
     if ( renderer == 0 ) {
@@ -444,14 +446,14 @@ void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map 
 void ReportView::slotRefreshView()
 {
     if ( ! isVisible() ) {
-        kDebug()<<"Not visible";
+        kDebug(planDbg())<<"Not visible";
         return;
     }
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
     if ( ! m_preRenderer->isValid()) {
-        kDebug()<<"Invalid design document";
+        kDebug(planDbg())<<"Invalid design document";
         return;
     }
     ReportData *rd = createReportData( e );
@@ -485,7 +487,7 @@ void ReportView::createReportData( const QString &type, ReportData *rd )
 
 ReportData *ReportView::createReportData( const QString &type )
 {
-    kDebug()<<type;
+    kDebug(planDbg())<<type;
     //FIXME a smarter report data creator
     ReportData *r = 0;
     if ( type == "costbreakdown" || type =="costperformance" || type =="effortperformance" ) {
@@ -523,7 +525,7 @@ bool ReportView::loadContext( const KoXmlElement &context )
         QDomDocument doc( "context" );
         KoXml::asQDomElement( doc, e );
         m_design = doc;
-    } else kDebug()<<"Invalid context xml";
+    } else kDebug(planDbg())<<"Invalid context xml";
     slotRefreshView();
     return true;
 }
@@ -910,8 +912,8 @@ QDomDocument ReportDesignPanel::document() const
         m_sourceeditor->sourceData( e );
     }
     e.appendChild( m_designer->document() );
-/*    qDebug()<<"ReportDesignerView::document:";
-    qDebug()<<document.toString();*/
+/*    kDebug(planDbg())<<"ReportDesignerView::document:";
+    kDebug(planDbg())<<document.toString();*/
     return document;
 }
 

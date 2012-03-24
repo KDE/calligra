@@ -32,7 +32,7 @@ KAboutData * newKarbonAboutData()
 {
     KAboutData * aboutData = new KAboutData(
         "karbon", 0,
-        ki18n("Karbon14"),
+        ki18n("Karbon"),
         version,
         ki18n(description),
         KAboutData::License_LGPL,

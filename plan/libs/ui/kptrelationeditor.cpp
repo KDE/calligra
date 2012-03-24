@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -44,6 +45,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
+
 
 namespace KPlato
 {
@@ -75,13 +77,13 @@ void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelI
 RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    kDebug()<<"----------------- Create RelationEditor ----------------------";
+    kDebug(planDbg())<<"----------------- Create RelationEditor ----------------------";
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new RelationTreeView( this );
     l->addWidget( m_view );
-    //kDebug()<<m_view->actionSplitView();
+    //kDebug(planDbg())<<m_view->actionSplitView();
     setupGui();
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
@@ -116,19 +118,19 @@ void RelationEditor::setGuiActive( bool /*activate */)
 
 void RelationEditor::slotCurrentChanged(  const QModelIndex &/*curr*/, const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void RelationEditor::slotSelectionChanged( const QModelIndexList /*list*/)
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     slotEnableActions();
 }
 
 Relation *RelationEditor::currentRelation() const
 {
-    //kDebug();
+    //kDebug(planDbg());
     return m_view->currentRelation();
 }
 
@@ -145,7 +147,7 @@ void RelationEditor::slotContextMenuRequested( const QModelIndex& index, const Q
 
 void RelationEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -172,14 +174,14 @@ void RelationEditor::setupGui()
 
 void RelationEditor::slotSplitView()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
 }
 
 
 void RelationEditor::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     bool col0 = false;
     TreeViewBase *v = m_view->slaveView();
     if ( v->isHidden() ) {
@@ -195,7 +197,7 @@ void RelationEditor::slotOptions()
 
 void RelationEditor::slotAddRelation()
 {
-    kDebug();
+    kDebug(planDbg());
 }
 
 void RelationEditor::edit( QModelIndex i )
@@ -215,7 +217,7 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug();
+    kDebug(planDbg());
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 

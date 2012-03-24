@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,13 @@
 #include "kptdocuments.h"
 #include "kptnode.h"
 #include "kptxmlloaderobject.h"
+#include <kptdebug.h>
 
 #include "KoXmlReader.h"
 #include <KoStore.h>
 
 #include "QDomDocument"
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -37,7 +37,7 @@ Document::Document()
     m_sendAs( SendAs_None ),
     parent ( 0 )
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
@@ -46,12 +46,12 @@ Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendA
     parent ( 0 )
 {
     setUrl( url );
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Document::~Document()
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 bool Document::operator==( const Document &doc ) const
@@ -173,13 +173,13 @@ void Document::save(QDomElement &element) const
 Documents::Documents()
     : node( 0 )
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Documents::Documents( const Documents &docs )
     : node( 0 )
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
     foreach ( Document *doc, docs.documents() ) {
         m_docs.append( new Document( *doc ) );
     }
@@ -187,7 +187,7 @@ Documents::Documents( const Documents &docs )
 
 Documents::~Documents()
 {
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
     deleteAll();
 }
 
@@ -274,7 +274,7 @@ Document *Documents::findDocument( const KUrl &url ) const
 
 bool Documents::load( KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug();
+    kDebug(planDbg());
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -318,7 +318,7 @@ void Documents::saveToStore( KoStore *store ) const
             if ( doc->url().isLocalFile() ) {
                 path = doc->url().toLocalFile();
             }
-            kDebug()<<"Copy file to store: "<<path<<doc->url().fileName();
+            kDebug(planDbg())<<"Copy file to store: "<<path<<doc->url().fileName();
             store->addLocalFile( path, doc->url().fileName() );
 
         }

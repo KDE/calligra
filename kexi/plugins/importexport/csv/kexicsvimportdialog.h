@@ -35,6 +35,9 @@
 #include <QPixmap>
 #include <QTextStream>
 #include <QEvent>
+#if QT_VERSION >= 0x040700
+# include <QElapsedTimer>
+#endif
 
 #include <kdialog.h>
 
@@ -231,6 +234,12 @@ private:
     int m_prevColumnForSetText; //!< used for non-gui tracking of skipped clolumns,
                                 //!< so can be saved to the database,
                                 //!< e.g. first three columns are saved for ,,,"abc" line in the CSV data
+#if QT_VERSION >= 0x040700
+    QElapsedTimer m_elapsedTimer; //!< Used to update progress
+#else
+    QTime m_elapsedTimer; //!< Used to update progress
+#endif
+    qint64 m_elapsedMs;
 
 private slots:
     void fillTable();

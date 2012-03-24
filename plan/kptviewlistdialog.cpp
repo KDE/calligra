@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,17 +15,18 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "kptviewlistdialog.h"
 #include "kptviewlist.h"
 #include "kptview.h"
 #include "reports/reportview.h"
+#include <kptdebug.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -172,14 +174,14 @@ void AddViewPanel::viewtypeChanged( int idx )
 
 void AddViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -371,14 +373,14 @@ void EditViewPanel::changed()
 
 void EditViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void EditViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -471,7 +473,7 @@ void EditCategoryPanel::changed()
 
 void EditCategoryPanel::fillAfter()
 {
-    kDebug();
+    kDebug(planDbg());
     widget.insertAfter->clear();
     widget.insertAfter->addItem( i18n( "Top" ) );
     int idx = 0;
@@ -590,14 +592,14 @@ void AddReportsViewPanel::viewtypeChanged( int idx )
 
 void AddReportsViewPanel::categoryChanged()
 {
-    kDebug()<<widget.category->currentText();
+    kDebug(planDbg())<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddReportsViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug()<<cat;
+    kDebug(planDbg())<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );

@@ -248,18 +248,23 @@ public:
     Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc );
 
     /**
-     * A special purpose constructor which creates an invalid Style class which
-     * stores a copy of the provided CHPs.
+     * A special purpose constructor which creates an invalid Style
+     * class which stores a copy of the provided CHPs.
      */
     Style(const Word97::CHP& chp);
 
     ~Style();
 
     /**
-     * Additional validation of the style, which requires the whole stylesheet
-     * to be loaded to check the STD structure.  You MUST call this one after
-     * the stylesheet is loaded, else the isValid method informs only about the
-     * parsing errors.
+     * Additional validation of the style, which requires the whole
+     * stylesheet to be loaded to check the STD structure.  You MUST
+     * call this one after the stylesheet is loaded, else the isValid
+     * method informs only about the parsing errors.
+     *
+     * At the moment a number of selected repair procedures is
+     * included.  Remember that the filter is NOT prepared to process
+     * corrupt and invalid files.  If you relax the validation process
+     * a number of corrupt files will squeeze through.
      */
     void validate(const U16 istd, const U16 rglpstd_cnt,
                   const std::vector<Style*>& styles, U16& udsNum);

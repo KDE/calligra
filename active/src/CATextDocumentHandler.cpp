@@ -212,6 +212,16 @@ void CATextDocumentHandler::findMatchFound (const KoFindMatch& match)
     canvas()->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
 }
 
+int CATextDocumentHandler::totalPages() const {
+    return d->document->pageManager()->pageCount();
+}
+
+void CATextDocumentHandler::gotoPage(int pageNumber)
+{
+     d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
+     documentController()->canvasController()->ensureVisible(d->currentTextDocPage.rect(), true);
+}
+
 void CATextDocumentHandler::findNoMatchFound()
 {
     kDebug() << "Match for " << searchString() << " not found";
@@ -225,6 +235,11 @@ QString CATextDocumentHandler::bottomToolbarSource() const
 QString CATextDocumentHandler::topToolbarSource() const
 {
     return "TextDocumentEditingToolbar.qml";
+}
+
+QString CATextDocumentHandler::leftToolbarSource() const
+{
+    return "TextDocumentLeftToolbar.qml";
 }
 
 void CATextDocumentHandler::copy()

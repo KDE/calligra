@@ -52,6 +52,7 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
+class KisLayerComposition;
 
 namespace KisMetaData
 {
@@ -202,8 +203,15 @@ public:
 
     /**
      * Execute a rotate transform on all layers in this image.
+     * Image is resized to fit rotated image.
      */
-    void rotate(double radians);
+    void rotateImage(double radians);
+
+    /**
+     * Execute a rotate transform on on a subtree of this image.
+     * Image is not resized.
+     */
+    void rotateNode(KisNodeSP node, double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
@@ -487,6 +495,21 @@ public:
      */
     bool canReselectGlobalSelection();
 
+    /**
+     * Returns the layer compositions for the image
+     */
+    QList<KisLayerComposition*> compositions();
+
+    /**
+     * Adds a new layer composition, will be saved with the image
+     */
+    void addComposition(KisLayerComposition* composition);
+
+    /**
+     * Remove the layer compostion
+     */
+    void removeComposition(KisLayerComposition* composition);
+
 signals:
 
     /**
@@ -588,6 +611,8 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+                    bool resizeImage, double radians);
     void shearImpl(const QString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);

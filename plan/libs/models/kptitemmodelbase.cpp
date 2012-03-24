@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2007, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptdurationspinbox.h"
 #include "kptresourcemodel.h"
 #include "kptresourceallocationmodel.h"
+#include "kptdebug.h"
 
 #include <QApplication>
 #include <QComboBox>
@@ -40,7 +41,7 @@
 
 #include <KComboBox>
 #include <klineedit.h>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -123,7 +124,7 @@ void DateTimeCalendarDelegate::setModelData(QWidget *editor, QAbstractItemModel 
 
 void DateTimeCalendarDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
     editor->setGeometry(r);
@@ -173,7 +174,7 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
                 o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
                                                 ? QPalette::Highlight : QPalette::Window );
                 style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
-                //kDebug()<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
+                //kDebug(planDbg())<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
                 painter->restore();
             }
         } else {
@@ -214,7 +215,7 @@ QWidget *ProgressBarDelegate::createEditor( QWidget *parent, const QStyleOptionV
     Slider *slider = new Slider( parent );
     slider->setRange( 0, 100 );
     slider->setOrientation( Qt::Horizontal );
-    //kDebug()<<slider->minimumSizeHint()<<slider->minimumSize();
+    //kDebug(planDbg())<<slider->minimumSizeHint()<<slider->minimumSize();
     return slider;
 }
 
@@ -233,7 +234,7 @@ void ProgressBarDelegate::setModelData( QWidget *editor, QAbstractItemModel *mod
 void ProgressBarDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
 {
     editor->setGeometry( option.rect );
-    //kDebug()<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
+    //kDebug(planDbg())<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
 }
 
 Slider::Slider( QWidget *parent )
@@ -353,7 +354,7 @@ void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
     editor->setGeometry(r);
@@ -415,7 +416,7 @@ void RequieredResourceDelegate::setModelData(QWidget *editor, QAbstractItemModel
 
 void RequieredResourceDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     r.setWidth( qMax( 100, r.width() ) );
     editor->setGeometry(r);
@@ -455,7 +456,7 @@ void DurationSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 
 void DurationSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -494,7 +495,7 @@ void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -633,13 +634,13 @@ void ItemModelBase::setScheduleManager( ScheduleManager *sm )
 
 void ItemModelBase::slotLayoutChanged()
 {
-    kDebug();
+    kDebug(planDbg());
     emit layoutChanged();
 }
 
 void ItemModelBase::slotLayoutToBeChanged()
 {
-    kDebug();
+    kDebug(planDbg());
     emit layoutAboutToBeChanged();
 }
 

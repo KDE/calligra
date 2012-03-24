@@ -61,14 +61,14 @@ void DateTime::add(const Duration &duration) {
         DateTime x = addMSecs(duration.milliseconds());
         setDate( x.date() );
         setTime( x.time() );
-        //kDebug()<<toString();
+        //kDebug(planDbg())<<toString();
     }
 }
 
 void DateTime::subtract(const Duration &duration) {
     if (isValid() && duration.m_ms) {
         *this = addMSecs(-duration.m_ms);
-        //kDebug()<<toString();
+        //kDebug(planDbg())<<toString();
     }
 }
 
@@ -82,7 +82,7 @@ Duration DateTime::duration(const DateTime &dt) const {
 #endif
         dur.m_ms = x < 0 ? -x : x;
     }
-    //kDebug()<<dur.milliseconds();
+    //kDebug(planDbg())<<dur.milliseconds();
     return dur;
 }
 

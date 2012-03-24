@@ -76,9 +76,10 @@ class KoDocumentRdfPrivate
 public:
 
     KoDocumentRdfPrivate()
-            : model(Soprano::createModel())
+            : model(0)
             , prefixMapping(0)
     {
+        model = Soprano::createModel();
     }
 
     ~KoDocumentRdfPrivate()
@@ -1343,4 +1344,25 @@ bool KoDocumentRdf::backendIsSane()
     delete model;
     return true;
 
+}
+
+QStringList KoDocumentRdf::idrefList() const
+{
+    Q_ASSERT(d->model);
+    QStringList idrefs;
+
+    StatementIterator it = model()->listStatements(
+                               Node(),
+                               Node(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+                               Node(),
+                               Node());
+    if (!it.isValid()) {
+        return idrefs;
+    }
+
+    QList<Statement> allStatements = it.allElements();
+    foreach (Soprano::Statement s, allStatements) {
+        idrefs << s.object().toString();
+    }
+    return idrefs;
 }

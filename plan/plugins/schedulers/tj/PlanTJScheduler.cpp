@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009, 2010, 2011 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2010, 2011, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptcalendar.h"
+#include "kptdebug.h"
 
 #include "taskjuggler/taskjuggler.h"
 #include "taskjuggler/Project.h"
@@ -83,7 +84,7 @@ KLocale *PlanTJScheduler::locale() const
 
 void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttributes *object )
 {
-//     qDebug()<<"PlanTJScheduler::slotMessage:"<<msg;
+//     kDebug(planDbg())<<"PlanTJScheduler::slotMessage:"<<msg;
     Schedule::Log log;
     if ( object &&  object->getType() == CA_Task && m_taskmap.contains( static_cast<TJ::Task*>( object ) ) ) {
         log = Schedule::Log( static_cast<Node*>( m_taskmap[ static_cast<TJ::Task*>( object ) ] ), type, msg );
@@ -170,14 +171,14 @@ void PlanTJScheduler::run()
     logInfo( m_project, 0, "Start scheduling", 1 );
     bool r = solve();
     if ( ! r ) {
-        qDebug()<<"Scheduling failed";
+        kDebug(planDbg())<<"Scheduling failed";
         result = 2;
         logError( m_project, 0, i18nc( "@info/plain" , "Failed to schedule project" ) );
         setProgress( PROGRESS_MAX_VALUE );
         return;
     }
     if ( m_haltScheduling ) {
-        qDebug()<<"Scheduling halted";
+        kDebug(planDbg())<<"Scheduling halted";
         logInfo( m_project, 0, "Scheduling halted" );
         deleteLater();
         return;
@@ -200,7 +201,7 @@ bool PlanTJScheduler::check()
 
 bool PlanTJScheduler::solve()
 {
-    qDebug()<<"PlanTJScheduler::solve()";
+    kDebug(planDbg())<<"PlanTJScheduler::solve()";
     TJ::Scenario *sc = m_tjProject->getScenario( 0 );
     if ( ! sc ) {
         if ( locale() ) {
@@ -346,7 +347,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
-    qDebug()<<"taskFromTJ:"<<task<<task->name()<<cs->id();
+    kDebug(planDbg())<<"taskFromTJ:"<<task<<task->name()<<cs->id();
     task->setStartTime( DateTime( QDateTime::fromTime_t( job->getStart( 0 ) ) ) );
     task->setEndTime( DateTime( QDateTime::fromTime_t( job->getEnd( 0 ) ).addSecs( 1 ) ) );
     task->setDuration( task->endTime() - task->startTime() );
@@ -426,7 +427,7 @@ Duration PlanTJScheduler::calcPositiveFloat( Task *task )
 void PlanTJScheduler::calcPertValues( Task *t )
 {
     // NOTE: no need for milliseconds as TJ works with seconds
-    kDebug()<<t->name()<<t->startTime()<<t->endTime();
+    kDebug(planDbg())<<t->name()<<t->startTime()<<t->endTime();
     qint64 startfloat = 0, freefloat = 0, negativefloat = 0;
     foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
         qint64 f = (qint64)(r->parent()->endTime().secsTo( t->startTime() ) - r->lag().seconds());
@@ -466,7 +467,7 @@ bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
     if ( m_resourcemap.values().contains( r ) ) {
-        kDebug()<<r->name()<<"already exist";
+        kDebug(planDbg())<<r->name()<<"already exist";
         return m_resourcemap.key( r );
     }
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
@@ -547,7 +548,7 @@ TJ::Task *PlanTJScheduler::addTask( KPlato::Task *task )
 
 void PlanTJScheduler::addTasks()
 {
-    kDebug();
+    kDebug(planDbg());
     QList<Node*> list = m_project->allNodes();
     for (int i = 0; i < list.count(); ++i) {
         Node *n = list.at(i);
@@ -681,7 +682,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
 
 void PlanTJScheduler::addRequests()
 {
-    kDebug();
+    kDebug(planDbg());
     QMap<TJ::Task*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -690,7 +691,7 @@ void PlanTJScheduler::addRequests()
 
 void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
 {
-    kDebug();
+    kDebug(planDbg());
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         job->setMilestone( true );
         job->setDuration( 0, 0.0 );

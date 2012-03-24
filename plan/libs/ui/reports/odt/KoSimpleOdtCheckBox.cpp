@@ -1,6 +1,6 @@
 /*
    KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,8 @@
 #include <QImage>
 
 #include <kmimetype.h>
-#include <kdebug.h>
+
+#include "kptdebug.h"
 
 KoSimpleOdtCheckBox::KoSimpleOdtCheckBox(OROCheck *primitive)
     : KoSimpleOdtPrimitive(primitive)
@@ -63,7 +64,7 @@ void KoSimpleOdtCheckBox::createStyle(KoGenStyles &coll)
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
     gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
-    
+
     QPen pen;
     qreal weight = checkBox()->lineStyle().weight;
     if (weight < 1.0) {
@@ -81,6 +82,7 @@ void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("xml:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
@@ -167,15 +169,15 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
         }
     }
     painter.end();
-    
+
     KoStoreDevice device(store);
     bool ok = image.save(&device, "PNG");
     if (ok) {
         const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());
         manifestWriter->addManifestEntry(name,  mimetype);
-        kDebug()<<"manifest:"<<mimetype;
+        kDebug(planDbg())<<"manifest:"<<mimetype;
     }
     bool cl = store->close();
-    kDebug()<<ok<<cl;
+    kDebug(planDbg())<<ok<<cl;
     return ok && cl;
 }

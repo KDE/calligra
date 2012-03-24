@@ -74,6 +74,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_menuExtender(this, this)
         , m_slotTextChanged_enabled(true)
         , m_dataSourceLabel(0)
+        , m_length(0)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -121,6 +122,14 @@ void KexiDBTextEdit::slotTextChanged()
 {
     if (!m_slotTextChanged_enabled)
         return;
+
+    if (m_length > 0) {
+        if (toPlainText().length() > m_length) {
+            setPlainText(toPlainText().left(m_length));
+            moveCursorToEnd();
+        }
+    }
+
     signalValueChanged();
 }
 
@@ -187,8 +196,17 @@ void KexiDBTextEdit::clear()
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
-    if (!cinfo)
+    if (!cinfo) {
+        m_length = 0;
         return;
+    }
+
+    if (cinfo->field->isTextType()) {
+        if (!designMode()) {
+            m_length = cinfo->field->length();
+        }
+    }
+
     KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
 }
 

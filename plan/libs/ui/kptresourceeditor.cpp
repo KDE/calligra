@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -46,7 +47,6 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -182,7 +182,7 @@ void ResourceEditor::draw()
 
 void ResourceEditor::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -192,7 +192,7 @@ void ResourceEditor::setGuiActive( bool activate )
 
 void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
@@ -225,13 +225,13 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
 
 void ResourceEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceEditor::slotSelectionChanged( const QModelIndexList )
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     updateActionsEnabled();
 }
 
@@ -305,14 +305,14 @@ void ResourceEditor::setupGui()
 
 void ResourceEditor::slotSplitView()
 {
-    kDebug();
+    kDebug(planDbg());
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void ResourceEditor::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -323,7 +323,7 @@ void ResourceEditor::slotOptions()
 
 void ResourceEditor::slotAddResource()
 {
-    //kDebug();
+    //kDebug(planDbg());
     QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -357,7 +357,7 @@ void ResourceEditor::slotAddResource()
 
 void ResourceEditor::slotAddGroup()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
@@ -371,7 +371,7 @@ void ResourceEditor::slotAddGroup()
 void ResourceEditor::slotDeleteSelection()
 {
     QObjectList lst = m_view->selectedObjects();
-    //kDebug()<<lst.count()<<" objects";
+    //kDebug(planDbg())<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
         QModelIndex i = m_view->selectionModel()->currentIndex();
@@ -384,13 +384,13 @@ void ResourceEditor::slotDeleteSelection()
 
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<objectName();
+    kDebug(planDbg())<<objectName();
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
-    kDebug()<<objectName();
+    kDebug(planDbg())<<objectName();
     m_view->saveContext( model()->columnMap(), context );
 }
 
