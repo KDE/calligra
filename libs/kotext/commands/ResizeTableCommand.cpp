@@ -105,7 +105,7 @@ void ResizeTableCommand::redo()
             // make sure the style is set (could have been a default style)
             carsManager.setRowStyle(m_band, carsManager.rowStyle(m_band));
 
-            carsManager.rowStyle(m_band).setRowHeight(m_size);
+            carsManager.rowStyle(m_band).setMinimumRowHeight(m_size);
 
             m_newRowStyle = carsManager.rowStyle(m_band).clone();
         }

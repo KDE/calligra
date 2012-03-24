@@ -1127,7 +1127,6 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     } else {
         if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
             m_tableDragWithShift = event->modifiers() & Qt::ShiftModifier;
-            bool ctrlPressed = event->modifiers() & Qt::ControlModifier;
             if(m_tableDraggedOnce) {
                 canvas()->shapeController()->resourceManager()->undoStack()->undo();
             }
@@ -1148,7 +1147,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, -m_dx, 0.0);
             }
             if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()) {
-                if (!m_tableDragWithShift && !ctrlPressed) {
+                if (!m_tableDragWithShift) {
                     m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
                         m_tableDragInfo.tableColumnDivider,
                         m_tableDragInfo.tableTrailSize + m_dx, topCmd);
