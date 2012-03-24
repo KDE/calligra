@@ -24,6 +24,7 @@
 class KisDeformOptionsWidget;
 
 const QString DEFORM_AMOUNT = "Deform/deformAmount";
+const QString DEFORM_COLOR_MIX_AMOUNT = "Deform:colorMixAmount";
 const QString DEFORM_ACTION = "Deform/deformAction";
 const QString DEFORM_USE_BILINEAR = "Deform/bilinear";
 const QString DEFORM_USE_MOVEMENT_PAINT = "Deform/useMovementPaint";
@@ -42,7 +43,7 @@ public:
     bool useMovementPaint() const;
     bool useCounter() const;
     bool useOldData() const;
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

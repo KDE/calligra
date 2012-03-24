@@ -41,6 +41,7 @@ class DeformProperties
 public:
     int action;
     qreal deformAmount;
+    qreal colorAmount;
     bool useBilinear;
     bool useCounter;
     bool useOldData;
@@ -178,6 +179,7 @@ public:
     void oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos);
     void setSizeProperties(KisBrushSizeProperties * properties){ m_sizeProperties = properties; }
     void setProperties(DeformProperties * properties){ m_properties = properties; }
+    void setPaintColor(const KoColor &color) { m_paintColor = color; }
     void initDeformAction();
     QPointF hotSpot(qreal scale, qreal rotation);
 
@@ -220,6 +222,8 @@ private:
 
     DeformProperties * m_properties;
     KisBrushSizeProperties * m_sizeProperties;
+
+    KoColor m_paintColor;
 };
 
 

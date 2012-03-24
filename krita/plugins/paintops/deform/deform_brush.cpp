@@ -110,7 +110,7 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
 void DeformBrush::initDeformAction()
 {
     DeformModes mode = DeformModes(m_properties->action-1);
-    
+
     switch(mode){
         case GROW:
         case SHRINK:
@@ -217,10 +217,10 @@ bool DeformBrush::setupAction(DeformModes mode,const QPointF& pos)
     return true;
 }
 
-KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab, 
-                                             KisPaintDeviceSP layer, 
-                                             qreal scale, 
-                                             qreal rotation, 
+KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
+                                             KisPaintDeviceSP layer,
+                                             qreal scale,
+                                             qreal rotation,
                                              QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
@@ -271,13 +271,24 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal bcosa = cos(rotation);
     qreal bsina = sin(rotation);
 
-    
+
     mask->setRect(dab->bounds());
     mask->initialize();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
     KoColor pixel(dab->colorSpace());
-    
+
+    KoMixColorsOp * mixer = 0;
+    const quint8* pixels[2];
+    qint16 weights[2];
+    if (m_properties->colorAmount > 0.0) {
+        mixer = dab->colorSpace()->mixColorsOp();
+        // color to mix in
+        pixels[1] = m_paintColor.data();
+    }
+
+
+
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
@@ -312,15 +323,26 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             maskX = bcosa * rmaskX - bsina * rmaskY;
             maskY = bsina * rmaskX + bcosa * rmaskY;
 
+
             maskX += pos.x();
             maskY += pos.y();
 
             movePixel(maskX, maskY, dabPointer);
+
+            // mix some color in here if mix amount is > 0.0
+            if (mixer) {
+                qreal weight = pow(distance, m_properties->colorAmount);
+                pixels[0] = dabPointer;
+                weights[0] = (weight * 255);
+                weights[1] = (255 - weights[0]);
+                mixer->mixColors(pixels, weights, 2, dabPointer);
+            }
+            // move on
             dabPointer += m_pixelSize;
-            
+
             *maskPointer = OPACITY_OPAQUE_U8;
             maskPointer += maskPixelSize;
-            
+
         }
     }
     m_counter++;

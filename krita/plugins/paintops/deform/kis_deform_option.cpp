@@ -24,9 +24,12 @@ public:
     KisDeformOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
-        
+
         deformAmount->setRange(0.0,1.0,2);
         deformAmount->setValue(0.20);
+
+        colorAmount->setRange(0.0,1.0,2);
+        colorAmount->setValue(0.00);
     }
 };
 
@@ -37,6 +40,7 @@ KisDeformOption::KisDeformOption()
     m_options = new KisDeformOptionsWidget();
 
     connect(m_options->deformAmount, SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
+    connect(m_options->colorAmount, SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
     connect(m_options->interpolationChBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useCounter, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useOldData, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
@@ -49,7 +53,7 @@ KisDeformOption::KisDeformOption()
     connect(m_options->lensBtn, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->lensOutBtn, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->colorBtn, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    
+
     setConfigurationPage(m_options);
 }
 
@@ -61,6 +65,7 @@ KisDeformOption::~KisDeformOption()
 void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * config)
 {
     m_options->deformAmount->setValue(config->getDouble(DEFORM_AMOUNT));
+    m_options->colorAmount->setValue(config->getDouble(DEFORM_COLOR_MIX_AMOUNT));
     m_options->interpolationChBox->setChecked(config->getBool(DEFORM_USE_BILINEAR));
     m_options->useCounter->setChecked(config->getBool(DEFORM_USE_COUNTER));
     m_options->useOldData->setChecked(config->getBool(DEFORM_USE_OLD_DATA));
@@ -89,6 +94,7 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * conf
 void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
     config->setProperty(DEFORM_AMOUNT, m_options->deformAmount->value());
+    config->setProperty(DEFORM_COLOR_MIX_AMOUNT, m_options->colorAmount->value());
     config->setProperty(DEFORM_ACTION, deformAction());
     config->setProperty(DEFORM_USE_BILINEAR, m_options->interpolationChBox->isChecked());
     config->setProperty(DEFORM_USE_COUNTER, m_options->useCounter->isChecked());

@@ -62,11 +62,14 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_properties.useBilinear = settings->getBool(DEFORM_USE_BILINEAR);
     m_properties.useCounter = settings->getBool(DEFORM_USE_COUNTER);
     m_properties.useOldData = settings->getBool(DEFORM_USE_OLD_DATA);
+    m_properties.colorAmount = settings->getDouble(DEFORM_COLOR_MIX_AMOUNT);
 
     m_deformBrush.setProperties( &m_properties );
     m_deformBrush.setSizeProperties( &m_sizeProperties );
 
     m_deformBrush.initDeformAction();
+
+    m_deformBrush.setPaintColor(painter->paintColor());
 
     m_dev = source();
 

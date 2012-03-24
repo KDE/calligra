@@ -23,18 +23,49 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="deformLabel">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
+   <item row="3" column="0">
+    <layout class="QVBoxLayout" name="qualityLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
      </property>
-     <property name="text">
-      <string>Deform Mode</string>
+     <item>
+      <widget class="QCheckBox" name="interpolationChBox">
+       <property name="text">
+        <string>Bilinear interpolation</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="useCounter">
+       <property name="text">
+        <string>Use counter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="useOldData">
+       <property name="text">
+        <string>Use undeformed image</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0">
+    <spacer name="bottomSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>100</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="1" column="0">
     <layout class="QGridLayout" name="modesGrid">
@@ -99,6 +130,19 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="deformLabel">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Deform Mode</string>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -138,6 +182,20 @@
       </layout>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="colorAmountLayout" stretch="0,1">
+       <item>
+        <widget class="QLabel" name="ColorAmountLbl">
+         <property name="text">
+          <string>Color mixing</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KisDoubleSliderSpinBox" name="colorAmount" native="true"/>
+       </item>
+      </layout>
+     </item>
+     <item>
       <spacer name="middleSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -152,68 +210,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
-    <layout class="QVBoxLayout" name="qualityLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
-     <item>
-      <widget class="QCheckBox" name="interpolationChBox">
-       <property name="text">
-        <string>Bilinear interpolation</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="useCounter">
-       <property name="text">
-        <string>Use counter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="useOldData">
-       <property name="text">
-        <string>Use undeformed image</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0">
-    <spacer name="bottomSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>100</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
-  <zorder>deformLabel</zorder>
-  <zorder>growBtn</zorder>
-  <zorder>shrinkBtn</zorder>
-  <zorder>swirlCCWBtn</zorder>
-  <zorder>swirlCWBtn</zorder>
-  <zorder>moveBtn</zorder>
-  <zorder>colorBtn</zorder>
-  <zorder>lensOutBtn</zorder>
-  <zorder>lensBtn</zorder>
-  <zorder>deformAmountLbl</zorder>
-  <zorder>interpolationChBox</zorder>
-  <zorder>useCounter</zorder>
-  <zorder>useOldData</zorder>
-  <zorder>deformAmount</zorder>
-  <zorder>middleSpacer</zorder>
-  <zorder>topSpacer</zorder>
-  <zorder>interpolationChBox</zorder>
  </widget>
  <customwidgets>
   <customwidget>
