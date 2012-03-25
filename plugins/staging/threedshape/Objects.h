@@ -48,8 +48,9 @@ private:
 };
 
 
-class Sphere : protected Object3D
+class Sphere : public Object3D
 {
+public:
     Sphere();
     virtual ~Sphere();
 
@@ -65,8 +66,9 @@ private:
     QVector3D  m_size;
 };
 
-class Cube : protected Object3D
+class Cube : public Object3D
 {
+public:
     Cube();
     virtual ~Cube();
 

@@ -85,7 +85,7 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement)
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "size", "(1 1 1)");
     m_size = odfToVector3D(dummy);
 
-    kDebug(31000) << "sphere" << m_center << m_size;
+    kDebug(31000) << "Sphere:" << m_center << m_size;
     return true;
 }
 
@@ -127,7 +127,7 @@ bool Cube::loadOdf(const KoXmlElement &objectElement)
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "max-edge", "(1 1 1)");
     m_maxEdge = odfToVector3D(dummy);
 
-    kDebug(31000) << "cube" << m_minEdge << m_maxEdge;
+    kDebug(31000) << "Cube:" << m_minEdge << m_maxEdge;
     return true;
 }
 

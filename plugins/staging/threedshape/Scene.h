@@ -32,6 +32,7 @@
 
 // Shape
 #include "Lightsource.h"
+#include "Objects.h"
 
 class KoXmlWriter;
 class KoShapeLoadingContext;
@@ -91,6 +92,7 @@ private:
 
     // 2. The scene itself.
     QList<Lightsource>  m_lights;
+    QList<Object3D>     m_objects; // value list. If necessary, we can make object3d shared.
 };
 
 
