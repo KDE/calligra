@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY tables "<application>Calligra Tables</application>">
+  <!ENTITY sheets "<application>Calligra Sheets</application>">
   <!ENTITY words "<application>Calligra Words</application>">
   <!ENTITY stage "<application>Calligra Stage</application>">
-  <!ENTITY kappname "&tables;">
+  <!ENTITY kappname "&sheets;">
   <!ENTITY package "calligra">
   <!ENTITY calligra "Calligra">
   <!ENTITY % addindex "IGNORE">
@@ -20,7 +20,7 @@
 <book lang="&language;">
 
 <bookinfo>
-<title>The &tables; Handbook</title>
+<title>The &sheets; Handbook</title>
 
 <!-- MAINTAINED BY raphael.langerhorst@kdemail.net -->
 
@@ -66,14 +66,14 @@
 
 <abstract>
 <para>
-&tables; is a full featured spreadsheet program.
+&sheets; is a full featured spreadsheet program.
 </para>
 </abstract>
 
 <keywordset>
 <keyword>KDE</keyword>
 <keyword>Calligra</keyword>
-<keyword>Tables</keyword>
+<keyword>Sheets</keyword>
 <keyword>Spreadsheet</keyword>
 </keywordset>
 
@@ -90,7 +90,7 @@ url="http://docs.kde.org/development/en/calligra/tables/index.html">http://docs.
 for updated versions of this document.</para></important>
 
 <para>
-&tables; is a full featured spreadsheet program. It is part of the &calligra;
+&sheets; is a full featured spreadsheet program. It is part of the &calligra;
 productivity suite for &kde;.</para>
 <para>Other &calligra; applications include &words;, (word processing),
 &stage; (slide presentation creator) among others.</para>
@@ -121,10 +121,10 @@ http://www.calligra.org</ulink></para>
 <title>Credits and License</title>
 
 <para>
-&tables;
+&sheets;
 </para>
 <para>
-Program copyright 1998-2011, The &tables; Team:
+Program copyright 1998-2011, The &sheets; Team:
 </para>
 <para>
 <itemizedlist>
@@ -178,11 +178,11 @@ Documentation copyright 2002 &Pamela.Roberts;
 <appendix id="installation">
 <title>Installation</title>
 
-<para>&tables; is part of &kde;'s &calligra; package and uses various
+<para>&sheets; is part of &kde;'s &calligra; package and uses various
 &calligra; libraries. &calligra; itself is part of &kde; and depends on the
 general &kde; libraries.</para>
 <para>For instructions on acquiring and installing &kde;, &calligra; and
-&tables; please visit
+&sheets; please visit
 <ulink url="http://www.kde.org">http://www.kde.org</ulink> and
 <ulink url="http://www.calligra.org">http://www.calligra.org</ulink>.</para>
 

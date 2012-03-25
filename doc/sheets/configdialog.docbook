@@ -11,12 +11,12 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
-<title>The &tables; Configuration Dialog Box</title>
+<title>The &sheets; Configuration Dialog Box</title>
 
 <para>Selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>
-Configure Tables...</guimenuitem></menuchoice> opens a dialog box 
+Configure Sheets...</guimenuitem></menuchoice> opens a dialog box
 with several pages, selected with the icons at the left of the dialog box, 
-which allow you to change many aspects of &tables;'s operation.</para>
+which allow you to change many aspects of &sheets;'s operation.</para>
 
 <sect1 id="configinterface">
 <title>Interface</title>
@@ -146,7 +146,7 @@ this feature altogether by choosing <guilabel>Do not save automatically</guilabe
 <sect1 id="configmisc">
 <title><guilabel>Misc</guilabel></title>
 
-<para>The <guilabel>Misc</guilabel> page of &tables;'s configuration 
+<para>The <guilabel>Misc</guilabel> page of &sheets;'s configuration 
 dialog box contains the following items;</para>
 
 <para><variablelist>
@@ -160,7 +160,7 @@ range of options in the drop down selection box.
 <varlistentry>
 <term><guilabel>Show error message for invalid formulae</guilabel></term>
 <listitem><para>If this box is checked a message box will pop up when what 
-you have entered into a cell cannot be understood by &tables;.
+you have entered into a cell cannot be understood by &sheets;.
 </para></listitem>
 </varlistentry>
 
@@ -179,7 +179,7 @@ marked by a small red triangle at the top right corner.
 <sect1 id="configpagelayout">
 <title><guilabel>Page Layout</guilabel></title>
 
-<para>This page of &tables;'s configuration dialog box lets you set up the 
+<para>This page of &sheets;'s configuration dialog box lets you set up the 
 default page size, orientation and units used by the printer and by the 
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
 <guimenuitem>Page Layout...</guimenuitem> from the <guimenu>Format
@@ -219,7 +219,7 @@ tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTr
 <!--FIXME link to sonnet handbook -> building blocks-->
 <sect1 id="configspelling">
 <title>Spelling</title>
-<para>This page lets you configure the behavior of &tables;'s spell 
+<para>This page lets you configure the behavior of &sheets;'s spell 
 checker.</para>
 <para>For more information please refer to the 
 <ulink url="help:kcontrol/spellchecking">Spell Checker</ulink> documentation.</para>
@@ -228,7 +228,7 @@ checker.</para>
 <varlistentry>
 <term><guilabel>Create root/affix combinations not in dictionary</guilabel>
 </term>
-<listitem><para>If this box is checked then when &tables; finds a word in 
+<listitem><para>If this box is checked then when &sheets; finds a word in 
 the document which it does not recognize but which consists of a recognized
 root word plus a recognized prefix or suffix it will accept it, whereas if
 the box is not checked the spell checker will reject it.

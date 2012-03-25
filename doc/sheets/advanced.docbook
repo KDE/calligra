@@ -18,12 +18,12 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
-<title>Advanced &tables;</title>
+<title>Advanced &sheets;</title>
 <sect1 id="series">
 <title>Series</title>
 <para>When constructing a spreadsheet you often need to include a series of
 values, such as 10, 11, 12..., in a row or column. There are several ways you
-can do this in &tables;.</para>
+can do this in &sheets;.</para>
 <para>For a simple short series such as 5, 6, 7, 8... the <quote>Drag and Copy
 </quote> method is the simplest. Enter the starting value into the starting
 cell and the next value of the series into an adjacent cell.
@@ -44,7 +44,7 @@ start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10,
 12..., the step value in this example being the series 2, 1, 2, 1...</para>
 
  <!--FIXME does not work here -->
-<para>&tables; also recognizes some special <quote>series</quote> such as
+<para>&sheets; also recognizes some special <quote>series</quote> such as
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
 (note the capitalization) then Drag and Copy it down. To see what special series 
 are available, and perhaps create your own, select <menuchoice><guimenu>Tools</guimenu>
@@ -67,7 +67,7 @@ Drag and Copy cell A2 down.</para>
 <title>Formulae</title>
 <sect2 id="builtin">
 <title>Built in Functions</title>
-<para>&tables; has a huge range of built in mathematical and other 
+<para>&sheets; has a huge range of built in mathematical and other 
 <link linkend="functions">functions</link> 
 that can be used in a formula cell. They can be seen and accessed by selecting 
 a cell then choosing <guimenuitem>Function...</guimenuitem> from the 
@@ -227,18 +227,18 @@ Copy</guimenuitem> then <guimenuitem>Special Paste...</guimenuitem> <guilabel>
 Addition</guilabel> into cells A10 to D15, 5 will be added to A10:A15 and 
 C10:C15, and 10 to B10:B15 and D10:D15.</para>
 <para>Note that a modifier value can be a formula as well as a simple numeric 
-value. If it is a formula then &tables; will adjust the cell references as 
+value. If it is a formula then &sheets; will adjust the cell references as 
 for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
 </sect1>
 
 <sect1 id="goalseek">
 <title>Goal Seeking</title>
-<para>&tables; can be used to solve algebraic expressions such as <emphasis>
+<para>&sheets; can be used to solve algebraic expressions such as <emphasis>
 x + x^2 = 4</emphasis> or <emphasis>For what value of x does x + x squared 
 equal 4 ?</emphasis></para>
 <para>For this example you could enter <userinput>=A2+A2*A2</userinput>
 into A1 then either try different values in A2 until the result in A1 is as 
-close as you wish to <emphasis>4</emphasis> or, preferably, use &tables;'s  
+close as you wish to <emphasis>4</emphasis> or, preferably, use &sheets;'s  
 <guimenuitem>Goal Seek...</guimenuitem> feature which automatically adjusts the 
 value in one cell to try to make the value in another cell as close as 
 possible to a target value.</para>
@@ -260,7 +260,7 @@ calculation. When it finishes and if it has found a solution press the
 
 <sect1 id="sheets">
 <title>Using more than one Worksheet</title>
-<para>When you start a new, empty, document with &tables; it will create a 
+<para>When you start a new, empty, document with &sheets; it will create a 
 number of blank worksheets. The number of sheets it creates is determined 
 by the selected template.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
@@ -375,11 +375,11 @@ inserted data to appear, then choosing <guimenuitem>From Text File...</guimenuit
 or <guimenuitem>From Clipboard...</guimenuitem> from the 
 <menuchoice><guimenu>Insert</guimenu><guisubmenu>External Data</guisubmenu>
 </menuchoice> sub menu.</para>
-<para>In both cases &tables; will assume that the data is in
+<para>In both cases &sheets; will assume that the data is in
 <acronym>CSV</acronym> form and will open a
 dialog box allowing you to control how the data is extracted from the file or
 clipboard and placed into the worksheet cells.</para>
-<para>If support for it has been included in your system, &tables; can also
+<para>If support for it has been included in your system, &sheets; can also
 insert data from a <acronym>SQL</acronym> database into a worksheet. This is
 done by using the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
 External Data</guisubmenu><guimenuitem>From Database...</guimenuitem>
@@ -416,9 +416,9 @@ application when clicked on.
 </para></listitem>
 
 <listitem><para>The <guilabel>Cell</guilabel> type of link cell holds a 
-&tables; cell reference, entered in the <guilabel>Cell or Named Area</guilabel> text box. 
+&sheets; cell reference, entered in the <guilabel>Cell or Named Area</guilabel> text box. 
 <mousebutton>Left</mousebutton> clicking on this type of link cell causes 
-&tables;'s focus to move to the target cell.
+&sheets;'s focus to move to the target cell.
 </para></listitem>
 </itemizedlist>
 
@@ -429,11 +429,11 @@ dialog. This is the text that appears in the cell.</para>
 
 <sect1 id="validcheck">
 <title>Validity Checking</title>
-<para>&tables; can automatically check the validity of entered data against 
+<para>&sheets; can automatically check the validity of entered data against 
 a number of criteria, and pop up a message box if the data is invalid.</para>
 <para>To enable this feature, select the cell(s) to be monitored and choose 
 <menuchoice><guimenu>Data</guimenu><guimenuitem>Validity...</guimenuitem>
-</menuchoice>. This will bring up &tables;'s <guilabel>Validity</guilabel> 
+</menuchoice>. This will bring up &sheets;'s <guilabel>Validity</guilabel> 
 dialog box which has three tabbed pages.</para>
 <para>In the <guilabel>Criteria</guilabel> page select what type of data is to 
 be considered valid from the <guilabel>Allow:</guilabel> combo box list then 
@@ -716,7 +716,7 @@ enabled in Cell Protection and the sheet is protected</phrase>
 <sect2 id="splitview">
 <title>Splitting the View</title>
 <para>If your spreadsheet is so large that you cannot see all of it at once, 
-splitting &tables;'s window into two or more views can help you work on it. 
+splitting &sheets;'s window into two or more views can help you work on it. 
 This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
 Split View</guimenuitem></menuchoice> which will split the current view into 
 two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
@@ -750,10 +750,10 @@ where you can enter any name you wish.</para>
 into the small text box at the left end of the Formula toolbar, overwriting the 
 cell reference that normally appears here.</para>
 <para>If you enter a name that has already been used into this text box 
-&tables;'s selection will change to show the named cell(s).</para>
+&sheets;'s selection will change to show the named cell(s).</para>
 <para>The <menuchoice><guimenu>Data</guimenu><guimenuitem>Named Areas...</guimenuitem>
 </menuchoice> option will give you a list of existing names 
-and let you change &tables;'s focus to any of them or let you remove a name.
+and let you change &sheets;'s focus to any of them or let you remove a name.
 </para>
 <para>Named cells are particularly useful in formulae as an alternative to 
 <link linkend="absolute"> absolute cell references</link> as the names can 
