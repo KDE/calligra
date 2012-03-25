@@ -65,4 +65,21 @@ private:
     QVector3D  m_size;
 };
 
+class Cube : protected Object3D
+{
+    Cube();
+    virtual ~Cube();
+
+    virtual bool loadOdf(const KoXmlElement &objectElement);
+    virtual void saveOdf(KoXmlWriter &writer) const;
+
+    // getters
+    QVector3D minEdge() const { return m_minEdge;   }
+    QVector3D maxEdge() const { return m_maxEdge; }
+
+private:
+    QVector3D  m_minEdge;
+    QVector3D  m_maxEdge;
+};
+
 #endif

@@ -49,7 +49,7 @@ Object3D::~Object3D()
 }
 
 
-bool Object3D::loadOdf(const KoXmlElement &lightElement)
+bool Object3D::loadOdf(const KoXmlElement &objectElement)
 {
     // FIXME: Load style, layer, Z-index, id.
 
@@ -85,6 +85,7 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement)
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "size", "(1 1 1)");
     m_size = odfToVector3D(dummy);
 
+    kDebug(31000) << "sphere" << m_center << m_size;
     return true;
 }
 
@@ -101,4 +102,47 @@ void Sphere::saveOdf(KoXmlWriter &writer) const
 
     writer.endElement(); // dr3d:sphere
 }
+
+
+// ================================================================
+//                             Cube
+
+
+Cube::Cube()
+{
+}
+
+Cube::~Cube()
+{
+}
+
+
+bool Cube::loadOdf(const KoXmlElement &objectElement)
+{
+    Object3D::loadOdf(objectElement);
+
+    QString dummy;
+    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(0 0 0)");
+    m_minEdge = odfToVector3D(dummy);
+    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "max-edge", "(1 1 1)");
+    m_maxEdge = odfToVector3D(dummy);
+
+    kDebug(31000) << "cube" << m_minEdge << m_maxEdge;
+    return true;
+}
+
+void Cube::saveOdf(KoXmlWriter &writer) const
+{
+    writer.startElement("dr3d:cube");
+
+    Object3D::saveOdf(writer);
+
+    writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
+                        .arg(m_minEdge.y()).arg(m_minEdge.z()));
+    writer.addAttribute("dr3d:max-edge", QString("(%1 %2 %3)").arg(m_maxEdge.x())
+                        .arg(m_maxEdge.y()).arg(m_maxEdge.z()));
+
+    writer.endElement(); // dr3d:cube
+}
+
 
