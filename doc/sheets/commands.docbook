@@ -99,7 +99,7 @@ line being separated by a comma, space, tab or other character,
 for example <emphasis>123, 456, 789, abcd, efgh</emphasis>. Such files
 are commonly called <quote><acronym>CSV</acronym></quote> (Comma Separated
 Values) files, even though the separating character may not be a comma.</para>
-<para>If you ask &tables; to open a text file it assumes that the file is
+<para>If you ask &sheets; to open a text file it assumes that the file is
 in <acronym>CSV</acronym> format and launches a dialog box that allows you to
 specify the delimiter (separating character) used by the file, and shows how
 the data items will be placed into different spreadsheet cells.</para>
@@ -133,7 +133,7 @@ The document does not become the exported file.
 <guimenu>File</guimenu>
 <guimenuitem>Create Template From Document...</guimenuitem>
 </menuchoice></term>
-<listitem><para>Create a &tables; <link linkend="templates">template</link>
+<listitem><para>Create a &sheets; <link linkend="templates">template</link>
 based on this document.
 </para></listitem>
 </varlistentry>
@@ -185,7 +185,7 @@ author.</action></para>
 <guimenu>File</guimenu>
 <guimenuitem>Close</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Close the current document but leave &tables; running.
+<listitem><para><action>Close the current document but leave &sheets; running.
 </action></para></listitem>
 </varlistentry>
 <varlistentry>
@@ -197,7 +197,7 @@ author.</action></para>
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quit</action> &tables;.</para></listitem>
+<listitem><para><action>Quit</action> &sheets;.</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -424,7 +424,7 @@ selection.
 <guimenu>View</guimenu>
 <guimenuitem>New View</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open a new instance of &tables;
+<listitem><para><action>Open a new instance of &sheets;
 with the same document.</action>
 </para></listitem>
 </varlistentry>
@@ -437,7 +437,7 @@ with the same document.</action>
 <guimenu>View</guimenu>
 <guimenuitem>Close All Views</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Close all open instances of &tables;</action>
+<listitem><para><action>Close all open instances of &sheets;</action>
 </para></listitem>
 </varlistentry>
 
@@ -474,7 +474,7 @@ contains two or more views)
 <guimenu>View</guimenu>
 <guimenuitem>Goto Cell...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Change &tables;'s focus to show defined cell.</action>
+<listitem><para><action>Change &sheets;'s focus to show defined cell.</action>
 </para></listitem>
 </varlistentry>
 -->
@@ -875,7 +875,7 @@ Validity Checking</link> for more details.
 <guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or amend the special series of words recognized 
-by &tables;.</action>
+  by &sheets;. These list can be used to insert special <link linkend="series">series</link> into the worksheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1012,7 +1012,7 @@ All Sheets of the current Document can be accessed through the Tab Bar.
 <guimenu>Settings</guimenu>
 <guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Configure the keyboard shortcuts used by &tables;.
+<listitem><para><action>Configure the keyboard shortcuts used by &sheets;.
 </action> See the section on <link linkend="configshort">configuring shortcuts
 </link> for more details.
 
@@ -1033,10 +1033,10 @@ information.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure &tables;...</guimenuitem>
+<guimenuitem>Configure &sheets;...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>General &tables; configuration.</action> See the 
-section on <link linkend="configdialog">&tables; configuration</link> for 
+<listitem><para><action>General &sheets; configuration.</action> See the 
+section on <link linkend="configdialog">&sheets; configuration</link> for 
 more details.
 </para></listitem>
 </varlistentry>
@@ -1315,7 +1315,7 @@ cell of the current selection of cells into the selected cell.</action>
 
 <sect1 id="othershort">
 <title>Other Shortcuts</title>
-<para>This section describes those &tables; shortcut keys used for operations 
+<para>This section describes those &sheets; shortcut keys used for operations 
 that do not appear in any of the menus.</para>
 
 <variablelist>

@@ -11,30 +11,30 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
-<title>&tables; Basics</title>
+<title>&sheets; Basics</title>
 
-<note><para>Like the rest of &kde;, &tables; is highly configurable, which can
+<note><para>Like the rest of &kde;, &sheets; is highly configurable, which can
 cause problems for readers trying to compare the text in a document such as
-this with what they see on the version of &tables; running on their desktop.
+this with what they see on the version of &sheets; running on their desktop.
 To cut down on some of the possibilities for confusion, it it suggested that
-when you first start to use &tables; you set the default options in all pages
-of the &tables; configuration dialog (obtained by selecting
+when you first start to use &sheets; you set the default options in all pages
+of the &sheets; configuration dialog (obtained by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-Tables...</guimenuitem></menuchoice>).
+Sheets...</guimenuitem></menuchoice>).
 </para></note>
 
 <sect1 id="starting">
 <title>Spreadsheets for Beginners</title>
 
 <para>This section attempts to explain by example what a spreadsheet program
-such as &tables; actually does, and why it is such a useful tool in any
+such as &sheets; actually does, and why it is such a useful tool in any
 situation where you have to deal with numbers. If you have already used a
 spreadsheet program you may wish to skip to the next section.</para>
 
-<para>The first thing to do is to start up &tables;. You can do this by
-<mousebutton>left</mousebutton> clicking on a &tables; icon if there is one
+<para>The first thing to do is to start up &sheets;. You can do this by
+<mousebutton>left</mousebutton> clicking on a &sheets; icon if there is one
 on your desktop or panel, or you can select
-<menuchoice><guimenu>Office</guimenu><guimenuitem>&tables;</guimenuitem>
+<menuchoice><guimenu>Office</guimenu><guimenuitem>&sheets;</guimenuitem>
 </menuchoice>
 from the &kmenu;.</para>
 
@@ -44,7 +44,7 @@ from the &kmenu;.</para>
 <imagedata fileref="newdocument.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>&tables; at first run</phrase>
+<phrase>&sheets; at first run</phrase>
 </textobject>
 </mediaobject>
 When it has started you will be given the choice of opening a recent
@@ -53,7 +53,7 @@ opening an existing document . Select the <guilabel>General</guilabel> category
 on the left and choose the <guilabel>Blank Worksheet</guilabel> template. Then
 click the <guibutton>Use This Template</guibutton> button.</para>
 
-<para>Looking at &tables; once it has started up, you will see a sheet of
+<para>Looking at &sheets; once it has started up, you will see a sheet of
 empty rectangular cells arranged in numbered rows and lettered columns. This
 is where you enter data or formula, text or charts.
 <mediaobject>
@@ -76,16 +76,16 @@ selection point to another cell.
 months, listing how much we think we will be spending for Food, Shelter,
 Clothing and any Other expenditure. Now select cell B7 (column B, row 7), 
 type in <userinput>=B2+B3+B4+B5</userinput> and press &Enter;. 
-Because it begins with a <keycap>=</keycap> symbol &tables; sees this as a 
+Because it begins with a <keycap>=</keycap> symbol &sheets; sees this as a 
 formula, something it has to calculate, in this case by adding together the 
 values in the 4 cells B2 to B5, and what is shown in the cell B7 is the result 
 of that calculation.</para>
 <para>You could enter a similar formula into cell C7, except that in this case
 it would have to be <userinput>=C2+C3+C4+C5</userinput>, but there is an
-easier way which is to Copy cell B7 and Paste it into C7. &tables; will
+easier way which is to Copy cell B7 and Paste it into C7. &sheets; will
 automatically adjust the cell references from B.. to C.. when the Paste is
 done.</para>
-<para>At this point you may think that &tables; is doing no more than you
+<para>At this point you may think that &sheets; is doing no more than you
 could manage with pencil, paper and a calculator, and you could be right, but
 remember that this is a very small example of a spreadsheet, doing simple
 calculations on only a few numbers. For any reasonably amount of values or data
@@ -119,7 +119,7 @@ Cell...</guimenuitem></menuchoice> menu option</para></listitem>
 <para>You can also steer your way around with the <keysym>arrow</keysym> keys.
 Pressing the &Enter; key will move the current selection one
 position up, down, left or right depending on the setting in the 
-<guilabel>Interface</guilabel> page of &tables;'s <link linkend="configinterface">configuration 
+<guilabel>Interface</guilabel> page of &sheets;'s <link linkend="configinterface">configuration 
 dialog box</link>.</para> <para>If you hold the <keycombo
 action="simul">&Shift;</keycombo> key down while using the
 <keysym>arrow</keysym> keys the selection will move to the start or end of the
@@ -157,7 +157,7 @@ the other rows or columns of cells.</para>
 <para>Entering data into a cell can be as simple as selecting the cell, typing 
 your data, then pressing &Enter; or moving the selection to 
 another cell with one of the <keysym>arrow</keysym> keys. Depending on how you 
-enter the data, &tables; will interpret it as a number, date, time or text:</para>
+enter the data, &sheets; will interpret it as a number, date, time or text:</para>
 <itemizedlist>
 <listitem><para>
 Numbers are entered in the obvious way; <userinput>123</userinput>, <userinput>
@@ -181,11 +181,11 @@ HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
 10:30:52 pm</userinput>.
 </para></listitem>
 <listitem><para>
-&tables; defines any input data as <quote>text</quote> if it cannot 
+&sheets; defines any input data as <quote>text</quote> if it cannot 
 recognize the data as being a number, date or time.
 </para></listitem>
 </itemizedlist>
-<note><para>By default, &tables; right justifies numbers, dates and times 
+<note><para>By default, &sheets; right justifies numbers, dates and times 
 within a cell and left justifies anything else. This can be a useful guide 
 to whether you have entered a date or time in the correct format. But 
 remember that how items are displayed can be changed by altering 
@@ -201,10 +201,10 @@ edits.</para>
 <sect2 id="genericformat">
 <title>Generic Cell Format</title>
 <para>
-&tables; uses the <quote>Generic</quote> cell format as default. As long
-as this format is used, &tables; autodetects the actual data type depending
+&sheets; uses the <quote>Generic</quote> cell format as default. As long
+as this format is used, &sheets; autodetects the actual data type depending
 on the current cell data. For example if you enter some text into a cell and
-later enter a number into the same cell, &tables; automatically interprets
+later enter a number into the same cell, &sheets; automatically interprets
 the new data as a number. If you want to define the type of data yourself, you
 can explicitly set it in the <link linkend="formatdata">cell format</link>.
 You can change the format back to <quote>Generic</quote> at any time.
@@ -216,7 +216,7 @@ You can change the format back to <quote>Generic</quote> at any time.
 <sect1 id="copypaste">
 <title>Copy, Cut and Paste</title>
 
-<para>At first glance, &tables;'s <guimenuitem>Cut</guimenuitem>, 
+<para>At first glance, &sheets;'s <guimenuitem>Cut</guimenuitem>, 
 <guimenuitem>Copy</guimenuitem> and <guimenuitem>Paste</guimenuitem> appear 
 to be similar to these functions in other &kde; applications. Having selected 
 a cell or cells, you can choose <guimenuitem>Copy</guimenuitem> or 
@@ -228,7 +228,7 @@ mouse button down on a selected cell. You can also use the shortcuts
 </keycombo>, then move the selection to the target cell and choose 
 <guimenuitem>Paste</guimenuitem> or press <keycombo action="simul">
 &Ctrl;<keycap>V</keycap></keycombo>. However there are some 
-subtleties associated with these functions in &tables; and these are discussed 
+subtleties associated with these functions in &sheets; and these are discussed 
 below.</para>
 
 <para>If a cell contains a formula then the formula itself is copied rather 
@@ -246,7 +246,7 @@ For example in the simple shopping list shown below, cell D2 should contain
 <userinput>=B2 * C2</userinput>, D3 should be <userinput>=B3 * C3</userinput>, 
 D4 should be <userinput>=B4 * C4</userinput> and so on. Instead of having to 
 enter a different formula in each cell, you can just enter the first formula 
-into D2 and then copy it into the cells below, letting &tables; adjust the 
+into D2 and then copy it into the cells below, letting &sheets; adjust the 
 cell references to suit.</para>
 <mediaobject>
 <imageobject>
@@ -268,7 +268,7 @@ corner cell of the area you want to paste into before doing the paste.</para>
 <para>If you cut or copy a rectangular area of cells, say B2:C3, and paste it 
 into a larger area such as A10:D13 the original pattern of cells will be 
 repeated to fill the target area.</para>
-<para>&tables; also provides a <quote>Drag and Copy</quote> method for 
+<para>&sheets; also provides a <quote>Drag and Copy</quote> method for 
 copying cells down into other cells immediately below or to the 
 right of the original cell(s). To use this method select the cell(s) to be 
 copied then position the mouse pointer over the small black square at the 
@@ -283,7 +283,7 @@ relative position change. Absolute references are not changed.</para>
 <title>Other Paste Modes</title>
 <para>A cell may contain text, a value, or a formula, and may also contain 
 special font, border or background <link linkend="formatspread">formatting 
-information</link>. &tables; has special versions of Paste that let 
+information</link>. &sheets; has special versions of Paste that let 
 you handle these items in different ways.</para>
 
 <para><menuchoice><guimenu>Edit</guimenu><guimenuitem>Special
@@ -344,7 +344,7 @@ new ones.</para>
 <sect1 id="simplesums">
 <title>Simple Sums</title>
 <para>If the first character in a cell is an equals sign (<keycap>=</keycap>) 
-&tables; will take the cell contents to be a formula which is to be  
+&sheets; will take the cell contents to be a formula which is to be  
 calculated. The result of the calculation will be displayed in the cell rather 
 than the formula itself. For example, enter <userinput>=2+3</userinput> 
 into a cell and it should display <emphasis>5</emphasis>.</para>
@@ -364,7 +364,7 @@ at the bottom left corner if the <guilabel>Show formula indicator</guilabel>
 check box in the <menuchoice><guimenu>Format</guimenu>
 <guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet Properties</guisubmenu>
 </menuchoice> dialog is checked.</para>
-<para>&tables; also includes a large number of built-in functions for 
+<para>&sheets; also includes a large number of built-in functions for 
 applications such as statistical, trigonometrical and financial calculations. 
 Their use will be examined in more depth in a <link linkend="formulas">
 later section</link> of this manual, but if you are interested at this stage 
@@ -375,7 +375,7 @@ that will be displayed.</para>
 be of interest as it calculates the sum of all values in a specified area of 
 cells. For example <userinput>=SUM(B4:C10)</userinput> calculates the sum of 
 all values in the cell area B4 to C10.</para>
-<para>If &tables; displays <keycap>#VALUE!</keycap> when you have 
+<para>If &sheets; displays <keycap>#VALUE!</keycap> when you have 
 entered your formula this usually means that it cannot understand what 
 you have entered, but if the row of symbols ends with a 
 small red arrow this just means that the cell is not wide enough to display 
@@ -389,10 +389,10 @@ does fit properly.</para>
 <menuchoice><guimenu>Format</guimenu>
 <guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet Properties</guisubmenu>
 </menuchoice> dialog box is 
-checked, &tables; will recalculate the values of cells whenever anything that 
+checked, &sheets; will recalculate the values of cells whenever anything that 
 affects them is changed in the sheet.</para>
 <para>When <guilabel>Automatic recalculation</guilabel> is not checked for the 
-current sheet, you can instruct &tables; to perform a recalculation at any time by 
+current sheet, you can instruct &sheets; to perform a recalculation at any time by 
 using the <guimenuitem>Recalculate Sheet</guimenuitem> or <guimenuitem>
 Recalculate Document</guimenuitem> option in the <guimenu>Tools</guimenu> 
 menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
@@ -404,7 +404,7 @@ menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
 <title>Sorting Data</title>
 <para>In the simple example shown below, the data consist of the names and 
 countries of a number of mountains together with their height above sea level. 
-&tables; can sort data such as this in different ways.</para>
+&sheets; can sort data such as this in different ways.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -462,7 +462,7 @@ The cell format is moved with the cell content, if you select
 <para>The left hand end of the Status bar by default shows a summary of the values in 
 the selected cell(s). According to the setting of the <guilabel>Function shown in 
 status bar</guilabel> combo box in the <guilabel>Interface</guilabel> page of 
-&tables;'s configuration dialog the summary can be:</para>
+&sheets;'s configuration dialog the summary can be:</para>
 
 <variablelist>
 <varlistentry>
@@ -521,14 +521,14 @@ Status bar and choosing an item from the pop up menu.</para>
 
 <sect1 id="saving">
 <title>Saving your Work</title>
-<para>&tables; saves the complete document, which may include more than one 
+<para>&sheets; saves the complete document, which may include more than one 
 worksheet, as a single document file.</para>
 <para>If you have created a new document, or want to save an existing one 
 under a different name, use <menuchoice><guimenu>File</guimenu><guimenuitem>
 Save As...</guimenuitem></menuchoice>. This will bring up &kde;'s common 
 <guilabel>Save Document As</guilabel> dialog box. 
 Choose the folder where you want to save the document and enter a 
-suitable file name into the <guilabel>Name</guilabel> text box. &tables; 
+suitable file name into the <guilabel>Name</guilabel> text box. &sheets; 
 documents are normally automatically saved with a <filename>.ods</filename> 
 extension, you do not need to add this to the filename but do make sure that 
 the <guilabel>Filter</guilabel> selection is set to 
@@ -536,19 +536,19 @@ the <guilabel>Filter</guilabel> selection is set to
 <para>To save your document without changing its name, just use <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
 
-<para>You can also save a &tables; document in a foreign format selecting the 
+<para>You can also save a &sheets; document in a foreign format selecting the 
 format from the <guilabel>Filter:</guilabel> combo box.</para>
 <para>When you save a modified version of an existing document
-&tables; will keep the previous version as a backup file, adding a
+&sheets; will keep the previous version as a backup file, adding a
 <literal>~</literal> to the end of the filename.</para>
-<para>&tables; can provide some protection against losing your work because 
-of a computer crash or because you have closed &tables; without saving the 
+<para>&sheets; can provide some protection against losing your work because 
+of a computer crash or because you have closed &sheets; without saving the 
 current document. It does this by automatically saving the latest version of 
 the document you are working on every few minutes using a modified file name. 
 The autosaved version is normally removed when you next save your document, 
 so that it will only exist if it is more up to date than the version that was
 saved manually.
-When you open a document &tables; checks to see if an autosaved
+When you open a document &sheets; checks to see if an autosaved
 version exists, and if it finds one it will offer to open that instead.</para>
 <para>Autosaved documents are saved with a file name of the form
 <filename>.yourfilename.autosave</filename> (note the leading period),
@@ -568,7 +568,7 @@ Doing this opens the <guilabel>Create Template</guilabel> dialog box.
 Enter a name for your new template into the <guilabel>Name:</guilabel> text
 box and press <guibutton>OK</guibutton>. The next time you start a new
 document by choosing <menuchoice><guimenu>File</guimenu>
-<guimenuitem>New</guimenuitem></menuchoice> or when you next start &tables; the 
+<guimenuitem>New</guimenuitem></menuchoice> or when you next start &sheets; the 
 startup dialog window will give you the option of creating the
 new document from your template.</para>
 <para>The <guilabel>Create Template</guilabel> dialog box also lets you
@@ -590,12 +590,12 @@ the dialog.</para>
 brings up &kde;'s common <guilabel>Print</guilabel> dialog box where you can
 choose, among other options, the printer to be used, the number of copies and
 whether all or only selected pages are to be printed.</para>
-<para>By default &tables; will print all items in the current worksheet, but
+<para>By default &sheets; will print all items in the current worksheet, but
 you can restrict this by first selecting the area that you want to be
 printed then choosing <guimenuitem>Define Print Range</guimenuitem> from the
 <menuchoice><guimenu>Format</guimenu><guisubmenu>Print Range</guisubmenu>
 </menuchoice> sub menu.</para>
-<para>&tables; will print as many pages as are necessary to include all
+<para>&sheets; will print as many pages as are necessary to include all
 items in the current worksheet. You can quickly see how a worksheet will be
 split into separate pages for printing by checking the <menuchoice>
 <guimenu>View</guimenu>
@@ -621,12 +621,10 @@ of the page borders.</para>
 <para>The <guilabel>Sheet</guilabel> provides more options.
 The <guilabel>Print settings</guilabel> section lets you select whether or not to print the grid,
 comment indicators and formula indicators, objects and charts.
-The <guilabel>Ranges</guilabel> section provides
-an alternative way of restricting the printed output to just one part of the
-worksheet and allows you to repeat selected column(s) or row(s) on each printed
+The <guilabel>Repetitions on each page</guilabel> section allows you to repeat selected column(s) or row(s) on each printed
 page. 
 In the section <guilabel>Scaling</guilabel> you can set a scalefactor 
-or limit the number of pages for the print.</para>
+or the page limits for the print.</para>
 
 </sect1>
 

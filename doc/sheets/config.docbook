@@ -11,11 +11,11 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
-<title>Configuring &tables; Shortcuts and Toolbars</title>
+<title>Configuring &sheets; Shortcuts and Toolbars</title>
 
 <sect1 id="configshort">
 <title>Shortcuts</title>
-<para>To change the shortcut key arrangements used by &tables; select
+<para>To change the shortcut key arrangements used by &sheets; select
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...
 </guimenuitem></menuchoice>. This will launch a dialog box as shown below.
 </para>
@@ -40,14 +40,14 @@ shortcut, for example <keycombo action="simul">
 
 <sect1 id="configtoolbars">
 <title>Toolbars</title>
-<para>&tables; has six toolbars: <guilabel>File</guilabel>, 
+<para>&sheets; has six toolbars: <guilabel>File</guilabel>, 
 <guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
 <guilabel>Format</guilabel>, <guilabel>Font</guilabel> and <guilabel>Color/Border</guilabel>.
 each of which may or may not be shown depending on the choices made in the 
 <guimenu>Settings</guimenu> menu.</para>
 <para>If the toolbars are unlocked, you can choose whether a toolbar appears at the <guimenuitem>Top</guimenuitem>, 
 <guimenuitem>Left</guimenuitem>, <guimenuitem>Right</guimenuitem> or 
-<guimenuitem>Bottom</guimenuitem> of &tables;'s window by <mousebutton>right</mousebutton> clicking on 
+<guimenuitem>Bottom</guimenuitem> of &sheets;'s window by <mousebutton>right</mousebutton> clicking on 
 the toolbar, which brings up the <guilabel>Toolbar Menu</guilabel>, and making 
 a selection from the <guisubmenu>Orientation</guisubmenu> sub menu. This 
 <guilabel>Toolbar Menu</guilabel> also has sub menus for choosing whether the 
@@ -57,9 +57,9 @@ toolbar displays icons, text or both, and the size of the icons.</para>
 the two vertical bars at the left end of each toolbar and holding the 
 <mousebutton>left</mousebutton> mouse button down while you drag the toolbar 
 to the wanted position. When you drag the toolbar in this way you can release 
-the mouse button when it is some distance from any of &tables;'s window 
+the mouse button when it is some distance from any of &sheets;'s window 
 sides, and then you will get a floating toolbar, which is not locked to any 
-particular part of &tables;'s window and can in fact be moved outside of 
+particular part of &sheets;'s window and can in fact be moved outside of 
 the window. To put a floating toolbar back into one of the traditional 
 positions <mousebutton>right</mousebutton> click on its titlebar to bring 
 up the <guilabel>Toolbar Menu</guilabel> then choose one of the options in 
@@ -67,7 +67,7 @@ the <guisubmenu>Orientation</guisubmenu> sub menu.</para>
 
 <para>Selecting <guimenuitem>Configure Toolbars...</guimenuitem> from the 
 <guimenu>Settings</guimenu> menu will bring up a dialog box which lets you add 
-buttons to or remove them from &tables;'s toolbars.</para>
+buttons to or remove them from &sheets;'s toolbars.</para>
 <para>To use this <guilabel>Configure Toolbars</guilabel> dialog box first 
 select a toolbar from the <guilabel>Toolbar:</guilabel> combo box. The 
 right hand <guilabel>Current actions:</guilabel> window will then show the 
