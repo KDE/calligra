@@ -2,6 +2,7 @@
 Name=Calligra Sheets
 Name[ca]=Sheets del Calligra
 Name[da]=Calligra Sheets
+Name[fi]=Calligra Sheets
 Name[hu]=Calligra Sheets
 Name[it]=Calligra Sheets
 Name[kk]=Calligra Sheets
@@ -63,6 +64,7 @@ Comment[el]=Γραφή εγγράφων φύλλου εργασίας
 Comment[en_GB]=Write spreadsheet documents
 Comment[es]=Escribir documentos de hoja de cálculo
 Comment[et]=Tabelidokumentide kirjutamine
+Comment[fi]=Kirjoita taulukkolaskenta-asiakirjoja
 Comment[fr]=Documents tableurs vides
 Comment[ga]=Scríobh cáipéisí scarbhileoige
 Comment[it]=Scrivi fogli di testo
