@@ -216,9 +216,9 @@ void KarbonPaletteBarWidget::updateDocumentColors()
                 }
             }
         }
-        KoShapeBorderModel *stroke = shape->border();
+        KoShapeStrokeModel *stroke = shape->stroke();
         if (stroke) {
-            KoLineBorder *lb = dynamic_cast<KoLineBorder*>(shape->border());
+            KoLineBorder *lb = dynamic_cast<KoLineBorder*>(shape->stroke());
             if (lb) {
                 if (lb->lineStyle() == Qt::SolidLine) {
                     colors.insert(qHash(lb->color()), lb->color());

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen danders@get2net>
+  Copyright (C) 2009, 2012 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 #include <QMimeData>
 #include <QObject>
@@ -41,9 +42,6 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {

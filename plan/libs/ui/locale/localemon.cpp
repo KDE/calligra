@@ -2,7 +2,7 @@
  * localemon.cpp
  *
  * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
- * Copyright (c) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (c) 2009, 2012 Dag Andersen <danders@get2net.dk>
  *
  * Requires the Qt widget libraries, available at no cost at
  * http://www.troll.no/
@@ -26,8 +26,8 @@
 #include "localemon.h"
 
 #include "kptcommand.h"
+#include "kptdebug.h"
 
-#include <kdebug.h>
 #include <QCheckBox>
 #include <QComboBox>
 
@@ -37,7 +37,6 @@
 #include <KConfigGroup>
 #include <KStandardDirs>
 
-extern int planDbg();
 
 namespace KPlato {
 

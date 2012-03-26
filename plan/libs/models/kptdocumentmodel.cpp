@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,11 +22,10 @@
 #include "kptdocuments.h"
 #include "kptglobal.h"
 #include "kptcommonstrings.h"
+#include "kptdebug.h"
 
-#include <kdebug.h>
 #include <QMimeData>
 
-extern int planDbg();
 
 class KoDocument;
 

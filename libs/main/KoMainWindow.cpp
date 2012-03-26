@@ -1352,7 +1352,6 @@ public:
 
         m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
         m_pageLayoutWidget->showUnitchooser(false);
-        m_pageLayoutWidget->layout()->setMargin(0);
         KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
         optionsItem->setIcon(KIcon("configure"));
         addPage(optionsItem);
@@ -1616,9 +1615,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-    // important so dockermanager can move toolbars back
-    emit beforeHandlingToolBars();
-
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1684,8 +1680,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
-    // important so dockermanager can move toolbars where wanted
-    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 

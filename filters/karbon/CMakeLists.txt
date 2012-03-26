@@ -38,9 +38,10 @@ endif (QT3SUPPORT)
 if (POPPLER_FOUND AND NOT WIN32)
     add_subdirectory( pdf )
 endif (POPPLER_FOUND AND NOT WIN32)
+add_subdirectory( xfig )
 
 # enable again when these filters are ported
-message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, xfig, msod and oodraw filters")
+message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, msod and oodraw filters")
 
 if(FALSE)
 add_subdirectory( ai )

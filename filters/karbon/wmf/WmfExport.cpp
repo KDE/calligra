@@ -124,7 +124,7 @@ void WmfExport::paintShape(KoShape * shape)
 
         polygons.append(p);
     }
-    mWmf->setPen(getPen(shape->border()));
+    mWmf->setPen(getPen(shape->stroke()));
 
     if (polygons.count() == 1 && ! shape->background())
         mWmf->drawPolyline(polygons.first());
@@ -151,21 +151,21 @@ void WmfExport::paintShape(KoShape * shape)
     }
 }
 
-QPen WmfExport::getPen(const KoShapeBorderModel * stroke)
+QPen WmfExport::getPen(const KoShapeStrokeModel * stroke)
 {
-    const KoLineBorder * lineBorder = dynamic_cast<const KoLineBorder*>(stroke);
-    if (! lineBorder)
+    const KoLineBorder * lineStroke = dynamic_cast<const KoLineBorder*>(stroke);
+    if (! lineStroke)
         return QPen(Qt::NoPen);
 
-    QPen pen(lineBorder->lineStyle());
+    QPen pen(lineStroke->lineStyle());
     if (pen.style() > Qt::SolidLine)
-        pen.setDashPattern(lineBorder->lineDashes());
+        pen.setDashPattern(lineStroke->lineDashes());
 
-    pen.setColor(lineBorder->color());
-    pen.setCapStyle(lineBorder->capStyle());
-    pen.setJoinStyle(lineBorder->joinStyle());
-    pen.setWidthF(coordX(lineBorder->lineWidth()));
-    pen.setMiterLimit(lineBorder->miterLimit());
+    pen.setColor(lineStroke->color());
+    pen.setCapStyle(lineStroke->capStyle());
+    pen.setJoinStyle(lineStroke->joinStyle());
+    pen.setWidthF(coordX(lineStroke->lineWidth()));
+    pen.setMiterLimit(lineStroke->miterLimit());
 
     return pen;
 }

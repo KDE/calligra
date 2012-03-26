@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 -2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 -2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
 #include <kaction.h>
 #include <kicon.h>
@@ -45,7 +46,6 @@
 #include <QPainter>
 #include <QMenu>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -156,17 +156,14 @@ QWidget *PrintingDialog::createPageLayoutWidget() const
     widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
 
     KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
     w->showPageSpread( false );
-    w->layout()->setMargin( 0 );
-    lay->addWidget( w );
+    lay->addWidget( w, 1 );
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
     prev->setPageLayout( m_view->pageLayout() );
-    lay->addWidget( prev );
+    lay->addWidget( prev, 1 );
 
     connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
 

@@ -126,7 +126,7 @@ public:
             delete m_stroke;
     }
 
-    void setStroke(KoShapeBorderModel * stroke) {
+    void setStroke(KoShapeStrokeModel * stroke) {
         if (stroke != m_stroke) {
             if (m_stroke && !m_stroke->deref())
                 delete m_stroke;
@@ -178,7 +178,7 @@ protected:
     }
 
 private:
-    KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    KoShapeStrokeModel * m_stroke; ///< the stroke to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
@@ -242,7 +242,7 @@ void KarbonSmallStylePreview::selectionChanged()
     KoShape * shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         m_fillFrame->setFill(shape->background());
-        m_strokeFrame->setStroke(shape->border());
+        m_strokeFrame->setStroke(shape->stroke());
     } else {
         m_fillFrame->setFill(0);
         m_strokeFrame->setStroke(0);

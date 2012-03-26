@@ -83,9 +83,9 @@ in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <variablelist>
 <varlistentry>
 <term><guilabel>Generic</guilabel></term>
-<listitem><para>This is the default format and &tables; autodetects the
+<listitem><para>This is the default format and &sheets; autodetects the
 actual
-data type depending on the current cell data. By default, &tables; right
+data type depending on the current cell data. By default, &sheets; right
 justifies numbers, dates and times within a cell and left justifies anything
 else.</para>
 <para>If the <guilabel>Generic</guilabel> format does not suit you, you can change to a specific
@@ -181,7 +181,7 @@ Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
 dialog box you can set how the time should be displayed by choosing one of the
 available time format options. The default format is the system format set in
 &systemsettings;. When the number in the cell does not make sense as a time,
-&tables; will display 00:00 in the global format you have in
+&sheets; will display 00:00 in the global format you have in
 &systemsettings;.</para>
 </listitem>
 </varlistentry>
@@ -195,7 +195,7 @@ Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
 dialog box you can set how the date and time should be displayed by choosing one of the
 available date and time format options. The default format is the system format set in
 &systemsettings;. When the number in the cell does not make sense as a date and time,
-&tables; will display 00:00 in the global format you have in
+&sheets; will display 00:00 in the global format you have in
 &systemsettings;.</para>
 </listitem>
 </varlistentry>
@@ -453,7 +453,7 @@ formula. This also needs to enable sheet protection to work.
 You can hide the cell content with <guilabel>Hide all</guilabel> and again this needs sheet
 protection.
 You can learn more about all these settings in the <link
-linkend="protection">Advanced &tables; chapter, Protection
+linkend="protection">Advanced &sheets; chapter, Protection
 section</link>.</para>
 <variablelist>
 <varlistentry>
@@ -500,7 +500,7 @@ that the cell text will always be printed by default.</para>
 <sect1 id="conditional">
 <title>Conditional Cell Attributes</title>
 <para>You can make the appearance of a cell change according to the value it 
-contains, useful perhaps if you are using &tables; to keep track of your 
+contains, useful perhaps if you are using &sheets; to keep track of your 
 household expenses and want to highlight any item greater than, say, one 
 thousand dollars.</para>
 <para>To do this select the cell(s) then choose <guimenuitem>Conditional  
@@ -527,7 +527,7 @@ menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row</guisubmen
 </menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
 Column</guisubmenu></menuchoice> menu.</para>
 <para>If you move the mouse cursor so that its tip is over the line between 
-two of the row numbers at the left of &tables;'s window the cursor will 
+two of the row numbers at the left of &sheets;'s window the cursor will 
 change to show two parallel lines each with a short arrow headed line coming 
 from it. When the cursor is in this state you can hold the <mousebutton>left
 </mousebutton> mouse button down and drag the border between the two rows, 
@@ -566,7 +566,7 @@ Dissociate Cells</guimenuitem> from the <guimenu>Format</guimenu> menu.</para>
 <para>A finished spreadsheet can often be made to look more attractive by 
 hiding the cells containing intermediate calculations so that only the 
 important data input and result areas are shown.</para>
-<para>In &tables; you can hide selected rows or columns by 
+<para>In &sheets; you can hide selected rows or columns by 
 using the <guimenuitem>Hide Rows</guimenuitem> and <guimenuitem>Hide 
 Columns</guimenuitem> options from the <menuchoice><guimenu>Format</guimenu>
 <guisubmenu>Row</guisubmenu></menuchoice>, <menuchoice><guimenu>Format
@@ -659,13 +659,13 @@ see the page borders if you want to print your sheet.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Show formula</guilabel></term>
-<listitem><para>If this box is checked &tables; will display the actual
+<listitem><para>If this box is checked &sheets; will display the actual
 formulae in cells rather than the results.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Show formula indicator</guilabel></term>
-<listitem><para>If this box is checked &tables; will display a small blue
+<listitem><para>If this box is checked &sheets; will display a small blue
 triangle at the bottom left corner of cells containing formulae. This is useful
 if you want to protect cells with formulae.</para>
 </listitem>

@@ -26,6 +26,7 @@
 #include "kptproject.h"
 #include "kptrelation.h"
 #include "kptschedule.h"
+#include "kptdebug.h"
 
 #include "calligraversion.h"
 
@@ -52,15 +53,6 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 #include <kdeversion.h>
-
-KPLATOUI_EXPORT int planDependencyEditorDbg() {
-#if KDE_IS_VERSION( 4, 3, 80 )
-    static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
-#else
-    static int s_area = 0;
-#endif
-    return s_area;
-}
 
 namespace KPlato
 {

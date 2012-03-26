@@ -153,6 +153,30 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-03-22
+Tables
+*Fixed bug: Details of lookup column not visible
+BUG:296528
+
+2012-03-19
+KexiDB
+*SQLite Driver
+**Fix exporting required symbols of kexidb_sqlite3_icu library for the sqlite3 interface. Also fix the filename extension when loading on different platforms.
+***by Andrius da Costa Ribas
+***+some fixes for gcc/linux
+CCMAIL:andriusmao@gmail.com
+
+2012-03-18
+Reports
+*Fixed bug: Data source property in report field do not show proper list of fields
+
+2012-03-17
+KexiDB
+*Properly deep-copy query asterisks when cloning query objects
+**This fixes crash for reports based on queries
+CCBUG:246928
+CCBUG:281737
+
 2012-03-13
 KexiDB
 *Fix deep copying of query schema and ORDER BY structures

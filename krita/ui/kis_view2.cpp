@@ -675,9 +675,14 @@ void KisView2::slotLoadingFinished()
         image()->unlock();
     }
 
-    KisNodeSP activeNode = image()->rootLayer()->firstChild();
+    KisNodeSP activeNode = m_d->doc->preActivatedNode();
+    m_d->doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
-    while(activeNode && !activeNode->inherits("KisLayer")) {
+    if (!activeNode) {
+        activeNode = image()->rootLayer()->firstChild();
+    }
+
+    while (activeNode && !activeNode->inherits("KisLayer")) {
         activeNode = activeNode->nextSibling();
     }
 

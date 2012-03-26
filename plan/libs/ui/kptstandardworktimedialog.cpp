@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,16 +22,15 @@
 #include "kptproject.h"
 #include "kptcalendar.h"
 #include "kptcommand.h"
+#include "kptdebug.h"
 
 #include <QPushButton>
 #include <QTreeWidgetItem>
 
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
