@@ -2559,60 +2559,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL hlinkClick
-//! hlinkClick handler
-/*!
- Parent elements:
- - cNvPr (§21.3.2.7)
- - cNvPr (§20.1.2.2.8)
- - cNvPr (§20.2.2.3)
- - cNvPr (§20.5.2.8)
- - cNvPr (§19.3.1.12)
- - defRPr (§21.1.2.3.2)
- - docPr (§20.4.2.5)
- - endParaRPr (§21.1.2.2.3)
- - [done] rPr (§21.1.2.3.9)
-
- Child elements:
- - extLst (§20.1.2.2.15)
- - snd (§20.1.2.2.32)
-
-TODO....
- Attributes..
- Children..
-*/
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
-{
-    READ_PROLOGUE
-
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, id)
-
-    if (!r_id.isEmpty() && m_context->relationships) {
-        m_hyperLink = true;
-        m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
-        m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
-    }
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-    }
-
-#if defined(PPTXXMLSLIDEREADER_CPP)
-    // Where there is a hyperlink, hlink value should be used by default
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
-    QString valTransformed = m_context->colorMap.value("hlink");
-    colorItem = m_context->themes->colorScheme.value(valTransformed);
-    if (colorItem) {
-        m_currentColor = colorItem->value();
-    }
-#endif
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
 #define CURRENT_EL pPr
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
@@ -2752,6 +2698,60 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL hlinkClick
+//! hlinkClick handler
+/*!
+ Parent elements:
+ - cNvPr (§21.3.2.7)
+ - cNvPr (§20.1.2.2.8)
+ - cNvPr (§20.2.2.3)
+ - cNvPr (§20.5.2.8)
+ - cNvPr (§19.3.1.12)
+ - defRPr (§21.1.2.3.2)
+ - docPr (§20.4.2.5)
+ - endParaRPr (§21.1.2.2.3)
+ - [done] rPr (§21.1.2.3.9)
+
+ Child elements:
+ - extLst (§20.1.2.2.15)
+ - snd (§20.1.2.2.32)
+
+TODO....
+ Attributes..
+ Children..
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+
+    if (!r_id.isEmpty() && m_context->relationships) {
+        m_hyperLink = true;
+        m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
+        m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
+
+#if defined(PPTXXMLSLIDEREADER_CPP)
+    // Where there is a hyperlink, hlink value should be used by default
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    QString valTransformed = m_context->colorMap.value("hlink");
+    colorItem = m_context->themes->colorScheme.value(valTransformed);
+    if (colorItem) {
+        m_currentColor = colorItem->value();
+    }
+#endif
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL custGeom
 //! custGeom Handler (Custom Geometry)
 /*
@@ -2861,9 +2861,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 
     READ_EPILOGUE
 }
-
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "a"
 
 //! off handler (Offset)
 //! DrawingML ECMA-376, 20.1.7.4, p. 3185.
@@ -3547,9 +3544,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_EPILOGUE
 }
 
-// NOTE: osed only for blipFill namespace is parametrized, can be a or p
-#define MSOOXML_CURRENT_NS "a"
-
 #undef CURRENT_EL
 #define CURRENT_EL blipFill
 //! blipFill handler (Picture Fill)
@@ -3605,8 +3599,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller caller)
 {
     kDebug() << "Blip Caller:" << (char)caller;
-    // we do not use READ_PROLOGUE because namespace depends on caller here
+
+    // Do not use READ_PROLOGUE because namespace depends on caller
     PUSH_NAME_INTERNAL
+
     QString ns;
     // 'p' by default; for dml in docx use 'pic'
 #ifdef DOCXXMLDOCREADER_CPP
@@ -3643,8 +3639,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         }
     }
 
-    // we do not use READ_EPILOGUE because namespace depends on caller here
+    // Do not use READ_EPILOGUE because namespace depends on caller
     POP_NAME_INTERNAL
+
     if (!expectElEnd(qn)) {
         kDebug() << "READ_EPILOGUE:" << qn << "not found!";
         return KoFilter::WrongFormat;
@@ -4922,6 +4919,143 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buFont()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL buNone
+//! buNone - No bullets
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
+{
+    READ_PROLOGUE
+    m_currentBulletProperties.setBulletChar("");
+    m_listStylePropertiesAltered = true;
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buAutoNum
+//! buAutoNum - Bullet Auto Numbering
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+
+    if (!type.isEmpty()) {
+        if (type == "alphaLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "arabicParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "arabicParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "arabicPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "arabicPlain") {
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "romanLcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanUcParenBoth") {
+            m_currentBulletProperties.setPrefix("(");
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("I");
+        } else {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(startAt)
+    if (!startAt.isEmpty()) {
+        m_currentBulletProperties.setStartValue(startAt);
+    }
+
+    m_listStylePropertiesAltered = true;
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL fld
 //! fld - Text Field
 /*!
@@ -5224,143 +5358,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
     }
 
     readNext();
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL buNone
-//! buNone - No bullets
-/*!
- Parent elements:
- - defPPr (§21.1.2.2.2)
- - [done] lvl1pPr (§21.1.2.4.13)
- - [done] lvl2pPr (§21.1.2.4.14)
- - [done] lvl3pPr (§21.1.2.4.15)
- - [done] lvl4pPr (§21.1.2.4.16)
- - [done] lvl5pPr (§21.1.2.4.17)
- - [done] lvl6pPr (§21.1.2.4.18)
- - [done] lvl7pPr (§21.1.2.4.19)
- - [done] lvl8pPr (§21.1.2.4.20)
- - [done] lvl9pPr (§21.1.2.4.21)
- - [done] pPr (§21.1.2.2.7)
-*/
-//! @todo support all attributes
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
-{
-    READ_PROLOGUE
-    m_currentBulletProperties.setBulletChar("");
-    m_listStylePropertiesAltered = true;
-    readNext();
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL buAutoNum
-//! buAutoNum - Bullet Auto Numbering
-/*!
- Parent elements:
- - defPPr (§21.1.2.2.2)
- - [done] lvl1pPr (§21.1.2.4.13)
- - [done] lvl2pPr (§21.1.2.4.14)
- - [done] lvl3pPr (§21.1.2.4.15)
- - [done] lvl4pPr (§21.1.2.4.16)
- - [done] lvl5pPr (§21.1.2.4.17)
- - [done] lvl6pPr (§21.1.2.4.18)
- - [done] lvl7pPr (§21.1.2.4.19)
- - [done] lvl8pPr (§21.1.2.4.20)
- - [done] lvl9pPr (§21.1.2.4.21)
- - [done] pPr (§21.1.2.2.7)
-*/
-//! @todo support all attributes
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
-{
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-
-    TRY_READ_ATTR_WITHOUT_NS(type)
-
-    if (!type.isEmpty()) {
-        if (type == "alphaLcParenBoth") {
-            m_currentBulletProperties.setPrefix("(");
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (type == "alphaLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (type == "alphaLcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (type == "alphaUcParenBoth") {
-            m_currentBulletProperties.setPrefix("(");
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (type == "alphaUcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (type == "alphaUcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (type == "arabicParenBoth") {
-            m_currentBulletProperties.setPrefix("(");
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("1");
-        }
-        else if (type == "arabicParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("1");
-        }
-        else if (type == "arabicPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("1");
-        }
-        else if (type == "arabicPlain") {
-            m_currentBulletProperties.setNumFormat("1");
-        }
-        else if (type == "romanLcParenBoth") {
-            m_currentBulletProperties.setPrefix("(");
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("i");
-        }
-        else if (type == "romanLcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("i");
-        }
-        else if (type == "romanLcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("i");
-        }
-        else if (type == "romanUcParenBoth") {
-            m_currentBulletProperties.setPrefix("(");
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("I");
-        }
-        else if (type == "romanUcParenR") {
-            m_currentBulletProperties.setSuffix(")");
-            m_currentBulletProperties.setNumFormat("I");
-        }
-        else if (type == "romanUcPeriod") {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("I");
-        } else {
-            m_currentBulletProperties.setSuffix(".");
-            m_currentBulletProperties.setNumFormat("i");
-        }
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(startAt)
-    if (!startAt.isEmpty()) {
-        m_currentBulletProperties.setStartValue(startAt);
-    }
-
-    m_listStylePropertiesAltered = true;
-    readNext();
-
     READ_EPILOGUE
 }
 
