@@ -245,7 +245,7 @@ The estimation can be either effort based or duration based. If it is effort bas
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QLabel" name="textLabel3_2">
            <property name="sizePolicy">
@@ -365,7 +365,7 @@ The estimation can be either effort based or duration based. If it is effort bas
             <bool>false</bool>
            </property>
            <property name="buddy">
-            <cstring>optimisticValueoptimisticValue</cstring>
+            <cstring>optimisticValue</cstring>
            </property>
           </widget>
          </item>
