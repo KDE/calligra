@@ -129,9 +129,7 @@ KisTextureOption::~KisTextureOption()
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    if (!isChecked()) return;
     if (!m_optionWidget->chooser->currentResource()) return;
-
     KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
     if (!pattern) return;
 
@@ -157,6 +155,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
+
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
 }
 
@@ -165,7 +164,6 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toAscii());
     QImage img;
     img.loadFromData(ba, "PNG");
-
     QString name = setting->getString("Texture/Pattern/Name");
     if (name.isEmpty()) {
         name = setting->getString("Texture/Pattern/FileName");
