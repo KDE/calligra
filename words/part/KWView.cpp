@@ -193,12 +193,13 @@ QWidget *KWView::canvas() const
 void KWView::updateReadWrite(bool readWrite)
 {
     m_actionFormatFrameSet->setEnabled(readWrite);
-    m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
     m_actionAddBookmark->setEnabled(readWrite);
-    QAction *action = actionCollection()->action("insert_variable");
+    QAction *action = actionCollection()->action("insert_framebreak");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
@@ -231,14 +232,6 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
-
-    m_actionInsertFrameBreak  = new KAction(QString(), this);
-    actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak);
-    m_actionInsertFrameBreak->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    m_actionInsertFrameBreak->setText(i18n("Page Break"));
-    m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
-    m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
     m_actionViewHeader = new KAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
@@ -537,18 +530,6 @@ void KWView::createTemplate()
 
     QDir d;
     d.remove(fileName);
-}
-
-void KWView::insertFrameBreak()
-{
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    if (editor) {
-        // this means we have the text tool selected right now.
-        editor->insertFrameBreak();
-    } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
-        KoTextDocument doc(m_document->mainFrameSet()->document());
-        doc.textEditor()->insertFrameBreak();
-    }
 }
 
 void KWView::addBookmark()
