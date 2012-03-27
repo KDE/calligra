@@ -151,7 +151,7 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     d->toolBarsDocker->setWidget(dockedToolBarsWidget);
     d->toolBarsDocker->setVisible(false);
     KoDockWidgetTitleBar *tb = new KoDockWidgetTitleBar(d->toolBarsDocker);
-    tb->setTextVisible(false);
+    tb->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
     d->toolBarsDocker->setTitleBarWidget(tb);
 
     connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
