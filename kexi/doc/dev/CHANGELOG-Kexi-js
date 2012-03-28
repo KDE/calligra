@@ -157,6 +157,13 @@ Main Window
 KexiDB
 *fixed functions returning field's type group name and type group string; they were completely broken but probably only GUI was affected
 **merged with Predicate
+Forms
+*Fixed bug: Setting a text box as Read Only allows changes to be made nevertheles
+BUG:278419 
+*Properly updated context menu when read-only flag is set for line edits and text boxes
+
+TODO: read-only data widgets: in data mode display a small read-only tooltip during editing or as a label on the right hand
+TODO: read-only data widgets: in design mode display a small read-only icon/text
 
 2012-03-22
 Tables

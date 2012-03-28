@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -123,9 +123,9 @@ void KexiDBTextEdit::slotTextChanged()
     if (!m_slotTextChanged_enabled)
         return;
 
-    if (m_Length > 0) {
-        if (toPlainText().length() > m_Length) {
-            setPlainText(toPlainText().left(m_Length));
+    if (m_length > 0) {
+        if (toPlainText().length() > (int)m_length) {
+            setPlainText(toPlainText().left(m_length));
             moveCursorToEnd();
         }
     }
@@ -216,12 +216,11 @@ void KexiDBTextEdit::paintEvent(QPaintEvent *pe)
     KexiDBTextWidgetInterface::paint(this, &p, toPlainText().isEmpty(), alignment(), hasFocus());
 }
 
-QMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
+void KexiDBTextEdit::contextMenuEvent(QContextMenuEvent *e)
 {
-    Q_UNUSED(pos);
-    QMenu *contextMenu = KTextEdit::createStandardContextMenu();//pos);
-    m_menuExtender.createTitle(contextMenu);
-    return contextMenu;
+    QMenu *menu = createStandardContextMenu();
+    m_menuExtender.exec(menu, e->globalPos());
+    delete menu;
 }
 
 void KexiDBTextEdit::undo()
