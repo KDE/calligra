@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,8 +50,10 @@ public:
             : QValidator(parent) {
     }
     ~KexiDBLineEdit_ReadOnlyValidator() {}
-    virtual State validate(QString &, int &) const {
-        return Invalid;
+    virtual State validate(QString &input, int &pos) const {
+        input = qobject_cast<KexiDBLineEdit*>(parent())->originalText();
+        pos = qobject_cast<KexiDBLineEdit*>(parent())->originalCursorPosition();
+        return Intermediate;
     }
 };
 
@@ -110,7 +112,10 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(cursorPositionChanged(int,int)),
+            this, SLOT(slotCursorPositionChanged(int,int)));
 
     KexiDBLineEditStyle *ks = new KexiDBLineEditStyle(style());
     ks->setParent(this);
@@ -135,13 +140,14 @@ void KexiDBLineEdit::setInvalidState(const QString& displayText)
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
     if (focusPolicy() & Qt::TabFocus)
         setFocusPolicy(Qt::ClickFocus);
-    setText(displayText);
+    setValueInternal(displayText, true);
 }
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
-    setText(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
+    m_originalText = m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString());
+    setText(m_originalText);
     setCursorPosition(0); //ok?
     m_slotTextChanged_enabled = true;
 }
@@ -156,6 +162,21 @@ void KexiDBLineEdit::slotTextChanged(const QString&)
     if (!m_slotTextChanged_enabled)
         return;
     signalValueChanged();
+}
+
+void KexiDBLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
+{
+    Q_UNUSED(oldPos);
+    if (m_originalText == text()) {
+        // when cursor was moved without altering the text, remember its position,
+        // otherwise the change will be reverted by the validator
+        m_cursorPosition = newPos;
+    }
+}
+
+int KexiDBLineEdit::originalCursorPosition() const
+{
+    return m_cursorPosition;
 }
 
 bool KexiDBLineEdit::valueIsNull()
@@ -185,22 +206,23 @@ void KexiDBLineEdit::setReadOnly(bool readOnly)
     return KLineEdit::setReadOnly(readOnly);
 #else
     m_internalReadOnly = readOnly;
-    if (m_internalReadOnly) {
-        if (m_readWriteValidator)
-            disconnect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
-                       this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
-        m_readWriteValidator = validator();
-        if (m_readWriteValidator)
-            connect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
-                    this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
-        if (!m_readOnlyValidator)
-            m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
-        setValidator(m_readOnlyValidator);
-    } else {
-        //revert to r/w validator
-        setValidator(m_readWriteValidator);
+    if (!designMode()) {
+        if (m_internalReadOnly) {
+            if (m_readWriteValidator)
+                disconnect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+                           this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
+            m_readWriteValidator = validator();
+            if (m_readWriteValidator)
+                connect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+                        this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
+            if (!m_readOnlyValidator)
+                m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
+            setValidator(m_readOnlyValidator);
+        } else {
+            //revert to r/w validator
+            setValidator(m_readWriteValidator);
+        }
     }
-    m_menuExtender.updatePopupMenuActions();
 #endif
 }
 
@@ -209,13 +231,12 @@ void KexiDBLineEdit::slotReadWriteValidatorDestroyed(QObject*)
     m_readWriteValidator = 0;
 }
 
-QMenu * KexiDBLineEdit::createPopupMenu()
+void KexiDBLineEdit::contextMenuEvent(QContextMenuEvent *e)
 {
-    QMenu *contextMenu = KLineEdit::createStandardContextMenu();
-    m_menuExtender.createTitle(contextMenu);
-    return contextMenu;
+    QMenu *menu = createStandardContextMenu();
+    m_menuExtender.exec(menu, e->globalPos());
+    delete menu;
 }
-
 
 QWidget* KexiDBLineEdit::widget()
 {
@@ -247,7 +268,14 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         return;
 
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
-    setValidator(new KexiDB::FieldValidator(*cinfo->field, this));
+    delete m_readWriteValidator;
+    KexiDB::FieldValidator* fieldValidator = new KexiDB::FieldValidator(*cinfo->field, this);
+    if (m_internalReadOnly) {
+        m_readWriteValidator = fieldValidator;
+    }
+    else {
+        setValidator(fieldValidator);
+    }
 
     const QString inputMask(m_textFormatter.inputMask());
     if (!inputMask.isEmpty())

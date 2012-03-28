@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -125,18 +125,25 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
+    //! Used when read only flag is true
+    QString originalText() const { return m_originalText; }
+
+    //! Used when read only flag is true
+    int originalCursorPosition() const;
+
 protected slots:
     void slotTextChanged(const QString&);
 
-    //! Used to protecte m_readWriteValidator against after validator is destroyed
+    void slotCursorPositionChanged(int oldPos, int newPos);
+
+    //! Used to protect m_readWriteValidator against after validator is destroyed
     void slotReadWriteValidatorDestroyed(QObject*);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     virtual bool event(QEvent *);
-
-    virtual QMenu * createPopupMenu();
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
     //! Implemented for KexiSubwidgetInterface
     virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
@@ -162,6 +169,10 @@ protected:
 
     //! Used in slotTextChanged()
     bool m_slotTextChanged_enabled : 1;
+
+    QString m_originalText;
+
+    int m_cursorPosition;
 };
 
 #endif
