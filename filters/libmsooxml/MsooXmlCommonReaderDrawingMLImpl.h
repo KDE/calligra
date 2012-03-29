@@ -667,7 +667,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
   - nvGrpSpPr (Non-Visual Properties for a Group Shape) §20.1.2.2.27
   - [done] pic (Picture) §20.1.2.2.30
   - [done] sp (Shape) §20.1.2.2.33
-  - txSp (Text Shape) §20.1.2.2.41
+  - [done] txSp (Text Shape) §20.1.2.2.41
 
   SpreadsheetML:
   - [done] cxnSp (Connection Shape) §20.5.2.13
@@ -710,7 +710,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
                     ELSE_TRY_READ_IF_NS(a, sp)
                     ELSE_TRY_READ_IF_NS(a, cxnSp)
                     // ELSE_TRY_READ_IF_NS(a, graphicFrame)
-                    //TODO: txSp
+                    ELSE_TRY_READ_IF_NS(a, txSp)
                     SKIP_UNKNOWN
                     //! @todo add ELSE_WRONG_FORMAT
                 }
@@ -1435,7 +1435,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
  - [done] nvSpPr (Non-Visual Properties for a Shape) §20.1.2.2.29
  - [done] spPr (Shape Properties) §20.1.2.2.35
  - [done] style (Shape Style) §20.1.2.2.37
- - txSp (Text Shape) §20.1.2.2.41
+ - [done] txSp (Text Shape) §20.1.2.2.41
 
  Attributes:
  - [unsupported?] useBgFill
@@ -1476,7 +1476,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 TRY_READ_IF_NS(a, nvSpPr)
                 ELSE_TRY_READ_IF_NS(a, spPr)
                 ELSE_TRY_READ_IF_NS(a, style)
-                //TODO: txSp
+                ELSE_TRY_READ_IF_NS(a, txSp)
                 SKIP_UNKNOWN
                 //! @todo add ELSE_WRONG_FORMAT
             }
@@ -1494,17 +1494,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 ELSE_TRY_READ_IF(txBody)
 #else
                 else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
-                    bool boxCreated = false;
-                    if (m_contentType == "rect" || m_contentType.isEmpty() ||
-                        unsupportedPredefinedShape())
-                    {
-                        body->startElement("draw:text-box"); // CASE #P436
-                        boxCreated = true;
-                    }
-                    TRY_READ(DrawingML_txBody)
-                    if (boxCreated) {
-                        body->endElement(); // draw:text-box
-                    }
+                    TRY_READ_IN_CONTEXT(DrawingML_txBody)
                 }
 #endif
                 SKIP_UNKNOWN
@@ -1618,38 +1608,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
  These properties include the shape fill, outline, geometry, effects, and 3D orientation.
 
  Parent elements:
-     PresentationML:
-     - [done] cxnSp (§19.3.1.19)
-     - [done] pic (§19.3.1.37)
-     - [done] sp (§19.3.1.43)
+ ----------------
+ PresentationML:
+ - [done] cxnSp (§19.3.1.19)
+ - [done] pic (§19.3.1.37)
+ - [done] sp (§19.3.1.43)
 
-     DrawingML:
-     - [done] cxnSp (§20.1.2.2.10)
-     - lnDef (§20.1.4.1.20)
-     - [done] pic (§20.1.2.2.30)
-     - [done] sp (§20.1.2.2.33)
-     - spDef (§20.1.4.1.27)
-     - txDef (§20.1.4.1.28)
+ DrawingML:
+ - [done] cxnSp (§20.1.2.2.10)
+ - lnDef (§20.1.4.1.20)
+ - [done] pic (§20.1.2.2.30)
+ - [done] sp (§20.1.2.2.33)
+ - spDef (§20.1.4.1.27)
+ - txDef (§20.1.4.1.28)
 
  Child elements:
-    - [done] blipFill (Picture Fill) §20.1.8.14
-    - [done] custGeom (Custom Geometry) §20.1.9.8
-    - effectDag (Effect Container) §20.1.8.25
-    - [done] effectLst (Effect Container) §20.1.8.26
-    - extLst (Extension List) §20.1.2.2.15
-    - [done] gradFill (Gradient Fill) §20.1.8.33
-    - grpFill (Group Fill) §20.1.8.35
-    - [done] ln (Outline) §20.1.2.2.24
-    - [done] noFill (No Fill) §20.1.8.44
-    - pattFill (Pattern Fill) §20.1.8.47
-    - [done] prstGeom (Preset geometry) §20.1.9.18
-    - scene3d (3D Scene Properties) §20.1.4.1.26
-    - [done] solidFill (Solid Fill) §20.1.8.54
-    - sp3d (Apply 3D shape properties) §20.1.5.12
-    - [done] xfrm (2D Transform for Individual Objects) §20.1.7.6
+ - [done] blipFill (Picture Fill) §20.1.8.14
+ - [done] custGeom (Custom Geometry) §20.1.9.8
+ - effectDag (Effect Container) §20.1.8.25
+ - [done] effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §20.1.2.2.15
+ - [done] gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - [done] ln (Outline) §20.1.2.2.24
+ - [done] noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - [done] prstGeom (Preset geometry) §20.1.9.18
+ - scene3d (3D Scene Properties) §20.1.4.1.26
+ - [done] solidFill (Solid Fill) §20.1.8.54
+ - sp3d (Apply 3D shape properties) §20.1.5.12
+ - [done] xfrm (2D Transform for Individual Objects) §20.1.7.6
 
  Attributes:
-    - bwMode (Black and White Mode)
+ - bwMode (Black and White Mode)
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
@@ -1830,7 +1821,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 }
 
 // ================================================================
-//                     NameSpace "dgm"
+//                     Namespace "dgm"
 // ================================================================
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "dgm"
@@ -1915,7 +1906,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 #define MSOOXML_CURRENT_NS "lc"
 
 // ================================================================
-//                     NameSpace "lc"
+//                     Namespace "lc"
 // ================================================================
 
 #undef CURRENT_EL
@@ -1939,7 +1930,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
   - nvGrpSpPr (Non-Visual Properties for a Group Shape)
   - [done] pic (Picture)
   - [done] sp (Shape)
-  - txSp (Text Shape)
+  - [done] txSp (Text Shape)
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lockedCanvas()
 {
@@ -1962,7 +1953,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lockedCanvas()
             ELSE_TRY_READ_IF_NS(a, pic)
             ELSE_TRY_READ_IF_NS(a, sp)
             // ELSE_TRY_READ_IF_NS(a, graphicFrame)
-            //TODO: txSp
+            ELSE_TRY_READ_IF_NS(a, txSp)
             SKIP_UNKNOWN
 	}
     }
@@ -1972,11 +1963,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lockedCanvas()
 }
 
 // ================================================================
-//                     NameSpace "a"
+//                     Namespace "a"
 // ================================================================
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
-
 
 #undef CURRENT_EL
 #define CURRENT_EL lnRef
@@ -2654,7 +2644,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             if (QUALIFIED_NAME_IS(rPr)) {
                 TRY_READ(DrawingML_rPr)
             }
-            ELSE_TRY_READ_IF(t)
+            else if (QUALIFIED_NAME_IS(t)) {
+                TRY_READ_WITH_ARGS(t, true;)
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -3264,29 +3256,64 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
 
 #undef CURRENT_EL
 #define CURRENT_EL xfrm
-//! xfrm handler (2D Transform for Individual Objects)
-//! DrawingML ECMA-376, 20.1.7.6, p. 3187.
-/*! This element represents 2-D transforms for ordinary shapes.
+//! xfrm  (2D Transform for Graphic Frame)
+//! ECMA-376, 19.3.1.53, p.2862 (PresentationML)
+//! ECMA-376, 20.5.2.36, p.3548 (SpreadsheetML)
+/*! This element specifies the transform to be applied to the
+  corresponding graphic frame. This transformation is applied to the
+  graphic frame just as it would be for a shape or group shape. */
+
+//! xfrm (2D Transform for Grouped Objects)
+//! ECMA-376, 20.1.7.5, p.3185 (DrawingML)
+/*! This element is nearly identical to the representation of 2-D
+  transforms for ordinary shapes (§20.1.7.6). The only addition is a
+  member to represent the Child offset and the Child extents. */
+
+//! xfrm (2D Transform for Individual Objects)
+//! ECMA-376, 20.1.7.6, p.3186 (DrawingML)
+/*! This element represents 2-D transforms for ordinary shapes. */
+/*!
 
  Parent elements:
-    - [done] graphicFrame (§20.1.2.2.18)
-    - spPr (§21.2.2.197)
-    - spPr (§21.3.2.23)
-    - spPr (§21.4.3.7)
-    - [done] spPr (§20.1.2.2.35) - DrawingML
-    - spPr (§20.2.2.6)
-    - spPr (§20.5.2.30)
-    - [done] spPr (§19.3.1.44)
-    - txSp (§20.1.2.2.41)
+ ----------------
+ PresentationML:
+ - [done] graphicFrame (§19.3.1.21)/(§20.5.2.16)
+
+ SpreadsheetML
+ - graphicFrame (§20.5.2.16)
+
+ DrawingML:
+ - [done] grpSpPr (§21.3.2.14)
+ - [done] grpSpPr (§20.1.2.2.22)
+ - [done] grpSpPr (§20.5.2.18)
+ - [done] grpSpPr (§19.3.1.23)
+
+ - graphicFrame (§20.1.2.2.18)
+ - [done] spPr (§21.2.2.197)
+ - [done] spPr (§21.3.2.23)
+ - [done] spPr (§21.4.3.7)
+ - [done] spPr (§20.1.2.2.35)
+ - [done] spPr (§20.2.2.6)
+ - [done] spPr (§20.5.2.30)
+ - [done] spPr (§19.3.1.44)
+ - [done] txSp (§20.1.2.2.41)
+
  Child elements:
-    - [done] ext (Extents) §20.1.7.3
-    - [done] off (Offset) §20.1.7.4
-    - [done] chExt (Child extends) ..in case of a group shape
-    - [done] chOff (Child offset) ..in case of a group shape
+ ---------------
+ PresentationML/SpreadsheetML:
+ - [done] ext (Extents) §20.1.7.3
+ - [done] off (Offset) §20.1.7.4
+
+ DrawingML:
+ - [done] chExt (Child extends) §20.1.7.1 (grpSpPr only)
+ - [done] chOff (Child offset) §20.1.7.2 (grpSpPr only)
+ - [done] ext (Extents) §20.1.7.3
+ - [done] off (Offset) §20.1.7.4
+
  Attributes:
-    - [done] flipH (Horizontal Flip)
-    - [done] flipV (Vertical Flip)
-    - [done] rot (Rotation)
+ - [done] flipH (Horizontal Flip)
+ - [done] flipV (Vertical Flip)
+ - [done] rot (Rotation)
 */
 //! @todo support all child elements
 //! CASE #P476
@@ -3320,6 +3347,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL off
 //! off handler (Offset)
 //! DrawingML ECMA-376, 20.1.7.4, p. 3185.
 /*! This element specifies the location of the bounding box of an object.
@@ -3336,9 +3365,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 
  Attributes:
     - [done] x (X-Axis Coordinate)
-    - [done] y (Y-Axis Coordinate) */ //! @todo support all elements
-#undef CURRENT_EL
-#define CURRENT_EL off
+    - [done] y (Y-Axis Coordinate)
+*/
+//! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
 {
     READ_PROLOGUE
@@ -3382,6 +3411,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL ext
 //! ext handler (Extents)
 //! DrawingML ECMA-376, 20.1.7.3, p. 3185.
 /*! This element specifies the size of the bounding box enclosing the referenced object.
@@ -3399,8 +3430,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
       the size of the object as displayed (the result of any scaling to the original object).
  - [done] cy (Extent Width) Specifies the width of the extents rectangle in EMUs.
 */
-#undef CURRENT_EL
-#define CURRENT_EL ext
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
 {
     READ_PROLOGUE
@@ -3427,10 +3456,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     READ_EPILOGUE
 }
 
-//! chExt handler (Child extend)
-//! Look parent, children
 #undef CURRENT_EL
 #define CURRENT_EL chExt
+//! chExt handler (Child extend)
+//! Look parent, children
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
 {
     READ_PROLOGUE
@@ -4006,43 +4035,47 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 #undef CURRENT_EL
 #define CURRENT_EL blipFill
 //! blipFill handler (Picture Fill)
-//! ECMA-376, PresentationML, 19.3.1.4, p. 2818; DrawingML, 20.1.8.14, p. 3195
+//! ECMA-376, 19.3.1.4, p.2818 (PresentationML)
+//! ECMA-376, 20.1.8.14, p.3195 (DrawingML)
 //! @todo use it in DrawingML, 20.2.2.1, p. 3456
-/*! This element specifies the type of picture fill that the picture object has.
- Because a picture has a picture fill already by default, it is possible to have
- two fills specified for a picture object.
+/*! This element specifies the type of picture fill that the picture
+ object has.  Because a picture has a picture fill already by default,
+ it is possible to have two fills specified for a picture object.
 
- BLIPs refer to Binary Large Image or Pictures. Blip Fills are made up of several components: a Blip
- Reference, a Source Rectangle, and a Fill Mode.
- See also M.4.8.4.3 Blip Fills, ECMA-376, p. 5411.
+ BLIPs refer to Binary Large Image or Pictures. Blip Fills are made up
+ of several components: a Blip Reference, a Source Rectangle, and a
+ Fill Mode.  See also M.4.8.4.3 Blip Fills, ECMA-376, p. 5411.
 
  Parent elements:
-    - bg (§21.4.3.1)
-    - bgFillStyleLst (§20.1.4.1.7)
-    - [done] bgPr (§19.3.1.2)
-    - defRPr (§21.1.2.3.2)
-    - endParaRPr (§21.1.2.2.3)
-    - fill (§20.1.8.28)
-    - fill (§20.1.4.2.9)
-    - fillOverlay (§20.1.8.29)
-    - fillStyleLst (§20.1.4.1.13)
-    - grpSpPr (§21.3.2.14)
-    - grpSpPr (§20.1.2.2.22)
-    - grpSpPr (§20.5.2.18)
-    - grpSpPr (§19.3.1.23)
-    - [done] pic (§20.1.2.2.30) - DrawingML
-    - [done] pic (§19.3.1.37) - PresentationML
-    - [done] rPr (§21.1.2.3.9)
-    - spPr (§21.2.2.197)
-    - spPr (§21.3.2.23)
-    - spPr (§21.4.3.7)
-    - spPr (§20.1.2.2.35)
-    - spPr (§20.2.2.6)
-    - spPr (§20.5.2.30)
-    - spPr (§19.3.1.44)
-    - tblPr (§21.1.3.15)
-    - tcPr (§21.1.3.17)
-    - uFill (§21.1.2.3.12)
+     PresentationML:
+     - [done] pic (§19.3.1.37)
+
+     DrawingML:
+     - bg (§21.4.3.1)
+     - bgFillStyleLst (§20.1.4.1.7)
+     - [done] bgPr (§19.3.1.2)
+     - defRPr (§21.1.2.3.2)
+     - endParaRPr (§21.1.2.2.3)
+     - fill (§20.1.8.28)
+     - fill (§20.1.4.2.9)
+     - fillOverlay (§20.1.8.29)
+     - fillStyleLst (§20.1.4.1.13)
+     - grpSpPr (§21.3.2.14)
+     - grpSpPr (§20.1.2.2.22)
+     - grpSpPr (§20.5.2.18)
+     - grpSpPr (§19.3.1.23)
+     - [done] pic (§20.1.2.2.30)
+     - [done] rPr (§21.1.2.3.9)
+     - spPr (§21.2.2.197)
+     - spPr (§21.3.2.23)
+     - spPr (§21.4.3.7)
+     - spPr (§20.1.2.2.35)
+     - spPr (§20.2.2.6)
+     - spPr (§20.5.2.30)
+     - spPr (§19.3.1.44)
+     - tblPr (§21.1.3.15)
+     - tcPr (§21.1.3.17)
+     - uFill (§21.1.2.3.12)
 
  Child elements:
     - [done] blip (Blip) §20.1.8.13
@@ -4074,7 +4107,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         } else {
             ns = QChar((char)caller);
         }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
+#elif defined XLSXXMLDRAWINGREADER_CPP
         if (caller == blipFill_pic) {
             ns = QLatin1String("xdr");
         } else {
@@ -4092,7 +4125,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF_QSTRING(qn)
+        if (m_isLockedCanvas) {
+            BREAK_IF_END_OF(CURRENT_EL)
+        } else {
+            BREAK_IF_END_OF_QSTRING(qn)
+        }
         if (isStartElement()) {
             TRY_READ_IF(blip)
             ELSE_TRY_READ_IF(stretch)
@@ -4114,6 +4151,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         }
         return KoFilter::OK;
     }
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL txSp
+//! txSp (Text Shape)
+//! ECMA-376, 20.1.2.2.41, p.3057 (DrawingML)
+/*! This element specifies the existence of a text shape within a
+  parent shape. This text shape is specifically used for displaying
+  text as it has only text related child elements.
+
+  ParentElements:
+  - [done] grpSp (§20.1.2.2.20)
+  - [done] lockedCanvas (§20.3.2.1)
+  - [done] sp (§20.1.2.2.33)
+
+  Child Elements:
+  - extLst (Extension List) §20.1.2.2.15
+  - [done] txBody (Shape Text Body) §20.1.2.2.40
+  - useSpRect (Use Shape Text Rectangle) §20.1.2.2.42
+  - [done] xfrm (2D Transform for Individual Objects) §20.1.7.6
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txSp()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+#if defined PPTXXMLSLIDEREADER_CPP
+            TRY_READ_IF(txBody)
+#else
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
+                TRY_READ_IN_CONTEXT(DrawingML_txBody)
+            }
+#endif
+            ELSE_TRY_READ_IF(xfrm)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
 }
 
 #if 0 //todo
@@ -6104,21 +6185,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
    properties are contained within this element.
 
    Parent Elements:
+   ----------------
+   PresentationML/SpreadsheetML:
+   - [done] sp (§19.3.1.43)/(§20.5.2.29)
+
    DrawingML:
    - [done] tc (§21.1.3.16)
-   - txSp (§20.1.2.2.41)
-
-   SpreadsheetML:
-   - [done] sp (§20.5.2.29)
+   - [done] txSp (§20.1.2.2.41)
 
    Child Elements:
    - [done] bodyPr (Body Properties) §21.1.2.1.1
    - [done] lstStyle (Text List Styles) §21.1.2.4.12
    - [done] p (Text Paragraphs) §21.1.2.2.6
 
-   NOTE: There's a separate implementation in the PPTX filter.
+   TODO: There's a separate implementation in the PPTX filter which
+   should be merge with this one.
+
 */
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody(txBodyCaller caller)
 {
     READ_PROLOGUE2(DrawingML_txBody)
 
@@ -6127,6 +6211,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_pPr_lvl = 0;
     m_continueListNumbering.clear();
     m_prevListStyleName.clear();
+
+    bool textBoxCreated = false;
+    if (caller != DrawingML_txBody_tc) {
+        if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+            body->startElement("draw:text-box");
+            textBoxCreated = true;
+        }
+    }
 
     while (!atEnd()) {
         readNext();
@@ -6150,6 +6242,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             body->endElement(); // text:list
         }
         m_prevListLevel = 0;
+    }
+
+    if (textBoxCreated) {
+        body->endElement(); //draw:text-box
     }
 
     READ_EPILOGUE

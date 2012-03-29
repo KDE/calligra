@@ -281,17 +281,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
                 KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
                 body = &newBody;
 
-                TRY_READ(DrawingML_txBody);
+                TRY_READ_IN_CONTEXT(DrawingML_txBody);
 
                 KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
 
                 body = oldBody;
             }
-//             ELSE_TRY_READ_IF(extLst)
+            // ELSE_TRY_READ_IF(extLst)
             ELSE_TRY_READ_IF(tcPr)
             SKIP_UNKNOWN
-//             ELSE_WRONG_FORMAT
+            // ELSE_WRONG_FORMAT
         }
     }
 

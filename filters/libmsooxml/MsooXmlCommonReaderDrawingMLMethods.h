@@ -55,6 +55,12 @@ enum cNvPrCaller {
     cNvPr_nvCxnSpPr
 };
 
+enum txBodyCaller {
+    DrawingML_txBody_tc,
+    DrawingML_txBody_txSp,
+    DrawingML_txBody_sp
+};
+
 enum spacingType {
     spacingMarginTop,
     spacingLines,
@@ -142,6 +148,7 @@ KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
+KoFilter::ConversionStatus read_txSp();
 
 void handleRprAttributes(const QXmlStreamAttributes& attrs);
 
@@ -208,7 +215,7 @@ void readWrap();
 // MSOOXML_CURRENT_NS == (DRAWINGML_NS || DRAWINGML_TXBODY_NS)
 // ----------------------------------------
 
-KoFilter::ConversionStatus read_DrawingML_txBody();
+KoFilter::ConversionStatus read_DrawingML_txBody(txBodyCaller caller);
 
 // ----------------------------------------
 

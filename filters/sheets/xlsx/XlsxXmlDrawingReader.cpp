@@ -412,8 +412,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 
 #undef CURRENT_EL
 #define CURRENT_EL graphicFrame
-//! graphicFrame
-/*! ECMA-376, 20.5.2.16, p. 3524
+//! graphicFrame (Graphic Frame)
+/*! ECMA-376, 20.5.2.16, p. 3524 (SpreadSheetML)
   This element describes a single graphical object frame for a spreadsheet
   which contains a graphical object.
 
@@ -424,9 +424,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
   - [done] twoCellAnchor (§20.5.2.33)
 
   Child Elements:
-  - [done] graphic (Graphic Object) (§5.1.2.1.16)
-  - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
-  - xfrm (2D Transform for Graphic Frame)
+  - [done] graphic (Graphic Object) (§20.1.2.2.16)
+  - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§20.5.2.20)
+  - xfrm (2D Transform for Graphic Frame) (§20.5.2.36)
 */
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 {
