@@ -155,9 +155,9 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
             }
         } else {
             // target is stroke so check the stroke style
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(shape->stroke());
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (! stroke) {
-                stroke = new KoLineBorder(1.0);
+                stroke = new KoShapeStroke(1.0);
                 stroke->setLineBrush(QBrush(*m_gradient));
                 m_currentCmd = new KoShapeStrokeCommand(shape, stroke);
                 shape->setStroke(stroke);
@@ -166,7 +166,7 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
             } else {
                 Qt::BrushStyle style = stroke->lineBrush().style();
                 if (style < Qt::LinearGradientPattern || style > Qt::RadialGradientPattern) {
-                    KoLineBorder * newStroke = new KoLineBorder(*stroke);
+                    KoShapeStroke * newStroke = new KoShapeStroke(*stroke);
                     newStroke->setLineBrush(QBrush(*m_gradient));
                     m_currentCmd = new KoShapeStrokeCommand(shape, newStroke);
                     stroke->setLineBrush(QBrush(*m_gradient));
@@ -368,7 +368,7 @@ void KarbonGradientTool::initialize()
         }
         // is the gradient a stroke gradient but shape has no stroke gradient anymore ?
         if (strategy->target() == GradientStrategy::Stroke) {
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(strategy->shape()->stroke());
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(strategy->shape()->stroke());
             if (! stroke  || ! stroke->lineBrush().gradient() || stroke->lineBrush().gradient()->type() != strategy->type()) {
                 // delete the gradient
                 m_strategies.remove(strategy->shape(), strategy);
@@ -411,7 +411,7 @@ void KarbonGradientTool::initialize()
         }
 
         if (! strokeExists) {
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(shape->stroke());
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (stroke) {
                 GradientStrategy * strokeStrategy = createStrategy(shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke);
                 if (strokeStrategy) {
@@ -572,12 +572,12 @@ void KarbonGradientTool::gradientChanged()
     } else {
         QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape * shape, selectedShapes) {
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(shape->stroke());
-            KoLineBorder * newStroke = 0;
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+            KoShapeStroke * newStroke = 0;
             if (stroke)
-                newStroke = new KoLineBorder(*stroke);
+                newStroke = new KoShapeStroke(*stroke);
             else
-                newStroke = new KoLineBorder(1.0);
+                newStroke = new KoShapeStroke(1.0);
             QBrush newGradient;
             if (newStroke->lineBrush().gradient()) {
                 QGradient * g = KarbonGradientHelper::convertGradient(newStroke->lineBrush().gradient(), type);

@@ -144,8 +144,6 @@ private slots:
     void editFrameProperties();
     /// called if another shape got selected
     void selectionChanged();
-    /// force the remainder of the text into the next page
-    void insertFrameBreak();
     /// insert a bookmark on current text cursor location or selection
     void addBookmark();
     /// go to previously bookmarked text cursor location or selection

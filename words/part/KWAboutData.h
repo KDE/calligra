@@ -70,6 +70,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(ki18n("Ewald Snel"), ki18n("Filter"), "ewald@rambo.its.tudelft.nl");
     aboutData->addAuthor(ki18n("Tomasz Grobelny"), ki18n("Filter"), "grotk@poczta.onet.pl");
     aboutData->addAuthor(ki18n("Michael Johnson"), ki18n("Filter"));
+    aboutData->addAuthor(ki18n("Fatcow Web Hosting"), ki18n("Page break icon"), "http://www.fatcow.com/free-icons");
     return aboutData;
 }
 

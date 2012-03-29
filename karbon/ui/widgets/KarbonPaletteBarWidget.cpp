@@ -29,7 +29,7 @@
 #include <KoShapeBackground.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include <KLocale>
 #include <KGlobal>
@@ -218,7 +218,7 @@ void KarbonPaletteBarWidget::updateDocumentColors()
         }
         KoShapeStrokeModel *stroke = shape->stroke();
         if (stroke) {
-            KoLineBorder *lb = dynamic_cast<KoLineBorder*>(shape->stroke());
+            KoShapeStroke *lb = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (lb) {
                 if (lb->lineStyle() == Qt::SolidLine) {
                     colors.insert(qHash(lb->color()), lb->color());

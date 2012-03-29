@@ -47,7 +47,7 @@ TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 
 
 TableShapeFactory::TableShapeFactory()
-    : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "Spreadsheet Shape")
+    : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "spreadsheetshape-deferred")
 {
     setToolTip(i18n("Spreadsheet Shape"));
     setIcon("spreadsheetshape");

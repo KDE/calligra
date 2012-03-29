@@ -29,7 +29,7 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include <KLocale>
 #include <KGlobalSettings>
@@ -143,7 +143,7 @@ protected:
 
         if (m_stroke) {
             m_checkerPainter.paint(painter, rect());
-            const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(m_stroke);
+            const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(m_stroke);
             if (line) {
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
