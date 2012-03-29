@@ -40,3 +40,4 @@ Type=Service
 X-KDE-Library=spreadsheetshape-deferred
 X-Flake-MinVersion=4
 X-Flake-PluginVersion=4
+X-DeferredID=spreadsheetshape-deferred
