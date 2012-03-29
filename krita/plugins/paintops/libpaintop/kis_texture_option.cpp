@@ -102,13 +102,6 @@ public:
         chkInvert->setChecked(false);
         formLayout->addRow(i18n("Invert Texture:"), chkInvert);
 
-        cmbChannel = new QComboBox(this);
-        cmbChannel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        QStringList channels;
-        channels << i18n("Alpha") << i18n("Hue") << i18n("Saturation") << i18n("Lightness");
-        cmbChannel->addItems(channels);
-        formLayout->addRow(i18n("Channel:"), cmbChannel);
-
         setLayout(formLayout);
     }
     KisPatternChooser *chooser;
@@ -119,7 +112,6 @@ public:
     KisGradientSlider *cutoffSlider;
     QComboBox *cmbCutoffPolicy;
     QCheckBox *chkInvert;
-    QComboBox *cmbChannel;
 };
 
 KisTextureOption::KisTextureOption(QObject *)
@@ -140,7 +132,6 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cmbChannel, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     resetGUI(m_optionWidget->chooser->currentResource());
 }
 
@@ -161,7 +152,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     qreal strength = m_optionWidget->strengthSlider->value();
 
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
-    TextureChannel activeChannel = (TextureChannel)m_optionWidget->cmbChannel->currentIndex();
 
     setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
@@ -171,7 +161,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/CutoffRight", m_optionWidget->cutoffSlider->white());
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
-    setting->setProperty("Texture/Pattern/Channel", int(activeChannel));
 
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -231,7 +220,6 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
-    m_optionWidget->cmbChannel->setCurrentIndex(setting->getInt("Texture/Pattern/Channel"));
 
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
 }
@@ -334,8 +322,8 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     invert = setting->getBool("Texture/Pattern/Invert");
     cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
-    activeChannel = (KisTextureOption::TextureChannel)setting->getInt("Texture/Pattern/Channel");
     cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
+
     recalculateMask();
 }
 
@@ -354,19 +342,20 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     fillDevice->setY(y);
 
     KisFillPainter fillPainter(fillDevice);
-    fillPainter.fillRect(x, y, rect.width(), rect.height(), m_mask, bounds);
+    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, bounds);
     fillPainter.end();
 
     quint8 *dabData = dab->data();
 
+    KoColor color(dab->colorSpace());
+    QColor qColor;
+    qreal h, s, l, a;
+
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
-
-        quint8 textureMask = *iter->oldRawData();
-
         for (int col = 0; col < rect.width(); ++col) {
-            if (!(cutoffPolicy == 2 && (textureMask < cutoffLeft || textureMask > cutoffRight))) {
-                dab->colorSpace()->multiplyAlpha(dabData, textureMask, 1);
+            if (!(cutoffPolicy == 2 && (*iter->oldRawData() < cutoffLeft || *iter->oldRawData() > cutoffRight))) {
+                dab->colorSpace()->multiplyAlpha(dabData, *iter->oldRawData(), 1);
             }
             iter->nextPixel();
             dabData += dab->pixelSize();

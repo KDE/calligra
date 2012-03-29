@@ -37,13 +37,6 @@ class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
     Q_OBJECT
 public:
 
-    enum TextureChannel {
-        ALPHA,
-        HUE,
-        SATURATION,
-        LIGHT
-    };
-
     explicit KisTextureOption(QObject *parent= 0);
     virtual ~KisTextureOption();
 
@@ -75,7 +68,6 @@ public:
     int offsetY;
     qreal strength;
     bool invert;
-    KisTextureOption::TextureChannel activeChannel;
     KisPattern *pattern;
     int cutoffLeft;
     int cutoffRight;
