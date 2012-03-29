@@ -261,11 +261,13 @@ void TextTool::createActions()
 
 
     m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
     m_actionFormatSub = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
@@ -331,6 +333,14 @@ void TextTool::createActions()
     addAction("line_break", action);
     action->setShortcut(Qt::SHIFT + Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
+
+    action  = new KAction(KIcon("insert-pagebreak"), i18n("Page Break"), this);
+    addAction("insert_framebreak", action);
+    action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
+    action->setToolTip(i18n("Force the remainder of the text into the next page"));
+    action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
+
 
     action  = new KAction(i18n("Font..."), this);
     addAction("format_font", action);
@@ -1417,7 +1427,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         m_caretTimer.start();
         m_caretTimerState = true; // turn caret on while typing
     }
-    ensureCursorVisible();
+    if (moveOperation != QTextCursor::NoMove)
+        // this difference in handling is need to prevent leaving a trail of old cursors onscreen
+        ensureCursorVisible();
+    else
+        m_delayedEnsureVisible = true;
 
     updateSelectionHandler();
 }
@@ -1988,6 +2002,14 @@ void TextTool::insertIndexMarker()
 {
     // TODO handle result when we figure out how to report errors from a tool.
     m_textEditor.data()->insertIndexMarker();
+}
+
+void TextTool::insertFrameBreak()
+{
+    m_textEditor.data()->insertFrameBreak();
+
+    ensureCursorVisible();
+    m_delayedEnsureVisible = true;
 }
 
 void TextTool::setStyle(KoCharacterStyle *style)

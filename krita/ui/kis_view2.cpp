@@ -48,6 +48,7 @@
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kparts/componentfactory.h>
@@ -123,6 +124,8 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
 
+#include "thememanager.h"
+
 class BlockingUserInputEventFilter : public QObject
 {
     bool eventFilter(QObject *watched, QEvent *event)
@@ -159,8 +162,9 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0) {
-
+        , paintingAssistantManager(0)
+        , themeManager(0)
+    {
     }
 
     ~KisView2Private() {
@@ -206,6 +210,7 @@ public:
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    Digikam::ThemeManager *themeManager;
 };
 
 
@@ -213,6 +218,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
       m_d(new KisView2Private())
 {
+    // populate theme menu
+    m_d->themeManager = new Digikam::ThemeManager(this);
+
     setFocusPolicy(Qt::NoFocus);
 
     if (!doc->isReadWrite()) {
@@ -343,7 +351,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
@@ -402,6 +410,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    KConfigGroup group(KGlobal::config(), "theme");
+    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
     delete m_d;
 }
 
@@ -711,7 +721,15 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    KConfigGroup group(KGlobal::config(), "theme");
+    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    m_d->themeManager->registerThemeActions(actionCollection());
+    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                       m_d->themeManager->defaultThemeName()));
+
 }
+
 
 
 void KisView2::createManagers()

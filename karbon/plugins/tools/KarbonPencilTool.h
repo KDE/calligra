@@ -24,7 +24,7 @@
 #include <QRectF>
 
 class KoPathShape;
-class KoLineBorder;
+class KoShapeStroke;
 class KoPathPoint;
 
 class KarbonPencilTool : public KoToolBase
@@ -57,7 +57,7 @@ private:
     qreal lineAngle(const QPointF &p1, const QPointF &p2);
     void addPoint(const QPointF & point);
     void finish(bool closePath);
-    KoLineBorder * currentStroke();
+    KoShapeStroke * currentStroke();
 
     /// returns the nearest existing path point
     KoPathPoint* endPointAtPosition(const QPointF &position);
