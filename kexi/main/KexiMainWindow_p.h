@@ -79,7 +79,11 @@ public:
     KToolBar *createToolBar(const char *name, const QString& caption);
     
     void setCurrentTab(const QString& name);
-    
+
+    //! Sets current tab to @a index, counting from first visible (non-Kexi) tab.
+    //! In non-user mode, the first visible tab is "create" tab.
+    void setCurrentTab(int index);
+
     void hideTab(const QString& name);
     
     void showTab(const QString& name);
@@ -494,6 +498,9 @@ public:
     void setCurrentTab(const QString& name);
     void hideTab(const QString& name);
     void showTab(const QString& name);
+#ifndef NDEBUG
+    void debugToolbars() const;
+#endif
     int lowestIndex;
 };
 
@@ -1008,11 +1015,43 @@ void KexiTabbedToolBar::Private::hideTab(const QString& name)
     toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = false;
 }
 
+#ifndef NDEBUG
+void KexiTabbedToolBar::Private::debugToolbars() const
+{
+    kDebug() << "QHash<QString, KToolBar*> toolbarsForName:";
+    for (QHash<QString, KToolBar*>::ConstIterator it(toolbarsForName.constBegin());
+         it!=toolbarsForName.constEnd(); ++it)
+    {
+        kDebug() << it.key() << "->" << it.value();
+    }
+    kDebug() << "QHash<QString, int> toolbarsIndexForName:";
+    for (QHash<QString, int>::ConstIterator it(toolbarsIndexForName.constBegin());
+         it!=toolbarsIndexForName.constEnd(); ++it)
+    {
+        kDebug() << it.key() << "->" << it.value();
+    }
+    kDebug() << "QHash<QString, QString> toolbarsCaptionForName:";
+    for (QHash<QString, QString>::ConstIterator it(toolbarsCaptionForName.constBegin());
+         it!=toolbarsCaptionForName.constEnd(); ++it)
+    {
+        kDebug() << it.key() << "->" << it.value();
+    }
+    kDebug() << "QVector<bool> toolbarsVisibleForIndex:";
+    for (int i = 0; i < toolbarsVisibleForIndex.size(); i++) {
+        kDebug() << i << "->" << toolbarsVisibleForIndex[i];
+    }
+}
+#endif
+
 void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
-    //kDebug() << "name:" << name;
-    //kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
-    //kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
+    kDebug() << "name:" << name;
+    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
+    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
+    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
+#ifndef NDEBUG
+    //debugToolbars();
+#endif
     if (q->indexOf(toolbarsForName.value(name)) == -1) {
         int h = 0;
         // count h = invisible tabs before this
@@ -1353,6 +1392,11 @@ KToolBar* KexiTabbedToolBar::createToolBar(const char* name, const QString& capt
 void KexiTabbedToolBar::setCurrentTab(const QString& name)
 {
     d->setCurrentTab(name);
+}
+
+void KexiTabbedToolBar::setCurrentTab(int index)
+{
+    setCurrentIndex(d->lowestIndex + index);
 }
 
 void KexiTabbedToolBar::hideTab(const QString& name)

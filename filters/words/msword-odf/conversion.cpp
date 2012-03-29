@@ -39,7 +39,7 @@
 
 //#define CONVERSION_DEBUG_SHD
 
-static QMap<int, qreal> myValues() {
+static QMap<int, qreal> prepareShdPairs() {
     QMap<int, qreal> shadingTable;
     shadingTable[2] = 0.05;
     shadingTable[3] = 0.10;
@@ -83,7 +83,7 @@ static QMap<int, qreal> myValues() {
     return shadingTable;
 }
 
-static const QMap<int, qreal> SHADING_TABLE = myValues();
+static const QMap<int, qreal> SHADING_TABLE = prepareShdPairs();
 
 
 QString Conversion::styleName2QString(const wvWare::UString& str)
@@ -245,9 +245,9 @@ int yMix(int yFore, int yBack, qreal pct) {
     return yBack + (yFore - yBack) * pct;
 }
 
-QString Conversion::contrastFontColor(const QString& bgColor)
+QString Conversion::contrastColor(const QString& color)
 {
-    if (bgColor.isNull()) {
+    if (color.isNull()) {
         return QColor(Qt::black).name();
     }
 
@@ -265,7 +265,7 @@ QString Conversion::contrastFontColor(const QString& bgColor)
     }
     return  QColor(d, d, d).name();
 #else
-    int luminosity = luma(QColor(bgColor));
+    int luminosity = luma(QColor(color));
     if (luminosity <= 60) {
          return QColor(Qt::white).name();
     } else {
@@ -279,16 +279,25 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
 
-    if (shd.shdAutoOrNill) {
-        return contrastFontColor(bgColor);
+#ifdef CONVERSION_DEBUG_SHD
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
+    qDebug() << "ipat:" << shd.ipat;
+    qDebug() << "cvBack:" << hex << shd.cvBack;
+    qDebug() << "cvFore:" << hex << shd.cvFore;
+#endif
+
+    if (shd.isShdAuto() || shd.isShdNil()) {
+        return contrastColor(bgColor);
     }
 
     QColor foreColor;
     QColor backColor;
 
     if (shd.cvFore == wvWare::Word97::cvAuto) {
-        if (fontColor.isNull()) {
-            foreColor = QColor(contrastFontColor(bgColor));
+        if (fontColor.isEmpty()) {
+            foreColor = QColor(contrastColor(bgColor));
         } else {
             foreColor = QColor(fontColor);
         }
@@ -297,7 +306,7 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     }
 
     if (shd.cvBack == wvWare::Word97::cvAuto) {
-        if (bgColor.isNull()) {
+        if (bgColor.isEmpty()) {
             backColor = QColor(Qt::white).name();
         } else {
             backColor = QColor(bgColor);
@@ -332,7 +341,6 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
     qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
     qDebug() << "ipat" << shd.ipat;
-
     qDebug() << "fore" << QString::number(shd.cvFore | 0xff000000, 16).right(6) << foreColor.name();
     qDebug() << "back" << QString::number(shd.cvBack | 0xff000000, 16).right(6) << backColor.name();
     qDebug() << "luminosity " << luminosity;
@@ -350,19 +358,19 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
 QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
-    QString ret;
-    if (shd.shdAutoOrNill) {
-        return ret;
-    }
-
 #ifdef CONVERSION_DEBUG_SHD
-    qDebug() << "==> shdToColorStr";
+    qDebug() << Q_FUNC_INFO;
     qDebug() << "bgColor:" << bgColor;
     qDebug() << "fontColor:" << fontColor;
     qDebug() << "ipat:" << shd.ipat;
-    qDebug() << "cvBack:" << QColor(shd.cvBack).name();
-    qDebug() << "cvFore:" << QColor(shd.cvFore).name();
+    qDebug() << "cvBack:" << hex << shd.cvBack;
+    qDebug() << "cvFore:" << hex << shd.cvFore;
 #endif
+
+    QString ret;
+    if (shd.isShdAuto() || shd.isShdNil()) {
+        return ret;
+    }
 
     switch (shd.ipat) {
     case ipatAuto: // "Clear" in MS Word UI
@@ -372,7 +380,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         break;
     case ipatSolid:
         if (shd.cvFore == wvWare::Word97::cvAuto) {
-            ret = contrastFontColor(bgColor);
+            ret = contrastColor(bgColor);
         } else {
             ret.append(QString::number(shd.cvFore | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
@@ -382,7 +390,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         break;
     default:
     {
-        //handle remaining Ipat values
+        //handle remaining ipat values
         quint32 grayClr = shadingPatternToColor(shd.ipat);
         if (grayClr == wvWare::Word97::cvAuto) {
             ret = computeAutoColor(shd, bgColor, fontColor);
@@ -403,7 +411,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             QColor foreColor;
             QColor backColor;
             if (shd.cvFore == wvWare::Word97::cvAuto) {
-                foreColor = QColor(contrastFontColor(bgColor));
+                foreColor = QColor(contrastColor(bgColor));
                 //qDebug() << "fr auto" << foreColor.name() << "bgColor" << bgColor;
             } else {
                 foreColor = QColor(shd.cvFore);
@@ -412,7 +420,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
 
             if (shd.cvBack == wvWare::Word97::cvAuto) {
                 // it's not autocolor, it's probably background color
-                backColor = contrastFontColor(foreColor.name());
+                backColor = contrastColor(foreColor.name());
                 //qDebug() << "bg auto" << backColor.name();
             } else {
                 backColor = QColor(shd.cvBack);

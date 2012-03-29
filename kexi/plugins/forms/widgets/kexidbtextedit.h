@@ -129,6 +129,9 @@ private:
     bool m_slotTextChanged_enabled : 1;
 
     DataSourceLabel *m_dataSourceLabel;
+
+    //! Text length allowed
+    uint m_length;
 };
 
 #endif

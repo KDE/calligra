@@ -1,8 +1,10 @@
 include_directories(
     ${WPD_INCLUDE_DIR}
     ${LIBWPG_INCLUDE_DIR}
+    ${QT_INCLUDES}
+    ${KDE4_INCLUDE_DIR}
 )
-add_library(writerperfect SHARED
+kde4_add_library(writerperfect SHARED
             DiskDocumentHandler.cxx
             DocumentElement.cxx
             FemtoZip.cxx
@@ -18,7 +20,7 @@ add_library(writerperfect SHARED
             TableStyle.cxx
             TextRunStyle.cxx
 )
-target_link_libraries(writerperfect ${WPD_LIBRARIES} ${LIBWPG_LIBRARIES})
+target_link_libraries(writerperfect ${WPD_LIBRARIES} ${LIBWPG_LIBRARIES} ${QT_QTCORE_LIBRARY} )
 
 set_target_properties(writerperfect PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

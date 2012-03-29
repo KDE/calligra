@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,10 +49,14 @@ SQLiteVacuum::SQLiteVacuum(const QString& filePath)
 
 SQLiteVacuum::~SQLiteVacuum()
 {
-    m_dumpProcess->waitForFinished();
-    delete m_dumpProcess;
-    m_sqliteProcess->waitForFinished();
-    delete m_sqliteProcess;
+    if (m_dumpProcess) {
+        m_dumpProcess->waitForFinished();
+        delete m_dumpProcess;
+    }
+    if (m_sqliteProcess) {
+        m_sqliteProcess->waitForFinished();
+        delete m_sqliteProcess;
+    }
     if (m_dlg)
         m_dlg->close();
     delete m_dlg;

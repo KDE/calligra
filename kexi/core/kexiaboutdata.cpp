@@ -55,6 +55,8 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Shreya Pandit"), ki18n("Web elements for forms and reports"), "shreya.pandit25@gmail.com");
     addAuthor(
+        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug repors"),  "dimitrios.tanis@kdemail.net");
+    addAuthor(
         ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
     addAuthor(
         ki18n("Sharan Rao"), ki18n("Sybase/MS SQL Server database drivers, xBase migration plugin, improvements for KexiDB"), "sharanrao@gmail.com");
@@ -77,8 +79,6 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Till Busch"), ki18n("Bugfixes, original Table Widget"), "till@bux.at");
 
-    addCredit(
-        ki18n("Dimitrios T. Tanis"), ki18n("Documentation for Kexi 2"),  "jtanis@tanisfood.gr");
     addCredit(
         ki18n("Daniel Molkentin"), ki18n("Initial design improvements"),  "molkentin@kde.org");
     addCredit(

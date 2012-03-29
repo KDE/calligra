@@ -39,12 +39,13 @@
 #include <QColor>
 #include <QByteArray>
 
+//#define USE_OFFICEARTDGG_CONTAINER
+//#define DEBUG_GHANDLER
+
 using namespace wvWare;
 using namespace MSO;
 
 using Conversion::twipsToPt;
-
-//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -956,7 +957,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -994,13 +1000,16 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
-    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
-    // OfficeArtClientTextBox.
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide
+    // an OfficeArtClientTextBox.
+    bool textIdValid = false;
     quint32 textId = 0;
+
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
             textId = tb->clientTextBox;
+            textIdValid = true;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
@@ -1009,9 +1018,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             kDebug(30513) << "lTxid property - negative text identifier!";
         } else {
             textId = (quint32)ds.iTxid();
+            textIdValid = true;
         }
     }
-    emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+    if (textIdValid) {
+        emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
+    }
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }
@@ -1030,7 +1042,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1089,7 +1106,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+    DrawStyle ds(dgg, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1169,7 +1190,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

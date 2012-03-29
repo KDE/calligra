@@ -43,10 +43,10 @@ KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*options*/): QAbstractTableModel(parent)
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
                                       , d(new Private())
 {
-
+    d->options = options;
 }
 
 KexiFieldListModel::~KexiFieldListModel()
@@ -92,7 +92,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {
     KexiFieldListModelItem *item = 0;
 
-    if (index.row() < d->items.count()) {
+    if (index.isValid() && index.row() < d->items.count()) {
         item = d->items[index.row()];
     }
 

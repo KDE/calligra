@@ -33,6 +33,7 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_posOffsetH = 0;
     m_posOffsetV = 0;
     m_currentTextStyleProperties = 0;
+    m_read_t_args = false;
 }
 
 void MSOOXML_CURRENT_CLASS::doneInternal()
@@ -42,17 +43,35 @@ void MSOOXML_CURRENT_CLASS::doneInternal()
 
 #undef CURRENT_EL
 #define CURRENT_EL t
-//! t handler (Text)
-/*! ECMA-376, 17.3.3.31, p.389.
+//! t (Text)
+//! ECMA-376, 17.3.3.31, p.379. (WordprocessingML)
+//! ECMA-376, 21.1.2.3.11, p.3632 (DrawingML)
+//! ECMA-376, 22.1.2.116, p.4226 (MathML)
+/*! This element specifies the actual text for this text run. This is
+  the text that is formatted using all specified body, paragraph and
+  run properties. This element shall be present within a run of text.
+
  Parent elements:
- - [done] r (§22.1.2.87) - Shared ML
+ ----------------
+ WordprocessingML:
+ - r (§22.1.2.87)
  - [done] r (§17.3.2.25)
+
+ DrawingML:
+ - [done] fld (§21.1.2.2.4)
+ - [done] r (§21.1.2.3.8)
+
  No child elements.
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 {
-    READ_PROLOGUE
+    if (m_read_t_args) {
+        READ_PROLOGUE_IF_NS(a)
+    } else {
+        READ_PROLOGUE
+    }
+
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
@@ -62,17 +81,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
             d->textBoxHasContent = true;
 #endif
         }
-//! @todo add ELSE_WRONG_FORMAT
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (m_read_t_args) {
+            BREAK_IF_END_OF_WITH_NS(a, CURRENT_EL)
+        } else {
+            BREAK_IF_END_OF(CURRENT_EL)
+        }
     }
 //kDebug() << "{1}";
-    READ_EPILOGUE
+
+    if (m_read_t_args) {
+        m_read_t_args = false;
+        READ_EPILOGUE_IF_NS(a)
+    } else {
+        READ_EPILOGUE
+    }
 }
 
 
-// ----------------------------------------------------------------
-//                     New namespace: mc
 
+// ================================================================
+//                     Namespace: mc
+// ================================================================
 // ARRRRRGH!
 
 // The way that READ_PROLOGUE is defined via QUALIFIED_NAME makes it

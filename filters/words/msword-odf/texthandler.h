@@ -143,14 +143,14 @@ public:
     QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
 
     /**
-     *
+     * TODO:
      */
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
 
     /**
-     *
+     * TODO:
      */
-    void updateListStyle() throw(InvalidFormatException);
+    void defineListStyle(KoGenStyle &style);
 
     /**
      *
@@ -256,14 +256,10 @@ private:
     //  List
     // ************************************************
     QString m_listSuffixes[9]; // the suffix for every list level seen so far
-    QString m_listStyleName;   // track the name of the list style
     int m_currentListLevel; // tells us which list level we're on (-1 if not in a list)
     int m_currentListID;    // tracks the ID of the current list - 0 if not a list
 
     QStack <KoXmlWriter*> m_usedListWriters;
-
-    //information about already processed lists
-    QMap<int, QPair<QString, QList<quint8> > > m_previousLists;
 
     // Map of listID keys and listLevel/continue-list pairs
     QMap<int, QPair<quint8, bool> > m_continueListNum;
@@ -279,26 +275,20 @@ private:
     //save/restore (very similar to the wv2 method)
     struct State {
         State(Words::Table* table, Paragraph* paragraph,
-              QString listStyleName, int listDepth, int listID,
-              const QMap<int, QPair<QString, QList<quint8> > > &prevLists,
+              int listDepth, int listID,
               KoXmlWriter* drawingWriter, bool insideDrawing) :
 
             table(table),
             paragraph(paragraph),
-            listStyleName(listStyleName),
             listDepth(listDepth),
             listID(listID),
-            previousLists(prevLists),
             drawingWriter(drawingWriter),
             insideDrawing(insideDrawing)
         {}
         Words::Table* table;
         Paragraph* paragraph;
-        QString listStyleName;
         int listDepth; //tells us which list level we're on (-1 if not in a list)
         int listID;    //tracks the id of the current list - 0 if no list
-        QMap<int, QPair<QString, QList<quint8> > > previousLists; //remember previous lists, to continue numbering
-
         KoXmlWriter* drawingWriter;
         bool insideDrawing;
     };

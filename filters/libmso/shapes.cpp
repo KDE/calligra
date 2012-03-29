@@ -470,7 +470,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processRoundRectangle(o, out);
         break;
     case msosptEllipse:
-        // TODO: Something has to be done here (LukasT).
+        // TODO: Something has to be done here (LukasT).  LukasT:
+        // "Great comment", can you provide more details? :)
         processEllipse(o, out);
         break;
     case msosptDiamond:

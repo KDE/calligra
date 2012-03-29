@@ -351,9 +351,9 @@ void Document::processStyles()
                 userStyle.addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
 
-            // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor(), true);
+            // Process the paragraph and character properties.
             Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle, false, 0, 0, QString());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor());
 
             // Add style to main collection, using the name that it
             // had in the .doc.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <kptnode.h>
 #include <kptresource.h>
 #include <kptdocuments.h>
+#include "kptdebug.h"
 
 #include <QTextCodec>
 #include <QByteArray>
@@ -31,7 +32,6 @@
 #include <QTextStream>
 #include <QFile>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kurl.h>
 
@@ -39,7 +39,6 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 
-extern int planDbg();
 
 using namespace KPlato;
 

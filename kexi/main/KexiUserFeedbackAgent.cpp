@@ -151,10 +151,7 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
  : QObject(parent), d(new Private)
 {
     if (d->configGroup.readEntry("BasicInfo", false)) {
-        d->areas |= BasicArea;
-    }
-    if (d->configGroup.readEntry("AnonymousIdentification", false)) {
-        d->areas |= AnonymousIdentificationArea;
+        d->areas |= BasicArea | AnonymousIdentificationArea;
     }
     if (d->configGroup.readEntry("SystemInfo", false)) {
         d->areas |= SystemInfoArea;
@@ -193,7 +190,6 @@ void KexiUserFeedbackAgent::setEnabledAreas(Areas areas)
     }
     d->areas = areas;
     d->configGroup.writeEntry("BasicInfo", bool(d->areas & BasicArea));
-    d->configGroup.writeEntry("AnonymousIdentification", bool(d->areas & AnonymousIdentificationArea));
     d->configGroup.writeEntry("SystemInfo", bool(d->areas & SystemInfoArea));
     d->configGroup.writeEntry("ScreenInfo", bool(d->areas & ScreenInfoArea));
     d->configGroup.writeEntry("RegionalSettings", bool(d->areas & RegionalSettingsArea));

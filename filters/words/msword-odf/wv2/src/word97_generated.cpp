@@ -559,10 +559,7 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
     shifterU16>>=5;
     ipat=shifterU16;
 
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
-
-    if(preservePos)
+    if (preservePos)
         stream->pop();
     return true;
 }
@@ -587,11 +584,6 @@ void SHD::readPtr(const U8 *ptr) {
     wvlog << "icoBack: 0x" << hex << icoBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
 #endif
-
-    //check for Shd80Nil 
-    if (icoFore == 0x001F && icoBack == 0x001F && ipat == 0x003F) {
-        shdAutoOrNill = true;
-    }
 }
 
 void SHD::read90Ptr(const U8 *ptr) {
@@ -619,9 +611,6 @@ void SHD::read90Ptr(const U8 *ptr) {
     cvBack=(cvauto<<24)|(r<<16)|(g<<8)|(b);
     shifterU16=readU16(ptr);
     ipat=shifterU16;
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
 void SHD::readSHDOperandPtr(const U8 *ptr) {
@@ -663,28 +652,22 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     wvlog << "cvBack: 0x" << hex << cvBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
 #endif
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
-bool SHD::isShdAutoOrNill()
+bool SHD::isShdAuto() const
 {
-    shdAutoOrNill = false;
-
-    //ShdAuto
     if (cvFore == 0xff000000 && cvBack == 0xff000000 && ipat == 0x0000) {
-        shdAutoOrNill = true;
+        return true;
     }
-    //ShdNil
-    if (cvFore == 0xffffffff && cvBack == 0xffffffff && 
-        (ipat == 0x0000 || ipat == 0xffff)) 
-    {
-        shdAutoOrNill = true;
+    return false;
+}
+
+bool SHD::isShdNil() const
+{
+    if (cvFore == 0xffffffff && cvBack == 0xffffffff && ipat == 0x0000) {
+        return true;
     }
-
-
-    return shdAutoOrNill;
+    return false;
 }
 
 bool SHD::write(OLEStreamWriter *stream, bool preservePos) const {
@@ -708,9 +691,6 @@ void SHD::clear() {
     cvFore=0xff000000;
     cvBack=0xff000000;
     ipat=0;
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
 void SHD::dump() const

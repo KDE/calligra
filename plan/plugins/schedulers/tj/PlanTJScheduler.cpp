@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009, 2010, 2011 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2010, 2011, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptcalendar.h"
+#include "kptdebug.h"
 
 #include "taskjuggler/taskjuggler.h"
 #include "taskjuggler/Project.h"
@@ -52,8 +53,6 @@
 #include <iostream>
 
 #define PROGRESS_MAX_VALUE 100
-
-extern int planDbg();
 
 
 PlanTJScheduler::PlanTJScheduler( Project *project, ScheduleManager *sm, QObject *parent )

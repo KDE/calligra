@@ -50,21 +50,21 @@ include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDE
 
 add_subdirectory( libexport )
 
-if (NOT TINY)
-
+IF( NOT TINY )
     macro_optional_find_package(WPD)
     macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
-    
+    macro_optional_find_package(WPG)
+    macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
     macro_optional_find_package(LibWPS)
     macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
 
     add_subdirectory( html-odf )
-    if(WPD_FOUND)
+    if(WPD_FOUND AND WPG_FOUND)
         add_subdirectory( wordperfect )
-    endif(WPD_FOUND)
-    if(LIBWPS_FOUND)
+    endif(WPD_FOUND AND WPG_FOUND)
+    if(WPD_FOUND AND LIBWPS_FOUND)
         add_subdirectory( works )
-    endif(LIBWPS_FOUND)
+    endif(WPD_FOUND AND LIBWPS_FOUND)
 
     if(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 #        if (TARGET kowmf)
@@ -84,7 +84,7 @@ if (NOT TINY)
     endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 
     
-endif (NOT TINY)
+ENDIF( NOT TINY )
 
 add_subdirectory( ascii )
 add_subdirectory( rtf )

@@ -13,7 +13,7 @@ import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 applications = {
   'calligrawords': ['odt', 'doc', 'docx'],
   'calligrastage': ['odp', 'ppt', 'pptx'],
-  'calligratables': ['ods', 'xls', 'xlsx']
+  'calligrasheets': ['ods', 'xls', 'xlsx']
 }
 extensions = {
   'odt': 'odt',

@@ -57,6 +57,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
+#include <KoTemplateCreateDia.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
@@ -95,6 +96,8 @@
 #include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
+#include <KStandardDirs>
+#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
@@ -190,12 +193,13 @@ QWidget *KWView::canvas() const
 void KWView::updateReadWrite(bool readWrite)
 {
     m_actionFormatFrameSet->setEnabled(readWrite);
-    m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
     m_actionAddBookmark->setEnabled(readWrite);
-    QAction *action = actionCollection()->action("insert_variable");
+    QAction *action = actionCollection()->action("insert_framebreak");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
@@ -228,14 +232,6 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
-
-    m_actionInsertFrameBreak  = new KAction(QString(), this);
-    actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak);
-    m_actionInsertFrameBreak->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    m_actionInsertFrameBreak->setText(i18n("Page Break"));
-    m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
-    m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
     m_actionViewHeader = new KAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
@@ -378,16 +374,16 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    // -------------- File menu
+    m_actionCreateTemplate = new KAction(i18n("Create Template From Document..."), this);
+    m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
+    m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
+    actionCollection()->addAction("extra_template", m_actionCreateTemplate);
+    connect(m_actionCreateTemplate, SIGNAL(triggered()), this, SLOT(createTemplate()));
+
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
-
-        // -------------- File menu
-        m_actionExtraCreateTemplate = new KAction(i18n("Create Template From Document..."), 0,
-        this, SLOT(extraCreateTemplate()),
-        actionCollection(), "extra_template");
-        m_actionExtraCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
-        m_actionExtraCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
 
         (void) new KAction(i18n("Configure Mail Merge..."), "configure",0,
         this, SLOT(editMailMergeDataBase()),
@@ -507,16 +503,33 @@ KoPrintJob *KWView::createPrintJob()
     return dia;
 }
 
-void KWView::insertFrameBreak()
+void KWView::createTemplate()
 {
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    if (editor) {
-        // this means we have the text tool selected right now.
-        editor->insertFrameBreak();
-    } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
-        KoTextDocument doc(m_document->mainFrameSet()->document());
-        doc.textEditor()->insertFrameBreak();
+    int width = 60;
+    int height = 60;
+    QPixmap pix = m_document->generatePreview(QSize(width, height));
+
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".ott");
+    //Check that creation of temp file was successful
+    if (!tempFile->open()) {
+        qWarning("Creation of temporary file to store template failed.");
+        return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close();
+    delete tempFile;
+
+    m_document->saveNativeFormat(fileName);
+
+    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
+                                        fileName, pix, this);
+
+    KWFactory::componentData().dirs()->addResourceType("words_template",
+            "data", "words/templates/");
+
+    QDir d;
+    d.remove(fileName);
 }
 
 void KWView::addBookmark()

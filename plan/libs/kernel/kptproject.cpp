@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas zander <zander@kde.org>
- Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004 - 2010, 2012 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
  Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
 
@@ -29,6 +29,7 @@
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 #include "kptschedulerplugin.h"
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
@@ -39,12 +40,10 @@
 #include <QList>
 
 #include <kdatetime.h>
-#include <kdebug.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
