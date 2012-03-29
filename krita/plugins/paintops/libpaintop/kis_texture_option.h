@@ -79,6 +79,7 @@ public:
     KisPattern *pattern;
     int cutoffLeft;
     int cutoffRight;
+    int cutoffPolicy;
     /**
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
