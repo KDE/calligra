@@ -11,7 +11,7 @@
        - Load object style
     + Load object specific attributes
        - sphere                                         done
-       - cube
+       - cube                                           done
        - extrude
        - rotate
 
@@ -19,21 +19,21 @@
     + Scene object                                      Done
     + Lightsource object                                Done
     + 3DObject baseclass
-       - sphere object
-       - cube object
+       - sphere object                                  done
+       - cube object                                    done
        - extrude object
        - rotate object
 
  * Save the 3D scene
     + Save Scene attributes                             Done
-    + Save Scene style
+    + Save Scene style                                  Done
     + Save Lightsources                                 Done
     + Save generic scene object stuff
        - Save generic object attributes
        - Save object style
     + Save object specific attributes
        - sphere                                         done
-       - cube
+       - cube                                           done
        - extrude
        - rotate
 

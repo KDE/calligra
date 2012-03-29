@@ -31,7 +31,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-//#include <KoShape.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -41,6 +42,7 @@
 #include "GraphicsProperties.h"
 
 Scene::Scene()
+    : m_sceneProperties()
 {
 }
 
@@ -61,7 +63,7 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
     kDebug(31000) << styleName << styleElement;
 
     // Get the 
-    GraphicsProperties  sceneProperties;
+    m_sceneProperties.clear();
     if (styleElement && !styleElement->isNull()) {
         kDebug(31000) << "loading style" << styleName;
 
@@ -69,7 +71,7 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
         const KoXmlElement  properties = KoXml::namedItemNS(*styleElement, KoXmlNS::style, "graphic-properties");
         kDebug(31000) << "isNull:" << properties.isNull();
         if (!properties.isNull())
-            sceneProperties.loadOdf(properties);
+            m_sceneProperties.loadOdf(properties);
     }
     
     // 1. Load the scene attributes.
@@ -133,8 +135,8 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
             kDebug(31000) << "  Light:" << l.diffuseColor() << l.direction()
                           << l.enabled() << l.specular();
 #endif
-        }
-        else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
+        } 
+       else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // FIXME: Recursive!  How does this work?
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
@@ -168,8 +170,17 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
     return true;
 }
 
-void Scene::saveOdf(KoXmlWriter &writer) const
+void Scene::saveOdf(KoShapeSavingContext &context) const
 {
+    KoXmlWriter &writer = context.xmlWriter();
+
+    // 0. Scene style
+    // FIXME: This doesn't work because the shape itself has its own style with its own stylename.
+    KoGenStyle   sceneStyle(KoGenStyle::GraphicAutoStyle, "graphic" /*, m_sceneProperties.parent()*/);
+    m_sceneProperties.saveOdf(sceneStyle);
+    QString  styleName = context.mainStyles().insert(sceneStyle, "gr");
+    writer.addAttribute("draw:style-name", styleName);
+
     // 1. Write scene attributes
     // Camera attributes
     writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(m_vrp.x())

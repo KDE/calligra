@@ -35,6 +35,7 @@
 
 class KoXmlElement;
 class KoXmlWriter;
+class KoGenStyle;
 class KoShapeSavingContext;
 
 /**
@@ -60,6 +61,8 @@ public:
     GraphicsProperties();
     ~GraphicsProperties();
 
+    void clear();
+
     /**
      * Load the style from the element
      *
@@ -67,7 +70,7 @@ public:
      * @return true when border attributes were found
      */
     bool loadOdf(const KoXmlElement &properties);
-    void saveOdf(KoXmlWriter &writer) const;
+    void saveOdf(KoGenStyle &style) const;
 
     // getters
     Fill   fill() const               { return m_fill; }

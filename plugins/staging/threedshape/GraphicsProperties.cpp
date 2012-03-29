@@ -31,6 +31,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoGenStyle.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 
@@ -49,6 +50,11 @@ GraphicsProperties::~GraphicsProperties()
 {
 }
 
+
+void GraphicsProperties::clear()
+{
+    m_attributes = 0x0;
+}
 
 bool GraphicsProperties::loadOdf(const KoXmlElement &properties)
 {
@@ -96,6 +102,9 @@ bool GraphicsProperties::loadOdf(const KoXmlElement &properties)
     return true;
 }
 
-void GraphicsProperties::saveOdf(KoXmlWriter &writer) const
+void GraphicsProperties::saveOdf(KoGenStyle &style) const
 {
+    if (m_attributes & AttributeFill) {
+        style.addProperty("draw:fill", m_fill == Solid ? "solid" : "", KoGenStyle::GraphicType);
+    }
 }

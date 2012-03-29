@@ -31,6 +31,7 @@
 #include <KoShape.h>
 
 // Shape
+#include "GraphicsProperties.h"
 #include "Lightsource.h"
 #include "Objects.h"
 
@@ -58,7 +59,7 @@ public:
     ~Scene();
 
     bool loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context);
-    void saveOdf(KoXmlWriter &writer) const;
+    void saveOdf(KoShapeSavingContext &context) const;
 
     // getters
     QVector3D   vrp()          const { return m_vrp;          }
@@ -74,6 +75,9 @@ public:
     QString     transform()    const { return m_transform;    } // Not yet used, just saved
 
 private:
+    // 0. Scene style
+    GraphicsProperties  m_sceneProperties;
+
     // 1. Scene attributes
     // Camera attributes
     QVector3D   m_vrp;          // Camera origin

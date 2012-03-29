@@ -98,7 +98,7 @@ void ThreedShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
 
     // Writes the attributes and children of the dr3d:scene element.
-    m_scene.saveOdf(writer);
+    m_scene.saveOdf(context);
 
     writer.endElement(); // dr3d:scene
 }
