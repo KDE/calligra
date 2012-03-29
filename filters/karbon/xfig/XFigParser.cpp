@@ -590,6 +590,7 @@ qDebug()<<"arc";
         if (arrowHead.isNull()) {
             return 0;
         }
+        arcObject->setForwardArrow(arrowHead.take());
     }
 
     if (backwardArrow > 0) {
@@ -597,9 +598,20 @@ qDebug()<<"arc";
         if (arrowHead.isNull()) {
             return 0;
         }
+        arcObject->setBackwardArrow(arrowHead.take());
     }
 
-// TODO
+    const XFigArcObject::Subtype subtype =
+        (sub_type==1) ?   XFigArcObject::OpenEnded :
+        /*(sub_type==2)*/ XFigArcObject::PieWedgeClosed;
+    arcObject->setSubtype(subtype);
+    const XFigArcObject::Direction arcDirection =
+        (direction==1) ?   XFigArcObject::CounterClockwise :
+        /*(direction==0)*/ XFigArcObject::Clockwise;
+    arcObject->setDirection(arcDirection);
+    arcObject->setCenterPoint(XFigPoint(center_x, center_y));
+    arcObject->setPoints(XFigPoint(x1, y1), XFigPoint(x2, y2), XFigPoint(x3, y3));
+    arcObject->setCapType(capType(cap_style));
     arcObject->setDepth( depth );
     arcObject->setFill( area_fill, fill_color );
     arcObject->setLine( lineType(line_style), thickness, style_val, pen_color );

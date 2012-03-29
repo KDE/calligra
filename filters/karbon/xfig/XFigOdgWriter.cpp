@@ -106,6 +106,12 @@ XFigOdgWriter::odfLength( qint32 length ) const
 }
 
 double
+XFigOdgWriter::odfLength( double length ) const
+{
+    return ptUnit( length / m_Document->resolution() );
+}
+
+double
 XFigOdgWriter::odfXCoord( qint32 x ) const
 {
     return ptUnit( static_cast<double>(x) / m_Document->resolution() );
@@ -363,7 +369,7 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
     writeStroke(polylineStyle, polylineObject);
     writeFill(polylineStyle, polylineObject);
     writeJoinType(polylineStyle, polylineObject->joinType());
-    writeCapType(polylineStyle, polylineObject->capType());
+    writeCapType(polylineStyle, polylineObject);
     writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
     writeArrow(polylineStyle, polylineObject->forwardArrow(), LineEnd);
     const QString polylineStyleName =
@@ -442,10 +448,57 @@ XFigOdgWriter::writeSplineObject( const XFigSplineObject* /*object*/ )
 {
 }
 
-void
-XFigOdgWriter::writeArcObject( const XFigArcObject* /*object*/ )
+void XFigOdgWriter::writeArcObject( const XFigArcObject* arcObject )
 {
-    // TODO
+    const XFigPoint centerPoint = arcObject->centerPoint();
+    const XFigPoint point1 = arcObject->point1();
+    const XFigPoint point3 = arcObject->point3();
+
+    const XFigCoord diffX1 = point1.x() - centerPoint.x();
+    const XFigCoord diffY1 = point1.y() - centerPoint.y();
+    const XFigCoord diffX3 = point3.x() - centerPoint.x();
+    const XFigCoord diffY3 = point3.y() - centerPoint.y();
+
+    double startAngle = -atan2( diffY1, diffX1 ) * 180.0/M_PI;
+    double endAngle   = -atan2( diffY3, diffX3 ) * 180.0/M_PI;
+    if (arcObject->direction() == XFigArcObject::Clockwise) {
+        const double helper = startAngle;
+        startAngle = endAngle;
+        endAngle = helper;
+    }
+    const double radius = qSqrt((diffX1*diffX1) + (diffY1*diffY1));
+
+    m_BodyWriter->startElement("draw:circle");
+
+    writeZIndex( arcObject );
+
+    m_BodyWriter->addAttributePt("svg:cx", odfXCoord(centerPoint.x()));
+    m_BodyWriter->addAttributePt("svg:cy", odfXCoord(centerPoint.y()));
+    m_BodyWriter->addAttributePt("svg:r", odfLength(radius));
+    m_BodyWriter->addAttribute("draw:start-angle", startAngle);
+    m_BodyWriter->addAttribute("draw:end-angle", endAngle);
+
+    // TODO: cut in XFig has no line on the cut side, only on the curve
+    const char* kind =
+        (arcObject->subtype() == XFigArcObject::PieWedgeClosed) ? "section" :
+        (arcObject->fillStyleId() != -1 ) ?                       "cut" :
+                                                                  "arc";
+    m_BodyWriter->addAttribute("draw:kind", kind);
+
+    KoGenStyle arcStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    writeStroke(arcStyle, arcObject);
+    writeFill(arcStyle, arcObject);
+    writeCapType(arcStyle, arcObject);
+    writeArrow(arcStyle, arcObject->backwardArrow(),
+               (arcObject->direction() == XFigArcObject::Clockwise)?LineEnd:LineStart);
+    writeArrow(arcStyle, arcObject->forwardArrow(),
+               (arcObject->direction() == XFigArcObject::Clockwise)?LineStart:LineEnd);
+    const QString arcStyleName = m_StyleCollector.insert(arcStyle, QLatin1String("arcStyle"));
+    m_BodyWriter->addAttribute("draw:style-name", arcStyleName);
+
+    writeComment(arcObject);
+
+    m_BodyWriter->endElement(); // draw:circle
 }
 
 
@@ -705,8 +758,10 @@ XFigOdgWriter::writeJoinType(KoGenStyle& odfStyle, int joinType)
 }
 
 void
-XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, int capType)
+XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, const XFigLineEndable* lineEndable)
 {
+    const XFigCapType capType = lineEndable->capType();
+
     const char* const linecap =
         (capType == XFigCapRound) ?      "round" :
         (capType == XFigCapProjecting) ? "square" :

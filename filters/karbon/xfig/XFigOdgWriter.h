@@ -41,6 +41,7 @@ class XFigTextObject;
 class XFigAbstractGraphObject;
 class XFigAbstractObject;
 class XFigLineable;
+class XFigLineEndable;
 class XFigFillable;
 class XFigArrowHead;
 class XFigPoint;
@@ -87,7 +88,7 @@ private:
     void writeStroke( KoGenStyle& odfStyle, const XFigLineable* lineable );
     void writeDotDash( KoGenStyle& odfStyle, int lineType, double distance );
     void writeJoinType(KoGenStyle& odfStyle, int joinType);
-    void writeCapType( KoGenStyle& odfStyle, int capType );
+    void writeCapType( KoGenStyle& odfStyle, const XFigLineEndable* lineEndable );
     void writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType);
 
     void writeComment(const XFigAbstractObject* object);
@@ -101,6 +102,7 @@ private:
     double odfYCoord( qint32 y ) const;
     /// Returns the XFig length as ODF length (in pt)
     double odfLength( qint32 length ) const;
+    double odfLength( double length ) const;
 
 private:
     QLocale m_CLocale;
