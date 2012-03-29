@@ -44,6 +44,7 @@
 #include <kis_painter.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_gradient_slider.h>
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -81,6 +82,11 @@ public:
         strengthSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         formLayout->addRow(i18n("Strength:"), strengthSlider);
 
+        cutoffSlider = new KisGradientSlider(this);
+        cutoffSlider->enableGamma(false);
+        cutoffSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        formLayout->addRow(i18n("Threshold"), cutoffSlider);
+
         chkInvert = new QCheckBox("", this);
         chkInvert->setChecked(false);
         formLayout->addRow(i18n("Invert Texture:"), chkInvert);
@@ -99,6 +105,7 @@ public:
     KisSliderSpinBox *offsetSliderX;
     KisSliderSpinBox *offsetSliderY;
     KisDoubleSliderSpinBox *strengthSlider;
+    KisGradientSlider *cutoffSlider;
     QCheckBox *chkInvert;
     QComboBox *cmbChannel;
 };
@@ -117,6 +124,8 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cmbChannel, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     resetGUI(m_optionWidget->chooser->currentResource());
@@ -137,6 +146,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     int offsetX = m_optionWidget->offsetSliderX->value();
     int offsetY = m_optionWidget->offsetSliderY->value();
     qreal strength = m_optionWidget->strengthSlider->value();
+
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
     TextureChannel activeChannel = (TextureChannel)m_optionWidget->cmbChannel->currentIndex();
 
@@ -144,6 +154,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/Strength", strength);
+    setting->setProperty("Texture/Pattern/CutoffLeft", m_optionWidget->cutoffSlider->black());
+    setting->setProperty("Texture/Pattern/CutoffRight", m_optionWidget->cutoffSlider->white());
     setting->setProperty("Texture/Pattern/Invert", invert);
     setting->setProperty("Texture/Pattern/Channel", int(activeChannel));
 
@@ -201,6 +213,8 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_optionWidget->strengthSlider->setValue(setting->getDouble("Texture/Pattern/Strength"));
+    m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
+    m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
     m_optionWidget->cmbChannel->setCurrentIndex(setting->getInt("Texture/Pattern/Channel"));
 
@@ -302,6 +316,8 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     offsetY = setting->getInt("Texture/Pattern/OffsetY");
     strength = setting->getDouble("Texture/Pattern/Strength");
     invert = setting->getBool("Texture/Pattern/Invert");
+    cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
+    cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
     activeChannel = (KisTextureOption::TextureChannel)setting->getInt("Texture/Pattern/Channel");
 
     recalculateMask();

@@ -48,7 +48,7 @@ public:
     virtual ~KisTextureOption();
 
 public slots:
-    
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -77,7 +77,8 @@ public:
     bool invert;
     KisTextureOption::TextureChannel activeChannel;
     KisPattern *pattern;
-
+    int cutoffLeft;
+    int cutoffRight;
     /**
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
