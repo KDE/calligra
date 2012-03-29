@@ -2,8 +2,9 @@
  * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
- *
  * Contact: Suresh Chande suresh.chande@nokia.com
+ *
+ * Copyright (C) 2011-2012 Matus Uzak (matus.uzak@gmail.com).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -40,6 +41,7 @@ enum ColorType {
 };
 
 enum blipFillCaller {
+    blipFill_lockedCanvas = 'a',
     blipFill_spPr = 'a',
     blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
@@ -72,36 +74,38 @@ struct GroupProp {
 
 void initDrawingML();
 
-// All the readers
-#if !defined MSOOXMLDRAWINGTABLESTYLEREADER_H
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "dgm"
 // ----------------------------------------
 KoFilter::ConversionStatus read_relIds();
+
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "c"
 // ----------------------------------------
 KoFilter::ConversionStatus read_chart();
-#endif
+
+// ----------------------------------------
+// MSOOXML_CURRENT_NS "lc"
+// ----------------------------------------
+KoFilter::ConversionStatus read_lockedCanvas();
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == DRAWINGML_PIC_NS
 // ----------------------------------------
-
-// The following elements have a different NS with each client.
-KoFilter::ConversionStatus read_cNvPicPr();
-KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller);
-KoFilter::ConversionStatus read_nvPicPr();
-KoFilter::ConversionStatus read_pic();
-KoFilter::ConversionStatus read_spPr();
-KoFilter::ConversionStatus read_nvSpPr();
-KoFilter::ConversionStatus read_grpSp();
-KoFilter::ConversionStatus read_grpSpPr();
-KoFilter::ConversionStatus read_nvCxnSpPr();
-KoFilter::ConversionStatus read_cNvSpPr();
-KoFilter::ConversionStatus read_cxnSp();
-KoFilter::ConversionStatus read_sp();
-KoFilter::ConversionStatus read_style();
+// The following elements can have a namespace in {a,pic,p,xdr}.
+KoFilter::ConversionStatus read_cNvPicPr(); //done
+KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller); //done
+KoFilter::ConversionStatus read_nvPicPr(); //done
+KoFilter::ConversionStatus read_pic(); //done
+KoFilter::ConversionStatus read_nvSpPr(); //done
+KoFilter::ConversionStatus read_grpSp(); //done
+KoFilter::ConversionStatus read_grpSpPr(); //done
+KoFilter::ConversionStatus read_nvCxnSpPr(); //done
+KoFilter::ConversionStatus read_cNvSpPr(); //done
+KoFilter::ConversionStatus read_cxnSp(); //done
+KoFilter::ConversionStatus read_sp(); //done
+KoFilter::ConversionStatus read_spPr(); //done
+KoFilter::ConversionStatus read_style(); //done
 
 void preReadSp();
 void generateFrameSp();
@@ -110,7 +114,6 @@ bool unsupportedPredefinedShape();
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "a"
 // ----------------------------------------
-
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_masterClrMapping();
 KoFilter::ConversionStatus read_overrideClrMapping();
@@ -145,8 +148,7 @@ void handleRprAttributes(const QXmlStreamAttributes& attrs);
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == DRAWINGML_NS
 // ----------------------------------------
-
-// The following elements have a different NS with each client.
+// The following elements can have a namespace in {a,wp}.
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_DrawingML_highlight();
@@ -212,6 +214,8 @@ KoFilter::ConversionStatus read_DrawingML_txBody();
 
 MSOOXML::Utils::autoFitStatus m_normAutofit; // Whether text should be fitted to fit the shape
 
+bool m_isLockedCanvas;
+
 KoGenStyle m_referredFont;
 
 int m_gradPosition;
@@ -252,8 +256,13 @@ QMap<quint16, QString> m_lvlXmlIdMap;
 // true - continue numbered list, false - restart numbering
 QMap<quint16, bool> m_continueListNumbering;
 
-bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
-bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
+//! set by read_drawing() to indicate if we have encountered
+//! drawing/anchor, used by read_pic()
+bool m_drawing_anchor;
+
+//! set by read_drawing() to indicate if we have encountered
+//! drawing/inline, used by read_pic()
+bool m_drawing_inline;
 
 // Shape properties
 qint64 m_svgX; //!< set by read_off()
@@ -264,16 +273,14 @@ int m_svgChX; //!< set by read_chOff()
 int m_svgChY; //!< set by read_chOff()
 int m_svgChWidth; //! set by read_chExt()
 int m_svgChHeight; //! set by read_chExt()
-// These have to be in a vector in order to support group shapes within
-// a group shape
-
 
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
-
-QVector<GroupProp> m_svgProp; //! value of the parent
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
+
 int m_rot; //! set by read_xfrm()
+
+QVector<GroupProp> m_svgProp; //! value of the parent
 
 QString m_xlinkHref; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()

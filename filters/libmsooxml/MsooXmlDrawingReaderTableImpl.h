@@ -274,7 +274,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if(qualifiedName() == "a:txBody") {
+            if (qualifiedName() == "a:txBody") {
                 QBuffer buffer;
 
                 KoXmlWriter* oldBody = body;
