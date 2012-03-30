@@ -59,7 +59,7 @@ bool ResizeColumnManipulator::process(Element* element)
         ColumnFormat *format = m_sheet->nonDefaultColumnFormat(col);
         if (m_firstrun)
             m_oldSizes[col] = format->width();
-        format->setWidth(qMax(2.0, m_reverse ? m_oldSizes[col] : m_newSize));
+        format->setWidth(m_reverse ? m_oldSizes[col] : qMax(2.0, m_newSize));
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
