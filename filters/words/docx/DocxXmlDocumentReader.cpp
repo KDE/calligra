@@ -3632,8 +3632,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL) {
         m_currentTextStyle.addProperty("fo:font-weight", "bold");
-    }
-    else {
+    } else {
         m_currentTextStyle.addProperty("fo:font-weight", "normal");
     }
     readNext();
@@ -3649,6 +3648,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_i()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL) {
         m_currentTextStyle.addProperty("fo:font-style", "italic");
+    } else {
+        m_currentTextStyle.addProperty("fo:font-style", "normal");
     }
     readNext();
     READ_EPILOGUE
