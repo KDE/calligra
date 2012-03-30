@@ -1746,18 +1746,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
     TRY_READ_ATTR(anchor)
 
-    if (!link_target.isEmpty() || !anchor.isEmpty()) {
-        body->startElement("text:a", false);
-        body->addAttribute("xlink:type", "simple");
-        closeTag = true;
-        if (!anchor.isEmpty())
-        {
-            body->addAttribute("xlink:href", QString("#%1").arg(anchor));
-        }
-        else {
-            body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
-        }
-    }
+    MSOOXML::Utils::XmlWriteBuffer hlinkBuffer;
+    body = hlinkBuffer.setWriter(body);
 
     while (!atEnd()) {
         readNext();
@@ -1776,6 +1766,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    body = hlinkBuffer.originalWriter();
+
+    //NOTE: Workaround until text:display="none" support.
+    if ((m_currentParagraphStyle.property("text:display", KoGenStyle::TextType) == "none") &&
+        hlinkBuffer.isEmpty()) {
+        READ_EPILOGUE
+    }
+
+    if (!link_target.isEmpty() || !anchor.isEmpty()) {
+        body->startElement("text:a", false);
+        body->addAttribute("xlink:type", "simple");
+        closeTag = true;
+        if (!anchor.isEmpty())
+        {
+            body->addAttribute("xlink:href", QString("#%1").arg(anchor));
+        }
+        else {
+            body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        }
+    }
+
+    hlinkBuffer.releaseWriter();
+
     if (closeTag) {
         body->endElement(); // text:bookmark, text:a
     }
@@ -2217,6 +2230,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    //NOTE: Workaround until text:display="none" support.
+    bool isHidden = (m_currentParagraphStyle.property("text:display", KoGenStyle::TextType) == "none");
+
     // rPr (Run Properties for the Paragraph Mark), ECMA-376, 17.3.1.29, p.253
     // This element specifies the set of run properties applied to the
     // glyph used to represent the physical location of the paragraph
@@ -2228,8 +2244,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
 
-    if (oldWasCaption) {
+    if (oldWasCaption || (isHidden && textPBuf.isEmpty())) {
         //nothing
+        body = textPBuf.originalWriter();
     } else {
         if (m_dropCapStatus == DropCapRead) {
             body = textPBuf.releaseWriter();
@@ -2629,6 +2646,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    //NOTE: Workaround until text:display="none" support.
+    if (m_currentTextStyle.property("text:display") == "none") {
+        body = buffer.originalWriter();
+        READ_EPILOGUE
     }
 
     if (m_currentTextStyle.parentName().isEmpty()) {
@@ -3609,8 +3632,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL) {
         m_currentTextStyle.addProperty("fo:font-weight", "bold");
-    }
-    else {
+    } else {
         m_currentTextStyle.addProperty("fo:font-weight", "normal");
     }
     readNext();
@@ -3626,6 +3648,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_i()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL) {
         m_currentTextStyle.addProperty("fo:font-style", "italic");
+    } else {
+        m_currentTextStyle.addProperty("fo:font-style", "normal");
     }
     readNext();
     READ_EPILOGUE
