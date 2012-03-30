@@ -67,5 +67,5 @@ Comment[sv]=Nytt Karbon-dokument:
 Comment[uk]=Новий документ Karbon:
 Comment[x-test]=xxNew Karbon document:xx
 Type=Link
-URL=.source/Illustration.karbon
+URL=.source/Illustration.odg
 Icon=application-vnd.oasis.opendocument.graphics
