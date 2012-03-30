@@ -161,6 +161,7 @@ Forms
 *Fixed bug: Setting a text box as Read Only allows changes to be made nevertheles
 BUG:278419 
 *Properly updated context menu when read-only flag is set for line edits and text boxes
+*Setting a text box or text editor to Read Only mode changes the look to a bit dimmed (as in disabled widget) to indicate the mode
 
 TODO: read-only data widgets: in data mode display a small read-only tooltip during editing or as a label on the right hand
 TODO: read-only data widgets: in design mode display a small read-only icon/text

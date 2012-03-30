@@ -144,11 +144,14 @@ protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     virtual bool event(QEvent *);
     virtual void contextMenuEvent(QContextMenuEvent *e);
+    virtual void changeEvent(QEvent *e);
 
     //! Implemented for KexiSubwidgetInterface
     virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
     void updateTextForDataSource();
+
+    void updatePalette();
 
     //! Used to format text
     KexiTextFormatter m_textFormatter;
@@ -165,14 +168,15 @@ protected:
 
     //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
     //! is still false.
-    bool m_internalReadOnly : 1;
+    bool m_internalReadOnly;
 
     //! Used in slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled;
 
     QString m_originalText;
-
     int m_cursorPosition;
+    QPalette m_originalPalette; //!< Used for read-only case
+    bool m_paletteChangeEvent_enabled;
 };
 
 #endif
