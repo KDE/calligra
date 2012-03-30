@@ -39,9 +39,6 @@
 #include <kexidb/fieldvalidator.h>
 #include <kexiutils/utils.h>
 
-//! @todo reenable as an app aption
-//#define USE_KLineEdit_setReadOnly
-
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator
 {
@@ -101,17 +98,12 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         , m_menuExtender(this, this)
         , m_internalReadOnly(false)
         , m_slotTextChanged_enabled(true)
+        , m_paletteChangeEvent_enabled(true)
 {
-#ifdef USE_KLineEdit_setReadOnly
-//! @todo reenable as an app aption
-    QPalette p(widget->palette());
-    p.setColor(KexiFormUtils::lighterGrayBackgroundColor(palette()));
-    widget->setPalette(p);
-#endif
-
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
+    m_originalPalette = palette();
     connect(this, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
@@ -199,13 +191,28 @@ bool KexiDBLineEdit::isReadOnly() const
     return m_internalReadOnly;
 }
 
+void KexiDBLineEdit::updatePalette()
+{
+    m_paletteChangeEvent_enabled = false;
+    setPalette(m_internalReadOnly ?
+               KexiUtils::paletteForReadOnly(m_originalPalette)
+              : m_originalPalette);
+    m_paletteChangeEvent_enabled = true;
+}
+
+void KexiDBLineEdit::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::PaletteChange && m_paletteChangeEvent_enabled) {
+        m_originalPalette = palette();
+        updatePalette();
+    }
+    KLineEdit::changeEvent(e);
+}
+
 void KexiDBLineEdit::setReadOnly(bool readOnly)
 {
-#ifdef USE_KLineEdit_setReadOnly
-//! @todo reenable as an app aption
-    return KLineEdit::setReadOnly(readOnly);
-#else
     m_internalReadOnly = readOnly;
+    updatePalette();
     if (!designMode()) {
         if (m_internalReadOnly) {
             if (m_readWriteValidator)
@@ -223,7 +230,6 @@ void KexiDBLineEdit::setReadOnly(bool readOnly)
             setValidator(m_readWriteValidator);
         }
     }
-#endif
 }
 
 void KexiDBLineEdit::slotReadWriteValidatorDestroyed(QObject*)

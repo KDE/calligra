@@ -117,22 +117,27 @@ protected slots:
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void contextMenuEvent(QContextMenuEvent *e);
+    virtual void changeEvent(QEvent *e);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     QMenu * createPopupMenu(const QPoint & pos);
     void updateTextForDataSource();
     void createDataSourceLabel();
+    void updatePalette();
 
 private:
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
     //! Used to disable slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled;
 
     DataSourceLabel *m_dataSourceLabel;
 
     //! Text length allowed
     uint m_length;
+
+    QPalette m_originalPalette; //!< Used for read-only case
+    bool m_paletteChangeEvent_enabled;
 };
 
 #endif

@@ -21,6 +21,7 @@
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
 #include <kexidb/queryschema.h>
+#include <kexiutils/utils.h>
 
 #include <kapplication.h>
 #include <kstdaccel.h>
@@ -75,6 +76,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_slotTextChanged_enabled(true)
         , m_dataSourceLabel(0)
         , m_length(0)
+        , m_paletteChangeEvent_enabled(true)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -342,6 +344,24 @@ void KexiDBTextEdit::selectAllOnFocusIfNeeded()
 {
 //    moveCursorToEnd();
 //    selectAll();
+}
+
+void KexiDBTextEdit::updatePalette()
+{
+    m_paletteChangeEvent_enabled = false;
+    setPalette(isReadOnly() ?
+               KexiUtils::paletteForReadOnly(m_originalPalette)
+              : m_originalPalette);
+    m_paletteChangeEvent_enabled = true;
+}
+
+void KexiDBTextEdit::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::PaletteChange && m_paletteChangeEvent_enabled) {
+        m_originalPalette = palette();
+        updatePalette();
+    }
+    KTextEdit::changeEvent(e);
 }
 
 #include "kexidbtextedit.moc"
