@@ -59,7 +59,10 @@ bool ResizeColumnManipulator::process(Element* element)
         ColumnFormat *format = m_sheet->nonDefaultColumnFormat(col);
         if (m_firstrun)
             m_oldSizes[col] = format->width();
+        qreal delta = format->width();
         format->setWidth(m_reverse ? m_oldSizes[col] : qMax(2.0, m_newSize));
+        delta = format->width() - delta;
+        m_sheet->adjustCellAnchoredShapesX(delta, col+1);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
@@ -99,6 +102,12 @@ bool ResizeRowManipulator::process(Element* element)
         }
     } else {
         m_sheet->rowFormats()->setRowHeight(range.top(), range.bottom(), m_newSize);
+    }
+    // TODO: more efficiently update positions of cell-anchored shapes
+    for (int row = range.top(); row <= range.bottom(); ++row) {
+        qreal delta = m_newSize - m_oldSizes[row];
+        if (m_reverse) delta = -delta;
+        m_sheet->adjustCellAnchoredShapesY(delta, row+1);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));

@@ -575,6 +575,38 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
+void Sheet::adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta)
+{
+    foreach (KoShape* s, d->shapes) {
+        if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
+            if (s->position().x() >= minX && s->position().x() < maxX) {
+                s->setPosition(s->position() + QPointF(delta, 0));
+            }
+        }
+    }
+}
+
+void Sheet::adjustCellAnchoredShapesX(qreal delta, int firstCol, int lastCol)
+{
+    adjustCellAnchoredShapesX(columnPosition(firstCol), columnPosition(lastCol+1), delta);
+}
+
+void Sheet::adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta)
+{
+    foreach (KoShape* s, d->shapes) {
+        if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
+            if (s->position().y() >= minY && s->position().y() < maxY) {
+                s->setPosition(s->position() + QPointF(0, delta));
+            }
+        }
+    }
+}
+
+void Sheet::adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow)
+{
+    adjustCellAnchoredShapesY(rowPosition(firstRow), rowPosition(lastRow+1), delta);
+}
+
 int Sheet::leftColumn(qreal _xpos, qreal &_left) const
 {
     _left = 0.0;
