@@ -139,10 +139,14 @@ bool HideShowManipulator::process(Element* element)
         for (int col = range.left(); col <= range.right(); ++col) {
             ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
             format->setHidden(!m_reverse);
+            m_sheet->adjustCellAnchoredShapesX(m_reverse ? format->width() : -format->width(), col);
         }
     }
     if (m_manipulateRows) {
         m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), !m_reverse);
+        qreal delta = m_sheet->rowFormats()->totalRowHeight(range.top(), range.bottom());
+        if (!m_reverse) delta = -delta;
+        m_sheet->adjustCellAnchoredShapesY(delta, range.top());
     }
     return true;
 }

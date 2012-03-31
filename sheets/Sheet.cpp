@@ -580,7 +580,9 @@ void Sheet::adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta)
     foreach (KoShape* s, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
             if (s->position().x() >= minX && s->position().x() < maxX) {
-                s->setPosition(s->position() + QPointF(delta, 0));
+                QPointF p = s->position();
+                p.setX(qMax(minX, p.x() + delta));
+                s->setPosition(p);
             }
         }
     }
@@ -596,7 +598,9 @@ void Sheet::adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta)
     foreach (KoShape* s, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
             if (s->position().y() >= minY && s->position().y() < maxY) {
-                s->setPosition(s->position() + QPointF(0, delta));
+                QPointF p = s->position();
+                p.setY(qMax(minY, p.y() + delta));
+                s->setPosition(p);
             }
         }
     }
