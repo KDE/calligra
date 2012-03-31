@@ -305,9 +305,7 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
     QList<QAction *> actions = menu->actions();
     if (actions.isEmpty())
         return false;
-    QWidgetAction * action = dynamic_cast<QWidgetAction*>(actions.first());
-    if (!action || !action->defaultWidget())
-        return false;
+    QAction * action = actions.first();
 
     /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
      (see doc/dev/settings.txt) */
@@ -316,7 +314,11 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                             objectTypeName));
 
     menu->addTitle(KIcon(iconName), realTitle, action /*before old*/);
-    menu->removeAction(action);
+    if (dynamic_cast<QWidgetAction*>(action)
+        && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
+    {
+        menu->removeAction(action);
+    }
     return true;
 }
 
