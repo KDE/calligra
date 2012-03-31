@@ -112,8 +112,9 @@ bool ResizeRowManipulator::process(Element* element)
   class HideShowManipulator
 ****************************************************************************/
 
-HideShowManipulator::HideShowManipulator()
-        : m_manipulateColumns(false),
+HideShowManipulator::HideShowManipulator(KUndo2Command* parent)
+        : AbstractRegionCommand(parent),
+        m_manipulateColumns(false),
         m_manipulateRows(false)
 {
 }
