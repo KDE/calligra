@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Chart Report Plugin
 Name[ca]=Connector d'informes de diagrames
+Name[el]=Πρόσθετο αναφοράς Chart
 Name[es]=Complemento de informe de gráficos
 Name[et]=Aruande diagrammiplugin
 Name[fr]=Module externe de panneaux pour Chart
@@ -20,6 +21,7 @@ Comment=KoReport Chart Plugin
 Comment[ca]=Connector de diagrames KoReport
 Comment[da]=Diagram-plugin til KoReport
 Comment[de]=KoReport-Diagrammmodul
+Comment[el]=Πρόσθετο KoReport Chart
 Comment[es]=Complemento de diagramas de KoReport
 Comment[et]=KoReporti diagrammiplugin
 Comment[it]=Estensione per i grafici di KoReport
