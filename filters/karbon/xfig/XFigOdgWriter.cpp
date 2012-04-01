@@ -459,8 +459,8 @@ void XFigOdgWriter::writeArcObject( const XFigArcObject* arcObject )
     const XFigCoord diffX3 = point3.x() - centerPoint.x();
     const XFigCoord diffY3 = point3.y() - centerPoint.y();
 
-    double startAngle = -atan2( diffY1, diffX1 ) * 180.0/M_PI;
-    double endAngle   = -atan2( diffY3, diffX3 ) * 180.0/M_PI;
+    double startAngle = -atan2( (qreal)diffY1, diffX1 ) * 180.0/M_PI;
+    double endAngle   = -atan2( (qreal)diffY3, diffX3 ) * 180.0/M_PI;
     if (arcObject->direction() == XFigArcObject::Clockwise) {
         const double helper = startAngle;
         startAngle = endAngle;
