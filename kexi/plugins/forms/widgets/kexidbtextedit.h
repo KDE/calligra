@@ -134,7 +134,7 @@ private:
     DataSourceLabel *m_dataSourceLabel;
 
     //! Text length allowed
-    uint m_Length;
+    uint m_length;
 
     QPalette m_originalPalette; //!< Used for read-only case
     bool m_paletteChangeEvent_enabled;
