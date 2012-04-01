@@ -199,13 +199,13 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     if (!cinfo) {
-        m_Length = 0;
+        m_length = 0;
         return;
     }
 
     if (cinfo->field->isTextType()) {
         if (!designMode())
-            m_Length = cinfo->field->length();
+            m_length = cinfo->field->length();
     }
 
     KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
