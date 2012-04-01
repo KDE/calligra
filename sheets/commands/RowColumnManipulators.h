@@ -129,7 +129,7 @@ private:
 class HideShowManipulator : public AbstractRegionCommand
 {
 public:
-    HideShowManipulator();
+    HideShowManipulator(KUndo2Command* parent = 0);
     virtual ~HideShowManipulator();
 
     virtual bool process(Element*);

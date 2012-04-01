@@ -44,7 +44,7 @@ class XFigLineable;
 class XFigLineEndable;
 class XFigFillable;
 class XFigArrowHead;
-class XFigPoint;
+struct XFigPoint;
 
 class KoXmlWriter;
 class KoStore;
