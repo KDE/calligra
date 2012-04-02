@@ -17,6 +17,7 @@ Name[pt_BR]=Filtro de importação de OpenOffice.org Draw para o Karbon
 Name[sv]=OpenOffice.org Draw-importfilter för Karbon
 Name[uk]=Фільтр імпорту малюнків OpenOffice.org у Karbon
 Name[x-test]=xxOpenOffice.org Draw Import Filter for Karbonxx
+Name[zh_TW]=Karbon 的 OpenOffice.org Draw 匯入過濾程式
 X-KDE-Export=application/x-karbon
 X-KDE-Import=application/vnd.sun.xml.draw
 X-KDE-Weight=1

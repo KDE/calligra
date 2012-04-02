@@ -17,6 +17,7 @@ Name[pt_BR]=Filtro de importação de EPS para o Karbon
 Name[sv]=Karbon EPS-importfilter
 Name[uk]=Фільтр експорту EPS для Karbon
 Name[x-test]=xxKarbon EPS Import Filterxx
+Name[zh_TW]=Karbon EPS 匯出過濾程式
 X-KDE-Export=image/svg+xml,application/illustrator
 X-KDE-Import=image/x-eps,image/eps,application/eps,application/x-eps,application/postscript
 X-KDE-Weight=1

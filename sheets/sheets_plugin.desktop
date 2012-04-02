@@ -9,10 +9,12 @@ Comment[hu]=Bővítmény a Calligra Sheetshez
 Comment[it]=Estensione per Calligra Sheets
 Comment[kk]=Calligra Sheets плагині
 Comment[nl]=Plug-in voor Calligra Sheets
+Comment[pl]=Wtyczka dla Calligra Sheets
 Comment[pt]='Plugin' para o Calligra Sheets
 Comment[pt_BR]=Plugin para o Calligra Sheets
 Comment[sv]=Insticksprogram för Calligra Sheets
 Comment[uk]=Додаток до Calligra Sheets
 Comment[x-test]=xxPlugin for Calligra Sheetsxx
+Comment[zh_TW]=Calligra Sheets 的外掛程式
 [PropertyDef::X-CalligraSheets-InterfaceVersion]
 Type=int

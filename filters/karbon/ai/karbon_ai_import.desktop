@@ -17,6 +17,7 @@ Name[pt_BR]=Filtro de importação de Illustrator para o Karbon
 Name[sv]=Karbon Illustrator-importfilter
 Name[uk]=Фільтр імпорту Illustrator для Karbon
 Name[x-test]=xxKarbon Illustrator Import Filterxx
+Name[zh_TW]=Karbon Illustrator 匯入過濾程式
 X-KDE-Export=application/x-karbon
 X-KDE-Import=application/illustrator
 X-KDE-Weight=1

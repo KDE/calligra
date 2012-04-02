@@ -66,6 +66,7 @@ Comment[pt_BR]=Novo documento do Karbon:
 Comment[sv]=Nytt Karbon-dokument:
 Comment[uk]=Новий документ Karbon:
 Comment[x-test]=xxNew Karbon document:xx
+Comment[zh_TW]=新增 Karbon 文件：
 Type=Link
 URL=.source/Illustration.karbon
 Icon=application-vnd.oasis.opendocument.graphics

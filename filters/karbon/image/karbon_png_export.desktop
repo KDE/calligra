@@ -17,6 +17,7 @@ Name[pt_BR]=Filtro de exportação de PNG para o Karbon
 Name[sv]=Karbon PNG-exportfilter
 Name[uk]=Фільтр експорту SVG для Karbon
 Name[x-test]=xxKarbon PNG Export Filterxx
+Name[zh_TW]=Karbon EPS 匯出過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/png

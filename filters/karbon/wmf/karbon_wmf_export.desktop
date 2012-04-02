@@ -17,6 +17,7 @@ Name[pt_BR]=Filtro de exportação de WMF para o Karbon
 Name[sv]=Karbon WMF-exportfilter
 Name[uk]=Фільтр експорту WMF у Karbon
 Name[x-test]=xxKarbon WMF Export Filterxx
+Name[zh_TW]=Karbon WMF 匯出過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/x-wmf
