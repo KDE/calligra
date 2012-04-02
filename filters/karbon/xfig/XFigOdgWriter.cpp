@@ -769,29 +769,143 @@ XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, const XFigLineEndable* lineEnd
     odfStyle.addProperty(QLatin1String("svg:stroke-linecap"), linecap);
 }
 
-void
-XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType)
+static const
+struct ArrowData
 {
-    if (arrow != 0) {
-        KoGenStyle arrowStyle(KoGenStyle::MarkerStyle);
-        // TODO: support all arrow types. this is just a tmp. substitute copied from kpr2odf
-        const char* const displayName = "Line Arrow";
-        const char* const viewBox = "0 0 1122 2243";
-        const char* const d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
-
-        arrowStyle.addAttribute(QLatin1String("draw:display-name"), displayName);
-        arrowStyle.addAttribute(QLatin1String("svg:viewBox"), viewBox);
-        arrowStyle.addAttribute(QLatin1String("svg:d"), d);
-        const QString arrowStyleName =
-            m_StyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
-
-        const char* const markerStart =
-            (lineEndType==LineStart) ? "draw:marker-start" : "draw:marker-end";
-        const char* const markerStartWidth =
-            (lineEndType==LineStart) ? "draw:marker-start-width" : "draw:marker-end-width";
-        odfStyle.addProperty(QLatin1String(markerStart), arrowStyleName);
-        odfStyle.addPropertyPt(QLatin1String(markerStartWidth), odfLineThickness(arrow->thickness()));
+    const char* displayName;
+    const char* viewBox;
+    const char* d;
+} arrowDataList[13] =
+{
+    {   // 0
+        "Stick Arrow",
+        "0 0 1 1",
+        "m0,1 l0.5,-1 0.5,1"
+    },
+    {   // 1
+        "Triangle Arrow",
+        "0 0 1 1",
+        "m0,1 l0.5,-1 0.5,1 -1,0z"
+    },
+    {   // 2
+        "Concave Spear Arrow",
+        "0 0 1 1.25",
+        "m0,1.25 l0.5,-1.25 0.5,1.25 -0.5,-0.25 -0.5,0.25z"
+    },
+    {   // 3
+        "Convex Spear Arrow",
+        "0 0 1 1",
+        "m0,0.75 l0.5,-0.75 0.5,0.75 -0.5,0.25 -0.5,-0.25z"
+    },
+    {   // 4
+        "Diamond Arrow",
+        "0 0 1 1",
+        "m0,0.5 l0.5,-0.5 0.5,0.5 -0.5,0.5 -0.5,-0.5z"
+    },
+    {   // 5
+        "Circle Arrow",
+        "0 0 1 1",
+        "m0,0.5 a0.5,0.5 0 1,1 0,0.5z"
+    },
+    {   // 6
+        "Half Circle Arrow",
+        "0 0 1 1",
+        "a0.5,0.5 0 1,0 1,0z"
+    },
+    {   // 7
+        "Square Arrow",
+        "0 0 1 1",
+        "l0,1 1,0 0,-1 -1,0z"
+    },
+    {   // 8
+        "Reverse Triangle Arrow",
+        "0 0 1 1",
+        "l0.5,1 0.5,-1 -1,0z"
+    },
+    {   // 9
+        "Wye Arrow",
+        "0 0 1 1",
+        "l0.5,1 0.5,-1"
+    },
+    {   // 10
+        "Bar Arrow",
+        "0 0 1 0",
+        "l1,0"
+    },
+    {   // 11
+        "Tophalf Concave Spear Arrow",
+        "0 0 1 1",
+        "l0,1 1,0 0,-1"
+    },
+    {   // 12
+        "Tophalf Convex Spear Arrow",
+        "0 0 1 1",
+        "m0,1 l0,-1 1,0 0,1"
     }
+};
+
+// ODF seems to miss support for:
+// * non-centric arrows
+// * stroke-based arrows
+// * scaling by length, not just width
+// Non-centric arrows are for now simply mapped to the similar centric ones.
+// TODO: calculate hollow/stroke arrow data; scale all with arrow->length()
+static const int arrowDataMap[XFigArrowHeadTypeCount] =
+{
+    0, // XFigArrowHeadStick
+    1, //XFigArrowHeadHollowTriangle
+    1, //XFigArrowHeadFilledTriangle
+    2, //XFigArrowHeadHollowConcaveSpear
+    2, //XFigArrowHeadFilledConcaveSpear
+    3, //XFigArrowHeadHollowConvexSpear
+    3, //XFigArrowHeadFilledConvexSpear
+    4, //XFigArrowHeadHollowDiamond
+    4, //XFigArrowHeadFilledDiamond
+    5, //XFigArrowHeadHollowCircle
+    5, //XFigArrowHeadFilledCircle
+    6, //XFigArrowHeadHollowHalfCircle
+    6, //XFigArrowHeadFilledHalfCircle
+    7, //XFigArrowHeadHollowSquare
+    7, //XFigArrowHeadFilledSquare
+    8, //XFigArrowHeadHollowReverseTriangle
+    8, //XFigArrowHeadFilledReverseTriangle
+    2, //XFigArrowHeadTopHalfFilledConcaveSpear
+    2, //XFigArrowHeadBottomHalfFilledConcaveSpear
+    1, //XFigArrowHeadHollowTopHalfTriangle
+    1, //XFigArrowHeadFilledTopHalfTriangle
+    2, //XFigArrowHeadHollowTopHalfConcaveSpear
+    2, //XFigArrowHeadFilledTopHalfConcaveSpear
+    3, //XFigArrowHeadHollowTopHalfConvexSpear
+    3, //XFigArrowHeadFilledTopHalfConvexSpear
+    9, //XFigArrowHeadWye
+    7, //XFigArrowHeadBar
+    11, //XFigArrowHeadTwoProngFork
+    12 //XFigArrowHeadReverseTwoProngFork
+};
+
+void XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType)
+{
+    if (arrow == 0) {
+        return;
+    }
+
+    KoGenStyle arrowStyle(KoGenStyle::MarkerStyle);
+    const ArrowData& arrowData = arrowDataList[arrowDataMap[arrow->type()]];
+    arrowStyle.addAttribute(QLatin1String("draw:display-name"), arrowData.displayName);
+    arrowStyle.addAttribute(QLatin1String("svg:viewBox"), arrowData.viewBox);
+    arrowStyle.addAttribute(QLatin1String("svg:d"), arrowData.d);
+    const QString arrowStyleName =
+        m_StyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
+
+    const char* const marker =
+        (lineEndType==LineStart) ? "draw:marker-start" : "draw:marker-end";
+    const char* const markerWidth =
+        (lineEndType==LineStart) ? "draw:marker-start-width" : "draw:marker-end-width";
+    const char* const markerCenter =
+        (lineEndType==LineStart) ? "draw:marker-start-center" : "draw:marker-end-center";
+    odfStyle.addProperty(QLatin1String(marker), arrowStyleName);
+    odfStyle.addPropertyPt(QLatin1String(markerWidth), odfLength(arrow->width()));
+    odfStyle.addProperty(QLatin1String(markerCenter), "1.0");
 }
 
 void
