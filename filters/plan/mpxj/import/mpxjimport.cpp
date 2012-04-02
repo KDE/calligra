@@ -87,7 +87,7 @@ KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QBy
         if ( ! doc.setContent( &file ) ) {
             kDebug(planMpxjDbg()) << "could not read maindoc.xml";
             sts = KoFilter::InternalError;
-        } else if ( sts == ! part->loadXML( doc, 0 ) ) {
+        } else if ( ! part->loadXML( doc, 0 ) ) {
             kDebug(planMpxjDbg()) << "failed to load maindoc.xml";
             sts = KoFilter::InternalError;
         }
@@ -99,8 +99,8 @@ KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QBy
 KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray outFile )
 {
     kDebug(planMpxjDbg())<<inFile<<outFile;
-    JavaVM *jvm;       /* denotes a Java VM */
-    JNIEnv *env;       /* pointer to native method interface */
+    JavaVM *jvm = 0;       /* denotes a Java VM */
+    JNIEnv *env = 0;       /* pointer to native method interface */
     JavaVMInitArgs vm_args; /* JDK/JRE 6 VM initialization arguments */
     JavaVMOption* options = new JavaVMOption[1];
     QByteArray cp = qgetenv( "PLAN_CLASSPATH" );
@@ -130,7 +130,7 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
     }
     delete options;
 
-    jclass cls = env->FindClass("plan.PlanConvert");
+    jclass cls = env->FindClass("plan/PlanConvert");
     if ( cls == 0 ) {
         kDebug(planMpxjDbg())<<"Failed to find class";
         return KoFilter::InternalError;
