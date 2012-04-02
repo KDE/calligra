@@ -1233,6 +1233,9 @@ public final class PlanWriter extends AbstractProjectWriter
     */
     private String getDurationString(Date start, Date end)
     {
+        if (start == null || end == null) {
+            return getDurationString(0);
+        }
         return getDurationString(end.getTime() - start.getTime());
     }
 
