@@ -22,6 +22,7 @@
 #include "KoXmlWriter.h"
 #include "KPrShapeAnimations.h"
 #include "kdebug.h"
+#include "KPrFormulaParser.h"
 
 KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationValue(shapeAnimation)
 {
@@ -45,6 +46,10 @@ qreal KPrSmilValues::value(qreal time) const
             value = m_values.at(i).eval(m_cache);;
         }
     }
+    if (m_formulaParser) {
+        //qDebug() << "parser value in smil: " << m_formulaParser->eval(m_cache, time);
+        value = m_formulaParser->eval(m_cache, time);
+    }
     return value;
 }
 
@@ -58,11 +63,15 @@ qreal KPrSmilValues::endValue() const
     return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
-bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
+bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula)
 {
     m_calcMode = calcMode;
-
+    //qDebug() << "KPrSmilValues" << formula;
     QStringList valuesList = values.split(";");
+    if (!formula.isEmpty()) {
+        //qDebug() << "iniciar parser";
+        m_formulaParser = new KPrFormulaParser (formula, m_shape, m_textBlockData);
+    }
     if (valuesList.size() < 2) {
         return false;
     }

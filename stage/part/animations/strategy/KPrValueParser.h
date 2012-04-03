@@ -173,7 +173,7 @@ class Opcode
 public:
 
     enum { Nop = 0, Load, Identifier, Add, Sub, Neg, Mul, Div,
-           Pow
+           Pow, Function
          };
 
     unsigned type;
