@@ -54,6 +54,7 @@ public:
         Caret,          ///<  ^ (power)
         LeftPar,        ///<  (
         RightPar,       ///<  )
+        Comma           ///< ,
     };
 
     /**

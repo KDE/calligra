@@ -34,22 +34,31 @@ qreal KPrSmilValues::value(qreal time) const
     qreal value1 = 0.0;
     qreal value2 = 0.0;
 
-    for (int i = 0; i < m_values.size(); i++) {
-        if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
-            value1 = m_values.at(i).eval(m_cache);
-            value2 = m_values.at(i+1).eval(m_cache);
-            value = (time - m_times.at(i)) * (value2 - value1);
-            value = value / (m_times.at(i+1) - m_times.at(i));
-            value += value1;
+    if (!m_formulaParser.empty()) {
+        for (int i = 0; i < m_formulaParser.size(); i++) {
+            if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
+                value = m_formulaParser.at(i).eval(m_cache, time);
+            }
+            else if (time == m_times.at(i)){
+                value = m_values.at(i).eval(m_cache);;
+            }
         }
-        else if (time == m_times.at(i)){
-            value = m_values.at(i).eval(m_cache);;
+
+    } else {
+        for (int i = 0; i < m_values.size(); i++) {
+            if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
+                value1 = m_values.at(i).eval(m_cache);
+                value2 = m_values.at(i+1).eval(m_cache);
+                value = (time - m_times.at(i)) * (value2 - value1);
+                value = value / (m_times.at(i+1) - m_times.at(i));
+                value += value1;
+            }
+            else if (time == m_times.at(i)){
+                value = m_values.at(i).eval(m_cache);;
+            }
         }
     }
-    if (m_formulaParser) {
-        //qDebug() << "parser value in smil: " << m_formulaParser->eval(m_cache, time);
-        value = m_formulaParser->eval(m_cache, time);
-    }
+
     return value;
 }
 
@@ -66,11 +75,13 @@ qreal KPrSmilValues::endValue() const
 bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula)
 {
     m_calcMode = calcMode;
-    //qDebug() << "KPrSmilValues" << formula;
     QStringList valuesList = values.split(";");
     if (!formula.isEmpty()) {
-        //qDebug() << "iniciar parser";
-        m_formulaParser = new KPrFormulaParser (formula, m_shape, m_textBlockData);
+        KPrFormulaParser formulaParser (formula, m_shape, m_textBlockData);
+        if (!formulaParser.valid()) {
+            return false;
+        }
+        m_formulaParser.append(formulaParser);
     }
     if (valuesList.size() < 2) {
         return false;

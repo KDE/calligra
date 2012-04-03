@@ -114,20 +114,16 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     // value
     QString formula = element.attributeNS(KoXmlNS::anim, "formula", QString());
     if (!formula.isEmpty()) {
-        qDebug() << formula << attributeName;
         QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
         QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
         retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode, formula);
         m_values = smilValue;
-        kWarning(33003) << "formula not yes supported";
-        //retval = false;
     }
     else {
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         if (!values.isEmpty()) {
-            qDebug() << "values" << attributeName;
             QString formula;
             QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
             QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());

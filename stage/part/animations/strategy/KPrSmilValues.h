@@ -42,7 +42,7 @@ protected:
     QList<KPrValueParser> m_values;
     QList<qreal> m_times;
     QList<qreal> m_splines;
-    KPrFormulaParser *m_formulaParser;
+    QList<KPrFormulaParser> m_formulaParser;
 };
 
 #endif // KPRSMILVALUES_H
