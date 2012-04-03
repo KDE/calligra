@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Import Filter
-Name[x-test]=xxMS Project Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/vnd.ms-project
 X-KDE-Weight=1
