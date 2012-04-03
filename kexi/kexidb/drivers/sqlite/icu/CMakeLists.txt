@@ -5,6 +5,6 @@ target_link_libraries(kexidb_sqlite3_icu
                       ${ICU_LIBRARIES}
                       ${ICU_I18N_LIBRARIES}
 )
-set_target_properties(kexidb_sqlite3_icu PROPERTIES PREFIX "")
+set_target_properties(kexidb_sqlite3_icu PROPERTIES PREFIX "" DEFINE_SYMBOL libsqlite3_EXPORTS)
 
 install(TARGETS kexidb_sqlite3_icu DESTINATION ${PLUGIN_INSTALL_DIR})

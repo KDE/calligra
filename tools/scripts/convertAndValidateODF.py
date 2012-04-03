@@ -115,7 +115,7 @@ def getApplicationName(extension):
     if extension == "odp":
         return "calligrastage"
     if extension == "ods":
-        return "calligratables"
+        return "calligrasheets"
 
 
 def getODFVersion(zip):

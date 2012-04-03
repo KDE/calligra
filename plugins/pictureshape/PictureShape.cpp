@@ -186,7 +186,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     m_clippingRect.normalize(imageData()->imageSize());
 
     // painting the image as prepared in waitUntilReady()
-    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityImage.size()) {
+    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityRequestedSize) {
         QSizeF imageSize = m_printQualityImage.size();
         QRectF cropRect(
             imageSize.width()  * m_clippingRect.left,
@@ -236,6 +236,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
         if (image.isNull()) {
             return;
         }
+        m_printQualityRequestedSize = pixels;
         if (image.size().width() < pixels.width()) { // don't scale up.
             pixels = image.size();
         }
@@ -337,20 +338,24 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         break;
     }
 
-    QSizeF       imageSize = imageData()->imageSize();
-    ClippingRect rect      = m_clippingRect;
+    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
 
-    rect.normalize(imageSize);
-    rect.bottom = 1.0 - rect.bottom;
-    rect.right = 1.0 - rect.right;
+    if (imageData != 0) {
+        QSizeF       imageSize = imageData->imageSize();
+        ClippingRect rect      = m_clippingRect;
 
-    if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
-        style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
-            .arg(rect.top * imageSize.height())
-            .arg(rect.right * imageSize.width())
-            .arg(rect.bottom * imageSize.height())
-            .arg(rect.left * imageSize.width())
-        );
+        rect.normalize(imageSize);
+        rect.bottom = 1.0 - rect.bottom;
+        rect.right = 1.0 - rect.right;
+
+        if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
+            style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+                .arg(rect.top * imageSize.height())
+                .arg(rect.right * imageSize.width())
+                .arg(rect.bottom * imageSize.height())
+                .arg(rect.left * imageSize.width())
+            );
+        }
     }
 
     return KoShape::saveStyle(style, context);

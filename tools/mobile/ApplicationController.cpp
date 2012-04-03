@@ -120,10 +120,10 @@
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <kundo2stack.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include <tables/part/View.h>
-#include <tables/Sheet.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
+#include <sheets/part/View.h>
+#include <sheets/Sheet.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -1516,7 +1516,7 @@ void ApplicationController::toggleToolBar(bool show)
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     if (documentType() == SpreadsheetDocument) {
         KoToolManager::instance()->switchToolRequested(cellToolFactoryId());
-        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(document());
         kspreadDoc->map()->setReadWrite(!show);
     }
     document()->setReadWrite(!show);
@@ -2068,7 +2068,7 @@ void ApplicationController::handleDocumentPageSetupChanged()
     }
 
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        Calligra::Sheets::DocBase *kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*>(document());
         if (kspreadDoc->map()->count() > 0)
             pageNo = i18n("pg%1 - pg%2", 1, QString::number(kspreadDoc->map()->count()));
     }

@@ -40,7 +40,7 @@ option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -59,7 +59,7 @@ IF (TINY)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
     set(SHOULD_BUILD_STAGE FALSE)
-    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_SHEETS FALSE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -78,7 +78,7 @@ ELSEIF (CREATIVEONLY)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
@@ -120,6 +120,16 @@ include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
+set(SHOULD_BUILD_TEXTSHAPE TRUE)
+if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+    if (NOT IHAVEPATCHEDQT)
+        set(SHOULD_BUILD_WORDS FALSE)
+        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
+    endif (NOT IHAVEPATCHEDQT)
+endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
@@ -148,7 +158,7 @@ find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
-    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
 endif (NOT Boost_FOUND)
 
 if (APPLE)
@@ -175,9 +185,9 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ##
 ## Look for OpenGL
 ##
-
-macro_optional_find_package(OpenGL)
 set(HAVE_OPENGL 0)
+if (NOT WIN32)
+macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
     message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
@@ -192,6 +202,7 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs
@@ -204,7 +215,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -473,9 +484,9 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2, boost
+### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
@@ -483,10 +494,10 @@ if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 
-### Active needs tables, stage and words
-if (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+### Active needs sheets, stage and words
+if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_ACTIVE FALSE)
-endif (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
 ### Active: only build with Qt 4.7.0 or better 
@@ -579,9 +590,9 @@ if(SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
 
-if(SHOULD_BUILD_TABLES)
-    macro_optional_add_subdirectory(tables)
-endif(SHOULD_BUILD_TABLES)
+if(SHOULD_BUILD_SHEETS)
+    macro_optional_add_subdirectory(sheets)
+endif(SHOULD_BUILD_SHEETS)
 
 if(SHOULD_BUILD_KRITA)
   macro_optional_add_subdirectory(krita)
@@ -600,12 +611,12 @@ if(SHOULD_BUILD_ACTIVE)
 endif(SHOULD_BUILD_ACTIVE)
 
 
-if(   NOT SHOULD_BUILD_TABLES OR NOT BUILD_tables
+if(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
    OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
    OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
   )
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(   NOT SHOULD_BUILD_TABLES OR NOT BUILD_tables
+endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
       OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
       OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
      )
@@ -622,11 +633,11 @@ else(SHOULD_BUILD_KOABSTRACTION)
     set(SHOULD_BUILD_MOBILE FALSE)
 endif(SHOULD_BUILD_KOABSTRACTION)
 
-if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
-else(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_CSTESTER FALSE)
-endif(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+endif(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
 
 macro_optional_add_subdirectory(doc)
 
@@ -652,7 +663,7 @@ endmacro(macro_display_application_enabled)
 message(STATUS "---------------- The following applications will be built ----------------" )
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
+macro_display_application_enabled(sheets ${SHOULD_BUILD_SHEETS})
 macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})

@@ -150,23 +150,112 @@ TODO:
 Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
-*make sure that after closing project, and then opening tabbed toolbar activates its first tab
-*do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
-TODO: backport to 2.4
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+2012-03-28
+KexiDB
+*fixed functions returning field's type group name and type group string; they were completely broken but probably only GUI was affected
+**merged with Predicate
+Forms
+*Fixed bug: Setting a text box as Read Only allows changes to be made nevertheles
+BUG:278419 
+*Properly updated context menu when read-only flag is set for line edits and text boxes
+*Setting a text box or text editor to Read Only mode changes the look to a bit dimmed (as in disabled widget) to indicate the mode
+
+TODO: read-only data widgets: in data mode display a small read-only tooltip during editing or as a label on the right hand
+TODO: read-only data widgets: in design mode display a small read-only icon/text
+
+2012-03-22
+Tables
+*Fixed bug: Details of lookup column not visible
+BUG:296528
+
+2012-03-19
+KexiDB
+*SQLite Driver
+**Fix exporting required symbols of kexidb_sqlite3_icu library for the sqlite3 interface. Also fix the filename extension when loading on different platforms.
+***by Andrius da Costa Ribas
+***+some fixes for gcc/linux
+CCMAIL:andriusmao@gmail.com
+
+2012-03-18
+Reports
+*Fixed bug: Data source property in report field do not show proper list of fields
+
+TODO: crash
+#5  0xb73f3657 in QHash<QString, KexiDB::TableSchema*>::value (this=0x54, akey=...) at /usr/include/QtCore/qhash.h:607
+#6  0xb73f23fb in KexiDB::ConnectionPrivate::table (this=0x0, name=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:126
+#7  0xb73ea4b2 in KexiDB::Connection::tableSchema (this=0x83da3e0, tableName=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:2938
+#8  0xae83f0b9 in KexiDBReportData::getSchema (this=0x853c7a8) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:113
+#9  0xae83ea25 in KexiDBReportData::KexiDBReportData (this=0x853c7a8, qstrSQL=..., pDb=0x83da3e0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:30
+#10 0xae843301 in KexiSourceSelector::sourceData (this=0x85439a0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:148
+#11 0xae842eeb in KexiSourceSelector::setConnectionData (this=0x85439a0, c=...) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:105
+#12 0xae83e507 in KexiReportDesignView::afterSwitchFrom (this=0x866c3f0, mode=Kexi::DataViewMode) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexireportdesignview.cpp:159
+#13 0xb7203c0f in KexiWindow::switchToViewMode (this=0x83f8510, newViewMode=Kexi::DesignViewMode, staticObjectArgs=0x0, proposeOpeningInTextViewModeBecauseOfProblems=@0xbfce3bef)
+    at /home/jarek/kde4/sources/calligra-master2/kexi/core/KexiWindow.cpp:664
+
+2012-03-17
+KexiDB
+*Properly deep-copy query asterisks when cloning query objects
+**This fixes crash for reports based on queries
+CCBUG:246928
+CCBUG:281737
+
+2012-03-13
+KexiDB
+*Fix deep copying of query schema and ORDER BY structures
+**This removes crashes related, e.g. in reports based on queries with joins
+BUG:246928
+BUG:281737
+
+2012-03-12
+Reports
+*Fixed bug: setting a field's data source to a calculated value, results international characters not displaying correctly
+BUG:277731
+
+2012-03-07
+KexiDB
+*SQLite Driver
+**Fixed crashes when compacting database fails
+**Fixed error when attempting to compact database opened from recent lists
+TODO: port to Predicate
+*MySQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+*PostgreSQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+Reports
+*Fix crash in assigning data source that uses reserved words as field names
+**Tables/queries with reserved words still do not work in reports though
+CCBUG:278052
+
+2012-03-06
+Main Window
+*User feedback: added home page and forum links
 
 2012-03-05
 Main Window
 *User feedback: set anonymous identification as mandatory, needed even for basic statistics
 
+2012-03-03
+Main Window
+*make sure that after closing project, and then opening tabbed toolbar activates its first tab
+*do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
+
+~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
 2012-03-01
 KexiDB
 *SQLite Driver
-*Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported database compacting code to the new Kexi that uses system SQLite version
 BUG:293548
+TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 

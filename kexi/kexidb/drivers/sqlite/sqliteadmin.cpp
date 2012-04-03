@@ -44,7 +44,7 @@ bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString&
         setError(&manager, title);
         return false;
     }
-    SQLiteVacuum vacuum(databaseName);
+    SQLiteVacuum vacuum(data.dbPath() + QDir::separator() + databaseName);
     tristate result = vacuum.run();
     if (!result) {
         setError(title);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
 #include <kexidb/queryschema.h>
+#include <kexiutils/utils.h>
 
 #include <kapplication.h>
 #include <kstdaccel.h>
@@ -74,6 +75,8 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , m_menuExtender(this, this)
         , m_slotTextChanged_enabled(true)
         , m_dataSourceLabel(0)
+        , m_length(0)
+        , m_paletteChangeEvent_enabled(true)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -121,6 +124,14 @@ void KexiDBTextEdit::slotTextChanged()
 {
     if (!m_slotTextChanged_enabled)
         return;
+
+    if (m_length > 0) {
+        if (toPlainText().length() > (int)m_length) {
+            setPlainText(toPlainText().left(m_length));
+            moveCursorToEnd();
+        }
+    }
+
     signalValueChanged();
 }
 
@@ -187,8 +198,17 @@ void KexiDBTextEdit::clear()
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
-    if (!cinfo)
+    if (!cinfo) {
+        m_length = 0;
         return;
+    }
+
+    if (cinfo->field->isTextType()) {
+        if (!designMode()) {
+            m_length = cinfo->field->length();
+        }
+    }
+
     KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
 }
 
@@ -199,12 +219,11 @@ void KexiDBTextEdit::paintEvent(QPaintEvent *pe)
     KexiDBTextWidgetInterface::paint(this, &p, toPlainText().isEmpty(), alignment(), hasFocus());
 }
 
-QMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
+void KexiDBTextEdit::contextMenuEvent(QContextMenuEvent *e)
 {
-    Q_UNUSED(pos);
-    QMenu *contextMenu = KTextEdit::createStandardContextMenu();//pos);
-    m_menuExtender.createTitle(contextMenu);
-    return contextMenu;
+    QMenu *menu = createStandardContextMenu();
+    m_menuExtender.exec(menu, e->globalPos());
+    delete menu;
 }
 
 void KexiDBTextEdit::undo()
@@ -325,6 +344,24 @@ void KexiDBTextEdit::selectAllOnFocusIfNeeded()
 {
 //    moveCursorToEnd();
 //    selectAll();
+}
+
+void KexiDBTextEdit::updatePalette()
+{
+    m_paletteChangeEvent_enabled = false;
+    setPalette(isReadOnly() ?
+               KexiUtils::paletteForReadOnly(m_originalPalette)
+              : m_originalPalette);
+    m_paletteChangeEvent_enabled = true;
+}
+
+void KexiDBTextEdit::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::PaletteChange && m_paletteChangeEvent_enabled) {
+        m_originalPalette = palette();
+        updatePalette();
+    }
+    KTextEdit::changeEvent(e);
 }
 
 #include "kexidbtextedit.moc"

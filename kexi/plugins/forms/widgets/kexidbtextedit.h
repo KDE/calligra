@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -116,19 +116,28 @@ protected slots:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
+    virtual void changeEvent(QEvent *e);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     QMenu * createPopupMenu(const QPoint & pos);
     void updateTextForDataSource();
     void createDataSourceLabel();
+    void updatePalette();
 
 private:
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
     //! Used to disable slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled;
 
     DataSourceLabel *m_dataSourceLabel;
+
+    //! Text length allowed
+    uint m_length;
+
+    QPalette m_originalPalette; //!< Used for read-only case
+    bool m_paletteChangeEvent_enabled;
 };
 
 #endif

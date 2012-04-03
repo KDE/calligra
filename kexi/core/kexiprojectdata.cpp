@@ -332,7 +332,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                     fn = home + fn.mid(homeVar.length());
                 }
                 d->connData.setFileName(fn);
-                setDatabaseName(fn);
+                setDatabaseName(d->connData.dbFileName());
             }
         }
         else {

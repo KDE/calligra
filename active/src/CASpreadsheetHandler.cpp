@@ -23,11 +23,11 @@
 #include "CADocumentController.h"
 #include "CACanvasController.h"
 
-#include <tables/Sheet.h>
-#include <tables/Map.h>
-#include <tables/DocBase.h>
-#include <tables/part/CanvasItem.h>
-#include <tables/part/Doc.h>
+#include <sheets/Sheet.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
+#include <sheets/part/CanvasItem.h>
+#include <sheets/part/Doc.h>
 
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
@@ -46,7 +46,7 @@ public:
         currentSheetNum = 0;
     }
     int currentSheetNum;
-    Calligra::Tables::Doc* document;
+    Calligra::Sheets::Doc* document;
 };
 
 CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentController)
@@ -77,12 +77,12 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
         return false;
     }
 
-    d->document = static_cast<Calligra::Tables::Doc*> (doc);
+    d->document = static_cast<Calligra::Sheets::Doc*> (doc);
     d->document->openUrl (KUrl (uri));
 
     setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
     KoToolManager::instance()->addController (documentController()->canvasController());
-    Calligra::Tables::CanvasItem* canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas());
+    Calligra::Sheets::CanvasItem* canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas());
 
     if (!canvasItem) {
         kDebug() << "Failed to fetch a canvas item";
@@ -131,13 +131,13 @@ void CASpreadsheetHandler::tellZoomControllerToSetDocumentSize (QSize size)
 
 void CASpreadsheetHandler::updateCanvas()
 {
-    dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->update();
+    dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas())->update();
     updateDocumentSizeForActiveSheet();
 }
 
 void CASpreadsheetHandler::updateDocumentSizeForActiveSheet()
 {
-    Calligra::Tables::Sheet* sheet = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->activeSheet();
+    Calligra::Sheets::Sheet* sheet = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas())->activeSheet();
     //FIXME 1.5 is a hack to "fix" the wrong values below. Why is it wrong?
     documentController()->canvasController()->updateDocumentSize (
         sheet->cellCoordinatesToDocument (sheet->usedArea (false)).toRect().size()*1.5, false);
@@ -150,13 +150,13 @@ QString CASpreadsheetHandler::documentTypeName()
 
 void CASpreadsheetHandler::nextSheet()
 {
-    Calligra::Tables::CanvasItem* canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas());
+    Calligra::Sheets::CanvasItem* canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas());
     if (!canvasItem)
         return;
-    Calligra::Tables::Sheet* sheet = canvasItem->activeSheet();
+    Calligra::Sheets::Sheet* sheet = canvasItem->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::DocBase* kspreadDoc = qobject_cast<Calligra::Tables::DocBase*> (document());
+    Calligra::Sheets::DocBase* kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*> (document());
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->nextSheet (sheet);
@@ -170,13 +170,13 @@ void CASpreadsheetHandler::nextSheet()
 
 void CASpreadsheetHandler::previousSheet()
 {
-    Calligra::Tables::CanvasItem* canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*> (canvas());
+    Calligra::Sheets::CanvasItem* canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas());
     if (!canvasItem)
         return;
-    Calligra::Tables::Sheet* sheet = canvasItem->activeSheet();
+    Calligra::Sheets::Sheet* sheet = canvasItem->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::DocBase* kspreadDoc = dynamic_cast<Calligra::Tables::DocBase*> (document());
+    Calligra::Sheets::DocBase* kspreadDoc = dynamic_cast<Calligra::Sheets::DocBase*> (document());
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->previousSheet (sheet);
@@ -195,7 +195,7 @@ void CASpreadsheetHandler::resizeCanvas (const QSizeF& canvasSize)
 
 int CASpreadsheetHandler::sheetCount() const
 {
-    return dynamic_cast<Calligra::Tables::CanvasItem*> (canvas())->activeSheet()->map()->count();
+    return dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas())->activeSheet()->map()->count();
 }
 
 QString CASpreadsheetHandler::leftToolbarSource() const

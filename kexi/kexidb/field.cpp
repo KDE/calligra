@@ -108,6 +108,7 @@ Field::Field(const Field& f)
 
 Field::~Field()
 {
+    //kDebug() << this << debugString();
     delete m_expr;
     delete m_customProperties;
 }

@@ -64,7 +64,7 @@
 #include "KarbonPaletteBarWidget.h"
 
 #include <KoMainWindow.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
@@ -82,7 +82,7 @@
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
-#include <KoShapeBorderCommand.h>
+#include <KoShapeStrokeCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
 #include <KoShapeClipCommand.h>
@@ -304,7 +304,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         createLayersTabDock();
 
         // set one whitespace as title to allow a one column toolbox
-        KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
+        KoToolBoxFactory toolBoxFactory(d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
@@ -399,20 +399,20 @@ void KarbonView::dropEvent(QDropEvent *e)
             return;
 
         if (d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
-            QList<KoShapeBorderModel*> borders;
+            QList<KoShapeStrokeModel*> strokes;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
-                KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-                KoLineBorder * newBorder = 0;
-                if (border) {
-                    newBorder = new KoLineBorder(*border);
-                    newBorder->setColor(color);
+                KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+                KoShapeStroke * newStroke = 0;
+                if (stroke) {
+                    newStroke = new KoShapeStroke(*stroke);
+                    newStroke->setColor(color);
                 } else {
-                    newBorder = new KoLineBorder(1.0, color);
+                    newStroke = new KoShapeStroke(1.0, color);
                 }
-                borders.append(newBorder);
+                strokes.append(newStroke);
             }
-            d->canvas->addCommand(new KoShapeBorderCommand(selectedShapes, borders, 0));
+            d->canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
         } else {
             KoColorBackground * fill = new KoColorBackground(color);
             d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
@@ -1461,7 +1461,7 @@ void KarbonView::applyStrokeToSelection()
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), shape->border()));
+    d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), shape->stroke()));
 }
 
 void KarbonView::applyPaletteColor(const KoColor &color)
@@ -1472,19 +1472,19 @@ void KarbonView::applyPaletteColor(const KoColor &color)
 
     int style = d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
     if (style == KoFlake::Foreground) {
-        QList<KoShapeBorderModel*> newStrokes;
+        QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape *shape, selection->selectedShapes()) {
-            KoLineBorder *stroke = dynamic_cast<KoLineBorder*>(shape->border());
+            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (stroke) {
-                // preserve border properties
-                KoLineBorder *newStroke = new KoLineBorder(*stroke);
+                // preserve stroke properties
+                KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
                 newStroke->setColor(color.toQColor());
                 newStrokes << newStroke;
             } else {
-                newStrokes << new KoLineBorder(1.0, color.toQColor());
+                newStrokes << new KoShapeStroke(1.0, color.toQColor());
             }
         }
-        d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), newStrokes));
+        d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
         d->canvas->resourceManager()->setForegroundColor(color);
     } else {
         KoShapeBackground *fill = new KoColorBackground(color.toQColor());

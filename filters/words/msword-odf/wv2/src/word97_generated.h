@@ -537,7 +537,7 @@ bool operator!=(const PRM &lhs, const PRM &rhs);
 /**
  * Shading Descriptor (SHD)
  */
-struct SHD {
+struct WV2_EXPORT SHD {
     /**
      * Creates an empty SHD structure and sets the defaults
      */
@@ -668,15 +668,15 @@ struct SHD {
     U16 ipat;
 
     /**
-     * returns if this is ShdAuto or ShdNill - specifies that no shading is applied
+     * return true if SHD content is interpreted as shdAuto.
      */
-    bool isShdAutoOrNill();
+    bool isShdAuto() const;
 
     /**
-     * true if ShdAuto, ShdNil or Shd80Nil is dected, no shading should be
-     * applied
+     * return true if SHD content is interpreted as shdNil.
      */
-    bool shdAutoOrNill;
+    bool isShdNil() const;
+
 }; // SHD
 
 bool operator==(const SHD &lhs, const SHD &rhs);

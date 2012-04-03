@@ -206,8 +206,8 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
             }
         }
     }
-    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.begin());
-    for (; it != anchors.end(); ++it) {
+    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.constBegin());
+    for (; it != anchors.constEnd(); ++it) {
         it.key()->removeAnchors(it.value(), command);
     }
 }
