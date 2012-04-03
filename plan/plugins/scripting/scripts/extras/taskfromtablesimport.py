@@ -7,7 +7,7 @@ Python script to import task data from a spreadsheet
 (C)2011 Dag Andersen <danders@get2net.dk>
 Licensed under LGPL v2.1+higher.
 
-Requires Calligra Tables
+Requires Calligra Sheets
 
 The data in the spreadsheet must be organized as follows:
 
