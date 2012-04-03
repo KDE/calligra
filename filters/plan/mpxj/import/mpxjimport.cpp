@@ -30,6 +30,7 @@
 
 #include "mpxjconfig.h"
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 int planMpxjDbg() {
 #if KDE_IS_VERSION( 4, 3, 80 )
@@ -96,9 +97,41 @@ KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QBy
     return sts;
 }
 
+/*-------------------
+NOTE:
+There is an old bug in java VM that has the effect that
+one can call createJavaVm() only once pr process, even
+when destroyJavaVM() has been called in between.
+
+This means that using a JavaVM + JNI, the user can only
+use the filter once for each plan process.
+
+We work around this by running java in a separate process until a better solution is found.
+---------------------*/
+
 KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray outFile )
 {
     kDebug(planMpxjDbg())<<inFile<<outFile;
+#if 1
+    QString cp = qgetenv( "PLAN_CLASSPATH" );
+    QString x = PLANCONVERT_JAR_FILE;
+    if ( ! x.isEmpty() ) {
+        if ( ! cp.isEmpty() ) {
+            cp += ":";
+        }
+        cp += x;
+    }
+    QString exe = "java";
+    QStringList args;
+    args <<  "-cp";
+    args << cp;
+    args << "plan.PlanConvert";
+    args << inFile << outFile;
+    int res = KProcess::execute( exe, args );
+    kDebug(planMpxjDbg())<<res;
+    return res == 0 ? KoFilter::OK : KoFilter::InternalError;
+
+#else
     JavaVM *jvm = 0;       /* denotes a Java VM */
     JNIEnv *env = 0;       /* pointer to native method interface */
     JavaVMInitArgs vm_args; /* JDK/JRE 6 VM initialization arguments */
@@ -163,6 +196,7 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
         return KoFilter::StorageCreationError;
     }
     return KoFilter::OK;
+#endif
 }
 
 #include "mpxjimport.moc"
