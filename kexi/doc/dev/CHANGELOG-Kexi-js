@@ -153,6 +153,11 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
+2012-04-04
+KoProperty
+*When property set is cleared, clear model(s) for associated views
+**This fixes random crashes in Property Editor
+
 2012-03-28
 KexiDB
 *fixed functions returning field's type group name and type group string; they were completely broken but probably only GUI was affected
