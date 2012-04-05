@@ -4209,6 +4209,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
 }
 #endif
 
+#include "MsooXmlDrawingMLSharedImpl.h"
+
 // ================================================================
 //                     Namespace in {a,wp}
 // ================================================================
@@ -6250,7 +6252,5 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody(txBodyCa
 
     READ_EPILOGUE
 }
-
-#include "MsooXmlDrawingMLSharedImpl.h"
 
 #endif

@@ -1,0 +1,28 @@
+diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
+index ee658d9..16f7150 100644
+--- a/src/gui/text/qtextlayout.cpp
++++ b/src/gui/text/qtextlayout.cpp
+@@ -2501,20 +2501,24 @@
+     x += eng->alignLine(line);
+
+     if (!i && !eng->layoutData->items.size()) {
+         *cursorPos = 0;
+         return x.toReal();
+     }
+
+     int pos = *cursorPos;
+     int itm;
+     const HB_CharAttributes *attributes = eng->attributes();
++    if (!attributes) {
++        *cursorPos = 0;
++        return x.toReal();
++    }
+     while (pos < line.from + line.length && !attributes[pos].charStop)
+         pos++;
+     if (pos == line.from + (int)line.length) {
+         // end of line ensure we have the last item on the line
+         itm = eng->findItem(pos-1);
+     }
+     else
+         itm = eng->findItem(pos);
+     eng->shapeLine(line);

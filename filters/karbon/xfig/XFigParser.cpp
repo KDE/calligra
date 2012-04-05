@@ -83,35 +83,36 @@ enum XFig3_2TextAlignment {
     XFig3_2TextRightAligned = 2
 };
 
-
-enum XFig3_2ArrowHeadType
-{
-    XFig3_2ArrowHeadStick = 0,
-    XFig3_2ArrowHeadClosedTriangle = 1,
-    XFig3_2ArrowHeadClosedIndentedButt = 2,
-    XFig3_2ArrowHeadClosedPointedButt = 3
-};
+static const int arrowHeadTypeMapSize = 15;
 static const
-struct { XFig3_2ArrowHeadType type3_2; XFigArrowHeadType type; }
-arrowHeadTypeMap[] =
+struct { XFigArrowHeadType style[2]; }
+arrowHeadTypeMap[arrowHeadTypeMapSize] =
 {
-    { XFig3_2ArrowHeadStick, XFigArrowHeadStick },
-    { XFig3_2ArrowHeadClosedTriangle, XFigArrowHeadClosedTriangle },
-    { XFig3_2ArrowHeadClosedIndentedButt,XFigArrowHeadClosedIndentedButt  },
-    { XFig3_2ArrowHeadClosedPointedButt, XFigArrowHeadClosedPointedButt }
+    { {XFigArrowHeadStick,                     XFigArrowHeadStick} },
+    { {XFigArrowHeadHollowTriangle,            XFigArrowHeadFilledTriangle} },
+    { {XFigArrowHeadHollowConcaveSpear,        XFigArrowHeadFilledConcaveSpear} },
+    { {XFigArrowHeadHollowConvexSpear,         XFigArrowHeadFilledConvexSpear} },
+    { {XFigArrowHeadHollowDiamond,             XFigArrowHeadFilledDiamond} },
+    { {XFigArrowHeadHollowCircle,              XFigArrowHeadFilledCircle} },
+    { {XFigArrowHeadHollowHalfCircle,          XFigArrowHeadFilledHalfCircle} },
+    { {XFigArrowHeadHollowSquare,              XFigArrowHeadFilledSquare} },
+    { {XFigArrowHeadHollowReverseTriangle,     XFigArrowHeadFilledReverseTriangle} },
+    { {XFigArrowHeadTopHalfFilledConcaveSpear, XFigArrowHeadBottomHalfFilledConcaveSpear} },
+    { {XFigArrowHeadHollowTopHalfTriangle,     XFigArrowHeadFilledTopHalfTriangle} },
+    { {XFigArrowHeadHollowTopHalfConcaveSpear, XFigArrowHeadFilledTopHalfConcaveSpear} },
+    { {XFigArrowHeadHollowTopHalfConvexSpear,  XFigArrowHeadFilledTopHalfConvexSpear} },
+    { {XFigArrowHeadWye,                       XFigArrowHeadBar} },
+    { {XFigArrowHeadTwoProngFork,              XFigArrowHeadReverseTwoProngFork} }
 };
-static const int arrowHeadTypeMapSize = sizeof(arrowHeadTypeMap)/sizeof(arrowHeadTypeMap[0]);
 
 static inline
 XFigArrowHeadType
-arrowHeadType( int type3_2 )
+arrowHeadType( int type3_2, int style3_2 )
 {
     XFigArrowHeadType result = XFigArrowHeadStick;
-    for (int i = 0; i<arrowHeadTypeMapSize; ++i) {
-        if (arrowHeadTypeMap[i].type3_2 == type3_2) {
-            result = arrowHeadTypeMap[i].type;
-            break;
-        }
+    if ((0<=type3_2) && (type3_2<arrowHeadTypeMapSize) &&
+        ((style3_2 == 0) || (style3_2 == 1))) {
+        result = arrowHeadTypeMap[type3_2].style[style3_2];
     }
     return result;
 }
@@ -1026,8 +1027,7 @@ XFigArrowHead* XFigParser::parseArrowHead()
         >> arrow_width >> arrow_height;
 
     XFigArrowHead* arrowHead = new XFigArrowHead;
-    arrowHead->setType(arrowHeadType(arrow_style));
-    arrowHead->setIsHollow((arrow_style == 0));
+    arrowHead->setType(arrowHeadType(arrow_type, arrow_style));
     arrowHead->setThickness(arrow_thickness );
     arrowHead->setSize(arrow_width, arrow_height);
 

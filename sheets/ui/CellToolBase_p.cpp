@@ -1234,9 +1234,9 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             }
         }
         actions.append(popupMenuActions["separator6"]);
-        actions.append(q->action("comment"));
+        actions.append(popupMenuActions["comment"]);
         if (!cell.comment().isEmpty()) {
-            actions.append(q->action("clearComment"));
+            actions.append(popupMenuActions["clearComment"]);
         }
 
         if (testListChoose(q->selection())) {
@@ -1292,6 +1292,15 @@ void CellToolBase::Private::createPopupMenuActions()
     action = new KAction(i18n("Selection List..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
+
+    action = new KAction(KIcon("comment"), i18n("Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
+    popupMenuActions.insert("comment", action);
+
+    action = new KAction(KIcon("clearComment"),i18n("Clear Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
+    popupMenuActions.insert("clearComment", action);
+
 }
 
 bool CellToolBase::Private::testListChoose(Selection *selection) const

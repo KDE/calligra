@@ -58,35 +58,58 @@ private:
 
 enum XFigArrowHeadType
 {
-    XFigArrowHeadStick, ///>  -->
-    XFigArrowHeadClosedTriangle, ///>  --|>
-    XFigArrowHeadClosedIndentedButt, ///>  -->>
-    XFigArrowHeadClosedPointedButt ///> --<>
+    XFigArrowHeadStick = 0, ///>  -->
+    XFigArrowHeadHollowTriangle, ///>  --|>
+    XFigArrowHeadFilledTriangle, ///>  --|>
+    XFigArrowHeadHollowConcaveSpear, ///>  --}>
+    XFigArrowHeadFilledConcaveSpear, ///>  --}>
+    XFigArrowHeadHollowConvexSpear, ///> --{>
+    XFigArrowHeadFilledConvexSpear, ///> --{>
+    XFigArrowHeadHollowDiamond, ///> --<>
+    XFigArrowHeadFilledDiamond, ///> --<>
+    XFigArrowHeadHollowCircle, ///> --()
+    XFigArrowHeadFilledCircle, ///> --()
+    XFigArrowHeadHollowHalfCircle, ///> --(|
+    XFigArrowHeadFilledHalfCircle, ///> --(|
+    XFigArrowHeadHollowSquare, ///> --[]
+    XFigArrowHeadFilledSquare, ///> --[]
+    XFigArrowHeadHollowReverseTriangle, ///> --<|
+    XFigArrowHeadFilledReverseTriangle, ///> --<|
+    XFigArrowHeadTopHalfFilledConcaveSpear,
+    XFigArrowHeadBottomHalfFilledConcaveSpear,
+    XFigArrowHeadHollowTopHalfTriangle,
+    XFigArrowHeadFilledTopHalfTriangle,
+    XFigArrowHeadHollowTopHalfConcaveSpear,
+    XFigArrowHeadFilledTopHalfConcaveSpear,
+    XFigArrowHeadHollowTopHalfConvexSpear,
+    XFigArrowHeadFilledTopHalfConvexSpear,
+    XFigArrowHeadWye, ///> --<
+    XFigArrowHeadBar, ///> --|
+    XFigArrowHeadTwoProngFork, ///> --[
+    XFigArrowHeadReverseTwoProngFork, ///> --]
+    XFigArrowHeadTypeCount
 };
 
 class XFigArrowHead
 {
 public:
     XFigArrowHead()
-    : m_Type(XFigArrowHeadStick), m_IsHollow(false), m_Thickness(0.0), m_Width(0.0), m_Height(0.0)
+    : m_Type(XFigArrowHeadStick), m_Thickness(0.0), m_Width(0.0), m_Length(0.0)
     {}
 
     void setType(XFigArrowHeadType type) { m_Type = type; }
-    void setIsHollow(bool isHollow) { m_IsHollow = isHollow; }
     void setThickness(double thickness) { m_Thickness = thickness; }
-    void setSize(double width, double height) { m_Width = width; m_Height = height; }
+    void setSize(double width, double length) { m_Width = width; m_Length = length; }
 
     XFigArrowHeadType type() const { return m_Type; }
-    bool isHollow() const { return m_IsHollow; }
     double thickness() const { return m_Thickness; }
     double width() const { return m_Width; }
-    double height() const { return m_Height; }
+    double length() const { return m_Length; }
 private:
     XFigArrowHeadType m_Type;
-    bool m_IsHollow;
     double m_Thickness;
     double m_Width;
-    double m_Height;
+    double m_Length;
 };
 
 class XFigAbstractObject
