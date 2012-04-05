@@ -18,9 +18,9 @@
 #ifndef RTFREADER_USERPROPSDESTINATION_H
 #define RTFREADER_USERPROPSDESTINATION_H
 
-#include <QtCore/QString>
-#include <QtCore/QVariant>
-#include <QtGui/QColor>
+#include <QString>
+#include <QVariant>
+#include <QColor>
 
 #include "Destination.h"
 #include "rtfreader_export.h"

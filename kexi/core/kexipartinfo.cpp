@@ -126,12 +126,14 @@ void KexiNewObjectAction::slotTriggered()
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
-    KexiNewObjectAction *act = new KexiNewObjectAction(
-        this,
-        KexiMainWindowIface::global()->actionCollection());
-    
-    if (KexiMainWindowIface::global()->actionCollection()) {
-        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    if (KexiMainWindowIface::global()) {
+        KexiNewObjectAction *act = new KexiNewObjectAction(
+            this,
+            KexiMainWindowIface::global()->actionCollection());
+        
+        if (KexiMainWindowIface::global()->actionCollection()) {
+            KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+        }
     }
 }
 

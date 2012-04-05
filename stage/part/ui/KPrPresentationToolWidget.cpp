@@ -21,9 +21,9 @@
 
 #include "KPrPresentationToolWidget.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QDesktopWidget>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QDesktopWidget>
 
 #include <KIcon>
 

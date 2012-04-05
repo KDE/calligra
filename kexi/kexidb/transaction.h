@@ -20,7 +20,7 @@
 #ifndef KEXIDB_TRANSACTION_H
 #define KEXIDB_TRANSACTION_H
 
-#include <qpointer.h>
+#include <QPointer>
 
 #include "kexidb_export.h"
 

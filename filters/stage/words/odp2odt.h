@@ -21,7 +21,7 @@
 #define ODP2ODT_H
 
 #include <KoFilter.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 // odp2odt means: OASIS OpenDocument Presentation to Text
 class Odp2Odt : public KoFilter

@@ -23,8 +23,9 @@ set(planworkfactory_LIB_SRCS
     packagesettings.cpp
     taskcompletiondialog.cpp
 
+    debugarea.cpp
+
     ../KPlatoXmlLoader.cpp #NB
-    ../kptpackage.cpp
 )
 
 kde4_add_ui_files(planworkfactory_LIB_SRCS

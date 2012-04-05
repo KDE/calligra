@@ -19,10 +19,10 @@
 
 #include <kundo2command.h>
 
-#include <tables/Sheet.h>
-#include <tables/Map.h>
+#include <sheets/Sheet.h>
+#include <sheets/Map.h>
 
-namespace Calligra { namespace Tables {
+namespace Calligra { namespace Sheets {
     class Sheet;
     class Map;
 } }
@@ -30,12 +30,12 @@ namespace Calligra { namespace Tables {
 class RemoveSheetCommand : public KUndo2Command
 {
 public:
-    explicit RemoveSheetCommand(Calligra::Tables::Sheet* sheet);
+    explicit RemoveSheetCommand(Calligra::Sheets::Sheet* sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Calligra::Tables::Sheet* sheet;
-    Calligra::Tables::Map* map;
+    Calligra::Sheets::Sheet* sheet;
+    Calligra::Sheets::Map* map;
 };

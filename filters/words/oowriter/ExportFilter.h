@@ -149,7 +149,7 @@ private:
     ulong m_pictureNumber; ///< Number of picture (increment *before* use)
     ulong m_automaticParagraphStyleNumber; ///< Number of paragraph-based automatic styles (increment *before* use)
     ulong m_automaticTextStyleNumber; ///< Number of text-based automatic styles (increment *before* use)
-    ulong m_footnoteNumber; ///< Number of footnote (for text:id) (increment *before* use)
+    ulong m_footnoteNumber; ///< Number of footnote (for text:id and xml:id) (increment *before* use)
     ulong m_tableNumber; ///< Number of table (for table:name) (increment *before* use)
     ulong m_textBoxNumber; ///< Number of a textbox (for draw:text-box) (increment *before* use)
 

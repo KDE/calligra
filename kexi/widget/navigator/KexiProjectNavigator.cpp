@@ -26,9 +26,9 @@
 #include "KexiProjectItemDelegate.h"
 
 #include <QHeaderView>
-#include <qpoint.h>
-#include <qpixmapcache.h>
-#include <qtoolbutton.h>
+#include <QPoint>
+#include <QPixmapCache>
+#include <QToolButton>
 #include <QKeyEvent>
 #include <QEvent>
 

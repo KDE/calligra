@@ -23,10 +23,10 @@
 #include "keximigrate.h"
 #include "importoptionsdlg.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QRadioButton>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>

@@ -87,6 +87,15 @@ public:
      */
     QRectF rect() const;
 
+    /**
+     * return a rectangle outlining the main text on this page, using the offset in the document.
+     */
+    QRectF contentRect() const;
+
+    /* set the content rect valid on this page
+     */
+    void setContentRect(const QRectF &rect);
+
     // the y coordinate
     /**
      * All Pages are in a document-wide coordinate system that simply puts every page under

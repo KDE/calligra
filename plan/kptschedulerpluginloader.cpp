@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -21,9 +21,11 @@
 #include "kptschedulerpluginloader.h"
  
 #include "kptschedulerplugin.h"
- 
+#include "kptdebug.h"
+
 #include <KServiceTypeTrader>
 #include <KDebug>
+
 
 namespace KPlato
 {
@@ -39,7 +41,7 @@ SchedulerPluginLoader::~SchedulerPluginLoader()
  
 void SchedulerPluginLoader::loadAllPlugins()
 {
-    kDebug() << "Load all plugins";
+    kDebug(planDbg()) << "Load all plugins";
     KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
  
     KService::List::const_iterator iter;
@@ -59,12 +61,12 @@ void SchedulerPluginLoader::loadAllPlugins()
         SchedulerPlugin *plugin = factory->create<SchedulerPlugin>(this);
  
         if (plugin) {
-            kDebug() << "Load plugin:" << service->name()<<", "<<service->comment();
+            kDebug(planDbg()) << "Load plugin:" << service->name()<<", "<<service->comment();
             plugin->setName( service->name() );
             plugin->setComment( service->comment() );
             emit pluginLoaded( service->library(), plugin);
         } else {
-           kDebug() << error;
+           kDebug(planDbg()) << error;
         }
     }
 }

@@ -22,7 +22,7 @@
 
 #include "stylefactory.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <KoFilter.h>
 #include <QVariantList>

@@ -24,10 +24,9 @@
 
 
 KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
-                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0), m_parser(0)
+                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0)
 {
     m_qstrQuery = qstrSQL;
-    m_parser = new KexiDB::Parser(m_connection);
     getSchema();
 }
 
@@ -61,7 +60,6 @@ void KexiDBReportData::addExpression(const QString& field, const QVariant& value
 KexiDBReportData::~KexiDBReportData()
 {
     close();
-    delete m_parser;
     delete m_copySchema;
     delete m_originalSchema;
     delete m_cursor;    
@@ -120,17 +118,16 @@ bool KexiDBReportData::getSchema()
         else if ( m_connection->querySchema ( m_qstrQuery ) )
         {
             kDebug() << m_qstrQuery <<  " is a query..";
+            m_connection->querySchema(m_qstrQuery)->debug();
             m_originalSchema = new KexiDB::QuerySchema(*(m_connection->querySchema ( m_qstrQuery )));
         }
 
         if (m_originalSchema) {
             kDebug() << "Original:" << m_connection->selectStatement(*m_originalSchema);
+            m_originalSchema->debug();
             
-            //m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
-            
-            m_parser->parse(m_connection->selectStatement(*m_originalSchema));
-            m_copySchema = m_parser->query();
-            
+            m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
+            m_copySchema->debug();
             kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
         }
         
@@ -146,36 +143,32 @@ QString KexiDBReportData::sourceName() const
 
 uint KexiDBReportData::fieldNumber ( const QString &fld ) const
 {
-    KexiDB::QueryColumnInfo::Vector flds;
     
-    uint x = -1;
-    if ( m_cursor && m_cursor->query() )
-    {
-        flds = m_cursor->query()->fieldsExpanded();
+    if (!m_cursor || !m_cursor->query()) {
+        return -1;
     }
-
-    for ( int i = 0; i < flds.size() ; ++i )
-    {
-        if ( fld.toLower() == flds[i]->aliasOrName().toLower() )
-        {
-            x = i;
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
+        m_cursor->query()->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    for (int i = 0; i < fieldsExpanded.size() ; ++i) {
+        if (0 == QString::compare(fld, fieldsExpanded[i]->aliasOrName(), Qt::CaseInsensitive)) {
+            return i;
         }
     }
-    return x;
+    return -1;
 }
 
 QStringList KexiDBReportData::fieldNames() const
 {
-    QStringList names;
-
-    if ( m_originalSchema )
-    {
-        for(unsigned int i = 0; i < m_originalSchema->fieldCount(); ++i)
-        {
-            names << m_originalSchema->field(i)->name();
-        }
+    if (!m_originalSchema) {
+        return QStringList();
     }
-
+    QStringList names;
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
+        m_originalSchema->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    for (int i = 0; i < fieldsExpanded.size(); i++) {
+//! @todo in some Kexi mode captionOrAliasOrName() would be used here (more user-friendly)
+        names.append(fieldsExpanded[i]->aliasOrName());
+    }
     return names;
 }
 

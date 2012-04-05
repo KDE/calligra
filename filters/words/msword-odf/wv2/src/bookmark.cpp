@@ -135,18 +135,16 @@ Bookmarks::~Bookmarks()
     delete m_start;
 }
 
-BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
+BookmarkData Bookmarks::bookmark( const U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << " globalCP=" << globalCP << endl;
 #endif
-
+    ok = false;
     if ( (m_startIt && m_startIt->current()) &&
          (m_startIt->currentStart() == globalCP) &&
          (m_nameIt != m_name.end()) )
     {
-        ok = false;
-
         if (m_valid.isEmpty()) {
             wvlog << "BUG: m_valid empty?";
         } else if (m_valid.first()) {
@@ -178,9 +176,45 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #endif
         return BookmarkData( start, end, name );
     }
-
-    ok = false;
     return BookmarkData( 0, 0, wvWare::UString("") );
+}
+
+BookmarkData Bookmarks::bookmark(const UString& name, bool& ok ) const
+{
+    std::vector<UString>::const_iterator nameIt = m_name.begin();
+    PLCFIterator<Word97::BKF> startIt(*m_start);
+
+    PLCFIterator<Word97::BKL>* endIt = 0;
+    if (m_nFib < Word8nFib) {
+        endIt = new PLCFIterator<Word97::BKL>(*m_end);
+    }
+
+    while (startIt.current()) {
+        if (*nameIt == name) {
+            U32 start = startIt.currentStart();
+            U32 end = start;
+            if (m_nFib < Word8nFib) {
+                end = endIt->currentStart();
+                delete endIt;
+            } else {
+                U16 ibkl = startIt.current()->ibkl;
+                end = m_endCP[ibkl];
+            }
+            ok = true;
+            return BookmarkData( start, end, name );
+        }
+        ++startIt;
+        ++nameIt;
+
+        if (m_nFib < Word8nFib) {
+            ++( *endIt );
+        }
+    }
+    if (m_nFib < Word8nFib) {
+        delete endIt;
+    }
+    ok = false;
+    return BookmarkData( 0, 0, UString("") );
 }
 
 U32 Bookmarks::nextBookmarkStart()
@@ -250,7 +284,6 @@ void Bookmarks::check( U32 globalCP )
 
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Bookmark skipped! CP:" << globalCP;
-        m_num--;
 #endif
     }
 }

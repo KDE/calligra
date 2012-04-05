@@ -1,17 +1,23 @@
 [Desktop Entry]
 Name=Storage
 Name[bg]=Хранилище
+Name[ca]=Emmagatzematge
+Name[ca@valencia]=Emmagatzement
 Name[cs]=Úložiště
 Name[de]=Speicher
 Name[el]=Αποθήκη
 Name[es]=Almacenamiento
 Name[et]=Salvesti
+Name[fr]=Stockage
+Name[hu]=Tároló
 Name[it]=Storage
+Name[kk]=Жинатауыш
 Name[nb]=Lagring
 Name[nl]=Opslag
 Name[pl]=Magazyn
 Name[pt]=Armazenamento
 Name[pt_BR]=Armazenamento
+Name[ru]=Хранилище
 Name[sv]=Lagring
 Name[ug]=ساقلاش
 Name[uk]=Сховище даних

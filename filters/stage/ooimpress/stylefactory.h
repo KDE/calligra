@@ -24,7 +24,7 @@
 #include <QList>
 #include <QString>
 
-#include <qdom.h>
+#include <QDomDocument>
 
 class StyleFactory;
 

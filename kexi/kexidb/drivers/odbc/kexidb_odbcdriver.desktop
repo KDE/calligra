@@ -63,6 +63,7 @@ Name[zh_TW]=ODBC
 Comment=Kexi Open Database Connectivity Driver
 Comment[ca]=Controlador ODBC per al Kexi
 Comment[ca@valencia]=Controlador ODBC per al Kexi
+Comment[cs]=Ovladač Kexi Open Database Connectivity
 Comment[cy]=Gyrrydd Cysylltedd Cronfa Ddata Agored Kexi
 Comment[da]=Kexi-driver for åben databaseforbindelse
 Comment[de]=Kexi-ODBC-Treiber

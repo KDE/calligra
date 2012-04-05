@@ -34,7 +34,7 @@
 #include <QIODevice>
 #include <QBuffer>
 #include <QTextStream>
-#include <qdom.h>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <QList>
 #include <QByteArray>

@@ -20,7 +20,7 @@
 #ifndef KARBON_LAYER_SORTING_MODEL_H
 #define KARBON_LAYER_SORTING_MODEL_H
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 class KarbonDocument;
 

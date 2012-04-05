@@ -27,7 +27,7 @@
 #include "kexitableview_p.h"
 #include "kexitableedit.h"
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kglobalsettings.h>
 

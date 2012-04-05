@@ -12,7 +12,7 @@
 #ifndef _BookingList_h_
 #define _BookingList_h_
 
-#include <qlist.h>
+#include <QList>
 
 #include "Booking.h"
 

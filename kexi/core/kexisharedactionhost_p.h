@@ -20,8 +20,8 @@
 #ifndef KEXISHAREDACTIONHOST_P_H
 #define KEXISHAREDACTIONHOST_P_H
 
-#include <qobject.h>
-#include <qsignalmapper.h>
+#include <QObject>
+#include <QSignalMapper>
 
 //#include <kxmlguiwindow.h>
 

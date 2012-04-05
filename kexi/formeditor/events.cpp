@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <kdebug.h>
 
 #include "events.h"

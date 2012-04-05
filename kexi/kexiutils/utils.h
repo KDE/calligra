@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -104,13 +104,13 @@ inline type findParentByType(QObject* o)
 /*! \return first found child of \a o, inheriting \a className.
  If objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
-KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName);
+KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className, const char* objName);
 
 /*! \return first found child of \a o, that inherit \a className.
  If \a objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
 template<class type>
-inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
+inline type findFirstChild(QObject *o, const char* className, const char* objName = 0)
 {
     return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 }
@@ -261,9 +261,20 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
  with accessibility settings. */
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
-/*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
+/*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps 
  that have to reflect the foreground color. */
-KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
+KEXIUTILS_EXPORT void replaceColors(QPixmap* original, const QColor& color);
+
+/*! Replaces colors in image @a original using @a color color. Used for coloring bitmaps 
+ that have to reflect the foreground color. */
+KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
+
+/*! @return true if curent color scheme is light.
+ Lightness of window background is checked to measure this. */
+KEXIUTILS_EXPORT bool isLightColorScheme();
+
+/*! @return palette altered for indicating "read only" flag. */
+KEXIUTILS_EXPORT QPalette paletteForReadOnly(const QPalette &palette);
 
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
@@ -378,7 +389,7 @@ KEXIUTILS_EXPORT QPixmap scaledPixmap(const WidgetMargins& margins, const QRect&
 
 //! A helper for automatic deleting of contents of containers.
 template <typename Container>
-class KEXIUTILS_EXPORT ContainerDeleter
+class ContainerDeleter
 {
 public:
     ContainerDeleter(Container& container) : m_container(container) {}
@@ -394,7 +405,7 @@ private:
 
 //! @short Autodeleted hash
 template <class Key, class T>
-class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T>
+class AutodeletedHash : public QHash<Key, T>
 {
 public:
     AutodeletedHash(const AutodeletedHash& other) : QHash<Key, T>(other), m_autoDelete(false) {}
@@ -414,7 +425,7 @@ private:
 
 //! @short Autodeleted list
 template <typename T>
-class KEXIUTILS_EXPORT AutodeletedList : public QList<T>
+class AutodeletedList : public QList<T>
 {
 public:
     AutodeletedList(const AutodeletedList& other)
@@ -501,7 +512,7 @@ private:
 //! @short Case insensitive hash container supporting QString or QByteArray keys.
 //! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
 template <typename Key, typename T>
-class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T>
+class CaseInsensitiveHash : public QHash<Key, T>
 {
 public:
     CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
@@ -576,7 +587,7 @@ private:
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
 template <typename T>
-class KEXIUTILS_EXPORT Setter
+class Setter
 {
 public:
     //! Creates a new setter object for variable @a var,

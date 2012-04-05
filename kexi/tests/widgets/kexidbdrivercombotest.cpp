@@ -22,8 +22,8 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <kdebug.h>

@@ -21,6 +21,11 @@
 #include "KWFrameDialog.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
+
+#include <commands/KoShapeRunAroundCommand.h>
+
+#include <kundo2command.h>
 
 KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
         : m_state(state),
@@ -50,7 +55,7 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
 }
 
-void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
+bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
@@ -60,7 +65,16 @@ void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
     KoShape::TextRunAroundSide side = KoShape::BiggestRunAroundSide;
     qreal distance = 10.0;
     qreal threshold = 0.0;
+
+    bool atLeastOne = false;
+
     foreach (KWFrame *frame, frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
+        atLeastOne = true;
         if (runaround == GuiHelper::Unset) {
             side = frame->shape()->textRunAroundSide();
             runaround = GuiHelper::On;
@@ -80,11 +94,17 @@ void KWRunAroundProperties::open(const QList<KWFrame*> &frames)
             raThreshold = GuiHelper::TriState;
     }
 
+    if (!atLeastOne) {
+        return false;
+    }
+
     if (runaround != GuiHelper::TriState)
         m_runAroundSide->button(side)->setChecked(true);
 
     widget.distance->changeValue(distance);
     widget.threshold->changeValue(threshold);
+
+    return true;
 }
 
 void KWRunAroundProperties::open(KoShape *shape)
@@ -98,6 +118,11 @@ void KWRunAroundProperties::open(KoShape *shape)
 
 void KWRunAroundProperties::save()
 {
+    save(0);
+}
+
+void KWRunAroundProperties::save(KUndo2Command *macro)
+{
     if (m_frames.count() == 0) {
         KWFrame *frame = m_state->frame();
         if (frame == 0 && m_shape)
@@ -107,24 +132,38 @@ void KWRunAroundProperties::save()
         m_frames.append(frame);
     }
     foreach (KWFrame *frame, m_frames) {
-        bool needRelayout = false;
-        if (m_runAroundSide->checkedId() != -1) {
-            KoShape::TextRunAroundSide rrs = static_cast<KoShape::TextRunAroundSide>(m_runAroundSide->checkedId());
-            if (frame->shape()->textRunAroundSide() != rrs) {
-                frame->shape()->setTextRunAroundSide(rrs);
-                needRelayout = true;
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
             }
         }
-        if (frame->shape()->textRunAroundDistance() != widget.distance->value()) {
-            frame->shape()->setTextRunAroundDistance(widget.distance->value());
-            needRelayout = true;
+        KoShape *shape = frame->shape();
+        KoShape::TextRunAroundSide side = shape->textRunAroundSide();
+        int runThrough = shape->runThrough();
+        qreal distance = shape->textRunAroundDistance();
+        qreal threshold = shape->textRunAroundThreshold();
+
+        if (m_runAroundSide->checkedId() != -1) {
+            KoShape::TextRunAroundSide rrs = static_cast<KoShape::TextRunAroundSide>(m_runAroundSide->checkedId());
+            if (side != rrs) {
+                side = rrs;
+            }
         }
-        if (frame->shape()->textRunAroundThreshold() != widget.threshold->value()) {
-            frame->shape()->setTextRunAroundThreshold(widget.threshold->value());
-            needRelayout = true;
+        if (distance != widget.distance->value()) {
+            distance = widget.distance->value();
         }
-        if (needRelayout)
-            frame->shape()->notifyChanged();
+        if (shape->textRunAroundThreshold() != widget.threshold->value()) {
+            threshold = widget.threshold->value();
+        }
+        if (macro) {
+            new KoShapeRunAroundCommand(shape, side, runThrough, distance, threshold, macro);
+        } else {
+            shape->setTextRunAroundSide(side, KoShape::Background);
+            shape->setRunThrough(runThrough);
+            shape->setTextRunAroundDistance(distance);
+            shape->setTextRunAroundThreshold(threshold);
+            shape->notifyChanged();
+        }
     }
     m_state->removeUser();
 }

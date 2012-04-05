@@ -79,7 +79,7 @@ QObject *Scripting::Node::parentNode()
 
 QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
 {
-    //kDebug()<<start<<end<<schedule;
+    //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     QDate s = start.toDate();
     QDate e = end.toDate();

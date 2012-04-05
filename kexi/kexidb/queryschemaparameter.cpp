@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #include "driver.h"
 
 #include <kdebug.h>
-#include <qpointer.h>
+#include <QPointer>
 
 using namespace KexiDB;
 
@@ -52,8 +52,8 @@ void KexiDB::debug(const QuerySchemaParameterList& list)
 class QuerySchemaParameterValueListIterator::Private
 {
 public:
-    Private(Driver& aDriver, const QList<QVariant>& aParams)
-            : driver(&aDriver)
+    Private(const Driver* aDriver, const QList<QVariant>& aParams)
+            : driver(const_cast<Driver*>(aDriver))
             , params(aParams) {
         //move to last item, as the order is reversed due to parser's internals
         paramsIt = params.constEnd(); //fromLast();
@@ -67,7 +67,7 @@ public:
 };
 
 QuerySchemaParameterValueListIterator::QuerySchemaParameterValueListIterator(
-    Driver& driver, const QList<QVariant>& params)
+    const Driver* driver, const QList<QVariant>& params)
         : d(new Private(driver, params))
 {
 }
@@ -94,9 +94,11 @@ QString QuerySchemaParameterValueListIterator::getPreviousValueAsString(Field::T
 {
     if (d->paramsItPosition == 0) { //d->params.constEnd()) {
         KexiDBWarn << "QuerySchemaParameterValues::getPreviousValueAsString() no prev value";
-        return d->driver->valueToSQL(type, QVariant()); //"NULL"
+        return d->driver ? d->driver->valueToSQL(type, QVariant())
+                         : KexiDB::valueToSQL(type, QVariant()); //"NULL"
     }
-    QString res(d->driver->valueToSQL(type, *d->paramsIt));
+    QString res(d->driver ? d->driver->valueToSQL(type, *d->paramsIt)
+                          : KexiDB::valueToSQL(type, *d->paramsIt));
     --d->paramsItPosition;
     --d->paramsIt;
 // ++d->paramsIt;

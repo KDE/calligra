@@ -21,7 +21,7 @@
 #ifndef _KEXI_ERROR_H_
 #define _KEXI_ERROR_H_
 
-#include <qstring.h>
+#include <QString>
 #include "global.h"
 #include "kexidb_export.h"
 

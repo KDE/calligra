@@ -29,8 +29,8 @@
 #include <kdebug.h>
 #include <krecentdirs.h>
 
-#include <qobject.h>
-#include <qlineedit.h>
+#include <QObject>
+#include <QLineEdit>
 
 #include <win/win32_utils.h>
 #include <kconfiggroup.h>

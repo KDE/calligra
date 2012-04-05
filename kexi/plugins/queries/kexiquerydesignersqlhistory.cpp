@@ -18,11 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <qclipboard.h>
-#include <qregexp.h>
+#include <QPainter>
+#include <QClipboard>
+#include <QRegExp>
 #include <QMouseEvent>
-#include <q3simplerichtext.h>
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -33,6 +32,7 @@
 #include <KIcon>
 
 #include "kexiquerydesignersqlhistory.h"
+#include <QTextDocument>
 
 KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
         : Q3ScrollView(parent)
@@ -269,11 +269,8 @@ void HistoryEntry::drawItem(QPainter *p, int width)
     p->drawText(22, 2, 150, lineHeight, Qt::AlignLeft | Qt::AlignVCenter, m_execTimeString);
     p->setPen(bgBrush.color());
     p->setBrush(bgBrush);
-    m_formated->setWidth(width - 2);
-    QRect content(2, lineHeight + 1, width - 2, m_formated->height());
-// QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
-// QRect content(2, 21, width - 2, p->fontMetrics().height() + 4);
-// content = QRect(2, 21, width - 2, m_for.height());
+    m_formated->setTextWidth(width - 2);
+    QRect content(2, lineHeight + 1, width - 2, m_formated->size().height());
 
     if (m_selected)
         p->setBrush(highlightedBgBrush);
@@ -287,8 +284,11 @@ void HistoryEntry::drawItem(QPainter *p, int width)
 
     content.setX(content.x() + 2);
     content.setWidth(content.width() - 2);
-// p->drawText(content, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
-    m_formated->draw(p, content.x(), content.y(), content, QColorGroup(m_parent->palette()));
+
+    // Draw
+    p->translate(content.x(), content.y());
+    m_formated->drawContents(p, content);
+    
 }
 
 void HistoryEntry::highlight()
@@ -356,7 +356,8 @@ void HistoryEntry::highlight()
 
     //kDebug() << "HistoryEntry::highlight() text:" << text;
     delete m_formated;
-    m_formated = new Q3SimpleRichText(text, KGlobalSettings::fixedFont());
+    m_formated = new QTextDocument();
+    m_formated->setPlainText(text);
 }
 
 void
@@ -371,8 +372,8 @@ QRect HistoryEntry::geometry(int y, int width, const QFontMetrics& f)
 // int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 // return QRect(0, y, width, h);
     int lineHeight = f.height();
-    m_formated->setWidth(width - 2);
-    return QRect(0, y, width, m_formated->height() + lineHeight + 1);
+    m_formated->setTextWidth(width - 2);
+    return QRect(0, y, width, m_formated->size().height() + lineHeight + 1);
 }
 
 void HistoryEntry::setTime(const QTime &execTime)

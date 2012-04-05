@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <QDir>
-#include <qdom.h>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <QList>
 #include <QByteArray>

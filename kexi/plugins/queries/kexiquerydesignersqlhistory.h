@@ -22,12 +22,12 @@
 #define KEXIQUERYDESIGNERSQLHISTORY_H
 
 #include <q3scrollview.h>
-#include <qdatetime.h>
-#include <qlist.h>
-#include <qmap.h>
+#include <QDateTime>
+#include <QList>
+#include <QMap>
 #include <QMouseEvent>
 
-class Q3SimpleRichText;
+class QTextDocument;
 class KMenu;
 class KexiQueryDesignerSQLHistory;
 
@@ -57,7 +57,7 @@ private:
     QString m_execTimeString;
     QString m_statement;
     QString m_error;
-    Q3SimpleRichText *m_formated;
+    QTextDocument *m_formated;
     KexiQueryDesignerSQLHistory *m_parent;
 
     int m_y;

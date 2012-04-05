@@ -21,8 +21,8 @@
 #define KEXIDB_MSGHANDLER_H
 
 #include "object.h"
-#include <qpointer.h>
-#include <qwidget.h>
+#include <QPointer>
+#include <QWidget>
 
 namespace KexiDB
 {

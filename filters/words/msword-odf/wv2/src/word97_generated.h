@@ -537,7 +537,7 @@ bool operator!=(const PRM &lhs, const PRM &rhs);
 /**
  * Shading Descriptor (SHD)
  */
-struct SHD {
+struct WV2_EXPORT SHD {
     /**
      * Creates an empty SHD structure and sets the defaults
      */
@@ -668,15 +668,15 @@ struct SHD {
     U16 ipat;
 
     /**
-     * returns if this is ShdAuto or ShdNill - specifies that no shading is applied
+     * return true if SHD content is interpreted as shdAuto.
      */
-    bool isShdAutoOrNill();
+    bool isShdAuto() const;
 
     /**
-     * true if ShdAuto, ShdNil or Shd80Nil is dected, no shading should be
-     * applied
+     * return true if SHD content is interpreted as shdNil.
      */
-    bool shdAutoOrNill;
+    bool isShdNil() const;
+
 }; // SHD
 
 bool operator==(const SHD &lhs, const SHD &rhs);
@@ -3185,6 +3185,27 @@ struct CHP : public Shared {
      * specifies if the text is scaled to fit the line
      */
     U16 fTNYCompress:1;
+
+
+    /**
+     * A CP value in the Bullet Pictures document that specifies which picture
+     * is used as a bullet character when rendering the bullet.  The CP value
+     * MUST be greater than or equal to zero.  The Bullet Pictures document is
+     * stored within the main document and marked by a hidden bookmark called
+     * "_PictureBullets."
+     */
+    U32 picBulletCP;
+
+    /**
+     * PbiGrfOperand - specifies whether a picture is used as a bullet
+     * character when rendering the bullet.  This value also specifies whether
+     * the size of the picture changes automatically to match the size of the
+     * text that follows the bullet.
+     */
+    U8 fPicBullet:1;
+    U8 fNoAutoSize:1;
+    U8 pbi_unused:6;
+
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);
@@ -7695,10 +7716,9 @@ struct PCD {
     U16 fn:8;
 
     /**
-     * file offset of beginning of piece. The size of the <b>ith</b> piece
-     * can be determined by subtracting rgcp[<b>i</b>] of the containing
-     * <b>plcfpcd</b>
-     * from its rgcp[<b>i+1</b>].
+     * file offset of beginning of piece. The size of the <b>ith</b> piece can
+     * be determined by subtracting rgcp[<b>i</b>] of the containing
+     * <b>plcfpcd</b> from its rgcp[<b>i+1</b>].
      */
     U32 fc;
 

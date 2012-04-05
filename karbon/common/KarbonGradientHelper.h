@@ -21,7 +21,7 @@
 #define KARBONGRADIENTHELPER_H
 
 #include <karboncommon_export.h>
-#include <QtGui/QBrush>
+#include <QBrush>
 
 class QGradient;
 

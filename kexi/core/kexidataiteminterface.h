@@ -20,9 +20,9 @@
 #ifndef KEXIDATAITEMINTERFACE_H
 #define KEXIDATAITEMINTERFACE_H
 
-#include <qvariant.h>
-#include <qwidget.h>
-#include <qpointer.h>
+#include <QVariant>
+#include <QWidget>
+#include <QPointer>
 
 #include <kexi_export.h>
 

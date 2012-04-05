@@ -20,10 +20,10 @@
 #ifndef FILTEREFFECTSCENEITEMS_H
 #define FILTEREFFECTSCENEITEMS_H
 
-#include <QtGui/QGraphicsRectItem>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QDrag>
-#include <QtCore/QMimeData>
+#include <QGraphicsRectItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QDrag>
+#include <QMimeData>
 
 class KoFilterEffect;
 

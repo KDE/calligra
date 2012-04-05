@@ -5,7 +5,7 @@ set(htmlodf_export_PART_SRCS
 htmlodfexport.cpp
 document.cpp
 exportdialog.cpp
-convert.cpp
+ManifestParser.cpp
 )
 
 kde4_add_ui_files(htmlodf_export_PART_SRCS exportwidget.ui )

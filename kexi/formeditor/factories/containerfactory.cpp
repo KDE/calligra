@@ -21,7 +21,7 @@
 
 #include <QStackedWidget>
 #include <QFrame>
-#include <qdom.h>
+#include <QDomDocument>
 #include <Q3ScrollView>
 #include <QTabBar>
 #include <QSplitter>

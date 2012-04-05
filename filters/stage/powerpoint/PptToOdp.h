@@ -35,11 +35,11 @@
 #include <KoGenStyles.h>
 #include <KoStore.h>
 
-#include <QtCore/QStack>
-#include <QtCore/QPair>
-#include <QtCore/QRectF>
-#include <QtGui/QColor>
-#include <QtCore/QDebug>
+#include <QStack>
+#include <QPair>
+#include <QRectF>
+#include <QColor>
+#include <QDebug>
 
 class PowerPointImport;
 class ODrawToOdf;
@@ -259,12 +259,14 @@ private:
      * @param TextCFException9 address
      * @param TextCFException10 address
      * @param TextSIException address
+     * @param chunk might represent a symbol
      */
     void defineTextProperties(KoGenStyle& style,
                               const PptTextCFRun& cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si);
+                              const MSO::TextSIException* si,
+                              const bool isSymbol = false);
 
     /**
      * Extract data from TextPFException into the style
@@ -348,7 +350,18 @@ private:
     int processTextForBody(Writer& out,
                            const MSO::OfficeArtClientData* cd,
                            const MSO::TextContainer* tc,
-                           const MSO::TextRuler* tr);
+                           const MSO::TextRuler* tr,
+                           const bool isPlaceholder);
+
+    /**
+     * Add a text:list-item into a newly created text:list with corresponding
+     * number of levels and set automatic numbering related attributes.
+     */
+    void addListElement(KoXmlWriter& out,
+                        const QString& listStyle,
+                        QStack<QString>& levels,
+                        quint16 level,
+                        const PptTextPFRun &pf);
 
     /**
      * Process a span or the smallest run of text having it's own formatting.
@@ -372,7 +385,7 @@ private:
                          PptTextCFRun& cf,
                          const MSO::TextContainer* tc,
 			 const QString& text,
-                         int start, int end,
+                         const int start, int end,
                          quint16* p_fs);
 
     /**
@@ -395,7 +408,7 @@ private:
                           const MSO::TextRuler* tr,
                           const bool isPlaceHolder,
                           const QString& text,
-                          int start,
+                          const int start,
                           int end);
 
     /**
@@ -643,10 +656,20 @@ private:
     MasterStyles masterPresentationStyles;
     QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
-    bool m_isList; //true - processing a list, false - processing a paragraph
-    QMap<quint16, bool> m_continueNumbering; //true - continue numbered list, false - restart numbering
-    quint16 m_previousListLevel;
+
     quint16 m_firstChunkFontSize;
+    quint16 m_firstChunkFontRef;
+    bool m_firstChunkSymbolAtStart;
+
+    bool m_isList; //true - processing a list, false - processing a paragraph
+    quint16 m_previousListLevel;
+
+    // true - continue numbered list, false - restart numbering
+    QMap<quint16, bool> m_continueListNumbering;
+
+    // Map of level keys and xml:id values of text:list elements to continue
+    // automatic numbering.
+    QMap<quint16, QString> m_lvlXmlIdMap;
 
     /**
     * @brief An usedDeclaration.

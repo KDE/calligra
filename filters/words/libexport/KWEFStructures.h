@@ -44,7 +44,7 @@
 #include <QString>
 #include <QMap>
 #include <QColor>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QDateTime>
 
 #include "PictureKey.h"

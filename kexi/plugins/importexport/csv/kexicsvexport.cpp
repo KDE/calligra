@@ -30,9 +30,9 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include <QTextStream>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qclipboard.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QClipboard>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>

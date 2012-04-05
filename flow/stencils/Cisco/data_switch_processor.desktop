@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Data Switch Processor
 Name[ca]=Data Switch Processor
+Name[ca@valencia]=Data Switch Processor
 Name[el]=Επεξεργαστής μεταγωγής δεδομένων
+Name[et]=Andmekommutaatori protsessor
+Name[it]=Data Switch Processor
+Name[kk]=Дерек қосқыш процесоры
 Name[nb]=Datasvitsj-prosessor
 Name[nl]=Data Switch Processor
 Name[pl]=Procesor przełącznika danych
 Name[pt]=Processador Comutação Dados
 Name[pt_BR]=Processador de comutação de dados
+Name[ru]=Обработчик коммутации данных
 Name[sv]=Dataväxelprocessor
 Name[uk]=Процесор комутації даних
 Name[x-test]=xxData Switch Processorxx

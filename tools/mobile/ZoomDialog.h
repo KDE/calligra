@@ -25,7 +25,7 @@
 #ifndef ZOOMDIALOG_H
 #define ZOOMDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui
 {

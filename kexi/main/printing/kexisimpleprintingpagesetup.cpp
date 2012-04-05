@@ -35,13 +35,13 @@
 #include <kpushbutton.h>
 
 
-#include <qlabel.h>
-#include <qtimer.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QTimer>
+#include <QLayout>
+#include <QPainter>
+#include <QCheckBox>
 #include <q3whatsthis.h>
-#include <qtooltip.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3ValueList>

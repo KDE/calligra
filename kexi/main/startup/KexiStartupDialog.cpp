@@ -27,15 +27,14 @@
 #include <kexidb/utils.h>
 #include <kexi_global.h>
 
-#include <qlayout.h>
-#include <qtabwidget.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpoint.h>
-#include <qobject.h>
-#include <qapplication.h>
-#include <qtooltip.h>
-#include <q3widgetstack.h>
+#include <QLayout>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPoint>
+#include <QObject>
+#include <QApplication>
+
 #include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
@@ -114,7 +113,6 @@ public:
     KPageWidget* templatesWidget;
     QListView *templatesWidget_IconListView;//helper
 
-    Q3WidgetStack *viewBlankTempl;
     KexiStartupDialogTemplatesPage *viewTemplates;
     //TemplatesPage *viewBusinessTempl;
 

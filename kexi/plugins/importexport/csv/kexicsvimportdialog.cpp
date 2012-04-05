@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with Calligra Libraries.
@@ -27,20 +27,20 @@
 
 #include "kexicsvimportdialog.h"
 
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qclipboard.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qmime.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QClipboard>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMimeSource>
+#include <QPushButton>
+#include <QRadioButton>
 #include <q3table.h>
-#include <qfiledialog.h>
-#include <qpainter.h>
-#include <qtextcodec.h>
-#include <qtimer.h>
-#include <qfontmetrics.h>
+#include <QFileDialog>
+#include <QPainter>
+#include <QTextCodec>
+#include <QTimer>
+#include <QFontMetrics>
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
@@ -96,6 +96,7 @@
 #define MAX_BYTES_TO_PREVIEW 10240 //max 10KB is reasonable
 #define MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER 4096
 #define MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW 1930
+#define PROGRESS_STEP_MS (1000/5) // 5 updates per second
 
 class KexiCSVImportDialogTable : public Q3Table
 {
@@ -686,6 +687,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     bool lastCharDelimiter = false;
     bool nextRow = false;
     row = column = 1;
+    m_prevColumnForSetText = 0;
     maxColumn = 0;
     QChar x;
     const bool hadInputStream = m_inputStream != 0;
@@ -697,10 +699,9 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     } else {
         m_file->seek(0); //always seek at 0 because loadRows() is called many times
         m_inputStream = new QTextStream(m_file);
-        if (m_options.defaultEncodingExplicitySet) {
-            QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
-            if (codec)
-                m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
+        QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
+        if (codec) {
+            m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
         }
         if (m_detectDelimiter) {
             const QString delimiter(detectDelimiterByLookingAtFirstBytesOfFile(*m_inputStream));
@@ -710,21 +711,20 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     }
     const QChar delimiter(m_delimiterWidget->delimiter()[0]);
     m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
-    int progressStep = 0;
     if (m_importingProgressDlg) {
-        progressStep = qMax(
-            1,
-            (m_importingProgressDlg->progressBar()->maximum() - m_importingProgressDlg->progressBar()->minimum() + 1) / 200
-        );
+        m_elapsedTimer.start();
+        m_elapsedMs = m_elapsedTimer.elapsed();
     }
     int offset = 0;
     for (;!m_inputStream->atEnd(); offset++) {
 //disabled: this breaks wide spreadsheets
 // if (column >= m_maximumRowsForPreview)
 //  return true;
-
-        if (m_importingProgressDlg && ((offset % progressStep) < 5)) {
+        if (m_importingProgressDlg && (offset % 0x100) == 0
+            && (m_elapsedMs + PROGRESS_STEP_MS) < m_elapsedTimer.elapsed())
+        {
             //update progr. bar dlg on final exporting
+            m_elapsedMs = m_elapsedTimer.elapsed();
             m_importingProgressDlg->progressBar()->setValue(offset);
             qApp->processEvents();
             if (m_importingProgressDlg->wasCancelled()) {
@@ -751,7 +751,6 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             if (x == m_textquote) {
                 state = S_QUOTED_FIELD;
             } else if (x == delimiter) {
-                setText(row - m_startline, column, field, inGUI);
                 field.clear();
                 if ((ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
@@ -764,8 +763,13 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     }
                 }
                 nextRow = true;
+                if (ignoreDups && lastCharDelimiter) {
+                    // we're ignoring repeated delimiters so remove any extra trailing delimiters
+                    --column;
+                }
                 maxColumn = qMax(maxColumn, column);
                 column = 1;
+                m_prevColumnForSetText = 0;
             } else {
                 field += x;
                 state = S_MAYBE_NORMAL_FIELD;
@@ -809,6 +813,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
+                    m_prevColumnForSetText = 0;
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -827,6 +832,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
+                    m_prevColumnForSetText = 0;
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -851,6 +857,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
+                    m_prevColumnForSetText = 0;
                 } else {
                     if ((ignoreDups == false) || (lastCharDelimiter == false))
                         ++column;
@@ -1122,11 +1129,20 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
             return; // do not care about this value if it contains column names (these were already used)
 
         //save text directly to database buffer
-        if (col == 1) { //1st col
+        if (m_prevColumnForSetText == 0) { //1st call
             m_importingStatement->clearArguments();
-            if (m_implicitPrimaryKeyAdded)
+            if (m_implicitPrimaryKeyAdded) {
                 *m_importingStatement << QVariant(); //id will be autogenerated here
+            }
         }
+        if ((m_prevColumnForSetText + 1) < col) { //skipped one or more columns
+                                                  //before this: save NULLs first
+            for (int i = m_prevColumnForSetText + 1; i < col; i++) {
+                *m_importingStatement << QVariant();
+            }
+        }
+        m_prevColumnForSetText = col;
+
         const int detectedType = m_detectedTypes[col-1];
         if (detectedType == _INT_TYPE) {
             *m_importingStatement << (text.isEmpty() ? QVariant() : text.toInt());
@@ -1622,10 +1638,21 @@ void KexiCSVImportDialog::accept()
     project->addStoredItem(part->info(), partItemForSavedTable);
 
     QDialog::accept();
-    KMessageBox::information(this,
-                             i18n("Data has been successfully imported to table \"%1\".",
-                                  m_destinationTableSchema->name()));
+    msgboxResult = KMessageBox::questionYesNo(this,
+                       i18n("Data has been successfully imported to table \"%1\".",
+                            m_destinationTableSchema->name()),
+//! @todo 2.5 add title "Successfull import"
+                       QString(),
+//! @todo 2.5 change to "Open Imported Table"
+                       KStandardGuiItem::open(),
+                       KStandardGuiItem::close());
+
     parentWidget()->raise();
+    if (msgboxResult == KMessageBox::Yes) {
+        bool openingCancelled;
+        KexiMainWindowIface::global()->openObject(partItemForSavedTable,
+                                                  Kexi::DataViewMode, openingCancelled);
+    }
     m_conn = 0;
 }
 

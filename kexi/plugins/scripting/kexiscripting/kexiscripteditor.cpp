@@ -25,13 +25,7 @@
 #include <kross/core/action.h>
 
 #include <kdebug.h>
-//#include <kparts/factory.h>
-//#include <klibloader.h>
-//#include <k3mdimainfrm.h>
-//#include <kxmlguiwindow.h>
 #include <kmenu.h>
-
-//#include <kexidialogbase.h>
 
 /// \internal d-pointer class
 class KexiScriptEditor::Private

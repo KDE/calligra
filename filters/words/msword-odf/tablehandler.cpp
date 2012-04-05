@@ -181,7 +181,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
             align = QString("right");
             break;
         }
-    } 
+    }
     tableStyle.addProperty("table:align", align);
 
     int width = table->m_cellEdges[table->m_cellEdges.size() - 1] - table->m_cellEdges[0];
@@ -576,7 +576,7 @@ void WordsTableHandler::tableCellStart()
     //    cellStyle.addProperty("style:direction", "ttb");
     //}
 
-    //process vertical alignment information 
+    //process vertical alignment information
     QString align;
     switch (tc.vertAlign) {
     case vAlignTop:
@@ -676,7 +676,7 @@ void WordsTableHandler::tableCellEnd()
         m_cellStyleName.clear();
 
         //add the current background-color to stack
-//         document()->addBgColor(color);
+//         document()->pushBgColor(color);
     }
 }
 

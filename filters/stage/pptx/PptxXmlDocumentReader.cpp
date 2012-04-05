@@ -166,8 +166,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     return KoFilter::OK;
 }
 
-PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
-    const QString& slidePath, const QString& slideFile)
+PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString& slidePath, const QString& slideFile)
 {
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
         slidePath, slideFile,
@@ -258,14 +257,17 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
 
 #undef CURRENT_EL
 #define CURRENT_EL sldId
-//! p:sldId handler (Slide ID)  ECMA-376, 19.2.1.33, p. 2797.
-/*! This element specifies a presentation slide that is available within the
- *  corresponding presentation.
+//! p:sldId handler (Slide ID)
+/*! ECMA-376, 19.2.1.33, p. 2797.
 
- Parent elements:
-    - [done] sldIdLst (§19.2.1.34)
- Child elements:
-    - extLst (Extension List)
+  This element specifies a presentation slide that is available within the
+  corresponding presentation.
+
+  Parent elements:
+  - [done] sldIdLst (§19.2.1.34)
+
+  Child elements:
+  - extLst (Extension List)
 */
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 {
@@ -356,8 +358,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 
     // 2nd reading round
     context.firstReadingRound = false;
-    status = m_context->import->loadAndParseDocument(
-        &slideReader, slidePath + '/' + slideFile, &context);
+    status = m_context->import->loadAndParseDocument(&slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideReader.errorString();
         return status;
@@ -874,6 +875,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
     }
 
     if (!m_context->firstReadRound) {
+        kDebug() << "======> Second reading round <======";
         while (!atEnd()) {
             readNext();
             kDebug() << *this;
@@ -898,6 +900,18 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 SKIP_UNKNOWN
             }
         }
+        // TODO: Discuss the font-size logic in case it's not provided in the
+        // presentation at the Office Open XML File Format Implementation
+        // forum.  The 18pt value is a result of test files analysis.
+        KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
+        style.setDefaultStyle(true);
+        style.addPropertyPt("fo:font-size", 18, KoGenStyle::TextType);
+        mainStyles->insert(style);
+
+        style = KoGenStyle(KoGenStyle::TextStyle, "text");
+        style.setDefaultStyle(true);
+        style.addPropertyPt("fo:font-size", 18, KoGenStyle::TextType);
+        mainStyles->insert(style);
     }
 
     if (!m_context->firstReadRound) {
@@ -919,14 +933,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
             }
             d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
-            const QString masterPageStyleName(
-                mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
+            const QString masterPageStyleName(mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
     } else {
         m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
-            m_context->relationships->targetCountWithWord("notesMasters") +
-            m_context->relationships->targetCountWithWord("slides");
+                                   m_context->relationships->targetCountWithWord("notesMasters") +
+                                   m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

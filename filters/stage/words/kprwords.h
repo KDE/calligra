@@ -21,7 +21,7 @@
 #define KPRWORDS_H
 
 #include <KoFilter.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 class KprWords : public KoFilter
 {

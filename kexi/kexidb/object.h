@@ -23,7 +23,7 @@
 #include "error.h"
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
-#include <qstring.h>
+#include <QString>
 
 namespace KexiDB
 {

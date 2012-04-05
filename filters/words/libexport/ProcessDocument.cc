@@ -39,7 +39,7 @@
    Copyright 2001 Michael Johnson <mikej@xnet.com>
 */
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QList>
 
 #include <kdebug.h>

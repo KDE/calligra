@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="Plan" version="21">
+<kpartgui name="Calligra Plan" version="22">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>

@@ -22,7 +22,7 @@
 
 #include <kexi_export.h>
 #include <kexiutils/tristate.h>
-#include <qstring.h>
+#include <QString>
 class QVariant;
 class QStringList;
 

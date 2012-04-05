@@ -1,47 +1,47 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
-   Copyright (C) 2001-2005,2007 Rob Buis <buis@kde.org>
-   Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
-   Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
-   Copyright (C) 2002,2005 David Faure <faure@kde.org>
-   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
-   Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
-   Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
-   Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
-   Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
-   Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
-   Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
-   Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
-   Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
-   Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
-   Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
-   Copyright (C) 2006 Andreas Hartmetz <ahartmetz@gmail.com>
-   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 2006-2007 Aaron J. Seigo <aseigo@kde.org>
-   Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
+ * Copyright (C) 2001-2005,2007 Rob Buis <buis@kde.org>
+ * Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+ * Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
+ * Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
+ * Copyright (C) 2002,2005 David Faure <faure@kde.org>
+ * Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
+ * Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
+ * Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
+ * Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
+ * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
+ * Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
+ * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
+ * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
+ * Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
+ * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2006 Andreas Hartmetz <ahartmetz@gmail.com>
+ * Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * Copyright (C) 2006-2007 Aaron J. Seigo <aseigo@kde.org>
+ * Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "KarbonView.h"
 
@@ -64,7 +64,7 @@
 #include "KarbonPaletteBarWidget.h"
 
 #include <KoMainWindow.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
@@ -82,7 +82,7 @@
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
-#include <KoShapeBorderCommand.h>
+#include <KoShapeStrokeCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
 #include <KoShapeClipCommand.h>
@@ -112,8 +112,6 @@
 #include <KoShapeRegistry.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
 #include <KoZoomController.h>
 
@@ -135,19 +133,19 @@
 #include <KDebug>
 
 // qt header
-#include <QtGui/QIcon>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtGui/QPainter>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QDropEvent>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtCore/QTimer>
-#include <QtCore/QEvent>
-#include <QtGui/QPrinter>
-#include <QtGui/QImageReader>
+#include <QIcon>
+#include <QApplication>
+#include <QClipboard>
+#include <QPainter>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QDropEvent>
+#include <QGridLayout>
+#include <QLabel>
+#include <QTimer>
+#include <QEvent>
+#include <QPrinter>
+#include <QImageReader>
 
 #include <unistd.h>
 
@@ -238,8 +236,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->status->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->status->setMinimumWidth(300);
     addStatusBarItem(d->status, 1);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
-            d->status, SLOT(setText(const QString &)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            d->status, SLOT(setText(QString)));
     d->cursorCoords = new QLabel(QString(), this);
     d->cursorCoords->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->cursorCoords->setMinimumWidth(50);
@@ -276,25 +274,25 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    connect(p, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
+    connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
     d->vertRuler->setUnit(p->unit());
     d->vertRuler->setVisible(false);
 
-    connect(d->canvas, SIGNAL(documentOriginChanged(const QPoint &)), this, SLOT(pageOffsetChanged()));
+    connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)),
-            this, SLOT(mousePositionChanged(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
+            this, SLOT(mousePositionChanged(QPoint)));
     d->vertRuler->createGuideToolConnection(d->canvas);
     d->horizRuler->createGuideToolConnection(d->canvas);
 
     updateRuler();
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
-    connect(d->colorBar, SIGNAL(colorSelected(const KoColor&)), this, SLOT(applyPaletteColor(const KoColor&)));
+    connect(d->colorBar, SIGNAL(colorSelected(KoColor)), this, SLOT(applyPaletteColor(KoColor)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
     connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
@@ -306,11 +304,11 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         createLayersTabDock();
 
         // set one whitespace as title to allow a one column toolbox
-        KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
+        KoToolBoxFactory toolBoxFactory(d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -401,20 +399,20 @@ void KarbonView::dropEvent(QDropEvent *e)
             return;
 
         if (d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
-            QList<KoShapeBorderModel*> borders;
+            QList<KoShapeStrokeModel*> strokes;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
-                KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-                KoLineBorder * newBorder = 0;
-                if (border) {
-                    newBorder = new KoLineBorder(*border);
-                    newBorder->setColor(color);
+                KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+                KoShapeStroke * newStroke = 0;
+                if (stroke) {
+                    newStroke = new KoShapeStroke(*stroke);
+                    newStroke->setColor(color);
                 } else {
-                    newBorder = new KoLineBorder(1.0, color);
+                    newStroke = new KoShapeStroke(1.0, color);
                 }
-                borders.append(newBorder);
+                strokes.append(newStroke);
             }
-            d->canvas->addCommand(new KoShapeBorderCommand(selectedShapes, borders, 0));
+            d->canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
         } else {
             KoColorBackground * fill = new KoColorBackground(color);
             d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
@@ -437,7 +435,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
 
         KoProperties params;
         QVariant v;
@@ -1399,8 +1397,8 @@ void KarbonView::createLayersTabDock()
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
-                layerDocker, SLOT(setPart(KParts::Part *)));
+        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+                layerDocker, SLOT(setPart(KParts::Part*)));
     }
 }
 
@@ -1438,7 +1436,12 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
 
 KoPrintJob * KarbonView::createPrintJob()
 {
-    return new KarbonPrintJob(this);
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPaper);
+}
+
+KoPrintJob * KarbonView::createPdfPrintJob()
+{
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPdf);
 }
 
 void KarbonView::applyFillToSelection()
@@ -1458,7 +1461,7 @@ void KarbonView::applyStrokeToSelection()
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), shape->border()));
+    d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), shape->stroke()));
 }
 
 void KarbonView::applyPaletteColor(const KoColor &color)
@@ -1469,19 +1472,19 @@ void KarbonView::applyPaletteColor(const KoColor &color)
 
     int style = d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
     if (style == KoFlake::Foreground) {
-        QList<KoShapeBorderModel*> newStrokes;
+        QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape *shape, selection->selectedShapes()) {
-            KoLineBorder *stroke = dynamic_cast<KoLineBorder*>(shape->border());
+            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (stroke) {
-                // preserve border properties
-                KoLineBorder *newStroke = new KoLineBorder(*stroke);
+                // preserve stroke properties
+                KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
                 newStroke->setColor(color.toQColor());
                 newStrokes << newStroke;
             } else {
-                newStrokes << new KoLineBorder(1.0, color.toQColor());
+                newStrokes << new KoShapeStroke(1.0, color.toQColor());
             }
         }
-        d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), newStrokes));
+        d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
         d->canvas->resourceManager()->setForegroundColor(color);
     } else {
         KoShapeBackground *fill = new KoColorBackground(color.toQColor());

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qfontinfo.h>
+#include <QFontInfo>
 
 #include <kglobalsettings.h>
 #include <kdebug.h>

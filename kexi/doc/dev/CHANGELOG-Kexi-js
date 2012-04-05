@@ -3,7 +3,7 @@
  Proposed by jstaniek
 
  Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
- Copyright (C) 2008-2011 Jaroslaw Staniek (staniek at kde.org)
+ Copyright (C) 2008-2012 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ TODO Form editor:
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - clicking too many time on undo CRASHES
  - fix syncing form geometry with properties in the propeditor
- - show Spring element and autofield widget for 2.3
+ - show Spring element and autofield widget
  - disable 'assign action' when no button is selected
  - port 'assign action' dialog to QColumnView
  - disable mouse-over highlighting effect for buttons and check boxes
@@ -92,8 +92,24 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-STARTUP
+TODO:
+Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
+
+i18n TODO:
+"Save to Words" -> "Save as Text Document"
+i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet") -> i18n("Save as Spreadsheet")
+i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
+->
+i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Calligra Tables.", cxt.destinationUrl.prettyUrl()) , i18n("Note: do not translate 'Tables'", "Opening in Calligra Tables"));
+
+i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
+->
+i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
+
+CSV Import TODO:
+*add "Skip empty rows" option
+*add "Skip empty columns" option
 
 ===================== Kexi 2.4  =====================
 
@@ -102,7 +118,357 @@ TODO:
 *Add Ctrl+Return shortcut to opening in design mode from navigator
 *Add Ctrl+Shift+Return shortcut to opening in texts mode from navigator
 
+TODO:
+Startup
+*before opening check if database has been already opened and if so, activate the window instead of opening second instance; D-Bus iface needed
+*inform other instances of Kexi that database was opened so they can update last-modified property of the Recently opened projects; D-Bus iface needed
+
+TODO: go with FF implementation:
+http://www.conetrees.com/2009/03/blog/usability-spotter-4-usability-issue-google-chrome-tab-selection-through-the-mouse/
+TODO: use right-hand tab button for window list as in FF
+
+
+TODO: remove 'KoReportDesigner designer(0);' from KoReportPluginManager::actions()
+
+
+TODO: Widgets [code] fix memory leak introduced in KexiFieldComboBox::setTableOrQuery()
+
+TODO: kexidb collation: Add Alphanum collation (code at http://www.davekoelle.com/alphanum.html)
+TODO: kexidb collation: use ICU or Qt5+ICU, ICU is 30x faster than QString::localeAwareCompare; http://labs.qt.nokia.com/2011/06/14/string-collation-with-locales/
+*ICU enabled in libsqlite3 on debian in 3.6.11-1 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=494987 but then disabled in 3.6.14.2-1
+
+TODO:
+[01:02] <diggy> jstaniek: Kexi's crashing when quiting, after opening a table in design view and opening lookup column page in property editor
+[01:02] <diggy> but I'm too tired to look into it now
+[01:02] <diggy> It seems some problem in d pointer destructor
+
+~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
+
+2012-03-03
+Main Window
+*User feedback: added anti-DOS protection when updating feedback ui
+*User feedback: added checking format of the .list files to avoid erroneous HTTP requests
+
+~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+2012-03-28
+KexiDB
+*fixed functions returning field's type group name and type group string; they were completely broken but probably only GUI was affected
+**merged with Predicate
+Forms
+*Fixed bug: Setting a text box as Read Only allows changes to be made nevertheles
+BUG:278419 
+*Properly updated context menu when read-only flag is set for line edits and text boxes
+*Setting a text box or text editor to Read Only mode changes the look to a bit dimmed (as in disabled widget) to indicate the mode
+
+TODO: read-only data widgets: in data mode display a small read-only tooltip during editing or as a label on the right hand
+TODO: read-only data widgets: in design mode display a small read-only icon/text
+
+2012-03-22
+Tables
+*Fixed bug: Details of lookup column not visible
+BUG:296528
+
+2012-03-19
+KexiDB
+*SQLite Driver
+**Fix exporting required symbols of kexidb_sqlite3_icu library for the sqlite3 interface. Also fix the filename extension when loading on different platforms.
+***by Andrius da Costa Ribas
+***+some fixes for gcc/linux
+CCMAIL:andriusmao@gmail.com
+
+2012-03-18
+Reports
+*Fixed bug: Data source property in report field do not show proper list of fields
+
+TODO: crash
+#5  0xb73f3657 in QHash<QString, KexiDB::TableSchema*>::value (this=0x54, akey=...) at /usr/include/QtCore/qhash.h:607
+#6  0xb73f23fb in KexiDB::ConnectionPrivate::table (this=0x0, name=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:126
+#7  0xb73ea4b2 in KexiDB::Connection::tableSchema (this=0x83da3e0, tableName=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:2938
+#8  0xae83f0b9 in KexiDBReportData::getSchema (this=0x853c7a8) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:113
+#9  0xae83ea25 in KexiDBReportData::KexiDBReportData (this=0x853c7a8, qstrSQL=..., pDb=0x83da3e0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:30
+#10 0xae843301 in KexiSourceSelector::sourceData (this=0x85439a0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:148
+#11 0xae842eeb in KexiSourceSelector::setConnectionData (this=0x85439a0, c=...) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:105
+#12 0xae83e507 in KexiReportDesignView::afterSwitchFrom (this=0x866c3f0, mode=Kexi::DataViewMode) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexireportdesignview.cpp:159
+#13 0xb7203c0f in KexiWindow::switchToViewMode (this=0x83f8510, newViewMode=Kexi::DesignViewMode, staticObjectArgs=0x0, proposeOpeningInTextViewModeBecauseOfProblems=@0xbfce3bef)
+    at /home/jarek/kde4/sources/calligra-master2/kexi/core/KexiWindow.cpp:664
+
+2012-03-17
+KexiDB
+*Properly deep-copy query asterisks when cloning query objects
+**This fixes crash for reports based on queries
+CCBUG:246928
+CCBUG:281737
+
+2012-03-13
+KexiDB
+*Fix deep copying of query schema and ORDER BY structures
+**This removes crashes related, e.g. in reports based on queries with joins
+BUG:246928
+BUG:281737
+
+2012-03-12
+Reports
+*Fixed bug: setting a field's data source to a calculated value, results international characters not displaying correctly
+BUG:277731
+
+2012-03-07
+KexiDB
+*SQLite Driver
+**Fixed crashes when compacting database fails
+**Fixed error when attempting to compact database opened from recent lists
+TODO: port to Predicate
+*MySQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+*PostgreSQL Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+CCBUG:254068
+TODO: port to Predicate
+Reports
+*Fix crash in assigning data source that uses reserved words as field names
+**Tables/queries with reserved words still do not work in reports though
+CCBUG:278052
+
+2012-03-06
+Main Window
+*User feedback: added home page and forum links
+
+2012-03-05
+Main Window
+*User feedback: set anonymous identification as mandatory, needed even for basic statistics
+
+2012-03-03
+Main Window
+*make sure that after closing project, and then opening tabbed toolbar activates its first tab
+*do not hide all tabs after project closing, this make it consistent with the appearance of tabs after starting kexi without specifying any project
+
 ~~~~~~~~~~~~~~~~ 2.4 RC1 (2.3.91) ~~~~~~~~~~~~~~~~
+
+2012-03-01
+KexiDB
+*SQLite Driver
+**Ported database compacting code to the new Kexi that uses system SQLite version
+BUG:293548
+TODO: port to Predicate
+
+TODO: after db creating and opening the main menu is invisible
+
+2012-02-27
+CSV Import
+*Update the progress bar less frequently
+
+2012-02-26
+KexiDB
+*SQLite Driver
+**fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+CCBUG:279980
+TODO: port to Predicate
+CSV Import
+*Fixed bug: crash while importing CSV rows that start with empty cells (only delimiters)
+**Example row: ,,,"a"
+BUG:279980
+CSV Import
+*Fixed bug: encoding selection misbehaves when importing a CSV file
+**encoding selection was not retained between first and another displaying of the CSV Import Options dialog
+**encoding selection made in the CSV Import Options dialog was not applied to the importing preview and process
+BUG:294636
+
+2012-02-22
+Main Window
+*allow to anchor context message position to given widget on parent resizes
+*allow to resize context message position on parent resizes
+*welcome status bar: fetch the GUI updates from the server if available, every 60 minutes
+
+2012-02-19
+Main Window
+*User feedback: fixed grammar and typos
+*Fix cropped "Share usage info" message of the User feedback
+*User feedback: After clicking "Share usage info", "Details" or "Help" and the message is visible, minimizing+restoring hides the message
+
+2012-02-18
+Widgets
+*context message widget can contain arbitrary QWidget content
+*buttons in context message widget can be left-aligned, useful for Help button
+*context message widget now displays more modern callout
+*context message widget now has internal widgets colorized using the view theme
+*context message widget now uses the view theme
+*context message widget now uses clean [x] button
+Main Window
+*added access to the feedback via KexiMainWindow::userFeedbackAgent()
+*feedback agent now supports selection of areas
+*feedback agent now handles retrieving redirect URL
+*status bar: HTML replaced with .ui files loaded by quitools and external Qt resources
+
+2012-02-14
+Widgets
+*kmessagewidget: improve shapes of callouts
+
+2012-02-13
+Main Window
+*feedback format set to 1.2: added os_release, os_machine, screen_count
+General
+*Added stable version information: for 2.3.1 returns 2.3.1, for 2.5.70 returns 2.6.0, for 2.9.70 returns 3.0.0
+
+2012-02-12
+Startup
+*Fixed crash when clicking on "Welcome" action while 'confirm database overwriting' question is displayed
+Widgets
+*kmessagewidget: fix geometry when updating callout pointer
+*kmessagewidget: extend API to support custom widget embedding
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 7 (2.3.87) ~~~~~~~~~~~~~~~~
+
+2012-01-12
+Startup
+*Make the recent database entries of the Welcome Page resize when the window resizes
+
+2012-01-10..11
+Main Window
+*fix possible crash when opening Form or Report design
+*prototype of welcome status bar
+*feedback format++: added JSON-compatible character escaping; added uid
+Widgets
+*Further simpify the gui: added flat icon-based button without background that behaves like a link; use it in all Assistant pages instead of Cancel links
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 6 (2.3.86) ~~~~~~~~~~~~~~~~
+
+2012-01-05
+Main Window
+*Simple User Feedback Agent introduced
+TODO: add Qt version, SQLite version, driver usage stats, migration/import/export stats
+      add git revision with exact date+time if compiled using git checkout
+      project stats: # of objects, size (MB, records), types of objects, data types usage
+      system/architecture (32/64) - /proc/version, /proc/cpuinfo
+      occurence of crashes, sending crash reports
+      length of session
+      KDE settings: font size
+      Desktop Manager/WM: KDE/GNOME/other
+      Size of Kexi window used if not maximized
+      functions usage (frequence by function, by function category)
+TODO: Idea: based on functions usage inform about unused functions in the "Did you know?" box
+
+See sample code at http://lxr.kde.org/source/kde/kde-runtime/drkonqi/bugzillalib.cpp
+See sample code at http://lxr.kde.org/source/extragear/network/choqok/microblogs/twitter/twittermicroblog.cpp
+
+2012-01-03..04
+CSV Import
+*Fixed bug: import to table in Kexi ignores "Ignore multiple delimiters" setting
+BUG:160237
+*Fixed bug: ignore any trailing delimiters if "Ignore multiple delimiters" option is on, so empty extra column is not added
+BUG:290645
+*Ask for opening the imported table
+TODO 2.5: add message box title "Successfull import"
+TODO 2.5: change standard "Open" btn to "Open Imported Table"
+
+2012-01-01
+KexiDB
+*Query SQL generated in the Query Designer should be of KEXISQL type
+BUG:290354
+TODO: port to Predicate
+
+2011-12-26..28
+Forms
+*Fixed bug: Image box does not store image pasted to it in design time
+BUG:289545
+*Fixed bug: Changing Horizontal Alignment in image box has no effect unless user resizes it or reopens the form
+BUG:289544
+*Fixed bug: Invalid image geometry within the Image Box form widget when frame properties change
+BUG:289990
+
+TODO: add int margin property to the Image Box
+TODO: add qreal rotation property to the Image Box
+TODO: add scale rotation property to the Image Box
+TODO: add int transparency property to the Image Box
+TODO: add effect property to the Image Box, see QGraphicsEffects
+
+2011-12-16..20
+KexiDB
+*Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+BUG:278411
+TODO: port to Predicate
+
+2011-12-14
+General
+*Fix crash when loading kexi part information without main window
+**detected by tests/newapi
+Core
+*remove memory leak in code opening project
+KexiDB
+*avoid 'invalid read' in code for inserting records into tables
+TODO: port to Predicate
+
+2011-12-10..11
+General
+*[code] fix KexiUtils::replaceColors()
+Table View
+*Make Kexi obey color scheme selection for KDE
+**Table view color support improved for dark schemes
+CCBUG:279694
+Main Window
+*Add Calligra branding to the Kexi Menu
+**Clicking on the logo opens the calligra.org web site
+*Make menu and logo look OK for black color schemes
+Forms
+*Do not create inline editing command when inserting, this fixes possible crash in undo/redo
+*[code] Fix connection to inlineEditorDeleted()
+TODO: clicking on form should exit from inline editing mode
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 5 (2.3.85) ~~~~~~~~~~~~~~~~
+
+2011-12-07
+General
+*[code] properly delete Kexi's "about data" structure, simplify the API, remove CUSTOM version ifdefs
+Query Designer
+*Fix crash when selecting sort order in a query field
+**[code] Properly update current row pointer after row insert
+*Fix crash when selecting sort order without query field specified
+BUG:255304
+*[code] Split KexiQueryDesignerGuiEditor::slotBeforeCellChanged to functions per column
+
+2011-12-02
+General
+*fix build with gcc 4.2.1 under OpenBSD
+BUG:288085
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:283888
+*After inserting element, respective toolbox action is deselected
+
+2011-11-30
+Reports
+*Fix bug: no indication of selected toolbox action for report element
+BUG:285583
+*After inserting element, respective toolbox action is deselected
+
+2011-11-27..29
+Main Window
+*set close buttons on view tabs always visible
+*remove main area borders for cleaner GUI
+*remove MainWindow.HoverCloseButtonForTabs setting
+*[code] remove old code related to KDE3's KMDI
+*[code] removed custom version macros like KEXI_ADD_CUSTOM_OBJECT_CREATION
+
+2011-11-26
+Startup
+*Do not display connection dialog when opening .kexis file that define database name
+*Welcome view: when clicked on a database open it in a new Kexi instance if another database is already opened in the current instance
+
+2011-11-23..24
+Startup
+*Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
+Main Window
+BUG:282651
+*fix build of search line edit for msvc
+
+~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~
 
 2011-11-16
 Widgets
@@ -158,11 +524,6 @@ Documentation
 2011-10-12
 Main Window
 *Simplified background below menu to make it flicker less
-
-2011-10-11
-Code
-*[code] Moved kexi/migration/spreadsheet/ plugin to plugins/kexi/ as it also depends on Tables
-*[code] Moved kexi/shapes/ to kexi/plugins/shapes/ to simplify dir structure
 
 2011-10-12
 Main Window

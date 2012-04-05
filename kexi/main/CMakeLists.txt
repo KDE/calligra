@@ -10,6 +10,8 @@ ADD_DEFINITIONS(
 -DKEXI_NO_CTXT_HELP=1
 )
 
+set(QT_USE_QTUITOOLS true)
+
 ########### next target ###############
 
 set(keximain_LIB_SRCS 
@@ -21,10 +23,12 @@ kexinamewidget.cpp
 kexinamedialog.cpp 
 kexinewstuff.cpp
 KexiSearchLineEdit.cpp
+KexiUserFeedbackAgent.cpp
 
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
 startup/KexiWelcomeAssistant.cpp
+startup/KexiWelcomeStatusBar.cpp
 startup/KexiImportExportAssistant.cpp
 startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
@@ -63,7 +67,10 @@ target_link_libraries(
     ${KDE4_KFILE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
+    ${QT_QTUITOOLS_LIBRARY}
 )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+add_subdirectory(status)

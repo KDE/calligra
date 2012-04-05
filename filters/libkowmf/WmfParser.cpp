@@ -26,12 +26,12 @@
 
 #include <kdebug.h>
 
-#include <QtGui/QImage>
-#include <QtGui/QMatrix>
-#include <QtCore/QDataStream>
-#include <QtCore/QByteArray>
-#include <QtCore/QBuffer>
-#include <QtGui/QPolygon>
+#include <QImage>
+#include <QMatrix>
+#include <QDataStream>
+#include <QByteArray>
+#include <QBuffer>
+#include <QPolygon>
 
 #include <math.h>
 

@@ -22,8 +22,8 @@
 
 #include <KoToolBase.h>
 #include <KoSnapGuide.h>
-#include <QtGui/QGradient>
-#include <QtCore/QMultiMap>
+#include <QGradient>
+#include <QMultiMap>
 
 class GradientStrategy;
 class KarbonGradientEditWidget;
@@ -57,8 +57,6 @@ public:
     virtual void deactivate();
 
 protected:
-    /// reimplemented from KoToolBase
-    virtual QWidget * createOptionWidget();
     /// reimplemented from KoToolBase
     virtual QList<QWidget *> createOptionWidgets();
 

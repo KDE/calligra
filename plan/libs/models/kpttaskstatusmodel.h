@@ -90,6 +90,9 @@ public:
     void setWeekday( int day ) { m_weekday = day; }
     int weekday() const { return m_weekday; }
     
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
     virtual void refresh();

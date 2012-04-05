@@ -37,8 +37,8 @@
 #include <KInputDialog>
 #include <KDebug>
 
-#include <QtGui/QGraphicsItem>
-#include <QtCore/QSet>
+#include <QGraphicsItem>
+#include <QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
         : QWidget(parent), m_scene(new FilterEffectScene(this))
@@ -69,8 +69,11 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     addEffect->setToolTip(i18n("Add effect to current filter stack"));
     connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
 
+    // TODO: make these buttons do something useful
     raiseEffect->setIcon(KIcon("arrow-up"));
+    raiseEffect->hide();
     lowerEffect->setIcon(KIcon("arrow-down"));
+    lowerEffect->hide();
 
     addPreset->setIcon(KIcon("list-add"));
     addPreset->setToolTip(i18n("Add to filter presets"));
@@ -78,13 +81,14 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 
     removePreset->setIcon(KIcon("list-remove"));
     removePreset->setToolTip(i18n("Remove filter preset"));
+    connect(removePreset, SIGNAL(clicked()), this, SLOT(removeFromPresets()));
 
     view->setScene(m_scene);
     view->setRenderHint(QPainter::Antialiasing, true);
     view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
-    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
-            this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
+    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource,ConnectionTarget)),
+            this, SLOT(connectionCreated(ConnectionSource,ConnectionTarget)));
     connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
 
     QSet<ConnectionSource::SourceType> inputs;
@@ -369,6 +373,28 @@ void FilterEffectEditWidget::addToPresets()
 
     if (!server->addResource(resource))
         delete resource;
+}
+
+void FilterEffectEditWidget::removeFromPresets()
+{
+    if (!presets->count()) {
+        return;
+    }
+    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    if (!serverProvider) {
+        return;
+    }
+    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    if (!server) {
+        return;
+    }
+
+    FilterEffectResource *resource = server->resources().at(presets->currentIndex());
+    if (!resource) {
+        return;
+    }
+
+    server->removeResource(resource);
 }
 
 void FilterEffectEditWidget::presetSelected(KoResource *resource)

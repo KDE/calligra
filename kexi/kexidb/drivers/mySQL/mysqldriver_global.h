@@ -20,7 +20,7 @@
 #ifndef MYSQLDRIVER_GLOBAL_H
 #define MYSQLDRIVER_GLOBAL_H
 
-#include <qglobal.h>
+#include <QtGlobal>
 #ifdef Q_WS_WIN
 # define KDEWIN_FCNTL_H
 # define KDEWIN_SYS_STAT_H

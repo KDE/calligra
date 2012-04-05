@@ -21,7 +21,7 @@
  * 02110-1301 USA
  *
  */
-#include <QtGui/QtGui>
+#include <QtGui>
 #include <QtOpenGL/QtOpenGL>
 #include <QShortcut>
 #include "GlWidget.h"

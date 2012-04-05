@@ -20,7 +20,7 @@
 #ifndef KPRPRESENTERVIEWWIDGET
 #define KPRPRESENTERVIEWWIDGET
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QStackedLayout;
 

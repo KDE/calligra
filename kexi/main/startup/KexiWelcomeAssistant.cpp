@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "KexiWelcomeAssistant.h"
 
 #include "KexiRecentProjectsModel.h"
+#include "KexiWelcomeStatusBar.h"
 
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
@@ -64,9 +65,18 @@ KexiMainWelcomePage::KexiMainWelcomePage(
                   parent)
  , m_assistant(assistant)
 {
-    connect(this, SIGNAL(openProject(KexiProjectData)),
-            assistant, SIGNAL(openProject(KexiProjectData)));
+    connect(this, SIGNAL(openProject(KexiProjectData,QString,bool*)),
+            assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)));
+    QWidget* contents = new QWidget;
+    QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
+    
     m_recentProjects = new KexiCategorizedView;
+    // do not alter background palette
+    QPalette pal(m_recentProjects->palette());
+    pal.setColor(QPalette::Disabled, QPalette::Base,
+                    pal.color(QPalette::Normal, QPalette::Base));
+    m_recentProjects->setPalette(pal);
+    contentsLyr->addWidget(m_recentProjects, 1);
     //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
@@ -77,7 +87,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    setContents(m_recentProjects);
+    
+    m_statusBar = new KexiWelcomeStatusBar;
+    contentsLyr->addWidget(m_statusBar);
+    
+    setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
 }
@@ -103,9 +117,12 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
     //m_templatesList->clearSelection();
 
     if (pdata) {
-        emit openProject(*pdata);
-//        next();
-//        return;
+        bool opened = false;
+        emit openProject(*pdata, m_assistant->projects()->shortcutPath(*pdata), &opened);
+        if (opened) { // update
+            pdata->setLastOpened(QDateTime::currentDateTime());
+            m_recentProjects->update();
+        }
     }
 }
 
@@ -251,5 +268,16 @@ KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
+
+// void KexiWelcomeAssistant::mousePressEvent(QMouseEvent* e)
+// {
+//     if (e->buttons() == Qt::LeftButton) {
+//         QWidget *w = QApplication::widgetAt(e->globalPos());
+//         if (w) {
+//             emit widgetClicked(w);
+//         }
+//     }
+//     KexiAssistantWidget::mousePressEvent(e);
+// }
 
 #include "KexiWelcomeAssistant.moc"

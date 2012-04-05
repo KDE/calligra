@@ -20,8 +20,8 @@
 #ifndef SCRIPTING_KEXIDBDRIVER_H
 #define SCRIPTING_KEXIDBDRIVER_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
 #include <kexidb/driver.h>
 #include <kexi_global.h>

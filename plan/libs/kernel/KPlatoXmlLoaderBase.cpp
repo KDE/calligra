@@ -198,10 +198,6 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, project->resourceList() ) {
-        r->resolveRequiredResources( *project );
-    }
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -319,7 +315,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }
@@ -1299,9 +1295,9 @@ bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& 
         if (e.tagName() == "actual-effort") {
             QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
             if ( date.isValid() ) {
-                Completion::UsedEffort::ActualEffort *a = new Completion::UsedEffort::ActualEffort();
-                a->setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
-                a->setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                Completion::UsedEffort::ActualEffort a;
+                a.setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
+                a.setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
                 ue->setEffort( date, a );
             }
         }

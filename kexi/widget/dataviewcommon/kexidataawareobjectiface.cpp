@@ -655,6 +655,25 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             } else {
                 kDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
+// #define setCursorPosition_DEBUG
+#ifdef setCursorPosition_DEBUG
+                int _i = 0;
+                kDebug() << "m_curRow:" << m_curRow;
+                for (KexiTableViewData::Iterator ii = m_data->constBegin();
+                     ii != m_data->constEnd(); ++ii)
+                {
+                    kDebug() << _i << (ulong)(*ii)
+                             << (ii == m_itemIterator ? "CURRENT" : "")
+                             << (*ii)->debugString();
+                    _i++;
+                }
+
+//always works: m_itemIterator = m_data->constBegin();
+//              m_itemIterator += m_curRow;
+
+                kDebug() << "~" << m_curRow << (ulong)(*m_itemIterator)
+                         << (*m_itemIterator)->debugString();
+#endif
                 if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
                     && m_curRow == (rows() - 1))
                 {
@@ -684,6 +703,10 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
                     m_itemIterator += m_curRow;
                 }
                 m_currentItem = *m_itemIterator;
+#ifdef setCursorPosition_DEBUG
+                kDebug() << "new~" << m_curRow
+                         << (ulong)(*m_itemIterator) << (*m_itemIterator)->debugString();
+#endif
             }
         }
 
@@ -1240,11 +1263,10 @@ void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int
 
     m_data->insertRow(*newRecord, pos, true /*repaint*/);
 
-    if (changeCurrentRecord) {
-        //update iter...
-        m_itemIterator = m_data->constBegin();
-        m_itemIterator += m_curRow;
-    }
+    // always update iterator since the list was modified...
+    m_itemIterator = m_data->constBegin();
+    m_itemIterator += m_curRow;
+
     /*
       QSize s(tableSize());
       resizeContents(s.width(),s.height());

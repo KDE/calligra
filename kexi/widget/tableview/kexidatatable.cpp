@@ -20,8 +20,8 @@
 */
 
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 
 #include <kiconloader.h>
 #include <klocale.h>

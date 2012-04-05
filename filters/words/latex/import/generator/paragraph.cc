@@ -19,7 +19,7 @@
 
 #include "paragraph.h"
 #include <element.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QList>
 
 bool Paragraph::analyze(QList<Element*>* body)

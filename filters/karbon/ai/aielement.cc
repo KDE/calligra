@@ -18,7 +18,7 @@
 */
 
 #include "aielement.h"
-#include <qglobal.h>
+#include <QtGlobal>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QString>

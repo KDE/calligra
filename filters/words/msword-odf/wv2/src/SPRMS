@@ -1,0 +1,53 @@
+ code   | sprm             | operand
+=============================================================================================
+0x 0836 | sprmCFItalic     | 
+0x 0839 | sprmCFShadow     | 
+0x 083c | sprmCFVanish     | Specifies whether the text is formatted as hidden.
+0x 0855 | sprmCFSpec       | Specifies whether the current text has a special meaning.
+0x 286f | sprmCIdctHint    | Hint on which of the language, font, size, bold, and italic properties to use.
+0x 2a3e | sprmCKul         | The underlining style of the text.
+0x 2a42 | sprmCIco         | Specifies the color of the text. The default text color is cvAuto.
+0x 2a53 | sprmCFDStrike    | 
+0x 485f | sprmCLidBi       | The language of the text when the text is displayed R-t-L or is complex script
+0x 486d | sprmCRgLid0_80   | The language of the text, except for East Asian languages.
+0x 4873 | sprmCRgLid0      | The language of the text, except for East Asian languages.
+0x 4874 | sprmCRgLid1      | The language of the text if it is an East Asian language.
+0x 4888 | sprmCPbiGrf      | Specifies whether a picture is used as a bullet character when rendering the bullet.
+0x 4a43 | sprmCHps         | An unsigned 2-byte integer that specifies the size of the text.
+0x 4a4f | sprmCRgFtc0      | Index into the font table.
+0x 4a51 | sprmCRgFtc2      | Index into the font table.
+0x 4a5e | sprmCFtcBi       | Index into the font table (SttbfFfn).
+0x 4a61 | sprmCHpsBi       | An unsigned 2-byte integer that specifies the size of the text (Right-to-Left).
+0x 6815 | sprmCRsidProp    | Revision save ID.
+0x 6816 | sprmCRsidText    | Revision save ID.
+0x 6870 | sprmCCv          | A COLORREF value that specifies the color of the text.
+0x 6877 | sprmCCvUl        | A COLORREF value that specifies the color of the text underline.
+0x 6887 | sprmCPbiIBullet  | A CP value in Bullet Pictures document that specifies which picture is used as a bullet.
+0x 6a03 | sprmCPicLocation | Specifies either picture position in Data Stream/binary data/name of OLE object storage.
+0x 6a09 | sprmCSymbol      | Designates the character as a symbol and specifies it's font and character code.
+
+=============================================================================================
+0x 2403 | sprmPJc80        | Physical justification of the paragraph.
+0x 2461 | sprmPJc          | Logical justification of the paragraph.
+0x 260a | sprmPIlvl        | List level of the paragraph.
+0x 460b | sprmPIlfo        | List identificator.
+0x 6424 | sprmPBrcTop80    | Top border of the paragraph.
+0x 6425 | sprmPBrcLeft80   | Left border of the paragraph. 
+0x 6426 | sprmPBrcBottom80 |
+0c 6427 | sprmPBrcRight80  |
+0x 6467 | sprmPRsid        | Revision save ID.
+0x 840e | sprmPDxaRight80  | Physical right indent of the paragraph [twips]
+0x 840f | sprmPDxaLeft80   | Physical left indent of the P (Paragraph) [twips].
+0x 8411 | sprmPDxaLeft180  | Logical left indent of the 1st line of the P, relative to the rest of the P [twips].
+0x 845d | sprmPDxaRight    | Logical right indent of the paragraph [twips]
+0x 845e | sprmPDxaLeft     | Logical left indent of the P (Paragraph) [twips].
+0x 8460 | sprmPDxaLeft1    | Logical left indent of the 1st line of the P, relative to the rest of the P [twips].
+0x a413 | sprmPDyaBefore   | Spacing before this paragraph [twips].
+0x c60d | sprmPChgTabsPapx | Custom tab stops to be added or ignored.
+0x c615 | sprmPChgTabs     | Custom tab stops that are added or ignored.
+0x c64e | sprmPBrcTop      | Top border of the paragraph.
+0x c64f | sprmPBrcLeft     |
+0x c650 | sprmPBrcBottom   |
+0x c651 | sprmPBrcRight    |
+=============================================================================================
+

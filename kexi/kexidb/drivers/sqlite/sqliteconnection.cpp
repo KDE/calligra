@@ -29,16 +29,25 @@
 #include <kexidb/error.h>
 #include <kexiutils/utils.h>
 
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
 
 #include <KDebug>
 #include <KLocale>
+#include <KStandardDirs>
 
 //remove debug
 #undef KexiDBDrvDbg
 #define KexiDBDrvDbg if (0) kDebug()
+
+#if defined(Q_OS_WIN)
+#define SHARED_LIB_EXTENSION ".dll"
+#elif defined(Q_OS_MAC)
+#define SHARED_LIB_EXTENSION ".dylib"
+#else
+#define SHARED_LIB_EXTENSION ".so"
+#endif
 
 using namespace KexiDB;
 
@@ -49,6 +58,7 @@ SQLiteConnectionInternal::SQLiteConnectionInternal(Connection *connection)
         , errmsg_p(0)
         , res(SQLITE_OK)
         , result_name(0)
+        , m_extensionsLoadingEnabled(false)
 {
 }
 
@@ -68,6 +78,19 @@ void SQLiteConnectionInternal::storeResult()
         errmsg_p = 0;
     }
     errmsg = (data && res != SQLITE_OK) ? sqlite3_errmsg(data) : 0;
+}
+
+bool SQLiteConnectionInternal::extensionsLoadingEnabled() const
+{
+    return m_extensionsLoadingEnabled;
+}
+
+void SQLiteConnectionInternal::setExtensionsLoadingEnabled(bool set)
+{
+    if (set == m_extensionsLoadingEnabled)
+        return;
+    sqlite3_enable_load_extension(data, set);
+    m_extensionsLoadingEnabled = set;
 }
 
 /*! Used by driver */
@@ -191,12 +214,19 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
         // See http://www.sqlite.org/pragma.html#pragma_secure_delete
 //! @todo add connection flags to the driver and global setting to control the "secure delete" pragma
         if (!drv_executeSQL("PRAGMA secure_delete = on")) {
-            d->storeResult();
-            const QString errmsg(d->errmsg); // save
-            const int res = d->res; // save
-            drv_closeDatabase();
-            d->errmsg = errmsg;
-            d->res = res;
+            drv_closeDatabaseSilently();
+            return false;
+        }
+        // Load ICU extension for unicode collations
+        QString icuExtensionFilename(
+            KStandardDirs::locate("module", QLatin1String("kexidb_sqlite3_icu" SHARED_LIB_EXTENSION)));
+        if (!loadExtension(icuExtensionFilename)) {
+            drv_closeDatabaseSilently();
+            return false;
+        }
+        // load ROOT collation for use as default collation
+        if (!drv_executeSQL("SELECT icu_load_collation('', '')")) {
+            drv_closeDatabaseSilently();
             return false;
         }
     }
@@ -260,6 +290,15 @@ bool SQLiteConnection::drv_closeDatabase()
 #endif
     }
     return false;
+}
+
+void SQLiteConnection::drv_closeDatabaseSilently()
+{
+    const QString errmsg(d->errmsg); // save
+    const int res = d->res; // save
+    drv_closeDatabase();
+    d->errmsg = errmsg;
+    d->res = res;
 }
 
 bool SQLiteConnection::drv_dropDatabase(const QString &dbName)
@@ -392,6 +431,25 @@ bool SQLiteConnection::isReadOnly() const
 #else
     return Connection::isReadOnly();
 #endif
+}
+
+bool SQLiteConnection::loadExtension(const QString& path)
+{
+    bool tempEnable = false;
+    if (!d->extensionsLoadingEnabled()) {
+        tempEnable = true;
+        d->setExtensionsLoadingEnabled(true);
+    }
+    d->res = sqlite3_load_extension(d->data, path.toUtf8().constData(), 0, &d->errmsg_p);
+    d->storeResult();
+    bool ok = SQLITE_OK == d->res;
+    if (tempEnable) {
+        d->setExtensionsLoadingEnabled(false);
+    }
+    if (!ok) {
+        kWarning() << "Could not load SQLite extension" << path;
+    }
+    return ok;
 }
 
 #include "sqliteconnection.moc"

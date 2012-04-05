@@ -22,8 +22,7 @@
 #ifndef KEXIDBAUTOFIELD_H
 #define KEXIDBAUTOFIELD_H
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QLabel>
 #include <kexidb/field.h>
 #include <formeditor/container.h>

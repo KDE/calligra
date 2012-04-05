@@ -20,8 +20,8 @@
 #ifndef KEXICELLEDITORFACTORY_H
 #define KEXICELLEDITORFACTORY_H
 
-#include <qvariant.h>
-#include <qwidget.h>
+#include <QVariant>
+#include <QWidget>
 
 #include <kexi_global.h>
 #include <kexidb/field.h>

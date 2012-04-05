@@ -29,14 +29,14 @@
 #include <kurllabel.h>
 #include <kdebug.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QPainter>
+#include <QCheckBox>
 #include <QWhatsThis>
 #include <q3paintdevicemetrics.h>
 #include <QPixmap>
-#include <qimage.h>
+#include <QImage>
 
 #include <kexiutils/tristate.h>
 #include <kexidb/connection.h>

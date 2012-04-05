@@ -20,8 +20,8 @@
 #ifndef KEXIBLOBBUFFER_H
 #define KEXIBLOBBUFFER_H
 
-#include <qobject.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QPixmap>
 
 #include <kurl.h>
 

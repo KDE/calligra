@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptnode.h"
 #include "kptschedule.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -40,6 +41,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
+
 
 namespace KPlato
 {
@@ -90,7 +92,7 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     m_project( 0 ),
     current_schedule( 0 )
 {
-    kDebug() << " ---------------- KPlato: Creating PertResult ----------------";
+    kDebug(planDbg()) << " ---------------- KPlato: Creating PertResult ----------------";
     widget.setupUi(this);
     PertResultItemModel *m = new PertResultItemModel( widget.treeWidgetTaskResult );
     widget.treeWidgetTaskResult->setModel( m );
@@ -134,7 +136,7 @@ void PertResult::draw( Project &project)
   
 void PertResult::draw()
 {
-    kDebug()<<m_project;
+    kDebug(planDbg())<<m_project;
     widget.scheduleName->setText( i18n( "None" ) );
     widget.totalFloat->clear();
     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
@@ -165,7 +167,7 @@ void PertResult::setupGui()
 
 void PertResult::slotSplitView()
 {
-    kDebug();
+    kDebug(planDbg());
     widget.treeWidgetTaskResult->setViewSplitMode( ! widget.treeWidgetTaskResult->isViewSplit() );
     emit optionsModified();
 }
@@ -177,13 +179,13 @@ Node *PertResult::currentNode() const
 
 void PertResult::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
-    kDebug()<<index<<pos;
+    kDebug(planDbg())<<index<<pos;
     Node *node = model()->node( index );
     if ( node == 0 ) {
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug()<<node->name()<<" :"<<pos;
+    kDebug(planDbg())<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -205,13 +207,13 @@ void PertResult::slotContextMenuRequested( const QModelIndex& index, const QPoin
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug()<<name;
+    kDebug(planDbg())<<name;
     emit requestPopupMenu( name, pos );
 }
 
 void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -220,7 +222,7 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void PertResult::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -284,7 +286,7 @@ void PertResult::setProject( Project *project )
 
 bool PertResult::loadContext( const KoXmlElement &context )
 {
-    kDebug();
+    kDebug(planDbg());
     return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
@@ -305,7 +307,7 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     current_schedule( 0 ),
     block( false )
 {
-    kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------";
+    kDebug(planDbg()) << " ---------------- KPlato: Creating PertCpmView ----------------";
     widget.setupUi(this);
     widget.cpmTable->setSelectionMode( QAbstractItemView::ExtendedSelection );
     widget.probabilityFrame->setVisible( false );
@@ -363,7 +365,7 @@ void PertCpmView::setupGui()
 
 void PertCpmView::slotSplitView()
 {
-    kDebug();
+    kDebug(planDbg());
     widget.cpmTable->setViewSplitMode( ! widget.cpmTable->isViewSplit() );
     emit optionsModified();
 }
@@ -375,13 +377,13 @@ Node *PertCpmView::currentNode() const
 
 void PertCpmView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
-    kDebug()<<index<<pos;
+    kDebug(planDbg())<<index<<pos;
     Node *node = model()->node( index );
     if ( node == 0 ) {
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug()<<node->name()<<" :"<<pos;
+    kDebug(planDbg())<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -403,13 +405,13 @@ void PertCpmView::slotContextMenuRequested( const QModelIndex& index, const QPoi
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug()<<name;
+    kDebug(planDbg())<<name;
     emit requestPopupMenu( name, pos );
 }
 
 void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -418,7 +420,7 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void PertCpmView::slotOptions()
 {
-    kDebug();
+    kDebug(planDbg());
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -429,7 +431,7 @@ void PertCpmView::slotOptions()
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
     bool enbl = sm && sm->isScheduled() && sm->usePert();
-    kDebug()<<sm<<(sm?sm->isScheduled():false)<<(sm?sm->usePert():false)<<enbl;
+    kDebug(planDbg())<<sm<<(sm?sm->isScheduled():false)<<(sm?sm->usePert():false)<<enbl;
     widget.probabilityFrame->setVisible( enbl );
     current_schedule = sm;
     model()->setManager( sm );
@@ -507,7 +509,7 @@ void PertCpmView::draw()
 
 void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
 {
-    kDebug()<<dt;
+    kDebug(planDbg())<<dt;
     if ( block || m_project == 0 || current_schedule == 0 ) {
         return;
     }
@@ -521,13 +523,13 @@ void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
     double z = d / dev;
     double v = probability( z );
     widget.probability->setValue( (int)( v * 100 ) );
-    //kDebug()<<z<<", "<<v;
+    //kDebug(planDbg())<<z<<", "<<v;
     block = false;
 }
 
 void PertCpmView::slotProbabilityChanged( int value )
 {
-    kDebug()<<value;
+    kDebug(planDbg())<<value;
     if ( value == 0 || block || m_project == 0 || current_schedule == 0 ) {
         return;
     }
@@ -538,7 +540,7 @@ void PertCpmView::slotProbabilityChanged( int value )
     double p = valueZ( value );
     DateTime t = et + Duration( qint64( p * dev ) );
     widget.finishTime->setDateTime( t );
-    //kDebug()<<p<<", "<<t.toString();
+    //kDebug(planDbg())<<p<<", "<<t.toString();
     block = false;
 }
 
@@ -552,7 +554,7 @@ double PertCpmView::probability( double z ) const
         }
     }
     p = dist[i-1][1] + ( ( dist[i][1] - dist[i-1][1] ) * ( ( qAbs(z) - dist[i-1][0] ) / (dist[i][0] - dist[i-1][0] ) ) );
-    //kDebug()<<i<<":"<<z<<dist[i][0]<<dist[i][1]<<"="<<p;
+    //kDebug(planDbg())<<i<<":"<<z<<dist[i][0]<<dist[i][1]<<"="<<p;
     return z < 0 ? 1 - p : p;
 }
 
@@ -567,7 +569,7 @@ double PertCpmView::valueZ( double pr ) const
         }
     }
     z = dist[i-1][0] + ( ( dist[i][0] - dist[i-1][0] ) * ( ( p - dist[i-1][1] ) / (dist[i][1] - dist[i-1][1] ) ) );
-    //kDebug()<<i<<":"<<pr<<p<<dist[i][0]<<dist[i][1]<<"="<<z;
+    //kDebug(planDbg())<<i<<":"<<pr<<p<<dist[i][0]<<dist[i][1]<<"="<<z;
     return pr < 50.0 ? -z : z;
 }
 
@@ -578,7 +580,7 @@ void PertCpmView::slotUpdate()
 
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<objectName();
+    kDebug(planDbg())<<objectName();
     return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 

@@ -85,9 +85,9 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
 }
 
-void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem *prev )
+void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem */*prev*/ )
 {
-    //kDebug()<<current->widget()<<m_descriptionTab->parent();
+    //kDebug(planDbg())<<current->widget()<<m_descriptionTab->parent();
     // HACK: KPageDialog grabs focus when a tab is clicked.
     // KRichTextWidget still flashes the caret so the user thinks it has the focus.
     // For now, just give the KRichTextWidget focus.

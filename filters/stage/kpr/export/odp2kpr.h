@@ -21,7 +21,7 @@
 #define ODP2KPR_H
 
 #include <KoFilter.h>
-#include <qdom.h>
+#include <QDomDocument>
 
 class Odp2Kpr : public KoFilter
 {

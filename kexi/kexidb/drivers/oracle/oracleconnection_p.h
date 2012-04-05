@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef KEXIDB_ORACLECLIENT_P_H
 #define KEXIDB_ORACLECLIENT_P_H  
 	#include <occi.h>
-	#include <qstring.h>
+	#include <QString>
 	#include <kexidb/connection_p.h>
 	#include <vector>
 	#undef bool

@@ -1,10 +1,17 @@
 [Desktop Entry]
 Name=Tape array
 Name[ca]=Cinta matriu
+Name[ca@valencia]=Cinta matriu
+Name[el]=Tape array
+Name[et]=Lindimassiiv
+Name[it]=Array di nastri
+Name[kk]=Таспа (жиым)
 Name[nb]=StorageRack3U
+Name[nl]=Tape-array
 Name[pl]=Macierz taśmy
 Name[pt]=Bloco fitas magnéticas
 Name[pt_BR]=Conjunto de fitas magnéticas
+Name[ru]=Массив данных на ленте
 Name[sv]=Bandgrupp
 Name[uk]=Стрічковий масив
 Name[x-test]=xxTape arrayxx

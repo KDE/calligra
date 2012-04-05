@@ -30,7 +30,7 @@
 
 #include <cstdlib>
 #include <qtest_kde.h>
-#include <QtCore/QDir>
+#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
@@ -136,6 +136,7 @@ void ProjectTester::initTestCase()
     m_project->setName( "P1" );
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
+    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01 00:00" ) );
     m_project->setConstraintEndTime( m_project->constraintStartTime().addDays( 7 ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
@@ -157,7 +158,7 @@ void ProjectTester::cleanupTestCase()
 
 void ProjectTester::oneTask()
 {
-    QDate today = QDate::currentDate();
+    QDate today = QDate::fromString( "2012-02-01", Qt::ISODate );
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
     QTime t1( 9, 0, 0 );
@@ -428,7 +429,7 @@ void ProjectTester::team()
     Resource *team = new Resource();
     team->setType( Resource::Type_Team );
     team->setName( "Team" );
-    team->addTeamMember( r2 );
+    team->addTeamMemberId( r2->id() );
     project.addResource( g, team );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
@@ -504,7 +505,7 @@ void ProjectTester::team()
     qDebug()<<endl<<"Testing:"<<s;
     
     r1->removeRequests();
-    team->addTeamMember( r1 );
+    team->addTeamMemberId( r1->id() );
     r1->setAvailableFrom( targetstart );
     r1->setAvailableUntil( targetend );
 

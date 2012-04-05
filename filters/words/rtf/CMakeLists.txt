@@ -1,6 +1,5 @@
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-add_subdirectory( export )
+if (QT3SUPPORT)
+    add_subdirectory( export )
+endif (QT3SUPPORT)
 add_subdirectory( import )
 

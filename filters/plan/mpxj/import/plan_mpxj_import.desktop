@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Service
+Name=Plan MS Project Import Filter
+Name[pt_BR]=Filtro de importação do MS Project para o Plan
+Name[sv]=Plan MS Project-importfilter
+Name[uk]=Фільтр імпорту файлів MS Project для Plan
+Name[x-test]=xxPlan MS Project Import Filterxx
+X-KDE-Export=application/x-vnd.kde.plan
+X-KDE-Import=application/vnd.ms-project
+X-KDE-Weight=1
+X-KDE-Library=planmpxjimport
+X-KDE-ServiceTypes=CalligraFilter

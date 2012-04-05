@@ -2,7 +2,7 @@
 #define TESTBASICLAYOUT_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <KoShape.h>
 

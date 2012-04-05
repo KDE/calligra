@@ -313,11 +313,12 @@ public:
 signals:
     void mailWorkpackage( Node *n, Resource *r = 0 );
     void mailWorkpackages( QList<Node*> &nodes, Resource *r );
+    void checkForWorkPackages();
 
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
-
+    void slotRefreshView();
     void setScheduleManager( ScheduleManager *sm );
 
 protected:

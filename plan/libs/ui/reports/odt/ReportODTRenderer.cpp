@@ -24,7 +24,9 @@
 #include "KoSimpleOdtLine.h"
 #include "KoSimpleOdtCheckBox.h"
 #include "renderobjects.h"
-#include <kdebug.h>
+
+#include "kptdebug.h"
+
 
 ReportODTRenderer::ReportODTRenderer()
 {
@@ -67,7 +69,7 @@ bool ReportODTRenderer::render(const KoReportRendererContext& context, ORODocume
             } else if (prim->type() == ORORect::Rect) {
                 // TODO: section background
             } else {
-                kDebug() << "unhandled primitive type."<<prim->type();
+                kDebug(planDbg()) << "unhandled primitive type."<<prim->type();
             }
         }
     }

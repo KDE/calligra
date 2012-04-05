@@ -34,6 +34,7 @@ class KexiProjectSelectorWidget;
 class KCategorizedView;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
+class KexiWelcomeStatusBar;
 
 class KexiMainWelcomePage : public KexiAssistantPage
 {
@@ -46,7 +47,7 @@ public:
     QString selectedCategory;
     
 signals:
-    void openProject(const KexiProjectData& data);
+    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
 private slots:
     void slotItemClicked(const QModelIndex& index);
@@ -55,6 +56,7 @@ private:
     KexiCategorizedView* m_recentProjects;
     KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
     KexiWelcomeAssistant* m_assistant;
+    KexiWelcomeStatusBar* m_statusBar;
 };
 
 class KexiProjectData;
@@ -84,7 +86,14 @@ public slots:
     void tryAgainActionTriggered();
 
 signals:
-    void openProject(const KexiProjectData& data);
+    /*! Emitted if project @a data was selected to open.
+     @a shortcutPath can be non empty to indicate .kexis filename useful for opening new
+     instance of Kexi. Receiver should set value pointed by @a opened to true if the
+     database has been opened successfully. */
+    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
+    
+// protected:
+//     virtual void mousePressEvent(QMouseEvent* e);
 
 private:
     void createProject(

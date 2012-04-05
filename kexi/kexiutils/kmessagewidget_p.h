@@ -35,6 +35,8 @@ public:
 
     void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
 
+    QPoint calloutPointerPosition() const;
+    
     QPoint pointerPosition() const;
 
     void setCalloutPointerPosition(const QPoint& globalPos);

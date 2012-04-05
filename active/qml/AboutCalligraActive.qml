@@ -1,6 +1,6 @@
 /*
  *   Copyright 2011 Sebastian Kügler <sebas@kde.org>
- *   Copyright 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ *   Copyright 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -22,18 +22,18 @@ import QtQuick 1.0
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicslayouts 4.7 as GraphicsLayouts
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Item {
+Rectangle {
     PlasmaCore.Theme {
         id: theme
     }
 
-    anchors.margins: 20
+    color: "white"
 
-    Button {
+    PlasmaComponents.Button {
         id: back
-        drawBackground: false
-        imageSource: "qrc:///images/go-previous.png"
+        iconSource: "go-previous"
         anchors.left: parent.left
         anchors.top: parent.top
         height: 64
@@ -45,21 +45,21 @@ Item {
 
     Column {
         anchors.fill: parent
-        anchors.topMargin: 20
+        anchors.margins: 40
         spacing: 80
 
-//         Image {
-//             id: calligra_logo
-//             source: "qrc:///images/calligra-logo.png"
-//             anchors.horizontalCenter: parent.horizontalCenter
-//         }
-
-        Text {
+        Image {
             id: calligra_logo
-            text: "Calligra"
+            source: "qrc:///images/calligra-logo.png"
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 80
         }
+
+//         Text {
+//             id: calligra_logo
+//             text: "Calligra"
+//             anchors.horizontalCenter: parent.horizontalCenter
+//             font.pointSize: 80
+//         }
 
         Text {
             id: description

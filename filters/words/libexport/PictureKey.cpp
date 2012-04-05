@@ -23,7 +23,7 @@
 
 #include <QDateTime>
 #include <QFileInfo>
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kdebug.h>
 

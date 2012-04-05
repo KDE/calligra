@@ -20,9 +20,9 @@
 #include "kexitabledesignerview_p.h"
 #include "kexitabledesignerview.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qsplitter.h>
+#include <QLayout>
+#include <QLabel>
+#include <QSplitter>
 
 #include <kiconloader.h>
 #include <kdebug.h>

@@ -25,9 +25,9 @@
 
 #include <KStandardAction>
 #include <KAction>
-#include <QtGui/qwidget.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qicon.h>
+#include <QWidget>
+#include <QString>
+#include <QIcon>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;
@@ -164,6 +164,7 @@ protected:
 #endif
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent *);
     void paintEvent(QPaintEvent *);
     void actionEvent(QActionEvent *);

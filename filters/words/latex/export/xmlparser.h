@@ -23,8 +23,8 @@
 #ifndef __LATEX_XMLPARSER_H__
 #define __LATEX_XMLPARSER_H__
 
-#include "qstring.h"
-#include "qdom.h"
+#include <QString>
+#include <QDomDocument>
 #include "config.h"
 
 class FileHeader;

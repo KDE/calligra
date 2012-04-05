@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -115,13 +115,19 @@ class KEXI_DB_EXPORT OrderByColumn
 public:
     typedef QList<OrderByColumn*>::ConstIterator ListConstIterator;
     OrderByColumn();
-    OrderByColumn(QueryColumnInfo& column, bool ascending = true, int pos = -1);
+    explicit OrderByColumn(QueryColumnInfo& column, bool ascending = true, int pos = -1);
 
     //! Like above but used when the field \a field is not present on the list of columns.
     //! (e.g. SELECT a FROM t ORDER BY b; where T is a table with fields (a,b)).
-    OrderByColumn(Field& field, bool ascending = true);
+    explicit OrderByColumn(Field& field, bool ascending = true);
 
     ~OrderByColumn();
+
+    /*! @return copy of this OrderByColumn object.
+     In @a fromQuery and @a toQuery is needed if column() is assigned to this info.
+     Then, column info within @a toQuery will be assigned to the new OrderByColumn object,
+     corresponding to column() from "this" OrderByColumn object. */
+    OrderByColumn* copy(QuerySchema* fromQuery, QuerySchema* toQuery) const;
 
     //! A column to sort.
     inline QueryColumnInfo* column() const {
@@ -159,7 +165,7 @@ public:
      of "tablename.fieldname" (but only if fieldname is not a name of alias).
      \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
     QString toSQLString(bool includeTableName = true,
-                        Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
+                        const Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
 
 protected:
     //! Column to sort
@@ -181,8 +187,9 @@ public:
     /*! Constructs empty list of ordered columns. */
     OrderByColumnList();
 
-    /*! Copy constructor. */
-    OrderByColumnList(const OrderByColumnList& other);
+    /*! A copy constructor. */
+    OrderByColumnList(const OrderByColumnList& other,
+                      QuerySchema* fromQuery, QuerySchema* toQuery);
 
     ~OrderByColumnList();
 
@@ -233,9 +240,6 @@ public:
      \return true on successful adding and false if there is no such position \a pos. */
     bool appendColumn(QuerySchema& querySchema, bool ascending = true, int pos = -1);
 
-    /*! Appends \a column to the list. */
-    void appendColumn(const OrderByColumn& column);
-
     /*! \return true if the list is empty. */
     bool isEmpty() const {
         return OrderByColumnListBase::isEmpty();
@@ -270,7 +274,7 @@ public:
      of "tablename.fieldname".
      \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
     QString toSQLString(bool includeTableNames = true,
-                        Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
+                        const Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary) const;
 };
 
 //! @short KexiDB::QuerySchema provides information about database query
@@ -763,11 +767,11 @@ public:
      This method is similar to FieldList::sqlFieldsList() it just uses
      QueryColumnInfo::List instead of Field::List.
     */
-    static QString sqlColumnsList(QueryColumnInfo::List* infolist, Driver *driver);
+    static QString sqlColumnsList(QueryColumnInfo::List* infolist, const Driver *driver);
 
     /*! \return cached sql list created using sqlColumnsList() on a list returned
      by autoIncrementFields(). */
-    QString autoIncrementSQLFieldsList(Driver *driver);
+    QString autoIncrementSQLFieldsList(const Driver *driver);
 
     /*! Sets a WHERE expression \a exp. It will be owned by this query,
      so you can forget about it. Previously set WHERE expression will be deleted.
@@ -851,6 +855,8 @@ public:
      for that the QueryAsterisk object was added (using QuerySchema::addField()).
      */
     QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
+
+    QueryAsterisk(const QueryAsterisk& asterisk);
 
     virtual ~QueryAsterisk();
 

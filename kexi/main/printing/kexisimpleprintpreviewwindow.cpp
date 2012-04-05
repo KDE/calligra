@@ -22,10 +22,10 @@
 #include "kexisimpleprintpreviewwindow_p.h"
 #include <kexi_version.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3accel.h>
-#include <qtimer.h>
-#include <qlabel.h>
+#include <QTimer>
+#include <QLabel>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>

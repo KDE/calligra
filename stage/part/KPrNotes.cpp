@@ -27,13 +27,13 @@
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeLayer.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoPASavingContext.h>
-
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
@@ -157,10 +157,11 @@ bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
     return true;
 }
 
-void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
 }
 
 KoPageLayout & KPrNotes::pageLayout()
@@ -194,6 +195,12 @@ bool KPrNotes::displayMasterBackground()
 
 void KPrNotes::setDisplayMasterBackground( bool )
 {
+}
+
+QImage KPrNotes::thumbImage(const QSize&)
+{
+    Q_ASSERT( 0 );
+    return QImage();
 }
 
 QPixmap KPrNotes::generateThumbnail( const QSize& )

@@ -30,6 +30,11 @@ set(wordsprivate_LIB_SRCS
     KWOdfSharedLoadingData.cpp
     KWRootAreaProvider.cpp
 
+    pagetool/KWPageTool.cpp
+    pagetool/KWPageToolFactory.cpp
+    pagetool/SimpleSetupWidget.cpp
+    pagetool/SimpleHeaderFooterWidget.cpp
+
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
@@ -46,13 +51,13 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWDocumentColumns.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
-    dialogs/KWStatistics.cpp
-    dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
-    dialogs/KWInsertPageDialog.cpp
+
     dockers/KWStatisticsDocker.cpp
+    dockers/KWStatistics.cpp
+    dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -63,6 +68,7 @@ set(wordsprivate_LIB_SRCS
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
+    commands/KWShapeCreateCommand.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -79,12 +85,13 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
-    dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
-    dialogs/KWInsertPageDialog.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
+    dockers/StatisticsPreferencesPopup.ui
+    pagetool/SimpleSetupWidget.ui
+    pagetool/SimpleHeaderFooterWidget.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
