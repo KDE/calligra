@@ -1,5 +1,5 @@
 /*
- *  
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <kis_adjustment_layer.h>
-
+#include <kis_node_commands_adapter.h>
 #include "animator_loader.h"
 #include "animator_switcher.h"
 #include "animator_lt_updater.h"
@@ -41,7 +41,8 @@ AnimatorManager::AnimatorManager(KisImage* image)
 {
     m_image = image;
     m_nodeManager = 0;
-    
+    m_nodeAdapter = 0;
+
     m_loader = new AnimatorLoader(this);
     m_switcher = new AnimatorSwitcher(this);
     m_updater = new AnimatorLTUpdater(this);
@@ -49,23 +50,27 @@ AnimatorManager::AnimatorManager(KisImage* image)
     m_exporter = new AnimatorExporter(this);
     m_importer = new AnimatorImporter(this);
     m_frameManager = new AnimatorFrameManager(this);
-    
+
     m_framesNumber = 0;
-    
+
     m_info = new AnimatorMetaInfo(1, 4);
-    
+
     connect(this, SIGNAL(layerFramesNumberChanged(AnimatedLayer*,int)), SLOT(framesNumberCheck(AnimatedLayer*,int)));
-    
+
     connect(m_switcher, SIGNAL(frameChanged(int,int)), m_updater, SLOT(update(int,int)));
 }
 
 AnimatorManager::~AnimatorManager()
 {
+    delete m_nodeAdapter;
 }
 
 void AnimatorManager::setCanvas(KoCanvasBase* canvas)
 {
+    if (!dynamic_cast<KisCanvas2*>(canvas)) return;
+
     m_nodeManager = dynamic_cast<KisCanvas2*>(canvas)->view()->nodeManager();
+    m_nodeAdapter = new KisNodeCommandsAdapter(dynamic_cast<KisCanvas2*>(canvas)->view());
     m_exporter->setCanvas(canvas);
     m_importer->setCanvas(canvas);
 #if LOAD_ON_START
@@ -76,6 +81,8 @@ void AnimatorManager::setCanvas(KoCanvasBase* canvas)
 void AnimatorManager::unsetCanvas()
 {
     m_nodeManager = 0;
+    delete m_nodeAdapter;
+    m_nodeAdapter = 0;
 }
 
 
@@ -174,13 +181,13 @@ void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
 {
     if (!ready())
         return;
-    
+
     if (!content)
         return;
-    
+
     if (frame->getContent())
         m_nodeManager->removeNode(frame->getContent());
-    
+
     putNodeAt(content, frame, 0);
     if (! content->name().startsWith("_"))
         content->setName("_");
@@ -190,13 +197,13 @@ void AnimatorManager::setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLay
 {
     if (!ready())
         return;
-    
+
     if (!frame->getContent())
         return;
-    
+
     if (frame->filter())
         m_nodeManager->removeNode(frame->filter());
-    
+
     if (filter) {
         putNodeAt(filter, frame, 1);
         filter->setName("filter");
@@ -205,10 +212,12 @@ void AnimatorManager::setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLay
 
 void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
-    if (node->parent())
+    if (node->parent()) {
         m_nodeManager->moveNodeAt(node, parent, index);
-    else
-        m_nodeManager->insertNode(node, parent, index);
+    }
+    else {
+        m_nodeAdapter->addNode(node, parent, index);
+    }
 }
 
 void AnimatorManager::removeNode(KisNodeSP node)
@@ -227,23 +236,14 @@ void AnimatorManager::removeLayer(KisNode *layer)
 {
     if (!layer || !layer->parent())
         return;
-    
-    KisNodeSP newActive = layer->prevSibling();
-    if (!newActive) {
-        newActive = layer->nextSibling();
-        if (!newActive) {
-            newActive = layer->parent();
-        }
-    }
-    
-    m_nodeManager->removeNode(layer);
-    m_nodeManager->activateNode(newActive);
+
+    m_nodeAdapter->removeNode(layer);
     layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
 
 void AnimatorManager::createGroupLayer(KisNodeSP parent)
 {
-    m_nodeManager->activateNode(parent);
+    m_nodeManager->slotNonUiActivatedNode(parent);
     m_nodeManager->createNode("KisGroupLayer");
 }
 
@@ -263,7 +263,7 @@ void AnimatorManager::framesNumberCheck(AnimatedLayer* layer, int number)
 {
     if (number == m_framesNumber)
         return;
-    
+
     if (number > m_framesNumber)
     {
         m_maxFrameLayer = layer;
@@ -271,7 +271,7 @@ void AnimatorManager::framesNumberCheck(AnimatedLayer* layer, int number)
         emit framesNumberChanged(m_framesNumber);
         return;
     }
-    
+
     if (layer == m_maxFrameLayer)
     {
         // We do not know layer with max frames now
@@ -299,15 +299,15 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
 {
     if (frameNumber >= 0)
         getSwitcher()->goFrame(frameNumber);
-    
+
     if (node)
     {
         SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(node);
         if (frame)
             node = frame->getContent();
-        m_nodeManager->activateNode(node);
+        m_nodeManager->slotNonUiActivatedNode(node);
     }
-    
+
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeLayer());
     emit animatedLayerActivated(alayer);
 }
@@ -326,7 +326,7 @@ void AnimatorManager::layerAdded(AnimatedLayer* layer)
     if (!layer)
         return;
     m_layers.append(layer);
-    
+
     framesNumberCheck(layer, layer->dataEnd());
 }
 
@@ -337,7 +337,7 @@ void AnimatorManager::layerRemoved(AnimatedLayer* layer)
     int i = m_layers.indexOf(layer);
     if (i >= 0)
         m_layers.removeAt(i);
-    
+
     if (layer == m_maxFrameLayer)
         calculateFramesNumber();
 }
@@ -376,20 +376,17 @@ void AnimatorManager::createAnimatedLayer()
 {
     CustomAnimatedLayer* newLayer = new CustomAnimatedLayer(image(), "", 255);
     newLayer->setAName("New layer");
-    
+
     KisNode *activeNode = activeLayer();
     AnimatedLayer *alayer = qobject_cast<AnimatedLayer*>(activeNode);
-    
+
     if (alayer) {
         KisNode *parent = alayer->parent().data();
-        m_nodeManager->insertNode(newLayer, parent, parent->index(alayer));
+        m_nodeAdapter->addNode(newLayer, parent, parent->index(alayer));
     } else {
-        m_nodeManager->insertNode(newLayer, image()->root(), 0);
-        m_nodeManager->moveNode(newLayer, activeNode);
+        m_nodeAdapter->addNode(newLayer, image()->root(), 0);
+//        m_nodeAdapter->moveNode(newLayer, activeNode);
     }
-    
-    layerAdded(newLayer);
-    m_nodeManager->activateNode(newLayer);
 }
 
 void AnimatorManager::createNormalLayer()
@@ -407,13 +404,13 @@ void AnimatorManager::convertToViewLayer(int from, int to)
     KisNode* activeNode = activeLayer();
     if (qobject_cast<AnimatedLayer*>(activeNode))
         return;
-    
+
     createAnimatedLayer<ViewAnimatedLayer>();
     ViewAnimatedLayer* vlayer = qobject_cast<ViewAnimatedLayer*>(activeLayer());
     if (!vlayer)
         return;
     putNodeAt(activeNode, vlayer, 0);
-    
+
     vlayer->setStart(from);
     vlayer->setEnd(to);
     vlayer->save();
@@ -470,13 +467,13 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, int frameNumber, const Q
         warnKrita << "Could not determine animated layer or frame adding is not supported, no frame created";
         return;
     }
-    
+
     if (alayer->frameAt(frameNumber))
     {
         warnKrita << "Have frame already, no frame created";
         return;
     }
-    
+
     SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(alayer->emptyFrame());
     frame->setName(alayer->getNameForFrame(frameNumber, iskey));
     alayer->insertFrame(frame);
@@ -485,7 +482,7 @@ void AnimatorManager::createFrame(AnimatedLayer* layer, int frameNumber, const Q
         m_nodeManager->createNode(ftype);
         frame->setContent(m_nodeManager->activeNode().data());
     }
-    
+
     // TODO: don't do full update
     getUpdater()->fullUpdateLayer(alayer);
     getUpdater()->updateLayer(alayer, frameNumber, frameNumber);

@@ -20,18 +20,18 @@
 #include "animator_filtered_lt.h"
 
 #include <kis_adjustment_layer.h>
-#include <kis_filter_configuration.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 
 AnimatorFilteredLT::AnimatorFilteredLT(KisImage *image) : AnimatorLT()
 {
     m_leftFilter = 0;
     m_rightFilter = 0;
-    
+
     m_basicFilter = 0;
     m_usedL = false;
     m_usedR = false;
-    
+
     m_image = image;
     setBasicFilter(new KisAdjustmentLayer(image, "", new KisFilterConfiguration("hsvadjustment", 0), 0));
 }
@@ -47,16 +47,16 @@ KisAdjustmentLayerSP AnimatorFilteredLT::filter(int relFrame)
         warnKrita << "cannot use filter";
         return 0;
     }
-    
+
     if (relFrame == 0)
         return 0;
-    
+
     if (relFrame < 0 && !m_usedL)
         return 0;
-    
+
     if (relFrame > 0 && !m_usedR)
         return 0;
-    
+
     KisAdjustmentLayerSP result = relFrame<0 ? m_leftFilter : m_rightFilter;
     if (!result) {
         result = new KisAdjustmentLayer(*m_basicFilter);
@@ -79,7 +79,7 @@ void AnimatorFilteredLT::setFilterUsed(int relFrame, bool used)
 {
     if (relFrame < 0)
         m_usedL = used;
-    
+
     if (relFrame > 0)
         m_usedR = used;
 }
