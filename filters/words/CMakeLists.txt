@@ -1,3 +1,5 @@
+if (NOT WIN32)
+
 # check whether we can compile wv2
 
 macro_optional_find_package(Iconv)
@@ -45,6 +47,7 @@ IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
   set(ICONV_FOUND FALSE)
 ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 
+endif(NOT WIN32)
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDES} )
 
@@ -83,6 +86,8 @@ endif (NOT TINY)
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
-add_subdirectory(msword-odf)
+if (NOT WIN32)
+    add_subdirectory(msword-odf)
+endif(NOT WIN32)
 
 add_subdirectory( docx )
