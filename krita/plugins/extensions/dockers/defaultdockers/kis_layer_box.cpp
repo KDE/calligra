@@ -131,15 +131,15 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnRaise->setEnabled(false);
     m_wdgLayerBox->bnRaise->setIcon(BarIcon("go-up"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnLower->setIcon(BarIcon("go-down"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnLeft->setEnabled(true);
     m_wdgLayerBox->bnLeft->setIcon(BarIcon("arrow-left"));
     m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnRight->setEnabled(true);
     m_wdgLayerBox->bnRight->setIcon(BarIcon("arrow-right"));
     m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
@@ -149,7 +149,9 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->bnDuplicate->setIcon(BarIcon("edit-copy"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
-
+#ifdef Q_WS_WIN
+    m_wdgLayerBox->bnDuplicate->setVisible(false);
+#endif
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
@@ -213,7 +215,7 @@ KisLayerBox::KisLayerBox()
 #endif
     m_newLayerMenu->addAction(m_newSelectionMaskAction);
 
-    
+
     m_nodeModel = new KisNodeModel(this);
 
     /**
@@ -359,7 +361,7 @@ void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
     KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
     int  index = m_wdgLayerBox->cmbComposite->indexOf(cmpOp);
-    
+
     m_wdgLayerBox->cmbComposite->blockSignals(true);
     m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
@@ -495,7 +497,7 @@ void KisLayerBox::slotRaiseClicked()
     KisNodeSP grandParent = parent->parent();
 
     if (!m_nodeManager->activeNode()->prevSibling()) {
-        if (!grandParent) return;  
+        if (!grandParent) return;
         if (!grandParent->parent() && node->inherits("KisMask")) return;
         m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
     } else {
@@ -509,9 +511,9 @@ void KisLayerBox::slotLowerClicked()
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
-    
+
     if (!m_nodeManager->activeNode()->nextSibling()) {
-        if (!grandParent) return;  
+        if (!grandParent) return;
         if (!grandParent->parent() && node->inherits("KisMask")) return;
         m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
     } else {
@@ -526,8 +528,8 @@ void KisLayerBox::slotLeftClicked()
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
     quint16 nodeIndex = parent->index(node);
-    
-    if (!grandParent) return;  
+
+    if (!grandParent) return;
     if (!grandParent->parent() && node->inherits("KisMask")) return;
 
     if (nodeIndex <= parent->childCount() / 2) {
