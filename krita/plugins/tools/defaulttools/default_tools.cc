@@ -60,7 +60,9 @@ DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
     r->add(new KisToolRectangleFactory(QStringList()));
     r->add(new KisToolMeasureFactory(QStringList()));
     r->add(new KisToolPathFactory(QStringList()));
+#ifndef Q_WS_WIN
     r->add(new KisToolMoveFactory(QStringList()));
+#endif
     r->add(new KisToolPanFactory(QStringList()));
     r->add(new KisToolMultiBrushFactory(QStringList()));
 }
