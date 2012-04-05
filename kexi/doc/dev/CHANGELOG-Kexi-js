@@ -157,6 +157,9 @@ Main Window
 KoProperty
 *When property set is cleared, clear model(s) for associated views
 **This fixes random crashes in Property Editor
+Forms
+*Fixed saving "Enabled" property
+BUG:278424
 
 2012-03-28
 KexiDB
