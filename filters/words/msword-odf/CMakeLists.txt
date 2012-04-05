@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(
     ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
     ../../libmso
     ../../libmsooxml
-    ../../tables/xlsx/
+    ../../sheets/xlsx/
 )
 
 set(mswordodf_import_PART_SRCS
@@ -16,7 +16,7 @@ set(mswordodf_import_PART_SRCS
    tablehandler.cpp
    graphicshandler.cpp
    drawclient.cpp
-   ../../tables/xlsx/NumberFormatParser.cpp
+   ../../sheets/xlsx/NumberFormatParser.cpp
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")

@@ -32,7 +32,7 @@ KAboutData* newFlowAboutData()
   KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
                                 ki18n("(C) 2000-2011, The Flow Team"), KLocalizedString(),
-                                "http://www.calligra-suite.org/flow/");
+                                "http://www.calligra.org/flow/");
   aboutData->setProductName("calligraflow"); // for bugs.kde.org
   aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "yue.liu@mail.com");
   aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Former Maintainer"), "peter.simonsson@gmail.com");

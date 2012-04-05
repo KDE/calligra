@@ -1,0 +1,4 @@
+kexi_sqlite3_dump - A tool for executing DUMP command on SQLite 3 databases
+
+This tools gives progress information about the operation.
+This is needed by GUI applications.

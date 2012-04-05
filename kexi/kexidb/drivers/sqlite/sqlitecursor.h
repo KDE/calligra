@@ -20,7 +20,7 @@
 #ifndef KEXIDB_SQLITECURSOR_H
 #define KEXIDB_SQLITECURSOR_H
 
-#include <qstring.h>
+#include <QString>
 
 #include <kexidb/cursor.h>
 #include "connection.h"

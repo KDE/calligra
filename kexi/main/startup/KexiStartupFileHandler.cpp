@@ -62,8 +62,10 @@ public:
     }
     ~Private() {
         if (messageWidgetLoop) {
-        //    messageWidgetLoop->exit(0);
-            messageWidgetLoop->deleteLater();
+            messageWidgetLoop->exit(0);
+            messageWidgetLoop->processEvents(); // for safe exit
+            messageWidgetLoop->exit(0);
+            delete messageWidgetLoop;
         }
     }
 
@@ -478,7 +480,6 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
     d->messageWidgetLoop->exit(0);
 }
 
-//static
 bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 {
     QFileInfo fi(filePath);

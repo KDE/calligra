@@ -26,9 +26,9 @@
 #ifndef KEXIDATAAWAREOBJECTINTERFACE_H
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
-#include <qtimer.h>
-#include <qpointer.h>
-#include <qlabel.h>
+#include <QTimer>
+#include <QPointer>
+#include <QLabel>
 #include <QList>
 
 #include <kdebug.h>

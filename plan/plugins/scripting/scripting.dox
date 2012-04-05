@@ -9,7 +9,7 @@
 * The \a Scripting::Module class enables access to the Plan
 * functionality from within the scripting backends.
 *
-* \see http://www.calligra-suite.org/plan
+* \see http://www.calligra.org/plan
 * \see http://kross.dipe.org
 *
 * @section Legal

@@ -20,10 +20,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qdom.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

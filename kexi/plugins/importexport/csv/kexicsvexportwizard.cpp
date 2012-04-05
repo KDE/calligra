@@ -30,9 +30,9 @@
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/KexiFileWidget.h>
 
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qclipboard.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QClipboard>
 #include <QTextStream>
 #include <QGridLayout>
 #include <QLabel>

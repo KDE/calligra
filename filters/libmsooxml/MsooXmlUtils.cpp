@@ -54,7 +54,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QColor>
 #include <QBrush>
 #include <QImage>
@@ -1139,14 +1139,9 @@ public:
     }
 };
 
-void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
-    bool flipH, bool flipV)
+void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff)
 {
     angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)/ (qreal)60000.0;
-    // Angle seems to be negative if one of the flips is active
-    if ((flipH && !flipV) || (!flipH && flipV)) {
-        angle = -angle;
-    }
     //position change is calculated based on the fact that center point stays in the same location
     // Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
     // Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2
@@ -1160,6 +1155,98 @@ void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* te
     s_underLineStyles->setup(msooxmlName, textStyleProperties);
 }
 
+//-----------------------------------------
+// Marker styles
+//-----------------------------------------
+
+namespace
+{
+    const char* markerStyles[6] = {
+        "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+        "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+    };
+
+    // trying to maintain compatibility with libmso
+    enum MSOLINEEND_CUSTOM {
+        msolineNoEnd,
+        msolineArrowEnd,
+        msolineArrowStealthEnd,
+        msolineArrowDiamondEnd,
+        msolineArrowOvalEnd,
+        msolineArrowOpenEnd
+    };
+}
+
+QString Utils::defineMarkerStyle(KoGenStyles& mainStyles, const QString& type)
+{
+    uint id;
+
+    if (type == "arrow") {
+        id = msolineArrowOpenEnd;
+    } else if (type == "stealth") {
+        id = msolineArrowStealthEnd;
+    } else if (type == "diamond") {
+        id = msolineArrowDiamondEnd;
+    } else if (type == "oval") {
+        id = msolineArrowOvalEnd;
+    } else if (type == "triangle") {
+        id = msolineArrowEnd;
+    } else {
+        return QString();
+    }
+
+    const QString name(markerStyles[id]);
+
+    if (mainStyles.style(name)) {
+        return name;
+    }
+
+    KoGenStyle marker(KoGenStyle::MarkerStyle);
+    marker.addAttribute("draw:display-name",  QString(markerStyles[id]).replace("_20_", " "));
+
+    // sync with LO
+    switch (id) {
+    case msolineArrowStealthEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 318-159-127-159 127z");
+        break;
+    case msolineArrowDiamondEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 159-159 159-159-159z");
+        break;
+    case msolineArrowOvalEnd:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m318 0c0-87-72-159-159-159s-159 72-159 159 72 159 159 159 159-72 159-159z");
+        break;
+    case msolineArrowOpenEnd:
+        marker.addAttribute("svg:viewBox", "0 0 477 477");
+        marker.addAttribute("svg:d", "m239 0 238 434-72 43-166-305-167 305-72-43z");
+        break;
+    case msolineArrowEnd:
+    default:
+        marker.addAttribute("svg:viewBox", "0 0 318 318");
+        marker.addAttribute("svg:d", "m159 0 159 318h-318z");
+        break;
+    }
+    return mainStyles.insert(marker, name, KoGenStyles::DontAddNumberToName);
+}
+
+qreal Utils::defineMarkerWidth(const QString &markerWidth, const qreal lineWidth)
+{
+    int c = 0;
+
+    if (markerWidth == "lg") {
+        c = 3;
+    } else if (markerWidth == "med" || markerWidth.isEmpty()) {
+        c = 2; //MSOOXML default = "med"
+    } else if (markerWidth == "sm") {
+        c = 1;
+    }
+    return ( lineWidth * c );
+}
+
+//-----------------------------------------
+// XmlWriteBuffer
 //-----------------------------------------
 
 Utils::XmlWriteBuffer::XmlWriteBuffer()
@@ -1393,26 +1480,16 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 // </units> -------------------
 
-Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_type(ParagraphBulletProperties::DefaultType), m_startValue("1"), m_bulletFont(UNUSED),
-    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_prefix(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize(UNUSED),
-    m_bulletSize(UNUSED)
+Utils::ParagraphBulletProperties::ParagraphBulletProperties()
 {
-}
-
-bool Utils::ParagraphBulletProperties::isEmpty() const
-{
-    if (m_type == ParagraphBulletProperties::DefaultType) {
-        return true;
-    }
-    return false;
+    clear();
 }
 
 void Utils::ParagraphBulletProperties::clear()
 {
-    m_startValue = "1"; //ECMA-376, p.4575
+    m_level = -1;
     m_type = ParagraphBulletProperties::DefaultType;
+    m_startValue = "1"; //ECMA-376, p.4575
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
     m_numFormat = UNUSED;
@@ -1426,6 +1503,15 @@ void Utils::ParagraphBulletProperties::clear()
     m_followingChar = UNUSED;
     m_bulletRelativeSize = UNUSED;
     m_bulletSize = UNUSED;
+    m_startOverride = false;
+}
+
+bool Utils::ParagraphBulletProperties::isEmpty() const
+{
+    if (m_type == ParagraphBulletProperties::DefaultType) {
+        return true;
+    }
+    return false;
 }
 
 void Utils::ParagraphBulletProperties::setAlign(const QString& align)
@@ -1518,7 +1604,7 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
     }
     //m_bulletRelativeSize
     //m_bulletSize
-    if (!(m_textStyle.property("fo:font-size")).isEmpty()) {
+    if (!m_textStyle.property("fo:font-size").isEmpty()) {
         QString bulletSize = m_textStyle.property("fo:font-size");
         if (bulletSize.endsWith("%")) {
             bulletSize.chop(1);
@@ -1530,6 +1616,11 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
             kDebug() << "Unit of font-size NOT supported!";
         }
     }
+}
+
+void Utils::ParagraphBulletProperties::setStartOverride(const bool startOverride)
+{
+    m_startOverride = startOverride;
 }
 
 QString Utils::ParagraphBulletProperties::startValue() const
@@ -1577,9 +1668,22 @@ QString Utils::ParagraphBulletProperties::followingChar() const
     return m_followingChar;
 }
 
+KoGenStyle Utils::ParagraphBulletProperties::textStyle() const
+{
+    return m_textStyle;
+}
+
+bool Utils::ParagraphBulletProperties::startOverride() const
+{
+    return m_startOverride;
+}
+
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
     // This function is intented for helping to inherit some values from other properties
+    if (m_level == -1) {
+        m_level = properties.m_level;
+    }
     if (properties.m_type != ParagraphBulletProperties::DefaultType) {
         m_type = properties.m_type;
     }
@@ -1619,7 +1723,7 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_bulletRelativeSize != UNUSED) {
         m_bulletRelativeSize = properties.m_bulletRelativeSize;
     }
-    if (!properties.m_bulletSize.isEmpty()) {
+    if (properties.m_bulletSize != UNUSED) {
         m_bulletSize = properties.m_bulletSize;
     }
     if (properties.m_followingChar != UNUSED) {
@@ -1686,21 +1790,20 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
 
     if (currentFilter == Utils::DocxFilter) {
 
-        //MSWord: A label does NOT inherit {Italics, Bold, Underline} from
-        //text-properties of the paragraph style.
-
-        //fo:font-style
-        if ((m_textStyle.property("fo:font-style")).isEmpty()) {
-            m_textStyle.addProperty("fo:font-style", "normal");
+        //MSWord: A label does NOT inherit Underline from text-properties of
+        //the paragraph style.  A bullet does not inherit {Italics, Bold}.
+        if (m_type != ParagraphBulletProperties::NumberType) {
+            if ((m_textStyle.property("fo:font-style")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-style", "normal");
+            }
+            if ((m_textStyle.property("fo:font-weight")).isEmpty()) {
+                m_textStyle.addProperty("fo:font-weight", "normal");
+            }
         }
-        //fo:font-weight
-        if ((m_textStyle.property("fo:font-weight")).isEmpty()) {
-            m_textStyle.addProperty("fo:font-weight", "normal");
-        }
-        //style:text-underline-style
         if ((m_textStyle.property("style:text-underline-style")).isEmpty()) {
             m_textStyle.addProperty("style:text-underline-style", "none");
         }
+
         //fo:font-size
         if (m_type != ParagraphBulletProperties::PictureType) {
             if ((m_textStyle.property("fo:font-size")).isEmpty()) {
@@ -1708,31 +1811,6 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
             }
         }
         out.addAttribute("text:style-name", mainStyles.insert(m_textStyle, "T"));
-    }
-    else {
-        out.startElement("style:text-properties");
-        if (m_bulletColor != UNUSED) {
-            out.addAttribute("fo:color", m_bulletColor);
-        }
-        if (m_type != ParagraphBulletProperties::PictureType) {
-            out.addAttribute("fo:font-size", bulletSize);
-        }
-        //MSPowerPoint: UI does not enable to change font of a numbered lists.
-        if (m_bulletFont != UNUSED) {
-            if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {
-                out.addAttribute("fo:font-family", m_bulletFont);
-            }
-        }
-        //MSPowerPoint: A label does NOT inherit Underline from text-properties
-        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
-        if ((currentFilter == Utils::PptxFilter)) {
-            if (m_type != ParagraphBulletProperties::NumberType) {
-                out.addAttribute("fo:font-style", "normal");
-                out.addAttribute("fo:font-weight", "normal");
-            }
-            out.addAttribute("style:text-underline-style", "none");
-        }
-        out.endElement(); //style:text-properties
     }
 
     //---------------------------------------------
@@ -1742,13 +1820,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     if (m_align != UNUSED) {
         out.addAttribute("fo:text-align", m_align);
     }
-    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
     if ((m_type == ParagraphBulletProperties::PictureType) && (m_bulletSize != UNUSED)) {
         QString size = QString(m_bulletSize).append("pt");
         out.addAttribute("fo:width", size);
         out.addAttribute("fo:height", size);
     }
 
+    out.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
     // NOTE: DrawingML: If indent and marL were not provided by a master slide
     // or defaults, then according to the spec. a value of -342900 is implied
     // for indent and a value of 347663 is implied for marL (no matter which
@@ -1850,6 +1928,31 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     }
     out.endElement(); //style:list-level-label-alignment
     out.endElement(); //style:list-level-properties
+    if (currentFilter != Utils::DocxFilter) {
+        out.startElement("style:text-properties");
+        if (m_bulletColor != UNUSED) {
+            out.addAttribute("fo:color", m_bulletColor);
+        }
+        if (m_type != ParagraphBulletProperties::PictureType) {
+            out.addAttribute("fo:font-size", bulletSize);
+        }
+        //MSPowerPoint: UI does not enable to change font of a numbered lists.
+        if (m_bulletFont != UNUSED) {
+            if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {
+                out.addAttribute("fo:font-family", m_bulletFont);
+            }
+        }
+        //MSPowerPoint: A label does NOT inherit Underline from text-properties
+        //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
+        if ((currentFilter == Utils::PptxFilter)) {
+            if (m_type != ParagraphBulletProperties::NumberType) {
+                out.addAttribute("fo:font-style", "normal");
+                out.addAttribute("fo:font-weight", "normal");
+            }
+            out.addAttribute("style:text-underline-style", "none");
+        }
+        out.endElement(); //style:text-properties
+    }
     out.endElement(); //text:list-level-style-*
 
     return QString::fromUtf8(buf.buffer(), buf.buffer().size());

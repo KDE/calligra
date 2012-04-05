@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,7 +23,8 @@
 #include <QTimer>
 #include <QAction>
 #include <QPointer>
-#include <QEvent>
+#include <QMouseEvent>
+#include <QApplication>
 
 #include <kexiutils/utils.h>
 #include "KexiAssistantPage.h"
@@ -34,13 +35,15 @@
 class KexiContextMessage::Private
 {
 public:
-    Private() : defaultAction(0) {}
+    Private() : defaultAction(0), contentsWidget(0) {}
     ~Private() {
 //        qDeleteAll(actions);
     }
     QString text;
     QList<QAction*> actions;
+    QSet<QAction*> leftButtonAlignment;
     QAction* defaultAction;
+    QWidget *contentsWidget;
 };
 
 // ----
@@ -54,6 +57,12 @@ KexiContextMessage::KexiContextMessage(const QString& text)
 KexiContextMessage::KexiContextMessage(const KexiContextMessage& other)
  : d(new Private(*other.d))
 {
+}
+
+KexiContextMessage::KexiContextMessage(QWidget *contentsWidget)
+ : d(new Private)
+{
+    d->contentsWidget = contentsWidget;
 }
 
 KexiContextMessage::~KexiContextMessage()
@@ -71,14 +80,22 @@ void KexiContextMessage::setText(const QString text)
     d->text = text;
 }
 
-void KexiContextMessage::addAction(QAction* action)
+void KexiContextMessage::addAction(QAction* action, ButtonAlignment alignment)
 {
     d->actions.append(action);
+    if (alignment == AlignLeft) {
+        d->leftButtonAlignment.insert(action);
+    }
 }
     
 QList<QAction*> KexiContextMessage::actions() const
 {
     return d->actions;
+}
+
+KexiContextMessage::ButtonAlignment KexiContextMessage::buttonAlignment(QAction* action) const
+{
+    return d->leftButtonAlignment.contains(action) ? AlignLeft : AlignRight;
 }
 
 void KexiContextMessage::setDefaultAction(QAction* action)
@@ -91,12 +108,22 @@ QAction* KexiContextMessage::defaultAction() const
     return d->defaultAction;
 }
 
+QWidget* KexiContextMessage::contentsWidget() const
+{
+    return d->contentsWidget;
+}
+
 // ----
 
 class KexiContextMessageWidget::Private
 {
 public:
-    Private() : hasActions(false), eventBlocking(true) {}
+    Private()
+     : resizeTrackingPolicy(0)
+     , hasActions(false)
+     , eventBlocking(true)
+    {
+    }
     ~Private() {}
 
     void setDisabledColorsForPage()
@@ -114,7 +141,7 @@ public:
 
     void setEnabledColorsForPage()
     {
-        if (page && hasActions)
+        if (page && (hasActions || contentsWidget))
             page->setPalette(origPagePalette);
     }
 
@@ -123,6 +150,16 @@ public:
     QPalette origPagePalette;
     QPointer<QWidget> context;
     QPointer<QWidget> nextFocusWidget;
+    QPointer<QWidget> contentsWidget;
+
+    //!< For updating the callout position
+    QPointer<QWidget> trackedWidget;
+    QPoint origCalloutPointerPosition;
+    QSize origSize;
+    QSize origPageSize;
+    QPoint trackedWidgetOriginalPos;
+    Qt::Orientations resizeTrackingPolicy;
+
     bool hasActions;
     bool eventBlocking;
 };
@@ -130,7 +167,7 @@ public:
 KexiContextMessageWidget::KexiContextMessageWidget(
     QWidget *page, QFormLayout* layout,
     QWidget *context, const KexiContextMessage& message)
- : KMessageWidget()
+ : KMessageWidget(message.contentsWidget(), 0)
  , d(new Private)
 {
     init(page, layout, context, message);
@@ -150,7 +187,8 @@ KexiContextMessageWidget::KexiContextMessageWidget(
  : KMessageWidget()
  , d(new Private)
 {
-    init(0, layout, context, KexiContextMessage(message));
+    KexiContextMessage contextMessage(message);
+    init(0, layout, context, contextMessage);
 }
 
 void KexiContextMessageWidget::init(
@@ -159,6 +197,7 @@ void KexiContextMessageWidget::init(
 {
     d->context = context;
     d->page = page;
+    d->contentsWidget = message.contentsWidget();
     hide();
     setText(message.text());
     setMessageType(KMessageWidget::Warning);
@@ -167,10 +206,10 @@ void KexiContextMessageWidget::init(
     setAutoDelete(true);
     setContentsMargins(3, 0, 3, 0); // to better fit to line edits
     d->hasActions = !message.actions().isEmpty();
-    if (d->page && d->hasActions) {
+    if ((d->page && d->hasActions) || d->contentsWidget) {
         d->setDisabledColorsForPage();
         foreach (KexiLinkWidget* w, d->page->findChildren<KexiLinkWidget*>()) {
-            kDebug() << w << w->isEnabled();
+            //kDebug() << w << w->isEnabled();
             if (w->isEnabled()) {
                 d->enabledLinks.append(w);
                 w->setEnabled(false);
@@ -195,6 +234,9 @@ void KexiContextMessageWidget::init(
     if (d->hasActions) {
         foreach(QAction* action, message.actions()) {
             KMessageWidget::addAction(action);
+            if (KexiContextMessage::AlignLeft == message.buttonAlignment(action)) {
+                KMessageWidget::setButtonLeftAlignedForAction(action);
+            }
             connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
         }
 
@@ -236,6 +278,44 @@ void KexiContextMessageWidget::actionTriggered()
 
 bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
 {
+    if (d->contentsWidget && event->type() == QEvent::MouseButtonRelease) {
+        // hide the message when clicking outside when contents widget is present
+        QMouseEvent *me = static_cast<QMouseEvent*>(event);
+        QWidget *w = QApplication::widgetAt(me->globalPos());
+        //kDebug() << watched << w << w->parentWidget();
+        if (!KexiUtils::hasParent(this, w)) {
+            actionTriggered();
+            return true;
+        }
+    }
+    
+    if (watched == d->page && event->type() == QEvent::Resize) {
+        //kDebug() << "RESIZE:" << watched;
+        if (d->trackedWidget) {
+            if (d->resizeTrackingPolicy != 0) {
+                // update size
+                //kDebug() << d->origSize << d->page->size() << d->origPageSize;
+                if (!d->origSize.isValid()) {
+                    d->origSize = size();
+                }
+                QSize newSize(d->origSize + d->page->size() - d->origPageSize);
+                QSize sizeToSet = size();
+                if (d->resizeTrackingPolicy & Qt::Horizontal) {
+                    sizeToSet.setWidth(newSize.width());
+                }
+                if (d->resizeTrackingPolicy & Qt::Vertical) {
+                    sizeToSet.setHeight(newSize.height());
+                    setFixedHeight(newSize.height());
+                }
+                resize(sizeToSet);
+                setPaletteInherited();
+            }
+            // update position
+            QPoint delta(d->trackedWidget->mapToGlobal(QPoint(0, 0)) - d->trackedWidgetOriginalPos);
+            KMessageWidget::setCalloutPointerPosition(d->origCalloutPointerPosition + delta);
+        }
+    }
+
     switch (event->type()) {
     case QEvent::ActivationChange:
     case QEvent::CloseSoftwareInputPanel:
@@ -297,6 +377,46 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
 void KexiContextMessageWidget::setNextFocusWidget(QWidget *widget)
 {
     d->nextFocusWidget = widget;
+}
+
+void KexiContextMessageWidget::setCalloutPointerPosition(const QPoint& globalPos,
+                                                         QWidget *trackedWidget)
+{
+    KMessageWidget::setCalloutPointerPosition(globalPos);
+    // save current position so delta can be easier computed in the future
+    // (see KexiContextMessageWidget::eventFilter())
+    d->trackedWidget = trackedWidget;
+    if (d->trackedWidget) {
+        d->origCalloutPointerPosition = globalPos;
+        d->origSize = QSize(-1, -1);
+        d->origPageSize = d->page->size();
+        d->trackedWidgetOriginalPos = d->trackedWidget->mapToGlobal(QPoint(0, 0));
+    }
+}
+
+void KexiContextMessageWidget::setResizeTrackingPolicy(Qt::Orientations orientations)
+{
+    d->resizeTrackingPolicy = orientations;
+}
+
+Qt::Orientations KexiContextMessageWidget::resizeTrackingPolicy() const
+{
+    return d->resizeTrackingPolicy;
+}
+
+void KexiContextMessageWidget::setPaletteInherited()
+{
+    if (d->contentsWidget) {
+        // fix palette that gets messed after resize
+        const QBrush bbrush(backgroundBrush());
+        foreach (QWidget* w, findChildren<QWidget*>()) {
+            QPalette pal(w->palette());
+            pal.setBrush(QPalette::Base, bbrush);
+            pal.setBrush(QPalette::Window, bbrush);
+            pal.setBrush(QPalette::Button, bbrush);
+            w->setPalette(pal);
+        }
+    }
 }
 
 #include "KexiContextMessage.moc"

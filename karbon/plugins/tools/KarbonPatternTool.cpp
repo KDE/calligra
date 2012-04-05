@@ -39,8 +39,8 @@
 
 #include <KLocale>
 
-#include <QtGui/QPainter>
-#include <QtGui/QWidget>
+#include <QPainter>
+#include <QWidget>
 #include <kundo2command.h>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)

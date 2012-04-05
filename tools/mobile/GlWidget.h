@@ -24,7 +24,7 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QtGui/QtGui>
+#include <QtGui>
 #include <QtOpenGL/QGLWidget>
 
 class QGLShaderProgram;

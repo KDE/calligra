@@ -211,13 +211,6 @@ KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
     return 0;
 }
 
-#if 0 // 2.x
-bool KexiSharedActionHost::acceptsSharedActions(QObject *)
-{
-    return false;
-}
-#endif
-
 QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
 {
     return 0;
@@ -225,28 +218,11 @@ QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
 
 QWidget* KexiSharedActionHost::focusWindow()
 {
-#if 0 //sebsauer 20061120: KDE3
-    if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
-        fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
-    } else {
-        QWidget *aw = qApp->activeWindow();
-        if (!aw)
-            aw = d->mainWin;
-        fw = aw->focusWidget();
-    }
-    while (fw && !acceptsSharedActions(fw))
-        fw = fw->parentWidget();
-    return fw;
-#else
     QWidget *aw = QApplication::activeWindow();
     if (!aw)
         aw = dynamic_cast<QWidget*>(d->mainWin);
     QWidget *fw = aw->focusWidget();
     return findWindow(fw);
-/*2.x    while (fw && !acceptsSharedActions(fw))
-        fw = fw->parentWidget();
-    return fw;*/
-#endif
 }
 
 KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)

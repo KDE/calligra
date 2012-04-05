@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <q3dict.h>
 #include <QColor>
 //Added by qt3to4:

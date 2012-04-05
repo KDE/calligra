@@ -49,16 +49,6 @@ These settings indicates to the receiver of the package which information is rel
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="ui_remainingEffort">
-     <property name="toolTip">
-      <string>Estimate of the remaining effort</string>
-     </property>
-     <property name="text">
-      <string>Remaining effort</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QCheckBox" name="ui_documents">
      <property name="toolTip">
       <string>The documents attached to this task</string>

@@ -125,7 +125,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                             subValueChild = subValueChild.nextSiblingElement();
                         } while (!subValueChild.isNull());
                         QStringList mergedAllowedValues;
-                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                        while (mergedAllowedValues.length() != (pow((double) allowedValues.length(), allowedValues.length()))) {
                             foreach (QString baseValue, allowedValues) {
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
@@ -572,7 +572,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     }
 
     KoXmlElement root = generatedXmlReader->documentElement();
-    KoXmlElement properties = root.firstChild().toElement();
+    KoXmlElement properties = root.firstChildElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
@@ -589,6 +589,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     if (!result) {
         kDebug(32500) << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
         kDebug(32500) << generatedXmlOutput;
+        kDebug(32500) << properties.attributeNames();
     }
     return result;
 }

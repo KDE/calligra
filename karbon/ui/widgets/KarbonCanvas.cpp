@@ -44,14 +44,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QFocusEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
-#include <QtCore/QEvent>
-#include <QtCore/QSizeF>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QMenu>
+#include <QEvent>
+#include <QSizeF>
 
 class KarbonCanvas::KarbonCanvasPrivate {
 public:
@@ -224,9 +224,10 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
                 menu.addAction(action);
             }
             menu.exec(e->globalPos());
-            e->setAccepted(true);
         }
     }
+
+    e->setAccepted(true);
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
@@ -268,6 +269,12 @@ void KarbonCanvas::wheelEvent(QWheelEvent *e)
 
 QVariant KarbonCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (d->toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return d->toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

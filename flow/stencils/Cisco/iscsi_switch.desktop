@@ -1,16 +1,21 @@
 [Desktop Entry]
 Name=iSCSI switch
 Name[ca]=iSCSI switch
+Name[ca@valencia]=iSCSI switch
+Name[de]=iSCSI-Switch
 Name[el]=iSCSI switch
 Name[es]=Switch iSCSI
 Name[et]=iSCSI kommutaator
 Name[it]=Switch iSCSI
+Name[kk]=iSCSI қосқышы
 Name[nb]=iSCSI-svitsj
 Name[nl]=iSCSI switch
 Name[pl]=Przełącznik iSCSI
 Name[pt]=Comutador iSCSI
 Name[pt_BR]=Comutador iSCSI
+Name[ru]=Коммутатор iSCSI
 Name[sv]=iSCSI-växel
 Name[uk]=Комутатор iSCSI
 Name[x-test]=xxiSCSI switchxx
+Name[zh_CN]=iSCSI 交换机
 Name[zh_TW]=iSCSI 交換器

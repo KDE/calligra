@@ -18,16 +18,16 @@
 */
 #include "slideview.h"
 #include "slideloader.h"
-#include <QtCore/QDebug>
-#include <QtCore/QEvent>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QImage>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPixmapCache>
-#include <QtGui/QGraphicsSceneEvent>
-#include <QtGui/QScrollBar>
-#include <QtGui/QTransform>
-#include <QtGui/QWheelEvent>
+#include <QDebug>
+#include <QEvent>
+#include <QGraphicsItem>
+#include <QImage>
+#include <QVBoxLayout>
+#include <QPixmapCache>
+#include <QGraphicsSceneEvent>
+#include <QScrollBar>
+#include <QTransform>
+#include <QWheelEvent>
 #include <QtOpenGL/QGLWidget>
 #include <cmath>
 

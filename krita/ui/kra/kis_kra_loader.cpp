@@ -52,11 +52,12 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
+#include <kis_layer_composition.h>
 
 
 using namespace KRA;
 
-class KisKraLoader::Private
+struct KisKraLoader::Private
 {
 public:
 
@@ -65,6 +66,7 @@ public:
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
+    vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
 
 };
 
@@ -84,16 +86,11 @@ KisKraLoader::~KisKraLoader()
 
 KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
-
-    KisConfig cfg;
     QString attr;
-    KoXmlNode node;
-    KoXmlNode child;
     KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
-    QString description;
     QString profileProductName;
     double xres;
     double yres;
@@ -156,8 +153,16 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+        image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
+        KoXmlNode child;
+        for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+            KoXmlElement e = child.toElement();
+            if(e.tagName() == "compositions") {
+                loadCompositions(e, image);
+            }
+        }
     }
 
     return image;
@@ -165,29 +170,9 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
 void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
 {
-    // Load the layers data
-    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
-    if (external)
-        visitor.setExternalUri(uri);
-
-    image->rootLayer()->accept(visitor);
-
-
-    // annotations
-    // exif
+    // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString::null : uri;
-    location += m_d->imageName + EXIF_PATH;
-    if (store->hasFile(location)) {
-        QByteArray data;
-        store->open(location);
-        data = store->read(store->size());
-        store->close();
-        image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
-    }
-
-    // icc profile
-    location = external ? QString::null : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         store->open(location);
@@ -198,6 +183,29 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     }
 
 
+    // Load the layers data: if there is a profile associated with a layer it will be set now.
+    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
+
+    if (external)
+        visitor.setExternalUri(uri);
+
+    image->rootLayer()->accept(visitor);
+
+
+
+    // annotations
+    // exif
+    location = external ? QString::null : uri;
+    location += m_d->imageName + EXIF_PATH;
+    if (store->hasFile(location)) {
+        QByteArray data;
+        store->open(location);
+        data = store->read(store->size());
+        store->close();
+        image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
+    }
+
+
     if (m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
@@ -205,10 +213,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
 }
 
+vKisNodeSP KisKraLoader::selectedNodes() const
+{
+    return m_d->selectedNodes;
+}
+
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
 {
 
-    KoXmlNode node = element.lastChild();
+    KoXmlNode node = element.firstChild();
     KoXmlNode child;
 
     QDomDocument doc;
@@ -246,7 +259,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     // ALWAYS define a default value in case the property is not
     // present in the layer definition: this helps a LOT with backward
     // compatibility.
-
     QString name = element.attribute(NAME, "No Name");
 
     QUuid id = QUuid(element.attribute(UUID, QUuid().toString()));
@@ -335,17 +347,23 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
     }
-    
-    if(node->inherits("KisPaintLayer")) {
+
+    if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
         layer->setChannelLockFlags(channelLockFlags);
     }
 
-    if (element.attribute(FILE_NAME).isNull())
+    if (element.attribute(FILE_NAME).isNull()) {
         m_d->layerFilenames[node] = name;
-    else
-        m_d->layerFilenames[node] = QString(element.attribute(FILE_NAME));
+    }
+    else {
+        m_d->layerFilenames[node] = element.attribute(FILE_NAME);
+    }
+
+    if (element.hasAttribute("selected") && element.attribute("selected") == "true")  {
+        m_d->selectedNodes.append(node);
+    }
 
     return node;
 }
@@ -554,4 +572,16 @@ KisNode* KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& 
     Q_CHECK_PTR(mask);
 
     return mask;
+}
+
+void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
+{
+    KoXmlNode child;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        QString name = e.attribute("name");
+        KisLayerComposition* composition = new KisLayerComposition(image, name);
+        composition->load(e);
+        image->addComposition(composition);
+    }
 }

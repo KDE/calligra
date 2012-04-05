@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=Storage Solution Engine
-Name[ca]=Motor de solucions d'emmagatzement
+Name[ca]=Motor de solucions d'emmagatzematge
+Name[ca@valencia]=Motor de solucions d'emmagatzement
 Name[el]=Storage Solution Engine
+Name[et]=Storage Solution Engine
+Name[it]=Motore soluzione di archiviazione
+Name[kk]=Жинақтауыш шешімінің тетігі
 Name[nb]=Storage Solution Engine
+Name[nl]=Engine voor opslagoplossing
 Name[pl]=Silnik rozwiązania przechowywania
 Name[pt]=Motor Solução Armazenamento
 Name[pt_BR]=Motor de solução de armazenamento
+Name[ru]=Решение по хранению данных
 Name[sv]=Lagringsutrustning
 Name[uk]=Рушій рішень зберігання
 Name[x-test]=xxStorage Solution Enginexx
+Name[zh_CN]=储存方案引擎
 Name[zh_TW]=儲存解決引擎

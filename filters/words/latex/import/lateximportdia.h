@@ -39,7 +39,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QRadioButton>
-#include <qvbuttongroup.h>
+#include <QVButtonGroup>
 
 #include <klocale.h>
 #include <dcopobject.h>

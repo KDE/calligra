@@ -25,15 +25,14 @@
 #include <cfloat>
 #include <stack>
 
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRegion>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -327,8 +326,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         Q_ASSERT(x < m_width);
         Q_ASSERT(y >= 0);
         Q_ASSERT(y < m_height);
-        /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
-        it is needed to start the iterator at the first position, and then skip to (x,y). */
+
         pixelIt->moveTo(x,y);
         quint8 diff;
         if (canOptimizeDifferences) {
@@ -350,7 +348,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             continue;
         }
 
-        // Here as well: start the iterator at (0,y)
         KisRandomAccessorSP selIt = pSel->createRandomAccessorNG(x, y);
 
         if (m_fuzzy) {

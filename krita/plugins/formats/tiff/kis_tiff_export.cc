@@ -28,6 +28,7 @@
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -75,12 +76,13 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     if (cs->colorModelId() == CMYKAColorModelID) {
         kdb->optionswdg->alpha->setChecked(false);
+        kdb->optionswdg->alpha->setEnabled(false);
     }
-
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::UserCancelled;
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
     }
-
     KisTIFFOptions options = kdb->options();
 
     if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
@@ -95,7 +97,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image;
+    KisImageSP image;
 
     if (options.flatten) {
         image = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");

@@ -32,7 +32,7 @@ KAboutData * newKritaAboutData()
                                             CALLIGRA_VERSION_STRING,
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2011 The Krita team.\n"),
+                                            ki18n("(c) 1999-2012 The Krita team.\n"),
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
@@ -74,7 +74,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Silvio Heinrich"), KLocalizedString(), "plassy@web.de");
     aboutData->addAuthor(ki18n("Sven Langkamp"), KLocalizedString(), "sven.langkamp@gmail.com");
-    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist and template developer"), "Animtim", "www.animtim.fr.nf");
+    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist and template developer"), "Animtim", "http://www.timotheegiet.com/blog");
     aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Tom Burdick"), KLocalizedString(), "tburdi1@uic.edu");

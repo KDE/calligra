@@ -29,12 +29,12 @@
 
 CSTCompareView::CSTCompareView(QWidget *parent)
 : QWidget(parent)
-, m_currentIndex(0)
 #ifdef HAS_POPPLER
 , m_showPdf(false)
 , m_pdfDelta(0)
 , m_pdfDocument(0)
 #endif
+, m_currentIndex(0)
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
@@ -239,7 +239,9 @@ void CSTCompareView::updateImage(int index)
         if (m_pdfDocument) {
             Poppler::Page *page = m_pdfDocument->page(m_data[index].toInt() - 1 + m_pdfDelta);
             if (page) {
-                pdfView = page->renderToImage();
+                QSizeF pageSize = page->pageSizeF();
+                qreal scale = qMin(72.0 * (image1.width() / pageSize.width()), 72.0 * (image1.height() / pageSize.height()));
+                pdfView = page->renderToImage(scale, scale);
             } else {
                 currentPageText += " - unable to load page from PDF";
             }

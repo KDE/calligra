@@ -22,9 +22,9 @@
 #include "kexilookupcolumnpage.h"
 #include "kexitabledesignercommands.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qsplitter.h>
+#include <QLayout>
+#include <QLabel>
+#include <QSplitter>
 #include <QByteArray>
 
 #include <kiconloader.h>

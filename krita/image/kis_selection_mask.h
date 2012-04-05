@@ -62,16 +62,6 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    /**
-     * @return the deselected selection or 0 if no selection was deselected
-     */
-    KisSelectionSP deleselectedSelection();
-
-    /**
-     * Set deselected selection
-     */
-    void setDeleselectedSelection(KisSelectionSP selection);
-
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
@@ -79,14 +69,11 @@ public:
     bool active() const;
     void setActive(bool active);
 
-signals:
-    void changeActivity(KisSelectionMask* mask, bool active);
-
 private:
 
     KisImageWSP image() const;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

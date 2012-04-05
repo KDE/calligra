@@ -1,0 +1,4 @@
+File=planworksettings.kcfg 
+ClassName=PlanWorkSettings
+Singleton=true
+Mutators=true

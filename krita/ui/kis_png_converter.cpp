@@ -558,7 +558,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
-    double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
+    double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
     KisTransaction("", layer -> paintDevice());
 
@@ -908,7 +908,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                  color_type, interlacetype,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
-    png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
+    // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
+
+    bool sRGB = device->colorSpace()->profile()->name().toLower().contains("srgb");
+    if (sRGB) {
+        png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
+    }
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
         png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
@@ -949,12 +954,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     // Save the color profile
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
-    
+    if (!sRGB) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
 #else
-    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
 #endif
+    }
 
     // read comments from the document information
     if (m_doc) {

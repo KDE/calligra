@@ -1345,7 +1345,7 @@ void StructureParser::createDocInfo(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("document-info",
-                     "-//KDE//DTD document-info 1.2//EN", "http://www.calligra-suite.org/DTD/document-info-1.2.dtd"));
+                     "-//KDE//DTD document-info 1.2//EN", "http://www.calligra.org/DTD/document-info-1.2.dtd"));
 
     m_info = doc;
 
@@ -1354,7 +1354,7 @@ void StructureParser::createDocInfo(void)
             "xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
     QDomElement elementDoc(mainDocument.createElement("document-info"));
-    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/document-info");
+    elementDoc.setAttribute("xmlns", "http://www.calligra.org/DTD/document-info");
     m_info.appendChild(elementDoc);
 
     QDomElement about(mainDocument.createElement("about"));
@@ -1443,7 +1443,7 @@ void StructureParser :: createDocument(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("DOC",
-                     "-//KDE//DTD words 1.2//EN", "http://www.calligra-suite.org/DTD/words-1.2.dtd"));
+                     "-//KDE//DTD words 1.2//EN", "http://www.calligra.org/DTD/words-1.2.dtd"));
 
     mainDocument = doc;
 
@@ -1453,7 +1453,7 @@ void StructureParser :: createDocument(void)
 
     QDomElement elementDoc;
     elementDoc = mainDocument.createElement("DOC");
-    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/words");
+    elementDoc.setAttribute("xmlns", "http://www.calligra.org/DTD/words");
     elementDoc.setAttribute("editor", "AbiWord Import Filter");
     elementDoc.setAttribute("mime", "application/x-words");
     elementDoc.setAttribute("syntaxVersion", 3);

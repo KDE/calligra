@@ -48,7 +48,7 @@ void ClassName::setPalette(const QPalette &pal)
     SuperClassName::setPalette(pal2);
 }
 
-const QColor& ClassName::frameColor() const
+QColor ClassName::frameColor() const
 {
     return d->frameColor;
 }

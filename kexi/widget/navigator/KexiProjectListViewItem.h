@@ -22,7 +22,7 @@
 #define KEXIBROWSERITEM_H
 
 #include <k3listview.h>
-#include <qstring.h>
+#include <QString>
 
 #include <core/kexipartitem.h>
 

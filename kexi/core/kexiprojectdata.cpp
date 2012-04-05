@@ -23,10 +23,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qdom.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -332,7 +332,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                     fn = home + fn.mid(homeVar.length());
                 }
                 d->connData.setFileName(fn);
-                setDatabaseName(fn);
+                setDatabaseName(d->connData.dbFileName());
             }
         }
         else {

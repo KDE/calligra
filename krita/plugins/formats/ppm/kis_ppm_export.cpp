@@ -19,10 +19,12 @@
 #include "kis_ppm_export.h"
 
 #include <KPluginFactory>
+#include <KApplication>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <KDialog>
 #include <KMessageBox>
@@ -31,10 +33,14 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 
 #include "ui_kis_wdg_options_ppm.h"
 #include <qendian.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
@@ -154,13 +160,25 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    QString filterConfig = KisConfig().exportConfiguration("PPM");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
+
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
+    cfg.setProperty("type", optionsPPM.type->currentIndex());
+    KisConfig().setExportConfiguration("PPM", cfg);
+
     bool bitmap = (to == "image/x-portable-bitmap");
 
     KisImageWSP image = output->image();
@@ -173,8 +191,12 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))
             || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16")))) {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", pd->colorSpace()->name())) ;
-        return KoFilter::CreationError;
+        if (rgb) {
+            pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
+        }
+        else {
+            pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0));
+        }
     }
 
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";

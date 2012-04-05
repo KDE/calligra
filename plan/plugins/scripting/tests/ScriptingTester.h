@@ -20,7 +20,7 @@
 #ifndef KPlato_ScriptingTester_h
 #define KPlato_ScriptingTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestResult;
 

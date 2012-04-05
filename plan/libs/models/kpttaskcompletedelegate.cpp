@@ -61,7 +61,7 @@ void TaskCompleteDelegate::paint( QPainter *painter, const QStyleOptionViewItem 
         style = opt.widget ? opt.widget->style() : QApplication::style();
         style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
 
-        //kDebug()<<"Draw something else, type="<<type<<index.model()->index( index.row(), NodeModel::NodeName, index.parent() ).data().toString();
+        //kDebug(planDbg())<<"Draw something else, type="<<type<<index.model()->index( index.row(), NodeModel::NodeName, index.parent() ).data().toString();
 
         ItemDelegate::paint( painter, option, index );
     }

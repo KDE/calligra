@@ -152,7 +152,9 @@ namespace wvWare
         Parser9x( const Parser9x& rhs );
         Parser9x& operator=( const Parser9x& rhs );
 
-        // Uniquely represents a position inside a complex file. Used to map a CP to a Position
+        // Uniquely represents the position inside of a text stream of a
+        // document by mapping a CP to an offset into the corresponding
+        // piece retrieved from the piece table.
         struct Position
         {
             // Start position
@@ -258,7 +260,13 @@ namespace wvWare
 
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
 
-        void emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp );
+        /**
+         * Parse the picture data.
+         * @return name of the picture as stored in the Pictures directory of
+         * the ODF container.
+         */
+        QString emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp,
+                                 const bool isBulletPicture = false );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 
@@ -285,7 +293,7 @@ namespace wvWare
         Drawings* m_drawings;
         Bookmarks* m_bookmarks;
 
-        PLCF<Word97::PCD>* m_plcfpcd;     // piece table
+        PLCF<Word97::PCD>* m_plcfpcd;   // piece table
 
         // From here on we have all variables which change their state
         // depending on the parsed content.  These variables have to be saved

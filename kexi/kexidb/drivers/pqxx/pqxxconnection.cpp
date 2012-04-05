@@ -18,8 +18,8 @@
 */
 
 #include "pqxxconnection.h"
-#include <qvariant.h>
-#include <qfile.h>
+#include <QVariant>
+#include <QFile>
 #include <kdebug.h>
 #include <kexidb/error.h>
 #include <kexidb/global.h>

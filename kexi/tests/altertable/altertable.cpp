@@ -21,11 +21,11 @@
 
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
+#include <QClipboard>
 
 #include <kdebug.h>
 
@@ -671,8 +671,8 @@ int main(int argc, char *argv[])
     newArgv[0] = qstrdup(argv[0]);
     newArgv[1] = qstrdup("--skip-startup-dialog");
 
-    KAboutData* aboutdata = Kexi::createAboutData();
-    aboutdata->setProgramName("Kexi Alter Table Test");
+    KexiAboutData aboutdata;
+    aboutdata.setProgramName("Kexi Alter Table Test");
     int result = KexiMainWindow::create(newArgc, newArgv, aboutdata);
     if (!qApp)
         return quit(result);

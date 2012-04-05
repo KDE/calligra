@@ -20,7 +20,7 @@
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QImage>
 #include <QBuffer>
 
@@ -364,7 +364,11 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
                 ref.uid = fbse->rgbUid;
             }
         }
-        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+
+        if (manifest) {
+            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+        }
+
         fileNames[ref.uid] = ref.name;
     }
 #ifdef DEBUG_PICTURES

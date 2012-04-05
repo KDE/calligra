@@ -56,6 +56,7 @@
 #include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
+#include "kis_default_bounds.h"
 
 class CacheData : public KisDataManager::AbstractCache
 {
@@ -131,7 +132,7 @@ public:
             cacheThumbnail(w, h, thumbnail);
         }
 
-        Q_ASSERT(!thumbnail.isNull());
+        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
     }
 
@@ -154,7 +155,7 @@ private:
 };
 
 
-class KisPaintDevice::Private
+struct KisPaintDevice::Private
 {
 
 public:
@@ -167,7 +168,7 @@ public:
     }
 
     KisNodeWSP parent;
-    KisDefaultBoundsSP defaultBounds;
+    KisDefaultBoundsBaseSP defaultBounds;
     PaintDeviceCache cache;
     qint32 x;
     qint32 y;
@@ -182,7 +183,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -202,11 +203,15 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBoundsSP defaultBounds,
+                          KisDefaultBoundsBaseSP defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
     setObjectName(name);
+
+    if (!defaultBounds) {
+        defaultBounds = new KisDefaultBounds();
+    }
 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     Q_ASSERT(m_d->colorSpace);
@@ -329,13 +334,19 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBoundsSP defaultBounds)
+// for testing purposes only
+KisNodeWSP KisPaintDevice::parentNode() const
+{
+    return m_d->parent;
+}
+
+void KisPaintDevice::setDefaultBounds(KisDefaultBoundsBaseSP defaultBounds)
 {
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBoundsSP KisPaintDevice::defaultBounds() const
+KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
@@ -658,7 +669,6 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     if (!profile && colorSpace()->id() == "RGBA") {
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
     } else {
-        Q_ASSERT(profile);
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
                 ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
@@ -1082,11 +1092,27 @@ void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
     m_d->cache.invalidate();
 }
 
+void KisPaintDevice::fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
 void KisPaintDevice::fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
 {
     Q_ASSERT(fastBitBltPossible(src));
 
     m_datamanager->bitBltRough(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltRoughOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
     m_d->cache.invalidate();
 }
 

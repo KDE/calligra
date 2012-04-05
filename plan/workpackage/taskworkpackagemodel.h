@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -14,7 +14,7 @@
   You should have received a copy of the GNU Library General Public License
   along with this library; see the file COPYING.LIB.  If not, write to
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
+  Boston, MA 02110-1301, USA.
 */
 
 #ifndef TASKWORKPACKAGEMODEL_H
@@ -80,9 +80,9 @@ public:
 
         // Completion
         NodeCompleted,
-        NodePlannedEffort,
         NodeActualEffort,
         NodeRemainingEffort,
+        NodePlannedEffort,
         NodeActualStart,
         NodeStarted,
         NodeActualFinish,
@@ -134,6 +134,10 @@ protected slots:
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
 
+    void slotDocumentAdded( Node *node, Document *doc, int index );
+    void slotDocumentRemoved( Node *node, Document *doc, int index );
+    void slotDocumentChanged( Node *node, Document *doc, int index );
+
 protected:
     QVariant nodeData( Node *node, int column, int role ) const; 
     QVariant documentData( Document *doc, int column, int role ) const; 
@@ -155,6 +159,10 @@ protected:
     bool setActualEffort( Node *node, const QVariant &value, int role );
     bool setStartedTime( Node *node, const QVariant &value, int role );
     bool setFinishedTime( Node *node, const QVariant &value, int role );
+
+    QVariant actualStart( Node *n, int role ) const;
+    QVariant actualFinish( Node *n, int role ) const;
+    QVariant plannedEffort( Node *n, int role ) const;
 
 private:
     NodeModel m_nodemodel;

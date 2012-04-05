@@ -20,7 +20,7 @@
 #define KARBONLAYERDOCKER_H
 
 #include <QDockWidget>
-#include <QtCore/QTimer>
+#include <QTimer>
 #include <KoDockFactoryBase.h>
 #include <KoDocumentSectionView.h>
 

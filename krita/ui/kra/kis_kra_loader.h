@@ -52,6 +52,8 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
+    vKisNodeSP selectedNodes() const;
+
 private:
 
     KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
@@ -76,10 +78,11 @@ private:
 
     KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
+    void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

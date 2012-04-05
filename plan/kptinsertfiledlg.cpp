@@ -95,7 +95,7 @@ InsertFilePanel::InsertFilePanel( Project &project, Node *currentNode, QWidget *
 
 void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 {
-    ui.ui_url->setFilter( "*.kplato" );
+    ui.ui_url->setFilter( "*.plan" );
 }
 
 void InsertFilePanel::changed( const QString &text )

@@ -13,7 +13,7 @@
 #ifndef _FlagList_h_
 #define _FlagList_h_
 
-#include "qstringlist.h"
+#include "QStringList"
 
 namespace TJ
 {

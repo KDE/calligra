@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <assert.h>
 
@@ -108,6 +108,7 @@ Field::Field(const Field& f)
 
 Field::~Field()
 {
+    //kDebug() << this << debugString();
     delete m_expr;
     delete m_customProperties;
 }

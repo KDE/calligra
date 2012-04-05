@@ -20,8 +20,8 @@
 #include "KoPathSegment.h"
 #include "KoPathPoint.h"
 #include <kdebug.h>
-#include <QtGui/QPainterPath>
-#include <QtGui/QTransform>
+#include <QPainterPath>
+#include <QTransform>
 #include <math.h>
 
 /// Maximal recursion depth for finding root params
@@ -1086,7 +1086,7 @@ qreal KoPathSegment::paramAtLength(qreal length, qreal tolerance) const
 
     if (deg == 1) {
         // make sure we return a maximum value of 1.0
-        return qMin(1.0, length / d->chordLength());
+        return qMin(qreal(1.0), length / d->chordLength());
     }
 
     // for curves we need to make sure, that the specified length

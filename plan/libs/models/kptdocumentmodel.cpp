@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,9 +22,10 @@
 #include "kptdocuments.h"
 #include "kptglobal.h"
 #include "kptcommonstrings.h"
+#include "kptdebug.h"
 
-#include <kdebug.h>
 #include <QMimeData>
+
 
 class KoDocument;
 
@@ -43,6 +44,32 @@ QVariant DocumentModel::url( const Document *doc, int role ) const
             return QVariant();
     }
     return QVariant();
+}
+
+QVariant DocumentModel::name( const Document *doc, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return doc->name();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool DocumentModel::setName( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            doc->setName( value.toString() );
+            return true;
+        default:
+            break;
+    }
+    return false;
 }
 
 QVariant DocumentModel::type( const Document *doc, int role ) const
@@ -132,12 +159,13 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
 {
     QVariant result;
     switch ( property ) {
-        case 0: result = url( doc, role ); break;
-        case 1: result = type( doc, role ); break;
-        case 2: result = status( doc, role ); break;
-        case 3: result = sendAs( doc, role ); break;
+        case Property_Url: result = url( doc, role ); break;
+        case Property_Name: result = name( doc, role ); break;
+        case Property_Type: result = type( doc, role ); break;
+        case Property_SendAs: result = sendAs( doc, role ); break;
+        case Property_Status: result = status( doc, role ); break;
         default:
-            //kDebug()<<"Invalid property number: "<<property;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;
             return result;
     }
     return result;
@@ -145,7 +173,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
 
 int DocumentModel::propertyCount()
 {
-    return 4;
+    return 5;
 }
 
 bool DocumentModel::setData( Document *doc, int property, const QVariant & /*value*/, int role )
@@ -158,7 +186,7 @@ bool DocumentModel::setData( Document *doc, int property, const QVariant & /*val
         //case 1: return setType( doc, value, role );
         //case 2: result = status( doc, role ); break;
         default:
-            //kDebug()<<"Invalid property number: "<<property;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;
             break;
     }
     return false;
@@ -168,20 +196,22 @@ QVariant DocumentModel::headerData( int section, int role )
 {
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
-            case 0: return i18n( "Url" );
-            case 1: return i18n( "Type" );
-            case 2: return i18n( "Status" );
-            case 3: return i18n( "Send As" );
+            case Property_Url: return i18n( "Url" );
+            case Property_Name: return i18n( "Name" );
+            case Property_Type: return i18n( "Type" );
+            case Property_SendAs: return i18n( "Send As" );
+            case Property_Status: return i18n( "Status" );
 
             default: return QVariant();
         }
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::documentUrl();
-            case 1: return ToolTip::documentType();
-            case 2: return ToolTip::documentStatus();
-            case 3: return ToolTip::documentSendAs();
+            case Property_Url: return ToolTip::documentUrl();
+            case Property_Name: return QVariant(); //TODO
+            case Property_Type: return ToolTip::documentType();
+            case Property_SendAs: return ToolTip::documentSendAs();
+            case Property_Status: return ToolTip::documentStatus();
 
             default: return QVariant();
         }
@@ -231,7 +261,7 @@ void DocumentItemModel::slotDocumentRemoved( Document *doc )
 
 void DocumentItemModel::setDocuments( Documents *docs )
 {
-    //kDebug()<<m_documents<<docs;
+    //kDebug(planDbg())<<m_documents<<docs;
     if ( m_documents ) {
     }
     m_documents = docs;
@@ -254,21 +284,24 @@ Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
-    //kDebug()<<index<<m_readWrite;
+    //kDebug(planDbg())<<index<<m_readWrite;
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case 0: // url
+            case DocumentModel::Property_Url: // url
                 flags &= ~Qt::ItemIsEditable; // wee need a full path
                 break;
-            case 1: // type
+            case DocumentModel::Property_Name: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 2: // status
+            case DocumentModel::Property_Type: // type
+                flags |= Qt::ItemIsEditable;
+                break;
+            case DocumentModel::Property_SendAs: // sendAs
+                flags |= Qt::ItemIsEditable;
+                break;
+            case DocumentModel::Property_Status: // status
                 flags &= ~Qt::ItemIsEditable;
-                break;
-            case 3: // sendAs
-                flags |= Qt::ItemIsEditable;
                 break;
             default:
                 flags &= ~Qt::ItemIsEditable;
@@ -288,7 +321,7 @@ QModelIndex DocumentItemModel::index( int row, int column, const QModelIndex &pa
         return QModelIndex();
     }
     if ( m_documents == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug()<<"No index for"<<row<<","<<column;
+        //kDebug(planDbg())<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     if ( row >= m_documents->count() ) {
@@ -317,6 +350,16 @@ bool DocumentItemModel::setUrl( Document *doc, const QVariant &value, int role )
             }
             //m_part->addCommand( new DocumentModifyUrlCmd( *doc, value.toString(), "Modify Document Url" ) );
             return true;
+    }
+    return false;
+}
+
+bool DocumentItemModel::setName( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            //m_part->addCommand( new DocumentModifyTypeCmd( *doc, value.toString(), "Modify Document Type" ) );
+            return m_model.setName( doc, value, role );
     }
     return false;
 }
@@ -372,19 +415,22 @@ bool DocumentItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags(index) & Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
     bool result = false;
     Document *doc = document( index );
     switch (index.column()) {
-        case 0:
+        case DocumentModel::Property_Url:
             result = setUrl( doc, value, role );
             break;
-        case 1:
+        case DocumentModel::Property_Name:
+            result = setName( doc, value, role );
+            break;
+        case DocumentModel::Property_Type:
             result = setType( doc, value, role );
             break;
-        case 3:
+        case DocumentModel::Property_SendAs:
             result = setSendAs( doc, value, role );
             break;
         default:
@@ -404,8 +450,8 @@ QVariant DocumentItemModel::headerData( int section, Qt::Orientation orientation
             return m_model.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignCenter;
-                case 2: return Qt::AlignCenter;
+                case DocumentModel::Property_Type: return Qt::AlignCenter;
+                case DocumentModel::Property_SendAs: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -420,8 +466,8 @@ QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *p
 {
     switch ( column ) {
         //case 0: return new KUrlDelegate( parent ); //???????
-        case 1: { kDebug()<< column; return new EnumDelegate( parent ); }
-        case 3: { kDebug()<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_Type: { kDebug(planDbg())<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_SendAs: { kDebug(planDbg())<< column; return new EnumDelegate( parent ); }
         default: break;
     }
     return 0;
@@ -429,17 +475,17 @@ QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *p
 
 int DocumentItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    //kDebug()<<m_model.propertyCount();
+    //kDebug(planDbg())<<m_model.propertyCount();
     return m_model.propertyCount();
 }
 
 int DocumentItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( m_documents == 0 || parent.isValid() ) {
-        //kDebug()<<parent;
+        //kDebug(planDbg())<<parent;
         return 0;
     }
-    //kDebug()<<parent<<": "<<m_documents->count();
+    //kDebug(planDbg())<<parent<<": "<<m_documents->count();
     return m_documents->count();
 }
 
@@ -472,7 +518,7 @@ bool DocumentItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
     Q_UNUSED(index);
     Q_UNUSED(dropIndicatorPosition);
     Q_UNUSED(data);
-    //kDebug();
+    //kDebug(planDbg());
     return true;
 }
 
@@ -489,7 +535,7 @@ bool DocumentItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 {
     Q_UNUSED(row);
     Q_UNUSED(parent);
-    //kDebug()<<action;
+    //kDebug(planDbg())<<action;
     if (action == Qt::IgnoreAction) {
         return true;
     }

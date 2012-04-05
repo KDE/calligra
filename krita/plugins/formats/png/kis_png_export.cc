@@ -28,15 +28,16 @@
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-
+#include <kis_config.h>
 #include <kis_iterators_pixel.h>
-
+#include <kis_properties_configuration.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_filter_registry_model.h>
 #include <kis_exif_info_visitor.h>
@@ -81,6 +82,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
@@ -106,17 +108,31 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     }
 
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
-    wdg->alpha->setChecked(isThereAlpha);
-    wdg->alpha->setVisible(isThereAlpha);
-    wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
-    if (isThereAlpha) {
+
+    QString filterConfig = KisConfig().exportConfiguration("PNG");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    wdg->alpha->setChecked(cfg.getBool("alpha", isThereAlpha));
+    if (wdg->alpha->isChecked()) {
         wdg->tryToSaveAsIndexed->setChecked(false);
     }
+    else {
+        wdg->tryToSaveAsIndexed->setChecked(cfg.getBool("indexed", false));
+    }
+    wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
+    wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
+
+    wdg->alpha->setVisible(isThereAlpha);
+    wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
+
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if (hasVisibleWidgets()) {
-        if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        if (!m_chain->manager()->getBatchMode()) {
+            if (kdb->exec() == QDialog::Rejected) {
+                return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            }
         }
     }
 
@@ -124,6 +140,13 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     bool interlace = wdg->interlacing->isChecked();
     int compression = wdg->compressionLevel->value();
     bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
+
+    cfg.setProperty("alpha", alpha);
+    cfg.setProperty("indexed", tryToSaveAsIndexed);
+    cfg.setProperty("compression", compression);
+    cfg.setProperty("interlaced", interlace);
+
+    KisConfig().setExportConfiguration("PNG", cfg);
 
     delete kdb;
 

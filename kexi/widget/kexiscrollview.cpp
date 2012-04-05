@@ -19,11 +19,11 @@
 */
 #include "kexiscrollview.h"
 
-#include <QtGui/QPalette>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPalette>
+#include <QCursor>
+#include <QObject>
+#include <QPainter>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QEvent>
 #include <Q3Frame>

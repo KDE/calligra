@@ -161,6 +161,13 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
 {
     READ_PROLOGUE
 
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(ilvl)
+    int level = 0;
+    STRING_TO_INT(ilvl, level, QString("w:lvlOverride"));
+    level++;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -173,6 +180,22 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
                     // Overriding lvl information
                     if (m_currentBulletList.at(index).m_level == m_currentBulletProperties.m_level) {
                         m_currentBulletList.replace(index, m_currentBulletProperties);
+                        break;
+                    }
+                    ++index;
+                }
+            }
+            else if (name() == "startOverride") {
+                int index = 0;
+                while (index < m_currentBulletList.size()) {
+                    if (m_currentBulletList.at(index).m_level == level)
+                    {
+                        const QXmlStreamAttributes attrs2(attributes());
+                        QString val( attrs2.value(QUALIFIED_NAME(val)).toString() );
+                        if (!val.isEmpty()) {
+                            m_currentBulletList[index].setStartValue(val);
+                        }
+                        m_currentBulletList[index].setStartOverride(true);
                         break;
                     }
                     ++index;
@@ -452,6 +475,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
             if (name() == "abstractNumId") {
                TRY_READ(abstractNumId)
                m_currentBulletList = m_abstractListStyles[m_currentAbstractId];
+               m_context->m_abstractNumIDs[numId] = m_currentAbstractId;
             }
             // lvlOverride may modify the bulletlist which we get above
             ELSE_TRY_READ_IF(lvlOverride)
@@ -526,6 +550,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
             if (qualifiedName() == QLatin1String("w:ind")) {
                 TRY_READ(ind_numbering)
             }
+            //TODO: tabs are important
             SKIP_UNKNOWN
         }
     }

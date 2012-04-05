@@ -21,7 +21,7 @@
 #define __koPictureClipart_h__
 
 #include <QString>
-#include <qpicture.h>
+#include <QPicture>
 //Added by qt3to4:
 #include <QPixmap>
 #include "PictureBase.h"

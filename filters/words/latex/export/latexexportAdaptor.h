@@ -21,7 +21,7 @@
 #ifndef __LATEXEXPORTADAPTOR_H__
 #define __LATEXEXPORTADAPTOR_H__
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtDBus/QtDBus>
 
 class WordsLatexExportDia;

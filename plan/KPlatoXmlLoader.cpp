@@ -158,7 +158,6 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
                 }
                 package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
                 package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
                 package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
             }
         }

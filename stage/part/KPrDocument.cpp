@@ -129,6 +129,8 @@ const char * KPrDocument::odfTagName( bool withNamespace )
 
 bool KPrDocument::saveOdfProlog( KoPASavingContext & context )
 {
+    if ( !KoPADocument::saveOdfProlog( context ) )
+        return false;
     m_declarations->saveOdf( context );
     return true;
 }
@@ -366,6 +368,8 @@ void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
 
 bool KPrDocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context )
 {
+    if ( !KoPADocument::loadOdfProlog( body, context ) )
+        return false;
     return m_declarations->loadOdf( body, context );
 }
 

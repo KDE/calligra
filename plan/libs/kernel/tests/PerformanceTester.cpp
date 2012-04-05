@@ -330,7 +330,7 @@ void PerformanceTester::acwpPrDayTask()
     
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 10 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -344,7 +344,7 @@ void PerformanceTester::acwpPrDayTask()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 20 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -356,7 +356,7 @@ void PerformanceTester::acwpPrDayTask()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 30 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -368,7 +368,7 @@ void PerformanceTester::acwpPrDayTask()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 50 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -380,7 +380,7 @@ void PerformanceTester::acwpPrDayTask()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 80 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -708,7 +708,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 10 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -722,7 +722,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 20 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -734,7 +734,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 30 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -747,7 +747,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 50 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -759,7 +759,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 80 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
@@ -1040,7 +1040,7 @@ void PerformanceTester::acwpPrDayProject()
     
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 10 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = p1->bcwpPrDay();
     eca = p1->acwp();
@@ -1053,7 +1053,7 @@ void PerformanceTester::acwpPrDayProject()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 20 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 6, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = p1->bcwpPrDay();
     eca = p1->acwp();
@@ -1065,7 +1065,7 @@ void PerformanceTester::acwpPrDayProject()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 30 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = p1->bcwpPrDay();
     eca = p1->acwp();
@@ -1077,7 +1077,7 @@ void PerformanceTester::acwpPrDayProject()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 50 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 8, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = p1->bcwpPrDay();
     eca = p1->acwp();
@@ -1089,7 +1089,7 @@ void PerformanceTester::acwpPrDayProject()
     d = d.addDays( 1 );
     cmd = new ModifyCompletionPercentFinishedCmd( t1->completion(), d, 80 );
     cmd->execute(); delete cmd;
-    cmd = new AddCompletionActualEffortCmd( *ue, d, new Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
+    cmd = new AddCompletionActualEffortCmd( *ue, d, Completion::UsedEffort::ActualEffort( Duration( 0, 12, 0 ) ) );
     cmd->execute(); delete cmd;
     ecb = p1->bcwpPrDay();
     eca = p1->acwp();

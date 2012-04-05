@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007. 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include <QSplitter>
 #include <QTabWidget>
 
-#include <kdebug.h>
+#include "kptdebug.h"
 
 namespace KPlato
 {
@@ -81,7 +81,7 @@ void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &labe
 // reimp
 void SplitterView::setGuiActive( bool active ) // virtual slot
 {
-    kDebug()<<active<<m_activeview;
+    kDebug(planDbg())<<active<<m_activeview;
     if ( m_activeview ) {
         m_activeview->setGuiActive( active );
     } else {
@@ -91,7 +91,7 @@ void SplitterView::setGuiActive( bool active ) // virtual slot
 
 void SplitterView::slotGuiActivated( ViewBase *v, bool active )
 {
-    kDebug()<<active<<m_activeview<<" -> "<<v;
+    kDebug(planDbg())<<active<<m_activeview<<" -> "<<v;
     if ( active ) {
         if ( m_activeview ) {
             emit guiActivated( m_activeview, false );
@@ -108,14 +108,14 @@ ViewBase *SplitterView::findView( const QPoint &pos ) const
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         ViewBase *w = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( w && w->frameGeometry().contains( pos ) ) {
-            kDebug()<<pos<<" in "<<w->frameGeometry();
+            kDebug(planDbg())<<pos<<" in "<<w->frameGeometry();
             return w;
         }
         QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
         if (tw && tw->frameGeometry().contains( pos ) ) {
             w = dynamic_cast<ViewBase*>( tw->currentWidget() );
             if ( w ) {
-                kDebug()<<pos<<" in "<<w->frameGeometry();
+                kDebug(planDbg())<<pos<<" in "<<w->frameGeometry();
                 return w;
             }
         }
@@ -203,10 +203,10 @@ void SplitterView::updateReadWrite( bool mode )
 ViewBase *SplitterView::focusView() const
 {
     QList<ViewBase*> lst = findChildren<ViewBase*>();
-    kDebug()<<lst;
+    kDebug(planDbg())<<lst;
     foreach ( ViewBase *v, lst ) {
         if ( v->isActive() ) {
-            kDebug()<<v;
+            kDebug(planDbg())<<v;
             return v;
         }
     }
@@ -238,7 +238,7 @@ QList<QAction*> SplitterView::actionList( const QString name ) const
 QList<QAction*> SplitterView::contextActionList() const
 {
     ViewBase *view = focusView();
-    kDebug()<<this<<view;
+    kDebug(planDbg())<<this<<view;
     if ( view ) {
         return view->contextActionList();
     }

@@ -19,10 +19,10 @@
 
 #include "RemoveSheetCommand.h"
 
-using Calligra::Tables::Sheet;
-using Calligra::Tables::Map;
+using Calligra::Sheets::Sheet;
+using Calligra::Sheets::Map;
 
-RemoveSheetCommand::RemoveSheetCommand(Calligra::Tables::Sheet* s)
+RemoveSheetCommand::RemoveSheetCommand(Calligra::Sheets::Sheet* s)
 {
     sheet = s;
     map = sheet->map();

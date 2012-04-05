@@ -51,9 +51,16 @@ namespace wvWare
         const ListInfo* listInfo() const;
 
         /**
-         * @internal
+         * Set the name of the bullet picture into ListInfo.
          */
-        void createListInfo( ListInfoProvider& listInfoProvider, const Word97::CHP& chp );
+        void setBulletPictureName(const QString& name);
+
+        /**
+         * @internal
+         * @param list info provider
+         * @param pragraph mark's CHPs
+         */
+        void createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp );
 
     private:
         ParagraphProperties& operator=( const ParagraphProperties& rhs );

@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef SYBASECONNECTION_H
 #define SYBASECONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kexidb/connection.h>
 #include "sybasecursor.h"

@@ -23,9 +23,6 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
-
 #include <QDateTime>
 #include <QDateTimeEdit>
 #include <QComboBox>

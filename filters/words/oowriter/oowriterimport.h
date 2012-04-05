@@ -24,7 +24,7 @@
 #include <KoFilter.h>
 
 #include <q3dict.h>
-#include <qdom.h>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <QByteArray>
 #include <QVector>

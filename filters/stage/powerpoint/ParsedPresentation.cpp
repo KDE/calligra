@@ -18,7 +18,7 @@
 */
 #include "ParsedPresentation.h"
 #include "generated/leinputstream.h"
-#include <QtCore/QBuffer>
+#include <QBuffer>
 
 using namespace MSO;
 

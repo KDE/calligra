@@ -19,7 +19,7 @@
 
 #include "KPrConfigureSlideShowDialog.h"
 
-#include <QtGui/QDesktopWidget>
+#include <QDesktopWidget>
 
 #include <KLocale>
 #include <KDebug>

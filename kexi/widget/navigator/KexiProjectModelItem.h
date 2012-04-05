@@ -23,7 +23,7 @@
 
 #include <QVariant>
 #include <QPixmap>
-#include <qstring.h>
+#include <QString>
 #include <core/kexipartitem.h>
 #include <kexi.h>
 

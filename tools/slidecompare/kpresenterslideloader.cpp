@@ -23,7 +23,7 @@
 #include <KDE/KStandardDirs>
 #include <KDE/KMimeType>
 #include <KDE/KParts/ComponentFactory>
-#include <QtCore/QDebug>
+#include <QDebug>
 
 KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {
     m_doc = 0;

@@ -14,7 +14,6 @@ target_link_libraries(
     kexiutils
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KDECORE_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     ${XBase_LIBRARIES} 
     )
 

@@ -22,8 +22,8 @@
 
 #include <KoToolBase.h>
 #include <KoSnapGuide.h>
-#include <QtGui/QGradient>
-#include <QtCore/QMultiMap>
+#include <QGradient>
+#include <QMultiMap>
 
 class GradientStrategy;
 class KarbonGradientEditWidget;

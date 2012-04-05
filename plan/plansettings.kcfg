@@ -3,7 +3,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
-  <!-- kcfgfile name="kplatorc"/> Don't, Factory::componentData().config() is used -->
+  <!-- kcfgfile name="planrc"/> Don't, Factory::componentData().config() is used -->
   <group name="Task defaults">
     <entry name="Leader" type="String">
       <label>Name of task responsible</label>
@@ -158,19 +158,16 @@
       <label>Automatically check for new work packages</label>
     </entry>
     <entry name="RetrieveUrl" type="Url">
-      <label>Directory where kplato retrieves work packages from project members</label>
+<!--       <label>Directory where Plan retrieves work packages from project members</label> -->
     </entry>
     <entry name="DeleteFile" type="Bool">
-      <label>If set, kplato will delete the file after it has been read</label>
+<!--       <label>If set, Plan will delete the file after it has been read</label> -->
     </entry>
     <entry name="SaveFile" type="Bool">
-      <label>If set, kplato will save the file after it has been read</label>
-    </entry>
-    <entry name="LeaveFile" type="Bool">
-      <label>If set, kplato will leave where it is the file after it has been read</label>
+<!--       <label>If set, Plan will save the file after it has been read</label> -->
     </entry>
     <entry name="SaveUrl" type="Url">
-      <label>Directory where kplato saves work packages when the package has been read</label>
+<!--       <label>Directory where Plan saves work packages when the package has been read</label> -->
     </entry>
   </group>
 

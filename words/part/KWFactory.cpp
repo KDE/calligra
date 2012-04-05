@@ -29,6 +29,8 @@
 
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
+#include <KoToolRegistry.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
@@ -36,6 +38,7 @@
 #include "dockers/KWRdfDockerFactory.h"
 #endif
 #include "dockers/KWStatisticsDocker.h"
+#include "pagetool/KWPageToolFactory.h"
 
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
@@ -63,6 +66,8 @@ QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *pa
     bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
     KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
+
+    KoToolRegistry::instance()->add(new KWPageToolFactory());
 
     if (!bWantKoDocument)
         doc->setReadWrite(false);
@@ -93,7 +98,7 @@ const KComponentData &KWFactory::componentData()
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
 #ifdef SHOULD_BUILD_RDF
-        dockRegistry->add(new KWRdfDockerFactory());
+// TODO reenable after release        dockRegistry->add(new KWRdfDockerFactory());
 #endif
 
     }

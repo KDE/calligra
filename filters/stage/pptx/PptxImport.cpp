@@ -1110,8 +1110,9 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
-        // We are reading twice, in the first round we ignore everything except defaultTextStyle
-        // except that we count the number of slides/slideMasters/noteMasters for progress reporting purposes
+        // Reading twice. In the 1st round everything except defaultTextStyle
+        // is ignored and the number of slides/slideMasters/noteMasters for
+        // progress reporting purposes is calculated.
         context.firstReadRound = false;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

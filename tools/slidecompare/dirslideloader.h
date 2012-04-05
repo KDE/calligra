@@ -20,11 +20,11 @@
 #define DIRSLIDELOADER_H
 
 #include "slideloader.h"
-#include <QtCore/QFileSystemWatcher>
-#include <QtCore/QDir>
-#include <QtCore/QTimer>
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
+#include <QFileSystemWatcher>
+#include <QDir>
+#include <QTimer>
+#include <QDateTime>
+#include <QDebug>
 
 class DirSlideLoader : public SlideLoader {
 private:

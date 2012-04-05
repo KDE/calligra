@@ -21,7 +21,7 @@
 #define KPRSNAKEWIPEDIAGONALSTRATEGY_H
 
 #include "../KPrMatrixWipeStrategy.h"
-#include <QtCore/QVector>
+#include <QVector>
 
 class KPrSnakeWipeDiagonalStrategy : public KPrMatrixWipeStrategy
 {

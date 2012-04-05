@@ -2,6 +2,7 @@
  * Resource.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -87,7 +88,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthStart = 0;
         bool weekStartsMonday = project->getWeekStartsMonday();
         for (time_t ts = p->getStart(); i < (long) sbSize; ts +=
-             p->getScheduleGranularity(), i++)
+             p->getScheduleGranularity(), ++i)
         {
             if (ts == midnight(ts))
                 dayStart = i;
@@ -111,7 +112,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthEnd = i;
         // WTF does p->getEnd not return the 1st sec after the time frame!!!
         for (time_t ts = p->getEnd() + 1; i >= 0;
-             ts -= p->getScheduleGranularity(), i--)
+             ts -= p->getScheduleGranularity(), --i)
         {
             DayEndIndex[i] = dayEnd;
             if (ts - midnight(ts) < (int) p->getScheduleGranularity())
@@ -1099,7 +1100,7 @@ Resource::getPIDs(int sc, const Interval& period, const Task* task,
             continue;
         if ((!task || task == b->getTask() ||
              b->getTask()->isDescendantOf(task)) &&
-            pids.findIndex(b->getTask()->getProjectId()) == -1)
+            pids.indexOf(b->getTask()->getProjectId()) == -1)
         {
             pids.append(b->getTask()->getProjectId());
         }

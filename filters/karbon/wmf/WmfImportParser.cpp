@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 #include <KDebug>
-#include <QtCore/QBuffer>
+#include <QBuffer>
 #include <math.h>
 
 /*
@@ -67,7 +67,7 @@ bool WMFImportParser::begin(const QRect &boundingBox)
                                    "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
 
     // add some PR.  one line is more than enough.
-    m_svgWriter.addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->\n");
+    m_svgWriter.addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->\n");
     m_svgWriter.startElement("svg");
     m_svgWriter.addAttribute("xmlns", "http://www.w3.org/2000/svg");
     m_svgWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -531,7 +531,7 @@ QString WMFImportParser::saveStroke(Libwmf::WmfDeviceContext &context)
         return "stroke:none;";
     }
 
-    const qreal width = context.pen.width() > 1.0 ? qMax(1.0, context.pen.width() * m_scaleX) : 1.0;
+    const qreal width = context.pen.width() > qreal(1.0) ? qMax(qreal(1.0), context.pen.width() * m_scaleX) : qreal(1.0);
 
     QString strokeStyle;
 

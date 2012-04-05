@@ -32,6 +32,11 @@ Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout(LayoutFacto
     setName(_rhs.name());
 }
 
+Section::~Section()
+{
+    delete m_sectionContainer;
+}
+
 SectionContainer* Section::sectionContainer()
 {
     return m_sectionContainer;

@@ -93,6 +93,19 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
+{
+  Q_OBJECT
+public:
+    DateTimeCalendarDelegate( QObject *parent = 0 );
+
+    QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+    void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+    void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+
+};
+
 class KPLATOMODELS_EXPORT ProgressBarDelegate : public ItemDelegate
 {
   Q_OBJECT
@@ -276,6 +289,9 @@ public:
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     bool setData( const QModelIndex &index, const QVariant &value, int role );
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int /*column*/ ) const { return Qt::DisplayRole; }
 
 signals:
     /// Connect to this signal if your model modifies data using undo commands.

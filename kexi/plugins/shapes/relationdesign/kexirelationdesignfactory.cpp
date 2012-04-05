@@ -28,7 +28,7 @@ KexiRelationDesignFactory::KexiRelationDesignFactory()
 {
     setToolTip(i18n("A kexi relation design shape"));
     setIcon("kexi");
-    setXmlElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape"));
+    setXmlElementNames("http://www.calligra.org/kexirelationdesign", QStringList("shape"));
     setLoadingPriority(1);
 }
 
@@ -44,6 +44,6 @@ bool KexiRelationDesignFactory::supports(const KoXmlElement &e, KoShapeLoadingCo
 {
     Q_UNUSED(context);
     kDebug();
-    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra-suite.org/kexirelationdesign");
+    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra.org/kexirelationdesign");
 }
 

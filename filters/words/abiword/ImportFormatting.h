@@ -24,7 +24,7 @@
 #include <QString>
 #include <QColor>
 #include <QtXml>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QVector>
 
 #include "ImportHelpers.h"

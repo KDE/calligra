@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 
-#include <qmap.h>
+#include <QMap>
 #include <kexi_global.h>
 
 namespace Kexi

@@ -31,8 +31,8 @@
 
 #include <kdebug.h>
 
-#include <qlayout.h>
-#include <qevent.h>
+#include <QLayout>
+#include <QEvent>
 #include <QKeyEvent>
 
 /*! @internal

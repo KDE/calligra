@@ -49,7 +49,7 @@ struct KisCoordinatesConverter::Private {
 
 void KisCoordinatesConverter::recalculateTransformations() const
 {
-    if(!m_d->image.isValid()) return;
+    if(!m_d->image) return;
 
     m_d->imageToDocument = QTransform::fromScale(1 / m_d->image->xRes(),
                                                  1 / m_d->image->yRes());
@@ -213,15 +213,27 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
                                                       QPointF *brushOrigin,
                                                       QPolygonF *polygon) const
 {
+    /**
+     * Qt has different rounding for QPainter::drawRect/drawImage.
+     * The image is rounded mathematically, while rect in aligned
+     * to the next integer. That causes transparent line appear on
+     * the canvas.
+     *
+     * See: https://bugreports.qt.nokia.com/browse/QTBUG-22827
+     */
+
+    QRectF imageRect = imageRectInViewportPixels();
+    imageRect.adjust(0,0,-0.5,-0.5);
+
     KisConfig cfg;
     if (cfg.scrollCheckers()) {
         *transform = viewportToWidgetTransform();
-        *polygon = imageRectInViewportPixels();
+        *polygon = imageRect;
         *brushOrigin = imageToViewport(QPointF(0,0));
     }
     else {
         *transform = QTransform();
-        *polygon = viewportToWidgetTransform().map(imageRectInViewportPixels());
+        *polygon = viewportToWidgetTransform().map(imageRect);
         *brushOrigin = QPoint(0,0);
     }
 }
@@ -249,7 +261,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 
 QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
 {
-    if(!m_d->image.isValid())
+    if(!m_d->image)
         return QPointF();
     
     QPolygonF poly = imageToWidget(QPolygon(m_d->image->bounds()));
@@ -261,19 +273,19 @@ QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
 
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
 {
-    if(!m_d->image.isValid()) return QRectF();
+    if(!m_d->image) return QRectF();
     return imageToWidget(m_d->image->bounds());
 }
 
 QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
 {
-    if(!m_d->image.isValid()) return QRectF();
+    if(!m_d->image) return QRectF();
     return imageToViewport(m_d->image->bounds());
 }
 
 QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 {
-    if(!m_d->image.isValid()) return QSizeF();
+    if(!m_d->image) return QSizeF();
 
     qreal scaleX, scaleY;
     imageScale(&scaleX, &scaleY);

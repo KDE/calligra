@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009,2012 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,9 +26,9 @@
 
 #include <KoShapeManager.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
-KarbonPrintJob::KarbonPrintJob(KarbonView *view)
+KarbonPrintJob::KarbonPrintJob(KarbonView *view, PrintMode printMode)
         : KoPrintingDialog(view),
         m_view(view)
 {
@@ -40,6 +40,11 @@ KarbonPrintJob::KarbonPrintJob(KarbonView *view)
         printer().setOrientation(QPrinter::Landscape);
     else
         printer().setOrientation(QPrinter::Portrait);
+
+    if (printMode == PrintToPdf) {
+        printer().setPaperSize(pageSize, QPrinter::Point);
+        printer().setFullPage(true);
+    }
 }
 
 QRectF KarbonPrintJob::preparePage(int)

@@ -20,7 +20,7 @@
 #include "alter.h"
 #include "utils.h"
 #include <kexiutils/utils.h>
-#include <qmap.h>
+#include <QMap>
 #include <stdlib.h>
 
 namespace KexiDB
@@ -29,7 +29,9 @@ class AlterTableHandler::Private
 {
 public:
     Private() {}
-    ~Private() {}
+    ~Private() {
+        qDeleteAll(actions);
+    }
     ActionList actions;
     QPointer<Connection> conn;
 };
@@ -782,6 +784,7 @@ void AlterTableHandler::clear()
 
 void AlterTableHandler::setActions(const ActionList& actions)
 {
+    qDeleteAll(d->actions);
     d->actions = actions;
 }
 

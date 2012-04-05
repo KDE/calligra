@@ -18,21 +18,26 @@
 #ifndef _KIS_BASE_NODE_H
 #define _KIS_BASE_NODE_H
 
+#include <QObject>
 #include <QIcon>
+#include <QUuid>
+#include <QString>
+
 #include <kicon.h>
 
-#include "kis_types.h"
-#include "kis_shared.h"
-#include "krita_export.h"
 #include "KoDocumentSectionModel.h"
-#include <QUuid>
+
+#include "kis_shared.h"
+#include "kis_paint_device.h"
+#include "kis_processing_visitor.h" // included, not forward declared for msvc
 
 class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
-class KisProcessingVisitor;
 class KisUndoAdapter;
+
+#include "krita_export.h"
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -90,7 +95,7 @@ public:
      */
     virtual KisPaintDeviceSP projection() const;
 
-    virtual const KoColorSpace * colorSpace() const = 0;
+    virtual const KoColorSpace *colorSpace() const = 0;
 
     /**
      * Return the opacity of this layer, scaled to a range between 0
@@ -125,7 +130,7 @@ public:
     /**
      * Return the composite op associated with this layer.
      */
-    virtual const KoCompositeOp * compositeOp() const = 0;
+    virtual const KoCompositeOp *compositeOp() const = 0;
     const QString& compositeOpId() const;
 
     /**
@@ -160,6 +165,7 @@ public:
      */
     void setName(const QString& name) {
         setObjectName(name);
+        baseNodeChangedCallback();
     }
 
     /**
@@ -377,7 +383,19 @@ protected:
         return 0;
     }
 
+    /**
+     * This callback is called when some meta state of the base node
+     * that can be interesting to the UI has changed. E.g. visibility,
+     * lockness, opacity, compositeOp and etc. This signal is
+     * forwarded by the KisNode and KisNodeGraphListener to the model
+     * in KisLayerBox, so it can update its controls when information
+     * changes.
+     */
+    virtual void baseNodeChangedCallback() {
+    }
+
 signals:
+
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
      */
@@ -393,7 +411,7 @@ signals:
     void systemLockingChanged(bool);
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

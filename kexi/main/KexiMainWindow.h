@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +48,7 @@ class Part;
 class KXMLGUIClient;
 class KXMLGUIFactory;
 class KexiMainWidget;
+class KexiUserFeedbackAgent;
 
 #include <KTabWidget>
 
@@ -60,6 +61,7 @@ public:
     virtual ~KexiMainWindowTabWidget();
 public slots:
     void closeTab();
+
 protected:
     //! Implemented to add context menu
     void contextMenu(int index, const QPoint& point);
@@ -72,6 +74,11 @@ protected:
 
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
+
+private:
+    int m_tabIndex;
+
+    void setTabIndexFromContextMenu(const int clickedIndex);
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
@@ -149,7 +156,7 @@ public:
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
+    static int create(int argc, char *argv[], const KexiAboutData &aboutData);
 
     //! \return KexiMainWindow singleton (if it is instantiated)
 //  static KexiMainWindow* self();
@@ -187,9 +194,12 @@ public:
     /*! Implemented for KexiMainWindow. */
     virtual QList<QAction*> allActions() const;
 
-    /*! \return currently active window od 0 if there is no active window.
+    /*! \return currently active window or 0 if there is no active window.
      Implemented for KexiWindow. */
     virtual KexiWindow* currentWindow() const;
+    
+    /*! @return window for tab @a tabIndex or 0 if there is no such tab. */
+    KexiWindow* windowForTab(int tabIndex) const;
 
     /*! Reimplemented */
 //  virtual void readProperties(KConfig *config);
@@ -211,32 +221,27 @@ public:
     // see KexiMainWindowIface
     virtual KToolBar *toolBar(const QString& name) const;
 
-public slots:
-    /*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
-      Just calls closeWindow(). Use closeWindow() if you need, not this one. */
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
-#else
-#pragma WARNING( TODO virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); )
-#endif
-#endif
+    //! Shows design tab when switching between objects or views.
+    void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
 
-    /*! Reimplemented for internal reasons. */
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd );
-#else
-#pragma WARNING( TODO virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd ); )
-#endif
-#endif
+    //! Sets currently visible tab when switching to design view, according to object type opened.
+    virtual void setDesignTabIfNeeded(const QString &partClass);
+
+    //! Hides tabs when they are closed (depending on class)
+    virtual void closeTab(const QString &partClass);
+
+    /*! Implemented for KexiMainWindow */
+    virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
+
+public slots:
     /*! Implemented for KexiMainWindow */
     virtual tristate closeWindow(KexiWindow *window);
 
     /*! Closes the current window. */
-    tristate closeCurrentWindow() {
-        return closeWindow(0);
-    }
+    tristate closeCurrentWindow();
+
+    /*! Closes window inside tab @a tabIndex. */
+    tristate closeWindowForTab(int tabIndex);
 
     /*! Internal implementation. If \a doNotSaveChanges is true,
      messages asking for saving the will be skipped and the changes will be dropped.
@@ -249,19 +254,6 @@ public slots:
 
     /*! Activates previous window. */
     void activatePreviousWindow();
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO   virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
-#else
-#pragma WARNING( TODO   virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true); )
-#endif
-#ifdef __GNUC__
-#warning TODO   virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
-#else
-#pragma WARNING( TODO   virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false); )
-#endif
-#endif
 
 //! @todo move part of this to KexiProject, because currently KexiProject::openObject() allows multiple opens!
     /*! Opens object pointed by \a item in a view \a viewMode.
@@ -326,6 +318,14 @@ public slots:
     /*! Helper. Opens project pointed by \a aFileName. */
     tristate openProject(const QString& aFileName);
 
+    /*! Opens project referenced by @a data.
+     If @a shortcutPath is a empty .kexis filename and there is another project opened,
+     a new instance of Kexi is started with the .kexis file as argument. 
+     Value pointed by @a opened is set to true if the database has been opened successfully.
+     @return true on successful opening, cancelled if the operation was cancelled
+     and false on failure.*/
+    tristate openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
+
     /*! Creates a new project usign template pointed by \a projectData.
      Application state (e.g. actions) is updated.
      New project data is copied into a project structures.
@@ -357,6 +357,9 @@ public slots:
     /*! Add searchable model to the main window. This extends search to a new area. 
      One example is Project Navigator. @see KexiMainWindowIface */
     virtual void addSearchableModel(KexiSearchableModel *model);
+
+    //! Shows Context sensitive ToolTab when changing current Object Tab
+    void showTabIfNeeded();
 
 signals:
     //! Emitted to make sure the project can be close.
@@ -399,7 +402,7 @@ protected:
     /*! Creates user project-wide actions */
     void setupUserActions();
 
-    /*! Sets up the window from user settings (e.g. mdi mode). */
+    /*! Sets up the window from user settings. */
     void restoreSettings();
 
     /*! Writes user settings back. */
@@ -514,26 +517,7 @@ protected slots:
     /*! Called if a window (tab) changes from \a prevWindow to \a window. Both parameters can be 0. */
     void activeWindowChanged(KexiWindow *window, KexiWindow *prevWindow);
 
-    /*! This slot is called if a window gets colsed and will unregister stuff */
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  void childClosed(KMdiChildView *dlg);
-#else
-#pragma WARNING( TODO  void childClosed(KMdiChildView *dlg); )
-#endif
-#endif
-
     void slotPartLoaded(KexiPart::Part* p);
-
-//  void slotCaptionForCurrentMDIChild(bool childrenMaximized);
-    /*
-    #ifdef __GNUC__
-    #warning TODO  void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
-    #else
-    #pragma WARNING( TODO  void slotNoMaximizedChildFrmLeft(KMdiChildFrm*); )
-    #endif
-        void slotLastChildViewClosed();
-        void slotChildViewIsDetachedNow(QWidget*);*/
 
     //! internal - creates and initializes kexi project
     void createKexiProject(const KexiProjectData& new_data);
@@ -658,19 +642,6 @@ protected slots:
 
     /*! Handles changes in 'dirty' flag for windows. */
     void slotDirtyFlagChanged(KexiWindow* window);
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
-#else
-#pragma WARNING( TODO  void slotMdiModeHasBeenChangedTo(KMdi::MdiMode); )
-#endif
-#endif
-    //! reimplemented to add "restart is required" message box
-//2.0: unused  virtual void switchToIDEAlMode();
-//2.0: unused  void switchToIDEAlMode(bool showMessage);
-//2.0: unused  virtual void switchToChildframeMode();
-//2.0: unused  void switchToChildframeMode(bool showMessage);
 
     /*! Shows Project Migration Wizard. \return true on successful migration,
      cancelled on cancellation, and false on failure.

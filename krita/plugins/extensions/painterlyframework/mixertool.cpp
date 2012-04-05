@@ -129,17 +129,12 @@ void MixerTool::setRadius(qreal radius)
     m_d->mixingBrush->settings()->changePaintOpSize(radius, radius);
 }
 
-void MixerTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void MixerTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(toolActivation)
     m_d->state = HOVER;
     useCursor(m_d->cursor);
     m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->backgroundColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-}
-
-void MixerTool::deactivate()
-{
 }
 
 void MixerTool::resourceChanged(int key, const QVariant & res)
@@ -161,10 +156,15 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
     Q_UNUSED(converter);
 
     if (m_d->mixer->hasFocus()) {
-        m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
-                                                   0,
-                                                   painter,
-                                                   KisPaintOpSettings::CursorIsOutline);
+        /**
+         * We don't use paintOutline anymore. Now the tool needs
+         * to request QPainterPath from the paint op with brushOutline()
+         * and paint it itself. Consult with the code in KisToolFreehand.
+         */
+        //m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
+        //                                           0,
+        //                                           painter,
+        //                                           KisPaintOpSettings::CursorIsOutline);
     }
 }
 

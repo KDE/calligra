@@ -21,7 +21,7 @@
 #ifndef KEXIPARTMANAGER_H
 #define KEXIPARTMANAGER_H
 
-#include <qobject.h>
+#include <QObject>
 
 #include <kservice.h>
 

@@ -61,7 +61,9 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
     if(m_setupAxisFlag) {
         setMode(KisTool::OTHER);
         m_axisPoint = convertToPixelCoord(e->point);
+        requestUpdateOutline(e->point);
         updateCanvas();
+        e->accept();
     }
     else {
         initTransformations();
@@ -72,9 +74,10 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
 void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
 {
     if(mode() == KisTool::OTHER) {
-        updateOutlineDocPoint(e->point);
         m_axisPoint = convertToPixelCoord(e->point);
+        requestUpdateOutline(e->point);
         updateCanvas();
+        e->accept();
     }
     else {
         KisToolFreehand::mouseMoveEvent(e);
@@ -100,7 +103,9 @@ void KisToolMultihand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if(mode() == KisTool::OTHER) {
         setMode(KisTool::HOVER_MODE);
+        requestUpdateOutline(e->point);
         finishAxisSetup();
+        e->accept();
     }
     else {
         KisToolFreehand::mouseReleaseEvent(e);
@@ -158,7 +163,11 @@ void KisToolMultihand::initTransformations()
          * TODO: currently, the seed is the same for all the
          * strokes
          */
+#ifdef Q_WS_WIN
+        srand(0);
+#else
         srand48(0);
+#endif
 
         for (int i = 0; i < m_handsCount; i++){
             qreal angle = drand48() * M_PI * 2;

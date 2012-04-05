@@ -25,10 +25,10 @@
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
-#include <qlayout.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
+#include <QLayout>
+#include <QObject>
+#include <QPushButton>
+#include <QApplication>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>

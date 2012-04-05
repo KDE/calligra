@@ -27,8 +27,8 @@
 #include <kxmlguiclient.h>
 #include <kactioncollection.h>
 
-#include <qwidget.h>
-#include <qicon.h>
+#include <QWidget>
+#include <QIcon>
 #include <kexi_global.h>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)

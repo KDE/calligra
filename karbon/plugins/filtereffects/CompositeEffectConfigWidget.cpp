@@ -25,9 +25,9 @@
 #include <KComboBox>
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStackedWidget>
 
 CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

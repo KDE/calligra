@@ -18,19 +18,19 @@
 */
 #include "FoCellEditor.h"
 
-#include <tables/ui/Selection.h>
-#include <tables/ui/CellToolBase.h>
-#include <tables/Cell.h>
+#include <sheets/ui/Selection.h>
+#include <sheets/ui/CellToolBase.h>
+#include <sheets/Cell.h>
 #include <KoViewConverter.h>
 #include <KoDpi.h>
 #include <KoUnit.h>
-#include <tables/ui/CellEditorBase.h>
+#include <sheets/ui/CellEditorBase.h>
 
 #include <QGtkStyle>
 #include <QScrollBar>
 #include <QFocusEvent>
 
-FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *parent)
+FoCellEditor::FoCellEditor(Calligra::Sheets::CellToolBase *cellTool, QWidget *parent)
     :QTextEdit(parent),
     m_cellTool(cellTool)
 {
@@ -41,7 +41,7 @@ FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *pa
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
     document()->setDocumentMargin(0);
-    const Calligra::Tables::Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
+    const Calligra::Sheets::Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
     const bool wrapText = cell.style().wrapText();
     Q_UNUSED(wrapText);
     setWordWrapMode(QTextOption::WordWrap);
@@ -167,7 +167,7 @@ void FoCellEditor::slotTextChanged()
         setGeometry(x(), y(), requiredWidth, requiredHeight);
     }
 
-#if 0 // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
+#if 0 // CALLIGRA_SHEETS_WIP_EDITOR_OVERHAUL
     const Cell cell(d->selection->activeSheet(), d->selection->marker());
     if ((cell.style().formatType()) == Format::Percentage) {
         if ((text.length() == 1) && text[0].isDigit()) {
@@ -176,7 +176,7 @@ void FoCellEditor::slotTextChanged()
             return;
         }
     }
-#endif // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
+#endif // CALLIGRA_SHEETS_WIP_EDITOR_OVERHAUL
 
     // update the external editor, but only if we have focus
     if (hasFocus()) {
@@ -211,7 +211,7 @@ void FoCellEditor::focusInEvent(QFocusEvent *event)
 {
     if (event->reason() != Qt::OtherFocusReason) {
         kDebug() << "induced by user";
-        m_cellTool->setLastEditorWithFocus(Calligra::Tables::CellToolBase::EmbeddedEditor);
+        m_cellTool->setLastEditorWithFocus(Calligra::Sheets::CellToolBase::EmbeddedEditor);
     }
     QTextEdit::focusInEvent(event);
 }

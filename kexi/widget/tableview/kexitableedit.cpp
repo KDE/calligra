@@ -23,8 +23,8 @@
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 
-#include <qpalette.h>
-#include <qpainter.h>
+#include <QPalette>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

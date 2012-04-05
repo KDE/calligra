@@ -30,7 +30,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-#include <qdir.h>
+#include <QDir>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)
