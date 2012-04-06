@@ -2635,7 +2635,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata, aFileName);
+        projectData = new KexiProjectData(cdata);
         deleteAfterOpen = true;
     }
     if (!projectData)
@@ -3941,7 +3941,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
                                           QDir::convertSeparators(cdata.fileName())));
             return;
         }
-        data = new KexiProjectData(cdata, cdata.fileName());
+        data = new KexiProjectData(cdata);
     } else {
         //sanity
         if (!(d->prj && d->prj->dbConnection()
