@@ -86,7 +86,8 @@ ExternalEditor::~ExternalEditor()
 
 QSize ExternalEditor::sizeHint() const
 {
-    return KTextEdit::sizeHint(); // document()->size().toSize();
+    return minimumSize();
+    //return KTextEdit::sizeHint(); // document()->size().toSize();
 }
 
 void ExternalEditor::setCellTool(CellToolBase* cellTool)
