@@ -511,21 +511,6 @@ QList<QWidget *> KarbonGradientTool::createOptionWidgets()
     return widgets;
 }
 
-QWidget * KarbonGradientTool::createOptionWidget()
-{
-    QWidget *optionWidget = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(optionWidget);
-    layout->setMargin(6);
-
-    m_gradientWidget = new KarbonGradientEditWidget(optionWidget);
-    m_gradientWidget->setGradient(*m_gradient);
-    layout->addWidget(m_gradientWidget);
-
-    connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()));
-
-    return optionWidget;
-}
-
 void KarbonGradientTool::gradientSelected(KoResource * resource)
 {
     if (! resource)

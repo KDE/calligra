@@ -32,6 +32,7 @@ class KexiFieldListModel::Private
 {
 public:
     Private();
+    ~Private();
     KexiDB::TableOrQuerySchema* schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
@@ -41,6 +42,11 @@ public:
 KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 {
 
+}
+
+KexiFieldListModel::Private::~Private()
+{
+    qDeleteAll(items);
 }
 
 KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
@@ -64,6 +70,8 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     if (!d->schema)
         return;
 
+    qDeleteAll(d->items);
+    d->items.clear();
     KexiFieldListModelItem *item = 0;
     KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
