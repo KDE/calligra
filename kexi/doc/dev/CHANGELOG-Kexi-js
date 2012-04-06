@@ -151,6 +151,14 @@ Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+~~~~~~~~~~~~~~~~ 2.4.1 ~~~~~~~~~~~~~~~~
+
+2012-04-06
+KexiDB
+*SQLite Driver
+**Fixed error when attempting to compact database opened from Open view
+TODO: port to Predicate
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
 2012-04-04
