@@ -79,7 +79,7 @@ private:
     bool activateItem();
 
 private:
-    Selection *m_selection;
+    QPointer<Selection> m_selection;
     KCompletion completionList;
 };
 

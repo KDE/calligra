@@ -52,6 +52,7 @@ public:
     ExternalEditor *editor;
     QGridLayout *layout;
     CellToolBase *cellTool;
+    QPointer<KoToolProxy> toolProxy;
 };
 
 CellEditorDocker::CellEditorDocker()
@@ -100,22 +101,26 @@ CellEditorDocker::~CellEditorDocker()
 void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 {
     kDebug() << "setting canvas to" << canvas;
-    if (d->canvas) {
-        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+    if (d->toolProxy) {
+        disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
     d->canvas = dynamic_cast<CanvasBase*>(canvas);
     if (d->canvas) {
         d->locationComboBox->setSelection(d->canvas->selection());
-        connect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+        d->toolProxy = d->canvas->toolProxy();
+        connect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
 }
 
 void CellEditorDocker::unsetCanvas()
 {
     kDebug() << "unsetting canvas";
-    if (d->canvas) {
-        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+    if (d->toolProxy) {
+        disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
+    d->canvas = 0;
+    d->toolProxy = 0;
+    d->locationComboBox->setSelection(0);
 }
 
 void CellEditorDocker::resizeEvent(QResizeEvent *event)
