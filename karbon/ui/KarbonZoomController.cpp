@@ -123,19 +123,6 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         d->action->setEffectiveZoom(zoom);
     }
 
-    // before changing the zoom get the actual document size, document origin
-    // and the current preferred center point
-    QPoint preferredCenter = d->canvasController->preferredCenter();
-    QPointF documentOrigin = d->canvas->documentOrigin();
-    QRectF documentRect = d->canvas->documentViewRect();
-
-    // now calculate the preferred center in document coordinates
-    QPointF docCenter = d->zoomHandler->viewToDocument(preferredCenter - documentOrigin);
-    KoSelection * selection = d->canvas->shapeManager()->selection();
-    if( selection->count()) {
-        docCenter = selection->boundingRect().center();
-    }
-
     d->zoomHandler->setZoom(zoom);
 
     // Tell the canvasController that the zoom has changed
@@ -148,8 +135,14 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
     // Finally ask the canvasController to recenter
     if (mode == KoZoomMode::ZOOM_CONSTANT) {
-        QPointF center = d->canvas->documentOrigin() + d->zoomHandler->documentToView(docCenter);
-        d->canvasController->setPreferredCenter(center.toPoint());
+        KoSelection * selection = d->canvas->shapeManager()->selection();
+        if (selection->count()) {
+            QPointF docCenter = selection->boundingRect().center();
+            QPointF center = d->canvas->documentOrigin() + d->zoomHandler->documentToView(docCenter);
+            d->canvasController->setPreferredCenter(center.toPoint());
+        } else {
+            d->canvasController->recenterPreferred();
+        }
     } else {
         // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
         QRectF pageRect(-documentRect.topLeft(), d->pageSize);
