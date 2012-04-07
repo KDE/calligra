@@ -7,7 +7,7 @@ Python script to import task data from a spreadsheet
 (C)2011 Dag Andersen <danders@get2net.dk>
 Licensed under LGPL v2.1+higher.
 
-Requires Calligra Tables
+Requires Calligra Sheets
 
 The data in the spreadsheet must be organized as follows:
 
@@ -76,7 +76,7 @@ class TaskImporter:
 
         Tables = Kross.module("kspread")
         if not Tables:
-            raise Exception, T.i18n("Could not start Tables")
+            raise Exception, T.i18n("Could not start Calligra Sheets")
         
         if not Tables.openUrl(filename):
             self.forms.showMessageBox("Sorry", T.i18n("Error"), T.i18n("Could not open document: %1", [filename]))

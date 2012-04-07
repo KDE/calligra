@@ -348,7 +348,7 @@ public:
 
     //! \return a i18n'd type group name for this field
     inline QString typeGroupName() const {
-        return Field::typeGroupName(type());
+        return Field::typeGroupName(typeGroup());
     }
 
     //! \return a type string for this field,
@@ -360,7 +360,7 @@ public:
     //! \return a type group string for this field,
     //! for example "Integer" string for Field::IntegerGroup.
     inline QString typeGroupString() const {
-        return Field::typeGroupString(type());
+        return Field::typeGroupString(typeGroup());
     }
 
     /*! \return (optional) subtype for this field.

@@ -132,7 +132,7 @@ using namespace Swinder;
 
 /// This represents the internal chart data cache aka the "local-table" that
 /// is embedded into the charts content.xml and not fetched from the application
-/// embedding the chart (e.g. from a Calligra Tables sheet).
+/// embedding the chart (e.g. from a Calligra Sheets sheet).
 class ChartSubStreamHandler::InternalDataCache
 {
 public:

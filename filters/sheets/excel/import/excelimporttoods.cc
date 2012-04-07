@@ -1177,7 +1177,7 @@ static QString convertDate(double serialNo, const QString& valueFormat)
     QDateTime dt(QDate(1899, 12, 30));
     dt = dt.addMSecs((qint64)(serialNo * 86400 * 1000)); // TODO: we probably need double precision here
 
-    //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with Calligra Tables but probably not with other customers...
+    //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with Calligra Sheets but probably not with other customers...
     //return dd.toString("yyyy-MM-dd");
     return dt.toString("yyyy-MM-ddThh:mm:ss");
 }

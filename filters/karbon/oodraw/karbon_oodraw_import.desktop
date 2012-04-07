@@ -2,8 +2,10 @@
 Type=Service
 Name=OpenOffice.org Draw Import Filter for Karbon
 Name[ca]=Filtre d'importació OpenOffice.org Draw per al Karbon
+Name[cs]=Importní filtr OpenOffice.org Draw pro Karbon
 Name[da]=OpenOffice.org Draw importfilter for Karbon
 Name[de]=Karbon OpenOffice.org-Draw-Importfilter
+Name[el]=Φίλτρο εισαγωγής OpenOffice.org Draw για το Karbon
 Name[es]=Filtro de Karbon de importación de OpenOffice.org Draw
 Name[fi]=OpenOffice.org-piirrostuontisuodin Karboniin
 Name[hu]=OpenOffice.org Draw importszűrő a Karbonhoz
