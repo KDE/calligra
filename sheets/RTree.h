@@ -412,7 +412,7 @@ template<typename T>
 void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
 {
     // clear current tree
-    KoRTree<T>::clear();
+    clear();
 
     // make rect->data mapping
     typedef QPair<QRegion, T> DataRegion;
