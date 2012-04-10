@@ -156,17 +156,14 @@ QWidget *PrintingDialog::createPageLayoutWidget() const
     widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
 
     KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
     w->showPageSpread( false );
-    w->layout()->setMargin( 0 );
-    lay->addWidget( w );
+    lay->addWidget( w, 1 );
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
     prev->setPageLayout( m_view->pageLayout() );
-    lay->addWidget( prev );
+    lay->addWidget( prev, 1 );
 
     connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
 

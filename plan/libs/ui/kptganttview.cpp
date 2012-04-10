@@ -43,7 +43,6 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
-#include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
 

@@ -120,6 +120,16 @@ include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
+set(SHOULD_BUILD_TEXTSHAPE TRUE)
+if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+    if (NOT IHAVEPATCHEDQT)
+        set(SHOULD_BUILD_WORDS FALSE)
+        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
+    endif (NOT IHAVEPATCHEDQT)
+endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
@@ -175,9 +185,9 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ##
 ## Look for OpenGL
 ##
-
-macro_optional_find_package(OpenGL)
 set(HAVE_OPENGL 0)
+if (NOT WIN32)
+macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
     message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
@@ -192,6 +202,7 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs
@@ -204,7 +215,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -473,7 +484,7 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2, boost
+### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)

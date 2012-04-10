@@ -315,6 +315,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     d->dockWidgetMenu->setVisible(false);
+    d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
@@ -1354,7 +1355,6 @@ public:
 
         m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
         m_pageLayoutWidget->showUnitchooser(false);
-        m_pageLayoutWidget->layout()->setMargin(0);
         KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
         optionsItem->setIcon(KIcon("configure"));
         addPage(optionsItem);
@@ -1618,9 +1618,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-    // important so dockermanager can move toolbars back
-    emit beforeHandlingToolBars();
-
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1686,8 +1683,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
-    // important so dockermanager can move toolbars where wanted
-    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 

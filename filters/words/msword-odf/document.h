@@ -275,7 +275,7 @@ private:
     LEInputStream* m_datastm;
     POLE::Stream& m_tblstm_pole;
 
-    //A stack for backgroud-colors, which represets a background color context
+    //A stack for background-colors, which represets a background color context
     //for automatic colors.
     QStack<QString> m_bgColors;
 

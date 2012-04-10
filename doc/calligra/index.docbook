@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
- <!ENTITY tables "<application>Calligra Tables</application>">
+ <!ENTITY sheets "<application>Calligra Sheets</application>">
  <!ENTITY words "<application>Calligra Words</application>">
  <!ENTITY stage "<application>Calligra Stage</application>">
  <!ENTITY flow "<application>Calligra Flow</application>">
@@ -61,7 +61,7 @@ for updated versions of this document.</para></important>
 
 <itemizedlist>
 <listitem><para>&words; (a frames-based wordprocessor)</para></listitem>
-<listitem><para>&tables; (a spreadsheet application)</para></listitem> 
+<listitem><para>&sheets; (a spreadsheet application)</para></listitem> 
 <listitem><para>&stage; (screen and slide presentations)</para></listitem>
 <listitem><para>&flow; (a flowchart application)</para></listitem>
 <listitem><para>&karbon; (a vector drawing application)</para></listitem>
@@ -74,7 +74,7 @@ for updated versions of this document.</para></important>
 Because these components use Flake technology, &calligra;
 components are designed to work very well with each other. Many &calligra;
 component can be embedded in another &calligra; document. For instance, you
-can insert a spreadsheet which you created in &tables; directly into a &words;
+can insert a spreadsheet which you created in &sheets; directly into a &words;
 document. In this way, complex, compound documents can be created using
 &calligra;.
 </para>

@@ -58,35 +58,58 @@ private:
 
 enum XFigArrowHeadType
 {
-    XFigArrowHeadStick, ///>  -->
-    XFigArrowHeadClosedTriangle, ///>  --|>
-    XFigArrowHeadClosedIndentedButt, ///>  -->>
-    XFigArrowHeadClosedPointedButt ///> --<>
+    XFigArrowHeadStick = 0, ///>  -->
+    XFigArrowHeadHollowTriangle, ///>  --|>
+    XFigArrowHeadFilledTriangle, ///>  --|>
+    XFigArrowHeadHollowConcaveSpear, ///>  --}>
+    XFigArrowHeadFilledConcaveSpear, ///>  --}>
+    XFigArrowHeadHollowConvexSpear, ///> --{>
+    XFigArrowHeadFilledConvexSpear, ///> --{>
+    XFigArrowHeadHollowDiamond, ///> --<>
+    XFigArrowHeadFilledDiamond, ///> --<>
+    XFigArrowHeadHollowCircle, ///> --()
+    XFigArrowHeadFilledCircle, ///> --()
+    XFigArrowHeadHollowHalfCircle, ///> --(|
+    XFigArrowHeadFilledHalfCircle, ///> --(|
+    XFigArrowHeadHollowSquare, ///> --[]
+    XFigArrowHeadFilledSquare, ///> --[]
+    XFigArrowHeadHollowReverseTriangle, ///> --<|
+    XFigArrowHeadFilledReverseTriangle, ///> --<|
+    XFigArrowHeadTopHalfFilledConcaveSpear,
+    XFigArrowHeadBottomHalfFilledConcaveSpear,
+    XFigArrowHeadHollowTopHalfTriangle,
+    XFigArrowHeadFilledTopHalfTriangle,
+    XFigArrowHeadHollowTopHalfConcaveSpear,
+    XFigArrowHeadFilledTopHalfConcaveSpear,
+    XFigArrowHeadHollowTopHalfConvexSpear,
+    XFigArrowHeadFilledTopHalfConvexSpear,
+    XFigArrowHeadWye, ///> --<
+    XFigArrowHeadBar, ///> --|
+    XFigArrowHeadTwoProngFork, ///> --[
+    XFigArrowHeadReverseTwoProngFork, ///> --]
+    XFigArrowHeadTypeCount
 };
 
 class XFigArrowHead
 {
 public:
     XFigArrowHead()
-    : m_Type(XFigArrowHeadStick), m_IsHollow(false), m_Thickness(0.0), m_Width(0.0), m_Height(0.0)
+    : m_Type(XFigArrowHeadStick), m_Thickness(0.0), m_Width(0.0), m_Length(0.0)
     {}
 
     void setType(XFigArrowHeadType type) { m_Type = type; }
-    void setIsHollow(bool isHollow) { m_IsHollow = isHollow; }
     void setThickness(double thickness) { m_Thickness = thickness; }
-    void setSize(double width, double height) { m_Width = width; m_Height = height; }
+    void setSize(double width, double length) { m_Width = width; m_Length = length; }
 
     XFigArrowHeadType type() const { return m_Type; }
-    bool isHollow() const { return m_IsHollow; }
     double thickness() const { return m_Thickness; }
     double width() const { return m_Width; }
-    double height() const { return m_Height; }
+    double length() const { return m_Length; }
 private:
     XFigArrowHeadType m_Type;
-    bool m_IsHollow;
     double m_Thickness;
     double m_Width;
-    double m_Height;
+    double m_Length;
 };
 
 class XFigAbstractObject
@@ -185,6 +208,26 @@ private:
     qint32 m_ColorId;
 };
 
+class XFigLineEndable
+{
+protected:
+    XFigLineEndable() : m_ForwardArrow(0), m_BackwardArrow(0), m_CapType(XFigCapButt) {}
+public:
+    ~XFigLineEndable() { delete m_ForwardArrow; delete m_BackwardArrow; }
+
+    void setForwardArrow( XFigArrowHead* forwardArrow ) { delete m_ForwardArrow; m_ForwardArrow = forwardArrow; }
+    void setBackwardArrow( XFigArrowHead* backwardArrow ) { delete m_BackwardArrow; m_BackwardArrow = backwardArrow; }
+    void setCapType(XFigCapType capType) { m_CapType = capType; }
+
+    const XFigArrowHead* forwardArrow() const { return m_ForwardArrow; }
+    const XFigArrowHead* backwardArrow() const { return m_BackwardArrow; }
+    XFigCapType capType() const { return m_CapType; }
+private:
+    XFigArrowHead* m_ForwardArrow;
+    XFigArrowHead* m_BackwardArrow;
+    XFigCapType m_CapType;
+};
+
 class XFigEllipseObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable
 {
 public:
@@ -231,29 +274,18 @@ private:
     XFigJoinType m_JoinType;
 };
 
-class XFigPolylineObject : public XFigAbstractPolylineObject
+class XFigPolylineObject : public XFigAbstractPolylineObject, public XFigLineEndable
 {
 public:
     XFigPolylineObject()
-    : XFigAbstractPolylineObject(PolylineId), m_CapType(XFigCapButt), m_ForwardArrow(0), m_BackwardArrow(0)
+    : XFigAbstractPolylineObject(PolylineId)
     {}
-    ~XFigPolylineObject() { delete m_ForwardArrow; delete m_BackwardArrow; }
 
     virtual void setPoints(const QVector<XFigPoint>& points) { m_Points = points; }
 
-    void setCapType(XFigCapType capType) { m_CapType = capType; }
-    void setForwardArrow( XFigArrowHead* forwardArrow ) { delete m_ForwardArrow; m_ForwardArrow = forwardArrow; }
-    void setBackwardArrow( XFigArrowHead* backwardArrow ) { delete m_BackwardArrow; m_BackwardArrow = backwardArrow; }
-
     const QVector<XFigPoint>& points() const { return m_Points; }
-    XFigCapType capType() const { return m_CapType; }
-    const XFigArrowHead* forwardArrow() const { return m_ForwardArrow; }
-    const XFigArrowHead* backwardArrow() const { return m_BackwardArrow; }
 private:
     QVector<XFigPoint> m_Points;
-    XFigCapType m_CapType;
-    XFigArrowHead* m_ForwardArrow;
-    XFigArrowHead* m_BackwardArrow;
 };
 
 class XFigPolygonObject : public XFigAbstractPolylineObject
@@ -324,16 +356,33 @@ private:
 //     QVector<XFigPathPoint> mPathPoints;
 };
 
-class XFigArcObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable
+class XFigArcObject : public XFigAbstractGraphObject, public XFigFillable, public XFigLineable, public XFigLineEndable
 {
 public:
-    XFigArcObject() : XFigAbstractGraphObject(ArcId) {}
+    enum Subtype { OpenEnded, PieWedgeClosed };
+    enum Direction { Clockwise, CounterClockwise };
 
-//     void addPathPoint( const XFigPathPoint& pathPoint ) { mPathPoints.append(pathPoint); }
+    XFigArcObject() : XFigAbstractGraphObject(ArcId), m_Subtype(OpenEnded), m_Direction(Clockwise) {}
 
-//     const QVector<XFigPathPoint>& pathPoints() const { return mPathPoints; }
+    void setSubtype( Subtype subtype ) { m_Subtype = subtype; }
+    void setDirection( Direction direction ) { m_Direction = direction; }
+    void setCenterPoint( XFigPoint centerPoint ) { m_CenterPoint = centerPoint; }
+    void setPoints( XFigPoint point1, XFigPoint point2, XFigPoint point3 )
+    { m_Point1 = point1; m_Point2 = point2; m_Point3 = point3; }
+
+    Subtype subtype() const { return m_Subtype; }
+    Direction direction() const { return m_Direction; }
+    XFigPoint centerPoint() const { return m_CenterPoint; }
+    XFigPoint point1() const { return m_Point1; }
+    XFigPoint point2() const { return m_Point2; }
+    XFigPoint point3() const { return m_Point3; }
 private:
-//     QVector<XFigPathPoint> mPathPoints;
+    Subtype m_Subtype;
+    Direction m_Direction;
+    XFigPoint m_CenterPoint;
+    XFigPoint m_Point1;
+    XFigPoint m_Point2;
+    XFigPoint m_Point3;
 };
 
 

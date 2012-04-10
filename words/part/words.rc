@@ -35,7 +35,10 @@
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
   <Action name="view_tableborders"/>
+  <Separator/>
+  <Action name="view_toggledockers"/>
   <Action name="show_docstruct"/>
+  <Separator/>
   <Action name="show_ruler"/>
   <Action name="view_show_guides"/>
   <Action name="view_grid"/>

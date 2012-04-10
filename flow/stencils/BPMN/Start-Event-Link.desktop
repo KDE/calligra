@@ -2,6 +2,7 @@
 Name=Start-Event-Link
 Name[ca]=Inicia-Esdeveniment-Enllaç
 Name[ca@valencia]=Inicia-Esdeveniment-Enllaç
+Name[el]=Σύνδεσμος-γεγονότος-εκκίνησης
 Name[es]=Enlace al evento inicial
 Name[et]=Algussündmuse link
 Name[it]=Evento-iniziale-Collegamento
@@ -15,4 +16,5 @@ Name[ru]=Начальное событие - связь
 Name[sv]=Starthändelse-länk
 Name[uk]=Посилання на початкову подію
 Name[x-test]=xxStart-Event-Linkxx
+Name[zh_CN]=开始-事件-连接
 Name[zh_TW]=開始─事件─連結

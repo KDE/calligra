@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -125,23 +125,33 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
+    //! Used when read only flag is true
+    QString originalText() const { return m_originalText; }
+
+    //! Used when read only flag is true
+    int originalCursorPosition() const;
+
 protected slots:
     void slotTextChanged(const QString&);
 
-    //! Used to protecte m_readWriteValidator against after validator is destroyed
+    void slotCursorPositionChanged(int oldPos, int newPos);
+
+    //! Used to protect m_readWriteValidator against after validator is destroyed
     void slotReadWriteValidatorDestroyed(QObject*);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     virtual bool event(QEvent *);
-
-    virtual QMenu * createPopupMenu();
+    virtual void contextMenuEvent(QContextMenuEvent *e);
+    virtual void changeEvent(QEvent *e);
 
     //! Implemented for KexiSubwidgetInterface
     virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
     void updateTextForDataSource();
+
+    void updatePalette();
 
     //! Used to format text
     KexiTextFormatter m_textFormatter;
@@ -158,10 +168,15 @@ protected:
 
     //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
     //! is still false.
-    bool m_internalReadOnly : 1;
+    bool m_internalReadOnly;
 
     //! Used in slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled;
+
+    QString m_originalText;
+    int m_cursorPosition;
+    QPalette m_originalPalette; //!< Used for read-only case
+    bool m_paletteChangeEvent_enabled;
 };
 
 #endif

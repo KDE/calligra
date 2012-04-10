@@ -93,8 +93,8 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
         }
         
         m_document = newDoc;
-        widgetDocker.semanticView->setDocumentRdf(m_document->documentRdf());
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(KoRdfSemanticItem*)),
+        widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
+        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(KoRdfSemanticItem*)),
                 this, SLOT(semanticObjectAdded(KoRdfSemanticItem*)));
         connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(KoRdfSemanticItem*)),
                 this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
@@ -168,7 +168,7 @@ void KWRdfDocker::updateData()
 
     // TODO try to get rid of 'editor' here by remembering the position in the resourceChanged()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    KoDocumentRdf *rdf = m_document->documentRdf();
+    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf());
     if (editor && rdf)
     {
         //kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
