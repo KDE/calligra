@@ -2,6 +2,7 @@
 Type=Application
 Name=Calligra Flow
 Name[ca]=Flux del Calligra
+Name[ca@valencia]=Flux del Calligra
 Name[cs]=Calligra Flow
 Name[da]=Calligra Flow
 Name[de]=Calligra Flow
@@ -29,6 +30,7 @@ Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[bg]=Редактиране на блоксхеми и диаграми
 GenericName[ca]=Editor de diagrames de fluxos
+GenericName[ca@valencia]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů
 GenericName[cy]=Golygu Siartiau Llif & Diagram
 GenericName[da]=Flydediagrammer & diagramredigering

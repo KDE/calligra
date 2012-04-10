@@ -2,9 +2,11 @@
 Name=Water Level
 Name[bg]=Ниво на водата
 Name[ca]=Nivell d'aigua
+Name[ca@valencia]=Nivell d'aigua
 Name[cs]=Vodní hladina:
 Name[de]=Wasserspiegel
 Name[el]=Επίπεδο ύδατος
+Name[es]=Nivel del agua
 Name[et]=Veetase
 Name[hu]=Vízszint
 Name[it]=Livello dell'acqua

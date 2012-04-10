@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shape Report Plugin
 Name[ca]=Connector d'informes de forma
+Name[ca@valencia]=Connector d'informes de forma
 Name[de]=Objektberichtmodul
 Name[el]=Πρόσθετο Shape Report
 Name[es]=Complemento de informe de formas
@@ -19,6 +20,7 @@ Name[x-test]=xxShape Report Pluginxx
 Name[zh_TW]=元件報告外掛程式
 Comment=KoReport Shape Plugin
 Comment[ca]=Connector de forma KoReport
+Comment[ca@valencia]=Connector de forma KoReport
 Comment[da]=Form-plugin til KoReport
 Comment[de]=KoReport-Objektmodul
 Comment[el]=Πρόσθετο KoReport Shape

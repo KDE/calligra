@@ -2,6 +2,7 @@
 Name=Calligra Chart Component
 Name[bg]=Компонент за диаграми в Calligra
 Name[ca]=Component de diagrames del Calligra
+Name[ca@valencia]=Component de diagrames del Calligra
 Name[cs]=Komponenta Calligra pro grafy
 Name[da]=Calligra-komponent til diagrammer
 Name[de]=Calligra-Komponente für Diagramme
@@ -35,6 +36,7 @@ GenericName[af]=Kaart
 GenericName[bg]=Диаграма
 GenericName[br]=Treser grafoù
 GenericName[ca]=Diagrames
+GenericName[ca@valencia]=Diagrames
 GenericName[cs]=Graf
 GenericName[cy]=Siart
 GenericName[da]=Diagram

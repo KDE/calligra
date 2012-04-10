@@ -5,6 +5,7 @@ X-KDE-Library=plantjscheduler
 
 Name=TJ Scheduler
 Name[ca]=Planificador TJ
+Name[ca@valencia]=Planificador TJ
 Name[cs]=Plánovač TJ
 Name[da]=TJ-skemalægning
 Name[el]=Χρονοπρογραμματιστής TJ
@@ -25,6 +26,7 @@ Name[zh_CN]=TJ 调度器
 Name[zh_TW]=TJ 排程器
 Comment=The TaskJuggler scheduler
 Comment[ca]=El planificador TakJuggler
+Comment[ca@valencia]=El planificador TakJuggler
 Comment[cs]=Plánovač TaskJuggler
 Comment[da]=TaskJugglers skemalægning
 Comment[el]=Ο χρονοπρογραμματιστής TaskJuggler

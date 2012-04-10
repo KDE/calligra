@@ -4,6 +4,7 @@ URL=.source/Invoice.kst
 Name=Invoice
 Name[bg]=Фактура
 Name[ca]=Factura
+Name[ca@valencia]=Factura
 Name[cs]=Faktura
 Name[cy]=Derbyneb
 Name[da]=Faktura

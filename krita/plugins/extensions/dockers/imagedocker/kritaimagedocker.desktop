@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Image Docker
 Name[ca]=Amarradors d'imatges
+Name[ca@valencia]=Amarradors d'imatges
 Name[cs]=Dok obrázků
 Name[da]=Billed-dokker
 Name[el]=Εργαλείο προσάρτησης εικόνων
@@ -21,6 +22,7 @@ Name[x-test]=xxImage Dockerxx
 Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
 Comment[ca]=Amarrador per a imatges de referència
+Comment[ca@valencia]=Amarrador per a imatges de referència
 Comment[cs]=Dok pro referenční obrázky
 Comment[da]=Dokker til referencebilleder
 Comment[el]=Προσάρτηση για εικόνες παραπομπής

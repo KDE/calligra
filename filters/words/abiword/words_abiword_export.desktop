@@ -3,6 +3,7 @@ Type=Service
 Name=Words AbiWord Export Filter
 Name[bg]=Филтър за изнасяне от Words в AbiWord
 Name[ca]=Filtre d'exportació AbiWord per al Words
+Name[ca@valencia]=Filtre d'exportació AbiWord per al Words
 Name[cs]=Exportní filtr AbiWord pro Words
 Name[da]=AbiWord-eksportfilter til Words
 Name[de]=Words AbiWord-Exportfilter

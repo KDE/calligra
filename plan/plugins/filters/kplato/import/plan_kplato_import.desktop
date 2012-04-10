@@ -3,6 +3,7 @@ Type=Service
 Name=Plan KPlato Import Filter
 Name[bg]=Филтър за внасяне от KPlato в Plan
 Name[ca]=Filtre d'importació KPlato per al Plan
+Name[ca@valencia]=Filtre d'importació KPlato per al Plan
 Name[da]=KPlato-importfilter til Plan
 Name[de]=KPlato-Importfilter für Calligra Plan
 Name[el]=Φίλτρο εισαγωγής Plan KPlato
