@@ -33,6 +33,7 @@
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <QAbstractEventDispatcher>
+#include <kmimetype.h>
 #include <kdemacros.h>
 
 extern "C"
