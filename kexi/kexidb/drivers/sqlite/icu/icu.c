@@ -28,6 +28,8 @@
 **     provide case-independent matching.
 */
 
+#include "sqliteicu.h"
+
 #if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU)
 
 /* Include ICU headers */
@@ -491,7 +493,7 @@ int sqlite3IcuInit(sqlite3 *db){
 int sqlite3_extension_init(
   sqlite3 *db, 
   char **pzErrMsg,
-  const sqlite3_api_routines *pApi
+  const struct sqlite3_api_routines *pApi
 ){
   SQLITE_EXTENSION_INIT2(pApi)
   return sqlite3IcuInit(db);

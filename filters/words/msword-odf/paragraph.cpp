@@ -23,39 +23,8 @@
 
 #include "paragraph.h"
 #include "conversion.h"
-
+#include "msdoc.h"
 #include <kdebug.h>
-
-//specifies the type of alignment which is applied to the text that is entered
-//at the tab stop
-enum TabJC {
-    jcLeft,      //Left justification.
-    jcCenter,    //Center justification.
-    jcRight,     //Right justification.
-    jcDecimal,   //[1]
-    jcBar,       //Specifies that the current tab is a bar tab.
-    jcList = 0x6 //Specifies that the current tab is a list tab.
-};
-
-//specifies the characters that are used to fill in the space which is created
-//by a tab that ends at a custom tab stop.
-enum TabLC {
-    tlcNone,         //No leader.
-    tlcDot,          //Dot leader.
-    tlcHyphen,       //Dashed leader.
-    tlcUnderscore,   //Underscore leader.
-    tlcHeavy,        //Same as tlcUnderscore.
-    tlcMiddleDot,    //Centered dot leader.
-    tlcDefault = 0x7 //Same as tlcNone.
-};
-
-//[1] - Specifies that the current tab stop results in a location in the
-//document at which all following text is aligned around the first decimal
-//separator in the following text runs. If there is no decimal separator, text
-//is aligned around the implicit decimal separator after the last digit of the
-//first numeric value that appears in the following text. All text runs before
-//the first decimal character appear before the tab stop; all text runs after
-//it appear after the tab stop location.
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
@@ -793,13 +762,12 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-    //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
+    //TODO: Compare with the parent style to avoid duplicity.
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
     // defined for paragraph.  Must be in <0,64>.
-    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph && paragraph->isHeading()))) {
-        kDebug(30513) << "processing tab stops";
-        //looks like we need to write these out with an xmlwriter
+    if (pap.itbdMac) {
+
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
@@ -814,7 +782,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
             tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
 
-            //td.tbd.jc = justification code, default "left" (can be ignored)
+            //td.tbd.jc = justification code
             switch (td.tbd.jc) {
             case jcCenter:
                 tmpWriter.addAttribute("style:type", "center");
@@ -830,7 +798,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
             default:
-//                 tmpWriter.addAttribute("style:type", "left");
+                //ODF: The default value for this attribute is left.
                 break;
             }
             //td.tbd.tlc = tab leader code, default no leader (can be ignored)
@@ -847,10 +815,13 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             case tlcHeavy:
                 leader = QChar('_');
                 break;
+            case tlcNone:
             default:
+                //ODF: The default value for this attribute is “ “ (U+0020, SPACE).
                 break;
             }
-            if (!leader.isNull()) {
+            //The value MUST be ignored if jc is equal jcBar.
+            if (td.tbd.jc != jcBar) {
                 tmpWriter.addAttribute("style:leader-text", leader);
             }
             tmpWriter.endElement();//style:tab-stop

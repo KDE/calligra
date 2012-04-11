@@ -1,6 +1,11 @@
 
 Calligra Plan current:
 
+* Add mpxj based filter capable of importing data from
+  Planner, PrimaVera and various MS Project file formats,
+
+Release 2.4:
+------------
 * Fix bug 292931: Crash when scheduling task of type Duration.
 
 * Fix crash in reports due incorrect use of KoXml to QDom conversion

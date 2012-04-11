@@ -30,6 +30,7 @@
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include <kptdebug.h>
 
 #include <KoXmlReader.h>
 
@@ -37,9 +38,7 @@
 #include <QBrush>
 //Added by qt3to4:
 #include <QList>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {

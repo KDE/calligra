@@ -38,7 +38,7 @@
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 
-// Calligra Tables
+// Calligra Sheets
 #include <sheets/ApplicationSettings.h>
 #include <sheets/Cell.h>
 #include <sheets/part/Doc.h>

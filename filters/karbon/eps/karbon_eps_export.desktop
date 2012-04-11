@@ -2,8 +2,13 @@
 Type=Service
 Name=Karbon EPS Export Filter
 Name[ca]=Filtre d'exportació EPS per al Karbon
+Name[cs]=Exportní filtr do formátu EPS pro Karbon
 Name[da]=Karbon EPS-eksportfilter
 Name[de]=Karbon EPS-Exportfilter
+Name[el]=Φίλτρο εξαγωγής του Karbon EPS
+Name[es]=Filtro de Karbon de exportación a EPS
+Name[et]=Karboni EPS-i ekspordifilter
+Name[fi]=EPS-vientisuodin Karboniin
 Name[hu]=Karbon EPS exportszűrő
 Name[it]=Filtro di esportazione EPS per Karbon
 Name[kk]=Karbon -> EPS экспорт сүзгісі

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
@@ -36,9 +37,7 @@
 #include <klocale.h>
 #include <ktimezone.h>
 #include <ksystemtimezone.h>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {

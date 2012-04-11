@@ -163,7 +163,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
                 this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
@@ -193,12 +193,13 @@ QWidget *KWView::canvas() const
 void KWView::updateReadWrite(bool readWrite)
 {
     m_actionFormatFrameSet->setEnabled(readWrite);
-    m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
     m_actionAddBookmark->setEnabled(readWrite);
-    QAction *action = actionCollection()->action("insert_variable");
+    QAction *action = actionCollection()->action("insert_framebreak");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
@@ -231,14 +232,6 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
-
-    m_actionInsertFrameBreak  = new KAction(QString(), this);
-    actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak);
-    m_actionInsertFrameBreak->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    m_actionInsertFrameBreak->setText(i18n("Page Break"));
-    m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
-    m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
     m_actionViewHeader = new KAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
@@ -310,7 +303,7 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
         actionCollection()->addAction("insert_semanticobject_ref", createRef);
         KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
@@ -539,18 +532,6 @@ void KWView::createTemplate()
     d.remove(fileName);
 }
 
-void KWView::insertFrameBreak()
-{
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    if (editor) {
-        // this means we have the text tool selected right now.
-        editor->insertFrameBreak();
-    } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
-        KoTextDocument doc(m_document->mainFrameSet()->document());
-        doc.textEditor()->insertFrameBreak();
-    }
-}
-
 void KWView::addBookmark()
 {
     QString name, suggestedName;
@@ -727,7 +708,7 @@ void KWView::pageSettingsDialogFinished()
 void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         KoSemanticStylesheetsEditor *dia = new KoSemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory

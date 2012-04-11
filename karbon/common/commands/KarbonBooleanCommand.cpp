@@ -101,7 +101,7 @@ void KarbonBooleanCommand::redo()
         pr = transformationA.inverted().map(pr);
         // create a path shape from the resulting path in local coordinates
         d->resultingPath = KoPathShape::createShapeFromPainterPath(pr);
-        d->resultingPath->setBorder(d->pathA->border());
+        d->resultingPath->setStroke(d->pathA->stroke());
         d->resultingPath->setBackground(d->pathA->background());
         d->resultingPath->setShapeId(d->pathA->shapeId());
         // the created shape has a transformation applied so we have to

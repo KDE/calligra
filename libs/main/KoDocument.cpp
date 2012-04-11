@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -371,7 +372,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
         KConfigGroup cfgGrp(componentData().config(), "RDF");
         bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
         if (rdfEnabled) {
-            d->docRdf  = new KoDocumentRdf(this);
+            setDocumentRdf(new KoDocumentRdf(this));
         }
     }
 #endif
@@ -812,10 +813,12 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
-    return d->docRdf;
+    if (d->docRdf && d->docRdf->model()) {
+        return d->docRdf;
+    }
 #endif
     return 0;
 }
@@ -823,10 +826,11 @@ KoDocumentRdf *KoDocument::documentRdf() const
 void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
 {
     delete d->docRdf;
-#ifdef SHOULD_BUILD_RDF
-    d->docRdf = rdfDocument;
-#else
     d->docRdf = 0;
+#ifdef SHOULD_BUILD_RDF
+    if (rdfDocument->model()) {
+        d->docRdf = rdfDocument;
+    }
 #endif
 }
 
