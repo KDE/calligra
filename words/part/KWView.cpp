@@ -163,7 +163,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
                 this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
@@ -303,7 +303,7 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
         actionCollection()->addAction("insert_semanticobject_ref", createRef);
         KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
@@ -708,7 +708,7 @@ void KWView::pageSettingsDialogFinished()
 void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         KoSemanticStylesheetsEditor *dia = new KoSemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory

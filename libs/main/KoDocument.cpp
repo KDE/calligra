@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -812,7 +813,7 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
     if (d->docRdf && d->docRdf->model()) {

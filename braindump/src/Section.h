@@ -21,6 +21,7 @@
 #define _SECTION_H_
 
 #include <QMetaType>
+#include <QString>
 #include "SectionGroup.h"
 
 class Layout;
