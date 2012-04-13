@@ -1247,15 +1247,19 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             const QPointF bottomRight = shape->boundingRect().bottomRight();
             qreal endX = 0.0;
             qreal endY = 0.0;
-            const int col = sheet()->leftColumn(bottomRight.x(), endX);
-            const int row = sheet()->topRow(bottomRight.y(), endY);
-            shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), col, row).name());
-            shape->setAdditionalAttribute("table:end-x", QString::number(bottomRight.x() - endX));
-            shape->setAdditionalAttribute("table:end-y", QString::number(bottomRight.y() - endY));
-            shapes[i]->saveOdf(tableContext.shapeContext);
+            const int scol = sheet()->leftColumn(bottomRight.x(), endX);
+            const int srow = sheet()->topRow(bottomRight.y(), endY);
+            qreal offsetX = sheet()->columnPosition(column);
+            qreal offsetY = sheet()->rowPosition(row);
+            tableContext.shapeContext.addShapeOffset(shape, QTransform::fromTranslate(-offsetX, -offsetY));
+            shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), scol, srow).name());
+            shape->setAdditionalAttribute("table:end-x", QString::number(bottomRight.x() - endX) + "pt");
+            shape->setAdditionalAttribute("table:end-y", QString::number(bottomRight.y() - endY) + "pt");
+            shape->saveOdf(tableContext.shapeContext);
             shape->removeAdditionalAttribute("table:end-cell-address");
             shape->removeAdditionalAttribute("table:end-x");
             shape->removeAdditionalAttribute("table:end-y");
+            tableContext.shapeContext.removeShapeOffset(shape);
         }
     }
 

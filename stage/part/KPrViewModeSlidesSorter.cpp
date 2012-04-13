@@ -57,6 +57,7 @@
 //KDE Headers
 #include <klocale.h>
 #include <KDebug>
+#include <kicon.h>
 #include <kconfiggroup.h>
 #include <KIconLoader>
 #include <KGlobalSettings>

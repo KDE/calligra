@@ -24,7 +24,7 @@
 
 #include "FoExternalEditor.h"
 
-// Tables
+// Calligra Sheets
 #include <sheets/ui/CellToolBase.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>

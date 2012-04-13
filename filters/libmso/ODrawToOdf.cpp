@@ -622,10 +622,10 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     // if it is empty use the colors defined inside fillColor() and fillBackColor
 
     if (ds.fillShadeColors()) {
-        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
-        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
-        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
-        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
+        style.addAttribute("svg:x1", QString("%1%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1%").arg(y2));
 
         IMsoArray a = ds.fillShadeColors_complex();
 
@@ -677,10 +677,10 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             }
         }
 
-        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
-        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
-        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
-        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
+        style.addAttribute("svg:x1", QString("%1%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1%").arg(y2));
 
         elementWriter.startElement("svg:stop");
         elementWriter.addAttribute("svg:offset", "0");

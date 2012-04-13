@@ -877,7 +877,7 @@ void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
         case InQuotes:
             if (data->unicode() == '\'') {
                 // an escaped apostrophe?
-                // As long as Tables does not support fixed sheets eat the dollar sign.
+                // As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
                 const QChar * next = data + 1;
                 if (!next->isNull() && *next == QChar('\'', 0)) {
                     ++data;

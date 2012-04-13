@@ -26,13 +26,16 @@
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+
 #include "rdf/KoDocumentRdfEditWidgetBase.h"
 #ifdef SHOULD_BUILD_RDF
+#include "rdf/KoDocumentRdf.h"
 #include "rdf/KoDocumentRdfEditWidget.h"
 #endif
 
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kicon.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -68,7 +71,7 @@ public:
     QList<KPageWidgetItem*> m_pages;
     Ui::KoDocumentInfoAboutWidget* m_aboutUi;
     Ui::KoDocumentInfoAuthorWidget* m_authorUi;
-    KoDocumentRdf* m_rdf;
+    KoDocumentRdfBase* m_rdf;
 #ifdef SHOULD_BUILD_RDF
     KoDocumentRdfEditWidget* m_rdfEditWidget;
 #else
@@ -80,7 +83,7 @@ public:
 };
 
 
-KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf)
+KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, KoDocumentRdfBase* docRdf)
         : KPageDialog(parent)
         , d(new KoDocumentInfoDlgPrivate)
 {
@@ -136,7 +139,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
         d->m_rdfEditWidget = 0;
 
 #ifdef SHOULD_BUILD_RDF
-        d->m_rdfEditWidget = new KoDocumentRdfEditWidget(this, d->m_rdf);
+        d->m_rdfEditWidget = new KoDocumentRdfEditWidget(this, (KoDocumentRdf*)d->m_rdf);
         page = new KPageWidgetItem(d->m_rdfEditWidget->widget(), i18n("Rdf"));
         page->setHeader(i18n("Rdf"));
         page->setIcon(KIcon("text-rdf"));

@@ -24,9 +24,7 @@
 #include <QObject>
 #include <QPainter>
 #include <QPixmap>
-//Added by qt3to4:
 #include <QEvent>
-#include <Q3Frame>
 #include <QMouseEvent>
 
 #include <kdebug.h>

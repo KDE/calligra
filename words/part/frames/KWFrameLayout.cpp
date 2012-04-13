@@ -462,6 +462,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     if (pageBackground) {
         KoShape *bs = pageBackground->shape();
+        bs->setRunThrough(-10); //so it will be below everything
         bs->setZIndex(--minZIndex);
         bs->setSize(pageRect.size());
         bs->setPosition(pageRect.topLeft());
