@@ -48,6 +48,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+    qDeleteAll(m_objects);
 }
 
 
@@ -144,8 +145,8 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
             // dr3d:center
             // dr3d:size
             // + a number of other standard attributes
-            Sphere  sphere;
-            sphere.loadOdf(elem);
+            Sphere  *sphere = new Sphere();
+            sphere->loadOdf(elem);
             m_objects.append(sphere);
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
@@ -153,8 +154,8 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
             // dr3d:min-edge
             // dr3d:max-edge
             // + a number of other standard attributes
-            Cube  cube;
-            cube.loadOdf(elem);
+            Cube  *cube = new Cube();
+            cube->loadOdf(elem);
             m_objects.append(cube);
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
@@ -166,6 +167,8 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
             // dr3d:
         }
     }
+
+    kDebug(31000) << "Lights:" << m_lights.size() << "Objects:" << m_objects.size();
 
     return true;
 }
@@ -225,5 +228,7 @@ void Scene::saveOdf(KoShapeSavingContext &context) const
     }
 
     // 2.2 Objects in the scene
-    // FIXME
+    foreach (const Object3D *object, m_objects) {
+        object->saveOdf(writer);
+    }
 }

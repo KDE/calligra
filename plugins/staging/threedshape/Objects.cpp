@@ -59,6 +59,7 @@ bool Object3D::loadOdf(const KoXmlElement &objectElement)
 void Object3D::saveOdf(KoXmlWriter &writer) const
 {
     // FIXME: Save style, layer, Z-index, id.
+    kDebug(31000) << "Saving Object3D";
 }
 
 
@@ -91,6 +92,7 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement)
 
 void Sphere::saveOdf(KoXmlWriter &writer) const
 {
+    kDebug(31000) << "Saving Sphere:" << m_center << m_size;
     writer.startElement("dr3d:sphere");
 
     Object3D::saveOdf(writer);
@@ -133,6 +135,7 @@ bool Cube::loadOdf(const KoXmlElement &objectElement)
 
 void Cube::saveOdf(KoXmlWriter &writer) const
 {
+    kDebug(31000) << "Saving Cube:" << m_minEdge << m_maxEdge;
     writer.startElement("dr3d:cube");
 
     Object3D::saveOdf(writer);

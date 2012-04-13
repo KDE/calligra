@@ -108,6 +108,8 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     kDebug(31000) << "========================================================== Starting 3D Scene";
     kDebug(31000) <<"Loading ODF element: " << sceneElement.tagName();
 
+    // Load the graphic style into the shape. The attributes of this
+    // style should be used when rendering the scene.
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
     bool result = m_scene.loadOdf(sceneElement, context);
