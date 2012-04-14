@@ -696,8 +696,8 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
-            propertySetForRecord->changeProperty("name", newValue); // "name" prop. is of custom type Identifier, so this assignment
-            // will automatically convert newValue to an valid identifier
+            propertySetForRecord->changeProperty("name",
+                KexiUtils::string2Identifier(newValue.toString()));
 
             //remember this action containing 2 subactions
             CommandGroup *changeCaptionAndNameCommand = new CommandGroup(
