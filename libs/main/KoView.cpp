@@ -562,21 +562,27 @@ QToolBar* KoView::viewBar()
 
 QList<QAction*> KoView::createChangeUnitActions()
 {
-    QActionGroup *unitGroup = new QActionGroup(this);
-    QList<QAction*> answer;
-    answer.append(new UnitChangeAction(KoUnit::Millimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Centimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Decimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Inch, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Pica, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Cicero, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Point, unitGroup, d->document));
+    // TODO: this sorting (grouping similar unit types) differs from the one
+    // of the KoUnit::Unit enum, which is e.g. also used in the unit selector
+    // in the page layout dialog. Should be synched
+    static const KoUnit::Unit units[] =
+    {
+        KoUnit::Millimeter,
+        KoUnit::Centimeter,
+        KoUnit::Decimeter,
+        KoUnit::Inch,
+        KoUnit::Pica,
+        KoUnit::Cicero,
+        KoUnit::Point
+    };
+    static const int unitCount = sizeof(units)/sizeof(*units);
 
-    const int currentUnit = d->document.data()->unit().indexInList();
-    Q_ASSERT(currentUnit < answer.count());
-    if (currentUnit >= 0)
-        answer.value(currentUnit)->setChecked(true);
-    return answer;
+    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    for(int i = 0; i<unitCount; ++i) {
+        unitActions->addUnit(units[i]);
+    }
+
+    return unitActions->actions();
 }
 
 #include <KoView_p.moc>

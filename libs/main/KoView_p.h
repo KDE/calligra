@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+/* This file is part of the Calligra project, made within the KDE community.
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,31 +20,66 @@
 #ifndef KOVIEW_P_H
 #define KOVIEW_P_H
 
+// Calligra
 #include "KoUnit.h"
 #include "KoDocument.h"
-
+// Qt
+#include <QActionGroup>
 #include <QAction>
 
-class UnitChangeAction : public QAction
+
+// Action group which keeps the actions in sync with the document's unit property
+class UnitActionGroup : public QActionGroup
 {
     Q_OBJECT
 public:
-    UnitChangeAction(KoUnit::Unit unit, QObject *parent, KoDocument *document)
-            : QAction(KoUnit::unitDescription(KoUnit(unit)), parent),
-            m_document(document),
-            m_unit(unit) {
-        setCheckable(true);
-        connect(this, SIGNAL(triggered(bool)), SLOT(activated()));
+    explicit UnitActionGroup(KoDocument *document, QObject* parent = 0)
+            : QActionGroup(parent)
+            , m_document(document)
+    {
+        setExclusive(true);
+        connect(this, SIGNAL(triggered(QAction*)), SLOT(onTriggered(QAction*)));
+        connect(document, SIGNAL(unitChanged(KoUnit)), SLOT(onUnitChanged(KoUnit)));
     }
 
-public slots:
-    void activated() {
-        m_document->setUnit(m_unit);
+    void addUnit(KoUnit::Unit unit)
+    {
+        QAction* action = new QAction(KoUnit::unitDescription(KoUnit(unit)), this);
+        action->setData(unit);
+        action->setCheckable(true);
+
+        const int currentUnit = m_document->unit().indexInList();
+        if (currentUnit == unit) {
+            action->setChecked(true);
+        }
+    }
+
+private slots:
+    void onTriggered(QAction *action)
+    {
+        m_document->setUnit(KoUnit(static_cast<KoUnit::Unit>(action->data().toInt())));
+    }
+
+    void onUnitChanged(const KoUnit &unit)
+    {
+        const int indexInList = unit.indexInList();
+
+        foreach (QAction *action, actions()) {
+            if (action->data().toInt() == indexInList) {
+                action->setChecked(true);
+                break;
+            }
+            // in case the new unit is not in the list of actions
+            // this ensures that the action currently checked is unchecked
+            // once the end of actions has been reached
+            if (action->isChecked()) {
+                action->setChecked(false);
+            }
+        }
     }
 
 private:
     KoDocument *m_document;
-    KoUnit m_unit;
 };
 
 #endif
