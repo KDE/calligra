@@ -64,7 +64,7 @@ class KOODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by Calligra. */
-    enum Unit {
+    enum Type {
         Millimeter = 0,
         Point,  ///< Postscript point, 1/72th of an Inco
         Inch,
@@ -73,7 +73,7 @@ public:
         Pica,
         Cicero,
         Pixel,
-        UnitCount ///< @internal
+        TypeCount ///< @internal
     };
 
     /// Used to control the scope of the unit types listed in the UI
@@ -86,12 +86,12 @@ public:
     static KoUnit fromListForUi(int index, ListFilter filter, qreal factor = 1.0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
-    explicit KoUnit(Unit unit = Point, qreal factor = 1.0) {
-        m_unit = unit; m_pixelConversion = factor;
+    explicit KoUnit(Type unit = Point, qreal factor = 1.0) {
+        m_type = unit; m_pixelConversion = factor;
     }
 
-    KoUnit& operator=(Unit unit) {
-        m_unit = unit; m_pixelConversion = 1.0; return *this;
+    KoUnit& operator=(Type unit) {
+        m_type = unit; m_pixelConversion = 1.0; return *this;
     }
 
     bool operator!=(const KoUnit &other) const {
@@ -99,11 +99,11 @@ public:
     }
 
     bool operator==(const KoUnit &other) const {
-        return m_unit == other.m_unit;
+        return m_type == other.m_type;
     }
 
-    KoUnit::Unit type() const {
-        return m_unit;
+    KoUnit::Type type() const {
+        return m_type;
     }
 
     void setFactor(qreal factor) {
@@ -204,8 +204,6 @@ public:
     static KoUnit unit(const QString &unitName, bool *ok = 0);
     /// Get the name of a unit
     static QString unitName(KoUnit unit);
-    /// Get the full (translated) description of a unit
-    static QString unitDescription(KoUnit unit);
 
     /// Returns the list of unit types for the UI, controlled with the given @p filter.
     static QStringList listOfUnitNameForUi(ListFilter filter);
@@ -224,7 +222,7 @@ public:
     }
 
 private:
-    Unit m_unit;
+    Type m_type;
     qreal m_pixelConversion;
 };
 
