@@ -40,29 +40,30 @@ public:
         setExclusive(true);
         connect(this, SIGNAL(triggered(QAction*)), SLOT(onTriggered(QAction*)));
         connect(document, SIGNAL(unitChanged(KoUnit)), SLOT(onUnitChanged(KoUnit)));
-    }
 
-    void addUnit(KoUnit::Unit unit)
-    {
-        QAction* action = new QAction(KoUnit::unitDescription(KoUnit(unit)), this);
-        action->setData(unit);
-        action->setCheckable(true);
+        const QStringList unitNames = KoUnit::listOfUnitNameForUi(KoUnit::HidePixel);
+        const int currentUnitIndex = m_document->unit().indexInListForUi(KoUnit::HidePixel);
 
-        const int currentUnit = m_document->unit().indexInList();
-        if (currentUnit == unit) {
-            action->setChecked(true);
+        for (int i = 0; i < unitNames.count(); ++i) {
+            QAction* action = new QAction(unitNames.at(i), this);
+            action->setData(i);
+            action->setCheckable(true);
+
+            if (currentUnitIndex == i) {
+                action->setChecked(true);
+            }
         }
     }
 
 private slots:
     void onTriggered(QAction *action)
     {
-        m_document->setUnit(KoUnit(static_cast<KoUnit::Unit>(action->data().toInt())));
+        m_document->setUnit(KoUnit::fromListForUi(action->data().toInt(), KoUnit::HidePixel));
     }
 
     void onUnitChanged(const KoUnit &unit)
     {
-        const int indexInList = unit.indexInList();
+        const int indexInList = unit.indexInListForUi(KoUnit::HidePixel);
 
         foreach (QAction *action, actions()) {
             if (action->data().toInt() == indexInList) {

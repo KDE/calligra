@@ -89,10 +89,10 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     grid->addWidget(new QLabel(i18n("Units:"), tmpQGroupBox), 0, 0);
 
     d->unit = new KComboBox(tmpQGroupBox);
-    d->unit->addItems(KoUnit::listOfUnitName());
+    d->unit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
     grid->addWidget(d->unit, 0, 1);
     d->oldUnit = KoUnit::unit(unitType);
-    d->unit->setCurrentIndex(d->oldUnit.indexInList());
+    d->unit->setCurrentIndex(d->oldUnit.indexInListForUi(KoUnit::HidePixel));
 
     grid->addWidget(new QLabel(i18n("Handle radius:"), tmpQGroupBox), 1, 0);
 
@@ -128,7 +128,6 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 
     tmpQGroupBox->setLayout(grid);
 
-    connect(d->unit, SIGNAL(activated(int)), SIGNAL(unitChanged(int)));
     connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
     connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->pasteOffset, SLOT(setDisabled(bool)));
 }
@@ -142,9 +141,9 @@ void KoConfigMiscPage::apply()
 {
     KConfigGroup miscGroup = d->config->group("Misc");
 
-    int currentUnit = d->unit->currentIndex();
-    if (d->oldUnit.indexInList() != currentUnit) {
-        d->oldUnit = KoUnit((KoUnit::Unit)currentUnit);
+    int currentUnitIndex = d->unit->currentIndex();
+    if (d->oldUnit.indexInListForUi(KoUnit::HidePixel) != currentUnitIndex) {
+        d->oldUnit = KoUnit::fromListForUi(currentUnitIndex, KoUnit::HidePixel);
         d->doc->setUnit(d->oldUnit);
         miscGroup.writeEntry("Units", KoUnit::unitName(d->oldUnit));
     }
@@ -181,10 +180,13 @@ void KoConfigMiscPage::slotDefault()
 
 void KoConfigMiscPage::slotUnitChanged(int u)
 {
-    KoUnit unit = KoUnit((KoUnit::Unit) u);
+    const KoUnit unit = KoUnit::fromListForUi(u, KoUnit::HidePixel);
+
     d->pasteOffset->blockSignals(true);
     d->pasteOffset->setUnit(unit);
     d->pasteOffset->blockSignals(false);
+
+    emit unitChanged(unit);
 }
 
 #include <KoConfigMiscPage.moc>

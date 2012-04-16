@@ -562,26 +562,7 @@ QToolBar* KoView::viewBar()
 
 QList<QAction*> KoView::createChangeUnitActions()
 {
-    // TODO: this sorting (grouping similar unit types) differs from the one
-    // of the KoUnit::Unit enum, which is e.g. also used in the unit selector
-    // in the page layout dialog. Should be synched
-    static const KoUnit::Unit units[] =
-    {
-        KoUnit::Millimeter,
-        KoUnit::Centimeter,
-        KoUnit::Decimeter,
-        KoUnit::Inch,
-        KoUnit::Pica,
-        KoUnit::Cicero,
-        KoUnit::Point
-    };
-    static const int unitCount = sizeof(units)/sizeof(*units);
-
     UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
-    for(int i = 0; i<unitCount; ++i) {
-        unitActions->addUnit(units[i]);
-    }
-
     return unitActions->actions();
 }
 

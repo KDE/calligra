@@ -54,21 +54,36 @@
  * %Calligra stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
+ *
+ * For implementing the selection of a unit type in the UI use the *ForUi() methods.
+ * They ensure the same order of the unit types in all places, with the order not
+ * bound to the order in the enum (so ABI-compatible extension is possible) and
+ * with the scope of listed types controlled by the @c Filter parameter.
  */
 class KOODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by Calligra. */
     enum Unit {
-        Millimeter,
+        Millimeter = 0,
         Point,  ///< Postscript point, 1/72th of an Inco
         Inch,
         Centimeter,
         Decimeter,
         Pica,
         Cicero,
-        Pixel
+        Pixel,
+        UnitCount ///< @internal
     };
+
+    /// Used to control the scope of the unit types listed in the UI
+    enum ListFilter {
+        ListAll = 0,
+        HidePixel = 1
+    };
+
+    /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p filter. */
+    static KoUnit fromListForUi(int index, ListFilter filter, qreal factor = 1.0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
     explicit KoUnit(Unit unit = Point, qreal factor = 1.0) {
@@ -87,6 +102,13 @@ public:
         return m_unit == other.m_unit;
     }
 
+    KoUnit::Unit type() const {
+        return m_unit;
+    }
+
+    void setFactor(qreal factor) {
+        m_pixelConversion = factor;
+    }
     /**
      * Prepare ptValue to be displayed in pt
      * This method will round to 0.001 precision
@@ -184,23 +206,19 @@ public:
     static QString unitName(KoUnit unit);
     /// Get the full (translated) description of a unit
     static QString unitDescription(KoUnit unit);
-    static QStringList listOfUnitName(bool hidePixel = true);
 
-    /// PixelVisibility for indexInList()
-    enum PixelVisibility {
-        ShowAll,
-        HidePixel
-    };
-    /// Get the index of this unit in the list of names
-    /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
-    int indexInList(PixelVisibility visibility = HidePixel) const;
+    /// Returns the list of unit types for the UI, controlled with the given @p filter.
+    static QStringList listOfUnitNameForUi(ListFilter filter);
+    /// Get the index of this unit in the list of unit types for the UI,
+    /// if it is controlled with the given @p filter.
+    int indexInListForUi(ListFilter filter) const;
 
     /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
     /// parse an angle to its value in degrees
     static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
-    
+
     QString toString() {
         return KoUnit::unitName(*this);
     }

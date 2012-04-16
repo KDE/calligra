@@ -27,23 +27,72 @@
 
 #include <QRegExp>
 
-QStringList KoUnit::listOfUnitName(bool hidePixel)
+// grouped by units which are similar
+static const KoUnit::Unit unitsInUi[KoUnit::UnitCount] =
+{
+    KoUnit::Millimeter,
+    KoUnit::Centimeter,
+    KoUnit::Decimeter,
+    KoUnit::Inch,
+    KoUnit::Pica,
+    KoUnit::Cicero,
+    KoUnit::Point,
+    KoUnit::Pixel,
+};
+
+QStringList KoUnit::listOfUnitNameForUi(ListFilter filter)
 {
     QStringList lst;
-    for (int i = KoUnit::Millimeter; i <= KoUnit::Pixel; ++i) {
-        Unit unit = static_cast<Unit>(i);
-        if ((i != Pixel) || (hidePixel == false))
+    for (int i = 0; i < KoUnit::UnitCount; ++i) {
+        const Unit unit = unitsInUi[i];
+        if ((unit != Pixel) || (filter == ListAll))
             lst.append(KoUnit::unitDescription(KoUnit(unit)));
     }
     return lst;
 }
 
-int KoUnit::indexInList(PixelVisibility visibility) const
+KoUnit KoUnit::fromListForUi(int index, ListFilter filter, qreal factor)
 {
-    if (visibility == HidePixel && m_unit > Pixel)
-        return m_unit -1;
-    else
-        return m_unit;
+    KoUnit::Unit unit = KoUnit::Point;
+
+    if ((0 <= index) && (index < KoUnit::UnitCount)) {
+        // iterate through all enums and skip the Pixel enum if needed
+        for (int i = 0; i < KoUnit::UnitCount; ++i) {
+            if ((filter == HidePixel) && (unitsInUi[i] == Pixel)) {
+                ++index;
+                continue;
+            }
+            if (i == index) {
+                unit = unitsInUi[i];
+                break;
+            }
+        }
+    }
+
+    return KoUnit(unit, factor);
+}
+
+int KoUnit::indexInListForUi(ListFilter filter) const
+{
+    if ((filter == HidePixel) && (m_unit == Pixel)) {
+        return -1;
+    }
+
+    int result = -1;
+
+    int skipped = 0;
+    for (int i = 0; i < KoUnit::UnitCount; ++i) {
+        if ((filter == HidePixel) && (unitsInUi[i] == Pixel)) {
+            ++skipped;
+            continue;
+        }
+        if (unitsInUi[i] == m_unit) {
+            result = i - skipped;
+            break;
+        }
+    }
+
+    return result;
 }
 
 QString KoUnit::unitDescription(KoUnit _unit)
