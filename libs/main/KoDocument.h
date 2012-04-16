@@ -595,7 +595,7 @@ public:
      * the RDF system and needs full access to the KoDocumentRdf object.
      * @see KoDocumentRdf
      */
-    KoDocumentRdf *documentRdf() const;
+    KoDocumentRdfBase *documentRdf() const;
 
     /**
      * Replace the current rdf document with the given rdf document. The existing RDF document
@@ -1060,6 +1060,7 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
+    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

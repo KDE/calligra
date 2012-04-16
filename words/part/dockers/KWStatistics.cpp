@@ -104,8 +104,15 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     widgetDocker.count_nospaces->setVisible(visible);
 }
 
+KWStatistics::~KWStatistics()
+{
+    m_timer->stop();
+}
 void KWStatistics::updateData()
 {
+    if (!isVisible()) {
+        return;
+    }
     m_charsWithSpace = 0;
     m_charsWithoutSpace = 0;
     m_words = 0;

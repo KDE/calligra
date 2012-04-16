@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Import Filter
+Name[el]=Φίλτρο εισαγωγής MS Project
+Name[nl]=Importfilter voor MS Project
+Name[pt]=Filtro de Importação do MS Project
 Name[pt_BR]=Filtro de importação de MS Project
 Name[sv]=MS Project-importfilter
 Name[uk]=Фільтр імпорту MS Project

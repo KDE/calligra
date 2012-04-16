@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +64,11 @@ public:
 
     KexiProjectData();
 
+    /*! Creates project data out of connection data @a cdata.
+      @a dbname can be provided for server-based connections; it is ignored
+      for file-based onces because in this case name is equal to database's filename
+      (cdata.dbFileName()).
+      @a caption is for setting project's caption. */
     KexiProjectData(const KexiDB::ConnectionData &cdata,
                     const QString& dbname = QString(), const QString& caption = QString());
 
