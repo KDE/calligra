@@ -331,10 +331,10 @@ QDomElement KoReportDesigner::document() const
     KoReportDesignerItemBase::addPropertyAsAttribute(&pagestyle, m_orientation);
 
     // -- margins
-    pagestyle.setAttribute("fo:margin-top", KoUnit::unit(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-bottom", KoUnit::unit(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-right", KoUnit::unit(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-left", KoUnit::unit(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-top", KoUnit::fromSymbol(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-bottom", KoUnit::fromSymbol(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-right", KoUnit::fromSymbol(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-left", KoUnit::fromSymbol(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
 
     content.appendChild(pagestyle);
 
@@ -802,7 +802,7 @@ KoUnit KoReportDesigner::pageUnit() const
 
     u = m_unit->value().toString();
 
-    KoUnit unit = KoUnit::unit(u, &found);
+    KoUnit unit = KoUnit::fromSymbol(u, &found);
     if (!found) {
         unit = KoUnit(KoUnit::Centimeter);
     }

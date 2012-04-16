@@ -232,42 +232,42 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
     if (firstLetter == -1)
         return value.toDouble();
 
-    const QString unit = value.mid(firstLetter);
+    const QString symbol = value.mid(firstLetter);
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
 
-    if (unit == QLatin1String("pt"))
+    if (symbol == QLatin1String("pt"))
         return val;
 
     bool ok;
-    KoUnit u = KoUnit::unit(unit, &ok);
+    KoUnit u = KoUnit::fromSymbol(symbol, &ok);
     if (ok)
         return u.fromUserValue(val);
 
-    if (unit == QLatin1String("m"))
+    if (symbol == QLatin1String("m"))
         return DM_TO_POINT(val * 10.0);
-    else if (unit == QLatin1String("km"))
+    else if (symbol == QLatin1String("km"))
         return DM_TO_POINT(val * 10000.0);
-    kWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report.";
+    kWarning() << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;
 }
 
-KoUnit KoUnit::unit(const QString &_unitName, bool* ok)
+KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
 {
     Type result = Point;
 
-    if (ok)
-        *ok = false;
-
-    if (_unitName == QString::fromLatin1("inch") /*compat*/) {
+    if (symbol == QLatin1String("inch") /*compat*/) {
         result = Inch;
         if (ok)
             *ok = true;
     } else {
+        if (ok)
+            *ok = false;
+
         for (int i = 0; i < TypeCount; ++i) {
-            if (_unitName == QLatin1String(unitNameList[i])) {
+            if (symbol == QLatin1String(unitNameList[i])) {
                 result = static_cast<Type>(i);
                 if (ok)
                     *ok = true;

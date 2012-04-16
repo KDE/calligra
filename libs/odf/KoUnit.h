@@ -84,6 +84,10 @@ public:
 
     /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p filter. */
     static KoUnit fromListForUi(int index, ListFilter filter, qreal factor = 1.0);
+    /// Convert a unit symbol string into a KoUnit
+    /// @param symbol symbol to convert
+    /// @param ok if set, it will be true if the unit was known, false if unknown
+    static KoUnit fromSymbol(const QString &symbol, bool *ok = 0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
     explicit KoUnit(Type unit = Point, qreal factor = 1.0) {
@@ -198,10 +202,6 @@ public:
     /// @return the value converted to points for internal use
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
-    /// Convert a unit symbol into a KoUnit
-    /// @param symbol symbol to convert
-    /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit unit(const QString &symbol, bool *ok = 0);
     /// Get the symbol string of the unit
     QString symbol() const;
 

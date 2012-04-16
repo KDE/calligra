@@ -151,7 +151,7 @@ void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
 {
     QString un = m_sectionData->m_height->option("unit", "cm").toString();
 
-    section.setAttribute("svg:height", KoUnit::unit(un).toUserStringValue(m_sectionData->m_height->value().toDouble()) + un);
+    section.setAttribute("svg:height", KoUnit::fromSymbol(un).toUserStringValue(m_sectionData->m_height->value().toDouble()) + un);
     section.setAttribute("fo:background-color", m_sectionData->backgroundColor().name());
 
     // now get a list of all the QGraphicsItems on this scene and output them.
