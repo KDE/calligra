@@ -198,12 +198,12 @@ public:
     /// @return the value converted to points for internal use
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
-    /// Convert a unit name into a KoUnit
-    /// @param unitName name to convert
+    /// Convert a unit symbol into a KoUnit
+    /// @param symbol symbol to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit unit(const QString &unitName, bool *ok = 0);
-    /// Get the name of a unit
-    static QString unitName(KoUnit unit);
+    static KoUnit unit(const QString &symbol, bool *ok = 0);
+    /// Get the symbol string of the unit
+    QString symbol() const;
 
     /// Returns the list of unit types for the UI, controlled with the given @p filter.
     static QStringList listOfUnitNameForUi(ListFilter filter);
@@ -218,7 +218,7 @@ public:
     static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
 
     QString toString() {
-        return KoUnit::unitName(*this);
+        return symbol();
     }
 
 private:

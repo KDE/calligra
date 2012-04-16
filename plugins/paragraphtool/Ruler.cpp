@@ -81,7 +81,7 @@ QString Ruler::valueString() const
 {
     QString ret;
     ret.append(m_unit.toUserStringValue(m_value));
-    ret.append(KoUnit::unitName(m_unit));
+    ret.append(m_unit.symbol());
     return ret;
 }
 

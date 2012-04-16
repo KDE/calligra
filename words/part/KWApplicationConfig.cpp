@@ -151,6 +151,6 @@ void KWApplicationConfig::setUnit(const KoUnit &unit)
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup misc = config->group("Misc");
-    misc.writeEntry("Units", KoUnit::unitName(unit));
+    misc.writeEntry("Units", unit.symbol());
     misc.sync();
 }

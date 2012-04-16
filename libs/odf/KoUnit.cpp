@@ -278,9 +278,9 @@ KoUnit KoUnit::unit(const QString &_unitName, bool* ok)
     return KoUnit(result);
 }
 
-QString KoUnit::unitName(KoUnit _unit)
+QString KoUnit::symbol() const
 {
-    return QLatin1String(unitNameList[_unit.m_type]);
+    return QLatin1String(unitNameList[m_type]);
 }
 
 qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
@@ -322,7 +322,7 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
 QDebug operator<<(QDebug debug, const KoUnit &unit)
 {
 #ifndef NDEBUG
-    debug.nospace() << KoUnit::unitName(unit);
+    debug.nospace() << unit.symbol();
 #else
     Q_UNUSED(unit);
 #endif

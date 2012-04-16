@@ -217,7 +217,7 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
     KoUnit unit = m_reportDesigner->pageUnit();
     
-    m_sectionData->m_height->setOption("unit", KoUnit::unitName(unit));
+    m_sectionData->m_height->setOption("unit", unit.symbol());
 
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
