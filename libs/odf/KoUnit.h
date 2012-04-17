@@ -3,6 +3,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
    Copyright (C) 2010 Thomas Zander <zander@kde.org>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +23,18 @@
 
 #ifndef KOUNIT_H
 #define KOUNIT_H
-#include <QString>
-#include <QStringList>
-#include <QVariant>
-#include <QDebug>
-#include <math.h> // for floor
+
+// Calligra
 #include "koodf_export.h"
+// Qt
+#include <QFlags>
+#include <QString>
+#include <QDebug>
+// std
+#include <math.h> // for floor
+
+class QStringList;
+class QVariant;
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -58,7 +65,7 @@
  * For implementing the selection of a unit type in the UI use the *ForUi() methods.
  * They ensure the same order of the unit types in all places, with the order not
  * bound to the order in the enum (so ABI-compatible extension is possible) and
- * with the scope of listed types controlled by the @c Filter parameter.
+ * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
 class KOODF_EXPORT KoUnit
 {
@@ -77,13 +84,15 @@ public:
     };
 
     /// Used to control the scope of the unit types listed in the UI
-    enum ListFilter {
+    enum ListOption {
         ListAll = 0,
-        HidePixel = 1
+        HidePixel = 1,
+        HideMask = HidePixel
     };
+     Q_DECLARE_FLAGS(ListOptions, ListOption)
 
-    /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p filter. */
-    static KoUnit fromListForUi(int index, ListFilter filter, qreal factor = 1.0);
+    /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
+    static KoUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
     /// Convert a unit symbol string into a KoUnit
     /// @param symbol symbol to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
@@ -205,11 +214,11 @@ public:
     /// Get the symbol string of the unit
     QString symbol() const;
 
-    /// Returns the list of unit types for the UI, controlled with the given @p filter.
-    static QStringList listOfUnitNameForUi(ListFilter filter);
+    /// Returns the list of unit types for the UI, controlled with the given @p listOptions.
+    static QStringList listOfUnitNameForUi(ListOptions listOptions = ListAll);
     /// Get the index of this unit in the list of unit types for the UI,
-    /// if it is controlled with the given @p filter.
-    int indexInListForUi(ListFilter filter) const;
+    /// if it is controlled with the given @p listOptions.
+    int indexInListForUi(ListOptions listOptions = ListAll) const;
 
     /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
@@ -231,5 +240,6 @@ KOODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
 #endif
 
 Q_DECLARE_METATYPE(KoUnit)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoUnit::ListOptions)
 
 #endif

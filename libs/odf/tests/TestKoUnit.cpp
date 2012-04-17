@@ -24,7 +24,7 @@
 
 
 Q_DECLARE_METATYPE(KoUnit::Type)
-Q_DECLARE_METATYPE(KoUnit::ListFilter)
+Q_DECLARE_METATYPE(KoUnit::ListOptions)
 
 
 void TestKoUnit::testSimpleConstructor()
@@ -124,38 +124,38 @@ void TestKoUnit::testFromSymbol()
 
 void TestKoUnit::testListForUi_data()
 {
-    QTest::addColumn<KoUnit::ListFilter>("filter");
+    QTest::addColumn<KoUnit::ListOptions>("listOptions");
     QTest::addColumn<int>("index");
 
-    const QVector<KoUnit::ListFilter> filters =
-        QVector<KoUnit::ListFilter>() << KoUnit::HidePixel << KoUnit::ListAll;
-    static const char* const filterName[2] = {"HidePixel", "ListAll"};
+    const QVector<KoUnit::ListOptions> optionsList =
+        QVector<KoUnit::ListOptions>() << KoUnit::HidePixel << KoUnit::ListDefault;
+    static const char* const optionsName[2] = {"HidePixel", "ListDefault"};
     static const char* const indexName[3] = {"-start", "-middle", "-end"};
 
-    for (int f = 0; f < filters.count(); ++f) {
-        const KoUnit::ListFilter filter = filters.at(f);
-        const int unitCount = KoUnit::listOfUnitNameForUi(filter).count();
+    for (int o = 0; o < optionsList.count(); ++o) {
+        const KoUnit::ListOptions options = optionsList.at(o);
+        const int unitCount = KoUnit::listOfUnitNameForUi(options).count();
         for (int i = 0; i < 3; ++i) {
             const int index =
                 (i == 0) ? 0 :
                 (i == 1) ? unitCount/2 :
                 /*i == 2*/ unitCount-1;
 
-            const QString rowName = QLatin1String(filterName[f]) + QLatin1String(indexName[i]);
+            const QString rowName = QLatin1String(optionsName[o]) + QLatin1String(indexName[i]);
 
-            QTest::newRow(rowName.toLatin1().constData()) << filter << index;
+            QTest::newRow(rowName.toLatin1().constData()) << options << index;
         }
     }
 }
 
 void TestKoUnit::testListForUi()
 {
-    QFETCH(KoUnit::ListFilter, filter);
+    QFETCH(KoUnit::ListOptions, listOptions);
     QFETCH(int, index);
 
-    KoUnit unit = KoUnit::fromListForUi(index, filter);
+    KoUnit unit = KoUnit::fromListForUi(index, listOptions);
 
-    QCOMPARE(unit.indexInListForUi(filter), index);
+    QCOMPARE(unit.indexInListForUi(listOptions), index);
 }
 
 QTEST_MAIN(TestKoUnit)

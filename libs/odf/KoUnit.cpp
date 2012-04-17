@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
    Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,25 +78,25 @@ static const KoUnit::Type typesInUi[KoUnit::TypeCount] =
     KoUnit::Pixel,
 };
 
-QStringList KoUnit::listOfUnitNameForUi(ListFilter filter)
+QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
 {
     QStringList lst;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
         const Type type = typesInUi[i];
-        if ((type != Pixel) || (filter == ListAll))
+        if ((type != Pixel) || (listOptions&HideMask == ListAll))
             lst.append(unitDescription(type));
     }
     return lst;
 }
 
-KoUnit KoUnit::fromListForUi(int index, ListFilter filter, qreal factor)
+KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
 {
     KoUnit::Type type = KoUnit::Point;
 
     if ((0 <= index) && (index < KoUnit::TypeCount)) {
         // iterate through all enums and skip the Pixel enum if needed
         for (int i = 0; i < KoUnit::TypeCount; ++i) {
-            if ((filter == HidePixel) && (typesInUi[i] == Pixel)) {
+            if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
                 ++index;
                 continue;
             }
@@ -109,9 +110,9 @@ KoUnit KoUnit::fromListForUi(int index, ListFilter filter, qreal factor)
     return KoUnit(type, factor);
 }
 
-int KoUnit::indexInListForUi(ListFilter filter) const
+int KoUnit::indexInListForUi(ListOptions listOptions) const
 {
-    if ((filter == HidePixel) && (m_type == Pixel)) {
+    if ((listOptions&HidePixel) && (m_type == Pixel)) {
         return -1;
     }
 
@@ -119,7 +120,7 @@ int KoUnit::indexInListForUi(ListFilter filter) const
 
     int skipped = 0;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
-        if ((filter == HidePixel) && (typesInUi[i] == Pixel)) {
+        if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
             ++skipped;
             continue;
         }
