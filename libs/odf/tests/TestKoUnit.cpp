@@ -128,7 +128,7 @@ void TestKoUnit::testListForUi_data()
     QTest::addColumn<int>("index");
 
     const QVector<KoUnit::ListOptions> optionsList =
-        QVector<KoUnit::ListOptions>() << KoUnit::HidePixel << KoUnit::ListDefault;
+        QVector<KoUnit::ListOptions>() << KoUnit::HidePixel << KoUnit::ListAll;
     static const char* const optionsName[2] = {"HidePixel", "ListDefault"};
     static const char* const indexName[3] = {"-start", "-middle", "-end"};
 
