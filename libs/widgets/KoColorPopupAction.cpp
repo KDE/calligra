@@ -81,7 +81,9 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
     QList<KoColorSet*> palettes = srv->resources();
-    d->colorSetWidget->setColorSet(palettes.first());
+    if (!palettes.empty()) {
+        d->colorSetWidget->setColorSet(palettes.first());
+    }
 
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
