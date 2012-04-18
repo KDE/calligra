@@ -28,6 +28,7 @@ KoShapePaintingContext::KoShapePaintingContext()
     , showTableBorders(true)
     , showSpellChecking(false)
     , showSelections(true)
+    , showListVisualizer(true)
 {
 }
 
@@ -36,9 +37,11 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
     KoCanvasResourceManager *rm = canvas->resourceManager();
 
     showFormattingCharacters = rm->boolResource(KoCanvasResourceManager::ShowFormattingCharacters);
+    showListVisualizer = rm->boolResource(KoCanvasResourceManager::ShowListVisualizer);
     if (forPrint) {
         showTextShapeOutlines = false;
         showFormattingCharacters = false;
+        showListVisualizer = false;
     } else {
         showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
     }

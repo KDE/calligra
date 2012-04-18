@@ -124,6 +124,9 @@ public:
      */
     QPointF counterPosition() const;
 
+    void setListVisualizerPosition(const QPointF &position);
+    QPointF listVisualizerPosition() const;
+
     /**
      * Sets a textformat to be used for the counter/bullet
      * @param font the format

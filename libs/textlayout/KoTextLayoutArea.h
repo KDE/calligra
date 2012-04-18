@@ -194,7 +194,7 @@ private:
 
     void clearPreregisteredFootNotes();
 
-    void drawListItem(QPainter *painter, const QTextBlock &block);
+    void drawListItem(QPainter *painter, const QTextBlock &block, bool drawListVisualizer);
 
     void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
 
@@ -254,6 +254,7 @@ private:
     QList<QTextFrame *> m_footNoteFrames;
     KoTextLayoutEndNotesArea *m_endNotesArea;
     QList<KoTextLayoutArea *> m_generatedDocAreas;
+    QColor m_listVisualizerColors[10];
 };
 
 #endif

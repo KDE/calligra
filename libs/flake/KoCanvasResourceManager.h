@@ -79,6 +79,7 @@ public:
         ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
         ShowFormattingCharacters,  ///< Paint of formatting characters ?
         ShowTableBorders,  ///< Paint of table borders (when not really there) ?
+        ShowListVisualizer,  ///< Draw List Visualization
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         FlowStart = 3000,       ///< Base number for flow specific values.

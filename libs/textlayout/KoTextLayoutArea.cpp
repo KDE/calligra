@@ -103,6 +103,16 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_extraTextIndent(0)
  , m_endNotesArea(0)
 {
+    m_listVisualizerColors[0] = QColor(160, 0, 0); //red
+    m_listVisualizerColors[1] = QColor(0, 128, 0);  //green
+    m_listVisualizerColors[2] = QColor(0, 0, 255);  //blue
+    m_listVisualizerColors[3] = QColor(255, 213, 0);  //golden
+    m_listVisualizerColors[4] = QColor(128, 128, 0);    //olive
+    m_listVisualizerColors[5] = QColor(255, 165, 0);  //orange
+    m_listVisualizerColors[6] = QColor(128, 0, 128);  //purple
+    m_listVisualizerColors[7] = QColor(0, 255, 255);  //cyan
+    m_listVisualizerColors[8] = QColor(0, 0, 160);    //darkblue
+    m_listVisualizerColors[9] = QColor(165, 42, 42);            //brown
 }
 
 KoTextLayoutArea::~KoTextLayoutArea()

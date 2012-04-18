@@ -250,6 +250,14 @@ void KWView::setupActions()
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
     connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
+    m_actionShowListVisualizer = new KToggleAction(i18n("Show List Visualizer"), this);   
+    m_actionShowListVisualizer->setToolTip(i18n("Turns drawing of outline around list on or off"));
+    m_actionShowListVisualizer->setCheckable(true);
+    actionCollection()->addAction("show_list_visualizer", m_actionShowListVisualizer);
+    connect(m_actionShowListVisualizer, SIGNAL(toggled(bool)), this, SLOT(setShowListVisualizer(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowListVisualizer, QVariant(false));
+    m_actionShowListVisualizer->setChecked(m_document->config().showListViusalizer());
+
     m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
@@ -683,6 +691,13 @@ void KWView::setShowTableBorders(bool on)
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(on));
     m_canvas->update();
     m_document->config().setShowTableBorders(on);
+}
+
+void KWView::setShowListVisualizer(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowListVisualizer, QVariant(on));
+    m_canvas->update();
+    m_document->config().setShowListVisualizer(on);
 }
 
 void KWView::formatPage()

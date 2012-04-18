@@ -71,6 +71,7 @@ public:
             , showFormattingCharacters(false)
             , showSpellChecking(false)
             , showSelections(true)
+            , showListVisualizer(true)
             , background(Qt::white)
         {
         }
@@ -85,6 +86,7 @@ public:
         bool showTableBorders;
         bool showSpellChecking;
         bool showSelections;
+        bool showListVisualizer;
         QColor background;
     };
 

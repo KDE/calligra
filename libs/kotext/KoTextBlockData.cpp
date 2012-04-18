@@ -50,6 +50,7 @@ public:
     bool counterIsImage;
     int counterIndex;
     QPointF counterPos;
+    QPointF listVisualizerPos;
     QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
@@ -184,6 +185,16 @@ void KoTextBlockData::setCounterPosition(const QPointF &position)
 QPointF KoTextBlockData::counterPosition() const
 {
     return d->counterPos;
+}
+
+void KoTextBlockData::setListVisualizerPosition(const QPointF &position)
+{
+    d->listVisualizerPos = position;
+}
+
+QPointF KoTextBlockData::listVisualizerPosition() const
+{
+    return d->listVisualizerPos;
 }
 
 void KoTextBlockData::setLabelFormat(const QTextCharFormat &format)

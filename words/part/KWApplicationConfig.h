@@ -122,6 +122,16 @@ public:
         return m_statusBarShowZoom;
     }
 
+    void setShowListVisualizer(bool on)
+    {
+        m_showListVisualizer = on;
+    }
+
+    bool showListViusalizer()
+    {
+        return m_showListVisualizer;
+    }
+
     /**
      * Set the zoom level for new views and for next startups of words.
      * Documents shown at 100% will show the page on screen at the same amount of
@@ -171,6 +181,7 @@ private:
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
+    bool m_showListVisualizer;
 
     int m_zoom; /// < zoom level in percent
     KoZoomMode::Mode m_zoomMode;

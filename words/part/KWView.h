@@ -125,6 +125,8 @@ public slots:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// set the display of list visualizer
+    void setShowListVisualizer(bool on);
 
 protected:
     /// reimplemented method from superclass
@@ -215,6 +217,7 @@ private:
     KAction *m_actionViewHeader;
     KAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
+    KToggleAction *m_actionShowListVisualizer;
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;

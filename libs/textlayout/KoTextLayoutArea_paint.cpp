@@ -216,7 +216,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             paintStrategy->applyStrategy(painter);
             painter->save();
-            drawListItem(painter, block);
+            drawListItem(painter, block, context.showListVisualizer);
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
@@ -391,7 +391,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->restore();
 }
 
-void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
+void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, bool drawListVisualizer)
 {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (data == 0)
@@ -452,6 +452,8 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
+                data->setListVisualizerPosition(QPointF(counterPosition.x(),
+                              counterPosition.y() + (layout.lineAt(0).height()/2.0)));
                 if (KoListStyle::isNumberingStyle(listStyle)) {
                     //if numbered list baseline align
                     counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
@@ -481,6 +483,59 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             if (idata) {
                 painter->drawPixmap(x, y, width, height, idata->pixmap());
             }
+            data->setListVisualizerPosition(data->counterPosition());
+        }
+
+        if (drawListVisualizer) {
+            painter->save();
+            QPen pen = painter->pen();
+            int listLevel = listFormat.intProperty(KoListStyle::Level);
+            if (listLevel > 0 && listLevel <= 10) {
+                pen.setColor(m_listVisualizerColors[listLevel - 1]);
+            }
+            pen.setStyle(Qt::DashLine);
+            painter->setPen(pen);
+            QPointF listVisualizerPos = data->listVisualizerPosition();
+            //draw horizontal line
+            painter->drawLine(QPointF(listVisualizerPos.x() - 10, listVisualizerPos.y()), listVisualizerPos);
+
+            //draw vertical line
+            bool drawVerticalLine = false;
+            QTextBlock previousItemBlock;
+            int itemIndex = list->itemNumber(block);
+            if (itemIndex == 0) {
+                KoList *listContinued = 0;
+                if (KoTextDocument(list->document()).list(list) && (listContinued = KoTextDocument(list->document()).list(list)->listContinuedFrom())) {
+                    //find the previous list of the same level
+                    QTextList *previousTextList = listContinued->textLists().at(listFormat.intProperty(KoListStyle::Level) - 1).data();
+                    if (previousTextList) {
+                        previousItemBlock = previousTextList->item(previousTextList->count() - 1);
+                        drawVerticalLine = true;
+                    }
+                }
+            } else {
+                previousItemBlock = list->item(itemIndex - 1);
+                drawVerticalLine = true;
+            }
+
+            if (drawVerticalLine) {
+            KoTextBlockData *prevItemData = dynamic_cast<KoTextBlockData*>(previousItemBlock.userData());
+                if (prevItemData != 0) {
+                    QPointF lastVisualizerPos = prevItemData->listVisualizerPosition();
+                    painter->drawLine(QPointF(listVisualizerPos.x() - 10, listVisualizerPos.y()),
+                                      QPointF(lastVisualizerPos.x() - 10, lastVisualizerPos.y()));
+                }
+            } else {
+                //draw a point to indicate begining of the list
+                painter->drawLine(QPointF(listVisualizerPos.x() - 10, listVisualizerPos.y()),
+                                  QPointF(listVisualizerPos.x() - 17, listVisualizerPos.y()));
+                painter->setBrush(QBrush(pen.color(), Qt::SolidPattern));
+                pen.setStyle(Qt::SolidLine);
+                painter->setPen(pen);
+                painter->drawEllipse(QPointF(listVisualizerPos.x() - 17, listVisualizerPos.y()), 3, 3);
+            }
+
+            painter->restore();
         }
     }
 }
