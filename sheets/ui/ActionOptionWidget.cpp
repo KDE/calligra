@@ -91,6 +91,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
             }
             if (!w) {
                 QToolButton* b = new QToolButton(this);
+                b->setFocusPolicy(Qt::NoFocus);
                 b->setDefaultAction(a);
                 w = b;
             }
