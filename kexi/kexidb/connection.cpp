@@ -3015,7 +3015,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema(const RecordData &data)
     bool ok = true;
     const int objID = data[0].toInt(&ok);
     if (!ok)
-        return false;
+        return 0;
     QString sqlText;
     if (!loadDataBlock(objID, sqlText, "sql")) {
         setError(ERR_OBJECT_NOT_FOUND,
