@@ -3434,7 +3434,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         return 0;
     }
     if (!d->prj || !item)
-        return false;
+        return 0;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
