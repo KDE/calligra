@@ -367,6 +367,11 @@ void KPrAnimationDirector::updateZoom( const QSize & size )
 
 void KPrAnimationDirector::paintStep( QPainter & painter )
 {
+    if (m_pageRect != m_canvas->rect()) {
+        painter.setClipping(false);
+        painter.fillRect(m_canvas->rect(), Qt::black);
+        painter.setClipping(true);
+    }
     painter.translate( m_pageRect.topLeft() );
     m_view->activePage()->paintBackground( painter, m_zoomHandler );
 
