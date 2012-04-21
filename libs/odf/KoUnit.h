@@ -30,6 +30,7 @@
 #include <QFlags>
 #include <QString>
 #include <QDebug>
+#include <QMetaType>
 // std
 #include <math.h> // for floor
 
