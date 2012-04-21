@@ -167,7 +167,7 @@ inline bool KisRepeatHLineIteratorPixelBase<T>::nextPixel()
     }
     ++this->m_realX;
 
-    return (this->m_realX >= m_startX + m_width);
+    return (this->m_realX < m_startX + m_width);
 }
 
 template<class T>
@@ -226,7 +226,7 @@ inline bool KisRepeatVLineIteratorPixelBase<T>::nextPixel()
         this->m_iterator->nextPixel();
     }
     ++this->m_realY;
-    return (this->m_realY >= m_startY + m_height);
+    return (this->m_realY < m_startY + m_height);
 
 }
 
