@@ -52,7 +52,7 @@ private slots:
     void spacingPercentChanged(int percent);
     void useFontMetrices(bool);
     void autoTextIndentChanged(int state);
-    void firstIndentValueChanged();
+    void firstIndenValueChanged();
     void leftMarginValueChanged();
     void rightMarginValueChanged();
     void bottomMarginValueChanged();
@@ -69,7 +69,6 @@ private:
     bool m_bottomMarginInherited;
     bool m_textIndentInherited;
     bool m_autoTextIndentInherited;
-    bool m_spacingInherited;
 };
 
 #endif
