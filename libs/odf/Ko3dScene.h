@@ -91,37 +91,35 @@ public:
     void saveOdfChildren(KoXmlWriter &writer) const;
 
     // getters
-    QVector3D   vrp()          const { return m_vrp;          }
-    QVector3D   vpn()          const { return m_vpn;          }
-    QVector3D   vup()          const { return m_vup;          }
-    Projection  projection()   const { return m_projection;   }
-    QString     distance()     const { return m_distance;     }
-    QString     focalLength()  const { return m_focalLength;  }
-    QString     shadowSlant()  const { return m_shadowSlant;  }
-    Shademode   shadeMode()    const { return m_shadeMode;    }
-    QColor      ambientColor() const { return m_ambientColor; }
-    bool        lightingMode() const { return m_lightingMode; }
-    QString     transform()    const { return m_transform;    }
+    QVector3D   vrp()          const;
+    QVector3D   vpn()          const;
+    QVector3D   vup()          const;
+    Projection  projection()   const;
+    QString     distance()     const;
+    QString     focalLength()  const;
+    QString     shadowSlant()  const;
+    Shademode   shadeMode()    const;
+    QColor      ambientColor() const;
+    bool        lightingMode() const;
+    QString     transform()    const;
+
+    // setters
+    void setVrp(QVector3D vrp);
+    void setVpn(QVector3D vpn);
+    void setVup(QVector3D vup);
+    void setProjection(Projection projection);
+    void setDistance(QString distance);
+    void setFocalLength(QString focalLength);
+    void setShadowSlant(QString shadowSlant);
+    void setShadeMode(Shademode shadeMode);
+    void setAmbientColor(QColor ambientColor);
+    void setLightingMode(bool lightingMode);
+    void setTransform(QString transform);
 
 private:
+    class Private;
+    Private *d;
 
-    // Camera attributes
-    QVector3D   m_vrp;          // Camera origin
-    QVector3D   m_vpn;          // Camera direction
-    QVector3D   m_vup;          // Up direction
-    Projection  m_projection;
-    QString     m_distance;     // Not yet used, just saved
-    QString     m_focalLength;  // Not yet used, just saved
-    QString     m_shadowSlant;  // Not yet used, just saved
-
-    // Rendering attributes
-    Shademode   m_shadeMode;
-    QColor      m_ambientColor;
-    bool        m_lightingMode; // True: enable lights, false: disable lights
-    QString     m_transform;    // Not yet used, just saved
-
-    // 2. The scene itself.
-    QList<Lightsource>  m_lights;
 };
 
 

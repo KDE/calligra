@@ -21,9 +21,6 @@
 // Own
 #include "Ko3dScene.h"
 
-// Qt
-#include <QString>
-
 // KDE
 #include <KDebug>
 
@@ -34,6 +31,37 @@
 
 
 static QVector3D odfToVector3D(QString &string);
+
+
+
+// ----------------------------------------------------------------
+//                         Ko3dScene::Private
+
+
+class Ko3dScene::Private
+{
+public:
+    Private() {};
+    ~Private() {};
+
+    // Camera attributes
+    QVector3D   vrp;          // Camera origin
+    QVector3D   vpn;          // Camera direction
+    QVector3D   vup;          // Up direction
+    Projection  projection;
+    QString     distance;
+    QString     focalLength;
+    QString     shadowSlant;
+
+    // Rendering attributes
+    Shademode   shadeMode;
+    QColor      ambientColor;
+    bool        lightingMode; // True: enable lights, false: disable lights
+    QString     transform;
+
+    // Lightsources (these are children of the element, not attributes)
+    QList<Lightsource>  lights;
+};
 
 
 // ----------------------------------------------------------------
@@ -52,10 +80,10 @@ Ko3dScene::Lightsource::~Lightsource()
 bool Ko3dScene::Lightsource::loadOdf(const KoXmlElement &lightElement)
 {
     m_diffuseColor = QColor(lightElement.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
-    QString direction = lightElement.attributeNS(KoXmlNS::dr3d, "direction", "");
+    QString direction = lightElement.attributeNS(KoXmlNS::dr3d, "direction");
     m_direction    = odfToVector3D(direction);
-    m_enabled      = (lightElement.attributeNS(KoXmlNS::dr3d, "enabled", "") == "true");
-    m_specular     = (lightElement.attributeNS(KoXmlNS::dr3d, "specular", "") == "true");
+    m_enabled      = (lightElement.attributeNS(KoXmlNS::dr3d, "enabled") == "true");
+    m_specular     = (lightElement.attributeNS(KoXmlNS::dr3d, "specular") == "true");
 
     return true;
 }
@@ -79,12 +107,40 @@ void Ko3dScene::Lightsource::saveOdf(KoXmlWriter &writer) const
 
 
 Ko3dScene::Ko3dScene()
+    : d(new Private())
 {
 }
 
 Ko3dScene::~Ko3dScene()
 {
 }
+
+
+// getters
+QVector3D  Ko3dScene::vrp()          const { return d->vrp;          }
+QVector3D  Ko3dScene::vpn()          const { return d->vpn;          }
+QVector3D  Ko3dScene::vup()          const { return d->vup;          }
+Ko3dScene::Projection  Ko3dScene::projection() const { return d->projection;   }
+QString    Ko3dScene::distance()     const { return d->distance;     }
+QString    Ko3dScene::focalLength()  const { return d->focalLength;  }
+QString    Ko3dScene::shadowSlant()  const { return d->shadowSlant;  }
+Ko3dScene::Shademode   Ko3dScene::shadeMode() const { return d->shadeMode;    }
+QColor     Ko3dScene::ambientColor() const { return d->ambientColor; }
+bool       Ko3dScene::lightingMode() const { return d->lightingMode; }
+QString    Ko3dScene::transform()    const { return d->transform;    }
+
+    // setters
+void Ko3dScene::setVrp(QVector3D vrp)                { d->vrp = vrp; }
+void Ko3dScene::setVpn(QVector3D vpn)                { d->vpn = vpn; }
+void Ko3dScene::setVup(QVector3D vup)                { d->vup = vup; }
+void Ko3dScene::setProjection(Projection projection) { d->projection = projection; }
+void Ko3dScene::setDistance(QString distance)        { d->distance = distance; }
+void Ko3dScene::setFocalLength(QString focalLength)  { d->focalLength = focalLength; }
+void Ko3dScene::setShadowSlant(QString shadowSlant)  { d->shadowSlant = shadowSlant; }
+void Ko3dScene::setShadeMode(Shademode shadeMode)    { d->shadeMode = shadeMode; }
+void Ko3dScene::setAmbientColor(QColor ambientColor) { d->ambientColor = ambientColor; }
+void Ko3dScene::setLightingMode(bool lightingMode)   { d->lightingMode = lightingMode; }
+void Ko3dScene::setTransform(QString transform)      { d->transform = transform; }
 
 
 bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
@@ -94,37 +150,37 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
     // 1. Load the scene attributes.
 
     // Camera attributes
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
-    m_vrp = odfToVector3D(dummy);
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn", "");
-    m_vpn = odfToVector3D(dummy);
+    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp");
+    d->vrp = odfToVector3D(dummy);
+    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn");
+    d->vpn = odfToVector3D(dummy);
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vup", "(0.0 0.0 1.0)");
-    m_vup = odfToVector3D(dummy);
+    d->vup = odfToVector3D(dummy);
 
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "projection", "perspective");
     if (dummy == "parallel")
-        m_projection = Parallel;
+        d->projection = Parallel;
     else
-        m_projection = Perspective;
+        d->projection = Perspective;
 
-    m_distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance", "");
-    m_focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length", "");
-    m_shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant", "");
-    m_ambientColor = QColor(sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888"));
+    d->distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance");
+    d->focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length");
+    d->shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant");
+    d->ambientColor = QColor(sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888"));
 
     // Rendering attributes
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
     if (dummy == "flat")
-        m_shadeMode = Flat;
+        d->shadeMode = Flat;
     else if (dummy == "phong")
-        m_shadeMode = Phong;
+        d->shadeMode = Phong;
     else if (dummy == "draft")
-        m_shadeMode = Draft;
+        d->shadeMode = Draft;
     else
-        m_shadeMode = Gouraud;
+        d->shadeMode = Gouraud;
 
-    m_lightingMode = (sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "") == "true");
-    m_transform = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
+    d->lightingMode = (sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode") == "true");
+    d->transform = sceneElement.attributeNS(KoXmlNS::dr3d, "transform");
 
     // 2. Load the light sources.
 
@@ -135,18 +191,11 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
         if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Lightsource  light;
             light.loadOdf(elem);
-            m_lights.append(light);
-
-#if 0
-            Lightsource  &l = m_lights.back();
-            //kDebug(31000) << "  Light:" << l.diffuseColor() << l.direction()
-            //              << l.enabled() << l.specular();
-#endif
+            d->lights.append(light);
         }
-
     }
 
-    //kDebug(31000) << "Lights:" << m_lights.size() << "Objects:" << m_objects.size();
+    //kDebug(31000) << "Lights:" << d->lights.size();
 
     return true;
 }
@@ -155,22 +204,22 @@ void Ko3dScene::saveOdfAttributes(KoXmlWriter &writer) const
 {
     // 1. Write scene attributes
     // Camera attributes
-    writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(m_vrp.x())
-                        .arg(m_vrp.y()).arg(m_vrp.z()));
-    writer.addAttribute("dr3d:vpn", QString("(%1 %2 %3)").arg(m_vpn.x())
-                        .arg(m_vpn.y()).arg(m_vpn.z()));
-    writer.addAttribute("dr3d:vup", QString("(%1 %2 %3)").arg(m_vup.x())
-                        .arg(m_vup.y()).arg(m_vup.z()));
+    writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(d->vrp.x())
+                        .arg(d->vrp.y()).arg(d->vrp.z()));
+    writer.addAttribute("dr3d:vpn", QString("(%1 %2 %3)").arg(d->vpn.x())
+                        .arg(d->vpn.y()).arg(d->vpn.z()));
+    writer.addAttribute("dr3d:vup", QString("(%1 %2 %3)").arg(d->vup.x())
+                        .arg(d->vup.y()).arg(d->vup.z()));
 
-    writer.addAttribute("dr3d:projection", (m_projection == Parallel) ? "parallel" : "perspective");
+    writer.addAttribute("dr3d:projection", (d->projection == Parallel) ? "parallel" : "perspective");
 
-    writer.addAttribute("dr3d:distance",     m_distance);
-    writer.addAttribute("dr3d:focal-length", m_focalLength);
-    writer.addAttribute("dr3d:shadow-slant", m_shadowSlant);
+    writer.addAttribute("dr3d:distance", d->distance);
+    writer.addAttribute("dr3d:focal-length", d->focalLength);
+    writer.addAttribute("dr3d:shadow-slant", d->shadowSlant);
+    writer.addAttribute("dr3d:ambient-color", d->ambientColor.name());
 
     // Rendering attributes
-    writer.addAttribute("dr3d:ambient-color", m_ambientColor.name());
-    switch (m_shadeMode) {
+    switch (d->shadeMode) {
     case Flat:
         writer.addAttribute("dr3d:shade-mode", "flat");
         break;
@@ -186,15 +235,15 @@ void Ko3dScene::saveOdfAttributes(KoXmlWriter &writer) const
         break;
     }
 
-    writer.addAttribute("dr3d:lighting-mode", m_lightingMode);
-    writer.addAttribute("dr3d:transform",     m_transform);
+    writer.addAttribute("dr3d:lighting-mode", d->lightingMode);
+    writer.addAttribute("dr3d:transform", d->transform);
 }
 
 
 void Ko3dScene::saveOdfChildren(KoXmlWriter &writer) const
 {
     // Write light sources.
-    foreach (const Lightsource &light, m_lights) {
+    foreach (const Lightsource &light, d->lights) {
         light.saveOdf(writer);
     }
 }
