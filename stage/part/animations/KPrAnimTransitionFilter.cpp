@@ -19,6 +19,9 @@
 
 #include "KPrAnimTransitionFilter.h"
 #include "KoShapeSavingContext.h"
+#include <KoXmlNS.h>
+
+#include "KPrTransitionFilterRegistry.h"
 
 
 KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation)
@@ -32,7 +35,21 @@ KPrAnimTransitionFilter::~KPrAnimTransitionFilter()
 
 bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+
     KPrAnimationBase::loadOdf(element, context);
+    if ( element.hasAttributeNS( KoXmlNS::smil, "type" ) ) {
+        QString smilType(element.attributeNS(KoXmlNS::smil,"type"));
+        qDebug() << "has type: " << smilType;
+        QString smilSubType( element.attributeNS( KoXmlNS::smil, "subtype" ) );
+        qDebug() << smilSubType;
+        bool reverse = false;
+        if ( element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
+            qDebug() << "has reverse";
+            reverse = true;
+        }
+        qDebug() << "Ready to create object in AnimTransitionFilter.cpp";
+        KPrTransitionFilterRegistry::instance()->createTransitionFilterEffect(element);
+    }
     return true;
 }
 

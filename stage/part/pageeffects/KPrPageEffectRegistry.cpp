@@ -97,6 +97,7 @@ KPrPageEffectRegistry::~KPrPageEffectRegistry()
 
 void KPrPageEffectRegistry::init()
 {
+    qDebug() << "Init Page Registry";
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "PageEffectPlugins";
     config.blacklist = "PageEffectPluginsDisabled";

@@ -106,6 +106,10 @@ set( calligrastageprivate_LIB_SRCS
      animations/KPrAnimationSubStep.cpp
      animations/KPrAnimationLoader.cpp
      animations/KPrAnimationData.cpp
+     animations/KPrTransitionFilterRegistry.cpp
+     animations/KPrAnimTransitionFilterEffect.cpp
+     animations/KPrAnimTransitionFilterFactory.cpp
+     animations/KPrAnimTransitionFilterStrategy.cpp
 
      animations/strategy/KPrAnimationValue.cpp
      animations/strategy/KPrValueParser.cpp
