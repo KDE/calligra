@@ -88,7 +88,7 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
 
     do {
         quint8 d = cs->difference(color, it->oldRawData());
-        qreal newOpacity; // = cs->opacityF(srcIt.rawData());
+        qreal newOpacity; // = cs->opacityF(srcIt->rawData());
         if (d >= threshold) {
             newOpacity = 1.0;
         } else {
