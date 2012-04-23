@@ -123,4 +123,10 @@ private:
 };
 
 
+/** Try to load a 3d scene from an element and return a pointer to a
+ * Ko3dScene if it succeeded.
+ */
+Ko3dScene *load3dScene(KoXmlElement &element);
+
+
 #endif

@@ -81,9 +81,9 @@ bool Ko3dScene::Lightsource::loadOdf(const KoXmlElement &lightElement)
 {
     m_diffuseColor = QColor(lightElement.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
     QString direction = lightElement.attributeNS(KoXmlNS::dr3d, "direction");
-    m_direction    = odfToVector3D(direction);
-    m_enabled      = (lightElement.attributeNS(KoXmlNS::dr3d, "enabled") == "true");
-    m_specular     = (lightElement.attributeNS(KoXmlNS::dr3d, "specular") == "true");
+    m_direction = odfToVector3D(direction);
+    m_enabled = (lightElement.attributeNS(KoXmlNS::dr3d, "enabled") == "true");
+    m_specular = (lightElement.attributeNS(KoXmlNS::dr3d, "specular") == "true");
 
     return true;
 }
@@ -147,6 +147,15 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
 {
     QString dummy;
 
+    // Check if there is a 3d scene at all in this element. We
+    // approximate that by checking if there are any camera parameters.
+    if (!sceneElement.hasAttributeNS(KoXmlNS::dr3d, "vrp")
+        && !sceneElement.hasAttributeNS(KoXmlNS::dr3d, "vpn")
+        && !sceneElement.hasAttributeNS(KoXmlNS::dr3d, "vup"))
+    {
+        return false;
+    }
+
     // 1. Load the scene attributes.
 
     // Camera attributes
@@ -191,9 +200,8 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
     // 2. Load the light sources.
 
     // From the ODF 1.1 spec section 9.4.1:
-    KoXmlElement  elem;
+    KoXmlElement elem;
     forEachElement(elem, sceneElement) {
-
         if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Lightsource  light;
             light.loadOdf(elem);
@@ -256,6 +264,23 @@ void Ko3dScene::saveOdfChildren(KoXmlWriter &writer) const
 
 
 // ----------------------------------------------------------------
+//                         Public functions
+
+
+Ko3dScene *load3dScene(KoXmlElement &element)
+{
+    Ko3dScene *scene = new Ko3dScene();
+
+    if (scene->loadOdf(element)) {
+        return scene;
+    }
+
+    delete scene;
+    return 0;
+}
+
+
+// ----------------------------------------------------------------
 //                         Static functions
 
 
@@ -263,10 +288,10 @@ QVector3D odfToVector3D(QString &string)
 {
     // The string comes into this function in the form "(0 3.5 0.3)".
     QStringList elements = string.mid(1, string.size() - 2).split(' ', QString::SkipEmptyParts);
-    if (elements.size() != 3) {
-        return QVector3D(0, 0, 1);
+    if (elements.size() == 3) {
+        return QVector3D(elements[0].toDouble(), elements[1].toDouble(), elements[2].toDouble());
     }
     else {
-        return QVector3D(elements[0].toDouble(), elements[1].toDouble(), elements[2].toDouble());
+        return QVector3D(0, 0, 1);
     }
 }
