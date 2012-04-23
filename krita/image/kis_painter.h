@@ -722,7 +722,7 @@ protected:
 private:
     template <bool useOldSrcData>
         void bitBltImpl(qint32 dstX, qint32 dstY,
-                        const KisPaintDeviceSP srcDev,
+                        KisPaintDeviceSP srcDev,
                         qint32 srcX, qint32 srcY,
                         qint32 srcWidth, qint32 srcHeight);
 
