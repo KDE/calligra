@@ -27,7 +27,7 @@
 #include <KoColor.h>
 
 #include <qtest_kde.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 
 
 void KisRandomIteratorBenchmark::initTestCase()
@@ -50,19 +50,19 @@ void KisRandomIteratorBenchmark::cleanupTestCase()
 void KisRandomIteratorBenchmark::benchmarkCreation()
 {
     QBENCHMARK{
-        KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+        KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
     }
 }
 
 void KisRandomIteratorBenchmark::benchmarkWriteBytes()
 {
-    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
     
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo(j,i);
-                memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+                it->moveTo(j,i);
+                memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -71,13 +71,13 @@ void KisRandomIteratorBenchmark::benchmarkWriteBytes()
 
 void KisRandomIteratorBenchmark::benchmarkReadBytes()
 {
-    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo(j,i);
-                memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+                it->moveTo(j,i);
+                memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -86,13 +86,13 @@ void KisRandomIteratorBenchmark::benchmarkReadBytes()
 
 void KisRandomIteratorBenchmark::benchmarkConstReadBytes()
 {
-    KisRandomConstAccessor it = m_device->createRandomConstAccessor(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo(j,i);
-                memcpy(m_color->data(),it.rawData(), m_colorSpace->pixelSize());
+                it->moveTo(j,i);
+                memcpy(m_color->data(), it->oldRawData(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -104,15 +104,15 @@ void KisRandomIteratorBenchmark::benchmarkReadWriteBytes(){
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisRandomAccessor writeIterator = m_device->createRandomAccessor(0,0);
-    KisRandomConstAccessor constReadIterator = dab.createRandomConstAccessor(0,0);
+    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG(0,0);
+    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG(0,0);
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                writeIterator.moveTo(j,i);
-                constReadIterator.moveTo(j,i);
-                memcpy(writeIterator.rawData(), constReadIterator.rawData(), m_colorSpace->pixelSize());
+                writeIterator->moveTo(j,i);
+                constReadIterator->moveTo(j,i);
+                memcpy(writeIterator->rawData(), constReadIterator->oldRawData(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -122,16 +122,16 @@ void KisRandomIteratorBenchmark::benchmarkReadWriteBytes(){
 
 void KisRandomIteratorBenchmark::benchmarkTotalRandom()
 {
-    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
     // set the seed so that we always go in the same permutation over the device
     srand(123456);
    
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo( rand() % TEST_IMAGE_WIDTH, 
+                it->moveTo( rand() % TEST_IMAGE_WIDTH, 
                            rand() % TEST_IMAGE_HEIGHT );
-                memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+                memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -139,16 +139,16 @@ void KisRandomIteratorBenchmark::benchmarkTotalRandom()
 
 void KisRandomIteratorBenchmark::benchmarkTotalRandomConst()
 {
-    KisRandomConstAccessor it = m_device->createRandomConstAccessor(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
     // set the seed so that we always go in the same permutation over the device
     srand(123456);
    
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo( rand() % TEST_IMAGE_WIDTH, 
+                it->moveTo( rand() % TEST_IMAGE_WIDTH, 
                            rand() % TEST_IMAGE_HEIGHT );
-                memcpy(m_color->data(), it.rawData(), m_colorSpace->pixelSize());
+                memcpy(m_color->data(), it->oldRawData(), m_colorSpace->pixelSize());
             }
         }
     }
@@ -158,12 +158,12 @@ void KisRandomIteratorBenchmark::benchmarkTotalRandomConst()
 
 void KisRandomIteratorBenchmark::benchmarkNoMemCpy()
 {
-    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
     
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo(j,i);
+                it->moveTo(j,i);
             }
         }
     }
@@ -172,12 +172,12 @@ void KisRandomIteratorBenchmark::benchmarkNoMemCpy()
 
 void KisRandomIteratorBenchmark::benchmarkConstNoMemCpy()
 {
-    KisRandomConstAccessor it = m_device->createRandomConstAccessor(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                it.moveTo(j,i);
+                it->moveTo(j,i);
             }
         }
     }
@@ -197,7 +197,7 @@ void KisRandomIteratorBenchmark::benchmarkTileByTileWrite()
         kWarning() << "There will be some unprocessed pixels! Test area differs from the image size";
     }
     
-    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
     QBENCHMARK{
         for (int yTile = 0; yTile < yTiles; yTile++){
             for (int xTile = 0; xTile < xTiles; xTile++){
@@ -205,8 +205,8 @@ void KisRandomIteratorBenchmark::benchmarkTileByTileWrite()
                 int y = yTile * TEST_AREA_HEIGHT;
                 for (int j = y; j< y+TEST_AREA_HEIGHT; j++ ){
                     for (int i = x; i < x+TEST_AREA_WIDTH ; i++){
-                        it.moveTo(i,j);
-                        memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+                        it->moveTo(i,j);
+                        memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
                     }
                 }
             }
@@ -222,14 +222,14 @@ void KisRandomIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisRandomAccessor writeIterator = m_device->createRandomAccessor(0,0);
-    KisRandomConstAccessor constReadIterator = dab.createRandomConstAccessor(0,0);
+    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG(0,0);
+    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG(0,0);
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-                writeIterator.moveTo(j,i);
-                constReadIterator.moveTo(j,i);
+                writeIterator->moveTo(j,i);
+                constReadIterator->moveTo(j,i);
             }
         }
     }
