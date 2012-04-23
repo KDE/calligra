@@ -113,6 +113,7 @@ Ko3dScene::Ko3dScene()
 
 Ko3dScene::~Ko3dScene()
 {
+    delete d;
 }
 
 
@@ -267,7 +268,7 @@ void Ko3dScene::saveOdfChildren(KoXmlWriter &writer) const
 //                         Public functions
 
 
-Ko3dScene *load3dScene(KoXmlElement &element)
+KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element)
 {
     Ko3dScene *scene = new Ko3dScene();
 

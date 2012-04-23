@@ -46,7 +46,11 @@ class KoXmlElement;
  * chart:plot-area if the chart also has 3D mode set.
  */
 
-class Ko3dScene
+
+#include "koodf_export.h"
+
+
+class KOODF_EXPORT Ko3dScene
 {
 public:
     enum Projection {
@@ -126,7 +130,7 @@ private:
 /** Try to load a 3d scene from an element and return a pointer to a
  * Ko3dScene if it succeeded.
  */
-Ko3dScene *load3dScene(KoXmlElement &element);
+Ko3dScene *load3dScene(const KoXmlElement &element);
 
 
 #endif
