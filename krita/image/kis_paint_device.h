@@ -674,7 +674,7 @@ public:
      * This function create a random accessor which can easily access to sub pixel values.
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor(const KisSelection * selection = 0) const;
+    KisRandomSubAccessorSP createRandomSubAccessor() const;
 
 
     /** Clear the selected pixels from the paint device */

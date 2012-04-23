@@ -191,8 +191,8 @@ typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;
 class KisRandomAccessorNG;
 typedef KisSharedPtr<KisRandomAccessorNG> KisRandomAccessorSP;
 
-class KisRandomSubAccessorPixel;
-typedef KisSharedPtr<KisRandomSubAccessorPixel> KisRandomSubAccessorPixelSP;
+class KisRandomSubAccessor;
+typedef KisSharedPtr<KisRandomSubAccessor> KisRandomSubAccessorSP;
 
 // Things
 

@@ -958,13 +958,10 @@ KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, q
     return new KisRandomAccessor2(dm, x, y, m_d->x, m_d->y, false);
 }
 
-KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor(const KisSelection * selection) const
+KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 {
-    m_d->cache.invalidate();
-    // XXX: shouldn't we use the selection here?
-    Q_UNUSED(selection);
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
-    return KisRandomSubAccessorPixel(pd);
+    return new KisRandomSubAccessor(pd);
 }
 
 void KisPaintDevice::clearSelection(KisSelectionSP selection)
