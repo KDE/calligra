@@ -40,8 +40,12 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
-
-    dev->exactBounds(x, y, w, h);
+    QRect rc;
+    rc = dev->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
 
     const KoColorSpace * cs = dev->colorSpace();
 

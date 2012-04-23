@@ -400,15 +400,6 @@ QRegion KisPaintDevice::region() const
     return m_d->cache.region();
 }
 
-void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-{
-    QRect rc = exactBounds();
-    x = rc.x();
-    y = rc.y();
-    w = rc.width();
-    h = rc.height();
-}
-
 QRect KisPaintDevice::exactBounds() const
 {
     return m_d->cache.exactBounds();

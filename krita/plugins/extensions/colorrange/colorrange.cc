@@ -102,7 +102,12 @@ void ColorRange::selectOpaque()
     KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
-    device->exactBounds(x, y, w, h);
+    QRect rc = device->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+    
     const KoColorSpace * cs = device->colorSpace();
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 

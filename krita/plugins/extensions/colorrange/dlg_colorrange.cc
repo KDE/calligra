@@ -262,7 +262,12 @@ void DlgColorRange::slotSelectClicked()
 {
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     qint32 x, y, w, h;
-    m_view->activeDevice()->exactBounds(x, y, w, h);
+    QRect rc = m_view->activeDevice()->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+
     const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
 
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));

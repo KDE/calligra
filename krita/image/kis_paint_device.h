@@ -198,9 +198,6 @@ public:
      */
     virtual QRect exactBounds() const;
 
-    /// Convience method for the above
-    KDE_DEPRECATED void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
-
     /**
      * Returns a rough approximation of region covered by device.
      * For tiled data manager, it region will consist of a number
