@@ -879,26 +879,18 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
-KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection) const
+KisRepeatHLineConstIteratorSP KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
-    KisDataManager* selectionDm = 0;
 
-    if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
-
-    return KisRepeatHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y, _dataWidth);
+    return new KisRepeatHLineConstIteratorNG(dm, x, y, w, m_d->x, m_d->y, _dataWidth);
 }
 
-KisRepeatVLineConstIteratorPixel KisPaintDevice::createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection) const
+KisRepeatVLineConstIteratorSP KisPaintDevice::createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
-    KisDataManager* selectionDm = 0;
 
-    if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
-
-    return KisRepeatVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y, _dataWidth);
+    return new KisRepeatVLineConstIteratorNG(dm, x, y, h, m_d->x, m_d->y, _dataWidth);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection)

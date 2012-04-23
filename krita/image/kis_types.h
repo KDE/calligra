@@ -154,10 +154,16 @@ class KisRectIterator;
 typedef KisRectIteratorPixelBase<KisRectIterator, quint8*> KisRectIteratorPixel;
 
 // Repeat iterators
+class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;
-typedef KisRepeatHLineIteratorPixelBase< KisHLineConstIteratorPixel > KisRepeatHLineConstIteratorPixel;
+typedef KisRepeatHLineIteratorPixelBase< KisHLineIterator2 > KisRepeatHLineConstIteratorNG;
+typedef KisSharedPtr<KisRepeatHLineConstIteratorNG> KisRepeatHLineConstIteratorSP;
+
+class KisVLineIterator2;
 template<class T> class KisRepeatVLineIteratorPixelBase;
-typedef KisRepeatVLineIteratorPixelBase< KisVLineConstIteratorPixel > KisRepeatVLineConstIteratorPixel;
+typedef KisRepeatVLineIteratorPixelBase< KisVLineIterator2 > KisRepeatVLineConstIteratorNG;
+typedef KisSharedPtr<KisRepeatVLineConstIteratorNG> KisRepeatVLineConstIteratorSP;
+
 
 // Random accessor
 template<class T, typename TSelect> class KisRandomAccessorPixelBase;
