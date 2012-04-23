@@ -49,6 +49,10 @@ static const int measurementTextAboveBelowMargin = 1;
 
 void RulerTabChooser::mousePressEvent(QMouseEvent *)
 {
+    if (! m_showTabs) {
+        return;
+    }
+
     switch(m_type) {
     case QTextOption::LeftTab:
         m_type = QTextOption::RightTab;
@@ -68,6 +72,10 @@ void RulerTabChooser::mousePressEvent(QMouseEvent *)
 
 void RulerTabChooser::paintEvent(QPaintEvent *)
 {
+    if (! m_showTabs) {
+        return;
+    }
+
     QPainter painter(this);
     QPolygonF polygon;
 
@@ -245,7 +253,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
+    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
 
     if (numberStepPixel == 0 || numberStep == 0)
@@ -477,7 +485,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
+    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
         if (adjustMillimeters)
@@ -613,7 +621,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     font.setPointSize(6);
     QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
-            d->viewConverter->viewToDocumentX(line.length())) + ' ' + KoUnit::unitName(d->unit);
+            d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
             midPoint.y() + fontMetrics.ascent()/2);
     painter.setFont(font);
@@ -693,8 +701,6 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paintingStrategy(normalPaintingStrategy),
     ruler(parent)
 {
-    if(orientation == Qt::Horizontal)
-        tabChooser = new RulerTabChooser(parent);
 }
 
 KoRulerPrivate::~KoRulerPrivate()
@@ -705,7 +711,7 @@ KoRulerPrivate::~KoRulerPrivate()
 
 qreal KoRulerPrivate::numberStepForUnit() const
 {
-    switch(unit.indexInList()) {
+    switch(unit.type()) {
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
@@ -935,19 +941,25 @@ void KoRuler::setShowIndents(bool show)
 void KoRuler::setFirstLineIndent(qreal indent)
 {
     d->firstLineIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 void KoRuler::setParagraphIndent(qreal indent)
 {
     d->paragraphIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 void KoRuler::setEndIndent(qreal indent)
 {
     d->endIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 qreal KoRuler::firstLineIndent() const
@@ -967,6 +979,11 @@ qreal KoRuler::endIndent() const
 
 QWidget *KoRuler::tabChooser()
 {
+    if ((d->tabChooser == 0) && (d->orientation == Qt::Horizontal)) {
+        d->tabChooser = new RulerTabChooser(parentWidget());
+        d->tabChooser->setShowTabs(d->showTabs);
+    }
+
     return d->tabChooser;
 }
 
@@ -987,18 +1004,32 @@ void KoRuler::updateSelectionBorders(qreal first, qreal second)
 
 void KoRuler::setShowTabs(bool show)
 {
+    if (d->showTabs == show) {
+        return;
+    }
+
     d->showTabs = show;
+    if (d->tabChooser) {
+        d->tabChooser->setShowTabs(show);
+    }
+    update();
 }
 
 void KoRuler::setRelativeTabs(bool relative)
 {
     d->relativeTabs = relative;
+    if (d->showTabs) {
+        update();
+    }
 }
 
 void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance)
 {
     d->tabs = tabs;
     d->tabDistance = tabDistance;
+    if (d->showTabs) {
+        update();
+    }
 }
 
 QList<KoRuler::Tab> KoRuler::tabs() const
@@ -1074,7 +1105,9 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
                     - d->effectiveActiveRangeStart() - (d->relativeTabs ? d->paragraphIndent : 0);
         }
-        Tab t = {tabpos, d->tabChooser->type()};
+        Tab t = {tabpos, d->tabChooser ?  d->tabChooser->type() :
+                         d->rightToLeft ? QTextOption::RightTab :
+                                          QTextOption::LeftTab};
         d->tabs.append(t);
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;
