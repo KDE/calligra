@@ -158,10 +158,12 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
     d->vup = odfToVector3D(dummy);
 
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "projection", "perspective");
-    if (dummy == "parallel")
+    if (dummy == "parallel") {
         d->projection = Parallel;
-    else
+    }
+    else {
         d->projection = Perspective;
+    }
 
     d->distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance");
     d->focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length");
@@ -170,14 +172,18 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
 
     // Rendering attributes
     dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
-    if (dummy == "flat")
+    if (dummy == "flat") {
         d->shadeMode = Flat;
-    else if (dummy == "phong")
+    }
+    else if (dummy == "phong") {
         d->shadeMode = Phong;
-    else if (dummy == "draft")
+    }
+    else if (dummy == "draft") {
         d->shadeMode = Draft;
-    else
+    }
+    else {
         d->shadeMode = Gouraud;
+    }
 
     d->lightingMode = (sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode") == "true");
     d->transform = sceneElement.attributeNS(KoXmlNS::dr3d, "transform");
@@ -257,8 +263,10 @@ QVector3D odfToVector3D(QString &string)
 {
     // The string comes into this function in the form "(0 3.5 0.3)".
     QStringList elements = string.mid(1, string.size() - 2).split(' ', QString::SkipEmptyParts);
-    if (elements.size() != 3)
+    if (elements.size() != 3) {
         return QVector3D(0, 0, 1);
-    else
+    }
+    else {
         return QVector3D(elements[0].toDouble(), elements[1].toDouble(), elements[2].toDouble());
+    }
 }
