@@ -275,7 +275,7 @@ void KarbonPart::loadOasisSettings(const KoXmlDocument & settingsDoc)
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
     if (!viewSettings.isNull()) {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
     guidesData().loadOdfSettings(settingsDoc);
@@ -395,17 +395,17 @@ void KarbonPart::initConfig()
         setBackupFile(interfaceGroup.readEntry("BackupFile", true));
     }
     int undos = 30;
-    QString defaultUnit = "cm";
-    if (KGlobal::locale()->measureSystem() == KLocale::Imperial)
-        defaultUnit = "in";
+
+    QString defaultUnitSymbol =
+        QLatin1String((KGlobal::locale()->measureSystem() == KLocale::Imperial)?"in":"cm");
 
     if (config->hasGroup("Misc")) {
         KConfigGroup miscGroup = config->group("Misc");
         undos = miscGroup.readEntry("UndoRedo", -1);
-        defaultUnit = miscGroup.readEntry("Units", defaultUnit);
+        defaultUnitSymbol = miscGroup.readEntry("Units", defaultUnitSymbol);
     }
     undoStack()->setUndoLimit(undos);
-    setUnit(KoUnit::unit(defaultUnit));
+    setUnit(KoUnit::fromSymbol(defaultUnitSymbol));
 
     if (config->hasGroup("Grid")) {
         KoGridData defGrid;

@@ -2048,7 +2048,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
         width->setEnabled(false);
 
     double dw = dlg->selection()->canvas()->unit().toUserValue(dlg->defaultWidthSize);
-    defaultWidth->setText(i18n("Default width (%1 %2)", dw, KoUnit::unitName(dlg->selection()->canvas()->unit())));
+    defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->selection()->canvas()->unit().symbol()));
     if (dlg->isRowSelected)
         defaultWidth->setEnabled(false);
 
@@ -2066,7 +2066,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
         height->setEnabled(false);
 
     double dh =  dlg->selection()->canvas()->unit().toUserValue(dlg->defaultHeightSize);
-    defaultHeight->setText(i18n("Default height (%1 %2)", dh, KoUnit::unitName(dlg->selection()->canvas()->unit())));
+    defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->selection()->canvas()->unit().symbol()));
     if (dlg->isColumnSelected)
         defaultHeight->setEnabled(false);
 
