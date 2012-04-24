@@ -97,7 +97,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
 
         // fill twice
-        fillPainter.fillColor(1, 1, 0);
+        fillPainter.fillColor(1, 1, m_device);
 
         fillPainter.deleteTransaction();
     }
