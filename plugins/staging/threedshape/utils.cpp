@@ -19,14 +19,11 @@
  */
 
 // Own
-#include "Lightsource.h"
+#include "utils.h"
 
 // Qt
 #include <QString>
-//#include <QPainter>
-//#include <QTimer>
-//#include <QPixmapCache>
-//#include <QtCore/QBuffer>
+#include <QStringList>
 
 // KDE
 #include <KDebug>
