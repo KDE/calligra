@@ -75,10 +75,10 @@ public:
         void saveOdf(KoXmlWriter &writer) const;
 
         // getters
-        QColor    diffuseColor() const;
+        QColor diffuseColor() const;
         QVector3D direction() const;
-        bool      enabled() const;
-        bool      specular() const;
+        bool enabled() const;
+        bool specular() const;
 
         // setters
         void setDiffuseColor(const QColor &color);
@@ -87,10 +87,10 @@ public:
         void setSpecular(const bool specular);
 
     private:
-        QColor     m_diffuseColor;
+        QColor m_diffuseColor;
         QVector3D  m_direction;
-        bool       m_enabled;
-        bool       m_specular;
+        bool m_enabled;
+        bool m_specular;
     };
 
     Ko3dScene();
@@ -101,17 +101,17 @@ public:
     void saveOdfChildren(KoXmlWriter &writer) const;
 
     // getters
-    QVector3D   vrp()          const;
-    QVector3D   vpn()          const;
-    QVector3D   vup()          const;
-    Projection  projection()   const;
-    QString     distance()     const;
-    QString     focalLength()  const;
-    QString     shadowSlant()  const;
-    Shademode   shadeMode()    const;
-    QColor      ambientColor() const;
-    bool        lightingMode() const;
-    QString     transform()    const;
+    QVector3D vrp() const;
+    QVector3D vpn() const;
+    QVector3D vup() const;
+    Projection projection() const;
+    QString distance() const;
+    QString focalLength() const;
+    QString shadowSlant() const;
+    Shademode shadeMode() const;
+    QColor ambientColor() const;
+    bool lightingMode() const;
+    QString transform() const;
 
     // setters
     void setVrp(QVector3D vrp);

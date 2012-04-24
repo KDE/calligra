@@ -45,22 +45,22 @@ public:
     ~Private() {};
 
     // Camera attributes
-    QVector3D   vrp;          // Camera origin
-    QVector3D   vpn;          // Camera direction
-    QVector3D   vup;          // Up direction
-    Projection  projection;
-    QString     distance;
-    QString     focalLength;
-    QString     shadowSlant;
+    QVector3D vrp;          // Camera origin
+    QVector3D vpn;          // Camera direction
+    QVector3D vup;          // Up direction
+    Projection projection;
+    QString distance;
+    QString focalLength;
+    QString shadowSlant;
 
     // Rendering attributes
-    Shademode   shadeMode;
-    QColor      ambientColor;
-    bool        lightingMode; // True: enable lights, false: disable lights
-    QString     transform;
+    Shademode shadeMode;
+    QColor ambientColor;
+    bool lightingMode; // True: enable lights, false: disable lights
+    QString transform;
 
     // Lightsources (these are children of the element, not attributes)
-    QList<Lightsource>  lights;
+    QList<Lightsource> lights;
 };
 
 
@@ -78,10 +78,10 @@ Ko3dScene::Lightsource::~Lightsource()
 
 
 // getters
-QColor    Ko3dScene::Lightsource::diffuseColor() const { return m_diffuseColor; }
+QColor Ko3dScene::Lightsource::diffuseColor() const { return m_diffuseColor; }
 QVector3D Ko3dScene::Lightsource::direction() const { return m_direction; }
-bool      Ko3dScene::Lightsource::enabled() const { return m_enabled; }
-bool      Ko3dScene::Lightsource::specular() const { return m_specular; }
+bool Ko3dScene::Lightsource::enabled() const { return m_enabled; }
+bool Ko3dScene::Lightsource::specular() const { return m_specular; }
 
 // setters
 void
@@ -150,30 +150,30 @@ Ko3dScene::~Ko3dScene()
 
 
 // getters
-QVector3D  Ko3dScene::vrp()          const { return d->vrp;          }
-QVector3D  Ko3dScene::vpn()          const { return d->vpn;          }
-QVector3D  Ko3dScene::vup()          const { return d->vup;          }
-Ko3dScene::Projection  Ko3dScene::projection() const { return d->projection;   }
-QString    Ko3dScene::distance()     const { return d->distance;     }
-QString    Ko3dScene::focalLength()  const { return d->focalLength;  }
-QString    Ko3dScene::shadowSlant()  const { return d->shadowSlant;  }
-Ko3dScene::Shademode   Ko3dScene::shadeMode() const { return d->shadeMode;    }
-QColor     Ko3dScene::ambientColor() const { return d->ambientColor; }
-bool       Ko3dScene::lightingMode() const { return d->lightingMode; }
-QString    Ko3dScene::transform()    const { return d->transform;    }
+QVector3D Ko3dScene::vrp() const { return d->vrp; }
+QVector3D Ko3dScene::vpn() const { return d->vpn; }
+QVector3D Ko3dScene::vup() const { return d->vup; }
+Ko3dScene::Projection  Ko3dScene::projection() const { return d->projection; }
+QString Ko3dScene::distance() const { return d->distance; }
+QString Ko3dScene::focalLength() const { return d->focalLength; }
+QString Ko3dScene::shadowSlant() const { return d->shadowSlant; }
+Ko3dScene::Shademode   Ko3dScene::shadeMode() const { return d->shadeMode; }
+QColor Ko3dScene::ambientColor() const { return d->ambientColor; }
+bool Ko3dScene::lightingMode() const { return d->lightingMode; }
+QString Ko3dScene::transform() const { return d->transform; }
 
     // setters
-void Ko3dScene::setVrp(QVector3D vrp)                { d->vrp = vrp; }
-void Ko3dScene::setVpn(QVector3D vpn)                { d->vpn = vpn; }
-void Ko3dScene::setVup(QVector3D vup)                { d->vup = vup; }
+void Ko3dScene::setVrp(QVector3D vrp) { d->vrp = vrp; }
+void Ko3dScene::setVpn(QVector3D vpn) { d->vpn = vpn; }
+void Ko3dScene::setVup(QVector3D vup) { d->vup = vup; }
 void Ko3dScene::setProjection(Projection projection) { d->projection = projection; }
-void Ko3dScene::setDistance(QString distance)        { d->distance = distance; }
-void Ko3dScene::setFocalLength(QString focalLength)  { d->focalLength = focalLength; }
-void Ko3dScene::setShadowSlant(QString shadowSlant)  { d->shadowSlant = shadowSlant; }
-void Ko3dScene::setShadeMode(Shademode shadeMode)    { d->shadeMode = shadeMode; }
+void Ko3dScene::setDistance(QString distance) { d->distance = distance; }
+void Ko3dScene::setFocalLength(QString focalLength) { d->focalLength = focalLength; }
+void Ko3dScene::setShadowSlant(QString shadowSlant) { d->shadowSlant = shadowSlant; }
+void Ko3dScene::setShadeMode(Shademode shadeMode) { d->shadeMode = shadeMode; }
 void Ko3dScene::setAmbientColor(QColor ambientColor) { d->ambientColor = ambientColor; }
-void Ko3dScene::setLightingMode(bool lightingMode)   { d->lightingMode = lightingMode; }
-void Ko3dScene::setTransform(QString transform)      { d->transform = transform; }
+void Ko3dScene::setLightingMode(bool lightingMode) { d->lightingMode = lightingMode; }
+void Ko3dScene::setTransform(QString transform) { d->transform = transform; }
 
 
 bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
