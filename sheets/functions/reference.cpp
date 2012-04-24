@@ -617,7 +617,7 @@ Value func_rows(valVector, ValueCalc *, FuncExtra *e)
 //
 // Function: SHEET
 //
-Value func_sheet(valVector args, ValueCalc *, FuncExtra *e)
+Value func_sheet(valVector /*args*/, ValueCalc *, FuncExtra *e)
 {
     Sheet *sheet = e->sheet;
     if (!e->regions.isEmpty()) {
@@ -631,7 +631,7 @@ Value func_sheet(valVector args, ValueCalc *, FuncExtra *e)
 //
 // Function: SHEETS
 //
-Value func_sheets(valVector args, ValueCalc *, FuncExtra *e)
+Value func_sheets(valVector /*args*/, ValueCalc *, FuncExtra *e)
 {
     if (!e->regions.isEmpty()) {
         const Calligra::Sheets::Region &region = e->regions[0];

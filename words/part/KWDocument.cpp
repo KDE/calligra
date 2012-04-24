@@ -24,7 +24,7 @@
  */
 
 #include "KWDocument.h"
-#include "KWFactory.h"<
+#include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWCanvasItem.h"

@@ -45,7 +45,8 @@ protected:
 
 private slots:
     void slotApplyClicked();
-    void distributeUnit(const KoUnit &unit);
+    void setDocumentUnit(const KoUnit &unit);
+    void onDocumentUnitChange(const KoUnit &unit);
     void pageStyleCloneClicked();
     void pageStyleDeleteClicked();
     void pageStyleCurrentRowChanged(int row);

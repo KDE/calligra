@@ -1944,7 +1944,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         }
         //MSPowerPoint: A label does NOT inherit Underline from text-properties
         //of the 1st text chunk.  A bullet does NOT inherit {Italics, Bold}.
-        if ((currentFilter == Utils::PptxFilter)) {
+        if (currentFilter == Utils::PptxFilter) {
             if (m_type != ParagraphBulletProperties::NumberType) {
                 out.addAttribute("fo:font-style", "normal");
                 out.addAttribute("fo:font-weight", "normal");

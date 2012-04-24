@@ -311,7 +311,7 @@ void View::setActiveSection(Section* page)
     m_sectionPropertiesDock->setSection(m_activeSection);
 }
 
-void View::updateMousePosition(const QPoint& position)
+void View::updateMousePosition(const QPoint& /*position*/)
 {
     QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
     // the offset is positive it the canvas is shown fully visible

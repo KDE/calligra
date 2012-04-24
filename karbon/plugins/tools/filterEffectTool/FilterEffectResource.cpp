@@ -119,10 +119,10 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
 
     // only allow obect bounding box units
     if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox")
-        return false;
+        return 0;
 
     if (e.attribute("primitiveUnits") != "objectBoundingBox")
-        return false;
+        return 0;
 
     // parse filter region rectangle
     QRectF filterRegion;
