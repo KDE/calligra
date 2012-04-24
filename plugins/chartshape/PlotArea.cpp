@@ -150,33 +150,33 @@ public:
     mutable bool pixmapRepaintRequested;
 };
 
-PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
+PlotArea::Private::Private( PlotArea *q, ChartShape *parent)
     : q(q)
-    , shape( parent )
+    , shape(parent)
     // Default type: normal bar chart
-    , chartType( BarChartType )
-    , chartSubtype( NormalChartSubtype )
-    , wall( 0 )
-    , floor( 0 )
-    , threeD( false )
-    , threeDScene( 0 )
+    , chartType(BarChartType)
+    , chartSubtype(NormalChartSubtype)
+    , wall(0)
+    , floor(0)
+    , threeD(false)
+    , threeDScene(0)
     // By default, x and y axes are not swapped.
-    , vertical( false )
+    , vertical(false)
     // Data specific for bar charts
-    , gapBetweenBars( 0 )
-    , gapBetweenSets( 100 )
+    , gapBetweenBars(0)
+    , gapBetweenSets(100)
     // OpenOffice.org's default. It means the first pie slice starts at the
     // very top (and then going counter-clockwise).
-    , pieAngleOffset( 90.0 )
+    , pieAngleOffset(90.0)
     // KD Chart stuff
-    , kdChart( new KDChart::Chart() )
-    , kdCartesianPlanePrimary( new KDChart::CartesianCoordinatePlane( kdChart ) )
-    , kdCartesianPlaneSecondary( new KDChart::CartesianCoordinatePlane( kdChart ) )
-    , kdPolarPlane( new KDChart::PolarCoordinatePlane( kdChart ) )
-    , kdRadarPlane( new KDChart::RadarCoordinatePlane( kdChart ) )
+    , kdChart(new KDChart::Chart())
+    , kdCartesianPlanePrimary(new KDChart::CartesianCoordinatePlane(kdChart))
+    , kdCartesianPlaneSecondary(new KDChart::CartesianCoordinatePlane(kdChart))
+    , kdPolarPlane(new KDChart::PolarCoordinatePlane(kdChart))
+    , kdRadarPlane(new KDChart::RadarCoordinatePlane(kdChart))
     // Cache
-    , paintPixmap( true )
-    , pixmapRepaintRequested( true )
+    , paintPixmap(true)
+    , pixmapRepaintRequested(true)
 {
     // --- Prepare Primary Cartesian Coordinate Plane ---
     KDChart::GridAttributes gridAttributes;
