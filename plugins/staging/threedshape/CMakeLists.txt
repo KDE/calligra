@@ -11,7 +11,6 @@ SET (threedshape_LIB_SRCS
     #ThreedShapeConfigWidget.cpp
 
     Scene.cpp
-    Lightsource.cpp
     Objects.cpp
     utils.cpp
 

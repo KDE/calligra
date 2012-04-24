@@ -49,6 +49,13 @@ Scene::Scene()
 Scene::~Scene()
 {
     qDeleteAll(m_objects);
+    delete m_threeDParams;
+}
+
+
+Ko3dScene *Scene::threeDParams() const
+{
+    return m_threeDParams;
 }
 
 
@@ -75,42 +82,10 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
             m_sceneProperties.loadOdf(properties);
     }
     
-    // 1. Load the scene attributes.
+    // Load the scene attributes.
+    m_threeDParams = load3dScene(sceneElement);
 
-    // Camera attributes
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vrp", "");
-    m_vrp = odfToVector3D(dummy);
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vpn", "");
-    m_vpn = odfToVector3D(dummy);
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "vup", "(0.0 0.0 1.0)");
-    m_vup = odfToVector3D(dummy);
-
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "projection", "perspective");
-    if (dummy == "parallel")
-        m_projection = Parallel;
-    else
-        m_projection = Perspective;
-
-    m_distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance", "");
-    m_focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length", "");
-    m_shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant", "");
-    m_ambientColor = QColor(sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888"));
-
-    // Rendering attributes
-    dummy = sceneElement.attributeNS(KoXmlNS::dr3d, "shade-mode", "gouraud");
-    if (dummy == "flat")
-        m_shadeMode = Flat;
-    else if (dummy == "phong")
-        m_shadeMode = Phong;
-    else if (dummy == "draft")
-        m_shadeMode = Draft;
-    else
-        m_shadeMode = Gouraud;
-
-    m_lightingMode = (sceneElement.attributeNS(KoXmlNS::dr3d, "lighting-mode", "") == "true");
-    m_transform = sceneElement.attributeNS(KoXmlNS::dr3d, "transform", "");
-
-    // 2. Load the child elements, i.e the scene itself.
+    // Load the child elements, i.e the scene itself.
 
     // From the ODF 1.1 spec section 9.4.1:
     //
@@ -123,21 +98,13 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
     //  * Sphere – see section 9.4.4.
     //  * Rotate – see section 9.4.6.
     //  * Cube – see section 9.4.3.
+    //
+    // The lights are skipped here, they are taken care of by the call
+    // to loadScene() above.
     KoXmlElement  elem;
     forEachElement(elem, sceneElement) {
 
-        if (elem.localName() == "light" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Lightsource  light;
-            light.loadOdf(elem);
-            m_lights.append(light);
-
-#if 1
-            Lightsource  &l = m_lights.back();
-            kDebug(31000) << "  Light:" << l.diffuseColor() << l.direction()
-                          << l.enabled() << l.specular();
-#endif
-        } 
-       else if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
+        if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // FIXME: Recursive!  How does this work?
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
@@ -168,7 +135,7 @@ bool Scene::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &con
         }
     }
 
-    kDebug(31000) << "Lights:" << m_lights.size() << "Objects:" << m_objects.size();
+    kDebug(31000) << "Objects:" << m_objects.size();
 
     return true;
 }
@@ -184,48 +151,13 @@ void Scene::saveOdf(KoShapeSavingContext &context) const
     QString  styleName = context.mainStyles().insert(sceneStyle, "gr");
     writer.addAttribute("draw:style-name", styleName);
 
-    // 1. Write scene attributes
-    // Camera attributes
-    writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(m_vrp.x())
-                        .arg(m_vrp.y()).arg(m_vrp.z()));
-    writer.addAttribute("dr3d:vpn", QString("(%1 %2 %3)").arg(m_vpn.x())
-                        .arg(m_vpn.y()).arg(m_vpn.z()));
-    writer.addAttribute("dr3d:vup", QString("(%1 %2 %3)").arg(m_vup.x())
-                        .arg(m_vup.y()).arg(m_vup.z()));
-
-    writer.addAttribute("dr3d:projection", (m_projection == Parallel) ? "parallel" : "perspective");
-
-    writer.addAttribute("dr3d:distance",     m_distance);
-    writer.addAttribute("dr3d:focal-length", m_focalLength);
-    writer.addAttribute("dr3d:shadow-slant", m_shadowSlant);
-
-    // Rendering attributes
-    writer.addAttribute("dr3d:ambient-color", m_ambientColor.name());
-    switch (m_shadeMode) {
-    case Flat:
-        writer.addAttribute("dr3d:shade-mode", "flat");
-        break;
-    case Phong:
-        writer.addAttribute("dr3d:shade-mode", "phong");
-        break;
-    case Draft:
-        writer.addAttribute("dr3d:shade-mode", "draft");
-        break;
-    case Gouraud:
-    default:
-        writer.addAttribute("dr3d:shade-mode", "gouraud");
-        break;
-    }
-
-    writer.addAttribute("dr3d:lighting-mode", m_lightingMode);
-    writer.addAttribute("dr3d:transform",     m_transform);
-
-    // 2. Write scene objects
+    // Write scene attributes
+    if (m_threeDParams)
+        m_threeDParams->saveOdfAttributes(writer);
 
     // 2.1 Light sources
-    foreach (const Lightsource &light, m_lights) {
-        light.saveOdf(writer);
-    }
+    if (m_threeDParams)
+        m_threeDParams->saveOdfChildren(writer);
 
     // 2.2 Objects in the scene
     foreach (const Object3D *object, m_objects) {

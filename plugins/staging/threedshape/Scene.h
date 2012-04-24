@@ -28,11 +28,12 @@
 #include <QList>
 
 // Calligra
+#include <Ko3dScene.h>
 #include <KoShape.h>
 
 // Shape
 #include "GraphicsProperties.h"
-#include "Lightsource.h"
+//#include "Lightsource.h"
 #include "Objects.h"
 
 class KoXmlWriter;
@@ -61,42 +62,18 @@ public:
     bool loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context) const;
 
-    // getters
-    QVector3D   vrp()          const { return m_vrp;          }
-    QVector3D   vpn()          const { return m_vpn;          }
-    QVector3D   vup()          const { return m_vup;          }
-    Projection  projection()   const { return m_projection;   }
-    QString     distance()     const { return m_distance;     } // Not yet used, just saved
-    QString     focalLength()  const { return m_focalLength;  } // Not yet used, just saved
-    QString     shadowSlant()  const { return m_shadowSlant;  } // Not yet used, just saved
-    Shademode   shadeMode()    const { return m_shadeMode;    }
-    QColor      ambientColor() const { return m_ambientColor; }
-    bool        lightingMode() const { return m_lightingMode; }
-    QString     transform()    const { return m_transform;    } // Not yet used, just saved
+    Ko3dScene *threeDParams() const;
 
 private:
-    // 0. Scene style
+    // Scene style
+    // FIXME: Use loading in KoShape instead.
     GraphicsProperties  m_sceneProperties;
 
-    // 1. Scene attributes
-    // Camera attributes
-    QVector3D   m_vrp;          // Camera origin
-    QVector3D   m_vpn;          // Camera direction
-    QVector3D   m_vup;          // Up direction
-    Projection  m_projection;
-    QString     m_distance;     // Not yet used, just saved
-    QString     m_focalLength;  // Not yet used, just saved
-    QString     m_shadowSlant;  // Not yet used, just saved
+    // Scene attributes
+    Ko3dScene *m_threeDParams;    // Camera and rendering parameters plus lightsources.
 
-    // Rendering attributes
-    Shademode   m_shadeMode;
-    QColor      m_ambientColor;
-    bool        m_lightingMode; // True: enable lights, false: disable lights
-    QString     m_transform;    // Not yet used, just saved
-
-    // 2. The scene itself.
-    QList<Lightsource>  m_lights;
-    QList<Object3D*>    m_objects; // value list. If necessary, we can make object3d shared.
+    // The objects in the scene.
+    QList<Object3D*>  m_objects; // value list. If necessary, we can make object3d shared.
 };
 
 

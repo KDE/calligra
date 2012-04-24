@@ -35,8 +35,6 @@
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 
-// Shape
-
 
 GraphicsProperties::GraphicsProperties()
     : m_attributes(0)

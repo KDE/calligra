@@ -46,7 +46,6 @@
 
 // 3D shape
 #include "Scene.h"
-#include "Lightsource.h"
 
 
 ThreedShape::ThreedShape()
@@ -113,11 +112,6 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
     bool result = m_scene.loadOdf(sceneElement, context);
-    kDebug(31000) << "Camera:" << m_scene.vrp() << m_scene.vpn() << m_scene.vup()
-                  << m_scene.distance() << m_scene.projection() << m_scene.focalLength()
-                  << "\nRendering:" << m_scene.shadowSlant()
-                  << m_scene.ambientColor()
-                  << m_scene.shadeMode() << m_scene.lightingMode() << m_scene.transform();
 
     return result;
 }
