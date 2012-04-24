@@ -77,6 +77,38 @@ Ko3dScene::Lightsource::~Lightsource()
 }
 
 
+// getters
+QColor    Ko3dScene::Lightsource::diffuseColor() const { return m_diffuseColor; }
+QVector3D Ko3dScene::Lightsource::direction() const { return m_direction; }
+bool      Ko3dScene::Lightsource::enabled() const { return m_enabled; }
+bool      Ko3dScene::Lightsource::specular() const { return m_specular; }
+
+// setters
+void
+Ko3dScene::Lightsource::setDiffuseColor(const QColor &color)
+{
+    m_diffuseColor = color;
+}
+
+void
+Ko3dScene::Lightsource::setDirection(const QVector3D &direction)
+{
+    m_direction = direction;
+}
+
+void
+Ko3dScene::Lightsource::setEnabled(const bool enabled)
+{
+    m_enabled = enabled;
+}
+
+void
+Ko3dScene::Lightsource::setSpecular(const bool specular)
+{
+    m_specular = specular;
+}
+
+
 bool Ko3dScene::Lightsource::loadOdf(const KoXmlElement &lightElement)
 {
     m_diffuseColor = QColor(lightElement.attributeNS(KoXmlNS::dr3d, "diffuse-color", "#ffffff"));
@@ -175,9 +207,9 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
         d->projection = Perspective;
     }
 
-    d->distance     = sceneElement.attributeNS(KoXmlNS::dr3d, "distance");
-    d->focalLength  = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length");
-    d->shadowSlant  = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant");
+    d->distance = sceneElement.attributeNS(KoXmlNS::dr3d, "distance");
+    d->focalLength = sceneElement.attributeNS(KoXmlNS::dr3d, "focal-length");
+    d->shadowSlant = sceneElement.attributeNS(KoXmlNS::dr3d, "shadow-slant");
     d->ambientColor = QColor(sceneElement.attributeNS(KoXmlNS::dr3d, "ambient-color", "#888888"));
 
     // Rendering attributes

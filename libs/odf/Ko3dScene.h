@@ -75,10 +75,16 @@ public:
         void saveOdf(KoXmlWriter &writer) const;
 
         // getters
-        QColor    diffuseColor() { return m_diffuseColor; }
-        QVector3D direction()    { return m_direction;    }
-        bool      enabled()      { return m_enabled;      }
-        bool      specular()     { return m_specular;     }
+        QColor    diffuseColor() const;
+        QVector3D direction() const;
+        bool      enabled() const;
+        bool      specular() const;
+
+        // setters
+        void setDiffuseColor(const QColor &color);
+        void setDirection(const QVector3D &direction);
+        void setEnabled(const bool enabled);
+        void setSpecular(const bool specular);
 
     private:
         QColor     m_diffuseColor;
