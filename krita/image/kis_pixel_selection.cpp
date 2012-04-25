@@ -188,21 +188,24 @@ void KisPixelSelection::invert()
     // unselected but existing pixels need to be inverted too
     QRect rc = region().boundingRect();
 
-    quint8 *bytes = new quint8[rc.width()];
-    for(int row = rc.y(); row < rc.height(); ++row) {
-        readBytes(bytes, rc.x(), row, rc.width(), 1);
-        for (int i = 0; i < rc.width(); ++i) {
-            bytes[i] = MAX_SELECTED - bytes[i];
+    if (!rc.isEmpty()) {
+#if 0
+        quint8 *bytes = new quint8[rc.width()];
+        for(int row = rc.y(); row < rc.height(); ++row) {
+            readBytes(bytes, rc.x(), row, rc.width(), 1);
+            for (int i = 0; i < rc.width(); ++i) {
+                bytes[i] = MAX_SELECTED - bytes[i];
+            }
+            writeBytes(bytes, rc.x(), row, rc.width(), 1);
         }
-        writeBytes(bytes, rc.x(), row, rc.width(), 1);
+        delete []bytes;
+#else
+        KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+        do {
+            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
+        } while (it->nextPixel());
+#endif
     }
-    delete []bytes;
-
-//    KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
-//    do {
-//        *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-//    } while (it->nextPixel());
-
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
 }
