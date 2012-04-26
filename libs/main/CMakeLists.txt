@@ -60,7 +60,6 @@ set(komain_LIB_SRCS
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
-    KoItemToolTip.cpp
 
     KoProgressBar.cpp
     KoProgressUpdater.cpp
