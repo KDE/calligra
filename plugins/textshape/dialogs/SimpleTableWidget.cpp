@@ -53,7 +53,6 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
 
     widget.border->setNumColumns(9);
 
-
     fillBorderButton(QColor(0,0,0));
 
     KoColorPopupAction *actionBorderColor = new KoColorPopupAction(this);
@@ -186,6 +185,7 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
         }
         i++;
     }
+    widget.border->setItemsBackground(QColor(Qt::white));
 
    // widget.borderType->addItem("None");
 

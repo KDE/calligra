@@ -48,7 +48,7 @@ class ItemChooserAction : public QWidgetAction
 {
 public:
     ItemChooserAction(int columns);
-    QWidget *m_widget;
+    QFrame *m_widget;
     QGridLayout *m_containerLayout;
     int m_cnt;
     int m_columns;
@@ -61,12 +61,20 @@ ItemChooserAction::ItemChooserAction(int columns)
  , m_cnt(0)
  , m_columns(columns)
 {
-    m_widget = new QWidget;
+    m_widget = new QFrame;
+    QGridLayout *l = new QGridLayout();
+    l->setSpacing(0);
+    l->setMargin(0);
+    m_widget->setLayout(l);
+
+    QWidget *w = new QWidget();
+    l->addWidget(w);
+
     m_containerLayout = new QGridLayout();
     m_containerLayout->setSpacing(4);
-    m_widget->setLayout(m_containerLayout);
+    w->setLayout(m_containerLayout);
+
     setDefaultWidget(m_widget);
-    m_widget->setBackgroundRole(QPalette::Base);
 }
 
 QToolButton *ItemChooserAction::addItem(QPixmap pm)
@@ -106,6 +114,23 @@ void FormattingButton::setNumColumns(int columns)
 {
     m_styleAction = 0;
     m_columns = columns;
+}
+
+void FormattingButton::setItemsBackground(const QColor &color)
+{
+    if(m_styleAction) {
+        foreach (QObject *o, m_styleAction->defaultWidget()->children()) {
+            QWidget *w = qobject_cast<QWidget *>(o);
+            if (w) {
+                QPalette p = w->palette();
+                p.setColor(QPalette::Window, color);
+                w->setPalette(p);
+                w->setAutoFillBackground(true);
+                break;
+            }
+        }
+        qobject_cast<QFrame *>(m_styleAction->defaultWidget())->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
+    }
 }
 
 void FormattingButton::addItem(QPixmap pm, int id, QString toolTip)
