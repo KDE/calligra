@@ -21,7 +21,6 @@
 
 #include <math.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include "kis_iterator_ng.h"
 #include "kis_buffer_stream.h"

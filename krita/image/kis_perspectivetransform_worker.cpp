@@ -25,7 +25,6 @@
 #include <QTransform>
 #include <QVector3D>
 
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"
 #include "kis_random_sub_accessor.h"

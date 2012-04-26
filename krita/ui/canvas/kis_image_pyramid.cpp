@@ -21,7 +21,6 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_painter.h"
-#include "kis_iterators_pixel.h"
 #include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
 

@@ -41,7 +41,6 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_iterator.h>
 #include "kis_iterator_ng.h"
 
 jp2Converter::jp2Converter(KisDoc2 *doc)

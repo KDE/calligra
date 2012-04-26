@@ -19,7 +19,6 @@
 #include "kis_vline_iterator_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 
 #include <KoColorSpace.h>

@@ -36,7 +36,6 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_config.h>
-#include <kis_iterators_pixel.h>
 #include <kis_properties_configuration.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_filter_registry_model.h>
