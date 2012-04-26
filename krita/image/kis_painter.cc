@@ -64,6 +64,7 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
 #include "kis_perspective_math.h"
+#include "tiles3/kis_random_accessor.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -465,7 +466,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     qint32 rowsRemaining = srcHeight;
 
     // Read below
-    KisRandomAccessorSP srcIt = srcDev->createRandomAccessorNG(srcX, srcY);
+    KisRandomConstAccessorSP srcIt = srcDev->createRandomConstAccessorNG(srcX, srcY);
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(dstX, dstY);
 
     /* Here be a huge block of verbose code that does roughly the same than
@@ -509,7 +510,8 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
                 d->paramInfo.dstRowStride  = dstRowStride;
-                d->paramInfo.srcRowStart   = useOldSrcData ? srcIt->oldRawData() : srcIt->rawData();
+                // if we don't use the oldRawData, we need to access the rawData of the source device.
+                d->paramInfo.srcRowStart   = useOldSrcData ? srcIt->oldRawData() : static_cast<KisRandomAccessor2*>(srcIt.data())->rawData();
                 d->paramInfo.srcRowStride  = srcRowStride;
                 d->paramInfo.maskRowStart  = maskIt->oldRawData();
                 d->paramInfo.maskRowStride = maskRowStride;
@@ -556,7 +558,8 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
                 d->paramInfo.dstRowStride  = dstRowStride;
-                d->paramInfo.srcRowStart   = useOldSrcData ? srcIt->oldRawData() : srcIt->rawData();
+                // if we don't use the oldRawData, we need to access the rawData of the source device.
+                d->paramInfo.srcRowStart   = useOldSrcData ? srcIt->oldRawData() : static_cast<KisRandomAccessor2*>(srcIt.data())->rawData();
                 d->paramInfo.srcRowStride  = srcRowStride;
                 d->paramInfo.maskRowStart  = 0;
                 d->paramInfo.maskRowStride = 0;
@@ -576,6 +579,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     }
 
     addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
+
 }
 
 void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
