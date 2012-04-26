@@ -31,10 +31,10 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
         m_height(height)
 {
     Q_ASSERT(width > 0); // for us, to warn us when abusing the iterators
-    if (width < 1) width == 1;  // for release mode, to make sure there's always at least one pixel read.
+    if (width < 1) width = 1;  // for release mode, to make sure there's always at least one pixel read.
 
     Q_ASSERT(height > 0); // for us, to warn us when abusing the iterators
-    if (height < 1) height == 1;  // for release mode, to make sure there's always at least one pixel read.
+    if (height < 1) height = 1;  // for release mode, to make sure there's always at least one pixel read.
 
 
     left -= offsetX;
