@@ -171,7 +171,6 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         }
     }
     switch (image->color_space) {
-    case CLRSPC_UNSPECIFIED:
     case CLRSPC_UNKNOWN:
         break;
     case CLRSPC_SRGB: {
