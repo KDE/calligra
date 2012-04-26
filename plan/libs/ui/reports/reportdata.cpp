@@ -69,7 +69,7 @@ QString ReportData::sourceName() const {
     return QString();
 }
 
-unsigned int ReportData::fieldNumber ( const QString &fld ) const
+int ReportData::fieldNumber ( const QString &fld ) const
 {
     QStringList names = fieldKeys();
     int idx = names.indexOf( fld );

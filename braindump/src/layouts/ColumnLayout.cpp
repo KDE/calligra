@@ -70,6 +70,7 @@ bool contains(const QList<KoShape*> list1, const QList<KoShape*> list2)
 
 void ColumnLayout::shapeGeometryChanged(KoShape* _shape)
 {
+    Q_UNUSED(_shape)
     Q_ASSERT(m_shapes.contains(_shape));
 }
 

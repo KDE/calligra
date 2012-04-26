@@ -141,7 +141,7 @@ QString KexiDBReportData::sourceName() const
     return m_qstrQuery;
 }
 
-uint KexiDBReportData::fieldNumber ( const QString &fld ) const
+int KexiDBReportData::fieldNumber ( const QString &fld ) const
 {
     
     if (!m_cursor || !m_cursor->query()) {
