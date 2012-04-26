@@ -20,9 +20,9 @@
 #ifndef KEXISHAREDACTIONHOST_H
 #define KEXISHAREDACTIONHOST_H
 
-#include <qpointer.h>
-#include <qobject.h>
-#include <qpair.h>
+#include <QPointer>
+#include <QObject>
+#include <QPair>
 
 #include <kstandardaction.h>
 #include <kaction.h>

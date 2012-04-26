@@ -32,10 +32,10 @@
 
 #include "kowidgets_export.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoUnit;
-class KoLineBorder;
+class KoShapeStroke;
 class KoMarker;
 
 /// A widget for configuring the stroke of a shape
@@ -54,7 +54,7 @@ public:
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
 
-    void updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker);
+    void updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker);
 
     void locationChanged(Qt::DockWidgetArea area);
 

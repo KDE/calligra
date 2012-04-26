@@ -31,7 +31,6 @@
 #include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -57,9 +56,9 @@
 #include <KConfigGroup>
 #include <KDebug>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QButtonGroup>
 #include <QItemSelection>
 #include <QApplication>
 #include <QClipboard>

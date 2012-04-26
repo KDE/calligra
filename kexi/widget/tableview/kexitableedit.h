@@ -23,7 +23,7 @@
 
 #include <core/kexidataiteminterface.h>
 
-#include <qvariant.h>
+#include <QVariant>
 #ifndef KEXI_MOBILE
 #include <q3scrollview.h>
 #endif

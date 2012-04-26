@@ -22,7 +22,7 @@
 #ifndef KEXISCRIPTPART_H
 #define KEXISCRIPTPART_H
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kexi.h>
 #include <kexipart.h>

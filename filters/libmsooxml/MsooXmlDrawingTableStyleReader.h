@@ -24,7 +24,6 @@
 
 #include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
-#include "MsooXmlThemesReader.h"
 
 class KoGenStyles;
 
@@ -38,11 +37,16 @@ class KoGenStyles;
 namespace MSOOXML
 {
 
+class DrawingMLTheme;
 class MsooXmlImport;
+
 class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList, QMap< QString, QString > _colorMap);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path,
+				    const QString& _file, MSOOXML::DrawingMLTheme* _themes,
+				    QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList,
+				    QMap< QString, QString > _colorMap);
     virtual ~MsooXmlDrawingTableStyleContext();
 
     QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
@@ -94,9 +98,8 @@ protected:
     KoFilter::ConversionStatus read_Table_ln();
     KoFilter::ConversionStatus read_fill();
 
-    //get read_ln and friends, it's a shame I have to get a lot of crap alongside
-    #include <MsooXmlCommonReaderMethods.h>
-    #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include "MsooXmlDrawingMLShared.h"
+
 private:
     MsooXmlDrawingTableStyleContext* m_context;
 

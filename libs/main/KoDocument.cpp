@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -66,16 +67,16 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtGui/QPainter>
-#include <QtCore/QTimer>
+#include <QBuffer>
+#include <QDir>
+#include <QFileInfo>
+#include <QPainter>
+#include <QTimer>
 #include <QtDBus/QDBusConnection>
-#include <QtGui/QLayout>
-#include <QtGui/QApplication>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QLayout>
+#include <QApplication>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 
@@ -371,7 +372,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
         KConfigGroup cfgGrp(componentData().config(), "RDF");
         bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
         if (rdfEnabled) {
-            d->docRdf  = new KoDocumentRdf(this);
+            setDocumentRdf(new KoDocumentRdf(this));
         }
     }
 #endif
@@ -625,6 +626,22 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
     d->confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
+bool KoDocument::saveInBatchMode() const
+{
+    if (d->filterManager) {
+        return d->filterManager->getBatchMode();
+    }
+    return true;
+}
+
+void KoDocument::setSaveInBatchMode(const bool batchMode)
+{
+    if (!d->filterManager) {
+        d->filterManager = new KoFilterManager(this, d->progressUpdater);
+    }
+    d->filterManager->setBatchMode(batchMode);
+}
+
 bool KoDocument::wantExportConfirmation() const
 {
     return true;
@@ -796,10 +813,12 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
-    return d->docRdf;
+    if (d->docRdf && d->docRdf->model()) {
+        return d->docRdf;
+    }
 #endif
     return 0;
 }
@@ -807,10 +826,11 @@ KoDocumentRdf *KoDocument::documentRdf() const
 void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
 {
     delete d->docRdf;
-#ifdef SHOULD_BUILD_RDF
-    d->docRdf = rdfDocument;
-#else
     d->docRdf = 0;
+#ifdef SHOULD_BUILD_RDF
+    if (rdfDocument->model()) {
+        d->docRdf = rdfDocument;
+    }
 #endif
 }
 
@@ -1050,6 +1070,38 @@ bool KoDocument::saveToStream(QIODevice *dev)
     if (nwritten != (int)s.size())
         kWarning(30003) << "wrote " << nwritten << "- expected" <<  s.size();
     return nwritten == (int)s.size();
+}
+
+QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
+{
+    if (!url.isLocalFile()) return mimeType;
+
+    QStringList imageMimeTypes;
+    imageMimeTypes << "image/jpeg"
+                   << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
+                   << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
+                   << "application/pdf"
+                   << "image/x-exr"
+                   << "image/x-xcf"
+                   << "image/x-eps"
+                   << "image/x-nikon-nef" << "image/x-canon-cr2" << "image/x-sony-sr2" << "image/x-canon-crw" << "image/x-pentax-pef" << "image/x-sigma-x3f" << "image/x-kodak-kdc" << "image/x-minolta-mrw" << "image/x-sony-arw" << "image/x-kodak-k25" << "image/x-kodak-dcr" << "image/x-olympus-orf" << "image/x-panasonic-raw" << "image/x-panasonic-raw2" << "image/x-fuji-raf" << "image/x-sony-srf" << "image/x-adobe-dng"
+                   << "image/png"
+                   << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
+                   << "image/tiff"
+                   << "image/openraster"
+                   << "image/jp2";
+
+    if (!imageMimeTypes.contains(mimeType)) return mimeType;
+
+    int accuracy = 0;
+
+    QFile f(url.toLocalFile());
+    f.open(QIODevice::ReadOnly);
+    QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
+    KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
+    f.close();
+
+    return mime->name();
 }
 
 // Called for embedded documents
@@ -1382,12 +1434,13 @@ bool KoDocument::openFile()
 
     KUrl u(localFilePath());
     QString typeName = arguments().mimeType();
-    //kDebug(30003) << "mimetypes 1:" << typeName;
 
     if (typeName.isEmpty()) {
         typeName = KMimeType::findByUrl(u, 0, true)->name();
     }
-    //kDebug(30003) << "mimetypes 2:" << typeName;
+
+    // for images, always check content.
+    typeName = checkImageMimeTypes(typeName, u);
 
     // Sometimes it seems that arguments().mimeType() contains a much
     // too generic mime type.  In that case, let's try some educated
@@ -1395,7 +1448,7 @@ bool KoDocument::openFile()
     //
     // FIXME: Should we just ignore this and always call
     //        KMimeType::findByUrl()? David Faure says that it's
-    //        impossible for findByUrl() to fail ot initiate the
+    //        impossible for findByUrl() to fail to initiate the
     //        mimetype for "*.doc" to application/msword.  This hints
     //        that we should do that.  But why does it happen like
     //        this at all?
@@ -1778,7 +1831,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         QString errorMsg;
         int errorLine;
         int errorColumn;
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         bool res;
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
             res = loadXML(doc, 0);
@@ -1879,7 +1932,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
         oasis = false;
 
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);
@@ -1902,7 +1955,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             d->docInfo->loadOasis(metaDoc);
         }
     } else if (!oasis && store->hasFile("documentinfo.xml")) {
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         if (oldLoadAndParse(store, "documentinfo.xml", doc)) {
             d->docInfo->load(doc);
         }
@@ -1947,7 +2000,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 bool KoDocument::loadFromStore(KoStore *_store, const QString& url)
 {
     if (_store->open(url)) {
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         doc.setContent(_store->device());
         if (!loadXML(doc, _store)) {
             _store->close();
@@ -2552,12 +2605,7 @@ void KoDocument::setUnit(const KoUnit &unit)
 
 void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
 {
-    settingsWriter->addConfigItem("unit", unitName());
-}
-
-QString KoDocument::unitName() const
-{
-    return KoUnit::unitName(unit());
+    settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
 void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)

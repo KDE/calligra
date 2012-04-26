@@ -1,6 +1,6 @@
 /*
    KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +36,8 @@
 #include <QPainter>
 #include <QPicture>
 
+#include "kptdebug.h"
+
 KoSimpleOdtPicture::KoSimpleOdtPicture(OROPrimitive *primitive)
     : KoSimpleOdtPrimitive(primitive)
 {
@@ -54,6 +56,7 @@ void KoSimpleOdtPicture::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("xml:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
@@ -85,7 +88,7 @@ bool KoSimpleOdtPicture::saveData(KoStore* store, KoXmlWriter* manifestWriter) c
     painter.setRenderHint(QPainter::Antialiasing);
     painter.drawPicture(0, 0, *(picture()->picture()));
     painter.end();
-    kDebug()<<image.format();
+    kDebug(planDbg())<<image.format();
     bool ok = image.save(&device, "PNG");
     if (ok) {
         const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());

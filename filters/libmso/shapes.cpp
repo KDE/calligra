@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 #include <QTransform>
-#include <qbuffer.h>
+#include <QBuffer>
 
 #include <cmath>
 
@@ -113,6 +113,10 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
+    // TODO: Use client->isPlaceholder - might require an update of the
+    // placeholderAllowed function in the PPT filter.  Trying to save as many
+    // shapes into draw:text-box at the moment, becasue vertical allignment in
+    // draw:custom-shape does not work properly (bug 288047).
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
     } else {
@@ -447,7 +451,14 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
     quint16 shapeType = o.shapeProp.rh.recInstance;
+    client->m_currentShapeType = o.shapeProp.rh.recInstance;
+
     switch (shapeType) {
     case msosptNotPrimitive:
         processNotPrimitive(o, out);
@@ -459,7 +470,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processRoundRectangle(o, out);
         break;
     case msosptEllipse:
-        // TODO: Something has to be done here (LukasT).
+        // TODO: Something has to be done here (LukasT).  LukasT:
+        // "Great comment", can you provide more details? :)
         processEllipse(o, out);
         break;
     case msosptDiamond:
@@ -960,7 +972,12 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
-    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
+    if (o.clientData && client->onlyClientData(*o.clientData)) {
         client->processClientData(o.clientTextbox.data(), *o.clientData, out);
     } else if (o.clientTextbox) {
         client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);
@@ -1022,7 +1039,6 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:class-names
     //draw:data
     //draw:engine
-    //draw:id
     //draw:layer
     out.xml.addAttribute("draw:layer", "layout");
     //draw:name

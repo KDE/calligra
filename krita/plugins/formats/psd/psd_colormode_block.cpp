@@ -19,8 +19,8 @@
 
 #include "psd.h"
 #include "psd_utils.h"
-#include <QtCore/QByteArray>
-#include <qrgb.h>
+#include <QByteArray>
+#include <QColor>
 #include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
@@ -89,7 +89,7 @@ bool PSDColorModeBlock::valid()
         return false;
     }
     if (colormode == DuoTone && blocksize == 0) {
-        error == QString("DuoTone mode, but data block is empty");
+        error = QString("DuoTone mode, but data block is empty");
         return false;
     }
     if ((quint32)data.size() != blocksize) {

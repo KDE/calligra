@@ -21,6 +21,7 @@ set(kexiutils_LIB_SRCS
   KexiContextMessage.cpp
   KexiTitleLabel.cpp
   KexiLinkWidget.cpp
+  KexiLinkButton.cpp
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp

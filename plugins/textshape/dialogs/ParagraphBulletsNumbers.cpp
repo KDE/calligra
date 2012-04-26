@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -155,7 +156,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
 {
     Q_ASSERT(savingStyle);
 
-    KoUnit *unit=new KoUnit(KoUnit::Centimeter);
+    KoUnit unit(KoUnit::Centimeter);
 
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
@@ -165,7 +166,6 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     if (savingStyle->listStyle() == 0) {
         KoListStyle *listStyle = new KoListStyle(savingStyle);
-        listStyle->setStyleId(style);
         savingStyle->setListStyle(listStyle);
     }
     KoListStyle *listStyle = savingStyle->listStyle();
@@ -182,7 +182,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
         llp.setAlignmentMode(true);
         switch(widget.labelFollowedBy->currentIndex()) {
         case 0: llp.setLabelFollowedBy(KoListStyle::ListTab);
-            llp.setTabStopPosition(unit->fromUserValue(widget.doubleSpinBox->value()));
+            llp.setTabStopPosition(unit.fromUserValue(widget.doubleSpinBox->value()));
             break;
         case 1: llp.setLabelFollowedBy(KoListStyle::Space);
             break;
@@ -192,12 +192,12 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
             Q_ASSERT(false);
         }
 
-        llp.setMargin(unit->fromUserValue(widget.doubleSpinBox_2->value()));
-        llp.setTextIndent(unit->fromUserValue(widget.doubleSpinBox_3->value())-unit->fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setMargin(unit.fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setTextIndent(unit.fromUserValue(widget.doubleSpinBox_3->value())-unit.fromUserValue(widget.doubleSpinBox_2->value()));
     }
 
     if (style == KoListStyle::CustomCharItem) {
-        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
+        llp.setBulletCharacter((currentRow == m_blankCharIndex) ? QChar() : widget.customCharacter->text().remove('&').at(0));
     }
     // it is important to not use 45 for CustomCharItem as it is also char based
     else if (!KoListStyle::isNumberingStyle(style)) {
@@ -217,36 +217,33 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     if (llp.level() != m_previousLevel)
         listStyle->removeLevelProperties(m_previousLevel);
     listStyle->setLevelProperties(llp);
-
-    delete unit;
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index)
 {
     KoListStyle::Style style = m_mapping[index];
     bool showLetterSynchronization = false;
-    switch (style) {
-    case KoListStyle::SquareItem:
-    case KoListStyle::Bullet:
-    case KoListStyle::BlackCircle:
-    case KoListStyle::CircleItem:
-    case KoListStyle::BoxItem:
-    case KoListStyle::CustomCharItem:
-    case KoListStyle::None:
+
+    if (!KoListStyle::isNumberingStyle(style)) {
         widget.startValue->setCounterType(KoListStyle::DecimalItem);
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
-        break;
-    case KoListStyle::AlphaLowerItem:
-    case KoListStyle::UpperAlphaItem:
-        showLetterSynchronization = true;
-        // fall through
-    default:
-        widget.startValue->setEnabled(true);
-        widget.startValue->setCounterType(style);
-        int value = widget.startValue->value();
-        widget.startValue->setValue(value + 1);
-        widget.startValue->setValue(value); // surely to trigger a change event.
+        widget.levels->setValue(1);
+        widget.levels->setEnabled(false);
+    } else {
+        switch (style) {
+        case KoListStyle::AlphaLowerItem:
+        case KoListStyle::UpperAlphaItem:
+            showLetterSynchronization = true;
+            // fall through
+        default:
+            widget.levels->setEnabled(true);
+            widget.startValue->setEnabled(true);
+            widget.startValue->setCounterType(style);
+            int value = widget.startValue->value();
+            widget.startValue->setValue(value + 1);
+            widget.startValue->setValue(value); // surely to trigger a change event.
+        }
     }
 
     widget.customCharacter->setEnabled(style == KoListStyle::CustomCharItem && index != m_blankCharIndex);
@@ -285,33 +282,42 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
 void ParagraphBulletsNumbers::recalcPreview()
 {
-    // TODO use startValue
-    // use custom char
-    // use type
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
-    QString answer;
+    QString answer = "";
     if (style != KoListStyle::None) {
         QString suffix = widget.suffix->text();
-        if (suffix.isEmpty())
-            suffix = ".";
+        if (suffix.isEmpty() && KoListStyle::isNumberingStyle(style))
+            suffix = QLatin1Char('.');
         const int depth = widget.depth->value();
         const int displayLevels = qMin(widget.levels->value(), depth);
         for (int i = 1; i <= depth; ++i) {
             if (depth - displayLevels >= i)
                 continue;
-            if (i == depth)
+
+            if (i == depth) {
                 answer += widget.prefix->text();
-            answer += QString::number(i);
-            if (i == depth)
+
+                if (KoListStyle::isNumberingStyle(style)) {
+                    answer += widget.startValue->textFromValue(widget.startValue->value());
+                } else if(style == KoListStyle::CustomCharItem) {
+                   answer += widget.customCharacter->text().remove('&').at(0);
+                }else {
+                    answer += QString(QChar(KoListStyle::bulletCharacter(style)));
+                }
+
                 answer += suffix;
-            else
-                answer += '.';
+            } else {
+                if (KoListStyle::isNumberingStyle(style)) {
+                    answer += widget.startValue->textFromValue(i).append('.');
+                }
+            }
         }
         if (!answer.isEmpty())
             answer += ' ';
     }
     emit bulletListItemChanged(answer);
+    emit parStyleChanged();
 }
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
@@ -321,6 +327,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
     } else {
         widget.doubleSpinBox->setEnabled(true);
     }
+    emit parStyleChanged();
 }
 
 #include <ParagraphBulletsNumbers.moc>

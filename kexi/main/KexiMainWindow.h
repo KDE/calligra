@@ -48,6 +48,7 @@ class Part;
 class KXMLGUIClient;
 class KXMLGUIFactory;
 class KexiMainWidget;
+class KexiUserFeedbackAgent;
 
 #include <KTabWidget>
 
@@ -60,6 +61,7 @@ public:
     virtual ~KexiMainWindowTabWidget();
 public slots:
     void closeTab();
+
 protected:
     //! Implemented to add context menu
     void contextMenu(int index, const QPoint& point);
@@ -72,6 +74,11 @@ protected:
 
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
+
+private:
+    int m_tabIndex;
+
+    void setTabIndexFromContextMenu(const int clickedIndex);
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
@@ -149,7 +156,7 @@ public:
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
+    static int create(int argc, char *argv[], const KexiAboutData &aboutData);
 
     //! \return KexiMainWindow singleton (if it is instantiated)
 //  static KexiMainWindow* self();
@@ -213,6 +220,18 @@ public:
 
     // see KexiMainWindowIface
     virtual KToolBar *toolBar(const QString& name) const;
+
+    //! Shows design tab when switching between objects or views.
+    void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
+
+    //! Sets currently visible tab when switching to design view, according to object type opened.
+    virtual void setDesignTabIfNeeded(const QString &partClass);
+
+    //! Hides tabs when they are closed (depending on class)
+    virtual void closeTab(const QString &partClass);
+
+    /*! Implemented for KexiMainWindow */
+    virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
 
 public slots:
     /*! Implemented for KexiMainWindow */
@@ -338,6 +357,9 @@ public slots:
     /*! Add searchable model to the main window. This extends search to a new area. 
      One example is Project Navigator. @see KexiMainWindowIface */
     virtual void addSearchableModel(KexiSearchableModel *model);
+
+    //! Shows Context sensitive ToolTab when changing current Object Tab
+    void showTabIfNeeded();
 
 signals:
     //! Emitted to make sure the project can be close.

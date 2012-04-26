@@ -23,8 +23,8 @@
 #include <sqltypes.h>
 
 //QT Includes
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 
 //KDE Includes
 #include <KDebug>

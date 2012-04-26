@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 
-#define GAP 5
+#define GAP 20
 
 KWViewModeNormal::KWViewModeNormal()
     : m_pageSpreadMode(false)

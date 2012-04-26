@@ -31,6 +31,7 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    Ko3dScene.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
@@ -61,6 +62,7 @@ set(koodf_LIB_SRCS
     KoColumnStyle.cpp
     KoRowStyle.cpp
     KoTblStyle.cpp
+    KoElementReference.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -104,6 +106,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    Ko3dScene.h
     KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
@@ -115,5 +118,6 @@ install( FILES
     KoXmlReaderForward.h
     KoProperties.h
     KoUnit.h
+    KoElementReference.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

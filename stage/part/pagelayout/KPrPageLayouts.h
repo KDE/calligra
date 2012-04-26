@@ -33,6 +33,7 @@ class KoPASavingContext;
 
 class KPrPageLayouts : public QObject
 {
+  Q_OBJECT
 public:
     KPrPageLayouts(QObject *parent = 0);
     ~KPrPageLayouts();

@@ -20,8 +20,8 @@
 #ifndef SCRIPTING_KEXIDBCURSOR_H
 #define SCRIPTING_KEXIDBCURSOR_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
 #include <kexidb/cursor.h>
 #include <kexidb/roweditbuffer.h>

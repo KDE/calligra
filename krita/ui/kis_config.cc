@@ -541,7 +541,7 @@ void KisConfig::setCheckersColor(const QColor & v)
 
 bool KisConfig::antialiasCurves()
 {
-    return m_cfg.readEntry("antialiascurves", false);
+    return m_cfg.readEntry("antialiascurves", true);
 }
 
 void KisConfig::setAntialiasCurves(bool v)
@@ -693,6 +693,17 @@ void KisConfig::setPresetChooserViewMode(const int mode)
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+
+bool KisConfig::presetShowAllMode() const
+{
+    return m_cfg.readEntry("presetChooserShowAllPresets", true);
+}
+
+void KisConfig::setPresetShowAllMode(bool showAll)
+{
+    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
+}
+
 bool KisConfig::firstRun() const
 {
     return m_cfg.readEntry("firstRun", true);
@@ -803,4 +814,16 @@ QStringList KisConfig::favoriteCompositeOps() const
 void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps)
 {
     m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
+}
+
+QString KisConfig::exportConfiguration(const QString &filterId) const
+{
+    return m_cfg.readEntry("ExportConfiguration-" + filterId, QString());
+}
+
+void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties)
+{
+    QString exportConfig = properties.toXML();
+    m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+
 }

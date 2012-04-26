@@ -20,17 +20,17 @@
 #include "KoReportDesignerItemBase.h"
 
 // qt
-#include <qpainter.h>
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qdom.h>
-#include <qinputdialog.h>
-#include <qslider.h>
-#include <qdatastream.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qsettings.h>
+#include <QPainter>
+#include <QString>
+#include <QLabel>
+#include <QLineEdit>
+#include <QDomDocument>
+#include <QInputDialog>
+#include <QSlider>
+#include <QDataStream>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QSettings>
 #include <kdebug.h>
 
 #include <koproperty/Property.h>
@@ -63,12 +63,12 @@ void KoReportDesignerItemBase::buildXML(QGraphicsItem * item, QDomDocument & doc
 void KoReportDesignerItemBase::buildXMLRect(QDomDocument & doc, QDomElement & entity, KRPos *pos, KRSize *siz)
 {
     Q_UNUSED(doc)
-    KoUnit unit = pos->unit();
-    
-    entity.setAttribute("svg:x", QString::number(pos->toUnit().x()) + KoUnit::unitName(unit));
-    entity.setAttribute("svg:y", QString::number(pos->toUnit().y()) + KoUnit::unitName(unit));
-    entity.setAttribute("svg:width", QString::number(siz->toUnit().width()) + KoUnit::unitName(unit));
-    entity.setAttribute("svg:height", QString::number(siz->toUnit().height()) + KoUnit::unitName(unit));
+    const QString unitSymbol = pos->unit().symbol();
+
+    entity.setAttribute("svg:x", QString::number(pos->toUnit().x()) + unitSymbol);
+    entity.setAttribute("svg:y", QString::number(pos->toUnit().y()) + unitSymbol);
+    entity.setAttribute("svg:width", QString::number(siz->toUnit().width()) + unitSymbol);
+    entity.setAttribute("svg:height", QString::number(siz->toUnit().height()) + unitSymbol);
 }
 
 void KoReportDesignerItemBase::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts)

@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qfile.h>
-#include <qapplication.h>
-#include <qdom.h>
+#include <QFile>
+#include <QApplication>
+#include <QDomDocument>
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -461,7 +461,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
         if (!d->connection->isReadOnly()) {
             partsTableOk = d->connection->createTable(t_parts, true/*replaceExisting*/);
 
-            KexiDB::FieldList *fl = t_parts->subList("p_id", "p_name", "p_mime", "p_url");
+            QScopedPointer<KexiDB::FieldList> fl(t_parts->subList("p_id", "p_name", "p_mime", "p_url"));
 #define INSERT_RECORD(id, groupName, name) \
             if (partsTableOk) { \
                 partsTableOk = d->connection->insertRecord(*fl, QVariant(int(KexiPart::id)), \
@@ -1174,7 +1174,7 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
         d->connection->tableSchema("kexi__parts");
     if (!ts)
         return false;
-    KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+    QScopedPointer<KexiDB::FieldList> fl(ts->subList("p_id", "p_name", "p_mime", "p_url"));
     //kDebug() << "fieldlist: " << (fl ? fl->debugString() : QString());
     if (!fl)
         return false;

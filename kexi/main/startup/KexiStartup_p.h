@@ -20,8 +20,8 @@
 #ifndef KEXI_STARTUPHANDLER_P_H
 #define KEXI_STARTUPHANDLER_P_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 //#include <sys/stat.h>
 #include <kde_file.h>

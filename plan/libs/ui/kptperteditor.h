@@ -32,9 +32,9 @@
 #include <QTableWidget>
 #include <QFont>
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kactionselector.h>
 

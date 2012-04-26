@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -21,13 +21,13 @@
 #include "kptitemviewsettup.h"
 #include "kptitemmodelbase.h"
 #include "kptviewbase.h"
+#include "kptdebug.h"
 
 #include <QCheckBox>
 #include <QHeaderView>
 
 #include <kactionselector.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -62,7 +62,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
-    kDebug()<<includeColumn0<<c;
+    kDebug(planDbg())<<includeColumn0<<c;
     for ( ; c < model->columnCount(); ++c ) {
         Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
         item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
@@ -92,7 +92,7 @@ void ItemViewSettup::slotChanged()
 
 void ItemViewSettup::slotOk()
 {
-    kDebug();
+    kDebug(planDbg());
     QListWidget *lst = selector->availableListWidget();
     for ( int r = 0; r < lst->count(); ++r ) {
         int c = static_cast<Item*>( lst->item( r ) )->column();
@@ -109,7 +109,7 @@ void ItemViewSettup::slotOk()
 
 void ItemViewSettup::setDefault()
 {
-    kDebug();
+    kDebug(planDbg());
     selector->availableListWidget()->clear();
     selector->selectedListWidget()->clear();
     QAbstractItemModel *model = m_view->model();

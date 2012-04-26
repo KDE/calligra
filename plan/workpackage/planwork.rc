@@ -2,7 +2,7 @@
 <kpartgui name="PlanWork" version="1">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
-           <Action name="package_remove_selected"/>
+           <Action name="package_remove_current"/>
         </Menu>
 <!--        <Menu name="settings"><text>&amp;Settings</text>
            <Action name="configure" group="settings_configure"/>

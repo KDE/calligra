@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -700,7 +700,7 @@ public:
     };
 
     /*! \return "SELECT ..." statement's string needed for executing query
-     defined by \a querySchema and \a params. */
+     defined by \a querySchema, \a params and \a options. */
     QString selectStatement(QuerySchema& querySchema,
                             const QList<QVariant>& params,
                             const SelectStatementOptions& options = SelectStatementOptions()) const;
@@ -1260,7 +1260,23 @@ private:
     friend class KexiDB::AlterTableHandler;
 };
 
+/*! \return "SELECT ..." statement's string needed for executing query
+    defined by \a querySchema, \a params and \a options. 
+    \a driver can be provided to generate driver-dependent statement. 
+    If \a driver is 0, KexiSQL statement is generated. */
+KEXI_DB_EXPORT QString selectStatement(const KexiDB::Driver *driver,
+                                       KexiDB::QuerySchema& querySchema,
+                                       const QList<QVariant>& params,
+                                       const KexiDB::Connection::SelectStatementOptions& options = KexiDB::Connection::SelectStatementOptions());
+
+/*! \overload QString selectStatement(const KexiDB::Driver *driver, KexiDB::QuerySchema& querySchema, const QList<QVariant>& params, const KexiDB::Connection::SelectStatementOptions& options); */
+KEXI_DB_EXPORT inline QString selectStatement(const KexiDB::Driver *driver,
+                                              QuerySchema& querySchema,
+                                              const KexiDB::Connection::SelectStatementOptions& options = KexiDB::Connection::SelectStatementOptions())
+{
+    return KexiDB::selectStatement(driver, querySchema, QList<QVariant>(), options);
+}
+
 } //namespace KexiDB
 
 #endif
-

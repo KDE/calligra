@@ -20,7 +20,7 @@
 #ifndef KEXI_STARTUPDATA_H
 #define KEXI_STARTUPDATA_H
 
-#include <qstring.h>
+#include <QString>
 #include <kexi_export.h>
 
 class KexiProjectData;

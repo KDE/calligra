@@ -23,9 +23,9 @@
 
 #include "kowmf_export.h"
 
-#include <QtCore/QRect>
-#include <QtGui/QRegion>
-#include <QtGui/QPainter>
+#include <QRect>
+#include <QRegion>
+#include <QPainter>
 
 class QString;
 class QPen;

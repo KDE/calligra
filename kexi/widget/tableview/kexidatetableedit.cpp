@@ -21,19 +21,19 @@
 
 #include "kexidatetableedit.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qdatetime.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QPainter>
+#include <QVariant>
+#include <QRect>
+#include <QPalette>
+#include <QColor>
+#include <QFontMetrics>
+#include <QDateTime>
+#include <QCursor>
+#include <QPoint>
+#include <QLayout>
+#include <QToolButton>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <klocale.h>

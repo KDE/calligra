@@ -20,7 +20,7 @@
 #ifndef KEXIDB_ROWEDITBUFFER_H
 #define KEXIDB_ROWEDITBUFFER_H
 
-#include <qmap.h>
+#include <QMap>
 
 #include "field.h"
 #include "queryschema.h"

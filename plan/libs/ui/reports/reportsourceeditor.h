@@ -23,7 +23,7 @@
 
 #include "ui_reportsourceeditor.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QAbstractItemModel;
 class QDomElement;

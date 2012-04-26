@@ -25,7 +25,6 @@
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoPACanvas.h>
 
 #include "FlowDocument.h"
 

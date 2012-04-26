@@ -19,8 +19,10 @@
 
 #include "KexiAssistantPage.h"
 
+#include "utils.h"
 #include "KexiTitleLabel.h"
 #include "KexiLinkWidget.h"
+#include "KexiLinkButton.h"
 
 #include <KAcceleratorManager>
 #include <KStandardGuiItem>
@@ -45,7 +47,7 @@ public:
     QLabel* descriptionLabel;
     KexiLinkWidget* backButton;
     KexiLinkWidget* nextButton;
-    KexiLinkWidget* cancelButton;
+    KexiLinkButton* cancelButton;
     QPointer<QWidget> focusWidget;
 };
 
@@ -62,7 +64,7 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
             if (back) {
                 *button = new KexiLinkWidget(
                     QLatin1String("KexiAssistantPage:back"),
-                    KStandardGuiItem::back().text().replace('&', ""), q);
+                    KStandardGuiItem::back().plainText(), q);
                 (*button)->setFormat(
                     i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
             }
@@ -115,23 +117,11 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
-    /*m_backButton = new KPushButton(KStandardGuiItem::back());
-    m_backButton->setFlat(true);
-    m_mainLyr->addWidget(m_backButton, 1, 0);*/
-    /*m_nextButton = new KPushButton(KStandardGuiItem::forward());
-    m_nextButton->setFlat(true);
-    m_nextButton->setContentsMargins(space, 0, 0, 0);
-    m_mainLyr->addWidget(m_nextButton, 1, 2);*/
-    //KAcceleratorManager::manage(this);
     
-    d->cancelButton = new KexiLinkWidget(
-        QLatin1String("KexiAssistantPage:cancel"),
-        KStandardGuiItem::cancel().text().replace('&', ""),
-        this);
-    d->cancelButton->setContentsMargins(0, 0,
-        d->cancelButton->fontMetrics().width(QString::fromUtf8(" ›")), 0);
-    connect(d->cancelButton, SIGNAL(linkActivated(QString)),
-            this, SLOT(slotLinkActivated(QString)));
+    d->cancelButton = new KexiLinkButton(KIcon("close"));
+    d->cancelButton->setToolTip(KStandardGuiItem::cancel().plainText());
+    d->cancelButton->setUsesForegroundColor(true);
+    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
 }
 
@@ -158,7 +148,7 @@ void KexiAssistantPage::setNextButtonVisible(bool set)
 void KexiAssistantPage::setContents(QWidget* widget)
 {
     widget->setContentsMargins(0, 0, 0, 0);
-    d->mainLyr->addWidget(widget, 2, 1);
+    d->mainLyr->addWidget(widget, 2, 1, 2, 2);
 }
 
 void KexiAssistantPage::setContents(QLayout* layout)
@@ -175,10 +165,13 @@ void KexiAssistantPage::slotLinkActivated(const QString& link)
     else if (d->nextButton && link == d->nextButton->link()) {
         next();
     }
-    else if (link == d->cancelButton->link()) {
-        emit cancelled(this);
-        if (parentWidget())
-            parentWidget()->deleteLater();
+}
+
+void KexiAssistantPage::slotCancel()
+{
+    emit cancelled(this);
+    if (parentWidget()) {
+        parentWidget()->deleteLater();
     }
 }
 

@@ -23,7 +23,7 @@
 #include <poppler/Object.h>
 #include <poppler/OutputDev.h>
 
-#include <QtCore/QString>
+#include <QString>
 
 class GfxPath;
 class QColor;

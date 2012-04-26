@@ -20,7 +20,7 @@
 #include "WmfDeviceContext.h"
 #include "WmfEnums.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <kdebug.h>
 

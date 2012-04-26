@@ -20,8 +20,8 @@
 
 #include "kounavail.h"
 
-#include <qpainter.h>
-#include <qicon.h>
+#include <QPainter>
+#include <QIcon>
 #include <QPaintEvent>
 #include <kaction.h>
 #include <kcomponentdata.h>
@@ -30,7 +30,7 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <qapplication.h>
+#include <QApplication>
 #include <KoOdfReadStore.h>
 
 KoUnavailPart::KoUnavailPart( QWidget *parentWidget, QObject* parent )
@@ -46,14 +46,14 @@ KoView* KoUnavailPart::createViewInstance( QWidget* parent)
 
 bool KoUnavailPart::loadOdf( KoOdfReadStore & odfStore )
 {
-    m_doc = KoXml::asQDomDocument( QDomDocument(), odfStore.contentDoc() );
+    m_doc = KoXml::asQDomDocument( odfStore.contentDoc() );
     return true;
 }
 
 bool KoUnavailPart::loadXML( const KoXmlDocument &doc, KoStore *)
 {
     // Simply keep a copy of the whole document ;)
-    m_doc = KoXml::asQDomDocument( QDomDocument(), doc );
+    m_doc = KoXml::asQDomDocument( doc );
     return true;
 }
 

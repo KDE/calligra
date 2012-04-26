@@ -25,7 +25,6 @@
 #include "KoPAPageProvider.h"
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -47,8 +46,8 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QMimeData>
+#include <QAbstractItemModel>
+#include <QMimeData>
 #include <QApplication>
 #include <QClipboard>
 #include <QMenu>

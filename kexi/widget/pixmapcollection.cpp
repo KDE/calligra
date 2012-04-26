@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpixmap.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstringlist.h>
-#include <qtoolbutton.h>
-#include <qdom.h>
+#include <QPixmap>
+#include <QLayout>
+#include <QLabel>
+#include <QStringList>
+#include <QToolButton>
+#include <QDomDocument>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

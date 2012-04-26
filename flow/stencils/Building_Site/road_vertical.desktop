@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=Vertical Road
 Name[ca]=Carretera vertical
+Name[ca@valencia]=Carretera vertical
 Name[el]=Κάθετος δρόμος
 Name[es]=Carretera vertical
 Name[et]=Vertikaalne tee
+Name[fi]=Pystysuora tie
+Name[it]=Strada verticale
+Name[kk]=Тік жол
 Name[nb]=Loddrett vei
 Name[nds]=Pielrecht Straat
 Name[nl]=Verticale weg
@@ -14,4 +18,5 @@ Name[ru]=Вертикальная дорога
 Name[sv]=Vertikal väg
 Name[uk]=Вертикальний шлях
 Name[x-test]=xxVertical Roadxx
+Name[zh_CN]=垂直道路
 Name[zh_TW]=垂直路

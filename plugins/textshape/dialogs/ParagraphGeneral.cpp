@@ -22,6 +22,7 @@
 #include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
 #include "ParagraphDecorations.h"
+#include "ParagraphDropCaps.h"
 
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -49,25 +50,33 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
             widget.preview, SLOT(setRightMargin(qreal)));
     connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(qreal,qreal,qreal,int,bool)),
             widget.preview, SLOT(setLineSpacing(qreal,qreal,qreal,int,bool)));
+    connect(m_paragraphIndentSpacing, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphLayout = new ParagraphLayout(this);
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
     connect(m_paragraphLayout, SIGNAL(horizontalAlignmentChanged(Qt::Alignment)), this, SLOT(horizontalAlignmentChanged(Qt::Alignment)));
+    connect(m_paragraphLayout, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
     widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
     connect(m_paragraphBulletsNumbers, SIGNAL(bulletListItemChanged(const QString&)),
         this, SLOT(bulletListItemChanged(const QString&)));
+    connect(m_paragraphBulletsNumbers, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphDecorations = new ParagraphDecorations(this);
     widget.tabs->addTab(m_paragraphDecorations, i18n("Decorations"));
     connect(m_paragraphDecorations, SIGNAL(backgroundColorChanged(const QColor&)),
         this, SLOT(backgroundColorChanged(const QColor&)));
+    connect(m_paragraphDecorations, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
+
+    m_paragraphDropCaps = new ParagraphDropCaps(this);
+    widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
+    connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 }
 
 void ParagraphGeneral::hideStyleName(bool hide)
@@ -141,6 +150,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     m_paragraphLayout->setDisplay(style);
     m_paragraphBulletsNumbers->setDisplay(style, level);
     m_paragraphDecorations->setDisplay(style);
+    m_paragraphDropCaps->setDisplay(style);
 
     m_blockSignals = false;
 }
@@ -156,6 +166,7 @@ void ParagraphGeneral::setParagraphStyles(const QList<KoParagraphStyle*> styles)
 void ParagraphGeneral::setUnit(const KoUnit &unit)
 {
     m_paragraphIndentSpacing->setUnit(unit);
+    m_paragraphDropCaps->setUnit(unit);
 }
 
 void ParagraphGeneral::save(KoParagraphStyle *style)
@@ -176,6 +187,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphLayout->save(savingStyle);
     m_paragraphBulletsNumbers->save(savingStyle);
     m_paragraphDecorations->save(savingStyle);
+    m_paragraphDropCaps->save(style);
 
     savingStyle->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
     emit styleAltered(savingStyle);

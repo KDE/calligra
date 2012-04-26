@@ -19,11 +19,11 @@
 
 #include "kis_tool_perspectivegrid.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qregion.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QApplication>
+#include <QPainter>
+#include <QRegion>
+#include <QWidget>
+#include <QLayout>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -80,6 +80,8 @@ void KisToolPerspectiveGrid::deactivate()
         m_points.clear();
     }
     m_canvas->updateCanvas();
+
+    KisTool::deactivate();
 }
 
 bool KisToolPerspectiveGrid::mouseNear(const QPointF& mousep, const QPointF& point)
@@ -136,7 +138,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 KisSubPerspectiveGrid* grid = *it;
                 QPointF gridCenter = grid->center();
                 dbgKrita << "click at " << event->point << " top left at " << *grid->topLeft();
-                if (m_selectedNode1 = nodeNearPoint(grid, mousep)) {
+                if (m_selectedNode1 == nodeNearPoint(grid, mousep)) {
                     m_internalMode = MODE_DRAGING_NODE;
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()))*0.5))) {
@@ -231,7 +233,7 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
         KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
         for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
             KisSubPerspectiveGrid* grid = *it;
-            if (m_higlightedNode = nodeNearPoint(grid, mousep)) {
+            if ((m_higlightedNode = nodeNearPoint(grid, mousep))) {
                 if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
                     m_higlightedNode = 0;
                 } else {

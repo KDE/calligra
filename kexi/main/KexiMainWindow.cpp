@@ -22,17 +22,17 @@
 #include <config-kexi.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QEventLoop>
+#include <QFile>
+#include <QTimer>
+#include <QObject>
 #include <QProcess>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qfiledialog.h>
+#include <QToolButton>
+
+#include <QMutex>
+#include <QWaitCondition>
+#include <QFileDialog>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QTextStream>
@@ -136,7 +136,6 @@
 #ifdef FEEDBACK_INCLUDE
 #include FEEDBACK_INCLUDE
 #endif
-#include <kapplication.h>
 #include <kaboutdata.h>
 #include <ktoolinvocation.h>
 #endif
@@ -169,6 +168,7 @@ private:
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget* mainWidget)
         : KTabWidget(parent)
         , m_mainWidget(mainWidget)
+        , m_tabIndex(-1)
 {
     m_closeAction = new KAction(KIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
@@ -203,7 +203,7 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 
 void KexiMainWindowTabWidget::closeTab()
 {
-    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeCurrentWindow();
+    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
 }
 
 void KexiMainWindowTabWidget::tabInserted(int index)
@@ -217,10 +217,20 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     QMenu menu;
     menu.addAction(m_closeAction);
 //! @todo add "&Detach Tab"
+    setTabIndexFromContextMenu(index);
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
     
+void KexiMainWindowTabWidget::setTabIndexFromContextMenu(const int clickedIndex)
+{
+    if (currentIndex() == -1) {
+        m_tabIndex = -1;
+        return;
+    }
+    m_tabIndex = clickedIndex;
+}
+
 //-------------------------------------------------
 
 //static
@@ -230,22 +240,16 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 }*/
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
+int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
 {
-    Kexi::initCmdLineArgs(argc, argv, aboutdata);
+    Kexi::initCmdLineArgs(argc, argv, aboutData);
 
     bool GUIenabled = true;
-    /// @note According to GCC 4.3 the following variable is not used, commented for now
-    //QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindow is created
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
@@ -265,7 +269,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 #ifdef KEXI_DEBUG_GUI
     QWidget* debugWindow = 0;
     if (GUIenabled) {
-        KConfigGroup generalGroup = d->config->group("General");
+        KConfigGroup generalGroup = KGlobal::config()->group("General");
         if (generalGroup.readEntry("ShowInternalDebugger", false)) {
             debugWindow = KexiUtils::createDebugWindow(win);
             debugWindow->show();
@@ -333,11 +337,12 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupPropertyEditor();
     }
 
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
-#ifdef KEXI_ADD_CUSTOM_KexiMainWindow
-# include "KexiMainWindow_ctor.h"
-#endif
+    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -1387,6 +1392,17 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     enableMessages(false);
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
+    d->tabbedToolBar->showTab("create");// not needed since create toolbar already shows toolbar! move when kexi starts
+    d->tabbedToolBar->showTab("data");
+    d->tabbedToolBar->showTab("external");
+    d->tabbedToolBar->showTab("tools");
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    //d->tabbedToolBar->showTab("form");
+    //d->tabbedToolBar->showTab("report");
+
+    // make sure any tab is activated
+    d->tabbedToolBar->setCurrentTab(0);
     return true;
 }
 
@@ -1716,6 +1732,13 @@ tristate KexiMainWindow::closeProject()
     updateAppCaption();
 
     emit projectClosed();
+/*
+    d->tabbedToolBar->hideTab("create");
+    d->tabbedToolBar->hideTab("data");
+    d->tabbedToolBar->hideTab("external");
+    d->tabbedToolBar->hideTab("tools");
+    d->tabbedToolBar->hideTab("form");
+    d->tabbedToolBar->hideTab("report");*/
     return true;
 }
 
@@ -2612,7 +2635,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata, aFileName);
+        projectData = new KexiProjectData(cdata);
         deleteAfterOpen = true;
     }
     if (!projectData)
@@ -2860,6 +2883,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
         return cancelled;
     }
 
+    activateWindow(window);
     //view changed: switch to this view's gui client
     KXMLGUIClient *viewClient = currentWindow()->guiClient();
     updateWindowViewGUIClient(viewClient);
@@ -2871,6 +2895,7 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
+    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
     return true;
 }
 
@@ -3114,7 +3139,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     }
 
     const int window_id = window->id(); //remember now, because removeObject() can destruct partitem object
-
+    const QString window_partClass = window->partItem()->partClass();
     if (remove_on_closing) {
         //we won't save this object, and it was never saved -remove it
         if (!removeObject(window->partItem(), true)) {
@@ -3205,6 +3230,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
+    showTabIfNeeded();
     return true;
 }
 
@@ -3387,6 +3413,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 //  activeWindowChanged(window, previousWindow);
     }
     invalidateProjectWideActions();
+    showDesignTabIfNeeded(item->partClass(), viewMode);
+    setDesignTabIfNeeded(item->partClass());
     return window;
 }
 
@@ -3406,7 +3434,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         return 0;
     }
     if (!d->prj || !item)
-        return false;
+        return 0;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
@@ -3913,7 +3941,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
                                           QDir::convertSeparators(cdata.fileName())));
             return;
         }
-        data = new KexiProjectData(cdata, cdata.fileName());
+        data = new KexiProjectData(cdata);
     } else {
         //sanity
         if (!(d->prj && d->prj->dbConnection()
@@ -4413,6 +4441,64 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+{
+    closeTab("");
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: 
+            d->tabbedToolBar->showTab("form");
+            break;
+        case KexiPart::ReportObjectType: 
+            d->tabbedToolBar->showTab("report");
+            break;
+        default: ;
+        }
+    }
+}
+
+void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->setCurrentTab("form"); 
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->setCurrentTab("report"); 
+        break;
+    default:;
+    }  
+}
+
+void KexiMainWindow::closeTab(const QString &partClass)
+{
+    switch (d->prj->idForClass(partClass)) {
+    case KexiPart::FormObjectType: 
+        d->tabbedToolBar->hideTab("form");
+        break;
+    case KexiPart::ReportObjectType: 
+        d->tabbedToolBar->hideTab("report");
+        break;
+    default:
+        d->tabbedToolBar->hideTab("form");
+        d->tabbedToolBar->hideTab("report");
+    }
+}
+
+void KexiMainWindow::showTabIfNeeded()
+{
+    if (currentWindow()) {
+        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+    } else {
+        closeTab("");
+    }
+}
+
+KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
+{
+    return &d->userFeedback;
 }
 
 #include "KexiMainWindow.moc"

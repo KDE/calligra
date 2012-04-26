@@ -24,9 +24,13 @@
 
 #include <QWidget>
 
+class StylesModel;
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
+
+class QModelIndex;
 
 class StyleManager : public QWidget
 {
@@ -41,14 +45,16 @@ public:
 
 public slots:
     void save();
+    void setParagraphStyle(KoParagraphStyle *style);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
 private slots:
+    void styleChanged(bool state = true);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
-    void setParagraphStyle(KoParagraphStyle *style);
-    void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
+    void slotStyleSelected(QModelIndex index);
 
 private:
     Ui::StyleManager widget;
@@ -57,10 +63,15 @@ private:
     QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
 
+    StylesModel *m_paragraphStylesModel;
+    StylesModel *m_characterStylesModel;
+    KoStyleThumbnailer *m_thumbnailer;
     KoParagraphStyle *m_selectedParagStyle;
     KoCharacterStyle *m_selectedCharStyle;
 
     bool m_blockSignals;
+    bool m_blockStyleChangeSignals;
+    bool m_styleChanged;
 };
 
 #endif

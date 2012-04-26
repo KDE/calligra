@@ -21,7 +21,7 @@
 #ifndef INTERNALSOURCESELECTOR_H
 #define INTERNALSOURCESELECTOR_H
 
-#include <QtGui/QComboBox>
+#include <QComboBox>
 #include <kexidb/connection.h>
 
 class InternalSourceSelector : public QComboBox

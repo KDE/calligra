@@ -27,7 +27,7 @@
 #include <kdialog.h>
 #include <kparts/plugin.h>
 
-#include <QtCore/QPointF>
+#include <QPointF>
 #include <QVariantList>
 
 class KarbonView;

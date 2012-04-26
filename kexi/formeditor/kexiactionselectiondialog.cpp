@@ -33,9 +33,9 @@
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
-#include <qbitmap.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QBitmap>
+#include <QLabel>
+
 #include <Q3Header>
 #include <QGridLayout>
 #include <QHBoxLayout>

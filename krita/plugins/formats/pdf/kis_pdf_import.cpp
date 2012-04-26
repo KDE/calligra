@@ -24,9 +24,9 @@
 #include <poppler-qt4.h>
 
 // Qt's headers
-#include <qfile.h>
-#include <qimage.h>
-#include <qradiobutton.h>
+#include <QFile>
+#include <QImage>
+#include <QRadioButton>
 
 // KDE's headers
 #include <kapplication.h>
@@ -86,8 +86,9 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         url.setPath(tmpFile);
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load(QFile::encodeName(url.toLocalFile()));
-
+    Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
+    pdoc->setRenderHint(Poppler::Document::Antialiasing, true);
+    pdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
 
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";

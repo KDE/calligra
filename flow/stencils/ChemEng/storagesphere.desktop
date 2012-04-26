@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=storagesphere
-Name[ca]=esfera d'emmagatzament
+Name[ca]=esfera d'emmagatzemament
+Name[ca@valencia]=esfera d'emmagatzament
 Name[el]=storagesphere
+Name[es]=esfera de almacenamiento
+Name[et]=Ümarhoidla
+Name[it]=storagesphere
+Name[kk]=Дөңгелек жинағыш
 Name[nb]=lagerkule
 Name[nl]=opslagbol
 Name[pl]=magazyn sferyczny
 Name[pt]=esfera-armazenamento
 Name[pt_BR]=esfera de armazenamento
+Name[sk]=storagesphere
 Name[sv]=lagringsklocka
 Name[uk]=Сферичний накопичувач
 Name[x-test]=xxstoragespherexx

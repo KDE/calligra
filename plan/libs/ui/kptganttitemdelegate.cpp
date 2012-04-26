@@ -122,13 +122,12 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                         return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>"
-                            "Constraint type: %5<nl/>"
-                            "Constraint time: %6<nl/>"
-                            "Negative float: %7 h",
+                            "Status: %3<nl/>"
+                            "Constraint type: %4<nl/>"
+                            "Constraint time: %5<nl/>"
+                            "Negative float: %6 h",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraintStart, Qt::DisplayRole ).toString(),
@@ -140,13 +139,12 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                         return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>"
-                            "Constraint type: %5<nl/>"
-                            "Constraint time: %6<nl/>"
-                            "Negative float: %7 h",
+                            "Status: %3<nl/>"
+                            "Constraint type: %4<nl/>"
+                            "Constraint time: %5<nl/>"
+                            "Negative float: %6 h",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeConstraintEnd, Qt::DisplayRole ).toString(),
@@ -157,10 +155,9 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                     return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %4<nl/>",
+                            "Status: %3<nl/>",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString()
                                 );
             }
@@ -179,7 +176,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
 
 QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
 {
-    //kDebug()<<idx<<column<<role;
+    //kDebug(planDbg())<<idx<<column<<role;
     QModelIndex i = idx.model()->index( idx.row(), column, idx.parent() );
     return i.data( role );
 }
@@ -199,7 +196,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
         }
         txt += '(' + data( idx, NodeModel::NodeAssignments, Qt::DisplayRole ).toString() + ')';
     }
-    //kDebug()<<txt;
+    //kDebug(planDbg())<<txt;
     return txt;
 }
 
@@ -245,7 +242,7 @@ QRectF GanttItemDelegate::itemNegativeFloatRect( const KDGantt::StyleOptionGantt
 
 bool GanttItemDelegate::hasStartConstraint( const QModelIndex& idx ) const
 {
-    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
     switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
         case Node::FixedInterval:
         case Node::StartNotEarlier:
@@ -279,7 +276,7 @@ QRectF GanttItemDelegate::itemStartConstraintRect( const KDGantt::StyleOptionGan
 
 bool GanttItemDelegate::hasEndConstraint( const QModelIndex& idx ) const
 {
-    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
     switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
         case Node::FixedInterval:
         case Node::FinishNotLater:
@@ -313,7 +310,7 @@ QRectF GanttItemDelegate::itemEndConstraintRect( const KDGantt::StyleOptionGantt
 
 KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
-    //kDebug()<<opt<<idx;
+    //kDebug(planDbg())<<opt<<idx;
     if ( !idx.isValid() ) return KDGantt::Span();
 
     QRectF optRect = opt.itemRect;
@@ -446,7 +443,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
-                    //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    //kDebug(planDbg())<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
                     if (  v.toBool() ) {
                         QVariant br = data( idx, i, Role::Foreground );
                         painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
@@ -484,7 +481,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             }
             painter->restore();
             if ( showTimeConstraint ) {
-                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
                 painter->save();
                 painter->setBrush( QBrush( Qt::darkGray ) );
                 painter->setPen( Qt::black );
@@ -556,7 +553,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
         }
         break;
     case KDGantt::TypeEvent:
-        //kDebug() << opt.boundingRect << opt.itemRect;
+        //kDebug(planDbg()) << opt.boundingRect << opt.itemRect;
         if ( opt.boundingRect.isValid() ) {
             pw-=1;
             painter->save();
@@ -590,7 +587,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
-                    //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    //kDebug(planDbg())<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
                     if (  v.toBool() ) {
                         QVariant br = data( idx, i, Role::Foreground );
                         painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
@@ -630,7 +627,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             painter->restore();
 
             if ( showTimeConstraint ) {
-                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
                 painter->save();
                 painter->setBrush( QBrush( Qt::darkGray ) );
                 painter->setPen( Qt::black );
@@ -777,7 +774,7 @@ void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOpt
     if ( data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
          data( c.endIndex(), NodeModel::NodeCriticalPath ).toBool() )
     {
-        //kDebug()<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
+        //kDebug(planDbg())<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
         QPen pen( Qt::red );
         c.setData( KDGantt::Constraint::ValidConstraintPen, pen );
         // FIXME How to make sure it's not obscured by other constraints?

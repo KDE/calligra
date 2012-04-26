@@ -63,7 +63,7 @@ void CompareView::init()
     layout->addWidget(m_stack, 1, 0);
 
     m_diffLabel = new QLabel(this);
-    layout->addWidget(m_diffLabel, 1, 1);
+    layout->addWidget(m_diffLabel, 1, 1, Qt::AlignCenter);
 
     setLayout(layout);
 }
@@ -82,6 +82,8 @@ void CompareView::update(const QImage &image1, const QImage &image2, const QStri
     m_image1Label->setPixmap(QPixmap::fromImage(image1));
     m_image2Label->setPixmap(QPixmap::fromImage(image2));
     m_diffLabel->setPixmap(QPixmap::fromImage(m_diff));
+    m_diffLabel->setMinimumWidth(image1.width());
+    m_diffLabel->setAlignment(Qt::AlignCenter);
 }
 
 int lighten(int value)

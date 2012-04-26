@@ -19,7 +19,7 @@
 
 #include "TestKoBookmark.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QDebug>
 #include <QString>
 #include <QTextDocument>
@@ -60,6 +60,7 @@ void TestKoBookmark::testInsertion()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText("1bla bla bla");

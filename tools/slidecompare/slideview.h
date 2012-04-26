@@ -19,10 +19,10 @@
 #ifndef SLIDEVIEW_H
 #define SLIDEVIEW_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QProgressBar>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsScene>
+#include <QWidget>
+#include <QProgressBar>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 
 class SlideLoader;
 class GraphicsSlideItem;

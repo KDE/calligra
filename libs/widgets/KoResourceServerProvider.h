@@ -24,7 +24,7 @@
 
 #include <kowidgets_export.h>
 
-#include <QtCore/QThread>
+#include <QThread>
 
 #include <kdebug.h>
 
@@ -81,6 +81,11 @@ public:
     KoResourceServer<KoPattern>* patternServer();
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
+
+private slots:
+
+    void allGradientsLoaded();
+
 private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);

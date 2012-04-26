@@ -30,6 +30,7 @@ class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
 class ParagraphDecorations;
+class ParagraphDropCaps;
 
 class ParagraphGeneral : public CharacterGeneral
 {
@@ -43,13 +44,14 @@ public:
 
     void switchToGeneralTab();
     void hideStyleName(bool hide);
+    bool isStyleChanged();
 
 public slots:
     void save(KoParagraphStyle *style = 0);
 
 signals:
     void nameChanged(const QString &name);
-    void styleAltered(const KoParagraphStyle *style);
+    void styleAltered(const KoParagraphStyle *style); /// when saving
 
 private slots:
     void setName(const QString &name);
@@ -65,6 +67,7 @@ private:
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
     ParagraphDecorations *m_paragraphDecorations;
+    ParagraphDropCaps *m_paragraphDropCaps;
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;

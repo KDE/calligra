@@ -29,14 +29,14 @@
 #include <KoShapeBackground.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include <KLocale>
 #include <KGlobal>
-#include <QtGui/QToolButton>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMenu>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QMenu>
 
 const int FixedWidgetSize = 20;
 const int ScrollUpdateIntervall = 25;
@@ -62,7 +62,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
     m_colorBar->setOrientation(orientation);
     connect(m_prevButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollBackward()));
     connect(m_nextButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollForward()));
-    connect(m_colorBar, SIGNAL(colorSelected(const KoColor&)), this, SIGNAL(colorSelected(const KoColor&)));
+    connect(m_colorBar, SIGNAL(colorSelected(KoColor)), this, SIGNAL(colorSelected(KoColor)));
     connect(m_colorBar, SIGNAL(scrollOffsetChanged()), this, SLOT(updateButtons()));
     connect(m_choosePalette, SIGNAL(clicked()), this, SLOT(selectPalette()));
 
@@ -216,9 +216,9 @@ void KarbonPaletteBarWidget::updateDocumentColors()
                 }
             }
         }
-        KoShapeBorderModel *stroke = shape->border();
+        KoShapeStrokeModel *stroke = shape->stroke();
         if (stroke) {
-            KoLineBorder *lb = dynamic_cast<KoLineBorder*>(shape->border());
+            KoShapeStroke *lb = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (lb) {
                 if (lb->lineStyle() == Qt::SolidLine) {
                     colors.insert(qHash(lb->color()), lb->color());

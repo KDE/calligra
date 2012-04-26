@@ -1,13 +1,19 @@
 [Desktop Entry]
 Name=Disk subsystem
 Name[ca]=Subsistema de disc
+Name[ca@valencia]=Subsistema de disc
 Name[el]=Υποσύστημα δίσκου
+Name[es]=Subsistema de disco
+Name[et]=Kettaseadmete alamsüsteem
 Name[it]=Sottosistema a disco
+Name[kk]=Дискі ішкі жүйесі
 Name[nb]=Disk undersystem
 Name[nl]=Schijfsubsysteem
 Name[pl]=Pod-system dyskowy
 Name[pt]=Sub-sistema disco
 Name[pt_BR]=Sub-sistema do disco
+Name[ru]=Дисковая подсистема
+Name[sk]=Diskový subsystém
 Name[sv]=Diskdelsystem
 Name[uk]=Дискова підсистема
 Name[x-test]=xxDisk subsystemxx

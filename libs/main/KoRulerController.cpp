@@ -64,21 +64,18 @@ public:
             ruler->setShowTabs(false);
             return;
         }
+
         QRectF activeRange = resourceManager->resource(KoCanvasResourceManager::ActiveRange).toRectF();
         ruler->setOverrideActiveRange(activeRange.left(), activeRange.right());
-        ruler->setShowIndents(true);
-        ruler->setShowTabs(true);
         lastPosition = block.position();
         currentTabIndex = -2;
         tabList.clear();
 
         QTextBlockFormat format = block.blockFormat();
-        ruler->setShowIndents(true);
         ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
-        ruler->setParagraphIndent(format.property(QTextFormat::BlockLeftMargin).value<QTextLength>().value(0));
-        ruler->setFirstLineIndent(format.property(QTextFormat::TextIndent).value<QTextLength>().value(0));
-        ruler->setEndIndent(format.property(QTextFormat::BlockRightMargin).value<QTextLength>().value(0));
-        ruler->setShowTabs(true);
+        ruler->setParagraphIndent(format.leftMargin());
+        ruler->setFirstLineIndent(format.textIndent());
+        ruler->setEndIndent(format.rightMargin());
         ruler->setRelativeTabs(relativeTabs());
 
         QList<KoRuler::Tab> tabs;
@@ -98,6 +95,9 @@ public:
     tabStopDistance = block.document()->documentLayout()->defaultTabSpacing();
         } */
         ruler->updateTabs(tabs, tabStopDistance);
+
+        ruler->setShowIndents(true);
+        ruler->setShowTabs(true);
     }
 
     void indentsChanged() {

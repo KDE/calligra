@@ -63,6 +63,8 @@
 #include <kis_cursor.h>
 #include <kis_config.h>
 
+#include "kis_resources_snapshot.h"
+
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
 #include <opengl/kis_opengl_gradient_program.h>
 #include <opengl/kis_opengl_canvas2.h>
@@ -264,9 +266,17 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
         if (currentImage() && (device = currentNode()->paintDevice())) {
             qApp->setOverrideCursor(Qt::BusyCursor);
 
+            KisUndoAdapter *undoAdapter = image()->undoAdapter();
+            undoAdapter->beginMacro(i18n("Gradient"));
+
             KisGradientPainter painter(device, currentSelection());
-            painter.beginTransaction(i18n("Gradient"));
-            setupPainter(&painter);
+
+            KisResourcesSnapshotSP resources =
+                new KisResourcesSnapshot(image(), 0,
+                                         canvas()->resourceManager());
+            resources->setupPainter(&painter);
+
+            painter.beginTransaction("");
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
@@ -275,7 +285,8 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
             painter.setProgress(updater->startSubtask());
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            painter.endTransaction(image()->undoAdapter());
+            painter.endTransaction(undoAdapter);
+            undoAdapter->endMacro();
 
             qApp->restoreOverrideCursor();
             currentNode()->setDirty();

@@ -223,6 +223,20 @@ QRectF KWPage::rect() const
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
+QRectF KWPage::contentRect() const
+{
+    if (! isValid())
+        return QRectF();
+    return priv->pages[n].contentRect;
+}
+
+void KWPage::setContentRect(const QRectF &rect)
+{
+    if (isValid()) {
+        priv->pages[n].contentRect = rect;
+    }
+}
+
 KoPageFormat::Orientation KWPage::orientationHint() const
 {
     if (! isValid())
@@ -361,7 +375,7 @@ int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
 
     if (adjustment != 0) {
         pageNumber += adjustment;
-        if (!page.priv->pageNumbers.contains(pageNumber))
+        if (page.priv && !page.priv->pageNumbers.contains(pageNumber))
             pageNumber = -1; // doesn't exist.
     }
 

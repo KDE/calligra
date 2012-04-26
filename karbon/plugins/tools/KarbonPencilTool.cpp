@@ -22,7 +22,7 @@
 
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -39,12 +39,12 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
-#include <QtGui/QStackedWidget>
-#include <QtGui/QGroupBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QLabel>
+#include <QStackedWidget>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QPainter>
+#include <QLabel>
 
 #include <math.h>
 
@@ -79,9 +79,9 @@ void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter
         m_shape->paint(painter, converter, paintContext);
         painter.restore();
 
-        if (m_shape->border()) {
+        if (m_shape->stroke()) {
             painter.save();
-            m_shape->border()->paint(m_shape, painter, converter);
+            m_shape->stroke()->paint(m_shape, painter, converter);
             painter.restore();
         }
 
@@ -110,7 +110,7 @@ void KarbonPencilTool::mousePressEvent(KoPointerEvent *event)
     if (! m_shape) {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
-        m_shape->setBorder(currentBorder());
+        m_shape->setStroke(currentStroke());
         m_points.clear();
 
         QPointF point = event->point;
@@ -292,7 +292,7 @@ void KarbonPencilTool::finish(bool closePath)
 
     // set the proper shape id
     path->setShapeId(KoPathShapeId);
-    path->setBorder(currentBorder());
+    path->setStroke(currentStroke());
 
     KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
     if (cmd) {
@@ -393,11 +393,11 @@ void KarbonPencilTool::setDelta(double delta)
         m_combineAngle = delta;
 }
 
-KoLineBorder * KarbonPencilTool::currentBorder()
+KoShapeStroke * KarbonPencilTool::currentStroke()
 {
-    KoLineBorder * border = new KoLineBorder(canvas()->resourceManager()->activeBorder());
-    border->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
-    return border;
+    KoShapeStroke * stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+    stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+    return stroke;
 }
 
 KoPathPoint* KarbonPencilTool::endPointAtPosition(const QPointF &position)

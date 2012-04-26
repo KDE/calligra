@@ -28,7 +28,7 @@
 #include <QSplitter>
 #include <QStandardItemModel>
 #include <QMap>
-#include <qaction.h>
+#include <QAction>
 
 class KoReportData;
 class ORPreRender;

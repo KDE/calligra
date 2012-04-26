@@ -20,8 +20,8 @@
 #include "connectiondata.h"
 #include "drivermanager.h"
 
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QFileInfo>
+#include <QDir>
 
 #include <klocale.h>
 #include <KDebug>

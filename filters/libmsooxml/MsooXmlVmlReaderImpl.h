@@ -29,6 +29,8 @@
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "v"
 
+//#define VMLREADER_DEBUG
+
 //! Used by read_rect() to parse CSS2.
 //! See ECMA-376 Part 4, 14.1.2.16, p.465.
 //! @todo reuse KHTML parser?
@@ -464,10 +466,51 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:auto-grow-width", "true");
     }
 
-    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.leftMargin);
-    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.rightMargin);
-    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.topMargin);
-    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.bottomMargin);
+    // --------------------
+    // padding
+    // --------------------
+#ifdef VMLREADER_DEBUG
+    kDebug() << this << "padding-left:" << m_currentVMLProperties.internalMarginLeft;
+    kDebug() << this << "padding-top:" << m_currentVMLProperties.internalMarginTop;
+    kDebug() << this << "padding-right:" << m_currentVMLProperties.internalMarginRight;
+    kDebug() << this << "padding-bottom:" << m_currentVMLProperties.internalMarginBottom;
+#endif
+    m_currentDrawStyle->addProperty("fo:padding-left", m_currentVMLProperties.internalMarginLeft);
+    m_currentDrawStyle->addProperty("fo:padding-right", m_currentVMLProperties.internalMarginRight);
+    m_currentDrawStyle->addProperty("fo:padding-top", m_currentVMLProperties.internalMarginTop);
+    m_currentDrawStyle->addProperty("fo:padding-bottom", m_currentVMLProperties.internalMarginBottom);
+
+    // --------------------
+    // margins
+    // --------------------
+    QString *p_margin = &m_currentVMLProperties.marginLeft;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-left")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-left");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginTop;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-top")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-top");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginRight;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-right")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-right");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginBottom;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-bottom")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-bottom");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.marginLeft);
+    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.marginTop);
+    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.marginRight);
+    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.marginBottom);
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
@@ -497,10 +540,16 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
     m_currentVMLProperties.imagedataPath = QString();
-    m_currentVMLProperties.leftMargin = "0.1in"; // default
-    m_currentVMLProperties.rightMargin = "0.1in"; // default
-    m_currentVMLProperties.topMargin = "0.05in"; //default
-    m_currentVMLProperties.bottomMargin = "0.05in"; //default
+    // default internal margins
+    m_currentVMLProperties.internalMarginLeft = "0.1in";
+    m_currentVMLProperties.internalMarginRight = "0.1in";
+    m_currentVMLProperties.internalMarginTop = "0.05in";
+    m_currentVMLProperties.internalMarginBottom = "0.05in";
+    // default margins (according to MS Word UI NOT MS-ODRAW defaults)
+    m_currentVMLProperties.marginLeft = "0.13in";
+    m_currentVMLProperties.marginRight = "0.13in";
+    m_currentVMLProperties.marginTop = "0in";
+    m_currentVMLProperties.marginBottom = "0in";
     m_currentVMLProperties.fitTextToShape = false;
     m_currentVMLProperties.fitShapeToText = false;
 }
@@ -2328,8 +2377,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.real_groupWidth = _real_groupWidth;
             m_currentVMLProperties.real_groupHeight = _real_groupHeight;
         }
-    }
-    else {
+    } else {
         takeDefaultValues();
     }
 
@@ -2371,6 +2419,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
+            //TODO: represent as draw:frame/draw:text-box
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
@@ -2546,24 +2595,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
         inset.replace(",,", ",0,");
         int index = inset.indexOf(',');
         if (index > 0) {
-            oldProperties.leftMargin = inset.left(index);
+            oldProperties.internalMarginLeft = inset.left(index);
             inset = inset.mid(index + 1);
             doPrependCheck(inset);
             index = inset.indexOf(',');
             if (index > 0) {
-                oldProperties.topMargin = inset.left(index);
+                oldProperties.internalMarginTop = inset.left(index);
                 inset = inset.mid(index + 1);
                 doPrependCheck(inset);
                 index = inset.indexOf(',');
                 if (index > 0) {
-                    oldProperties.rightMargin = inset.left(index);
-                    oldProperties.bottomMargin = inset.mid(index + 1);
-                    doPrependCheck(oldProperties.bottomMargin);
+                    oldProperties.internalMarginRight = inset.left(index);
+                    oldProperties.internalMarginBottom = inset.mid(index + 1);
+                    doPrependCheck(oldProperties.internalMarginBottom);
                 } else {
-                    oldProperties.rightMargin = inset.left(index);
+                    oldProperties.internalMarginRight = inset.left(index);
                 }
             } else {
-                oldProperties.topMargin = inset.left(index);
+                oldProperties.internalMarginTop = inset.left(index);
             }
         }
     }

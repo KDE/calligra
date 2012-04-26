@@ -1,7 +1,8 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
+ * Copyright (C) 2012 Sujith H <sujith.h@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,6 +21,7 @@
  */
 
 import QtQuick 1.0 as QML
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 QML.Item {
     id: container
@@ -35,32 +37,29 @@ QML.Item {
         anchors.fill: parent
         spacing: 10
 
-        Button {
+        PlasmaComponents.Button {
             id: button1
-            textPosition: "right"
 
-            imageSource: "qrc:///images/words.png"
+            iconSource: "words"
             text: "Text Document"
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showTextDocs";
         }
 
-        Button {
+        PlasmaComponents.Button {
             id: button2
-            textPosition: "right"
 
-            imageSource: "qrc:///images/tables.png"
+            iconSource: "kspread"
             text: "Spreadsheet"
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showSpreadsheets";
         }
-        Button {
+        PlasmaComponents.Button {
             id: button3
-            textPosition: "right"
 
-            imageSource: "qrc:///images/stage.png"
+            iconSource: "stage"
             text: "Presentation"
             width: buttonWidth; height: buttonHeight
 

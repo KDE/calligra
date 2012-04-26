@@ -18,7 +18,7 @@
  */
 
 #include "kexiprjtypeselector.h"
-#include <qlabel.h>
+#include <QLabel>
 #include <kiconloader.h>
 #include <kmimetype.h>
 #include <kexidb/driver.h>

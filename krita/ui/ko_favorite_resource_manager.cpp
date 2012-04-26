@@ -26,7 +26,6 @@
 #include <KoToolManager.h>
 #include <kis_paintop_preset.h>
 #include <KoID.h>
-#include <ui_wdgpaintoppresets.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include "ko_favorite_resource_manager.h"
@@ -45,6 +44,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         :m_favoriteBrushManager(0)
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
+        ,m_blockUpdates(false)
         ,m_colorList(0)
 {
 
@@ -271,6 +271,9 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
 
 void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
 {
+    if(m_blockUpdates) {
+        return;
+    }
     removeFavoritePreset(resource->name());
 }
 
@@ -280,6 +283,11 @@ void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 
 void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
+}
+
+void KoFavoriteResourceManager::setBlockUpdates(bool block)
+{
+    m_blockUpdates = block;
 }
 
 #include "ko_favorite_resource_manager.moc"

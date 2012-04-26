@@ -1,0 +1,4 @@
+/*
+    Auto generated
+*/
+#define PLANCONVERT_JAR_FILE "${PLANCONVERT_INSTALL_DIR}/PlanConvert.jar"

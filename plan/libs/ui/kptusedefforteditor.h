@@ -39,7 +39,7 @@ class KPLATOUI_EXPORT UsedEffortItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    UsedEffortItemModel( QWidget *parent );
+    UsedEffortItemModel( QWidget *parent = 0 );
     
     void setProject( Project *project ) { m_project = project; }
     
@@ -137,6 +137,7 @@ public:
     QModelIndex addRow();
     void removeRow( int row );
 
+    /// These falgs are in addition to flags return from QAbstractItemModel::flags()
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
     
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }

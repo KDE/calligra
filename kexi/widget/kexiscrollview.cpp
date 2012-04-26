@@ -19,14 +19,12 @@
 */
 #include "kexiscrollview.h"
 
-#include <QtGui/QPalette>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-//Added by qt3to4:
+#include <QPalette>
+#include <QCursor>
+#include <QObject>
+#include <QPainter>
+#include <QPixmap>
 #include <QEvent>
-#include <Q3Frame>
 #include <QMouseEvent>
 
 #include <kdebug.h>

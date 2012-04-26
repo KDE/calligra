@@ -25,7 +25,7 @@
 #include "KWTextFrameSet.h"
 #include "KWRootAreaProvider.h"
 
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
@@ -91,17 +91,26 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
                 KWPage originalpage = m_pageManager->page(shape);
                 Q_ASSERT(originalpage.isValid());
                 KoTextLayoutRootArea *area = data->rootArea();
-                if (area)
+                bool wasBlockChanges = false;
+                if (area) {
+                    // We need to block documentChanged() signals emitted cause for example page-variables
+                    // may change there content to result in us marking root-areas dirty for relayout else
+                    // we could end in an infinite relayout ping-pong.
+                    wasBlockChanges = area->documentLayout()->changesBlocked();
+                    area->documentLayout()->setBlockChanges(true);
                     area->setPage(new KWPage(copypage));
+                }
                 shape->paint(painter, converter, paintcontext);
-                if (area)
+                if (area) {
                     area->setPage(new KWPage(originalpage));
+                    area->documentLayout()->setBlockChanges(wasBlockChanges);
+                }
             }
             painter.restore();
-            if (shape->border()) {
+            if (shape->stroke()) {
                 painter.save();
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-                shape->border()->paint(shape, painter, converter);
+                shape->stroke()->paint(shape, painter, converter);
                 painter.restore();
             }
         }
@@ -110,8 +119,8 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
         painter.save();
         m_original->paint(painter, converter, paintcontext);
         painter.restore();
-        if (m_original->border()) {
-            m_original->border()->paint(m_original, painter, converter);
+        if (m_original->stroke()) {
+            m_original->stroke()->paint(m_original, painter, converter);
         }
     }
 }

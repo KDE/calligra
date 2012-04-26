@@ -27,7 +27,7 @@
 #include <KarbonLayerReorderCommand.h>
 
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
+//#include <KoShapeStrokeModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -49,10 +49,10 @@
 #include <KMenu>
 #include <KConfigGroup>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QToolButton>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QToolButton>
 
 enum ButtonIds {
     Button_New,
@@ -167,7 +167,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     }
     setViewMode(mode);
 
-    connect(m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+    connect(m_layerView, SIGNAL(clicked(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
 
     m_updateTimer.setSingleShot(true);
     m_updateTimer.setInterval(250);

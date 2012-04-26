@@ -20,8 +20,8 @@
 #ifndef SCRIPTING_KEXIDBCONNECTIONDATA_H
 #define SCRIPTING_KEXIDBCONNECTIONDATA_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
 #include <kexidb/connection.h>
 #include <kexidb/connectiondata.h>

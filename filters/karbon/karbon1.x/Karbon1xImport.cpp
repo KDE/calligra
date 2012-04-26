@@ -30,11 +30,11 @@
 #include <KDebug>
 #include <KPluginFactory>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
+#include <QBuffer>
+#include <QImage>
+#include <QColor>
+#include <QFont>
+#include <QFontMetrics>
 
 #include <math.h>
 

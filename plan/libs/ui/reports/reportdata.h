@@ -45,6 +45,10 @@ public:
     explicit ReportData();
     virtual ~ReportData();
 
+    /// Set the @p role that shall be used when fetching data for @p column
+    /// Default is Qt::DisplayRole
+    void setColumnRole( int column, int role );
+
     //!Open the dataset
     virtual bool open();
 
@@ -70,7 +74,7 @@ public:
     virtual qint64 recordCount() const;
 
     //!Return the index number of the field given by nane field
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
 
     //!Return the list of field names
     virtual QStringList fieldNames() const;
@@ -125,6 +129,8 @@ protected:
     
     ReportData *m_datasource;
     QMap<QString, QVariant> m_expressions;
+
+    QMap<int, int> m_columnroles;
 };
 
 class KPLATOUI_EXPORT ChartReportData : public ReportData

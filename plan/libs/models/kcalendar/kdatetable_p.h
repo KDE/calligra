@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KPTDATETABLE_P_H
 #define KPTDATETABLE_P_H
 
-#include <QtGui/QLineEdit>
+#include <QLineEdit>
 
 namespace KPlato
 {

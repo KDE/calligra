@@ -23,8 +23,8 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
-#include <QtCore/QDateTime>
-#include <QtGui/QTransform>
+#include <QDateTime>
+#include <QTransform>
 #include <QList>
 
 #include <kparts/part.h>
@@ -308,6 +308,17 @@ public:
     bool confirmNonNativeSave(const bool exporting) const;
     void setConfirmNonNativeSave(const bool exporting, const bool on);
 
+
+    /**
+     * @return true if saving/exporting should inhibit the option dialog
+     */
+    bool saveInBatchMode() const;
+
+    /**
+     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     */
+    void setSaveInBatchMode(const bool batchMode);
+
     virtual bool wantExportConfirmation() const;
 
     /**
@@ -584,7 +595,7 @@ public:
      * the RDF system and needs full access to the KoDocumentRdf object.
      * @see KoDocumentRdf
      */
-    KoDocumentRdf *documentRdf() const;
+    KoDocumentRdfBase *documentRdf() const;
 
     /**
      * Replace the current rdf document with the given rdf document. The existing RDF document
@@ -768,13 +779,6 @@ public:
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
 
     /**
-     * Returns the name of the unit used to display all measures/distances.
-     * Use this method for displaying it in the user interface, but use
-     * unit() for everything else (conversions etc.)
-     */
-    QString unitName() const;
-
-    /**
      * Set the template type used. This is used by the start up widget to show
      * the correct templates.
      */
@@ -797,9 +801,9 @@ public:
     bool loadNativeFormatFromStore(QByteArray &data);
 
     /**
-    Adds a new version and then saves the whole document.
-    * @param comment the comment for the version
-    * @return true on success, otherwise false
+     * Adds a new version and then saves the whole document.
+     * @param comment the comment for the version
+     * @return true on success, otherwise false
     */
     bool addVersion(const QString& comment);
 
@@ -1049,6 +1053,7 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
+    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

@@ -28,11 +28,11 @@
 #include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
-#include <qlayout.h>
-#include <qsplitter.h>
-#include <qtimer.h>
-#include <qdatetime.h>
-#include <qdom.h>
+#include <QLayout>
+#include <QSplitter>
+#include <QTimer>
+#include <QDateTime>
+#include <QDomDocument>
 #include <q3stylesheet.h>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>

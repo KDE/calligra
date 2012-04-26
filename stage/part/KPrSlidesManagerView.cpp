@@ -21,11 +21,12 @@
 #include "KPrSlidesManagerView.h"
 
 //Qt headers
-#include <QtCore/qmath.h>
+#include <qmath.h>
 #include <QPaintEvent>
 #include <QScrollBar>
 #include <QPainter>
 #include <QPen>
+#include <QDrag>
 
 //Kde headers
 #include <klocale.h>

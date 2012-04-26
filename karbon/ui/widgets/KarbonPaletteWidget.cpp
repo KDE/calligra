@@ -20,10 +20,10 @@
 #include "KarbonPaletteWidget.h"
 #include <KoColorSet.h>
 #include <KLocale>
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWheelEvent>
-#include <QtGui/QToolTip>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QToolTip>
 
 KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     : QWidget(parent)

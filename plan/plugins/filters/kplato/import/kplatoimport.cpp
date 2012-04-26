@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <kptnode.h>
 #include <kptresource.h>
 #include <kptdocuments.h>
+#include "kptdebug.h"
 
 #include <QTextCodec>
 #include <QByteArray>
@@ -31,13 +32,13 @@
 #include <QTextStream>
 #include <QFile>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kurl.h>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocument.h>
+
 
 using namespace KPlato;
 
@@ -51,7 +52,7 @@ KPlatoImport::KPlatoImport(QObject* parent, const QVariantList &)
 
 KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug() << from << to;
+    kDebug(planDbg()) << from << to;
     if ( ( from != "application/x-vnd.kde.kplato" ) || ( to != "application/x-vnd.kde.plan" ) ) {
         return KoFilter::NotImplemented;
     }
@@ -62,9 +63,9 @@ KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const Q
     }
     if (batch) {
         //TODO
-        kDebug() << "batch";
+        kDebug(planDbg()) << "batch";
     } else {
-        //kDebug()<<"online";
+        //kDebug(planDbg())<<"online";
         part = m_chain->outputDocument();
     }
     if (part == 0) {

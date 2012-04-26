@@ -39,7 +39,7 @@
    Copyright 2001 Michael Johnson <mikej@xnet.com>
 */
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QList>
 
 #include <kdebug.h>
@@ -515,7 +515,7 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
                                    ValueListFormatData *formatDataList, int formatPos, int formatLen,
                                    KWEFWordsLeader *leader)
 {
-    if ((formatPos == -1)) {
+    if (formatPos == -1) {
         // We have no position defined
         kWarning(30508) << "Missing text image position!";
         return;
@@ -551,7 +551,7 @@ static void SubProcessFormatThreeTag(QDomNode myNode,
                                      ValueListFormatData *formatDataList, int formatPos, int /*formatLen*/,
                                      KWEFWordsLeader *leader)
 {
-    if ((formatPos == -1)) { // formatLen is never there but is 1.
+    if (formatPos == -1) { // formatLen is never there but is 1.
         // We have no position and no length defined
         kWarning(30508) << "Missing variable formatting!";
         return;

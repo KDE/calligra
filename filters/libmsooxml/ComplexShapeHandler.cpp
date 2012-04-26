@@ -271,6 +271,24 @@ QString ComplexShapeHandler::handle_gdLst(QXmlStreamReader* reader)
     return returnString;
 }
 
+QString ComplexShapeHandler::handle_rect(QXmlStreamReader* reader)
+{
+    QXmlStreamAttributes attrs = reader->attributes();
+    while (!reader->atEnd()) {
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "rect") {
+            break;
+        }
+    }
+
+    QString left = attrs.value("l").toString(); left = getArgument(left);
+    QString top = attrs.value("t").toString(); top = getArgument(top);
+    QString right = attrs.value("r").toString(); right = getArgument(right);
+    QString bottom = attrs.value("b").toString(); bottom = getArgument(bottom);
+
+    return QString("%1 %2 %3 %4").arg(left).arg(top).arg(right).arg(bottom).trimmed();
+}
+
 QString ComplexShapeHandler::handle_close(QXmlStreamReader* reader)
 {
     while (!reader->atEnd()) {

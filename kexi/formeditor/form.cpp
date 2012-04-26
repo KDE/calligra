@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -465,7 +465,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["midLineWidth"] = i18n("Mid Frame Width");
     propCaption["frameShape"] = i18n("Frame Shape");
     propCaption["frameShadow"] = i18n("Frame Shadow");
-    //any QScrollbar
+    //any QScrollBar
     propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
     propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
 
@@ -1875,11 +1875,6 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveLayoutProperty(property, value);
         return;
     }
-    else if (property == "enabled")  {
-        // we cannot really disable the widget, we just change its color palette
-        saveEnabledProperty(value.toBool());
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
     if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
@@ -2257,8 +2252,6 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
-//! @todo fix enabled property here
-//crashes:    d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
@@ -3283,38 +3276,6 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     }
 }
 
-//! @todo make it support undo
-void Form::saveEnabledProperty(bool value)
-{
-    foreach(QWidget* widget, d->selected) {
-        ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
-        if (tree->isEnabled() == value)
-            continue;
-
-        QPalette p(widget->palette());
-        p.setCurrentColorGroup(value ? QPalette::Normal : QPalette::Disabled);
-#if 0
-        QPalette p(widget->palette());
-        if (!d->origActiveColors) {
-            d->origActiveColors = new QColorGroup(p.active());
-        }
-        if (value) {
-            p.setActive(*d->origActiveColors);   //revert
-        }
-        else {
-            QColorGroup cg = p.disabled();
-            //also make base color a bit disabled-like
-            cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
-            p.setActive(cg);
-        }
-#endif
-        widget->setPalette(p);
-
-        tree->setEnabled(value);
-        handleWidgetPropertyChanged(widget, "enabled", QVariant(value));
-    }
-}
-
 void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         const QHash<QByteArray, QVariant> &propValues, Command *parentCommand, bool addToActiveForm)
 {
@@ -3468,7 +3429,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
 
         connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(textedit, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     } else {
         KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
@@ -3482,7 +3443,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         editor->selectAll();
         connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }
     d->inlineEditor->installEventFilter(this);
     d->inlineEditor->setFont(args.widget->font());
@@ -3530,7 +3491,11 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->editedWidgetClass = args.classname;
     d->originalInlineText = args.text;
 
-    changeInlineTextInternal(args.text); // to update size of the widget
+    d->slotPropertyChangedEnabled = false;
+    InlineTextEditingCommand command( // to update size of the widget
+        *this, selectedWidget(), d->editedWidgetClass, args.text);
+    command.execute();
+    d->slotPropertyChangedEnabled = true;
 }
 
 //moved from WidgetFactory
@@ -3761,7 +3726,15 @@ void Form::resetInlineEditor()
         }
     }
     if (ed) {
-        changeInlineTextInternal(inlineEditorText());
+        d->slotPropertyChangedEnabled = false;
+        InlineTextEditingCommand command(
+            *this, selectedWidget(), d->editedWidgetClass, inlineEditorText());
+        command.execute();
+        d->slotPropertyChangedEnabled = true;
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    if (ed) {
         disconnect(ed, 0, this, 0);
         ed->deleteLater();
     }
@@ -3775,8 +3748,6 @@ void Form::resetInlineEditor()
     if (handles) {
         handles->setEditingMode(false);
     }
-    d->inlineEditor = 0;
-    d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
 //2.0    setInlineEditor(widget, 0);
 //2.0    setWidget(0, 0);

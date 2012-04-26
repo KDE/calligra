@@ -30,9 +30,9 @@
 #include <KAction>
 #include <KShortcut>
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
 #include <QList>
 #include <QShortcut>
 #include <QPointer>

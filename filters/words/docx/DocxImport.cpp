@@ -227,6 +227,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
             mainContext.m_tableStyles = context.m_tableStyles;
             mainContext.m_namedDefaultStyles = context.m_namedDefaultStyles;
+            mainContext.m_defaultFontSizePt = context.m_defaultFontSizePt;
         }
     }
 

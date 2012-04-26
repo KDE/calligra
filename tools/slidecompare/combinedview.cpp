@@ -22,9 +22,9 @@
 #include "slideview.h"
 #include "oothread.h"
 #include <PptToOdp.h>
-#include <QtGui/QGridLayout>
-#include <QtGui/QDragEnterEvent>
-#include <QtCore/QCoreApplication>
+#include <QGridLayout>
+#include <QDragEnterEvent>
+#include <QCoreApplication>
 #include <KDE/KMessageBox>
 #include <KDE/KMimeType>
 

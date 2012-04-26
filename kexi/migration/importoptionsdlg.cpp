@@ -20,10 +20,10 @@
 #include "importoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
 
-#include <qdir.h>
-#include <qlabel.h>
-#include <qtextcodec.h>
-#include <qcheckbox.h>
+#include <QDir>
+#include <QLabel>
+#include <QTextCodec>
+#include <QCheckBox>
 #include <QGridLayout>
 
 #include <kapplication.h>

@@ -38,6 +38,7 @@ class KActionCollection;
 class KXMLGUIClient;
 class KXMLGUIFactory;
 class KexiSearchableModel;
+class KexiUserFeedbackAgent;
 namespace KexiPart
 {
 class Item;
@@ -287,6 +288,8 @@ public:
      One example is Project Navigator. */
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
     
+    virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
+
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,16 +24,17 @@
 #include <QCheckBox>
 #include <QDate>
 #include <QTableWidget>
+#include <QHeaderView>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 
-#include <kdebug.h>
-
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
+#include "kptdebug.h"
+
 
 namespace KPlato
 {
@@ -78,7 +79,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
         case Qt::DisplayRole: {
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug()<<index.row()<<","<<index.column()<<""<<r;
+                //kDebug(planDbg())<<index.row()<<","<<index.column()<<""<<r;
                 if ( r ) {
                     return r->name();
                 }
@@ -90,7 +91,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 8 ) {
                 // Total
-                //kDebug()<<index.row()<<","<<index.column()<<" total"<<endl;
+                //kDebug(planDbg())<<index.row()<<","<<index.column()<<" total"<<endl;
                 double res = 0.0;
                 foreach ( const QDate &d, m_dates ) {
                     Completion::UsedEffort::ActualEffort e = ue->effort( d );
@@ -108,7 +109,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug()<<index.row()<<","<<index.column()<<" "<<r<<endl;
+                //kDebug(planDbg())<<index.row()<<","<<index.column()<<" "<<r<<endl;
                 if ( r ) {
                     return r->name();
                 }
@@ -143,7 +144,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
 
 bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug();
+    kDebug(planDbg());
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 8 ) {
@@ -184,13 +185,13 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
 
 bool UsedEffortItemModel::submit()
 {
-    kDebug();
+    kDebug(planDbg());
     return QAbstractItemModel::submit();
 }
 
 void UsedEffortItemModel::revert()
 {
-    kDebug();
+    kDebug(planDbg());
     QList<const Resource*> lst = m_resourcelist;
     foreach ( const Resource *r, lst ) {
         if ( ! m_completion->usedEffortMap().contains( r ) ) {
@@ -505,7 +506,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             } else {
                 v = e->totalPerformed;
             }
-            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //kDebug(planDbg())<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return v.format();
         }
         case Qt::EditRole:
@@ -545,7 +546,7 @@ QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration v = m_node->plannedEffort( id(), ECCT_EffortWork );
-            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
+            //kDebug(planDbg())<<m_node->name()<<": "<<v<<" "<<unit;
             return v.format();
         }
         case Qt::EditRole:
@@ -603,24 +604,24 @@ QList<qint64> CompletionEntryItemModel::scales() const
     if ( lst.isEmpty() ) {
         lst = Estimate::defaultScales();
     }
-    //kDebug()<<lst;
+    //kDebug(planDbg())<<lst;
     return lst;
 
 }
 
 bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    //kDebug();
+    //kDebug(planDbg());
     switch ( role ) {
         case Qt::EditRole: {
-            if ( idx.column() == 0 ) {
+            if ( idx.column() == Property_Date ) {
                 QDate od = date( idx.row() ).toDate();
                 removeEntry( od );
                 addEntry( value.toDate() );
                 // emit dataChanged( idx, idx );
                 return true;
             }
-            if ( idx.column() == 1 ) {
+            if ( idx.column() == Property_Completion ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -635,7 +636,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 emit dataChanged( idx, createIndex( idx.row(), 3 ) );
                 return true;
             }
-            if ( idx.column() == 2 ) {
+            if ( idx.column() == Property_UsedEffort ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -650,7 +651,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 emit dataChanged( idx, idx );
                 return true;
             }
-            if ( idx.column() == 3 ) {
+            if ( idx.column() == Property_RemainingEffort ) {
                 Completion::Entry *e = m_completion->entry( date( idx.row() ).toDate() );
                 if ( e == 0 ) {
                     return false;
@@ -673,13 +674,13 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
 
 bool CompletionEntryItemModel::submit()
 {
-    kDebug()<<endl;
+    kDebug(planDbg())<<endl;
     return QAbstractItemModel::submit();
 }
 
 void CompletionEntryItemModel::revert()
 {
-    kDebug()<<endl;
+    kDebug(planDbg())<<endl;
     refresh();
 }
 
@@ -729,14 +730,14 @@ void CompletionEntryItemModel::setCompletion( Completion *completion )
 void CompletionEntryItemModel::refresh()
 {
     m_datelist.clear();
-    m_flags[ 2 ] = 0;
+    m_flags[ Property_UsedEffort ] = Qt::NoItemFlags;
     if ( m_completion ) {
         m_datelist = m_completion->entries().keys();
         if ( m_completion->entrymode() == Completion::EnterEffortPerTask ) {
-            m_flags[ 2 ] = Qt::ItemIsEditable;
+            m_flags[ Property_UsedEffort ] = Qt::ItemIsEditable;
         }
     }
-    kDebug()<<m_datelist<<endl;
+    kDebug(planDbg())<<m_datelist<<endl;
     reset();
 }
 
@@ -763,7 +764,7 @@ void CompletionEntryItemModel::removeEntry( const QDate date )
 
 void CompletionEntryItemModel::removeRow( int row )
 {
-    kDebug()<<row;
+    kDebug(planDbg())<<row;
     if ( row < 0 && row >= rowCount() ) {
         return;
     }
@@ -771,7 +772,7 @@ void CompletionEntryItemModel::removeRow( int row )
     beginRemoveRows( QModelIndex(), row, row );
     m_datelist.removeAt( row );
     endRemoveRows();
-    kDebug()<<date<<" removed row"<<row;
+    kDebug(planDbg())<<date<<" removed row"<<row;
     m_completion->takeEntry( date );
     emit rowRemoved( date );
     emit changed();
@@ -779,7 +780,7 @@ void CompletionEntryItemModel::removeRow( int row )
 
 void CompletionEntryItemModel::addEntry( const QDate date )
 {
-    kDebug()<<date<<endl;
+    kDebug(planDbg())<<date<<endl;
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
@@ -804,6 +805,8 @@ void CompletionEntryItemModel::addEntry( const QDate date )
 CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     : QTableView( parent )
 {
+    verticalHeader()->hide();
+
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
     setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
@@ -832,35 +835,35 @@ void CompletionEntryEditor::setCompletionModel( CompletionEntryItemModel *m )
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
 {
-    kDebug()<<endl;
     model()->setCompletion( completion );
 }
 
 void CompletionEntryEditor::addEntry()
 {
-    kDebug()<<endl;
+    kDebug(planDbg())<<endl;
     QModelIndex i = model()->addRow();
     if ( i.isValid() ) {
-        model()->setFlags( i.column(), model()->flags( i ) | Qt::ItemIsEditable );
+        model()->setFlags( i.column(), Qt::ItemIsEditable );
         setCurrentIndex( i );
         emit selectionChanged( QItemSelection(), QItemSelection() ); //hmmm, control removeEntryBtn
+        scrollTo( i );
         edit( i );
-        model()->setFlags( i.column(), model()->flags( i ) & ~Qt::ItemIsEditable );
+        model()->setFlags( i.column(), Qt::NoItemFlags );
     }
 }
 
 void CompletionEntryEditor::removeEntry()
 {
-    //kDebug();
+    //kDebug(planDbg());
     QModelIndexList lst = selectedIndexes();
-    kDebug()<<lst;
+    kDebug(planDbg())<<lst;
     QMap<int, int> rows;
     while ( ! lst.isEmpty() ) {
         QModelIndex idx = lst.takeFirst();
         rows[ idx.row() ] = 0;
     }
     QList<int> r = rows.uniqueKeys();
-    kDebug()<<rows<<r;
+    kDebug(planDbg())<<rows<<r;
     for ( int i = r.count() - 1; i >= 0; --i ) {
         model()->removeRow( r.at( i ) );
     }

@@ -55,9 +55,9 @@
 #include <KAcceleratorManager>
 #include <KFileDialog>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QLayout>
+#include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
@@ -488,6 +488,7 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
             messageWidget = new KexiContextMessageWidget(
                 this, contents->formLayout,
                 contents->le_dbname, message);
+            messageWidget->setMessageType(KMessageWidget::Warning);
             messageWidget->setNextFocusWidget(contents->le_title);
             return false;
         }

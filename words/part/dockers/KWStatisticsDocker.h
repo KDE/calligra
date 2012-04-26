@@ -38,6 +38,8 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
+private:
+    bool m_canvasReset;
 };
 
 class KWStatisticsDockerFactory : public KoDockFactoryBase

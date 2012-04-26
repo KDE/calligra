@@ -263,6 +263,44 @@ enum MSOLINESTYLE
 };
 
 /**
+ * The MSOLINEEND enumeration specifies the line end decorations that
+ * appear at the ends of lines.
+ */
+enum MSOLINEEND
+{
+    msolineNoEnd,
+    msolineArrowEnd,
+    msolineArrowStealthEnd,
+    msolineArrowDiamondEnd,
+    msolineArrowOvalEnd,
+    msolineArrowOpenEnd,
+    msolineArrowChevronEnd,
+    msolineArrowDoubleChevronEnd
+};
+
+/**
+ * The MSOLINECAP enumeration specifies ways to cap the ends of lines
+ * in the document.
+ */
+enum MSOLINECAP
+{
+    msolineEndCapRound,
+    msolineEndCapSquare,
+    msolineEndCapFlat
+};
+
+/**
+ * The MSOLINEJOIN enumeration specifies the types of join styles that
+ * can be applied to lines in the document.
+ */
+enum MSOLINEJOIN
+{
+    msolineJoinBevel,
+    msolineJoinMiter,
+    msolineJoinRound
+};
+
+/**
  * The MSOLINEDASHING enumeration, as shown in the following table, specifies
  * preset dashed-line values. Each style corresponds to a precise binary
  * representation of the repeating dash style. Each 1 corresponds to a line

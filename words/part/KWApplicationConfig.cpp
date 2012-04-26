@@ -51,7 +51,9 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setCursorInProtectedArea(interface.readEntry("cursorInProtectArea", true));
     // Config-file value in mm, default 10 pt
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
-    m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
+    m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds));
+    document->setAutoSave(m_autoSaveSeconds);
+
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
 
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
@@ -93,7 +95,7 @@ void KWApplicationConfig::load(KWDocument *document)
 
         //load default unit setting - this is only used for new files (from templates) or empty files
         if (document && misc.hasKey("Units"))
-            document->setUnit(KoUnit::unit(misc.readEntry("Units")));
+            document->setUnit(KoUnit::fromSymbol(misc.readEntry("Units")));
         m_defaultColumnSpacing = misc.readEntry("ColumnSpacing", m_defaultColumnSpacing);
     }
 
@@ -149,6 +151,6 @@ void KWApplicationConfig::setUnit(const KoUnit &unit)
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup misc = config->group("Misc");
-    misc.writeEntry("Units", KoUnit::unitName(unit));
+    misc.writeEntry("Units", unit.symbol());
     misc.sync();
 }

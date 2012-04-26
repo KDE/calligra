@@ -31,7 +31,8 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QtGui/QScrollArea>
+#include <QPointer>
+#include <QScrollArea>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -49,11 +50,10 @@
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
-    KoColorSet *colorSet;
+    QPointer<KoColorSet> colorSet;
     QTimer m_timer;
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
-    QCheckBox *filterCheckBox;
     QWidget *colorSetContainer;
     QScrollArea *scrollArea;
     QGridLayout *colorSetLayout;
@@ -65,14 +65,12 @@ public:
     void colorTriggered(KoColorPatch *patch);
     void addRecent(const KoColor &);
     void activateRecent(int i);
-    void filter(int state);
+    void fillColors();
     void addRemoveColors();
 };
 
-void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
+void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
 {
-    bool hide = (state == Qt::Checked);
-
     delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
@@ -86,14 +84,12 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 
     if (colorSet) {
         for( int i = 0, p= 0; i < colorSet->nColors(); i++) {
-            if(!hide || (i % 3 != 0 && i % 16 != 5)) {
-                KoColorPatch *patch = new KoColorPatch(colorSetContainer);
-                patch->setFrameStyle(QFrame::NoFrame);
-                patch->setColor(colorSet->getColor(i).color);
-                connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-                colorSetLayout->addWidget(patch, p/16, p%16);
-                ++p;
-            }
+            KoColorPatch *patch = new KoColorPatch(colorSetContainer);
+            patch->setFrameStyle(QFrame::NoFrame);
+            patch->setColor(colorSet->getColor(i).color);
+            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            colorSetLayout->addWidget(patch, p/16, p%16);
+            ++p;
         }
     }
 
@@ -110,7 +106,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
     if (dlg->exec() == KDialog::Accepted ) { // always reload the color set
         KoColorSet * cs = dlg->activeColorSet();
         // check if the selected colorset is predefined
-        if( ! palettes.contains( cs ) ) {
+        if( !palettes.contains( cs ) ) {
             int i = 1;
             QFileInfo fileInfo;
             QString savePath = srv->saveLocation();
@@ -118,21 +114,21 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             do {
                 fileInfo.setFile( savePath + QString("%1.gpl").arg( i++, 4, 10, QChar('0') ) );
             }
-            while( fileInfo.exists() );
+            while (fileInfo.exists());
 
             cs->setFilename( fileInfo.filePath() );
             cs->setValid( true );
 
             // add new colorset to predefined colorsets
-            if( ! srv->addResource( cs ) ) {
+            if (!srv->addResource(cs)) {
+
                 delete cs;
                 cs = 0;
             }
         }
-        if( cs )
+        if (cs) {
             thePublic->setColorSet(cs);
-        // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
-        // thePublic->setFixedSize(mainLayout->sizeHint());
+        }
     }
     delete dlg;
 }
@@ -193,15 +189,10 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     color.fromQColor(QColor(128,0,0));
     d->addRecent(color);
 
-    d->filterCheckBox = new QCheckBox(i18n("Hide colors with bad contrast"));
-    d->filterCheckBox->setChecked(true);
-    d->mainLayout->addWidget(d->filterCheckBox);
-    connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
-
     d->scrollArea = new QScrollArea();
     d->scrollArea->setBackgroundRole(QPalette::Dark);
     d->mainLayout->addWidget(d->scrollArea);
-    d->filter(Qt::Checked);
+    d->fillColors();
 
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
@@ -213,11 +204,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     KoColorSet *colorSet = new KoColorSet();
     setColorSet(colorSet);
-
-/*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
-    connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
-*/
-
 }
 
 KoColorSetWidget::~KoColorSetWidget()
@@ -228,11 +214,6 @@ KoColorSetWidget::~KoColorSetWidget()
         delete d->colorSet;
     }
     delete d;
-}
-
-void KoColorSetWidget::addRecentColor(const KoColor &color)
-{
-    d->addRecent(color);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
@@ -251,16 +232,18 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
         addRecent(patch->color());
 }
 
-void KoColorSetWidget::setOppositeColor(const KoColor &color)
-{
-    Q_UNUSED(color);
-}
-
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 {
-    delete d->colorSet;
+    if (colorSet == d->colorSet) return;
+
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    if (!palettes.contains(d->colorSet)) {
+        delete d->colorSet;
+    }
+
     d->colorSet = colorSet;
-    d->filter(d->filterCheckBox->checkState());
+    d->fillColors();
 }
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)

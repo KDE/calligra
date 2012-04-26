@@ -1,8 +1,12 @@
 project(kexi)
 
+INCLUDE(CheckFunctionExists)
+
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+
+check_function_exists("uname" HAVE_UNAME)
 
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)

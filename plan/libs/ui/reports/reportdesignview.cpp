@@ -105,30 +105,30 @@ tristate ReportDesignView::storeData ( bool dontAsk ) {
     QDomElement conndata = srcsel->connectionData();
 
     if (conndata.isNull())
-        kDebug() << "Null conn data!";
+        kDebug(planDbg()) << "Null conn data!";
     
     root.appendChild ( _rd->document() );
     root.appendChild(conndata);
     doc.appendChild ( root );
 
     QString src  = doc.toString();
-    kDebug() << src;
+    kDebug(planDbg()) << src;
 
     DB::Connection *conn = MainWindowIface::global()->project()->dbConnection();
 
     if ( storeDataBlock ( src, "pgzreport_layout" ) ) {
-        kDebug() << "Saved OK";
+        kDebug(planDbg()) << "Saved OK";
         setDirty ( false );
         return true;
     } else {
-        kDebug() << "NOT Saved OK";
+        kDebug(planDbg()) << "NOT Saved OK";
     }
 
     return false;
 }
 
 tristate ReportDesignView::beforeSwitchTo ( ::ViewMode mode, bool &dontStore ) {
-    kDebug() << mode;
+    kDebug(planDbg()) << mode;
     dontStore = true;
     if ( _rd && mode == ::DataViewMode ) {
         tempData()->reportDefinition = _rd->document();
@@ -138,7 +138,7 @@ tristate ReportDesignView::beforeSwitchTo ( ::ViewMode mode, bool &dontStore ) {
 }
 
 tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
-    kDebug() << tempData()->document;
+    kDebug(planDbg()) << tempData()->document;
     if ( tempData()->document.isEmpty() ) {
         _rd = new ReportDesigner ( this );
     } else {
@@ -159,7 +159,7 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
                 srcsel->setConnectionData(conn);
             }
         } else {
-            kDebug() << "no koreport section";
+            kDebug(planDbg()) << "no koreport section";
 
             //TODO remove...just create a blank document
             //Temp - allow load old style report definitions (no data)
