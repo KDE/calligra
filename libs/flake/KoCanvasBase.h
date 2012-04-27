@@ -157,11 +157,10 @@ public:
     virtual const QGraphicsWidget *canvasItem() const{ return 0; }
 
     /**
-     * Return the unit of the current document for initialization of the widgets created
+     * Return the unit for initialization of the widgets created
      * by the flake framework.
-     * @see KoDocument::unit()
      */
-    virtual KoUnit unit() const = 0;
+    virtual KoUnit unit() const;
 
     /**
      * Called when the user tries to move the argument shape to allow the application to limit the

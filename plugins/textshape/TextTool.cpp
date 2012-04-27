@@ -151,7 +151,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     createActions();
 
-    m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
     m_textEditingPlugins = canvas->resourceManager()->
         resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
     if (m_textEditingPlugins == 0) {
@@ -646,7 +645,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
             drawRect.setHeight(boxHeight);
             drawRect.moveTop(drawRect.top() - 1.5 * boxHeight);
-            QString label = m_unit.toUserStringValue(w);
+            QString label = canvas()->unit().toUserStringValue(w) + canvas()->unit().symbol();
             int labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
             painter.fillRect(drawRect, QColor(64, 255, 64, 196));
             painter.setPen(QColor(0, 0, 0, 196));
@@ -681,7 +680,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QBrush brush(g);
                 painter.fillRect(drawRect, brush);
             } else {
-                label = m_unit.toUserStringValue(w);
+                label = canvas()->unit().toUserStringValue(w) + canvas()->unit().symbol();
                 labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
                 drawRect.setHeight(boxHeight);
                 painter.fillRect(drawRect, QColor(64, 255, 64, 196));
@@ -725,7 +724,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
             drawRect.setWidth(boxHeight);
             drawRect.moveLeft(drawRect.left() - 1.5 * boxHeight);
-            QString label = m_unit.toUserStringValue(h);
+            QString label = canvas()->unit().toUserStringValue(h) + canvas()->unit().symbol();
             QRectF labelRect = QFontMetrics(QToolTip::font()).boundingRect(label);
             labelRect.setHeight(boxHeight);
             labelRect.setWidth(labelRect.width() + 10);
@@ -2437,8 +2436,6 @@ void TextTool::resourceChanged(int key, const QVariant &var)
         int pos = m_textEditor.data()->position();
         m_textEditor.data()->setPosition(var.toInt());
         m_textEditor.data()->setPosition(pos, QTextCursor::KeepAnchor);
-    } else if (key == KoCanvasResourceManager::Unit) {
-        m_unit = var.value<KoUnit>();
     } else return;
 
     repaintSelection();

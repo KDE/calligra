@@ -25,6 +25,7 @@
 #include <kparts/part.h>
 #include "komain_export.h"
 
+class KoCanvasResourceManager;
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
@@ -291,7 +292,7 @@ public:
     QToolBar* viewBar();
 
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions();
+    QList<QAction*> createChangeUnitActions(KoCanvasResourceManager *resourceManager);
 
 public slots:
     /**

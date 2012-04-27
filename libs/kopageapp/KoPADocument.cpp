@@ -404,8 +404,6 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    saveUnitOdf(settingsWriter);
-
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");
@@ -440,7 +438,6 @@ void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() ) {
-        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
 

@@ -33,6 +33,8 @@
 
 #include <kdebug.h>
 
+#include <KoUnit.h>
+
 #include "Damages.h"
 #include "Map.h"
 #include "PrintSettings.h"

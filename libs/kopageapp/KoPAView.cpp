@@ -277,14 +277,11 @@ void KoPAView::initGUI()
     // The rulers
     d->horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter( d->canvas ));
     d->horizontalRuler->setShowMousePosition(true);
-    d->horizontalRuler->setUnit(d->doc->unit());
     d->verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter( d->canvas ));
-    d->verticalRuler->setUnit(d->doc->unit());
     d->verticalRuler->setShowMousePosition(true);
 
-    new KoRulerController(d->horizontalRuler, d->canvas->resourceManager());
+    new KoRulerController(d->horizontalRuler, d->verticalRuler, d->canvas->resourceManager());
 
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
     //Layout a tab bar
     d->tabBar = new QTabBar();
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
@@ -1230,13 +1227,6 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
     default:
         break;
     }
-}
-
-void KoPAView::updateUnit(const KoUnit &unit)
-{
-    d->horizontalRuler->setUnit(unit);
-    d->verticalRuler->setUnit(unit);
-    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
 
 void KoPAView::updatePageCount()

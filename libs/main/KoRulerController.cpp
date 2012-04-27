@@ -45,8 +45,9 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoRulerController::Private
 {
 public:
-    Private(KoRuler *r, KoCanvasResourceManager *crp)
+    Private(KoRuler *r, KoRuler *vr, KoCanvasResourceManager *crp)
             : ruler(r),
+            vertRuler(vr),
             resourceManager(crp),
             lastPosition(-1),
             originalTabIndex(-2),
@@ -54,6 +55,12 @@ public:
     }
 
     void canvasResourceChanged(int key) {
+        if (key == KoCanvasResourceManager::Unit) {
+            KoUnit unit = resourceManager->unitResource(key);
+            ruler->setUnit(unit);
+            vertRuler->setUnit(unit);
+        }
+
         if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument
             && key != KoCanvasResourceManager::ActiveRange)
             return;
@@ -200,6 +207,7 @@ public:
 
 private:
     KoRuler *ruler;
+    KoRuler *vertRuler;
     KoCanvasResourceManager *resourceManager;
     int lastPosition; // the last position in the text document.
     QList<KoText::Tab> tabList;
@@ -207,9 +215,9 @@ private:
     int originalTabIndex, currentTabIndex;
 };
 
-KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceManager *crp)
+KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoRuler *verticalRuler, KoCanvasResourceManager *crp)
         : QObject(horizontalRuler),
-        d(new Private(horizontalRuler, crp))
+        d(new Private(horizontalRuler, verticalRuler, crp))
 {
     connect(crp, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
     connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));

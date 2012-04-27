@@ -66,9 +66,6 @@ public: // KoCanvasBase interface methods.
     virtual void updateCanvas(const QRectF &rc);
 
     /// reimplemented method from superclass
-    virtual KoUnit unit() const;
-
-    /// reimplemented method from superclass
     virtual KoToolProxy *toolProxy() const;
 
     /// reimplemented method from superclass

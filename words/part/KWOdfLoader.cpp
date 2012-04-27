@@ -258,7 +258,6 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
     if (!viewSettings.isNull()) {
-        m_document->setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
     }
 
     KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");

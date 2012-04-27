@@ -600,9 +600,9 @@ QToolBar* KoView::viewBar()
     return d->viewBar;
 }
 
-QList<QAction*> KoView::createChangeUnitActions()
+QList<QAction*> KoView::createChangeUnitActions(KoCanvasResourceManager *resourceManager)
 {
-    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    UnitActionGroup* unitActions = new UnitActionGroup(resourceManager, this);
     return unitActions->actions();
 }
 

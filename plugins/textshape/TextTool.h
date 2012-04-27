@@ -330,7 +330,6 @@ private:
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
-    KoUnit m_unit;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_allowResourceManagerUpdates;

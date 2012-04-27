@@ -139,11 +139,6 @@ public:
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
-        if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-            unit = KoUnit::Inch;
-        } else {
-            unit = KoUnit::Centimeter;
-        }
     }
 
     /*
@@ -168,8 +163,6 @@ public:
     KoProgressProxy *progressProxy;
     QTextStream *profileStream;
     QTime profileReferenceTime;
-
-    KoUnit unit;
 
     KoFilterManager *filterManager; // The filter-manager to use when loading/saving [for the options]
 
@@ -2588,24 +2581,6 @@ KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
 void KoDocument::setPageLayout(const KoPageLayout &pageLayout)
 {
     d->pageLayout = pageLayout;
-}
-
-KoUnit KoDocument::unit() const
-{
-    return d->unit;
-}
-
-void KoDocument::setUnit(const KoUnit &unit)
-{
-    if (d->unit != unit) {
-        d->unit = unit;
-        emit unitChanged(unit);
-    }
-}
-
-void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
-{
-    settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
 void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)

@@ -90,11 +90,6 @@ KoShapeManager *KWCanvasBase::shapeManager() const
     return m_shapeManager;
 }
 
-KoUnit KWCanvasBase::unit() const
-{
-    return m_document->unit();
-}
-
 KoToolProxy *KWCanvasBase::toolProxy() const
 {
     return m_toolProxy;

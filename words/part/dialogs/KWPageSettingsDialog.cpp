@@ -72,59 +72,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     showTextDirection(true); // TODO can we hide this in selected usecases? Use the resource manager bidi-check maybe?
     //showApplyToDocument(true); // TODO uncommand when we can handle it.
 
-#if 0
-    bool simpleSetup = m_document->pageCount() == 1
-            || (m_document->pageCount() == 2 && page.pageSide() == KWPage::PageSpread);
-    if (!simpleSetup) { // if there is one style, its still a simple doc
-        bool onlyOneStyle = true;
-        foreach (const KWPage &p, m_document->pageManager()->pages()) {
-            if (p.pageStyle() != m_page.pageStyle()) {
-                onlyOneStyle = false;
-                break;
-            }
-        }
-        if (onlyOneStyle)
-            simpleSetup = true;
-    }
-
-    if (simpleSetup) {
-        /*
-          Simple setup means we have currently exactly one page style; so the common usecase
-          is that that one will be changed, and it will apply to all pages in the document.
-          Lets make that usecase as simple and as straight forward as possible
-
-          Notice that if the user unchecks the "apply to document' checkbox we will automatically
-          switch to the not simple setup and use page styles.
-         */
-        KWPageStyle pageStyle = m_page.pageStyle();
-        setPageSpread(pageStyle.isPageSpread());
-        setTextDirection(pageStyle.direction());
-    }
-    else {
-        /*
-          The document is already not simple anymore; there is more than one page style
-          in use. We should show that fact and the user is allowed to use the power of
-          page styles.
-         */
-        setPageSpread(m_page.pageSide() == KWPage::PageSpread);
-        setTextDirection(m_page.directionHint());
-
-        /* TODO
-        fill the styles combobox and please be smart about it with an auto-generated
-        style being named after the pages its assigned to.
-        Make sure the current page style is the first entry.
-
-        */
-    }
-#else
     KWPageStyle pageStyle = m_page.pageStyle();
     setPageSpread(pageStyle.isPageSpread());
     setTextDirection(pageStyle.direction());
-#endif
-
-    onDocumentUnitChange(m_document->unit());
-    connect(m_document, SIGNAL(unitChanged(KoUnit)), SLOT(onDocumentUnitChange(KoUnit)));
-    connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
 }
 
 KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
@@ -173,17 +123,6 @@ void KWPageSettingsDialog::slotApplyClicked()
     new KWPageStylePropertiesCommand(m_document, m_pageStyle, styleToUpdate, cmd);
     m_document->addCommand(cmd);
     m_document->firePageSetupChanged();
-}
-
-void KWPageSettingsDialog::setDocumentUnit(const KoUnit &unit)
-{
-    m_document->setUnit(unit);
-}
-
-void KWPageSettingsDialog::onDocumentUnitChange(const KoUnit &unit)
-{
-    setUnit(unit);
-    m_columns->setUnit(unit);
 }
 
 void KWPageSettingsDialog::reloadPageStyles()

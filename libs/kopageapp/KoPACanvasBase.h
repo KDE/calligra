@@ -60,7 +60,6 @@ public:
 
     KoToolProxy * toolProxy() const;
     KoViewConverter *viewConverter() const;
-    KoUnit unit() const;
 
     /// XXX
     void setDocumentOffset(const QPoint &offset);

@@ -35,7 +35,7 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
         , m_frameConnectSelector(0)
         , m_canvas(canvas)
 {
-    m_state = new FrameConfigSharedState(document);
+    m_state = new FrameConfigSharedState(document, m_canvas->unit());
     setFaceType(Tabbed);
     m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
     addPage(m_generalFrameProperties, i18n("General"));
@@ -110,10 +110,10 @@ void KWFrameDialog::cancelClicked()
 }
 
 // static
-QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
+QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc, const KoUnit &unit)
 {
     QList<KoShapeConfigFactoryBase *> answer;
-    FrameConfigSharedState *state = new FrameConfigSharedState(doc);
+    FrameConfigSharedState *state = new FrameConfigSharedState(doc, unit);
     answer.append(new KWFrameConnectSelectorFactory(state));
     answer.append(new KWRunAroundPropertiesFactory(state));
     answer.append(new KWGeneralFramePropertiesFactory(state));

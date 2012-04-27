@@ -92,10 +92,12 @@ void KWApplicationConfig::load(KWDocument *document)
 
     KConfigGroup misc = config->group("Misc");
     if (misc.exists()) {
+        if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+            m_unit = KoUnit::fromSymbol(misc.readEntry("Units", "in"));
+        } else {
+            m_unit = KoUnit::fromSymbol(misc.readEntry("Units", "cm"));
+        }
 
-        //load default unit setting - this is only used for new files (from templates) or empty files
-        if (document && misc.hasKey("Units"))
-            document->setUnit(KoUnit::fromSymbol(misc.readEntry("Units")));
         m_defaultColumnSpacing = misc.readEntry("ColumnSpacing", m_defaultColumnSpacing);
     }
 
@@ -145,12 +147,8 @@ void KWApplicationConfig::save()
     interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);
     interface.writeEntry("StatusBarShowZoom", m_statusBarShowZoom);
     interface.sync();
-}
 
-void KWApplicationConfig::setUnit(const KoUnit &unit)
-{
-    KSharedConfigPtr config = KGlobal::config();
     KConfigGroup misc = config->group("Misc");
-    misc.writeEntry("Units", unit.symbol());
+    misc.writeEntry("Units", m_unit.symbol());
     misc.sync();
 }

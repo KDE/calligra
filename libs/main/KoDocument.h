@@ -31,7 +31,6 @@
 #include <kservice.h>
 #include <kcomponentdata.h>
 
-#include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "komain_export.h"
 #include "KoGridData.h"
@@ -762,23 +761,6 @@ public:
     }
 
     /**
-     * Returns the unit used to display all measures/distances.
-     */
-    KoUnit unit() const;
-
-    /**
-     * Sets the unit used to display all measures/distances.
-     */
-    void setUnit(const KoUnit &unit);
-
-    /**
-     * Save the unit to the settings writer
-     *
-     * @param settingsWriter
-     */
-    void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
-    /**
      * Set the template type used. This is used by the start up widget to show
      * the correct templates.
      */
@@ -868,13 +850,6 @@ public slots:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 signals:
-
-    /**
-     * This signal is emitted when the unit is changed by setUnit().
-     * It is common to connect views to it, in order to change the displayed units
-     * (e.g. in the rulers)
-     */
-    void unitChanged(const KoUnit &unit);
 
     /**
      * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)

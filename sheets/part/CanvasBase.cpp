@@ -182,11 +182,6 @@ void CanvasBase::updateCanvas(const QRectF& rc)
     update(clipRect);
 }
 
-KoUnit CanvasBase::unit() const
-{
-    return doc()->unit();
-}
-
 KoToolProxy* CanvasBase::toolProxy() const
 {
     return d->toolProxy;

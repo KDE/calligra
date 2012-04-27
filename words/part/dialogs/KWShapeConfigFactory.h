@@ -21,6 +21,7 @@
 #define KWSHAPECONFIGFACTORY_H
 
 #include <KoShapeConfigFactoryBase.h>
+#include <KoUnit.h>
 
 #include <QObject>
 
@@ -33,7 +34,7 @@ class FrameConfigSharedState : public QObject
 {
     Q_OBJECT
 public:
-    explicit FrameConfigSharedState(KWDocument *document);
+    explicit FrameConfigSharedState(KWDocument *document, const KoUnit &unit);
     ~FrameConfigSharedState();
 
     void addUser();
@@ -52,6 +53,10 @@ public:
         return m_document;
     }
 
+    KoUnit unit() const {
+        return m_unit;
+    }
+
     bool keepAspectRatio() const {
         return m_protectAspectRatio;
     }
@@ -66,6 +71,7 @@ private:
     bool m_protectAspectRatio; // states if the user has this boolean set right now.
     KWFrame *m_frame;
     KWDocument *m_document;
+    KoUnit m_unit;
 };
 
 /// factory to create a KWFrameConnectSelector widget

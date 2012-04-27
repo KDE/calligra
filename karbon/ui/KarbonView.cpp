@@ -269,17 +269,16 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // widgets:
     d->horizRuler = new KoRuler(this, Qt::Horizontal, d->canvas->viewConverter());
     d->horizRuler->setShowMousePosition(true);
-    d->horizRuler->setUnit(p->unit());
+    d->horizRuler->setUnit(d->canvas->unit());
     d->horizRuler->setRightToLeft(false);
     d->horizRuler->setVisible(false);
-    new KoRulerController(d->horizRuler, d->canvas->resourceManager());
-
-    connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
-    d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setUnit(d->canvas->unit());
     d->vertRuler->setVisible(false);
+
+    new KoRulerController(d->horizRuler, d->vertRuler, d->canvas->resourceManager());
 
     connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
@@ -1201,8 +1200,8 @@ void KarbonView::mousePositionChanged(const QPoint &position)
         d->vertRuler->updateMouseCoordinate(viewPos.y());
 
     QPointF documentPos = d->canvas->viewConverter()->viewToDocument(viewPos);
-    qreal x = part()->unit().toUserValue(documentPos.x());
-    qreal y = part()->unit().toUserValue(documentPos.y());
+    qreal x = d->canvas->unit().toUserValue(documentPos.x());
+    qreal y = d->canvas->unit().toUserValue(documentPos.y());
 
     if (statusBar() && statusBar()->isVisible())
         d->cursorCoords->setText(QString("%1, %2").arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)));
@@ -1407,13 +1406,6 @@ void KarbonView::createLayersTabDock()
 void KarbonView::updateReadWrite(bool readwrite)
 {
     Q_UNUSED(readwrite);
-}
-
-void KarbonView::updateUnit(const KoUnit &unit)
-{
-    d->horizRuler->setUnit(unit);
-    d->vertRuler->setUnit(unit);
-    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
 
 QList<KoPathShape*> KarbonView::selectedPathShapes()

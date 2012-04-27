@@ -106,7 +106,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
 
     // Init shape Factories with our frame based configuration panels.
-    m_panelFactories = KWFrameDialog::panels(this);
+    m_panelFactories = KWFrameDialog::panels(this, KoUnit());
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->setOptionPanels(m_panelFactories);
@@ -134,7 +134,6 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
 KWDocument::~KWDocument()
 {
     qDeleteAll(m_panelFactories);
-    m_config.setUnit(unit());
     saveConfig();
     qDeleteAll(m_frameSets);
 }
