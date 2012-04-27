@@ -20,10 +20,10 @@
 #define KWAPPLICATIONCONFIG_H
 
 #include <KoZoomMode.h>
+#include <KoUnit.h>
 
 class KConfigGroup;
 class KWDocument;
-class KoUnit;
 
 /**
  * A set of config settings for application-specific stuff (compared to document-specific stuff).
@@ -178,6 +178,7 @@ private:
     int m_autoSaveSeconds;
     qreal m_defaultColumnSpacing;
 
+    KoUnit m_unit;
     Q_DISABLE_COPY(KWApplicationConfig)
 };
 

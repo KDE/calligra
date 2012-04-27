@@ -49,8 +49,8 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     m_runAroundSide->addButton(widget.enough);
     m_runAroundSide->setId(widget.enough, KoShape::EnoughRunAroundSide);
 
-    widget.distance->setUnit(state->document()->unit());
-    widget.threshold->setUnit(state->document()->unit());
+    widget.distance->setUnit(state->unit());
+    widget.threshold->setUnit(state->unit());
 
     connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
 }

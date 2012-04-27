@@ -49,6 +49,7 @@ extern "C" {
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoUnit.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>

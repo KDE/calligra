@@ -55,9 +55,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     // Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_view->viewConverter());
     m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler = new KoRuler(this, Qt::Vertical, m_view->viewConverter());
-    m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
 
     m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
@@ -81,10 +79,8 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     gridLayout->addWidget(m_verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
 
-    new KoRulerController(m_horizontalRuler, m_canvas->resourceManager());
+    new KoRulerController(m_horizontalRuler, m_verticalRuler, m_canvas->resourceManager());
 
-    connect(m_view->kwdocument(), SIGNAL(unitChanged(const KoUnit&)), m_horizontalRuler, SLOT(setUnit(const KoUnit&)));
-    connect(m_view->kwdocument(), SIGNAL(unitChanged(const KoUnit&)), m_verticalRuler, SLOT(setUnit(const KoUnit&)));
     connect(m_view->kwdocument(), SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
 
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), m_horizontalRuler, SLOT(setOffset(int)));
@@ -172,7 +168,7 @@ void KWGui::shapeSelectionChanged()
 
 void KWGui::setupUnitActions()
 {
-    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    QList<QAction*> unitActions = m_view->createChangeUnitActions(m_canvas->resourceManager());
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     unitActions.append(separator);

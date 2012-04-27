@@ -58,6 +58,7 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "part/View.h"
+#include "part/Canvas.h"
 
 #include "ui_FileOptionsWidget.h"
 #include "ui_InterfaceOptionsWidget.h"
@@ -114,7 +115,7 @@ void PreferenceDialog::Private::applyInterfaceOptions()
 
     oldCursorMovement = view->doc()->map()->settings()->moveToValue();
     oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
-    oldUnit = view->doc()->unit();
+    oldUnit = view->canvasWidget()->unit();
 
     const int cursorMovementIndex = interfaceOptions.m_cursorMovement->currentIndex();
     const MoveTo cursorMovement = (MoveTo)interfaceOptions.m_cursorMovement->itemData(cursorMovementIndex).toInt();
@@ -136,8 +137,7 @@ void PreferenceDialog::Private::applyInterfaceOptions()
 
     const int unitIndex = interfaceOptions.m_unit->currentIndex();
     const KoUnit unit = KoUnit::fromListForUi(unitIndex, KoUnit::ListAll);
-    if (unit != view->doc()->unit()) {
-        view->doc()->setUnit(unit);
+    if (unit != view->canvasWidget()->unit()) {
         // TODO: this is never read, still needed?
         parameterGroup.writeEntry("Unit", static_cast<int>(unit.type()));
         oldUnit = unit;
@@ -220,7 +220,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
 
     oldCursorMovement = view->doc()->map()->settings()->moveToValue();
     oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
-    oldUnit = view->doc()->unit();
+    oldUnit = view->canvasWidget()->unit();
     oldIndentationStep = view->doc()->map()->settings()->indentValue();
     oldCaptureAllArrowKeys = view->doc()->map()->settings()->captureAllArrowKeys();
 

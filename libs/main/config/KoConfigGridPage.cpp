@@ -59,7 +59,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 
     d->config = d->doc->componentData().config();
 
-    KoUnit unit = d->doc->unit();
+    KoUnit unit; //FIXME get from canvas resource manager
     KoGridData &gd = d->doc->gridData();
 
     QGroupBox* generalGrp = new QGroupBox(i18n("Grid"), this);

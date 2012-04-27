@@ -26,6 +26,8 @@
 
 #include <kdebug.h>
 
+#include <KoUnit.h>
+
 #include "Formula.h"
 #include "calligra_sheets_limits.h"
 #include "Localization.h"

@@ -73,7 +73,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     d->oldPasteOffset = d->docResources->pasteOffset();
     d->oldPasteAtCursor = d->docResources->pasteAtCursor();
 
-    const KoUnit documentUnit = d->doc->unit();
+    const KoUnit documentUnit;// FIXME = d->doc->unit();
 
     QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Misc"), this);
 
@@ -143,7 +143,7 @@ void KoConfigMiscPage::apply()
     int currentUnitIndex = d->unit->currentIndex();
     if (d->oldUnit.indexInListForUi(KoUnit::HidePixel) != currentUnitIndex) {
         d->oldUnit = KoUnit::fromListForUi(currentUnitIndex, KoUnit::HidePixel);
-        d->doc->setUnit(d->oldUnit);
+        //d->doc->setUnit(d->oldUnit);//FIXME write canvas resource instead
         miscGroup.writeEntry("Units", d->oldUnit.symbol());
     }
 

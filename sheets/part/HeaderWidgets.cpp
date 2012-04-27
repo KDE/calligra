@@ -177,9 +177,9 @@ void RowHeaderWidget::paintSizeIndicator(int mouseY)
 
     QString tmpSize;
     double hh = m_pCanvas->zoomHandler()->unzoomItY(m_iResizePos - y);
-    double hu = m_pCanvas->doc()->unit().toUserValue(hh);
+    double hu = m_pCanvas->unit().toUserValue(hh);
     if (hu > 0.01)
-        tmpSize = i18n("Height: %1 %2", hu, m_pCanvas->doc()->unit().symbol());
+        tmpSize = i18n("Height: %1 %2", hu, m_pCanvas->unit().symbol());
     else
         tmpSize = i18n("Hide Row");
 
@@ -347,9 +347,9 @@ void ColumnHeaderWidget::paintSizeIndicator(int mouseX)
 
     QString tmpSize;
     double ww = m_pCanvas->zoomHandler()->unzoomItX((sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x);
-    double wu = m_pCanvas->doc()->unit().toUserValue(ww);
+    double wu = m_pCanvas->unit().toUserValue(ww);
     if (wu > 0.01)
-        tmpSize = i18n("Width: %1 %2", wu, m_pCanvas->doc()->unit().symbol());
+        tmpSize = i18n("Width: %1 %2", wu, m_pCanvas->unit().symbol());
     else
         tmpSize = i18n("Hide Column");
 

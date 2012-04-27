@@ -90,7 +90,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
 
     if (! m_chain->manager()->getBatchMode()) {
         ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
-        widget->setUnit(karbonPart->unit());
+        widget->setUnit(KoUnit());//FIXME
         widget->setBackgroundColor(backgroundColor);
         widget->enableBackgroundOpacity(format == "PNG");
 

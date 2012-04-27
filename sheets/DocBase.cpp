@@ -181,7 +181,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    saveUnitOdf(settingsWriter);
+    //saveUnitOdf(settingsWriter);
 
     saveOdfSettings(*settingsWriter);
 
@@ -285,9 +285,6 @@ void DocBase::loadOdfSettings(const KoXmlDocument&settingsDoc)
 {
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    if (!viewSettings.isNull()) {
-        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
-    }
     map()->loadOdfSettings(settings);
     loadOdfIgnoreList(settings);
 }

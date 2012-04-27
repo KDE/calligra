@@ -389,8 +389,6 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    m_document->saveUnitOdf(settingsWriter);
-
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");

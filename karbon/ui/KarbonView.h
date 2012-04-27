@@ -150,8 +150,6 @@ protected slots:
     void mousePositionChanged(const QPoint &position);
     void pageOffsetChanged();
 
-    void updateUnit(const KoUnit &unit);
-
     void applyFillToSelection();
     void applyStrokeToSelection();
     void applyPaletteColor(const KoColor &color);

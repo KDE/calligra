@@ -22,7 +22,7 @@
 
 // Calligra
 #include "KoUnit.h"
-#include "KoDocument.h"
+#include "KoCanvasResourceManager.h"
 // Qt
 #include <QActionGroup>
 #include <QAction>
@@ -33,16 +33,16 @@ class UnitActionGroup : public QActionGroup
 {
     Q_OBJECT
 public:
-    explicit UnitActionGroup(KoDocument *document, QObject* parent = 0)
+    explicit UnitActionGroup(KoCanvasResourceManager *resourceManager, QObject* parent = 0)
             : QActionGroup(parent)
-            , m_document(document)
+            , m_resourceManager(resourceManager)
     {
         setExclusive(true);
         connect(this, SIGNAL(triggered(QAction*)), SLOT(onTriggered(QAction*)));
-        connect(document, SIGNAL(unitChanged(KoUnit)), SLOT(onUnitChanged(KoUnit)));
+        connect(resourceManager, SIGNAL(resourceChanged(int, const QVariant &)), SLOT(onResourceChanged(int, const QVariant &)));
 
         const QStringList unitNames = KoUnit::listOfUnitNameForUi(KoUnit::HidePixel);
-        const int currentUnitIndex = m_document->unit().indexInListForUi(KoUnit::HidePixel);
+        const int currentUnitIndex = m_resourceManager->unitResource(KoCanvasResourceManager::Unit).indexInListForUi(KoUnit::HidePixel);
 
         for (int i = 0; i < unitNames.count(); ++i) {
             QAction* action = new QAction(unitNames.at(i), this);
@@ -58,11 +58,21 @@ public:
 private slots:
     void onTriggered(QAction *action)
     {
-        m_document->setUnit(KoUnit::fromListForUi(action->data().toInt(), KoUnit::HidePixel));
+        KoUnit unit = KoUnit::fromListForUi(action->data().toInt(), KoUnit::HidePixel);
+        QVariant v;
+        v.setValue<KoUnit>(unit);
+        m_resourceManager->setResource(KoCanvasResourceManager::Unit, v);
+
     }
 
-    void onUnitChanged(const KoUnit &unit)
+    void onResourceChanged(int key, const QVariant &var)
     {
+        if (key != KoCanvasResourceManager::Unit) {
+            return;
+        }
+
+        KoUnit unit = var.value<KoUnit>();
+
         const int indexInList = unit.indexInListForUi(KoUnit::HidePixel);
 
         foreach (QAction *action, actions()) {
@@ -80,7 +90,7 @@ private slots:
     }
 
 private:
-    KoDocument *m_document;
+    KoCanvasResourceManager *m_resourceManager;
 };
 
 #endif

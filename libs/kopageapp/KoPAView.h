@@ -282,11 +282,6 @@ protected slots:
      */
     void configure();
 
-    /**
-     * This is called when the unit of the document changes
-     */
-    void updateUnit(const KoUnit &unit);
-
 private:
     class Private;
     Private * const d;

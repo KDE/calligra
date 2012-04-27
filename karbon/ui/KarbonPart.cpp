@@ -275,7 +275,6 @@ void KarbonPart::loadOasisSettings(const KoXmlDocument & settingsDoc)
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
     if (!viewSettings.isNull()) {
-        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
     guidesData().loadOdfSettings(settingsDoc);
@@ -290,8 +289,6 @@ void KarbonPart::saveOasisSettings(KoStore * store)
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
-
-    saveUnitOdf(settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-set
 
@@ -405,7 +402,7 @@ void KarbonPart::initConfig()
         defaultUnitSymbol = miscGroup.readEntry("Units", defaultUnitSymbol);
     }
     undoStack()->setUndoLimit(undos);
-    setUnit(KoUnit::fromSymbol(defaultUnitSymbol));
+    //FIXME setUnit(KoUnit::fromSymbol(defaultUnitSymbol));
 
     if (config->hasGroup("Grid")) {
         KoGridData defGrid;

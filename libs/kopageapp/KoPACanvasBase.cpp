@@ -143,11 +143,6 @@ KoViewConverter * KoPACanvasBase::viewConverter() const
     return d->view->viewMode()->viewConverter( const_cast<KoPACanvasBase *>( this ) );
 }
 
-KoUnit KoPACanvasBase::unit() const
-{
-    return d->doc->unit();
-}
-
 const QPoint & KoPACanvasBase::documentOffset() const
 {
     return d->documentOffset;

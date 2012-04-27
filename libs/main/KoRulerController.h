@@ -40,9 +40,10 @@ public:
      * Constructor.
      * @param horizontalRuler the ruler to monitor and update.
      *  Will also be used as QObject parent for memory management purposes.
+     * @param verticalRuler the ruler is only needed so we can update it's units.
      * @param crp the resource provider for the canvas this ruler and the text tool belong to.
      */
-    KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceManager *crp);
+    KoRulerController(KoRuler *horizontalRuler, KoRuler *verticalRuler, KoCanvasResourceManager *crp);
     ~KoRulerController();
 
 private:
