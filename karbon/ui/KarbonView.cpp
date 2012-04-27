@@ -327,6 +327,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // layout:
     QGridLayout *layout = new QGridLayout();
     layout->setMargin(0);
+    layout->setSpacing(0);
     layout->addWidget(d->horizRuler->tabChooser(), 0, 0);
     layout->addWidget(d->horizRuler, 0, 1);
     layout->addWidget(d->vertRuler, 1, 0);
