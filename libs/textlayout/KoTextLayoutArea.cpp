@@ -92,6 +92,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_isLayoutEnvironment(false)
  , m_actsHorizontally(false)
  , m_dropCapsWidth(0)
+ , m_dropCapsDistance(0)
  , m_startOfArea(0)
  , m_endOfArea(0)
  , m_acceptsPageBreak(false)
@@ -449,6 +450,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     delete m_startOfArea;
     delete m_endOfArea;
     m_dropCapsWidth = 0;
+    m_dropCapsDistance = 0;
 
     m_startOfArea = new FrameIterator(cursor);
     m_endOfArea = 0;
@@ -836,6 +838,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         if (dropCaps && dropCapsLines > 1 && block.length() > 1) {
             QString blockText = block.text();
+            m_dropCapsDistance = pStyle.dropCapsDistance();
 
             if (dropCapsLength == 0) { // means whole word is to be dropped
                 int firstNonSpace = blockText.indexOf(QRegExp("[^ ]"));
@@ -1325,6 +1328,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     m_y = y_justBelowDropCaps; // make sure m_y is below the dropped characters
                 y_justBelowDropCaps = 0;
                 m_dropCapsWidth = 0;
+                m_dropCapsDistance = 0;
             }
         }
         documentLayout()->positionAnchoredObstructions();
@@ -1404,7 +1408,10 @@ qreal KoTextLayoutArea::x() const
     if (m_isRtl) {
         return m_x;
     } else {
-        return m_x + m_indent + (m_dropCapsNChars > 0 ? 0.0 : m_dropCapsWidth);
+        if (m_dropCapsNChars > 0 || m_dropCapsWidth == 0)
+            return m_x + m_indent ;
+        else
+            return m_x + m_indent + m_dropCapsWidth + m_dropCapsDistance;
     }
 }
 
@@ -1418,7 +1425,7 @@ qreal KoTextLayoutArea::width() const
         // lets use that instead but remember all the indent stuff we have calculated
         width = m_width - (m_right - m_left) + m_maximumAllowedWidth;
     }
-    return width - m_indent - m_dropCapsWidth;
+    return width - m_indent - m_dropCapsWidth - m_dropCapsDistance;
 }
 
 void KoTextLayoutArea::setAcceptsPageBreak(bool accept)

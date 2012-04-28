@@ -28,11 +28,10 @@
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
 #include "OdfDocumentHandler.hxx"
-#include "writerperfect_export.h"
 
 class OdgGeneratorPrivate;
 
-class WRITERPERFECT_EXPORT OdgGenerator : public libwpg::WPGPaintInterface {
+class OdgGenerator : public libwpg::WPGPaintInterface {
 public:
     OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
     ~OdgGenerator();

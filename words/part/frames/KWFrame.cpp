@@ -183,7 +183,7 @@ void KWFrame::copySettings(const KWFrame *frame)
     shape()->copySettings(frame->shape());
 }
 
-void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
+void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const
 {
     QString value;
     switch (frameBehavior()) {

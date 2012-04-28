@@ -1041,9 +1041,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
-    bool isCustomShape = false;
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    bool isCustomShape = false;
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     inheritDefaultBodyProperties();
@@ -1069,7 +1069,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else if (m_contentType == "custom") { // custGeom
         body->startElement("draw:custom-shape");
+#ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
+#endif
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1084,7 +1086,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
+#ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
+#endif
     }
 
     if (!m_cNvPrName.isEmpty()) {

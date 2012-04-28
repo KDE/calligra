@@ -63,6 +63,14 @@ class jingodfvalidator:
 				schemas[odfversion][1])
 		if (err):
 			return err
+		err = self.validateFile(zip, 'meta.xml',
+				schemas[odfversion][0])
+		if (err):
+			return err
+		err = self.validateFile(zip, 'settings.xml',
+				schemas[odfversion][0])
+		if (err):
+			return err
 		return None
 
 	def validateFlatXML(self, filepath):
