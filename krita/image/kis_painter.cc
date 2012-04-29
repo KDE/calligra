@@ -411,7 +411,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
 template <bool useOldSrcData>
 void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
-                            KisPaintDeviceSP srcDev,
+                            const KisPaintDeviceSP srcDev,
                             qint32 srcX, qint32 srcY,
                             qint32 srcWidth, qint32 srcHeight)
 {
@@ -512,7 +512,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 // if we don't use the oldRawData, we need to access the rawData of the source device.
                 d->paramInfo.srcRowStart   = useOldSrcData ? srcIt->oldRawData() : static_cast<KisRandomAccessor2*>(srcIt.data())->rawData();
                 d->paramInfo.srcRowStride  = srcRowStride;
-                d->paramInfo.maskRowStart  = maskIt->oldRawData();
+                d->paramInfo.maskRowStart  = static_cast<KisRandomAccessor2*>(maskIt.data())->rawData();
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
