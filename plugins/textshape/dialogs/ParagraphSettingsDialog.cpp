@@ -75,6 +75,10 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.KoCharacterStyle::applyStyle(cformat);
     chosenStyle.applyStyle(format);
 
+    kDebug(32500) << "slotApply after save";
+    kDebug(32500) << "format.lineSpacing: " << format.property(KoParagraphStyle::LineSpacing);
+    kDebug(32500) << "format.lineHeight: " << format.property(KoParagraphStyle::LineHeight);
+
     m_editor->mergeAutoStyle(cformat, format);
     if (chosenStyle.listStyle()) {
         KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);

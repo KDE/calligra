@@ -150,6 +150,7 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
 
 void ParagraphIndentSpacing::lineSpacingChanged(int row)
 {
+    kDebug(32500) << "entering lineSpacing changed: " << row;
     qreal fixedLineHeight = 0, lineSpacing = 0, minimumLineSpacing = 0;
     int percentHeight = 0;
     bool useFontMetrics = (row != 5) && (widget.useFont->isChecked());
@@ -210,7 +211,16 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
         m_lineSpacingInherited = false;
     }
 
+    kDebug(32500) << "fixedLineHeight: " << fixedLineHeight;
+    kDebug(32500) << "lineSpacing: " << lineSpacing;
+    kDebug(32500) << "minimumLineSpacing: " << minimumLineSpacing;
+    kDebug(32500) << "percentHeight: " << percentHeight;
+    kDebug(32500) << "useFontMetrics: " << useFontMetrics;
+    kDebug(32500) << "m_lineSpacingInherited: " << m_lineSpacingInherited;
+
     emit lineSpacingChanged(fixedLineHeight, lineSpacing, minimumLineSpacing, percentHeight, useFontMetrics);
+
+    kDebug(32500) << "end lineSpacingChanged";
 }
 
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
@@ -238,6 +248,7 @@ void ParagraphIndentSpacing::spacingValueChanged(qreal value)
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)
 {
+    kDebug(32500) << "save start";
     // general note; we have to unset values by setting it to zero instead of removing the item
     // since this dialog may be used on a copy style, which will be applied later. And removing
     // items doesn't work for that.
@@ -260,6 +271,7 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
         style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     }
     if (!m_lineSpacingInherited) {
+        kDebug(32500) << "lineSpacing changed currentIndex: " << widget.lineSpacing->currentIndex();
         style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
         style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
         style->setLineSpacing(0);
@@ -284,6 +296,12 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
             style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.minimumLineSpacing->value()));
         }
         style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
+
+        kDebug(32500) << "style.lineHeightPercent: " << style->lineHeightPercent();
+        kDebug(32500) << "style.lineSpacing: " << style->lineSpacing();
+        kDebug(32500) << "style.lineHeightAbsolute: " << style->lineHeightAbsolute();
+        kDebug(32500) << "style.minimumLineHeight: " << style->minimumLineHeight();
+        kDebug(32500) << "style.lineSpacingFromFont: " << style->lineSpacingFromFont();
     }
 }
 

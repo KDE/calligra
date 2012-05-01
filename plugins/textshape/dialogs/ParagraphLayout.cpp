@@ -79,7 +79,9 @@ void ParagraphLayout::breakBeforeChanged()
 
 void ParagraphLayout::thresholdValueChanged()
 {
-    m_orphanThresholdInherited = false;
+    if (!m_ignoreSignals) {
+        m_orphanThresholdInherited = false;
+    }
 }
 
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)
