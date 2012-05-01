@@ -41,7 +41,6 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     Q_ASSERT(document);
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApplyClicked()));
-    showUnitchooser(true);
     Q_ASSERT(page.isValid());
 
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());

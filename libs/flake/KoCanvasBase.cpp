@@ -106,7 +106,7 @@ KoCanvasController *KoCanvasBase::canvasController() const
 
 KoUnit KoCanvasBase::unit() const
 {
-    return d->resourceManager->unitResource(KoCanvasResourceManager::Unit);
+    return d->resourceManager->unit();
 }
 
 void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const

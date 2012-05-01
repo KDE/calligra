@@ -25,6 +25,7 @@
 #include <KoConfigMiscPage.h>
 #include <KoPACanvasBase.h>
 #include <KoShapeController.h>
+#include <KoDocument.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -37,7 +38,7 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
     setDefaultButton(KDialog::Ok);
 
-    m_miscPage = new KoConfigMiscPage( parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager() );
+    m_miscPage = new KoConfigMiscPage(parent->koDocument()->componentData().config(), parent->kopaCanvas()->shapeController()->resourceManager(), parent->kopaCanvas()->resourceManager());
     KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );
     item->setHeader( i18n( "Misc" ) );
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));

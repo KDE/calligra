@@ -211,10 +211,6 @@ void Doc::saveConfig()
 
 void Doc::initConfig()
 {
-    KSharedConfigPtr config = Factory::global().config();
-
-    const int page = config->group("Tables Page Layout").readEntry("Default unit page", 0);
-    // FIXME setUnit(KoUnit::fromListForUi(page, KoUnit::HidePixel));
 }
 
 KoView* Doc::createViewInstance(QWidget* parent)

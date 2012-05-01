@@ -34,14 +34,14 @@ class KOMAIN_EXPORT KoConfigGridPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoConfigGridPage(KoDocument* doc, char* name = 0L);
+    explicit KoConfigGridPage(KoDocument* doc, KoCanvasResourceManager *cvResources, char* name = 0L);
     ~KoConfigGridPage();
 
     void apply();
 
 public slots:
     void slotDefault();
-    void slotUnitChanged(const KoUnit &unit);
+    void resourceChanged(int key, const QVariant &var);
     void spinBoxHSpacingChanged(qreal);
     void spinBoxVSpacingChanged(qreal);
 

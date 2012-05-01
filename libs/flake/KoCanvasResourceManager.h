@@ -124,7 +124,7 @@ public:
     /**
      * Set a resource of type KoUnit
      * @param key the integer key
-     * @param id the new value for the key.
+     * @param unit the new unit.
      * @see KoCanvasResourceManager::CanvasResource
      */
     void setResource(int key, const KoUnit &unit);
@@ -163,6 +163,17 @@ public:
 
     /// Returns the stroke resource
     KoShapeStroke activeStroke() const;
+
+    /**
+     * Return the unit of the canvas.
+     */
+    KoUnit unit();
+
+    /**
+     * Set the unit of the canvas.
+     * @param unit the new unit.
+     */
+    void setUnit(const KoUnit &unit);
 
     /**
      * Return the resource determined by param key as a boolean.

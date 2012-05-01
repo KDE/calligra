@@ -290,6 +290,8 @@ void KarbonPart::saveOasisSettings(KoStore * store)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
+    //FIXME saveUnit(settingsWriter);
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");
