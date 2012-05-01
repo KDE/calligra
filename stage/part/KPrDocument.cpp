@@ -384,15 +384,14 @@ void KPrDocument::showStartUpWidget( KoMainWindow * parent, bool alwaysShow )
     bool error = false;
     KoShapeFactoryBase * factory;
 
-    // TODO: Uncomment i18n calls after release of 2.3
     factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     if ( !factory ) {
-        m_errorMessage = /*i18n(*/ "Can not find needed text component, KPresenter will quit now." /*)*/;
+        m_errorMessage = i18n("Can not find needed text component, Calligra Stage will quit now.");
         error = true;
     }
     factory = KoShapeRegistry::instance()->value( "PictureShape" );
     if ( !factory ) {
-        m_errorMessage = /*i18n(*/ "Can not find needed picture component, KPresenter will quit now." /*)*/;
+        m_errorMessage = i18n("Can not find needed picture component, Calligra Stage will quit now.");
         error = true;
     }
 
