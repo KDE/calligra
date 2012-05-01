@@ -26,22 +26,20 @@
 
 #include "komain_export.h"
 
-class KoUnit;
-class KoDocument;
+#include <KSharedConfigPtr>
+
 class KoDocumentResourceManager;
+class KoCanvasResourceManager;
 
 class KOMAIN_EXPORT KoConfigMiscPage : public KVBox
 {
     Q_OBJECT
 
 public:
-    explicit KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name = 0L);
+    explicit KoConfigMiscPage(KSharedConfigPtr config, KoDocumentResourceManager *documentResources, KoCanvasResourceManager *cvResources, char* name = 0L);
     ~KoConfigMiscPage();
 
     void apply();
-
-signals:
-    void unitChanged(const KoUnit &unit);
 
 public slots:
     void slotDefault();

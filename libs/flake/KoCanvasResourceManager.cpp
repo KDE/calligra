@@ -107,6 +107,17 @@ KoColor KoCanvasResourceManager::backgroundColor() const
     return koColorResource(BackgroundColor);
 }
 
+KoUnit KoCanvasResourceManager::unit()
+{
+    return unitResource(Unit);
+}
+
+void KoCanvasResourceManager::setUnit(const KoUnit &unit)
+{
+    setResource(Unit, unit);
+}
+
+
 KoShape *KoCanvasResourceManager::koShapeResource(int key) const
 {
     return d->manager.koShapeResource(key);

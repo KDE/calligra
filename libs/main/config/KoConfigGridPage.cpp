@@ -52,14 +52,14 @@ public:
     KoAspectButton * bnLinkSpacing;
 };
 
-KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
+KoConfigGridPage::KoConfigGridPage(KoDocument* doc, KoCanvasResourceManager *cvResources, char* name)
 : d(new Private(doc))
 {
     setObjectName(name);
 
     d->config = d->doc->componentData().config();
 
-    KoUnit unit; //FIXME get from canvas resource manager
+    KoUnit unit = cvResources->unit();
     KoGridData &gd = d->doc->gridData();
 
     QGroupBox* generalGrp = new QGroupBox(i18n("Grid"), this);
@@ -121,8 +121,9 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 
     setValuesFromGrid(d->doc->gridData());
 
-    connect(d->spaceHorizUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxHSpacingChanged(qreal)));
-    connect(d->spaceVertUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxVSpacingChanged(qreal)));
+    connect(d->spaceHorizUSpin, SIGNAL(valueChangedPt(qreal)), this, SLOT(spinBoxHSpacingChanged(qreal)));
+    connect(d->spaceVertUSpin, SIGNAL(valueChangedPt(qreal)), this, SLOT(spinBoxVSpacingChanged(qreal)));
+    connect(cvResources, SIGNAL(resourceChanged(int ,const QVariant &)), this, SLOT(resourceChanged(int ,const QVariant &)));
 }
 
 KoConfigGridPage::~KoConfigGridPage()
@@ -130,14 +131,16 @@ KoConfigGridPage::~KoConfigGridPage()
     delete d;
 }
 
-void KoConfigGridPage::slotUnitChanged(const KoUnit &unit)
+void KoConfigGridPage::resourceChanged(int key, const QVariant &var)
 {
-    d->spaceHorizUSpin->blockSignals(true);
-    d->spaceVertUSpin->blockSignals(true);
-    d->spaceHorizUSpin->setUnit(unit);
-    d->spaceVertUSpin->setUnit(unit);
-    d->spaceHorizUSpin->blockSignals(false);
-    d->spaceVertUSpin->blockSignals(false);
+    if (key == KoCanvasResourceManager::Unit) {
+        d->spaceHorizUSpin->blockSignals(true);
+        d->spaceVertUSpin->blockSignals(true);
+        d->spaceHorizUSpin->setUnit(unit);
+        d->spaceVertUSpin->setUnit(unit);
+        d->spaceHorizUSpin->blockSignals(false);
+        d->spaceVertUSpin->blockSignals(false);
+    }
 }
 
 void KoConfigGridPage::apply()

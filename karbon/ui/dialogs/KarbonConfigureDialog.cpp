@@ -23,6 +23,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KarbonView.h"
 #include "KarbonPart.h"
 #include "KarbonConfigInterfacePage.h"
+#include "KarbonCanvas.h"
 
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
@@ -45,7 +46,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Interface"));
     item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
 
-    m_miscPage = new KoConfigMiscPage(parent->part(), parent->part()->resourceManager());
+    m_miscPage = new KoConfigMiscPage(parent->part()->componentData().config(), parent->part()->resourceManager(), parent->canvasWidget()->resourceManager());
     item = addPage(m_miscPage, i18n("Misc"));
     item->setHeader(i18n("Misc"));
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
