@@ -129,7 +129,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "movie";
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
-    info.icon = KIcon("video-x-genenric");
+    info.icon = KIcon("video-x-generic");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);

@@ -465,15 +465,15 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(resizeColumn()));
     action->setToolTip(i18n("Change the width of a column"));
 
-    action = new KAction(KIcon("insert_table_col"), i18n("Columns"), this);
+    action = new KAction(KIcon("edit-table-insert-column-left"), i18n("Columns"), this);
     action->setIconText(i18n("Insert Columns"));
     action->setToolTip(i18n("Inserts a new column into the spreadsheet"));
     addAction("insertColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertColumn()));
 
-    action = new KAction(KIcon("delete_table_col"), i18n("Columns"), this);
+    action = new KAction(KIcon("edit-table-delete-column"), i18n("Columns"), this);
     action->setIconText(i18n("Remove Columns"));
-    action->setToolTip(i18n("Removes a column from the spreadsheet"));
+    action->setToolTip(i18n("Removes the selected columns from the spreadsheet"));
     addAction("deleteColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteColumn()));
 
@@ -492,7 +492,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(equalizeColumn()));
     action->setToolTip(i18n("Resizes selected columns to be the same size"));
 
-    action = new KAction(KIcon("show_sheet_column"), i18n("Show Columns"), this);
+    action = new KAction(KIcon("show_table_column"), i18n("Show Columns"), this);
     addAction("showSelColumns", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showColumn()));
     action->setToolTip(i18n("Show hidden columns in the selection"));
@@ -503,13 +503,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(resizeRow()));
     action->setToolTip(i18n("Change the height of a row"));
 
-    action = new KAction(KIcon("insert_table_row"), i18n("Rows"), this);
+    action = new KAction(KIcon("edit-table-insert-row-above"), i18n("Rows"), this);
     action->setIconText(i18n("Insert Rows"));
     action->setToolTip(i18n("Inserts a new row into the spreadsheet"));
     addAction("insertRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertRow()));
 
-    action = new KAction(KIcon("delete_table_row"), i18n("Rows"), this);
+    action = new KAction(KIcon("edit-table-delete-row"), i18n("Rows"), this);
     action->setIconText(i18n("Remove Rows"));
     action->setToolTip(i18n("Removes a row from the spreadsheet"));
     addAction("deleteRow", action);
@@ -689,7 +689,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this,  SLOT(insertFromTextfile()));
     action->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
 
-    action = new KAction(KIcon("klipper"), i18n("From &Clipboard..."), this);
+    action = new KAction(KIcon("edit-paste"), i18n("From &Clipboard..."), this);
     action->setIconText(i18n("Clipboard"));
     addAction("insertFromClipboard", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFromClipboard()));
