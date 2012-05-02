@@ -272,30 +272,37 @@ void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
-    if (!strings.author().isNull()) {
+    if (!strings.author().isEmpty()) {
         m_metaWriter->startElement("meta:initial-creator");
         m_metaWriter->addTextNode(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
-    if (!strings.title().isNull()) {
+    if (!strings.title().isEmpty()) {
         m_metaWriter->startElement("dc:title");
         kDebug(30513) << "TITLE: " << Conversion::string(strings.title());
         m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
-    if (!strings.subject().isNull()) {
+    if (!strings.subject().isEmpty()) {
         m_metaWriter->startElement("dc:subject");
         m_metaWriter->addTextNode(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
-    if (!strings.lastRevBy().isNull()) {
+    if (!strings.lastRevBy().isEmpty()) {
         m_metaWriter->startElement("dc:creator");
         m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
     }
-    if (!strings.keywords().isNull()) {
+    if (!strings.keywords().isEmpty()) {
         m_metaWriter->startElement("meta:keyword");
         m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
+        m_metaWriter->endElement();
+    }
+    //NOTE: According to the Word6/Word8 spec. SttbfAssoc does contain
+    //comments.  However it's not reproducible in MSOffice2000.
+    if (!strings.comments().isEmpty()) {
+        m_metaWriter->startElement("dc:description");
+        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
         m_metaWriter->endElement();
     }
 }
