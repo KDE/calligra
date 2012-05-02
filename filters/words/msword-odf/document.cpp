@@ -298,11 +298,6 @@ void Document::processAssociatedStrings()
         m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
         m_metaWriter->endElement();
     }
-    if (!strings.comments().isNull()) {
-        m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
-        m_metaWriter->endElement();
-    }
 }
 
 void Document::processStyles()
