@@ -99,6 +99,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_continuedNoteToNext(0)
  , m_continuedNoteFromPrevious(0)
  , m_footNoteCountInDoc(0)
+ , m_maximumAllowedBottomForContinuedNote(0.0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -654,8 +655,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         m_left = m_boundingRect.left();
         m_right = m_boundingRect.right();
         m_maximumAllowedWidth = 0;
+        setVirginPage(true);
 
         KoTextLayoutArea::layout(new FrameIterator(m_startOfArea));
+    }
+    if (m_maximumAllowedBottomForContinuedNote>0) {
+        m_maximalAllowedBottom = m_maximumAllowedBottomForContinuedNote;
+        setVirginPage(true);
+
+        return KoTextLayoutArea::layout(new FrameIterator(m_startOfArea));
     }
     return true; // we have layouted till the end of the frame
 }
@@ -1852,7 +1860,13 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
             m_footNoteCursorToNext = 0;
             m_continuedNoteToNext = 0;
         } else {
-            m_continuedNoteToNext = note;
+            if (!(m_maximumAllowedBottomForContinuedNote>0.0)) {
+                m_maximumAllowedBottomForContinuedNote = m_maximalAllowedBottom - line.height();
+                m_continuedNoteToNext = 0;
+            } else {
+                m_continuedNoteToNext = note;
+                m_maximumAllowedBottomForContinuedNote = 0.0;
+            }
         }
         m_preregisteredFootNotesHeight += footNoteArea->bottom();
         m_preregisteredFootNoteAreas.append(footNoteArea);
