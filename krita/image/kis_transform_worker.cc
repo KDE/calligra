@@ -38,6 +38,7 @@
 #include "kis_datamanager.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
+#include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
 #include "kis_painter.h"

@@ -49,6 +49,7 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_iterators_pixel.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
 #include "kis_hsv_adjustment_filter.h"

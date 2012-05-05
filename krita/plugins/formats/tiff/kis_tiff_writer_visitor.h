@@ -22,6 +22,8 @@
 
 #include <kis_node_visitor.h>
 
+#include <kis_iterators_pixel.h>
+
 #include <tiffio.h>
 
 struct KisTIFFOptions;

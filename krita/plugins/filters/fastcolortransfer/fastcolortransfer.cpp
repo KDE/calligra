@@ -32,6 +32,7 @@
 
 #include <filter/kis_filter_registry.h>
 #include <kis_image.h>
+#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>

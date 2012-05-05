@@ -26,6 +26,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
+#include "kis_iterators_pixel.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_random_sub_accessor.h"
 #include <kis_iterator_ng.h>

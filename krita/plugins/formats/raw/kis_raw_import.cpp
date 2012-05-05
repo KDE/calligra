@@ -32,6 +32,7 @@
 #include "kis_transaction.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include <kis_iterators_pixel.h>
 #include "kis_iterator_ng.h"
 
 #include <libkdcraw/kdcraw.h>

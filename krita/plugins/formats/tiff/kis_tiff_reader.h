@@ -29,6 +29,7 @@
 #include <kis_paint_device.h>
 #include <kis_types.h>
 #include <kis_global.h>
+#include <kis_iterator.h>
 
 #define quint32_MAX 4294967295u
 

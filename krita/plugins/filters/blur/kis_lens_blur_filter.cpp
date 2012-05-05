@@ -29,6 +29,7 @@
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
+#include <kis_iterators_pixel.h>
 
 #include "ui_wdg_lens_blur.h"
 

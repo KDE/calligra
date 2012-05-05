@@ -36,6 +36,7 @@
 #include <widgets/kis_double_widget.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_image.h>
+#include <kis_iterators_pixel.h>
 #include <kis_canvas_resource_provider.h>
 
 

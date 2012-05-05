@@ -37,6 +37,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
+#include <kis_iterator.h>
 
 #include "psd.h"
 #include "psd_header.h"

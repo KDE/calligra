@@ -53,6 +53,7 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
+#include "kis_iterators_pixel.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_paintop.h"

@@ -35,6 +35,7 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
+#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
