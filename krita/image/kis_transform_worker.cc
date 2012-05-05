@@ -35,7 +35,9 @@
 #include "kis_debug.h"
 #include "kis_selection.h"
 #include "kis_datamanager.h"
-
+#include "kis_global.h"
+#include "kis_iterator_ng.h"
+#include "kis_random_accessor.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
@@ -88,17 +90,15 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
 
-    KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
-    KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width());
-    for (qint32 i = 0; i < r.height(); ++i) {
-        while (!hit.isDone()) {
-            memcpy(vit.rawData(), hit.rawData(), pixelSize);
+    KisHLineIteratorSP hit = src->createHLineIteratorNG(r.x(), r.top(), r.width());
+    KisHLineIteratorSP vit = dst->createHLineIteratorNG(r.x(), r.top(), r.width());
 
-            ++hit;
-            ++vit;
-        }
-        hit.nextRow();
-        vit.nextRow();
+    for (qint32 i = 0; i < r.height(); ++i) {
+        do {
+            memcpy(vit->rawData(), hit->rawData(), pixelSize);
+        } while (hit->nextPixel() && vit->nextPixel());
+        hit->nextRow();
+        vit->nextRow();
 
         //progress info
         m_progressStep += r.width();
