@@ -113,6 +113,15 @@ protected:
     KoFilter(QObject *parent = 0);
 
     /**
+     * @brief setErrorMessage in case of filter failure, set the error to the given message
+     *
+     * The error message describes the issues in more detail than the ConversionStatus.
+     *
+     * @param errorMessage a descriptive user-ready message of why the filter failed.
+     */
+    void setErrorMessage(const QString &errorMessage);
+
+    /**
      * Use this pointer to access all information about input/output
      * during the conversion. @em Don't use it in the constructor -
      * it's invalid while constructing the object!

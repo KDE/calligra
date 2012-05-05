@@ -33,13 +33,18 @@ class KoFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;
-
+    QString errorMessage;
     Private() :updater(0) {}
 };
 
 KoFilter::KoFilter(QObject *parent)
     : QObject(parent), m_chain(0), d(new Private)
 {
+}
+
+void KoFilter::setErrorMessage(const QString &errorMessage)
+{
+    d->errorMessage = errorMessage;
 }
 
 KoFilter::~KoFilter()
