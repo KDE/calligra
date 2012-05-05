@@ -1602,7 +1602,7 @@ bool KoDocument::openFile()
             case KoFilter::InternalError:
             case KoFilter::UnexpectedEOF:
             case KoFilter::UnexpectedOpcode:
-            case KoFilter::StupidError: // ?? what is this ??
+            case KoFilter::FilterChainBroken:
             case KoFilter::UsageError:
                 msg = i18n("Internal error"); break;
 

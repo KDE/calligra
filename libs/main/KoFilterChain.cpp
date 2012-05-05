@@ -83,7 +83,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
 
     if (!m_chainLinks.current()) {
         kWarning(30500) << "Huh?? Found a null pointer in the chain";
-        return KoFilter::StupidError;
+        return KoFilter::FilterChainBroken;
     }
 
     if (status == KoFilter::OK) {

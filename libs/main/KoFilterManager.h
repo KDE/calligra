@@ -94,6 +94,8 @@ public:
      * The @p status variable signals the success/error of the conversion
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
+     *
+     * @returns the name of the file the filter created, or an empty string.
      */
     QString importDocument(const QString& url,
                            const QString& documentMimeType,
