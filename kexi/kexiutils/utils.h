@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -273,6 +273,9 @@ KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
  Lightness of window background is checked to measure this. */
 KEXIUTILS_EXPORT bool isLightColorScheme();
 
+/*! @return palette altered for indicating "read only" flag. */
+KEXIUTILS_EXPORT QPalette paletteForReadOnly(const QPalette &palette);
+
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
 
@@ -535,7 +538,7 @@ public:
         return QHash<Key, T>::insertMulti(key.toLower(), value);
     }
     const Key key(const T& value, const Key& defaultKey) const {
-        return QHash<Key, T>::key(value, key.toLower());
+        return QHash<Key, T>::key(value, defaultKey.toLower());
     }
     int remove(const Key& key) {
         return QHash<Key, T>::remove(key.toLower());

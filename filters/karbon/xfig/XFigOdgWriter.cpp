@@ -106,6 +106,12 @@ XFigOdgWriter::odfLength( qint32 length ) const
 }
 
 double
+XFigOdgWriter::odfLength( double length ) const
+{
+    return ptUnit( length / m_Document->resolution() );
+}
+
+double
 XFigOdgWriter::odfXCoord( qint32 x ) const
 {
     return ptUnit( static_cast<double>(x) / m_Document->resolution() );
@@ -341,7 +347,7 @@ XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
 
     KoGenStyle ellipseStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(ellipseStyle, ellipseObject );
-    writeFill(ellipseStyle, ellipseObject );
+    writeFill(ellipseStyle, ellipseObject, ellipseObject->lineColorId());
     const QString ellipseStyleName = m_StyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
     m_BodyWriter->addAttribute("draw:style-name", ellipseStyleName);
 
@@ -361,9 +367,9 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
 
     KoGenStyle polylineStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(polylineStyle, polylineObject);
-    writeFill(polylineStyle, polylineObject);
+    writeFill(polylineStyle, polylineObject, polylineObject->lineColorId());
     writeJoinType(polylineStyle, polylineObject->joinType());
-    writeCapType(polylineStyle, polylineObject->capType());
+    writeCapType(polylineStyle, polylineObject);
     writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
     writeArrow(polylineStyle, polylineObject->forwardArrow(), LineEnd);
     const QString polylineStyleName =
@@ -386,7 +392,7 @@ XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
 
     KoGenStyle polygonStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(polygonStyle, polygonObject);
-    writeFill(polygonStyle, polygonObject);
+    writeFill(polygonStyle, polygonObject, polygonObject->lineColorId());
     writeJoinType(polygonStyle, polygonObject->joinType());
     const QString polygonStyleName =
         m_StyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
@@ -420,7 +426,7 @@ XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
     {
         KoGenStyle boxStyle(KoGenStyle::GraphicAutoStyle, "graphic");
         writeStroke(boxStyle, boxObject);
-        writeFill(boxStyle, boxObject);
+        writeFill(boxStyle, boxObject, boxObject->lineColorId());
         writeJoinType(boxStyle, boxObject->joinType());
         const QString boxStyleName = m_StyleCollector.insert(boxStyle, QLatin1String("boxStyle"));
         m_BodyWriter->addAttribute("draw:style-name", boxStyleName);
@@ -442,10 +448,57 @@ XFigOdgWriter::writeSplineObject( const XFigSplineObject* /*object*/ )
 {
 }
 
-void
-XFigOdgWriter::writeArcObject( const XFigArcObject* /*object*/ )
+void XFigOdgWriter::writeArcObject( const XFigArcObject* arcObject )
 {
-    // TODO
+    const XFigPoint centerPoint = arcObject->centerPoint();
+    const XFigPoint point1 = arcObject->point1();
+    const XFigPoint point3 = arcObject->point3();
+
+    const XFigCoord diffX1 = point1.x() - centerPoint.x();
+    const XFigCoord diffY1 = point1.y() - centerPoint.y();
+    const XFigCoord diffX3 = point3.x() - centerPoint.x();
+    const XFigCoord diffY3 = point3.y() - centerPoint.y();
+
+    double startAngle = -atan2( (qreal)diffY1, diffX1 ) * 180.0/M_PI;
+    double endAngle   = -atan2( (qreal)diffY3, diffX3 ) * 180.0/M_PI;
+    if (arcObject->direction() == XFigArcObject::Clockwise) {
+        const double helper = startAngle;
+        startAngle = endAngle;
+        endAngle = helper;
+    }
+    const double radius = qSqrt((diffX1*diffX1) + (diffY1*diffY1));
+
+    m_BodyWriter->startElement("draw:circle");
+
+    writeZIndex( arcObject );
+
+    m_BodyWriter->addAttributePt("svg:cx", odfXCoord(centerPoint.x()));
+    m_BodyWriter->addAttributePt("svg:cy", odfXCoord(centerPoint.y()));
+    m_BodyWriter->addAttributePt("svg:r", odfLength(radius));
+    m_BodyWriter->addAttribute("draw:start-angle", startAngle);
+    m_BodyWriter->addAttribute("draw:end-angle", endAngle);
+
+    // TODO: cut in XFig has no line on the cut side, only on the curve
+    const char* kind =
+        (arcObject->subtype() == XFigArcObject::PieWedgeClosed) ? "section" :
+        (arcObject->fillType() != XFigFillNone ) ?                "cut" :
+                                                                  "arc";
+    m_BodyWriter->addAttribute("draw:kind", kind);
+
+    KoGenStyle arcStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    writeStroke(arcStyle, arcObject);
+    writeFill(arcStyle, arcObject, arcObject->lineColorId());
+    writeCapType(arcStyle, arcObject);
+    writeArrow(arcStyle, arcObject->backwardArrow(),
+               (arcObject->direction() == XFigArcObject::Clockwise)?LineEnd:LineStart);
+    writeArrow(arcStyle, arcObject->forwardArrow(),
+               (arcObject->direction() == XFigArcObject::Clockwise)?LineStart:LineEnd);
+    const QString arcStyleName = m_StyleCollector.insert(arcStyle, QLatin1String("arcStyle"));
+    m_BodyWriter->addAttribute("draw:style-name", arcStyleName);
+
+    writeComment(arcObject);
+
+    m_BodyWriter->endElement(); // draw:circle
 }
 
 
@@ -587,38 +640,54 @@ void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
 }
 
 void
-XFigOdgWriter::writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable )
+XFigOdgWriter::writeFill(KoGenStyle& odfStyle, const XFigFillable* fillable, qint32 penColorId)
 {
-    // TODO: support for fill patterns not yet done, mapping to solid fill for now
-    const qint32 fillStyleId = (fillable->fillStyleId() > 20) ? 20 : fillable->fillStyleId();
+    const XFigFillType fillType = fillable->fillType();
 
-    const bool isNotFilled = ( fillStyleId == -1 );
+    const char* const fillString =
+        (fillType == XFigFillSolid) ?   "solid" :
+        (fillType == XFigFillPattern) ? "hatch" :
+        /*(fillType == XFigFillNone)*/  "none";
+    odfStyle.addProperty(QLatin1String("draw:fill"), fillString);
 
-    odfStyle.addProperty( QLatin1String("draw:fill"), isNotFilled ? "none" : "solid" );
-
-    if (! isNotFilled) {
+    if (fillType != XFigFillNone) {
         const qint32 fillColorId = fillable->fillColorId();
 
         QString colorString;
-        // BLACK or DEFAULT color?
-        if (fillColorId < 1) {
-            // 0: white, 20: black, 1..19 shades of grey, from lighter to darker
-            const int value = qRound((20 - fillStyleId) * 255.0 / 20.0);
-            colorString = QColor(value, value, value).name();
-        // WHITE color ?
-        } else if (fillColorId == 7) {
-            // 0: black, 20: white, 1..19 shades of grey, from darker to lighter
-            const int value = qRound(fillStyleId * 255.0 / 20.0);
-            colorString = QColor(value, value, value).name();
+        if (fillType == XFigFillSolid) {
+            // BLACK or DEFAULT color?
+            if (fillColorId < 1) {
+                // 0: white, 20: black, 1..19 shades of grey, from lighter to darker
+                const int value = qRound((20 - fillable->fillTinting()) * 255.0 / 20.0);
+                colorString = QColor(value, value, value).name();
+            // WHITE color ?
+            } else if (fillColorId == 7) {
+                // 0: black, 20: white, 1..19 shades of grey, from darker to lighter
+                const int value = qRound(fillable->fillTinting() * 255.0 / 20.0);
+                colorString = QColor(value, value, value).name();
+            } else {
+                //TODO: tint blackness/whiteness of color
+                const QColor* const color = m_Document->color(fillColorId);
+                if (color != 0) {
+                    colorString = color->name();
+                }
+            }
+
+            odfStyle.addProperty(QLatin1String("draw:fill-color"), colorString);
         } else {
-            //TODO: tint blackness/whiteness of color
-            const QColor* color = m_Document->color(fillColorId);
+            // ODF 1.2 does not support a hatch pattern with a background
+            // Options are to
+            // * just do the hatch (not all XFig ones can be mapped)
+            // * just do the background
+            // * use pixmaps (needs pixmaps created with given colors)
+            // Decision for now: just do the hatch
+            const QColor* const color = m_Document->color(penColorId);
             if (color != 0) {
                 colorString = color->name();
             }
-        }
 
-        odfStyle.addProperty( QLatin1String("draw:fill-color"), colorString );
+            writeHatch(odfStyle, fillable->fillPatternType(), colorString);
+        }
     }
 }
 
@@ -705,8 +774,10 @@ XFigOdgWriter::writeJoinType(KoGenStyle& odfStyle, int joinType)
 }
 
 void
-XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, int capType)
+XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, const XFigLineEndable* lineEndable)
 {
+    const XFigCapType capType = lineEndable->capType();
+
     const char* const linecap =
         (capType == XFigCapRound) ?      "round" :
         (capType == XFigCapProjecting) ? "square" :
@@ -714,29 +785,232 @@ XFigOdgWriter::writeCapType(KoGenStyle& odfStyle, int capType)
     odfStyle.addProperty(QLatin1String("svg:stroke-linecap"), linecap);
 }
 
-void
-XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType)
+static const
+struct ArrowData
 {
-    if (arrow != 0) {
-        KoGenStyle arrowStyle(KoGenStyle::MarkerStyle);
-        // TODO: support all arrow types. this is just a tmp. substitute copied from kpr2odf
-        const char* const displayName = "Line Arrow";
-        const char* const viewBox = "0 0 1122 2243";
-        const char* const d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
-
-        arrowStyle.addAttribute(QLatin1String("draw:display-name"), displayName);
-        arrowStyle.addAttribute(QLatin1String("svg:viewBox"), viewBox);
-        arrowStyle.addAttribute(QLatin1String("svg:d"), d);
-        const QString arrowStyleName =
-            m_StyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
-
-        const char* const markerStart =
-            (lineEndType==LineStart) ? "draw:marker-start" : "draw:marker-end";
-        const char* const markerStartWidth =
-            (lineEndType==LineStart) ? "draw:marker-start-width" : "draw:marker-end-width";
-        odfStyle.addProperty(QLatin1String(markerStart), arrowStyleName);
-        odfStyle.addPropertyPt(QLatin1String(markerStartWidth), odfLineThickness(arrow->thickness()));
+    const char* displayName;
+    const char* viewBox;
+    const char* d;
+} arrowDataList[13] =
+{
+    {   // 0
+        "Arrowheads 7",//"Stick Arrow",
+        "0 0 1122 2243",//"0 0 1 1",
+        "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"//"m0,1 l0.5,-1 0.5,1"
+    },
+    {   // 1
+        "Arrowheads 6",//"Triangle Arrow",
+        "0 0 1131 902",//"0 0 1 1",
+        "m564 0-564 902h1131z"//"m0,1 l0.5,-1 0.5,1 -1,0z"
+    },
+    {   // 2
+        "Concave Spear Arrow",
+        "0 0 1131 1580",//"0 0 1 1.25",
+        "m1013 1491 118 89-567-1580-564 1580 114-85 136-68 148-46 161-17 161 13 153 46z"//"m0,1.25 l0.5,-1.25 0.5,1.25 -0.5,-0.25 -0.5,0.25z"
+    },
+    {   // 3
+        "Convex Spear Arrow",
+        "0 0 1 1",
+        "m0,0.75 l0.5,-0.75 0.5,0.75 -0.5,0.25 -0.5,-0.25z"
+    },
+    {   // 4
+        "Arrowheads 10",//"Diamond Arrow",
+        "0 0 1131 1131",//"0 0 1 1",
+        "m0 564 564 567 567-567-567-564z",//"m0,0.5 l0.5,-0.5 0.5,0.5 -0.5,0.5 -0.5,-0.5z"
+    },
+    {   // 5
+        "Arrowheads 9",//"Circle Arrow",
+        "0 0 1131 1131",//"0 0 1 1",
+        "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z",//"m0,0.5 a0.5,0.5 0 1,1 0,0.5z"
+    },
+    {   // 6
+        "Half Circle Arrow",
+        "0 0 1 1",
+        "a0.5,0.5 0 1,0 1,0z"
+    },
+    {   // 7
+        "Arrowheads 1",//"Square Arrow",
+        "0 0 10 10",
+        "m0 0h10v10h-10z",
+    },
+    {   // 8
+        "Reverse Triangle Arrow",
+        "0 0 1 1",
+        "l0.5,1 0.5,-1 -1,0z"
+    },
+    {   // 9
+        "Wye Arrow",
+        "0 0 1 1",
+        "l0.5,1 0.5,-1" // TODO
+    },
+    {   // 10
+        "Arrowheads 3",//"Bar Arrow",
+        "0 0 836 110",
+        "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z",
+    },
+    {   // 11
+        "Two Prong Fork Arrow",
+        "0 0 1 1",
+        "l0,1 1,0 0,-1" // TODO
+    },
+    {   // 12
+        "Reverse Two Prong Fork Arrow",
+        "0 0 1 1",
+        "m0,1 l0,-1 1,0 0,1" // TODO
     }
+};
+
+// ODF seems to miss support for:
+// * non-centric arrows
+// * stroke-based arrows
+// * scaling by length, not just width
+// Non-centric arrows are for now simply mapped to the similar centric ones.
+// TODO: calculate hollow/stroke arrow data; scale all with arrow->length()
+static const int arrowDataMap[XFigArrowHeadTypeCount] =
+{
+    0, // XFigArrowHeadStick
+    1, //XFigArrowHeadHollowTriangle
+    1, //XFigArrowHeadFilledTriangle
+    2, //XFigArrowHeadHollowConcaveSpear
+    2, //XFigArrowHeadFilledConcaveSpear
+    3, //XFigArrowHeadHollowConvexSpear
+    3, //XFigArrowHeadFilledConvexSpear
+    4, //XFigArrowHeadHollowDiamond
+    4, //XFigArrowHeadFilledDiamond
+    5, //XFigArrowHeadHollowCircle
+    5, //XFigArrowHeadFilledCircle
+    6, //XFigArrowHeadHollowHalfCircle
+    6, //XFigArrowHeadFilledHalfCircle
+    7, //XFigArrowHeadHollowSquare
+    7, //XFigArrowHeadFilledSquare
+    8, //XFigArrowHeadHollowReverseTriangle
+    8, //XFigArrowHeadFilledReverseTriangle
+    2, //XFigArrowHeadTopHalfFilledConcaveSpear
+    2, //XFigArrowHeadBottomHalfFilledConcaveSpear
+    1, //XFigArrowHeadHollowTopHalfTriangle
+    1, //XFigArrowHeadFilledTopHalfTriangle
+    2, //XFigArrowHeadHollowTopHalfConcaveSpear
+    2, //XFigArrowHeadFilledTopHalfConcaveSpear
+    3, //XFigArrowHeadHollowTopHalfConvexSpear
+    3, //XFigArrowHeadFilledTopHalfConvexSpear
+    8, //XFigArrowHeadWye
+    10, //XFigArrowHeadBar
+    1, //XFigArrowHeadTwoProngFork
+    1 //XFigArrowHeadReverseTwoProngFork
+};
+
+void XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType)
+{
+    if (arrow == 0) {
+        return;
+    }
+
+    KoGenStyle arrowStyle(KoGenStyle::MarkerStyle);
+    const ArrowData& arrowData = arrowDataList[arrowDataMap[arrow->type()]];
+    arrowStyle.addAttribute(QLatin1String("draw:display-name"), arrowData.displayName);
+    arrowStyle.addAttribute(QLatin1String("svg:viewBox"), arrowData.viewBox);
+    arrowStyle.addAttribute(QLatin1String("svg:d"), arrowData.d);
+    const QString arrowStyleName =
+        m_StyleCollector.insert(arrowStyle, QLatin1String("arrowStyle"));
+
+    const char* const marker =
+        (lineEndType==LineStart) ? "draw:marker-start" : "draw:marker-end";
+    const char* const markerWidth =
+        (lineEndType==LineStart) ? "draw:marker-start-width" : "draw:marker-end-width";
+    const char* const markerCenter =
+        (lineEndType==LineStart) ? "draw:marker-start-center" : "draw:marker-end-center";
+    odfStyle.addProperty(QLatin1String(marker), arrowStyleName);
+    odfStyle.addPropertyPt(QLatin1String(markerWidth), odfLength(arrow->width()));
+    odfStyle.addProperty(QLatin1String(markerCenter), "1.0");
+}
+
+void XFigOdgWriter::writeHatch(KoGenStyle& odfStyle, int patternType, const QString& colorString)
+{
+    KoGenStyle hatchStyle(KoGenStyle::HatchStyle);
+
+    const char* displayName = 0;
+    const char* style = 0;
+    const char* distance = 0;
+    const char* rotation = 0;
+
+    // Shingles, bricks, tire treads cannot be done, are mapped to horizontal/vertical lines
+    // Fish, circles, hexagons, octagons cannot be done, are mapped to cross hatchess
+    // 30 degree crosshatch cannot be done, mapped to 45 degree one
+    switch (patternType) {
+    default:
+    case XFigFillVerticalShinglesSkewedDown:
+    case XFigFillVerticalShinglesSkewedUp:
+    case XFigFillVerticalTireTreads:
+    case XFigFillVerticalBricks:
+    case XFigFillVerticalLines:
+        displayName = " Vertical";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "900";
+        break;
+    case XFigFillHorizontalShinglesSkewedRight:
+    case XFigFillHorizontalShinglesSkewedLeft:
+    case XFigFillHorizontalTireTreads:
+    case XFigFillHorizontalBricks:
+    case XFigFillHorizontalLines:
+        displayName = " Horizontal";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "0";
+        break;
+    case XFigFillRightDiagonal30Degree:
+        displayName = " 30 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "300";
+        break;
+    case XFigFillLeftDiagonal30Degree:
+        displayName = " -30 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "3300";
+        break;
+    case XFigFillRightDiagonal45Degree:
+        displayName =  " 45 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "450";
+        break;
+    case XFigFillLeftDiagonal45Degree:
+        displayName = " -45 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "3150";
+        break;
+    case XFigFillFishScales:
+    case XFigFillSmallFishScales:
+    case XFigFillCircles:
+    case XFigFillHexagons:
+    case XFigFillOctagons:
+    case XFigFillCrossHatch:
+        displayName = " Crossed 0 Degrees";
+        style = "double";
+        distance = "0.102cm";
+        rotation = "900";
+        break;
+    case XFigFillCrossHatch30Degree:
+    case XFigFillCrossHatch45Degree:
+        displayName = " Crossed 45 Degrees";
+        style = "double";
+        distance = "0.102cm";
+        rotation = "450";
+        break;
+    }
+
+    hatchStyle.addAttribute("draw:display-name", colorString+QLatin1String(displayName));
+    hatchStyle.addAttribute("draw:style", style);
+    hatchStyle.addAttribute("draw:color", colorString);
+    hatchStyle.addAttribute("draw:distance", distance);
+    hatchStyle.addAttribute("draw:rotation", rotation);
+    const QString hatchStyleName =
+        m_StyleCollector.insert(hatchStyle, QLatin1String("hatchStyle"));
+
+    odfStyle.addProperty("draw:fill-hatch-name", hatchStyleName);
 }
 
 void

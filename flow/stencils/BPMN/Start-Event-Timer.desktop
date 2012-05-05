@@ -2,6 +2,7 @@
 Name=Start-Event-Timer
 Name[ca]=Inicia-Esdeveniment-Temporitzador
 Name[ca@valencia]=Inicia-Esdeveniment-Temporitzador
+Name[el]=Χρονόμετρο-γεγονότος-εκκίνησης
 Name[es]=Temporizador del evento inicial
 Name[et]=Algussündmuse taimer
 Name[it]=Evento-iniziale-Timer
@@ -15,4 +16,5 @@ Name[ru]=Начальное событие - таймер
 Name[sv]=Starthändelse-tidtagning
 Name[uk]=Таймер початкової події
 Name[x-test]=xxStart-Event-Timerxx
+Name[zh_CN]=开始-事件-定时器
 Name[zh_TW]=開始─事件─計時器

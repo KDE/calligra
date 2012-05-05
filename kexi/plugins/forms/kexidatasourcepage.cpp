@@ -259,6 +259,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 KexiDataSourcePage::~KexiDataSourcePage()
 {
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    delete m_tableOrQuerySchema;
+#endif
 }
 
 void KexiDataSourcePage::setProject(KexiProject *prj)

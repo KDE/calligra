@@ -83,35 +83,36 @@ enum XFig3_2TextAlignment {
     XFig3_2TextRightAligned = 2
 };
 
-
-enum XFig3_2ArrowHeadType
-{
-    XFig3_2ArrowHeadStick = 0,
-    XFig3_2ArrowHeadClosedTriangle = 1,
-    XFig3_2ArrowHeadClosedIndentedButt = 2,
-    XFig3_2ArrowHeadClosedPointedButt = 3
-};
+static const int arrowHeadTypeMapSize = 15;
 static const
-struct { XFig3_2ArrowHeadType type3_2; XFigArrowHeadType type; }
-arrowHeadTypeMap[] =
+struct { XFigArrowHeadType style[2]; }
+arrowHeadTypeMap[arrowHeadTypeMapSize] =
 {
-    { XFig3_2ArrowHeadStick, XFigArrowHeadStick },
-    { XFig3_2ArrowHeadClosedTriangle, XFigArrowHeadClosedTriangle },
-    { XFig3_2ArrowHeadClosedIndentedButt,XFigArrowHeadClosedIndentedButt  },
-    { XFig3_2ArrowHeadClosedPointedButt, XFigArrowHeadClosedPointedButt }
+    { {XFigArrowHeadStick,                     XFigArrowHeadStick} },
+    { {XFigArrowHeadHollowTriangle,            XFigArrowHeadFilledTriangle} },
+    { {XFigArrowHeadHollowConcaveSpear,        XFigArrowHeadFilledConcaveSpear} },
+    { {XFigArrowHeadHollowConvexSpear,         XFigArrowHeadFilledConvexSpear} },
+    { {XFigArrowHeadHollowDiamond,             XFigArrowHeadFilledDiamond} },
+    { {XFigArrowHeadHollowCircle,              XFigArrowHeadFilledCircle} },
+    { {XFigArrowHeadHollowHalfCircle,          XFigArrowHeadFilledHalfCircle} },
+    { {XFigArrowHeadHollowSquare,              XFigArrowHeadFilledSquare} },
+    { {XFigArrowHeadHollowReverseTriangle,     XFigArrowHeadFilledReverseTriangle} },
+    { {XFigArrowHeadTopHalfFilledConcaveSpear, XFigArrowHeadBottomHalfFilledConcaveSpear} },
+    { {XFigArrowHeadHollowTopHalfTriangle,     XFigArrowHeadFilledTopHalfTriangle} },
+    { {XFigArrowHeadHollowTopHalfConcaveSpear, XFigArrowHeadFilledTopHalfConcaveSpear} },
+    { {XFigArrowHeadHollowTopHalfConvexSpear,  XFigArrowHeadFilledTopHalfConvexSpear} },
+    { {XFigArrowHeadWye,                       XFigArrowHeadBar} },
+    { {XFigArrowHeadTwoProngFork,              XFigArrowHeadReverseTwoProngFork} }
 };
-static const int arrowHeadTypeMapSize = sizeof(arrowHeadTypeMap)/sizeof(arrowHeadTypeMap[0]);
 
 static inline
 XFigArrowHeadType
-arrowHeadType( int type3_2 )
+arrowHeadType( int type3_2, int style3_2 )
 {
     XFigArrowHeadType result = XFigArrowHeadStick;
-    for (int i = 0; i<arrowHeadTypeMapSize; ++i) {
-        if (arrowHeadTypeMap[i].type3_2 == type3_2) {
-            result = arrowHeadTypeMap[i].type;
-            break;
-        }
+    if ((0<=type3_2) && (type3_2<arrowHeadTypeMapSize) &&
+        ((style3_2 == 0) || (style3_2 == 1))) {
+        result = arrowHeadTypeMap[type3_2].style[style3_2];
     }
     return result;
 }
@@ -211,6 +212,82 @@ joinType( int type3_2 )
     for (int i = 0; i<joinTypeMapSize; ++i) {
         if (joinTypeMap[i].type3_2 == type3_2) {
             result = joinTypeMap[i].type;
+            break;
+        }
+    }
+    return result;
+}
+
+static inline
+XFigFillType fillType(int type3_2)
+{
+    return
+        ((0 <= type3_2) && (type3_2 <= 40)) ?  XFigFillSolid :
+        ((41 <= type3_2) && (type3_2 <= 62)) ? XFigFillPattern :
+        /*(type3_2 == -1) ?*/                  XFigFillNone;
+}
+
+enum XFig3_2FillPatternType
+{
+    XFig3_2FillLeftDiagonal30Degree = 41,
+    XFig3_2FillRightDiagonal30Degree = 42,
+    XFig3_2FillCrossHatch30Degree = 43,
+    XFig3_2FillLeftDiagonal45Degree = 44,
+    XFig3_2FillRightDiagonal45Degree = 45,
+    XFig3_2FillCrossHatch45Degree = 46,
+    XFig3_2FillHorizontalBricks = 47,
+    XFig3_2FillVerticalBricks = 48,
+    XFig3_2FillHorizontalLines = 49,
+    XFig3_2FillVerticalLines = 50,
+    XFig3_2FillCrossHatch = 51,
+    XFig3_2FillHorizontalShinglesSkewedRight = 52,
+    XFig3_2FillHorizontalShinglesSkewedLeft = 53,
+    XFig3_2FillVerticalShinglesSkewedDown = 54,
+    XFig3_2FillVerticalShinglesSkewedUp = 55,
+    XFig3_2FillFishScales = 56,
+    XFig3_2FillSmallFishScales = 57,
+    XFig3_2FillCircles = 58,
+    XFig3_2FillHexagons = 59,
+    XFig3_2FillOctagons = 60,
+    XFig3_2FillHorizontalTireTreads = 61,
+    XFig3_2FillVerticalTireTreads = 62
+};
+static const
+struct { XFig3_2FillPatternType type3_2; XFigFillPatternType type; }
+fillPatternTypeMap[] =
+{
+    {XFig3_2FillLeftDiagonal30Degree, XFigFillLeftDiagonal30Degree},
+    {XFig3_2FillRightDiagonal30Degree, XFigFillRightDiagonal30Degree},
+    {XFig3_2FillCrossHatch30Degree, XFigFillCrossHatch30Degree},
+    {XFig3_2FillLeftDiagonal45Degree, XFigFillLeftDiagonal45Degree},
+    {XFig3_2FillRightDiagonal45Degree, XFigFillRightDiagonal45Degree},
+    {XFig3_2FillCrossHatch45Degree, XFigFillCrossHatch45Degree},
+    {XFig3_2FillHorizontalBricks, XFigFillHorizontalBricks},
+    {XFig3_2FillVerticalBricks, XFigFillVerticalBricks},
+    {XFig3_2FillHorizontalLines, XFigFillHorizontalLines},
+    {XFig3_2FillVerticalLines, XFigFillVerticalLines},
+    {XFig3_2FillCrossHatch, XFigFillCrossHatch},
+    {XFig3_2FillHorizontalShinglesSkewedRight, XFigFillHorizontalShinglesSkewedRight},
+    {XFig3_2FillHorizontalShinglesSkewedLeft, XFigFillHorizontalShinglesSkewedLeft},
+    {XFig3_2FillVerticalShinglesSkewedDown, XFigFillVerticalShinglesSkewedDown},
+    {XFig3_2FillVerticalShinglesSkewedUp, XFigFillVerticalShinglesSkewedUp},
+    {XFig3_2FillFishScales, XFigFillFishScales},
+    {XFig3_2FillSmallFishScales, XFigFillSmallFishScales},
+    {XFig3_2FillCircles, XFigFillCircles},
+    {XFig3_2FillHexagons, XFigFillHexagons},
+    {XFig3_2FillOctagons, XFigFillOctagons},
+    {XFig3_2FillHorizontalTireTreads, XFigFillHorizontalTireTreads},
+    {XFig3_2FillVerticalTireTreads, XFigFillVerticalTireTreads}
+};
+static const int fillPatternTypeMapSize = sizeof(fillPatternTypeMap)/sizeof(fillPatternTypeMap[0]);
+
+static inline
+XFigFillPatternType fillPatternType(int type3_2)
+{
+    XFigFillPatternType result = XFigFillLeftDiagonal30Degree;
+    for (int i = 0; i<fillPatternTypeMapSize; ++i) {
+        if (fillPatternTypeMap[i].type3_2 == type3_2) {
+            result = fillPatternTypeMap[i].type;
             break;
         }
     }
@@ -590,6 +667,7 @@ qDebug()<<"arc";
         if (arrowHead.isNull()) {
             return 0;
         }
+        arcObject->setForwardArrow(arrowHead.take());
     }
 
     if (backwardArrow > 0) {
@@ -597,11 +675,30 @@ qDebug()<<"arc";
         if (arrowHead.isNull()) {
             return 0;
         }
+        arcObject->setBackwardArrow(arrowHead.take());
     }
 
-// TODO
+    const XFigArcObject::Subtype subtype =
+        (sub_type==1) ?   XFigArcObject::OpenEnded :
+        /*(sub_type==2)*/ XFigArcObject::PieWedgeClosed;
+    arcObject->setSubtype(subtype);
+    const XFigArcObject::Direction arcDirection =
+        (direction==1) ?   XFigArcObject::CounterClockwise :
+        /*(direction==0)*/ XFigArcObject::Clockwise;
+    arcObject->setDirection(arcDirection);
+    arcObject->setCenterPoint(XFigPoint(center_x, center_y));
+    arcObject->setPoints(XFigPoint(x1, y1), XFigPoint(x2, y2), XFigPoint(x3, y3));
+    arcObject->setCapType(capType(cap_style));
     arcObject->setDepth( depth );
-    arcObject->setFill( area_fill, fill_color );
+    const XFigFillType fillType = ::fillType(area_fill);
+    if (fillType == XFigFillSolid) {
+        arcObject->setFillTinting(area_fill);
+    } else if (fillType == XFigFillPattern) {
+        arcObject->setFillPatternType(::fillPatternType(area_fill));
+    } else {
+        arcObject->setFillNone();
+    }
+    arcObject->setFillColorId(fill_color);
     arcObject->setLine( lineType(line_style), thickness, style_val, pen_color );
 
     return arcObject.take();
@@ -640,7 +737,15 @@ qDebug()<<"ellipse";
     ellipseObject->setXAxisAngle(angle);
 
     ellipseObject->setDepth( depth );
-    ellipseObject->setFill( area_fill, fill_color);
+    const XFigFillType fillType = ::fillType(area_fill);
+    if (fillType == XFigFillSolid) {
+        ellipseObject->setFillTinting(area_fill);
+    } else if (fillType == XFigFillPattern) {
+        ellipseObject->setFillPatternType(::fillPatternType(area_fill));
+    } else {
+        ellipseObject->setFillNone();
+    }
+    ellipseObject->setFillColorId(fill_color);
     ellipseObject->setLine( lineType(line_style), thickness, style_val, pen_color );
 
     return ellipseObject.take();
@@ -746,7 +851,15 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     }
     abstractPolylineObject->setPoints(points);
     abstractPolylineObject->setDepth(depth);
-    abstractPolylineObject->setFill(area_fill, fill_color);
+    const XFigFillType fillType = ::fillType(area_fill);
+    if (fillType == XFigFillSolid) {
+        abstractPolylineObject->setFillTinting(area_fill);
+    } else if (fillType == XFigFillPattern) {
+        abstractPolylineObject->setFillPatternType(::fillPatternType(area_fill));
+    } else {
+        abstractPolylineObject->setFillNone();
+    }
+    abstractPolylineObject->setFillColorId(fill_color);
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(joinType(join_style));
 
@@ -828,7 +941,15 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
 
     abstractPolylineObject->setPoints(points);
     abstractPolylineObject->setDepth(depth);
-    abstractPolylineObject->setFill(area_fill, fill_color);
+    const XFigFillType fillType = ::fillType(area_fill);
+    if (fillType == XFigFillSolid) {
+        abstractPolylineObject->setFillTinting(area_fill);
+    } else if (fillType == XFigFillPattern) {
+        abstractPolylineObject->setFillPatternType(::fillPatternType(area_fill));
+    } else {
+        abstractPolylineObject->setFillNone();
+    }
+    abstractPolylineObject->setFillColorId(fill_color);
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(XFigJoinRound);
 
@@ -1014,8 +1135,7 @@ XFigArrowHead* XFigParser::parseArrowHead()
         >> arrow_width >> arrow_height;
 
     XFigArrowHead* arrowHead = new XFigArrowHead;
-    arrowHead->setType(arrowHeadType(arrow_style));
-    arrowHead->setIsHollow((arrow_style == 0));
+    arrowHead->setType(arrowHeadType(arrow_type, arrow_style));
     arrowHead->setThickness(arrow_thickness );
     arrowHead->setSize(arrow_width, arrow_height);
 

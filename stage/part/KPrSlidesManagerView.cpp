@@ -26,6 +26,7 @@
 #include <QScrollBar>
 #include <QPainter>
 #include <QPen>
+#include <QDrag>
 
 //Kde headers
 #include <klocale.h>

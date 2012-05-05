@@ -135,10 +135,11 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
     const int unitIndex = interfaceOptions.m_unit->currentIndex();
-    KoUnit unit((KoUnit::Unit)interfaceOptions.m_unit->itemData(unitIndex).toInt());
+    const KoUnit unit = KoUnit::fromListForUi(unitIndex, KoUnit::ListAll);
     if (unit != view->doc()->unit()) {
         view->doc()->setUnit(unit);
-        parameterGroup.writeEntry("Unit", unit.indexInList());
+        // TODO: this is never read, still needed?
+        parameterGroup.writeEntry("Unit", static_cast<int>(unit.type()));
         oldUnit = unit;
     }
 
@@ -231,7 +232,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     interfaceOptions.m_cursorMovement->setCurrentIndex(moveToIndex);
     const int functionIndex = interfaceOptions.m_statusBarFunction->findData(oldFunction);
     interfaceOptions.m_statusBarFunction->setCurrentIndex(functionIndex);
-    interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInList());
+    interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInListForUi(KoUnit::ListAll));
     interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
     interfaceOptions.m_captureAllArrowKeys->setChecked(oldCaptureAllArrowKeys);
     interfaceOptions.m_gridColor->setColor(oldGridColor);
@@ -332,14 +333,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("None"), NoneCalc);
 
     KComboBox* unitComboBox = d->interfaceOptions.m_unit;
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Millimeter)), KoUnit::Millimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Point)), KoUnit::Point);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Inch)), KoUnit::Inch);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Centimeter)), KoUnit::Centimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Decimeter)), KoUnit::Decimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pica)), KoUnit::Pica);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Cicero)), KoUnit::Cicero);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pixel)), KoUnit::Pixel);
+    unitComboBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(unitChanged(int)));
     unitChanged(0);
@@ -445,7 +439,7 @@ void PreferenceDialog::slotReset()
 
 void PreferenceDialog::unitChanged(int index)
 {
-    KoUnit unit((KoUnit::Unit)d->interfaceOptions.m_unit->itemData(index).toInt());
+    const KoUnit unit = KoUnit::fromListForUi(index, KoUnit::ListAll);
     d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
 

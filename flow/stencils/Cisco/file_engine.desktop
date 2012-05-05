@@ -2,7 +2,8 @@
 Name=File Engine
 Name[ca]=Motor de fitxers
 Name[ca@valencia]=Motor de fitxers
-Name[el]=Μηχανή flake
+Name[el]=Μηχανή αρχείων
+Name[es]=Motor de archivos
 Name[et]=File Engine
 Name[it]=Motore file
 Name[kk]=Файлдар басқару тетігі
@@ -12,6 +13,7 @@ Name[pl]=Silnik plikowy
 Name[pt]=Motor de Ficheiros
 Name[pt_BR]=Motor de arquivos
 Name[ru]=Система управления файлами
+Name[sk]=Súborový engine
 Name[sv]=Filutrustning
 Name[uk]=Система керування файлами
 Name[x-test]=xxFile Enginexx

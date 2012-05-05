@@ -34,13 +34,12 @@
 #include <libwpd/libwpd.h>
 
 #include "OdfDocumentHandler.hxx"
-#include "writerperfect_export.h"
 
 typedef bool (*OdfEmbeddedObject)(const WPXBinaryData &data, OdfDocumentHandler *pHandler, const OdfStreamType streamType);
 
 class OdtGeneratorPrivate;
 
-class WRITERPERFECT_EXPORT OdtGenerator : public WPXDocumentInterface
+class OdtGenerator : public WPXDocumentInterface
 {
 public:
     OdtGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);

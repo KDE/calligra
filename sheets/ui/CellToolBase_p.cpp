@@ -1234,9 +1234,9 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             }
         }
         actions.append(popupMenuActions["separator6"]);
-        actions.append(q->action("comment"));
+        actions.append(popupMenuActions["comment"]);
         if (!cell.comment().isEmpty()) {
-            actions.append(q->action("clearComment"));
+            actions.append(popupMenuActions["clearComment"]);
         }
 
         if (testListChoose(q->selection())) {
@@ -1269,11 +1269,11 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustColumn()));
     popupMenuActions.insert("adjustColumn", action);
 
-    action = new KAction(KIcon("insert_table_col"), i18n("Insert Columns"), q);
+    action = new KAction(KIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertColumn()));
     popupMenuActions.insert("insertColumn", action);
 
-    action = new KAction(KIcon("delete_table_col"), i18n("Delete Columns"), q);
+    action = new KAction(KIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteColumn()));
     popupMenuActions.insert("deleteColumn", action);
 
@@ -1281,17 +1281,26 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustRow()));
     popupMenuActions.insert("adjustRow", action);
 
-    action = new KAction(KIcon("insert_table_row"), i18n("Insert Rows"), q);
+    action = new KAction(KIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertRow()));
     popupMenuActions.insert("insertRow", action);
 
-    action = new KAction(KIcon("delete_table_row"), i18n("Delete Rows"), q);
+    action = new KAction(KIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteRow()));
     popupMenuActions.insert("deleteRow", action);
 
     action = new KAction(i18n("Selection List..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
+
+    action = new KAction(KIcon("comment"), i18n("Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
+    popupMenuActions.insert("comment", action);
+
+    action = new KAction(KIcon("clearComment"),i18n("Clear Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
+    popupMenuActions.insert("clearComment", action);
+
 }
 
 bool CellToolBase::Private::testListChoose(Selection *selection) const
