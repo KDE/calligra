@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,36 +19,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONCONFIGUREDIALOG_H
-#define KARBONCONFIGUREDIALOG_H
+#ifndef KOCONFIGAUTHORPAGE_H
+#define KOCONFIGAUTHORPAGE_H
 
-#include <KoUnit.h>
-#include <KPageDialog>
+#include <QWidget>
 
-class KarbonView;
-class KarbonConfigInterfacePage;
-class KoConfigMiscPage;
-class KoConfigGridPage;
-class KoConfigDocumentPage;
-class KoConfigAuthorPage;
+#include "komain_export.h"
 
-class KarbonConfigureDialog : public KPageDialog
+class KOMAIN_EXPORT KoConfigAuthorPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KarbonConfigureDialog(KarbonView* parent);
+    KoConfigAuthorPage();
+    ~KoConfigAuthorPage();
 
-public slots:
-    void slotApply();
-    void slotDefault();
+    void apply();
+
+private slots:
+    void profileChanged(int i);
+    void addUser();
+    void deleteUser();
 
 private:
-    KarbonConfigInterfacePage* m_interfacePage;
-    KoConfigMiscPage* m_miscPage;
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_defaultDocPage;
-    KoConfigAuthorPage *m_authorPage;
+    class Private;
+    Private * const d;
 };
 
-#endif // KARBONCONFIGUREDIALOG_H
+#endif // KOCONFIGAUTHORPAGE_H
