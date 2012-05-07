@@ -2127,8 +2127,8 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
                     //kDebug()<<"add "<<val;
                     res = add(res, val);
-                    cnt++;
                 }
+                cnt++;
             }
         }
 

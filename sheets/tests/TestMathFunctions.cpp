@@ -110,6 +110,20 @@ void TestMathFunctions::initTestCase()
     storage->setValue(2, 7, Value("Hello"));
     // B9
     storage->setValue(2, 9, Value::errorDIV0());
+
+    //C3:C7
+    storage->setValue(3, 3, Value("Apples"));
+    storage->setValue(3, 4, Value("Bananas"));
+    storage->setValue(3, 5, Value("Apples"));
+    storage->setValue(3, 6, Value("Artichokes"));
+    storage->setValue(3, 7, Value("Lemon"));
+
+    // D3:D7
+    storage->setValue(4, 3, Value(1));
+    storage->setValue(4, 4, Value(2));
+    storage->setValue(4, 5, Value(3));
+    storage->setValue(4, 6, Value(4));
+    storage->setValue(4, 7, Value(5));
 }
 
 void TestMathFunctions::cleanupTestCase()
@@ -851,6 +865,27 @@ void TestMathFunctions::testSUMIF()
     CHECK_EVAL("SUMIF(B3:B4;\"7\";B4:B5)", Value(2));     // B3 is the string "7", but its match is mapped to B4 for the summation.
     CHECK_EVAL("SUMIF(B3:B10;1+1)",        Value(2));     // The criteria can be an expression.
     CHECK_EVAL("SUMIF(B3:B4;\"7\")",       Value(0));     // TODO B3 is the string "7", but only numbers are summed.
+}
+
+void TestMathFunctions::testSUMIFS()
+{
+    CHECK_EVAL("SUMIFS(B4:B5;C4:C5;\"Apples\";D4:D5;\">2.5\")",    Value(3));     // D4:D5 = {2,3}, so only D5 has value greater than 2.5.
+    CHECK_EVAL("SUMIFS(B3:B7;C3:C7;C3;D3:D7;\">0\")",              Value(3));     // Test if a cell equals the value in C3 in the range C3:C7 AND greater than 0 in D3:D7
+    CHECK_EVAL("SUMIFS("";C3:C7;C2;D3:D7;D2)",            Value::errorNUM());     // Constant values are not allowed for the range.
+    CHECK_EVAL("SUMIFS(B3:B7;"";B4;C3:C7;C4)",                     Value(0));     // Range not specified for first condition => no matches, AND with second result, should result in 0
+    CHECK_EVAL("SUMIFS(B3:B7;D3:D7;1+1)",                          Value(2));     // The criteria can be an expression.
+    CHECK_EVAL("SUMIFS(D3:D7;B3:B7;\"7\")",                        Value(0));     // TODO B3 is the string "7", numbers are summed in D3:D7.
+    CHECK_EVAL("SUMIFS(D3:D7;B4:B5;3)",                            Value(2));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+
+    //For last case-taken as:
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //    B4 |  2           D3 |  1
+    //    B5 |  3           D4 |  2           =>      Value Returned
+    //                      D5 |  3
+    //                      D6 |  4
+    //                      D7 |  5
+
 }
 
 void TestMathFunctions::testSUMSQ()

@@ -296,6 +296,64 @@ void TestStatisticalFunctions::testAVERAGE()
     CHECK_EVAL("AVERAGE(2; 4)",                Value(3));    //
 }
 
+void TestStatisticalFunctions::testAVERAGEIF()
+{
+    //  Cell | Value       Cell | Value
+    // ------+-------     ------+-------
+    //  B3   |    7        C19  |  0
+    //  B4   |    2        C20  |  5
+    //  B5   |    3        C21  |  2
+    //  B6   | TRUE        C22  |  5
+    //  B7   |Hello        C23  |  3
+
+    CHECK_EVAL("AVERAGEIF(C19:C21;\">0\";B3:B5)",    Value(2.5));   // C19:C21 = {0,5,2}, 5, 2 greater than 0.
+    CHECK_EVAL("AVERAGEIF(C19:C23;C22;B3:B7)",       Value(1.5));   // Test if a cell equals the value in C22 in the range C19:C23, TRUE should evaluate to 1.
+    CHECK_EVAL("AVERAGEIF(C19:C23;C22;"")",   Value::errorNUM());   // Constant values are not allowed for the range.
+    CHECK_EVAL("AVERAGEIF(C19:C23;C22)",               Value(5));   // Condition on the same range as the summation range
+    CHECK_EVAL("AVERAGEIF(C19:C23;6-1)",               Value(5));   // The criteria can be an expression.
+    CHECK_EVAL("AVERAGEIF(B3:B7;\"7\";C19:C23)",       Value(0));   // TODO B3 is the string "7", numbers are summed in C19:C23.
+    CHECK_EVAL("AVERAGEIF(C19:C23;1;B3:B7)", Value::errorDIV0());   // No condition matches => divide by zero
+    CHECK_EVAL("AVERAGEIF(B4:B5;3;C19:C23)",           Value(5));   // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+
+    //For the last case-taken as:
+    //  Cell | Value       Cell | Value
+    // ------+-------     ------+-------
+    //  B4   |    2        C19  |  0
+    //  B5   |    3        C20  |  5           =>      Value Returned = 5/1
+    //                     C21  |  2
+    //                     C22  |  5
+    //                     C23  |  3
+}
+
+void TestStatisticalFunctions::testAVERAGEIFS()
+{
+    //  Cell | Value       Cell | Value       Cell | Value       Cell | Value
+    // ------+-------     ------+-------     ------+-------     ------+-------
+    //  A19  |    1        B3   |    7        C19  |  0           C51 |   7
+    //  A20  |    2        B4   |    2        C20  |  5           C51 |   9
+    //  A21  |    4        B5   |    3        C21  |  2           C53 |  11
+    //  A22  |    8        B6   | TRUE        C22  |  5           C54 |  12
+    //  A23  |   16        B7   |Hello        C23  |  3           C55 |  15
+
+    CHECK_EVAL("AVERAGEIFS(B4:B5;C20:C21;\">0\";A20:A21;\">1.5\")",    Value(2.5));   // C20:C21 = {5,2}, both greater than 0, A20:A21 = {2,4}, both greater than 1.5.
+    CHECK_EVAL("AVERAGEIFS(A19:A23;C19:C23;C22;C51:C55;\">5\")",         Value(5));   // Test if a cell equals the value in C22 in the range C19:C23 AND greater than 5 in C51:C55 => Val = (2+8)/2
+    CHECK_EVAL("AVERAGEIFS("";C19:C23;C22;C51:C55;C51)",        Value::errorNUM());   // Constant values are not allowed for the range.
+    CHECK_EVAL("AVERAGEIFS(A19:A23;"";C22;"";C51)",                      Value(0));   // Range not specified for first condition => no matches, AND with second result, should result in 0
+    CHECK_EVAL("AVERAGEIFS(B3:B7;C19:C23;6-1)",                        Value(1.5));   // The criteria can be an expression. TRUE should evaluate to 1
+    CHECK_EVAL("AVERAGEIFS(A19:A23;B3:B7;\"7\")",                        Value(1));   // TODO B3 is the string "7", numbers are summed in C19:C23.
+    CHECK_EVAL("AVERAGEIFS(A19:A23;B3:B7;C22)",                Value::errorDIV0());   // No condition matches => divide by zero
+    CHECK_EVAL("AVERAGEIFS(A19:A23;B4:B5;3)",                            Value(2));   // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+
+    //For the last case-taken as:
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //  A19  |    1         B4 |  2
+    //  A20  |    2         B5 |  3           =>      Value Returned = 2/1
+    //  A21  |    4
+    //  A22  |    8
+    //  A23  |   16
+}
+
 void TestStatisticalFunctions::testAVERAGEA()
 {
     // ODF-tests

@@ -42,6 +42,8 @@ private slots:
 //     void testARRANG(); // alias PERMUT
     void testAVEDEV();
     void testAVERAGE();
+    void testAVERAGEIF();
+    void testAVERAGEIFS();
     void testAVERAGEA();
     void testBETADIST();
     void testBETAINV();

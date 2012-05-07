@@ -49,6 +49,7 @@ private slots:
     void testCOUNTA();
     void testCOUNTBLANK();
     void testCOUNTIF();
+    void testCOUNTIFS();
     void testERRORTYPE();
     void testFORMULA();
     void testINFO();

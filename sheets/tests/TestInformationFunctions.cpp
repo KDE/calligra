@@ -312,6 +312,33 @@ void TestInformationFunctions::testCOUNTIF()
     CHECK_EVAL("COUNTIF(B3:B10;1+1)",     Value(1));           // The criteria can be an expression.
 }
 
+void TestInformationFunctions::testCOUNTIFS()
+{
+    //  Cell | Value       Cell | Value       Cell | Value
+    // ------+-------     ------+-------     ------+-------
+    //  A19  |    1        B3   |    7        C11  |  5
+    //  A20  |    2        B4   |    2        C12  |  6
+    //  A21  |    4        B5   |    3        C13  |  8
+    //  A22  |    8        B6   | TRUE        C14  |  4
+    //  A23  |   16        B7   |Hello        C15  |  3
+
+    CHECK_EVAL("COUNTIFS(A20:A21;\">1\";B4:B5;\">2.5\";C12:C13;\">5\")", Value(1));     // A20:A21 = {2,4}, both > 1, B4:B5 = {2,3}, B5 > greater than 2.5, C12:C13 = {6,8}, both > 5
+    CHECK_EVAL("COUNTIFS(A19:A23;A20;B3:B7;A20;C11:C15;C12)",            Value(1));     // Test if a cell equals the value in A20 in the range A19:A23, A20 in the range B3:B7, C12 in the range C11:C15.
+    CHECK_EVAL("COUNTIFS(\"\";B4;\"\";A20)",                     Value::errorNA());     // Constant values are not allowed for the range.
+    CHECK_EVAL("COUNTIFS(B3:B7;\"7\";C11:C15;C11)",                      Value(1));     // [.B3] is the string "7", C11 in C11:C15.
+    CHECK_EVAL("COUNTIFS(B3:B7;1+1;C11:C15;8-2)",                        Value(1));     // The criteria can be an expression.
+    CHECK_EVAL("COUNTIFS(A19:A23;2;B4:B5;3)",                            Value(2));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+
+    //For the last case-taken as:
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //  A19  |    1         B4 |  2
+    //  A20  |    2         B5 |  3           =>      Value Returned = 1
+    //  A21  |    4
+    //  A22  |    8
+    //  A23  |   16
+}
+
 void TestInformationFunctions::testERRORTYPE()
 {
     CHECK_EVAL("ERRORTYPE(0)",    Value::errorVALUE());   // Non-errors produce an error.
