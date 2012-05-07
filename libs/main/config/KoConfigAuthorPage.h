@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-
-   Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,41 +16,34 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_TESTDATASET_H
-#define KCHART_TESTDATASET_H
+#ifndef KOCONFIGAUTHORPAGE_H
+#define KOCONFIGAUTHORPAGE_H
 
-// Qt
-#include <QtTest>
+#include <QWidget>
 
-// KChart
-#include "ChartProxyModel.h"
-#include "ChartTableModel.h"
-#include "TableSource.h"
+#include "komain_export.h"
 
-using namespace KChart;
-
-class TestDataSet : public QObject
+class KOMAIN_EXPORT KoConfigAuthorPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    TestDataSet();
-    
-private slots:
-    void initTestCase();
+    KoConfigAuthorPage();
+    ~KoConfigAuthorPage();
 
-    // Tests DataSet::*Data() methods
-    void testFooData();
-    
+    void apply();
+
+private slots:
+    void profileChanged(int i);
+    void addUser();
+    void deleteUser();
+
 private:
-    // m_source must be initialized before m_proxyModel
-    TableSource m_source;
-    ChartProxyModel m_proxyModel;
-    ChartTableModel m_sourceModel;
-    Table *m_table;
+    class Private;
+    Private * const d;
 };
-    
-#endif // KCHART_TESTDATASET_H
+
+#endif // KOCONFIGAUTHORPAGE_H

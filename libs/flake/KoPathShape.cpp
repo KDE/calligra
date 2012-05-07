@@ -207,13 +207,13 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
     d->startMarker.saveStyle(style, lineWidth, context);
     d->endMarker.saveStyle(style, lineWidth, context);
 
-    return KoShape::saveStyle(style, context);
+    return KoTosContainer::saveStyle(style, context);
 }
 
 void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     Q_D(KoPathShape);
-    KoShape::loadStyle(element, context);
+    KoTosContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
@@ -406,7 +406,6 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    Q_D(const KoPathShape);
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;

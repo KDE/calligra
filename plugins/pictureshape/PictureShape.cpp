@@ -173,6 +173,12 @@ ClippingRect PictureShape::parseClippingRectString(QString string) const
     return rect;
 }
 
+QPainterPath PictureShape::shadowOutline() const
+{
+    // Always return an outline for a shadow even if no fill is defined.
+    return outline();
+}
+
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
@@ -417,13 +423,13 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         }
     }
 
-    return KoShape::saveStyle(style, context);
+    return KoTosContainer::saveStyle(style, context);
 }
 
 void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     // Load the common parts of the style.
-    KoShape::loadStyle(element, context);
+    KoTosContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
