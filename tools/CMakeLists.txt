@@ -1,3 +1,4 @@
+if(NOT ANDROID)
 macro_optional_add_subdirectory( converter )
 macro_optional_add_subdirectory( thumbnail )
 macro_optional_add_subdirectory( kthesaurus )
@@ -19,7 +20,7 @@ if(OKULAR_FOUND)
 endif(OKULAR_FOUND)
 
 add_subdirectory(scripts)
-
+endif(NOT ANDROID)
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
 macro_optional_find_package(LibXml2) # calligra mobile uses xml2 directly

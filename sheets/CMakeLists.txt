@@ -317,7 +317,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
-
+if(NOT ANDROID)
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
 kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
@@ -336,7 +336,7 @@ install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
+endif(NOT ANDROID)
 ########### install files ###############
 
 install( FILES  sheets.rc sheets_readonly.rc sheets.notifyrc DESTINATION ${DATA_INSTALL_DIR}/sheets)

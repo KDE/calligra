@@ -43,7 +43,7 @@ target_link_libraries(TestKoColorSpaceMaths  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_
 
 ########### next target ###############
 set(CCSGraph_GRAPH CCSGraph.cpp)
-kde4_add_executable(CCSGraph ${CCSGraph_GRAPH})
+kde4_add_executable(CCSGraph TEST ${CCSGraph_GRAPH})
 target_link_libraries(CCSGraph  ${KDE4_KDEUI_LIBS} pigmentcms )
 
 ########### next target ###############
