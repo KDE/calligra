@@ -84,3 +84,4 @@ Icon=calligraplanwork
 X-KDE-ServiceTypes=Calligra/Application
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
+X-DocPath=http://userbase.kde.org/PlanWork/Manual

@@ -50,6 +50,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
 #include "commands/DeleteTableColumnCommand.h"
@@ -986,6 +987,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     QTextTableFormat tableFormat;
 
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    tableFormat.setProperty(KoTableStyle::CollapsingBorders, true);
     tableFormat.setMargin(5);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1224,6 +1226,41 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
         fmt.setRightMargin(fmt.rightMargin() + dRight);
     }
     table->setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
+         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Change Border Formatting"));
+    d->caret.beginEditBlock();
+    QTextTableCell cell = table->cellAt(row, column);
+    QTextCharFormat fmt = cell.format();
+    KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
+
+    switch (cellSide) {
+    case KoBorder::Top:
+        border.setTopBorderData(data);
+        break;
+    case KoBorder::Left:
+        border.setLeftBorderData(data);
+        break;
+    case KoBorder::Bottom:
+        border.setBottomBorderData(data);
+        break;
+    case KoBorder::Right:
+        border.setRightBorderData(data);
+        break;
+    case KoBorder::TopLeftToBottomRight:
+        border.setTlbrBorderData(data);
+        break;
+    case KoBorder::BottomLeftToTopRight:
+        border.setTrblBorderData(data);
+        break;
+    }
+    fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
+    cell.setFormat(fmt);
     d->caret.endEditBlock();
     d->updateState(KoTextEditor::Private::NoOp);
 }
@@ -1619,6 +1656,38 @@ void KoTextEditor::newLine()
     }
 
     emit cursorPositionChanged();
+}
+
+class WithinSelectionVisitor : public KoTextVisitor
+{
+public:
+    WithinSelectionVisitor(KoTextEditor *editor, int position)
+        : KoTextVisitor(editor)
+        , m_position(position)
+        , m_returnValue(false)
+    {
+    }
+
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        if (m_position >= qMax(block.position(), caret.selectionStart())
+                    && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {
+            m_returnValue = true;
+            setAbortVisiting(true);
+        }
+    }
+    int m_position; //the position we are searching for
+    bool m_returnValue; //if position is within the selection
+};
+
+bool KoTextEditor::isWithinSelection(int position) const
+{
+    // we know the visitor doesn't do anything with the texteditor so let's const cast
+    // to have a more beautiful outer api
+    WithinSelectionVisitor visitor(const_cast<KoTextEditor *>(this), position);
+
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+    return visitor.m_returnValue;
 }
 
 int KoTextEditor::position() const

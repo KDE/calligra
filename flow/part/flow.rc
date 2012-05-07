@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="31">
+<kpartgui name="flow" version="32">
     <MenuBar>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
@@ -54,6 +54,7 @@
             <Action name="page_last"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>

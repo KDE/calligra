@@ -73,18 +73,18 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 
     m_superscriptTextAction = m_toolbar->addAction(KIcon("format-text-superscript"), i18n("Superscript"));
     m_superscriptTextAction->setCheckable(true);
-    m_subscriptTextAction = m_toolbar->addAction(KIcon("format-text-suscript"), i18n("Subscript"));
+    m_subscriptTextAction = m_toolbar->addAction(KIcon("format-text-subscript"), i18n("Subscript"));
     m_subscriptTextAction->setCheckable(true);
     m_toolbar->addSeparator();
 
     m_alignActionGroup = new QActionGroup(this);
-    m_alignLeftAction = m_toolbar->addAction(KIcon("text_left"), i18n("Left Align"));
+    m_alignLeftAction = m_toolbar->addAction(KIcon("format-justify-left"), i18n("Left Align"));
     m_alignLeftAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignLeftAction);
-    m_alignCenterAction = m_toolbar->addAction(KIcon("text_center"), i18n("Centered"));
+    m_alignCenterAction = m_toolbar->addAction(KIcon("format-justify-center"), i18n("Centered"));
     m_alignCenterAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignCenterAction);
-    m_alignRightAction = m_toolbar->addAction(KIcon("text_right"), i18n("Right Align"));
+    m_alignRightAction = m_toolbar->addAction(KIcon("format-justify-right"), i18n("Right Align"));
     m_alignRightAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignRightAction);
     m_alignJustifyAction = m_toolbar->addAction(KIcon("format-justify-fill"), i18n("Justified"));

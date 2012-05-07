@@ -180,6 +180,10 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG)
+if (APPLE)
+    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    include_directories(${PNG_INCLUDE_DIR})
+endif(APPLE)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
@@ -302,18 +306,8 @@ endif( MARBLE_FOUND )
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS)
-set(REQUIRED_LCMS_VERSION 118)
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-    set(HAVE_LCMS FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Optional replacement for LittleCMS 1.18. Can be used for color management and Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
@@ -673,7 +667,9 @@ add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
 add_subdirectory(templates)
-add_subdirectory(tools)
+if(NOT ANDROID)
+    add_subdirectory(tools)
+endif(NOT ANDROID)
 add_subdirectory(filters)
 
 macro_display_feature_log()

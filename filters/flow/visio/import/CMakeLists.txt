@@ -1,5 +1,5 @@
 include_directories(
-    ${WRITERPERFECT_INCLUDES}
+    ../../../writerperfect
     ${LIBVISIO_INCLUDE_DIR}
     ${WPD_INCLUDE_DIR}
     ${LIBWPG_INCLUDE_DIR}

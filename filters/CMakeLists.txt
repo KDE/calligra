@@ -1,11 +1,5 @@
 include(CheckIncludeFiles)
 
-macro_optional_find_package(LibXml2)
-macro_log_feature(LIBXML2_FOUND "LibXML2" "LibXml2 library" "http://xmlsoft.org/" FALSE "" "Required by the xlslt filter")
-
-macro_optional_find_package(LibXslt)
-macro_log_feature(LIBXSLT_FOUND "LibXslt" "LibXslt Library" "http://xmlsoft.org/XSLT/" FALSE "" "Required by the xslt filter")
-
 macro_optional_find_package(WPD)
 macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
 
@@ -46,7 +40,6 @@ set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
 
 add_subdirectory(libmso)
 
-macro_optional_add_subdirectory( generic_wrapper )
 macro_optional_add_subdirectory( libkowmf )
 macro_optional_add_subdirectory( libmsooxml )
 
@@ -61,10 +54,6 @@ endif (SHOULD_BUILD_WORDS)
 if(SHOULD_BUILD_STAGE)
     macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
-
-if(SHOULD_BUILD_KFORMULA)
-    macro_optional_add_subdirectory(kformula)
-endif(SHOULD_BUILD_KFORMULA)
 
 if(SHOULD_BUILD_SHEETS)
     macro_optional_add_subdirectory(sheets)
@@ -81,10 +70,6 @@ endif(SHOULD_BUILD_FLOW)
 if(SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
-
-if(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
-	add_subdirectory(xsltfilter)
-endif(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
 
 if(NOT TINY AND WPD_FOUND AND LIBWPG_FOUND)
     macro_optional_add_subdirectory( writerperfect )

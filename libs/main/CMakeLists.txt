@@ -43,7 +43,6 @@ set(komain_LIB_SRCS
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
-    KoEmbeddingFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
     KoFilterVertex.cpp
@@ -56,6 +55,7 @@ set(komain_LIB_SRCS
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
+    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
@@ -125,6 +125,7 @@ endif( Soprano_FOUND )
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
+   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
@@ -203,7 +204,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
     KoFilterChain.h

@@ -31,7 +31,6 @@
 #include <QPoint>
 #include <QLayout>
 #include <QToolButton>
-#include <q3datetimeedit.h>
 #include <QClipboard>
 
 #include <kdebug.h>

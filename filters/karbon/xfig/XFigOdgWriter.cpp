@@ -192,8 +192,8 @@ XFigOdgWriter::storeMetaXml()
 
     const QString documentInfoFilePath = QLatin1String( "meta.xml" );
 
-    m_OutputStore->open( documentInfoFilePath );
-    documentInfo.saveOasis( m_OutputStore );
+    m_OutputStore->open(documentInfoFilePath);
+    documentInfo.saveOasis(m_OutputStore);
     m_OutputStore->close();
 
     // TODO: "text/xml" could be a static string
@@ -347,7 +347,7 @@ XFigOdgWriter::writeEllipseObject(const XFigEllipseObject* ellipseObject)
 
     KoGenStyle ellipseStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(ellipseStyle, ellipseObject );
-    writeFill(ellipseStyle, ellipseObject );
+    writeFill(ellipseStyle, ellipseObject, ellipseObject->lineColorId());
     const QString ellipseStyleName = m_StyleCollector.insert(ellipseStyle, QLatin1String("ellipseStyle"));
     m_BodyWriter->addAttribute("draw:style-name", ellipseStyleName);
 
@@ -367,7 +367,7 @@ XFigOdgWriter::writePolylineObject(const XFigPolylineObject* polylineObject)
 
     KoGenStyle polylineStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(polylineStyle, polylineObject);
-    writeFill(polylineStyle, polylineObject);
+    writeFill(polylineStyle, polylineObject, polylineObject->lineColorId());
     writeJoinType(polylineStyle, polylineObject->joinType());
     writeCapType(polylineStyle, polylineObject);
     writeArrow(polylineStyle, polylineObject->backwardArrow(), LineStart);
@@ -392,7 +392,7 @@ XFigOdgWriter::writePolygonObject( const XFigPolygonObject* polygonObject )
 
     KoGenStyle polygonStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(polygonStyle, polygonObject);
-    writeFill(polygonStyle, polygonObject);
+    writeFill(polygonStyle, polygonObject, polygonObject->lineColorId());
     writeJoinType(polygonStyle, polygonObject->joinType());
     const QString polygonStyleName =
         m_StyleCollector.insert(polygonStyle, QLatin1String("polygonStyle"));
@@ -426,7 +426,7 @@ XFigOdgWriter::writeBoxObject( const XFigBoxObject* boxObject )
     {
         KoGenStyle boxStyle(KoGenStyle::GraphicAutoStyle, "graphic");
         writeStroke(boxStyle, boxObject);
-        writeFill(boxStyle, boxObject);
+        writeFill(boxStyle, boxObject, boxObject->lineColorId());
         writeJoinType(boxStyle, boxObject->joinType());
         const QString boxStyleName = m_StyleCollector.insert(boxStyle, QLatin1String("boxStyle"));
         m_BodyWriter->addAttribute("draw:style-name", boxStyleName);
@@ -481,13 +481,13 @@ void XFigOdgWriter::writeArcObject( const XFigArcObject* arcObject )
     // TODO: cut in XFig has no line on the cut side, only on the curve
     const char* kind =
         (arcObject->subtype() == XFigArcObject::PieWedgeClosed) ? "section" :
-        (arcObject->fillStyleId() != -1 ) ?                       "cut" :
+        (arcObject->fillType() != XFigFillNone ) ?                "cut" :
                                                                   "arc";
     m_BodyWriter->addAttribute("draw:kind", kind);
 
     KoGenStyle arcStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     writeStroke(arcStyle, arcObject);
-    writeFill(arcStyle, arcObject);
+    writeFill(arcStyle, arcObject, arcObject->lineColorId());
     writeCapType(arcStyle, arcObject);
     writeArrow(arcStyle, arcObject->backwardArrow(),
                (arcObject->direction() == XFigArcObject::Clockwise)?LineEnd:LineStart);
@@ -640,38 +640,54 @@ void XFigOdgWriter::writeComment(const XFigAbstractObject* object)
 }
 
 void
-XFigOdgWriter::writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable )
+XFigOdgWriter::writeFill(KoGenStyle& odfStyle, const XFigFillable* fillable, qint32 penColorId)
 {
-    // TODO: support for fill patterns not yet done, mapping to solid fill for now
-    const qint32 fillStyleId = (fillable->fillStyleId() > 20) ? 20 : fillable->fillStyleId();
+    const XFigFillType fillType = fillable->fillType();
 
-    const bool isNotFilled = ( fillStyleId == -1 );
+    const char* const fillString =
+        (fillType == XFigFillSolid) ?   "solid" :
+        (fillType == XFigFillPattern) ? "hatch" :
+        /*(fillType == XFigFillNone)*/  "none";
+    odfStyle.addProperty(QLatin1String("draw:fill"), fillString);
 
-    odfStyle.addProperty( QLatin1String("draw:fill"), isNotFilled ? "none" : "solid" );
-
-    if (! isNotFilled) {
+    if (fillType != XFigFillNone) {
         const qint32 fillColorId = fillable->fillColorId();
 
         QString colorString;
-        // BLACK or DEFAULT color?
-        if (fillColorId < 1) {
-            // 0: white, 20: black, 1..19 shades of grey, from lighter to darker
-            const int value = qRound((20 - fillStyleId) * 255.0 / 20.0);
-            colorString = QColor(value, value, value).name();
-        // WHITE color ?
-        } else if (fillColorId == 7) {
-            // 0: black, 20: white, 1..19 shades of grey, from darker to lighter
-            const int value = qRound(fillStyleId * 255.0 / 20.0);
-            colorString = QColor(value, value, value).name();
+        if (fillType == XFigFillSolid) {
+            // BLACK or DEFAULT color?
+            if (fillColorId < 1) {
+                // 0: white, 20: black, 1..19 shades of grey, from lighter to darker
+                const int value = qRound((20 - fillable->fillTinting()) * 255.0 / 20.0);
+                colorString = QColor(value, value, value).name();
+            // WHITE color ?
+            } else if (fillColorId == 7) {
+                // 0: black, 20: white, 1..19 shades of grey, from darker to lighter
+                const int value = qRound(fillable->fillTinting() * 255.0 / 20.0);
+                colorString = QColor(value, value, value).name();
+            } else {
+                //TODO: tint blackness/whiteness of color
+                const QColor* const color = m_Document->color(fillColorId);
+                if (color != 0) {
+                    colorString = color->name();
+                }
+            }
+
+            odfStyle.addProperty(QLatin1String("draw:fill-color"), colorString);
         } else {
-            //TODO: tint blackness/whiteness of color
-            const QColor* color = m_Document->color(fillColorId);
+            // ODF 1.2 does not support a hatch pattern with a background
+            // Options are to
+            // * just do the hatch (not all XFig ones can be mapped)
+            // * just do the background
+            // * use pixmaps (needs pixmaps created with given colors)
+            // Decision for now: just do the hatch
+            const QColor* const color = m_Document->color(penColorId);
             if (color != 0) {
                 colorString = color->name();
             }
-        }
 
-        odfStyle.addProperty( QLatin1String("draw:fill-color"), colorString );
+            writeHatch(odfStyle, fillable->fillPatternType(), colorString);
+        }
     }
 }
 
@@ -906,6 +922,95 @@ void XFigOdgWriter::writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow,
     odfStyle.addProperty(QLatin1String(marker), arrowStyleName);
     odfStyle.addPropertyPt(QLatin1String(markerWidth), odfLength(arrow->width()));
     odfStyle.addProperty(QLatin1String(markerCenter), "1.0");
+}
+
+void XFigOdgWriter::writeHatch(KoGenStyle& odfStyle, int patternType, const QString& colorString)
+{
+    KoGenStyle hatchStyle(KoGenStyle::HatchStyle);
+
+    const char* displayName = 0;
+    const char* style = 0;
+    const char* distance = 0;
+    const char* rotation = 0;
+
+    // Shingles, bricks, tire treads cannot be done, are mapped to horizontal/vertical lines
+    // Fish, circles, hexagons, octagons cannot be done, are mapped to cross hatchess
+    // 30 degree crosshatch cannot be done, mapped to 45 degree one
+    switch (patternType) {
+    default:
+    case XFigFillVerticalShinglesSkewedDown:
+    case XFigFillVerticalShinglesSkewedUp:
+    case XFigFillVerticalTireTreads:
+    case XFigFillVerticalBricks:
+    case XFigFillVerticalLines:
+        displayName = " Vertical";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "900";
+        break;
+    case XFigFillHorizontalShinglesSkewedRight:
+    case XFigFillHorizontalShinglesSkewedLeft:
+    case XFigFillHorizontalTireTreads:
+    case XFigFillHorizontalBricks:
+    case XFigFillHorizontalLines:
+        displayName = " Horizontal";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "0";
+        break;
+    case XFigFillRightDiagonal30Degree:
+        displayName = " 30 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "300";
+        break;
+    case XFigFillLeftDiagonal30Degree:
+        displayName = " -30 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "3300";
+        break;
+    case XFigFillRightDiagonal45Degree:
+        displayName =  " 45 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "450";
+        break;
+    case XFigFillLeftDiagonal45Degree:
+        displayName = " -45 Degrees";
+        style = "single";
+        distance = "0.102cm";
+        rotation = "3150";
+        break;
+    case XFigFillFishScales:
+    case XFigFillSmallFishScales:
+    case XFigFillCircles:
+    case XFigFillHexagons:
+    case XFigFillOctagons:
+    case XFigFillCrossHatch:
+        displayName = " Crossed 0 Degrees";
+        style = "double";
+        distance = "0.102cm";
+        rotation = "900";
+        break;
+    case XFigFillCrossHatch30Degree:
+    case XFigFillCrossHatch45Degree:
+        displayName = " Crossed 45 Degrees";
+        style = "double";
+        distance = "0.102cm";
+        rotation = "450";
+        break;
+    }
+
+    hatchStyle.addAttribute("draw:display-name", colorString+QLatin1String(displayName));
+    hatchStyle.addAttribute("draw:style", style);
+    hatchStyle.addAttribute("draw:color", colorString);
+    hatchStyle.addAttribute("draw:distance", distance);
+    hatchStyle.addAttribute("draw:rotation", rotation);
+    const QString hatchStyleName =
+        m_StyleCollector.insert(hatchStyle, QLatin1String("hatchStyle"));
+
+    odfStyle.addProperty("draw:fill-hatch-name", hatchStyleName);
 }
 
 void

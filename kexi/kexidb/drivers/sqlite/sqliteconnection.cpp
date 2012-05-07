@@ -447,7 +447,7 @@ bool SQLiteConnection::loadExtension(const QString& path)
         d->setExtensionsLoadingEnabled(false);
     }
     if (!ok) {
-        kWarning() << "Could not load SQLite extension" << path;
+        kWarning() << "Could not load SQLite extension" << path << ":" << d->errmsg_p;
     }
     return ok;
 }

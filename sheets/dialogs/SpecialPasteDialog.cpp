@@ -83,7 +83,7 @@ void SpecialPasteDialog::slotOk()
         op = Paste::OverWrite;
     if (additionButton->isChecked())
         op = Paste::Add;
-    if (substractionButton->isChecked())
+    if (subtractionButton->isChecked())
         op = Paste::Sub;
     if (multiplicationButton->isChecked())
         op = Paste::Mul;
@@ -104,7 +104,7 @@ void SpecialPasteDialog::slotToggled(bool b)
 {
     overwriteButton->setEnabled(!b);
     additionButton->setEnabled(!b);
-    substractionButton->setEnabled(!b);
+    subtractionButton->setEnabled(!b);
     multiplicationButton->setEnabled(!b);
     divisionButton->setEnabled(!b);
 }

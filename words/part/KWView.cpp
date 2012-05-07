@@ -126,7 +126,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
-
+qDebug() << actionCollection()->action("settings_active_author");
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
