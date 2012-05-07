@@ -48,7 +48,6 @@ endif(ANDROID)
 target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
-    kdeclarative
     ${KOMAIN_LIBRARY}
     wordsprivate
     calligrasheetscommon
