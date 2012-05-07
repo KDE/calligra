@@ -3,14 +3,14 @@ include_directories( ${KWMF_INCLUDES} )
 
 ########### next target ###############
 
-set(wmfimport_PART_SRCS 
-    WmfImport.cpp 
+set(wmfimport_PART_SRCS
+    WmfImport.cpp
     WmfImportParser.cpp
 )
 
 kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport libwmf komain koodf)
+target_link_libraries(wmfimport libwmf ${KOMAIN_LIBRARY} ${KOODF_LIBRARY})
 
 install(TARGETS wmfimport
         DESTINATION ${PLUGIN_INSTALL_DIR})

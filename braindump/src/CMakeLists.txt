@@ -44,6 +44,6 @@ kde4_add_ui_files(braindump_SRCS
 
 kde4_add_executable(braindump ${braindump_SRCS})
 
-target_link_libraries(braindump ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS} flake kotext kowidgets braindumpcore komain)
+target_link_libraries(braindump ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS} ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KOWIDGETS_LIBRARY} braindumpcore ${KOMAIN_LIBRARY})
 
 install(TARGETS braindump ${INSTALL_TARGETS_DEFAULT_ARGS})

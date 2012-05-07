@@ -11,7 +11,7 @@ kde4_add_plugin(wpdimport ${wpdimport_PART_SRCS})
 
 
 
-target_link_libraries(wpdimport komain writerperfect)
+target_link_libraries(wpdimport ${KOMAIN_LIBRARY} writerperfect)
 
 install(TARGETS wpdimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

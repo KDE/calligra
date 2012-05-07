@@ -9,7 +9,7 @@ set( karbonxfigimport_PLUGIN_SRCS
 kde4_add_plugin( karbonxfigimport ${karbonxfigimport_PLUGIN_SRCS} )
 
 target_link_libraries( karbonxfigimport
-    komain
+    ${KOMAIN_LIBRARY}
 )
 
 install(TARGETS karbonxfigimport  DESTINATION ${PLUGIN_INSTALL_DIR} )

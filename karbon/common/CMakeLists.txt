@@ -1,4 +1,4 @@
-set(karboncommon_LIB_SRCS 
+set(karboncommon_LIB_SRCS
     KarbonDocument.cpp
     KarbonGlobal.cpp
     KarbonGradientHelper.cpp
@@ -11,8 +11,8 @@ set(karboncommon_LIB_SRCS
 
 kde4_add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
 
-target_link_libraries(karboncommon komain kowidgets)
-target_link_libraries(karboncommon LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(karboncommon ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY})
+target_link_libraries(karboncommon LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY})
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

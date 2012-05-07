@@ -27,7 +27,7 @@ kde4_add_plugin(kspreadlatexexport ${kspreadlatexexport_PART_SRCS})
 
 
 
-target_link_libraries(kspreadlatexexport komain ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kspreadlatexexport ${KOMAIN_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS kspreadlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

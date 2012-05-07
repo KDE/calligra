@@ -12,7 +12,7 @@ set(kis_node_model_test_SRCS kis_node_model_test.cpp modeltest.cpp )
 
 kde4_add_unit_test(kis_node_model_test TESTNAME krita-ui-kis_node_model_test  ${kis_node_model_test_SRCS})
 
-target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -20,7 +20,7 @@ set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
 
 kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-ui-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
 
-target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -28,7 +28,7 @@ set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp kis_dummies_fac
 
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
 
-target_link_libraries(kis_shape_controller_test  ${KDE4_KDEUI_LIBS}  komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_shape_controller_test  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -50,20 +50,20 @@ target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${Q
 
 set(kis_kra_loader_test_SRCS kis_kra_loader_test.cpp )
 kde4_add_unit_test(KisKraLoaderTest TESTNAME krita-ui-KisKraLoaderTest ${kis_kra_loader_test_SRCS})
-target_link_libraries(KisKraLoaderTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKraLoaderTest  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_kra_saver_test_SRCS kis_kra_saver_test.cpp )
 kde4_add_unit_test(KisKraSaverTest TESTNAME krita-ui-KisKraSaverTest ${kis_kra_saver_test_SRCS})
-target_link_libraries(KisKraSaverTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKraSaverTest  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 
 ########### next target ###############
 
 set(kis_kra_savexml_visitor_test_SRCS kis_kra_savexml_visitor_test.cpp )
 kde4_add_unit_test(KisKraSaveXmlVisitorTest TESTNAME krita-ui-KisKraSaveXmlVisitorTest ${kis_kra_savexml_visitor_test_SRCS})
-target_link_libraries(KisKraSaveXmlVisitorTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKraSaveXmlVisitorTest  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -95,13 +95,13 @@ target_link_libraries(KisRecordedActionEditorTest  ${KDE4_KDEUI_LIBS} kritaimage
 
 set(kis_doc2_test_SRCS kis_doc2_test.cpp )
 kde4_add_unit_test(KisDoc2Test TESTNAME krita-ui-KisDoc2Test  ${kis_doc2_test_SRCS})
-target_link_libraries(KisDoc2Test  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisDoc2Test  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_coordinates_converter_test_SRCS kis_coordinates_converter_test.cpp )
 kde4_add_unit_test(KisCoordinatesConverterTest TESTNAME krita-ui-KisCoordinatesConverterTest  ${kis_coordinates_converter_test_SRCS})
-target_link_libraries(KisCoordinatesConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisCoordinatesConverterTest  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

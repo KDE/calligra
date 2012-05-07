@@ -7,7 +7,7 @@ set( okularGenerator_odp_SRCS OkularOdpGenerator.cpp )
 
 kde4_add_plugin( okularGenerator_odp ${okularGenerator_odp_SRCS} )
 
-target_link_libraries( okularGenerator_odp ${OKULAR_LIBRARIES} ${KDE4_KDEUI_LIBS} komain kopageapp )
+target_link_libraries( okularGenerator_odp ${OKULAR_LIBRARIES} ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} ${KOPAGEAPP_LIBRARY} )
 
 install( TARGETS okularGenerator_odp DESTINATION ${PLUGIN_INSTALL_DIR} )
 

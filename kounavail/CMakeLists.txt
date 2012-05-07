@@ -12,7 +12,7 @@ kde4_add_plugin(kounavailpart ${kounavailpart_PART_SRCS})
 
 
 
-target_link_libraries(kounavailpart komain )
+target_link_libraries(kounavailpart ${KOMAIN_LIBRARY} )
 
 install(TARGETS kounavailpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

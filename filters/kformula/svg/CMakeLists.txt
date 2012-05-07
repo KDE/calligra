@@ -12,7 +12,7 @@ kde4_add_plugin(kfosvgexport ${kfosvgexport_PART_SRCS})
 
 
 
-target_link_libraries(kfosvgexport  ${KDE4_KDECORE_LIBS} komain kformulalib )
+target_link_libraries(kfosvgexport  ${KDE4_KDECORE_LIBS} ${KOMAIN_LIBRARY} kformulalib )
 
 install(TARGETS kfosvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

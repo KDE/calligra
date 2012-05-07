@@ -29,8 +29,8 @@ kde4_add_plugin(docximport ${docximport_PART_SRCS})
 target_link_libraries(
     docximport
     msooxml
-    koodf
-    komain
+    ${KOODF_LIBRARY}
+    ${KOMAIN_LIBRARY}
 )
 
 install(TARGETS docximport DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -49,8 +49,8 @@ kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
 target_link_libraries(
     docxexport
     msooxml
-    komain
-    koodf
+    ${KOODF_LIBRARY}
+    ${KOMAIN_LIBRARY}
 )
 
 install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -61,7 +61,7 @@ ENDIF(FALSE)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
   words_docx_import.desktop
 #todo  words_docx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}

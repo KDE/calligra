@@ -7,13 +7,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
 endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
 
 kde4_add_library(ppttoodplib STATIC PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
-target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
+target_link_libraries(ppttoodplib ${KOODF_LIBRARY} mso ${ZLIB_LIBRARIES})
 
-kde4_add_executable(ppttoodp ppttoodpmain.cpp)
+kde4_add_executable(ppttoodp TEST ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)
 
 kde4_add_plugin(powerpointimport PowerPointImport.cpp)
-target_link_libraries(powerpointimport ppttoodplib komain)
+target_link_libraries(powerpointimport ppttoodplib ${KOMAIN_LIBRARY})
 
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

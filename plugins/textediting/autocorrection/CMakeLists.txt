@@ -17,7 +17,7 @@ kde4_add_ui_files( autocorrect_SRCS
 
 kde4_add_plugin(autocorrect ${autocorrect_SRCS})
 
-target_link_libraries(autocorrect komain)
+target_link_libraries(autocorrect ${KOMAIN_LIBRARY})
 
 install(TARGETS autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
 

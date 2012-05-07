@@ -43,7 +43,7 @@ target_link_libraries(
     kplatomodels
     kplatoui
     planprivate
-    komain
+    ${KOMAIN_LIBRARY}
     )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -75,7 +75,7 @@ target_link_libraries(
     planworkapp
     planworkfactory
     kplatokernel
-    komain
+    ${KOMAIN_LIBRARY}
     )
 
 set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

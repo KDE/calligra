@@ -16,21 +16,20 @@ set(koabstraction_LIB_SRCS
 kde4_add_library(koabstraction SHARED ${koabstraction_LIB_SRCS})
 
 target_link_libraries(koabstraction ${extra_libs}
-    ${QT_LIBRARIES} 
-    flake
-    komain
-    kotext
-    kopageapp
+    ${QT_LIBRARIES}
+    ${FLAKE_LIBRARY}
+    ${KOMAIN_LIBRARY}
+    ${KOTEXT_LIBRARY}
+    ${KOPAGEAPP_LIBRARY}
     wordsprivate
     calligrasheetscommon
     ${MISSING_LIBS}
 )
 
 target_link_libraries(koabstraction LINK_INTERFACE_LIBRARIES
-    kotext
-    flake
-    komain
-    kotext
+    ${KOTEXT_LIBRARY}
+    ${FLAKE_LIBRARY}
+    ${KOMAIN_LIBRARY}
     calligrasheetscommon
     ${KDE4_KPARTS_LIBS}
     ${QT_LIBRARIES}

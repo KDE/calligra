@@ -2,7 +2,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/sheets ${KDE4_INCLUDES} ${KOMAIN_INCLUD
 
 set(kspreadhtmlimport_PART_SRCS htmlimport.cc )
 kde4_add_plugin(kspreadhtmlimport ${kspreadhtmlimport_PART_SRCS})
-target_link_libraries(kspreadhtmlimport komain ${KDE4_KHTML_LIBS})
+target_link_libraries(kspreadhtmlimport ${KOMAIN_LIBRARY} ${KDE4_KHTML_LIBS})
 install(TARGETS kspreadhtmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kspread_html_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

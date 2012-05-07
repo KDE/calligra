@@ -266,8 +266,8 @@ set (calligrasheetsodf_LIB_SRCS
 
 kde4_add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
 
-target_link_libraries(calligrasheetsodf komain)
-target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(calligrasheetsodf ${KOMAIN_LIBRARY})
+target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY})
 
 if(NOT ANDROID)
 set_target_properties(calligrasheetsodf PROPERTIES
@@ -280,7 +280,7 @@ install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 kde4_add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
 
 target_link_libraries(calligrasheetscommon
-    komain
+    ${KOMAIN_LIBRARY}
     calligrasheetsodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_THREADWEAVER_LIBS}
@@ -295,7 +295,7 @@ else()
     target_link_libraries(calligrasheetscommon ${KDE4_KUTILS_LIBS} )
 endif()
 
-target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
+target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY} calligrasheetsodf )
 
 if(NOT ANDROID)
 set_target_properties(calligrasheetscommon PROPERTIES
@@ -330,7 +330,7 @@ set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "or
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_calligrasheets komain )
+target_link_libraries(kdeinit_calligrasheets ${KOMAIN_LIBRARY} )
 
 install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

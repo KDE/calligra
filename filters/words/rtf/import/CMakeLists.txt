@@ -6,7 +6,7 @@ include_directories(
 
 set(rtfimport_PART_SRCS rtfimport.cpp )
 kde4_add_plugin(rtfimport ${rtfimport_PART_SRCS})
-target_link_libraries(rtfimport RtfReader komain)
+target_link_libraries(rtfimport RtfReader ${KOMAIN_LIBRARY})
 
 install(TARGETS rtfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  words_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

@@ -91,7 +91,7 @@ kde4_add_ui_files(musicshape_LIB_SRCS
 
 kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})
 
-target_link_libraries(musicshape flake)
+target_link_libraries(musicshape ${FLAKE_LIBRARY})
 install(TARGETS musicshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

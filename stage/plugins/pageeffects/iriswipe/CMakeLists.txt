@@ -21,11 +21,11 @@ kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})
 target_link_libraries(
     kpr_pageeffect_iriswipe
     calligrastageprivate
-    flake
-    
+    ${FLAKE_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}    
+    ${QT_QTGUI_LIBRARY}
     )
 
 install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${PLUGIN_INSTALL_DIR})

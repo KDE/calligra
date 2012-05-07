@@ -16,7 +16,7 @@ kde4_add_plugin(generickofilter ${generickofilter_PART_SRCS})
 
 
 
-target_link_libraries(generickofilter komain)
+target_link_libraries(generickofilter ${KOMAIN_LIBRARY})
 
 install(TARGETS generickofilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

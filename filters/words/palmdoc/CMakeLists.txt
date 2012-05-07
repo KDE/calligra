@@ -13,7 +13,7 @@ kde4_add_plugin(palmdocimport ${palmdocimport_PART_SRCS})
 
 
 
-target_link_libraries(palmdocimport komain)
+target_link_libraries(palmdocimport ${KOMAIN_LIBRARY})
 
 install(TARGETS palmdocimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

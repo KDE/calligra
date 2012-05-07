@@ -9,7 +9,7 @@ set(calligrascan_PART_SRCS scan.cpp )
 
 kde4_add_plugin(calligrascan ${calligrascan_PART_SRCS})
 
-target_link_libraries(calligrascan komain )
+target_link_libraries(calligrascan ${KOMAIN_LIBRARY} )
 
 install(TARGETS calligrascan  DESTINATION ${PLUGIN_INSTALL_DIR})
 

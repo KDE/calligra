@@ -13,7 +13,7 @@ set(mpxjimport_PART_SRCS
 
 kde4_add_plugin(planmpxjimport ${mpxjimport_PART_SRCS})
 
-target_link_libraries(planmpxjimport komain ${JNI_LIBRARIES})
+target_link_libraries(planmpxjimport ${KOMAIN_LIBRARY} ${JNI_LIBRARIES})
 
 install(TARGETS planmpxjimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

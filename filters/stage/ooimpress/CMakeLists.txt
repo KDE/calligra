@@ -12,7 +12,7 @@ kde4_add_plugin(ooimpressimport ${ooimpressimport_PART_SRCS})
 
 
 
-target_link_libraries(ooimpressimport komain)
+target_link_libraries(ooimpressimport ${KOMAIN_LIBRARY})
 
 install(TARGETS ooimpressimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +25,7 @@ kde4_add_plugin(ooimpressexport ${ooimpressexport_PART_SRCS})
 
 
 
-target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} ${KOMAIN_LIBRARY} )
 
 install(TARGETS ooimpressexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

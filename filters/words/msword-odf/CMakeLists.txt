@@ -24,8 +24,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 kde4_add_plugin(mswordodf_import ${mswordodf_import_PART_SRCS})
 
 #TODO cause of NumberFormatParser we depend on msooxml. Fix that!
-#target_link_libraries(mswordodf_import kowv2 komain mso ${ZLIB_LIBRARIES})
-target_link_libraries(mswordodf_import kowv2 komain mso msooxml ${ZLIB_LIBRARIES})
+#target_link_libraries(mswordodf_import kowv2 ${KOMAIN_LIBRARY} mso ${ZLIB_LIBRARIES})
+target_link_libraries(mswordodf_import kowv2 ${KOMAIN_LIBRARY} mso msooxml ${ZLIB_LIBRARIES})
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

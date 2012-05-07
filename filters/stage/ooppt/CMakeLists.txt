@@ -2,7 +2,7 @@ set(oopptimport_PART_SRCS oopptimport.cc)
 
 kde4_add_plugin(oopptimport ${oopptimport_PART_SRCS})
 
-target_link_libraries(oopptimport komain)
+target_link_libraries(oopptimport ${KOMAIN_LIBRARY})
 
 install(TARGETS oopptimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

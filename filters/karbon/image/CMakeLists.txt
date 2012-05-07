@@ -11,7 +11,7 @@ kde4_add_ui_files( karbonimageexport_PART_SRCS ImageExportOptionsWidget.ui )
 
 kde4_add_plugin(karbonimageexport ${karbonimageexport_PART_SRCS})
 
-target_link_libraries(karbonimageexport karbonui komain)
+target_link_libraries(karbonimageexport karbonui ${KOMAIN_LIBRARY})
 
 install(TARGETS karbonimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

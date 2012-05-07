@@ -11,7 +11,7 @@ kde4_add_plugin(applixwordimport ${applixwordimport_PART_SRCS})
 
 
 
-target_link_libraries(applixwordimport komain)
+target_link_libraries(applixwordimport ${KOMAIN_LIBRARY})
 
 install(TARGETS applixwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

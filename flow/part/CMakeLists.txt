@@ -36,7 +36,7 @@ set(flow_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_calligraflow komain)
+target_link_libraries(kdeinit_calligraflow ${KOMAIN_LIBRARY})
 
 install(TARGETS kdeinit_calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 

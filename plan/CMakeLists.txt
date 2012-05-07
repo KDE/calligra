@@ -24,7 +24,7 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kdgantt
     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
 
-    ${KOMAIN_INCLUDES}    
+    ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 
     ${CMAKE_SOURCE_DIR}/libs/koreport
@@ -94,7 +94,7 @@ kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  ${KOMAIN_LIBRARY})
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -125,11 +125,11 @@ if (Q_WS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_calligraplan komain)
+target_link_libraries(kdeinit_calligraplan ${KOMAIN_LIBRARY})
 
 install(TARGETS kdeinit_calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(calligraplan kdeinit_calligraplan komain)
+target_link_libraries(calligraplan kdeinit_calligraplan ${KOMAIN_LIBRARY})
 install(TARGETS calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

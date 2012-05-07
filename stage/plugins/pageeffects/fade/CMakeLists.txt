@@ -11,8 +11,8 @@ kde4_add_plugin(kpr_pageeffect_fade ${kpr_pageeffect_fade_PART_SRCS})
 target_link_libraries(
     kpr_pageeffect_fade
     calligrastageprivate
-    flake 
-    
+    ${FLAKE_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

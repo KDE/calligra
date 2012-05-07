@@ -6,14 +6,14 @@ include_directories(
     ${KOMAIN_INCLUDES}
 )
 
-set(kplatoimport_PART_SRCS 
+set(kplatoimport_PART_SRCS
    kplatoimport.cpp
 )
 
 
 kde4_add_plugin(plankplatoimport ${kplatoimport_PART_SRCS})
 
-target_link_libraries(plankplatoimport planprivate kplatokernel komain)
+target_link_libraries(plankplatoimport planprivate kplatokernel ${KOMAIN_LIBRARY})
 
 install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

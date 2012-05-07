@@ -4,7 +4,7 @@ set(dbaseimport_PART_SRCS dbaseimport.cc dbase.cpp )
 
 kde4_add_plugin(dbaseimport ${dbaseimport_PART_SRCS})
 
-target_link_libraries(dbaseimport komain)
+target_link_libraries(dbaseimport ${KOMAIN_LIBRARY})
 
 install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

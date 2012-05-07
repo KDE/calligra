@@ -20,19 +20,19 @@ kde4_add_plugin(mswriteimport ${mswriteimport_PART_SRCS})
 
 
 
-target_link_libraries(mswriteimport komain ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(mswriteimport ${KOMAIN_LIBRARY} ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS mswriteimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
 
-set(mswriteexport_PART_SRCS 
-   mswriteexport.cc 
-   libmswrite_defs.cpp 
-   structures_generated.cpp 
-   structures_private.cpp 
-   structures.cpp 
+set(mswriteexport_PART_SRCS
+   mswriteexport.cc
+   libmswrite_defs.cpp
+   structures_generated.cpp
+   structures_private.cpp
+   structures.cpp
    libmswrite.cpp )
 
 kde4_add_plugin(mswriteexport ${mswriteexport_PART_SRCS})

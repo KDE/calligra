@@ -37,7 +37,7 @@ target_link_libraries(
     planprivate
     kplatokernel
     kplatomodels
-    komain
+    ${KOMAIN_LIBRARY}
 )
 
 install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR})

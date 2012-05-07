@@ -30,7 +30,7 @@ kde4_add_ui_files( textvariables_SRCS
 
 kde4_add_plugin(textvariables ${textvariables_SRCS})
 
-target_link_libraries(textvariables kotext textlayout)
+target_link_libraries(textvariables ${KOTEXT_LIBRARY} ${TEXTLAYOUT_LIBRARY})
 
 install(TARGETS textvariables DESTINATION ${PLUGIN_INSTALL_DIR})
 

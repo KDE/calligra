@@ -4,7 +4,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 set(calligrathumbnail_SRCS calligracreator.cpp )
 kde4_add_plugin(calligrathumbnail ${calligrathumbnail_SRCS})
-target_link_libraries(calligrathumbnail komain)
+target_link_libraries(calligrathumbnail ${KOMAIN_LIBRARY})
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

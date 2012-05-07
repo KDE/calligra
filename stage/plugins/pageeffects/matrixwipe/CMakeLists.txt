@@ -37,9 +37,9 @@ kde4_add_plugin(kpr_pageeffect_matrixwipe ${kpr_pageeffect_matrixwipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_matrixwipe
-    calligrastageprivate 
-    flake 
-    
+    calligrastageprivate
+    ${FLAKE_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

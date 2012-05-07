@@ -17,7 +17,7 @@ kde4_add_plugin(calligrastageeventactions ${calligrastageeventactions_PART_SRCS}
 target_link_libraries(
     calligrastageeventactions
     calligrastageprivate
-    flake
+    ${FLAKE_LIBRARY}
     ${KDE4_KIO_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
     ${QT_QTGUI_LIBRARY}

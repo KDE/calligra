@@ -25,10 +25,10 @@ set(kpr_pageeffect_clockwipe_SRCS
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})
 
 target_link_libraries(
-    kpr_pageeffect_clockwipe 
-    calligrastageprivate 
-    flake
-    
+    kpr_pageeffect_clockwipe
+    calligrastageprivate
+    ${FLAKE_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

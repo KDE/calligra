@@ -13,7 +13,7 @@ set(kritahistorydocker_PART_SRCS
 
 kde4_add_plugin(kritahistorydocker ${kritahistorydocker_PART_SRCS})
 
-target_link_libraries(kritahistorydocker komain kritaimage kritaui)
+target_link_libraries(kritahistorydocker ${KOMAIN_LIBRARY} kritaimage kritaui)
 
 install(TARGETS kritahistorydocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 

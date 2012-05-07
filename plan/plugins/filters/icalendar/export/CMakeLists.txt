@@ -6,14 +6,14 @@ include_directories(
     ${KOMAIN_INCLUDES}
 )
 
-set(icalendarexport_PART_SRCS 
+set(icalendarexport_PART_SRCS
    icalendarexport.cpp
 )
 
 
 kde4_add_plugin(planicalexport ${icalendarexport_PART_SRCS})
 
-target_link_libraries(planicalexport planprivate kplatokernel komain ${LIBKCAL_LIBRARY})
+target_link_libraries(planicalexport planprivate kplatokernel ${KOMAIN_LIBRARY} ${LIBKCAL_LIBRARY})
 
 install(TARGETS planicalexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

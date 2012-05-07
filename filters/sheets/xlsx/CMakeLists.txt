@@ -25,8 +25,8 @@ kde4_add_plugin(xlsximport ${xlsximport_PART_SRCS})
 target_link_libraries(
     xlsximport
     msooxml
-    koodf
-    komain
+    ${KOODF_LIBRARY}
+    ${KOMAIN_LIBRARY}
     calligrasheetscommon
 )
 

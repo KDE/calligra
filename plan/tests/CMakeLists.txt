@@ -10,23 +10,23 @@ foreach(it ${test_files})
         COMMENT "Copy test file ${it}" VERBATIM
     )
 endforeach(it)
- 
+
 ########### next target ###############
 
-# NOTE: .kplato files is no longer native, so need some magic to run this test 
+# NOTE: .kplato files is no longer native, so need some magic to run this test
 # set(InsertFileTester_SRCS InsertFileTester.cpp)
-#  
+#
 # kde4_add_unit_test(InsertFileTester TESTNAME Plan-InsertFileTester  ${InsertFileTester_SRCS})
-#  
-# target_link_libraries(InsertFileTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
- 
+#
+# target_link_libraries(InsertFileTester  planprivate kplatokernel ${KOMAIN_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+
 
 ########## next target ###############
 
 set(InsertProjectTester_SRCS InsertProjectTester.cpp)
- 
+
 kde4_add_unit_test(InsertProjectTester TESTNAME Plan-InsertProjectTester  ${InsertProjectTester_SRCS})
 
-target_link_libraries(InsertProjectTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(InsertProjectTester  planprivate kplatokernel ${KOMAIN_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########## next target ###############

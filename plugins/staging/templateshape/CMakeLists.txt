@@ -31,9 +31,9 @@ SET (templateshape_LIB_SRCS
 
 kde4_add_plugin(templateshape ${templateshape_LIB_SRCS})
 
-target_link_libraries(templateshape flake    ${KDE4_KFILE_LIBRARY})
+target_link_libraries(templateshape ${FLAKE_LIBRARY} ${KDE4_KFILE_LIBRARY})
 #Template: Possibly you need to link with komain too.
-#target_link_libraries(templateshape komain flake    ${KDE4_KFILE_LIBRARY})
+#target_link_libraries(templateshape ${KOMAIN_LIBRARY} ${FLAKE_LIBRARY} ${KDE4_KFILE_LIBRARY})
 
 install(TARGETS templateshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

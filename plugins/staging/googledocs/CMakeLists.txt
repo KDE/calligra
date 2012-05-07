@@ -25,7 +25,7 @@ kde4_add_ui_files( calligragoogledocs_PART_SRCS
 )
 kde4_add_plugin(calligragoogledocs ${calligragoogledocs_PART_SRCS})
 
-target_link_libraries(calligragoogledocs ${QT_LIBRARIES} komain )
+target_link_libraries(calligragoogledocs ${QT_LIBRARIES} ${KOMAIN_LIBRARY} )
 
 install(TARGETS calligragoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
 

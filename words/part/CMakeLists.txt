@@ -102,11 +102,11 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain textlayout)
+target_link_libraries(wordsprivate ${KOMAIN_LIBRARY} ${TEXTLAYOUT_LIBRARY})
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
-target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY})
 
 if(NOT ANDROID)
 set_target_properties(wordsprivate
@@ -135,20 +135,20 @@ set(words_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
 
-kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
+#kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
-endif (Q_WS_MAC)
+#if (Q_WS_MAC)
+#   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+#   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
+#   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
+#endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
+#target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} ${KOMAIN_LIBRARY} )
 
-install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( calligrawords kdeinit_calligrawords )
-install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#target_link_libraries( calligrawords kdeinit_calligrawords )
+#install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

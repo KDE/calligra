@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/words/part )
 set(AsciiImport_PART_SRCS AsciiImport.cpp ImportDialog.cc )
 kde4_add_ui_files(AsciiImport_PART_SRCS ImportDialogUI.ui )
 kde4_add_plugin(asciiimport ${AsciiImport_PART_SRCS})
-target_link_libraries(asciiimport komain textlayout wordsprivate)
+target_link_libraries(asciiimport ${KOMAIN_LIBRARY} ${TEXTLAYOUT_LIBRARY} wordsprivate)
 install(TARGETS asciiimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 # ########### next target ###############

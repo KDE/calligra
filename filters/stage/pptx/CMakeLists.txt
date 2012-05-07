@@ -22,15 +22,15 @@ kde4_add_plugin(pptximport ${pptximport_PART_SRCS})
 target_link_libraries(
     pptximport
     msooxml
-    koodf
-    komain
+    ${KOODF_LIBRARY}
+    ${KOMAIN_LIBRARY}
 )
 
 install(TARGETS pptximport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
   kpresenter_pptx_import.desktop
 #  kpresenter_pptx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}

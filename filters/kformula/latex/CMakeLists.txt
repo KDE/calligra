@@ -12,7 +12,7 @@ kde4_add_plugin(kfolatexexport ${kfolatexexport_PART_SRCS})
 
 
 
-target_link_libraries(kfolatexexport  ${KDE4_KDECORE_LIBS} komain kformulalib )
+target_link_libraries(kfolatexexport  ${KDE4_KDECORE_LIBS} ${KOMAIN_LIBRARY} kformulalib )
 
 install(TARGETS kfolatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

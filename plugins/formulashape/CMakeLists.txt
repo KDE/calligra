@@ -50,8 +50,8 @@ set( kformulalib_PART_SRCS
 
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 
-target_link_libraries(kformulalib komain)
-target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(kformulalib ${KOMAIN_LIBRARY})
+target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY})
 
 set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

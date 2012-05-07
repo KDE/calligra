@@ -27,8 +27,8 @@ set(wordsexportfilters_LIB_SRCS
 
 kde4_add_library(wordsexportfilters SHARED ${wordsexportfilters_LIB_SRCS})
 
-target_link_libraries(wordsexportfilters komain)
-target_link_libraries(wordsexportfilters LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(wordsexportfilters ${KOMAIN_LIBRARY})
+target_link_libraries(wordsexportfilters LINK_INTERFACE_LIBRARIES ${KOMAIN_LIBRARY})
 
 set_target_properties(wordsexportfilters PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS wordsexportfilters  ${INSTALL_TARGETS_DEFAULT_ARGS})

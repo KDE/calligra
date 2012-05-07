@@ -49,10 +49,10 @@ target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
     kdeclarative
-    komain
+    ${KOMAIN_LIBRARY}
     wordsprivate
     calligrasheetscommon
-    kopageapp
+    ${KOPAGEAPP_LIBRARY}
     calligrastageprivate
 )
 

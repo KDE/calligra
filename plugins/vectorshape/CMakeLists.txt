@@ -41,7 +41,7 @@ SET ( VectorShape_SRCS
 
 kde4_add_plugin(vectorshape ${VectorShape_SRCS})
 
-target_link_libraries(vectorshape flake libwmf)
+target_link_libraries(vectorshape ${FLAKE_LIBRARY} libwmf)
 
 install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -33,7 +33,7 @@ kde4_add_ui_files( ArtisticTextShape_SRCS
 
 kde4_add_plugin( artistictextshape ${ArtisticTextShape_SRCS} )
 
-target_link_libraries(artistictextshape flake)
+target_link_libraries(artistictextshape ${FLAKE_LIBRARY})
 
 install( TARGETS artistictextshape DESTINATION ${PLUGIN_INSTALL_DIR} )
 

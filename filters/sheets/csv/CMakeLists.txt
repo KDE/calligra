@@ -6,7 +6,7 @@ set(csvimport_PART_SRCS csvimport.cc)
 
 kde4_add_plugin(csvimport ${csvimport_PART_SRCS})
 
-target_link_libraries(csvimport calligrasheetscommon kowidgets)
+target_link_libraries(csvimport calligrasheetscommon ${KOWIDGETS_LIBRARY})
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 

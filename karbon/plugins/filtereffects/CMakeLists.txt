@@ -40,7 +40,7 @@ set(karbonfiltereffects_PART_SRCS
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
 
-target_link_libraries(karbonfiltereffects flake kowidgets)
+target_link_libraries(karbonfiltereffects ${FLAKE_LIBRARY} ${KOWIDGETS_LIBRARY})
 
 install(TARGETS karbonfiltereffects  DESTINATION ${PLUGIN_INSTALL_DIR})
 

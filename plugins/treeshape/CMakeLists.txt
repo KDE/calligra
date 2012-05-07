@@ -24,7 +24,7 @@ kde4_add_ui_files(treeshape_LIB_SRCS
 )
 kde4_add_plugin(treeshape ${treeshape_LIB_SRCS})
 
-target_link_libraries(treeshape flake)
+target_link_libraries(treeshape ${FLAKE_LIBRARY})
 
 install(TARGETS treeshape DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES treeshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})

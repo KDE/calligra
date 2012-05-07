@@ -40,7 +40,7 @@ kde4_add_ui_files(karbonui_SRCS
 
 kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
-target_link_libraries(karbonui karboncommon kowidgets)
+target_link_libraries(karbonui karboncommon ${KOWIDGETS_LIBRARY})
 target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

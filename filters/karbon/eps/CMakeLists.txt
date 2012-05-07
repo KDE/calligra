@@ -20,7 +20,7 @@ set(karbonepsimport_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
 kde4_add_plugin(karbonepsimport ${karbonepsimport_PART_SRCS})
 
-target_link_libraries(karbonepsimport komain)
+target_link_libraries(karbonepsimport ${KOMAIN_LIBRARY})
 
 install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

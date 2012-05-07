@@ -4,7 +4,7 @@ set(kpr2odp_PART_SRCS kpr2odp.cpp )
 
 kde4_add_plugin(kpr2odp ${kpr2odp_PART_SRCS})
 
-target_link_libraries(kpr2odp komain)
+target_link_libraries(kpr2odp ${KOMAIN_LIBRARY})
 
 install(TARGETS kpr2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
 

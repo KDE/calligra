@@ -18,11 +18,11 @@ kde4_add_plugin(kpr_pageeffect_slidewipe ${kpr_pageeffect_slidewipe_PART_SRCS})
 target_link_libraries(
     kpr_pageeffect_slidewipe
     calligrastageprivate
-    flake
-    
+    ${FLAKE_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}    
+    ${QT_QTGUI_LIBRARY}
     )
 
 install(TARGETS kpr_pageeffect_slidewipe  DESTINATION ${PLUGIN_INSTALL_DIR})

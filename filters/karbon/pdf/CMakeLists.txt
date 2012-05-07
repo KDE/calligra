@@ -8,7 +8,7 @@ set(karbonpdfimport_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
 
 kde4_add_plugin(karbonpdfimport ${karbonpdfimport_PART_SRCS})
 
-target_link_libraries(karbonpdfimport komain poppler poppler-qt4)
+target_link_libraries(karbonpdfimport ${KOMAIN_LIBRARY} poppler poppler-qt4)
 if(JPEG_FOUND)
     target_link_libraries(karbonpdfimport jpeg)
 endif(JPEG_FOUND)

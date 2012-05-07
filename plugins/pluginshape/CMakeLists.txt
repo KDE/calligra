@@ -10,7 +10,7 @@ SET (pluginshape_LIB_SRCS
 
 kde4_add_plugin(pluginshape ${pluginshape_LIB_SRCS})
 
-target_link_libraries(pluginshape komain
+target_link_libraries(pluginshape ${KOMAIN_LIBRARY}
   )
 install(TARGETS pluginshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

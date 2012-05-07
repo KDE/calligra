@@ -159,8 +159,8 @@ target_link_libraries(calligramobile
     ${QT_QTSQL_LIBRARY}
     ${QT_QTNETWORK_LIBRARIES}
     koabstraction
-    komain
-    kopageapp
+    ${KOMAIN_LIBRARY}
+    ${KOPAGEAPP_LIBRARY}
     wordsprivate
     calligrasheetscommon
 )

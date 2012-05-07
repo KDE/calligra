@@ -239,8 +239,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KOMAIN_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES ${PIGMENTCMS_LIBRARY} ${KOMAIN_LIBRARY} ${KDE4_KPARTS_LIBS} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

@@ -45,7 +45,7 @@ set(kplatomodels_LIB_SRCS
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
 target_link_libraries(kplatomodels kplatokernel ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KABC_LIBS})
-target_link_libraries(kplatomodels kundo2)
+target_link_libraries(kplatomodels ${KUNDO2_LIBRARY})
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

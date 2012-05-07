@@ -40,7 +40,7 @@ set(msooxml_LIB_SRCS
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(msooxml koodf komain)
+target_link_libraries(msooxml ${KOODF_LIBRARY} ${KOMAIN_LIBRARY})
 if(QCA2_FOUND)
    target_link_libraries(msooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

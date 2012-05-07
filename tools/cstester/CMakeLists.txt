@@ -26,9 +26,9 @@ endif(BUILD_KARBON)
 kde4_add_executable(cstester ${cstester_SRCS})
 
 if(BUILD_KARBON)
-    target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate karbonui)
+    target_link_libraries(cstester ${KOMAIN_LIBRARY} ${KOPAGEAPP_LIBRARY} calligrasheetscommon wordsprivate karbonui)
 else(BUILD_KARBON)
-    target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate)
+    target_link_libraries(cstester ${KOMAIN_LIBRARY} ${KOPAGEAPP_LIBRARY} calligrasheetscommon wordsprivate)
 endif(BUILD_KARBON)
 
 install(TARGETS cstester  ${INSTALL_TARGETS_DEFAULT_ARGS})

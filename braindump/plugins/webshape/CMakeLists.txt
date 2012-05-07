@@ -19,7 +19,7 @@ kde4_add_plugin(webshape ${webshape_LIB_SRCS})
 
 target_link_libraries(
     webshape
-    flake
+    ${FLAKE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
     )

@@ -36,7 +36,7 @@ kde4_add_ui_files(pathshapes_PART_SRCS
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
-target_link_libraries(pathshapes flake kowidgets)
+target_link_libraries(pathshapes ${FLAKE_LIBRARY} ${KOWIDGETS_LIBRARY})
 
 install(TARGETS pathshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
 

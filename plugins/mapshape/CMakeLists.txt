@@ -23,7 +23,7 @@ SET (mapsshape_LIB_SRCS
 
 kde4_add_plugin(mapshape ${mapsshape_LIB_SRCS})
 
-target_link_libraries(mapshape komain ${MARBLE_LIBRARIES})
+target_link_libraries(mapshape ${KOMAIN_LIBRARY} ${MARBLE_LIBRARIES})
 install(TARGETS mapshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

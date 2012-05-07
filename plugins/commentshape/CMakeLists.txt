@@ -15,7 +15,7 @@ SET( commentshape_LIB_SRCS
 
 kde4_add_plugin(commentshape ${commentshape_LIB_SRCS})
 
-target_link_libraries(commentshape komain textlayout)
+target_link_libraries(commentshape ${KOMAIN_LIBRARY} ${TEXTLAYOUT_LIBRARY})
 
 install(TARGETS commentshape DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES commentshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})

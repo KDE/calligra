@@ -14,7 +14,7 @@ kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
 target_link_libraries(
     kformdesigner_containers
     kformdesigner
-    kundo2
+    ${KUNDO2_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}

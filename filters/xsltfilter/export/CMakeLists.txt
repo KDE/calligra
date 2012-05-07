@@ -16,7 +16,7 @@ kde4_add_plugin(xsltexport ${xsltexport_PART_SRCS})
 
 
 
-target_link_libraries(xsltexport komain ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(xsltexport ${KOMAIN_LIBRARY} ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS xsltexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

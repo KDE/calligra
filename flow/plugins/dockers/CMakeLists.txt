@@ -16,7 +16,7 @@ set(flowdockers_SRCS
 
 kde4_add_plugin(flowdockersplugin ${flowdockers_SRCS})
 
-target_link_libraries(flowdockersplugin komain kowidgets ${KDE4_KNEWSTUFF3_LIBS})
+target_link_libraries(flowdockersplugin ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${KDE4_KNEWSTUFF3_LIBS})
 
 install(TARGETS flowdockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 

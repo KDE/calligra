@@ -2,7 +2,7 @@ set(Filterkpr2odf_PART_SRCS Filterkpr2odf.cpp )
 
 kde4_add_plugin(Filterkpr2odf ${Filterkpr2odf_PART_SRCS})
 
-target_link_libraries(Filterkpr2odf komain)
+target_link_libraries(Filterkpr2odf ${KOMAIN_LIBRARY})
 
 install(TARGETS Filterkpr2odf DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  Filterkpr2odf.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

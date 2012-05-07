@@ -145,11 +145,11 @@ kde4_add_ui_files(calligrastageprivate_LIB_SRCS
 
 kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(calligrastageprivate ${KOPAGEAPP_LIBRARY} ${KOWIDGETS_LIBRARY} ${TEXTLAYOUT_LIBRARY} ${KDE4_PHONON_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 if(NOT ANDROID)
    target_link_libraries(calligrastageprivate ${QT_QTOPENGL_LIBRARY})
 endif(NOT ANDROID)
-target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
+target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES ${KOPAGEAPP_LIBRARY})
 
 if(NOT ANDROID)
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
@@ -181,7 +181,7 @@ if (Q_WS_MAC)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_calligrastage komain )
+target_link_libraries(kdeinit_calligrastage ${KOMAIN_LIBRARY} )
 
 install(TARGETS kdeinit_calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 

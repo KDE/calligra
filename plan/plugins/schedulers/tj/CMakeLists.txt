@@ -39,7 +39,7 @@ kde4_add_plugin( plantjscheduler ${TJScheduler_SRCS} )
 target_link_libraries(
     plantjscheduler
     kplatokernel
-    koodf
+    ${KOODF_LIBRARY}
 )
 
 set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )

@@ -22,7 +22,7 @@ kde4_add_plugin(stateshape ${stateshape_LIB_SRCS})
 
 target_link_libraries(
     stateshape
-    flake
+    ${FLAKE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     braindumpcore
     )

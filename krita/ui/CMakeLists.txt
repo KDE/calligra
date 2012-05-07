@@ -251,9 +251,9 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${X11_X11_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -264,7 +264,7 @@ if(HAVE_OPENGL)
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage ${KOMAIN_LIBRARY} ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

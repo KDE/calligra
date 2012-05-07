@@ -18,7 +18,7 @@ set(koreport_shapeplugin_LIB_SRCS
 
 kde4_add_plugin(koreport_shapeplugin ${koreport_shapeplugin_LIB_SRCS})
 
-target_link_libraries(koreport_shapeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport komain ${KOPROPERTY_LIBS})
+target_link_libraries(koreport_shapeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport ${KOMAIN_LIBRARY} ${KOPROPERTY_LIBS})
 
 
 ########### install files ###############

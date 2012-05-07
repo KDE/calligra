@@ -10,7 +10,7 @@ kde4_add_plugin(kpr_pageeffect_swapeffect ${kpr_pageeffect_swapeffect_PART_SRCS}
 target_link_libraries(
     kpr_pageeffect_swapeffect
     calligrastageprivate
-    flake
+    ${FLAKE_LIBRARY}
 
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}

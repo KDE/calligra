@@ -38,12 +38,12 @@ set(calligradockers_SRCS ${calligradockers_SRCS}
     colordocker/ColorDocker.cpp
     colordocker/ColorDockerFactory.cpp
 )
-set(EXTRA_LIBS pigmentcms kowidgets)
+set(EXTRA_LIBS ${PIGMENTCMS_LIBRARY} ${KOWIDGETS_LIBRARY})
 
 
 kde4_add_plugin(calligradockers ${calligradockers_SRCS})
 
-target_link_libraries(calligradockers komain ${EXTRA_LIBS})
+target_link_libraries(calligradockers ${KOMAIN_LIBRARY} ${EXTRA_LIBS})
 
 install(TARGETS calligradockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

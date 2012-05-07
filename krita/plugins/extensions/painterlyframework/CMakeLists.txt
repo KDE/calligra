@@ -11,7 +11,7 @@ set(kritakscolorspacesplugin_PART_SRCS
     kis_illuminant_profile.cpp)
 
 kde4_add_plugin(kritakscolorspacesplugin ${kritakscolorspacesplugin_PART_SRCS})
-target_link_libraries(kritakscolorspacesplugin pigmentcms ${OPENEXR_LIBRARIES})
+target_link_libraries(kritakscolorspacesplugin ${PIGMENTCMS_LIBRARY} ${OPENEXR_LIBRARIES})
 install(TARGETS kritakscolorspacesplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kritakscolorspacesplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 

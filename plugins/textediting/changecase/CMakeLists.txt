@@ -10,7 +10,7 @@ set(changecase_SRCS
 
 kde4_add_plugin(changecase ${changecase_SRCS})
 
-target_link_libraries(changecase kotext)
+target_link_libraries(changecase ${KOTEXT_LIBRARY})
 
 install(TARGETS changecase DESTINATION ${PLUGIN_INSTALL_DIR})
 
