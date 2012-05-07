@@ -32,6 +32,8 @@ kde4_add_library(libwmf SHARED ${libwmf_LIB_SRCS})
 
 target_link_libraries(libwmf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
+if(NOT ANDROID)
 set_target_properties(libwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+endif(NOT ANDROID)
 install(TARGETS libwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

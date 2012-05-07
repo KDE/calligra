@@ -12,7 +12,9 @@ kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 
 target_link_libraries(kochart ${KOMAIN_LIBRARY} )
 
+if(NOT ANDROID)
 set_target_properties(kochart PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+endif(NOT ANDROID)
 install(TARGETS kochart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 

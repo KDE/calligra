@@ -48,5 +48,7 @@ qt4_automoc(${RtfReader_LIB_SOURCES})
 kde4_add_library(RtfReader SHARED ${RtfReader_LIB_SOURCES})
 target_link_libraries(RtfReader ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}) 
 
+if(NOT ANDROID)
 set_target_properties(RtfReader PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+endif(NOT ANDROID)
 install(TARGETS RtfReader ${INSTALL_TARGETS_DEFAULT_ARGS})
