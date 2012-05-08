@@ -61,6 +61,8 @@ private slots:
     void insertCitation();
     /// configure a bibliography
     void configureBibliography();
+    /// shows bibliography database UI
+    void showBibliographyDatabase();
     /// format the table of contents template
     void formatTableOfContents();
     /// shows the configuration dialog for a ToC

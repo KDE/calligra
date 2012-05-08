@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>174</width>
-    <height>102</height>
+    <width>180</width>
+    <height>137</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,7 +16,7 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QToolButton" name="addCitation">
      <property name="toolTip">
@@ -31,29 +31,49 @@
     </widget>
    </item>
    <item>
-    <widget class="FormattingButton" name="addBibliography">
-     <property name="text">
-      <string>Insert Bibliography</string>
+    <widget class="QGroupBox" name="bibGroupBox">
+     <property name="title">
+      <string>Bibliography</string>
      </property>
-     <property name="popupMode">
-      <enum>QToolButton::InstantPopup</enum>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextOnly</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="configureBibliography">
-     <property name="toolTip">
-      <string>Configure bibliography</string>
-     </property>
-     <property name="text">
-      <string>Configure Bibliography</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="FormattingButton" name="addBibliography">
+          <property name="text">
+           <string>Insert</string>
+          </property>
+          <property name="popupMode">
+           <enum>QToolButton::InstantPopup</enum>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="configureBibliography">
+          <property name="toolTip">
+           <string>Configure bibliography</string>
+          </property>
+          <property name="text">
+           <string>Configure</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QToolButton" name="bibliographyDatabase">
+        <property name="text">
+         <string>Bibliography Database</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

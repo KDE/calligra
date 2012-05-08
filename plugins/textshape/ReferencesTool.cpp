@@ -28,6 +28,7 @@
 #include "dialogs/CitationInsertionDialog.h"
 #include "dialogs/InsertBibliographyDialog.h"
 #include "dialogs/BibliographyConfigureDialog.h"
+#include "dialogs/BibliographyDatabaseWindow.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -129,17 +130,23 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
-    action = new KAction(i18n("Insert Bibliography"),this);
+    action = new KAction(i18n("Insert"),this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
 
     action = new KAction(i18n("Insert Custom Bibliography"), this);
     addAction("insert_custom_bibliography", action);
     action->setToolTip(i18n("Insert a custom Bibliography into the document."));
+
     action = new KAction(i18n("Configure"),this);
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
+
+    action = new KAction(i18n("Bibliography Database"),this);
+    addAction("bibliography_database",action);
+    action->setToolTip(i18n("Bibliography Database"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showBibliographyDatabase()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -197,6 +204,12 @@ void ReferencesTool::insertCustomBibliography(KoBibliographyInfo *defaultTemplat
 void ReferencesTool::configureBibliography()
 {
     new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
+}
+
+void ReferencesTool::showBibliographyDatabase()
+{
+    BibliographyDatabaseWindow *bibDb = new BibliographyDatabaseWindow(m_scbw->parentWidget());
+    bibDb->show();
 }
 
 void ReferencesTool::formatTableOfContents()
