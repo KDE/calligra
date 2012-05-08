@@ -60,6 +60,8 @@ K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
         : KoFilter(parent)
+        , m_mainDoc(true)
+        , m_documentInfo(true)
         , m_currentPage(1)
         , m_objectIndex(1)
         , m_sticky(false)
