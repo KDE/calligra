@@ -165,7 +165,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 
     //Create the meta.xml file
     output->open("meta.xml");
-    KoDocumentInfo* meta = new KoDocumentInfo();
+    KoDocumentInfo *meta = new KoDocumentInfo();
     meta->load(m_documentInfo);
     meta->saveOasis(output);
     delete meta;
