@@ -874,14 +874,14 @@ void TestMathFunctions::testSUMIFS()
     CHECK_EVAL("SUMIFS("";C3:C7;C2;D3:D7;D2)",            Value::errorNUM());     // Constant values are not allowed for the range.
     CHECK_EVAL("SUMIFS(B3:B7;"";B4;C3:C7;C4)",                     Value(0));     // Range not specified for first condition => no matches, AND with second result, should result in 0
     CHECK_EVAL("SUMIFS(B3:B7;D3:D7;1+1)",                          Value(2));     // The criteria can be an expression.
-    CHECK_EVAL("SUMIFS(D3:D7;B3:B7;\"7\")",                        Value(0));     // TODO B3 is the string "7", numbers are summed in D3:D7.
-    CHECK_EVAL("SUMIFS(D3:D7;B4:B5;3)",                            Value(2));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+    CHECK_EVAL("SUMIFS(D3:D7;B3:B7;\"7\")",                        Value(1));     // TODO B3 is the string "7", numbers are summed in D3:D7.
+    CHECK_EVAL("SUMIFS(D3:D7;B4:B5;\">1\")",                       Value(3));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
 
     //For last case-taken as:
     //  Cell | Value      Cell | Value
     // ------+------     ------+------
     //    B4 |  2           D3 |  1
-    //    B5 |  3           D4 |  2           =>      Value Returned
+    //    B5 |  3           D4 |  2           =>      Value Returned = 1+2
     //                      D5 |  3
     //                      D6 |  4
     //                      D7 |  5

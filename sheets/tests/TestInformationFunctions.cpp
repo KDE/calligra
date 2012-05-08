@@ -327,13 +327,13 @@ void TestInformationFunctions::testCOUNTIFS()
     CHECK_EVAL("COUNTIFS(\"\";B4;\"\";A20)",                     Value::errorNA());     // Constant values are not allowed for the range.
     CHECK_EVAL("COUNTIFS(B3:B7;\"7\";C11:C15;C11)",                      Value(1));     // [.B3] is the string "7", C11 in C11:C15.
     CHECK_EVAL("COUNTIFS(B3:B7;1+1;C11:C15;8-2)",                        Value(1));     // The criteria can be an expression.
-    CHECK_EVAL("COUNTIFS(A19:A23;2;B4:B5;3)",                            Value(2));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
+    CHECK_EVAL("COUNTIFS(A19:A23;\">0\";B4:B5;\">1\")",                  Value(2));     // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
 
     //For the last case-taken as:
     //  Cell | Value      Cell | Value
     // ------+------     ------+------
     //  A19  |    1         B4 |  2
-    //  A20  |    2         B5 |  3           =>      Value Returned = 1
+    //  A20  |    2         B5 |  3           =>      Value Returned = 1+1
     //  A21  |    4
     //  A22  |    8
     //  A23  |   16
