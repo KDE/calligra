@@ -363,7 +363,7 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
     //check bookmark names
     for (uint i = 0; i < m_name.size(); i++) {
         if ( (m_name[i] == UString::null) ) {
-            m_name[i] == UString().from(i + 1);
+            m_name[i] = UString().from(i + 1);
         }
     }
     if (m_name.size() < m_start->count()) {

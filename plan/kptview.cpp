@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
   Copyright (C) 2002 - 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -123,14 +124,13 @@
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
 #include "kptschedulesdocker.h"
+#include "kptdebug.h"
 
 #include "plansettings.h"
 
 // #include "KPtViewAdaptor.h"
 
 #include <assert.h>
-
-extern int planDbg();
 
 namespace KPlato
 {

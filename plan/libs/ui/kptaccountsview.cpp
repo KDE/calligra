@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 - 2006 Dag Andersen danders@get2net>
+  Copyright (C) 2005 - 2006, 2012 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
 #include "kptaccountsmodel.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -46,9 +47,6 @@
 #include <klocale.h>
 #include <kaction.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {

@@ -151,7 +151,83 @@ Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
+KexiDB
+*put DESC/ASC after COLLATE section, not before (needed at least for sqlite driver)
+*fixed crash because of invalid deletion order of query structures
+*fixed crash because of invalid deletion relationship structures
+BUG:298197
+
+~~~~~~~~~~~~~~~~ 2.4.1 ~~~~~~~~~~~~~~~~
+
+Tables
+*Fixed bug: Cannot update field name from Property Editor
+BUG:278296
+
+2012-04-06
+KexiDB
+*SQLite Driver
+**Fixed error when attempting to compact database opened from Open view
+TODO: port to Predicate
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+2012-04-04
+KoProperty
+*When property set is cleared, clear model(s) for associated views
+**This fixes random crashes in Property Editor
+Forms
+*Fixed saving "Enabled" property
+BUG:278424
+
+2012-03-28
+KexiDB
+*fixed functions returning field's type group name and type group string; they were completely broken but probably only GUI was affected
+**merged with Predicate
+Forms
+*Fixed bug: Setting a text box as Read Only allows changes to be made nevertheles
+BUG:278419 
+*Properly updated context menu when read-only flag is set for line edits and text boxes
+*Setting a text box or text editor to Read Only mode changes the look to a bit dimmed (as in disabled widget) to indicate the mode
+
+TODO: read-only data widgets: in data mode display a small read-only tooltip during editing or as a label on the right hand
+TODO: read-only data widgets: in design mode display a small read-only icon/text
+
+2012-03-22
+Tables
+*Fixed bug: Details of lookup column not visible
+BUG:296528
+
+2012-03-19
+KexiDB
+*SQLite Driver
+**Fix exporting required symbols of kexidb_sqlite3_icu library for the sqlite3 interface. Also fix the filename extension when loading on different platforms.
+***by Andrius da Costa Ribas
+***+some fixes for gcc/linux
+CCMAIL:andriusmao@gmail.com
+
+2012-03-18
+Reports
+*Fixed bug: Data source property in report field do not show proper list of fields
+
+TODO: crash
+#5  0xb73f3657 in QHash<QString, KexiDB::TableSchema*>::value (this=0x54, akey=...) at /usr/include/QtCore/qhash.h:607
+#6  0xb73f23fb in KexiDB::ConnectionPrivate::table (this=0x0, name=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:126
+#7  0xb73ea4b2 in KexiDB::Connection::tableSchema (this=0x83da3e0, tableName=...) at /home/jarek/kde4/sources/calligra-master2/kexi/kexidb/connection.cpp:2938
+#8  0xae83f0b9 in KexiDBReportData::getSchema (this=0x853c7a8) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:113
+#9  0xae83ea25 in KexiDBReportData::KexiDBReportData (this=0x853c7a8, qstrSQL=..., pDb=0x83da3e0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexidbreportdata.cpp:30
+#10 0xae843301 in KexiSourceSelector::sourceData (this=0x85439a0) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:148
+#11 0xae842eeb in KexiSourceSelector::setConnectionData (this=0x85439a0, c=...) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexisourceselector.cpp:105
+#12 0xae83e507 in KexiReportDesignView::afterSwitchFrom (this=0x866c3f0, mode=Kexi::DataViewMode) at /home/jarek/kde4/sources/calligra-master2/kexi/plugins/reports/kexireportdesignview.cpp:159
+#13 0xb7203c0f in KexiWindow::switchToViewMode (this=0x83f8510, newViewMode=Kexi::DesignViewMode, staticObjectArgs=0x0, proposeOpeningInTextViewModeBecauseOfProblems=@0xbfce3bef)
+    at /home/jarek/kde4/sources/calligra-master2/kexi/core/KexiWindow.cpp:664
+
+2012-03-17
+KexiDB
+*Properly deep-copy query asterisks when cloning query objects
+**This fixes crash for reports based on queries
+CCBUG:246928
+CCBUG:281737
 
 2012-03-13
 KexiDB
@@ -390,12 +466,6 @@ BUG:288085
 2011-11-30
 Reports
 *Fix bug: no indication of selected toolbox action for report element
-BUG:283888
-*After inserting element, respective toolbox action is deselected
-
-2011-11-30
-Reports
-*Fix bug: no indication of selected toolbox action for report element
 BUG:285583
 *After inserting element, respective toolbox action is deselected
 
@@ -416,8 +486,8 @@ Startup
 Startup
 *Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
 Main Window
-BUG:282651
 *fix build of search line edit for msvc
+BUG:282651
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~
 
@@ -471,10 +541,6 @@ Forms
 **first commit by Dimitrios Tanis
 Documentation
 *Official Kexi handbook is now at http://userbase.kde.org/Kexi/Handbook
-
-2011-10-12
-Main Window
-*Simplified background below menu to make it flicker less
 
 2011-10-12
 Main Window
@@ -538,6 +604,7 @@ Reports
 **fixed all issues noted in review, cleaned up code using astyle
 
 2011-09-23
+Startup
 *Fix: properly show server-based items on the Recent Projects list
 BUG:282651
 

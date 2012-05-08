@@ -118,21 +118,18 @@ public:
             if (copy->whereExpr) {
                 whereExpr = copy->whereExpr->copy();
             }
+            // "*this = *copy" causes copying pointers; pull of them without destroying,
+            // will be deep-copied in the QuerySchema ctor.
+            asterisks.setAutoDelete(false);
+            asterisks.clear();
+            asterisks.setAutoDelete(true);
         }
         else {
             orderByColumnList = new OrderByColumnList;
         }
     }
     ~QuerySchemaPrivate() {
-        if (fieldsExpanded)
-            qDeleteAll(*fieldsExpanded);
-        delete fieldsExpanded;
-        if (internalFields) {
-            qDeleteAll(*internalFields);
-            delete internalFields;
-        }
-        delete fieldsExpandedWithInternalAndRowID;
-        delete fieldsExpandedWithInternal;
+        delete orderByColumnList;
         delete autoincFields;
         delete columnsOrder;
         delete columnsOrderWithoutAsterisks;
@@ -142,6 +139,15 @@ public:
         delete fakeRowIDCol;
         delete fakeRowIDField;
         delete ownedVisibleColumns;
+        if (fieldsExpanded)
+            qDeleteAll(*fieldsExpanded);
+        delete fieldsExpanded;
+        if (internalFields) {
+            qDeleteAll(*internalFields);
+            delete internalFields;
+        }
+        delete fieldsExpandedWithInternalAndRowID;
+        delete fieldsExpandedWithInternal;
     }
 
     void clear() {
@@ -165,14 +171,6 @@ public:
             orderByColumnList->clear();
         }
         if (fieldsExpanded) {
-            qDeleteAll(*fieldsExpanded);
-            delete fieldsExpanded;
-            fieldsExpanded = 0;
-            if (internalFields) {
-                qDeleteAll(*internalFields);
-                delete internalFields;
-                internalFields = 0;
-            }
             delete columnsOrder;
             columnsOrder = 0;
             delete columnsOrderWithoutAsterisks;
@@ -186,6 +184,14 @@ public:
             columnInfosByName.clear();
             delete ownedVisibleColumns;
             ownedVisibleColumns = 0;
+            qDeleteAll(*fieldsExpanded);
+            delete fieldsExpanded;
+            fieldsExpanded = 0;
+            if (internalFields) {
+                qDeleteAll(*internalFields);
+                delete internalFields;
+                internalFields = 0;
+            }
         }
     }
 
@@ -408,6 +414,7 @@ OrderByColumn::OrderByColumn(Field& field, bool ascending)
 
 OrderByColumn* OrderByColumn::copy(QuerySchema* fromQuery, QuerySchema* toQuery) const
 {
+    //kDebug() << "this=" << this << debugString() << "m_column=" << m_column;
     if (m_field) {
         return new OrderByColumn(*m_field, m_ascending);
     }
@@ -430,11 +437,13 @@ OrderByColumn* OrderByColumn::copy(QuerySchema* fromQuery, QuerySchema* toQuery)
         }
         return new OrderByColumn(*columnInfo, m_ascending, m_pos);
     }
+    Q_ASSERT(m_field || m_column);
     return 0;
 }
 
 OrderByColumn::~OrderByColumn()
 {
+    //kDebug() << this << debugString();
 }
 
 QString OrderByColumn::debugString() const
@@ -453,6 +462,7 @@ QString OrderByColumn::debugString() const
 
 QString OrderByColumn::toSQLString(bool includeTableName, const Driver *drv, int identifierEscaping) const
 {
+    //kDebug() << this << debugString();
     const QString orderString(m_ascending ? "" : " DESC");
     QString fieldName, tableName, collationString;
     if (m_column) {
@@ -479,7 +489,7 @@ QString OrderByColumn::toSQLString(bool includeTableName, const Driver *drv, int
             collationString = drv->collationSQL();
         }
     }
-    return tableName + fieldName + orderString + collationString;
+    return tableName + fieldName + collationString + orderString;
 }
 
 //=======================================
@@ -651,10 +661,13 @@ QuerySchema::QuerySchema(const QuerySchema& querySchema)
         Field *copiedField;
         if (dynamic_cast<QueryAsterisk*>(f)) {
             copiedField = f->copy();
-            if (static_cast<const KexiDB::FieldList *>(f->m_parent) == &querySchema)
+            if (static_cast<const KexiDB::FieldList *>(f->m_parent) == &querySchema) {
                 copiedField->m_parent = this;
-        } else
+            }
+        }
+        else {
             copiedField = f;
+        }
         addField(copiedField);
     }
     // this deep copy must be after the 'd' initialization because fieldsExpanded() is used there
@@ -715,6 +728,8 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
     d->clearCachedData();
     FieldList::insertField(position, field);
     if (field->isQueryAsterisk()) {
+        //kDebug() << "d->asterisks.append:" << field;
+        //field->debug();
         d->asterisks.append(field);
         //if this is single-table asterisk,
         //add a table to list if doesn't exist there:
@@ -790,6 +805,8 @@ void QuerySchema::removeField(KexiDB::Field *field)
         return;
     d->clearCachedData();
     if (field->isQueryAsterisk()) {
+        //kDebug() << "d->asterisks.removeAt:" << field;
+        //field->debug();
         d->asterisks.removeAt(d->asterisks.indexOf(field));   //this will destroy this asterisk
     }
 //TODO: should we also remove table for this field or asterisk?
@@ -1849,8 +1866,15 @@ QueryAsterisk::QueryAsterisk(QuerySchema *query, TableSchema *table)
     setType(Field::Asterisk);
 }
 
+QueryAsterisk::QueryAsterisk(const QueryAsterisk& asterisk)
+        : Field(asterisk)
+        , m_table(asterisk.table())
+{
+}
+
 QueryAsterisk::~QueryAsterisk()
 {
+    //kDebug() << this << debugString();
 }
 
 Field* QueryAsterisk::copy() const

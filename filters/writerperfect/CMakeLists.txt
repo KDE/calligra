@@ -1,9 +1,17 @@
 include_directories(
     ${WPD_INCLUDE_DIR}
     ${LIBWPG_INCLUDE_DIR}
-    ${QT_INCLUDES}
 )
-add_library(writerperfect SHARED
+
+if(NOT MSVC)
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -KPIC")
+    else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+    endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+endif(NOT MSVC)
+
+kde4_add_library(writerperfect STATIC
             DiskDocumentHandler.cxx
             DocumentElement.cxx
             FemtoZip.cxx
@@ -19,9 +27,4 @@ add_library(writerperfect SHARED
             TableStyle.cxx
             TextRunStyle.cxx
 )
-target_link_libraries(writerperfect ${WPD_LIBRARIES} ${LIBWPG_LIBRARIES} ${QT_QTCORE_LIBRARY} )
-
-set_target_properties(writerperfect PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
-)
-install(TARGETS writerperfect ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries(writerperfect ${WPD_LIBRARIES} ${LIBWPG_LIBRARIES})

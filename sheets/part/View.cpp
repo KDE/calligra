@@ -718,7 +718,7 @@ void View::initView()
         // Setup the tool dock widget.
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-        KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
+        KoToolBoxFactory toolBoxFactory(d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
         // Setup the tool options dock widget manager.

@@ -31,11 +31,10 @@
 
 #include "renderobjects.h"
 
-#include <kdebug.h>
 #include <QLayout>
 #include <QVarLengthArray>
 
-extern int planDbg();
+#include "kptdebug.h"
 
 KoSimpleOdtDocument::KoSimpleOdtDocument()
     : manifestWriter(0)

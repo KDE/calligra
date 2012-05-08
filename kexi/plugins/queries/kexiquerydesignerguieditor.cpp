@@ -57,6 +57,7 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include "kexiquerypart.h"
+#include "kexiqueryview.h"
 #include <KexiWindow.h>
 #include <KexiWindowData.h>
 #include <kexi_global.h>
@@ -380,6 +381,10 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     //build query schema
     KexiQueryPart::TempData * temp = tempData();
     if (temp->query()) {
+        KexiView *queryDataView = window()->viewForMode(Kexi::DataViewMode);
+        if (queryDataView) {
+            dynamic_cast<KexiQueryView*>(queryDataView)->setData(0);
+        }
         temp->clearQuery();
     } else {
         temp->setQuery(new KexiDB::QuerySchema());
@@ -946,7 +951,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
     //4. show ORDER BY information
     d->data->clearRowEditBuffer();
-    const KexiDB::OrderByColumnList orderByColumns(query->orderByColumnList());
+    KexiDB::OrderByColumnList& orderByColumns = query->orderByColumnList();
     QHash<KexiDB::QueryColumnInfo*, int> columnsOrder(
         query->columnsOrder(KexiDB::QuerySchema::UnexpandedListWithoutAsterisks));
     for (KexiDB::OrderByColumn::ListConstIterator orderByColumnIt(orderByColumns.constBegin());

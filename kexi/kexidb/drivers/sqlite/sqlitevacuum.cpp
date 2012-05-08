@@ -194,7 +194,7 @@ void SQLiteVacuum::sqliteProcessFinished(int exitCode, QProcess::ExitStatus exit
 
     if (0 != KDE::rename(m_tmpFilePath, m_filePath)) {
         kWarning() << "Rename" << m_tmpFilePath << "to" << m_filePath << "failed.";
-        m_result == false;
+        m_result = false;
     }
 
     if (m_result == true) {

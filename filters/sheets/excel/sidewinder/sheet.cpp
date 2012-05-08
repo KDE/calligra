@@ -42,6 +42,12 @@ namespace Swinder
 class Sheet::Private
 {
 public:
+
+    Private()
+        : workbook(0)
+        , autoFilters(0)
+    {}
+
     Workbook* workbook;
     QString name;
 

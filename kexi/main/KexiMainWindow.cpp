@@ -168,6 +168,7 @@ private:
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget* mainWidget)
         : KTabWidget(parent)
         , m_mainWidget(mainWidget)
+        , m_tabIndex(-1)
 {
     m_closeAction = new KAction(KIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
@@ -202,7 +203,7 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 
 void KexiMainWindowTabWidget::closeTab()
 {
-    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeCurrentWindow();
+    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
 }
 
 void KexiMainWindowTabWidget::tabInserted(int index)
@@ -216,10 +217,20 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     QMenu menu;
     menu.addAction(m_closeAction);
 //! @todo add "&Detach Tab"
+    setTabIndexFromContextMenu(index);
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
     
+void KexiMainWindowTabWidget::setTabIndexFromContextMenu(const int clickedIndex)
+{
+    if (currentIndex() == -1) {
+        m_tabIndex = -1;
+        return;
+    }
+    m_tabIndex = clickedIndex;
+}
+
 //-------------------------------------------------
 
 //static
@@ -2624,7 +2635,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata, aFileName);
+        projectData = new KexiProjectData(cdata);
         deleteAfterOpen = true;
     }
     if (!projectData)
@@ -3423,7 +3434,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         return 0;
     }
     if (!d->prj || !item)
-        return false;
+        return 0;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
@@ -3930,7 +3941,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
                                           QDir::convertSeparators(cdata.fileName())));
             return;
         }
-        data = new KexiProjectData(cdata, cdata.fileName());
+        data = new KexiProjectData(cdata);
     } else {
         //sanity
         if (!(d->prj && d->prj->dbConnection()

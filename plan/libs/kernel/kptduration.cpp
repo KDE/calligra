@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004-2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,15 +20,14 @@
 
 #include "kptduration.h"
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QRegExp>
 #include <QStringList>
 
-extern int planDbg();
 
 namespace KPlato
 {

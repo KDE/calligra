@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="134">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="135">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -35,7 +35,10 @@
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
   <Action name="view_tableborders"/>
+  <Separator/>
+  <Action name="view_toggledockers"/>
   <Action name="show_docstruct"/>
+  <Separator/>
   <Action name="show_ruler"/>
   <Action name="view_show_guides"/>
   <Action name="view_grid"/>
@@ -73,10 +76,9 @@
   </Menu>
   <Action name="enable_autocorrection"/>
   <Action name="configure_autocorrection"/>
-  <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
-  <Action name="configure_footendnote" group="settings_show"/>
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>

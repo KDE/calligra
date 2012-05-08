@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2007, 2012 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
   This library is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptresourceappointmentsmodel.h"
+#include "kptdebug.h"
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
@@ -42,7 +43,6 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
-#include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
 
@@ -63,7 +63,6 @@
 #include "kdganttglobal.h"
 #include "kdganttstyleoptionganttitem.h"
 
-extern int planDbg();
 
 /// The main namespace
 namespace KPlato

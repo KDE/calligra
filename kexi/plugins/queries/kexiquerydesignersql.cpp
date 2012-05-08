@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
-//Qt4#include <Q3SimpleRichText>
 
 #include <KDebug>
 #include <KMessageBox>

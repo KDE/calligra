@@ -74,7 +74,7 @@ public:
     virtual qint64 recordCount() const;
 
     //!Return the index number of the field given by nane field
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
 
     //!Return the list of field names
     virtual QStringList fieldNames() const;
