@@ -81,6 +81,7 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+#include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
@@ -136,7 +137,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
     }
 
-    m_find = new KoFindText(texts, this);
+    m_find = new KoFindText(this);
+    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
@@ -981,7 +983,7 @@ void KWView::loadingCompleted()
 {
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    m_find->addDocuments(texts);
+    m_find->setDocuments(texts);
 }
 
 void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)

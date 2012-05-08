@@ -40,6 +40,7 @@ class KWGui;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
+class KoFindStyle;
 class KoRdfSemanticItem;
 class KoTextAnchor;
 
