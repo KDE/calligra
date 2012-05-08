@@ -41,6 +41,8 @@
 #include <knuminput.h>
 #include <kmessagebox.h>
 
+#include <KoConfigAuthorPage.h>
+
 #include <kcolorbutton.h>
 #include <KPluginInfo>
 #include <KPluginSelector>
@@ -94,6 +96,9 @@ public:
 
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
+
+    // Author Options
+    KoConfigAuthorPage *authorPage;
 
 public:
     // Interface Options
@@ -376,6 +381,12 @@ PreferenceDialog::PreferenceDialog(View* view)
     page->setHeader(i18n("Spell Checker Behavior"));
     addPage(page);
     d->page4 = page;
+
+    d->authorPage = new KoConfigAuthorPage();
+    page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
+    page = addPage(d->authorPage, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(KIcon("user-identity"));
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -405,6 +416,8 @@ void PreferenceDialog::slotApply()
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     d->spellCheckPage->save();
+
+    d->authorPage->apply();
 
     // The changes affect the document, not just a single view,
     // so all user interfaces have to be updated.

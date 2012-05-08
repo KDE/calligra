@@ -192,8 +192,8 @@ XFigOdgWriter::storeMetaXml()
 
     const QString documentInfoFilePath = QLatin1String( "meta.xml" );
 
-    m_OutputStore->open( documentInfoFilePath );
-    documentInfo.saveOasis( m_OutputStore );
+    m_OutputStore->open(documentInfoFilePath);
+    documentInfo.saveOasis(m_OutputStore);
     m_OutputStore->close();
 
     // TODO: "text/xml" could be a static string

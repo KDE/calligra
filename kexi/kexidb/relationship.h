@@ -78,7 +78,7 @@ class QuerySchema;
 class KEXI_DB_EXPORT Relationship
 {
 public:
-    typedef KexiUtils::AutodeletedList<Relationship*> List;
+    typedef QList<Relationship*> List;
     typedef QList<Relationship*>::ConstIterator ListIterator;
 
     /*! Creates uninitialized Relationship object.
