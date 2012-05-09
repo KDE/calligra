@@ -7,4 +7,4 @@ configure_file (
 )
 
 
-install(FILES build/jar/PlanConvert.jar  DESTINATION ${PLANCONVERT_INSTALL_DIR})
+install(FILES jar/PlanConvert.jar  DESTINATION ${PLANCONVERT_INSTALL_DIR})
