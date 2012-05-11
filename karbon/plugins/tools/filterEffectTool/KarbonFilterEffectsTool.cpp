@@ -449,8 +449,7 @@ QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
 
     d->clearButton = new QToolButton(addFilterWidget);
     d->clearButton->setIcon(KIcon("edit-delete"));
-    // TODO: uncomment after release
-    //d->clearButton->setToolTip(i18n("Remove filter from object"));
+    d->clearButton->setToolTip(i18n("Remove filter from object"));
     addFilterLayout->addWidget(d->clearButton, 0, 3);
     connect(d->clearButton, SIGNAL(clicked()), this, SLOT(clearFilter()));
 
