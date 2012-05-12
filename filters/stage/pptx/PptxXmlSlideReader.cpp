@@ -1019,6 +1019,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             body->startElement("draw:object-ole");
             addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
+            body->addAttribute("xlink:type", "simple");
             body->endElement(); // draw:object-ole
         }
 
