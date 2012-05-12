@@ -126,7 +126,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
-qDebug() << actionCollection()->action("settings_active_author");
+
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -168,6 +168,10 @@ qDebug() << actionCollection()->action("settings_active_author");
                 this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
 #endif
+    if (m_document->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
 }
 
 KWView::~KWView()
