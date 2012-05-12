@@ -276,7 +276,8 @@ void Filterkpr2odf::convertContent(KoXmlWriter* content)
     KoXmlNode backgrounds = m_mainDoc.namedItem("DOC").namedItem("BACKGROUND");
     KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem("OBJECTS");
     KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem("PAPER");
-    m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
+    //m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
+    m_pageHeight = paper.toElement().attribute("ptHeight").toDouble();
 
     //Go to the first background, there might be missing backgrounds
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
