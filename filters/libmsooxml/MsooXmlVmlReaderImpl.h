@@ -571,7 +571,8 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
 
     QString newColor;
     if (color.startsWith("#")) {
-        newColor = color;
+        QColor c(color); // use QColor parser to validate and/or correct color
+        newColor = c.name();
     }
     else if (color == "red") {
         newColor = "#ff0000";
