@@ -1157,8 +1157,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     if (m_context->type == Slide) {
         // CASE #P476
-        body->addAttribute("draw:id", "cNvPrId" + m_cNvPrId);
-        body->addAttribute("xml:id", "cNvPrId" + m_cNvPrId);
+        QString id = "slide" + QString::number(m_context->slideNumber) + "item"
+                + m_cNvPrId;
+        body->addAttribute("draw:id", id);
+        body->addAttribute("xml:id", id);
         body->addAttribute("presentation:class", presentationClass);
         kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
