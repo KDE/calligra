@@ -357,7 +357,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             }
         }
     }
-    else {
+    else if (!m_currentVMLProperties.anchorType.isEmpty()) {
         body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType);
     }
     if (!asChar) {
