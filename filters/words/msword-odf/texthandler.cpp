@@ -2158,7 +2158,9 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
     } else {
         kDebug(30513) << "Missing CHPs for the label!";
     }
-    out.addAttribute("text:style-name", m_mainStyles->insert(textStyle, "T"));
+    if (listInfo->type() != wvWare::ListInfo::PictureType) {
+        out.addAttribute("text:style-name", m_mainStyles->insert(textStyle, "T"));
+    }
 
     //---------------------------------------------
     // list-level-properties
