@@ -1538,7 +1538,9 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         //<text:table-of-content-source>
         cwriter->startElement("text:table-of-content-source");
         cwriter->addAttribute("text:index-scope", "document");
-        cwriter->addAttribute("text:outline-level", levels);
+        if (levels > 0) {
+            cwriter->addAttribute("text:outline-level", levels);
+        }
         cwriter->addAttribute("text:relative-tab-stop-position", "false");
         cwriter->addAttribute("text:use-index-marks", "false");
         cwriter->addAttribute("text:use-index-source-styles", !useOutlineLevel);
