@@ -193,7 +193,7 @@ KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
         }
     }
 
-    m_executeAction = addAction("data_execute", KIcon("media-playback-start"), i18n("Execute"),
+    m_executeAction = addAction("data_execute", KIcon("system-run"), i18n("Execute"),
 //! @todo tooltip, what's this
                                 QString(), QString(),
                                 SLOT(slotExecuteObject()));

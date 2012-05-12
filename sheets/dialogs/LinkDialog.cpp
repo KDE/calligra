@@ -93,14 +93,14 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
 
     // link for e-mail
     d->mailPage = new QWidget();
-    d->p2 = addPage(d->mailPage, i18n("Mail"));
-    d->p2->setHeader(i18n("Link to Mail Address"));
-    d->p2->setIcon(KIcon("mail-message"));
+    d->p2 = addPage(d->mailPage, i18n("Email"));
+    d->p2->setHeader(i18n("Link to Email Address"));
+    d->p2->setIcon(KIcon("internet-mail"));
     QVBoxLayout* mLayout = new QVBoxLayout(d->mailPage);
     mLayout->addWidget(new QLabel(i18n("Text to display:"), d->mailPage));
     d->mailText = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailText);
-    mLayout->addWidget(new QLabel(i18n("Email:"), d->mailPage));
+    mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
     d->mailLink = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
     connect(d->mailText, SIGNAL(textChanged(const QString&)), this,

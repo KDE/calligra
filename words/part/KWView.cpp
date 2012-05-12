@@ -168,6 +168,10 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
                 this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
 #endif
+    if (m_document->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
 }
 
 KWView::~KWView()

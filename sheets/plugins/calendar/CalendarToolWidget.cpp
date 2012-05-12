@@ -50,8 +50,9 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     this->m_startDateWidget->setDate(first_day_in_month);
     this->m_endDateWidget->setDate(last_day_in_month);
 
-    this->m_selectStartDateButton->setIcon(KIcon("office-calendar"));
-    this->m_selectEndDateButton->setIcon(KIcon("office-calendar"));
+    const KIcon calendarIcon(QLatin1String("x-office-calendar"));
+    this->m_selectStartDateButton->setIcon(calendarIcon);
+    this->m_selectEndDateButton->setIcon(calendarIcon);
 
     connect(this->m_selectStartDateButton, SIGNAL(clicked()), this, SLOT(showStartDatePicker()));
     connect(this->m_selectEndDateButton, SIGNAL(clicked()), this, SLOT(showEndDatePicker()));

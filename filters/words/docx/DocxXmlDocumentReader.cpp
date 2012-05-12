@@ -4720,7 +4720,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
             text = QChar();
         }
     }
-    body->addAttribute("style:leader-text", text);
+    if (!text.isNull()) {
+        body->addAttribute("style:leader-text", text);
+    }
     body->endElement(); // style:tab-stop
 
     readNext();
@@ -6304,6 +6306,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
         body->startElement("draw:object-ole");
         addManifestEntryForFile(destinationName);
         body->addAttribute("xlink:href", destinationName);
+        body->addAttribute("xlink:type", "simple");
         body->endElement(); // draw:object-ole
     }
 

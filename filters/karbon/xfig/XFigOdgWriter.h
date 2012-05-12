@@ -84,12 +84,13 @@ private:
 
     void writeParagraphStyle( KoGenStyle& odfStyle, const XFigTextObject* textObject );
     void writeFont( KoGenStyle& odfStyle, const XFigTextObject* textObject );
-    void writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable );
+    void writeFill( KoGenStyle& odfStyle, const XFigFillable* fillable, qint32 penColorId );
     void writeStroke( KoGenStyle& odfStyle, const XFigLineable* lineable );
     void writeDotDash( KoGenStyle& odfStyle, int lineType, double distance );
     void writeJoinType(KoGenStyle& odfStyle, int joinType);
     void writeCapType( KoGenStyle& odfStyle, const XFigLineEndable* lineEndable );
     void writeArrow(KoGenStyle& odfStyle, const XFigArrowHead* arrow, LineEndType lineEndType);
+    void writeHatch(KoGenStyle& odfStyle, int patternType, const QString& colorString);
 
     void writeComment(const XFigAbstractObject* object);
     void writePoints( const QVector<XFigPoint>& points );
