@@ -821,7 +821,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             }
             //The value MUST be ignored if jc is equal jcBar.
-            if (td.tbd.jc != jcBar) {
+            if (td.tbd.jc != jcBar && leader > 0) {
                 tmpWriter.addAttribute("style:leader-text", leader);
             }
             tmpWriter.endElement();//style:tab-stop
