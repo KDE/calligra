@@ -1157,7 +1157,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     if (m_context->type == Slide) {
         // CASE #P476
-        body->addAttribute("draw:id", m_cNvPrId);
+        body->addAttribute("draw:id", "cNvPrId" + m_cNvPrId);
+        body->addAttribute("xml:id", "cNvPrId" + m_cNvPrId);
         body->addAttribute("presentation:class", presentationClass);
         kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
