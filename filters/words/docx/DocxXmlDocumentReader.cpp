@@ -4720,7 +4720,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
             text = QChar();
         }
     }
-    body->addAttribute("style:leader-text", text);
+    if (!text.isNull()) {
+        body->addAttribute("style:leader-text", text);
+    }
     body->endElement(); // style:tab-stop
 
     readNext();

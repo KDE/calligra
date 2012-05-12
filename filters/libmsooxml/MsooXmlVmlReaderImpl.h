@@ -2745,12 +2745,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else if (type == "through" || type == "square" || type == "tight") {
         if (type == "square" || type == "tight") {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "outside");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "false");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "outside");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "false");
         }
         else {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "full");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "true");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "full");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "true");
         }
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
