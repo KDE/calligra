@@ -1061,7 +1061,7 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     // NOTE: The default margin-left/margin-right values DO NOT make sense for
     // inline pictures, also after conversion of test files to DOCX, both
     // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
-    style.addPropertyPt("style:margin", 0);
+    style.addPropertyPt("fo:margin", 0);
 
     styleName = out.styles.insert(style);
 
