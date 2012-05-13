@@ -170,10 +170,6 @@ private slots:
     void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
-    /// Wrap the selected frames into a clipping shape container.
-    void createFrameClipping();
-    /// unwrap the selected frames into a clipping shape container.
-    void removeFrameClipping();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
     void updateStatusBarAction();
     /// show guides menu option uses this
