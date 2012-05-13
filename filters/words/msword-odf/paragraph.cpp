@@ -821,7 +821,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             }
             //The value MUST be ignored if jc is equal jcBar.
-            if (td.tbd.jc != jcBar) {
+            if (td.tbd.jc != jcBar && leader > 0) {
                 tmpWriter.addAttribute("style:leader-text", leader);
             }
             tmpWriter.endElement();//style:tab-stop
@@ -1024,7 +1024,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
-            style->addProperty("style:text-scale", chp->wCharScale, tt);
+            style->addProperty("style:text-scale",
+                QString::number(chp->wCharScale) + "%", tt);
         }
     }
 

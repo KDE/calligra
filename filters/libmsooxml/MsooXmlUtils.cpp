@@ -1765,8 +1765,8 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     }
     else {
         out.startElement("text:list-level-style-bullet");
-        if (m_bulletChar == UNUSED) {
-            out.addAttribute("text:bullet-char", "");
+        if (m_bulletChar.length() != 1) {
+            out.addAttribute("text:bullet-char", " ");
         } else {
             out.addAttribute("text:bullet-char", m_bulletChar);
         }

@@ -95,8 +95,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         widget->enableBackgroundOpacity(format == "PNG");
 
         KDialog dlg;
-        //dlg.setCaption(i18n("PNG Export Options"));
-        dlg.setCaption("Image Export Options"); // TODO add i18n after release
+        dlg.setCaption(i18n("PNG Export Options"));
         dlg.setButtons(KDialog::Ok | KDialog::Cancel);
         dlg.setMainWidget(widget);
         if (dlg.exec() != QDialog::Accepted)
