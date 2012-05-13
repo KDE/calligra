@@ -848,7 +848,6 @@ public slots:
     void setProfileReferenceTime(const QTime& referenceTime);
 
 signals:
-
     /**
      * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
      * Your KoDocument-derived class should emit the signal now and then during load/save.
