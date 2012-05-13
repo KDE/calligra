@@ -26,7 +26,7 @@
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if(hasProperty("PaintOpAction")) {
+    if (hasProperty("PaintOpAction")) {
         return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
     }
     return true;
@@ -49,7 +49,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisP
     if (mode == CursorIsOutline) {
     
         KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-        if(!options) {
+        if (!options) {
             return KisPaintOpSettings::brushOutline(pos,mode);
         }
         
