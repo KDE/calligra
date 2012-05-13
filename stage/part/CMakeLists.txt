@@ -84,6 +84,8 @@ set( calligrastageprivate_LIB_SRCS
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
      dockers/KPrPageLayoutDocker.cpp
+     dockers/KPrAnimationsDockerFactory
+     dockers/KPrAnimationsDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
