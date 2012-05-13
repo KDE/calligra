@@ -77,6 +77,8 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
     m_textureProperties.fillProperties(settings);
+    m_textureScaleOption.readOptionSetting(settings);
+    m_textureStrengthOption.readOptionSetting(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -86,6 +88,8 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
+    m_textureStrengthOption.sensor()->reset();
+    m_textureScaleOption.sensor()->reset();
 }
 
 KisBrushOp::~KisBrushOp()

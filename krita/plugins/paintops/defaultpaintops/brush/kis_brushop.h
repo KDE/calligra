@@ -37,6 +37,8 @@
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_texture_option.h>
+#include <kis_pressure_texture_strength_option.h>
+#include <kis_pressure_texture_scale_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -71,6 +73,8 @@ private:
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
     KisTextureProperties m_textureProperties;
+    KisPressureTextureScaleOption m_textureScaleOption;
+    KisPressureTextureStrengthOption m_textureStrengthOption;
 
     KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_dab;
