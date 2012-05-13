@@ -21,6 +21,7 @@
 #define BIBLIOGRAPHYDB_H
 
 #include <QObject>
+#include <QSqlDatabase>
 
 class QSqlDatabase;
 class QSqlTableModel;
@@ -32,15 +33,18 @@ class BibliographyDb : public QObject
     Q_OBJECT
 public:
     explicit BibliographyDb(QObject *parent = 0, QString path = QString(), QString dbName = QString());
+    ~BibliographyDb();
     bool openDb();
     bool deleteDb();
+    void closeDb();
     QSqlError lastError() const;
     // creates bibliography table in SQLITE database
     bool createTable();
     QSqlTableModel* tableModel();
+
 private:
     QSqlTableModel *m_model;
-    QSqlDatabase *m_db;
+    QSqlDatabase m_db;
     QString m_dbName;
     QString m_fullPath;
 };

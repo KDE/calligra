@@ -23,6 +23,7 @@
 #include <klocale.h>
 
 #include <QDir>
+#include <QFile>
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -32,19 +33,25 @@ BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
     QObject(parent),
     m_dbName(dbName),
     m_fullPath(path),
-    m_db(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE")))
+    m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE")))
 {
 #ifdef Q_OS_LINUX
     m_fullPath.append(QDir::separator()).append(m_dbName);
     m_fullPath = QDir::toNativeSeparators(m_fullPath);
-    m_db->setDatabaseName(m_fullPath);
+    m_db.setDatabaseName(m_fullPath);
 #else
-    m_db->setDatabaseName(m_dbName);
+    m_fullPath = m_dbName;
+    m_db.setDatabaseName(m_dbName);
 #endif
+    if (!QFile::exists(m_fullPath)) {
+        QFile dbFile(m_fullPath);
+        dbFile.open(QIODevice::WriteOnly);
+        dbFile.close();
+    }
     if (openDb()) {
-        m_model = new QSqlTableModel(this, *m_db);
+        m_model = new QSqlTableModel(this, m_db);
         m_model->setTable("bibref");
-        m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+        m_model->setEditStrategy(QSqlTableModel::OnRowChange);
         m_model->select();
 
         /*for (int i = 0; KoOdfBibliographyConfiguration::bibDataFields.size(); i++) {
@@ -55,15 +62,16 @@ BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
 
 bool BibliographyDb::openDb()
 {
-    if ( m_db->open() && !m_db->tables(QSql::Tables).contains("bibref")) {
+    if ( m_db.open() && !m_db.tables(QSql::Tables).contains("bibref")) {
         createTable();
     }
-    return m_db->isOpen();
+
+    return m_db.isOpen();
 }
 
 bool BibliographyDb::deleteDb()
 {
-    m_db->close();
+    m_db.close();
 #ifdef Q_OS_LINUX
     return QFile::remove(m_fullPath);
 #else
@@ -71,16 +79,21 @@ bool BibliographyDb::deleteDb()
 #endif
 }
 
+void BibliographyDb::closeDb()
+{
+    m_db.close();
+}
+
 QSqlError BibliographyDb::lastError() const
 {
-    return m_db->lastError();
+    return m_db.lastError();
 }
 
 bool BibliographyDb::createTable()
 {
     bool ret = false;
-    if (!m_db->isOpen()) {
-        m_db->open();
+    if (!m_db.isOpen()) {
+        m_db.open();
     } else {
         QString query("CREATE TABLE bibref"
                       "(id INTEGER PRIMARY KEY,"
@@ -116,7 +129,7 @@ bool BibliographyDb::createTable()
                       "custom5 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "isbn TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "issn TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '')");
-        m_db->exec(query);
+        m_db.exec(query);
     }
     return ret;
 }
@@ -124,4 +137,12 @@ bool BibliographyDb::createTable()
 QSqlTableModel* BibliographyDb::tableModel()
 {
     return m_model;
+}
+
+BibliographyDb::~BibliographyDb()
+{
+    closeDb();
+    if (m_model) {
+        delete m_model;
+    }
 }
