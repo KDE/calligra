@@ -21,6 +21,7 @@
 #define KPRANIMTRANSITIONFILTER_H
 
 #include "KPrAnimationBase.h"
+class KPrAnimTransitionFilterEffect;
 
 class KPrAnimTransitionFilter : public KPrAnimationBase
 {
@@ -37,6 +38,7 @@ protected:
 
 private:
     bool m_visible;
+    KPrAnimTransitionFilterEffect *m_effect;
 };
 
 #endif /* KPRANIMTRANSITIONFILTER_H */

@@ -40,7 +40,7 @@ KPrTransitionFilterRegistry * KPrTransitionFilterRegistry::instance()
 
 KPrAnimTransitionFilterEffect * KPrTransitionFilterRegistry::createTransitionFilterEffect( const KoXmlElement & element )
 {
-    Q_UNUSED(element);
+    //Q_UNUSED(element);
 
     KPrAnimTransitionFilterEffect * shapeEffect = 0;
     if ( element.hasAttributeNS( KoXmlNS::smil, "type" ) ) {

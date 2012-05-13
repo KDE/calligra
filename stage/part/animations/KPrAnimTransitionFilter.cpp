@@ -22,15 +22,20 @@
 #include <KoXmlNS.h>
 
 #include "KPrTransitionFilterRegistry.h"
+#include "KPrAnimTransitionFilterEffect.h"
 
 
 KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
+,m_effect(0)
 {
 }
 
 KPrAnimTransitionFilter::~KPrAnimTransitionFilter()
 {
+    if(m_effect) {
+        delete m_effect;
+    }
 }
 
 bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -48,14 +53,17 @@ bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadin
             reverse = true;
         }
         qDebug() << "Ready to create object in AnimTransitionFilter.cpp";
-        KPrTransitionFilterRegistry::instance()->createTransitionFilterEffect(element);
+        m_effect = KPrTransitionFilterRegistry::instance()->createTransitionFilterEffect(element);
     }
     return true;
 }
 
 bool KPrAnimTransitionFilter::saveOdf(KoPASavingContext & paContext) const
 {
-    Q_UNUSED(paContext);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.startElement("anim:transitionFilter");
+    saveAttribute(paContext);
+    writer.endElement();
     return true;
 }
 

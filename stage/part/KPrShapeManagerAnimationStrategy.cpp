@@ -58,6 +58,31 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
             }
 
             painter.setTransform(transform);
+
+            //Try to draw a swipe
+            QPainterPath m_shape;
+            m_shape.addEllipse(0, 0, 10, 10 );
+
+            int width = shape->boundingRect().width();
+            int height = shape->boundingRect().height();
+            int currPos = (1 / shape->boundingRect().width());//*0.5;
+            int scaleStep = 0;
+            //m_shape.addEllipse(-width/2,-height/2, width/2, height/2);
+            if( width > height )
+            {
+                scaleStep = 1 / shape->boundingRect().width();
+            }
+            else
+            {
+                scaleStep = 1 / shape->boundingRect().height();
+            }
+            QTransform matrix;
+            matrix.translate( width/2+5, height/2+5 );
+            //matrix.scale(currPos*scaleStep, currPos*scaleStep);
+            //m_shape.moveTo(shape->position().x()+width/2, shape->position().y()+height/2);
+            matrix.scale(5, 5);
+
+            painter.setClipPath(matrix.map(m_shape));
             // paint shape
             shapeManager()->paintShape( shape, painter, converter, paintContext);
             painter.restore();  // for the transform
