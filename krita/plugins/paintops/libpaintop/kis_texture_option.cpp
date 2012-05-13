@@ -33,6 +33,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_resource_server_provider.h>
 #include <kis_pattern_chooser.h>
@@ -45,6 +46,8 @@
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_gradient_slider.h>
+#include <kis_cmb_composite.h>
+
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -96,6 +99,17 @@ public:
         chkInvert->setChecked(false);
         formLayout->addRow(i18n("Invert Texture:"), chkInvert);
 
+        chkAlpha = new QCheckBox("", this);
+        chkAlpha->setChecked(false);
+        formLayout->addRow(i18n("Mask with Transparency Instead of Gray:"), chkAlpha);
+
+        chkTextureEachDab = new QCheckBox("", this);
+        chkTextureEachDab->setChecked(true);
+        formLayout->addRow(i18n("Texture Each Dab:"), chkTextureEachDab);
+
+        cmbCompositeOp = new KisCompositeOpComboBox(this);
+        formLayout->addRow(i18n("Mask Blending Mode"), cmbCompositeOp);
+
         setLayout(formLayout);
     }
     KisPatternChooser *chooser;
@@ -105,6 +119,10 @@ public:
     KisGradientSlider *cutoffSlider;
     QComboBox *cmbCutoffPolicy;
     QCheckBox *chkInvert;
+    QCheckBox *chkAlpha;
+    QCheckBox *chkTextureEachDab;
+    KisCompositeOpComboBox *cmbCompositeOp;
+
 };
 
 KisTextureOption::KisTextureOption(QObject *)
@@ -117,6 +135,9 @@ KisTextureOption::KisTextureOption(QObject *)
 
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chkAlpha, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chkTextureEachDab, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -160,6 +181,13 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
+
+    setting->setProperty("Texture/Pattern/UseAlphaChannel", (m_optionWidget->chkAlpha->checkState() == Qt::Checked));
+    setting->setProperty("Texture/Pattern/TextureEachDab", (m_optionWidget->chkTextureEachDab->checkState() == Qt::Checked));
+
+    KoID compositeOp;
+    m_optionWidget->cmbCompositeOp->entryAt(compositeOp, m_optionWidget->cmbCompositeOp->currentIndex());
+    setting->setProperty("Texture/Pattern/CompositeOp", compositeOp.id());
 
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
 }
@@ -209,6 +237,12 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
+    m_optionWidget->chkAlpha->setChecked(setting->getBool("Texture/Pattern/UseAlphaChannel"));
+    m_optionWidget->chkTextureEachDab->setChecked(setting->getBool("Texture/Pattern/TextureEachDab"));
+
+    QString compositeOpID = setting->getString("Texture/Pattern/CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
+    int index = m_optionWidget->cmbCompositeOp->indexOf(KoID(compositeOpID));
+    m_optionWidget->cmbCompositeOp->setCurrentIndex(index);
 
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
 }
@@ -310,6 +344,9 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
     cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
+    useAlpha = setting->getBool("Texture/Pattern/UseAlphaChannel", false);
+    textureEachDab = setting->getBool("Texture/Pattern/TextureEachDab", true);
+    compositeOpID = setting->getString("Texture/Pattern/CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
 
     recalculateMask();
 }

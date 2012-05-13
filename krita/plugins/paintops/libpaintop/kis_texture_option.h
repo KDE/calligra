@@ -67,12 +67,14 @@ public:
     qreal scale;
     int offsetX;
     int offsetY;
-    qreal strength;
     bool invert;
     KisPattern *pattern;
     int cutoffLeft;
     int cutoffRight;
     int cutoffPolicy;
+    bool useAlpha; // true: use alpha, false: use grayscale channel of the pattern
+    bool textureEachDab;
+    QString compositeOpID;
     /**
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
