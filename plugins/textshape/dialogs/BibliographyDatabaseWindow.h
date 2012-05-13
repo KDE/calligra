@@ -24,9 +24,11 @@
 
 #include <QMainWindow>
 #include <QTableView>
+#include <QDir>
 
 class BibliographyDb;
 class QTableView;
+class QDir;
 
 class BibliographyDatabaseWindow : public QMainWindow
 {
@@ -35,11 +37,19 @@ class BibliographyDatabaseWindow : public QMainWindow
 public:
     explicit BibliographyDatabaseWindow(QWidget *parent = 0);
     ~BibliographyDatabaseWindow();
+    void loadBibliographyDbs();
     
 private:
     Ui::BibliographyDatabaseWindow ui;
     QTableView *m_bibTableView;
     BibliographyDb *m_table;
+
+public:
+    QDir tableDir;
+
+private slots:
+    void tableChanged(QString);
+    void insertBlankRow();
 };
 
 #endif // BIBLIOGRAPHYDATABASEWINDOW_H

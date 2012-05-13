@@ -24,6 +24,7 @@
 #include <QSqlTableModel>
 #include <QDir>
 #include <QMessageBox>
+#include <QDebug>
 
 BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,23 +33,61 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     ui.setupUi(this);
 
     m_bibTableView = new QTableView(ui.centralwidget);
-    ui.horizontalLayout->addWidget(m_bibTableView);
+    ui.centralwidget->layout()->addWidget(m_bibTableView);
 
-    QDir tableDir(QDir::home().path().append(QDir::separator()).append(".calligra"));
+    connect(ui.tableList, SIGNAL(currentIndexChanged(QString)), this, SLOT(tableChanged(QString)));
+
+    //TODO: add blank row after row change
+    //connect(m_bibTableView, SIGNAL(rowCountChanged(int,int)), this, SLOT(insertBlankRow()));
+
     if (!tableDir.exists()) {
         if (!tableDir.mkpath(tableDir.absolutePath())) {
             QMessageBox::warning(this, i18n("Error"), QString(i18n("Error creating directory ")).append(tableDir.absolutePath()));
             emit close();
         }
+    } else {
+        loadBibliographyDbs();
     }
-
-    m_table = new BibliographyDb(this, tableDir.absolutePath(), "bibliography.sqlite");
-    m_bibTableView->setModel(m_table->tableModel());
-    m_bibTableView->hideColumn(0);      // hide ID column
-    m_bibTableView->show();
 }
 
 BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
 {
     delete m_table;
+}
+
+void BibliographyDatabaseWindow::loadBibliographyDbs()
+{
+    tableDir = QDir(QDir::home().path().append(QDir::separator()).append(".calligra"),
+                                              QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+    foreach(QFileInfo tableInfo, tableDir.entryInfoList()) {
+        ui.tableList->addItem(tableInfo.fileName());
+    }
+}
+
+void BibliographyDatabaseWindow::tableChanged(QString newTable)
+{
+    if (m_table) {
+        delete m_table;
+    }
+
+    if (newTable.isEmpty()) {
+        newTable = "bibliography.sqlite";
+    }
+
+    m_table = new BibliographyDb(this, tableDir.absolutePath(), newTable);
+    m_bibTableView->setModel(m_table->tableModel());
+    m_bibTableView->hideColumn(0);      // hide ID column
+    m_bibTableView->resizeColumnsToContents();
+    m_bibTableView->horizontalHeader()->setSortIndicatorShown(true);
+    m_bibTableView->setSortingEnabled(true);
+    m_bibTableView->show();
+
+    //We add extra row to insert new citation record
+    m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
+}
+
+void BibliographyDatabaseWindow::insertBlankRow()
+{
+    qDebug() << "inserting blank row..\n";
+    m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
 }

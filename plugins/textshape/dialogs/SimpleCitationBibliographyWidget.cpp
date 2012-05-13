@@ -51,7 +51,7 @@ SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesToo
     connect(widget.configureBibliography, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     widget.bibliographyDatabase->setDefaultAction(tool->action("bibliography_database"));
-    connect(widget.bibliographyDatabase, SIGNAL(clicked()), this, SLOT(doneWithFocus()));
+    connect(widget.bibliographyDatabase, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }
 
 SimpleCitationBibliographyWidget::~SimpleCitationBibliographyWidget()
