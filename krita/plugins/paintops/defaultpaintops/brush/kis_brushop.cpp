@@ -176,7 +176,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     MirrorProperties mirrors = m_mirrorOption.apply(info);
     dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
 
-    m_sharpnessOption.applyTreshold( dab );
+    m_sharpnessOption.applyTreshold(dab);
 
     // after everything, apply the texturing
     m_textureProperties.apply(dab, info.pos().toPoint());
