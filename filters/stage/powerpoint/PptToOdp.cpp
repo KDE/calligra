@@ -1232,7 +1232,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
-    style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    if (cf.fontSize() > 0) {
+        style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    }
     // fo:font-style: "italic", "normal" or "oblique
     style.addProperty("fo:font-style", cf.italic() ?"italic" :"normal", text);
     // fo:font-variant: "normal" or "small-caps"
