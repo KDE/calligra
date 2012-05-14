@@ -3830,7 +3830,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     if (ok) {
         if (lineRule == "atLeast") {
             lineSpace = TWIP_TO_POINT(lineSpace);
-            m_currentParagraphStyle.addPropertyPt("fo:line-height-at-least", lineSpace);
+            m_currentParagraphStyle.addPropertyPt("style:line-height-at-least", lineSpace);
         } else if (lineRule == "exact") {
             lineSpace = TWIP_TO_POINT(lineSpace);
             m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);

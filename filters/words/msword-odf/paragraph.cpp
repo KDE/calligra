@@ -664,7 +664,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             qreal value = qAbs((qreal)pap.lspd.dyaLine / (qreal)20.0); // twip -> pt
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if (pap.lspd.dyaLine > 0)
-                style->addPropertyPt("fo:line-height-at-least", value, pt);
+                style->addPropertyPt("style:line-height-at-least", value, pt);
             else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
                 style->addPropertyPt("fo:line-height", value, pt);
         } else
