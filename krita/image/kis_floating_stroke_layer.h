@@ -101,6 +101,8 @@ public:
     void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
     void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
 
+protected:
+
     /**
      * Lock the temporary target.
      * It should be done for guarding every access to
