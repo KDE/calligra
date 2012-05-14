@@ -25,7 +25,6 @@
        <height>0</height>
       </size>
      </property>
-     <zorder>checkBoxUseSameCurve</zorder>
     </widget>
    </item>
    <item row="8" column="1">
@@ -49,7 +48,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <zorder>checkBoxUseSameCurve</zorder>
     </widget>
    </item>
    <item row="1" column="0" colspan="5">
@@ -72,7 +70,6 @@
        <height>16777215</height>
       </size>
      </property>
-     <zorder>checkBoxUseSameCurve</zorder>
     </widget>
    </item>
    <item row="8" column="4">
@@ -129,8 +126,11 @@
    </item>
    <item row="2" column="1">
     <widget class="QCheckBox" name="checkBoxUseSameCurve">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, all inputs sensors will use the same curve. If not checked, you will be able to assign different curves to all active input sensors.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
-      <string>Use the same curve</string>
+      <string>Use the same curve for all inputs</string>
      </property>
      <property name="checked">
       <bool>true</bool>
