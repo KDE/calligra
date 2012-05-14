@@ -912,6 +912,27 @@ PptToOdp::doConversion(KoStore* storeout)
     // store document styles
     styles.saveOdfStylesDotXml(storeout, manifest);
 
+    if (!storeout->open("meta.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-meta xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    if (!storeout->open("settings.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    manifest->addManifestEntry("settings.xml", "text/xml");
+    manifest->addManifestEntry("meta.xml", "text/xml");
+
     odfWriter.closeManifestWriter();
 
     delete p;
