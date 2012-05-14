@@ -29,11 +29,36 @@ class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 
 /**
- * KisFloatingStrokeLayer is an invisible paint layer that
+ * KisFloatingStrokeLayer is an invisible paint target that
  * strokes are painted on until the stroke is done; then the stroke
- * result is merged with the paint layer.
+ * result is merged with the paint layer. A KisPaintLayer is a
+ * KisFloatingStrokeLayer.
  *
  * This is done in WASH and FRINGE painting mode -- see KisPaintActionTypeOption.
+ *
+ * The process by which we decide whether or not to use indirect painting is
+ * convoluted. For examplle for the plain brush operation:
+ *
+ * It starts with:
+ * KisPaintActionTypeOption:  UNSUPPORTED, BUILDUP, WASH, FRINGED
+ *  KisBrushopSettingsWidget: owns KisPaintActionTypeOption
+ *  KisBrushBasedPaintopSettings: created by KisBrushopSettingsWidget
+ *    bool KisPaintOpSettings::paintIncremental()
+ *
+ *   KisBrushOp::settings: returns KisBrushBasedPaintopSettings
+ *
+ *  KisResourcesSnapshot::needsIndirectPainting()
+ *      calls KisPaintOpSettings::paintIncremental()
+ *
+ *  KisToolFreehandHelper::initPaint:
+ *
+ *   calls KisResourcesSnapshot::needsIndirectPainting()
+ *      creates FreehandStrokeStrategy(indirectPainting,...)
+ *	 calls setNeedsIndirectPainting(needsIndirectPainting);
+ *
+ *
+ *   KisPainterBasedStrokeStrategy::initStrokeCallback()
+ *     casts current node to KisFloatingStrokeLayer
  */
 class KRITAIMAGE_EXPORT KisFloatingStrokeLayer
 {
@@ -60,7 +85,6 @@ public:
      */
     void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
     void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
-
 
     /**
      * Lock the temporary target.
