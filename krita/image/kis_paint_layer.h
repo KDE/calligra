@@ -21,7 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_indirect_painting_support.h"
+#include "kis_floating_stroke_layer.h"
 
 class KoColorSpace;
 
@@ -34,7 +34,7 @@ class KoColorSpace;
  * The transparency mask has two rendering forms: as a selection mask
  * and by changing the transparency of the paint layer's pixels.
  */
-class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisFloatingStrokeLayer
 {
 
     Q_OBJECT
@@ -81,6 +81,10 @@ public:
 
     bool needProjection() const;
 
+    /**
+     * @brief copyOriginalToProjection is used to show a paint stroke on a KisIndirectPaintingSupport device
+     *   until it is finished.
+     */
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;

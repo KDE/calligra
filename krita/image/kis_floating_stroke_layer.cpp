@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_indirect_painting_support.h"
+#include "kis_floating_stroke_layer.h"
 
 #include <QMutex>
 #include <QMutexLocker>
@@ -30,7 +30,7 @@
 #include "kis_painter.h"
 
 
-struct KisIndirectPaintingSupport::Private {
+struct KisFloatingStrokeLayer::Private {
     // To simulate the indirect painting
     KisPaintDeviceSP temporaryTarget;
     const KoCompositeOp* compositeOp;
@@ -43,79 +43,79 @@ struct KisIndirectPaintingSupport::Private {
 };
 
 
-KisIndirectPaintingSupport::KisIndirectPaintingSupport()
+KisFloatingStrokeLayer::KisFloatingStrokeLayer()
     : d(new Private)
 {
     d->compositeOp = 0;
 }
 
-KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
+KisFloatingStrokeLayer::~KisFloatingStrokeLayer()
 {
     delete d;
 }
 
-void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
+void KisFloatingStrokeLayer::setTemporaryTarget(KisPaintDeviceSP t)
 {
     d->dirtyRegion = QRegion();
     d->temporaryTarget = t;
 }
 
-void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
+void KisFloatingStrokeLayer::setTemporaryCompositeOp(const KoCompositeOp* c)
 {
     d->compositeOp = c;
 }
 
-void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
+void KisFloatingStrokeLayer::setTemporaryOpacity(quint8 o)
 {
     d->compositeOpacity = o;
 }
 
-void KisIndirectPaintingSupport::setTemporaryChannelFlags(const QBitArray& channelFlags)
+void KisFloatingStrokeLayer::setTemporaryChannelFlags(const QBitArray& channelFlags)
 {
     d->channelFlags = channelFlags;
 }
 
-void KisIndirectPaintingSupport::lockTemporaryTarget() const
+void KisFloatingStrokeLayer::lockTemporaryTarget() const
 {
     d->lock.lockForRead();
 }
 
-void KisIndirectPaintingSupport::unlockTemporaryTarget() const
+void KisFloatingStrokeLayer::unlockTemporaryTarget() const
 {
     d->lock.unlock();
 }
 
-KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
+KisPaintDeviceSP KisFloatingStrokeLayer::temporaryTarget()
 {
     return d->temporaryTarget;
 }
 
-const KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
+const KisPaintDeviceSP KisFloatingStrokeLayer::temporaryTarget() const
 {
     return d->temporaryTarget;
 }
 
-const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const
+const KoCompositeOp* KisFloatingStrokeLayer::temporaryCompositeOp() const
 {
     return d->compositeOp;
 }
 
-quint8 KisIndirectPaintingSupport::temporaryOpacity() const
+quint8 KisFloatingStrokeLayer::temporaryOpacity() const
 {
     return d->compositeOpacity;
 }
 
-const QBitArray& KisIndirectPaintingSupport::temporaryChannelFlags() const
+const QBitArray& KisFloatingStrokeLayer::temporaryChannelFlags() const
 {
     return d->channelFlags;
 }
 
-bool KisIndirectPaintingSupport::hasTemporaryTarget() const
+bool KisFloatingStrokeLayer::hasTemporaryTarget() const
 {
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::setDirty(const QRect &rect)
+void KisFloatingStrokeLayer::setDirty(const QRect &rect)
 {
     lockTemporaryTarget();
     if(hasTemporaryTarget()) {
@@ -124,30 +124,30 @@ void KisIndirectPaintingSupport::setDirty(const QRect &rect)
     unlockTemporaryTarget();
 }
 
-void KisIndirectPaintingSupport::addIndirectlyDirtyRect(const QRect &rect)
+void KisFloatingStrokeLayer::addIndirectlyDirtyRect(const QRect &rect)
 {
     QMutexLocker locker(&d->dirtyRegionMutex);
     d->dirtyRegion += rect;
 }
 
-QRegion KisIndirectPaintingSupport::indirectlyDirtyRegion()
+QRegion KisFloatingStrokeLayer::indirectlyDirtyRegion()
 {
     QMutexLocker locker(&d->dirtyRegionMutex);
     return d->dirtyRegion;
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
+void KisFloatingStrokeLayer::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
+void KisFloatingStrokeLayer::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
 
 template<class UndoAdapter>
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+void KisFloatingStrokeLayer::mergeToLayerImpl(KisLayerSP layer,
                                                   UndoAdapter *undoAdapter,
                                                   const QString &transactionText)
 {

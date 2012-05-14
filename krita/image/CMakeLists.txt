@@ -144,7 +144,7 @@ set(kritaimage_LIB_SRCS
    kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_layer.cc
-   kis_indirect_painting_support.cpp
+   kis_floating_stroke_layer.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

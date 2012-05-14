@@ -79,7 +79,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
+        , KisFloatingStrokeLayer()
         , m_d(new Private)
 {
     m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
@@ -134,7 +134,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisPaintLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
+    KisFloatingStrokeLayer::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 

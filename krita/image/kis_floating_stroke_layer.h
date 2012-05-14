@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_INDIRECT_PAINTING_SUPPORT_H_
-#define KIS_INDIRECT_PAINTING_SUPPORT_H_
+#ifndef KIS_FLOATING_STROKE_LAYER_H_
+#define KIS_FLOATING_STROKE_LAYER_H_
 
 #include "krita_export.h"
 #include "kis_types.h"
@@ -29,19 +29,20 @@ class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 
 /**
- * For classes that support indirect painting.
+ * KisFloatingStrokeLayer is an invisible paint layer that
+ * strokes are painted on until the stroke is done; then the stroke
+ * result is merged with the paint layer.
  *
- * XXX: Name doesn't suggest an object -- is KisIndirectPaintingLayer
- * a better name? (BSAR)
+ * This is done in WASH and FRINGE painting mode -- see KisPaintActionTypeOption.
  */
-class KRITAIMAGE_EXPORT KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisFloatingStrokeLayer
 {
-    KisIndirectPaintingSupport(const KisIndirectPaintingSupport&);
-    KisIndirectPaintingSupport& operator=(const KisIndirectPaintingSupport&);
+    KisFloatingStrokeLayer(const KisFloatingStrokeLayer&);
+    KisFloatingStrokeLayer& operator=(const KisFloatingStrokeLayer&);
 public:
 
-    KisIndirectPaintingSupport();
-    virtual ~KisIndirectPaintingSupport();
+    KisFloatingStrokeLayer();
+    virtual ~KisFloatingStrokeLayer();
 
     bool hasTemporaryTarget() const;
 
@@ -53,7 +54,8 @@ public:
     void setDirty(const QRect &rect);
 
     /**
-     * Writes the temporary target into the paint device of the layer.
+     * Writes the temporary target into the paint device of the layer when the stroke is finished.
+     * This is called by the stroke sthread
      * This action will lock the temporary target itself.
      */
     void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);

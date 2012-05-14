@@ -24,7 +24,7 @@
 #include <QObject>
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_indirect_painting_support.h"
+#include "kis_floating_stroke_layer.h"
 #include <krita_export.h>
 #include "kis_node_filter_interface.h"
 
@@ -37,7 +37,7 @@ class KisNodeVisitor;
  * the area where filter/generators are applied. The area outside
  * this selection is not affected by the layer
  */
-class KRITAIMAGE_EXPORT KisSelectionBasedLayer : public KisLayer, public KisIndirectPaintingSupport, public KisNodeFilterInterface
+class KRITAIMAGE_EXPORT KisSelectionBasedLayer : public KisLayer, public KisFloatingStrokeLayer, public KisNodeFilterInterface
 {
     Q_OBJECT
 

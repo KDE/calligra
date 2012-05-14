@@ -106,8 +106,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     bool hasIndirectPainting = needsIndirectPainting();
 
     if (hasIndirectPainting) {
-        KisIndirectPaintingSupport *indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+        KisFloatingStrokeLayer *indirect =
+            dynamic_cast<KisFloatingStrokeLayer*>(node.data());
 
         if (indirect) {
             targetDevice = new KisPaintDevice(node, paintDevice->colorSpace());
@@ -140,8 +140,8 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
     KisNodeSP node = m_resources->currentNode();
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-    KisIndirectPaintingSupport *indirect =
-        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+    KisFloatingStrokeLayer *indirect =
+        dynamic_cast<KisFloatingStrokeLayer*>(node.data());
 
     if(layer && indirect && indirect->hasTemporaryTarget()) {
         QString transactionText = m_transaction->text();
@@ -165,8 +165,8 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
     deletePainters();
 
     KisNodeSP node = m_resources->currentNode();
-    KisIndirectPaintingSupport *indirect =
-        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+    KisFloatingStrokeLayer *indirect =
+        dynamic_cast<KisFloatingStrokeLayer*>(node.data());
 
     if(indirect && indirect->hasTemporaryTarget()) {
         indirect->setTemporaryTarget(0);

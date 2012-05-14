@@ -63,7 +63,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
         : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
+        , KisFloatingStrokeLayer()
         , KisNodeFilterInterface(rhs)
         , m_d(new Private())
 {
@@ -233,7 +233,7 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
+    KisFloatingStrokeLayer::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
