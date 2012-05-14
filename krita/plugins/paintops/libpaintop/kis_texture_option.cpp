@@ -106,6 +106,7 @@ public:
         chkTextureEachDab = new QCheckBox("", this);
         chkTextureEachDab->setChecked(true);
         formLayout->addRow(i18n("Texture Each Dab:"), chkTextureEachDab);
+        chkTextureEachDab->setToolTip("If unchecked, sensor options for scale and strength have no function and blending mode is disabled.");
 
         cmbCompositeOp = new KisCompositeOpComboBox(this);
         formLayout->addRow(i18n("Mask Blending Mode"), cmbCompositeOp);
@@ -137,6 +138,7 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->chkAlpha, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->chkTextureEachDab, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chkTextureEachDab, SIGNAL(toggled(bool)), this, SLOT(textureEachDabToggled(bool)));
     connect(m_optionWidget->cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -252,6 +254,11 @@ void KisTextureOption::resetGUI(KoResource* res)
     KisPattern *pattern = static_cast<KisPattern *>(res);
     m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
     m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
+}
+
+void KisTextureOption::textureEachDabToggled(bool toggle)
+{
+    m_optionWidget->cmbCompositeOp->setEnabled(toggle);
 }
 
 void KisTextureProperties::recalculateMask()

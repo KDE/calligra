@@ -49,7 +49,7 @@ public slots:
 private slots:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
-
+    void textureEachDabToggled(bool toggle);
 private:
     KisTextureOptionWidget *m_optionWidget;
 
