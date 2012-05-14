@@ -38,8 +38,6 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWClipFrameCommand.h"
-#include "commands/KWRemoveFrameClipCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include <KoShapeReorderCommand.h>
 #include "ui_KWInsertImage.h"
@@ -364,14 +362,6 @@ void KWView::setupActions()
     action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
     action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
-
-    action = new KAction(i18n("Create Frame-clip"), this);
-    actionCollection()->addAction("create_clipped_frame", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(createFrameClipping()));
-
-    action = new KAction(i18n("Remove Frame-clip"), this);
-    actionCollection()->addAction("remove_clipped_frame", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
@@ -770,36 +760,6 @@ void KWView::editSelectAllFrames()
 void KWView::editDeleteSelection()
 {
     canvasBase()->toolProxy()->deleteSelection();
-}
-
-void KWView::createFrameClipping()
-{
-    QSet<KWFrame *> clipFrames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent() == 0)
-            clipFrames << frame;
-    }
-    if (!clipFrames.isEmpty()) {
-        KWClipFrameCommand *cmd = new KWClipFrameCommand(clipFrames.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-}
-
-void KWView::removeFrameClipping()
-{
-    QSet<KWFrame *> unClipFrames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent())
-            unClipFrames << frame;
-    }
-    if (!unClipFrames.isEmpty()) {
-        KWRemoveFrameClipCommand *cmd = new KWRemoveFrameClipCommand(unClipFrames.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
 }
 
 void KWView::setGuideVisibility(bool on)

@@ -305,7 +305,9 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
                 } else {
                     xmlWriter.startElement("number:number");
                 }
-                xmlWriter.addAttribute("number:decimal-places", decimalPlaces);
+                if (!gotFraction) {
+                    xmlWriter.addAttribute("number:decimal-places", decimalPlaces);
+                }
                 xmlWriter.addAttribute("number:min-integer-digits", integerDigits);
                 if (exponentDigits > 0) {
                     xmlWriter.addAttribute("number:min-exponent-digits", exponentDigits);

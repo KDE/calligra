@@ -912,6 +912,27 @@ PptToOdp::doConversion(KoStore* storeout)
     // store document styles
     styles.saveOdfStylesDotXml(storeout, manifest);
 
+    if (!storeout->open("meta.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-meta xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    if (!storeout->open("settings.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    manifest->addManifestEntry("settings.xml", "text/xml");
+    manifest->addManifestEntry("meta.xml", "text/xml");
+
     odfWriter.closeManifestWriter();
 
     delete p;
@@ -1211,7 +1232,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
-    style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    if (cf.fontSize() > 0) {
+        style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    }
     // fo:font-style: "italic", "normal" or "oblique
     style.addProperty("fo:font-style", cf.italic() ?"italic" :"normal", text);
     // fo:font-variant: "normal" or "small-caps"
@@ -1232,7 +1255,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:country-complex
     // style:font-charset
     if (isSymbolFont) {
-        style.addProperty("fo:font-charset", "x-symbol", text);
+        style.addProperty("style:font-charset", "x-symbol", text);
     }
     // style:font-family-asian
     // style:font-family-complex
@@ -1625,6 +1648,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
+        out.addAttribute("xlink:type", "simple");
     }
     else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
@@ -2194,7 +2218,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
     contentWriter.addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     contentWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    contentWriter.addAttribute("office:version", "1.0");
+    contentWriter.addAttribute("office:version", "1.2");
 
     // office:automatic-styles
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
@@ -2535,8 +2559,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                 mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else if (mouseover) {
         out.xml.startElement("text:a", false);
@@ -2544,8 +2570,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                 mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else {
         // count - specifies the number of characters of the
