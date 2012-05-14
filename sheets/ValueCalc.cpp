@@ -2270,6 +2270,30 @@ Value ValueCalc::countIfs(const Cell &cntRangeStart, QList<Value> range, QList<C
     return res;
 }
 
+Value ValueCalc::percentrank(const QList<double> &range, const double &val, const Value &digits)
+{
+    if (range.isEmpty())
+        return Value::errorNUM();
+
+    int cnt = 0;        // counter
+
+    Value res(0);
+
+    for (int i = 0; i < range.count(); i++) {       // start from the lowest number
+        if (val >= range[i]) {
+            if (val == range[i]) {      // if the given value matches an element in the arry
+                return roundDown(div((cnt), Value(range.count() - 1)), digits);     // result
+            }
+            cnt++;
+        }
+        else {      // the given value does not exist in the array
+            Number temp = conv()->asFloat(percentrank(range, range[i], digits)).asFloat() - conv()->asFloat(percentrank(range, range[i-1], digits)).asFloat();  // difference bet. percentrank's of the nearest larger and the nearest smaller values in the array to the given value
+            return roundDown(add(conv()->asFloat(percentrank(range, range[i-1], digits)).asFloat(), div(temp, sub(Value(range[i]), Value(range[i-1])))), digits);
+        }
+    }
+    return res;
+}
+
 Value ValueCalc::avg(const Value &range, bool full)
 {
     int cnt = count(range, full);

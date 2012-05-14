@@ -92,6 +92,7 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quartile(valVector args, ValueCalc *calc, FuncExtra *);
@@ -325,6 +326,12 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f = new Function("POISSON", func_poisson);
     f->setParamCount(3);
     add(f);
+    f->setNeedsExtra(true);
+    f = new Function("PERCENTRANK", func_percentrank);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
+    f->setNeedsExtra(true);
     f = new Function("RANK", func_rank);
     f->setParamCount(2, 3);
     f->setAcceptArray();
@@ -2287,6 +2294,40 @@ Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     return result;
+}
+
+//
+// Function: percentrank
+//
+// percentrank(range; val; significance)
+Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra*)
+{
+    double val = calc->conv()->asFloat(args[1]).asFloat();
+    Value res(0);
+
+    Value digits;       // no. of significant bits
+
+    if (args.count() > 2) {
+          digits = args[2];
+          if (!digits.isInteger())
+              return Value::errorPARSE();
+          if (calc->conv()->asInteger(args[2]).asInteger() < 1)
+              return Value::errorNUM();
+    }
+    else
+        digits = Value(3);
+
+    List array;         // array for storing the supplied range
+    int number = 0;
+
+    func_array_helper(args[0], calc, array, number);
+
+    // sort array
+    qSort(array);
+
+    res = calc->percentrank(array, val, digits);
+
+    return res;
 }
 
 //

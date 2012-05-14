@@ -110,6 +110,7 @@ private slots:
     void testPOISSON();
 //     void testPROB();     // ???
     void testQUARTILE();
+    void testPERCENTRANK();
     void testRANK();
     void testRSQ();
     void testSKEW();

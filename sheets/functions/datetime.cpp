@@ -61,7 +61,7 @@ Value func_minutes(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_month(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_monthname(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_months(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_networkdays(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_second(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_seconds(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_time(valVector args, ValueCalc *calc, FuncExtra *);
@@ -162,9 +162,9 @@ DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFMONTHS");
     f->setParamCount(3);
     add(f);
-    f = new Function("NETWORKDAY",  func_networkday);
-    //f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS");
-    f->setParamCount(2, 3);
+    f = new Function("NETWORKDAYS",  func_networkdays);
+    f->setAlternateName("NETWORKDAY");
+    f->setParamCount(2, 4);
     f->setAcceptArray();
     add(f);
     f = new Function("NOW",  func_currentDateTime);
@@ -1007,11 +1007,11 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
     return Value(enddate, calc->settings());
 }
 
-// Function: NETWORKDAY
+// Function: NETWORKDAYS
 //
 // - if holidays is not an array it is only added to days (neg. are not allowed)
 //
-Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
+Value func_networkdays(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     Value v1(calc->conv()->asDate(args[0]));
 
@@ -1027,12 +1027,13 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
         return Value::errorVALUE();
 
     int days = 0;                                 // workdays
-    QDate date0 = calc->settings()->referenceDate();   // referenceDate
-    valVector holidays;                           // stores holidays
+    QList<Value> day;                             // stores the weekends of the dayOfWeek
+
+    QList<QDate> holidays;                        // stores holidays
     int sign = 1;                                 // sign 1 = forward, -1 = backward
 
     if (enddate < startdate) {
-        // change sign and set count to ccw
+        // change sign
         sign = -1;
     }
 
@@ -1042,54 +1043,108 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     if (args.count() > 2) {
         if (args[2].type() == Value::Array) {
             // parameter is array
-            unsigned int row1, col1, rows, cols;
-
-            row1 = e->ranges[2].row1;
-            col1 = e->ranges[2].col1;
-            rows = e->ranges[2].row2 - row1 + 1;
-            cols = e->ranges[2].col2 - col1 + 1;
-
             Value holiargs = args[2];
 
-            for (unsigned r = 0; r < rows; ++r) {
-                for (unsigned c = 0; c < cols; ++c) {
-                    // only append if element is a valid date
-                    if (!holiargs.element(c + col1, r + row1).isEmpty()) {
-                        Value v(calc->conv()->asDate(holiargs.element(c + col1, r + row1)));
-                        if (v.isError())
-                            return Value::errorVALUE();
+            unsigned int rows = holiargs.rows();
+            unsigned int cols = holiargs.columns();
 
-                        if (v.asDate(calc->settings()).isValid())
-                            holidays.append(v);
+            if (!holiargs.isArray()) return Value::errorNUM();
+
+            for (unsigned r = 0; r < rows; r++) {
+                for (unsigned c = 0; c < cols; c++) {
+                    if (!holiargs.element(c, r).isEmpty()) {
+                        Value v(calc->conv()->asDate(holiargs.element(c, r)));
+
+                        if (v.isError()) return Value::errorVALUE();
+                        if (!v.asDate(calc->settings()).isValid()) return Value::errorVALUE();
+
+                        holidays.append(v.asDate(calc->settings()));
                     }
                 } // cols
             }   // rows
-        } else {
+        }
+        else {
             // no array parameter
-            if (args[2].isString()) {
-                Value v(calc->conv()->asDate(args[2]));
-                if (v.isError())
-                    return Value::errorVALUE();
+            Value v(calc->conv()->asDate(args[2]));
 
-                if (v.asDate(calc->settings()).isValid())
-                    holidays.append(v);
+            if (v.isError()) return Value::errorVALUE();
 
-            } else {
-                // isNumber
-                int hdays = calc->conv()->asInteger(args[2]).asInteger();
-
-                if (hdays < 0)
-                    return Value::errorVALUE();
-                days = days - hdays;
-            }
+            holidays.append(v.asDate(calc->settings()));
+            if (!holidays.first().isValid()) return Value::errorVALUE();
         }
     }
 
     //
-    // count days
+    // determine weekends
     //
+    if (args.count() == 4) {
+        //workdays provided
+        QString seq = calc->conv()->asString(args[3]).asString();   // store the sequence
+
+        if (seq.count() != 15) return Value::errorNUM();
+
+        for (int i = 1; i < seq.count(); i += 2) {
+            if ((seq[i] == '1') && (day.count() < 2)) {             //no. of weekends should be < 2
+                switch (i) {
+                    case 1:
+                        day.append(Value(7));                       // sunday
+                        break;
+                    case 3:
+                        day.append(Value(1));                       // monday
+                        break;
+                    case 5:
+                        day.append(Value(2));                       // tuesday
+                        break;
+                    case 7:
+                        day.append(Value(3));                       // wednesday
+                        break;
+                    case 9:
+                        day.append(Value(4));                       // thursday
+                        break;
+                    case 11:
+                        day.append(Value(5));                       // friday
+                        break;
+                    case 13:
+                        day.append(Value(6));                       // saturday
+                        break;
+                    default:
+                        day.append(Value(6));                       // default weekend - sat, sun
+                        day.append(Value(7));
+                }
+            }
+        }
+    }
+    else {                          // default workdays
+        day.append(Value(6));       // default weekends - sat, sun
+        day.append(Value(7));
+    }
+
+    //
+    // subtract holidays
+    //
+    if (args.count() > 2) {
+        if (args[2].type() == Value::Array) {
+            for (int i = 0; i < holidays.count(); i++) {
+                if ((holidays.value(i).dayOfWeek() != calc->conv()->asInteger(day.value(0)).asInteger()) && (holidays.value(i).dayOfWeek() != calc->conv()->asInteger(day.value(1)).asInteger())) {        //subtract only if holidays dont fall on a weekend
+                    if (holidays.value(i).daysTo(startdate) <= 0 && holidays.value(i).daysTo(enddate) >= 0) {     // subtract only if holidays lie between startdate and enddate
+                        days--;         // if valid holiday, reduce the count
+                    }
+                }
+            }
+        }
+        else {
+            if ((holidays.first().dayOfWeek() != calc->conv()->asInteger(day.value(0)).asInteger()) && (holidays.first().dayOfWeek() != calc->conv()->asInteger(day.value(1)).asInteger())) {             //subtract only if holidays dont fall on a weekend
+                if (holidays.first().daysTo(startdate) <= 0 && holidays.first().daysTo(enddate) >= 0) {          // subtract only if holidays lie between startdate and enddate
+                    days--;             // if valid holiday, reduce the count
+                }
+            }
+        }
+    }
+
+    enddate = enddate.addDays(1 * sign);          // enddate to be considered, so run till the next day after the enddate - sa as to consider the case if enddate is a holiday
+
     while (startdate != enddate) {
-        if (startdate.dayOfWeek() > 5 || holidays.contains(Value(date0.daysTo(startdate)))) {
+        if ((startdate.dayOfWeek() == calc->conv()->asInteger(day.value(0)).asInteger()) || (startdate.dayOfWeek() == calc->conv()->asInteger(day.value(1)).asInteger())) {
             startdate = startdate.addDays(1 * sign);
             continue;
         }

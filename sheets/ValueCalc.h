@@ -287,6 +287,7 @@ public:
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
     Value countIfs(const Cell &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
+    Value percentrank(const QList<double> &range, const double &val, const Value &digits);
     Value avg(const Value &range, bool full = true);
     Value max(const Value &range, bool full = true);
     Value min(const Value &range, bool full = true);

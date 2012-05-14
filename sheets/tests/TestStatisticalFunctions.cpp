@@ -1017,6 +1017,14 @@ void TestStatisticalFunctions::testPOISSON()
     CHECK_EVAL_SHORT("POISSON(0;2;FALSE())", Value(0.135335));    // TODO - be more precise /
 }
 
+void TestStatisticalFunctions::testPERCENTRANK()
+{
+    CHECK_EVAL("PERCENTRANK(A19:A31;16;5)",  Value(0.33333));     // significant digits = 5
+    CHECK_EVAL("PERCENTRANK(A19:A31;4096)",  Value(1));
+    CHECK_EVAL("PERCENTRANK(A19:A31;128;9)", Value(0.583333333));
+    CHECK_EVAL("PERCENTRANK(A19:A31;4;0)",   Value::errorNUM());  // for significant digits < 1, error #NUM!
+}
+
 void TestStatisticalFunctions::testRANK()
 {
     //  Cell | Value

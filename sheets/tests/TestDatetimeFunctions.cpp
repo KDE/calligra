@@ -238,25 +238,13 @@ void TestDatetimeFunctions::testWORKDAY()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value(true));
 }
 
-void TestDatetimeFunctions::testNETWORKDAY()
+void TestDatetimeFunctions::testNETWORKDAYS()
 {
-    // 2001 JAN 01 02 03 04 05 06 07 08 09
-    //          MO TU WE TH FR SA SU MO TU
-    //             01 02 03 04 05 05 05 06 ... networkdays
-    CHECK_EVAL("NETWORKDAY(DATE(2001;01;01);DATE(2001;01;08))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2001;01;01);DATE(2001;01;07))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2001;01;01);DATE(2001;01;06))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2001;01;01);DATE(2001;01;05))", Value(4));
-
-    // 2008 FEB 25 26 27 28 29 01 02 03 04
-    //          MO TU WE TH FR SA SU MO TU
-    //             01 02 03 04 05 05 05 06 ... networkdays
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;02;28))", Value(3));
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;02;29))", Value(4));
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;03;01))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;03;02))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;03;03))", Value(5));
-    CHECK_EVAL("NETWORKDAY(DATE(2008;02;25);DATE(2008;03;04))", Value(6));
+    CHECK_EVAL("NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;12))",                                    Value(10));    // default weekends taken - SAT & SUN
+    CHECK_EVAL("NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;12);DATE(2007;1;1))",                     Value(9));     // with one holiday falling on a workday
+    CHECK_EVAL("NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;14);DATE(2007;1;6))",                     Value(10));    // with one holiday falling on a weekend - not considered
+    CHECK_EVAL("NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;14);;\"{0;0;0;0;0;1;1}\")",               Value(10));    // no holidays, but weekends - FRI & SAT
+    CHECK_EVAL("NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;14);DATE(2007;1;6);\"{0;0;0;0;0;1;1}\")", Value(10));    // one holiday with weekends - FRI & SAT, with holiday falling on weekend
 }
 
 void TestDatetimeFunctions::testUNIX2DATE()

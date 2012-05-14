@@ -42,7 +42,7 @@ private slots:
     void testWEEKNUM();
     void testWEEKSINYEAR();
     void testWORKDAY();
-    void testNETWORKDAY();
+    void testNETWORKDAYS();
     void testUNIX2DATE();
     void testDATE2UNIX();
     void testDATE();
@@ -71,6 +71,7 @@ private slots:
 
 private:
     Value evaluate(const QString&, Value& ex);
+
 };
 
 } // namespace Sheets

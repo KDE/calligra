@@ -814,7 +814,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "SMALL",           2, false },    // 326
     { "QUARTILE",        2, false },    // 327
     { "PERCENTILE",      2, false },    // 328
-    { "PERCENTRANK",     0, true },     // 329
+    { "PERCENTRANK",     3, true },     // 329
     { "MODALVALUE",      0, true },     // 330
     { "TRIMMEAN",        2, false },    // 331
     { "TINV",            2, false },    // 332
