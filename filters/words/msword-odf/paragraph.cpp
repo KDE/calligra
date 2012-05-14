@@ -984,7 +984,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fImprint = text engraved if 1
     if (!refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint) {
         if (chp->fShadow)
-            style->addProperty("style:text-shadow", "1pt", tt);
+            style->addProperty("fo:text-shadow", "1pt", tt);
         if (chp->fImprint)
             style->addProperty("style:font-relief", "engraved", tt);
     }
