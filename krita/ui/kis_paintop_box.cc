@@ -300,6 +300,9 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         setCurrentPaintop(preset->paintOp(), preset->clone());
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
+        if (!preset->image().isNull()) {
+            m_presetWidget->setIcon(QIcon(QPixmap::fromImage(preset->image().scaled(m_presetWidget->iconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+        }
     }
 }
 
@@ -464,7 +467,7 @@ void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 
 void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 {
-    if(KisPaintOpRegistry::instance()->get(paintOpId) != 0) {
+    if (KisPaintOpRegistry::instance()->get(paintOpId) != 0) {
         KoID id(paintOpId, KisPaintOpRegistry::instance()->get(paintOpId)->name());
         setCurrentPaintop(id);
     }
