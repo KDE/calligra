@@ -28,7 +28,7 @@
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-
+#include "kis_pixel_selection.h"
 
 struct KisFloatingStrokeLayer::Private {
     // To simulate the indirect painting
@@ -40,6 +40,12 @@ struct KisFloatingStrokeLayer::Private {
 
     QMutex dirtyRegionMutex;
     QRegion dirtyRegion;
+
+    KisPixelSelectionSP mask;
+    int xOffset;
+    int yOffset;
+    QRect maskBounds;
+
 };
 
 
@@ -73,6 +79,14 @@ void KisFloatingStrokeLayer::setTemporaryOpacity(quint8 o)
 void KisFloatingStrokeLayer::setTemporaryChannelFlags(const QBitArray& channelFlags)
 {
     d->channelFlags = channelFlags;
+}
+
+void KisFloatingStrokeLayer::setMask(KisPixelSelectionSP mask, int xOffset, int yOffset, QRect &maskBounds)
+{
+    d->mask = mask;
+    d->xOffset = xOffset;
+    d->yOffset = yOffset;
+    d->maskBounds = maskBounds;
 }
 
 void KisFloatingStrokeLayer::lockTemporaryTarget() const

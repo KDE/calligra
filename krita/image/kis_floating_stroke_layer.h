@@ -76,6 +76,21 @@ public:
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
 
+    /**
+     * @brief setMask
+     * Sets a mask on the indirect painting layer. This mask is autoextended
+     * over the size of the stroke. The mask will "texture" the stroke before
+     * combining it.
+     *
+     * @param mask the selection that describes the mask.
+     * @param xOffset the x offset from the origin of the node
+     * @param yOffset the y offset from the origin of the node
+     * @param maskBounds the exact bounds of the mask. May be different from the actual
+     *    exactBounds of the selection mask since we might want to repeat a mask with
+     *    empty borders.
+     */
+    void setMask(KisPixelSelectionSP mask, int xOffset, int yOffset, QRect &maskBounds);
+
     void setDirty(const QRect &rect);
 
     /**
