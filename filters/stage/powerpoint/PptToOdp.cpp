@@ -1255,7 +1255,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:country-complex
     // style:font-charset
     if (isSymbolFont) {
-        style.addProperty("fo:font-charset", "x-symbol", text);
+        style.addProperty("style:font-charset", "x-symbol", text);
     }
     // style:font-family-asian
     // style:font-family-complex
