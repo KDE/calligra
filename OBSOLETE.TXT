@@ -64,7 +64,6 @@ Filters:
        html - obsoleted by html-odf
        latex
        amipro
-       applixword
        docbook
        kword1.3
        oowriter
