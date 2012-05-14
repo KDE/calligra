@@ -33,6 +33,12 @@ class KisPostExecutionUndoAdapter;
 class KisRecordedPaintAction;
 
 
+/**
+ * KisResourcesSnapshot stores the information about all the resources
+ * at some moment of time. This data is then given to the stroke jobs.
+ * We can't use KoResourceManager from the stroke job directly, because
+ * its contents may change for delayed jobs
+ */
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
