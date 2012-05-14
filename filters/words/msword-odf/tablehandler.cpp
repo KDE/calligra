@@ -289,7 +289,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     }
 
     if (tap->fCantSplit) {
-        rowStyle.addProperty("style:keep-together", "always");
+        rowStyle.addProperty("fo:keep-together", "always");
     }
 
     QString rowStyleName = m_mainStyles->insert(rowStyle, QLatin1String("row"));

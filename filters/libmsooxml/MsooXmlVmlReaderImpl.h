@@ -358,7 +358,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     else {
-        body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType);
+        body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType.isEmpty() ? "char": m_currentVMLProperties.anchorType);
     }
     if (!asChar) {
         if (hor_pos.isEmpty() || hor_pos == "absolute") {
@@ -571,7 +571,8 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
 
     QString newColor;
     if (color.startsWith("#")) {
-        newColor = color;
+        QColor c(color); // use QColor parser to validate and/or correct color
+        newColor = c.name();
     }
     else if (color == "red") {
         newColor = "#ff0000";
@@ -2745,12 +2746,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else if (type == "through" || type == "square" || type == "tight") {
         if (type == "square" || type == "tight") {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "outside");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "false");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "outside");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "false");
         }
         else {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "full");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "true");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "full");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "true");
         }
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");

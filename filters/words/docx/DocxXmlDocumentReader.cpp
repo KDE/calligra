@@ -3830,7 +3830,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     if (ok) {
         if (lineRule == "atLeast") {
             lineSpace = TWIP_TO_POINT(lineSpace);
-            m_currentParagraphStyle.addPropertyPt("fo:line-height-at-least", lineSpace);
+            m_currentParagraphStyle.addPropertyPt("style:line-height-at-least", lineSpace);
         } else if (lineRule == "exact") {
             lineSpace = TWIP_TO_POINT(lineSpace);
             m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
@@ -4720,7 +4720,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
             text = QChar();
         }
     }
-    body->addAttribute("style:leader-text", text);
+    if (!text.isNull()) {
+        body->addAttribute("style:leader-text", text);
+    }
     body->endElement(); // style:tab-stop
 
     readNext();
@@ -6304,6 +6306,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
         body->startElement("draw:object-ole");
         addManifestEntryForFile(destinationName);
         body->addAttribute("xlink:href", destinationName);
+        body->addAttribute("xlink:type", "simple");
         body->endElement(); // draw:object-ole
     }
 
