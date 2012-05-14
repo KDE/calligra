@@ -1648,6 +1648,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
+        out.addAttribute("xlink:type", "simple");
     }
     else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
@@ -2558,8 +2559,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                 mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else if (mouseover) {
         out.xml.startElement("text:a", false);
@@ -2567,8 +2570,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                 mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else {
         // count - specifies the number of characters of the
