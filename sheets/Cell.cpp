@@ -1224,6 +1224,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             xmlwriter.addAttribute("table:number-rows-spanned", QString::number(rowSpan));
     }
 
+    saveOdfAnnotation(xmlwriter);
+
     if (!isEmpty() && link().isEmpty()) {
         QSharedPointer<QTextDocument> doc = richText();
         if (doc) {
@@ -1268,8 +1270,6 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             tableContext.shapeContext.removeShapeOffset(shape);
         }
     }
-
-    saveOdfAnnotation(xmlwriter);
 
     xmlwriter.endElement();
     return true;
