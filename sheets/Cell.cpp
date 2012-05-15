@@ -1160,6 +1160,12 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                     // if the origin cell was a default cell,
                     // we count the default cells
                     repeated = nextCell.column() - j + 1;
+
+                    // check if any of the empty/default cells we skipped contained anchored shapes
+                    int shapeColumn = tableContext.nextAnchoredShape(sheet(), row, column);
+                    if (shapeColumn) {
+                        repeated = qMin(repeated, shapeColumn - column);
+                    }
                 }
                 // otherwise we just stop here to process the adjacent
                 // cell in the next iteration of the outer loop
@@ -1168,7 +1174,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             }
 
             if (nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
-                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, column) ||
+                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, nextCell.column()) ||
                     !(nextCell.style() == cellStyle && nextCell.conditions() == conditions())) {
                 break;
             }
