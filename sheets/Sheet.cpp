@@ -2916,7 +2916,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull()) {
+    do {
 //         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
@@ -2938,7 +2938,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         }
 
         nextCell = d->cellStorage->nextInRow(i, row);
-    }
+    } while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull());
 
     // Fill the row with empty cells, if there's a row default cell style.
     if (tableContext.rowDefaultStyles.contains(row)) {
