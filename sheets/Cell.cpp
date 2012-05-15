@@ -1198,19 +1198,6 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //kDebug(36003) <<"Formula found";
         QString formula = Odf::encodeFormula(userInput(), locale());
         xmlwriter.addAttribute("table:formula", formula);
-    } else if (!link().isEmpty()) {
-        //kDebug(36003)<<"Link found";
-        xmlwriter.startElement("text:p");
-        xmlwriter.startElement("text:a");
-        const QString url = link();
-        //Reference cell is started by '#'
-        if (Util::localReferenceAnchor(url))
-            xmlwriter.addAttribute("xlink:href", ('#' + url));
-        else
-            xmlwriter.addAttribute("xlink:href", url);
-        xmlwriter.addTextNode(userInput());
-        xmlwriter.endElement();
-        xmlwriter.endElement();
     }
 
     if (doesMergeCells()) {
@@ -1225,6 +1212,21 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
 
     saveOdfAnnotation(xmlwriter);
+
+    if (!isFormula() && !link().isEmpty()) {
+        //kDebug(36003)<<"Link found";
+        xmlwriter.startElement("text:p");
+        xmlwriter.startElement("text:a");
+        const QString url = link();
+        //Reference cell is started by '#'
+        if (Util::localReferenceAnchor(url))
+            xmlwriter.addAttribute("xlink:href", ('#' + url));
+        else
+            xmlwriter.addAttribute("xlink:href", url);
+        xmlwriter.addTextNode(userInput());
+        xmlwriter.endElement();
+        xmlwriter.endElement();
+    }
 
     if (!isEmpty() && link().isEmpty()) {
         QSharedPointer<QTextDocument> doc = richText();
