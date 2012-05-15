@@ -110,7 +110,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
 
     setButtons( KDialog::Ok|KDialog::Cancel );
     setDefaultButton( KDialog::Ok );
-    setCaption( i18n( "Create Template" ) );
+    setCaption( i18n( "Manage Templates" ) );
     setModal( true );
     setObjectName( "template create dia" );
 
