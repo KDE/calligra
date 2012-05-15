@@ -59,12 +59,9 @@ private:
 class PAINTOP_EXPORT KisTextureProperties
 {
 public:
-    KisTextureProperties()
-        : pattern(0)
-    {}
+    KisTextureProperties();
 
     bool enabled;
-    qreal scale;
     int offsetX;
     int offsetY;
     bool invert;
@@ -75,17 +72,22 @@ public:
     bool useAlpha; // true: use alpha, false: use grayscale channel of the pattern
     bool textureEachDab;
     QString compositeOpID;
+
     /**
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
      * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
      */
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset);
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, double strength = 1.0, double scale = 1.0);
     void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:
     QRect m_maskBounds; // this can be different from the extent if we mask out too many pixels in a big mask!
     KisPaintDeviceSP m_mask;
+
+    double m_strength;
+    double m_scale;
+
     void recalculateMask();
 };
 

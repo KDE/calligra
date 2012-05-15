@@ -179,7 +179,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     m_sharpnessOption.applyTreshold(dab);
 
     // after everything, apply the texturing
-    m_textureProperties.apply(dab, info.pos().toPoint());
+    m_textureProperties.apply(dab, info.pos().toPoint(), m_textureStrengthOption.apply(info), m_textureScaleOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);

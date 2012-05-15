@@ -24,7 +24,7 @@
 #include <KoColorSpace.h>
 
 KisPressureTextureScaleOption::KisPressureTextureScaleOption()
-        : KisCurveOption(i18n("Scale"), "TextureScale", KisPaintOpOption::textureCategory(), true )
+        : KisCurveOption(i18n("Scale"), "TextureScale", KisPaintOpOption::textureCategory(), true, 1.0, 0.3, 3.0 )
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
@@ -33,6 +33,8 @@ KisPressureTextureScaleOption::KisPressureTextureScaleOption()
 
 double KisPressureTextureScaleOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) {
+        return 1.0;
+    }
     return computeValue(info);
 }

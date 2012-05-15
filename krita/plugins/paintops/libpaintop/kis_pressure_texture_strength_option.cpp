@@ -24,7 +24,7 @@
 #include <KoColorSpace.h>
 
 KisPressureTextureStrengthOption::KisPressureTextureStrengthOption()
-        : KisCurveOption(i18n("Strength"), "TextureStrength", KisPaintOpOption::textureCategory(), true )
+        : KisCurveOption(i18n("Strength"), "TextureStrength", KisPaintOpOption::textureCategory(), true, 1.0, 0.1, 2.0 )
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));

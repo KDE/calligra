@@ -63,15 +63,6 @@ public:
         chooser->setCurrentItem(0, 0);
         formLayout->addRow(chooser);
 
-        scaleSlider = new KisMultipliersDoubleSliderSpinBox(this);
-        scaleSlider->setRange(0.0, 2.0, 2);
-        scaleSlider->setValue(1.0);
-        scaleSlider->addMultiplier(0.1);
-        scaleSlider->addMultiplier(2);
-        scaleSlider->addMultiplier(10);
-
-        formLayout->addRow(i18n("Scale:"), scaleSlider);
-
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         formLayout->addRow(i18n("Horizontal Offset:"), offsetSliderX);
@@ -104,7 +95,7 @@ public:
         formLayout->addRow(i18n("Mask with Transparency Instead of Gray:"), chkAlpha);
 
         chkTextureEachDab = new QCheckBox("", this);
-        chkTextureEachDab->setChecked(true);
+        chkTextureEachDab->setCheckState(Qt::Checked);
         formLayout->addRow(i18n("Texture Each Dab:"), chkTextureEachDab);
         chkTextureEachDab->setToolTip("If unchecked, sensor options for scale and strength have no function and blending mode is disabled.");
 
@@ -114,7 +105,6 @@ public:
         setLayout(formLayout);
     }
     KisPatternChooser *chooser;
-    KisMultipliersDoubleSliderSpinBox *scaleSlider;
     KisSliderSpinBox *offsetSliderX;
     KisSliderSpinBox *offsetSliderY;
     KisGradientSlider *cutoffSlider;
@@ -140,7 +130,6 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->chkTextureEachDab, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->chkTextureEachDab, SIGNAL(toggled(bool)), this, SLOT(textureEachDabToggled(bool)));
     connect(m_optionWidget->cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
@@ -161,13 +150,11 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     KisPattern *pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
     if (!pattern) return;
 
-    qreal scale = m_optionWidget->scaleSlider->value();
     int offsetX = m_optionWidget->offsetSliderX->value();
     int offsetY = m_optionWidget->offsetSliderY->value();
 
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
 
-    setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/CutoffLeft", m_optionWidget->cutoffSlider->black());
@@ -232,15 +219,14 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     }
     m_optionWidget->chooser->setCurrentPattern(pattern);
 
-    m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
-    m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
-    m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
-    m_optionWidget->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
+    m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX", 0));
+    m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY", 0));
+    m_optionWidget->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy", 1));
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_optionWidget->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
-    m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
-    m_optionWidget->chkAlpha->setChecked(setting->getBool("Texture/Pattern/UseAlphaChannel"));
-    m_optionWidget->chkTextureEachDab->setChecked(setting->getBool("Texture/Pattern/TextureEachDab"));
+    m_optionWidget->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert", false));
+    m_optionWidget->chkAlpha->setChecked(setting->getBool("Texture/Pattern/UseAlphaChannel", false));
+    m_optionWidget->chkTextureEachDab->setChecked(setting->getBool("Texture/Pattern/TextureEachDab", true));
 
     QString compositeOpID = setting->getString("Texture/Pattern/CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
     int index = m_optionWidget->cmbCompositeOp->indexOf(KoID(compositeOpID));
@@ -261,61 +247,14 @@ void KisTextureOption::textureEachDabToggled(bool toggle)
     m_optionWidget->cmbCompositeOp->setEnabled(toggle);
 }
 
-void KisTextureProperties::recalculateMask()
+KisTextureProperties::KisTextureProperties()
+    : pattern(0)
+    , m_strength(1.0)
+    , m_scale(1.0)
 {
-    if (!pattern) return;
-
-    m_mask = 0;
-
-    QImage mask = pattern->image();
-
-    if (!qFuzzyCompare(scale, 0.0)) {
-        QTransform tf;
-        tf.scale(scale, scale);
-        QRect rc = tf.mapRect(mask.rect());
-        mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-
-    QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
-    int width = mask.width();
-    int height = mask.height();
-
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     m_mask = new KisPaintDevice(cs);
-
-    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
-
-    for (int row = 0; row < height; ++row ) {
-        for (int col = 0; col < width; ++col ) {
-            const QRgb currentPixel = pixel[row * width + col];
-
-            const int red = qRed(currentPixel);
-            const int green = qGreen(currentPixel);
-            const int blue = qBlue(currentPixel);
-            float alpha = qAlpha(currentPixel) / 255.0;
-
-            const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
-            //float maskValue = (grayValue / 255.0) * strength * alpha + (1 - alpha);
-            float maskValue = (grayValue / 255.0) * alpha + (1 - alpha);
-
-            if (invert) {
-                maskValue = 1 - maskValue;
-            }
-
-            if (cutoffPolicy == 1 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
-                // mask out the dab if it's outside the pattern's cuttoff points
-                maskValue = OPACITY_TRANSPARENT_U8;
-            }
-
-            cs->setOpacity(iter->rawData(), maskValue, 1);
-            iter->nextPixel();
-        }
-        iter->nextRow();
-    }
-
-    m_maskBounds = QRect(0, 0, width, height);
 }
-
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
@@ -344,7 +283,6 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     }
 
     enabled = setting->getBool("Texture/Pattern/Enabled", false);
-    scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
     offsetX = setting->getInt("Texture/Pattern/OffsetX");
     offsetY = setting->getInt("Texture/Pattern/OffsetY");
     invert = setting->getBool("Texture/Pattern/Invert");
@@ -358,9 +296,71 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     recalculateMask();
 }
 
-void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
+void KisTextureProperties::recalculateMask()
+{
+    if (!pattern) return;
+    QImage mask = pattern->image();
+
+    if (!qFuzzyCompare(m_scale, 1.0)) {
+        QTransform tf;
+        tf.scale(m_scale, m_scale);
+        QRect rc = tf.mapRect(mask.rect());
+        mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
+    int width = mask.width();
+    int height = mask.height();
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    m_mask->clear();
+
+    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
+
+    for (int row = 0; row < height; ++row ) {
+        for (int col = 0; col < width; ++col ) {
+            const QRgb currentPixel = pixel[row * width + col];
+
+            float alpha = qAlpha(currentPixel) / 255.0;
+
+            float maskValue;
+            if (!useAlpha) {
+                const int red = qRed(currentPixel);
+                const int green = qGreen(currentPixel);
+                const int blue = qBlue(currentPixel);
+                const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
+                maskValue = (grayValue / 255.0) * m_strength * alpha + (1 - alpha);
+            }
+            else {
+                maskValue = alpha;
+            }
+
+            if (invert) {
+                maskValue = 1 - maskValue;
+            }
+
+            if (cutoffPolicy == 1 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
+                // mask out the dab if it's outside the pattern's cuttoff points
+                maskValue = OPACITY_TRANSPARENT_U8;
+            }
+
+            cs->setOpacity(iter->rawData(), maskValue, 1);
+            iter->nextPixel();
+        }
+        iter->nextRow();
+    }
+
+    m_maskBounds = QRect(0, 0, width, height);
+}
+
+void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, double strength, double scale)
 {
     if (!enabled) return;
+    if (fabs(m_strength - strength) > 0.2 || fabs(m_scale - scale) > 0.2) {
+        m_strength = strength;
+        m_scale = scale;
+        recalculateMask();
+    }
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();

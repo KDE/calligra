@@ -80,7 +80,7 @@ public:
                 return m_minValue + (m_value - m_minValue) * m_sensor->parameter(info);
         }
         
-        if(m_separateCurveValue)
+        if (m_separateCurveValue)
             return 1.0;
         
         return m_value;
