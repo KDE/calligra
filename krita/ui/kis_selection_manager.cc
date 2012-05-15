@@ -353,6 +353,7 @@ void KisSelectionManager::cut()
 {
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
+    if (!layer->isEditable()) return;
 
     if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->cut();
@@ -542,6 +543,9 @@ void KisSelectionManager::reselect()
 
 void KisSelectionManager::clear()
 {
+    KisNodeSP node = m_view->activeNode();
+    if (!node || !node->isEditable()) return;
+
     m_view->canvasBase()->toolProxy()->deleteSelection();
     updateGUI();
 }
@@ -550,6 +554,9 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 {
     KisPaintDeviceSP device = m_view->activeDevice();
     if (!device) return;
+
+    KisNodeSP node = m_view->activeNode();
+    if (!node || !node->isEditable()) return;
 
     KisSelectionSP selection = m_view->selection();
     QRect selectedRect = selection ?
