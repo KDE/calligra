@@ -1223,6 +1223,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             xmlwriter.addAttribute("xlink:href", ('#' + url));
         else
             xmlwriter.addAttribute("xlink:href", url);
+        xmlwriter.addAttribute("xlink:type", "simple");
         xmlwriter.addTextNode(userInput());
         xmlwriter.endElement();
         xmlwriter.endElement();
