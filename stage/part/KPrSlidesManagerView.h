@@ -90,6 +90,9 @@ public:
      */
     QPair<int, int> cursorRowAndColumn() const;
 
+protected:
+    virtual void wheelEvent(QWheelEvent *event);
+
 signals:
 
     /** Is emitted if the user has request a context menu */
@@ -114,6 +117,12 @@ signals:
 
     /** Is emitted when the view get focus */
     void focusGot();
+
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomIn();
+
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomOut();
 
 private:
 

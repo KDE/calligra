@@ -164,6 +164,21 @@ void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
     emit focusGot();
 }
 
+void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
+{
+    if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+        if (event->delta() > 0) {
+            emit zoomIn();
+        }
+        else {
+            emit zoomOut();
+        }
+    }
+    else {
+        QListView::wheelEvent(event);
+    }
+}
+
 void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     if (!this->selectionModel()->selection().isEmpty()) {
