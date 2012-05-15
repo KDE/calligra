@@ -1258,7 +1258,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             qreal offsetX = sheet()->columnPosition(column);
             qreal offsetY = sheet()->rowPosition(row);
             tableContext.shapeContext.addShapeOffset(shape, QTransform::fromTranslate(-offsetX, -offsetY));
-            shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), scol, srow).name());
+            shape->setAdditionalAttribute("table:end-cell-address", Region(QPoint(scol, srow)).saveOdf());
             shape->setAdditionalAttribute("table:end-x", QString::number(bottomRight.x() - endX) + "pt");
             shape->setAdditionalAttribute("table:end-y", QString::number(bottomRight.y() - endY) + "pt");
             shape->saveOdf(tableContext.shapeContext);
