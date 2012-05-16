@@ -134,21 +134,21 @@ private:
     QRect itemSize() const;
 
     /**
-     * Setter for the draging flag
+     * Setter for the dragging flag
      *
      * @param flag boolean
      */
-    void setDragingFlag(bool flag = true);
+    void setDraggingFlag(bool flag = true);
 
     /**
-     * Permit to know if a slide is draging
+     * Permit to know if a slide is dragging
      *
      * @return boolean
      */
-    bool isDraging() const;
+    bool isDragging() const;
 
     QRect m_itemSize;
-    bool m_dragingFlag;
+    bool m_draggingFlag;
     int margin;
 
 };

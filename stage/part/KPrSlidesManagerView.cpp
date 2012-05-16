@@ -34,7 +34,7 @@
 
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
-    , m_dragingFlag(false)
+    , m_draggingFlag(false)
     , margin(23)
 {
     setViewMode(QListView::IconMode);
@@ -58,7 +58,7 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
     QListView::paintEvent(event);
 
     // Paint the line where the slide should go
-    if (isDraging()) {
+    if (isDragging()) {
         QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
         QPair <int, int> m_pair = cursorRowAndColumn();
         int numberColumn = m_pair.first;
@@ -110,7 +110,7 @@ void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
 
 void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 {
-    setDragingFlag(false);
+    setDraggingFlag(false);
     ev->setDropAction(Qt::IgnoreAction);
     ev->accept();
 
@@ -136,7 +136,7 @@ void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
     QListView::dragMoveEvent(ev);
-    setDragingFlag();
+    setDraggingFlag();
     viewport()->update();
 }
 
@@ -149,7 +149,7 @@ void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
 void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e);
-    setDragingFlag(false);
+    setDraggingFlag(false);
 }
 
 void KPrSlidesManagerView::focusOutEvent(QFocusEvent *event)
@@ -201,14 +201,14 @@ void KPrSlidesManagerView::setItemSize(QRect size)
     setSpacing(m_itemSize.width() / 10);
 }
 
-void KPrSlidesManagerView::setDragingFlag(bool flag)
+void KPrSlidesManagerView::setDraggingFlag(bool flag)
 {
-    m_dragingFlag = flag;
+    m_draggingFlag = flag;
 }
 
-bool KPrSlidesManagerView::isDraging() const
+bool KPrSlidesManagerView::isDragging() const
 {
-    return m_dragingFlag;
+    return m_draggingFlag;
 }
 
 bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
