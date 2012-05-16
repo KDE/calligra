@@ -1768,7 +1768,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         if (m_bulletChar.length() != 1) {
             // TODO if there is no bullet char this should not be saved as list but as
             // normal paragraph. Both LO and MSO do export it just as paragraph and no list
-            // until there is a fix available that change that we use a Zero Width Space 
+            // until there is a fix available that change that we use a Zero Width Space
             // to not generate invalid xml
             out.addAttribute("text:bullet-char", QChar(0x200B));
         } else {
