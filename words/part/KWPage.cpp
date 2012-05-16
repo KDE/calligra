@@ -375,7 +375,7 @@ int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
 
     if (adjustment != 0) {
         pageNumber += adjustment;
-        if (!page.priv->pageNumbers.contains(pageNumber))
+        if (page.priv && !page.priv->pageNumbers.contains(pageNumber))
             pageNumber = -1; // doesn't exist.
     }
 

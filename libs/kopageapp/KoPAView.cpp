@@ -290,6 +290,7 @@ void KoPAView::initGUI()
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
     setTabBarPosition(Qt::Horizontal);
 
+    gridLayout->addWidget(d->horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
@@ -329,6 +330,10 @@ void KoPAView::initGUI()
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
+    }
+    if (d->doc->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 }
 

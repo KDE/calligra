@@ -2,7 +2,7 @@
 Type=Application
 Name=Calligra Stage
 Name[bg]=Calligra Stage
-Name[ca]=Etapa del Calligra
+Name[ca]=Stage del Calligra
 Name[ca@valencia]=Etapa del Calligra
 Name[cs]=Calligra Stage
 Name[da]=Calligra Stage
@@ -22,6 +22,8 @@ Name[pl]=Calligra Stage
 Name[pt]=Calligra Stage
 Name[pt_BR]=Calligra Stage
 Name[ru]=Calligra Stage
+Name[sk]=Calligra Stage
+Name[sl]=Calligra Stage
 Name[sv]=Calligra Stage
 Name[uk]=Calligra Stage
 Name[x-test]=xxCalligra Stagexx

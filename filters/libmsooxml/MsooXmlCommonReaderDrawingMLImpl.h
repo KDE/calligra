@@ -1041,9 +1041,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
-    bool isCustomShape = false;
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    bool isCustomShape = false;
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     inheritDefaultBodyProperties();
@@ -1069,7 +1069,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else if (m_contentType == "custom") { // custGeom
         body->startElement("draw:custom-shape");
+#ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
+#endif
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1084,7 +1086,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
+#ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
+#endif
     }
 
     if (!m_cNvPrName.isEmpty()) {
@@ -1153,7 +1157,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     if (m_context->type == Slide) {
         // CASE #P476
-        body->addAttribute("draw:id", m_cNvPrId);
+        QString id = "slide" + QString::number(m_context->slideNumber) + "item"
+                + m_cNvPrId;
+        body->addAttribute("draw:id", id);
+        body->addAttribute("xml:id", id);
         body->addAttribute("presentation:class", presentationClass);
         kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
@@ -2669,7 +2676,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_DEFAULT);
         fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif
@@ -5675,7 +5682,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     QString fontSize = m_currentTextStyle.property("fo:font-size");
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_DEFAULT);
         fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif

@@ -170,6 +170,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_slidesSorterView, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
     connect(m_slidesSorterView, SIGNAL(focusLost()), SLOT(disableEditActions()));
     connect(m_slidesSorterView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
+    connect(m_slidesSorterView, SIGNAL(zoomIn()), m_view->zoomController()->zoomAction(), SLOT(zoomIn()));
+    connect(m_slidesSorterView, SIGNAL(zoomOut()), m_view->zoomController()->zoomAction(), SLOT(zoomOut()));
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 

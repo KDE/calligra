@@ -16,7 +16,6 @@ kde4_add_plugin(htmlodf_export ${htmlodf_export_PART_SRCS})
 
 target_link_libraries(
     htmlodf_export
-    wordsexportfilters
     koodf
     komain
     ${QT_QTXMLPATTERNS_LIBRARY}

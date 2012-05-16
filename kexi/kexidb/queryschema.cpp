@@ -129,15 +129,6 @@ public:
         }
     }
     ~QuerySchemaPrivate() {
-        if (fieldsExpanded)
-            qDeleteAll(*fieldsExpanded);
-        delete fieldsExpanded;
-        if (internalFields) {
-            qDeleteAll(*internalFields);
-            delete internalFields;
-        }
-        delete fieldsExpandedWithInternalAndRowID;
-        delete fieldsExpandedWithInternal;
         delete orderByColumnList;
         delete autoincFields;
         delete columnsOrder;
@@ -148,6 +139,15 @@ public:
         delete fakeRowIDCol;
         delete fakeRowIDField;
         delete ownedVisibleColumns;
+        if (fieldsExpanded)
+            qDeleteAll(*fieldsExpanded);
+        delete fieldsExpanded;
+        if (internalFields) {
+            qDeleteAll(*internalFields);
+            delete internalFields;
+        }
+        delete fieldsExpandedWithInternalAndRowID;
+        delete fieldsExpandedWithInternal;
     }
 
     void clear() {
@@ -171,14 +171,6 @@ public:
             orderByColumnList->clear();
         }
         if (fieldsExpanded) {
-            qDeleteAll(*fieldsExpanded);
-            delete fieldsExpanded;
-            fieldsExpanded = 0;
-            if (internalFields) {
-                qDeleteAll(*internalFields);
-                delete internalFields;
-                internalFields = 0;
-            }
             delete columnsOrder;
             columnsOrder = 0;
             delete columnsOrderWithoutAsterisks;
@@ -192,6 +184,14 @@ public:
             columnInfosByName.clear();
             delete ownedVisibleColumns;
             ownedVisibleColumns = 0;
+            qDeleteAll(*fieldsExpanded);
+            delete fieldsExpanded;
+            fieldsExpanded = 0;
+            if (internalFields) {
+                qDeleteAll(*internalFields);
+                delete internalFields;
+                internalFields = 0;
+            }
         }
     }
 
@@ -414,6 +414,7 @@ OrderByColumn::OrderByColumn(Field& field, bool ascending)
 
 OrderByColumn* OrderByColumn::copy(QuerySchema* fromQuery, QuerySchema* toQuery) const
 {
+    //kDebug() << "this=" << this << debugString() << "m_column=" << m_column;
     if (m_field) {
         return new OrderByColumn(*m_field, m_ascending);
     }
@@ -436,11 +437,13 @@ OrderByColumn* OrderByColumn::copy(QuerySchema* fromQuery, QuerySchema* toQuery)
         }
         return new OrderByColumn(*columnInfo, m_ascending, m_pos);
     }
+    Q_ASSERT(m_field || m_column);
     return 0;
 }
 
 OrderByColumn::~OrderByColumn()
 {
+    //kDebug() << this << debugString();
 }
 
 QString OrderByColumn::debugString() const
@@ -459,6 +462,7 @@ QString OrderByColumn::debugString() const
 
 QString OrderByColumn::toSQLString(bool includeTableName, const Driver *drv, int identifierEscaping) const
 {
+    //kDebug() << this << debugString();
     const QString orderString(m_ascending ? "" : " DESC");
     QString fieldName, tableName, collationString;
     if (m_column) {
@@ -485,7 +489,7 @@ QString OrderByColumn::toSQLString(bool includeTableName, const Driver *drv, int
             collationString = drv->collationSQL();
         }
     }
-    return tableName + fieldName + orderString + collationString;
+    return tableName + fieldName + collationString + orderString;
 }
 
 //=======================================

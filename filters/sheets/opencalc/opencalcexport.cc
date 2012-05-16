@@ -449,12 +449,11 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         QString name(sheet->sheetName());
 
         int n = name.indexOf(' ');
-        if (n != -1) {
+        if (n > -1) {
             kDebug(30518) << "Sheet name converting:" << name;
-            name[n] == '_';
+            name.replace(' ','_');
             kDebug(30518) << "Sheet name converted:" << name;
         }
-        name = name.replace(' ', "_");
 
         QRect _printRange = sheet->printSettings()->printRegion().lastRange();
         if (_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {

@@ -156,7 +156,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     }
     viewActions << menu;
     {
-        QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
+        QAction* a = new KAction(KIcon("system-run"), i18n("Execute"), this);
         a->setObjectName("script_execute");
         a->setToolTip(i18n("Execute the scripting code"));
         a->setWhatsThis(i18n("Execute the scripting code"));
