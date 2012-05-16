@@ -6029,7 +6029,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 
 #undef CURRENT_EL
 #define CURRENT_EL vAlign
-//! vAlign Handler (Table Cell Vertical Alignement)
+//! vAlign Handler (Table Cell Vertical Alignment)
+/*! ECMA-376, 17.4.84, p. 519.
 /*
  Parent elements:
  - [done] tcPr (§17.7.6.8);
@@ -6048,7 +6049,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vAlign()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentTableStyleProperties->verticalAlign = val;
+        if (val == "both" || val == "center") {
+            m_currentTableStyleProperties->verticalAlign = "middle";
+        }
+        else if (val == "top" || val == "bottom") {
+            m_currentTableStyleProperties->verticalAlign = val;
+        } else {
+            m_currentTableStyleProperties->verticalAlign = "automatic";
+        }
         m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
     }
 
