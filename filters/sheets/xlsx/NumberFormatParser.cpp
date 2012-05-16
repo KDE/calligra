@@ -586,7 +586,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
     buffer.close();
 
     // conditional style with the current format
-    return styleFromTypeAndBuffer(hasConditions ? KoGenStyle::NumericTextStyle : type, buffer);
+    return styleFromTypeAndBuffer(type, buffer);
 }
 
 bool NumberFormatParser::isDateFormat(const QString& numberFormat)
