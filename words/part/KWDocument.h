@@ -174,8 +174,6 @@ public:
 
     // reimplemented slot from KoDocument
     virtual void initEmpty();
-    // reimplemented slot from KoDocument
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
