@@ -48,6 +48,7 @@ Comment[pl]=Program planujący projekt w oparciu o genetycznie ograniczone zasob
 Comment[pt]=Calendarização de Projectos com Conflitos de Recursos baseada em algoritmos genéticos
 Comment[pt_BR]=Calendarização de projetos com restrições de recursos baseada em algoritmos genéticos
 Comment[ru]=Планировщик Resource Constrained Project (основан на Genetics)
+Comment[sk]=Genetický projektový plánovač konfilktov prostriedkov
 Comment[sv]=Genetiskt baserad resurskonfliktschemaläggning av projekt
 Comment[uk]=Генетичний планувальник обмежень ресурсів проекту
 Comment[x-test]=xxGenetics based Resource Constrained Project Schedulerxx
