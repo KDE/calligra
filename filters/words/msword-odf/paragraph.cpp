@@ -792,6 +792,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             case jcDecimal:
                 tmpWriter.addAttribute("style:type", "char");
+                tmpWriter.addAttribute("style:char", ".");
                 break;
             case jcBar:
                 //bar -> just creates a vertical bar at that point that's always visible

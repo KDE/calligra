@@ -4686,6 +4686,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
         }
         else if (val == "decimal") {
             body->addAttribute("style:type", "char");
+            body->addAttribute("style:char", "." );
         }
         else if (val == "end" || val == "right") {
             body->addAttribute("style:type", "right");
@@ -6031,7 +6032,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 #define CURRENT_EL vAlign
 //! vAlign Handler (Table Cell Vertical Alignment)
 /*! ECMA-376, 17.4.84, p. 519.
-/*
+
  Parent elements:
  - [done] tcPr (§17.7.6.8);
  - [done] tcPr (§17.7.6.9);
