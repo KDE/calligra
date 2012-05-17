@@ -258,7 +258,7 @@ QVariant ResourceAllocationModel::required( const Resource *res, int role ) cons
             return QVariant();
         case Qt::WhatsThisRole:
             return i18nc( "@info:whatsthis", "<title>Required Resources</title>"
-            "<para>A working resource can be assigned one or more required resource."
+            "<para>A working resource can be assigned to one or more required resources."
             " A required resource is a material resource that the working resource depends on"
             " in order to do the work.</para>"
             "<para>To be able to use a material resource as a required resource, the material resource"
@@ -358,7 +358,7 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
         switch ( section ) {
             case RequestRequired:
                 return i18nc( "@info:whatsthis", "<title>Required Resources</title>"
-                "<para>A working resource can be assigned one or more required resource."
+                "<para>A working resource can be assigned to one or more required resources."
                 " A required resource is a material resource that the working resource depends on"
                 " in order to do the work.</para>"
                 "<para>To be able to use a material resource as a required resource, the material resource"
