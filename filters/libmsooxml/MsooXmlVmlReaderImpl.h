@@ -2628,31 +2628,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
         oldProperties.fitTextToShape = true;
     }
 
-    // In below code, the else clauses are needed for cases that not all insets are defined
+    // In below code, the else clauses are needed for cases that not
+    // all insets are defined
     TRY_READ_ATTR_WITHOUT_NS(inset)
     if (!inset.isEmpty()) {
         doPrependCheck(inset);
-        inset.replace(",,", ",0,");
+        inset.replace(",,", ",d,"); //Default
         int index = inset.indexOf(',');
         if (index > 0) {
-            oldProperties.internalMarginLeft = inset.left(index);
+            QString str = inset.left(index);
+            if (str != "d") {
+                if (str == "0") {
+                    str.append("in");
+                }
+                oldProperties.internalMarginLeft = str;
+            }
             inset = inset.mid(index + 1);
             doPrependCheck(inset);
             index = inset.indexOf(',');
             if (index > 0) {
-                oldProperties.internalMarginTop = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
                 inset = inset.mid(index + 1);
                 doPrependCheck(inset);
                 index = inset.indexOf(',');
                 if (index > 0) {
-                    oldProperties.internalMarginRight = inset.left(index);
-                    oldProperties.internalMarginBottom = inset.mid(index + 1);
-                    doPrependCheck(oldProperties.internalMarginBottom);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
+                    str = inset.mid(index + 1);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginBottom = str;
+                        doPrependCheck(oldProperties.internalMarginBottom);
+                    }
                 } else {
-                    oldProperties.internalMarginRight = inset.left(index);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
                 }
             } else {
-                oldProperties.internalMarginTop = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
             }
         }
     }
