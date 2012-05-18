@@ -372,8 +372,7 @@ void Document::processAssociatedStrings()
         m_metaWriter->endElement();
     }
     if (!comments.isEmpty()) {
-        //TODO: LO/MSOffice use dc:description
-        m_metaWriter->startElement("meta:comments");
+        m_metaWriter->startElement("dc:description");
         m_metaWriter->addTextNode(comments);
         m_metaWriter->endElement();
     }
