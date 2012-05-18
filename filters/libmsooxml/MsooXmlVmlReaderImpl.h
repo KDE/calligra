@@ -304,8 +304,17 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (!z_index.isEmpty()) {
-        body->addAttribute("draw:z-index", z_index);
+    //TODO: VML allows negative numbers, ODF does NOT!  Using
+    //automatic ordering in case of negative numbers temporary.
+    if (!z_index.isEmpty() && z_index != "auto") {
+        bool ok;
+        const int n = z_index.toInt(&ok);;
+        if (!ok) {
+            kDebug() << "error converting" << z_index << "to int (attribute z-index)"; \
+        }
+        else if (n >= 0) {
+            body->addAttribute("draw:z-index", n);
+        }
     }
 
     bool asChar = false;
