@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
+#include <QDrag>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QMimeData>

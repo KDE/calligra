@@ -42,7 +42,7 @@ public:
     int addStyle(const Lists::ListStyleItem &lsi);
 
 signals:
-    void bulletListItemChanged(const QString &listItem);
+    void parStyleChanged();
 
 private slots:
     void styleChanged(int);

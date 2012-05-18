@@ -24,7 +24,7 @@
  */
 
 #include "KWDocument.h"
-#include "KWFactory.h"<
+#include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWCanvasItem.h"
@@ -755,14 +755,6 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
 {
     KWOdfWriter writer(this);
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
-}
-
-QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
-{
-    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
-    if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-words"); // we can't save this, only load.
-    return answer;
 }
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)

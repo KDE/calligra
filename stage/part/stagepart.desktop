@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Calligra Stage Component
 Name[bg]=Компонент Calligra Stage
-Name[ca]=Component d'etapes del Calligra
+Name[ca]=Component Stage del Calligra
 Name[ca@valencia]=Component d'etapes del Calligra
 Name[cs]=Komponenta Calligra Stage
 Name[da]=Calligra-komponenten Stage
@@ -10,6 +10,7 @@ Name[el]=Συστατικό Calligra Stage
 Name[es]=Componente de Calligra Stage
 Name[et]=Calligra Stage'i komponent
 Name[fr]=Composant gestion de projets de Calligra
+Name[gl]=Compoñente de xestión de proxectos de Calligra
 Name[hu]=Calligra Stage komponens
 Name[it]=Componente di Calligra Stage
 Name[kk]=Calligra Stage компоненті
@@ -20,6 +21,8 @@ Name[pl]=Składnik Calligra Stage
 Name[pt]=Componente do Calligra Stage
 Name[pt_BR]=Componente do Calligra Stage
 Name[ru]=Компонент Calligra Stage
+Name[sk]=Komponent Calligra Stage
+Name[sl]=Komponenta Calligra Stage
 Name[sv]=Calligra Stage-komponent
 Name[uk]=Компонент Calligra Stage
 Name[x-test]=xxCalligra Stage Componentxx

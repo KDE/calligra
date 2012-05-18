@@ -34,6 +34,7 @@
 
 #include <QList>
 #include <QWidget>
+#include <QVariant>
 
 #include <KoCanvasBase.h>
 

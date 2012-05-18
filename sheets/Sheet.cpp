@@ -2589,6 +2589,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
 
     // flake
     // Create a dict of cell anchored shapes with the cell as key.
+    int sheetAnchoredCount = 0;
     foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
             qreal dummy;
@@ -2596,15 +2597,14 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
             tableContext.insertCellAnchoredShape(this, row, col, shape);
+        } else {
+            sheetAnchoredCount++;
         }
     }
 
-    const QRect usedArea = this->usedArea();
-    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
-
     // flake
     // Save the remaining shapes, those that are anchored in the page.
-    if (!d->shapes.isEmpty()) {
+    if (sheetAnchoredCount) {
         xmlWriter.startElement("table:shapes");
         foreach(KoShape* shape, d->shapes) {
             if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
@@ -2613,6 +2613,9 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
         }
         xmlWriter.endElement();
     }
+
+    const QRect usedArea = this->usedArea();
+    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
 
     xmlWriter.endElement();
     return true;
@@ -2916,7 +2919,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull()) {
+    do {
 //         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
@@ -2938,7 +2941,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         }
 
         nextCell = d->cellStorage->nextInRow(i, row);
-    }
+    } while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull());
 
     // Fill the row with empty cells, if there's a row default cell style.
     if (tableContext.rowDefaultStyles.contains(row)) {

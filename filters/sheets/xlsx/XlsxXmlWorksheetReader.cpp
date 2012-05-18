@@ -743,6 +743,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                         if (hasHyperlink) {
                             body->startElement("text:a");
                             body->addAttribute("xlink:href", cell->hyperlink());
+                            body->addAttribute("xlink:type", "simple");
                             //body->addAttribute("office:target-frame-name", targetFrameName);
                             if(cell->text.isEmpty()) {
                                 body->addTextNode(cell->hyperlink());

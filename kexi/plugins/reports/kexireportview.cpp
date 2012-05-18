@@ -73,19 +73,21 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("printer"), i18n("Print"), this));
+    viewActions << (a = new KAction(KIcon("document-print"), i18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 #endif
-    
+
+    // TODO: why is Words said below, but then Spreadsheet, not Sheets? And should not rather the file format be given,
+    // instead of a certaun application?
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(i18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
-    viewActions << (a = new KAction(KIcon("words"), QString(), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), QString(), this));
 #else
-    viewActions << (a = new KAction(KIcon("words"), i18nc("Note: do not translate 'Words'", "Save to Words"), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), i18nc("Note: do not translate 'Words'", "Save to Words"), this));
 #endif
     a->setObjectName("save_to_words");
     a->setToolTip(i18n("Save the report to a Words application's document"));
@@ -94,9 +96,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("tables"), " ", this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), " ", this));
 #else
-    viewActions << (a = new KAction(KIcon("tables"), i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet"), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet"), this));
 #endif
     a->setObjectName("save_to_tables");
     a->setToolTip(i18n("Save the report to a spreadsheet"));

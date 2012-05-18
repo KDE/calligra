@@ -66,7 +66,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     QVBoxLayout* btnlayout = new QVBoxLayout(this);
     layout->addLayout(btnlayout);
 
-    d->renamebtn = new QPushButton(/*KIcon("rename"),*/ i18n("Rename"), this);
+    d->renamebtn = new QPushButton(/*KIcon("edit-rename"),*/ i18n("Rename"), this);
     connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
     btnlayout->addWidget(d->renamebtn);
 

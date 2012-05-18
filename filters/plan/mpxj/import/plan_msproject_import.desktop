@@ -1,6 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Import Filter
+Name[el]=Φίλτρο εισαγωγής MS Project
+Name[et]=MS Projecti impordifilter
+Name[gl]=Filtro de importación de MS Project
+Name[nl]=Importfilter voor MS Project
+Name[pl]=Filtr importu MS Project do Plan
+Name[pt]=Filtro de Importação do MS Project
+Name[pt_BR]=Filtro de importação de MS Project
+Name[sv]=MS Project-importfilter
+Name[uk]=Фільтр імпорту MS Project
 Name[x-test]=xxMS Project Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/vnd.ms-project

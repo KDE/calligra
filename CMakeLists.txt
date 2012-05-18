@@ -157,6 +157,10 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+if (APPLE)
+    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    include_directories(${PNG_INCLUDE_DIR})
+endif(APPLE)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
@@ -216,7 +220,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -279,18 +283,8 @@ endif( MARBLE_FOUND )
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS)
-set(REQUIRED_LCMS_VERSION 118)
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-    set(HAVE_LCMS FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Optional replacement for LittleCMS 1.18. Can be used for color management and Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
@@ -308,9 +302,6 @@ if(NEPOMUK)
     add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
-
-
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
 #Set the build of TextShape changetraker
 
@@ -485,7 +476,7 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2, boost
+### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)

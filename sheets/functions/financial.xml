@@ -36,7 +36,7 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The ACCRINT function returns accrued interest for a security which pays periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+           <Text>The ACCRINT function returns accrued interest for a security which pays periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</Text>
            <Syntax>ACCRINT(issue; first interest; settlement; rate; par; frequency; basis)</Syntax>
            <Example>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1; 1000; 2; 0) returns 16,944</Example>
            <Related>ACCRINTM</Related>
@@ -67,7 +67,7 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The ACCRINTM function returns accrued interest for a security which pays interests at maturity date. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+           <Text>The ACCRINTM function returns accrued interest for a security which pays interests at maturity date. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</Text>
            <Syntax>ACCRINTM(issue; settlement; rate; par; basis)</Syntax>
            <Example>ACCRINTM("2/28/2001"; "8/31/2001"; 0.1; 100) returns 5.0278</Example>
            <Related>ACCRINT</Related>
@@ -194,7 +194,7 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The COUPNUM function returns the number of coupons to be paid between the settlement and the maturity. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+           <Text>The COUPNUM function returns the number of coupons to be paid between the settlement and the maturity. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</Text>
            <Syntax>COUPNUM(settlement; maturity; frequency; basis)</Syntax>
            <Example>COUPNUM("2/28/2001"; "8/31/2001"; 2; 0) returns 1</Example>
            <Related>COUPDAYBS</Related>
@@ -234,7 +234,7 @@
        </Parameter>
        <Help>
            <Text>Calculates the cumulative interest payment.</Text>
-           <Syntax>CUMIPMT(rate, periods, value, start, end, type)</Syntax>
+           <Syntax>CUMIPMT(rate; periods; value; start; end; type)</Syntax>
            <Example>CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -3562,187023</Example>
            <Related>IPMT</Related>
            <Related>CUMPRINC</Related>
@@ -271,7 +271,7 @@
        </Parameter>
        <Help>
            <Text>Calculates the cumulative principal payment.</Text>
-           <Syntax>CUMPRINC(rate, periods, value, start, end, type)</Syntax>
+           <Syntax>CUMPRINC(rate; periods; value; start; end; type)</Syntax>
            <Example>CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201</Example>
            <Related>PPMT</Related>
            <Related>CUMIPMT</Related>
@@ -366,7 +366,7 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The DISC function returns the discount rate for a security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+           <Text>The DISC function returns the discount rate for a security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</Text>
            <Syntax>DISC(settlement; maturity; par; redemption [; basis ] )</Syntax>
            <Example>DISC("2/28/2001"; "8/31/2001"; 12; 14) returns 0.2841</Example>
            <Related>YEARFRAC</Related>
@@ -621,7 +621,7 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The INTRATE function returns the interest rate for a fully invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+           <Text>The INTRATE function returns the interest rate for a fully invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</Text>
            <Syntax>INTRATE(settlement; maturity; investment; redemption; basis)</Syntax>
            <Example>INTRATE("2/28/2001"; "8/31/2001"; 1000000; 2000000; 1) returns 1.98</Example>
        </Help>
@@ -1201,7 +1201,7 @@
                    <Type>Int</Type>
                </Parameter>
                <Help>
-                   <Text>The RECEIVED function returns the amount received at the maturity date for a invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365. The settlement date must be before maturity date.</Text>
+                   <Text>The RECEIVED function returns the amount received at the maturity date for a invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360. The settlement date must be before maturity date.</Text>
                    <Syntax>RECEIVED(settlement; maturity; investment; discount; basis)</Syntax>
                    <Example>RECEIVED("2/28/2001"; "8/31/2001"; 1000; 0.05; 0) returns 1,025.787</Example>
                </Help>

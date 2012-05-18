@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1875,11 +1875,6 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveLayoutProperty(property, value);
         return;
     }
-    else if (property == "enabled")  {
-        // we cannot really disable the widget, we just change its color palette
-        saveEnabledProperty(value.toBool());
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
     if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
@@ -2257,8 +2252,6 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
-//! @todo fix enabled property here
-//crashes:    d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
@@ -3280,38 +3273,6 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }
-    }
-}
-
-//! @todo make it support undo
-void Form::saveEnabledProperty(bool value)
-{
-    foreach(QWidget* widget, d->selected) {
-        ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
-        if (tree->isEnabled() == value)
-            continue;
-
-        QPalette p(widget->palette());
-        p.setCurrentColorGroup(value ? QPalette::Normal : QPalette::Disabled);
-#if 0
-        QPalette p(widget->palette());
-        if (!d->origActiveColors) {
-            d->origActiveColors = new QColorGroup(p.active());
-        }
-        if (value) {
-            p.setActive(*d->origActiveColors);   //revert
-        }
-        else {
-            QColorGroup cg = p.disabled();
-            //also make base color a bit disabled-like
-            cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
-            p.setActive(cg);
-        }
-#endif
-        widget->setPalette(p);
-
-        tree->setEnabled(value);
-        handleWidgetPropertyChanged(widget, "enabled", QVariant(value));
     }
 }
 

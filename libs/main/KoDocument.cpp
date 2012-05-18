@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -812,7 +813,7 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
     if (d->docRdf && d->docRdf->model()) {
@@ -1071,6 +1072,38 @@ bool KoDocument::saveToStream(QIODevice *dev)
     return nwritten == (int)s.size();
 }
 
+QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
+{
+    if (!url.isLocalFile()) return mimeType;
+
+    QStringList imageMimeTypes;
+    imageMimeTypes << "image/jpeg"
+                   << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
+                   << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
+                   << "application/pdf"
+                   << "image/x-exr"
+                   << "image/x-xcf"
+                   << "image/x-eps"
+                   << "image/x-nikon-nef" << "image/x-canon-cr2" << "image/x-sony-sr2" << "image/x-canon-crw" << "image/x-pentax-pef" << "image/x-sigma-x3f" << "image/x-kodak-kdc" << "image/x-minolta-mrw" << "image/x-sony-arw" << "image/x-kodak-k25" << "image/x-kodak-dcr" << "image/x-olympus-orf" << "image/x-panasonic-raw" << "image/x-panasonic-raw2" << "image/x-fuji-raf" << "image/x-sony-srf" << "image/x-adobe-dng"
+                   << "image/png"
+                   << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
+                   << "image/tiff"
+                   << "image/openraster"
+                   << "image/jp2";
+
+    if (!imageMimeTypes.contains(mimeType)) return mimeType;
+
+    int accuracy = 0;
+
+    QFile f(url.toLocalFile());
+    f.open(QIODevice::ReadOnly);
+    QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
+    KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
+    f.close();
+
+    return mime->name();
+}
+
 // Called for embedded documents
 bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 {
@@ -1175,54 +1208,27 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
 QString KoDocument::autoSaveFile(const QString & path) const
 {
+    QString retval;
+
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
+    if (extension.isEmpty()) extension = mime->mainExtension();
+
     if (path.isEmpty()) {
-        // Never saved? Use a temp file in $HOME then
-        // Yes, two open unnamed docs will overwrite each other's autosave file,
-        // but hmm, we can only do something if that's in the same process anyway...
-        QString ret = QDir::homePath() + "/." + componentData().componentName() + ".autosave" + extension;
-        return ret;
+        // Never saved? Use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
     } else {
         KUrl url = KUrl::fromPath(path);
         Q_ASSERT(url.isLocalFile());
         QString dir = url.directory(KUrl::AppendTrailingSlash);
         QString filename = url.fileName();
-        return dir + '.' + filename + ".autosave" + extension;
+        retval = QString("%1.%2-autosave%3").arg(dir).arg(filename).arg(extension);
     }
-}
-
-bool KoDocument::checkAutoSaveFile()
-{
-    QString asf = autoSaveFile(QString());   // the one in $HOME
-    //kDebug(30003) <<"asf=" << asf;
-    if (QFile::exists(asf)) {
-        QDateTime date = QFileInfo(asf).lastModified();
-        QString dateStr = date.toString(Qt::LocalDate);
-        int res = KMessageBox::warningYesNoCancel(
-                      0, i18n("An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?",
-                              asf, dateStr));
-        switch (res) {
-        case KMessageBox::Yes : {
-            KUrl url;
-            url.setPath(asf);
-            bool ret = openUrl(url);
-            if (ret)
-                resetURL();
-            return ret;
-        }
-        case KMessageBox::No :
-            QFile::remove(asf);
-            return false;
-        default: // Cancel
-            return false;
-        }
-    }
-    return false;
+    return retval;
 }
 
 bool KoDocument::importDocument(const KUrl & _url)
@@ -1288,8 +1294,11 @@ bool KoDocument::openUrl(const KUrl & _url)
 
     bool ret = KParts::ReadWritePart::openUrl(url);
 
-    if (autosaveOpened)
+    if (autosaveOpened) {
         resetURL(); // Force save to act like 'Save As'
+        setReadWrite(true); // enable save button
+        QFile::remove(url.toLocalFile()); // and remove the autosave file
+    }
     else {
         // We have no calligra shell when we are being embedded as a readonly part.
         //if ( d->shells.isEmpty() )
@@ -1298,11 +1307,12 @@ bool KoDocument::openUrl(const KUrl & _url)
         foreach(KoMainWindow *mainWindow, d->shells) {
             mainWindow->addRecentURL(_url);
         }
-    }
-    if (ret) {
-        // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
-        KFileItem file(url, mimeType(), KFileItem::Unknown);
-        setReadWrite(file.isWritable());
+
+        if (ret) {
+            // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
+            KFileItem file(url, mimeType(), KFileItem::Unknown);
+            setReadWrite(file.isWritable());
+        }
     }
     return ret;
 }
@@ -1401,12 +1411,13 @@ bool KoDocument::openFile()
 
     KUrl u(localFilePath());
     QString typeName = arguments().mimeType();
-    //kDebug(30003) << "mimetypes 1:" << typeName;
 
     if (typeName.isEmpty()) {
         typeName = KMimeType::findByUrl(u, 0, true)->name();
     }
-    //kDebug(30003) << "mimetypes 2:" << typeName;
+
+    // for images, always check content.
+    typeName = checkImageMimeTypes(typeName, u);
 
     // Sometimes it seems that arguments().mimeType() contains a much
     // too generic mime type.  In that case, let's try some educated
@@ -1414,7 +1425,7 @@ bool KoDocument::openFile()
     //
     // FIXME: Should we just ignore this and always call
     //        KMimeType::findByUrl()? David Faure says that it's
-    //        impossible for findByUrl() to fail ot initiate the
+    //        impossible for findByUrl() to fail to initiate the
     //        mimetype for "*.doc" to application/msword.  This hints
     //        that we should do that.  But why does it happen like
     //        this at all?
@@ -2571,12 +2582,7 @@ void KoDocument::setUnit(const KoUnit &unit)
 
 void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
 {
-    settingsWriter->addConfigItem("unit", unitName());
-}
-
-QString KoDocument::unitName() const
-{
-    return KoUnit::unitName(unit());
+    settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
 void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)

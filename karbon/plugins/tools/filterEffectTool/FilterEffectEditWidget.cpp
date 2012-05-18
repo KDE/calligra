@@ -69,8 +69,11 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     addEffect->setToolTip(i18n("Add effect to current filter stack"));
     connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
 
+    // TODO: make these buttons do something useful
     raiseEffect->setIcon(KIcon("arrow-up"));
+    raiseEffect->hide();
     lowerEffect->setIcon(KIcon("arrow-down"));
+    lowerEffect->hide();
 
     addPreset->setIcon(KIcon("list-add"));
     addPreset->setToolTip(i18n("Add to filter presets"));

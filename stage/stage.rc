@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="118">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="119">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -178,6 +178,7 @@
   <Action name="extra_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="extra_configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
