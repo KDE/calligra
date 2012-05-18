@@ -37,10 +37,10 @@ public:
     * FToken types
     */
     enum Type {
-        Unknown = 0, ///< unknown type
-        Number,     ///< 14, 3, 1977, 3.14
-        IdentifierName,      ///< "height", "x", "pi" ...
-        Operator,    ///< +, *, /, -
+        Unknown = 0,         ///< unknown type
+        Number,             ///< 14, 3, 1977, 3.14
+        IdentifierName,     ///< "height", "x", "pi" ...
+        Operator,           ///< +, *, /, -
     };
 
     /**
@@ -61,12 +61,12 @@ public:
     /**
     * Creates a FToken.
     */
-    explicit FToken(Type type = Unknown, const QString& text = QString(), int pos = -1);
+    explicit FToken(Type type = Unknown, const QString &text = QString(), int pos = -1);
 
     static const FToken null;
 
     FToken(const FToken&);
-    FToken& operator=(const FToken&);
+    FToken &operator=(const FToken&);
 
     /**
     * Returns type of the FToken.
@@ -191,13 +191,13 @@ class KPrFormulaParser
 public:
     KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData);
     QString formula() const;
-    qreal eval(KPrAnimationCache * cache, const qreal time) const;
+    qreal eval(KPrAnimationCache *cache, const qreal time) const;
     bool valid() const;
 protected:
     FTokens scan(QString formula);
-    void compile(const FTokens& FTokens) const;
-    qreal identifierToValue(QString identifier, KPrAnimationCache * cache, const qreal time) const;
-    qreal formulaToValue(QString identifier, KPrAnimationCache * cache, qreal arg1, qreal arg2) const;
+    void compile(const FTokens &FTokens) const;
+    qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
+    qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;

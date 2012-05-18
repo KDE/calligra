@@ -160,7 +160,6 @@ void KPrAnimate::init(KPrAnimationCache *animationCache, int step)
 
 void KPrAnimate::next(int currentTime)
 {
-    //qDebug() << "next";
     qreal value = m_values->value(qreal(currentTime)/qreal(animationDuration()));
     m_attribute->updateCache(m_animationCache, m_shapeAnimation, value);
 }

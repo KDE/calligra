@@ -78,7 +78,7 @@ const FToken FToken::null;
     FToken
  **********************/
 
-FToken::FToken(Type type, const QString& text, int pos)
+FToken::FToken(Type type, const QString &text, int pos)
 {
     m_type = type;
     m_text = text;
@@ -86,7 +86,7 @@ FToken::FToken(Type type, const QString& text, int pos)
 }
 
 // copy constructor
-FToken::FToken(const FToken& ftoken)
+FToken::FToken(const FToken &ftoken)
 {
     m_type = ftoken.m_type;
     m_text = ftoken.m_text;
@@ -94,7 +94,7 @@ FToken::FToken(const FToken& ftoken)
 }
 
 // assignment operator
-FToken& FToken::operator=(const FToken & ftoken)
+FToken& FToken::operator=(const FToken &ftoken)
 {
     m_type = ftoken.m_type;
     m_text = ftoken.m_text;
@@ -142,7 +142,7 @@ unsigned FTokenStack::itemCount() const
     return topIndex;
 }
 
-void FTokenStack::push(const FToken& ftoken)
+void FTokenStack::push(const FToken &ftoken)
 {
     ensureSpace();
     insert(topIndex++, ftoken);
@@ -267,13 +267,14 @@ FTokens KPrFormulaParser::scan(QString formula)
             break;
         }
     }
-    if (parseError)
+    if (parseError) {
         ftokens.setValid(false);
+    }
 
     return ftokens;
 }
 
-void KPrFormulaParser::compile(const FTokens& ftokens) const
+void KPrFormulaParser::compile(const FTokens &ftokens) const
 {
     // initialize variables
     m_fvalid = false;
@@ -528,7 +529,7 @@ void KPrFormulaParser::compile(const FTokens& ftokens) const
     }
 }
 
-qreal KPrFormulaParser::eval(KPrAnimationCache * cache, const qreal time) const
+qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
 {
     QStack<qreal> stack;
     qreal val1, val2;
@@ -538,7 +539,7 @@ qreal KPrFormulaParser::eval(KPrAnimationCache * cache, const qreal time) const
     }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
-        FOpcode& opcode = m_codes[pc];
+        FOpcode &opcode = m_codes[pc];
         switch (opcode.type) {
         // load a constant, push to stack
         case FOpcode::Load:
@@ -587,9 +588,9 @@ qreal KPrFormulaParser::eval(KPrAnimationCache * cache, const qreal time) const
             val1 = stack.pop();
             if (opcode.index > 1) {
                 val2 = stack.pop();
-                stack.push(formulaToValue(m_functions[funcCount],cache, val1, val2));
+                stack.push(formulaToValue(m_functions[funcCount], val1, val2));
             } else {
-                stack.push(formulaToValue(m_functions[funcCount],cache, val1, -999));
+                stack.push(formulaToValue(m_functions[funcCount], val1, -999));
             }
             funcCount++;
             break;
@@ -603,8 +604,6 @@ qreal KPrFormulaParser::eval(KPrAnimationCache * cache, const qreal time) const
             stack.push(identifierToValue(m_identifier[opcode.index], cache, time));
         }
             break;
-
-
         default:
             break;
         }
@@ -624,7 +623,7 @@ bool KPrFormulaParser::valid() const
     return m_fvalid;
 }
 
-qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache * cache, const qreal time) const
+qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const
 {
     if (identifier == "width") {
         if (m_textBlockData) {
@@ -642,7 +641,8 @@ qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache 
         else {
             return m_shape->size().width() / cache->pageSize().width();
         }
-    } else if (identifier == "height") {
+    }
+    else if (identifier == "height") {
         if (m_textBlockData) {
             if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
                 QTextDocument *textDocument = textShapeData->document();
@@ -658,50 +658,63 @@ qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache 
         else {
             return m_shape->size().height() / cache->pageSize().height();
         }
-    } else if (identifier == "x") {
+    }
+    else if (identifier == "x") {
         return m_shape->position().x() / cache->pageSize().width();
-    } else if (identifier == "y") {
+    }
+    else if (identifier == "y") {
         return m_shape->position().y() / cache->pageSize().height();
-    } else if (identifier == "$") {
+    }
+    else if (identifier == "$") {
         return time;
-    } else if (identifier == "pi") {
+    }
+    else if (identifier == "pi") {
         return M_PI;
-    } else if (identifier == "e") {
+    }
+    else if (identifier == "e") {
         return exp(1);
     }
-
     return 0.0;
 }
 
-qreal KPrFormulaParser::formulaToValue(QString identifier, KPrAnimationCache *cache, qreal arg1, qreal arg2) const
+qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1, qreal arg2) const
 {
-    Q_UNUSED(cache);
     if (identifier == "sin") {
         return sin(arg1);
-    } else if (identifier == "cos") {
+    }
+    else if (identifier == "cos") {
         return cos(arg1);
-    } else if (identifier == "abs") {
+    }
+    else if (identifier == "abs") {
         return qAbs(arg1);
-    } else if (identifier == "sqrt") {
+    }
+    else if (identifier == "sqrt") {
         return sqrt(arg1);
-    } else if (identifier == "tan") {
+    }
+    else if (identifier == "tan") {
         return tan(arg1);
-    } else if (identifier == "atan") {
+    }
+    else if (identifier == "atan") {
         return atan(arg1);
-    } else if (identifier == "acos") {
+    }
+    else if (identifier == "acos") {
         return acos(arg1);
-    } else if (identifier == "asin") {
+    }
+    else if (identifier == "asin") {
         return asin(arg1);
-    } else if (identifier == "exp") {
+    }
+    else if (identifier == "exp") {
         return exp(arg1);
-    } else if (identifier == "log") {
+    }
+    else if (identifier == "log") {
         return log(arg1);
-    } else if (identifier == "min") {
+    }
+    else if (identifier == "min") {
         return qMin(arg1, arg2);
-    } else if (identifier == "max") {
+    }
+    else if (identifier == "max") {
         return qMax(arg1, arg2);
     }
-
     return 0.0;
 }
 

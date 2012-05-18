@@ -36,25 +36,25 @@ qreal KPrSmilValues::value(qreal time) const
 
     if (!m_formulaParser.empty()) {
         for (int i = 0; i < m_formulaParser.size(); i++) {
-            if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
+            if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
                 value = m_formulaParser.at(i).eval(m_cache, time);
             }
             else if (time == m_times.at(i)){
-                value = m_values.at(i).eval(m_cache);;
+                value = m_values.at(i).eval(m_cache);
             }
         }
 
     } else {
         for (int i = 0; i < m_values.size(); i++) {
-            if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
+            if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
                 value1 = m_values.at(i).eval(m_cache);
-                value2 = m_values.at(i+1).eval(m_cache);
+                value2 = m_values.at(i + 1).eval(m_cache);
                 value = (time - m_times.at(i)) * (value2 - value1);
-                value = value / (m_times.at(i+1) - m_times.at(i));
+                value = value / (m_times.at(i + 1) - m_times.at(i));
                 value += value1;
             }
             else if (time == m_times.at(i)){
-                value = m_values.at(i).eval(m_cache);;
+                value = m_values.at(i).eval(m_cache);
             }
         }
     }
@@ -137,6 +137,16 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
         }
     }
     writer.addAttribute("smil:values", values);
+    //Formula
+    QString formula;
+    foreach (KPrFormulaParser formulaParser, m_formulaParser) {
+        if (formula.isEmpty()) {
+            formula = QString("%1").arg(formulaParser.formula());
+        }
+    }
+    if (!formula.isEmpty()) {
+        writer.addAttribute("anim:formula", formula);
+    }
     // keyTimes
     QString keyTimes;
     foreach (qreal time, m_times) {
