@@ -1453,22 +1453,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
 
     body->startElement("text:note");
     body->addAttribute("text:id", QString("endn").append(id));
-    body->addAttribute("xml:id", QString("endn").append(id));
     body->addAttribute("text:note-class", "endnote");
-
     body->startElement("text:note-citation");
 
-    // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
-    // for it
+    // NOTE: This line is meaningless in the sense that office
+    // programs are supposed to autogenerate the value based on the
+    // footnote style, it is hardcoded for the moment as calligra has
+    // no support for it.
     body->addTextSpan(id);
-
     body->endElement(); // text:note-citation
-
     body->startElement("text:note-body");
-
     body->addCompleteElement(m_context->m_endnotes[id].toUtf8());
-
     body->endElement(); // text:note-body
     body->endElement(); // text:note
 
