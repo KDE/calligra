@@ -707,12 +707,6 @@ KoDocumentRdfBase *KoDocument::documentRdfBase() const
 }
 
 
-void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
-{
-    Q_UNUSED(view);
-    paintContent(painter, rect);
-}
-
 bool KoDocument::isModified() const
 {
     if (KParts::ReadWritePart::isModified()) {
@@ -1067,7 +1061,7 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
     QPainter p;
     p.begin(&pix);
-    paintEverything(p, rc);
+    paintContent(p, rc);
     p.end();
 
     return pix.scaled(QSize(previewWidth, previewHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
