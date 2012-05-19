@@ -694,11 +694,13 @@ signals:
     void titleModified(QString caption, bool isModified);
 
 protected slots:
+
     /**
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
     virtual void openExistingFile(const KUrl& url);
+
     /**
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
