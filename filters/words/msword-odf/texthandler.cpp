@@ -1090,18 +1090,19 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // \l field-argument - Text in this switch's field-argument specifies a
         // location in the file, such as a bookmark, where to jump.
         QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
-        m_fld->m_hyperLinkActive = true;
-
         if (rx.indexIn(*inst) >= 0) {
-            m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
-        } else {
-            rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
-            if (rx.indexIn(*inst) >= 0) {
-                m_fld->m_hyperLinkUrl = rx.cap(1);
-            } else {
-                kDebug(30513) << "HYPERLINK: missing URL";
+            // prevent invalid URI
+            if (rx.cap(1) != "#") {
+                m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
             }
         }
+
+        rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
+        if (rx.indexIn(*inst) >= 0) {
+            m_fld->m_hyperLinkUrl.prepend(rx.cap(1));
+        }
+
+        m_fld->m_hyperLinkActive = true;
         break;
     }
     case PAGEREF:
@@ -1162,6 +1163,8 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
  */
 void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
+    Q_UNUSED(fld);
+
 //     kDebug(30513) << "fDiffer:" << fld->flags.fDiffer <<
 //     "fZombieEmbed:" << fld->flags.fZombieEmbed <<
 //     "fResultDirty:" << fld->flags.fResultDirty <<

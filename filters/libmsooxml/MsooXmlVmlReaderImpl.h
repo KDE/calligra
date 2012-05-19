@@ -304,8 +304,17 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (!z_index.isEmpty()) {
-        body->addAttribute("draw:z-index", z_index);
+    //TODO: VML allows negative numbers, ODF does NOT!  Using
+    //automatic ordering in case of negative numbers temporary.
+    if (!z_index.isEmpty() && z_index != "auto") {
+        bool ok;
+        const int n = z_index.toInt(&ok);;
+        if (!ok) {
+            kDebug() << "error converting" << z_index << "to int (attribute z-index)";
+        }
+        else if (n >= 0) {
+            body->addAttribute("draw:z-index", n);
+        }
     }
 
     bool asChar = false;
@@ -478,8 +487,37 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:shadow", "hidden");
     }
     m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
-    m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
-    m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+
+    // ------------------------------
+    // shadow offset
+    // ------------------------------
+    QString offset = m_currentVMLProperties.shadowXOffset;
+    if (offset.endsWith('%')) {
+        offset.chop(1);
+        bool ok;
+        int p = offset.toInt(&ok);
+        if (!ok) {
+            kDebug() << "error converting" << offset << "to int (shadow x-offset)";
+        } else {
+            offset = QString::number(p * widthValue / 100.0,'f').append(widthString.right(2));
+        }
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", offset);
+
+    offset = m_currentVMLProperties.shadowYOffset;
+    if (offset.endsWith("%")) {
+        offset.chop(1);
+        bool ok;
+        int p = offset.toInt(&ok);
+        if (!ok) {
+            kDebug() << "error converting" << offset << "to int (shadow y-offset)";
+        } else {
+            offset = QString::number(p * heightValue / 100.0,'f').append(heightString.right(2));
+        }
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", offset);
+    // ------------------------------
+
     if (m_currentVMLProperties.shadowOpacity > 0) {
         m_currentDrawStyle->addProperty("draw:shadow-opacity", QString("%1%").
             arg(m_currentVMLProperties.shadowOpacity));
@@ -999,7 +1037,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 #undef CURRENT_EL
 #define CURRENT_EL shadow
 //! Shadow handler
-/*
+/*! ECMA-376 Part 4, 19.1.2.18, p.587.
+
  Parent elements:
  - arc (§14.1.2.1);
  - background (Part 1, §17.2.1);
@@ -1041,8 +1080,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
     TRY_READ_ATTR_WITHOUT_NS(offset)
     int index = offset.indexOf(',');
     if (index > 0) {
-        m_currentVMLProperties.shadowXOffset = offset.left(index);
-        m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+        if (offset.left(index) != "0") {
+            m_currentVMLProperties.shadowXOffset = offset.left(index);
+        }
+        if (offset.mid(index + 1) != "0") {
+            m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+        }
+    }
+    else if (offset == "0") {
+        m_currentVMLProperties.shadowed = false;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
@@ -2628,31 +2674,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
         oldProperties.fitTextToShape = true;
     }
 
-    // In below code, the else clauses are needed for cases that not all insets are defined
+    // In below code, the else clauses are needed for cases that not
+    // all insets are defined
     TRY_READ_ATTR_WITHOUT_NS(inset)
     if (!inset.isEmpty()) {
         doPrependCheck(inset);
-        inset.replace(",,", ",0,");
+        inset.replace(",,", ",d,"); //Default
         int index = inset.indexOf(',');
         if (index > 0) {
-            oldProperties.internalMarginLeft = inset.left(index);
+            QString str = inset.left(index);
+            if (str != "d") {
+                if (str == "0") {
+                    str.append("in");
+                }
+                oldProperties.internalMarginLeft = str;
+            }
             inset = inset.mid(index + 1);
             doPrependCheck(inset);
             index = inset.indexOf(',');
             if (index > 0) {
-                oldProperties.internalMarginTop = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
                 inset = inset.mid(index + 1);
                 doPrependCheck(inset);
                 index = inset.indexOf(',');
                 if (index > 0) {
-                    oldProperties.internalMarginRight = inset.left(index);
-                    oldProperties.internalMarginBottom = inset.mid(index + 1);
-                    doPrependCheck(oldProperties.internalMarginBottom);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
+                    str = inset.mid(index + 1);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginBottom = str;
+                        doPrependCheck(oldProperties.internalMarginBottom);
+                    }
                 } else {
-                    oldProperties.internalMarginRight = inset.left(index);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
                 }
             } else {
-                oldProperties.internalMarginTop = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
             }
         }
     }
