@@ -85,11 +85,7 @@ public:
     /**
      * Constructor.
      *
-     * @param parentWidget the parent widget, in case we create a wrapper widget
-     *        (in single view mode).
-     *        Usually passed by KPluginFactory::create.
-     * @param parent may be another KoDocument, or anything else.
-     *        Usually passed by KPluginFactory::create.
+     * @param parent The KoPart that owns the document. XXX: should be removed!
      * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
@@ -107,7 +103,6 @@ public:
 
     /// XXX: Temporary!
     KoPart *documentPart();
-
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons
@@ -288,18 +283,6 @@ public:
      *  @param rect        The rect that should be used in the painter object.
      */
     virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
-
-    /**
-     * Creates and shows the start up widget.
-     * @param parent the KoMainWindow used as parent for the widget.
-     * @param alwaysShow always show the widget even if the user has configured it to not show.
-     */
-    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-
-    /**
-     * Removes the startupWidget shown at application start up.
-     */
-    void deleteOpenPane(bool closing = false);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -537,19 +520,6 @@ public:
     QString backupPath()const;
 
     /**
-     * Indicates that this document is currently viewed
-     * and thus should control the title caption.
-     * Also resets current flag for all parents.
-     */
-    void setCurrent(bool on = true);
-
-    /**
-     * Sets current flag for this document and all its parents
-     */
-    void forceCurrent(bool on);
-    bool isCurrent() const;
-
-    /**
      * @return caption of the document
      *
      * Caption is of the form "[title] - [url]",
@@ -616,13 +586,6 @@ public:
      * the correct templates.
      */
     QString templateType() const;
-
-    /**
-     * Shows the init dialog when embeding
-     * @param parent the parent widget
-     */
-    virtual bool showEmbedInitDialog(QWidget *parent);
-
 
     QList<KoVersionInfo> &versionList();
 

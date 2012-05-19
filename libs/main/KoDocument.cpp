@@ -2336,24 +2336,6 @@ QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidg
     return QList<CustomDocumentWidgetItem>();
 }
 
-bool KoDocument::showEmbedInitDialog(QWidget *parent)
-{
-    KDialog dlg(parent);
-    dlg.setCaption(i18n("Embedding Object"));
-    KoOpenPane *pane = createOpenPane(&dlg, d->parentPart->componentData(), templateType());
-    pane->layout()->setMargin(0);
-    dlg.setMainWidget(pane);
-    KConfigGroup cfg = KSharedConfig::openConfig("EmbedInitDialog")->group(QString());
-    /*dlg.setInitialSize(*/dlg.restoreDialogSize(cfg /*)*/);
-    connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(accept()));
-
-    bool ok = dlg.exec() == QDialog::Accepted;
-
-    dlg.saveDialogSize(cfg);
-
-    return ok;
-}
-
 QList<KoVersionInfo> & KoDocument::versionList()
 {
     return d->versionInfo;
