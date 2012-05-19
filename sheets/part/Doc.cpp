@@ -237,11 +237,6 @@ QGraphicsItem *Doc::createCanvasItem()
     return new CanvasItem(this);
 }
 
-bool Doc::saveChildren(KoStore* _store)
-{
-    return map()->saveChildren(_store);
-}
-
 int Doc::supportedSpecialFormats() const
 {
     return KoDocument::supportedSpecialFormats();
