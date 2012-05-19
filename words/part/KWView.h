@@ -37,6 +37,7 @@ class KWCanvas;
 class KWFrame;
 class KWGui;
 
+class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
@@ -60,11 +61,11 @@ public:
      * The view will have a canvas as a member which does all the actual painting, the view will
      * be responsible for handling the actions.  The View is technically speaking the controller
      * class in the MVC design.
-     * @param viewMode the KWViewMode we should show initially.
+     * @param part a KoPart
      * @param document the document we show.
      * @param parent a parent widget we show ourselves in.
      */
-    KWView(const QString &viewMode, KWDocument *document, QWidget *parent);
+    KWView(KoPart *part, KWDocument *document, QWidget *parent);
     virtual ~KWView();
 
     /**

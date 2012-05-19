@@ -81,6 +81,7 @@ public:
 
     void setReadWrite(bool readwrite);
 
+    virtual bool saveFile(); ///reimplemented
 
     // ----------------- shell management -----------------
     /**

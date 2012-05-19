@@ -31,6 +31,7 @@
 #include "words_export.h"
 
 #include <KoDocument.h>
+#include <KoShapeManager.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoXmlReader.h>
 
@@ -48,6 +49,7 @@ class KoUpdater;
 class KoTextAnchor;
 class KoShapeContainer;
 class KoShapeController;
+class KoPart;
 
 class KLocalizedString;
 class QIODevice;
@@ -62,7 +64,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QObject* parent = 0);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -84,10 +86,6 @@ public:
     virtual bool loadOdf(KoOdfReadStore &odfStore);
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
-    /// reimplemented from KoDocument
-    virtual KoView* createViewInstance(QWidget*);
-    /// reimplemented from KoDocument
-    virtual QGraphicsItem *createCanvasItem();
     /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
@@ -218,11 +216,19 @@ signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
+    /// emitted whenever a shape is added.
+    void shapeAdded(KoShape *, KoShapeManager::Repaint repaint = KoShapeManager::PaintShapeOnAdd);
+
+    /// emitted whenever a shape is removed
+    void shapeRemoved(KoShape *);
+
+    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    void resourceChanged(int key, const QVariant &value);
+
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void removeFrameFromViews(KWFrame*);
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
@@ -259,7 +265,6 @@ private:
 
 private:
     QList<KWFrameSet*> m_frameSets;
-    QString m_viewMode;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;

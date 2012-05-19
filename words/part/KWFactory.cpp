@@ -27,6 +27,7 @@
 
 #include <kiconloader.h>
 
+#include <KWPart.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
@@ -64,7 +65,9 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
-    KWDocument *doc = new KWDocument(parent);
+    KWPart *part = new KWPart(parent);
+    KWDocument *doc = new KWDocument(part);
+    part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
     return doc;
 }

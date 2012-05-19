@@ -101,6 +101,10 @@ void KoPart::setReadWrite(bool readwrite)
     }
 }
 
+bool KoPart::saveFile()
+{
+    return false; // FIXME should actually save the document, dialogs and all
+}
 
 KoView *KoPart::createView(QWidget *parent)
 {

@@ -58,7 +58,6 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
-#include <KoInteractionTool.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -91,15 +90,14 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(QObject *parent)
-        : KoDocument(parent),
+KWDocument::KWDocument(KoPart *part)
+        : KoDocument(part),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
 
-    setComponentData(KWFactory::componentData(), false);
     setTemplateType("words_template");
 
     connect(&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
@@ -166,10 +164,9 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
     if (!m_frameSets.contains(frame->frameSet())) {
         addFrameSet(frame->frameSet());
     }
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(shape);
-    }
+
+    emit shapeAdded(shape);
+
     shape->update();
 }
 
@@ -185,10 +182,7 @@ void KWDocument::removeShape(KoShape *shape)
         else
             fs->removeFrame(frame);
     } else { // not a frame, but we still have to remove it from views.
-        foreach (KoView *view, views()) {
-            KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-            canvas->shapeManager()->remove(shape);
-        }
+        emit shapeRemoved(shape);
     }
 }
 
@@ -214,47 +208,6 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
 
 void KWDocument::paintContent(QPainter &, const QRect &)
 {
-}
-
-KoView *KWDocument::createViewInstance(QWidget *parent)
-{
-    KWView *view = new KWView(m_viewMode, this, parent);
-    bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, m_frameSets) {
-        if (fs->frameCount() == 0)
-            continue;
-        foreach (KWFrame *frame, fs->frames())
-            view->canvasBase()->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        if (switchToolCalled)
-            continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
-            KoSelection *selection = view->canvasBase()->shapeManager()->selection();
-            selection->select(fs->frames().first()->shape());
-
-            KoToolManager::instance()->switchToolRequested(
-                KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
-            switchToolCalled = true;
-        }
-    }
-    if (!switchToolCalled)
-        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    return view;
-}
-
-QGraphicsItem *KWDocument::createCanvasItem()
-{
-    // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(m_viewMode, this);
-    foreach (KWFrameSet *fs, m_frameSets) {
-        if (fs->frameCount() == 0) {
-            continue;
-        }
-        foreach (KWFrame *frame, fs->frames()) {
-            item->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        }
-    }
-    return item;
 }
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, bool addUndoRedoCommand)
@@ -308,10 +261,9 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     setModified(true);
     foreach (KWFrame *frame, fs->frames())
         removeFrame(frame);
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-    }
+
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
+
     disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
@@ -442,19 +394,8 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-    }
-    if (viewCount() == 0) {
-        KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem(false));
-        if (canvas) {
-            canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-            canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-        }
-    }
-    //frame->shape()->update();
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
+    emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
@@ -462,7 +403,7 @@ void KWDocument::removeFrame(KWFrame *frame)
     if (frame->shape() == 0) return;
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
 
-    removeFrameFromViews(frame);
+    emit shapeRemoved(frame->shape());
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
     if (!page.isAutoGenerated()) return;
@@ -794,19 +735,10 @@ void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KWDocument::showErrorAndDie()
 {
-    KMessageBox::error(widget(),
+    KMessageBox::error(0,
                        i18n("Can not find needed text component, Words will quit now"),
                        i18n("Installation Error"));
     QCoreApplication::exit(10);
-}
-
-void KWDocument::removeFrameFromViews(KWFrame *frame)
-{
-    Q_ASSERT(frame);
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->remove(frame->shape());
-    }
 }
 
 QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidgets(QWidget *parent)
@@ -824,8 +756,6 @@ QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidg
 
 void KWDocument::saveConfig()
 {
-    if (!isReadWrite())
-        return;
 //   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
 
