@@ -180,11 +180,6 @@ protected:
      */
     virtual bool completeLoading(KoStore*);
 
-    /**
-     * @reimp Overloaded function of KoDocument.
-     */
-    virtual bool saveChildren(KoStore* _store);
-
     virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
     virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 private:
