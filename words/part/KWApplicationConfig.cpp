@@ -55,6 +55,7 @@ void KWApplicationConfig::load(KWDocument *document)
     document->setAutoSave(m_autoSaveSeconds);
 
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
+    document->setBackupFile(m_createBackupFile);
 
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
 //    m_maxRecentFiles = interface.readEntry("NbRecentFile", 10);

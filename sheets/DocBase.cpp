@@ -158,7 +158,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.
-    map()->saveOdf(*contentWriter, savingContext);
+    map()->saveOdf(*bodyWriter, savingContext);
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body

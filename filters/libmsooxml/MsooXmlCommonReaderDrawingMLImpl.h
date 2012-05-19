@@ -1157,7 +1157,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     if (m_context->type == Slide) {
         // CASE #P476
-        body->addAttribute("draw:id", m_cNvPrId);
+        QString id = "slide" + QString::number(m_context->slideNumber) + "item"
+                + m_cNvPrId;
+        body->addAttribute("draw:id", id);
+        body->addAttribute("xml:id", id);
         body->addAttribute("presentation:class", presentationClass);
         kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
@@ -2673,7 +2676,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_DEFAULT);
         fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif
@@ -5679,7 +5682,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     QString fontSize = m_currentTextStyle.property("fo:font-size");
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (fontSize.isEmpty()) {
-        m_currentTextStyle.addProperty("fo:font-size", TEXT_FONTSIZE_DEFAULT);
+        m_currentTextStyle.addPropertyPt("fo:font-size", TEXT_FONTSIZE_DEFAULT);
         fontSize = QString("%1").arg(TEXT_FONTSIZE_DEFAULT);
     }
 #endif

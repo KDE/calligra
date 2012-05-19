@@ -1019,6 +1019,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             body->startElement("draw:object-ole");
             addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
+            body->addAttribute("xlink:type", "simple");
             body->endElement(); // draw:object-ole
         }
 
@@ -1765,11 +1766,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     popCurrentDrawStyle();
 
     body->addAttribute("draw:name", m_cNvPrName);
-    body->addAttribute("draw:layer", "layout");
-    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
     body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+    if (!m_context->graphicObjectIsGroup) {
+        // draw:g has no draw:layer, svg:x, svg:width or svg:height
+        body->addAttribute("draw:layer", "layout");
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+    }
 
     (void)buffer.releaseWriter();
 

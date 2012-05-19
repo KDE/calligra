@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Fix Bug 286564 -  plan do not update the resources allocation number when selected
+
 * Add mpxj based filter capable of importing data from
   Planner, PrimaVera and various MS Project file formats,
 

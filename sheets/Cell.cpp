@@ -1160,6 +1160,12 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                     // if the origin cell was a default cell,
                     // we count the default cells
                     repeated = nextCell.column() - j + 1;
+
+                    // check if any of the empty/default cells we skipped contained anchored shapes
+                    int shapeColumn = tableContext.nextAnchoredShape(sheet(), row, column);
+                    if (shapeColumn) {
+                        repeated = qMin(repeated, shapeColumn - column);
+                    }
                 }
                 // otherwise we just stop here to process the adjacent
                 // cell in the next iteration of the outer loop
@@ -1168,7 +1174,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             }
 
             if (nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
-                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, column) ||
+                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, nextCell.column()) ||
                     !(nextCell.style() == cellStyle && nextCell.conditions() == conditions())) {
                 break;
             }
@@ -1192,19 +1198,6 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //kDebug(36003) <<"Formula found";
         QString formula = Odf::encodeFormula(userInput(), locale());
         xmlwriter.addAttribute("table:formula", formula);
-    } else if (!link().isEmpty()) {
-        //kDebug(36003)<<"Link found";
-        xmlwriter.startElement("text:p");
-        xmlwriter.startElement("text:a");
-        const QString url = link();
-        //Reference cell is started by '#'
-        if (Util::localReferenceAnchor(url))
-            xmlwriter.addAttribute("xlink:href", ('#' + url));
-        else
-            xmlwriter.addAttribute("xlink:href", url);
-        xmlwriter.addTextNode(userInput());
-        xmlwriter.endElement();
-        xmlwriter.endElement();
     }
 
     if (doesMergeCells()) {
@@ -1216,6 +1209,24 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 
         if (rowSpan > 1)
             xmlwriter.addAttribute("table:number-rows-spanned", QString::number(rowSpan));
+    }
+
+    saveOdfAnnotation(xmlwriter);
+
+    if (!isFormula() && !link().isEmpty()) {
+        //kDebug(36003)<<"Link found";
+        xmlwriter.startElement("text:p");
+        xmlwriter.startElement("text:a");
+        const QString url = link();
+        //Reference cell is started by '#'
+        if (Util::localReferenceAnchor(url))
+            xmlwriter.addAttribute("xlink:href", ('#' + url));
+        else
+            xmlwriter.addAttribute("xlink:href", url);
+        xmlwriter.addAttribute("xlink:type", "simple");
+        xmlwriter.addTextNode(userInput());
+        xmlwriter.endElement();
+        xmlwriter.endElement();
     }
 
     if (!isEmpty() && link().isEmpty()) {
@@ -1252,7 +1263,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             qreal offsetX = sheet()->columnPosition(column);
             qreal offsetY = sheet()->rowPosition(row);
             tableContext.shapeContext.addShapeOffset(shape, QTransform::fromTranslate(-offsetX, -offsetY));
-            shape->setAdditionalAttribute("table:end-cell-address", Cell(sheet(), scol, srow).name());
+            shape->setAdditionalAttribute("table:end-cell-address", Region(QPoint(scol, srow)).saveOdf());
             shape->setAdditionalAttribute("table:end-x", QString::number(bottomRight.x() - endX) + "pt");
             shape->setAdditionalAttribute("table:end-y", QString::number(bottomRight.y() - endY) + "pt");
             shape->saveOdf(tableContext.shapeContext);
@@ -1262,8 +1273,6 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             tableContext.shapeContext.removeShapeOffset(shape);
         }
     }
-
-    saveOdfAnnotation(xmlwriter);
 
     xmlwriter.endElement();
     return true;
