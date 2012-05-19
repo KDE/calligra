@@ -1,5 +1,5 @@
 add_subdirectory( bigbrother )
-add_subdirectory( backgrounds )
+#add_subdirectory( backgrounds )
 add_subdirectory( imagesplit )
 #add_subdirectory( bracketing2hdr )
 add_subdirectory( colorrange )
