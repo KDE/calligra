@@ -642,11 +642,6 @@ void KoDocument::setSaveInBatchMode(const bool batchMode)
     d->filterManager->setBatchMode(batchMode);
 }
 
-bool KoDocument::wantExportConfirmation() const
-{
-    return true;
-}
-
 bool KoDocument::isImporting() const
 {
     return d->isImporting;

@@ -65,10 +65,6 @@ public:
     virtual ~KisDoc2();
 
 public:
-    // Overide KoDocument
-    virtual bool wantExportConfirmation() const {
-        return false;
-    }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
 
