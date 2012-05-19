@@ -40,10 +40,9 @@
 #include <KoOdfDocument.h>
 #include <kundo2stack.h>
 
-
 class KUndo2Command;
 class QGraphicsItem;
-
+class KoPart;
 class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
@@ -75,7 +74,7 @@ public:
  *
  *  @short The %Calligra document class
  */
-class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocument
+class KOMAIN_EXPORT KoDocument : public QObject, public KoOdfDocument
 {
     Q_OBJECT
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
@@ -95,7 +94,7 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(QObject *parent,
+    KoDocument(KoPart *parent,
                KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
@@ -105,6 +104,10 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KoDocument();
+
+    /// XXX: Temporary!
+    KoPart *documentPart();
+
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons
@@ -272,48 +275,6 @@ public:
     void showLoadingErrorDialog();
 
     /**
-     *  Create a new view for the document.
-     */
-    KoView *createView(QWidget *parent = 0);
-
-    /**
-     * Adds a view to the document.
-     *
-     * This calls KoView::updateReadWrite to tell the new view
-     * whether the document is readonly or not.
-     */
-    virtual void addView(KoView *view);
-
-    /**
-     * Removes a view of the document.
-     */
-    virtual void removeView(KoView *view);
-
-    /**
-     * @return a list of views this document is displayed in
-     */
-    QList<KoView*> views() const;
-
-    /**
-     * @return number of views this document is displayed in
-     */
-    int viewCount() const;
-
-    /**
-     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
-     * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
-     * as well).
-     *
-     * @param create if true, a new canvas item is created if there wasn't one.
-     */
-    QGraphicsItem *canvasItem(bool create = true);
-
-    /**
-     * Reimplemented from KParts::Part
-     */
-    virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
-
-    /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
@@ -345,7 +306,7 @@ public:
      *  the modified status changes (this is done by setModified() ) or
      *  because the URL or the document-info's title changed.
      */
-    virtual void setTitleModified();
+    void setTitleModified();
 
     /**
      *  @return true if the document is empty.
@@ -529,38 +490,6 @@ public:
     void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
-     * Appends the shell to the list of shells which show this
-     * document as their root document.
-     *
-     * This method is automatically called from KoMainWindow::setRootDocument,
-     * so you do not need to call it.
-     */
-    virtual void addShell(KoMainWindow *shell);
-
-    /**
-     * Removes the shell from the list. That happens automatically if the shell changes its
-     * root document. Usually you do not need to call this method.
-     */
-    virtual void removeShell(KoMainWindow *shell);
-
-    /**
-     * @return the list of shells for the main window
-     */
-    const QList<KoMainWindow*>& shells() const;
-
-    /**
-     * @return the number of shells for the main window
-     */
-    int shellCount() const;
-
-    /**
-     * @return the list of all the currently opened documents
-     */
-    static QList<KoDocument*> *documentList() {
-        return s_documentList;
-    }
-
-    /**
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */
@@ -620,8 +549,6 @@ public:
     void forceCurrent(bool on);
     bool isCurrent() const;
 
-    void setTitleModified(const QString &caption, bool mod);
-
     /**
      * @return caption of the document
      *
@@ -638,10 +565,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
-    void resetURL() {
-        setUrl(KUrl());
-        setLocalFilePath(QString());
-    }
+    void resetURL();
 
     /**
      * Set when you want an external embedded document to be stored internally
@@ -663,9 +587,7 @@ public:
     /**
      * @return returns the number of pages in the document.
      */
-    virtual int pageCount() const {
-        return 1;
-    }
+    virtual int pageCount() const;
 
     /**
      * Returns the unit used to display all measures/distances.
@@ -721,9 +643,6 @@ public:
 
     void clearUndoHistory();
 
-    using ReadWritePart::setUrl;
-    using ReadWritePart::localFilePath;
-    using ReadWritePart::setLocalFilePath;
 
 public slots:
     /**
@@ -809,6 +728,8 @@ signals:
 
     void closeEmbedInitDialog();
 
+    void titleModified(QString caption, bool isModified);
+
 protected slots:
     /**
      * This slot loads an existing file and deletes the start up widget.
@@ -835,21 +756,12 @@ protected:
     };
 
     /**
-        Generate a name for the document.
-    */
+     * Generate a name for the document.
+     */
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
 
-
-
-    virtual KoView *createViewInstance(QWidget *parent) = 0;
-
-    /**
-     * Override this to create a QGraphicsItem that does not rely
-     * on proxying a KoCanvasController.
-     */
-    virtual QGraphicsItem *createCanvasItem();
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
@@ -868,7 +780,7 @@ protected:
      * own KoProgressUpdater-subTasks which are then taken into account for the
      * displayed progressbar during loading.
      */
-    virtual void setupOpenFileSubProgress() {}
+    virtual void setupOpenFileSubProgress();
 
     /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
@@ -912,9 +824,7 @@ protected:
 
 
     /** @internal */
-    virtual void setModified() {
-        KParts::ReadWritePart::setModified();
-    }
+    virtual void setModified();
 
     /**
      *  Returns whether or not the current openUrl() or openFile() call is
@@ -943,14 +853,13 @@ protected:
 
 
 
-    /// to satisfy KoOdfDocument where it overlaps with kparts
-    virtual KUrl odfUrl() const {
-        return url();
-    }
+public:
 
-    virtual void setOdfUrl( const KUrl& url ) {
-        setUrl( url );
-    }
+    QString localFilePath() const;
+
+    virtual KUrl url() const;
+
+    virtual void setUrl(const KUrl& url);
 
 private slots:
 
@@ -979,9 +888,6 @@ private:
 
     class Private;
     Private *const d;
-
-
-    static QList<KoDocument*> *s_documentList;
 };
 
 #endif

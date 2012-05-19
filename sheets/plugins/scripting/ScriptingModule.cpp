@@ -38,7 +38,7 @@
 #include <interfaces/SheetAdaptor.h>
 #include <Map.h>
 #include <interfaces/MapAdaptor.h>
-#include <KoDocumentAdaptor.h>
+#include <KoPartAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
 extern "C" {

@@ -91,7 +91,6 @@
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kparts/event.h>
-#include <kparts/partmanager.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
@@ -325,8 +324,9 @@ void KoPAView::initGUI()
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
         d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
-        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-                d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
+// XXX: fine another way to signal to the view that the document has changed so the document structure docker needs to be reset.
+//        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
+//                d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
         connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
