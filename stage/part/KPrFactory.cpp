@@ -45,18 +45,12 @@ KPrFactory::~KPrFactory()
     s_instance = 0;
 }
 
-QObject* KPrFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
-
-    KPrDocument *doc = new KPrDocument( parentWidget, parent, !bWantKoDocument );
-
-    if ( !bWantKoDocument )
-        doc->setReadWrite( false );
-
+    KPrDocument *doc = new KPrDocument(parent);
     return doc;
 }
 

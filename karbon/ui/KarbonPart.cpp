@@ -125,13 +125,10 @@ public:
 };
 
 
-KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode), d(new Private())
+KarbonPart::KarbonPart(QObject* parent)
+        : KoDocument(parent), d(new Private())
 {
-    Q_UNUSED(widgetName);
     d->document.setResourceManager(resourceManager());
-
-    setObjectName(name);
     setComponentData(KarbonFactory::componentData(), false);
     setTemplateType("karbon_template");
     resourceManager()->setUndoStack(undoStack());
