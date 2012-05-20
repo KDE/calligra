@@ -20,8 +20,8 @@
 #include "KPrPart.h"
 
 #include "KPrView.h"
-
 #include "KPrDocument.h"
+#include "KPrFactory.h"
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
@@ -39,7 +39,7 @@ KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("stage_template");
-    setComponentData(KGlobal::mainComponent(), false);
+    setComponentData(KPrFactory::componentData(), false);
 }
 
 KPrPart::~KPrPart()
