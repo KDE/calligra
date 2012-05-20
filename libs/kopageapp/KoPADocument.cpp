@@ -20,7 +20,15 @@
 
 #include "KoPADocument.h"
 
-#include <QPainter>
+#include "KoPACanvas.h"
+#include "KoPAView.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
+#include "KoPASavingContext.h"
+#include "KoPALoadingContext.h"
+#include "KoPAViewMode.h"
+#include "KoPAPageProvider.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
@@ -46,22 +54,14 @@
 #include <KoUpdater.h>
 #include <KoDocumentInfo.h>
 #include <KoVariableManager.h>
-
-#include "KoPACanvas.h"
-#include "KoPAView.h"
-#include "KoPAPage.h"
-#include "KoPAPart.h"
-#include "KoPAMasterPage.h"
-#include "KoPASavingContext.h"
-#include "KoPALoadingContext.h"
-#include "KoPAViewMode.h"
-#include "KoPAPageProvider.h"
-#include "commands/KoPAPageDeleteCommand.h"
+#include <KoPart.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+
+#include <QPainter>
 
 #include <typeinfo>
 
@@ -78,7 +78,7 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument(KoPAPart *part)
+KoPADocument::KoPADocument(KoPart *part)
     : KoDocument(part),
     d(new Private())
 {
@@ -527,16 +527,8 @@ void KoPADocument::addShape( KoShape * shape )
         return;
 
     // the KoShapeController sets the active layer as parent
-    KoPAPageBase * page( pageByShape( shape ) );
+    KoPAPageBase *page(pageByShape(shape));
 
-    //FIXME make sure stage and connect shapeAdded to the views in their parts
-    /*
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->viewMode()->addShape( shape );
-    }
-*/
     emit shapeAdded(shape);
 
     // it can happen in kpresenter notes view that there is no page
@@ -552,25 +544,17 @@ void KoPADocument::postAddShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( shape );
 }
 
-void KoPADocument::removeShape( KoShape *shape )
+void KoPADocument::removeShape(KoShape *shape)
 {
-    if(!shape)
+    if (!shape)
         return;
 
-    KoPAPageBase * page( pageByShape( shape ) );
+    KoPAPageBase *page(pageByShape(shape));
 
-    //FIXME make sure stage and connect shapeAdded to the views in their parts
-    /*
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->viewMode()->removeShape( shape );
-    }
-*/
-    emit shapeRemoved( shape );
+    emit shapeRemoved(shape);
 
-    page->shapeRemoved( shape );
-    postRemoveShape( page, shape );
+    page->shapeRemoved(shape);
+    postRemoveShape(page, shape);
 }
 
 void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
@@ -722,21 +706,19 @@ int KoPADocument::takePage( KoPAPageBase *page )
         pages.removeAt( index );
 
         // change to previous page when the page is the active one if the first one is delete go to the next one
-        /*FIXME do something like this in the apps
         int newIndex = index == 0 ? 0 : index - 1;
         KoPAPageBase * newActivePage = pages.at( newIndex );
-            if ( page == kopaView->activePage() ) {
-                kopaView->viewMode()->updateActivePage( newActivePage );
-            }
-            */
+
         updatePageCount();
+
+        emit replaceActivePage(page, newActivePage);
+        emit pageRemoved(page);
     }
 
     if ( pages.size() == 1 ) {
         emit actionsPossible(KoPAView::ActionDeletePage, false);
     }
 
-    emit pageRemoved( page );
 
     return index;
 }

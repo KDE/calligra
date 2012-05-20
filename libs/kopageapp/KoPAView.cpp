@@ -159,7 +159,7 @@ public:
 
 
 
-KoPAView::KoPAView(KoPAPart *part, KoPADocument *document, QWidget *parent)
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
 : KoView(part, document, parent)
 , d( new Private(document))
 {

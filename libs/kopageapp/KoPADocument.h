@@ -45,7 +45,7 @@ class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeBasedDocu
     Q_OBJECT
 public:
 
-    explicit KoPADocument(KoPAPart *part);
+    explicit KoPADocument(KoPart *part);
     virtual ~KoPADocument();
 
     void paintContent( QPainter &painter, const QRect &rect);
@@ -234,7 +234,12 @@ signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);
     void pageAdded(KoPAPageBase* page);
+
+    /// This is a general signal to tell you a page was removed
     void pageRemoved(KoPAPageBase* page);
+
+    /// when page is removed this signal indicates you should replace it if it was active
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
 
     /**
      * Update all views this document is displayed on

@@ -16,6 +16,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp
+     KPrPart.cpp
      KPrView.cpp
      KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
