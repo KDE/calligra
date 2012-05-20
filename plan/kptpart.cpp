@@ -70,17 +70,15 @@
 namespace KPlato
 {
 
-Part::Part(QObject *parent)
-        : KoDocument(parent),
+Part::Part(KoPart *part)
+        : KoDocument(part),
         m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
-    setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
-    setTemplateType( "plan_template" );
-    m_config.setReadWrite( isReadWrite() );
+    m_config.setReadWrite( true );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -158,19 +156,6 @@ void Part::setProject( Project *project )
     }
     m_aboutPage.setProject( project );
     emit changed();
-}
-
-KoView *Part::createViewInstance( QWidget *parent )
-{
-    // syncronize view selector
-    View *view = dynamic_cast<View*>( views().value( 0 ) );
-    if ( view && m_context ) {
-        QDomDocument doc = m_context->save( view );
-        m_context->setContent( doc.toString() );
-    }
-    view = new View( this, parent );
-    connect( view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
-    return view;
 }
 
 bool Part::loadOdf( KoOdfReadStore &odfStore )
@@ -625,7 +610,7 @@ void Part::autoCheckForWorkPackages()
 
 void Part::checkForWorkPackages( bool keep )
 {
-    if ( m_checkingForWorkPackages || ! isReadWrite() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
+    if ( m_checkingForWorkPackages || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         return;
     }
     m_checkingForWorkPackages = true;

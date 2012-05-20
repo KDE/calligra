@@ -58,7 +58,7 @@ class KPLATO_EXPORT Part : public KoDocument
     Q_OBJECT
 
 public:
-    explicit Part(QObject* parent = 0);
+    explicit Part(KoPart *part = 0);
     ~Part();
 
     void setReadWrite( bool rw );
@@ -133,8 +133,6 @@ signals:
     void viewlistModified( bool );
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
-
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
