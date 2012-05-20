@@ -373,8 +373,6 @@ public:
      */
     bool saveNativeFormatCalligra(KoStore *store);
 
-public:
-
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
@@ -575,8 +573,8 @@ public:
 
     void clearUndoHistory();
 
-
 public slots:
+
     /**
      * Initialize an empty document using default values
      */
@@ -661,6 +659,8 @@ signals:
     void titleModified(QString caption, bool isModified);
 
 protected:
+
+    friend class KoPart;
 
     /**
      * Generate a name for the document.

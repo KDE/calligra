@@ -174,7 +174,8 @@ bool KoPart::openFile()
     }
     DocumentProgressProxy progressProxy(shell);
     d->document->setProgressProxy(&progressProxy);
-    return false; // FIXME should actually load the document, dialogs and all
+    d->document->setUrl(url());
+    return d->document->openFile();
 }
 
 bool KoPart::saveFile()
@@ -185,7 +186,8 @@ bool KoPart::saveFile()
     }
     DocumentProgressProxy progressProxy(shell);
     d->document->setProgressProxy(&progressProxy);
-    return false; // FIXME should actually save the document, dialogs and all
+    d->document->setUrl(url());
+    return d->document->saveFile();
 }
 
 KoView *KoPart::createView(QWidget *parent)

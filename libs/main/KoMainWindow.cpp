@@ -705,14 +705,16 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 void KoMainWindow::slotLoadCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotLoadCompleted";
-    KoDocument* doc = rootDocument();
-    KoDocument* newdoc = (KoDocument *)(sender());
-    // XXX
-    KoPart *newpart = newdoc->documentPart();
-    if (doc && doc->isEmpty()) {
+
+    qDebug() << ">>>>>>>>>>>>>>" << sender()->metaObject()->className();
+
+    KoPart *newpart = qobject_cast<KoPart*>(sender());
+    KoDocument *newdoc = newpart->document();
+
+    if (d->rootDocument && d->rootDocument->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
-    } else if (doc && !doc->isEmpty()) {
+    } else if (d->rootDocument && !d->rootDocument->isEmpty()) {
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
