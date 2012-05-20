@@ -748,8 +748,6 @@ private slots:
 
     void slotAutoSave();
 
-    void startCustomDocument();
-
 private:
 
     bool saveToStream(QIODevice *dev);

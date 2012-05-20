@@ -155,6 +155,9 @@ private slots:
 
     void setTitleModified(const QString &caption, bool mod);
     void slotStarted(KIO::Job*);
+    void startCustomDocument();
+
+
 public:
 
     //------------------ view management ------------------

@@ -443,6 +443,11 @@ QString KoPart::templateType() const
     return d->templateType;
 }
 
+void KoPart::startCustomDocument()
+{
+    deleteOpenPane();
+}
+
 KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {

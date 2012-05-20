@@ -121,7 +121,7 @@ public:
             backupPath(QString()),
             doNotSaveExtDoc(false),
             storeInternal(false),
-            bLoading(false),
+            isLoading(false),
             undoStack(0),
             parentPart(0)
 
@@ -172,7 +172,7 @@ public:
     QString backupPath;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool storeInternal; // Store this doc internally even if url is external
-    bool bLoading; // True while loading (openUrl is async)
+    bool isLoading; // True while loading (openUrl is async)
 
     QList<KoVersionInfo> versionInfo;
 
@@ -183,7 +183,7 @@ public:
 
     KService::Ptr nativeService;
 
-    bool bEmpty;
+    bool isEmpty;
 
     KoPageLayout pageLayout;
 
@@ -196,7 +196,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 {
     d->parentPart = parent;
 
-    d->bEmpty = true;
+    d->isEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
@@ -473,7 +473,7 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
-    if (isModified() && d->modifiedAfterAutosave && !d->bLoading) {
+    if (isModified() && d->modifiedAfterAutosave && !d->isLoading) {
         // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
         if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
             // That advice should also fix this error from occurring again
@@ -969,7 +969,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 
     KUrl url(_url);
     bool autosaveOpened = false;
-    d->bLoading = true;
+    d->isLoading = true;
     if (url.isLocalFile() && d->shouldCheckAutoSaveFile) {
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
@@ -987,7 +987,7 @@ bool KoDocument::openUrl(const KUrl & _url)
                 QFile::remove(asf);
                 break;
             default: // Cancel
-                d->bLoading = false;
+                d->isLoading = false;
                 return false;
             }
         }
@@ -1096,7 +1096,7 @@ bool KoDocument::openFile()
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
             KMessageBox::error(0, i18n("The file %1 does not exist.", d->parentPart->localFilePath()));
-        d->bLoading = false;
+        d->isLoading = false;
         return false;
     }
 
@@ -1288,12 +1288,12 @@ bool KoDocument::openFile()
                 KMessageBox::error(0, errorMsg);
             }
 
-            d->bLoading = false;
+            d->isLoading = false;
             delete d->progressUpdater;
             d->progressUpdater = 0;
             return false;
         }
-        d->bEmpty = false;
+        d->isEmpty = false;
         kDebug(30003) << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
@@ -1357,7 +1357,7 @@ bool KoDocument::openFile()
     delete d->progressUpdater;
     d->progressUpdater = 0;
 
-    d->bLoading = false;
+    d->isLoading = false;
 
     return ok;
 }
@@ -1487,7 +1487,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
 
         QApplication::restoreOverrideCursor();
         in.close();
-        d->bEmpty = false;
+        d->isEmpty = false;
         return res;
     } else { // It's a calligra store (tar.gz, zip, directory, etc.)
         in.close();
@@ -1632,7 +1632,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 
     bool res = completeLoading(store);
     QApplication::restoreOverrideCursor();
-    d->bEmpty = false;
+    d->isEmpty = false;
     return res;
 }
 
@@ -1776,7 +1776,7 @@ void KoDocument::setModified(bool mod)
     d->parentPart->setModified(mod);
 
     if (mod) {
-        d->bEmpty = false;
+        d->isEmpty = false;
     }
 
     // This influences the title
@@ -1977,7 +1977,7 @@ bool KoDocument::isAutosaving() const
 
 bool KoDocument::isLoading() const
 {
-    return d->bLoading;
+    return d->isLoading;
 }
 
 void KoDocument::removeAutoSaveFiles()
@@ -2087,11 +2087,6 @@ void KoDocument::initEmpty()
     setModified(false);
 }
 
-void KoDocument::startCustomDocument()
-{
-    d->parentPart->deleteOpenPane();
-}
-
 
 QList<KoVersionInfo> & KoDocument::versionList()
 {
@@ -2152,12 +2147,12 @@ KoGuidesData &KoDocument::guidesData()
 
 bool KoDocument::isEmpty() const
 {
-    return d->bEmpty;
+    return d->isEmpty;
 }
 
 void KoDocument::setEmpty()
 {
-    d->bEmpty = true;
+    d->isEmpty = true;
 }
 
 
