@@ -823,8 +823,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     }
 
     connect(d->rootDocument, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    connect(d->rootDocument, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(d->rootDocument, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    connect(d->rootPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    connect(d->rootPart, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
     KUrl oldURL = d->rootPart->url();
     QString oldFile = d->rootPart->localFilePath();
