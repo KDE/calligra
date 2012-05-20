@@ -705,9 +705,6 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 void KoMainWindow::slotLoadCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotLoadCompleted";
-
-    qDebug() << ">>>>>>>>>>>>>>" << sender()->metaObject()->className();
-
     KoPart *newpart = qobject_cast<KoPart*>(sender());
     KoDocument *newdoc = newpart->document();
 
@@ -727,8 +724,8 @@ void KoMainWindow::slotLoadCompleted()
         setRootDocument(newdoc);
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)
