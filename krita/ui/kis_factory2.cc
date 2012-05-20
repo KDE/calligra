@@ -60,7 +60,7 @@ KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
 
 KisFactory2::KisFactory2(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
 }
@@ -77,7 +77,7 @@ KisFactory2::~KisFactory2()
  * Create the document
  */
 QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );

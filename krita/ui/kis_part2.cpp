@@ -63,11 +63,10 @@ void KisPart2::setDocument(KisDoc2 *document)
 KoView *KisPart2::createViewInstance(QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisDoc2 *doc = qobject_cast<KisDoc2*>(document());
-    KisView2 *v = new KisView2(this, doc, parent);
-    Q_CHECK_PTR(v);
+    KisView2 *v = new KisView2(this, m_document, parent);
+
     //XXX : fix this ugliness
-    dynamic_cast<KisShapeController*>(doc->shapeController())->setInitialShapeForView(v);
+    dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     // XXX: this prevents a crash when opening a new document after opening a
