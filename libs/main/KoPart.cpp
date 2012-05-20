@@ -175,6 +175,9 @@ bool KoPart::openFile()
     DocumentProgressProxy progressProxy(shell);
     d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
+
+    // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
+    // reimplement openFile shold now subclass KoPart.
     return d->document->openFile();
 }
 
@@ -187,6 +190,9 @@ bool KoPart::saveFile()
     DocumentProgressProxy progressProxy(shell);
     d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
+
+    // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
+    // reimplement saveFile shold now subclass KoPart.
     return d->document->saveFile();
 }
 
