@@ -553,8 +553,8 @@ void View::Private::adjustActions(bool mode)
  *
  *****************************************************************************/
 
-View::View(QWidget *_parent, Doc *_doc)
-        : KoView(_doc, _parent)
+View::View(KoPart *part, QWidget *_parent, Doc *_doc)
+        : KoView(part, _doc, _parent)
         , d(new Private)
 {
     ElapsedTime et("View constructor");
@@ -567,10 +567,7 @@ View::View(QWidget *_parent, Doc *_doc)
     d->loading = true;
 
     setComponentData(Factory::global());
-    if (doc()->isReadWrite())
-        setXMLFile("sheets.rc");
-    else
-        setXMLFile("sheets_readonly.rc");
+    setXMLFile("sheets.rc");
 
     // GUI Initializations
     initView();
@@ -613,8 +610,7 @@ View::View(QWidget *_parent, Doc *_doc)
 
 View::~View()
 {
-    if (doc()->isReadWrite())   // make sure we're not embedded in Konq
-        selection()->emitCloseEditor(true); // save changes
+    selection()->emitCloseEditor(true); // save changes
 
     // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
@@ -1112,8 +1108,7 @@ void View::initialPosition()
     // Initialize shape anchoring action.
     shapeSelectionChanged();
 
-    if (koDocument()->isReadWrite())
-        initConfig();
+    initConfig();
 
     d->canvas->setFocus();
 
@@ -1153,7 +1148,7 @@ void View::updateReadWrite(bool readwrite)
         d->actions->hideSheet->setEnabled(true);
     }
     d->actions->showPageBorders->setEnabled(true);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::createTemplate()
@@ -1509,7 +1504,7 @@ void View::toggleProtectDoc(bool mode)
 
     doc()->setModified(true);
     stateChanged("map_is_protected", mode ? StateNoReverse : StateReverse);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::toggleProtectSheet(bool mode)
@@ -1908,7 +1903,7 @@ void View::calcStatusBarOp()
 void View::statusBarClicked(const QPoint&)
 {
     QPoint mousepos = QCursor::pos();
-    if (koDocument()->isReadWrite() && factory())
+    if (factory())
         if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
             menu->popup(mousepos);
 }
@@ -1958,7 +1953,7 @@ void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
 
 void View::popupTabBarMenu(const QPoint & _point)
 {
-    if (!koDocument()->isReadWrite() || !factory())
+    if (!factory())
         return;
     if (d->tabBar) {
         QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));

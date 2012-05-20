@@ -26,6 +26,7 @@
 
 #include "AboutData.h"
 #include "Doc.h"
+#include "Part.h"
 
 using namespace Calligra::Sheets;
 
@@ -54,8 +55,10 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    Doc *doc = new Doc(parent);
-    return doc;
+    Part *part = new Part(parent);
+    Doc *doc = new Doc(part);
+    part->setDocument(doc);
+    return part;
 }
 
 KAboutData* Factory::aboutData()
