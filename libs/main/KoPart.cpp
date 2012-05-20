@@ -324,12 +324,15 @@ void KoPart::showLoadingErrorDialog()
 
 void KoPart::openExistingFile(const KUrl& url)
 {
+    qApp->setOverrideCursor(Qt::BusyCursor);
     d->document->openUrl(url);
     setModified(false);
+    qApp->restoreOverrideCursor();
 }
 
 void KoPart::openTemplate(const KUrl& url)
 {
+    qApp->setOverrideCursor(Qt::BusyCursor);
     bool ok = d->document->loadNativeFormat(url.toLocalFile());
     d->document->setModified(false);
     d->document->undoStack()->clear();
@@ -346,6 +349,7 @@ void KoPart::openTemplate(const KUrl& url)
         showLoadingErrorDialog();
         d->document->initEmpty();
     }
+    qApp->restoreOverrideCursor();
 }
 void KoPart::addRecentURLToAllShells(KUrl url)
 {
