@@ -452,7 +452,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
 
     d->rootDocument = doc;
     // XXX remove this after the splitting
-    if (!rootPart) {
+    if (!rootPart && doc) {
         d->rootPart = doc->documentPart();
     }
     else {
