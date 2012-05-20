@@ -100,7 +100,7 @@ class KPLATOUI_EXPORT ReportView : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportView( KoDocument *part, QWidget *parent );
+    ReportView(KoPart *part, KoDocument *doc, QWidget *parent);
 
 public slots:
     void setGuiActive( bool active );

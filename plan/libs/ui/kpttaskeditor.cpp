@@ -271,8 +271,8 @@ void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorP
 
 
 //-----------------------------------
-TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent )
 {
     kDebug(planDbg())<<"----------------- Create TaskEditor ----------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -327,7 +327,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << NodeModel::NodeName );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -898,8 +898,8 @@ KoPrintJob *TaskEditor::createPrintJob()
 
 
 //-----------------------------------
-TaskView::TaskView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -964,7 +964,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -1186,8 +1186,8 @@ void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropInd
 }
 
 //--------------------------------
-TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent ),
     m_cmd( 0 )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -1259,7 +1259,7 @@ TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 

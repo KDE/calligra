@@ -101,7 +101,7 @@ class KPLATOUI_EXPORT TaskStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusView( KoDocument *part, QWidget *parent );
+    TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void setProject( Project *project );
@@ -317,7 +317,7 @@ class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    ProjectStatusView( KoDocument *part, QWidget *parent );
+    ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_project; }
@@ -384,7 +384,7 @@ class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    PerformanceStatusView( KoDocument *part, QWidget *parent );
+    PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_view->project(); }

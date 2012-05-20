@@ -123,8 +123,8 @@ QList<Account*> AccountTreeView::selectedAccounts() const
 
 
 //-----------------------------------
-AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+AccountsEditor::AccountsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     
@@ -134,7 +134,7 @@ AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
     
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 

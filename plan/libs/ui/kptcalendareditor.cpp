@@ -385,8 +385,8 @@ CalendarDay *CalendarDayView::selectedDay() const
 }
 
 //-----------------------------------
-CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent ),
     m_model( new DateTableDataModel( this ) )
 {
     setWhatsThis( i18nc( "@info:whatsthis",
@@ -457,9 +457,9 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     m_calendarview->setDragEnabled ( true );
     m_calendarview->setAcceptDrops( true );
 
-    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
     connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );

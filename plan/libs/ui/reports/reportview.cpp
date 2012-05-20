@@ -138,8 +138,8 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 }
 
 //---------------------
-ReportView::ReportView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ReportView::ReportView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent )
 {
 //    kDebug(planDbg())<<"--------------- ReportView ------------------";
 

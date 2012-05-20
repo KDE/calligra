@@ -211,8 +211,8 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 
 
 //-----------------------------------
-TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_id( -1 )
 {
     kDebug(planDbg())<<"-------------------- creating TaskStatusView -------------------";
@@ -222,7 +222,7 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
@@ -424,8 +424,8 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *
 }
 
 //-----------------------------------
-ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg())<<"-------------------- creating ProjectStatusView -------------------";
@@ -1122,8 +1122,8 @@ void PerformanceStatusTreeView::resizeSplitters()
 }
 
 //-----------------------------------
-PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent )
 {
     kDebug(planDbg())<<"-------------------- creating PerformanceStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );

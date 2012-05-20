@@ -45,6 +45,7 @@ class QAbstractItemModel;
 class KoDocument;
 class KoPrintJob;
 class KoPageLayoutWidget;
+class KoPart;
 
 /// The main namespace
 namespace KPlato
@@ -189,7 +190,7 @@ class KPLATOUI_EXPORT ViewBase : public KoView, public ViewActionLists
     Q_OBJECT
 public:
     /// Contructor
-    ViewBase(KoDocument *doc, QWidget *parent);
+    ViewBase(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~ViewBase();
     /// Return the part (document) this view handles
