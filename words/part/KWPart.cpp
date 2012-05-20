@@ -24,18 +24,24 @@
 #include "KWCanvasItem.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
+#include "dialogs/KWStartupWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeManager.h>
 
 #include <kglobal.h>
+#include <kmessagebox.h>
 
 KWPart::KWPart(QObject *parent)
     : KoPart(parent)
 {
     setComponentData(KGlobal::mainComponent(), false);
+
+    setTemplateType("words_template");
 }
 
 KWPart::~KWPart()
@@ -52,7 +58,7 @@ KoView *KWPart::createViewInstance(QWidget *parent)
 {
     KWView *view = new KWView(this, m_document, parent);
     connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *)));
-    connect(m_document, SIGNAL(resourceChanged(int key, const QVariant &value)), view->canvasBase()->resourceManager(), SLOT(setResource(int key, const QVariant &value)));
+    connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, m_document->frameSets()) {
@@ -90,4 +96,35 @@ QGraphicsItem *KWPart::createCanvasItem()
         }
     }
     return item;
+}
+
+QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWidget *parent)
+{
+    KoColumns columns;
+    columns.columns = 1;
+    columns.columnSpacing = 20;
+
+    QList<KoPart::CustomDocumentWidgetItem> widgetList;
+    KoPart::CustomDocumentWidgetItem item;
+    item.widget = new KWStartupWidget(parent, m_document, columns);
+    widgetList << item;
+    return widgetList;
+}
+
+void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
+{
+    // print error if kotext not available
+    if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
+        // need to wait 1 event since exiting here would not work.
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+    else
+        KoPart::showStartUpWidget(parent, alwaysShow);
+}
+
+void KWPart::showErrorAndDie()
+{
+    KMessageBox::error(0,
+                       i18n("Can not find needed text component, Words will quit now"),
+                       i18n("Installation Error"));
+    QCoreApplication::exit(10);
 }

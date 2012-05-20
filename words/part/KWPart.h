@@ -42,6 +42,14 @@ public:
 
     void setDocument(KWDocument *document);
 
+    /// reimplemented from super
+    QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+
+    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+private slots:
+     void showErrorAndDie();
+
 protected:
 
     virtual KoView *createViewInstance(QWidget *parent); ///reimplemented

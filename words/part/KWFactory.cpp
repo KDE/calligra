@@ -31,6 +31,7 @@
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
+#include <KoMainWindow.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
@@ -69,7 +70,7 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     KWDocument *doc = new KWDocument(part);
     part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
-    return doc;
+    return part;
 }
 
 KAboutData *KWFactory::aboutData()

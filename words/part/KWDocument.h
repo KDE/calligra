@@ -157,9 +157,6 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
-    /// reimplemented from super
-    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-
     KWApplicationConfig &config() {
         return m_config;
     }
@@ -230,7 +227,6 @@ private slots:
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
     /// Called after the constructor figures out there is an install problem.
-    void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
     void layoutProgressChanged(int percent);
@@ -257,7 +253,6 @@ private:
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
     /**
      * emits pageSetupChanged
      */
