@@ -650,6 +650,10 @@ bool KoMainWindow::openDocument(const KUrl & url)
 bool KoMainWindow::openDocument(KoPart *newPart, KoDocument *newdoc, const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
+        // the part always has a document; the document doesn't know about the part.
+        if (!newdoc) {
+            newdoc = newPart->document();
+        }
         newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc, newPart);
         newdoc->setUrl(url);
@@ -672,6 +676,9 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 
     if (!newpart)
         return false;
+
+    if (!newdoc)
+        newdoc = newpart->document();
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));

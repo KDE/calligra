@@ -142,12 +142,14 @@ KoPart::~KoPart()
 
 void KoPart::setDocument(KoDocument *document)
 {
+    Q_ASSERT(document);
     d->document = document;
     connect(d->document, SIGNAL(titleModified(QString,bool)), SLOT(setTitleModified(QString,bool)));
 }
 
 KoDocument *KoPart::document() const
 {
+    Q_ASSERT(d->document);
     return d->document;
 }
 
@@ -462,10 +464,8 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
     }
     openPane->show();
 
-    connect(openPane, SIGNAL(openExistingFile(const KUrl&)),
-            this, SLOT(openExistingFile(const KUrl&)));
-    connect(openPane, SIGNAL(openTemplate(const KUrl&)),
-            this, SLOT(openTemplate(const KUrl&)));
+    connect(openPane, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
+    connect(openPane, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
 
     return openPane;
 }
