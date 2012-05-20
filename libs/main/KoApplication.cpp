@@ -60,7 +60,7 @@ namespace {
 class KoApplicationPrivate
 {
 public:
-    KoApplicationPrivate() 
+    KoApplicationPrivate()
         : splashScreen(0)
     {}
 
@@ -100,7 +100,7 @@ KoApplication::KoApplication()
 	    setStyle("windowsvista");
     }
 #endif
-    
+
 }
 
 // This gets called before entering KApplication::KApplication
@@ -312,7 +312,7 @@ bool KoApplication::start()
             return (numberOfOpenDocuments > 0);
         }
         else {
-            doc->showStartUpWidget(shell);
+            part->showStartUpWidget(shell);
         }
 
     }

@@ -182,7 +182,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
-    d->document->setCurrent();
 
     d->scrollTimer = new QTimer(this);
     connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
@@ -208,7 +207,6 @@ KoView::~KoView()
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
                 d->manager->removePart(d->part);
             d->part->removeView(this);
-            d->document->setCurrent(false);
         }
     }
     delete d;

@@ -34,6 +34,10 @@
 class KoMainWindow;
 class KoDocument;
 class KoView;
+class KoMainWindow;
+class KoView;
+class KoOpenPane;
+
 class QGraphicsItem;
 
 /**
@@ -76,11 +80,27 @@ public:
      */
     KoDocument *document() const;
 
+    /**
+     * Show the last error message in a message box.
+     * The dialog box will mention a saving problem.
+     * Note that save/saveFile takes care of doing it.
+     */
+    void showSavingErrorDialog();
+
+    /**
+     * Show the last error message in a message box.
+     * The dialog box will mention a loading problem.
+     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
+     * so this is often called after loadNativeFormat returned false.
+     */
+    void showLoadingErrorDialog();
+
 
     // ---------- KParts::ReadWritePart overloads -----------
 
     void setReadWrite(bool readwrite);
 
+    virtual bool openFile(); ///reimplemented
     virtual bool saveFile(); ///reimplemented
 
     // ----------------- shell management -----------------
@@ -112,6 +132,24 @@ public:
     void addRecentURLToAllShells(KUrl url);
 
     KoMainWindow *currentShell() const;
+
+protected slots:
+
+    /**
+     * This slot loads an existing file and deletes the start up widget.
+     * @param url the file to load
+     */
+    virtual void openExistingFile(const KUrl& url);
+
+    /**
+     * This slot loads a template and deletes the start up widget.
+     * @param url the template to load
+     */
+    virtual void openTemplate(const KUrl& url);
+
+signals:
+
+    void closeEmbedInitDialog();
 
 private slots:
 
@@ -158,7 +196,71 @@ public:
      */
     QGraphicsItem *canvasItem(bool create = true);
 
+    // ------- startup/openpane etc ---------------
+
+    /**
+     * Set the template type used. This is used by the start up widget to show
+     * the correct templates.
+     */
+    void setTemplateType(const QString& _templateType);
+
+    /**
+     * Template type used. This is used by the start up widget to show
+     * the correct templates.
+     */
+    QString templateType() const;
+
+
+    /**
+     * Creates and shows the start up widget.
+     * @param parent the KoMainWindow used as parent for the widget.
+     * @param alwaysShow always show the widget even if the user has configured it to not show.
+     */
+    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+    /**
+     * Removes the startupWidget shown at application start up.
+     */
+    void deleteOpenPane(bool closing = false);
+
 protected:
+
+    /**
+     * Struct used in the list created by createCustomDocumentWidgets()
+     */
+    struct CustomDocumentWidgetItem {
+        /// Pointer to the custom document widget
+        QWidget *widget;
+        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
+        QString title;
+        /// icon used in the sidebar. If left empty it will use the unknown icon
+        QString icon;
+    };
+
+    /**
+     * Override this method in your derived class to show a widget in the startup 'dialog'.
+     * This widget should allow the user to set settings for a custom document (i.e. one
+     * not based on a template).
+     * The returned widget should provide its own button (preferably 'Create') and
+     * implement the logic to implement the document instance correctly.
+     * After initializing the widget should emit a signal called 'documentSelected()' which
+     * will remove the startupWidget and show the document.
+     * @param parent the parent of the to be created widget.
+     * @return a list of KoDocument::CustomDocumentWidgetItem.
+     */
+    virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+
+    /**
+     * Creates the open widget showed at application start up.
+     * @param parent the parent widget
+     * @param instance the KComponentData to be used for KConfig data
+     * @param templateType the template-type (group) that should be selected on creation.
+     */
+    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
+                               const QString& templateType = QString());
+
+
+
 
     virtual KoView *createViewInstance(QWidget *parent) = 0;
 

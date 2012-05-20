@@ -41,18 +41,13 @@
 #include <kundo2stack.h>
 
 class KUndo2Command;
-class QGraphicsItem;
 class KoPart;
 class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
-class KoMainWindow;
-class KoView;
 class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
-class KoOpenPane;
-class KoTextEditor;
 class KoProgressUpdater;
 class KoProgressProxy;
 
@@ -253,21 +248,6 @@ public:
      * showing it; this method is mostly provided for non-interactive use.
      */
     QString errorMessage() const;
-
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a saving problem.
-     * Note that save/saveFile takes care of doing it.
-     */
-    void showSavingErrorDialog();
-
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
 
     /**
      * @brief Generates a preview picture of the document
@@ -576,17 +556,6 @@ public:
      */
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
 
-    /**
-     * Set the template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplateType(const QString& _templateType);
-    /**
-     * Template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    QString templateType() const;
-
     QList<KoVersionInfo> &versionList();
 
     bool loadNativeFormatFromStore(QByteArray &data);
@@ -689,36 +658,9 @@ signals:
     */
     void modified(bool);
 
-    void closeEmbedInitDialog();
-
     void titleModified(QString caption, bool isModified);
 
-protected slots:
-
-    /**
-     * This slot loads an existing file and deletes the start up widget.
-     * @param url the file to load
-     */
-    virtual void openExistingFile(const KUrl& url);
-
-    /**
-     * This slot loads a template and deletes the start up widget.
-     * @param url the template to load
-     */
-    virtual void openTemplate(const KUrl& url);
-
 protected:
-    /**
-     * Struct used in the list created by createCustomDocumentWidgets()
-     */
-    struct CustomDocumentWidgetItem {
-        /// Pointer to the custom document widget
-        QWidget *widget;
-        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
-        QString title;
-        /// icon used in the sidebar. If left empty it will use the unknown icon
-        QString icon;
-    };
 
     /**
      * Generate a name for the document.
@@ -754,19 +696,6 @@ protected:
      *  You should not have to reimplement, except for very special cases.
      */
     virtual bool saveFile();
-
-    /**
-     * Override this method in your derived class to show a widget in the startup 'dialog'.
-     * This widget should allow the user to set settings for a custom document (i.e. one
-     * not based on a template).
-     * The returned widget should provide its own button (preferably 'Create') and
-     * implement the logic to implement the document instance correctly.
-     * After initializing the widget should emit a signal called 'documentSelected()' which
-     * will remove the startupWidget and show the document.
-     * @param parent the parent of the to be created widget.
-     * @return a list of KoDocument::CustomDocumentWidgetItem.
-     */
-    virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      *  Overload this function if you have to load additional files
@@ -807,17 +736,6 @@ protected:
      */
     bool isExporting() const;
 
-    /**
-     * Creates the open widget showed at application start up.
-     * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
-     * @param templateType the template-type (group) that should be selected on creation.
-     */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
-
-
-
 public:
 
     QString localFilePath() const;
@@ -837,9 +755,6 @@ private:
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
-
-    /// @return the current KoMainWindow shell
-    KoMainWindow *currentShell();
 
     KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);

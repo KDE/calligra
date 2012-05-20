@@ -34,7 +34,6 @@
 #include "KoView.h"
 #include "KoPart.h"
 
-
 KoApplicationAdaptor::KoApplicationAdaptor(KoApplication *parent)
         : QDBusAbstractAdaptor(parent)
         , m_application(parent)

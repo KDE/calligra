@@ -589,16 +589,17 @@ KoPart* KoMainWindow::createPart() const
 void KoMainWindow::updateCaption()
 {
     kDebug(30003) << "KoMainWindow::updateCaption()";
-    if (!d->rootDocument)
+    if (!d->rootDocument) {
         updateCaption(QString(), false);
-    else if (rootDocument()->isCurrent()) {
-        QString caption( rootDocument()->caption() );
+    }
+    else {
+        QString caption( d->rootDocument->caption() );
         if (d->readOnly)
             caption += ' ' + i18n("(write protected)");
 
-        updateCaption(caption, rootDocument()->isModified());
+        updateCaption(caption, d->rootDocument->isModified());
         if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
-            d->saveAction->setToolTip(i18n("Save as %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash)));
+            d->saveAction->setToolTip(i18n("Save as %1", d->rootDocument->url().fileName(KUrl::ObeyTrailingSlash)));
         else
             d->saveAction->setToolTip(i18n("Save"));
     }
@@ -1069,7 +1070,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         d->deferredClosingEvent = e;
         if (d->partToOpen) {
             // The open pane is visible
-            d->partToOpen->document()->deleteOpenPane(true);
+            d->partToOpen->deleteOpenPane(true);
         }
         if (!d->m_dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->m_dockerStateBeforeHiding);
@@ -1194,7 +1195,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
         KoMainWindow *s = new KoMainWindow(newpart->componentData());
         s->show();
         newpart->addShell(s);
-        newpart->document()->showStartUpWidget(s, true /*Always show widget*/);
+        newpart->showStartUpWidget(s, true /*Always show widget*/);
         return;
     }
 
@@ -1207,7 +1208,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     }
 
     newpart->addShell(this);
-    newdoc->showStartUpWidget(this, true /*Always show widget*/);
+    newpart->showStartUpWidget(this, true /*Always show widget*/);
 }
 
 void KoMainWindow::slotFileNew()

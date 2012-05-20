@@ -28,9 +28,60 @@
 #include "KoView.h"
 #include "KoCanvasController.h"
 #include "KoCanvasControllerWidget.h"
+#include "KoOpenPane.h"
+#include "KoMainWindow.h"
+#include "KoProgressProxy.h"
+#include "KoFilterManager.h"
+#include "KoServiceProvider.h"
+
+#include <kdebug.h>
+#include <kstandarddirs.h>
+#include <kxmlguifactory.h>
+#include <kdeprintdialog.h>
+#include <knotification.h>
+#include <kdialog.h>
+#include <kmessagebox.h>
+#include <kdesktopfile.h>
+#include <kmessagebox.h>
+#include <kmimetype.h>
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+
+namespace {
+
+class DocumentProgressProxy : public KoProgressProxy {
+public:
+    KoMainWindow *m_shell;
+    DocumentProgressProxy(KoMainWindow *shell)
+        : m_shell(shell)
+    {
+    }
+
+    ~DocumentProgressProxy() {
+        // signal that the job is done
+        setValue(-1);
+    }
+
+    int maximum() const {
+        return 100;
+    }
+
+    void setValue(int value) {
+        if (m_shell) {
+            m_shell->slotProgress(value);
+        }
+    }
+
+    void setRange(int /*minimum*/, int /*maximum*/) {
+
+    }
+
+    void setFormat(const QString &/*format*/) {
+
+    }
+};
+}
 
 
 class KoPart::Private
@@ -39,6 +90,7 @@ public:
     Private()
         : document(0)
         , canvasItem(0)
+        , startUpWidget(0)
     {
     }
 
@@ -46,6 +98,8 @@ public:
     QList<KoMainWindow*> shells;
     KoDocument *document;
     QGraphicsItem *canvasItem;
+    QPointer<KoOpenPane> startUpWidget;
+    QString templateType;
 
 };
 
@@ -72,10 +126,12 @@ KoPart::~KoPart()
     }
 
 
+    delete d->startUpWidget;
+    d->startUpWidget = 0;
+
+
     delete d;
 }
-
-
 
 void KoPart::setDocument(KoDocument *document)
 {
@@ -101,8 +157,25 @@ void KoPart::setReadWrite(bool readwrite)
     }
 }
 
+bool KoPart::openFile()
+{
+    KoMainWindow *shell = 0;
+    if (shellCount() > 0) {
+        shell = shells()[0];
+    }
+    DocumentProgressProxy progressProxy(shell);
+    d->document->setProgressProxy(&progressProxy);
+    return false; // FIXME should actually load the document, dialogs and all
+}
+
 bool KoPart::saveFile()
 {
+    KoMainWindow *shell = 0;
+    if (shellCount() > 0) {
+        shell = shells()[0];
+    }
+    DocumentProgressProxy progressProxy(shell);
+    d->document->setProgressProxy(&progressProxy);
     return false; // FIXME should actually save the document, dialogs and all
 }
 
@@ -214,6 +287,49 @@ KoMainWindow *KoPart::currentShell() const
 
 }
 
+void KoPart::showSavingErrorDialog()
+{
+    if (d->document->errorMessage().isEmpty()) {
+        KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
+    } else if (d->document->errorMessage() != "USER_CANCELED") {
+        KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), d->document->errorMessage()));
+    }
+}
+
+void KoPart::showLoadingErrorDialog()
+{
+    if (d->document->errorMessage().isEmpty()) {
+        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
+    } else if (d->document->errorMessage() != "USER_CANCELED") {
+        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), d->document->errorMessage()));
+    }
+}
+
+void KoPart::openExistingFile(const KUrl& url)
+{
+    d->document->openUrl(url);
+    setModified(false);
+}
+
+void KoPart::openTemplate(const KUrl& url)
+{
+    bool ok = d->document->loadNativeFormat(url.toLocalFile());
+    d->document->setModified(false);
+    d->document->undoStack()->clear();
+
+    if (ok) {
+        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        // in case this is a open document template remove the -template from the end
+        mimeType.remove( QRegExp( "-template$" ) );
+        d->document->setMimeTypeAfterLoading(mimeType);
+        deleteOpenPane();
+        d->document->resetURL();
+        d->document->setEmpty();
+    } else {
+        showLoadingErrorDialog();
+        d->document->initEmpty();
+    }
+}
 void KoPart::addRecentURLToAllShells(KUrl url)
 {
     // Add to recent actions list in our shells
@@ -233,6 +349,106 @@ void KoPart::setTitleModified(const QString &caption, bool mod)
     }
 }
 
+void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
+{
+#ifndef NDEBUG
+    if (d->templateType.isEmpty())
+        kDebug(30003) << "showStartUpWidget called, but setTemplateType() never called. This will not show a lot";
+#endif
+
+    if (!alwaysShow) {
+        KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+        QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
+        if (!fullTemplateName.isEmpty()) {
+            KUrl url(fullTemplateName);
+            QFileInfo fi(url.toLocalFile());
+            if (!fi.exists()) {
+                QString appName = KGlobal::mainComponent().componentName();
+                QString desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/*/" + fullTemplateName);
+                if (desktopfile.isEmpty()) {
+                    desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/" + fullTemplateName);
+                }
+                if (desktopfile.isEmpty()) {
+                    fullTemplateName.clear();
+                } else {
+                    KUrl templateURL;
+                    KDesktopFile f(desktopfile);
+                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
+                    fullTemplateName = templateURL.toLocalFile();
+                }
+            }
+            if (!fullTemplateName.isEmpty()) {
+                openTemplate(fullTemplateName);
+                shells().first()->setRootDocument(d->document, this);
+                return;
+            }
+        }
+    }
+
+    mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
+
+    if (d->startUpWidget) {
+        d->startUpWidget->show();
+    } else {
+        d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templateType);
+        mainWindow->setCentralWidget(d->startUpWidget);
+    }
+
+    mainWindow->setDocToOpen(this);
+}
+
+void KoPart::deleteOpenPane(bool closing)
+{
+    if (d->startUpWidget) {
+        d->startUpWidget->hide();
+        d->startUpWidget->deleteLater();
+
+        if(!closing) {
+            shells().first()->setRootDocument(d->document, this);
+            KoPart::shells().first()->factory()->container("mainToolBar",
+                                                                  shells().first())->show();
+        }
+    } else {
+        emit closeEmbedInitDialog();
+    }
+}
+
+QList<KoPart::CustomDocumentWidgetItem> KoPart::createCustomDocumentWidgets(QWidget * /*parent*/)
+{
+    return QList<CustomDocumentWidgetItem>();
+}
+
+void KoPart::setTemplateType(const QString& _templateType)
+{
+    d->templateType = _templateType;
+}
+
+QString KoPart::templateType() const
+{
+    return d->templateType;
+}
+
+KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
+                                       const QString& templateType)
+{
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
+
+    KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
+    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
+    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+        openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);
+        connect(item.widget, SIGNAL(documentSelected()), this, SLOT(startCustomDocument()));
+    }
+    openPane->show();
+
+    connect(openPane, SIGNAL(openExistingFile(const KUrl&)),
+            this, SLOT(openExistingFile(const KUrl&)));
+    connect(openPane, SIGNAL(openTemplate(const KUrl&)),
+            this, SLOT(openTemplate(const KUrl&)));
+
+    return openPane;
+}
 
 
 #include <KoPart.moc>
