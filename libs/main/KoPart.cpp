@@ -2,7 +2,7 @@
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2005 David Faure <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2012 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011 Inge Wallin <ingwa@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -44,6 +44,10 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
+#include <kfileitem.h>
+#include <kio/netaccess.h>
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
@@ -110,6 +114,9 @@ KoPart::KoPart(QObject *parent)
 {
     // we're not a part in a part, so we cannot be selected, we're always top-level
     setSelectable(false);
+
+
+    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoPart::~KoPart()
@@ -348,6 +355,14 @@ void KoPart::setTitleModified(const QString &caption, bool mod)
         mainWindow->updateVersionsFileAction(d->document);
     }
 }
+
+void KoPart::slotStarted(KIO::Job *job)
+{
+    if (job && job->ui()) {
+        job->ui()->setWindow(currentShell());
+    }
+}
+
 
 void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {

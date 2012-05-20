@@ -747,7 +747,7 @@ public:
 private slots:
 
     void slotAutoSave();
-    void slotStarted(KIO::Job*);
+
     void startCustomDocument();
 
 private:

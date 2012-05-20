@@ -2,7 +2,7 @@
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2005 David Faure <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2012 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011 Inge Wallin <ingwa@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -51,8 +51,6 @@
 
 #include <kmimetype.h>
 #include <kfileitem.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
@@ -62,6 +60,11 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
+#include <kconfiggroup.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
+#include <kfileitem.h>
+#include <kio/netaccess.h>
 
 #include <QBuffer>
 #include <QDir>
@@ -225,7 +228,6 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
 
-    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoDocument::~KoDocument()
@@ -2029,12 +2031,6 @@ bool KoDocument::hasExternURL() const
             && d->parentPart->url().protocol() != INTERNAL_PROTOCOL;
 }
 
-void KoDocument::slotStarted(KIO::Job *job)
-{
-    if (job && job->ui()) {
-        job->ui()->setWindow(d->parentPart->currentShell());
-    }
-}
 
 static const struct {
     const char *localName;

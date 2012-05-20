@@ -154,7 +154,7 @@ signals:
 private slots:
 
     void setTitleModified(const QString &caption, bool mod);
-
+    void slotStarted(KIO::Job*);
 public:
 
     //------------------ view management ------------------
