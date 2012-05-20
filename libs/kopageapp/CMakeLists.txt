@@ -17,6 +17,7 @@ set( kopageapp_LIB_SRCS
      KoShapeTraversal.cpp
      KoPAView.cpp
      KoPAViewBase.cpp
+     KoPAPart.cpp
      KoPACanvas.cpp
      KoPACanvasItem.cpp
      KoPACanvasBase.cpp
@@ -72,6 +73,7 @@ install(FILES
     KoPAMasterPage.h
     KoPAPageBase.h
     KoPAPageContainerModel.h
+    KoPAPart.h
     KoPASavingContext.h
     KoPAUtil.h
     KoPAView.h

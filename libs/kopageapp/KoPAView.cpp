@@ -159,9 +159,9 @@ public:
 
 
 
-KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-: KoView( document, parent )
-, d( new Private( document ) )
+KoPAView::KoPAView(KoPAPart *part, KoPADocument *document, QWidget *parent)
+: KoView(part, document, parent)
+, d( new Private(document))
 {
     initGUI();
     initActions();
