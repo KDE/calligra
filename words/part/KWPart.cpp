@@ -22,6 +22,7 @@
 #include "KWView.h"
 #include "KWDocument.h"
 #include "KWCanvasItem.h"
+#include "KWFactory.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWStartupWidget.h"
@@ -39,7 +40,7 @@
 KWPart::KWPart(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData(KGlobal::mainComponent(), false);
+    setComponentData(KWFactory::componentData(), false);
 
     setTemplateType("words_template");
 }
