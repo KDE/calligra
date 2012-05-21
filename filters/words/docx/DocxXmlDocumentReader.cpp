@@ -3372,8 +3372,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->startElement("draw:g");
     } else {
         body->startElement("draw:frame");
+        body->addAttribute("draw:layer", "layout");
+
+        if (m_hasPosOffsetH) {
+            kDebug() << "m_posOffsetH" << m_posOffsetH;
+            m_svgX += m_posOffsetH;
+        }
+        if (m_hasPosOffsetV) {
+            kDebug() << "m_posOffsetV" << m_posOffsetV;
+            m_svgY += m_posOffsetV;
+        }
+
+        if (!m_docPrName.isEmpty()) { // from docPr/@name
+            body->addAttribute("draw:name", m_docPrName);
+        }
+
+        if (m_rot == 0) {
+            body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+            body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+        } else {
+            // m_rot is in 1/60,000th of a degree
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+            body->addAttribute("draw:transform", rotString);
+        }
+
+        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
     }
 
+//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
@@ -3480,42 +3510,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
-//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
-    if (m_hasPosOffsetH) {
-        kDebug() << "m_posOffsetH" << m_posOffsetH;
-        m_svgX += m_posOffsetH;
-    }
-    if (m_hasPosOffsetV) {
-        kDebug() << "m_posOffsetV" << m_posOffsetV;
-        m_svgY += m_posOffsetV;
-    }
-
-    if (!m_docPrName.isEmpty()) { // from docPr/@name
-        body->addAttribute("draw:name", m_docPrName);
-    }
-    body->addAttribute("draw:layer", "layout");
-
-    if (m_rot == 0) {
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-    }
-    else {
-        // m_rot is in 1/60,000th of a degree
-        qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
-        QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-        body->addAttribute("draw:transform", rotString);
-    }
-
-    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-
     popCurrentDrawStyle();
 
     (void)buffer.releaseWriter();
 
-    body->endElement(); // draw:frame
+    body->endElement(); // draw:frame/draw:g
 
     if (m_hyperLink) {
         body->endElement(); // text:a
