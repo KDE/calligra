@@ -828,19 +828,9 @@ void Part::slotViewDestroyed()
 {
 }
 
-void Part::activate( QWidget *w )
+void Part::setLoadingTemplate(bool loading)
 {
-    if ( manager() )
-        manager()->setActivePart( this, w );
-}
-
-void Part::openTemplate( const KUrl &url )
-{
-    //kDebug(planDbg())<<url;
-    // HACK because we can't really reimplemt openTemplate() (private methods)
-    m_loadingTemplate = true;
-    KoDocument::openTemplate( url );
-    m_loadingTemplate = false;
+    m_loadingTemplate = loading;
 }
 
 bool Part::completeLoading( KoStore *store )
@@ -875,7 +865,7 @@ bool Part::completeLoading( KoStore *store )
 }
 
 bool Part::completeSaving( KoStore *store )
-{
+{/*FIXME
     // Seems like a hack, but imo the best to do
     View *view = dynamic_cast<View*>( views().value( 0 ) );
     if ( view ) {
@@ -891,7 +881,7 @@ bool Part::completeSaving( KoStore *store )
             m_viewlistModified = false;
             emit viewlistModified( false );
         }
-    }
+    }*/
     return true;
 }
 
@@ -980,28 +970,18 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
     return true;
 }
 
-void Part::insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index )
+void Part::insertViewListItem( View */*view*/, const ViewListItem *item, const ViewListItem *parent, int index )
 {
-    foreach ( KoView *v, views() ) {
-        View *vv = dynamic_cast<View*>( v );
-        if ( vv == 0 || vv == view ) {
-            continue;
-        }
-        vv->addViewListItem( item, parent, index );
-    }
+    // FIXME callers should take care that they now get a signal even if originating from themselves
+    emit viewListItemAdded(item, parent, index);
     setModified( true );
     m_viewlistModified = true;
 }
 
-void Part::removeViewListItem( View *view, const ViewListItem *item )
+void Part::removeViewListItem( View */*view*/, const ViewListItem *item )
 {
-    foreach ( KoView *v, views() ) {
-        View *vv = dynamic_cast<View*>( v );
-        if ( vv == 0 || vv == view ) {
-            continue;
-        }
-        vv->removeViewListItem( item );
-    }
+    // FIXME callers should take care that they now get a signal even if originating from themselves
+    emit viewListItemRemoved(item);
     setModified( true );
     m_viewlistModified = true;
 }

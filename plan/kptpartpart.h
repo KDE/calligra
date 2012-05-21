@@ -47,7 +47,9 @@ public:
     virtual KoView *createViewInstance(QWidget *parent);
 
 protected:
-    Part *m_document;
+    virtual void openTemplate( const KUrl& url );
+
+    KPlato::Part *m_document;
 };
 
 }  //KPlato namespace

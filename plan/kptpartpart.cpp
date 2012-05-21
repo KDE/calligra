@@ -17,48 +17,50 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "FlowPart.h"
+#include "kptpartpart.h"
 
-#include "FlowView.h"
-#include "FlowDocument.h"
-#include "FlowFactory.h"
-
-#include <KoPACanvasItem.h>
-#include <KoCanvasBase.h>
-#include <KoToolManager.h>
-#include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
+#include "kptview.h"
+#include "kptpart.h"
+#include "kptfactory.h"
 
 #include <kglobal.h>
-#include <KMessageBox>
 
-Part::Part(QObject *parent)
+PartPart::PartPart(QObject *parent)
     : KoPart(parent)
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
 }
 
-Part::~Part()
+PartPart::~PartPart()
 {
 }
 
-void Part::setDocument(FlowDocument *document)
+void PartPart::setDocument(KPlato::Part *document)
 {
     KoPart::setDocument(document);
     m_document = document;
 }
 
-KoView *Part::createViewInstance(QWidget *parent)
+KoView *PartPart::createViewInstance(QWidget *parent)
 {
     // syncronize view selector
     View *view = dynamic_cast<View*>(views().value(0));
+    /*FIXME
     if (view && m_context) {
         QDomDocument doc = m_context->save(view);
         m_context->setContent(doc.toString());
-    }
+    }*/
     view = new View(this, m_document, parent);
     connect(view, SIGNAL(destroyed()), this, SLOT(slotViewDestroyed()));
+    connect(m_document, SIGNAL(viewListItemAdded(const ViewListItem *, const ViewListItem *, int)), view, SLOT(addViewListItem(const ViewListItem *, const ViewListItem *, int)));
+    connect(m_document, SIGNAL(viewListItemRemoved(const ViewListItem *)), view, SLOT(removeViewListItem(const ViewListItem *)));
     return view;
+}
+
+void PartPart::openTemplate(const KUrl &url)
+{
+    m_document->setLoadingTemplate(true);
+    KoPart::openTemplate(url);
+    m_document->setLoadingTemplate(true);
 }
