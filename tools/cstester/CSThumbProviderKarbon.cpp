@@ -22,6 +22,7 @@
 #include "CSThumbProviderKarbon.h"
 
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <QApplication>
 #include <QEventLoop>
