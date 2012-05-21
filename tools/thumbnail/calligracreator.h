@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <QTimerEvent>
 
+class KoPart;
 class KoDocument;
 
 class CalligraCreator : public QObject, public ThumbCreator
@@ -43,6 +44,7 @@ private slots:
     void slotCompleted();
 
 private:
+    KoPart *m_part;
     KoDocument *m_doc;
     bool m_completed;
 };

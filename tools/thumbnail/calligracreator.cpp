@@ -30,6 +30,7 @@
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
 
+#include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <QAbstractEventDispatcher>
@@ -45,12 +46,14 @@ extern "C"
 }
 
 CalligraCreator::CalligraCreator()
-    : m_doc(0)
+    : m_part(0)
+    , m_doc(0)
 {
 }
 
 CalligraCreator::~CalligraCreator()
 {
+    delete m_part;
     delete m_doc;
 }
 
@@ -70,11 +73,13 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     QString mimetype = KMimeType::findByPath( path )->name();
 
-    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>( mimetype );
+    m_part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoPart>( mimetype );
 
-    if (!m_doc) return false;
+    if (!m_part) return false;
 
-    connect(m_doc, SIGNAL(completed()), SLOT(slotCompleted()));
+    m_doc = m_part->document();
+
+    connect(m_part, SIGNAL(completed()), SLOT(slotCompleted()));
 
     KUrl url;
     url.setPath( path );
@@ -106,7 +111,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
 void CalligraCreator::timerEvent(QTimerEvent *)
 {
-    m_doc->closeUrl();
+    m_part->closeUrl();
     m_completed = true;
 }
 
