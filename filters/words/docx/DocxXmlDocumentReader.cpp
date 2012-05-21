@@ -153,6 +153,7 @@ void DocxXmlDocumentReader::init()
     m_wasCaption = false;
     m_closeHyperlink = false;
     m_listFound = false;
+    m_insideParagraph = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
@@ -2100,6 +2101,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 {
     READ_PROLOGUE
+    m_insideParagraph = true;
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
     m_listFound = false;
@@ -2391,7 +2393,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         m_wasCaption = true;
                     }
                 }
-                //insert the XML snippet representing a floating table
+                //insert the bookmark-start/bookmark-end XML snippet
+                if (!m_bookmarkSnippet.isEmpty()) {
+                    body->addCompleteElement(m_bookmarkSnippet.toUtf8());
+                }
+
+                //insert the floating table XML snippet
                 if (!m_floatingTable.isEmpty()) {
                     body->addCompleteElement(m_floatingTable.toUtf8());
                     m_floatingTable.clear();
@@ -2399,6 +2406,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
                 (void)textPBuf.releaseWriter();
                 body->endElement(); //text:p
+
                 if (m_listFound) {
                     for (int i = 0; i <= m_currentListLevel; ++i) {
                         body->endElement(); //text:list-item
@@ -2418,6 +2426,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     }
 
     m_currentStyleName.clear();
+    m_insideParagraph = false;
 
     m_currentParagraphStyle = activeStyles.last();
     activeStyles.pop_back();
@@ -3047,11 +3056,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
 
     TRY_READ_ATTR(name)
     TRY_READ_ATTR(id)
+
     if (!name.isEmpty() && !id.isEmpty()) {
+        MSOOXML::Utils::XmlWriteBuffer buffer;
+
+        //bookmark presence limitation by ODF 1.2
+        if (!m_insideParagraph) {
+            body = buffer.setWriter(body);
+        }
         body->startElement("text:bookmark-start");
         body->addAttribute("text:name", name);
         body->endElement(); // text:bookmark-start
         m_bookmarks[id] = name;
+
+        if (!m_insideParagraph) {
+            body = buffer.releaseWriter(m_bookmarkSnippet);
+        }
     }
 
     readNext();
@@ -3115,9 +3135,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
 
     TRY_READ_ATTR(id)
     if (!id.isEmpty()) {
+        MSOOXML::Utils::XmlWriteBuffer buffer;
+
+        //bookmark presence limitation by ODF 1.2
+        if (!m_insideParagraph) {
+            body = buffer.setWriter(body);
+        }
         body->startElement("text:bookmark-end");
         body->addAttribute("text:name", m_bookmarks[id]);
         body->endElement(); // text:bookmark-end
+
+        if (!m_insideParagraph) {
+            body = buffer.releaseWriter(m_bookmarkSnippet);
+        }
     }
 
     readNext();
