@@ -63,7 +63,7 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     if (!document)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(document);
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(document);
     if (!karbonPart)
         return KoFilter::WrongFormat;
 

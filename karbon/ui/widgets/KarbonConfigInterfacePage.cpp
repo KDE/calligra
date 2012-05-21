@@ -96,7 +96,7 @@ void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonPart* part = m_view->part();
+    KarbonKoDocument* part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 

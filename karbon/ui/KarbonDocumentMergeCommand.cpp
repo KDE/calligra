@@ -38,13 +38,13 @@ public:
         }
     }
 
-    KarbonPart * targetPart;
+    KarbonKoDocument * targetPart;
     QList<KoShapeLayer*> layers;
     QList<KoShape*> shapes;
     bool hasMerged;
 };
 
-KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart)
+KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonKoDocument * targetPart, KarbonKoDocument * sourcePart)
         : KUndo2Command(0), d(new Private())
 {
     d->targetPart = targetPart;

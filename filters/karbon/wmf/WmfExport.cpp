@@ -59,7 +59,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     if (! doc)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(doc);
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(doc);
     if (! karbonPart)
         return KoFilter::WrongFormat;
 

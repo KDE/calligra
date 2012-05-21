@@ -152,7 +152,7 @@
 class KarbonView::Private
 {
 public:
-    Private(KarbonPart * p)
+    Private(KarbonKoDocument * p)
             : part(p), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
@@ -164,7 +164,7 @@ public:
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
-    KarbonPart * part;
+    KarbonKoDocument * part;
     KarbonCanvas * canvas;
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
@@ -202,16 +202,13 @@ public:
     QWidget * zoomActionWidget; ///< zoom action widget
 };
 
-KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
+KarbonView::KarbonView(KarbonKoDocument* p, QWidget* parent)
         : KoView(p, parent), d(new Private(p))
 {
     setComponentData(KarbonFactory::componentData(), true);
     setAcceptDrops(true);
 
-    if (!p->isReadWrite())
-        setXMLFile(QString::fromLatin1("karbon_readonly.rc"));
-    else
-        setXMLFile(QString::fromLatin1("karbon.rc"));
+    setXMLFile(QString::fromLatin1("karbon.rc"));
 
     const int viewMargin = 250;
     d->canvas = new KarbonCanvas(p);
@@ -352,7 +349,7 @@ KarbonView::~KarbonView()
     delete d;
 }
 
-KarbonPart * KarbonView::part() const
+KarbonKoDocument * KarbonView::part() const
 {
     return d->part;
 }
@@ -491,7 +488,7 @@ void KarbonView::fileImportGraphic()
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->document().dataCenterMap();
 
-    KarbonPart importPart;
+    KarbonKoDocument importPart;
     // use data centers of this document for importing
     importPart.document().useExternalDataCenterMap(dataCenters);
 

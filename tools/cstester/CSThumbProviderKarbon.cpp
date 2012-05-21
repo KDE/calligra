@@ -37,7 +37,7 @@ void processEvents()
     }
 }
 
-CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonPart *doc)
+CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonKoDocument *doc)
 : m_doc(doc)
 {
 }
