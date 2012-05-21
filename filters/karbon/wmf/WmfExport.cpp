@@ -22,6 +22,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <kdebug.h>
 #include <kpluginfactory.h>

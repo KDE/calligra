@@ -19,6 +19,7 @@
 
 #include "KarbonDocumentMergeCommand.h"
 #include "KarbonPart.h"
+#include "KarbonKoDocument.h"
 #include "KarbonDocument.h"
 #include "KoShapeLayer.h"
 #include <KLocale>

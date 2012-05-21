@@ -24,6 +24,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 #include <KarbonLayerReorderCommand.h>
 
 #include <KoShapeManager.h>

@@ -62,6 +62,7 @@ class KoColor;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
+class KarbonPart;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
@@ -70,7 +71,7 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    explicit KarbonView(KarbonKoDocument* part, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonKoDocument* doc, QWidget* parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to

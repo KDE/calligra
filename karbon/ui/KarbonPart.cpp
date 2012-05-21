@@ -58,7 +58,7 @@ KoView * KarbonPart::createViewInstance(QWidget *parent)
 {
     KarbonKoDocument *doc = qobject_cast<KarbonKoDocument*>(document());
 
-    KarbonView *result = new KarbonView(doc, parent);
+    KarbonView *result = new KarbonView(this, doc, parent);
 
     KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
     provider->setResource(KoCanvasResourceManager::PageSize, doc->document().pageSize());

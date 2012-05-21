@@ -28,6 +28,7 @@
 
 #include <KarbonPart.h>
 #include <KarbonDocument.h>
+#include <KarbonKoDocument.h>
 
 #include <KoShape.h>
 #include <KoShapeLayer.h>

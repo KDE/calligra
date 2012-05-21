@@ -38,6 +38,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>

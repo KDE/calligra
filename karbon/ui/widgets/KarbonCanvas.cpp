@@ -31,6 +31,7 @@
 
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
+#include <KarbonKoDocument.h>
 #include "KarbonPart.h"
 #include <KarbonOutlinePaintingStrategy.h>
 
