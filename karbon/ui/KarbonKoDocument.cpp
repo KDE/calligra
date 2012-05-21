@@ -40,6 +40,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KarbonKoDocument.h"
 #include "KarbonPart.h"
 #include "KarbonFactory.h"
 #include "KarbonView.h"
@@ -107,17 +108,6 @@ public:
             return defaultValue;
     }
 
-    void applyCanvasConfiguration(KarbonCanvas * canvas, KarbonKoDocument * part)
-    {
-        KSharedConfigPtr config = part->componentData().config();
-
-        QColor color(Qt::white);
-        if (config->hasGroup("Interface")) {
-            color = config->group("Interface").readEntry("CanvasColor", color);
-        }
-        canvas->setBackgroundColor(color);
-    }
-
     KarbonDocument document;  ///< store non-visual doc info
     bool showStatusBar;       ///< enable/disable status bar in attached view(s)
     bool merge;
@@ -125,12 +115,11 @@ public:
 };
 
 
-KarbonKoDocument::KarbonKoDocument(QObject* parent)
-        : KoDocument(parent), d(new Private())
+KarbonKoDocument::KarbonKoDocument(KarbonPart* part)
+        : KoDocument(part)
+        , d(new Private())
 {
     d->document.setResourceManager(resourceManager());
-    setComponentData(KarbonFactory::componentData(), false);
-    setTemplateType("karbon_template");
     resourceManager()->setUndoStack(undoStack());
 
     initConfig();
@@ -157,33 +146,6 @@ void KarbonKoDocument::setPageLayout(const KoPageLayout& layout)
     setPageSize(QSizeF(layout.width, layout.height));
 }
 
-KoView* KarbonKoDocument::createViewInstance(QWidget* parent)
-{
-    KarbonView *result = new KarbonView(this, parent);
-
-    KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
-    provider->setResource(KoCanvasResourceManager::PageSize, d->document.pageSize());
-
-    d->applyCanvasConfiguration(result->canvasWidget(), this);
-
-    return result;
-}
-
-void KarbonKoDocument::removeView(KoView *view)
-{
-    kDebug(38000) << "KarbonPart::removeView";
-    KoDocument::removeView(view);
-}
-
-void KarbonKoDocument::openTemplate(const KUrl& url)
-{
-    KoDocument::openTemplate(url);
-
-    // explicitly set the output mimetype to our native mimetype
-    // so that autosaving works for not yet saved templates as well
-    if (outputMimeType().isEmpty())
-        setOutputMimeType("application/vnd.oasis.opendocument.graphics");
-}
 
 bool KarbonKoDocument::loadXML(const KoXmlDocument&, KoStore*)
 {
@@ -368,18 +330,18 @@ uint KarbonKoDocument::maxRecentFiles() const
 
 void KarbonKoDocument::reorganizeGUI()
 {
-    foreach(KoView* view, views()) {
+    foreach(KoView* view, documentPart()->views()) {
         KarbonView * kv = qobject_cast<KarbonView*>(view);
         if (kv) {
             kv->reorganizeGUI();
-            d->applyCanvasConfiguration(kv->canvasWidget(), this);
+            emit applyCanvasConfiguration(kv->canvasWidget());
         }
     }
 }
 
 void KarbonKoDocument::initConfig()
 {
-    KSharedConfigPtr config = KarbonKoDocument::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::componentData().config();
 
     // disable grid by default
     gridData().setShowGrid(false);
@@ -420,7 +382,7 @@ bool KarbonKoDocument::mergeNativeFormat(const QString &file)
     d->merge = true;
     bool result = loadNativeFormat(file);
     if (!result)
-        showLoadingErrorDialog();
+        documentPart()->showLoadingErrorDialog();
     d->merge = false;
     return result;
 }
@@ -452,7 +414,7 @@ void KarbonKoDocument::addShape(KoShape* shape)
 
         d->document.add(shape);
 
-        foreach(KoView *view, views()) {
+        foreach(KoView *view, documentPart()->views()) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->addShape(shape);
         }
@@ -469,7 +431,7 @@ void KarbonKoDocument::removeShape(KoShape* shape)
         d->document.removeLayer(layer);
     } else {
         d->document.remove(shape);
-        foreach(KoView *view, views()) {
+        foreach(KoView *view, documentPart()->views()) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->remove(shape);
         }
@@ -486,11 +448,11 @@ QMap<QString, KoDataCenterBase*> KarbonKoDocument::dataCenterMap() const
 void KarbonKoDocument::setPageSize(const QSizeF &pageSize)
 {
     d->document.setPageSize(pageSize);
-    foreach(KoView *view, views()) {
+    foreach(KoView *view, documentPart()->views()) {
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
         canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
     }
 }
 
-#include "KarbonPart.moc"
+#include "KarbonKoDocument.moc"
 

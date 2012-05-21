@@ -29,8 +29,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBON_PART_H
-#define KARBON_PART_H
+#ifndef KARBON_KODOCUMENT_H
+#define KARBON_KODOCUMENT_H
 
 #include <QMap>
 
@@ -43,6 +43,8 @@
 
 class QRect;
 class KarbonDocument;
+class KarbonPart;
+class KarbonCanvas;
 class KoDataCenterBase;
 
 /**
@@ -53,7 +55,7 @@ class KARBONUI_EXPORT KarbonKoDocument : public KoDocument, public KoShapeBasedD
 {
     Q_OBJECT
 public:
-    explicit KarbonKoDocument(QObject* parent = 0L);
+    explicit KarbonKoDocument(KarbonPart *part);
     virtual ~KarbonKoDocument();
 
     /// reimplemented form KoDocument
@@ -98,12 +100,9 @@ public slots:
 
 signals:
     void shapeCountChanged();
+    void applyCanvasConfiguration(KarbonCanvas *canvas);
 
 protected:
-    /// reimplemented form KoDocument
-    virtual KoView* createViewInstance(QWidget* parent);
-    /// reimplemented form KoDocument
-    virtual void removeView(KoView *view);
 
     /// Loads settings like grid and guide lines from given xml document
     void loadOasisSettings(const KoXmlDocument & settingsDoc);
@@ -116,9 +115,6 @@ protected:
     /// Reads settings from config file
     void initConfig();
 
-protected slots:
-    /// reimplemented from KoDocument
-    virtual void openTemplate(const KUrl& url);
 
 private:
     class Private;

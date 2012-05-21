@@ -351,6 +351,7 @@ void KoPart::openTemplate(const KUrl& url)
     }
     qApp->restoreOverrideCursor();
 }
+
 void KoPart::addRecentURLToAllShells(KUrl url)
 {
     // Add to recent actions list in our shells

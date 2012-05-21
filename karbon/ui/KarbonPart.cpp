@@ -20,10 +20,12 @@
 #include "KarbonPart.h"
 
 #include "KarbonView.h"
+#include "KarbonDocument.h"
 #include "KarbonKoDocument.h"
 #include "KarbonFactory.h"
+#include "KarbonCanvas.h"
 
-#include <KoPACanvasItem.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
@@ -31,6 +33,7 @@
 #include <KoShapeManager.h>
 
 #include <kglobal.h>
+#include <kconfiggroup.h>
 #include <KMessageBox>
 
 KarbonPart::KarbonPart(QObject *parent)
@@ -44,56 +47,49 @@ KarbonPart::~KarbonPart()
 {
 }
 
-void KarbonPart::setDocument(KarbonDocument *document)
+void KarbonPart::setDocument(KoDocument *document)
 {
     KoPart::setDocument(document);
-    m_document = document;
+    KarbonKoDocument *doc = qobject_cast<KarbonKoDocument*>(document);
+    connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }
 
 KoView * KarbonPart::createViewInstance(QWidget *parent)
 {
-    KarbonView *view = new KarbonView(this, m_document, parent);
-    connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->viewMode(), SLOT(addShape(KoShape *)));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->viewMode(), SLOT(removeShape(KoShape *)));
-    connect(m_document, SIGNAL(replaceActivePage(KoPAPageBase *, KoPAPageBase *)), view, SLOT(replaceActivePage(KoPAPageBase *, KoPAPageBase *)));
-    return view;
+    KarbonKoDocument *doc = qobject_cast<KarbonKoDocument*>(document());
+
+    KarbonView *result = new KarbonView(doc, parent);
+
+    KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
+    provider->setResource(KoCanvasResourceManager::PageSize, doc->document().pageSize());
+
+    applyCanvasConfiguration(result->canvasWidget());
+
+    return result;
 }
 
-QGraphicsItem *KarbonPart::createCanvasItem()
+void KarbonPart::openTemplate(const KUrl& url)
 {
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(m_document);
-    return canvasItem;
-}
+    KoPart::openTemplate(url);
 
-void KarbonPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
-{
-    // Go through all (optional) plugins we require and quit if necessary
-    bool error = false;
-    KoShapeFactoryBase *factory;
-
-    factory = KoShapeRegistry::instance()->value("TextShapeID");
-    if (!factory) {
-        m_errorMessage = i18n("Can not find needed text component, Calligra Karbon will quit now.");
-        error = true;
-    }
-    factory = KoShapeRegistry::instance()->value("PictureShape");
-    if (!factory) {
-        m_errorMessage = i18n("Can not find needed picture component, Calligra Karbon will quit now.");
-        error = true;
-    }
-
-    if (error) {
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    } else {
-        KoPart::showStartUpWidget(parent, alwaysShow);
+    // explicitly set the output mimetype to our native mimetype
+    // so that autosaving works for not yet saved templates as well
+    if (document()->outputMimeType().isEmpty()) {
+        document()->setOutputMimeType("application/vnd.oasis.opendocument.graphics");
     }
 }
 
-void KarbonPart::showErrorAndDie()
+
+void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
 {
-    KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));
-    // This means "the environment is incorrect" on Windows
-    // FIXME: Is this uniform on all platforms?
-    QCoreApplication::exit(10);
+    KSharedConfigPtr config = componentData().config();
+
+    QColor color(Qt::white);
+    if (config->hasGroup("Interface")) {
+        color = config->group("Interface").readEntry("CanvasColor", color);
+    }
+    canvas->setBackgroundColor(color);
 }
 
+
+#include "KarbonPart.moc"

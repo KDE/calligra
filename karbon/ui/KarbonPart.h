@@ -24,11 +24,13 @@
 
 #include "karbonui_export.h"
 
-class KarbonKoDocument;
 class QGraphicsItem;
 class KoView;
+class KoDocument;
 
-class KARBON_EXPORT KarbonPart : public KoPart
+class KarbonCanvas;
+
+class KARBONUI_EXPORT KarbonPart : public KoPart
 {
     Q_OBJECT
 
@@ -37,28 +39,19 @@ public:
 
     virtual ~KarbonPart();
 
-    void setDocument(KarbonKoDocument *document);
-
-    /**
-     * Creates and shows the start up widget. Reimplemented from KoDocument.
-     *
-     * @param parent the KoMainWindow used as parent for the widget.
-     * @param alwaysShow always show the widget even if the user has configured it to not show.
-     */
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow);
+    void setDocument(KoDocument *document);
 
     /// reimplemented
     virtual KoView *createViewInstance(QWidget *parent);
-    /// reimplemented
-    virtual QGraphicsItem *createCanvasItem();
 
 protected slots:
-    /// Quits Stage with error message from m_errorMessage.
-    void showErrorAndDie();
 
-protected:
-    QString m_errorMessage;
-    KarbonKoDocument *m_document;
+    /// reimplemented
+    virtual void openTemplate(const KUrl& url);
+
+private slots:
+
+    void applyCanvasConfiguration(KarbonCanvas *canvas);
 };
 
 #endif
