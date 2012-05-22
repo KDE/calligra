@@ -282,6 +282,42 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(9, 29, Value(3));
     storage->setValue(9, 30, Value(2));
     storage->setValue(9, 31, Value(1));
+
+    // J19:J20
+    storage->setValue(10, 19, Value(253));
+    storage->setValue(10, 20, Value(240));
+
+    // K19:K20
+    storage->setValue(11, 19, Value(197));
+    storage->setValue(11, 20, Value(240));
+
+    // L19:L20
+    storage->setValue(12, 19, Value(204));
+    storage->setValue(12, 20, Value(240));
+
+    // M19:M20
+    storage->setValue(13, 19, Value());
+    storage->setValue(13, 20, Value(240));
+
+    // N19:N20
+    storage->setValue(14, 19, Value(true));
+    storage->setValue(14, 20, Value(240));
+
+    // O19:O20
+    storage->setValue(15, 19, Value(279));
+    storage->setValue(15, 20, Value("ABC"));
+
+    // P19:P20
+    storage->setValue(16, 19, Value("HI"));
+    storage->setValue(16, 20, Value());
+
+    // Q19:Q20
+    storage->setValue(17, 19, Value(279));
+    storage->setValue(17, 20, Value(240));
+
+    // R19:R20
+    storage->setValue(18, 19, Value(267));
+    storage->setValue(18, 20, Value(240));
 }
 
 void TestStatisticalFunctions::testAVEDEV()
@@ -428,6 +464,31 @@ void TestStatisticalFunctions::testCHIDIST()
     CHECK_EVAL("CHIDIST(      2;2)",       Value(0.3678794412));    //
     CHECK_EVAL("CHIDIST(     -1;2)",       Value(1));               // constraint x<0 TODO EXCEL return #NUM!
 //     CHECK_EVAL("CHIDIST(     4;\"texr\")", Value::VALUE()    ); // TODO
+}
+
+void TestStatisticalFunctions::testCHISQDIST()
+{
+    CHECK_EVAL("CHISQDIST(0;2)",               Value(0));             // number cannot be less than 0
+    CHECK_EVAL("CHISQDIST(0;2;FALSE())",       Value(0));             // number cannot be less than 0
+    CHECK_EVAL("CHISQDIST(2;2;FALSE())",       Value(0.183940));      // FALSE() => returns the value of the probability density function
+    CHECK_EVAL_SHORT("CHISQDIST(2;2;TRUE())",  Value(0.632120));      // TRUE() => returns the value of the cumulative distribution function
+    CHECK_EVAL("CHISQDIST(4;2;FALSE())",       Value(0.067668));      // FALSE() => returns the value of the probability density function
+    CHECK_EVAL_SHORT("CHISQDIST(4;2;TRUE())",  Value(0.864665));      // TRUE() => returns the value of the cumulative distribution function
+}
+
+void TestStatisticalFunctions::testCHISQINV()
+{
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.1;3);3;TRUE())",   Value(0.1));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.3;3);3;TRUE())",   Value(0.3));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.5;3);3;TRUE())",   Value(0.5));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.7;3);3;TRUE())",   Value(0.7));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.9;3);3;TRUE())",   Value(0.9));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.1;20);20;TRUE())", Value(0.1));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.3;20);20;TRUE())", Value(0.3));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.5;20);20;TRUE())", Value(0.5));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.7;20);20;TRUE())", Value(0.7));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0.9;20);20;TRUE())", Value(0.9));
+    CHECK_EVAL("CHISQDIST(CHISQINV(0;20);20;TRUE())",   Value(0));
 }
 
 void TestStatisticalFunctions::testCONFIDENCE()
@@ -744,6 +805,18 @@ void TestStatisticalFunctions::testLEGACYCHIINV()
     CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;20);20)", Value(0.7));    //
     CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;20);20)", Value(0.9));    //
     CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(1.0;20);20)", Value(1.0));    //
+}
+
+void TestStatisticalFunctions::testLEGACYCHITEST()
+{
+    // rows |  J  |  K  |  L  |  M  |  N   |  O  |  P  |  Q  |  R
+    // -----+-----+-----+-----+-----+------+-----+-----+-----+-----
+    //  19  | 253 | 197 | 204 |     | True | 279 | ABC | 279 | 267      Actual values
+    //  20  | 240 | 240 | 240 | 240 | 240  | HI  |     | 240 | 240      Expected values
+    CHECK_EVAL_SHORT("CHITEST(J19:L19;J20:L20)", Value(0.0010036));            // just the numbers
+    CHECK_EVAL_SHORT("CHITEST(J19:R19;J20:R20)", Value(0.0001164));            // String, Boolean or Empty values are ignored
+    CHECK_EVAL("CHITEST(J19:P19;J20:R20)",       Value::errorNUM());           // rows != columns, #NUM! returned
+    CHECK_EVAL("CHITEST(J19:J19;J20:J20)",       Value::errorNUM());           // (rows * columns) < 1, #NUM! returned
 }
 
 void TestStatisticalFunctions::testLEGACYFDIST()

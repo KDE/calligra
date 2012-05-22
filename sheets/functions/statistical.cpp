@@ -50,6 +50,8 @@ Value func_betainv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_chisqdist(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_chisqinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combina(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence(valVector args, ValueCalc *calc, FuncExtra *);
@@ -78,6 +80,7 @@ Value func_kurtosis_pop(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_large(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychidist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacychitest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_loginv(valVector args, ValueCalc *calc, FuncExtra *);
@@ -169,6 +172,12 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f->setParamCount(4);
     add(f);
     f = new Function("CHIDIST", func_chidist);
+    f->setParamCount(2);
+    add(f);
+    f = new Function("CHISQDIST", func_chisqdist);
+    f->setParamCount(2, 3);
+    add(f);
+    f = new Function("CHISQINV", func_chisqinv);
     f->setParamCount(2);
     add(f);
     f = new Function("COMBIN", func_combin);
@@ -265,6 +274,12 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("LEGACYCHIINV", func_legacychiinv);
     f->setParamCount(2);
+    add(f);
+    f = new Function("LEGACYCHITEST", func_legacychitest);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    f->setAlternateName("CHITEST");
     add(f);
     f = new Function("LEGACYFDIST", func_legacyfdist);
     f->setParamCount(3);
@@ -1044,6 +1059,56 @@ Value func_chidist(valVector args, ValueCalc *calc, FuncExtra *)
     // 1.0 - GetGammaDist (fChi / 2.0, fDF / 2.0, 1.0)
     return calc->sub(Value(1.0), calc->GetGammaDist(calc->div(fChi, 2.0),
                      calc->div(fDF, 2.0), Value(1.0)));
+}
+
+//
+// Function chisqdist
+//
+//
+Value func_chisqdist(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value fNum = calc->conv()->asFloat(args[0]);
+    Value fDF = calc->conv()->asFloat(args[1]);
+
+    bool selFun = true;
+
+    if (args.count() > 2)
+        selFun = calc->conv()->asBoolean(args[2]).asBoolean();
+
+    if (calc->lower(fNum, Value(0.00)) || (calc->equal(fNum, Value(0.00))))
+        return Value(0);
+
+    if (!selFun) {      // non cumulative
+        // NOTE: this requires the use of function GetGammaDistribution with 4th argument = "false". But GetGammaDistribution only takes 3 parameters - must be modified!
+        return calc->roundUp(calc->div(calc->mul(calc->pow(fNum, calc->sub(calc->div(fDF, 2), Value(1))), calc->pow(Value(2.71828), calc->sub(Value(0), calc->div(fNum, Value(2))))), calc->mul(calc->pow(Value(2), calc->div(fDF, Value(2))), calc->fact(calc->conv()->asInteger(calc->div(fDF, Value(2))).asInteger(), 0))), 6);
+        //return calc->GetGammaDist(fNum, calc->div(fDF, Value(2)), Value(2), false);
+    } else              // cumulative
+        return calc->GetGammaDist(calc->div(fNum, 2.0), calc->div(fDF, 2.0), Value(1.0));
+
+    return Value(0);
+}
+
+//
+// Function chisqinv(probability, Degrees of Freedom)
+//
+Value func_chisqinv(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value fNum = calc->conv()->asFloat(args[0]);
+    Value fDF = calc->conv()->asInteger(args[1]);       // only integers
+    Value result;
+
+    if (calc->lower(fNum, Value(0)) || calc->greater(fNum, Value(1))) return Value::errorNUM();     // fNum should lie between 0 and 1
+
+    if (calc->lower(fDF, Value(1))) return Value::errorNUM();       // fDF cannot be lower than 1
+
+    bool convergenceError;
+
+    result = InverseIterator(func_chisqdist, valVector() << fDF, calc).exec(fNum.asFloat(), fDF.asFloat() * 0.5, fDF.asFloat(), convergenceError);
+
+    if (convergenceError)
+        return Value::errorVALUE();
+
+    return result;
 }
 
 //
@@ -1912,6 +1977,58 @@ Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     return result;
+}
+
+//
+// Function: legacy.chitest
+//
+// Returns some Chi square goodness-for-fit test
+//
+Value func_legacychitest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value arrayA = args[0];         // array for Actual values
+    Value arrayE = args[1];         // array for Expected values
+
+    Value chiSq(0);                 // value of chi square
+    Value DF;                       // Degrees of freedom
+
+    if (arrayA.rows() != arrayE.rows() || arrayA.columns() != arrayE.columns())
+        return Value::errorNUM();
+
+    if (!((arrayA.columns() * arrayA.rows()) > 1))
+        return Value::errorNUM();
+
+    int rows = arrayA.rows();
+    int cols = arrayA.columns();
+
+    int rowCnt = 0;     // valid row count
+    int colCnt = 0;     // valid column count
+
+    // calculating Chi square
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            // if element is empty or its type is Boolean or Text - ignore the corresponding element
+            if (arrayA.element(c, r).isEmpty() || arrayE.element(c, r).isEmpty())
+                continue;
+            if (arrayA.element(c, r).isBoolean() || arrayE.element(c, r).isBoolean())
+                continue;
+            if (arrayA.element(c, r).isString() || arrayE.element(c, r).isString())
+                continue;
+
+            colCnt++;
+
+            chiSq = calc->add(chiSq, calc->div(calc->sqr(calc->sub(arrayA.element(c, r), arrayE.element(c, r))), arrayE.element(c, r)));
+        }   // cols
+        rowCnt++;
+    }   // rows
+
+    // calculating Degree of Freedom
+    if (calc->greater(rowCnt, Value(1)) && calc->greater(colCnt, Value(1)))
+        DF = calc->mul(calc->sub(Value(rowCnt), Value(1)), calc->sub(Value(colCnt), Value(1)));
+    else
+        DF = calc->sub(calc->mul(Value(rowCnt), Value(colCnt)), 1);
+
+    return FunctionCaller(func_legacychidist, valVector() << chiSq << DF, calc).exec();
 }
 
 //

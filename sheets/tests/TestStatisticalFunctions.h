@@ -50,6 +50,8 @@ private slots:
 //     void testBINO(); // kspread version of BINOMDIST with 3 Parameters
     void testBINOMDIST();
     void testCHIDIST();
+    void testCHISQDIST();
+    void testCHISQINV();
 //     void testCOMBIN();  // in -> TestMathFunctions
 //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();
@@ -81,6 +83,7 @@ private slots:
 
     void testLEGACYCHIDIST();
     void testLEGACYCHIINV();
+    void testLEGACYCHITEST();
     void testLEGACYFDIST();
     void testLEGACYFINV();
 //     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
