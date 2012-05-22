@@ -19,35 +19,48 @@
 
 #include "BibliographyDatabaseWindow.h"
 #include "BibliographyDb.h"
+#include "InsertCitationDialog.h"
 
 #include <QTableView>
+#include <QHeaderView>
 #include <QSqlTableModel>
 #include <QDir>
 #include <QMessageBox>
+#include <QVariant>
 #include <QDebug>
+
+#include <klocale.h>
+#include <KFileDialog>
+#include <KUrl>
 
 BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     QMainWindow(parent),
     m_table(0)
 {
     ui.setupUi(this);
+    setupActions();
 
     m_bibTableView = new QTableView(ui.centralwidget);
+    m_bibTableView->setCornerButtonEnabled(true);
+    m_bibTableView->verticalHeader()->setDefaultSectionSize(20);
+    m_bibTableView->setEditTriggers(QTableView::AllEditTriggers);
+
     ui.centralwidget->layout()->addWidget(m_bibTableView);
-
-    connect(ui.tableList, SIGNAL(currentIndexChanged(QString)), this, SLOT(tableChanged(QString)));
-
-    //TODO: add blank row after row change
-    //connect(m_bibTableView, SIGNAL(rowCountChanged(int,int)), this, SLOT(insertBlankRow()));
 
     if (!tableDir.exists()) {
         if (!tableDir.mkpath(tableDir.absolutePath())) {
             QMessageBox::warning(this, i18n("Error"), QString(i18n("Error creating directory ")).append(tableDir.absolutePath()));
             emit close();
         }
-    } else {
-        loadBibliographyDbs();
+    } else if (loadBibliographyDbs() == 0) {
+        ui.tableList->addItem("bibliography.sqlite");
+        ui.tableList->setItemData(0, QVariant::fromValue<QString>(tableDir.absolutePath()));
+
+        tableChanged("bibliography.sqlite");
     }
+
+    connect(ui.tableList, SIGNAL(currentIndexChanged(QString)), this, SLOT(tableChanged(QString)));
+    ui.tableList->setCurrentIndex(ui.tableList->count() - 1);
 }
 
 BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
@@ -55,13 +68,17 @@ BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
     delete m_table;
 }
 
-void BibliographyDatabaseWindow::loadBibliographyDbs()
+int BibliographyDatabaseWindow::loadBibliographyDbs()
 {
     tableDir = QDir(QDir::home().path().append(QDir::separator()).append(".calligra"),
                                               QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-    foreach(QFileInfo tableInfo, tableDir.entryInfoList()) {
-        ui.tableList->addItem(tableInfo.fileName());
+    QFileInfoList tableFiles = tableDir.entryInfoList();
+    for( int i = 0; i < tableFiles.size(); i++) {
+        ui.tableList->addItem(tableFiles.at(i).fileName());
+        ui.tableList->setItemData(i, QVariant::fromValue<QString>(tableFiles.at(i).dir().absolutePath()));
     }
+
+    return tableFiles.size();
 }
 
 void BibliographyDatabaseWindow::tableChanged(QString newTable)
@@ -70,11 +87,12 @@ void BibliographyDatabaseWindow::tableChanged(QString newTable)
         delete m_table;
     }
 
-    if (newTable.isEmpty()) {
-        newTable = "bibliography.sqlite";
+    QString dbPath = ui.tableList->itemData(ui.tableList->currentIndex()).value<QString>();
+    if (dbPath.isEmpty()) {
+        return;
     }
 
-    m_table = new BibliographyDb(this, tableDir.absolutePath(), newTable);
+    m_table = new BibliographyDb(this, dbPath, newTable);
     m_bibTableView->setModel(m_table->tableModel());
     m_bibTableView->hideColumn(0);      // hide ID column
     m_bibTableView->resizeColumnsToContents();
@@ -82,12 +100,41 @@ void BibliographyDatabaseWindow::tableChanged(QString newTable)
     m_bibTableView->setSortingEnabled(true);
     m_bibTableView->show();
 
+    this->setWindowTitle(QString("Bibliography Database - ").append(newTable));
     //We add extra row to insert new citation record
-    m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
+    //m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
 }
 
 void BibliographyDatabaseWindow::insertBlankRow()
 {
-    qDebug() << "inserting blank row..\n";
-    m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
+    //m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
+}
+
+void BibliographyDatabaseWindow::setupActions()
+{
+    ui.actionNew->setStatusTip(i18n("New citation record"));
+    connect(ui.actionNew, SIGNAL(triggered()), this, SLOT(newRecord()));
+
+    ui.actionOpen->setStatusTip(i18n("Open citation database from file"));
+    connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+
+    ui.actionClose->setStatusTip(i18n("Close bibliography database"));
+    connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
+}
+
+void BibliographyDatabaseWindow::newRecord()
+{
+    new InsertCitationDialog(m_table, this);
+}
+
+void BibliographyDatabaseWindow::openFile()
+{
+    QString tableFile = KFileDialog::getOpenFileName(KUrl(tableDir.absolutePath()), ".sqlite", this, "Open Bibliography database table from file");
+
+    if (!tableFile.isEmpty()) {
+        ui.tableList->addItem(tableFile.section(QDir::separator(), -1));           //set list entry as tableFile.section(QDir::separator(), -1)
+        ui.tableList->setItemData(ui.tableList->count(), QVariant::fromValue<QString>(tableFile));
+
+        ui.tableList->setCurrentIndex(ui.tableList->count() - 1);
+    }
 }

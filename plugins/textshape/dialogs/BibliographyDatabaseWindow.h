@@ -29,6 +29,8 @@
 class BibliographyDb;
 class QTableView;
 class QDir;
+class QComboBox;
+class QDataWidgetMapper;
 
 class BibliographyDatabaseWindow : public QMainWindow
 {
@@ -37,19 +39,24 @@ class BibliographyDatabaseWindow : public QMainWindow
 public:
     explicit BibliographyDatabaseWindow(QWidget *parent = 0);
     ~BibliographyDatabaseWindow();
-    void loadBibliographyDbs();
-    
-private:
-    Ui::BibliographyDatabaseWindow ui;
-    QTableView *m_bibTableView;
-    BibliographyDb *m_table;
+    int loadBibliographyDbs();
 
 public:
     QDir tableDir;
 
-private slots:
+public slots:
     void tableChanged(QString);
     void insertBlankRow();
+
+private:
+    Ui::BibliographyDatabaseWindow ui;
+    QTableView *m_bibTableView;
+    BibliographyDb *m_table;
+    void setupActions();
+
+private slots:
+    void newRecord();
+    void openFile();
 };
 
 #endif // BIBLIOGRAPHYDATABASEWINDOW_H
