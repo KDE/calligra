@@ -26,7 +26,9 @@
 #include <KoTextDocument.h>
 
 #include <QMessageBox>
-#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlTableModel>
+#include <QDataWidgetMapper>
 #include <QSqlError>
 
 InsertCitationDialog::InsertCitationDialog(KoTextEditor *editor ,QWidget *parent) :
@@ -36,6 +38,8 @@ InsertCitationDialog::InsertCitationDialog(KoTextEditor *editor ,QWidget *parent
     m_table(0),
     m_mode(InsertCitationDialog::Default)
 {
+    Q_ASSERT(m_editor);
+
     dialog.setupUi(this);
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
@@ -56,6 +60,8 @@ InsertCitationDialog::InsertCitationDialog(BibliographyDb *db, QWidget *parent) 
     m_table(db),
     m_mode(InsertCitationDialog::DB)
 {
+    Q_ASSERT(m_db);
+
     dialog.setupUi(this);
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
@@ -71,18 +77,21 @@ InsertCitationDialog::InsertCitationDialog(BibliographyDb *db, QWidget *parent) 
 
 void InsertCitationDialog::insert()
 {
-    if (m_cites.contains(dialog.shortName->text())) {
-        if (*m_cites.value(dialog.shortName->text()) != *toCite()) {      //prompts if values are changed
-            int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
-                                 "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
-            if ( ret == QMessageBox::Yes) {
-                foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {     //update all cites with new values
-                    existingCite->fieldMap() = toCite()->fieldMap();
-                    existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
-                }
-                emit accept();
-            } else return;
-        }
+    if (m_mode == InsertCitationDialog::Default &&
+            m_cites.contains(dialog.shortName->text()) && *m_cites.value(dialog.shortName->text()) != *toCite()) {
+
+        //prompts if values are changed
+        int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
+                             "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
+
+        if (ret == QMessageBox::Yes) {
+            foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {     //update all cites with new values
+                existingCite->setFields(toCite()->fieldMap());
+                existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
+            }
+
+            emit accept();
+        } else return;
     }
 
     if (dialog.shortName->text().isEmpty()) {
@@ -92,15 +101,16 @@ void InsertCitationDialog::insert()
     }
 
     if (m_mode == InsertCitationDialog::DB) {
-        QSqlError insertQueryError = m_table->insertCitation(toCite()).lastError();
-        if (insertQueryError.isValid()) {
+
+        if (!m_table->insertCitation(toCite()) && m_table->lastError().isValid()) {
             QMessageBox::critical(this, i18n("Error"), QString(i18n("Unable to insert citation record to database. "))
-                                  .append(insertQueryError.text()), QMessageBox::Ok);
+                                  .append(m_table->lastError().text()), QMessageBox::Ok);
             return;
         }
+
     } else {
         KoInlineCite *cite = m_editor->insertCitation();
-        cite->fieldMap() = toCite()->fieldMap();
+        cite->setFields(toCite()->fieldMap());
     }
     emit accept();
 }
