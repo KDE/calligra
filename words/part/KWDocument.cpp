@@ -757,14 +757,6 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
-QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
-{
-    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
-    if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-words"); // we can't save this, only load.
-    return answer;
-}
-
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "pageStyleName=" << style.name();

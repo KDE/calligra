@@ -37,15 +37,15 @@
         <dict>
             <key>CFBundleTypeExtensions</key>
             <array>
-                <string>kwd</string>
-                <string>KWD</string>
-                <string>kwt</string>
-                <string>KWT</string>
+                <string>odt</string>
+                <string>ODT</string>
+                <string>ott</string>
+                <string>OTT</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
-                <string>application/x-words</string>
-                <string>application/x-words-crypt</string>
+                <string>application/vnd.oasis.opendocument.text</string>
+                <string>application/vnd.oasis.opendocument.text-template</string>
             </array>
             <key>CFBundleTypeOSTypes</key>
             <array>

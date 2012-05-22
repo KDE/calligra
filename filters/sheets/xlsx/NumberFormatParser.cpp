@@ -133,7 +133,6 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
     QString plainText;
     QMap< QString, QString > conditions;
     QString condition;
-    bool hasConditions = false;
 
     // this is for the month vs. minutes-context
     bool justHadHours = false;
@@ -493,7 +492,6 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
                 const QString styleName = styles->insert(result, "N");
                 conditions.insertMulti(condition, styleName);
             }
-            hasConditions = true;
             condition.clear();
 
             // start a new style
@@ -554,7 +552,6 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
             const QString styleName = styles->insert(result, "N");
             conditions.insertMulti(condition, styleName);
         }
-        hasConditions = true;
         condition.clear();
 
         // start a new style
@@ -586,7 +583,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
     buffer.close();
 
     // conditional style with the current format
-    return styleFromTypeAndBuffer(hasConditions ? KoGenStyle::NumericTextStyle : type, buffer);
+    return styleFromTypeAndBuffer(type, buffer);
 }
 
 bool NumberFormatParser::isDateFormat(const QString& numberFormat)

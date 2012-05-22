@@ -54,6 +54,7 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
+    dialogs/KWConfigureDialog.cpp
 
     dockers/KWStatisticsDocker.cpp
     dockers/KWStatistics.cpp

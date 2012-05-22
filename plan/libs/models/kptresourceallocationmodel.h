@@ -152,9 +152,15 @@ protected:
     bool setAllocation( ResourceGroup *res, const QVariant &value, int role );
     bool setAllocation( Resource *res, const QVariant &value, int role );
 
+    QVariant maximum( const ResourceGroup *res, int role ) const;
+
     bool setRequired( const QModelIndex &idx, const QVariant &value, int role );
     QVariant required( const QModelIndex &idx, int role ) const;
-    
+
+private:
+    int requestedResources( const ResourceGroup *res ) const;
+    bool hasMaterialResources() const;
+
 private:
     ResourceAllocationModel m_model;
 

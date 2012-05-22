@@ -1150,7 +1150,6 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
     }
     gr->group()->registerRequest( gr );
 
-    gr->setUnits( element.attribute( "units" ).toInt() );
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1168,6 +1167,10 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
             }
         }
     }
+    // meaning of m_units changed
+    int x = element.attribute("units").toInt() -gr->count();
+    gr->setUnits( x > 0 ? x : 0 );
+
     return true;
 }
 

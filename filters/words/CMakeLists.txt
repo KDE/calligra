@@ -46,9 +46,7 @@ IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDES} )
-
-add_subdirectory( libexport )
+include_directories(${KOMAIN_INCLUDES} )
 
 IF( NOT TINY )
     macro_optional_find_package(WPD)

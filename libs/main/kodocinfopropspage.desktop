@@ -21,6 +21,7 @@ Name[pl]=Strona właściwości informacji o dokumencie dla Calligra
 Name[pt]=Página de Propriedades do Documento do Calligra
 Name[pt_BR]=Página de propriedades do documento do Calligra
 Name[ru]=Страница сведений о документе Calligra
+Name[sk]=Informačná strana dokumentu Calligra
 Name[sv]=Calligra-sida med dokumentinformation
 Name[uk]=Сторінка властивостей документу Calligra
 Name[x-test]=xxCalligra Document Info Properties Pagexx
@@ -30,4 +31,4 @@ X-KDE-Library=kodocinfopropspage
 X-KDE-ServiceTypes=KPropertiesDialog/Plugin
 X-KDE-Protocol=file
 # List taken from tools/thumbnail/calligrathumbnail.desktop
-MimeType=application/x-words;application/x-kspread;application/x-kpresenter;application/x-karbon;application/x-krita;application/x-kchart;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;image/openraster;
+MimeType=application/x-kspread;application/x-kpresenter;application/x-karbon;application/x-krita;application/x-kchart;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;image/openraster;

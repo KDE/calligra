@@ -1444,10 +1444,10 @@ long Resource::allocationSuitability( const DateTime &time, const Duration &dura
     Duration e;
     if ( m_type == Type_Team ) {
         foreach ( Resource *r, teamMembers() ) {
-            e += r->effort( time, duration, backward );
+            e += r->effort( time, duration, 100, backward );
         }
     } else {
-        e = effort( time, duration, backward );
+        e = effort( time, duration, 100, backward );
     }
     return e.minutes();
 }
@@ -1899,16 +1899,14 @@ QList<ResourceRequest*> ResourceGroupRequest::resourceRequests( bool resolveTeam
     return lst;
 }
 
-bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
+bool ResourceGroupRequest::load(KoXmlElement &element, XMLLoaderObject &status) {
     //kDebug(planDbg());
-    m_group = project.findResourceGroup(element.attribute("group-id"));
+    m_group = status.project().findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
         kError()<<"The referenced resource group does not exist: group id="<<element.attribute("group-id");
         return false;
     }
     m_group->registerRequest(this);
-    
-    m_units  = element.attribute("units").toInt();
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1918,13 +1916,20 @@ bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
         KoXmlElement e = n.toElement();
         if (e.tagName() == "resource-request") {
             ResourceRequest *r = new ResourceRequest();
-            if (r->load(e, project))
+            if (r->load(e, status.project()))
                 addResourceRequest(r);
             else {
                 kError()<<"Failed to load resource request";
                 delete r;
             }
         }
+    }
+    // meaning of m_units changed
+    // Pre 0.6.6 the number *included* all requests, now it is in *addition* to resource requests
+    m_units  = element.attribute("units").toInt();
+    if ( status.version() < "0.6.6" ) {
+        int x = m_units - m_resourceRequests.count();
+        m_units = x > 0 ? x : 0;
     }
     return true;
 }
@@ -2064,7 +2069,7 @@ void ResourceGroupRequest::resetDynamicAllocations()
 
 void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const Duration &effort, Schedule *ns, bool backward )
 {
-    int num = m_units - m_resourceRequests.count();
+    int num = m_units;
     if ( num <= 0 ) {
         return;
     }
@@ -2074,10 +2079,17 @@ void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const 
     Duration e = effort / m_units;
     QMap<long, ResourceRequest*> map;
     foreach ( Resource *r, m_group->resources() ) {
-        if ( r->type() == Resource::Type_Team || find( r ) ) {
+        if ( r->type() == Resource::Type_Team ) {
             continue;
         }
-        ResourceRequest *rr = new ResourceRequest( r, r->units() );
+        ResourceRequest *rr = find( r );
+        if ( rr ) {
+            if ( rr->isDynamicallyAllocated() ) {
+                --num; // allready allocated
+            }
+            continue;
+        }
+        rr = new ResourceRequest( r, r->units() );
         long s = rr->allocationSuitability( time, e, ns, backward );
         if ( s == 0 ) {
             // not suitable at all
@@ -2086,11 +2098,12 @@ void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const 
             map.insertMulti( s, rr );
         }
     }
-    num = qMin( map.count(), num );
-    for ( --num; num >= 0; --num ) {
-        ResourceRequest *r = map.take( map.keys().last() );
+    for ( --num; num >= 0 && ! map.isEmpty(); --num ) {
+        long key = map.keys().last();
+        ResourceRequest *r = map.take( key );
         r->setAllocatedDynaically( true );
         addResourceRequest( r );
+        kDebug(planDbg())<<key<<r;
     }
     qDeleteAll( map ); // delete the unused
 }
