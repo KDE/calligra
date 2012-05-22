@@ -25,7 +25,7 @@
 #include "dialogs/SimpleCaptionsWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
 #include "dialogs/NotesConfigurationDialog.h"
-#include "dialogs/CitationInsertionDialog.h"
+#include "dialogs/InsertCitationDialog.h"
 #include "dialogs/InsertBibliographyDialog.h"
 #include "dialogs/BibliographyConfigureDialog.h"
 #include "dialogs/BibliographyDatabaseWindow.h"
@@ -192,7 +192,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
 void ReferencesTool::insertCitation()
 {
-    new CitationInsertionDialog(textEditor(), m_scbw);
+    new InsertCitationDialog(textEditor(), m_scbw);
 }
 
 void ReferencesTool::insertCustomBibliography(KoBibliographyInfo *defaultTemplate)

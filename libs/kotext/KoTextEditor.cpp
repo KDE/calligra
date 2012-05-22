@@ -1403,7 +1403,7 @@ KoInlineCite *KoTextEditor::insertCitation()
 
     KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,cite);
+    manager->insertInlineObject(d->caret, cite);
 
     if (hasSelection) {
         d->caret.endEditBlock();

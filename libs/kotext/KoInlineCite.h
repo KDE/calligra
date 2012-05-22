@@ -59,141 +59,17 @@ public:
 
     void setType(Type t);
 
-    QString dataField(QString fieldName) const;     //returns bibliography-data-field with name fieldName
-
     bool hasSameData(KoInlineCite *cite) const;
 
     void copyFrom(KoInlineCite *cite);
 
-    void setIdentifier(const QString &identifier);
+    void setField(QString fieldName, QString fieldValue);
 
-    void setBibliographyType(const QString &bibliographyType);
+    void setFields(QMap<QString, QString> fields);
 
-    void setAddress (const QString &addr);
+    QString value(QString fieldName) const;
 
-    void setAnnotation (const QString &annotation);
-
-    void setAuthor (const QString &author);
-
-    void setBookTitle (const QString &booktitle);
-
-    void setChapter (const QString &chapter);
-
-    void setEdition (const QString &edition);
-
-    void setEditor (const QString &editor);
-
-    void setPublicationType (const QString &publicationType);
-
-    void setInstitution (const QString &institution);
-
-    void setJournal (const QString &journal);
-
-    void setLabel(const QString &label);
-
-    void setMonth (const QString &month);
-
-    void setNote (const QString &note);
-
-    void setNumber (const QString &number);
-
-    void setOrganisation (const QString &organisation);
-
-    void setPages (const QString &pages);
-
-    void setPublisher (const QString &publisher);
-
-    void setSchool (const QString &school);
-
-    void setSeries (const QString &series);
-
-    void setTitle (const QString &title);
-
-    void setReportType (const QString &reportType);
-
-    void setVolume (const QString &volume);
-
-    void setYear (const QString &year);
-
-    void setURL (const QString &url);
-
-    void setISBN (const QString &isbn);
-
-    void setISSN (const QString &issn);
-
-    void setCustom1 (const QString &custom1);
-
-    void setCustom2 (const QString &custom2);
-
-    void setCustom3 (const QString &custom3);
-
-    void setCustom4 (const QString &custom4);
-
-    void setCustom5 (const QString &custom5);
-
-    QString identifier() const;
-
-    QString address() const;
-
-    QString author() const;
-
-    QString bibliographyType() const;
-
-    QString annotation() const;
-
-    QString bookTitle() const;
-
-    QString chapter() const;
-
-    QString edition() const;
-
-    QString editor() const;
-
-    QString publicationType() const;
-
-    QString institution() const;
-
-    QString journal() const;
-
-    QString month() const;
-
-    QString note() const;
-
-    QString number() const;
-
-    QString organisations() const;
-
-    QString pages() const;
-
-    QString publisher() const;
-
-    QString school() const;
-
-    QString series() const;
-
-    QString title() const;
-
-    QString reportType() const;
-
-    QString volume() const;
-
-    QString year() const;
-
-    QString url() const;
-
-    QString isbn() const;
-
-    QString issn() const;
-
-    QString custom1() const;
-
-    QString custom2() const;
-
-    QString custom3() const;
-
-    QString custom4() const;
-
-    QString custom5() const;
+    QMap<QString, QString> fieldMap() const;
 
     int posInDocument() const;
 

@@ -279,7 +279,7 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
-            answers.insert(cite->identifier(), cite);
+            answers.insert(cite->value("identifier"), cite);
         }
     }
     return answers;

@@ -59,11 +59,11 @@ static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
     if ( keyIndex == sortKeys.size() ) return false;
     else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
-        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return true;
-        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return false;
+        if (c1->value(sortKeys[keyIndex].first) < c2->value(sortKeys[keyIndex].first)) return true;
+        else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) return false;
     } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
-        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return false;
-        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return true;
+        if (c1->value(sortKeys[keyIndex].first ) < c2->value(sortKeys[keyIndex].first)) return false;
+        else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) return true;
     } else return compare_on( keyIndex + 1, c1, c2 );
 
     return false;
@@ -123,9 +123,9 @@ void BibliographyGenerator::generate()
     {
         KoParagraphStyle *bibTemplateStyle = 0;
         BibliographyEntryTemplate bibEntryTemplate;
-        if (m_bibInfo->m_entryTemplate.keys().contains(cite->bibliographyType())) {
+        if (m_bibInfo->m_entryTemplate.keys().contains(cite->value("bibliography-type"))) {
 
-            bibEntryTemplate = m_bibInfo->m_entryTemplate[cite->bibliographyType()];
+            bibEntryTemplate = m_bibInfo->m_entryTemplate[cite->value("bibliography-type")];
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
             if (bibTemplateStyle == 0) {
@@ -133,7 +133,7 @@ void BibliographyGenerator::generate()
                 bibEntryTemplate.styleName = bibTemplateStyle->name();
             }
         } else {
-            qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
+            qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->value("bibliography-type");
             continue;
         }
 
@@ -147,8 +147,8 @@ void BibliographyGenerator::generate()
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
-                    cursor.insertText(QString(((spanEnabled)?" ":"")).append(cite->dataField(indexEntry->dataField)));
-                    spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
+                    cursor.insertText(QString(((spanEnabled)?" ":"")).append(cite->value(indexEntry->dataField)));
+                    spanEnabled = !cite->value(indexEntry->dataField).isEmpty();
                     break;
                 }
                 case IndexEntry::SPAN: {
