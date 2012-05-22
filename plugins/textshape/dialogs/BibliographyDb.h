@@ -22,11 +22,14 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QMap>
 
 class QSqlDatabase;
 class QSqlTableModel;
 class QSqlError;
 class QDir;
+
+class KoInlineCite;
 
 class BibliographyDb : public QObject
 {
@@ -41,7 +44,10 @@ public:
     // creates bibliography table in SQLITE database
     bool createTable();
     QSqlTableModel* tableModel();
+    bool insertCitation(KoInlineCite *);
+    QMap<QString, KoInlineCite *> citationRecords();
 
+    static QSqlRecord sqlRecord(KoInlineCite* cite);
 private:
     QSqlTableModel *m_model;
     QSqlDatabase m_db;

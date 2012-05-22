@@ -21,19 +21,22 @@
 
 #include <KoOdfBibliographyConfiguration.h>
 #include <klocale.h>
+#include <KoInlineCite.h>
 
 #include <QDir>
 #include <QFile>
 #include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlField>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlTableModel>
 
 BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
     QObject(parent),
+    m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
     m_dbName(dbName),
-    m_fullPath(path),
-    m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE")))
+    m_fullPath(path)
 {
 #ifdef Q_OS_LINUX
     m_fullPath.append(QDir::separator()).append(m_dbName);
@@ -53,10 +56,6 @@ BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
         m_model->setTable("bibref");
         m_model->setEditStrategy(QSqlTableModel::OnRowChange);
         m_model->select();
-
-        /*for (int i = 0; KoOdfBibliographyConfiguration::bibDataFields.size(); i++) {
-            m_model->setHeaderData(i, Qt::Horizontal, KoOdfBibliographyConfiguration::bibDataFields.at(i));
-        }*/
     }
 }
 
@@ -86,7 +85,7 @@ void BibliographyDb::closeDb()
 
 QSqlError BibliographyDb::lastError() const
 {
-    return m_db.lastError();
+    return m_model->lastError();
 }
 
 bool BibliographyDb::createTable()
@@ -97,8 +96,8 @@ bool BibliographyDb::createTable()
     } else {
         QString query("CREATE TABLE bibref"
                       "(id INTEGER PRIMARY KEY,"
-                      "identifier TEXT UNIQUE,"
-                      "bibliographic_type TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
+                      "identifier TEXT NOT NULL UNIQUE,"
+                      "bibliography_type TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "address TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "annote TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "author TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
@@ -112,7 +111,7 @@ bool BibliographyDb::createTable()
                       "month TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "note TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "number TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "organizations TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
+                      "organisations TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "pages TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "publisher TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "school TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
@@ -139,10 +138,47 @@ QSqlTableModel* BibliographyDb::tableModel()
     return m_model;
 }
 
+bool BibliographyDb::insertCitation(KoInlineCite *cite)
+{
+    QSqlRecord record = BibliographyDb::sqlRecord(cite);
+    return m_model->insertRecord(-1, record);
+}
+
+QMap<QString, KoInlineCite *> BibliographyDb::citationRecords()
+{
+    QMap<QString, KoInlineCite *> answers;
+    int citeCount = m_model->rowCount();
+
+    for (int i = 0; i < citeCount; i++) {
+        QSqlRecord record = m_model->record(i);
+        KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
+
+        foreach(QString dataField, KoOdfBibliographyConfiguration::bibDataFields) {
+            QString dbField = QString(dataField).replace(QString('-'), QString('_'));
+            cite->setField(dataField, record.value(dbField).toString());
+        }
+        answers.insert(cite->value("identifier"), cite);
+    }
+    return answers;
+}
+
 BibliographyDb::~BibliographyDb()
 {
     closeDb();
     if (m_model) {
         delete m_model;
     }
+}
+
+QSqlRecord BibliographyDb::sqlRecord(KoInlineCite *cite)
+{
+    QSqlRecord record;
+
+    foreach(QString dataField, KoOdfBibliographyConfiguration::bibDataFields) {
+        QString dbField = QString(dataField).replace("-", "_");
+        QSqlField field(dbField, QVariant::String);
+        field.setValue(cite->value(dataField));
+        record.append(field);
+    }
+    return record;
 }
