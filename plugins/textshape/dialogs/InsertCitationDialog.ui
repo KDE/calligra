@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CitationInsertionDialog</class>
- <widget class="QDialog" name="CitationInsertionDialog">
+ <class>InsertCitationDialog</class>
+ <widget class="QDialog" name="InsertCitationDialog">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -592,7 +592,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CitationInsertionDialog</receiver>
+   <receiver>InsertCitationDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

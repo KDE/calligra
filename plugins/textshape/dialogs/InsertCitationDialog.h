@@ -16,10 +16,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef CITATIONINSERTIONDIALOG_H
-#define CITATIONINSERTIONDIALOG_H
+#ifndef InsertCitationDialog_H
+#define InsertCitationDialog_H
 
-#include "ui_CitationInsertionDialog.h"
+#include "ui_InsertCitationDialog.h"
 #include <KoTextEditor.h>
 #include <QTextBlock>
 
@@ -27,24 +27,34 @@
 class TextTool;
 class KoStyleManager;
 class KoInlineCite;
+class BibliographyDb;
 
-class CitationInsertionDialog : public QDialog
+class InsertCitationDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent = 0);
+    enum Mode {
+        Default,
+        DB
+    };
+
+    explicit InsertCitationDialog(KoTextEditor *editor ,QWidget *parent = 0);
+    explicit InsertCitationDialog(BibliographyDb *db ,QWidget *parent = 0);
     KoInlineCite *toCite();                 //returns cite with values filled in form
     void fillValuesFrom(KoInlineCite *cite);        //fills form with values in cite
+    QMap<QString, KoInlineCite*> citations();
 
 public slots:
     void insert();
     void selectionChangedFromExistingCites();
 
 private:
-    Ui::CitationInsertionDialog dialog;
+    Ui::InsertCitationDialog dialog;
     bool m_blockSignals;
     KoTextEditor *m_editor;
+    BibliographyDb *m_table;
     QMap<QString, KoInlineCite*> m_cites;
+    Mode m_mode;
 };
 
 #endif // CITATIONBIBLIOGRAPHYDIALOG_H
