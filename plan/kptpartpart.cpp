@@ -62,5 +62,5 @@ void PartPart::openTemplate(const KUrl &url)
 {
     m_document->setLoadingTemplate(true);
     KoPart::openTemplate(url);
-    m_document->setLoadingTemplate(true);
+    m_document->setLoadingTemplate(false);
 }
