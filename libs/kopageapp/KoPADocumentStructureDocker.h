@@ -36,11 +36,6 @@ class QModelIndex;
 class QAction;
 class QButtonGroup;
 
-namespace KParts
-{
-    class Part;
-}
-
 class KoPADocumentStructureDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -84,9 +79,6 @@ signals:
 
 public slots:
     void updateView();
-//    /// Set the KPart::Part or the document for this docker, this will reset the document model for this docker
-//    /// and eventually dockerReset() signal will be emitted
-//    void setPart(KParts::Part * part);
 
     void selectPages(int start, int count);
 
