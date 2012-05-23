@@ -240,6 +240,15 @@ void KoPAView::initGUI()
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
+
+    if (shell()) {
+        // this needs to be done before KoCanvasControllerWidget::setCanvas is called
+        KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(shell()->createDockWidget(&structureDockerFactory));
+        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+    }
+
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
@@ -322,14 +331,6 @@ void KoPAView::initGUI()
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
 
     if (shell()) {
-        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
-// XXX: fine another way to signal to the view that the document has changed so the document structure docker needs to be reset.
-//        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-//                d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
-        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
-
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
     if (d->doc->inlineTextObjectManager()) {
