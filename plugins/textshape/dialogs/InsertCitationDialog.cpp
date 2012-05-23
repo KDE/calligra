@@ -105,6 +105,9 @@ void InsertCitationDialog::insert()
         if (!m_table->insertCitation(toCite()) && m_table->lastError().isValid()) {
             QMessageBox::critical(this, i18n("Error"), QString(i18n("Unable to insert citation record to database. "))
                                   .append(m_table->lastError().text()), QMessageBox::Ok);
+
+            //Remove invalid row appended last
+            m_table->tableModel()->removeRow(m_table->tableModel()->rowCount() - 1);
             return;
         }
 
