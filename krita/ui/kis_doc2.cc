@@ -138,6 +138,8 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
+    QList<KisPaintingAssistant*> assistants;
+
     KisPart2 *part; // XXX: we shouldn't know about the part here!
 };
 
@@ -433,7 +435,7 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, views()) {
+    foreach(KoView *v, m_d->part->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();

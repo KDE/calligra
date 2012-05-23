@@ -41,6 +41,7 @@ class KoShapeLayer;
 
 class KisChildDoc;
 class KisUndoStore;
+class KisPaintingAssistant;
 class KisView2;
 
 /**
