@@ -103,6 +103,28 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
     return false;
 }
 
+/* bodyPr (Body Properties) defaults
+ * ECMA-376, 21.1.2.1.1, p.3556 - DrawingML
+ */
+void MSOOXML_CURRENT_CLASS::inheritDefaultBodyProperties()
+{
+    if (m_shapeTextPosition.isEmpty()) {
+        m_shapeTextPosition = "top";
+    }
+    if (m_shapeTextTopOff.isEmpty()) {
+        m_shapeTextTopOff = "45720";
+    }
+    if (m_shapeTextLeftOff.isEmpty()) {
+        m_shapeTextLeftOff = "91440";
+    }
+    if (m_shapeTextRightOff.isEmpty()) {
+        m_shapeTextRightOff = "91440";
+    }
+    if (m_shapeTextBottomOff.isEmpty()) {
+        m_shapeTextBottomOff = "45720";
+    }
+}
+
 // ----------------------------------------------------------------
 
 // ================================================================
@@ -1041,13 +1063,14 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
+    inheritDefaultBodyProperties();
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     bool isCustomShape = false;
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
-    inheritDefaultBodyProperties();
-    inheritBodyProperties(); // Properties may or may not override default ones.
+    // Properties may or may not override default ones.
+    inheritBodyProperties();
 
     // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
     // text content of a drawing object to fill an entire object.  The
@@ -1064,10 +1087,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:line");
     }
     else if (m_contentType.contains("Connector")) {
-        body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
-                                         // handle that element yet
+        // This should be maybe draw:connector but calligra doesn't
+        // seem to handle that element atm.
+        body->startElement("draw:line");
     }
-    else if (m_contentType == "custom") { // custGeom
+    else if (m_contentType == "custom") {
         body->startElement("draw:custom-shape");
 #ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
@@ -1076,7 +1100,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
         if (d->phType == "sldImg") {
-            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+	    // Special feature for presentation notes
+            body->startElement("draw:page-thumbnail");
         } else {
             body->startElement("draw:frame");
         }
@@ -1084,7 +1109,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:frame");
 #endif
     }
-    else { // For predefined shapes
+    // For predefined shapes
+    else {
         body->startElement("draw:custom-shape");
 #ifdef PPTXXMLSLIDEREADER_CPP
         isCustomShape = true;
@@ -1312,7 +1338,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 //! cxnSp (Connection Shape)
 //! ECMA-376, 19.3.1.19, p.2833 (PresentationML)
 //! ECMA-376, 20.1.2.2.10, p.3029 (DrawingML)
-/* This element specifies a connection shape that is used to connect
+/*
+   This element specifies a connection shape that is used to connect
    two sp elements.  Once a connection is specified using a cxnSp, it
    is left to the generating application to determine the exact path
    the connector takes.  That is the connector routing algorithm is
@@ -6007,7 +6034,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 //! bodyPr handler (Body Properties)
 /*! ECMA-376, 21.1.2.1.1, p.3556 - DrawingML
 
- This element defines the body properties for the text body within a shape.
+ This element defines the body properties for the text body within a
+ shape.
 
  Parent elements:
  - lnDef (§20.1.4.1.20)
@@ -6036,39 +6064,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
-    // wrap (Text Wrapping Type)
-    // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
-    // then a value of square is implied which wraps the text using the bounding text box.
-    // The possible values for this attribute are defined by the ST_TextWrappingType simple type (§20.1.10.85):
-    // - none (Text Wrapping Type Enum ( None ))
-    //        No wrapping occurs on this text body. Words spill out without paying attention to the bounding
-    //        rectangle boundaries.
-    // - square (Text Wrapping Type Enum ( Square ))
-    //        Determines whether we wrap words within the bounding rectangle.
-    TRY_READ_ATTR_WITHOUT_NS(wrap)
+
     TRY_READ_ATTR_WITHOUT_NS(anchor)
     TRY_READ_ATTR_WITHOUT_NS(lIns)
     TRY_READ_ATTR_WITHOUT_NS(rIns)
     TRY_READ_ATTR_WITHOUT_NS(bIns)
     TRY_READ_ATTR_WITHOUT_NS(tIns)
     TRY_READ_ATTR_WITHOUT_NS(vert)
+    TRY_READ_ATTR_WITHOUT_NS(wrap)
 
-    // Todo
-    if (!vert.isEmpty()) {
-        if (vert == "vert270") {
-        }
-    }
+    //TODO:
+    /* TRY_READ_ATTR_WITHOUT_NS(fontAlgn) */
 
-//TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
+    //TODO:
+    /* if (!vert.isEmpty()) { */
+    /*     if (vert == "vert270") { */
+    /*     } */
+    /* } */
 
     m_shapeTextPosition.clear();
     m_shapeTextTopOff.clear();
     m_shapeTextBottomOff.clear();
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
-
-    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -6100,6 +6120,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 
 //! @todo more atributes
 
+    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
+
     bool spAutoFit = false;
     while (!atEnd()) {
         readNext();
@@ -6124,16 +6146,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 #ifdef PPTXXMLSLIDEREADER_CPP
     saveBodyProperties();
 
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+
     m_currentPresentationStyle.addProperty("draw:auto-grow-height",
-            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
-    m_currentPresentationStyle.addProperty("draw:auto-grow-width",
-            (!spAutoFit || wrap == QLatin1String("square"))
-            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue, KoGenStyle::GraphicType);
+            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, gt);
+
+    // If the wrap attribute is omitted, then a value of square is implied.
+    if (!spAutoFit || (wrap == QLatin1String("square") || wrap.isEmpty())) {
+	m_currentPresentationStyle.addProperty("draw:auto-grow-width", MsooXmlReader::constFalse, gt);
+    } else {
+	m_currentPresentationStyle.addProperty("draw:auto-grow-width", MsooXmlReader::constTrue, gt);
+    }
     // text in shape
-    m_currentPresentationStyle.addProperty("fo:wrap-option",
-        wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+    if (wrap == QLatin1String("none")) {
+	m_currentPresentationStyle.addProperty("fo:wrap-option", "no-wrap", gt);
+    } else {
+	m_currentPresentationStyle.addProperty("fo:wrap-option", "wrap", gt);
+    }
 #else
-  Q_UNUSED(spAutoFit);
+    Q_UNUSED(spAutoFit);
 #endif
     READ_EPILOGUE
 }
