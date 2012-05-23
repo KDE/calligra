@@ -29,6 +29,7 @@
 #include "kis_types.h"
 
 #include <krita_export.h>
+#include <kis_painting_assistant.h>
 
 class QString;
 
@@ -145,6 +146,16 @@ public:
      * @return the node that was set as active during loading
      */
     KisNodeSP preActivatedNode() const;
+
+    /**
+      *@return a list of all the assistants in all current views
+      */
+    QList<KisPaintingAssistant *> assistants();
+
+    /**
+     * @return a list of assistants loaded from a document
+     */
+    QList<KisPaintingAssistant *> preLoadedAssistants();
 
 signals:
 

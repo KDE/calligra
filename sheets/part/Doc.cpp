@@ -193,6 +193,8 @@ void Doc::initEmpty()
 
 void Doc::saveConfig()
 {
+    if (!isReadWrite())
+        return;
     KSharedConfigPtr config = Factory::global().config();
     Q_UNUSED(config);
 }

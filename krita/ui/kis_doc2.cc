@@ -82,6 +82,7 @@
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
 #include <kis_undo_stores.h>
+#include <kis_painting_assistants_manager.h>
 
 // Local
 #include "kis_factory2.h"
@@ -306,6 +307,9 @@ bool KisDoc2::completeLoading(KoStore *store)
         m_d->preActivatedNode = preselectedNodes.first();
     }
 
+    // before deleting the kraloader, get the list with preloaded assistants and save it
+    m_d->assistants = m_d->kraLoader->assistants();
+
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
@@ -424,6 +428,24 @@ vKisNodeSP KisDoc2::activeNodes() const
         }
     }
     return nodes;
+}
+
+QList<KisPaintingAssistant*> KisDoc2::assistants()
+{
+    QList<KisPaintingAssistant*> assistants;
+    foreach(KoView *v, views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();
+            assistants.append(assistantsmanager->assistants());
+        }
+    }
+    return assistants;
+}
+
+QList<KisPaintingAssistant *> KisDoc2::preLoadedAssistants()
+{
+    return m_d->assistants;
 }
 
 void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)

@@ -277,7 +277,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         qreal angle, xDiff, yDiff;
         MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                            .arg(angle).arg((m_svgX + xDiff)/360000, 3, 'f').arg((m_svgY + yDiff)/360000, 3, 'f');
         body->addAttribute("draw:transform", rotString);
     }
 
@@ -1246,8 +1246,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                     MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
                 }
 
-                QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                        .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                QString rotString = QString("rotate(%1) translate(%2cm %3cm)").
+                                    arg(angle).arg((m_svgX + xDiff)/360000, 3, 'f').
+                                    arg((m_svgY + yDiff)/360000, 3, 'f');
                 body->addAttribute("draw:transform", rotString);
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
@@ -4959,8 +4960,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_outerShdw()
     qreal xDist = EMU_TO_CM(dist.toInt() / 2) * cos(angle);
     qreal yDist = EMU_TO_CM(dist.toInt() / 2) * sin(angle);
 
-    m_currentDrawStyle->addProperty("draw:shadow-offset-x", QString("%1cm").arg(xDist));
-    m_currentDrawStyle->addProperty("draw:shadow-offset-y", QString("%1cm").arg(yDist));
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", QString("%1cm").arg(xDist, 3, 'f'));
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", QString("%1cm").arg(yDist, 3, 'f'));
 
     while (!atEnd()) {
         readNext();

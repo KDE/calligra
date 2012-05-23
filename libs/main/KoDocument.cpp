@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
 #include "KoMainWindow.h" // XXX: remove
 #include <KMessageBox> // XXX: remove
 #include <KNotification> // XXX: remove
@@ -31,6 +32,16 @@
 #include "KoPartAdaptor.h"
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
+=======
+#include "KoDocument.h"
+
+#include "KoServiceProvider.h"
+#include "KoDocumentAdaptor.h"
+#include "KoGlobal.h"
+#include "KoView.h"
+#include "KoEmbeddedDocumentSaver.h"
+#include "KoMainWindow.h"
+>>>>>>> master
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #ifdef SHOULD_BUILD_RDF
@@ -1889,7 +1900,11 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
+<<<<<<< HEAD
         d->nativeService = KoServiceProvider::readNativeService(d->parentPart->componentData());
+=======
+        d->nativeService = KoServiceProvider::readNativeService(componentData());
+>>>>>>> master
 
     return d->nativeService;
 }
@@ -2087,6 +2102,84 @@ void KoDocument::initEmpty()
     setModified(false);
 }
 
+<<<<<<< HEAD
+=======
+void KoDocument::startCustomDocument()
+{
+    deleteOpenPane();
+}
+
+KoOpenPane *KoDocument::createOpenPane(QWidget *parent, const KComponentData &componentData,
+                                       const QString& templateType)
+{
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
+
+    KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
+    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
+    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+        openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);
+        connect(item.widget, SIGNAL(documentSelected()), this, SLOT(startCustomDocument()));
+    }
+    openPane->show();
+
+    connect(openPane, SIGNAL(openExistingFile(const KUrl&)),
+            this, SLOT(openExistingFile(const KUrl&)));
+    connect(openPane, SIGNAL(openTemplate(const KUrl&)),
+            this, SLOT(openTemplate(const KUrl&)));
+
+    return openPane;
+}
+
+void KoDocument::setTemplateType(const QString& _templateType)
+{
+    d->templateType = _templateType;
+}
+
+QString KoDocument::templateType() const
+{
+    return d->templateType;
+}
+
+void KoDocument::deleteOpenPane(bool closing)
+{
+    if (d->startUpWidget) {
+        d->startUpWidget->hide();
+        d->startUpWidget->deleteLater();
+
+        if(!closing) {
+            shells().first()->setRootDocument(this);
+
+            shells().first()->factory()->container("mainToolBar", shells().first())->show();
+        }
+    } else {
+        emit closeEmbedInitDialog();
+    }
+}
+
+QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidgets(QWidget * /*parent*/)
+{
+    return QList<CustomDocumentWidgetItem>();
+}
+
+bool KoDocument::showEmbedInitDialog(QWidget *parent)
+{
+    KDialog dlg(parent);
+    dlg.setCaption(i18n("Embedding Object"));
+    KoOpenPane *pane = createOpenPane(&dlg, componentData(), templateType());
+    pane->layout()->setMargin(0);
+    dlg.setMainWidget(pane);
+    KConfigGroup cfg = KSharedConfig::openConfig("EmbedInitDialog")->group(QString());
+    /*dlg.setInitialSize(*/dlg.restoreDialogSize(cfg /*)*/);
+    connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(accept()));
+
+    bool ok = dlg.exec() == QDialog::Accepted;
+
+    dlg.saveDialogSize(cfg);
+
+    return ok;
+}
+>>>>>>> master
 
 QList<KoVersionInfo> & KoDocument::versionList()
 {
