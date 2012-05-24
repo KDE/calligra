@@ -2233,9 +2233,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_listStylePropertiesAltered = false;
 
     m_currentCombinedBulletProperties.clear();
-    m_currentListLevel = 1; // By default we're in the first level
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentListLevel = 1; // By default we're in the first level
     inheritListStyles();
 #else
     // TODO: MS Word: There's a different positioning logic for a list inside
@@ -2384,10 +2384,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #ifdef PPTXXMLSLIDEREADER_CPP
     // MS PowerPoint treats each paragraph as a list-item.
     m_listStylePropertiesAltered = true;
+#else
+    if (m_currentListLevel == 0) {
+	m_listStylePropertiesAltered = false;
+    }
 #endif
 
     //required to set size of the picture bullet properly
-    if (m_currentBulletProperties.bulletSizePt() == "UNUSED") {
+    if (m_listStylePropertiesAltered && m_currentBulletProperties.bulletSizePt() == "UNUSED") {
         if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
             fontSize.chop(2);
             qreal bulletSize = fontSize.toDouble();
@@ -2398,7 +2402,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_currentBulletProperties.setBulletRelativeSize(100);
             }
             m_currentBulletProperties.setBulletSizePt(bulletSize);
-            m_listStylePropertiesAltered = true;
         }
     }
 
@@ -2458,11 +2461,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     // Empty paragraph is NOT considered to be a list-item at the moment.
     // Prevent stage of displaying a bullet in front of it.
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (!rRead) {
         m_listStylePropertiesAltered = true;
         m_prevListStyleName.clear();
         m_currentListLevel = 0;
     }
+#endif
 
     body = textPBuf.originalWriter();
 
@@ -3114,7 +3119,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     bool ok = false;
 
     // Following settings are only applied if defined so they don't overwrite defaults
-    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    // previous defined either in the slideLayout, SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
@@ -4305,8 +4310,9 @@ void MSOOXML_CURRENT_CLASS::readWrap()
 
 #undef CURRENT_EL
 #define CURRENT_EL lstStyle
-//! lstStyle handler (Text List Styles) ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
-//!          This element specifies the list of styles associated with this body of text.
+//! lstStyle handler (Text List Styles)
+//! ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
+//! This element specifies the list of styles associated with this body of text.
 /*!
  Parent elements:
  - lnDef (§20.1.4.1.20)
