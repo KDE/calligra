@@ -32,6 +32,18 @@
 #include <QSqlError>
 #include <QSqlTableModel>
 
+const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" << "annote" << "author"
+                                                                          << "bibliography_type" << "booktitle"
+                                                                          << "chapter" << "custom1" << "custom2"
+                                                                          << "custom3" << "custom4" << "custom5"
+                                                                          << "edition" << "editor" << "howpublished"
+                                                                          << "identifier" << "institution" << "isbn"
+                                                                          << "issn" << "journal" << "month" << "note"
+                                                                          << "number" << "organizations" << "pages"
+                                                                          << "publisher" << "report_type" << "school"
+                                                                          << "series" << "title" << "url" << "volume"
+                                                                          << "year";
+
 BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
     QObject(parent),
     m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
@@ -111,7 +123,7 @@ bool BibliographyDb::createTable()
                       "month TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "note TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "number TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "organisations TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
+                      "organizations TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "pages TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "publisher TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
                       "school TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
@@ -153,9 +165,8 @@ QMap<QString, KoInlineCite *> BibliographyDb::citationRecords()
         QSqlRecord record = m_model->record(i);
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
 
-        foreach(QString dataField, KoOdfBibliographyConfiguration::bibDataFields) {
-            QString dbField = QString(dataField).replace(QString('-'), QString('_'));
-            cite->setField(dataField, record.value(dbField).toString());
+        for (int i = 0; i < BibliographyDb::dbFields.size(); i++) {
+            cite->setField(KoOdfBibliographyConfiguration::bibDataFields.at(i), record.value(BibliographyDb::dbFields.at(i)).toString());
         }
         answers.insert(cite->value("identifier"), cite);
     }
@@ -174,10 +185,9 @@ QSqlRecord BibliographyDb::sqlRecord(KoInlineCite *cite)
 {
     QSqlRecord record;
 
-    foreach(QString dataField, KoOdfBibliographyConfiguration::bibDataFields) {
-        QString dbField = QString(dataField).replace("-", "_");
-        QSqlField field(dbField, QVariant::String);
-        field.setValue(cite->value(dataField));
+    for (int i = 0; i < BibliographyDb::dbFields.size(); i++) {
+        QSqlField field(BibliographyDb::dbFields.at(i), QVariant::String);
+        field.setValue(cite->value(KoOdfBibliographyConfiguration::bibDataFields.at(i)));
         record.append(field);
     }
     return record;

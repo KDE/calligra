@@ -48,6 +48,7 @@ public:
     QMap<QString, KoInlineCite *> citationRecords();
 
     static QSqlRecord sqlRecord(KoInlineCite* cite);
+    static const QList<QString> dbFields;
 private:
     QSqlTableModel *m_model;
     QSqlDatabase m_db;
