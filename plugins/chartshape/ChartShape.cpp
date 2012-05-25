@@ -87,9 +87,9 @@
 #include <KoSelection.h>
 #include <KoShapeBackground.h>
 #include <KoInsets.h>
-#include <KoShapeStrokeModel.h>
+#include <KoShapeBorderModel.h>
 #include <KoColorBackground.h>
-#include <KoShapeStroke.h>
+#include <KoLineBorder.h>
 #include <KoOdfWorkaround.h>
 
 // KChart
@@ -498,10 +498,11 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->footer, true);
     setInheritsTransform(d->footer, true);
 
+#if 0
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
     setTextRunAroundContour(KoShape::ContourBox);
-
+#endif
     // Enable auto-resizing of chart labels
     foreach(KoShape *label, labels()) {
         TextLabelData *labelData = qobject_cast<TextLabelData*>(label->userData());
@@ -512,8 +513,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoColorBackground *background = new KoColorBackground(Qt::white);
     setBackground(background);
 
-    KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
-    setStroke(stroke);
+    KoLineBorder *stroke = new KoLineBorder(0, Qt::black);
+    setBorder(stroke);
 
     ChartLayout *l = layout();
     l->setPosition(d->plotArea, CenterPosition);
@@ -754,7 +755,7 @@ void ChartShape::paintDecorations(QPainter &painter,
     if (canvas->shapeManager()->selection()->selectedShapes().contains(this))
         return;
 
-    if (stroke())
+    if (border())
         return;
 
     QRectF border = QRectF(QPointF(-1.5, -1.5),
