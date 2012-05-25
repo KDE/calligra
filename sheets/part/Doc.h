@@ -84,7 +84,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit Doc(QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit Doc(QObject* parent = 0);
 
     /**
      * Destroys the document.
@@ -179,11 +179,6 @@ protected:
      * @reimp Overloaded function of KoDocument.
      */
     virtual bool completeLoading(KoStore*);
-
-    /**
-     * @reimp Overloaded function of KoDocument.
-     */
-    virtual bool saveChildren(KoStore* _store);
 
     virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
     virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);

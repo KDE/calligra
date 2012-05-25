@@ -58,9 +58,7 @@ class KPLATO_EXPORT Part : public KoDocument
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0,
-          QObject* parent = 0,
-          bool singleViewMode = false );
+    explicit Part(QObject* parent = 0);
     ~Part();
 
     void setReadWrite( bool rw );

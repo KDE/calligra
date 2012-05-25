@@ -64,7 +64,7 @@ public:
     }
 
     QDockWidget* createDockWidget() {
-        return new QDockWidget(i18n("Tool Bars Docker"));
+        return new QDockWidget(i18n("Tool Bars"));
     }
 
     DockPosition defaultDockPosition() const {

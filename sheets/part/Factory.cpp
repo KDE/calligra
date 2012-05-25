@@ -50,17 +50,11 @@ Factory::~Factory()
     s_global = 0;
 }
 
-QObject* Factory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
-
-    Doc *doc = new Doc(parentWidget, parent, !bWantKoDocument);
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
+    Doc *doc = new Doc(parent);
     return doc;
 }
 
