@@ -144,10 +144,10 @@ KoInlineCite *InsertCitationDialog::toCite()
 {
     KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
     cite->setField("address", dialog.address->text());
-    cite->setField("annotation", dialog.annotation->text());
+    cite->setField("annote", dialog.annotation->text());
     cite->setField("author", dialog.author->text());
     cite->setField("bibliography-type", dialog.sourceType->currentText().remove(' ').toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
-    cite->setField("bookTitle", dialog.booktitle->text());
+    cite->setField("booktitle", dialog.booktitle->text());
     cite->setField("chapter", dialog.chapter->text());
     cite->setField("custom1", dialog.ud1->text());
     cite->setField("custom2", dialog.ud2->text());
@@ -156,17 +156,17 @@ KoInlineCite *InsertCitationDialog::toCite()
     cite->setField("custom5", dialog.ud5->text());
     cite->setField("edition", dialog.edition->text());
     cite->setField("editor", dialog.editor->text());
+    cite->setField("howpublished", dialog.publication->text());
     cite->setField("identifier", dialog.shortName->text());
     cite->setField("institution", dialog.institution->text());
-    cite->setField("iSBN", dialog.isbn->text());
-    cite->setField("iSSN", dialog.issn->text());
+    cite->setField("isbn", dialog.isbn->text());
+    cite->setField("issn", dialog.issn->text());
     cite->setField("journal", dialog.journal->text());
     cite->setField("month", dialog.month->text());
     cite->setField("note", dialog.note->text());
     cite->setField("number", dialog.number->text());
-    cite->setField("organisation", dialog.organisation->text());
+    cite->setField("organization", dialog.organisation->text());
     cite->setField("pages", dialog.pages->text());
-    cite->setField("publication-type", dialog.publication->text());
     cite->setField("publisher", dialog.publisher->text());
     cite->setField("report-type", dialog.reporttype->text());
     cite->setField("school", dialog.school->text());
@@ -181,10 +181,10 @@ KoInlineCite *InsertCitationDialog::toCite()
 void InsertCitationDialog::fillValuesFrom(KoInlineCite *cite)
 {
     dialog.address->setText(cite->value("address"));
-    dialog.annotation->setText(cite->value("annotation"));
+    dialog.annotation->setText(cite->value("annote"));
     dialog.author->setText(cite->value("author"));
     dialog.sourceType->setCurrentIndex(dialog.sourceType->findText(cite->value("bibliography-type"), Qt::MatchFixedString));
-    dialog.booktitle->setText(cite->value("bookTitle"));
+    dialog.booktitle->setText(cite->value("booktitle"));
     dialog.chapter->setText(cite->value("chapter"));
     dialog.ud1->setText(cite->value("custom1"));
     dialog.ud2->setText(cite->value("custom2"));
@@ -197,18 +197,18 @@ void InsertCitationDialog::fillValuesFrom(KoInlineCite *cite)
     dialog.shortName->setText(cite->value("identifier"));
     dialog.isbn->setText(cite->value("isbn"));
     dialog.issn->setText(cite->value("issn"));
+    dialog.publication->setText(cite->value("howpublished"));
     dialog.journal->setText(cite->value("journal"));
     dialog.month->setText(cite->value("month"));
     dialog.note->setText(cite->value("note"));
     dialog.number->setText(cite->value("number"));
-    dialog.organisation->setText(cite->value("organisations"));
+    dialog.organisation->setText(cite->value("organizations"));
     dialog.pages->setText(cite->value("pages"));
-    dialog.publication->setText(cite->value("publicationType"));
     dialog.publisher->setText(cite->value("publisher"));
     dialog.school->setText(cite->value("school"));
     dialog.series->setText(cite->value("series"));
     dialog.title->setText(cite->value("title"));
-    dialog.reporttype->setText(cite->value("reportType"));
+    dialog.reporttype->setText(cite->value("report-type"));
     dialog.volume->setText(cite->value("volume"));
     dialog.year->setText(cite->value("year"));
     dialog.url->setText(cite->value("url"));

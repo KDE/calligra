@@ -224,8 +224,8 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 
     if (!value("identifier").isEmpty())
         writer->addAttribute("text:identifier", value("identifier"));
-    if (!value("bibliographyType").isEmpty())
-        writer->addAttribute("text:bibliography-type", value("bibliographyType"));
+    if (!value("bibliography-type").isEmpty())
+        writer->addAttribute("text:bibliography-type", value("bibliography-type"));
     if (!value("address").isEmpty())
         writer->addAttribute("text:address", value("identifier"));
     if (!value("annote").isEmpty())
@@ -240,8 +240,8 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
         writer->addAttribute("text:edition", value("edition"));
     if (!value("editor").isEmpty())
         writer->addAttribute("text:editor", value("editor"));
-    if (!value("publicationType").isEmpty())
-        writer->addAttribute("text:howpublished", value("publicationType"));
+    if (!value("howpublished").isEmpty())
+        writer->addAttribute("text:howpublished", value("howpublished"));
     if (!value("institution").isEmpty())
         writer->addAttribute("text:institution", value("institution"));
     if (!value("journal").isEmpty())
@@ -252,6 +252,8 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
         writer->addAttribute("text:note", value("note"));
     if (!value("number").isEmpty())
         writer->addAttribute("text:number", value("number"));
+    if (!value("organizations").isEmpty())
+        writer->addAttribute("text:organizations", value("organizations"));
     if (!value("pages").isEmpty())
         writer->addAttribute("text:pages", value("pages"));
     if (!value("publisher").isEmpty())
@@ -262,8 +264,8 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
         writer->addAttribute("text:series", value("series"));
     if (!value("title").isEmpty())
         writer->addAttribute("text:title", value("title"));
-    if (!value("reportType").isEmpty())
-        writer->addAttribute("text:report-type", value("reportType"));
+    if (!value("report-type").isEmpty())
+        writer->addAttribute("text:report-type", value("report-type"));
     if (!value("volume").isEmpty())
         writer->addAttribute("text:volume", value("volume"));
     if (!value("year").isEmpty())
