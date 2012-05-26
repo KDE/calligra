@@ -28,6 +28,7 @@ class QSqlDatabase;
 class QSqlTableModel;
 class QSqlError;
 class QDir;
+class QSortFilterProxyModel;
 
 class KoInlineCite;
 
@@ -44,13 +45,17 @@ public:
     // creates bibliography table in SQLITE database
     bool createTable();
     QSqlTableModel* tableModel();
+    QSortFilterProxyModel* proxyModel();
+    void setFilter(QRegExp);
     bool insertCitation(KoInlineCite *);
     QMap<QString, KoInlineCite *> citationRecords();
 
     static QSqlRecord sqlRecord(KoInlineCite* cite);
     static const QList<QString> dbFields;
+
 private:
     QSqlTableModel *m_model;
+    QSortFilterProxyModel *m_filterModel;
     QSqlDatabase m_db;
     QString m_dbName;
     QString m_fullPath;

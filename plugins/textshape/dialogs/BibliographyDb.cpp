@@ -31,6 +31,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlTableModel>
+#include <QSortFilterProxyModel>
 
 const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" << "annote" << "author"
                                                                           << "bibliography_type" << "booktitle"
@@ -46,6 +47,7 @@ const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" <<
 
 BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
     QObject(parent),
+    m_filterModel(new QSortFilterProxyModel(this)),
     m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
     m_dbName(dbName),
     m_fullPath(path)
@@ -68,6 +70,9 @@ BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
         m_model->setTable("bibref");
         m_model->setEditStrategy(QSqlTableModel::OnRowChange);
         m_model->select();
+
+        m_filterModel->setSourceModel(m_model);
+        m_filterModel->setDynamicSortFilter(true);
     }
 }
 
@@ -148,6 +153,19 @@ bool BibliographyDb::createTable()
 QSqlTableModel* BibliographyDb::tableModel()
 {
     return m_model;
+}
+
+QSortFilterProxyModel* BibliographyDb::proxyModel()
+{
+    return m_filterModel;
+}
+
+void BibliographyDb::setFilter(QRegExp expr)
+{
+    if (m_filterModel) {
+        m_filterModel->setFilterRegExp(expr);
+        m_filterModel->setFilterKeyColumn(-1);
+    }
 }
 
 bool BibliographyDb::insertCitation(KoInlineCite *cite)
