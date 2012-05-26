@@ -18,11 +18,21 @@
 */
 
 #include "KPrAnimationsDocker.h"
-#include "QListWidget"
-#include "QVBoxLayout"
+
 #include "KPrView.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
+
+//Qt Headers
+#include <QToolButton>
+#include <QListWidget>
+#include <QVBoxLayout>
+#include <QLabel>
+
+//KDE Headers
+#include <KIcon>
+#include <KLocale>
+#include <KIconLoader>
 
 KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
 : QDockWidget(parent, flags)
@@ -31,15 +41,62 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     setWindowTitle( i18n( "Shape Animations" ) );
 
     QWidget* base = new QWidget( this );
+    QHBoxLayout *hlayout = new QHBoxLayout;
+    QHBoxLayout *hlayout2 = new QHBoxLayout;
 
+    //Setup buttons
+    m_editAnimation = new QToolButton();
+    m_editAnimation->setText(i18n("Edit animation"));
+    m_editAnimation->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_editAnimation->setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
+    m_editAnimation->setIcon(KIcon("edit_animation"));
+    m_editAnimation->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_editAnimation->setToolTip(i18n("Edit animation"));
+    hlayout->addWidget(m_editAnimation);
+    hlayout->addStretch();
+
+    //m_moreShapesContainer = new CollectionMenu(mainWidget);
+    //m_moreShapes->setMenu(m_moreShapesContainer);
+    //m_moreShapes->setPopupMode(QToolButton::InstantPopup);
+
+    m_buttonAddAnimation = new QToolButton();
+    m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
+    m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
+
+    m_buttonRemoveAnimation = new QToolButton();
+    m_buttonRemoveAnimation->setIcon(SmallIcon("list-remove", KIconLoader::SizeSmallMedium));
+    m_buttonRemoveAnimation->setEnabled(false);
+    m_buttonRemoveAnimation->setToolTip(i18n("Remove animation"));
+    hlayout->addWidget(m_buttonAddAnimation);
+    hlayout->addWidget(m_buttonRemoveAnimation);
+
+    QLabel *orderLabel = new QLabel(i18n("Order: "));
+    m_buttonAnimationOrderUp = new QToolButton();
+    m_buttonAnimationOrderUp->setIcon(SmallIcon("arrow-down"));
+    m_buttonAnimationOrderUp->setToolTip(i18n("Move animation down"));
+    m_buttonAnimationOrderUp->setEnabled(false);
+
+    m_buttonAnimationOrderDown = new QToolButton();
+    m_buttonAnimationOrderDown->setIcon(SmallIcon("arrow-up"));
+    m_buttonAnimationOrderDown->setToolTip(i18n("Move animation up"));
+    m_buttonAnimationOrderDown->setEnabled(false);
+    hlayout2->addStretch();
+    hlayout2->addWidget(orderLabel);
+    hlayout2->addWidget(m_buttonAnimationOrderUp);
+    hlayout2->addWidget(m_buttonAnimationOrderDown);
+
+
+    //load View
     m_animationsTimeLineView = new KPrAnimationsTimeLineView();
     m_animationsModel = new KPrAnimationsDataModel();
     m_animationsTimeLineView->setModel(m_animationsModel);
 
     QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( m_animationsTimeLineView );
-    base->setLayout( layout );
-    setWidget( base );
+    layout->addLayout(hlayout);
+    layout->addWidget(m_animationsTimeLineView);
+    layout->addLayout(hlayout2);
+    base->setLayout(layout);
+    setWidget(base);
 }
 
 void KPrAnimationsDocker::setView(KPrView* view)

@@ -26,6 +26,7 @@
 #include <klocale.h>
 
 class QListWidget;
+class QToolButton;
 class KPrView;
 class KPrAnimationsTimeLineView;
 class KPrAnimationsDataModel;
@@ -44,6 +45,11 @@ private:
     KPrView* m_view;
     KPrAnimationsTimeLineView * m_animationsTimeLineView;
     KPrAnimationsDataModel *m_animationsModel;
+    QToolButton *m_editAnimation;
+    QToolButton *m_buttonAddAnimation;
+    QToolButton *m_buttonRemoveAnimation;
+    QToolButton *m_buttonAnimationOrderUp;
+    QToolButton *m_buttonAnimationOrderDown;
 };
 
 #endif // KPRANIMATIONSDOCKER_H

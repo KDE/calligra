@@ -45,6 +45,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     setLayout(layout);
+    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(m_view, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
 }
 

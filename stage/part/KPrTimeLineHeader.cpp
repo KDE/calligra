@@ -21,7 +21,7 @@ KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
 
 QSize KPrTimeLineHeader::minimumSizeHint() const
 {
-    return QSize(m_mainView->totalWidth(), headerHeigth);
+    return QSize(m_mainView->totalWidth()*0.25, headerHeigth);
 }
 
 void KPrTimeLineHeader::paintEvent(QPaintEvent *event)
@@ -60,8 +60,7 @@ void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, co
     int x = rect.center().x();
     QLinearGradient gradient(x, rect.top(), x, rect.bottom());
     QColor color = palette().button().color();
-    gradient.setColorAt(0, color.darker(125));
-    gradient.setColorAt(0.5, color.lighter(125));
+    gradient.setColorAt(0, color.lighter(125));
     gradient.setColorAt(1, color.darker(125));
     painter->fillRect(rect, gradient);
     m_mainView->paintItemBorder(painter, palette(), rect);
@@ -110,7 +109,7 @@ bool KPrTimeLineHeader::eventFilter(QObject *target, QEvent *event)
                 int width = size.width() - (ExtraWidth +
                                             scrollArea->verticalScrollBar()->sizeHint().width());
                 size.setWidth(width);
-                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(5)+100, size.height()));
+                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(5)-m_mainView->widthOfColumn(4), size.height()));
                 resize(size);
             }
         }

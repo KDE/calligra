@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <KIconLoader>
+#include <KLocale>
 
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
     QAbstractTableModel(parent)
@@ -132,7 +133,7 @@ QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orienta
         case 0:
             return QVariant();
         case 1:
-            return QString("Seconds");
+            return i18n("Seconds");
         case 2:
             return QVariant();
         case 3:

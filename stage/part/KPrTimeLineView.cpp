@@ -38,7 +38,7 @@ KPrTimeLineView::KPrTimeLineView(QWidget *parent)
 
 QSize KPrTimeLineView::sizeHint() const
 {
-    int rows = m_mainView
+    int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
     return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth());
 }
@@ -46,7 +46,7 @@ QSize KPrTimeLineView::sizeHint() const
 QSize KPrTimeLineView::minimumSizeHint() const
 {
 
-    int rows = m_mainView
+    int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
     return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth() );
 }
@@ -286,9 +286,9 @@ void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowH
     start = start + m_mainView->widthOfColumn(column-1);
     QRect rect(start,y,m_mainView->widthOfColumn(column), RowHeight);
     paintItemBackground(painter, rect,
-                        row == m_mainView->selectedRow() && m_mainView->selectedColumn() == column);
+                        row == m_mainView->selectedRow());
     paintLine(painter, row, rect,
-              row == m_mainView->selectedRow() && m_mainView->selectedColumn() == column);
+              row == m_mainView->selectedRow());
 
 
 }
@@ -330,7 +330,7 @@ void KPrTimeLineView::paintTextRow(QPainter *painter, int x, int y, int row, int
 {
     QRect rect(x,y,m_mainView->widthOfColumn(column), RowHeight);
     paintItemBackground(painter, rect,
-                        row == m_mainView->selectedRow() && m_mainView->selectedColumn() == column);
+                        row == m_mainView->selectedRow());
     painter->drawText(rect,
                       m_mainView->model()->data(m_mainView->model()->index(row,column)).toString(),
                       QTextOption(Qt::AlignCenter));
@@ -340,7 +340,7 @@ void KPrTimeLineView::paintIconRow(QPainter *painter, int x, int y, int row, int
 {
     QRect rect(x,y,m_mainView->widthOfColumn(column), RowHeight);
     paintItemBackground(painter, rect,
-                        row == m_mainView->selectedRow() && m_mainView->selectedColumn() == column);
+                        row == m_mainView->selectedRow());
     QPixmap thumbnail =  (m_mainView->model()->data(m_mainView->model()->index(row,column), Qt::DecorationRole)).value<QPixmap>();
     thumbnail.scaled(iconSize, iconSize , Qt::KeepAspectRatio);
     int width = 0;
@@ -357,7 +357,7 @@ void KPrTimeLineView::paintIconRow(QPainter *painter, int x, int y, int row, int
     qreal centerY = (RowHeight-heigth)/2;
     QRectF target(rect.x()+centerX, rect.y()+centerY, width, heigth);
     painter->save();
-    if (row == m_mainView->selectedRow() && m_mainView->selectedColumn() == column)
+    if (row == m_mainView->selectedRow())
         painter->setCompositionMode(QPainter::CompositionMode_ColorBurn);
     painter->drawPixmap(target, thumbnail, thumbnail.rect());
     painter->restore();
