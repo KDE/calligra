@@ -21,7 +21,7 @@
 #define KPRSMILVALUES_H
 
 #include "KPrAnimationValue.h"
-#include "KPrValueParser.h"
+//#include "KPrValueParser.h"
 #include <QList>
 #include <QPair>
 class KPrFormulaParser;
@@ -36,13 +36,15 @@ public:
     virtual qreal value(qreal time) const;
     virtual qreal endValue() const;
     virtual qreal startValue() const;
-    bool loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula);
+    bool loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode);
+    bool loadFormula(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula);
     bool saveOdf(KoPASavingContext &paContext) const;
 protected:
-    QList<KPrValueParser> m_values;
+    //QList<KPrValueParser> m_values;
+    QList<KPrFormulaParser> m_values;
     QList<qreal> m_times;
     QList<qreal> m_splines;
-    QList<KPrFormulaParser> m_formulaParser;
+    KPrFormulaParser *m_formulaParser;
 };
 
 #endif // KPRSMILVALUES_H

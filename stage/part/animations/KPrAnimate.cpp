@@ -115,20 +115,19 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     QString formula = element.attributeNS(KoXmlNS::anim, "formula", QString());
     if (!formula.isEmpty()) {
         QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
-        QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
+        QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
         KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
-        retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode, formula);
+        retval = retval && smilValue->loadFormula(values, keyTimes, keySplines, smilCalcMode, formula);
         m_values = smilValue;
     }
     else {
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         if (!values.isEmpty()) {
-            QString formula;
             QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
             QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
             KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
-            retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode, formula);
+            retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode);
             m_values = smilValue;
         }
         else {

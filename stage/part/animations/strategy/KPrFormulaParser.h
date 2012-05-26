@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
- /* heavily based on KPrValueParser and in consecuence in Ariya's work (see kspread/formula)*/
+ /* heavily based on Benjamin Port'work and in Ariya's work (see kspread/formula)*/
 
 #ifndef KPRFORMULAPARSER_H
 #define KPRFORMULAPARSER_H
@@ -189,25 +189,32 @@ public:
 class KPrFormulaParser
 {
 public:
-    KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData);
+    enum ParseType {
+        Values,
+        Formula
+    };
+
+    KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type);
     QString formula() const;
-    qreal eval(KPrAnimationCache *cache, const qreal time) const;
+    qreal eval(KPrAnimationCache *cache, const qreal time = -1) const;
     bool valid() const;
+
 protected:
-    FTokens scan(QString formula);
-    void compile(const FTokens &FTokens) const;
+    FTokens scan(QString formula) const;
+    void compile(const FTokens &FTokens);
     qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
     qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
     QString m_formula;
-    mutable bool m_fcompiled;
+    bool m_fcompiled;
     mutable bool m_fvalid;
     mutable QVector<FOpcode> m_codes;
-    mutable QVector<qreal> m_constants;
-    mutable QVector<QString> m_identifier;
-    mutable QVector<QString> m_functions;
+    QVector<qreal> m_constants;
+    QVector<QString> m_identifier;
+    QVector<QString> m_functions;
+    ParseType m_type;
 };
 
 #endif // KPRFORMULAPARSER_H

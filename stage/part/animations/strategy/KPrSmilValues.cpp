@@ -26,6 +26,7 @@
 
 KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationValue(shapeAnimation)
 {
+    m_formulaParser = 0;
 }
 
 qreal KPrSmilValues::value(qreal time) const
@@ -34,15 +35,8 @@ qreal KPrSmilValues::value(qreal time) const
     qreal value1 = 0.0;
     qreal value2 = 0.0;
 
-    if (!m_formulaParser.empty()) {
-        for (int i = 0; i < m_formulaParser.size(); i++) {
-            if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
-                value = m_formulaParser.at(i).eval(m_cache, time);
-            }
-            else if (time == m_times.at(i)){
-                value = m_values.at(i).eval(m_cache);
-            }
-        }
+    if (m_formulaParser) {
+            value = m_formulaParser->eval(m_cache, time);
 
     } else {
         for (int i = 0; i < m_values.size(); i++) {
@@ -72,23 +66,17 @@ qreal KPrSmilValues::endValue() const
     return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
-bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula)
+bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
 {
     m_calcMode = calcMode;
     QStringList valuesList = values.split(";");
-    if (!formula.isEmpty()) {
-        KPrFormulaParser formulaParser (formula, m_shape, m_textBlockData);
-        if (!formulaParser.valid()) {
-            return false;
-        }
-        m_formulaParser.append(formulaParser);
-    }
     if (valuesList.size() < 2) {
         return false;
     }
 
     foreach (QString value, valuesList) {
-        KPrValueParser parser(value, m_shape, m_textBlockData);
+        //KPrValueParser parser(value, m_shape, m_textBlockData);
+        KPrFormulaParser parser(value, m_shape, m_textBlockData, KPrFormulaParser::Values);
         if (!parser.valid()) {
             return false;
         }
@@ -124,12 +112,30 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     return true;
 }
 
+bool KPrSmilValues::loadFormula(QString values, QString keyTimes, QString keySplines, KPrAnimationValue::SmilCalcMode calcMode, QString formula)
+{
+    bool retval = loadValues(values, keyTimes, keySplines, calcMode);
+
+    //formula
+    if (!formula.isEmpty()) {
+        m_formulaParser = new KPrFormulaParser(formula, m_shape, m_textBlockData, KPrFormulaParser::Formula);
+        if (!m_formulaParser->valid()) {
+            m_formulaParser = 0;
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return (true && retval);
+}
+
 bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    foreach (KPrValueParser valueParser, m_values) {
+    //foreach (KPrValueParser valueParser, m_values) {
+    foreach (KPrFormulaParser valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
         } else {
@@ -138,14 +144,11 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     }
     writer.addAttribute("smil:values", values);
     //Formula
-    QString formula;
-    foreach (KPrFormulaParser formulaParser, m_formulaParser) {
-        if (formula.isEmpty()) {
-            formula = QString("%1").arg(formulaParser.formula());
+    if (m_formulaParser) {
+        QString formula = QString("%1").arg(m_formulaParser->formula());
+        if (!formula.isEmpty()) {
+            writer.addAttribute("anim:formula", formula);
         }
-    }
-    if (!formula.isEmpty()) {
-        writer.addAttribute("anim:formula", formula);
     }
     // keyTimes
     QString keyTimes;

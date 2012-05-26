@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-/* heavily based on KPrValueParser and in consecuence in Ariya's work (see kspread/formula)*/
+/* heavily based on Benjamin Port'work and in Ariya's work (see kspread/formula)*/
 
 #include "KPrFormulaParser.h"
 
@@ -175,12 +175,13 @@ void FTokenStack::ensureSpace()
 /**********************
     KPrFormulaParser
  **********************/
-KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData)
+KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type)
     : m_shape(shape)
     , m_textBlockData(textBlockData)
     , m_formula(formula)
     , m_fcompiled(false)
     , m_fvalid(false)
+    , m_type(type)
 {
     compile(scan(formula));
 }
@@ -190,7 +191,7 @@ QString KPrFormulaParser::formula() const
     return m_formula;
 }
 
-FTokens KPrFormulaParser::scan(QString formula)
+FTokens KPrFormulaParser::scan(QString formula) const
 {
     FTokens ftokens;
     // parsing state
@@ -274,7 +275,7 @@ FTokens KPrFormulaParser::scan(QString formula)
     return ftokens;
 }
 
-void KPrFormulaParser::compile(const FTokens &ftokens) const
+void KPrFormulaParser::compile(const FTokens &ftokens)
 {
     // initialize variables
     m_fvalid = false;
@@ -537,6 +538,9 @@ qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
     if (!m_fvalid || !m_fcompiled) {
         return 0.0;
     }
+    if ((m_type == KPrFormulaParser::Formula) && (time < 0)) {
+        return 0.0;
+    }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
         FOpcode &opcode = m_codes[pc];
@@ -665,7 +669,7 @@ qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache 
     else if (identifier == "y") {
         return m_shape->position().y() / cache->pageSize().height();
     }
-    else if (identifier == "$") {
+    else if ((identifier == "$") && (m_type == KPrFormulaParser::Formula) ) {
         return time;
     }
     else if (identifier == "pi") {
