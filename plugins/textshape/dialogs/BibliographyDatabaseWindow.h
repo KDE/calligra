@@ -42,11 +42,12 @@ public:
     int loadBibliographyDbs();
 
 public:
-    QDir tableDir;
+    static QDir tableDir;
 
 public slots:
     void tableChanged(QString);
     void insertBlankRow();
+    void searchQueryChanged(QString query);
 
 private:
     Ui::BibliographyDatabaseWindow ui;
@@ -56,6 +57,7 @@ private:
 
 private slots:
     void newRecord();
+    void newDatabase();
     void openFile();
 };
 
