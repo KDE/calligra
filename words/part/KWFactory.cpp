@@ -59,19 +59,13 @@ KWFactory::~KWFactory()
     s_instance = 0;
 }
 
-QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
-    KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
-
+    KWDocument *doc = new KWDocument(parent);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
     return doc;
 }
 

@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QGraphicsScene>
 
 #include <kdebug.h>
 #include "krscriptfunctions.h"
@@ -53,11 +54,15 @@ KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {   
     setObjectName("KexiReportDesigner_DataView");
-    m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setBackgroundRole(QPalette::Dark);
-    m_scrollArea->viewport()->setAutoFillBackground(true);
 
-    layout()->addWidget(m_scrollArea);
+    m_reportView = new QGraphicsView(this);
+    layout()->addWidget(m_reportView);
+   
+    m_reportScene = new QGraphicsScene(this);
+    m_reportScene->setSceneRect(0,0,1000,2000);
+    m_reportView->setScene(m_reportScene);
+    
+    m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
     
 #ifndef KEXI_MOBILE
     m_pageSelector = new KexiRecordNavigator(this, 0);
@@ -229,7 +234,7 @@ void KexiReportView::slotExportHTML()
 
     bool css = (KMessageBox::questionYesNo(this,
         i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
-             "or export using a Table which outputs a much simpler format."), i18n("Style"),
+             "or export using a HTML Table which outputs a much simpler format."), i18n("Style"),
              KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
     if (css){
@@ -310,10 +315,14 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 #endif
             }
 
-            m_reportWidget = new KoReportPage(this, m_reportDocument);
-            m_reportWidget->setObjectName("KexiReportPage");
-            m_scrollArea->setWidget(m_reportWidget);
-
+            m_reportPage = new KoReportPage(this, m_reportDocument);
+            m_reportPage->setObjectName("KexiReportPage");
+	    
+	    m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+	    m_reportScene->addItem(m_reportPage);
+	    m_reportPage->setPos(20,20);
+	    m_reportView->centerOn(0,0);
+	    
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
@@ -353,7 +362,7 @@ void KexiReportView::moveToFirstRecordRequested()
 {
 	if (m_currentPage != 1) {
 		m_currentPage = 1;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);  
 		#endif
@@ -364,7 +373,7 @@ void KexiReportView::moveToLastRecordRequested()
 {
 	if (m_currentPage != m_pageCount) {
 		m_currentPage = m_pageCount;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif
@@ -375,7 +384,7 @@ void KexiReportView::moveToNextRecordRequested()
 {
 	if (m_currentPage < m_pageCount) {
 		m_currentPage++;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif
@@ -386,7 +395,7 @@ void KexiReportView::moveToPreviousRecordRequested()
 {
 	if (m_currentPage > 1) {
 		m_currentPage--;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif

@@ -2171,25 +2171,6 @@ void PptxXmlSlideReader::inheritBodyProperties()
     inheritBodyPropertiesHelper(d->phIdx, m_context->slideLayoutProperties);
 }
 
-void PptxXmlSlideReader::inheritDefaultBodyProperties()
-{
-    if (m_shapeTextPosition.isEmpty()) {
-        m_shapeTextPosition = "top"; // top is default according to spec
-    }
-    if (m_shapeTextLeftOff.isEmpty()) {
-        m_shapeTextLeftOff = "91440"; // spec default
-    }
-    if (m_shapeTextRightOff.isEmpty()) {
-        m_shapeTextRightOff = "91440"; // spec default
-    }
-    if (m_shapeTextTopOff.isEmpty()) {
-        m_shapeTextTopOff = "91440"; // spec default
-    }
-    if (m_shapeTextBottomOff.isEmpty()) {
-        m_shapeTextBottomOff = "91440"; // spec default
-    }
-}
-
 void PptxXmlSlideReader::inheritDefaultListStyles()
 {
     int index = 0;

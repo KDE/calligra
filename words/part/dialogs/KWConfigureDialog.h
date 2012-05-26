@@ -1,6 +1,5 @@
-/*
-   This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <goutte@kde.org>
+/* This file is part of the KDE project
+   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,22 +17,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWEF_UTIL_H
-#define KWEF_UTIL_H
+#ifndef KWCONFIGUREDIALOG_H
+#define KWCONFIGUREDIALOG_H
 
-#include <words_libexport_export.h>
-namespace KWEFUtil
+#include <kpagedialog.h>
+
+class KWView;
+class KoConfigDocumentPage;
+class KoConfigGridPage;
+class KoConfigMiscPage;
+class KoConfigAuthorPage;
+
+class KWConfigureDialog : public KPageDialog
 {
+    Q_OBJECT
 
-WORDS_LIBEXPORT_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
-        const bool quot = false, const bool apos = false);
-}
+public:
+    KWConfigureDialog(KWView* parent);
 
-// Deprecated! Use KWEFUtil::EscapeSgmlText
-static inline QString EscapeXmlText(const QString& strIn,
-                                    const bool quot = false, const bool apos = false)
-{
-    return KWEFUtil::EscapeSgmlText(NULL, strIn, quot, apos);
-}
+public slots:
+    void slotApply();
+    void slotDefault();
 
-#endif /* KWEF_UTIL_H */
+private:
+    KoConfigGridPage* m_gridPage;
+    KoConfigDocumentPage* m_docPage;
+    KoConfigMiscPage* m_miscPage;
+    KoConfigAuthorPage *m_authorPage;
+
+};
+
+#endif // KWCONFIGUREDIALOG_H

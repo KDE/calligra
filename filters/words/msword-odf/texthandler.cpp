@@ -1090,18 +1090,19 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // \l field-argument - Text in this switch's field-argument specifies a
         // location in the file, such as a bookmark, where to jump.
         QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
-        m_fld->m_hyperLinkActive = true;
-
         if (rx.indexIn(*inst) >= 0) {
-            m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
-        } else {
-            rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
-            if (rx.indexIn(*inst) >= 0) {
-                m_fld->m_hyperLinkUrl = rx.cap(1);
-            } else {
-                kDebug(30513) << "HYPERLINK: missing URL";
+            // prevent invalid URI
+            if (rx.cap(1) != "#") {
+                m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
             }
         }
+
+        rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
+        if (rx.indexIn(*inst) >= 0) {
+            m_fld->m_hyperLinkUrl.prepend(rx.cap(1));
+        }
+
+        m_fld->m_hyperLinkActive = true;
         break;
     }
     case PAGEREF:
@@ -1162,6 +1163,8 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
  */
 void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
+    Q_UNUSED(fld);
+
 //     kDebug(30513) << "fDiffer:" << fld->flags.fDiffer <<
 //     "fZombieEmbed:" << fld->flags.fZombieEmbed <<
 //     "fResultDirty:" << fld->flags.fResultDirty <<
@@ -1842,9 +1845,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     // update automatic numbering info
     if (listInfo->type() == wvWare::ListInfo::NumberType) {
         if (m_continueListNum.contains(listId)) {
-            if (listLevel <= m_continueListNum[listId].first) {
-                m_continueListNum[listId].second = true;
-            } else {
+            if ( !(listLevel <= m_continueListNum[listId].first) ) {
 
                 // TODO: Check if any of the lists that inherit numbering
                 // from the abstract numbering definition was opened.
@@ -1860,6 +1861,15 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                     --i;
                 }
             }
+        }
+    } else {
+        // update all items with listLevel > m_currentListLevel
+        QMap<int, QPair<quint8, bool> >::const_iterator i = m_continueListNum.constBegin();
+        while (i != m_continueListNum.constEnd()) {
+            if (i.value().first > listLevel) {
+                m_continueListNum[i.key()].second = false;
+            }
+            i++;
         }
     }
 
@@ -1901,7 +1911,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             (m_continueListNum.contains(listId) && !m_continueListNum[listId].second)) {
             writer->addAttribute("text:start-value", listInfo->startAt());
         }
-        m_continueListNum[listId] = qMakePair(listLevel, false);
+        m_continueListNum[listId] = qMakePair(listLevel, true);
     }
 
     return true;

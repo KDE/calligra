@@ -42,6 +42,8 @@ using namespace Calligra::Sheets;
 Value func_arrang(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_average(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_averagea(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_averageif(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_averageifs(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_avedev(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betadist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betainv(valVector args, ValueCalc *calc, FuncExtra *);
@@ -142,6 +144,16 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f = new Function("AVERAGEA", func_averagea);
     f->setParamCount(1, -1);
     f->setAcceptArray();
+    add(f);
+    f = new Function("AVERAGEIF", func_averageif);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("AVERAGEIFS",         func_averageifs);
+    f->setParamCount(3, -1);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
     add(f);
     f = new Function("BETADIST", func_betadist);
     f->setParamCount(3, 6);
@@ -770,6 +782,48 @@ Value func_average(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_averagea(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return calc->avg(args);
+}
+
+//
+// Function: averageif
+//
+Value func_averageif(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    Value checkRange = args[0];
+    QString condition = calc->conv()->asString(args[1]).asString();
+    Condition cond;
+    calc->getCond(cond, Value(condition));
+
+    if (args.count() == 3) {
+        Cell avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+        return calc->averageIf(avgRangeStart, checkRange, cond);
+    } else {
+        return calc->averageIf(checkRange, cond);
+    }
+}
+
+//
+// Function: averageifs
+//
+Value func_averageifs(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    int lim = (int) (args.count()-1)/2;
+
+    QList<Value> c_Range;
+    QStringList condition;
+    QList<Condition> cond;
+
+    c_Range.append(args.value(0));           //first element - range to be operated on
+
+    for (int i = 1; i < args.count(); i += 2) {
+        c_Range.append(args[i]);
+        condition.append(calc->conv()->asString(args[i+1]).asString());
+        Condition c;
+        calc->getCond(c, Value(condition.last()));
+        cond.append(c);
+    }
+    Cell avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    return calc->averageIfs(avgRangeStart, c_Range, cond, lim);
 }
 
 //

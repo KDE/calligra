@@ -653,8 +653,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //
             // Get the proportion & turn it into a percentage for the
             // attribute.
-            QString proportionalLineSpacing(QString::number((qreal)pap.lspd.dyaLine
-                                                  / (qreal)2.4));
+            QString proportionalLineSpacing(QString::number(pap.lspd.dyaLine / 2.4f, 'f'));
             style->addProperty("fo:line-height", proportionalLineSpacing.append("%"), pt);
         } else if (pap.lspd.fMultLinespace == 0) {
             // Magnitude of lspd.dyaLine specifies the amount of space
@@ -664,7 +663,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             qreal value = qAbs((qreal)pap.lspd.dyaLine / (qreal)20.0); // twip -> pt
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if (pap.lspd.dyaLine > 0)
-                style->addPropertyPt("fo:line-height-at-least", value, pt);
+                style->addPropertyPt("style:line-height-at-least", value, pt);
             else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
                 style->addPropertyPt("fo:line-height", value, pt);
         } else
@@ -792,6 +791,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             case jcDecimal:
                 tmpWriter.addAttribute("style:type", "char");
+                tmpWriter.addAttribute("style:char", ".");
                 break;
             case jcBar:
                 //bar -> just creates a vertical bar at that point that's always visible
@@ -984,7 +984,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fImprint = text engraved if 1
     if (!refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint) {
         if (chp->fShadow)
-            style->addProperty("style:text-shadow", "1pt", tt);
+            style->addProperty("fo:text-shadow", "1pt", tt);
         if (chp->fImprint)
             style->addProperty("style:font-relief", "engraved", tt);
     }
@@ -1024,8 +1024,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
-            style->addProperty("style:text-scale",
-                QString::number(chp->wCharScale) + "%", tt);
+            style->addProperty("style:text-scale", QString::number(chp->wCharScale) + "%", tt);
         }
     }
 
