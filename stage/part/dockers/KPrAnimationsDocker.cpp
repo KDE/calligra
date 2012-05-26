@@ -21,6 +21,8 @@
 #include "QListWidget"
 #include "QVBoxLayout"
 #include "KPrView.h"
+#include "KPrAnimationsTimeLineView.h"
+#include "KPrAnimationsDataModel.h"
 
 KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
 : QDockWidget(parent, flags)
@@ -29,9 +31,13 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     setWindowTitle( i18n( "Shape Animations" ) );
 
     QWidget* base = new QWidget( this );
-    m_layoutsView = new QListWidget( base );
+
+    m_animationsTimeLineView = new KPrAnimationsTimeLineView();
+    m_animationsModel = new KPrAnimationsDataModel();
+    m_animationsTimeLineView->setModel(m_animationsModel);
+
     QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( m_layoutsView );
+    layout->addWidget( m_animationsTimeLineView );
     base->setLayout( layout );
     setWidget( base );
 }
@@ -41,7 +47,7 @@ void KPrAnimationsDocker::setView(KPrView* view)
     Q_ASSERT( view );
     if (m_view) {
         // don't disconnect the m_view->proxyObject as the object is already deleted
-        disconnect(m_layoutsView, 0, this, 0);
+        disconnect(m_animationsTimeLineView, 0, this, 0);
     }
     m_view = view;
     //connect( m_view->proxyObject, SIGNAL( activePageChanged() ),

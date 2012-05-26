@@ -27,6 +27,8 @@
 
 class QListWidget;
 class KPrView;
+class KPrAnimationsTimeLineView;
+class KPrAnimationsDataModel;
 
 class KPrAnimationsDocker: public QDockWidget
 {
@@ -40,7 +42,8 @@ public slots:
 
 private:
     KPrView* m_view;
-    QListWidget * m_layoutsView;
+    KPrAnimationsTimeLineView * m_animationsTimeLineView;
+    KPrAnimationsDataModel *m_animationsModel;
 };
 
 #endif // KPRANIMATIONSDOCKER_H
