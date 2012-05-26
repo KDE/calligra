@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QScrollBar>
+#include <QToolTip>
 #include <QDebug>
 #include <qmath.h>
 
@@ -103,24 +104,9 @@ void KPrTimeLineView::keyPressEvent(QKeyEvent *event)
 
 void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 {
-    int row = static_cast<int>(event->y() / m_mainView->rowsHeigth());
-    int column;
-    if (event->x() < m_mainView->widthOfColumn(0))
-        column = 0;
-    else if (event->x() < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1))
-        column = 1;
-    else if (event->x() < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
-             m_mainView->widthOfColumn(2))
-        column = 2;
-    else if (event->x() < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
-             m_mainView->widthOfColumn(2) + m_mainView->widthOfColumn(3))
-        column = 3;
-    else if (event->x() < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
-             m_mainView->widthOfColumn(2) + m_mainView->widthOfColumn(3)
-             + m_mainView->widthOfColumn(4))
-        column = 4;
-    else
-        column = 5;
+    int row = rowAt(event->y());
+    int column = columnAt(event->x());
+
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
     if (column == 5) {
@@ -231,6 +217,52 @@ void KPrTimeLineView::mouseReleaseEvent(QMouseEvent *event)
     setCursor(Qt::ArrowCursor);
     QWidget::mouseReleaseEvent(event);
     update();
+}
+
+bool KPrTimeLineView::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QModelIndex index = m_mainView->model()->index(rowAt(helpEvent->pos().y()),columnAt(helpEvent->pos().x()));
+        if (index.isValid()) {
+            QString text = m_mainView->model()->data(index, Qt::ToolTipRole).toString();
+            QToolTip::showText(helpEvent->globalPos(), text);
+        } else {
+            QToolTip::hideText();
+            event->ignore();
+        }
+
+        return true;
+    }
+    return QWidget::event(event);
+}
+
+int KPrTimeLineView::rowAt(int ypos)
+{
+    int row = static_cast<int>(ypos / m_mainView->rowsHeigth());
+    return row;
+}
+
+int KPrTimeLineView::columnAt(int xpos)
+{
+    int column;
+    if (xpos < m_mainView->widthOfColumn(0))
+        column = 0;
+    else if (xpos  < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1))
+        column = 1;
+    else if (xpos  < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
+             m_mainView->widthOfColumn(2))
+        column = 2;
+    else if (xpos  < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
+             m_mainView->widthOfColumn(2) + m_mainView->widthOfColumn(3))
+        column = 3;
+    else if (xpos  < m_mainView->widthOfColumn(0) + m_mainView->widthOfColumn(1) +
+             m_mainView->widthOfColumn(2) + m_mainView->widthOfColumn(3)
+             + m_mainView->widthOfColumn(4))
+        column = 4;
+    else
+        column = 5;
+    return column;
 }
 
 void KPrTimeLineView::paintEvent(QPaintEvent *event)

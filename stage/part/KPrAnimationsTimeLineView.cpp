@@ -52,7 +52,6 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
 void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
 {
     m_model = model;
-    qDebug() << "row count in ATV: " << model->rowCount();
     for (int row = 0; row < model->rowCount(); ++ row){
         int size = model->data(model->index(row, 1)).toString().length();
         qreal length = model->data(model->index(row, 5)).toDouble() + model->data(model->index(row, 6)).toDouble();

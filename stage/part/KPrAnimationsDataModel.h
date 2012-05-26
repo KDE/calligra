@@ -36,6 +36,7 @@ public:
         QString name;
         QPixmap thumbnail;
         QPixmap animationIcon;
+        QString animationName;
         KPrAnimationsDataModel::Types type;
         KPrAnimationsDataModel::TriggerEvents triggerEvent;
         qreal startTime;

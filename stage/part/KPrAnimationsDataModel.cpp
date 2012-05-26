@@ -14,10 +14,10 @@ KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
     data1.startTime = 0;
     data1.triggerEvent = KPrAnimationsDataModel::onClick;
     data1.type = KPrAnimationsDataModel::entrance;
-
     data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                       KIconLoader::NoGroup,
                                                       32);
+    data1.animationName = i18n("unrecognized animation");
     data1.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
                                                           KIconLoader::NoGroup,
                                                           32);
@@ -31,6 +31,7 @@ KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
     data2.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                       KIconLoader::NoGroup,
                                                       32);
+    data2.animationName = i18n("unrecognized animation");
     data2.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
                                                           KIconLoader::NoGroup,
                                                           32);
@@ -44,6 +45,7 @@ KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
     data3.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                       KIconLoader::NoGroup,
                                                       32);
+    data3.animationName = i18n("unrecognized animation");
     data3.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
                                                           KIconLoader::NoGroup,
                                                           32);
@@ -95,7 +97,6 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
 
         }
-
     } else if (role == Qt::DecorationRole) {
         switch (index.column()) {
         case 2:
@@ -120,6 +121,30 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::TextAlignmentRole) {
             return Qt::AlignCenter;
+    } else if (role == Qt::ToolTipRole) {
+        switch (index.column()) {
+        case 0:
+        case 1:
+        case 2:
+            return QVariant();
+        case 3:
+            return m_data.at(index.row()).animationName;
+        case 4:
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::onClick)
+                return i18n("start on mouse click");
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::afterPrevious)
+                return i18n("start after previous animation");
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::withPrevious)
+                return i18n("start with previous animation");
+        case 5:
+            return i18n("Start after %1 seconds. Duration of %2 seconds").
+                    arg(m_data.at(index.row()).startTime).arg(m_data.at(index.row()).duration);
+        case 6:
+        case 7:
+        default:
+            return QVariant();
+
+        }
     }
     return QVariant();
 }

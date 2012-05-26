@@ -29,6 +29,10 @@ private:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    bool event(QEvent *event);
+
+    int rowAt(int ypos);
+    int columnAt(int xpos);
 
     void paintEvent(QPaintEvent * event);
     void paintRow(QPainter *painter, int  row, int y, const int RowHeight);
