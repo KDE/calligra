@@ -33,7 +33,7 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:
-    explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    explicit KPrDocument(QObject* parent);
     ~KPrDocument();
 
     /// reimplemented

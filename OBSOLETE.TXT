@@ -112,3 +112,4 @@ Filters:
         filters/bumpmap -- we've got phong bumpmap now
         tools/tool_curves -- good ideas, but not ported in 2006. A good starting
            point for implementing a magnetic selection tool, though
+        tools/tool_star -- too simple for our intended userbase

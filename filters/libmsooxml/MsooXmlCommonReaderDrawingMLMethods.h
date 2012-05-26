@@ -200,13 +200,16 @@ KoFilter::ConversionStatus read_bodyPr();
 KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
-//! Sets the style:wrap attribute of graphic-properties for read_anchor().
-void saveStyleWrap(const char * style);
+//! Inherit default body properties
+void inheritDefaultBodyProperties();
 
-void algnToODF(const char * odfEl, const QString& emuValue);
+//! Sets the style:wrap attribute of graphic-properties for read_anchor().
+void saveStyleWrap(const char *style);
+
+void algnToODF(const char *odfEl, const QString& emuValue);
 
 //! Sets the fo:margin-* attribute of graphic-properties for read_anchor().
-void distToODF(const char * odfEl, const QString& emuValue);
+void distToODF(const char *odfEl, const QString& emuValue);
 
 //! Used by read_wrap*()
 void readWrap();

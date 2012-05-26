@@ -60,8 +60,8 @@ int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-DocBase::DocBase(QWidget *parentWidget, QObject* parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode)
+DocBase::DocBase(QObject* parent)
+    : KoDocument(parent)
     , d(new Private)
 {
     d->resourceManager = new KoDocumentResourceManager();

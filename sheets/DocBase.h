@@ -61,7 +61,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit DocBase(QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit DocBase(QObject* parent = 0);
     ~DocBase();
 
     /**

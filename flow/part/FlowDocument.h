@@ -29,7 +29,7 @@ class FlowDocument : public KoPADocument
     Q_OBJECT
 
     public:
-        FlowDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode = false);
+        FlowDocument(QObject* parent);
         ~FlowDocument();
 
         virtual KoOdf::DocumentType documentType() const;

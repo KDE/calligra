@@ -251,9 +251,6 @@ protected:
     // Inherits correct paragraph styles to m_currentParagraphStyle
     void inheritParagraphStyle(KoGenStyle& targetStyle);
 
-    // Inherits default body properties
-    void inheritDefaultBodyProperties();
-
     // Inherit correct body properties from slideMaster/slideLayout if needed
     void inheritBodyProperties();
 
