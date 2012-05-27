@@ -51,7 +51,8 @@ bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     return false;
 }
 
-bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const
+bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep,
+                                 QString presetClass, QString id) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
@@ -67,6 +68,10 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     }
 
     writer.addAttribute("presentation:node-type", nodeType);
+    if (!presetClass.isEmpty())
+        writer.addAttribute("presentation:preset-class", presetClass);
+    if (!id.isEmpty())
+        writer.addAttribute("presentation:preset-id", id);
     for(int i=0;i < this->animationCount(); i++) {
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {

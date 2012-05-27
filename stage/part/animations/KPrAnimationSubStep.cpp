@@ -41,7 +41,7 @@ void KPrAnimationSubStep::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep) const
+bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep, QString presetClass, QString id) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
@@ -49,7 +49,7 @@ bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep)
         bool startSubStep = !i;
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
-            a->saveOdf(paContext, startStep, startSubStep);
+            a->saveOdf(paContext, startStep, startSubStep, presetClass, id);
         }
     }
     writer.endElement();

@@ -21,8 +21,12 @@
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
 #include "KoXmlWriter.h"
+#include "KLocale"
 
 KPrAnimationStep::KPrAnimationStep()
+    : m_triggerEvent(KPrAnimationStep::On_Click)
+    , m_class(KPrAnimationStep::Custom)
+    , m_id(i18n("stage-unrecognized"))
 {
 }
 
@@ -48,7 +52,7 @@ bool KPrAnimationStep::saveOdf(KoPASavingContext & paContext) const
         bool startStep = !i;
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-            a->saveOdf(paContext, startStep);
+            a->saveOdf(paContext, startStep, presetClassText(), id());
         }
     }
     writer.endElement();
@@ -62,5 +66,60 @@ void KPrAnimationStep::deactivate()
         if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
             a->deactivate();
         }
+    }
+}
+
+void KPrAnimationStep::setNodeType(KPrAnimationStep::Node_Type type)
+{
+    m_triggerEvent = type;
+}
+
+void KPrAnimationStep::setPresetClass(KPrAnimationStep::Preset_Class presetClass)
+{
+    m_class = presetClass;
+}
+
+void KPrAnimationStep::setId(QString id)
+{
+    m_id = id;
+}
+
+KPrAnimationStep::Node_Type KPrAnimationStep::NodeType() const
+{
+    return m_triggerEvent;
+}
+
+KPrAnimationStep::Preset_Class KPrAnimationStep::presetClass() const
+{
+    return m_class;
+}
+
+QString KPrAnimationStep::id() const
+{
+    return m_id;
+}
+
+QString KPrAnimationStep::presetClassText() const
+{
+    if (presetClass() == KPrAnimationStep::Emphasis) {
+        return QString("emphasis");
+    }
+    else if (presetClass() == KPrAnimationStep::Entrance) {
+        return QString("entrance");
+    }
+    else if (presetClass() == KPrAnimationStep::Exit) {
+        return QString("exit");
+    }
+    else if (presetClass() == KPrAnimationStep::Motion_Path) {
+        return QString("motion-path");
+    }
+    else if (presetClass() == KPrAnimationStep::Ole_Action) {
+        return QString("ole-action");
+    }
+    else if (presetClass() == KPrAnimationStep::Media_Call) {
+        return QString("media-call");
+    }
+    else {
+        return QString("custom");
     }
 }

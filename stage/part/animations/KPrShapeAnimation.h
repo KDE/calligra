@@ -39,7 +39,7 @@ public:
     virtual ~KPrShapeAnimation();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
+    virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep, QString presetClass, QString id) const;
 
     KoShape * shape() const;
     KoTextBlockData * textBlockData() const;

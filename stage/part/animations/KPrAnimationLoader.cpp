@@ -36,6 +36,7 @@
 #include "KPrAnimationFactory.h"
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
+#include <QDebug>
 
 KPrAnimationLoader::KPrAnimationLoader()
 {
@@ -128,7 +129,6 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
 bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
-
     kDebug() << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
@@ -139,6 +139,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
+        (*animationStep)->setNodeType(KPrAnimationStep::On_Click);
         // add par animation
     }
     else if (nodeType == "after-previous") {
@@ -146,11 +147,13 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
+        (*animationStep)->setNodeType(KPrAnimationStep::After_Previous);
         // add par animation
     }
     else {
         if (nodeType != "with-previous") {
             kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
+            (*animationStep)->setNodeType(KPrAnimationStep::With_Previous);
         }
         // use the current substep
         if ((*animationStep)->animationCount()) {
@@ -162,6 +165,39 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         // add par to current par
     }
+
+    // load preset and id
+    //TODO: motion-path, ole-action, media-call are not supported
+    QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
+    QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
+    qDebug() << "Preset class: " << presetClass;
+    qDebug() << "Preset id: " << animationId;
+    if (presetClass == "entrance") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Entrance);
+    }
+    else if (presetClass == "exit") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Exit);
+    }
+    else if (presetClass == "emphasis") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Emphasis);
+    }
+    else if (presetClass == "motion-path") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Motion_Path);
+    }
+    else if (presetClass == "ole-action") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Ole_Action);
+    }
+    else if (presetClass == "media-call") {
+        (*animationStep)->setPresetClass(KPrAnimationStep::Media_Call);
+    }
+    else{
+        (*animationStep)->setPresetClass(KPrAnimationStep::Custom);
+    }
+    //TODO: Check if id is one of Stage Predefined animations
+    if (!animationId.isEmpty()) {
+        (*animationStep)->setId(animationId);
+    }
+
 
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is

@@ -30,7 +30,7 @@ public:
     KPrAnimationSubStep();
     virtual ~KPrAnimationSubStep();
     virtual void init(KPrAnimationCache *animationCache, int step);
-    virtual bool saveOdf(KoPASavingContext & paContext, bool startStep) const;
+    virtual bool saveOdf(KoPASavingContext & paContext, bool startStep, QString presetClass, QString id) const;
     virtual void deactivate();
 };
 
