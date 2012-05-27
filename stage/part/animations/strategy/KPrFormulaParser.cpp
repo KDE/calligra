@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-/* heavily based on Benjamin Port'work and in Ariya's work (see kspread/formula)*/
+ /* heavily based on Ariya's work (see kspread/formula) -- all errors are my own! */
 
 #include "KPrFormulaParser.h"
 
