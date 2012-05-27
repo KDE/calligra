@@ -3,58 +3,18 @@
 #include <QDebug>
 #include <KIconLoader>
 #include <KLocale>
+#include <KPrPage.h>
+#include "KoShape.h"
+#include "KoShapeContainer.h"
+#include "KoShapePainter.h"
+#include <QImage>
+#include <QPainter>
 
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
     QAbstractTableModel(parent)
+  , m_activePage(0)
 {
-    //Populate temporal model
-    AnimationsData data1;
-    data1.duration = 2;
-    data1.name="shape 1";
-    data1.startTime = 0;
-    data1.triggerEvent = KPrAnimationsDataModel::onClick;
-    data1.type = KPrAnimationsDataModel::entrance;
-    data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
-                                                      KIconLoader::NoGroup,
-                                                      32);
-    data1.animationName = i18n("unrecognized animation");
-    data1.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
-                                                          KIconLoader::NoGroup,
-                                                          32);
-
-    AnimationsData data2;
-    data2.duration = 3;
-    data2.name="shape 2";
-    data2.startTime = 1;
-    data2.triggerEvent = KPrAnimationsDataModel::afterPrevious;
-    data2.type = KPrAnimationsDataModel::custom;
-    data2.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
-                                                      KIconLoader::NoGroup,
-                                                      32);
-    data2.animationName = i18n("unrecognized animation");
-    data2.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
-                                                          KIconLoader::NoGroup,
-                                                          32);
-
-    AnimationsData data3;
-    data3.duration = 3;
-    data3.name="shape 3";
-    data3.startTime = 0;
-    data3.triggerEvent = KPrAnimationsDataModel::withPrevious;
-    data3.type = KPrAnimationsDataModel::exit;
-    data3.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
-                                                      KIconLoader::NoGroup,
-                                                      32);
-    data3.animationName = i18n("unrecognized animation");
-    data3.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
-                                                          KIconLoader::NoGroup,
-                                                          32);
-
-    m_data.append(data1);
-    m_data.append(data2);
-    m_data.append(data3);
-
-
+    m_data.clear();
 }
 
 int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
@@ -71,6 +31,8 @@ int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
 
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
+    if (!m_activePage)
+        return QVariant();
     if (!index.isValid())
         return QVariant();
     if (role == Qt::TextAlignmentRole) {
@@ -78,7 +40,7 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
-            return index.row();
+            return index.row() + 1;
         case 1:
             return m_data.at(index.row()).name;
         case 2:
@@ -104,15 +66,15 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
         case 3:
             return m_data.at(index.row()).animationIcon;
         case 4:
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::onClick)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::On_Click)
                 return KIconLoader::global()->loadIcon(QString("onclick"),
                                                        KIconLoader::NoGroup,
                                                        32);
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::afterPrevious)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::After_Previous)
                 return KIconLoader::global()->loadIcon(QString("after_previous"),
                                                        KIconLoader::NoGroup,
                                                        32);
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::withPrevious)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::With_Previous)
                 return KIconLoader::global()->loadIcon(QString("with_previous"),
                                                        KIconLoader::NoGroup,
                                                        32);
@@ -130,11 +92,11 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
         case 3:
             return m_data.at(index.row()).animationName;
         case 4:
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::onClick)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::On_Click)
                 return i18n("start on mouse click");
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::afterPrevious)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::After_Previous)
                 return i18n("start after previous animation");
-            if (m_data.at(index.row()).triggerEvent == KPrAnimationsDataModel::withPrevious)
+            if (m_data.at(index.row()).triggerEvent == KPrAnimationStep::With_Previous)
                 return i18n("start with previous animation");
         case 5:
             return i18n("Start after %1 seconds. Duration of %2 seconds").
@@ -151,6 +113,8 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 
 QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    if (!m_activePage)
+        return QVariant();
     if (role != Qt::DisplayRole)
         return QVariant();
     if (orientation == Qt::Horizontal) {
@@ -213,4 +177,70 @@ Qt::ItemFlags KPrAnimationsDataModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-#include "KPrAnimationsDataModel.moc"
+void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
+{
+    Q_ASSERT(activePage);
+    m_activePage = activePage;
+    m_data.clear();
+    m_steps = activePage->animationSteps();
+    int i = 0;
+    foreach (KPrAnimationStep *step, m_steps) {
+        i++;
+        if (step->animationState() == KPrAnimationStep::Valid) {
+            AnimationsData data1;
+            data1.duration = 2;
+            data1.name=i18n("Shape %1").arg(i);
+            data1.startTime = 0;
+            data1.triggerEvent = step->NodeType();
+            data1.type = step->presetClass();
+            //TODO: Image when shape thumbnail is not loaded
+            data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
+                                                              KIconLoader::NoGroup,
+                                                              32);
+            data1.animationName = step->id();
+            data1.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
+                                                                  KIconLoader::NoGroup,
+                                                                  32);
+            if (step->targetElement()) {
+                QPixmap thumbnail;
+                if (thumbnail.convertFromImage(createThumbnail(step->targetElement(), QSize(32, 32))))
+                    thumbnail.scaled(QSize(32, 32), Qt::KeepAspectRatio);
+                    data1.thumbnail = thumbnail;
+            }
+              m_data.append(data1);
+            qDebug() << "Item valid";
+        }
+        qDebug() << "Preset in model: " << step->presetClassText();
+        qDebug() << step->id();
+    }
+    emit dataReinitialized();
+}
+
+QImage KPrAnimationsDataModel::createThumbnail(KoShape* shape, const QSize &thumbSize) const
+{
+    KoShapePainter painter;
+
+    QList<KoShape*> shapes;
+
+    shapes.append(shape);
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container)
+        shapes.append(container->shapes());
+
+    painter.setShapes(shapes);
+
+    QImage thumb(thumbSize, QImage::Format_RGB32);
+    // draw the background of the thumbnail
+    thumb.fill(QColor(Qt::white).rgb());
+
+    QRect imageRect = thumb.rect();
+    // use 2 pixel border around the content
+    imageRect.adjust(2, 2, -2, -2);
+
+    QPainter p(&thumb);
+    painter.paint(p, imageRect, painter.contentRect());
+
+    return thumb;
+}
+
+

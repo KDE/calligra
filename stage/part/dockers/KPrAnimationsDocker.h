@@ -39,6 +39,7 @@ public:
     void setView(KPrView* view);
 
 public slots:
+    void slotActivePageChanged();
 
 
 private:

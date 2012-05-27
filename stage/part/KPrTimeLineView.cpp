@@ -300,7 +300,7 @@ void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowH
     //Column 2
     column = 2;
     start = start + m_mainView->widthOfColumn(column-1);
-    paintIconRow(painter, start, y, row, column, RowHeight, RowHeight);
+    paintIconRow(painter, start, y, row, column, RowHeight-2, RowHeight);
 
     //Column 3
     column = 3;

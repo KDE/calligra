@@ -21,12 +21,15 @@
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
 #include "KoXmlWriter.h"
+#include "KoShape.h"
 #include "KLocale"
 
 KPrAnimationStep::KPrAnimationStep()
     : m_triggerEvent(KPrAnimationStep::On_Click)
     , m_class(KPrAnimationStep::Custom)
     , m_id(i18n("stage-unrecognized"))
+    , m_state(KPrAnimationStep::Invalid)
+    , m_targetElement(0)
 {
 }
 
@@ -84,6 +87,16 @@ void KPrAnimationStep::setId(QString id)
     m_id = id;
 }
 
+void KPrAnimationStep::setAnimationState(KPrAnimationStep::Animation_State state)
+{
+    m_state = state;
+}
+
+void KPrAnimationStep::setTargetElement(KoShape *shape)
+{
+    m_targetElement = shape;
+}
+
 KPrAnimationStep::Node_Type KPrAnimationStep::NodeType() const
 {
     return m_triggerEvent;
@@ -92,6 +105,11 @@ KPrAnimationStep::Node_Type KPrAnimationStep::NodeType() const
 KPrAnimationStep::Preset_Class KPrAnimationStep::presetClass() const
 {
     return m_class;
+}
+
+KPrAnimationStep::Animation_State KPrAnimationStep::animationState() const
+{
+    return m_state;
 }
 
 QString KPrAnimationStep::id() const
@@ -122,4 +140,9 @@ QString KPrAnimationStep::presetClassText() const
     else {
         return QString("custom");
     }
+}
+
+KoShape *KPrAnimationStep::targetElement() const
+{
+    return m_targetElement;
 }

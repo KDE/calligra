@@ -198,6 +198,9 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         (*animationStep)->setId(animationId);
     }
 
+    //TODO: Set not supported animations to invalid
+    (*animationStep)->setAnimationState(KPrAnimationStep::Valid);
+
 
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is
@@ -238,6 +241,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
 
     if (shapeAnimation) {
         subStep->addAnimation(shapeAnimation);
+        (*animationStep)->setTargetElement(shapeAnimation->shape());
     }
     return true;
 }

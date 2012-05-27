@@ -1,15 +1,36 @@
 #ifndef KPRANIMATIONSDATAMODEL_H
 #define KPRANIMATIONSDATAMODEL_H
 
+#include "animations/KPrAnimationStep.h"
+
 #include <QAbstractTableModel>
 #include <QPixmap>
 #include <QIcon>
 
 #include "stage_export.h"
+/*Data Model for Animations Time Line View
+It requires an activePage to be set*/
+
+class KPrPage;
+class QImage;
+class KoShape;
 
 class STAGE_TEST_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
+
+    struct AnimationsData {   // Declare struct type
+        QString name;
+        QPixmap thumbnail;
+        QPixmap animationIcon;
+        QString animationName;
+        KPrAnimationStep::Preset_Class type;
+        KPrAnimationStep::Node_Type triggerEvent;
+        qreal startTime;
+        qreal duration;
+    };   // Define object
+
     explicit KPrAnimationsDataModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent) const;
@@ -17,34 +38,17 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    void setActivePage(KPrPage *activePage);
 
-    enum TriggerEvents {
-        onClick,
-        afterPrevious,
-        withPrevious
-    };
-
-    enum Types {
-        entrance,
-        exit,
-        emphasis,
-        custom
-    };
-
-
-    struct AnimationsData {   // Declare struct type
-        QString name;
-        QPixmap thumbnail;
-        QPixmap animationIcon;
-        QString animationName;
-        KPrAnimationsDataModel::Types type;
-        KPrAnimationsDataModel::TriggerEvents triggerEvent;
-        qreal startTime;
-        qreal duration;
-    };   // Define object
+signals:
+    void dataReinitialized();
 
 private:
+    QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
+
     QList<AnimationsData> m_data;
+    QList<KPrAnimationStep*> m_steps;
+    KPrPage *m_activePage;
 };
 
 #endif // KPRANIMATIONSDATAMODEL_H
