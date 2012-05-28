@@ -75,7 +75,7 @@ static QString toString(ParameterType type, bool range = false)
         case KSpread_Any:
             return i18n("A range of any kind of values");
         case KSpread_Date:
-            return i18n("A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\"");
+            return i18n("A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")");
         }
     }
 
