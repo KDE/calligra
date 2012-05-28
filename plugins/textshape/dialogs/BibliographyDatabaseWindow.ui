@@ -100,7 +100,7 @@
     <property name="title">
      <string>Filter</string>
     </property>
-    <addaction name="actionNew_2"/>
+    <addaction name="actionFilter"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
@@ -121,9 +121,9 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionNew_2">
+  <action name="actionFilter">
    <property name="text">
-    <string>New</string>
+    <string>Filters</string>
    </property>
   </action>
   <action name="actionClose">

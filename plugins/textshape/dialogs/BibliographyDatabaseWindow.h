@@ -27,10 +27,9 @@
 #include <QDir>
 
 class BibliographyDb;
+class BibDbFilter;
 class QTableView;
 class QDir;
-class QComboBox;
-class QDataWidgetMapper;
 
 class BibliographyDatabaseWindow : public QMainWindow
 {
@@ -49,12 +48,14 @@ public slots:
     void insertBlankRow();
     void searchQueryChanged(QString query);
     void searchTypeChanged(QAction *action);
+    void showFilters();
 
 private:
     Ui::BibliographyDatabaseWindow ui;
     QTableView *m_bibTableView;
     BibliographyDb *m_table;
     QRegExp::PatternSyntax m_syntax;
+    QList<BibDbFilter*> *m_filters;
     void setupActions();
 
 private slots:

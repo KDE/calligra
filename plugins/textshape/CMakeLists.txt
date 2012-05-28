@@ -88,6 +88,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/BibliographyDatabaseWindow.cpp
+    dialogs/EditFiltersDialog.cpp
     dialogs/BibliographyDb.cpp
     dialogs/ListLevelChooser.cpp
 

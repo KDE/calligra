@@ -20,6 +20,7 @@
 #include "BibliographyDatabaseWindow.h"
 #include "BibliographyDb.h"
 #include "InsertCitationDialog.h"
+#include "EditFiltersDialog.h"
 
 #include <QTableView>
 #include <QHeaderView>
@@ -43,7 +44,8 @@ QDir BibliographyDatabaseWindow::tableDir = QDir(QDir::home().path().append(QDir
 BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     QMainWindow(parent),
     m_table(0),
-    m_syntax(QRegExp::FixedString)
+    m_syntax(QRegExp::FixedString),
+    m_filters(new QList<BibDbFilter*>)
 {
     ui.setupUi(this);
     setupActions();
@@ -136,6 +138,9 @@ void BibliographyDatabaseWindow::setupActions()
     ui.actionClose->setStatusTip(i18n("Close bibliography database"));
     connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
 
+    ui.actionFilter->setStatusTip(i18n("Edit filters"));
+    connect(ui.actionFilter, SIGNAL(triggered()), this, SLOT(showFilters()));
+
     QActionGroup *searchActions = new QActionGroup(this);
 
     QAction *action = new QAction(i18n("Regular expression"), this);
@@ -160,7 +165,19 @@ void BibliographyDatabaseWindow::setupActions()
 void BibliographyDatabaseWindow::searchTypeChanged(QAction *action)
 {
     m_syntax = action->data().value<QRegExp::PatternSyntax>();
-    qDebug() << "search type changed to " << action->text();
+}
+
+void BibliographyDatabaseWindow::showFilters()
+{
+    if (m_filters->count() == 0) {
+        m_filters->append(new BibDbFilter("identifier", "", "NOT NULL"));
+    }
+    EditFiltersDialog *dialog = new EditFiltersDialog(m_filters, this);
+    if (dialog->exec() == QDialog::Accepted) {
+        foreach (BibDbFilter *filter, *m_filters) {
+            //Create filter string and apply it to model
+        }
+    }
 }
 
 void BibliographyDatabaseWindow::newRecord()
