@@ -28,6 +28,8 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QVariant>
+#include <QAction>
+#include <QActionGroup>
 #include <QDebug>
 
 #include <KoOdfBibliographyConfiguration.h>
@@ -40,7 +42,8 @@ QDir BibliographyDatabaseWindow::tableDir = QDir(QDir::home().path().append(QDir
 
 BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_table(0)
+    m_table(0),
+    m_syntax(QRegExp::FixedString)
 {
     ui.setupUi(this);
     setupActions();
@@ -110,7 +113,7 @@ void BibliographyDatabaseWindow::searchQueryChanged(QString query)
         m_bibTableView->setModel(m_table->proxyModel());
     }
 
-    QRegExp searchExp(ui.search->text(), Qt::CaseInsensitive, QRegExp::FixedString);
+    QRegExp searchExp(ui.search->text(), Qt::CaseInsensitive, m_syntax);
     m_table->setFilter(searchExp);
 }
 
@@ -132,6 +135,32 @@ void BibliographyDatabaseWindow::setupActions()
 
     ui.actionClose->setStatusTip(i18n("Close bibliography database"));
     connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
+
+    QActionGroup *searchActions = new QActionGroup(this);
+
+    QAction *action = new QAction(i18n("Regular expression"), this);
+    action->setCheckable(true);
+    action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::RegExp));
+    searchActions->addAction(action);
+
+    action = new QAction(i18n("Widcard"), this);
+    action->setCheckable(true);
+    action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::Wildcard));
+    searchActions->addAction(action);
+
+    action = new QAction(i18n("Fixed string"), this);
+    action->setCheckable(true);
+    action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::FixedString));
+    searchActions->addAction(action)->setChecked(true);
+
+    ui.menuSearch->addActions(searchActions->actions());
+    connect(searchActions, SIGNAL(triggered(QAction*)), this, SLOT(searchTypeChanged(QAction*)));
+}
+
+void BibliographyDatabaseWindow::searchTypeChanged(QAction *action)
+{
+    m_syntax = action->data().value<QRegExp::PatternSyntax>();
+    qDebug() << "search type changed to " << action->text();
 }
 
 void BibliographyDatabaseWindow::newRecord()

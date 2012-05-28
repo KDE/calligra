@@ -48,11 +48,13 @@ public slots:
     void tableChanged(QString);
     void insertBlankRow();
     void searchQueryChanged(QString query);
+    void searchTypeChanged(QAction *action);
 
 private:
     Ui::BibliographyDatabaseWindow ui;
     QTableView *m_bibTableView;
     BibliographyDb *m_table;
+    QRegExp::PatternSyntax m_syntax;
     void setupActions();
 
 private slots:
@@ -61,4 +63,5 @@ private slots:
     void openFile();
 };
 
+Q_DECLARE_METATYPE(QRegExp::PatternSyntax);
 #endif // BIBLIOGRAPHYDATABASEWINDOW_H

@@ -51,14 +51,18 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="searchLabel">
            <property name="text">
             <string>Search</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="search"/>
+          <widget class="KLineEdit" name="search">
+           <property name="showClearButton" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -98,8 +102,15 @@
     </property>
     <addaction name="actionNew_2"/>
    </widget>
+   <widget class="QMenu" name="menuSearch">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFilter"/>
+   <addaction name="menuSearch"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -139,7 +150,38 @@
     <string>Ctrl+N</string>
    </property>
   </action>
+  <action name="actionRegular_expression">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Regular expression</string>
+   </property>
+  </action>
+  <action name="actionWilcard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Wilcard</string>
+   </property>
+  </action>
+  <action name="actionFixed_string">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fixed string</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
