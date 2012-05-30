@@ -617,20 +617,28 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
         entry->isDir = true;
         embeddedFiles.append(entry);
     }
-
+kDebug(30006) << "Loading file";
     QByteArray fileContent = loadFile(fileName, context);
+kDebug(30006) << "File size:" << fileContent.size();
     if (fileContent.isNull())
         return;
 
     // Actually store the file in the list.
         FileEntry *entry = new FileEntry;
+kDebug(30006) << "A";
         entry->path = fileName;
+kDebug(30006) << "B";
         if (entry->path.startsWith("./"))
                     entry->path = entry->path.mid(2);
+kDebug(30006) << "C";
         entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
+kDebug(30006) << "D";
         entry->isDir = false;
-        entry->contents = fileContent;
+kDebug(30006) << "E";
+//        entry->contents = fileContent;
+kDebug(30006) << "F";
         embeddedFiles.append(entry);
+kDebug(30006) << "G";
 
         kDebug(30006) << "File length: " << fileContent.size();
 }
@@ -645,14 +653,16 @@ QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoa
     QByteArray fileContent;
 
     if (!store->open(fileName)) {
+kDebug(30006) << "Failed to open file";
         store->close();
         return QByteArray();
     }
 
     int fileSize = store->size();
+kDebug(30006) << "filesize:" << fileSize;
     fileContent = store->read(fileSize);
     store->close();
 
-    //kDebug(30006) << "File content: " << fileContent;
+    kDebug(30006) << "File content: " << fileContent;
     return fileContent;
 }
