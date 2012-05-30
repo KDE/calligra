@@ -90,7 +90,9 @@ MainWindow::MainWindow (QWidget* parent)
 
     setCentralWidget (m_view);
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
-    resize (800, 600);
+//    resize (800, 600);
+
+    connect(m_view->engine(), SIGNAL(quit()), qApp, SLOT(quit()));
 
     QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
 }
@@ -128,6 +130,12 @@ void MainWindow::checkForAndOpenDocument()
 
     QObject* object = m_view->rootObject();
     QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
+}
+
+void MainWindow::goHome()
+{
+    QObject* object = m_view->rootObject();
+    QMetaObject::invokeMethod(object, "goHome");
 }
 
 #include "MainWindow.moc"

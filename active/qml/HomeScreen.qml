@@ -27,6 +27,11 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Image {
     id: homeScreen
 
+    function goHome() {
+        if (homeScreen.state === "") Qt.quit();
+        homeScreen.state = ""
+    }
+
     function openDocument(path) {
         doc.openDocument(path);
     }

@@ -36,6 +36,8 @@ public:
     ~MainWindow();
 
     void openFile (const QString& path);
+public slots:
+    void goHome();
 
 private:
     QDeclarativeView* m_view;

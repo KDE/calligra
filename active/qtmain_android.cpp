@@ -31,6 +31,8 @@
 #include <QDir>
 #include <QDebug>
 #include <qglobal.h>
+#include <QApplication>
+#include <QWidget>
 
 #include <stdlib.h>
 
@@ -99,9 +101,21 @@ static jboolean startQtApp(JNIEnv* env, jobject /*object*/, jstring paramsString
     return pthread_create(&appThread, NULL, startMainMethod, NULL)==0;
 }
 
+static void nativeBackPressed(JNIEnv* env, jobject /*object*/)
+{
+    qDebug() << "native back pressed" << qApp->activeWindow() << qApp->topLevelWidgets();
+    QObject* obj = 0;
+    foreach(QWidget* w, qApp->topLevelWidgets()) {
+        if (w->inherits("MainWindow")) obj = w;
+    }
+    QMetaObject::invokeMethod(obj, "goHome");
+}
 
 static JNINativeMethod methods[] = {
     {"startQtApp", "(Ljava/lang/String;Ljava/lang/String;)V", (void *)startQtApp}
+};
+static JNINativeMethod methods2[] = {
+    {"nativeBackPressed", "()V", (void *)nativeBackPressed}
 };
 
 /*
@@ -137,6 +151,8 @@ static int registerNativeMethods(JNIEnv* env, const char* className,
 static int registerNatives(JNIEnv* env)
 {
     if (!registerNativeMethods(env, QtNativeClassPathName, methods, sizeof(methods) / sizeof(methods[0])))
+        return JNI_FALSE;
+    if (!registerNativeMethods(env, "org/kde/necessitas/origo/KdeActivity", methods2, sizeof(methods2) / sizeof(methods2[0])))
         return JNI_FALSE;
 
     return JNI_TRUE;
