@@ -64,6 +64,7 @@ Value func_fdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_finv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ftest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -95,6 +96,7 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_prob(valVector args, ValueCalc *calc, FuncExtra*);
 Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq(valVector args, ValueCalc *calc, FuncExtra *);
@@ -217,6 +219,10 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f = new Function("FISHER", func_fisher);
     add(f);
     f = new Function("FISHERINV", func_fisherinv);
+    add(f);
+    f = new Function("FORECAST", func_forecast);
+    f->setParamCount(3);
+    f->setAcceptArray();
     add(f);
     f = new Function("FREQUENCY", func_frequency);
     f->setParamCount(2);
@@ -342,6 +348,10 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f->setParamCount(3);
     add(f);
     f->setNeedsExtra(true);
+    f = new Function("PROB", func_prob);
+    f->setParamCount(3, 4);
+    f->setAcceptArray();
+    add(f);
     f = new Function("PERCENTRANK", func_percentrank);
     f->setParamCount(2, 3);
     f->setAcceptArray();
@@ -1341,6 +1351,21 @@ Value func_fisherinv(valVector args, ValueCalc *calc, FuncExtra *)
     // (exp (2.0 * fVal) - 1.0) / (exp (2.0 * fVal) + 1.0)
     Value ex = calc->exp(calc->mul(fVal, 2.0));
     return calc->div(calc->sub(ex, 1.0), calc->add(ex, 1.0));
+}
+
+//
+// Function: FORECAST
+//
+Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value x = calc->conv()->asFloat(args[0]);       // value of the independent variable
+    Value arrayY = args[1];
+    Value arrayX = args[2];
+
+    if ((arrayY.columns() != arrayX.columns()) || (arrayY.rows() != arrayX.rows())) return Value::errorNA();
+
+    // result = intercept + slope * x
+    return calc->add(FunctionCaller(func_intercept, valVector() << args[1] << args[2], calc).exec(), calc->mul(x, FunctionCaller(func_slope, valVector() << args[1] << args[2], calc).exec()));
 }
 
 //
@@ -2411,6 +2436,60 @@ Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     return result;
+}
+
+//
+// Function: prob
+//
+// prob(x_range; prob_range; lower_lim; upper_lim)
+Value func_prob(valVector args, ValueCalc *calc, FuncExtra*)
+{
+    Value xRange = args[0];                         // main range
+    Value pRange = args[1];                         // respective probability range
+    Value lLim = calc->conv()->asFloat(args[2]);    // lower limit
+    Value uLim;                                     // upper limit
+    Value p(0);                                     // probability of a discrete random variable lying between two limits.
+    Value sumOfProb(0);                             // sum of all the probabilities in the range
+
+    // cell count should be same in both the ranges
+    if (xRange.count() != pRange.count()) return Value::errorNA();
+
+    int rows = xRange.rows();
+    int cols = xRange.columns();
+
+    if (args.count() > 3) {     // if both lower and the upper limits are specified
+        uLim = calc->conv()->asFloat(args[3]);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                sumOfProb = calc->add(sumOfProb, pRange.element(c, r));
+
+                // probabillity should be between 0 and 1
+                if (!calc->gequal(Value(1), pRange.element(c, r)) || !calc->greater(pRange.element(c, r), Value(0))) return Value::errorNUM();
+
+                if (calc->gequal(xRange.element(c, r), Value(lLim)) && calc->gequal(Value(uLim), xRange.element(c, r))) {
+                    p = calc->add(p, pRange.element(c, r));
+                }
+            }
+        }
+    }
+    else {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                sumOfProb = calc->add(sumOfProb, pRange.element(c, r));
+
+                // probabillity should be between 0 and 1
+                if (!calc->gequal(Value(1), pRange.element(c, r)) || !calc->greater(pRange.element(c, r), Value(0))) return Value::errorNUM();
+
+                if (calc->equal(Value(lLim), xRange.element(c, r))) {
+                    p = calc->add(p, pRange.element(c, r));
+                }
+            }
+        }
+    }
+
+    if (!calc->approxEqual(sumOfProb, Value(1.0))) return Value::errorNUM();       // sum of probabilities should be 1
+
+    return p;
 }
 
 //

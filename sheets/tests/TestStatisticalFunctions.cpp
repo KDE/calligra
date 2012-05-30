@@ -318,6 +318,18 @@ void TestStatisticalFunctions::initTestCase()
     // R19:R20
     storage->setValue(18, 19, Value(267));
     storage->setValue(18, 20, Value(240));
+
+    // S19:S22
+    storage->setValue(19, 19, Value(0));
+    storage->setValue(19, 20, Value(1));
+    storage->setValue(19, 21, Value(2));
+    storage->setValue(19, 22, Value(3));
+
+    // T19:T22
+    storage->setValue(20, 19, Value(0.2));
+    storage->setValue(20, 20, Value(0.3));
+    storage->setValue(20, 21, Value(0.1));
+    storage->setValue(20, 22, Value(0.4));
 }
 
 void TestStatisticalFunctions::testAVEDEV()
@@ -616,6 +628,14 @@ void TestStatisticalFunctions::testFISHERINV()
     CHECK_EVAL("FISHERINV(LN(2))",                 Value(0.6));           // e^(2*ln(2))=4
     CHECK_EVAL("FISHERINV(FISHER(0.5))",           Value(0.5));           // Some random value.
     CHECK_EVAL("FISHERINV(0.47)+FISHERINV(-0.47)", Value(0));             // Function is symetrical.
+}
+
+void TestStatisticalFunctions::testFORECAST()
+{
+    // my tests
+    CHECK_EVAL("FORECAST(8;{1;2;3};{4;5;6})", Value(5));
+    CHECK_EVAL_SHORT("FORECAST(7;{5.8;-1};{2;-5})", Value(10.65714286));
+    CHECK_EVAL("FORECAST(50;{-1;-2;-3;-4};{10;20;30;40})", Value(-5));
 }
 
 void TestStatisticalFunctions::testFREQUENCY()
@@ -1088,6 +1108,22 @@ void TestStatisticalFunctions::testPOISSON()
     // ODF-tests
     CHECK_EVAL_SHORT("POISSON(0;1;FALSE())", Value(0.367880));    // TODO - be more precise /
     CHECK_EVAL_SHORT("POISSON(0;2;FALSE())", Value(0.135335));    // TODO - be more precise /
+}
+
+void TestStatisticalFunctions::testPROB()
+{
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //  S19  |  0          T19 |  0.2
+    //  S20  |  1          T20 |  0.3
+    //  S21  |  2          T21 |  0.1
+    //  S22  |  3          T22 |  0.4
+
+    // my tests
+    CHECK_EVAL_SHORT("PROB(S19:S22;T19:T22;2)",   Value(0.1));          // probability of a 2
+    CHECK_EVAL_SHORT("PROB(S19:S22;T19:T22;1;3)", Value(0.8));          // probability of a discrete variable lying between 1 and 3 (included)
+    CHECK_EVAL_SHORT("PROB(S19:S21;T19:T21;2)",   Value::errorNUM());   // sum of probabilities should be 1 - if not, return #NUM!
+    CHECK_EVAL_SHORT("PROB(S19:S21;T19:T22;2)",   Value::errorNA());    // cell count should be same - else return #NA!
 }
 
 void TestStatisticalFunctions::testPERCENTRANK()

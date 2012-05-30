@@ -64,6 +64,7 @@ private slots:
     void testFINV();
     void testFISHER();
     void testFISHERINV();
+    void testFORECAST();
     void testFREQUENCY();
     void testFTEST();
     void testGAMMADIST();
@@ -111,7 +112,7 @@ private slots:
     void testPERMUTATIONA();
     void testPHI();
     void testPOISSON();
-//     void testPROB();     // ???
+    void testPROB();
     void testQUARTILE();
     void testPERCENTRANK();
     void testRANK();
