@@ -331,12 +331,12 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             ResourceGroupRequest *r = m_requests.findGroupRequestById( e.attribute("group-id") );
             if ( r ) {
                 kWarning()<<"Multiple requests to same group, loading into existing group";
-                if ( ! r->load( e, status.project() ) ) {
+                if ( ! r->load( e, status ) ) {
                     kError()<<"Failed to load resource request";
                 }
             } else {
                 r = new ResourceGroupRequest();
-                if (r->load(e, status.project())) {
+                if (r->load(e, status)) {
                     addRequest(r);
                 } else {
                     kError()<<"Failed to load resource request";

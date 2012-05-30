@@ -60,8 +60,8 @@ int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-DocBase::DocBase(QWidget *parentWidget, QObject* parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode)
+DocBase::DocBase(QObject* parent)
+    : KoDocument(parent)
     , d(new Private)
 {
     d->resourceManager = new KoDocumentResourceManager();
@@ -158,7 +158,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.
-    map()->saveOdf(*contentWriter, savingContext);
+    map()->saveOdf(*bodyWriter, savingContext);
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body
@@ -286,7 +286,7 @@ void DocBase::loadOdfSettings(const KoXmlDocument&settingsDoc)
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
     if (!viewSettings.isNull()) {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
     }
     map()->loadOdfSettings(settings);
     loadOdfIgnoreList(settings);

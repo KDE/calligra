@@ -24,7 +24,7 @@
  */
 
 #include "KWDocument.h"
-#include "KWFactory.h"<
+#include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWCanvasItem.h"
@@ -91,8 +91,8 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode),
+KWDocument::KWDocument(QObject *parent)
+        : KoDocument(parent),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -757,14 +757,6 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
-QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
-{
-    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
-    if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-words"); // we can't save this, only load.
-    return answer;
-}
-
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "pageStyleName=" << style.name();
@@ -836,8 +828,7 @@ void KWDocument::saveConfig()
         return;
 //   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
-    if (isEmbedded())
-        return;
+
     m_config.save();
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");

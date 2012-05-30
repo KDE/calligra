@@ -8,7 +8,7 @@ http://mpxj.sourceforge.net
 This means that PlanConvert *should* be able to convert from all the file formats MPXJ supports.
 However, so far (April, 2012) only Planner (*.planner) and MS project file formats *.mpx and *.mpp has been tested.
 
-PlanConverts classes has been automatically generated from the plan.dtd file.
+PlanConverts classes is generated from the plan.dtd file using the script: generatedtdclasses
 There is a copy in subdirectory ./dtd.
 The original is found in the main plan project.
 
@@ -20,7 +20,7 @@ If changes are done to the original dtd that impacts PlanConvert, the following 
 1) Copy original to ./dtd
 2) Generate new PlanConvert schema classes using the bash script generatedtdclasses
 3) Update the PlanWriter class to correctly call the new schema classes
-4) Install mpxj and modify build.xml to pint to it, or make a link to it.
+4) Install mpxj and modify build.xml to point to it, or make a link (mpxj) to it.
 5) Compile the modifications using ant (ant jar)
 6) Install (from your cmake build directory)
 
@@ -31,7 +31,7 @@ When run as an import filter, java needs to know how to locate the mpxj and Apac
 If theses are not installed in a place where Java finds them, you will have to point to them using
 the PLAN_CLASSPATH environment variable, e.g:
 
-PLAN_CLASSPATH=/path/to/mpxj/mpxj.jar:/path/to/poi/poi.jar calligraplan&
+$ PLAN_CLASSPATH=/path/to/mpxj/mpxj.jar:/path/to/poi/poi.jar calligraplan&
 
 
 

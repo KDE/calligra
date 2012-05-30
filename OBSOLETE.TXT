@@ -1,0 +1,115 @@
+Date:   May 14 2012
+
+In the commits
+    4254f88a2a816aa81e2d68e73348354814363960  (most of this list, not marked)
+    45582416016079de1ccf0988c1ce58e20fd0ece2  (marked with [A])
+a lot of obsolete code was removed from our source tree. This file lists the
+removed plugins, why they were removed and why you might want to resurrect the
+code if you are interested in working on the features these plugins used to
+provide.
+
+The easiest way to get the source code is to check out the calligra/2.4 branch,
+which is the last release that included this code.
+
+
+Filters:
+
+    generic_wrapper (a filter that could use a python or perl script to do the
+    filtering)  [A]
+    xsltfilter (need Qt3 support, unmaintained since 2003)  [A]
+
+
+    karbon:
+
+    Karbon had a number of filters that were never ported when Calligra was
+    ported to Qt4
+
+      ai - adobe illustrator
+      kontour - the old kontour application from KOffice 1.1
+      xcf - gimp
+      msod - microsoft draw (this is also the only filter that used the sub-filter 
+         feature of KoFilterManager)
+      oodraw -- open office draw, obsoleted by ODF
+
+    kchart:
+
+       svg (needs Qt3 support)
+
+    kformula:
+
+       entire set of filters, none have been build since 2006.
+
+    stage:
+
+      These filters had not been built since Calligra was ported to Qt 4.
+
+      svg
+      genericimageexport
+      words - kword import filter
+      ooimpress - open office impress, obsoleted by ODP
+      magicpoint - windows presentation application
+      kpr - old kpresenter format, obsoleted by kprodp
+      ooppt -- use open office to import powerpoint
+
+    words:
+
+      Words is seen as a new development instead of a continuation of the
+      old kword application. It no longer supports the kword file format.
+      However, many of the filters converted to and from kwd, instead of odt.
+
+      These filters might be useful as reference material for whoever wants
+      to implement support for these file formats. However, the actual code
+      is often very old and need constant updates to keep it compiling with
+      newer compiler versions
+
+       mswrite
+       html - obsoleted by html-odf
+       latex
+       amipro
+       docbook
+       kword1.3
+       oowriter
+       palmdoc
+       wml
+       abiword
+       rtf export
+       libexport - not longer used by anything  [A]
+
+    Plugins:
+
+       mapshape -- shape that embeds marble. This plugin could be interesting
+         to resurrect, however, the plugin as it stands was very buggy and
+         unmaintained.
+       paragraphtool -- a great idea: on canvas manipulation of parapraph properties.
+         However, the author had no time for maintenance and the code did no
+         longer compile.
+       reporting/shape -- unfinished feature, it should be developed in a branch,
+         not in git master.
+       scan -- integration with scanner hardware for Krita and Stage, but it no longer
+         worked.
+       treeshape -- was never finished and the gsoc student went on to work on other
+         parts of KDE.
+
+    Tools:
+
+        Calligra Mobile and koabstraction: the QWidget-based mobile gui for Calligra.
+          Obsoleted by the work on Calligra Active and the demise of the Fremantle 
+          platform.
+        kthesaurus -- unmaintained since 2002
+
+    Krita:
+
+        colorspaces/lms_f32 -- not compiled for a long time now
+        extensions/backgrounds -- was unfinished
+        extensions/bracketing2hdr -- commented out for a long time
+        extensions/scripting -- not maintained (my fault!) since 2006
+        extensions/extensionsmanager -- unfinished
+        extensions/tonemapping -- broken
+        extensions/painterlyframework -- unmaintained. This should be resurrected
+           at one point since it is the only free software that can do real color
+           mixing. However, artists don't actually want the feature, it seems.
+        extensions/together -- looks like an unimplemented stub
+        filters/bumpmap -- we've got phong bumpmap now
+        tools/tool_curves -- good ideas, but not ported in 2006. A good starting
+           point for implementing a magnetic selection tool, though
+        tools/tool_star -- too simple for our intended userbase

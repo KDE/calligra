@@ -42,6 +42,8 @@ public:
     KWStatistics(KoCanvasResourceManager *provider, KWDocument *m_document,
                  KoSelection *selection = 0, QWidget *parent = 0);
 
+    virtual ~KWStatistics();
+
     void updateDataUi();
 
 public slots:

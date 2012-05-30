@@ -2,9 +2,13 @@
 Name=Database
 Name[cs]=Databáze
 Name[el]=Βάση δεδομένων
+Name[et]=Andmebaas
+Name[gl]=Base de datos
 Name[nl]=Database
+Name[pl]=Baza danych
 Name[pt]=Base de Dados
 Name[pt_BR]=Banco de dados
+Name[sl]=Podatkovna zbirka
 Name[sv]=Databas
 Name[uk]=База даних
 Name[x-test]=xxDatabasexx

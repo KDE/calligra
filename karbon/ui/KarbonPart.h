@@ -53,8 +53,7 @@ class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeBasedDocumen
 {
     Q_OBJECT
 public:
-    explicit KarbonPart(QWidget* parentWidget = 0L, const char* widgetName = 0L,
-                        QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false);
+    explicit KarbonPart(QObject* parent = 0L);
     virtual ~KarbonPart();
 
     /// reimplemented form KoDocument

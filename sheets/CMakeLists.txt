@@ -330,7 +330,7 @@ install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  sheets.rc sheets_readonly.rc sheets.notifyrc DESTINATION ${DATA_INSTALL_DIR}/sheets)
+install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

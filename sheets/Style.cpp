@@ -479,10 +479,12 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         setGoUpDiagonalPen(Odf::decodePen(str));
     }
 
-    if (styleStack.hasProperty(KoXmlNS::draw, "style-name")) {
-        kDebug(36003) << " style name :" << styleStack.property(KoXmlNS::draw, "style-name");
+    if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
+        QString styleName = styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name") ? styleStack.property(KoXmlNS::calligra, "fill-style-name")
+                : styleStack.property(KoXmlNS::draw, "style-name");
+        kDebug(36003) << " style name :" << styleName;
 
-        const KoXmlElement * style = stylesReader.findStyle(styleStack.property(KoXmlNS::draw, "style-name"), "graphic");
+        const KoXmlElement * style = stylesReader.findStyle(styleName, "graphic");
         kDebug(36003) << " style :" << style;
         if (style) {
             KoStyleStack drawStyleStack;
@@ -1424,7 +1426,7 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
     if (keysToStore.contains(BackgroundBrush) && (backgroundBrush().style() != Qt::NoBrush)) {
         QString tmp = saveOdfBackgroundStyle(mainStyles, backgroundBrush());
         if (!tmp.isEmpty())
-            style.addProperty("draw:style-name", tmp);
+            style.addProperty("calligra:fill-style-name", tmp);
     }
 
     QString _prefix;

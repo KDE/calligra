@@ -39,6 +39,8 @@ static ParameterType toType(const QString& type)
         return KSpread_String;
     if (type == "Any")
         return KSpread_Any;
+    if (type == "Date")
+        return KSpread_Date;
 
     return KSpread_Float;
 }
@@ -57,6 +59,8 @@ static QString toString(ParameterType type, bool range = false)
             return i18n("A floating point value (like 1.3, 0.343, 253 )");
         case KSpread_Any:
             return i18n("Any kind of value");
+        case KSpread_Date:
+            return i18n("A string representing a date (like \"2/22/2012\")");
         }
     } else {
         switch (type) {
@@ -70,6 +74,8 @@ static QString toString(ParameterType type, bool range = false)
             return i18n("A range of floating point values (like 1.3, 0.343, 253 )");
         case KSpread_Any:
             return i18n("A range of any kind of values");
+        case KSpread_Date:
+            return i18n("A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")");
         }
     }
 
