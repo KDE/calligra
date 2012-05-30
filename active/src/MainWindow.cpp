@@ -74,8 +74,8 @@ MainWindow::MainWindow (QWidget* parent)
         m_view->engine()->addImportPath (importPath);
     }
     
-    m_view->engine()->addImportPath("/data/data/org.kde.calligra.mobile/files/imports");
-    m_view->engine()->addPluginPath("/data/data/org.kde.calligra.mobile/lib");
+    m_view->engine()->addImportPath("/data/data/org.kde.calligra.active/files/imports");
+    m_view->engine()->addPluginPath("/data/data/org.kde.calligra.active/lib");
 
 
     m_view->rootContext()->setContextProperty ("recentFilesModel", QVariant::fromValue (recentFiles));
