@@ -1,0 +1,14 @@
+SOURCES:
+/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/deform_brush.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/deform_paintop_plugin.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/kis_deform_paintop.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/kis_deform_paintop_settings.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/kis_deform_paintop_factory.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/kis_deform_option.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp
+MOC_COMPILE_DEFINITIONS:
+_BSD_SOURCE
+MOC_DEFINITIONS:
+ -D_BSD_SOURCE
+MOC_INCLUDES:
+/home/shrikrishna/kde/src/calligra/krita;/home/shrikrishna/kde/src/calligra/krita/krita/image;/home/shrikrishna/kde/src/calligra/krita/krita/image/brushengine;/home/shrikrishna/kde/src/calligra/krita/krita/image/tiles;/home/shrikrishna/kde/src/calligra/krita/krita/ui;/home/shrikrishna/kde/src/calligra/krita/krita/ui/canvas;/home/shrikrishna/kde/src/calligra/krita/krita/ui/tool;/home/shrikrishna/kde/src/calligra/krita/krita/ui/flake;/home/shrikrishna/kde/src/calligra/krita/krita/ui/widgets;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/resources;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/colorwidgets;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/libbrush;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/libpaintop;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/deform
+CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE:
+
+CMAKE_BINARY_DIR:
+/home/shrikrishna/kde/src/calligra/krita
+CMAKE_SOURCE_DIR:
+/home/shrikrishna/kde/src/calligra/krita

@@ -353,7 +353,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
 
 
-KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
+KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace, bool infiniteCanvas)//##
 {
     KoColor backgroundColor(Qt::white, colorspace);
 
@@ -363,14 +363,14 @@ KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, 
     double defaultResolution=1.;
 
     newImage(name, width, height, colorspace, backgroundColor, "",
-             defaultResolution);
+             defaultResolution, infiniteCanvas);
     return image();
 }
 
 bool KisDoc2::newImage(const QString& name,
                        qint32 width, qint32 height,
                        const KoColorSpace* cs, const KoColor &bgColor,
-                       const QString &description, const double imageResolution)
+                       const QString &description, const double imageResolution, bool infiniteCanvas)//##
 {
     if (!init())
         return false;
@@ -384,7 +384,7 @@ bool KisDoc2::newImage(const QString& name,
 
     qApp->setOverrideCursor(Qt::BusyCursor);
 
-    image = new KisImage(createUndoStore(), width, height, cs, name);
+    image = new KisImage(createUndoStore(), width, height, cs, name,true,infiniteCanvas);//##
     Q_CHECK_PTR(image);
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));

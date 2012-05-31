@@ -1,0 +1,5 @@
+After compiling calligra,
+run kbuildsycoca4
+that caches the location of all the new plugins you built and installed 
+kbuildsycoca will find all plugins and cache their locations; if you haven't run that after installing calligra, kde cannot find the plugins
+and everything, including the main app is a plugin

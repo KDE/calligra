@@ -77,6 +77,8 @@ protected slots:
     void slotWidthUnitChanged(QString);
     void slotHeightUnitChanged(QString);
 
+    void slotInfiniteCheckboxChanged();//##
+
 protected:
     void loadAnchorIcons();
     void updateAnchorIcons(anchor enumAnchor);

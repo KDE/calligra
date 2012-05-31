@@ -100,7 +100,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
             this, SLOT(heightChanged(double)));
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
-
+//##
+    connect(chkInfinite, SIGNAL(stateChanged(int)),this,SLOT(isInfiniteChecked()));
+//##
     bnPortrait->setIcon(KIcon("portrait"));
     connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
     bnLandscape->setIcon(KIcon("landscape"));
@@ -198,12 +200,22 @@ void KisCustomImageWidget::createImage()
     double resolution;
     resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
-
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
+
+    //##
+    if(chkInfinite->isChecked())
+    {
+        m_doc->newImage(txtName->text(), 0, 0, cs, bgColor, txtDescription->toPlainText(), resolution,true);
+
+    }
+
+    else
+    {
+        width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
+        height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+        m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
+    }
 
     KisImageWSP image = m_doc->image();
     if (image && image->root() && image->root()->firstChild()) {
@@ -228,6 +240,7 @@ void KisCustomImageWidget::createImage()
                 painter.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
             }
         }
+
         layer->setDirty(QRect(0, 0, width, height));
     }
 
@@ -282,6 +295,42 @@ void KisCustomImageWidget::screenSizeClicked()
     doubleHeight->setValue(sz.height());
 }
 
+//##
+void KisCustomImageWidget::isInfiniteChecked()
+{
+    if(chkInfinite->isChecked())
+    {
+        cmbPredefined->setEnabled(false);
+        cmbWidthUnit->setEnabled(false);
+        cmbHeightUnit->setEnabled(false);
+        doubleWidth->setEnabled(false);
+        doubleHeight->setEnabled(false);
+        bnScreenSize->setEnabled(false);
+        txtPredefinedName->setEnabled(false);
+        bnSaveAsPredefined->setEnabled(false);
+        bnPortrait->setEnabled(false);
+        bnLandscape->setEnabled(false);
+    }
+
+    else
+    {
+        cmbPredefined->setEnabled(true);
+        cmbWidthUnit->setEnabled(true);
+        cmbHeightUnit->setEnabled(true);
+        doubleWidth->setEnabled(true);
+        doubleHeight->setEnabled(true);
+        bnScreenSize->setEnabled(true);
+        txtPredefinedName->setEnabled(true);
+        bnSaveAsPredefined->setEnabled(true);
+        bnPortrait->setEnabled(true);
+        bnLandscape->setEnabled(true);
+    }
+
+
+}
+
+//##
+
 void KisCustomImageWidget::fillPredefined()
 {
     cmbPredefined->addItem("");
@@ -310,7 +359,7 @@ void KisCustomImageWidget::fillPredefined()
             }
         }
     }
-
+    
     cmbPredefined->setCurrentIndex(0);
 
 }

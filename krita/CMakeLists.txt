@@ -14,6 +14,8 @@ endif(MSVC)
 
 include(CheckFunctionExists)
 
+find_package(KDE4 REQUIRED)
+
 macro_optional_find_package(GLEW)
 macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
 configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )

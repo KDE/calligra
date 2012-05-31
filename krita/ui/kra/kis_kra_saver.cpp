@@ -80,6 +80,16 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     if (image->profile() && image->profile()-> valid()) {
         imageElement.setAttribute(PROFILE, image->profile()->name());
     }
+
+    //##
+    if (image->isCanvasInfinite())
+    {
+        imageElement.setAttribute(INFINITECANVAS,1);
+    }
+    else
+        imageElement.setAttribute(INFINITECANVAS,0);
+    //##
+
     imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
     imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
 

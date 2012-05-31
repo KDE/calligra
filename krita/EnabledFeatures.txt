@@ -1,0 +1,7 @@
+   * GLIB2 - GLib 2.0
+   * png - Official PNG reference library
+   * OpenEXR - High dynamic-range (HDR) image file format
+   * tiff - TIFF Library and Utilities
+   * jpeg - Free library for JPEG image compression
+   * kdcraw - The KDCraw library
+   * SharedMimeInfo - Shared Mime Info

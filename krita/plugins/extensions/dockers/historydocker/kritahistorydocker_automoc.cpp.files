@@ -1,0 +1,14 @@
+SOURCES:
+/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker/History.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker/HistoryDock.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker/KisUndoView.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker/KisUndoModel.cpp
+MOC_COMPILE_DEFINITIONS:
+_BSD_SOURCE
+MOC_DEFINITIONS:
+ -D_BSD_SOURCE
+MOC_INCLUDES:
+/home/shrikrishna/kde/src/calligra/krita;/home/shrikrishna/kde/src/calligra/krita/krita/image;/home/shrikrishna/kde/src/calligra/krita/krita/image/brushengine;/home/shrikrishna/kde/src/calligra/krita/krita/image/tiles;/home/shrikrishna/kde/src/calligra/krita/krita/ui;/home/shrikrishna/kde/src/calligra/krita/krita/ui/canvas;/home/shrikrishna/kde/src/calligra/krita/krita/ui/tool;/home/shrikrishna/kde/src/calligra/krita/krita/ui/flake;/home/shrikrishna/kde/src/calligra/krita/krita/ui/widgets;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/resources;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/colorwidgets;/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker;/home/shrikrishna/kde/src/calligra/krita/plugins/extensions/dockers/historydocker
+CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE:
+
+CMAKE_BINARY_DIR:
+/home/shrikrishna/kde/src/calligra/krita
+CMAKE_SOURCE_DIR:
+/home/shrikrishna/kde/src/calligra/krita

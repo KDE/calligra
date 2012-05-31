@@ -130,9 +130,12 @@ public:
     KisCompositeProgressProxy *compositeProgressProxy;
 
     bool startProjection;
+
+    bool infiniteCanvas;//##
+
 };
 
-KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
+KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection, bool infiniteCanvas)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate())
@@ -240,6 +243,20 @@ bool KisImage::canReselectGlobalSelection()
 {
     return m_d->deselectedGlobalSelection;
 }
+
+//##
+bool KisImage::isCanvasInfinite()
+{
+    return m_d->infiniteCanvas;
+}
+
+void KisImage::setCanvasInfinite()
+{
+    m_d->infiniteCanvas = true;
+    return;
+}
+
+//##
 
 void KisImage::reselectGlobalSelection()
 {

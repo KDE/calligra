@@ -63,6 +63,8 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), m_page->xOffset, SLOT(setValue(int)));
     connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), m_page->yOffset, SLOT(setValue(int)));
 
+    connect(m_page->chkInfinite, SIGNAL(stateChanged(int)), this, SLOT(slotInfiniteCheckboxChanged()));
+
     m_page->xOffset->setMinimum(-width + 1);
     m_page->xOffset->setMaximum(width - 1);
     m_page->yOffset->setMinimum(-height + 1);
@@ -270,6 +272,34 @@ void DlgCanvasSize::slotHeightUnitChanged(QString)
 
     m_page->newHeight->blockSignals(false);
 }
+
+//##
+void DlgCanvasSize::slotInfiniteCheckboxChanged()
+{
+    if(m_page->chkInfinite->isChecked())
+    {
+        m_page->comboHeightUnit->setEnabled(false);
+        m_page->comboWidthUnit->setEnabled(false);
+        m_page->newHeight->setEnabled(false);
+        m_page->newWidth->setEnabled(false);
+
+        m_page->canvasPreview->setCanvasSize(m_page->canvasPreview->width(),m_page->canvasPreview->height());
+        m_page->canvasPreview->setImageSize(this->width(), this->height());
+    }
+    else
+    {
+        m_page->comboHeightUnit->setEnabled(true);
+        m_page->comboWidthUnit->setEnabled(true);
+        m_page->newHeight->setEnabled(true);
+        m_page->newWidth->setEnabled(true);
+
+        slotWidthChanged(m_page->newWidth->value());
+        slotHeightChanged(m_page->newHeight->value());
+    }
+
+}
+
+//##
 
 void DlgCanvasSize::loadAnchorIcons()
 {

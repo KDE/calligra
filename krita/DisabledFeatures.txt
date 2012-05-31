@@ -1,0 +1,21 @@
+   * GLEW  <http://glew.sourceforge.net>
+     The OpenGL Extension Wrangler Library
+     Required by the Krita shader filter plugin
+   * FFTW3  <http://www.fftw.org/>
+     A fast, free C FFT library
+     Required by the Krita for fast convolution operators
+   * OpenCTL (0.9.10 or higher)  <http://www.opengtl.org>
+     Free Color Transformation Language implementation (part of OpenGTL)
+     Required for High Dynamic Range Color Spaces, YCbCr and LMS support
+   * OpenShiva  <http://www.opengtl.org>
+     OpenShiva interpreter for the Shiva Kernel Language (part of OpenGTL)
+     Required for Shiva based Generators and Filters
+   * QtShiva  <http://www.opengtl.org>
+     Qt bindings for the OpenShiva interpreter (part of libQtGTL)
+     Required for Shiva based Generators and Filters
+   * poppler-qt4  <http://poppler.freedesktop.org>
+     The Poppler Qt4 interface library
+     Required by the Krita PDF filter
+   * openjpeg  <http://www.openjpeg.org>
+     Free library for JPEG 2000 image compression
+     Required by the Krita JPEG 2000 filter

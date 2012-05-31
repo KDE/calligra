@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
+    <width>479</width>
     <height>503</height>
    </rect>
   </property>
@@ -269,17 +269,11 @@
          </widget>
         </item>
         <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QCheckBox" name="chkInfinite">
+          <property name="text">
+           <string>Infinite Canvas</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="txtPredefinedName">

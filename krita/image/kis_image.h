@@ -77,7 +77,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true, bool infiniteCanvas = false);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -493,6 +493,18 @@ public:
      * \see reselectGlobalSelection()
      */
     bool canReselectGlobalSelection();
+
+    //##
+    /**
+      * Returns whether the canvas of the image has been set to be Infinite
+      */
+    bool isCanvasInfinite();
+
+    /**
+      * Marks the image as one with an infinite canvas
+      */
+    void setCanvasInfinite();
+    //##
 
 signals:
 

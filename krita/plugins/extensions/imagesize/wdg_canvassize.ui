@@ -129,6 +129,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="6">
+       <widget class="QCheckBox" name="chkInfinite">
+        <property name="text">
+         <string>Infinite Canvas</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

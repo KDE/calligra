@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              _
+           ,d88P'              ,8     op   ,o.
+        ,o8P                  d8'   ,8P     Y8
+      ,d8P'                  d8'   ,8F        =
+     d8P'           _u,     ,8'    dP    _,      ___ _   __           ._.
+    88           ,o8P  P   ,8[    dP     88    d88 888  ]8L,ooo._  od8P8Y
+   88          ,d8 ,,oop   d8    ,8[    d8P  ,8P _o88[  88P      d8P _ooo.
+   88         d88odP Y8b  ,8[   ,8P   ,=8P  ,88o8P dP  d8F     _88boP  88
+   Y8b.._._,o=PPP      P=P78boP  8bopP YP    PP^^ d8  ,8P       PP^^    YPY
+     ^^^^^^^                ^^    ^^             d88
+                                                d8P
+                                           /   d8 
+                                          b _o8P
+                                          ^^^
+
+              Builder version 1.1.5
+
+
+
+
+
+
+
+Checking if this is a distro I can automatically get the dependencies for you...
+You'll be asked for your root password to update needed software and
+>>> UNINSTALL ANY CURRENT KRITA / CALLIGRA INSTALL YOU HAVE <<<
+from elsewhere (they conflict with the compiled versions).
+IF YOU DON'T WANT TO CONTINUE WITH THIS PUSH Ctrl+C TO SKIP INSTALLING DEPENDENCIES NOW.
+
+
+Looks like you're not using a distro supported by this script (ie *Ubuntu, OpenSuse, Fedora). That's fine, but you need to make sure the necessary dependencies are installed yourself (usually whatever is needed to build koffice plus git). Once you have done that, please change the first line of this script to _autodepencencies=false and run this script again. NOTE: Using this method you will not get automatic updates to this script or a log file (which can help us find and fix problems for you).

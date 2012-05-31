@@ -1,0 +1,14 @@
+SOURCES:
+/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/selection_tools.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_rectangular.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_polygonal.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_elliptical.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_contiguous.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_outline.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_path.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_similar.cc;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools/kis_tool_select_brush.cc
+MOC_COMPILE_DEFINITIONS:
+_BSD_SOURCE
+MOC_DEFINITIONS:
+ -D_BSD_SOURCE
+MOC_INCLUDES:
+/home/shrikrishna/kde/src/calligra/krita;/home/shrikrishna/kde/src/calligra/krita/krita/image;/home/shrikrishna/kde/src/calligra/krita/krita/image/brushengine;/home/shrikrishna/kde/src/calligra/krita/krita/image/tiles;/home/shrikrishna/kde/src/calligra/krita/krita/ui;/home/shrikrishna/kde/src/calligra/krita/krita/ui/canvas;/home/shrikrishna/kde/src/calligra/krita/krita/ui/tool;/home/shrikrishna/kde/src/calligra/krita/krita/ui/flake;/home/shrikrishna/kde/src/calligra/krita/krita/ui/widgets;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/resources;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/colorwidgets;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools;/home/shrikrishna/kde/src/calligra/krita/plugins/tools/selectiontools
+CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE:
+
+CMAKE_BINARY_DIR:
+/home/shrikrishna/kde/src/calligra/krita
+CMAKE_SOURCE_DIR:
+/home/shrikrishna/kde/src/calligra/krita

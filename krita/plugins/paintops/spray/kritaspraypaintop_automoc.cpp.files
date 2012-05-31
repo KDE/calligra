@@ -1,0 +1,14 @@
+SOURCES:
+/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/spray_paintop_plugin.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_spray_paintop.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_sprayop_option.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_spray_shape_dynamics.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_spray_shape_option.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_spray_paintop_settings.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/spray_brush.cpp;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray/random_gauss.cpp
+MOC_COMPILE_DEFINITIONS:
+_BSD_SOURCE
+MOC_DEFINITIONS:
+ -D_BSD_SOURCE
+MOC_INCLUDES:
+/home/shrikrishna/kde/src/calligra/krita;/home/shrikrishna/kde/src/calligra/krita/krita/image;/home/shrikrishna/kde/src/calligra/krita/krita/image/brushengine;/home/shrikrishna/kde/src/calligra/krita/krita/image/tiles;/home/shrikrishna/kde/src/calligra/krita/krita/ui;/home/shrikrishna/kde/src/calligra/krita/krita/ui/canvas;/home/shrikrishna/kde/src/calligra/krita/krita/ui/tool;/home/shrikrishna/kde/src/calligra/krita/krita/ui/flake;/home/shrikrishna/kde/src/calligra/krita/krita/ui/widgets;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/resources;/home/shrikrishna/kde/src/calligra/krita/libs/widgets/colorwidgets;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/libbrush;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/libpaintop;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray;/home/shrikrishna/kde/src/calligra/krita/plugins/paintops/spray
+CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE:
+
+CMAKE_BINARY_DIR:
+/home/shrikrishna/kde/src/calligra/krita
+CMAKE_SOURCE_DIR:
+/home/shrikrishna/kde/src/calligra/krita

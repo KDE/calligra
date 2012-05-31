@@ -154,6 +154,11 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
+        //##
+        if ( element.attribute(INFINITECANVAS,"0") == "0" ? false : true )
+            image->setCanvasInfinite();
+        //##
+
     }
 
     return image;
