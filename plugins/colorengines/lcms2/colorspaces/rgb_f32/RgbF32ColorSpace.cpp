@@ -24,7 +24,6 @@
 #include <klocale.h>
 
 #include "compositeops/KoCompositeOps.h"
-#include "compositeops/KoCompositeOpAdd.h"
 
 #include "compositeops/RgbCompositeOps.h"
 
