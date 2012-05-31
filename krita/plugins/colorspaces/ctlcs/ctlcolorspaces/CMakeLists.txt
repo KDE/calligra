@@ -1,7 +1,7 @@
 install(FILES
     gray32f.ctlcs
     rgba16f.ctlcs
-    rgba32f.ctlcs
+#    rgba32f.ctlcs
     xyza16f.ctlcs
     xyza32f.ctlcs
     ycbcr8u.ctlcs

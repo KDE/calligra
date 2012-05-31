@@ -48,6 +48,7 @@
 #include "colorspaces/rgb_u8/RgbU8ColorSpace.h"
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
+#include "colorspaces/rgb_f32/RgbF32ColorSpace.h"
 
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
@@ -110,6 +111,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorProfile *rgbProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     registry->addProfile(rgbProfile);
 
+    registry->add(new RgbF32ColorSpaceFactory());
     registry->add(new RgbU16ColorSpaceFactory());
     registry->add(new RgbU8ColorSpaceFactory());
 

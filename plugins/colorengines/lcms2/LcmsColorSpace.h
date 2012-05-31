@@ -37,7 +37,9 @@ class KoLcmsInfo
         cmsUInt32Number cmType;  // The colorspace type as defined by littlecms
         cmsColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
     };
+
 public:
+
     KoLcmsInfo(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature) : d(new Private) {
         d->cmType = cmType;
         d->colorSpaceSignature = colorSpaceSignature;
@@ -71,6 +73,7 @@ template<class _CSTraits>
 class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 {
     struct KoLcmsColorTransformation : public KoColorTransformation {
+
         KoLcmsColorTransformation(const KoColorSpace* colorSpace) : KoColorTransformation(), m_colorSpace(colorSpace) {
             csProfile = 0;
             cmstransform = 0;
@@ -124,10 +127,12 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 
 protected:
 
-    LcmsColorSpace(const QString &id, const QString &name,  cmsUInt32Number cmType,
+    LcmsColorSpace(const QString &id, const QString &name,
+                   cmsUInt32Number cmType,
                    cmsColorSpaceSignature colorSpaceSignature,
                    KoColorProfile *p)
-            : KoColorSpaceAbstract<_CSTraits>(id, name), KoLcmsInfo(cmType, colorSpaceSignature)
+            : KoColorSpaceAbstract<_CSTraits>(id, name)
+            , KoLcmsInfo(cmType, colorSpaceSignature)
             , d(new Private())
 
     {
@@ -178,26 +183,18 @@ protected:
             Q_ASSERT(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }
-        // For conversions from default rgb
-//             d->lastFromRGB = cmsCreate_sRGBProfile();
-//
-//             d->defaultFromRGB = cmsCreateTransform(d->lastFromRGB, TYPE_BGR_8,
-//                     d->profile->lcmsProfile(), this->colorSpaceType(),
-//                     INTENT_PERCEPTUAL, 0);
-//
-//             d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
-//                     d->lastFromRGB, TYPE_BGR_8,
-//                     INTENT_PERCEPTUAL, 0);
-
     }
+
 public:
 
     virtual bool hasHighDynamicRange() const {
         return false;
     }
+
     virtual const KoColorProfile * profile() const {
         return d->colorProfile;
     }
+
     virtual KoColorProfile * profile() {
         return d->colorProfile;
     }
@@ -220,8 +217,10 @@ public:
             cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata, dst, 1);
         } else {
             if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
-                d->lastFromRGB = cmsCreateTransform(profile->lcmsProfile(), TYPE_BGR_8,
-                                                    d->profile->lcmsProfile(), this->colorSpaceType(),
+                d->lastFromRGB = cmsCreateTransform(profile->lcmsProfile(),
+                                                    TYPE_BGR_8,
+                                                    d->profile->lcmsProfile(),
+                                                    this->colorSpaceType(),
                                                     INTENT_PERCEPTUAL, 0);
                 d->lastRGBProfile = profile->lcmsProfile();
 
@@ -421,18 +420,24 @@ private:
 class LcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo
 {
 public:
-    LcmsColorSpaceFactory(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature) {
+    LcmsColorSpaceFactory(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature)
+        : KoLcmsInfo(cmType, colorSpaceSignature)
+    {
     }
+
     virtual bool profileIsCompatible(const KoColorProfile* profile) const {
         const IccColorProfile* p = dynamic_cast<const IccColorProfile*>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
+
     virtual QString colorSpaceEngine() const {
         return "icc";
     }
+
     virtual bool isHdr() const {
         return false;
     }
+
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const;
 };
