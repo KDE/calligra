@@ -201,5 +201,6 @@ struct KoColorSpaceTrait {
 #include "KoLabColorSpaceTraits.h"
 #include "KoXyzColorSpaceTraits.h"
 #include "KoYcbcrColorSpaceTraits.h"
+#include "KoCmykColorSpaceTraits.h"
 
 #endif
