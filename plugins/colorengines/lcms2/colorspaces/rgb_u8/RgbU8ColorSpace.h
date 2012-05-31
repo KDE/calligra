@@ -23,7 +23,7 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-class RgbU8ColorSpace : public LcmsColorSpace<KoRgbU8Traits>
+class RgbU8ColorSpace : public LcmsColorSpace<KoBgrU8Traits>
 {
 
 public:

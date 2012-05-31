@@ -63,7 +63,7 @@ private:
 };
 
 RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoRgbU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, cmsSigRgbData, p)
+        LcmsColorSpace<KoBgrU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, cmsSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Blue") , 0, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
@@ -73,11 +73,11 @@ RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
     init();
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
-    addStandardCompositeOps<KoRgbU8Traits>(this);
+    addStandardCompositeOps<KoBgrU8Traits>(this);
 
-    addCompositeOp(new RgbCompositeOpIn<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpOut<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpIn<KoBgrU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpOut<KoBgrU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpBumpmap<KoBgrU8Traits>(this));
 }
 
 
@@ -99,26 +99,26 @@ KoColorSpace* RgbU8ColorSpace::clone() const
 
 void RgbU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
-    const KoRgbU8Traits::Pixel* p = reinterpret_cast<const KoRgbU8Traits::Pixel*>(pixel);
+    const KoBgrU8Traits::Pixel* p = reinterpret_cast<const KoBgrU8Traits::Pixel*>(pixel);
     QDomElement labElt = doc.createElement("RGB");
-    labElt.setAttribute("r", KoColorSpaceMaths< KoRgbU8Traits::channels_type, qreal>::scaleToA(p->red));
-    labElt.setAttribute("g", KoColorSpaceMaths< KoRgbU8Traits::channels_type, qreal>::scaleToA(p->green));
-    labElt.setAttribute("b", KoColorSpaceMaths< KoRgbU8Traits::channels_type, qreal>::scaleToA(p->blue));
+    labElt.setAttribute("r", KoColorSpaceMaths< KoBgrU8Traits::channels_type, qreal>::scaleToA(p->red));
+    labElt.setAttribute("g", KoColorSpaceMaths< KoBgrU8Traits::channels_type, qreal>::scaleToA(p->green));
+    labElt.setAttribute("b", KoColorSpaceMaths< KoBgrU8Traits::channels_type, qreal>::scaleToA(p->blue));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
 
 void RgbU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
-    KoRgbU8Traits::Pixel* p = reinterpret_cast<KoRgbU8Traits::Pixel*>(pixel);
-    p->red = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
-    p->green = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
-    p->blue = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    KoBgrU8Traits::Pixel* p = reinterpret_cast<KoBgrU8Traits::Pixel*>(pixel);
+    p->red = KoColorSpaceMaths< qreal, KoBgrU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+    p->green = KoColorSpaceMaths< qreal, KoBgrU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p->blue = KoColorSpaceMaths< qreal, KoBgrU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 
 quint8 RgbU8ColorSpace::intensity8(const quint8 * src) const
 {
-    const KoRgbU8Traits::Pixel* p = reinterpret_cast<const KoRgbU8Traits::Pixel*>(src);
+    const KoBgrU8Traits::Pixel* p = reinterpret_cast<const KoBgrU8Traits::Pixel*>(src);
     return (quint8)(p->red * 0.30 + p->green * 0.59 + p->blue * 0.11);
 }

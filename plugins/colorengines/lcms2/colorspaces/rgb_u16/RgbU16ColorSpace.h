@@ -24,7 +24,7 @@
 #include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
-class RgbU16ColorSpace : public LcmsColorSpace<KoRgbU16Traits>
+class RgbU16ColorSpace : public LcmsColorSpace<KoBgrU16Traits>
 {
 public:
     RgbU16ColorSpace(KoColorProfile *p);
