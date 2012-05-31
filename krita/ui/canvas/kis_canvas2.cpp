@@ -65,7 +65,7 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
-#include "input/kis_inputmanager.h"
+#include "input/kis_input_manager.h"
 
 struct KisCanvas2::KisCanvas2Private
 {

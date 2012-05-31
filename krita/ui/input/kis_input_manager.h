@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 
 class KisCanvas2;
-
+class KisInputAction;
 class KisInputManager : public QObject
 {
     Q_OBJECT
@@ -33,7 +33,8 @@ public:
 
     bool eventFilter(QObject* object, QEvent* event );
 
-
+public Q_SLOTS:
+    void actionEnded();
 
 private:
     class Private;
