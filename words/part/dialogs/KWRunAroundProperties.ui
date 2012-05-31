@@ -102,7 +102,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>The shape affects the text by it's:</string>
+      <string>The shape affects the text by its:</string>
      </property>
      <property name="flat">
       <bool>true</bool>
