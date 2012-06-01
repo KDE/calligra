@@ -159,7 +159,10 @@ void CellEditorDocker::toolChanged(const QString &toolId)
 {
     kDebug() << "tool changed to" << toolId;
 
-    if (toolId == QLatin1String("KSpreadCellToolId")) {
+    const bool isCellTool = toolId == QLatin1String("KSpreadCellToolId");
+    setEnabled(isCellTool);
+
+    if (isCellTool) {
         KoToolBase* tool = KoToolManager::instance()->toolById(d->canvas, toolId);
         d->cellTool = qobject_cast<CellToolBase*>(tool);
         Q_ASSERT(d->cellTool);
