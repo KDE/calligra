@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,26 +17,35 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORGBU16COLORSPACE_H_
-#define KORGBU16COLORSPACE_H_
+#ifndef KIS_XYZ_U8_COLORSPACE_H_
+#define KIS_XYZ_U8_COLORSPACE_H_
 
-#include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
-#include "KoColorModelStandardIds.h"
+#include <LcmsColorSpace.h>
+#include <KoColorSpaceTraits.h>
 
-class RgbU16ColorSpace : public LcmsColorSpace<KoBgrU16Traits>
+#include <KoColorModelStandardIds.h>
+
+#define TYPE_XYZA_8 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(1)|EXTRA_SH(1))
+
+class XyzU8ColorSpace : public LcmsColorSpace<KoXyzU8Traits>
 {
 public:
-    RgbU16ColorSpace(const QString &name, KoColorProfile *p);
+
+    XyzU8ColorSpace(const QString &name, KoColorProfile *p);
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
+    static QString colorSpaceId()
+    {
+        return QString("XYZA8");
+    }
+
     virtual KoID colorModelId() const {
-        return RGBAColorModelID;
+        return XYZAColorModelID;
     }
 
     virtual KoID colorDepthId() const {
-        return Integer16BitsColorDepthID;
+        return Integer8BitsColorDepthID;
     }
 
     virtual KoColorSpace* clone() const;
@@ -45,44 +54,46 @@ public:
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 
-    static QString colorSpaceId()
-    {
-        return QString("RGBAU16");
-    }
-
 };
 
-class RgbU16ColorSpaceFactory : public LcmsColorSpaceFactory
+
+class XyzU8ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    RgbU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_16, cmsSigRgbData) {
+
+    XyzU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_8, cmsSigXYZData) {
     }
+
     virtual QString id() const {
-        return RgbU16ColorSpace::colorSpaceId();
+        return XyzU8ColorSpace::colorSpaceId();
     }
+
     virtual QString name() const {
-        return i18n("RGB (16-bit integer/channel)");
+        return i18n("XYZ (8-bit integer/channel)");
     }
 
     virtual bool userVisible() const {
         return true;
     }
+
     virtual KoID colorModelId() const {
-        return RGBAColorModelID;
+        return XYZAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
-        return Integer16BitsColorDepthID;
+        return Integer8BitsColorDepthID;
     }
+
     virtual int referenceDepth() const {
-        return 16;
+        return 8;
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new RgbU16ColorSpace(name(), p->clone());
+        return new XyzU8ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {
-        return "sRGB built-in";
+        return "XYZ built-in - (lcms internal)";
     }
 };
 

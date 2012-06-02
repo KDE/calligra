@@ -27,8 +27,8 @@
 
 #include "compositeops/RgbCompositeOps.h"
 
-RgbF32ColorSpace::RgbF32ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), i18n("RGBA (32-bit floating/channel, LCMS-based)"),  TYPE_RGBA_FLT, cmsSigRgbData, p)
+RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
+        LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(0, 255, 0)));
@@ -52,14 +52,9 @@ bool RgbF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
         return false;
 }
 
-QString RgbF32ColorSpace::colorSpaceId()
-{
-    return QString("RGBAF32");
-}
-
 KoColorSpace* RgbF32ColorSpace::clone() const
 {
-    return new RgbF32ColorSpace(profile()->clone());
+    return new RgbF32ColorSpace(name(), profile()->clone());
 }
 
 void RgbF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
@@ -79,6 +74,6 @@ void RgbF32ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->red = KoColorSpaceMaths< qreal, KoRgbF32Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
     p->green = KoColorSpaceMaths< qreal, KoRgbF32Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
     p->blue = KoColorSpaceMaths< qreal, KoRgbF32Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
-    p->alpha = KoColorSpaceMathsTraits<float>::max;
+    p->alpha = 1.0;
 }
 

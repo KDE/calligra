@@ -27,24 +27,29 @@
 class RgbF32ColorSpace : public LcmsColorSpace<KoRgbF32Traits>
 {
 public:
-    RgbF32ColorSpace(KoColorProfile *p);
+    RgbF32ColorSpace(const QString &name, KoColorProfile *p);
+
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
+
     virtual KoID colorModelId() const {
         return RGBAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Float32BitsColorDepthID;
     }
+
     virtual KoColorSpace* clone() const;
+
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 
-    /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
-    static QString colorSpaceId();
+    static QString colorSpaceId()
+    {
+        return QString("RGBAF32");
+    }
+
 };
 
 class RgbF32ColorSpaceFactory : public LcmsColorSpaceFactory
@@ -60,7 +65,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18n("RGBA (32-bit floating/channel, LCMS-based)");
+        return i18n("RGBA (32-bit floating/channel)");
     }
 
     virtual bool userVisible() const {
@@ -80,7 +85,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new RgbF32ColorSpace(p->clone());
+        return new RgbF32ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {

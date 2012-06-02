@@ -62,8 +62,8 @@ private:
     quint32 m_psize;
 };
 
-RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoBgrU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, cmsSigRgbData, p)
+RgbU8ColorSpace::RgbU8ColorSpace(const QString &name, KoColorProfile *p) :
+        LcmsColorSpace<KoBgrU8Traits>(colorSpaceId(), name, TYPE_BGRA_8, cmsSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Blue") , 0, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
@@ -72,7 +72,6 @@ RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
 
     init();
 
-    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoBgrU8Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoBgrU8Traits>(this));
@@ -86,15 +85,10 @@ KoColorTransformation* RgbU8ColorSpace::createInvertTransformation() const
     return new KoRgbU8InvertColorTransformation(this);
 }
 
-QString RgbU8ColorSpace::colorSpaceId()
-{
-    return QString("RGBA");
-}
-
 
 KoColorSpace* RgbU8ColorSpace::clone() const
 {
-    return new RgbU8ColorSpace(profile()->clone());
+    return new RgbU8ColorSpace(name(), profile()->clone());
 }
 
 void RgbU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const

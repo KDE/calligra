@@ -17,26 +17,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORGBU16COLORSPACE_H_
-#define KORGBU16COLORSPACE_H_
+#ifndef LabF32ColorSpace_H_
+#define LabF32ColorSpace_H_
 
 #include "LcmsColorSpace.h"
 #include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
-class RgbU16ColorSpace : public LcmsColorSpace<KoBgrU16Traits>
+// XXX: implement normalizedChannelValues?
+
+class LabF32ColorSpace : public LcmsColorSpace<KoLabF32Traits>
 {
 public:
-    RgbU16ColorSpace(const QString &name, KoColorProfile *p);
+    LabF32ColorSpace (const QString &name, KoColorProfile *p);
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
+    static QString colorSpaceId()
+    {
+        return QString("LABAF32");
+    }
+
     virtual KoID colorModelId() const {
-        return RGBAColorModelID;
+        return LABAColorModelID;
     }
 
     virtual KoID colorDepthId() const {
-        return Integer16BitsColorDepthID;
+        return Float32BitsColorDepthID;
     }
 
     virtual KoColorSpace* clone() const;
@@ -44,45 +51,46 @@ public:
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
-
-    static QString colorSpaceId()
-    {
-        return QString("RGBAU16");
-    }
-
 };
 
-class RgbU16ColorSpaceFactory : public LcmsColorSpaceFactory
+class LabF32ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    RgbU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_16, cmsSigRgbData) {
-    }
-    virtual QString id() const {
-        return RgbU16ColorSpace::colorSpaceId();
-    }
-    virtual QString name() const {
-        return i18n("RGB (16-bit integer/channel)");
+    LabF32ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_LabA_FLT, cmsSigLabData)
+    {
     }
 
     virtual bool userVisible() const {
         return true;
     }
-    virtual KoID colorModelId() const {
-        return RGBAColorModelID;
+
+    virtual QString id() const {
+        return LabF32ColorSpace::colorSpaceId();
     }
+
+    virtual QString name() const {
+        return i18n("L*a*b* (32-bit float/channel)");
+    }
+
+    virtual KoID colorModelId() const {
+        return LABAColorModelID;
+    }
+
     virtual KoID colorDepthId() const {
-        return Integer16BitsColorDepthID;
+        return Float32BitsColorDepthID;
+
     }
     virtual int referenceDepth() const {
-        return 16;
+        return 32;
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new RgbU16ColorSpace(name(), p->clone());
+        return new LabF32ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {
-        return "sRGB built-in";
+        return "Lab identity built-in";
     }
 };
 
