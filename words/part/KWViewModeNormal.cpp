@@ -64,8 +64,6 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
     while (index > 1) { // 1 since we might hit a pagespread in the binary search, so start one page early
         page = page.next();
         --index;
-        if (page.pageSide() == KWPage::PageSpread)
-            --index;
     }
 
     int emptyPages = 0;
@@ -142,10 +140,6 @@ void KWViewModeNormal::updatePageCache()
 
     m_pageSpreadMode = false;
     foreach (const KWPage &page, m_pageManager->pages()) {
-        if (page.pageSide() == KWPage::PageSpread) {
-            m_pageSpreadMode = true;
-            break;
-        }
     }
     m_pageTops.clear();
     qreal width = 0.0, bottom = 0.0;
@@ -153,17 +147,6 @@ void KWViewModeNormal::updatePageCache()
         qreal top = 0.0, last = 0.0, halfWidth = 0.0;
         foreach (const KWPage &page, m_pageManager->pages()) {
             switch (page.pageSide()) {
-            case KWPage::PageSpread:
-                if (last > 0)
-                    top += last + GAP;
-                m_pageTops.append(top);
-                m_pageTops.append(top);
-                top += page.height() + GAP;
-                width = qMax(width, page.width());
-                halfWidth = 0.0;
-                last = 0.0;
-                bottom = top;
-                break;
             case KWPage::Left:
                 m_pageTops.append(top);
                 last = page.height();

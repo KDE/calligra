@@ -46,6 +46,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(ki18n("Shreya Pandit"), ki18n("Statistics docker"), "");
     aboutData->addAuthor(ki18n("Brijesh Patel"), ki18n("Foot and endnotes"), "");
     aboutData->addAuthor(ki18n("Smit Patel"), ki18n("Bibliography"), "");
+    aboutData->addAuthor(ki18n("Mojtaba Shahi"), ki18n("Style Manager"), "");
     aboutData->addAuthor(ki18n("Lassi Nieminen"), ki18n("Filter"), "lassniem@gmail.com");
     aboutData->addAuthor(ki18n("Hanzes Matus"), ki18n("Filter"), "matus.hanzes@ixonos.com");
     aboutData->addAuthor(ki18n("Lukáš Tvrdý"), ki18n("Filter"), "lukast.dev@gmail.com");
