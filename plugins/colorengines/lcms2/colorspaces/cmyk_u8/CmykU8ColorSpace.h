@@ -49,7 +49,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "CMYKAU8";
+        return "CMYK";
     }
 
 };

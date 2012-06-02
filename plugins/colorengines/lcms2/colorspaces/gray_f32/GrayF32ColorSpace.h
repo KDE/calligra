@@ -52,6 +52,10 @@ public:
     {
         return "GRAYAF32";
     }
+
+    virtual bool hasHighDynamicRange() const {
+        return true;
+    }
 };
 
 class GrayF32ColorSpaceFactory : public LcmsColorSpaceFactory
@@ -93,6 +97,11 @@ public:
 
     virtual QString defaultProfile() const {
         return "gray built-in";
+    }
+
+    virtual bool isHdr() const
+    {
+        return true;
     }
 };
 

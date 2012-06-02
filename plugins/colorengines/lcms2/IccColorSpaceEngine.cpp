@@ -135,7 +135,7 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     profile->load();
 
     // and then lcms can read the profile from file itself without problems,
-    // quite often, and we can initilize it
+    // quite often, and we can initialize it
     if (!profile->valid()) {
         cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toAscii(), "r");
         profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
@@ -187,11 +187,23 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
         QString depthId = cs->colorDepthId().id();
         // Compute the depth part of the type
         quint32 depthType;
+
         if (depthId == Integer8BitsColorDepthID.id()) {
             depthType = BYTES_SH(1);
-        } else if (depthId == Integer16BitsColorDepthID.id()) {
+        }
+        else if (depthId == Integer16BitsColorDepthID.id()) {
             depthType = BYTES_SH(2);
-        } else {
+        }
+        else if (depthId == Float16BitsColorDepthID.id()) {
+            depthType = BYTES_SH(2);
+        }
+        else if (depthId == Float32BitsColorDepthID.id()) {
+            depthType = BYTES_SH(4);
+        }
+        else if (depthId == Float64BitsColorDepthID.id()) {
+            depthType = BYTES_SH(0);
+        }
+        else {
             dbgPigmentCS << "Unknow bit depth";
             return 0;
         }
@@ -199,7 +211,12 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
         quint32 modelType;
 
         if (modelId == RGBAColorModelID.id()) {
-            modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) | DOSWAP_SH(1) | SWAPFIRST_SH(1));
+            if (depthId.startsWith("U")) {
+                modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) | DOSWAP_SH(1) | SWAPFIRST_SH(1));
+            }
+            else if (depthId.startsWith("F")) {
+                modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) );
+            }
         } else if (modelId == XYZAColorModelID.id()) {
             modelType = (COLORSPACE_SH(PT_XYZ) | EXTRA_SH(1) | CHANNELS_SH(3));
         } else if (modelId == LABAColorModelID.id()) {

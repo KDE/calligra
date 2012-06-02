@@ -40,13 +40,17 @@ class KoLcmsInfo
 
 public:
 
-    KoLcmsInfo(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature) : d(new Private) {
+    KoLcmsInfo(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature)
+        : d(new Private)
+    {
         d->cmType = cmType;
         d->colorSpaceSignature = colorSpaceSignature;
     }
+
     virtual ~KoLcmsInfo() {
         delete d;
     }
+
     virtual quint32 colorSpaceType() const {
         return d->cmType;
     }
@@ -54,6 +58,7 @@ public:
     virtual cmsColorSpaceSignature colorSpaceSignature() const {
         return d->colorSpaceSignature;
     }
+
 private:
     Private* const d;
 };
@@ -74,7 +79,10 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 {
     struct KoLcmsColorTransformation : public KoColorTransformation {
 
-        KoLcmsColorTransformation(const KoColorSpace* colorSpace) : KoColorTransformation(), m_colorSpace(colorSpace) {
+        KoLcmsColorTransformation(const KoColorSpace* colorSpace)
+            : KoColorTransformation()
+            , m_colorSpace(colorSpace)
+        {
             csProfile = 0;
             cmstransform = 0;
             profiles[0] = 0;
@@ -115,26 +123,26 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
     };
 
     struct Private {
-        mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
+        mutable quint8 *qcolordata; // A small buffer for conversion from and to qcolor.
         KoLcmsDefaultTransformations* defaultTransformations;
 
         mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
         mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
         mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-        LcmsColorProfileContainer *  profile;
+        LcmsColorProfileContainer *profile;
         KoColorProfile* colorProfile;
     };
 
 protected:
 
-    LcmsColorSpace(const QString &id, const QString &name,
+    LcmsColorSpace(const QString &id,
+                   const QString &name,
                    cmsUInt32Number cmType,
                    cmsColorSpaceSignature colorSpaceSignature,
                    KoColorProfile *p)
             : KoColorSpaceAbstract<_CSTraits>(id, name)
             , KoLcmsInfo(cmType, colorSpaceSignature)
             , d(new Private())
-
     {
         Q_ASSERT(p); // No profile means the lcms color space can't work
         Q_ASSERT(profileIsCompatible(p));
@@ -149,9 +157,6 @@ protected:
     }
 
     virtual ~LcmsColorSpace() {
-        /*            cmsCloseProfile(d->lastFromRGB);
-                      cmsDeleteTransform( d->defaultFromRGB );
-                      cmsDeleteTransform( d->defaultToRGB );*/
         delete d->colorProfile;
         delete[] d->qcolordata;
         delete d;
@@ -167,7 +172,7 @@ protected:
         if (KoLcmsDefaultTransformations::s_RGBProfile == 0) {
             KoLcmsDefaultTransformations::s_RGBProfile = cmsCreate_sRGBProfile();
         }
-        d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ];
+        d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[this->id()][ d->profile];
         if (!d->defaultTransformations) {
             d->defaultTransformations = new KoLcmsDefaultTransformations;
             d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile,
@@ -177,9 +182,12 @@ protected:
                                                  INTENT_PERCEPTUAL,
                                                  0);
             Q_ASSERT(d->defaultTransformations->fromRGB);
-            d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
-                                               KoLcmsDefaultTransformations::s_RGBProfile, TYPE_BGR_8,
-                                               INTENT_PERCEPTUAL, 0);
+            d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
+                                                                  this->colorSpaceType(),
+                                                                  KoLcmsDefaultTransformations::s_RGBProfile,
+                                                                  TYPE_BGR_8,
+                                                                  INTENT_PERCEPTUAL,
+                                                                  0);
             Q_ASSERT(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }

@@ -52,6 +52,9 @@ public:
         return QString("XYZAF32");
     }
 
+    virtual bool hasHighDynamicRange() const {
+        return true;
+    }
 };
 
 
@@ -94,6 +97,12 @@ public:
 
     virtual QString defaultProfile() const {
         return "XYZ built-in - (lcms internal)";
+    }
+
+
+    virtual bool isHdr() const
+    {
+        return true;
     }
 };
 

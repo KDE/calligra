@@ -48,6 +48,10 @@ public:
         return Float32BitsColorDepthID;
     }
 
+    virtual bool hasHighDynamicRange() const {
+        return true;
+    }
+
     virtual KoColorSpace* clone() const;
 
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
@@ -96,6 +100,11 @@ public:
 
     virtual QString defaultProfile() const {
         return QString::null;
+    }
+
+    virtual bool isHdr() const
+    {
+        return true;
     }
 };
 

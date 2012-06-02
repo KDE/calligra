@@ -50,6 +50,9 @@ public:
         return QString("RGBAF32");
     }
 
+    virtual bool hasHighDynamicRange() const {
+        return true;
+    }
 };
 
 class RgbF32ColorSpaceFactory : public LcmsColorSpaceFactory

@@ -51,6 +51,10 @@ public:
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+
+    virtual bool hasHighDynamicRange() const {
+        return true;
+    }
 };
 
 class LabF32ColorSpaceFactory : public LcmsColorSpaceFactory
@@ -91,6 +95,11 @@ public:
 
     virtual QString defaultProfile() const {
         return "Lab identity built-in";
+    }
+
+    virtual bool isHdr() const
+    {
+        return true;
     }
 };
 
