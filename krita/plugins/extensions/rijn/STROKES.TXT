@@ -1,0 +1,97 @@
+18:17 < CyrilleB> dmitryK: ping, do we have a tutorial on how to write actions for the stroke framework ?
+18:18 -!- Lace57 [~quassel@xdsl-89-0-167-30.netcologne.de] has joined #krita
+18:19 < boud> CyrilleB: there's a lot of documentation on the topic in krita/docs/strokes
+18:19 -!- irina [~irina@calcifer.xs4all.nl] has joined #krita
+18:20 -!- Lace57 [~quassel@xdsl-89-0-167-30.netcologne.de] has quit [Read error: Connection reset by peer]
+18:21 < CyrilleB> boud: ok, so I guess, I just need to implement a KisSimpleStrokeStrategy ?
+18:21 < boud> erm
+18:21 < boud> I followed the docs some time ago to implement a new stroke, but I don't remember the details :-)
+18:23 < CyrilleB> from reading the doc, it sounds like it, but the name is really really weird :)
+18:23 < boud> ah...
+18:24 < dmitryK> CyrilleB: it depends on what you are going to du
+18:24 < dmitryK> CyrilleB: if you need a QUndoCommand-based action you needn't reimplement anything
+18:25 < dmitryK> CyrilleB: you just need to use KisProcessingApplicator
+18:26 < dmitryK> CyrilleB: what is your task?
+18:26 < CyrilleB> dmitryK: ah ok, so I just need to implement a Kundo2command ?
+18:27 < dmitryK> CyrilleB: yes
+18:27 < CyrilleB> except I won't need to implement a Kundo2command...
+18:28 < dmitryK> CyrilleB: or if you need something like a visitor, you can use KisProcessingVisitor that works on a single layer
+18:29 < CyrilleB> dmitryK: basically, I adding support to Krita for OpenRijn (part of OpenGTL) which is a programming language to 
+                  create stroke, so basically for drawing on a canvas
+18:29 < dmitryK> CyrilleB: does it use a something like KisPaintInformation?
+18:30 < dmitryK> CyrilleB: and does it use KisPainter as a framework?
+18:30 < CyrilleB> dmitryK: it will use KisPainter
+18:33 < dmitryK> CyrilleB: then you just need to add new types of jobs to FreehandStrokeStrategy::doStrokeCallback. Most of the 
+                 rest, including indirect painting support will be done for you automatically.
+18:33 < dmitryK> CyrilleB: or just use existing jobs if there are enough for you
+18:34 < dmitryK> CyrilleB: does it add any new functionality to KisPainter?
+18:36 < CyrilleB> dmitryK: no, basically it will KisPainter::paintLine, paintBezierCurve and paintAt
+18:36 < dmitryK> CyrilleB: oh, than it is even much more simple =)
+18:37 -!- simion314_ [~quassel@92.83.116.117] has quit [Remote host closed the connection]
+18:38 < CyrilleB> simpler is better :)
+18:41 -!- LukasT [~LukasT@adsl-dyn108.91-127-30.t-com.sk] has quit [Quit: Leaving.]
+18:44 < dmitryK> CyrilleB: it doesn't need the interactive features like airbrushing and line smoothing, right?
+18:45 < CyrilleB> dmitryK: nope
+18:46 < dmitryK> CyrilleB: then you can just use KisFigurePaintingToolHelper
+18:46 < dmitryK> CyrilleB: an example of usage is in KisToolLine::mouseReleaseEvent
+18:48 < dmitryK> CyrilleB: this helper doesn't have paintBezierCurve() method, but you can easily add one looking for an example in  
+                 KisToolFreehandHelper::paintBezierCurve.
+18:51 < CyrilleB> dmitryK: ok, and I can make multiple call to that ?
+18:52 < dmitryK> CyrilleB: sure, anything you need between a constructor and destructor.
+18:53 < CyrilleB> dmitryK: ok, thanks
+18:53 < dmitryK> CyrilleB: you are welcome! =)
+18:55 < CyrilleB> I can probably not use the class directly, though, since I will need to change paintops and colors between each 
+                  call, but it sounds like good inspiration on API calls
+18:57 < dmitryK> CyrilleB: do you need to change colors and paintops during a single action?
+18:59 -!- shrikrishna_ [~holla@117.192.222.232] has quit [Quit: No Ping reply in 180 seconds.]
+19:00 -!- shrikrishna [~holla@117.192.222.232] has joined #krita
+19:01 < CyrilleB> dmitryK: yes
+19:06 < dmitryK> CyrilleB: there will be a problem with this, because currently the snapshot of the resources is done in the 
+                 beginning of the stroke
+19:07 < dmitryK> CyrilleB: I can add one more type of job which will reload new resources
+19:07 < CyrilleB> dmitryK: ah I see, yes that would be nice
+19:08 -!- shrikrishna [~holla@117.192.222.232] has quit [Quit: No Ping reply in 180 seconds.]
+19:09 -!- shrikrishna [~holla@117.192.222.232] has joined #krita
+19:09 -!- LukasT [~LukasT@adsl-dyn108.91-127-30.t-com.sk] has joined #krita
+19:13 -!- Thra11 [~thrall@111.0.113.87.dyn.plus.net] has joined #krita
+19:13 -!- Thra11_ [~thrall@31.185.215.75] has quit [Ping timeout: 244 seconds]
+19:16 -!- shrikrishna [~holla@117.192.222.232] has quit [Quit: No Ping reply in 180 seconds.]
+19:16 -!- shrikrishna [~holla@117.192.222.232] has joined #krita
+19:19 -!- ceninan [~niwa@c-e63ae255.1119-1-64736c10.cust.bredbandsbolaget.se] has left #krita []
+19:21 -!- irina_ [~irina@calcifer.xs4all.nl] has joined #krita
+19:21 -!- irina [~irina@calcifer.xs4all.nl] has quit [Read error: Connection reset by peer]
+19:22 -!- shrikrishna_ [~holla@117.192.208.55] has joined #krita
+19:23 -!- shrikrishna [~holla@117.192.222.232] has quit [Ping timeout: 245 seconds]
+19:23 -!- irina_ is now known as irina
+19:27 < dmitryK> CyrilleB: btw, do you need to change the selection during the action?
+19:29 -!- irina [~irina@calcifer.xs4all.nl] has quit [Quit: Wonky connection...]
+19:29 -!- irina [~irina@calcifer.xs4all.nl] has joined #krita
+19:31 < dmitryK> CyrilleB: do you want that the whole script would be presented in a history as a single action? Or it is acceptable 
+                 that every its distinct action would be enlisted in the history?
+19:38 < dmitryK> CyrilleB: the latter case would have some problems besides the switching of colors and selections: currently the 
+                 strokes work in such a way that in creates a transaction and puts it into the undo stack itself. It means that you 
+                 cannot add two strokes into the history as a single stroke
+19:39 < dmitryK> "as a single item"
+19:44 -!- shrikrishna_ [~holla@117.192.208.55] has quit [Quit: No Ping reply in 180 seconds.]
+19:44 -!- shrikrishna [~holla@117.192.208.55] has joined #krita
+19:45 < CyrilleB> dmitryK: no change of selections
+19:45 < CyrilleB> dmitryK: and the whole script should be shown as a single action
+19:47 -!- LukasT [~LukasT@adsl-dyn108.91-127-30.t-com.sk] has quit [Quit: Leaving.]
+19:48 -!- n-pigeon [~pigeon@host166.np2.miedzyrzecz.com.pl] has left #krita []
+19:48 < dmitryK> CyrilleB: ok, I know how it can be achieved even with this limitation
+19:49 < CyrilleB> dmitryK: ok great, no urgency though
+19:51 < dmitryK> CyrilleB: I will not change the stroke strategy, but will make a special undo store for such action
+19:53 < dmitryK> CyrilleB: so you don't need to rewrite KisFigurePaintingToolHelper, just create a new helper (which will start a 
+                 new stroke) when you want to change color or a paintop or a target device
+19:53 -!- Thra11_ [~thrall@87.114.100.227] has joined #krita
+19:53 < CyrilleB> dmitryK: can't we just use a QUNdoGroup ?
+19:54 < dmitryK> CyrilleB: i don't think so, we don't use in other areas
+19:54 -!- Thra11 [~thrall@111.0.113.87.dyn.plus.net] has quit [Ping timeout: 252 seconds]
+19:55 -!- simion314 [~quassel@92.83.116.117] has joined #krita
+19:56 < dmitryK> CyrilleB: it'll be quite simple with undo store. You'll have to add two lines =)
+19:56 < CyrilleB> dmitryK: well we have KisUndoAdapter::beginMacro / endMacro
+19:57 -!- artsymptom [~Admin@199.27.100.43] has joined #krita
+19:57 < artsymptom> hi!
+19:58 < dmitryK> CyrilleB: you can't use it in threading environment, because the moment of time when you create a job and when it 
+                 is executed are different moments
+19:59 < CyrilleB> dmitryK: ah I see

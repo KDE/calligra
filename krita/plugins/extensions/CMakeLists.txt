@@ -23,3 +23,13 @@ endif(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
 macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Language (part of OpenGTL)" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
 macro_log_feature(HAVE_QTSHIVA "QtShiva" "Qt bindings for the OpenShiva interpreter (part of libQtGTL)" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
 
+find_package(OpenRijn)
+find_package(QtRijn )
+
+if(HAVE_OPENRIJN AND HAVE_QTRIJN)
+ add_subdirectory(rijn)
+endif(HAVE_OPENRIJN AND HAVE_QTRIJN)
+
+macro_log_feature(HAVE_OPENRIJN "OpenRijn" "OpenRijn interpreter for the Rijn Skectch Language (part of OpenGTL)" "http://www.opengtl.org" FALSE "" "Required for Rijn based sketches")
+macro_log_feature(HAVE_QTRIJN "QtRijn" "Qt bindings for the OpenRijn interpreter (part of libQtGTL)" "http://www.opengtl.org" FALSE "" "Required for Rijn sketches")
+
