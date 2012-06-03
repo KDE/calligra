@@ -80,6 +80,12 @@ bool KWCanvas::snapToGrid() const
     return m_view->snapToGrid();
 }
 
+QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
+{
+    return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
+}
+
+
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));

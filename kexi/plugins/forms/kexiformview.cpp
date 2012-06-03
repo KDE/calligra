@@ -1453,7 +1453,7 @@ void KexiFormView::updateActionsInternal()
         widget_assign_action->setEnabled(
                viewMode()==Kexi::DesignViewMode
             && selectedWidget
-            && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
+            && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton" || wClass == "KexiDBCommandLinkButton")
         );
     }
 #ifdef KEXI_DEBUG_GUI

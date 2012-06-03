@@ -78,9 +78,24 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     qsrand(QTime::currentTime().msec());
 }
 
+bool MSOOXML_CURRENT_CLASS::isCustomShape()
+{
+    if (m_contentType.isEmpty()) {
+	return false;
+    }
+    if (m_contentType == "rect") {
+	return false;
+    }
+    if (unsupportedPredefinedShape()) {
+	return false;
+    }
+    return true;
+}
+
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 {
-    // some conditions are not supported with custom shapes properly yet, remove them when possible
+    // TODO: Some conditions are not supported with custom shapes
+    // properly yet, remove them when possible.
 
     // Custom geometry has its own handling
     if (m_contentType == "custom") {
@@ -92,8 +107,8 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return false;
     }
 
-    // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
-    // some might have xml parser / calligra bugs
+    // These shapes are not properly supported atm. some have bugs in
+    // predefinedShapes.xml, some might have xml_parser/calligra bugs.
     if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||
         m_contentType == "curvedLeftArrow" || m_contentType == "curvedUpArrow" ||
         m_contentType == "curvedRightArrow" || m_contentType == "gear6" ||
@@ -1066,7 +1081,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    bool isCustomShape = false;
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     // Properties may or may not override default ones.
@@ -1093,11 +1107,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else if (m_contentType == "custom") {
         body->startElement("draw:custom-shape");
-#ifdef PPTXXMLSLIDEREADER_CPP
-        isCustomShape = true;
-#endif
     }
-    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+    else if (!isCustomShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
         if (d->phType == "sldImg") {
 	    // Special feature for presentation notes
@@ -1112,9 +1123,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     // For predefined shapes
     else {
         body->startElement("draw:custom-shape");
-#ifdef PPTXXMLSLIDEREADER_CPP
-        isCustomShape = true;
-#endif
     }
 
     if (!m_cNvPrName.isEmpty()) {
@@ -1134,7 +1142,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     // NOTE: Workaround: Set padding to ZERO until the fo:wrap-option support
     // arrives and other text on shape related issues get fixed.
-    if (isCustomShape) {
+    if (isCustomShape()) {
         m_currentDrawStyle->removeProperty("fo:padding-left");
         m_currentDrawStyle->removeProperty("fo:padding-right");
         m_currentDrawStyle->removeProperty("fo:padding-top");
@@ -1279,58 +1287,61 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-            if (m_contentType == "custom") {
-                body->startElement("draw:enhanced-geometry");
-                if (m_flipV) {
-                    body->addAttribute("draw:mirror-vertical", "true");
-                }
-                if (m_flipH) {
-                    body->addAttribute("draw:mirror-horizontal", "true");
-                }
-                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
-                body->addAttribute("draw:enhanced-path", m_customPath);
-                if (!m_textareas.isEmpty()) {
-                    body->addAttribute("draw:text-areas", m_textareas);
-                }
-                body->addCompleteElement(m_customEquations.toUtf8());
-                body->endElement(); // draw:enhanced-geometry
-            }
-            else if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
-                body->startElement("draw:enhanced-geometry");
-                if (m_flipV) {
-                    body->addAttribute("draw:mirror-vertical", "true");
-                }
-                if (m_flipH) {
-                    body->addAttribute("draw:mirror-horizontal", "true");
-                }
-                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
-                body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
-
-                QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
-                if (!textareas.isEmpty()) {
-                    body->addAttribute("draw:text-areas", textareas);
-                }
-
-                QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
-                // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
-                if (m_contentAvLstExists) {
-                    QMapIterator<QString, QString> i(m_avModifiers);
-                    while (i.hasNext()) {
-                        i.next();
-                        int index = 0;
-                        index = equations.indexOf(i.key());
-                        if (index > -1) {
-                            // We go forward by name and '" draw:formula="'
-                            index += i.key().length() + 16;
-                            equations.replace(index, equations.indexOf('\"', index) - index, i.value());
-                        }
-                    }
-                }
-                body->addCompleteElement(equations.toUtf8());
-                body->endElement(); // draw:enhanced-geometry
-            }
         }
     }
+}
+
+void MSOOXML_CURRENT_CLASS::writeEnhancedGeometry()
+{
+    if (!isCustomShape()) {
+        return;
+    }
+    body->startElement("draw:enhanced-geometry");
+    body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+
+    if (m_flipV) {
+        body->addAttribute("draw:mirror-vertical", "true");
+    }
+    if (m_flipH) {
+        body->addAttribute("draw:mirror-horizontal", "true");
+    }
+
+    if (m_contentType == "custom") {
+        body->addAttribute("draw:enhanced-path", m_customPath);
+        if (!m_textareas.isEmpty()) {
+            body->addAttribute("draw:text-areas", m_textareas);
+        }
+        if (!m_customEquations.isEmpty()) {
+            body->addCompleteElement(m_customEquations.toUtf8());
+        }
+    } else {
+        body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+
+        QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
+        if (!textareas.isEmpty()) {
+            body->addAttribute("draw:text-areas", textareas);
+        }
+        QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
+
+        // Some of the values might be overwritten by prstGeom.
+        if (m_contentAvLstExists) {
+            QMapIterator<QString, QString> i(m_avModifiers);
+            while (i.hasNext()) {
+                i.next();
+                int index = 0;
+                index = equations.indexOf(i.key());
+                if (index > -1) {
+                    // We go forward by name and '" draw:formula="'
+                    index += i.key().length() + 16;
+                    equations.replace(index, equations.indexOf('\"', index) - index, i.value());
+                }
+            }
+        }
+        if (!equations.isEmpty()) {
+            body->addCompleteElement(equations.toUtf8());
+        }
+    }
+    body->endElement(); // draw:enhanced-geometry
 }
 
 #undef CURRENT_EL
@@ -1420,6 +1431,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     generateFrameSp();
 
     (void)drawFrameBuf.releaseWriter();
+
+    if (isCustomShape()) {
+	writeEnhancedGeometry();
+    }
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1544,6 +1559,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     (void)drawFrameBuf.releaseWriter();
 
+    if (isCustomShape()) {
+	writeEnhancedGeometry();
+    }
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -6261,7 +6279,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody(txBodyCa
 
     bool textBoxCreated = false;
     if (caller != DrawingML_txBody_tc) {
-        if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+        if (!isCustomShape()) {
             body->startElement("draw:text-box");
             textBoxCreated = true;
         }
