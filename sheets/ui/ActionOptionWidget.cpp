@@ -108,7 +108,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
     // ToolOptionsDocker that makes the components of the widget align
     // to the top if there is extra space.
     QWidget *specialSpacer = new QWidget(this);
-    spacer->setObjectName("SpecialSpacer");
+    specialSpacer->setObjectName("SpecialSpacer");
     layout->addWidget(specialSpacer);
 }
 
