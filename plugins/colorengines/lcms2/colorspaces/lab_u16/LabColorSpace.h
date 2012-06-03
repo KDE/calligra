@@ -38,7 +38,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("LABAU16");
+        return QString("LABA");
     }
 
     virtual KoID colorModelId() const {
