@@ -138,7 +138,11 @@ void KWRunAroundProperties::open(KoShape *shape)
     m_runAroundSide->button(shape->textRunAroundSide())->setChecked(true);
     widget.threshold->changeValue(shape->textRunAroundThreshold());
     widget.distance->changeValue(shape->textRunAroundDistance());
-    m_runAroundContour->button(shape->textRunAroundContour())->setChecked(true);
+    if (shape->textRunAroundContour() == KoShape::ContourFull) {
+        m_runAroundContour->button(KoShape::ContourOutside)->setChecked(true);
+    } else {
+        m_runAroundContour->button(shape->textRunAroundContour())->setChecked(true);
+    }
 }
 
 void KWRunAroundProperties::save()
