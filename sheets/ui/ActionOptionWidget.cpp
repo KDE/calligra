@@ -78,6 +78,8 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
     for (QDomElement group = e.firstChildElement("group"); !group.isNull(); group = group.nextSiblingElement("group")) {
         QHBoxLayout *groupLayout = new QHBoxLayout();
         layout->addItem(groupLayout);
+
+        // In each group there are a number of actions that will be layouted together.
         for (QDomElement action = group.firstChildElement("action"); !action.isNull(); action = action.nextSiblingElement("action")) {
             QString actionName = action.attribute("name");
             KAction* a = cellTool->action(actionName);
@@ -101,6 +103,13 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
             }
         }
     }
+
+    // The following widget activates a special feature in the
+    // ToolOptionsDocker that makes the components of the widget align
+    // to the top if there is extra space.
+    QWidget *specialSpacer = new QWidget(this);
+    spacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer);
 }
 
 GroupFlowLayout::GroupFlowLayout(QWidget *parent, int margin, int hSpacing, int vSpacing)
