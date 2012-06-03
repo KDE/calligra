@@ -15,13 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COLORSPACE_GRAYSCALE_F32_H_
-#define KIS_COLORSPACE_GRAYSCALE_F32_H_
+#ifndef COLORSPACE_GRAYSCALE_F32_H_
+#define COLORSPACE_GRAYSCALE_F32_H_
 
 #include <klocale.h>
-#include "LcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
-#include "KoColorModelStandardIds.h"
+#include <KoColorModelStandardIds.h>
+#include "LcmsColorSpace.h"
 
 #define TYPE_GRAYA_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(4))
 
@@ -53,7 +53,8 @@ public:
         return "GRAYAF32";
     }
 
-    virtual bool hasHighDynamicRange() const {
+    virtual bool hasHighDynamicRange() const 
+    {
         return true;
     }
 };
@@ -64,7 +65,6 @@ public:
     GrayF32ColorSpaceFactory()
         : LcmsColorSpaceFactory(TYPE_GRAYA_FLT, cmsSigGrayData)
     {
-
     }
 
     virtual QString id() const {
