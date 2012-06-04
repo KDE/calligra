@@ -35,15 +35,13 @@ KisToolInvocationAction::~KisToolInvocationAction()
 
 void KisToolInvocationAction::begin()
 {
-    qDebug() << Q_FUNC_INFO;
-    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, 0);
+    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition(), Qt::LeftButton, Qt::LeftButton, 0);
     m_inputManager->toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
 }
 
 void KisToolInvocationAction::end()
 {
-    qDebug() << Q_FUNC_INFO;
-    QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, 0);
+    QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, m_inputManager->mousePosition(), Qt::LeftButton, Qt::LeftButton, 0);
     m_inputManager->toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
 }
 
@@ -51,6 +49,6 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if( event->type() == QEvent::MouseMove ) {
         QMouseEvent* evt = static_cast<QMouseEvent*>(event);
-        m_inputManager->toolProxy()->mouseMoveEvent(evt, evt->pos());
+        m_inputManager->toolProxy()->mouseMoveEvent(evt, m_inputManager->mousePosition());
     }
 }
