@@ -1,0 +1,135 @@
+diff --git a/plugins/chartshape/Axis.cpp b/plugins/chartshape/Axis.cpp
+index 5397eae..9fafeac 100644
+--- a/plugins/chartshape/Axis.cpp
++++ b/plugins/chartshape/Axis.cpp
+@@ -191,6 +191,7 @@ public:
+     // TODO: Save
+     // See ODF v1.2 $19.12 (chart:display-label)
+     bool showLabels;
++    bool showOverlappingDataLabels;
+ 
+     bool isVisible;
+ };
+@@ -243,6 +244,8 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
+     showInnerMajorTicks = false;
+     showOuterMajorTicks = true;
+ 
++    showOverlappingDataLabels = false;
++
+     kdBarDiagram     = 0;
+     kdLineDiagram    = 0;
+     kdAreaDiagram    = 0;
+@@ -499,6 +502,8 @@ void Axis::Private::createBarDiagram()
+     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
+     kdBarDiagram->setPen(QPen(Qt::black, 0.0));
+ 
++    kdBarDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
++
+     if (plotAreaChartSubType == StackedChartSubtype)
+         kdBarDiagram->setType(KDChart::BarDiagram::Stacked);
+     else if (plotAreaChartSubType == PercentChartSubtype) {
+@@ -536,6 +541,8 @@ void Axis::Private::createLineDiagram()
+     kdLineDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
+     registerDiagram(kdLineDiagram);
+ 
++    kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
++
+     if (plotAreaChartSubType == StackedChartSubtype)
+         kdLineDiagram->setType(KDChart::LineDiagram::Stacked);
+     else if (plotAreaChartSubType == PercentChartSubtype)
+@@ -580,6 +587,8 @@ void Axis::Private::createAreaDiagram()
+     // line diagram, we however want the first series to appear in front.
+     kdAreaDiagram->setReverseDatasetOrder(true);
+ 
++    kdAreaDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
++
+     if (plotAreaChartSubType == StackedChartSubtype)
+         kdAreaDiagram->setType(KDChart::LineDiagram::Stacked);
+     else if (plotAreaChartSubType == PercentChartSubtype)
+@@ -911,6 +920,11 @@ bool Axis::showLabels() const
+     return d->showLabels;
+ }
+ 
++bool Axis::showOverlappingDataLabels() const
++{
++    return d->showOverlappingDataLabels;
++}
++
+ QString Axis::id() const
+ {
+     return d->id;
+@@ -1225,6 +1239,11 @@ void Axis::setShowLabels(bool show)
+     d->kdAxis->setTextAttributes(textAttr);
+ }
+ 
++void Axis::setShowOverlappingDataLabels(bool show)
++{
++    d->showOverlappingDataLabels = show;
++}
++
+ Qt::Orientation Axis::orientation()
+ {
+     bool chartIsVertical = d->plotArea->isVertical();
+@@ -1401,6 +1420,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
+ 
+         if (styleStack.hasProperty(KoXmlNS::chart, "display-label"))
+             setShowLabels(styleStack.property(KoXmlNS::chart, "display-label") != "false");
++        if (styleStack.hasProperty(KoXmlNS::chart, "text-overlap"))
++            setShowOverlappingDataLabels(styleStack.property(KoXmlNS::chart, "text-overlap") != "false");
+         if (styleStack.hasProperty(KoXmlNS::chart, "visible"))
+             setVisible(styleStack.property(KoXmlNS::chart, "visible")  != "false");
+         if (styleStack.hasProperty(KoXmlNS::chart, "minimum")) {
+@@ -1564,6 +1585,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
+     axisStyle.addProperty("chart:tick-marks-major-outer", showOuterMajorTicks());
+ 
+     axisStyle.addProperty("chart:display-label", showLabels());
++    axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
+     axisStyle.addProperty("chart:visible", isVisible());
+     axisStyle.addPropertyPt("chart:gap-width", d->gapBetweenSets);
+     axisStyle.addPropertyPt("chart:overlap", -d->gapBetweenBars);
+diff --git a/plugins/chartshape/Axis.h b/plugins/chartshape/Axis.h
+index ee45965..b077139 100644
+--- a/plugins/chartshape/Axis.h
++++ b/plugins/chartshape/Axis.h
+@@ -60,6 +60,7 @@ public:
+     KoShape *title() const;
+     QString titleText() const;
+     bool showLabels() const;
++    bool showOverlappingDataLabels() const;
+     QString id() const;
+     AxisDimension dimension() const;
+     QList<DataSet*> dataSets() const;
+@@ -81,6 +82,7 @@ public:
+ 
+     void setTitleText(const QString &text);
+     void setShowLabels(bool show);
++    void setShowOverlappingDataLabels(bool show);
+ 
+     /**
+      * Attaches a data set to this axis, adding it to a diagram
+diff --git a/plugins/chartshape/TODO b/plugins/chartshape/TODO
+index ba376ac..9d9b5d3 100644
+--- a/plugins/chartshape/TODO
++++ b/plugins/chartshape/TODO
+@@ -38,7 +38,7 @@ assigned to a person.
+ 
+ Assigned issues
+  * Fix bug 300190: crash in legend frame                        [erione]
+- * Fix changing chart type to stock chart                       [erione]
++ * Fix changing chart type to stock chart                       [DONE]
+  * Fix saving(?) of axes                                        [erione]
+ 
+ 
+diff --git a/plugins/chartshape/kdchart/src/KDChartCartesianAxis.cpp b/plugins/chartshape/kdchart/src/KDChartCartesianAxis.cpp
+index 32a7311..5ebba71 100644
+--- a/plugins/chartshape/kdchart/src/KDChartCartesianAxis.cpp
++++ b/plugins/chartshape/kdchart/src/KDChartCartesianAxis.cpp
+@@ -941,7 +941,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
+                     QPointF secondPos = diagramIsVertical ? QPointF( i + labelDiff, 0.0 ) : QPointF( 0.0, i + labelDiff );
+                     secondPos = plane->translate( secondPos );
+ 
+-                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) )
++                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) && !diagram()->allowOverlappingDataValueTexts() )
+                     {
+                         i = minValueX;
+                         labelDiff += labelDiff;
