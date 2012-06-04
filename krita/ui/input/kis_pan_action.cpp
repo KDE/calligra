@@ -28,7 +28,7 @@
 class KisPanAction::Private
 {
 public:
-    QPointF lastMousePosition;
+    QPoint lastMousePosition;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -43,13 +43,11 @@ KisPanAction::~KisPanAction()
 
 void KisPanAction::begin()
 {
-    qDebug() << Q_FUNC_INFO;
     d->lastMousePosition = m_inputManager->mousePosition();
 }
 
 void KisPanAction::end()
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 void KisPanAction::inputEvent(QEvent *event)
@@ -57,9 +55,11 @@ void KisPanAction::inputEvent(QEvent *event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         if(mevent->buttons()) {
-            QPointF relMovement = mevent->posF() - d->lastMousePosition;
-            m_inputManager->canvas()->canvasController()->pan(relMovement.toPoint());
-            d->lastMousePosition = mevent->posF();
+            const KisCoordinatesConverter *conv = m_inputManager->canvas()->coordinatesConverter();
+            QPoint docMousePosition = conv->viewToDocument(mevent->posF()).toPoint();
+            QPoint relMovement = -(docMousePosition - d->lastMousePosition);
+            m_inputManager->canvas()->canvasController()->pan(relMovement);
+            d->lastMousePosition = docMousePosition;
         }
     }
 }
