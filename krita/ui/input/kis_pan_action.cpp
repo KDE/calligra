@@ -20,7 +20,8 @@
 
 #include <QDebug>
 
-KisPanAction::KisPanAction()
+KisPanAction::KisPanAction(KisCanvas2* canvas, KoToolProxy* tool)
+    : KisAbstractInputAction(canvas, tool)
 {
 
 }

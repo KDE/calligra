@@ -18,9 +18,12 @@
 
 #include "kis_tool_invocation_action.h"
 
+#include <KoToolProxy.h>
+
 #include <QDebug>
 
-KisToolInvocationAction::KisToolInvocationAction()
+KisToolInvocationAction::KisToolInvocationAction(KisCanvas2* canvas, KoToolProxy* tool)
+    : KisAbstractInputAction(canvas, tool)
 {
 
 }
@@ -32,13 +35,21 @@ KisToolInvocationAction::~KisToolInvocationAction()
 void KisToolInvocationAction::begin()
 {
     qDebug() << Q_FUNC_INFO;
+    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, 0);
+    toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
 }
 
 void KisToolInvocationAction::end()
 {
     qDebug() << Q_FUNC_INFO;
+    QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, 0);
+    toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
 }
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
+    if( event->type() == QEvent::MouseMove ) {
+        QMouseEvent* evt = static_cast<QMouseEvent*>(event);
+        toolProxy()->mouseMoveEvent(evt, evt->pos());
+    }
 }

@@ -116,7 +116,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
 
-    m_d->inputManager = new KisInputManager(this);
+    m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
     m_d->vastScrolling = cfg.vastScrolling();
     createCanvas(cfg.useOpenGL());

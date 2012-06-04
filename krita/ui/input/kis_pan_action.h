@@ -24,7 +24,7 @@
 class KisPanAction : public KisAbstractInputAction
 {
 public:
-    KisPanAction();
+    explicit KisPanAction(KisCanvas2* canvas, KoToolProxy* tool);
     virtual ~KisPanAction();
 
     virtual void begin();

@@ -21,6 +21,7 @@
 
 #include <QtCore/QObject>
 
+class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
 class KisInputManager : public QObject
@@ -28,7 +29,7 @@ class KisInputManager : public QObject
     Q_OBJECT
 
 public:
-    explicit KisInputManager(KisCanvas2* canvas);
+    explicit KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy);
     ~KisInputManager();
 
     bool eventFilter(QObject* object, QEvent* event );

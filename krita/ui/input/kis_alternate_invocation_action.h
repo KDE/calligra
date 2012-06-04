@@ -25,7 +25,7 @@
 class KisAlternateInvocationAction : public KisAbstractInputAction
 {
 public:
-    KisAlternateInvocationAction();
+    explicit KisAlternateInvocationAction(KisCanvas2* canvas, KoToolProxy* tool);
     virtual ~KisAlternateInvocationAction();
 
     virtual void begin();

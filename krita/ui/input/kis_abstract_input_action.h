@@ -20,15 +20,24 @@
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
 class QEvent;
+class KisCanvas2;
+class KoToolProxy;
 class KisAbstractInputAction
 {
 public:
-    explicit KisAbstractInputAction() { }
+    explicit KisAbstractInputAction(KisCanvas2 *canvas, KoToolProxy *tool) : m_toolProxy(tool), m_canvas(canvas) { }
     virtual ~KisAbstractInputAction() { }
 
     virtual void begin() = 0;
     virtual void end() = 0;
     virtual void inputEvent(QEvent* event) = 0;
+
+    KoToolProxy *toolProxy() const { return m_toolProxy; }
+    KisCanvas2 *canvas() const { return m_canvas; }
+
+private:
+    KoToolProxy *m_toolProxy;
+    KisCanvas2 *m_canvas;
 };
 
 #endif // KIS_ABSTRACT_INPUT_ACTION_H

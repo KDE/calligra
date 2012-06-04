@@ -20,8 +20,9 @@
 
 #include <QtCore/QDebug>
 
+#include <KoToolProxy.h>
+
 #include <kis_canvas2.h>
-#include <kis_tool_proxy.h>
 
 #include "kis_shortcut.h"
 #include "kis_abstract_input_action.h"
@@ -39,7 +40,7 @@ public:
     void matchTablet(QTabletEvent *event);
 
     KisCanvas2* canvas;
-    KisToolProxy* toolProxy;
+    KoToolProxy* toolProxy;
 
     KisAbstractInputAction* currentAction;
     KisShortcut* currentShortcut;
@@ -52,19 +53,20 @@ public:
     int eventCount;
 };
 
-KisInputManager::KisInputManager(KisCanvas2* canvas)
+KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
     : QObject( canvas ), d( new Private )
 {
     d->canvas = canvas;
+    d->toolProxy = proxy;
 
-    KisAbstractInputAction* action = new KisToolInvocationAction;
+    KisAbstractInputAction* action = new KisToolInvocationAction(canvas, proxy);
     KisShortcut* shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
     d->actions.append(action);
     d->shortcuts.append(shortcut);
 
-    action = new KisAlternateInvocationAction;
+    action = new KisAlternateInvocationAction(canvas, proxy);
     shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
@@ -72,7 +74,7 @@ KisInputManager::KisInputManager(KisCanvas2* canvas)
     d->actions.append(action);
     d->shortcuts.append(shortcut);
 
-    action = new KisPanAction;
+    action = new KisPanAction(canvas, proxy);
     shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
@@ -92,11 +94,11 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         case QEvent::KeyRelease:
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
-        //case QEvent::MouseMove:
-        //case QEvent::MouseButtonDblClick:
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonDblClick:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
-        //case QEvent::TabletMove:
+        case QEvent::TabletMove:
             d->match(event);
             if(d->currentAction) {
                 d->currentAction->inputEvent(event);
@@ -134,12 +136,10 @@ void KisInputManager::Private::match(QEvent* event)
         case QEvent::MouseButtonRelease:
             matchMouse(static_cast<QMouseEvent*>(event));
             break;
-//         case QEvent::MouseMove:
-//             foreach(KisShortcut* shortcut, potentialShortcuts) {
-//                 if(shortcut->matchLevel() != KisShortcut::CompleteMatch) {
-//                     potentialShortcuts.removeOne(shortcut);
-//                 }
-//             }
+        case QEvent::MouseMove:
+            if(!currentAction) {
+                actions.at(0)->inputEvent(event);
+            }
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
             matchTablet(static_cast<QTabletEvent*>(event));
@@ -168,8 +168,6 @@ void KisInputManager::Private::match(QEvent* event)
         eventCount = 0;
         return;
     }
-
-    qDebug() << potentialShortcuts;
 
     if(!currentShortcut && (potentialShortcuts.count() == 1 || eventCount > 5)) {
         KisShortcut* completedShortcut = 0;
