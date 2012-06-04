@@ -13,6 +13,7 @@
 #include "KPrAnimationsDataModel.h"
 #include "KPrTimeLineHeader.h"
 #include "KPrTimeLineView.h"
+#include "animations/KPrAnimationStep.h"
 
 const int Invalid = -1;
 const int scaleLimit = 1000;
@@ -52,17 +53,8 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
 void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
 {
     m_model = model;
-    for (int row = 0; row < model->rowCount(); ++ row){
-        int size = model->data(model->index(row, 1)).toString().length();
-        qreal length = model->data(model->index(row, 5)).toDouble() + model->data(model->index(row, 6)).toDouble();
-        if (size > m_nameWidth)
-            m_nameWidth = size;
-        if (length > m_maxLength)
-            m_maxLength = length;
-    }
-    QFontMetrics fm(font());
-    m_shapeNameColumnWidth = fm.width(QString("%1W").arg(QString(m_nameWidth, 'M')));
-    m_view->setMinimumSize(m_view->minimumSizeHint());
+    updateColumnsWidth();
+    connect(m_model, SIGNAL(dataReinitialized()), this, SLOT(updateColumnsWidth()));
     m_header->update();
     m_view->update();
 }
@@ -211,14 +203,14 @@ void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
 QColor KPrAnimationsTimeLineView::colorforRow(int row)
 {
     if (m_model) {
-        KPrAnimationsDataModel::Types type = static_cast<KPrAnimationsDataModel::Types>(m_model->data(m_model->index(row, 7)).toInt());
-        if (type == KPrAnimationsDataModel::entrance) {
+        KPrAnimationStep::Preset_Class type = static_cast<KPrAnimationStep::Preset_Class>(m_model->data(m_model->index(row, 7)).toInt());
+        if (type == KPrAnimationStep::Entrance) {
             return Qt::darkGreen;
-        } else if (type == KPrAnimationsDataModel::emphasis) {
+        } else if (type == KPrAnimationStep::Emphasis) {
             return Qt::blue;
-        } else if (type == KPrAnimationsDataModel::custom) {
+        } else if (type == KPrAnimationStep::Custom) {
             return Qt::gray;
-        } else if (type == KPrAnimationsDataModel::exit) {
+        } else if (type == KPrAnimationStep::Exit) {
             return Qt::red;
         }
     }
@@ -231,4 +223,26 @@ int KPrAnimationsTimeLineView::rowCount() const
         return m_model->rowCount(QModelIndex());
     }
     return 0;
+}
+
+void KPrAnimationsTimeLineView::update()
+{
+    m_view->update();
+    m_header->update();
+    QWidget::update();
+}
+
+void KPrAnimationsTimeLineView::updateColumnsWidth()
+{
+    for (int row = 0; row < m_model->rowCount(); ++ row){
+        int size = m_model->data(m_model->index(row, 1)).toString().length();
+        qreal length = m_model->data(m_model->index(row, 5)).toDouble() + m_model->data(m_model->index(row, 6)).toDouble();
+        if (size > m_nameWidth)
+            m_nameWidth = size;
+        if (length > m_maxLength)
+            m_maxLength = length;
+    }
+    QFontMetrics fm(font());
+    m_shapeNameColumnWidth = fm.width(QString("%1W").arg(QString(m_nameWidth, 'M')));
+    m_view->setMinimumSize(m_view->minimumSizeHint());
 }

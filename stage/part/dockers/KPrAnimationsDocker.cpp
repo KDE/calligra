@@ -22,6 +22,7 @@
 #include "KPrView.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
+#include "KPrPage.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -107,8 +108,9 @@ void KPrAnimationsDocker::setView(KPrView* view)
         disconnect(m_animationsTimeLineView, 0, this, 0);
     }
     m_view = view;
-    //connect( m_view->proxyObject, SIGNAL( activePageChanged() ),
-    //         this, SLOT( slotActivePageChanged() ) );
+    slotActivePageChanged();
+    connect(m_view->proxyObject, SIGNAL(activePageChanged()),
+             this, SLOT(slotActivePageChanged()));
 
     // remove the layouts from the last view
     //m_layoutsView->clear();
@@ -118,4 +120,14 @@ void KPrAnimationsDocker::setView(KPrView* view)
              this, SLOT( slotItemPressed( QListWidgetItem * ) ) );
     connect( m_layoutsView, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
              this, SLOT( slotCurrentItemChanged( QListWidgetItem *, QListWidgetItem * ) ) );*/
+}
+
+void KPrAnimationsDocker::slotActivePageChanged()
+{
+    Q_ASSERT( m_view );
+    KPrPage *page = dynamic_cast<KPrPage*>(m_view->activePage());
+    if ( page ) {
+        m_animationsModel->setActivePage(page);
+        m_animationsTimeLineView->update();
+    }
 }

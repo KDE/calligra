@@ -38,13 +38,15 @@ public:
     void setMaxLineLength(qreal length);
     QColor colorforRow(int row);
     int rowCount() const;
+    void update();
+
 
 
 
 signals:
     void clicked(const QModelIndex&);
 public slots:
-;
+    void updateColumnsWidth();
 
 private:
     KPrTimeLineView *m_view;
