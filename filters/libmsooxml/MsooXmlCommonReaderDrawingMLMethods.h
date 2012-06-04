@@ -80,6 +80,34 @@ struct GroupProp {
 
 void initDrawingML();
 
+/**
+ * @return true in case a custom or supported predefined shape is
+ * beeing processed and false in case of a text-box and rectangle.
+ */
+bool isCustomShape();
+
+/**
+ * @return true in case an unsupported shape is beeing processed.
+ */
+bool unsupportedPredefinedShape();
+
+/**
+ * TODO:
+ */
+void preReadSp();
+
+/**
+ * Write the parent el. in {draw:line, draw:custom-shape, draw:frame}
+ * to the body writer and create a graphic style for a shape.
+ */
+void generateFrameSp();
+
+/**
+ * Write the draw:enhanced-geometry element to the body writer in case
+ * of a draw:custom-shape.
+ */
+void writeEnhancedGeometry();
+
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "dgm"
 // ----------------------------------------
@@ -112,10 +140,6 @@ KoFilter::ConversionStatus read_cxnSp(); //done
 KoFilter::ConversionStatus read_sp(); //done
 KoFilter::ConversionStatus read_spPr(); //done
 KoFilter::ConversionStatus read_style(); //done
-
-void preReadSp();
-void generateFrameSp();
-bool unsupportedPredefinedShape();
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "a"
@@ -150,6 +174,7 @@ KoFilter::ConversionStatus read_graphicData();
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 KoFilter::ConversionStatus read_txSp();
 
+//! Convert attributes of Text Run Properties to ODF equivalents.
 void handleRprAttributes(const QXmlStreamAttributes& attrs);
 
 // ----------------------------------------

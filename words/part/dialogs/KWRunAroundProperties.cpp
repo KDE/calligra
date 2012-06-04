@@ -49,8 +49,15 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     m_runAroundSide->addButton(widget.enough);
     m_runAroundSide->setId(widget.enough, KoShape::EnoughRunAroundSide);
 
-    widget.distance->setUnit(state->document()->unit());
     widget.threshold->setUnit(state->document()->unit());
+
+    m_runAroundContour = new QButtonGroup();
+    m_runAroundContour->addButton(widget.box);
+    m_runAroundContour->setId(widget.box, KoShape::ContourBox);
+    m_runAroundContour->addButton(widget.outside);
+    m_runAroundContour->setId(widget.outside, KoShape::ContourOutside);
+
+    widget.distance->setUnit(state->document()->unit());
 
     connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
 }
@@ -62,9 +69,11 @@ bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
     GuiHelper::State runaround = GuiHelper::Unset;
     GuiHelper::State raDistance = GuiHelper::Unset;
     GuiHelper::State raThreshold = GuiHelper::Unset;
+    GuiHelper::State raContour = GuiHelper::Unset;
     KoShape::TextRunAroundSide side = KoShape::BiggestRunAroundSide;
     qreal distance = 10.0;
     qreal threshold = 0.0;
+    KoShape::TextRunAroundContour contour = KoShape::ContourBox;
 
     bool atLeastOne = false;
 
@@ -81,17 +90,23 @@ bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
         } else if (side != frame->shape()->textRunAroundSide())
             runaround = GuiHelper::TriState;
 
-        if (raDistance == GuiHelper::Unset) {
-            distance = frame->shape()->textRunAroundDistance();
-            raDistance = GuiHelper::On;
-        } else if (distance != frame->shape()->textRunAroundDistance())
-            raDistance = GuiHelper::TriState;
-
         if (raThreshold == GuiHelper::Unset) {
             threshold = frame->shape()->textRunAroundThreshold();
             raThreshold = GuiHelper::On;
         } else if (threshold != frame->shape()->textRunAroundThreshold())
             raThreshold = GuiHelper::TriState;
+
+        if (raContour == GuiHelper::Unset) {
+            contour = frame->shape()->textRunAroundContour();
+            raContour = GuiHelper::On;
+        } else if (contour != frame->shape()->textRunAroundContour())
+            raContour = GuiHelper::TriState;
+
+        if (raDistance == GuiHelper::Unset) {
+            distance = frame->shape()->textRunAroundDistance();
+            raDistance = GuiHelper::On;
+        } else if (distance != frame->shape()->textRunAroundDistance())
+            raDistance = GuiHelper::TriState;
     }
 
     if (!atLeastOne) {
@@ -101,8 +116,17 @@ bool KWRunAroundProperties::open(const QList<KWFrame*> &frames)
     if (runaround != GuiHelper::TriState)
         m_runAroundSide->button(side)->setChecked(true);
 
-    widget.distance->changeValue(distance);
     widget.threshold->changeValue(threshold);
+
+    if (contour == KoShape::ContourFull) {
+        contour = KoShape::ContourOutside;
+    }
+
+    if (raContour != GuiHelper::TriState) {
+        m_runAroundContour->button(contour)->setChecked(true);
+    }
+
+    widget.distance->changeValue(distance);
 
     return true;
 }
@@ -112,8 +136,13 @@ void KWRunAroundProperties::open(KoShape *shape)
     m_state->addUser();
     m_shape = shape;
     m_runAroundSide->button(shape->textRunAroundSide())->setChecked(true);
-    widget.distance->changeValue(shape->textRunAroundDistance());
     widget.threshold->changeValue(shape->textRunAroundThreshold());
+    widget.distance->changeValue(shape->textRunAroundDistance());
+    if (shape->textRunAroundContour() == KoShape::ContourFull) {
+        m_runAroundContour->button(KoShape::ContourOutside)->setChecked(true);
+    } else {
+        m_runAroundContour->button(shape->textRunAroundContour())->setChecked(true);
+    }
 }
 
 void KWRunAroundProperties::save()
@@ -142,6 +171,7 @@ void KWRunAroundProperties::save(KUndo2Command *macro)
         int runThrough = shape->runThrough();
         qreal distance = shape->textRunAroundDistance();
         qreal threshold = shape->textRunAroundThreshold();
+        KoShape::TextRunAroundContour contour = shape->textRunAroundContour();
 
         if (m_runAroundSide->checkedId() != -1) {
             KoShape::TextRunAroundSide rrs = static_cast<KoShape::TextRunAroundSide>(m_runAroundSide->checkedId());
@@ -149,19 +179,26 @@ void KWRunAroundProperties::save(KUndo2Command *macro)
                 side = rrs;
             }
         }
-        if (distance != widget.distance->value()) {
-            distance = widget.distance->value();
-        }
         if (shape->textRunAroundThreshold() != widget.threshold->value()) {
             threshold = widget.threshold->value();
         }
+        if (m_runAroundContour->checkedId() != -1) {
+            KoShape::TextRunAroundContour rrc = static_cast<KoShape::TextRunAroundContour>(m_runAroundContour->checkedId());
+            if (contour != rrc) {
+                contour = rrc;
+            }
+        }
+        if (distance != widget.distance->value()) {
+            distance = widget.distance->value();
+        }
         if (macro) {
-            new KoShapeRunAroundCommand(shape, side, runThrough, distance, threshold, macro);
+            new KoShapeRunAroundCommand(shape, side, runThrough, distance, threshold, contour, macro);
         } else {
             shape->setTextRunAroundSide(side, KoShape::Background);
             shape->setRunThrough(runThrough);
-            shape->setTextRunAroundDistance(distance);
             shape->setTextRunAroundThreshold(threshold);
+            shape->setTextRunAroundContour(contour);
+            shape->setTextRunAroundDistance(distance);
             shape->notifyChanged();
         }
     }
