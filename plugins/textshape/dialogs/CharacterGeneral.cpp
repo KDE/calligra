@@ -61,7 +61,6 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     //for character General
     m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
-    widget.inheritStyle->setEnabled(false);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
@@ -91,6 +90,27 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_style == 0)
         return;
     blockSignals(true);
+    //filter m_inherited style model
+
+    //
+    //m_characterInheritedStyleModel->clearStyleModel(); This Line has problem, a weird problem.
+    //
+
+    foreach(KoCharacterStyle *s, m_styleManager->characterStyles()) {
+        KoCharacterStyle *parent = s;
+        bool ok = true;
+        while (ok && parent) {
+            ok = parent->styleId() != m_style->styleId();
+
+            parent = parent->parentStyle();
+        }
+        if (! ok) continue; // can't inherit from itself, even indirectly.
+        m_characterInheritedStyleModel->addCharacterStyle(s);
+        if (s == m_style->parent())
+             widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*m_style).row());
+    }
+    if(!m_style->parentStyle())
+        widget.inheritStyle->setCurrentIndex(-1);
 
     if (!m_nameHidden)
         widget.name->setText(style->name());
@@ -125,6 +145,10 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     m_characterHighlighting->save(savingStyle);
     //m_languageTab->save(savingStyle);
     savingStyle->setName(widget.name->text());
+    if (widget.inheritStyle->currentIndex() != -1) {
+        KoCharacterStyle *parent = m_styleManager->characterStyle(m_characterInheritedStyleModel->index(widget.inheritStyle->currentIndex()).internalId());
+        savingStyle->setParentStyle(parent);
+    }
 
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);

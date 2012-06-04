@@ -45,6 +45,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 //
     widget.nextStyle->setVisible(true);
     widget.label_2->setVisible(true);
+    widget.inheritStyle->setEnabled(true);
 
     m_paragraphInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.inheritStyle->setStylesModel(m_paragraphInheritedStyleModel);
@@ -78,6 +79,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
     connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
+    connect(widget.inheritStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
 
     connect(this, SIGNAL(styleChanged()), this, SLOT(setPreviewParagraphStyle()));
 }
@@ -107,24 +109,23 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     CharacterGeneral::setStyle(style);
 
     blockSignals(true);
-
-/*    widget.inheritStyle->clear();
-    widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
-    widget.inheritStyle->setCurrentIndex(0);
-    foreach(KoParagraphStyle *s, m_paragraphStyles) {
+    // filter style model
+    m_paragraphInheritedStyleModel->clearStyleModel();
+    foreach(KoParagraphStyle *s, m_styleManager->paragraphStyles()) {
         KoParagraphStyle *parent = s;
         bool ok = true;
         while (ok && parent) {
-            ok = parent->styleId() != style->styleId();
+            ok = parent->styleId() != m_style->styleId();
             parent = parent->parentStyle();
         }
-        if (! ok) continue; // can't inherit from myself, even indirectly.
-
-        widget.inheritStyle->addItem(s->name(), s->styleId());
-        if (s == style->parent())
-            widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
+        if (! ok) continue; // can't inherit from itself, even indirectly.
+        m_paragraphInheritedStyleModel->addParagraphStyle(s);
+        if (s == m_style->parent())
+             widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexForParagraphStyle(*m_style).row());
     }
-*/
+    if(!m_style->parentStyle())
+        widget.inheritStyle->setCurrentIndex(-1);
+
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
@@ -133,7 +134,6 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
             widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexForParagraphStyle(*parentStyle).row());
-            //m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
         }
     }
 
@@ -175,6 +175,10 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphDropCaps->save(savingStyle);
     savingStyle->setName(widget.name->text());
     savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
+    if (widget.inheritStyle->currentIndex() != -1) {
+        KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphInheritedStyleModel->index(widget.inheritStyle->currentIndex()).internalId());
+        savingStyle->setParentStyle(parent);
+    }
 
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);

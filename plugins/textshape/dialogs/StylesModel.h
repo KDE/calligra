@@ -116,12 +116,18 @@ public:
     /** we call this when we apply our unapplied styles and we clear our list. */
     void clearDraftStyles();
 
+    /** We call this when we want a clear style model. */
+    void clearStyleModel();
+
 private slots:
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
+
+public slots:
+    void addParagraphStyle(KoParagraphStyle*);
+    void addCharacterStyle(KoCharacterStyle*);
+
 
 private:
     void updateParagraphStyles();

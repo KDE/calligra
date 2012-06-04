@@ -535,3 +535,22 @@ void StylesModel::clearDraftStyles()
     }
     m_draftCharStyleList.clear();
 }
+
+void StylesModel::clearStyleModel()
+{
+    if (m_modelType == StylesModel::ParagraphStyle) {
+        QList<int>::iterator begin = m_styleList.begin();
+        for ( ; begin != m_styleList.end(); ++begin) {
+            removeParagraphStyle(m_styleManager->paragraphStyle(*begin));
+        }
+    }
+    else {
+        QList<int>::iterator begin = m_styleList.begin();
+        if (begin != m_styleList.end() && *begin == -1) {
+            ++begin;
+        }
+        for ( ; begin != m_styleList.end(); ++begin) {
+             removeCharacterStyle(m_styleManager->characterStyle(*begin));
+        }
+    }
+}
