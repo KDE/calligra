@@ -59,14 +59,14 @@ KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
     d->canvas = canvas;
     d->toolProxy = proxy;
 
-    KisAbstractInputAction* action = new KisToolInvocationAction(canvas, proxy);
+    KisAbstractInputAction* action = new KisToolInvocationAction(this);
     KisShortcut* shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
     d->actions.append(action);
     d->shortcuts.append(shortcut);
 
-    action = new KisAlternateInvocationAction(canvas, proxy);
+    action = new KisAlternateInvocationAction(this);
     shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
@@ -74,11 +74,16 @@ KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
     d->actions.append(action);
     d->shortcuts.append(shortcut);
 
-    action = new KisPanAction(canvas, proxy);
+    action = new KisPanAction(this);
     shortcut = new KisShortcut;
     shortcut->setAction(action);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
     d->actions.append(action);
+    d->shortcuts.append(shortcut);
+
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
     d->shortcuts.append(shortcut);
 
     d->potentialShortcuts = d->shortcuts;
@@ -114,15 +119,25 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
-void KisInputManager::actionEnded()
+KisCanvas2* KisInputManager::canvas() const
 {
-    d->currentAction = 0;
-    d->potentialShortcuts.clear();
+    return d->canvas;
+}
+
+KoToolProxy* KisInputManager::toolProxy() const
+{
+    return d->toolProxy;
+}
+
+QPointF KisInputManager::mousePosition() const
+{
+    return QPointF();
 }
 
 KisInputManager::~KisInputManager()
 {
-
+    qDeleteAll(d->shortcuts);
+    qDeleteAll(d->actions);
 }
 
 void KisInputManager::Private::match(QEvent* event)

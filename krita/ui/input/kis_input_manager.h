@@ -21,6 +21,7 @@
 
 #include <QtCore/QObject>
 
+class QPointF;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
@@ -34,8 +35,9 @@ public:
 
     bool eventFilter(QObject* object, QEvent* event );
 
-public Q_SLOTS:
-    void actionEnded();
+    KisCanvas2 *canvas() const;
+    KoToolProxy *toolProxy() const;
+    QPointF mousePosition() const;
 
 private:
     class Private;

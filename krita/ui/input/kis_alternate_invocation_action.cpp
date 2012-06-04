@@ -20,8 +20,8 @@
 
 #include <QDebug>
 
-KisAlternateInvocationAction::KisAlternateInvocationAction(KisCanvas2* canvas, KoToolProxy* tool)
-    : KisAbstractInputAction(canvas, tool)
+KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
+    : KisAbstractInputAction(manager)
 {
 
 }

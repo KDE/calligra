@@ -19,9 +19,20 @@
 #include "kis_pan_action.h"
 
 #include <QDebug>
+#include <QMouseEvent>
 
-KisPanAction::KisPanAction(KisCanvas2* canvas, KoToolProxy* tool)
-    : KisAbstractInputAction(canvas, tool)
+#include "kis_input_manager.h"
+#include <kis_canvas2.h>
+#include <KoCanvasController.h>
+
+class KisPanAction::Private
+{
+public:
+    QPointF lastMousePosition;
+};
+
+KisPanAction::KisPanAction(KisInputManager *manager)
+    : KisAbstractInputAction(manager), d(new Private)
 {
 
 }
@@ -33,6 +44,7 @@ KisPanAction::~KisPanAction()
 void KisPanAction::begin()
 {
     qDebug() << Q_FUNC_INFO;
+    d->lastMousePosition = m_inputManager->mousePosition();
 }
 
 void KisPanAction::end()
@@ -40,8 +52,16 @@ void KisPanAction::end()
     qDebug() << Q_FUNC_INFO;
 }
 
-void KisPanAction::inputEvent(QEvent* event)
+void KisPanAction::inputEvent(QEvent *event)
 {
+    if(event->type() == QEvent::MouseMove) {
+        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+        if(mevent->buttons()) {
+            QPointF relMovement = mevent->posF() - d->lastMousePosition;
+            m_inputManager->canvas()->canvasController()->pan(relMovement.toPoint());
+            d->lastMousePosition = mevent->posF();
+        }
+    }
 }
 
 

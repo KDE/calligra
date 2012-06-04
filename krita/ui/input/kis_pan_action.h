@@ -24,12 +24,16 @@
 class KisPanAction : public KisAbstractInputAction
 {
 public:
-    explicit KisPanAction(KisCanvas2* canvas, KoToolProxy* tool);
+    explicit KisPanAction(KisInputManager *manager);
     virtual ~KisPanAction();
 
     virtual void begin();
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KIS_PAN_ACTION_H
