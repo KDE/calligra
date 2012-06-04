@@ -132,7 +132,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     kDebug() << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
-        // if there is allready an aniation create a new step
+        // if there is allready an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();
@@ -198,7 +198,8 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         (*animationStep)->setId(animationId);
     }
 
-    //TODO: Set not supported animations to invalid
+    //If a new animation was loaded set it as valid (This lets load only
+    //main steps and no substeps on animations edit view)
     (*animationStep)->setAnimationState(KPrAnimationStep::Valid);
 
 
@@ -232,7 +233,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                 }
             }
         }
-
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
         if (shapeAnimation && animation) {
             shapeAnimation->addAnimation(animation);

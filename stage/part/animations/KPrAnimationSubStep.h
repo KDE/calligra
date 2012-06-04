@@ -32,6 +32,7 @@ public:
     virtual void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveOdf(KoPASavingContext & paContext, bool startStep, QString presetClass, QString id) const;
     virtual void deactivate();
+    virtual QPair<int, int> timeRange();
 };
 
 #endif /* KPRANIMATIONSUBSTEP_H */

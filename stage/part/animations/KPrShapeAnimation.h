@@ -62,6 +62,8 @@ public:
      */
     //QPair<KoShape *, KoTextBlockData *> animationShape() const;
 
+    QPair<int, int> timeRange();
+
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;

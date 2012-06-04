@@ -40,6 +40,7 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
+            //TODO: Only return a number when animation starts on click
             return index.row() + 1;
         case 1:
             return m_data.at(index.row()).name;
@@ -154,6 +155,8 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
         case 4:
             return false;
         case 5:
+            //TODO: save new value in animation step.
+            /*
             m_data[index.row()].startTime = value.toDouble();
             emit dataChanged(index, index);
             return true;
@@ -161,6 +164,7 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
             m_data[index.row()].duration = value.toDouble();
             emit dataChanged(index, index);
             return true;
+            */
         case 7:
             return false;
         default:
@@ -188,27 +192,31 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
         i++;
         if (step->animationState() == KPrAnimationStep::Valid) {
             AnimationsData data1;
-            data1.duration = 2;
             data1.name=i18n("Shape %1").arg(i);
-            data1.startTime = 0;
+            //Load start and end time, convert them to seconds
+            QPair <int, int> timeRange = step->timeRange();
+            qDebug() << "Start at: " << timeRange.first << "end at: " << timeRange.second;
+            data1.startTime = timeRange.first/1000;
+            data1.duration = timeRange.second/1000;
             data1.triggerEvent = step->NodeType();
             data1.type = step->presetClass();
-            //TODO: Image when shape thumbnail is not loaded
+            //TODO: Draw image file to load when shape thumbnail is not loaded
             data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                               KIconLoader::NoGroup,
-                                                              32);
+                                                              KIconLoader::SizeMedium);
             data1.animationName = step->id();
+            //TODO: Parse animation preset Class and read icon name
             data1.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
                                                                   KIconLoader::NoGroup,
-                                                                  32);
+                                                                  KIconLoader::SizeMedium);
             if (step->targetElement()) {
                 QPixmap thumbnail;
-                if (thumbnail.convertFromImage(createThumbnail(step->targetElement(), QSize(32, 32))))
-                    thumbnail.scaled(QSize(32, 32), Qt::KeepAspectRatio);
+                if (thumbnail.convertFromImage(createThumbnail(step->targetElement(),
+                                                               QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium))))
+                    thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
                     data1.thumbnail = thumbnail;
             }
-              m_data.append(data1);
-            qDebug() << "Item valid";
+             m_data.append(data1);
         }
         qDebug() << "Preset in model: " << step->presetClassText();
         qDebug() << step->id();

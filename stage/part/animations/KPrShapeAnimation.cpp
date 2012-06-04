@@ -115,6 +115,24 @@ bool KPrShapeAnimation::visible()
     return true;
 }
 
+QPair<int, int> KPrShapeAnimation::timeRange()
+{
+    int minStart = 99999;
+    int maxEnd = 0;
+
+    for(int i=0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+            minStart = qMin(minStart, a->begin());
+            maxEnd = qMax(maxEnd, a->begin() + a->duration());
+        }
+    }
+    QPair<int, int> pair;
+    pair.first = minStart;
+    pair.second = maxEnd;
+    return pair;
+}
+
 void KPrShapeAnimation::deactivate()
 {
     if (m_textBlockData) {

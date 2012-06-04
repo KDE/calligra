@@ -31,7 +31,6 @@
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
 
-
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
@@ -46,6 +45,11 @@ KPrAnimationBase::~KPrAnimationBase()
 int KPrAnimationBase::duration() const
 {
     return m_duration;
+}
+
+int KPrAnimationBase::begin() const
+{
+    return m_begin;
 }
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

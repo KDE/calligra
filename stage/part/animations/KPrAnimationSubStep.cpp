@@ -65,3 +65,20 @@ void KPrAnimationSubStep::deactivate()
         }
     }
 }
+
+QPair<int, int> KPrAnimationSubStep::timeRange()
+{
+    int minStart=99999;
+    int maxEnd=0;
+    for (int i=0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+            minStart = qMin(minStart, a->timeRange().first);
+            maxEnd = qMax(maxEnd, a->timeRange().second);
+        }
+    }
+    QPair<int, int> pair;
+    pair.first = minStart;
+    pair.second = maxEnd;
+    return pair;
+}

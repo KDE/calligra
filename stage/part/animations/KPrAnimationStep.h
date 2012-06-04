@@ -65,6 +65,7 @@ public:
     QString id() const;
     QString presetClassText() const;
     KoShape *targetElement() const;
+    QPair <int, int> timeRange();
 
 private:
     Node_Type m_triggerEvent;

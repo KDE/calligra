@@ -80,7 +80,6 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
     for (int x = 0; x < totalWidth-Padding; x+=stepSize) {
         int z=x+rect.x()+Padding;
         if (z >0) {
-            painter->drawLine(z, 0, z, 1);
             // Draw numbers
             qreal number = x/stepSize*stepScale;
             painter->drawText((z-19 > 1 ? z-19 : z-16), rect.y(), 38, rect.height(), Qt::AlignCenter, QString("%1").arg(number));
