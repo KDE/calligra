@@ -56,13 +56,14 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     hlayout->addWidget(m_editAnimation);
     hlayout->addStretch();
 
-    //m_moreShapesContainer = new CollectionMenu(mainWidget);
-    //m_moreShapes->setMenu(m_moreShapesContainer);
-    //m_moreShapes->setPopupMode(QToolButton::InstantPopup);
+    //m_editAnimationsPanel = new EditAnimationsPanel(mainWidget);
+    //m_editAnimation->setMenu(m_editAnimationsPanel);
+    //m_editAnimation->setPopupMode(QToolButton::InstantPopup);
 
     m_buttonAddAnimation = new QToolButton();
     m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
     m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
+    m_buttonAddAnimation->setEnabled(false);
 
     m_buttonRemoveAnimation = new QToolButton();
     m_buttonRemoveAnimation->setIcon(SmallIcon("list-remove", KIconLoader::SizeSmallMedium));
