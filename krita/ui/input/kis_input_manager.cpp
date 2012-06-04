@@ -50,6 +50,8 @@ public:
 
     QList<KisShortcut*> potentialShortcuts;
 
+    QPoint mousePosition;
+
     int eventCount;
 };
 
@@ -91,8 +93,8 @@ KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-//     if(object != d->canvas->canvasWidget())
-//         return false;
+    if(object != d->canvas->canvasWidget())
+        return false;
 
     switch(event->type()) {
         case QEvent::KeyPress:
@@ -129,9 +131,9 @@ KoToolProxy* KisInputManager::toolProxy() const
     return d->toolProxy;
 }
 
-QPointF KisInputManager::mousePosition() const
+QPoint KisInputManager::mousePosition() const
 {
-    return QPointF();
+    return d->mousePosition;
 }
 
 KisInputManager::~KisInputManager()
@@ -152,9 +154,14 @@ void KisInputManager::Private::match(QEvent* event)
             matchMouse(static_cast<QMouseEvent*>(event));
             break;
         case QEvent::MouseMove:
+        {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            mousePosition = canvas->coordinatesConverter()->viewToDocument(mevent->posF()).toPoint();
             if(!currentAction) {
-                actions.at(0)->inputEvent(event);
+                toolProxy->mouseMoveEvent(mevent, mousePosition);
             }
+            break;
+        }
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
             matchTablet(static_cast<QTabletEvent*>(event));
