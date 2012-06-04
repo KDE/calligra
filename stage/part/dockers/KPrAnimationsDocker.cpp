@@ -53,6 +53,7 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     m_editAnimation->setIcon(KIcon("edit_animation"));
     m_editAnimation->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_editAnimation->setToolTip(i18n("Edit animation"));
+    m_editAnimation->setEnabled(false);
     hlayout->addWidget(m_editAnimation);
     hlayout->addStretch();
 
