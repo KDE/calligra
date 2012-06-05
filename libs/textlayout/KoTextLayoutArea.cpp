@@ -1223,11 +1223,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
-        QList<KoTextLayoutObstruction *> currentObstructions = documentLayout()->currentObstructions();
-        if () {
-            currentObstructions.append(->continuationObstruction);
-        }
-        runAroundHelper.setObstructions(currentObstructions);
+        runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         QRectF anchoringRect = m_blockRects.last();
 //        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
         anchoringRect.setTop(m_anchoringParagraphTop);

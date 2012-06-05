@@ -74,6 +74,7 @@ public:
        , anAnchorIsPlaced(false)
        , anchoringSoftBreak(INT_MAX)
        , allowPositionInlineObject(true)
+       , continuationObstruction(0)
        , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
@@ -110,6 +111,7 @@ public:
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
+    KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
 
@@ -848,9 +850,21 @@ KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragmen
     return KoInlineObjectExtent();
 }
 
+void KoTextDocumentLayout::setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction)
+{
+    if (d->continuationObstruction) {
+        delete d->continuationObstruction;
+    }
+    d->continuationObstruction = continuationObstruction;
+}
+
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()
 {
-    return d->freeObstructions + d->anchoredObstructions.values();
+    if (d->continuationObstruction) {
+        return d->freeObstructions + d->anchoredObstructions.values() << d->continuationObstruction;
+    } else {
+        return d->freeObstructions + d->anchoredObstructions.values();
+    }
 }
 
 QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const

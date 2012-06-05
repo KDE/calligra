@@ -37,8 +37,6 @@ public:
 
     void setAsContinuedArea(bool isContinuedArea);
 
-    KoTextLayoutObstruction *continuationObstruction;
-
 private:
     class Private;
     Private * const d;
