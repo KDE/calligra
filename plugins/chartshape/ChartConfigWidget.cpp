@@ -49,6 +49,8 @@
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
+#include <KDChartTextAttributes>
+#include <KDChartMeasure>
 
 // KChart
 #include "ChartProxyModel.h"
@@ -60,6 +62,7 @@
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "FontEditorDialog.h"
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
@@ -167,6 +170,8 @@ public:
     // Dialogs
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
+    FontEditorDialog axisFontEditorDialog;
+    FontEditorDialog legendFontEditorDialog;
     CellRegionDialog  cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
@@ -177,6 +182,8 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     : tableEditorDialog(0)
     , newAxisDialog(parent)
     , axisScalingDialog(parent)
+    , axisFontEditorDialog(parent)
+    , legendFontEditorDialog(parent)
     , cellRegionDialog(parent)
 
 {
@@ -1170,6 +1177,14 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT(ui_axisSubStepWidthChanged(double)));
     connect (d->axisScalingDialog.automaticSubStepWidth, SIGNAL(toggled(bool)),
               this, SLOT(ui_axisUseAutomaticSubStepWidthChanged(bool)));
+
+    // Edit Fonts
+    connect(d->ui.axisEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_axisEditFontButtonClicked()));
+    connect(&d->axisFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_axisLabelsFontChanged()));
+    connect(d->ui.legendEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_legendEditFontButtonClicked()));
+    connect(&d->legendFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_legendFontChanged()));
 }
 
 void ChartConfigWidget::createActions()
@@ -1511,6 +1526,22 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged(bool b)
     emit axisShowGridLinesChanged(d->axes[d->ui.axes->currentIndex()], b);
 }
 
+void ChartConfigWidget::ui_axisLabelsFontChanged()
+{
+    QFont font = d->axisFontEditorDialog.fontChooser->font();
+    foreach (Axis *axis, d->axes) {
+        axis->setFont(font);
+        axis->setFontSize(font.pointSizeF());
+    }
+}
+
+void ChartConfigWidget::ui_legendFontChanged()
+{
+    QFont font = d->legendFontEditorDialog.fontChooser->font();
+    d->shape->legend()->setFont(font);
+    d->shape->legend()->setFontSize(font.pointSizeF());
+}
+
 void ChartConfigWidget::ui_axisAdded()
 {
     AxisDimension dimension;
@@ -1606,6 +1637,20 @@ void ChartConfigWidget::ui_axisUseAutomaticSubStepWidthChanged(bool b)
 void ChartConfigWidget::ui_axisScalingButtonClicked()
 {
     d->axisScalingDialog.show();
+}
+
+void ChartConfigWidget::ui_axisEditFontButtonClicked()
+{
+    QFont font = d->axes.at(0)->font();
+    d->axisFontEditorDialog.fontChooser->setFont(font);
+    d->axisFontEditorDialog.show();
+}
+
+void ChartConfigWidget::ui_legendEditFontButtonClicked()
+{
+    QFont font = d->shape->legend()->font();
+    d->legendFontEditorDialog.fontChooser->setFont(font);
+    d->legendFontEditorDialog.show();
 }
 
 void ChartConfigWidget::ui_datasetShowCategoryChanged(bool b)

@@ -98,6 +98,8 @@ public slots:
     void setLegendAlignment(int boxEntryIndex);
     void setLegendFixedPosition(int buttonGroupIndex);
     //void setLegendShowTitle(bool toggled);
+    void ui_legendEditFontButtonClicked();
+    void ui_legendFontChanged();
     void updateFixedPosition(Position position);
     
     void ui_axisSelectionChanged(int index);
@@ -113,6 +115,8 @@ public slots:
     void ui_axisAdded();
     void ui_addAxisClicked();
     void ui_removeAxisClicked();
+    void ui_axisEditFontButtonClicked();
+    void ui_axisLabelsFontChanged();
 
 signals:
     void chartTypeChanged(ChartType type);

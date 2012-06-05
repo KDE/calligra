@@ -245,6 +245,7 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     showOuterMajorTicks = true;
 
     showOverlappingDataLabels = false;
+    showLabels = true;
 
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
@@ -1606,11 +1607,11 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     //axisStyle.addPropertyPt("chart:origin", origin);
 
-    axisStyle.addPropertyPt("fo:font-size", font().pointSize(), KoGenStyle::TextType);
-
     KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
     QPen pen = tatt.pen();
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
+    axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
+    axisStyle.addPropertyPt("fo:font-size", tatt.font().pointSize(), KoGenStyle::TextType);
 
     const QString styleName = mainStyles.insert(axisStyle, "ch");
     bodyWriter.addAttribute("chart:style-name", styleName);
@@ -2089,6 +2090,21 @@ void Axis::setFont(const QFont &font)
     KDChart::TextAttributes attr = d->kdAxis->textAttributes();
     attr.setFont(font);
     d->kdAxis->setTextAttributes(attr);
+}
+
+qreal Axis::fontSize() const
+{
+    return d->font.pointSizeF();
+}
+
+void Axis::setFontSize(qreal size)
+{
+    d->font.setPointSizeF(size);
+
+    // KDChart
+    KDChart::TextAttributes attributes = d->kdAxis->textAttributes();
+    attributes.setFontSize(KDChart::Measure(size, KDChartEnums::MeasureCalculationModeAbsolute));
+    d->kdAxis->setTextAttributes(attributes);
 }
 
 bool Axis::isVisible() const
