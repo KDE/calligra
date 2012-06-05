@@ -53,6 +53,7 @@ public:
     QGridLayout *layout;
     CellToolBase *cellTool;
     QPointer<KoToolProxy> toolProxy;
+    bool canvasResetBugWorkaround;
 };
 
 CellEditorDocker::CellEditorDocker()
@@ -61,6 +62,7 @@ CellEditorDocker::CellEditorDocker()
     setWindowTitle(i18n("Cell Editor"));
 
     d->canvas = 0;
+    d->canvasResetBugWorkaround = false;
 
     QWidget* w = new QWidget(this);
 
@@ -101,6 +103,7 @@ CellEditorDocker::~CellEditorDocker()
 void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 {
     kDebug() << "setting canvas to" << canvas;
+    d->canvasResetBugWorkaround = !!d->canvas;
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
@@ -114,6 +117,7 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 
 void CellEditorDocker::unsetCanvas()
 {
+    if (d->canvasResetBugWorkaround) return;
     kDebug() << "unsetting canvas";
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
