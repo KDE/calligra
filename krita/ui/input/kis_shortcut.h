@@ -37,8 +37,6 @@ public:
     KisShortcut();
     virtual ~KisShortcut();
 
-//     bool containsKey(Qt::Key key) const;
-//     bool containsButton(Qt::MouseButton button) const;
     int priority() const;
     KisAbstractInputAction* action() const;
     void setAction(KisAbstractInputAction *action);
@@ -46,14 +44,10 @@ public:
     void setKeys(const QList<Qt::Key> &keys);
     void setButtons(const QList<Qt::MouseButton> &buttons);
 
-    void keyPress(Qt::Key key);
-    void keyRelease(Qt::Key key);
-    void buttonPress(Qt::MouseButton button);
-    void buttonRelease(Qt::MouseButton button);
-
     MatchLevel matchLevel();
 
     void match(QEvent* event);
+    void clear();
 
 private:
     class Private;

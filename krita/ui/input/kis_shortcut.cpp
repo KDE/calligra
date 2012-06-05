@@ -85,16 +85,22 @@ void KisShortcut::match(QEvent* event)
 {
     switch(event->type()) {
         case QEvent::KeyPress: {
-            Qt::Key key = static_cast<Qt::Key>(static_cast<QKeyEvent*>(event)->key());
-            if(d->keys.contains(key) && !d->keyState.contains(key)) {
-                d->keyState.append(key);
+            QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
+            if(!kevent->isAutoRepeat()) {
+                Qt::Key key = static_cast<Qt::Key>(kevent->key());
+                if(d->keys.contains(key) && !d->keyState.contains(key)) {
+                    d->keyState.append(key);
+                }
             }
             break;
         }
         case QEvent::KeyRelease: {
-            Qt::Key key = static_cast<Qt::Key>(static_cast<QKeyEvent*>(event)->key());
-            if( d->keyState.contains(key) ) {
-                d->keyState.removeOne(key);
+            QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
+            if(!kevent->isAutoRepeat()) {
+                Qt::Key key = static_cast<Qt::Key>(kevent->key());
+                if( d->keyState.contains(key) ) {
+                    d->keyState.removeOne(key);
+                }
             }
             break;
         }
@@ -115,4 +121,10 @@ void KisShortcut::match(QEvent* event)
         default:
             break;
     }
+}
+
+void KisShortcut::clear()
+{
+    d->buttonState.clear();
+    d->keyState.clear();
 }

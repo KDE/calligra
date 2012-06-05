@@ -144,6 +144,16 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         case QEvent::Enter:
             d->canvas->canvasWidget()->setFocus();
             break;
+        case QEvent::Leave:
+            if(d->currentAction) {
+                d->currentShortcut->clear();
+                d->currentAction->end();
+                d->currentAction = 0;
+                d->currentShortcut = 0;
+                d->potentialShortcuts = d->shortcuts;
+                d->eventQueue.clear();
+            }
+            break;
         default:
             break;
     }
@@ -195,6 +205,8 @@ void KisInputManager::Private::match(QEvent* event)
                 if(!completedShortcut || completedShortcut->priority() < shortcut->priority()) {
                     completedShortcut = shortcut;
                 }
+            } else {
+                shortcut->clear();
             }
         }
 
