@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-class QPoint;
+class QPointF;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
@@ -37,7 +37,7 @@ public:
 
     KisCanvas2 *canvas() const;
     KoToolProxy *toolProxy() const;
-    QPoint mousePosition() const;
+    QPointF mousePosition() const;
 
 private:
     class Private;

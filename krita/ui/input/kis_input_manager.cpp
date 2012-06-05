@@ -18,7 +18,8 @@
 
 #include "kis_input_manager.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
+#include <QQueue>
 
 #include <KoToolProxy.h>
 
@@ -29,18 +30,16 @@
 #include "kis_tool_invocation_action.h"
 #include "kis_pan_action.h"
 #include "kis_alternate_invocation_action.h"
+#include "kis_rotate_canvas_action.h"
 
 class KisInputManager::Private
 {
 public:
-    Private() : toolProxy(0), currentAction(0), eventCount(0) { }
-    void match(QEvent* event);
-    void matchKey(QKeyEvent *event);
-    void matchMouse(QMouseEvent *event);
-    void matchTablet(QTabletEvent *event);
+    Private() : toolProxy(0), currentAction(0), currentShortcut(0) { }
+    void match(QEvent *event);
 
-    KisCanvas2* canvas;
-    KoToolProxy* toolProxy;
+    KisCanvas2 *canvas;
+    KoToolProxy *toolProxy;
 
     KisAbstractInputAction* currentAction;
     KisShortcut* currentShortcut;
@@ -50,13 +49,13 @@ public:
 
     QList<KisShortcut*> potentialShortcuts;
 
-    QPoint mousePosition;
+    QPointF mousePosition;
 
-    int eventCount;
+    QQueue<QEvent*> eventQueue;
 };
 
-KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
-    : QObject( canvas ), d( new Private )
+KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
+    : QObject(canvas), d(new Private)
 {
     d->canvas = canvas;
     d->toolProxy = proxy;
@@ -93,22 +92,40 @@ KisInputManager::KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy)
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    if(object != d->canvas->canvasWidget())
-        return false;
-
     switch(event->type()) {
+        case QEvent::MouseMove: {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF());
+            if(!d->currentAction) {
+                d->toolProxy->mouseMoveEvent(mevent, d->mousePosition);
+            }
+        }
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
-        case QEvent::MouseMove:
         case QEvent::MouseButtonDblClick:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
         case QEvent::TabletMove:
-            d->match(event);
+        case QEvent::Wheel:
             if(d->currentAction) {
+                d->currentShortcut->match(event);
+                if(d->currentShortcut->matchLevel() == KisShortcut::NoMatch) {
+                    d->currentAction->end();
+                    d->currentAction = 0;
+                    d->currentShortcut = 0;
+                    d->potentialShortcuts = d->shortcuts;
+                    d->eventQueue.clear();
+                    break;
+                }
+
+                while(!d->eventQueue.isEmpty()) {
+                    d->currentAction->inputEvent(d->eventQueue.dequeue());
+                }
                 d->currentAction->inputEvent(event);
+            } else {
+                d->match(event);
             }
             return true;
         case QEvent::Enter:
@@ -131,7 +148,7 @@ KoToolProxy* KisInputManager::toolProxy() const
     return d->toolProxy;
 }
 
-QPoint KisInputManager::mousePosition() const
+QPointF KisInputManager::mousePosition() const
 {
     return d->mousePosition;
 }
@@ -144,42 +161,8 @@ KisInputManager::~KisInputManager()
 
 void KisInputManager::Private::match(QEvent* event)
 {
-    switch(event->type()) {
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-            matchKey(static_cast<QKeyEvent*>(event));
-            break;
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-            matchMouse(static_cast<QMouseEvent*>(event));
-            break;
-        case QEvent::MouseMove:
-        {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            mousePosition = canvas->coordinatesConverter()->viewToDocument(mevent->posF()).toPoint();
-            if(!currentAction) {
-                toolProxy->mouseMoveEvent(mevent, mousePosition);
-            }
-            break;
-        }
-        case QEvent::TabletPress:
-        case QEvent::TabletRelease:
-            matchTablet(static_cast<QTabletEvent*>(event));
-            break;
-        default:
-            break;
-    }
-
-    if(currentShortcut && currentShortcut->matchLevel() == KisShortcut::NoMatch) {
-        currentAction->end();
-        currentAction = 0;
-        currentShortcut = 0;
-        potentialShortcuts = shortcuts;
-        eventCount = 0;
-        return;
-    }
-
     foreach(KisShortcut* shortcut, potentialShortcuts) {
+        shortcut->match(event);
         if(shortcut->matchLevel() == KisShortcut::NoMatch) {
             potentialShortcuts.removeOne(shortcut);
         }
@@ -187,11 +170,12 @@ void KisInputManager::Private::match(QEvent* event)
 
     if(potentialShortcuts.count() == 0) {
         potentialShortcuts = shortcuts;
-        eventCount = 0;
+        eventQueue.clear();
         return;
     }
 
-    if(!currentShortcut && (potentialShortcuts.count() == 1 || eventCount > 5)) {
+    eventQueue.enqueue(event);
+    if(potentialShortcuts.count() == 1 || eventQueue.count() >= 5) {
         KisShortcut* completedShortcut = 0;
         foreach(KisShortcut* shortcut, potentialShortcuts) {
             if(shortcut->matchLevel() == KisShortcut::CompleteMatch) {
@@ -207,37 +191,6 @@ void KisInputManager::Private::match(QEvent* event)
             currentAction->begin();
         }
 
-        eventCount = 0;
+        eventQueue.clear();
     }
-
-    eventCount++;
-}
-
-void KisInputManager::Private::matchKey(QKeyEvent* event)
-{
-    foreach(KisShortcut* shortcut, potentialShortcuts)
-    {
-        if( event->type() == QEvent::KeyPress ) {
-            shortcut->keyPress(static_cast<Qt::Key>(event->key()));
-        } else {
-            shortcut->keyRelease(static_cast<Qt::Key>(event->key()));
-        }
-    }
-}
-
-void KisInputManager::Private::matchMouse(QMouseEvent* event)
-{
-    foreach(KisShortcut* shortcut, potentialShortcuts)
-    {
-        if(event->type() == QEvent::MouseButtonPress) {
-            shortcut->buttonPress(event->button());
-        } else {
-            shortcut->buttonRelease(event->button());
-        }
-    }
-}
-
-void KisInputManager::Private::matchTablet(QTabletEvent* event)
-{
-
 }

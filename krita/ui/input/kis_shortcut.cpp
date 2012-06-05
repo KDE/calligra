@@ -19,6 +19,8 @@
 #include "kis_shortcut.h"
 
 #include "kis_abstract_input_action.h"
+#include <QEvent>
+#include <QKeyEvent>
 
 class KisShortcut::Private
 {
@@ -68,41 +70,49 @@ void KisShortcut::setKeys(const QList< Qt::Key >& keys)
     d->keyState.clear();
 }
 
-void KisShortcut::buttonPress(Qt::MouseButton button)
-{
-    if( d->buttons.contains( button ) && !d->buttonState.contains(button) ) {
-        d->buttonState.append( button );
-    }
-}
-
-void KisShortcut::buttonRelease(Qt::MouseButton button)
-{
-    if( d->buttonState.contains( button ) ) {
-        d->buttonState.removeOne(button);
-    }
-}
-
-void KisShortcut::keyPress(Qt::Key key)
-{
-    if( d->keys.contains(key) && !d->keyState.contains(key) ) {
-        d->keyState.append(key);
-    }
-}
-
-void KisShortcut::keyRelease(Qt::Key key)
-{
-    if( d->keyState.contains(key) ) {
-        d->keyState.removeOne(key);
-    }
-}
-
 KisShortcut::MatchLevel KisShortcut::matchLevel()
 {
     if( d->keys.count() == d->keyState.count() && d->buttons.count() == d->buttonState.count() ) {
         return CompleteMatch;
     } else if( d->keyState.count() > 0 || d->buttonState.count() > 0 ) {
-        return PotentialMatch;
+        return PartialMatch;
     }
 
     return NoMatch;
+}
+
+void KisShortcut::match(QEvent* event)
+{
+    switch(event->type()) {
+        case QEvent::KeyPress: {
+            Qt::Key key = static_cast<Qt::Key>(static_cast<QKeyEvent*>(event)->key());
+            if(d->keys.contains(key) && !d->keyState.contains(key)) {
+                d->keyState.append(key);
+            }
+            break;
+        }
+        case QEvent::KeyRelease: {
+            Qt::Key key = static_cast<Qt::Key>(static_cast<QKeyEvent*>(event)->key());
+            if( d->keyState.contains(key) ) {
+                d->keyState.removeOne(key);
+            }
+            break;
+        }
+        case QEvent::MouseButtonPress: {
+            Qt::MouseButton button = static_cast<QMouseEvent*>(event)->button();
+            if( d->buttons.contains( button ) && !d->buttonState.contains(button) ) {
+                d->buttonState.append( button );
+            }
+            break;
+        }
+        case QEvent::MouseButtonRelease: {
+            Qt::MouseButton button = static_cast<QMouseEvent*>(event)->button();
+            if( d->buttonState.contains( button ) ) {
+                d->buttonState.removeOne(button);
+            }
+            break;
+        }
+        default:
+            break;
+    }
 }

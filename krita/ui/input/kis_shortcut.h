@@ -22,6 +22,7 @@
 #include <Qt>
 #include <QList>
 
+class QEvent;
 class KisAbstractInputAction;
 class KisShortcut
 {
@@ -29,7 +30,7 @@ class KisShortcut
 public:
     enum MatchLevel {
         NoMatch,
-        PotentialMatch,
+        PartialMatch,
         CompleteMatch
     };
 
@@ -52,6 +53,7 @@ public:
 
     MatchLevel matchLevel();
 
+    void match(QEvent* event);
 
 private:
     class Private;
