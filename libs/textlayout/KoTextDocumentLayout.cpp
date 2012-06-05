@@ -626,6 +626,7 @@ bool KoTextDocumentLayout::doLayout()
                 rootArea->setFootNoteCountInDoc(footNoteAutoCount);
                 rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
+                setContinuationObstruction(0);
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
@@ -712,6 +713,7 @@ bool KoTextDocumentLayout::doLayout()
                 rootArea->setFootNoteCountInDoc(footNoteAutoCount);
                 rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
+                setContinuationObstruction(0);
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
@@ -856,6 +858,11 @@ void KoTextDocumentLayout::setContinuationObstruction(KoTextLayoutObstruction *c
         delete d->continuationObstruction;
     }
     d->continuationObstruction = continuationObstruction;
+}
+
+KoTextLayoutObstruction *KoTextDocumentLayout::continuationObstruction() const
+{
+    return d->continuationObstruction;
 }
 
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()

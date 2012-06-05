@@ -57,11 +57,16 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
+    painter->save();
+    if (d->isContinuedArea)
+        painter->translate(0, -1000);
+
     KoTextLayoutArea::paint(painter, context);
     if (d->postLayout) {
         d->postLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
     }
     d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
+    painter->restore();
 }
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
@@ -74,8 +79,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     }
 
     QString label;
-    if (d->isContinuedArea)
-    {
+    if (d->isContinuedArea) {
         label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
     } else {
         label = d->note->label();
@@ -113,7 +117,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 
     bool contNotNeeded = KoTextLayoutArea::layout(cursor);
 
-    if(!contNotNeeded) {
+    if (!contNotNeeded) {
         QString contNote = notesConfig->footnoteContinuationForward();
         font.setBold(true);
         d->postLayout = new QTextLayout(contNote, font, pd);
@@ -134,9 +138,8 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         d->postLayout->endLayout();
         contTextLine.setPosition(QPointF(right() - contTextLine.naturalTextWidth(), bottom() - contTextLine.height()));
 
-        documentLayout()->setContinuationObstruction(new KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
-    } else {
-        documentLayout()->setContinuationObstruction(0);
+        documentLayout()->setContinuationObstruction(new
+                                    KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
     }
     return contNotNeeded;
 }

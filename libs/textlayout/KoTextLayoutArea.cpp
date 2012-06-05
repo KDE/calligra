@@ -461,10 +461,11 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     if (m_footNoteCursorFromPrevious) {
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(m_continuedNoteFromPrevious, this, m_documentLayout);
         m_footNoteFrames.append(m_continuedNoteFromPrevious->textFrame());
-        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom());
+        // we adjust by 1000 (just a very high number) to avoid overlap
+        footNoteArea->setReferenceRect(left(), right(), 1000, maximumAllowedBottom() + 1000);
         footNoteArea->setAsContinuedArea(true);
         footNoteArea->layout(m_footNoteCursorFromPrevious);
-        m_footNotesHeight += footNoteArea->bottom();
+        m_footNotesHeight += footNoteArea->bottom() - 1000;
         m_footNoteAreas.append(footNoteArea);
     }
     while (!cursor->it.atEnd()) {
@@ -943,7 +944,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (m_isRtl) {
         qSwap(startMargin, endMargin);
     }
-    m_indent = textIndent(block, textList, pStyle);
+    m_indent = textIndent(block, textList, pStyle) + m_extraTextIndent;
 
     qreal labelBoxWidth = 0;
     qreal labelBoxIndent = 0;
@@ -1140,7 +1141,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->fragmentIterator = block.begin();
     } else {
         line = restartLayout(layout, cursor->lineTextStart);
-        m_indent = 0;
+        m_indent = m_extraTextIndent;
     }
 
     if (block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
@@ -1317,6 +1318,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             m_y += maxLineHeight;
             maxLineHeight = 0;
             m_indent = 0;
+            m_extraTextIndent = 0;
             ++numBaselineShifts;
         }
 
@@ -1378,7 +1380,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
-        return guessGlyphWidth * 3 + m_extraTextIndent;
+        return guessGlyphWidth * 3;
     }
 
     qreal blockTextIndent = block.blockFormat().textIndent();
@@ -1397,10 +1399,10 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
             set = (blockTextIndent != 0);
         }
         if (! set) {
-            return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
+            return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
-    return blockTextIndent + m_extraTextIndent;
+    return blockTextIndent;
 }
 
 void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
