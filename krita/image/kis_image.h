@@ -78,7 +78,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true, bool infiniteCanvas = false);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -142,6 +142,16 @@ public:
      * Returns true if lock() has been called more often than unlock().
      */
     bool locked() const;
+
+    /**
+     * Returns whether the canvas of the image has been set to be Infinite
+     */
+    bool isCanvasInfinite();
+
+    /*
+     * Marks the image as one with an infinite canvas
+     */
+    void setCanvasInfinite();
 
     /**
      * @return the image that is used as background tile.
@@ -607,7 +617,7 @@ public slots:
 private:
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, bool infiniteCanvas);
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);

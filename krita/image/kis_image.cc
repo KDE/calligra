@@ -131,9 +131,11 @@ public:
     KisCompositeProgressProxy *compositeProgressProxy;
 
     bool startProjection;
+
+    bool infiniteCanvas;
 };
 
-KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
+KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection, bool infiniteCanvas)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate())
@@ -141,7 +143,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     setObjectName(name);
     dbgImage << "creating" << name;
     m_d->startProjection = startProjection;
-    init(undoStore, width, height, colorSpace);
+    init(undoStore, width, height, colorSpace, infiniteCanvas);
 }
 
 KisImage::~KisImage()
@@ -277,7 +279,7 @@ void KisImage::rollBackLayerName()
     m_d->nserver->rollback();
 }
 
-void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace)
+void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, bool infiniteCanvas)
 {
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -301,6 +303,8 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->colorSpace = colorSpace;
 
+    m_d->infiniteCanvas = infiniteCanvas;
+
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 
     m_d->xres = 1.0;
@@ -323,6 +327,16 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
 {
     return m_d->compositeProgressProxy;
+}
+
+bool KisImage::isCanvasInfinite()
+{
+    return m_d->infiniteCanvas;
+}
+
+void KisImage::setCanvasInfinite()
+{
+    m_d->infiniteCanvas = true;
 }
 
 bool KisImage::locked() const
