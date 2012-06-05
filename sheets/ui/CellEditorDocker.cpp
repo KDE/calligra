@@ -71,7 +71,7 @@ CellEditorDocker::CellEditorDocker()
     d->formulaButton->setText(i18n("Formula"));
 
     d->editor = new ExternalEditor(w);
-    d->editor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    d->editor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
 //     d->editor->setMinimumHeight(d->locationComboBox->height());
 
     d->applyButton = new QToolButton(w);
@@ -143,6 +143,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
         if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
+            d->layout->setRowStretch(0, 0);
             d->layout->setRowStretch(1, 1);
         }
     } else { /* two rows */
@@ -150,6 +151,8 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
             QLayoutItem *const item = d->layout->itemAtPosition(1, 0);
             d->layout->removeItem(item);
             d->layout->addItem(item, 0, d->layout->count());
+            d->layout->setRowStretch(0, 1);
+            d->layout->setRowStretch(1, 0);
         }
     }
     QDockWidget::resizeEvent(event);
