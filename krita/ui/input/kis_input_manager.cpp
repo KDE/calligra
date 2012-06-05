@@ -87,6 +87,19 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
     d->shortcuts.append(shortcut);
 
+    action = new KisRotateCanvasAction(this);
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
+    d->actions.append(action);
+    d->shortcuts.append(shortcut);
+
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+    d->shortcuts.append(shortcut);
+
     d->potentialShortcuts = d->shortcuts;
 }
 
