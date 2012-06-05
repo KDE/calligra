@@ -253,7 +253,6 @@ private:
     KoInlineNote *m_continuedNoteToNext;
     KoInlineNote *m_continuedNoteFromPrevious;
     int m_footNoteCountInDoc;
-    qreal m_maximumAllowedBottomForContinuedNote;
 
     bool m_acceptsPageBreak;
     bool m_virginPage;

@@ -21,6 +21,7 @@
 #include "FrameIterator.h"
 #include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
+#include "KoTextLayoutObstruction.h"
 
 #include <QPainter>
 
@@ -33,6 +34,7 @@ public:
     KoInlineNote *note;
     QTextLayout *textLayout;
     QTextLayout *postLayout;
+    KoTextLayoutObstruction *continuationObstruction;
     qreal labelIndent;
     bool isContinuedArea;
 };
@@ -132,6 +134,8 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         QTextLine contTextLine = d->postLayout->createLine();
         d->postLayout->endLayout();
         contTextLine.setPosition(QPointF(right() - contTextLine.naturalTextWidth(), bottom() - contTextLine.height()));
+
+        continuationObstruction = new KoTextLayoutObstruction(contTextLine.naturalTextRect(), false);
     }
     return contNotNeeded;
 }
