@@ -82,10 +82,10 @@ CellEditorDocker::CellEditorDocker()
 
     d->layout = new QGridLayout(w);
     d->layout->setObjectName(QLatin1String("CellToolOptionWidget::Layout"));
-    d->layout->addWidget(d->locationComboBox, 0, 0);
-    d->layout->addWidget(d->formulaButton, 0, 1);
-    d->layout->addWidget(d->applyButton, 0, 2);
-    d->layout->addWidget(d->cancelButton, 0, 3);
+    d->layout->addWidget(d->locationComboBox, 0, 0, Qt::AlignTop);
+    d->layout->addWidget(d->formulaButton, 0, 1, Qt::AlignTop);
+    d->layout->addWidget(d->applyButton, 0, 2, Qt::AlignTop);
+    d->layout->addWidget(d->cancelButton, 0, 3, Qt::AlignTop);
     d->layout->addWidget(d->editor, 0, 4);
     d->layout->setColumnStretch(4, 1);
 
