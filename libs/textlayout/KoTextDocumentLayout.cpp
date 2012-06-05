@@ -597,8 +597,6 @@ bool KoTextDocumentLayout::doLayout()
             return false; // Abort layouting to restart from the beginning.
         }
 
-        rootArea->setFootNoteCountInDoc(footNoteAutoCount);
-
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -622,8 +620,8 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             bool finished;
             FrameIterator *tmpPosition = 0;
-            footNoteAutoCount += rootArea->footNoteAutoCount();
             do {
+                rootArea->setFootNoteCountInDoc(footNoteAutoCount);
                 rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
@@ -683,6 +681,7 @@ bool KoTextDocumentLayout::doLayout()
         }
         transferedFootNoteCursor = rootArea->footNoteCursorToNext();
         transferedContinuedNote = rootArea->continuedNoteToNext();
+        footNoteAutoCount += rootArea->footNoteAutoCount();
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
@@ -697,8 +696,6 @@ bool KoTextDocumentLayout::doLayout()
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
-            rootArea->setFootNoteCountInDoc(footNoteAutoCount);
-
             d->rootAreaList.append(rootArea);
             QSizeF size = d->provider->suggestSize(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
@@ -709,8 +706,8 @@ bool KoTextDocumentLayout::doLayout()
 
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
-            footNoteAutoCount += rootArea->footNoteAutoCount();
             do {
+                rootArea->setFootNoteCountInDoc(footNoteAutoCount);
                 rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
@@ -752,6 +749,7 @@ bool KoTextDocumentLayout::doLayout()
         }
         transferedFootNoteCursor = rootArea->footNoteCursorToNext();
         transferedContinuedNote = rootArea->continuedNoteToNext();
+        footNoteAutoCount += rootArea->footNoteAutoCount();
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
