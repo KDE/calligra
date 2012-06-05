@@ -1749,7 +1749,7 @@ void KoTextLayoutArea::setFootNoteCountInDoc(int count)
     m_footNoteCountInDoc = count;
 }
 
-void KoTextLayoutArea::inheritFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note)
+void KoTextLayoutArea::setFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note)
 {
     m_footNoteCursorFromPrevious = footNoteCursor;
     m_continuedNoteFromPrevious = note;
@@ -1869,6 +1869,7 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
         } else {
             if (!(m_maximumAllowedBottomForContinuedNote>0.0)) {
                 m_maximumAllowedBottomForContinuedNote = m_maximalAllowedBottom - line.height();
+                m_footNoteCursorToNext = 0;
                 m_continuedNoteToNext = 0;
             } else {
                 m_continuedNoteToNext = note;

@@ -588,8 +588,8 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
-    FrameIterator *passFootNoteCursorToNext = 0;
-    KoInlineNote *passContinuedNoteToNext = 0;
+    FrameIterator *transferedFootNoteCursor = 0;
+    KoInlineNote *transferedContinuedNote = 0;
     int footNoteAutoCount = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
@@ -598,11 +598,6 @@ bool KoTextDocumentLayout::doLayout()
         }
 
         rootArea->setFootNoteCountInDoc(footNoteAutoCount);
-        if (passFootNoteCursorToNext) {
-            rootArea->inheritFootNoteFromPrevious(passFootNoteCursorToNext, passContinuedNoteToNext);
-            passFootNoteCursorToNext = 0;
-            passContinuedNoteToNext = 0;
-        }
 
         bool shouldLayout = false;
 
@@ -628,11 +623,8 @@ bool KoTextDocumentLayout::doLayout()
             bool finished;
             FrameIterator *tmpPosition = 0;
             footNoteAutoCount += rootArea->footNoteAutoCount();
-            if (rootArea->footNoteCursorToNext()) {
-                passFootNoteCursorToNext = rootArea->footNoteCursorToNext();
-                passContinuedNoteToNext = rootArea->continuedNoteToNext();
-            }
             do {
+                rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -643,12 +635,14 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
-                foreach (KoTextAnchor *anchor, d->textAnchors) {
-                    if (!d->foundAnchors.contains(anchor)) {
-                        d->anchoredObstructions.remove(anchor->shape());
-                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
-                    }
+
+            foreach (KoTextAnchor *anchor, d->textAnchors) {
+                if (!d->foundAnchors.contains(anchor)) {
+                    d->anchoredObstructions.remove(anchor->shape());
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                 }
+            }
+
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -661,7 +655,7 @@ bool KoTextDocumentLayout::doLayout()
             d->provider->doPostLayout(rootArea, false);
             updateProgress(rootArea->startTextFrameIterator());
 
-            if (finished && !passFootNoteCursorToNext) {
+            if (finished && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
@@ -687,11 +681,14 @@ bool KoTextDocumentLayout::doLayout()
                 return true; // Finished layouting
             }
         }
+        transferedFootNoteCursor = rootArea->footNoteCursorToNext();
+        transferedContinuedNote = rootArea->continuedNoteToNext();
+
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
     }
 
-    while (passFootNoteCursorToNext || d->layoutPosition->it != document()->rootFrame()->end()) {
+    while (transferedFootNoteCursor || d->layoutPosition->it != document()->rootFrame()->end()) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
@@ -701,11 +698,6 @@ bool KoTextDocumentLayout::doLayout()
 
         if (rootArea) {
             rootArea->setFootNoteCountInDoc(footNoteAutoCount);
-            if (passFootNoteCursorToNext) {
-                rootArea->inheritFootNoteFromPrevious(passFootNoteCursorToNext, passContinuedNoteToNext);
-                passFootNoteCursorToNext = 0;
-                passContinuedNoteToNext = 0;
-            }
 
             d->rootAreaList.append(rootArea);
             QSizeF size = d->provider->suggestSize(rootArea);
@@ -718,11 +710,8 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
             footNoteAutoCount += rootArea->footNoteAutoCount();
-            if (rootArea->footNoteCursorToNext()) {
-                passFootNoteCursorToNext = rootArea->footNoteCursorToNext();
-                passContinuedNoteToNext = rootArea->continuedNoteToNext();
-            }
             do {
+                rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -733,12 +722,14 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
-                foreach (KoTextAnchor *anchor, d->textAnchors) {
-                    if (!d->foundAnchors.contains(anchor)) {
-                        d->anchoredObstructions.remove(anchor->shape());
-                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
-                    }
+
+            foreach (KoTextAnchor *anchor, d->textAnchors) {
+                if (!d->foundAnchors.contains(anchor)) {
+                    d->anchoredObstructions.remove(anchor->shape());
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                 }
+            }
+
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -759,6 +750,9 @@ bool KoTextDocumentLayout::doLayout()
         } else {
             break; // with no more space there is nothing else we can do
         }
+        transferedFootNoteCursor = rootArea->footNoteCursorToNext();
+        transferedContinuedNote = rootArea->continuedNoteToNext();
+
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
     }

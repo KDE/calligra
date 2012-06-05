@@ -119,7 +119,7 @@ public:
 
     void setFootNoteCountInDoc(int count);
 
-    void inheritFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note);
+    void setFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note);
 
     /// Sets the maximum allowed width before wrapping text.
     /// Setting this also indicates that we don't want wrapping.
