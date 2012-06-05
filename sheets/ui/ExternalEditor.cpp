@@ -92,6 +92,7 @@ QSize ExternalEditor::sizeHint() const
 
 void ExternalEditor::setCellTool(CellToolBase* cellTool)
 {
+    if (d->highlighter) delete d->highlighter;
     d->cellTool = cellTool;
     d->highlighter = new FormulaEditorHighlighter(this, cellTool->selection());
 }
