@@ -30,6 +30,7 @@ class KoBookmark;
 class QTextDocument;
 class QTexttable;
 class KoInlineTextObjectManager;
+class KoInlineNote;
 
 class TEXTLAYOUT_EXPORT KoPointedAt
 {
@@ -47,13 +48,15 @@ public:
     int position;
     KoBookmark *bookmark;
     QString externalHRef;
+    KoInlineNote *note;
+    QTextTable *table;
     TableHit tableHit;
     int tableRowDivider;
     int tableColumnDivider;
     qreal tableLeadSize;
     qreal tableTrailSize;
     QPointF tableDividerPos;
-    QTextTable *table;
+
 };
 
 #endif

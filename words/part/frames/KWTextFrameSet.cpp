@@ -63,25 +63,6 @@ KWTextFrameSet::~KWTextFrameSet()
 {
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
     delete m_rootAreaProvider;
-#if 0
-    // first remove the doc from all our frames so they won't try to use it after we delete it.
-    if (!m_frames.isEmpty()) {
-        // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
-        QList<KWFrame*>::Iterator iter = m_frames.end();
-        --iter;
-        do {
-            // try to find a frame that already has layout data to take ownership of the doc.
-            KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames.last()->shape()->userData());
-            if (tsd) {
-                tsd->setDocument(m_document);
-                m_document = 0;
-                break;
-            }
-            --iter;
-        } while (iter != m_frames.begin());
-        // if no frames have a KoTextShapeData, its save to delete m_document.
-    }
-#endif
     delete m_document;
 }
 
@@ -129,20 +110,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // The QTexDocument is shared between the shapes and we are the owner.
     data->setDocument(m_document, false);
 
-#if 0
-    m_frameOrderDirty = true;
-    data->setDocument(m_document, false);
-    data->setEndPosition(-1);
-    data->foul();
-    if (m_allowLayoutRequests) {
-        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-        if (lay) {
-            lay->scheduleLayout();
-            emit lay->shapeAdded(frame->shape());
-        }
-    }
-    connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
-#endif
 #ifndef QT_NO_DEBUG // these checks are just sanity checks in development mode
     KoTextDocument doc(m_document);
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
@@ -176,7 +143,7 @@ void KWTextFrameSet::setupDocument()
     m_document->setDocumentLayout(lay);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
-    
+
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
@@ -194,80 +161,3 @@ const KWPageStyle& KWTextFrameSet::pageStyle() const
 {
     return m_pageStyle;
 }
-
-#if 0
-// static   returns true if frame1 comes before frame2
-bool KWTextFrameSet::sortTextFrames(const KWFrame *f1, const KWFrame *f2)
-{
-    if (!f1 && f2) // copy always come after textframe
-        return false;
-    if (f1 && !f2) // copy always come after textframe
-        return true;
-    if (f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
-        return f1->sortingId() < f2->sortingId();
-    }
-#if 1
-    // use a more performant way of sorting the frames
-    QPointF tl1 = frame1->shape()->absolutePosition(KoFlake::TopLeftCorner);
-    QPointF tl2 = frame2->shape()->absolutePosition(KoFlake::TopLeftCorner);
-
-    if (tl1.y() == tl2.y()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
-        bool rtl = false; // right-to-left
-        if (tfs && tfs->pageManager()) { // check per page.
-            KWPage page1 = tfs->pageManager()->page(frame1->shape());
-            if (page1.isValid()) {
-                rtl = page1.directionHint() == KoText::RightLeftTopBottom;
-            }
-        }
-
-        if (rtl) {
-            QPointF br1 = frame1->shape()->absolutePosition(KoFlake::BottomRightCorner);
-            QPointF br2 = frame2->shape()->absolutePosition(KoFlake::BottomRightCorner);
-            return br2.x() < br1.x();
-        }
-        return tl1.x() < tl2.x();
-    }
-    return tl1.y() < tl2.y();
-#else
-    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
-    bool rtl = false; // right-to-left
-    if (tfs && tfs->pageManager()) { // check per page.
-        KWPage page1 = tfs->pageManager()->page(frame1->shape());
-        KWPage page2 = tfs->pageManager()->page(frame2->shape());
-        if (page1 != page2 && page1.isValid() && page2.isValid())
-            return page1.pageNumber() < page2.pageNumber();
-
-        // both on same page
-        if (page1.isValid())
-            rtl = page1.directionHint() == KoText::RightLeftTopBottom;
-    }
-    QRectF boundsF1 = frame1->shape()->boundingRect();
-    QRectF boundsF2 = frame2->shape()->boundingRect();
-    //kDebug(32001) << "boundsF1:" << boundsF1 << "boundsF2:" << boundsF2;
-
-    // support frame stacking.
-    if (boundsF1.bottom() < boundsF2.top() && boundsF1.left() > boundsF2.right())
-        return true;
-    if (boundsF1.top() > boundsF2.bottom() && boundsF1.right() < boundsF2.left())
-        return false;
-
-    QPointF posF1 = frame1->shape()->absolutePosition();
-    if (posF1.x() > boundsF2.right())
-        return rtl;
-    if (posF1.x() < boundsF2.left())
-        return !rtl;
-
-    // check the Y position. Y is greater only when it is below the second frame.
-    if (posF1.y() > boundsF2.bottom())
-        return false;
-    if (posF1.y() < boundsF2.top())
-        return true;
-
-    // my center lies inside frame2. Lets check the topleft pos.
-    if (frame1->shape()->boundingRect().top() > boundsF2.top())
-        return false;
-#endif
-    return true;
-}
-#endif

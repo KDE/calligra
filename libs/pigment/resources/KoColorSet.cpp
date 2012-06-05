@@ -44,7 +44,8 @@ KoColorSet::KoColorSet()
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-        : KoResource("")
+        : QObject(0)
+        , KoResource("")
 {
     setFilename(rhs.filename());
     m_ownData = false;
@@ -102,6 +103,7 @@ qint32 KoColorSet::nColors()
 
 bool KoColorSet::init()
 {
+    m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 

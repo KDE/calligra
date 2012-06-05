@@ -29,8 +29,8 @@
 
 #include <KoPACanvasItem.h>
 
-FlowDocument::FlowDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
-  : KoPADocument(parentWidget, parent, singleViewMode)
+FlowDocument::FlowDocument(QObject* parent)
+  : KoPADocument(parent)
 {
     setComponentData(FlowFactory::componentData(), false);
     setTemplateType("flow_template");

@@ -1765,19 +1765,26 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     }
     else {
         out.startElement("text:list-level-style-bullet");
-        if (m_bulletChar == UNUSED) {
-            out.addAttribute("text:bullet-char", "");
+        if (m_bulletChar.length() != 1) {
+            // TODO: if there is no bullet char this should not be
+            // saved as list but as normal paragraph. Both LO and MSO
+            // do export it just as paragraph and no list until there
+            // is a fix available that change that we use a Zero Width
+            // Space to not generate invalid xml
+            out.addAttribute("text:bullet-char", QChar(0x200B));
         } else {
             out.addAttribute("text:bullet-char", m_bulletChar);
         }
     }
     out.addAttribute("text:level", m_level);
+
     //---------------------------------------------
     // text-properties
     //---------------------------------------------
-
-    //NOTE: Setting a num. of text-properties to default values if not provided
-    //for the list style to maintain compatibility with both ODF and MSOffice.
+    //
+    // NOTE: Setting a num. of text-properties to default values if
+    // not provided for the list style to maintain compatibility with
+    // both ODF and MSOffice.
 
     QString bulletSize;
     if (m_bulletRelativeSize != UNUSED) {
@@ -1788,10 +1795,9 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         bulletSize = "100%";
     }
 
-    if (currentFilter == Utils::DocxFilter) {
-
-        //MSWord: A label does NOT inherit Underline from text-properties of
-        //the paragraph style.  A bullet does not inherit {Italics, Bold}.
+    // MSWord: A label does NOT inherit Underline from text-properties
+    // of the paragraph style.  A bullet does not inherit {Italics, Bold}.
+    if (currentFilter == Utils::DocxFilter && m_type != ParagraphBulletProperties::PictureType) {
         if (m_type != ParagraphBulletProperties::NumberType) {
             if ((m_textStyle.property("fo:font-style")).isEmpty()) {
                 m_textStyle.addProperty("fo:font-style", "normal");
@@ -1803,16 +1809,12 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         if ((m_textStyle.property("style:text-underline-style")).isEmpty()) {
             m_textStyle.addProperty("style:text-underline-style", "none");
         }
-
         //fo:font-size
-        if (m_type != ParagraphBulletProperties::PictureType) {
-            if ((m_textStyle.property("fo:font-size")).isEmpty()) {
-                m_textStyle.addProperty("fo:font-size", bulletSize);
-            }
+        if ((m_textStyle.property("fo:font-size")).isEmpty()) {
+            m_textStyle.addProperty("fo:font-size", bulletSize);
         }
         out.addAttribute("text:style-name", mainStyles.insert(m_textStyle, "T"));
     }
-
     //---------------------------------------------
     // list-level-properties
     //---------------------------------------------
@@ -1928,14 +1930,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
     }
     out.endElement(); //style:list-level-label-alignment
     out.endElement(); //style:list-level-properties
-    if (currentFilter != Utils::DocxFilter) {
+    if (currentFilter != Utils::DocxFilter && m_type != ParagraphBulletProperties::PictureType) {
         out.startElement("style:text-properties");
         if (m_bulletColor != UNUSED) {
             out.addAttribute("fo:color", m_bulletColor);
         }
-        if (m_type != ParagraphBulletProperties::PictureType) {
-            out.addAttribute("fo:font-size", bulletSize);
-        }
+        out.addAttribute("fo:font-size", bulletSize);
+
         //MSPowerPoint: UI does not enable to change font of a numbered lists.
         if (m_bulletFont != UNUSED) {
             if ((currentFilter != Utils::PptxFilter) || (m_type == ParagraphBulletProperties::BulletType)) {

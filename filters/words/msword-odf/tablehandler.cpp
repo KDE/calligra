@@ -278,9 +278,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
-
-    qreal rowHeightPt = Conversion::twipsToPt(qAbs(tap->dyaRowHeight));         // convert twips to Pts
-    QString rowHeightString = QString::number(rowHeightPt).append("pt");        // make height string from number
+    QString rowHeightString = QString::number(twipsToPt(qAbs(tap->dyaRowHeight)), 'f').append("pt");
 
     if (tap->dyaRowHeight > 0) {
         rowStyle.addProperty("style:min-row-height", rowHeightString);
@@ -289,7 +287,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     }
 
     if (tap->fCantSplit) {
-        rowStyle.addProperty("style:keep-together", "always");
+        rowStyle.addProperty("fo:keep-together", "always");
     }
 
     QString rowStyleName = m_mainStyles->insert(rowStyle, QLatin1String("row"));

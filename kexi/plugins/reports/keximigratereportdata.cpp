@@ -64,7 +64,7 @@ KexiMigrateReportData::~KexiMigrateReportData()
     }
 }
 
-uint KexiMigrateReportData::fieldNumber(const QString &fld) const
+int KexiMigrateReportData::fieldNumber(const QString &fld) const
 {
     KexiDB::QueryColumnInfo::Vector flds;
 

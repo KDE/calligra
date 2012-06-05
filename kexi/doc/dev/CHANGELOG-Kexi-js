@@ -151,6 +151,13 @@ Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
+KexiDB
+*put DESC/ASC after COLLATE section, not before (needed at least for sqlite driver)
+*fixed crash because of invalid deletion order of query structures
+*fixed crash because of invalid deletion relationship structures
+BUG:298197
+
 ~~~~~~~~~~~~~~~~ 2.4.1 ~~~~~~~~~~~~~~~~
 
 Tables

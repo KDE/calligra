@@ -43,7 +43,7 @@ public:
 
     virtual ~KexiMigrateReportData();
 
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QStringList fieldNames() const;
 
     virtual QVariant value(unsigned int) const;

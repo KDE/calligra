@@ -122,8 +122,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     setTextDirection(pageStyle.direction());
 #endif
 
-    distributeUnit(m_document->unit());
-    connect(this, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(distributeUnit(const KoUnit&)));
+    onDocumentUnitChange(m_document->unit());
+    connect(m_document, SIGNAL(unitChanged(KoUnit)), SLOT(onDocumentUnitChange(KoUnit)));
+    connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
 }
 
 KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
@@ -174,11 +175,15 @@ void KWPageSettingsDialog::slotApplyClicked()
     m_document->firePageSetupChanged();
 }
 
-void KWPageSettingsDialog::distributeUnit(const KoUnit &unit)
+void KWPageSettingsDialog::setDocumentUnit(const KoUnit &unit)
+{
+    m_document->setUnit(unit);
+}
+
+void KWPageSettingsDialog::onDocumentUnitChange(const KoUnit &unit)
 {
     setUnit(unit);
     m_columns->setUnit(unit);
-    m_document->setUnit(unit);
 }
 
 void KWPageSettingsDialog::reloadPageStyles()

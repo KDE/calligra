@@ -71,7 +71,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
     QToolButton *delRow = new QToolButton(m_contentsPageItem->widget());
-    delRow->setIconSet(KIcon("edit_remove"));
+    delRow->setIconSet(KIcon("list-remove"));
     delRow->setTextLabel(i18n("&Remove Item"), true);
     vlayout->addWidget(delRow);
     m_buttons.insert(BRemRow, delRow);
@@ -133,14 +133,14 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     // Setup the icon toolbar //////////
     Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);
     QToolButton *add = new QToolButton(m_columnsPageItem->widget());
-    add->setIconSet(KIcon("edit_add"));
+    add->setIconSet(KIcon("list-add"));
     add->setTextLabel(i18n("&Add Item"), true);
     vbox->addWidget(add);
     m_buttons.insert(BColAdd, add);
     connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
     QToolButton *remove = new QToolButton(m_columnsPageItem->widget());
-    remove->setIconSet(KIcon("edit_remove"));
+    remove->setIconSet(KIcon("list-remove"));
     remove->setTextLabel(i18n("&Remove Item"), true);
     vbox->addWidget(remove);
     m_buttons.insert(BColRem, remove);

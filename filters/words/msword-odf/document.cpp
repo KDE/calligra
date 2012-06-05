@@ -32,6 +32,7 @@
 //#include "versionmagic.h"
 #include "mswordodfimport.h"
 #include "msodraw.h"
+#include "msoleps.h"
 #include "msdoc.h"
 
 #include <KoUnit.h>
@@ -60,7 +61,7 @@ Document::Document(const std::string& fileName,
 //                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new WordsReplacementHandler)
@@ -87,6 +88,7 @@ Document::Document(const std::string& fileName,
         , m_wdstm(wordDocument)
         , m_tblstm(0)
         , m_datastm(data)
+        , m_sistm(si)
         , m_tblstm_pole(table)
 {
     kDebug(30513);
@@ -271,37 +273,117 @@ void Document::finishDocument()
 void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
+
+    MSO::SummaryInformationPropertySetStream *si = 0;
+    if (m_sistm) {
+        si = new MSO::SummaryInformationPropertySetStream();
+        try {
+            parseSummaryInformationPropertySetStream(*m_sistm, *si);
+        } catch (const IOException &e) {
+            kError(30513) << e.msg;
+        } catch (...) {
+            kWarning(30513) << "Warning: Caught an unknown exception!";
+        }
+    }
+
+    QString title;
+    QString subject;
+    QString keywords;
+    QString author;
+    QString lastRevBy;
+    QString comments;
+    QString *p_str = 0;
+
+    if (si) {
+        MSO::PropertySet &ps = si->propertySet.propertySet1;
+
+        for (uint i = 0; i < ps.numProperties; i++) {
+            switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+            case PIDSI_TITLE:
+                p_str = &title;
+                break;
+            case PIDSI_SUBJECT:
+                p_str = &subject;
+                break;
+            case PIDSI_AUTHOR:
+                p_str = &author;
+                break;
+            case PIDSI_KEYWORDS:
+                p_str = &keywords;
+                break;
+            case PIDSI_COMMENTS:
+                p_str = &comments;
+                break;
+            case PIDSI_LASTAUTHOR:
+                p_str = &lastRevBy;
+                break;
+            default:
+                break;
+            }
+            if (p_str) {
+                if (ps.property.at(i).vt_lpstr) {
+                    *p_str = ps.property.at(i).vt_lpstr->characters;
+                }
+                p_str = 0;
+            }
+        }
+    }
+
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
-    if (!strings.author().isNull()) {
-        m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextNode(Conversion::string(strings.author()));
-        m_metaWriter->endElement();
+    if (title.isEmpty() && !strings.title().isEmpty()) {
+        title = Conversion::string(strings.title());
     }
-    if (!strings.title().isNull()) {
+    if (subject.isEmpty() && !strings.subject().isEmpty()) {
+        subject = Conversion::string(strings.subject());
+    }
+    if (author.isEmpty() && !strings.author().isEmpty()) {
+        author = Conversion::string(strings.author() );
+    }
+    if (keywords.isEmpty() && !strings.keywords().isEmpty()) {
+        keywords = Conversion::string(strings.keywords());
+    }
+    //NOTE: According to the Word6/Word8 spec. SttbfAssoc does contain
+    //comments.  However it's not reproducible in MSOffice2000.
+    if (comments.isEmpty() && !strings.comments().isEmpty()) {
+        comments = Conversion::string(strings.comments());
+    }
+    if (lastRevBy.isEmpty() && !strings.lastRevBy().isEmpty()) {
+        lastRevBy = Conversion::string(strings.lastRevBy() );
+    }
+
+    if (!title.isEmpty()) {
         m_metaWriter->startElement("dc:title");
-        kDebug(30513) << "TITLE: " << Conversion::string(strings.title());
-        m_metaWriter->addTextNode(Conversion::string(strings.title()));
+        m_metaWriter->addTextNode(title);
         m_metaWriter->endElement();
     }
-    if (!strings.subject().isNull()) {
+    if (!subject.isEmpty()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(subject);
         m_metaWriter->endElement();
     }
-    if (!strings.lastRevBy().isNull()) {
-        m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
+    if (!author.isEmpty()) {
+        m_metaWriter->startElement("meta:initial-creator");
+        m_metaWriter->addTextNode(author);
         m_metaWriter->endElement();
     }
-    if (!strings.keywords().isNull()) {
+    if (!keywords.isEmpty()) {
         m_metaWriter->startElement("meta:keyword");
-        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
+        m_metaWriter->addTextNode(keywords);
         m_metaWriter->endElement();
     }
-    if (!strings.comments().isNull()) {
-        m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
+    if (!comments.isEmpty()) {
+        m_metaWriter->startElement("dc:description");
+        m_metaWriter->addTextNode(comments);
         m_metaWriter->endElement();
+    }
+    if (!lastRevBy.isEmpty()) {
+        m_metaWriter->startElement("dc:creator");
+        m_metaWriter->addTextNode(lastRevBy);
+        m_metaWriter->endElement();
+    }
+
+    if (si) {
+        delete si;
     }
 }
 
@@ -1090,7 +1172,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 #if 0
         qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
         if (headerMarginTop > 0) {
-            header.append(QString::number(headerMarginTop / 20.0));
+            header.append(QString::number(headerMarginTop / 20.0, 'f'));
         } else
 #endif
             header.append("0");
@@ -1114,7 +1196,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         footer.append(" fo:margin-top=\"");
         qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
         if (headerMarginBottom >= 400) {
-            footer.append(QString::number(headerMarginBottom / 20.0));
+            footer.append(QString::number(headerMarginBottom / 20.0, 'f'));
         } else {
             footer.append("14");
         }

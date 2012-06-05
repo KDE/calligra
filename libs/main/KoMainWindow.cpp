@@ -34,6 +34,7 @@
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
+#include "KoServiceProvider.h"
 
 #include <KoPageLayoutWidget.h>
 
@@ -67,6 +68,7 @@
 #include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
+#include <kmenubar.h>
 
 //   // qt includes
 #include <QDockWidget>
@@ -209,7 +211,7 @@ public:
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
-    QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+    QByteArray m_dockerStateBeforeHiding;
 
     QCloseEvent *deferredClosingEvent;
 
@@ -400,10 +402,8 @@ KoMainWindow::~KoMainWindow()
     }
 
     // We have to check if this was a root document.
-    // -> We aren't allowed to delete the (embedded) document!
     // This has to be checked from queryClose, too :)
-    if (d->rootDoc && d->rootDoc->viewCount() == 0 &&
-            !d->rootDoc->isEmbedded()) {
+    if (d->rootDoc && d->rootDoc->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDoc;
     }
@@ -566,7 +566,7 @@ void KoMainWindow::reloadRecentFileList()
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     QString errorMsg;
     return entry.createDoc(&errorMsg);
 }
@@ -640,10 +640,7 @@ bool KoMainWindow::openDocument(const KUrl & url)
 bool KoMainWindow::openDocument(KoDocument *newdoc, const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        if (!newdoc->checkAutoSaveFile()) {
-            newdoc->initEmpty(); //create an emtpy document
-        }
-
+        newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc);
         newdoc->setUrl(url);
         QString mime = KMimeType::findByUrl(url)->name();
@@ -694,7 +691,7 @@ void KoMainWindow::slotLoadCompleted()
     KoDocument* doc = rootDocument();
     KoDocument* newdoc = (KoDocument *)(sender());
 
-    if (doc && doc->isEmpty() && !doc->isEmbedded()) {
+    if (doc && doc->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
     } else if (doc && !doc->isEmpty()) {
@@ -752,7 +749,11 @@ void KoMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
-    if (!rootDocument()->wantExportConfirmation()) return true;
+    KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName());
+    if (!group.readEntry("WantExportConfirmation", true)) {
+        return true;
+    }
+
     KMimeType::Ptr mime = KMimeType::mimeType(outputFormat);
     QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(outputFormat));
 
@@ -1055,11 +1056,12 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
             // The open pane is visible
             d->docToOpen->deleteOpenPane(true);
         }
-        // Reshow the docker that were temporarely hidden before saving settings
-        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
-            dw->show();
+        if (!d->m_dockerStateBeforeHiding.isEmpty()) {
+            restoreState(d->m_dockerStateBeforeHiding);
         }
-        d->hiddenDockwidgets.clear();
+        statusBar()->setVisible(true);
+        menuBar()->setVisible(true);
+
         saveWindowSettings();
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
@@ -1122,10 +1124,6 @@ bool KoMainWindow::queryClose()
     //               << " shellcount=" << rootDocument()->shellCount() << endl;
     if (!d->forQuit && rootDocument()->shellCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
-        return true;
-
-    // see DTOR for a descr. of the test
-    if (d->rootDoc->isEmbedded())
         return true;
 
     // main doc + internally stored child documents
@@ -1217,9 +1215,9 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption(i18n("Import Document"));
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                    KoFilterManager::Import,
-                                   KoDocument::readExtraNativeMimeTypes());
+                                   KoServiceProvider::readExtraNativeMimeTypes());
     dialog->setMimeFilter(mimeFilter);
     if (dialog->exec() != QDialog::Accepted) {
         delete dialog;
@@ -1436,6 +1434,9 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     KoPrintJob *printJob = rootView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
+    if (isHidden()) {
+        printJob->setProperty("noprogressdialog", true);
+    }
 
     d->applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.
@@ -1947,25 +1948,22 @@ KoDockerManager * KoMainWindow::dockerManager() const
     return d->dockerManager;
 }
 
-void KoMainWindow::toggleDockersVisibility(bool v) const
+void KoMainWindow::toggleDockersVisibility(bool visible)
 {
-    Q_UNUSED(v);
-    if (d->hiddenDockwidgets.isEmpty()){
+    if (!visible) {
+        d->m_dockerStateBeforeHiding = saveState();
+
         foreach(QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
                 if (dw->isVisible()) {
                     dw->hide();
-                    d->hiddenDockwidgets << dw;
                 }
             }
         }
     }
     else {
-        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
-            dw->show();
-        }
-        d->hiddenDockwidgets.clear();
+        restoreState(d->m_dockerStateBeforeHiding);
     }
 }
 
