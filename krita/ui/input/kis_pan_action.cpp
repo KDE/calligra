@@ -20,6 +20,7 @@
 
 #include <QDebug>
 #include <QMouseEvent>
+#include <QApplication>
 
 #include "kis_input_manager.h"
 #include <kis_canvas2.h>
@@ -28,7 +29,7 @@
 class KisPanAction::Private
 {
 public:
-    QPoint lastMousePosition;
+    QPointF lastMousePosition;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -43,11 +44,13 @@ KisPanAction::~KisPanAction()
 
 void KisPanAction::begin()
 {
-    d->lastMousePosition = m_inputManager->mousePosition();
+    d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+    QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }
 
 void KisPanAction::end()
 {
+    QApplication::restoreOverrideCursor();
 }
 
 void KisPanAction::inputEvent(QEvent *event)
@@ -55,11 +58,12 @@ void KisPanAction::inputEvent(QEvent *event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         if(mevent->buttons()) {
-            const KisCoordinatesConverter *conv = m_inputManager->canvas()->coordinatesConverter();
-            QPoint docMousePosition = conv->viewToDocument(mevent->posF()).toPoint();
-            QPoint relMovement = -(docMousePosition - d->lastMousePosition);
-            m_inputManager->canvas()->canvasController()->pan(relMovement);
-            d->lastMousePosition = docMousePosition;
+            QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
+            m_inputManager->canvas()->canvasController()->pan(relMovement.toPoint());
+            d->lastMousePosition = mevent->posF();
+            QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
+        } else {
+            QApplication::changeOverrideCursor(Qt::OpenHandCursor);
         }
     }
 }
