@@ -1223,7 +1223,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
-        runAroundHelper.setObstructions(documentLayout()->currentObstructions());
+        QList<KoTextLayoutObstruction *> currentObstructions = documentLayout()->currentObstructions();
+        if () {
+            currentObstructions.append(->continuationObstruction);
+        }
+        runAroundHelper.setObstructions(currentObstructions);
         QRectF anchoringRect = m_blockRects.last();
 //        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
         anchoringRect.setTop(m_anchoringParagraphTop);
@@ -1861,8 +1865,6 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
             m_continuedNoteToNext = 0;
         } else {
             m_continuedNoteToNext = note;
-            QList<KoTextLayoutObstruction *> currentObstructions = documentLayout()->currentObstructions();
-            currentObstructions.append(footNoteArea->continuationObstruction);
         }
         m_preregisteredFootNotesHeight += footNoteArea->bottom();
         m_preregisteredFootNoteAreas.append(footNoteArea);
