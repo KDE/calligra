@@ -88,14 +88,14 @@ QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEff
 
             switch (m_blendMode) {
             case Normal:
-                dr = (1.0 - da) * sr + dr;
-                dg = (1.0 - da) * sg + dg;
-                db = (1.0 - da) * sb + db;
+                dr = (qreal(1.0) - da) * sr + dr;
+                dg = (qreal(1.0) - da) * sg + dg;
+                db = (qreal(1.0) - da) * sb + db;
                 break;
             case Multiply:
-                dr = (1.0 - da) * sr + (1.0 - sa) * dr + dr * sr;
-                dg = (1.0 - da) * sg + (1.0 - sa) * dg + dg * sg;
-                db = (1.0 - da) * sb + (1.0 - sa) * db + db * sb;
+                dr = (qreal(1.0) - da) * sr + (qreal(1.0) - sa) * dr + dr * sr;
+                dg = (qreal(1.0) - da) * sg + (qreal(1.0) - sa) * dg + dg * sg;
+                db = (qreal(1.0) - da) * sb + (qreal(1.0) - sa) * db + db * sb;
                 break;
             case Screen:
                 dr = sr + dr - dr * sr;
@@ -103,22 +103,22 @@ QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEff
                 db = sb + db - db * sb;
                 break;
             case Darken:
-                dr = qMin((1.0 - da) * sr + dr, (1.0 - sa) * dr + sr);
-                dg = qMin((1.0 - da) * sg + dg, (1.0 - sa) * dg + sg);
-                db = qMin((1.0 - da) * sb + db, (1.0 - sa) * db + sb);
+                dr = qMin((qreal(1.0) - da) * sr + dr, (qreal(1.0) - sa) * dr + sr);
+                dg = qMin((qreal(1.0) - da) * sg + dg, (qreal(1.0) - sa) * dg + sg);
+                db = qMin((qreal(1.0) - da) * sb + db, (qreal(1.0) - sa) * db + sb);
                 break;
             case Lighten:
-                dr = qMax((1.0 - da) * sr + dr, (1.0 - sa) * dr + sr);
-                dg = qMax((1.0 - da) * sg + dg, (1.0 - sa) * dg + sg);
-                db = qMax((1.0 - da) * sb + db, (1.0 - sa) * db + sb);
+                dr = qMax((qreal(1.0) - da) * sr + dr, (qreal(1.0) - sa) * dr + sr);
+                dg = qMax((qreal(1.0) - da) * sg + dg, (qreal(1.0) - sa) * dg + sg);
+                db = qMax((qreal(1.0) - da) * sb + db, (qreal(1.0) - sa) * db + sb);
                 break;
             }
-            da = 1.0 - (1.0 - da) * (1.0 - sa);
+            da = qreal(1.0) - (qreal(1.0) - da) * (qreal(1.0) - sa);
 
-            d = qRgba(static_cast<quint8>(qBound(0.0, dr * 255.0, 255.0)),
-                      static_cast<quint8>(qBound(0.0, dg * 255.0, 255.0)),
-                      static_cast<quint8>(qBound(0.0, db * 255.0, 255.0)),
-                      static_cast<quint8>(qBound(0.0, da * 255.0, 255.0)));
+            d = qRgba(static_cast<quint8>(qBound(qreal(0.0), dr * qreal(255.0), qreal(255.0))),
+                      static_cast<quint8>(qBound(qreal(0.0), dg * qreal(255.0), qreal(255.0))),
+                      static_cast<quint8>(qBound(qreal(0.0), db * qreal(255.0), qreal(255.0))),
+                      static_cast<quint8>(qBound(qreal(0.0), da * qreal(255.0), qreal(255.0))));
         }
     }
 

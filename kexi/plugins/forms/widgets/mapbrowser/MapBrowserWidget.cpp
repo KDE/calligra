@@ -19,7 +19,6 @@
 
 
 #include "MapBrowserWidget.h"
-#include <MarbleWidget.h>
 #include <QPointF>
 #include <KDebug>
 
