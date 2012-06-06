@@ -27,6 +27,7 @@ public:
     virtual ~KisRijnCanvas();
     KisPainter* painter();
     KisImageWSP image();
+    void        update();
 private:
     KisImageWSP       m_image;
     KisPaintDeviceSP  m_paintDevice;

@@ -40,3 +40,9 @@ KisPainter* KisRijnCanvas::painter()
 {
     return m_painter;
 }
+
+void KisRijnCanvas::update()
+{
+    m_paintDevice->setDirty(m_painter->takeDirtyRegion());
+}
+

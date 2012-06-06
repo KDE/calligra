@@ -51,17 +51,23 @@ namespace {
 
 float KisRijnBrush::drawPoint(OpenRijn::AbstractCanvas* _canvas, const OpenRijn::DrawingPoint& _point)
 {
-    return setupPainter(_canvas)->paintAt(odp2kpi(_point));
+    float di = setupPainter(_canvas)->paintAt(odp2kpi(_point));
+    static_cast<KisRijnCanvas*>(_canvas)->update();
+    return di;
 }
 
 OpenRijn::DistanceInformation KisRijnBrush::drawLine(OpenRijn::AbstractCanvas* _canvas, const OpenRijn::DrawingPoint& _pt1, const OpenRijn::DrawingPoint& _pt2, const OpenRijn::DistanceInformation& _information)
 {
-    return kdi2odi(setupPainter(_canvas)->paintLine(odp2kpi(_pt1), odp2kpi(_pt2), odi2kdi(_information)));
+    OpenRijn::DistanceInformation di = kdi2odi(setupPainter(_canvas)->paintLine(odp2kpi(_pt1), odp2kpi(_pt2), odi2kdi(_information)));
+    static_cast<KisRijnCanvas*>(_canvas)->update();
+    return di;
 }
 
 OpenRijn::DistanceInformation KisRijnBrush::drawCurve(OpenRijn::AbstractCanvas* _canvas, const OpenRijn::DrawingPoint& _pt1, float _x1, float _y1, float _x2, float _y2, const OpenRijn::DrawingPoint& _pt2, const OpenRijn::DistanceInformation& _information)
 {
-    return kdi2odi(setupPainter(_canvas)->paintBezierCurve(odp2kpi(_pt1), QPointF(_x1, _y1), QPointF(_x2, _y2), odp2kpi(_pt2), odi2kdi(_information)));
+    OpenRijn::DistanceInformation di = kdi2odi(setupPainter(_canvas)->paintBezierCurve(odp2kpi(_pt1), QPointF(_x1, _y1), QPointF(_x2, _y2), odp2kpi(_pt2), odi2kdi(_information)));
+    static_cast<KisRijnCanvas*>(_canvas)->update();
+    return di;
 }
 
 KisPainter* KisRijnBrush::setupPainter(OpenRijn::AbstractCanvas* _canvas)
