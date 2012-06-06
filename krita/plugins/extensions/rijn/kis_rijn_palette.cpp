@@ -17,6 +17,13 @@
 
 #include "kis_rijn_palette.h"
 
+#include <kis_image.h>
+#include <kis_paintop_preset.h>
+#include <kis_paintop_settings.h>
+#include <kis_paintop_registry.h>
+
+#include "kis_rijn_brush.h"
+
 KisRijnPalette::KisRijnPalette()
 {
 
@@ -24,6 +31,10 @@ KisRijnPalette::KisRijnPalette()
 
 OpenRijn::AbstractBrush* KisRijnPalette::createCircleBrush(float _size, float _hardness) const
 {
-    return 0;
+    KisPaintOpPresetSP    preset    = KisPaintOpRegistry::instance()->defaultPreset(KoID("paintbrush"), 0);
+    QString brush_definition_template = "<Brush type=\"auto_brush\" randomness=\"0\" density=\"1\" BrushVersion=\"2\" spacing=\"0.1\" angle=\"0\"> <MaskGenerator ratio=\"1\" type=\"circle\" vfade=\"%1\" id=\"default\" spikes=\"2\" hfade=\"%2\" diameter=\"%3\"/> </Brush>";
+    preset->settings()->setProperty("brush_definition", brush_definition_template.arg(_hardness).arg(_hardness).arg(_size));
+    
+    return new KisRijnBrush(preset);
 }
 
