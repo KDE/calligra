@@ -21,7 +21,7 @@
 #ifndef MAPBROWSERWIDGET_H
 #define MAPBROWSERWIDGET_H
 
-#include <MarbleWidget.h>
+#include <marble/MarbleWidget.h>
 
 #include "widgetfactory.h"
 #include "container.h"
