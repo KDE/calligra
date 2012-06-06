@@ -9,7 +9,7 @@
    Copyright 2009-2010 Hugo Pereira Da Costa <hugo@oxygen-icons.org>
    Copyright 2008 Long Huynh Huu <long.upcase@googlemail.com>
    Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
-   Copyright 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright 2007 C. Boemann <cbo@boemann.dk>
    Copyright 2007 Fredrik Höglund <fredrik@kde.org>
 
    This library is free software; you can redistribute it and/or
