@@ -2,7 +2,7 @@
  * Copyright (C) 2006, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -108,27 +108,29 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     if (d->ownsDocument && document != d->document)
         delete d->document;
     d->ownsDocument = transferOwnership;
-    if (d->document == document)
-        return;
-    d->document = document;
+
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
-    if (! d->document->useDesignMetrics())
-        d->document->setUseDesignMetrics(true);
+    if (! document->useDesignMetrics())
+        document->setUseDesignMetrics(true);
 
-    if (d->document->isEmpty() && !d->document->firstBlock().blockFormat().hasProperty(KoParagraphStyle::StyleId)) { // apply app default style for first parag
-        KoTextDocument doc(d->document);
-        KoStyleManager *sm = doc.styleManager();
+    KoTextDocument kodoc(document);
+
+    if (document->isEmpty() && !document->firstBlock().blockFormat().hasProperty(KoParagraphStyle::StyleId)) { // apply app default style for first parag
+        KoStyleManager *sm = kodoc.styleManager();
         if (sm) {
             KoParagraphStyle *defaultStyle = sm->defaultParagraphStyle();
             if (defaultStyle) {
-                QTextBlock block = d->document->begin();
+                QTextBlock block = document->begin();
                 defaultStyle->applyStyle(block);
             }
         }
     }
 
-    KoTextDocument kodoc(d->document);
+    if (d->document == document)
+        return;
+    d->document = document;
+
     if (kodoc.textEditor() == 0)
         kodoc.setTextEditor(new KoTextEditor(d->document));
 }
