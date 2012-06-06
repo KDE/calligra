@@ -36,6 +36,8 @@ public:
     QTextLayout *postLayout;
     qreal labelIndent;
     bool isContinuedArea;
+    qreal labelWidth;
+    qreal labelHeight;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -114,6 +116,8 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         KoTextLayoutArea::setExtraTextIndent(-d->labelIndent);
     }
     d->labelIndent += pStyle.leftMargin();
+    d->labelWidth = line.naturalTextWidth();
+    d->labelHeight = line.naturalTextRect().bottom() - line.naturalTextRect().top();
 
     bool contNotNeeded = KoTextLayoutArea::layout(cursor);
 
@@ -147,4 +151,18 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 void KoTextLayoutNoteArea::setAsContinuedArea(bool isContinuedArea)
 {
     d->isContinuedArea = isContinuedArea;
+}
+
+KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
+{
+    KoPointedAt pointedAt;
+    pointedAt.noteReference = -1;
+    pointedAt = KoTextLayoutArea::hitTest(p, accuracy);
+    if (p.x() > left() && p.x() < d->labelWidth && p.y() < top() + d->labelHeight)
+    {
+        pointedAt.noteReference = d->note->getPosInDocument();
+        pointedAt.position = p.x();
+    }
+
+    return pointedAt;
 }

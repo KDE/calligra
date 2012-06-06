@@ -497,6 +497,8 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
             // start a new style
             buffer.setData(QByteArray());
             buffer.open(QIODevice::WriteOnly);
+            type = KoGenStyle::ParagraphAutoStyle;
+            hadPlainText = false;
         }
         break;
 
