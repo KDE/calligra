@@ -34,6 +34,7 @@ KisRijnStroke::KisRijnStroke(KisImageWSP _image, KisNodeSP _node, const OpenRijn
         m_source(_source)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
+    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
@@ -56,6 +57,7 @@ void KisRijnStroke::initStrokeCallback()
 
 void KisRijnStroke::doStrokeCallback(KisStrokeJobData* _data)
 {
+    Q_UNUSED(_data);
     if(!m_sketch.isCompiled()) return;
     dbgPlugins << "Run " << m_source.name().c_str();
     
@@ -70,6 +72,6 @@ void KisRijnStroke::doStrokeCallback(KisStrokeJobData* _data)
 
 void KisRijnStroke::finishStrokeCallback()
 {
-    m_transaction->commit(m_image->undoAdapter());
+    m_transaction->commit(m_image->postExecutionUndoAdapter());
     delete m_transaction;
 }
