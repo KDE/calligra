@@ -338,6 +338,8 @@ public slots:
     /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
 
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+
 public: // reimplementations
     // KoView interface
     virtual QWidget *canvas() const;

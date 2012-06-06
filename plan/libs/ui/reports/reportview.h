@@ -53,7 +53,8 @@ namespace KoProperty
 
 class KTabWidget;
 
-class QScrollArea;
+class QGraphicsView;
+class QGraphicsScene;
 class QDomElement;
 class QDockWidget;
 class QDomElement;
@@ -157,8 +158,9 @@ private:
     KoReportPreRenderer *m_preRenderer;
     KoReportRendererFactory m_factory;
     ORODocument *m_reportDocument;
-    QScrollArea *m_scrollArea;
-    KoReportPage *m_reportWidget;
+    QGraphicsView *m_reportView;
+    QGraphicsScene *m_reportScene;
+    KoReportPage *m_reportPage;
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;

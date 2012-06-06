@@ -17,7 +17,7 @@
  * Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005-2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
  * Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>

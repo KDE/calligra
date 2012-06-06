@@ -41,6 +41,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/KexiCommandLinkButton.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
 #include <kexi_global.h>
@@ -58,6 +59,9 @@
 #include "widgets/kexidbcombobox.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
+#include "widgets/kexidbcommandlinkbutton.h"
+#include "widgets/kexidbslider.h"
+#include "widgets/kexidbprogressbar.h"
 #ifndef KEXI_NO_SUBFORM
 # include "widgets/kexidbsubform.h"
 #endif
@@ -307,6 +311,41 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setInheritedClassName("KPushButton");
         addClass(wi);
     }
+    {
+        KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        wi->setClassName("KexiDBCommandLinkButton");
+        wi->setPixmap("button");
+        wi->setName(i18n("Link Button"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "linkButton"));
+        wi->setDescription(i18n("A Link button for executing actions"));
+        addClass(wi);
+    }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("slider");
+        wi->setClassName("KexiDBSlider");
+        wi->setName(i18n("Slider"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "slider"));
+        wi->setDescription(i18n("A Slider widget"));
+        addClass(wi);
+    }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("progress-bar");
+        wi->setClassName("KexiDBProgressBar");
+        wi->setName(i18n("Progress Bar"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
+        wi->setDescription(i18n("A Progress Bar widget"));
+        addClass(wi);
+    }
+
+    
 
     m_propDesc["formName"] = i18n("Form Name");
     m_propDesc["onClickAction"] = i18n("On Click");
@@ -413,6 +452,12 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
     else if (c == "KexiDBCheckBox")
         w = new KexiDBCheckBox(text, p);
+    else if (c == "KexiDBSlider") {
+        w = new KexiDBSlider(p);
+    } else if (c == "KexiDBProgressBar") {
+        w = new KexiDBProgressBar(p);
+    }
+
     else if (c == "KexiDBComboBox")
         w = new KexiDBComboBox(p);
     /* else if(c == "KexiDBTimeEdit")
@@ -427,6 +472,9 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 //  w = new KexiDBDoubleSpinBox(p, n);
     else if (c == "KPushButton" || c == "KexiPushButton")
         w = new KexiPushButton(text, p);
+    else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
+        w = new KexiDBCommandLinkButton(text, QString(), p);
+    }
 
     if (w)
         w->setObjectName(n);
@@ -517,6 +565,18 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         ed->setVerticalScrollBarPolicy(textedit->verticalScrollBarPolicy());
 #endif
         return true;
+    }
+    // KexiDBCommandLinkButton
+    else if (args.classname == "KexiDBCommandLinkButton" ){
+        KexiDBCommandLinkButton *linkButton=static_cast<KexiDBCommandLinkButton*>(args.widget);
+        QStyleOption option;
+        option.initFrom(linkButton);
+        args.text = linkButton->text();
+        const QRect r(linkButton->style()->subElementRect(
+                        QStyle::SE_PushButtonContents, &option, linkButton));
+        args.geometry = QRect(linkButton->x() + r.x(), linkButton->y() + r.y(), r.width(), r.height());
+        return true;
+        
     }
     else if (args.classname == "KexiDBLabel") {
         KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
@@ -632,7 +692,6 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 {
     //general
     bool ok = true;
-
     if (classname == "KexiPushButton") {
         ok = property != "isDragEnabled"
 #ifdef KEXI_NO_UNFINISHED
@@ -643,7 +702,21 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "stdItem" /*! @todo reenable stdItem */
 #endif
              ;
-    } else if (classname == "KexiDBLineEdit")
+     } else if (classname == "KexiDBCommandLinkButton") {
+        ok = property != "isDragEnabled"
+#ifdef KEXI_NO_UNFINISHED
+             && property != "onClickAction" /*! @todo reenable */
+             && property != "onClickActionOption" /*! @todo reenable */
+             && property != "iconSet" /*! @todo reenable */
+             && property != "iconSize" /*! @todo reenable */
+             && property != "stdItem" /*! @todo reenable stdItem */
+#endif
+             ;
+     } else if (classname == "KexiDBSlider") {
+        ok = property != "focusPolicy";
+     } else if (classname == "KexiDBProgressBar") {
+        ok = property != "focusPolicy";
+     } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"

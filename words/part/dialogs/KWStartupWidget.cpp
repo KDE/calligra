@@ -87,10 +87,6 @@ void KWStartupWidget::buttonClicked()
 {
     m_doc->initEmpty();
 
-    if (m_layout.leftMargin < 0) {
-        m_layout.width /= 2.0;
-        m_doc->pageManager()->setPreferPageSpread(true);
-    }
     KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
