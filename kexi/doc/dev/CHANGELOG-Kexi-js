@@ -151,7 +151,18 @@ Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+~~~~~~~~~~~~~~~~ 2.4.3 ~~~~~~~~~~~~~~~~
+
+2012-06-06
+KexiDB
+*Remove limits for Text data type, leave as option
+**By default there are no limits in Text data type
+BUG:301277
+TODO: Port to Predicate
+TODO(2.5): Save default hint for max length (strategy) in table metadata, in 2.4 "defined" strategy is always used
+
 ~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
+
 KexiDB
 *put DESC/ASC after COLLATE section, not before (needed at least for sqlite driver)
 *fixed crash because of invalid deletion order of query structures
