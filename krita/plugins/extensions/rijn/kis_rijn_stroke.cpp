@@ -19,13 +19,19 @@
 #include "kis_rijn_canvas.h"
 #include "kis_rijn_palette.h"
 #include <kis_gtl_lock.h>
+#include <kis_transaction.h>
+#include <kis_painter.h>
 
 #include <GTLCore/String.h>
 #include <GTLCore/CompilationMessages.h>
 
 #include <QDebug>
 
-KisRijnStroke::KisRijnStroke(const OpenRijn::Source& _source) : KisSimpleStrokeStrategy("rijn", _source.name().c_str()), m_source(_source)
+KisRijnStroke::KisRijnStroke(KisImageWSP _image, KisNodeSP _node, const OpenRijn::Source& _source)
+        : KisSimpleStrokeStrategy("rijn", _source.name().c_str()),
+        m_image(_image),
+        m_node(_node),
+        m_source(_source)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -44,19 +50,26 @@ void KisRijnStroke::initStrokeCallback()
     } else {
         dbgPlugins << "Compilation of " << m_source.name().c_str() << " has succeeded.";
     }
+    
+    m_transaction = new KisTransaction(name(), m_node->paintDevice());
 }
 
 void KisRijnStroke::doStrokeCallback(KisStrokeJobData* _data)
 {
-    Data* data = dynamic_cast<Data*>(_data);
-    Q_ASSERT(data);
-    if(!data) return;
     if(!m_sketch.isCompiled()) return;
     dbgPlugins << "Run " << m_source.name().c_str();
     
-    KisRijnCanvas  canvas(data->image, data->node->paintDevice());
+    KisRijnCanvas  canvas(m_image, m_node->paintDevice());
     KisRijnPalette palette;
     
-    KisGtlLocker l;
-    m_sketch.draw(&canvas, &palette);
+    {
+        KisGtlLocker l;
+        m_sketch.draw(&canvas, &palette);
+    }
+}
+
+void KisRijnStroke::finishStrokeCallback()
+{
+    m_transaction->commit(m_image->undoAdapter());
+    delete m_transaction;
 }

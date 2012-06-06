@@ -29,11 +29,11 @@ void KisRijnSketchAction::activated()
 {
     KisImageWSP       image         = m_view->image();
     KisStrokesFacade* strokesFacade = image.data();
-    KisRijnStroke*    rijnStroke    = new KisRijnStroke(m_source);
+    KisRijnStroke*    rijnStroke    = new KisRijnStroke(image, m_view->activeNode(), m_source);
     
     // Create the job
     KisStrokeId       id            = strokesFacade->startStroke(rijnStroke);
-    strokesFacade->addJob(id, new KisRijnStroke::Data(image, m_view->activeNode()));
+    strokesFacade->addJob(id, new KisStrokeJobData);
     strokesFacade->endStroke(id);
 }
 

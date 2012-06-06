@@ -24,23 +24,19 @@
 
 #include <kis_image.h>
 
+class KisTransaction;
+
 class KisRijnStroke : public KisSimpleStrokeStrategy
 {
 public:
-    class Data : public KisStrokeJobData {
-    public:
-        Data(KisImageWSP _image, KisNodeSP _node )
-            : image(_image), node(_node)
-        {}
-
-        KisImageWSP      image;
-        KisNodeSP        node;
-    };
-    
-    KisRijnStroke(const OpenRijn::Source& _source);
+    KisRijnStroke(KisImageWSP _image, KisNodeSP _node, const OpenRijn::Source& _source);
     virtual void initStrokeCallback();
+    virtual void finishStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
 private:
+    KisImageWSP      m_image;
+    KisNodeSP        m_node;
     OpenRijn::Source m_source;
     OpenRijn::Sketch m_sketch;
+    KisTransaction*  m_transaction;
 };
