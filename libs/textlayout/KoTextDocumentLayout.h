@@ -213,7 +213,6 @@ public:
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
     void setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction);
-    KoTextLayoutObstruction *continuationObstruction() const;
 
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();

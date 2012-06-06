@@ -25,6 +25,8 @@
 
 #include <QPainter>
 
+#define OVERLAPPREVENTION 1000
+
 class KoTextLayoutNoteArea::Private
 {
 public:
@@ -60,8 +62,9 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     painter->save();
-    if (d->isContinuedArea)
-        painter->translate(0, -1000);
+    if (d->isContinuedArea) {
+        painter->translate(0, -OVERLAPPREVENTION);
+    }
 
     KoTextLayoutArea::paint(painter, context);
     if (d->postLayout) {
@@ -83,6 +86,8 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     QString label;
     if (d->isContinuedArea) {
         label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
+        setReferenceRect(left(), right(), top() + OVERLAPPREVENTION
+                                    , maximumAllowedBottom() + OVERLAPPREVENTION);
     } else {
         label = d->note->label();
     }
@@ -157,12 +162,22 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 {
     KoPointedAt pointedAt;
     pointedAt.noteReference = -1;
-    pointedAt = KoTextLayoutArea::hitTest(p, accuracy);
-    if (p.x() > left() && p.x() < d->labelWidth && p.y() < top() + d->labelHeight)
+    QPointF tmpP(p.x(), p.y() + (d->isContinuedArea ? OVERLAPPREVENTION : 0));
+
+    pointedAt = KoTextLayoutArea::hitTest(tmpP, accuracy);
+
+    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelHeight)
     {
         pointedAt.noteReference = d->note->getPosInDocument();
-        pointedAt.position = p.x();
+        pointedAt.position = tmpP.x();
     }
 
     return pointedAt;
+}
+
+QRectF KoTextLayoutNoteArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+    return KoTextLayoutArea::selectionBoundingBox(cursor).translated(0
+                                        , d->isContinuedArea ? -OVERLAPPREVENTION : 0);
+
 }

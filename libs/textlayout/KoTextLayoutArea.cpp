@@ -233,15 +233,17 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             return pointedAt;
         }
     }
+
+    //and finally test the foornotes
     point -= QPointF(0, bottom() - m_footNotesHeight);
     while (footNoteIndex<m_footNoteAreas.length()) {
         // check if p is over foot notes area
-        if (point.y() > m_footNoteAreas[footNoteIndex]->top()
-                && point.y() < m_footNoteAreas[footNoteIndex]->bottom()) {
+        if (point.y() > 0 && point.y() < m_footNoteAreas[footNoteIndex]->bottom()
+                                                    - m_footNoteAreas[footNoteIndex]->top()) {
             pointedAt = m_footNoteAreas[footNoteIndex]->hitTest(point, accuracy);
             return pointedAt;
         }
-        point -= QPointF(0,m_footNoteAreas[footNoteIndex]->bottom());
+        point -= QPointF(0,m_footNoteAreas[footNoteIndex]->bottom() - m_footNoteAreas[footNoteIndex]->top());
         ++footNoteIndex;
     }
     return pointedAt;
@@ -273,9 +275,10 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     while (footNoteIndex < m_footNoteAreas.length()) {
         subFrame = m_footNoteFrames[footNoteIndex];
         if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+        qDebug()<<"selarea in footnote"<<m_footNoteAreas[footNoteIndex]->top();
             return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor).translated(0, offset) ;
         }
-        offset += m_footNoteAreas[footNoteIndex]->bottom();
+        offset += m_footNoteAreas[footNoteIndex]->bottom() - m_footNoteAreas[footNoteIndex]->top();
         ++footNoteIndex;
     }
 
@@ -462,10 +465,10 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(m_continuedNoteFromPrevious, this, m_documentLayout);
         m_footNoteFrames.append(m_continuedNoteFromPrevious->textFrame());
         // we adjust by 1000 (just a very high number) to avoid overlap
-        footNoteArea->setReferenceRect(left(), right(), 1000, maximumAllowedBottom() + 1000);
+        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom());
         footNoteArea->setAsContinuedArea(true);
         footNoteArea->layout(m_footNoteCursorFromPrevious);
-        m_footNotesHeight += footNoteArea->bottom() - 1000;
+        m_footNotesHeight += footNoteArea->bottom() - footNoteArea->top();
         m_footNoteAreas.append(footNoteArea);
     }
     while (!cursor->it.atEnd()) {
@@ -1863,8 +1866,15 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
             m_continuedNoteToNext = 0;
         } else {
             m_continuedNoteToNext = note;
+
+            //layout again now it has set up a continuationObstruction
+            delete m_footNoteCursorToNext;
+            m_footNoteCursorToNext = new FrameIterator(subFrame);
+            footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - line.height() - m_y + offset);
+            footNoteArea->layout(m_footNoteCursorToNext);
+            documentLayout()->setContinuationObstruction(0); // remove it again
         }
-        m_preregisteredFootNotesHeight += footNoteArea->bottom();
+        m_preregisteredFootNotesHeight += footNoteArea->bottom() - footNoteArea->top();
         m_preregisteredFootNoteAreas.append(footNoteArea);
         return footNoteArea->bottom();
     }

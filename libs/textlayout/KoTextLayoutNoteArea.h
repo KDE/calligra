@@ -39,6 +39,8 @@ public:
 
     KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
 private:
     class Private;
     Private * const d;
