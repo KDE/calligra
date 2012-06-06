@@ -21,6 +21,7 @@
 #include <kis_gtl_lock.h>
 
 #include <GTLCore/String.h>
+#include <GTLCore/CompilationMessages.h>
 
 #include <QDebug>
 
@@ -32,13 +33,16 @@ KisRijnStroke::KisRijnStroke(const OpenRijn::Source& _source) : KisSimpleStrokeS
 
 void KisRijnStroke::initStrokeCallback()
 {
-    qDebug() << "Init " << m_source.name().c_str();
+    dbgPlugins << "Init " << m_source.name().c_str();
     KisGtlLocker l;
     m_sketch.setSource(m_source);
     m_sketch.compile();
     if(!m_sketch.isCompiled())
     {
         dbgPlugins << "Compilation of " << m_source.name().c_str() << " has failed.";
+        dbgPlugins << m_sketch.compilationMessages().toString().c_str();
+    } else {
+        dbgPlugins << "Compilation of " << m_source.name().c_str() << " has succeeded.";
     }
 }
 
@@ -48,7 +52,7 @@ void KisRijnStroke::doStrokeCallback(KisStrokeJobData* _data)
     Q_ASSERT(data);
     if(!data) return;
     if(!m_sketch.isCompiled()) return;
-    qDebug() << "Run " << m_source.name().c_str();
+    dbgPlugins << "Run " << m_source.name().c_str();
     
     KisRijnCanvas  canvas(data->image, data->node->paintDevice());
     KisRijnPalette palette;
