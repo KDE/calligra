@@ -15,15 +15,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_rijn_palette.h"
+#include <kis_simple_stroke_strategy.h>
 
-KisRijnPalette::KisRijnPalette()
+#include <GTLCore/Color.h>
+#include <OpenRijn/DrawingPoint.h>
+#include <OpenRijn/Source.h>
+#include <OpenRijn/Sketch.h>
+
+#include <kis_image.h>
+
+class KisRijnStroke : public KisSimpleStrokeStrategy
 {
+public:
+    class Data : public KisStrokeJobData {
+    public:
+        Data(KisImageWSP _image, KisNodeSP _node )
+            : image(_image), node(_node)
+        {}
 
-}
-
-OpenRijn::AbstractBrush* KisRijnPalette::createCircleBrush(float _size, float _hardness) const
-{
-    return 0;
-}
-
+        KisImageWSP      image;
+        KisNodeSP        node;
+    };
+    
+    KisRijnStroke(const OpenRijn::Source& _source);
+    virtual void initStrokeCallback();
+    void doStrokeCallback(KisStrokeJobData *data);
+private:
+    OpenRijn::Source m_source;
+    OpenRijn::Sketch m_sketch;
+};

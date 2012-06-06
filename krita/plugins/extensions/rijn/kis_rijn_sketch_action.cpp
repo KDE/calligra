@@ -16,19 +16,25 @@
  */
 
 #include "kis_rijn_sketch_action.h"
-
+#include "kis_rijn_stroke.h"
+#include <kis_view2.h>
+#include <kis_image.h>
 #include <GTLCore/String.h>
-
-#include <QDebug>
 
 KisRijnSketchAction::KisRijnSketchAction(QObject* _parent, KisView2* _view, const OpenRijn::Source& _source) : QObject(_parent), m_view(_view), m_source(_source)
 {
-
 }
 
 void KisRijnSketchAction::activated()
 {
-    qDebug() << "Run " << m_source.name().c_str();
+    KisImageWSP       image         = m_view->image();
+    KisStrokesFacade* strokesFacade = image.data();
+    KisRijnStroke*    rijnStroke    = new KisRijnStroke(m_source);
+    
+    // Create the job
+    KisStrokeId       id            = strokesFacade->startStroke(rijnStroke);
+    strokesFacade->addJob(id, new KisRijnStroke::Data(image, m_view->activeNode()));
+    strokesFacade->endStroke(id);
 }
 
 #include "kis_rijn_sketch_action.moc"
