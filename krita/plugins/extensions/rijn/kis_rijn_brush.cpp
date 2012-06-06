@@ -68,7 +68,7 @@ KisPainter* KisRijnBrush::setupPainter(OpenRijn::AbstractCanvas* _canvas)
 {
     KisRijnCanvas* canvas  = static_cast<KisRijnCanvas*>(_canvas);
     KisPainter*    painter = canvas->painter();
-    painter->setPaintOpPreset(m_paintOp, canvas->image());
     painter->setPaintColor(KoColor(QColor(paintColor().red() * 255, paintColor().green() * 255, paintColor().blue() * 255, paintColor().alpha() * 255), KoColorSpaceRegistry::instance()->rgb8()));
+    painter->setPaintOpPreset(m_paintOp, canvas->image());
     return painter;
 }
