@@ -105,6 +105,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
     bnLandscape->setIcon(KIcon("landscape"));
 
+    connect(chkInfiniteCanvas, SIGNAL(stateChanged(int)), this, SLOT(switchInfiniteCanvas()));
+
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
     chkFromClipboard->setChecked(clipAvailable);
@@ -197,13 +199,22 @@ void KisCustomImageWidget::createImage()
     qint32 width, height;
     double resolution;
     resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
-
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
-
+ 
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
+
+    if(chkInfiniteCanvas->isChecked())
+    {
+        m_doc->newImage(txtName->text(), 0, 0, cs, bgColor, txtDescription->toPlainText(), resolution, true);
+
+    }
+
+    else
+    {
+        width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
+        height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+        m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution, false);
+    }
 
     KisImageWSP image = m_doc->image();
     if (image && image->root() && image->root()->firstChild()) {
@@ -378,6 +389,37 @@ void KisCustomImageWidget::saveAsPredefined()
         cmbPredefined->addItem(txtPredefinedName->text());
     }
 
+}
+
+void KisCustomImageWidget::switchInfiniteCanvas()
+{
+    if(chkInfiniteCanvas->isChecked())
+    {
+        cmbPredefined->setEnabled(false);
+        cmbWidthUnit->setEnabled(false);
+        cmbHeightUnit->setEnabled(false);
+        doubleWidth->setEnabled(false);
+        doubleHeight->setEnabled(false);
+        bnScreenSize->setEnabled(false);
+        txtPredefinedName->setEnabled(false);
+        bnSaveAsPredefined->setEnabled(false);
+        bnPortrait->setEnabled(false);
+        bnLandscape->setEnabled(false);
+    }
+
+    else
+    {
+        cmbPredefined->setEnabled(true);
+        cmbWidthUnit->setEnabled(true);
+        cmbHeightUnit->setEnabled(true);
+        doubleWidth->setEnabled(true);
+        doubleHeight->setEnabled(true);
+        bnScreenSize->setEnabled(true);
+        txtPredefinedName->setEnabled(true);
+        bnSaveAsPredefined->setEnabled(true);
+        bnPortrait->setEnabled(true);
+        bnLandscape->setEnabled(true);
+    }
 }
 
 void KisCustomImageWidget::switchWidthHeight()

@@ -107,13 +107,13 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution);
+    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution, bool infiniteCanvas = false);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
+    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace, bool infiniteCanvas = false);
 
     KisImageWSP image() const;
 
@@ -128,6 +128,16 @@ public:
     void setCurrentImage(KisImageWSP image);
 
     KisUndoStore* createUndoStore();
+
+    /*
+     * Returns whether the current image has Infinite Canvas or not
+     */
+    bool isCanvasInfinite();
+
+    /*
+     * Marks the current image as one having an Infinite Canvas
+     */
+    void setCanvasInfinite();
 
     /**
      * The shape controller matches internal krita image layers with
