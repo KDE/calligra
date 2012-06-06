@@ -15,33 +15,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _RIJN_H_
-#define _RIJN_H_
+#include "kis_rijn_canvas.h"
 
-#include <QVariant>
+#include <kis_image.h>
+#include <kis_painter.h>
+#include <kis_paint_device.h>
 
-#include <kparts/plugin.h>
+KisRijnCanvas::KisRijnCanvas(KisImageWSP _image, KisPaintDeviceSP _paintDevice) : m_image(_image), m_paintDevice(_paintDevice), m_painter(new KisPainter(m_paintDevice))
+{
 
-namespace OpenRijn {
-    class SourcesCollection;
 }
 
-class KisView2;
-
-/**
- * Template of view plugin
- */
-class rijnPlugin : public KParts::Plugin
+KisRijnCanvas::~KisRijnCanvas()
 {
-    Q_OBJECT
-public:
-    rijnPlugin(QObject *parent, const QVariantList &);
-    virtual ~rijnPlugin();
+    delete m_painter;
+}
 
-private:
+KisImageWSP KisRijnCanvas::image()
+{
+    return m_image;
+}
 
-    KisView2 * m_view;
-    OpenRijn::SourcesCollection* m_sourcesCollection;
-};
-
-#endif // rijnPlugin_H
+KisPainter* KisRijnCanvas::painter()
+{
+    return m_painter;
+}

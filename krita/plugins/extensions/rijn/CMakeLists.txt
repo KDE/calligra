@@ -1,5 +1,5 @@
 
-set(kritarijn_PART_SRCS rijn.cc kis_rijn_sketch_action.cpp)
+set(kritarijn_PART_SRCS rijn.cc kis_rijn_sketch_action.cpp kis_rijn_brush.cpp kis_rijn_canvas.cpp kis_rijn_palette.cpp)
 
 include_directories(${OPENRIJN_INCLUDE_DIRS})
 

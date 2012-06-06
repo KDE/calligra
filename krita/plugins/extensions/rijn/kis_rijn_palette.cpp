@@ -15,33 +15,4 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _RIJN_H_
-#define _RIJN_H_
-
-#include <QVariant>
-
-#include <kparts/plugin.h>
-
-namespace OpenRijn {
-    class SourcesCollection;
-}
-
-class KisView2;
-
-/**
- * Template of view plugin
- */
-class rijnPlugin : public KParts::Plugin
-{
-    Q_OBJECT
-public:
-    rijnPlugin(QObject *parent, const QVariantList &);
-    virtual ~rijnPlugin();
-
-private:
-
-    KisView2 * m_view;
-    OpenRijn::SourcesCollection* m_sourcesCollection;
-};
-
-#endif // rijnPlugin_H
+#include "kis_rijn_palette.h"
