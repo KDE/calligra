@@ -987,8 +987,8 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
                     v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
                 else
                     v += QString::fromLatin1("(%1)").arg(field->precision());
-            } else if (field->type() == Field::Text && field->length() > 0)
-                v += QString::fromLatin1("(%1)").arg(field->length());
+            } else if (field->type() == Field::Text && field->maxLength() > 0)
+                v += QString::fromLatin1("(%1)").arg(field->maxLength());
 
             if (autoinc)
                 v += (" " +
@@ -1562,6 +1562,14 @@ static FieldList* createFieldListForKexi__Fields(TableSchema *kexi__fieldsSchema
            );
 }
 
+static QVariant buildLengthValue(const Field& f)
+{
+    if (f.isFPNumericType()) {
+        return f.scale();
+    }
+    return f.maxLength();
+}
+
 //! builds a list of values for field's \a f properties. Used by createTable().
 void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
 {
@@ -1570,7 +1578,7 @@ void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
     << QVariant(f->table()->id())
     << QVariant(f->type())
     << QVariant(f->name())
-    << QVariant(f->isFPNumericType() ? f->scale() : f->length())
+    << buildLengthValue(*f)
     << QVariant(f->isFPNumericType() ? f->precision() : 0)
     << QVariant(f->constraints())
     << QVariant(f->options())
@@ -2835,9 +2843,15 @@ KexiDB::Field* Connection::setupField(const RecordData &data)
     if (!ok)
         return 0;
     Field::Type f_type = (Field::Type)f_int_type;
-    int f_len = qMax(0, data.at(3).toInt(&ok));
-    if (!ok)
+    int f_len = qMax(0, data.at(3).toInt(&ok)); // defined limit
+    if (!ok) {
         return 0;
+    }
+    if (f_len < 0) {
+        f_len = 0;
+    }
+//! @todo load maxLengthStrategy info to see if the maxLength is the default
+
     int f_prec = data.at(4).toInt(&ok);
     if (!ok)
         return 0;

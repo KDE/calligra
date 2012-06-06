@@ -290,8 +290,11 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 
     if (cinfo->field->isTextType()) {
-        if (!designMode())
-            setMaxLength(cinfo->field->length());
+        if (!designMode()) {
+            if (cinfo->field->maxLength() > 0) {
+                setMaxLength(cinfo->field->maxLength());
+            }
+        }
     }
 }
 

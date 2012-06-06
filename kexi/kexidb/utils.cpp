@@ -667,7 +667,7 @@ struct KexiDB_BuiltinFieldProperties {
         ADD("name");
         ADD("caption");
         ADD("description");
-        ADD("length");
+        ADD("maxLength");
         ADD("precision");
         ADD("defaultValue");
         ADD("width");
@@ -732,8 +732,8 @@ bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>&
         field.setCaption((*it).toString());
     if ((it = values.find("description")) != values.constEnd())
         field.setDescription((*it).toString());
-    if ((it = values.find("length")) != values.constEnd())
-        field.setLength((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
+    if ((it = values.find("maxLength")) != values.constEnd())
+        field.setMaxLength((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
     if (!ok)
         return false;
     if ((it = values.find("precision")) != values.constEnd())
@@ -870,8 +870,8 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDescription(value.toString());
             return true;
         }
-        if ("length" == propertyName)
-            GET_INT(setLength);
+        if ("maxLength" == propertyName)
+            GET_INT(setMaxLength);
         if ("precision" == propertyName)
             GET_INT(setPrecision);
         if ("defaultValue" == propertyName) {

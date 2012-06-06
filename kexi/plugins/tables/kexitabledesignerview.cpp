@@ -398,7 +398,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
                      = new KoProperty::Property("unsigned", QVariant(field.isUnsigned()), i18n("Unsigned Number")));
 
     set->addProperty(prop
-                     = new KoProperty::Property("length", (int)field.length()/*200?*/, i18n("Length")));
+                     = new KoProperty::Property("maxLength", (int)field.maxLength()/*200?*/, i18n("Length")));
 
     set->addProperty(prop
                      = new KoProperty::Property("precision", (int)field.precision()/*200?*/, i18n("Precision")));
