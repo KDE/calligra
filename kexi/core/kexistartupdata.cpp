@@ -31,7 +31,7 @@ KexiStartupData::KexiStartupData()
         , m_forcedUserMode(false)
         , m_forcedDesignMode(false)
         , m_isProjectNavigatorVisible(false)
-        , m_forcedFullscreen(false)
+        , m_forcedFullScreen(false)
 // , m_createDB(false)
 // , m_dropDB(false)
 // , m_alsoOpenDB(false)
@@ -89,7 +89,7 @@ KexiStartupData::Import::operator bool() const
     return !fileName.isEmpty() && !mimeType.isEmpty();
 }
 
-bool KexiStartupData::forcedFullscreen() const
+bool KexiStartupData::forcedFullScreen() const
 {
-    return m_forcedFullscreen;
+    return m_forcedFullScreen;
 }
