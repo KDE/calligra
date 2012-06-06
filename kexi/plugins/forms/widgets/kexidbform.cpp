@@ -351,17 +351,6 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
     //generate a new list
     foreach (KFormDesigner::ObjectTreeItem* titem, *form->tabStops()) {
         if (titem->widget()->focusPolicy() & Qt::TabFocus) {
-            //this widget has tab focus:
-            titem->widget()->installEventFilter(this);
-            //also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
-            QList<QWidget*> children(titem->widget()->findChildren<QWidget*>());
-            foreach(QWidget* widget, children) {
-                kDebug() << "also adding '"
-                    << widget->metaObject()->className()
-                    << " " << widget->objectName()
-                    << "' child to filtered widgets";
-                widget->installEventFilter(this);
-            }
             if (fromWidget) {
                 kDebug() << "tab order: "
                     << fromWidget->objectName()
@@ -371,6 +360,16 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
             d->orderedFocusWidgets.append(titem->widget());
         }
 
+        titem->widget()->installEventFilter(this);
+        //also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
+        QList<QWidget*> children(titem->widget()->findChildren<QWidget*>());
+        foreach(QWidget* widget, children) {
+            kDebug() << "also adding '"
+                << widget->metaObject()->className()
+                << " " << widget->objectName()
+                << "' child to filtered widgets";
+            widget->installEventFilter(this);
+        }
         KexiFormDataItemInterface* dataItem
             = dynamic_cast<KexiFormDataItemInterface*>(titem->widget());
         if (dataItem && !dataItem->dataSource().isEmpty()) {
@@ -620,7 +619,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 return true;
             }
         }
-    } else if (e->type() == QEvent::FocusIn) {
+    } else if (e->type() == QEvent::FocusIn || (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(e)->button() == Qt::LeftButton)) {
         bool focusDataWidget = preview();
         if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
             kDebug() << "->>> focus IN, popup";

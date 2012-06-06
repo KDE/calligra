@@ -10,7 +10,7 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
  *
  * This library is free software; you can redistribute it and/or
