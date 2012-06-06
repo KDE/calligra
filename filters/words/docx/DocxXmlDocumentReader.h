@@ -269,6 +269,10 @@ protected:
     //! inserted into the following paragraph.
     QString m_floatingTable;
 
+    //! The complete XML snippet representing a bookmark-start or
+    //! bookmark-end, which MUST be inserted into the following paragraph.
+    QString m_bookmarkSnippet;
+
     QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
 
 private:
@@ -353,6 +357,7 @@ private:
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
+    bool m_insideParagraph;
 
     QString m_currentNumId;
 

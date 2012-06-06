@@ -191,6 +191,7 @@ public:
     // TODO: Save
     // See ODF v1.2 $19.12 (chart:display-label)
     bool showLabels;
+    bool showOverlappingDataLabels;
 
     bool isVisible;
 };
@@ -238,6 +239,13 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     logarithmicScaling = false;
 
+    showInnerMinorTicks = false;
+    showOuterMinorTicks = false;
+    showInnerMajorTicks = false;
+    showOuterMajorTicks = true;
+
+    showOverlappingDataLabels = false;
+
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;
@@ -262,9 +270,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT(plotArea);
 
-    delete numericStyleFormat;
-
     delete kdBarDiagram;
+    delete kdLineDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
     delete kdRingDiagram;
@@ -274,6 +281,8 @@ Axis::Private::~Private()
     delete kdBubbleDiagram;
     delete kdSurfaceDiagram;
     delete kdGanttDiagram;
+
+    delete numericStyleFormat;
 
     delete kdAxis;
 
@@ -494,6 +503,8 @@ void Axis::Private::createBarDiagram()
     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
     kdBarDiagram->setPen(QPen(Qt::black, 0.0));
 
+    kdBarDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
+
     if (plotAreaChartSubType == StackedChartSubtype)
         kdBarDiagram->setType(KDChart::BarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype) {
@@ -530,6 +541,8 @@ void Axis::Private::createLineDiagram()
 
     kdLineDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdLineDiagram);
+
+    kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdLineDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -574,6 +587,8 @@ void Axis::Private::createAreaDiagram()
     // KD Chart by default draws the first data set as last line in a normal
     // line diagram, we however want the first series to appear in front.
     kdAreaDiagram->setReverseDatasetOrder(true);
+
+    kdAreaDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdAreaDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -906,6 +921,11 @@ bool Axis::showLabels() const
     return d->showLabels;
 }
 
+bool Axis::showOverlappingDataLabels() const
+{
+    return d->showOverlappingDataLabels;
+}
+
 QString Axis::id() const
 {
     return d->id;
@@ -1220,6 +1240,11 @@ void Axis::setShowLabels(bool show)
     d->kdAxis->setTextAttributes(textAttr);
 }
 
+void Axis::setShowOverlappingDataLabels(bool show)
+{
+    d->showOverlappingDataLabels = show;
+}
+
 Qt::Orientation Axis::orientation()
 {
     bool chartIsVertical = d->plotArea->isVertical();
@@ -1396,6 +1421,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         if (styleStack.hasProperty(KoXmlNS::chart, "display-label"))
             setShowLabels(styleStack.property(KoXmlNS::chart, "display-label") != "false");
+        if (styleStack.hasProperty(KoXmlNS::chart, "text-overlap"))
+            setShowOverlappingDataLabels(styleStack.property(KoXmlNS::chart, "text-overlap") != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "visible"))
             setVisible(styleStack.property(KoXmlNS::chart, "visible")  != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "minimum")) {
@@ -1544,7 +1571,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:logarithmic", scalingIsLogarithmic());
 
     KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(kdPlane());
-    bool reverseAxis;
+    bool reverseAxis = false;
     if (plane) {
         if (orientation() == Qt::Horizontal)
             reverseAxis = plane->isHorizontalRangeReversed();
@@ -1559,6 +1586,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:tick-marks-major-outer", showOuterMajorTicks());
 
     axisStyle.addProperty("chart:display-label", showLabels());
+    axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
     axisStyle.addProperty("chart:visible", isVisible());
     axisStyle.addPropertyPt("chart:gap-width", d->gapBetweenSets);
     axisStyle.addPropertyPt("chart:overlap", -d->gapBetweenBars);
@@ -1720,49 +1748,58 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
 
     ChartType oldChartType = d->plotAreaChartType;
 
-    KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
+    // Change only the fill in case of type change from RadarChartType to FilledRadarChartType
+    // or viceversa as rest of the properties remain same
+    if (newChartType == RadarChartType && oldChartType == FilledRadarChartType) {
+        d->kdRadarDiagram->setFillAlpha(0);
+    } else if (newChartType == FilledRadarChartType && oldChartType == RadarChartType) {
+        d->kdRadarDiagram->setFillAlpha(0.4);
+    } else {
+        KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
 
-    KDChartModel *newModel = dynamic_cast<KDChartModel*>(newDiagram->model());
-    // FIXME: This causes a crash on unimplemented types. We should
-    //        handle that in some other way.
-    Q_ASSERT(newModel);
+        KDChartModel *newModel = dynamic_cast<KDChartModel*>(newDiagram->model());
+        // FIXME: This causes a crash on unimplemented types. We should
+        //        handle that in some other way.
+        Q_ASSERT(newModel);
 
-    foreach (DataSet *dataSet, d->dataSets) {
-        //if (dataSet->chartType() != LastChartType) {
-            dataSet->setChartType(LastChartType);
-            dataSet->setChartSubType(NoChartSubtype);
-        //}
-    }
+        foreach (DataSet *dataSet, d->dataSets) {
+            //if (dataSet->chartType() != LastChartType) {
+                dataSet->setChartType(LastChartType);
+                dataSet->setChartSubType(NoChartSubtype);
+            //}
+        }
 
-    KDChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
-    Q_ASSERT(oldDiagram);
-    // We need to know the old model so that we can remove the data sets
-    // from the old model that we added to the new model.
-    KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
-    Q_ASSERT(oldModel);
+        KDChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
+        Q_ASSERT(oldDiagram);
+        // We need to know the old model so that we can remove the data sets
+        // from the old model that we added to the new model.
+        KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
+        Q_ASSERT(oldModel);
 
-    foreach (DataSet *dataSet, d->dataSets) {
-        if (dataSet->chartType() != LastChartType)
-            continue;
+        foreach (DataSet *dataSet, d->dataSets) {
+            if (dataSet->chartType() != LastChartType)
+                continue;
 
-// FIXME: What does this do? Only the user may set a data set's pen through
-// a proper UI, in any other case the pen falls back to a default
-// which depends on the chart type, so setting it here will break the default
-// for other chart types.
-#if 0
-        Qt::PenStyle newPenStyle = newDiagram->pen().style();
-        QPen newPen = dataSet->pen();
-        newPen.setStyle(newPenStyle);
-        dataSet->setPen( newPen);
-#endif
-        newModel->addDataSet(dataSet);
-        const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
-                                 ? oldModel->columnCount() : oldModel->rowCount();
-        if (dataSetCount == oldModel->dataDimensions())
-            // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
-            d->deleteDiagram(oldChartType);
-        else
-            oldModel->removeDataSet(dataSet);
+    // FIXME: What does this do? Only the user may set a data set's pen through
+    // a proper UI, in any other case the pen falls back to a default
+    // which depends on the chart type, so setting it here will break the default
+    // for other chart types.
+    #if 0
+            Qt::PenStyle newPenStyle = newDiagram->pen().style();
+            QPen newPen = dataSet->pen();
+            newPen.setStyle(newPenStyle);
+            dataSet->setPen( newPen);
+    #endif
+            newModel->addDataSet(dataSet);
+            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
+                                     ? oldModel->columnCount() : oldModel->rowCount();
+            if (dataSetCount == oldModel->dataDimensions())
+                // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
+                d->deleteDiagram(oldChartType);
+            else
+                oldModel->removeDataSet(dataSet);
+        }
+
     }
 
     d->plotAreaChartType = newChartType;

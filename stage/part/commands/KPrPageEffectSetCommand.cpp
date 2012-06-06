@@ -31,18 +31,17 @@ KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEf
 , m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
 , m_deleteNewPageEffect( true )
 {
-    // TODO 2.1 rename page to slide
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
-            setText( i18nc( "(qtundo-format)", "Create page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Create Slide Effect" ) );
         }
         else {
-            setText( i18nc( "(qtundo-format)", "Modify page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Modify Slide Effect" ) );
         }
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Delete page effect" ) );
+        setText( i18nc( "(qtundo-format)", "Delete Slide Effect" ) );
     }
 }
 

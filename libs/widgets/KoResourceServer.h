@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
+#include <QDir>
 #include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -264,7 +265,7 @@ public:
     }
 
     /**
-     * Creates a new resourcea from a given file and adds them to the resource server
+     * Creates a new resource from a given file and adds them to the resource server
      * The base implementation does only load one resource per file, override to implement collections
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
@@ -487,7 +488,7 @@ protected:
               QDomNode n = file.firstChild();
               QDomElement e = n.toElement();
               if (e.tagName() == "name") {
-                  filenameList.append(e.text());
+                  filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
               }
              file = file.nextSiblingElement("file");
         }
@@ -530,7 +531,7 @@ protected:
 
        QDomElement fileEl = doc.createElement("file");
        QDomElement nameEl = doc.createElement("name");
-       QDomText nameText = doc.createTextNode(fileName);
+       QDomText nameText = doc.createTextNode(fileName.replace(QDir::homePath(),QString("~")));
        nameEl.appendChild(nameText);
        fileEl.appendChild(nameEl);
        root.appendChild(fileEl);

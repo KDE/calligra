@@ -30,7 +30,7 @@ class MockDocument : public KPrDocument
 {
 public:
     MockDocument()
-    : KPrDocument(0, 0)
+    : KPrDocument(0)
     {}
     KoView *createViewInstance(QWidget * /* parent */) {return 0;}
     const char *odfTagName(bool b) {return KoOdf::bodyContentElement(KoOdf::Presentation, b);}

@@ -14,6 +14,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoAutoSaveRecoveryDialog.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
@@ -53,6 +54,7 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -88,6 +90,7 @@ set(komain_LIB_SRCS
     KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
+    KoFindStyle.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -216,6 +219,7 @@ install( FILES
     KoGridData.h
     KoMainWindow.h
     KoModeBoxFactory.h
+    KoServiceProvider.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

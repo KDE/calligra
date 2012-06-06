@@ -28,8 +28,8 @@
 // The Plan file syntax is used in parts of the KPlatoWork file, so:
 // * If you change PLAN_FILE_SYNTAX_VERSION, change PLANWORK_FILE_SYNTAX_VERSION too!
 // * You don't need to change PLAN_FILE_SYNTAX_VERSION when you change KPLATOWORK_FILE_SYNTAX_VERSION
-#define PLAN_FILE_SYNTAX_VERSION "0.6.5"
-#define PLANWORK_FILE_SYNTAX_VERSION "0.6.5"
+#define PLAN_FILE_SYNTAX_VERSION "0.6.6"
+#define PLANWORK_FILE_SYNTAX_VERSION "0.6.6"
 
 #define CURRENTSCHEDULE     -1
 #define NOTSCHEDULED        -2

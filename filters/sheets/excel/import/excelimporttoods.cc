@@ -726,6 +726,8 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     if(rowCount < maximalRowCount-1) {
         xmlWriter->startElement("table:table-row");
         xmlWriter->addAttribute("table:number-rows-repeated", maximalRowCount - 1 - rowCount);
+        xmlWriter->startElement("table:table-cell");
+        xmlWriter->endElement();
         xmlWriter->endElement();
     }
 
@@ -1004,6 +1006,8 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
 
     if (!row) {
         xmlWriter->startElement("table:table-row");
+        xmlWriter->startElement("table:table-cell");
+        xmlWriter->endElement();
         xmlWriter->endElement();
         return repeat;
     }
@@ -1024,7 +1028,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     // find the column of the rightmost cell (if any)
     const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     int i = 0;
-    while(i <= lastCol) {
+    do {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(store, cell, repeat, xmlWriter);
@@ -1034,7 +1038,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
             xmlWriter->endElement();
             ++i;
         }
-    }
+    } while(i <= lastCol);
 
     xmlWriter->endElement();  // table:table-row
     addProgress(repeat);

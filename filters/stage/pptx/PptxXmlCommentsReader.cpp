@@ -76,7 +76,7 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 void PptxXmlCommentsReader::saveOdfComments()
 {
     for(int i = 0; i < d->currentComment; ++i) {
-        body->startElement("officeooo:annotation"); //TODO replace with standarized element name
+        body->startElement("office:annotation");
 
         QPoint position = d->positions.value(i);
         //FIXME according to the documentation these measurements are EMUs
@@ -97,7 +97,7 @@ void PptxXmlCommentsReader::saveOdfComments()
         body->addTextSpan(d->texts.value(i));
         body->endElement();//text:p
 
-        body->endElement();//officeooo:annotation
+        body->endElement();//office:annotation
     }
 }
 

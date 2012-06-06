@@ -25,7 +25,7 @@
 #include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
-    KoGenStyle style(KoGenStyle::DrawingPageStyle, "drawing-page");
+    KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 
     bool useMasterBackground = false;
     if (page.nodeName() == "PAGE") {
@@ -33,7 +33,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         if (!backMaster.isNull()) {
             style.addProperty("presentation:background-visible", backMaster.attribute("displayBackground", "1") == "1");
             style.addProperty("presentation:background-objects-visible", backMaster.attribute("displayMasterPageObject", "1") == "1");
-            useMasterBackground = backMaster.attribute("useMasterBackground", "0") == "1";
+            useMasterBackground = backMaster.attribute("useMasterBackground", "1") == "1"; // not set was the default and it means use the background from master
         } else {
             //if BACKMASTER is not found we assume it's true
             style.addProperty("presentation:background-visible", true);
@@ -263,6 +263,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             style.addChildElement("presentationSound", elementContents);
         }
     }//if pageEfect is null
+
     return m_styles.insert(style, "dp");
 }
 

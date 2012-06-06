@@ -69,8 +69,8 @@ public:
     }
 };
 
-KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoPADocument( parentWidget, parent, singleViewMode )
+KPrDocument::KPrDocument(QObject* parent)
+: KoPADocument(parent)
 , m_customSlideShows(new KPrCustomSlideShows())
 , m_presentationMonitor( 0 )
 , m_presenterViewEnabled( false )

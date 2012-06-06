@@ -60,6 +60,8 @@ K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
         : KoFilter(parent)
+        , m_mainDoc(true)
+        , m_documentInfo(true)
         , m_currentPage(1)
         , m_objectIndex(1)
         , m_sticky(false)
@@ -274,7 +276,8 @@ void Filterkpr2odf::convertContent(KoXmlWriter* content)
     KoXmlNode backgrounds = m_mainDoc.namedItem("DOC").namedItem("BACKGROUND");
     KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem("OBJECTS");
     KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem("PAPER");
-    m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
+    //m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
+    m_pageHeight = paper.toElement().attribute("ptHeight").toDouble();
 
     //Go to the first background, there might be missing backgrounds
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
