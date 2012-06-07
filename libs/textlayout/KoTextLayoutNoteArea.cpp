@@ -107,7 +107,6 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->textLayout->setAdditionalFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-    //option.setTextDirection();
     d->textLayout->setTextOption(option);
     d->textLayout->beginLayout();
     QTextLine line = d->textLayout->createLine();

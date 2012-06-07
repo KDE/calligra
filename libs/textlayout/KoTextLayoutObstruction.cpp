@@ -137,8 +137,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
 void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth)
 {
     m_distance = distance;
-    QPainterPath path = obstruction * matrix;
-    QPointF offset = obstruction.boundingRect().topLeft();
+    QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
     distance += borderHalfWidth;
     if (distance > 0.0) {

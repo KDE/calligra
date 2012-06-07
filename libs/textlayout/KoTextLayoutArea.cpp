@@ -234,7 +234,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         }
     }
 
-    //and finally test the foornotes
+    //and finally test the footnotes
     point -= QPointF(0, bottom() - m_footNotesHeight);
     while (footNoteIndex<m_footNoteAreas.length()) {
         // check if p is over foot notes area
@@ -463,7 +463,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     if (m_footNoteCursorFromPrevious) {
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(m_continuedNoteFromPrevious, this, m_documentLayout);
         m_footNoteFrames.append(m_continuedNoteFromPrevious->textFrame());
-        // we adjust by 1000 (just a very high number) to avoid overlap
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom());
         footNoteArea->setAsContinuedArea(true);
         footNoteArea->layout(m_footNoteCursorFromPrevious);
