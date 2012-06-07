@@ -399,7 +399,11 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
                      = new KoProperty::Property("unsigned", QVariant(field.isUnsigned()), i18n("Unsigned Number")));
 
     set->addProperty(prop
-                     = new KoProperty::Property("length", (int)field.maxLength()/*200?*/, i18n("Length")));
+                     = new KoProperty::Property("maxLength", (uint)field.maxLength(), i18n("Max Length")));
+    
+    set->addProperty(prop 
+                      = new KoProperty::Property("maxLengthIsDefault", field.maxLengthStrategy() == KexiDB::Field::DefaultMaxLength));  
+    prop->setVisible(false);//always hidden
 
     set->addProperty(prop
                      = new KoProperty::Property("precision", (int)field.precision()/*200?*/, i18n("Precision")));
@@ -881,12 +885,17 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
         QString fieldName(KexiUtils::string2Identifier(fieldCaption));
 
         KexiDB::Field::Type fieldType = KexiDB::intToFieldType(intFieldType);
+        uint maxLength = 0;     
+        if (fieldType == KexiDB::Field::Text) {     
+            maxLength = KexiDB::Field::defaultMaxLength();     
+        }
+        
         KexiDB::Field field( //tmp
             fieldName,
             fieldType,
             KexiDB::Field::NoConstraints,
             KexiDB::Field::NoOptions,
-            /*length*/0,
+            maxLength,
             /*precision*/0,
             /*defaultValue*/QVariant(),
             fieldCaption,
@@ -895,9 +904,15 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
 //  m_newTable->addField( field );
 
         // reasonable case for boolean type: set notNull flag and "false" as default value
-        if (fieldType == KexiDB::Field::Boolean) {
-            field.setNotNull(true);
-            field.setDefaultValue(QVariant(false));
+        switch (fieldType) {     
+            case KexiDB::Field::Boolean:
+                field.setNotNull(true);
+                field.setDefaultValue(QVariant(false));
+                break;     
+            case KexiDB::Field::Text:    
+                field.setMaxLengthStrategy(KexiDB::Field::DefaultMaxLength);    
+                break;
+            default:;
         }
 
         kDebug() << field.debugString();
