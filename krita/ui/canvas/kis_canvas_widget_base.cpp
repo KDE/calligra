@@ -55,7 +55,7 @@ public:
     const KoViewConverter * viewConverter;
     KoToolProxy * toolProxy;
     QTimer blockMouseEvent;
-    
+
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
     QColor borderColor;
 };
@@ -302,16 +302,6 @@ void KisCanvasWidgetBase::processInputMethodEvent(QInputMethodEvent *event)
 
 void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
 {
-    widget()->setFocus(Qt::OtherFocusReason);
-    m_d->blockMouseEvent.start(100);
-
-    const QPointF pos = e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0));
-    m_d->toolProxy->tabletEvent(e, m_d->coordinatesConverter->widgetToDocument(pos));
-
-    // HACK
-    e->ignore();
-    m_d->ignorenextMouseEventExceptRightMiddleClick = true;
-    // HACK
 }
 
 void KisCanvasWidgetBase::processWheelEvent(QWheelEvent *e)
