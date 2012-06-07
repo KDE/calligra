@@ -275,7 +275,6 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     while (footNoteIndex < m_footNoteAreas.length()) {
         subFrame = m_footNoteFrames[footNoteIndex];
         if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
-        qDebug()<<"selarea in footnote"<<m_footNoteAreas[footNoteIndex]->top();
             return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor).translated(0, offset) ;
         }
         offset += m_footNoteAreas[footNoteIndex]->bottom() - m_footNoteAreas[footNoteIndex]->top();
