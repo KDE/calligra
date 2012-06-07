@@ -13,7 +13,7 @@
 #include "KPrAnimationsDataModel.h"
 #include "KPrTimeLineHeader.h"
 #include "KPrTimeLineView.h"
-#include "animations/KPrAnimationStep.h"
+#include "animations/KPrShapeAnimation.h"
 
 const int Invalid = -1;
 const int scaleLimit = 1000;
@@ -54,7 +54,8 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
 {
     m_model = model;
     updateColumnsWidth();
-    connect(m_model, SIGNAL(dataReinitialized()), this, SLOT(updateColumnsWidth()));
+    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
+    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(update()));
     m_header->update();
     m_view->update();
 }
@@ -203,14 +204,14 @@ void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
 QColor KPrAnimationsTimeLineView::colorforRow(int row)
 {
     if (m_model) {
-        KPrAnimationStep::Preset_Class type = static_cast<KPrAnimationStep::Preset_Class>(m_model->data(m_model->index(row, 7)).toInt());
-        if (type == KPrAnimationStep::Entrance) {
+        KPrShapeAnimation::Preset_Class type = static_cast<KPrShapeAnimation::Preset_Class>(m_model->data(m_model->index(row, 7)).toInt());
+        if (type == KPrShapeAnimation::Entrance) {
             return Qt::darkGreen;
-        } else if (type == KPrAnimationStep::Emphasis) {
+        } else if (type == KPrShapeAnimation::Emphasis) {
             return Qt::blue;
-        } else if (type == KPrAnimationStep::Custom) {
+        } else if (type == KPrShapeAnimation::Custom) {
             return Qt::gray;
-        } else if (type == KPrAnimationStep::Exit) {
+        } else if (type == KPrShapeAnimation::Exit) {
             return Qt::red;
         }
     }
@@ -227,6 +228,7 @@ int KPrAnimationsTimeLineView::rowCount() const
 
 void KPrAnimationsTimeLineView::update()
 {
+    qDebug() << "Update time Line View called";
     m_view->update();
     m_header->update();
     QWidget::update();

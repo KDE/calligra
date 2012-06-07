@@ -32,6 +32,9 @@
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
+, m_triggerEvent(KPrShapeAnimation::On_Click)
+, m_class(KPrShapeAnimation::None)
+, m_id(QString())
 {
     // this is needed so we save the xml id's on saving and therefor are able to 
     // save animation back even when they have not yet run.
@@ -51,12 +54,13 @@ bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     return false;
 }
 
-bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep,
-                                 QString presetClass, QString id) const
+bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
     QString nodeType;
+    QString l_presetClass = presetClassText();
+    QString l_id = id();
     if (startStep && startSubStep) {
         nodeType = QString("on-click");
     }
@@ -68,10 +72,10 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     }
 
     writer.addAttribute("presentation:node-type", nodeType);
-    if (!presetClass.isEmpty())
-        writer.addAttribute("presentation:preset-class", presetClass);
-    if (!id.isEmpty())
-        writer.addAttribute("presentation:preset-id", id);
+    if (!l_presetClass.isEmpty())
+        writer.addAttribute("presentation:preset-class", l_presetClass);
+    if (!l_id.isEmpty())
+        writer.addAttribute("presentation:preset-id", l_id);
     for(int i=0;i < this->animationCount(); i++) {
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
@@ -128,7 +132,7 @@ QPair<int, int> KPrShapeAnimation::timeRange()
         }
     }
     QPair<int, int> pair;
-    pair.first = minStart;
+    pair.first = (minStart==99999)? 0: minStart;
     pair.second = maxEnd;
     return pair;
 }
@@ -144,3 +148,63 @@ void KPrShapeAnimation::deactivate()
 // KPrShapeAnimation would get all the data it would need
 // onClick would create a new animation
 // when putting data in it could check if the shape is the correct one if not create a parallel one (with previous)
+
+
+
+void KPrShapeAnimation::setNodeType(KPrShapeAnimation::Node_Type type)
+{
+    m_triggerEvent = type;
+}
+
+void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::Preset_Class presetClass)
+{
+    m_class = presetClass;
+}
+
+void KPrShapeAnimation::setId(QString id)
+{
+    m_id = id;
+}
+
+KPrShapeAnimation::Node_Type KPrShapeAnimation::NodeType() const
+{
+    return m_triggerEvent;
+}
+
+KPrShapeAnimation::Preset_Class KPrShapeAnimation::presetClass() const
+{
+    return m_class;
+}
+
+QString KPrShapeAnimation::id() const
+{
+    return m_id;
+}
+
+QString KPrShapeAnimation::presetClassText() const
+{
+    if (presetClass() == KPrShapeAnimation::None) {
+        return QString();
+    }
+    if (presetClass() == KPrShapeAnimation::Emphasis) {
+        return QString("emphasis");
+    }
+    else if (presetClass() == KPrShapeAnimation::Entrance) {
+        return QString("entrance");
+    }
+    else if (presetClass() == KPrShapeAnimation::Exit) {
+        return QString("exit");
+    }
+    else if (presetClass() == KPrShapeAnimation::Motion_Path) {
+        return QString("motion-path");
+    }
+    else if (presetClass() == KPrShapeAnimation::Ole_Action) {
+        return QString("ole-action");
+    }
+    else if (presetClass() == KPrShapeAnimation::Media_Call) {
+        return QString("media-call");
+    }
+    else {
+        return QString("custom");
+    }
+}

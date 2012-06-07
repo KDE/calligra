@@ -35,11 +35,33 @@ class KPrAnimationCache;
 class KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
 public:
+
+    enum Node_Type {
+        On_Click,
+        After_Previous,
+        With_Previous
+    };
+
+    enum Preset_Class {
+        None,
+        Entrance,
+        Exit,
+        Emphasis,
+        Custom,
+        Motion_Path,
+        Ole_Action,
+        Media_Call
+    };
+    enum Animation_State {
+        Valid,
+        Invalid
+    };
+
     KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
     virtual ~KPrShapeAnimation();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep, QString presetClass, QString id) const;
+    virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
 
     KoShape * shape() const;
     KoTextBlockData * textBlockData() const;
@@ -64,9 +86,21 @@ public:
 
     QPair<int, int> timeRange();
 
+    void setNodeType(Node_Type type);
+    void setPresetClass(Preset_Class presetClass);
+    void setId(QString id);
+     Node_Type NodeType() const;
+    Preset_Class presetClass() const;
+    QString id() const;
+    QString presetClassText() const;
+
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
+
+    Node_Type m_triggerEvent;
+    Preset_Class m_class;
+    QString m_id;
 };
 
 #endif /* KPRSHAPEANIMATION_H */

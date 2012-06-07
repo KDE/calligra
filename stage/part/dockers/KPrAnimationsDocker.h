@@ -30,6 +30,7 @@ class QToolButton;
 class KPrView;
 class KPrAnimationsTimeLineView;
 class KPrAnimationsDataModel;
+class QModelIndex;
 
 class KPrAnimationsDocker: public QDockWidget
 {
@@ -40,6 +41,8 @@ public:
 
 public slots:
     void slotActivePageChanged();
+    void changeSelection(const QModelIndex &index);
+    void changeAnimationSelection();
 
 
 private:

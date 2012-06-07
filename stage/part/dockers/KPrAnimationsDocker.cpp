@@ -34,6 +34,11 @@
 #include <KIcon>
 #include <KLocale>
 #include <KIconLoader>
+#include <KoToolManager.h>
+#include <KoSelection.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoShapeManager.h>
 
 KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
 : QDockWidget(parent, flags)
@@ -110,9 +115,12 @@ void KPrAnimationsDocker::setView(KPrView* view)
         disconnect(m_animationsTimeLineView, 0, this, 0);
     }
     m_view = view;
+    m_animationsModel->setDocumentView(m_view);
+
     slotActivePageChanged();
     connect(m_view->proxyObject, SIGNAL(activePageChanged()),
              this, SLOT(slotActivePageChanged()));
+    connect(m_animationsTimeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
 
     // remove the layouts from the last view
     //m_layoutsView->clear();
@@ -131,5 +139,40 @@ void KPrAnimationsDocker::slotActivePageChanged()
     if ( page ) {
         m_animationsModel->setActivePage(page);
         m_animationsTimeLineView->update();
+    }
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(changeAnimationSelection()));
+}
+
+void KPrAnimationsDocker::changeSelection(const QModelIndex &index)
+{
+    Q_ASSERT(index.internalPointer());
+
+    if (!index.isValid())
+        return;
+
+    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    if (!shape)
+        return;
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    foreach (KoShape* shape, selection->selectedShapes()) {
+        shape->update();
+    }
+    selection->deselectAll();
+    selection->select(shape);
+    selection->update();
+    shape->update();
+}
+
+void KPrAnimationsDocker::changeAnimationSelection()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
+    if (index.isValid()) {
+        m_animationsTimeLineView->setCurrentIndex(index);
     }
 }

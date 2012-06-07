@@ -41,7 +41,7 @@ void KPrAnimationSubStep::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep, QString presetClass, QString id) const
+bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
@@ -49,7 +49,7 @@ bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep,
         bool startSubStep = !i;
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
-            a->saveOdf(paContext, startStep, startSubStep, presetClass, id);
+            a->saveOdf(paContext, startStep, startSubStep);
         }
     }
     writer.endElement();
@@ -64,21 +64,4 @@ void KPrAnimationSubStep::deactivate()
             a->deactivate();
         }
     }
-}
-
-QPair<int, int> KPrAnimationSubStep::timeRange()
-{
-    int minStart=99999;
-    int maxEnd=0;
-    for (int i=0; i < this->animationCount(); i++) {
-        QAbstractAnimation *animation = this->animationAt(i);
-        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
-            minStart = qMin(minStart, a->timeRange().first);
-            maxEnd = qMax(maxEnd, a->timeRange().second);
-        }
-    }
-    QPair<int, int> pair;
-    pair.first = minStart;
-    pair.second = maxEnd;
-    return pair;
 }

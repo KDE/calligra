@@ -29,50 +29,13 @@ class KoShape;
 class KPrAnimationStep : public QSequentialAnimationGroup, KPrAnimationData
 {
 public:
-    enum Node_Type {
-        On_Click,
-        After_Previous,
-        With_Previous
-    };
-
-    enum Preset_Class {
-        Entrance,
-        Exit,
-        Emphasis,
-        Custom,
-        Motion_Path,
-        Ole_Action,
-        Media_Call
-    };
-    enum Animation_State {
-        Valid,
-        Invalid
-    };
-
     KPrAnimationStep();
     virtual ~KPrAnimationStep();
     virtual void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void deactivate();
-    void setNodeType(Node_Type type);
-    void setPresetClass(Preset_Class presetClass);
-    void setId(QString id);
-    void setAnimationState(Animation_State state);
-    void setTargetElement(KoShape *shape);
-    Node_Type NodeType() const;
-    Preset_Class presetClass() const;
-    Animation_State animationState() const;
-    QString id() const;
-    QString presetClassText() const;
-    KoShape *targetElement() const;
-    QPair <int, int> timeRange();
 
-private:
-    Node_Type m_triggerEvent;
-    Preset_Class m_class;
-    QString m_id;
-    Animation_State m_state;
-    KoShape *m_targetElement;
+
 };
 
 #endif /* KPRANIMATIONSTEP_H */
