@@ -63,6 +63,7 @@ protected slots:
     void slotAspectChanged(bool keep);
     void slotWidthChanged(int v);
     void slotHeightChanged(int v);
+    void slotCanvasInfinitenessChanged();
     void slotXOffsetChanged(int v);
     void slotYOffsetChanged(int v);
     void slotTopLeftClicked();

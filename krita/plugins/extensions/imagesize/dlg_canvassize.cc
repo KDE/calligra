@@ -45,6 +45,8 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     connect(m_page->xOffset, SIGNAL(valueChanged(int)), this, SLOT(slotXOffsetChanged(int)));
     connect(m_page->yOffset, SIGNAL(valueChanged(int)), this, SLOT(slotYOffsetChanged(int)));
 
+    connect(m_page->chkInfiniteCanvas, SIGNAL(stateChanged(int)), this, SLOT(slotCanvasInfinitenessChanged()));
+
     connect(m_page->topLeft, SIGNAL(clicked()), this, SLOT(slotTopLeftClicked()));
     connect(m_page->topCenter, SIGNAL(clicked()), this, SLOT(slotTopCenterClicked()));
     connect(m_page->topRight, SIGNAL(clicked()), this, SLOT(slotTopRightClicked()));
@@ -104,6 +106,31 @@ qint32 DlgCanvasSize::xOffset()
 qint32 DlgCanvasSize::yOffset()
 {
     return (qint32)m_page->yOffset->value();
+}
+
+void DlgCanvasSize::slotCanvasInfinitenessChanged()
+{
+    if(m_page->chkInfiniteCanvas->isChecked())
+    {
+        m_page->newWidth->setEnabled(false);
+        m_page->newHeight->setEnabled(false);
+        m_page->comboWidthUnit->setEnabled(false);
+        m_page->comboHeightUnit->setEnabled(false);
+        m_page->xOffset->setEnabled(false);
+        m_page->yOffset->setEnabled(false);
+        m_page->gridLayout_3->setEnabled(false);
+    }
+
+    else
+    {
+        m_page->newWidth->setEnabled(true);
+        m_page->newHeight->setEnabled(true);
+        m_page->comboWidthUnit->setEnabled(true);
+        m_page->comboHeightUnit->setEnabled(true);
+        m_page->xOffset->setEnabled(true);
+        m_page->yOffset->setEnabled(true);
+        m_page->gridLayout_3->setEnabled(true);
+    }
 }
 
 void DlgCanvasSize::slotAspectChanged(bool keep)
