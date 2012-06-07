@@ -24,6 +24,7 @@
 #include <KoToolProxy.h>
 
 #include <kis_canvas2.h>
+#include <ko_favorite_resource_manager.h>
 
 #include "kis_shortcut.h"
 #include "kis_abstract_input_action.h"
@@ -31,6 +32,8 @@
 #include "kis_pan_action.h"
 #include "kis_alternate_invocation_action.h"
 #include "kis_rotate_canvas_action.h"
+#include "kis_zoom_action.h"
+#include "kis_show_palette_action.h"
 
 class KisInputManager::Private
 {
@@ -100,27 +103,49 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
     d->shortcuts.append(shortcut);
 
+    action = new KisZoomAction(this);
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Space);
+    d->actions.append(action);
+    d->shortcuts.append(shortcut);
+
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+    d->shortcuts.append(shortcut);
+
+    action = new KisShowPaletteAction(this);
+    shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+    d->actions.append(action);
+    d->shortcuts.append(shortcut);
+
     d->potentialShortcuts = d->shortcuts;
 }
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
+    Q_UNUSED(object)
     switch(event->type()) {
-        case QEvent::MouseMove: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF());
-            if(!d->currentAction) {
-                d->toolProxy->mouseMoveEvent(mevent, d->mousePosition);
-            }
-        }
         case QEvent::KeyPress:
-        case QEvent::KeyRelease:
         case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
-        case QEvent::TabletPress:
-        case QEvent::TabletRelease:
-        case QEvent::TabletMove:
+            if(canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
+                canvas()->favoriteResourceManager()->slotShowPopupPalette();
+            }
+        case QEvent::MouseMove:
+            if(event->type() == QEvent::MouseMove) {
+                QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+                d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF());
+                if(!d->currentAction) {
+                    d->toolProxy->mouseMoveEvent(mevent, d->mousePosition);
+                }
+            }
+        case QEvent::KeyRelease:
+        case QEvent::MouseButtonRelease:
         case QEvent::Wheel:
             if(d->currentAction) {
                 d->currentShortcut->match(event);
@@ -143,7 +168,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             return true;
         case QEvent::Enter:
             d->canvas->canvasWidget()->setFocus();
-            break;
+            return true;
         case QEvent::Leave:
             if(d->currentAction) {
                 d->currentShortcut->clear();
@@ -153,7 +178,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                 d->potentialShortcuts = d->shortcuts;
                 d->eventQueue.clear();
             }
-            break;
+            return true;
+        case QEvent::TabletMove:
+            if(d->currentAction && d->currentAction->handleTablet()) {
+                d->currentAction->inputEvent(event);
+                return true;
+            }
+        case QEvent::TabletPress:
+        case QEvent::TabletRelease:
+            event->ignore();
         default:
             break;
     }

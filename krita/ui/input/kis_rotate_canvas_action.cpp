@@ -46,8 +46,6 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
 
 void KisRotateCanvasAction::begin()
 {
-    qDebug() << Q_FUNC_INFO;
-
     d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
     QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }

@@ -30,6 +30,7 @@ public:
     virtual void begin() = 0;
     virtual void end() = 0;
     virtual void inputEvent(QEvent* event) = 0;
+    virtual bool handleTablet() const { return false; }
 
 protected:
     KisInputManager * const m_inputManager;

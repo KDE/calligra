@@ -51,5 +51,13 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         m_inputManager->toolProxy()->mouseMoveEvent(mevent, m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(mevent->posF()));
+    } else if(event->type() == QEvent::TabletMove) {
+        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
+        m_inputManager->toolProxy()->tabletEvent(tevent, m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(tevent->pos()));
     }
+}
+
+bool KisToolInvocationAction::handleTablet() const
+{
+    return true;
 }

@@ -20,6 +20,7 @@
 
 #include "kis_abstract_input_action.h"
 #include <QEvent>
+#include <QDebug>
 #include <QKeyEvent>
 
 class KisShortcut::Private
