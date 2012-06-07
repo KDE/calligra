@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;
 Comment=
 Exec=braindump %u
-GenericName=Notes and idea gathering.
+GenericName=Notes and idea gathering
 GenericName[bs]=Napomene i sakupljanje ideja.
 GenericName[ca]=Notes i recull d'idees.
 GenericName[ca@valencia]=Notes i recull d'idees.
