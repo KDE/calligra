@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010 Ko Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +34,8 @@ class TEXTLAYOUT_EXPORT KoTextLayoutObstruction
 {
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
+
+    KoTextLayoutObstruction(QRectF rect, bool rtl);
 
     void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth);
 
@@ -78,6 +80,7 @@ private:
     QRectF m_line;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
+    QRectF m_rect;
     qreal m_distance;
     qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;

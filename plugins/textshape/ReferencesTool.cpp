@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -122,7 +122,7 @@ void ReferencesTool::createActions()
     action = new KAction(this);
     action->setText(i18n("Format Notes"));
     addAction("format_notes",action);
-    action->setToolTip(i18n("Configure"));
+    action->setToolTip(i18n("Configure the notes"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));
 
     action = new KAction(i18n("Insert Citation"),this);
