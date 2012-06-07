@@ -993,8 +993,24 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
                     v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
                 else
                     v += QString::fromLatin1("(%1)").arg(field->precision());
-            } else if (field->type() == Field::Text && field->maxLength() > 0)
-                v += QString::fromLatin1("(%1)").arg(field->maxLength());
+            }
+            else if (field->type() == Field::Text) {
+                uint realMaxLen;
+                if (m_driver->beh->TEXT_TYPE_MAX_LENGTH == 0) {
+                    realMaxLen = field->maxLength(); // allow to skip (N)
+                }
+                else { // max length specified by driver
+                    if (field->maxLength() == 0) { // as long as possible
+                        realMaxLen = m_driver->beh->TEXT_TYPE_MAX_LENGTH;
+                    }
+                    else { // not longer than specified by driver
+                        realMaxLen = qMin(m_driver->beh->TEXT_TYPE_MAX_LENGTH, field->maxLength());
+                    }
+                }
+                if (realMaxLen > 0) {
+                    v += QString::fromLatin1("(%1)").arg(realMaxLen);
+                }
+            }
 
             if (autoinc)
                 v += (" " +
