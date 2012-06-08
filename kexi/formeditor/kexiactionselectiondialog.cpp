@@ -53,20 +53,9 @@ class ActionSelectorDialogListItem : public QListWidgetItem
 public:
 
     ActionSelectorDialogListItem(const QString& data, QListWidget *parent, QString label1)
-            : QListWidgetItem(label1, parent)
-            , fifoSorting(true) {
-        m_sortKey.sprintf("%2.2d", parent->count());
+            : QListWidgetItem(label1, parent) {
 	setData(Qt::UserRole, data);
     }
-
-    virtual QString key(int column, bool ascending) const {
-        return fifoSorting ? m_sortKey : text();
-    }
-
-    bool fifoSorting : 1;
-
-protected:
-    QString m_sortKey;
 };
 
 //---------------------------------------
@@ -130,11 +119,12 @@ void KActionsListViewBase::init()
         ActionSelectorDialogListItem *pitem = new ActionSelectorDialogListItem(
             action->objectName(), this,
             action->toolTip().isEmpty() ? action->text().replace("&", "") : action->toolTip());
-        pitem->fifoSorting = false; //alpha sort
-        pitem->setIcon(action->icon());
+
+	pitem->setIcon(action->icon());
         if (pitem->icon().isNull())
             pitem->setIcon(noIcon);
     }
+    setSortingEnabled(true);
 }
 
 //---------------------------------------
@@ -198,6 +188,7 @@ public:
 		itm->setIcon(SmallIcon(part->info()->itemIcon()));
             }
 	}
+	setSortingEnabled(false);
     }
 
     ~ActionCategoriesListView() {
@@ -207,7 +198,6 @@ public:
     virtual QListWidgetItem *itemForAction(const QString& actionName) {
 	for (int i = 0; i < count(); ++i) {
 	  QListWidgetItem *itm = item(i);
-	  kDebug() << "Checking if " << actionName << " == " << itm->data(Qt::UserRole).toString();
 	  if (itm->data(Qt::UserRole).toString() == actionName)
 	    return itm;
 	  }
@@ -287,6 +277,8 @@ public:
         }
         item = new ActionSelectorDialogListItem("close", this, i18n("Close View"));
         item->setIcon(SmallIcon("window-close"));
+	
+	setSortingEnabled(true);
     }
 
     QString m_currentPartClass;
@@ -412,6 +404,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     lbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     lbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lbl->setWordWrap(true);
+
     d->glyr->addWidget(lbl, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 
     // widget stack for 2nd and 3rd column
@@ -630,8 +623,8 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item
         updateOKButtonStatus();
         return;
     }
-    // other case
-
+    
+    // Mavigator item case
     QString partClass = item->data(Qt::UserRole + 1).toString();
     d->updateSelectActionToBeExecutedMessage(partClass);
     if (d->objectsListView->itemsPartClass() != item->data(Qt::UserRole).toString()) {
@@ -649,6 +642,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item
 
       
     d->actionCategoriesListView->update();
+    d->actionToExecuteListView->update();
     updateOKButtonStatus();
 }
 
@@ -672,7 +666,9 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                                   d->currentFormActionsListView->currentItem())->data(Qt::UserRole).toString();
                 return data;
             }
-        }
+        } else if (simpleItem->data(Qt::UserRole).toString() == "noaction") {
+	  return data;
+	}
     }
     
 
