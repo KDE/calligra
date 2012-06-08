@@ -82,6 +82,9 @@ public:
     }
     ~PrintingOptions() {}
 
+    bool loadXml( KoXmlElement &element );
+    void saveXml( QDomElement &element ) const;
+
     struct Data {
         bool group;
         Qt::CheckState project;
@@ -104,6 +107,12 @@ public:
     void setOptions( const PrintingOptions &options );
     PrintingOptions options() const;
 
+signals:
+    void changed(PrintingOptions);
+
+protected slots:
+    void slotChanged();
+
 private:
     PrintingOptions m_options;
 };
@@ -114,7 +123,7 @@ class KPLATOUI_EXPORT PrintingDialog : public KoPrintingDialog
     Q_OBJECT
 public:
     PrintingDialog(ViewBase *view);
-    ~PrintingDialog() {}
+    ~PrintingDialog();
 
     virtual QList<QWidget*> createOptionWidgets() const;
     virtual QList<KoShape*> shapesOnPage(int);
@@ -130,7 +139,7 @@ public:
     QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 signals:
-    void changed ( const PrintingOptions &opt );
+    void changed( const PrintingOptions &opt );
     
 public slots:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
@@ -231,18 +240,18 @@ public:
     /// Reimplement if your view handles zoom
     virtual KoZoomController *zoomController() const { return 0; }
 
-    /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
-    /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const {}
+    /// Loads context info (printer settings) into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    /// Save context info (printer settings) from this view.
+    virtual void saveContext( QDomElement &context ) const;
 
     virtual KoPrintJob *createPrintJob();
     PrintingOptions printingOptions() const { return m_printingOptions; }
-    void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
 public slots:
+    void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     virtual void setScheduleManager( ScheduleManager *sm ) { m_schedulemanager = sm; }
@@ -254,7 +263,7 @@ public slots:
     virtual void slotEditPaste() {}
     virtual void slotRefreshView() {}
     
-    void setPageLayout( const KoPageLayout &layout ) { m_pagelayout = layout; }
+    void setPageLayout( const KoPageLayout &layout );
 
 signals:
     /// Emitted when the gui has been activated or deactivated

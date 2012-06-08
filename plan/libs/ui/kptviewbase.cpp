@@ -33,6 +33,7 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
+#include "KoUnit.h"
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -50,17 +51,78 @@
 namespace KPlato
 {
 
+bool PrintingOptions::loadXml( KoXmlElement &element )
+{
+    KoXmlElement e;
+    forEachElement( e, element ) {
+        if ( e.tagName() == "header" ) {
+            headerOptions.group = e.attribute( "group", "0" ).toInt();
+            headerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            headerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            headerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            headerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        } else if ( e.tagName() == "footer" ) {
+            footerOptions.group = e.attribute( "group", "0" ).toInt();
+            footerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            footerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            footerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            footerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        }
+    }
+    return true;
+}
+
+void PrintingOptions::saveXml( QDomElement &element ) const
+{
+    QDomElement me = element.ownerDocument().createElement( "printing-options" );
+    element.appendChild( me );
+
+    QDomElement h = me.ownerDocument().createElement( "header" );
+    me.appendChild( h );
+    h.setAttribute( "group", headerOptions.group );
+    h.setAttribute( "project", headerOptions.project );
+    h.setAttribute( "date", headerOptions.date );
+    h.setAttribute( "manager", headerOptions.manager );
+    h.setAttribute( "page", headerOptions.page );
+
+    QDomElement f = me.ownerDocument().createElement( "footer" );
+    me.appendChild( f );
+    f.setAttribute( "group", footerOptions.group );
+    f.setAttribute( "project", footerOptions.project );
+    f.setAttribute( "date", footerOptions.date );
+    f.setAttribute( "manager", footerOptions.manager );
+    f.setAttribute( "page", footerOptions.page );
+}
+
+//----------------------
 PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
     setWindowTitle( i18n("Header and Footer" ));
     setOptions( opt );
+
+    connect(ui_header, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_headerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+
+    connect(ui_footer, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_footerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
 }
 
 PrintingHeaderFooter::~PrintingHeaderFooter()
 {
     //kDebug(planDbg());
+}
+
+void PrintingHeaderFooter::slotChanged()
+{
+    emit changed( options() );
 }
 
 void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
@@ -104,6 +166,10 @@ PrintingDialog::PrintingDialog( ViewBase *view )
     m_widget( 0 )
 {
     setPrinterPageLayout();
+}
+
+PrintingDialog::~PrintingDialog()
+{
 }
 
 QAbstractPrintDialog::PrintDialogOptions PrintingDialog::printDialogOptions() const
@@ -176,6 +242,7 @@ QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
     //kDebug(planDbg());
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
+    connect(w, SIGNAL(changed(const PrintingOptions&)), m_view, SLOT(setPrintingOptions(const PrintingOptions&)));
     const_cast<PrintingDialog*>( this )->m_widget = w;
 
     return QList<QWidget*>() << w;
@@ -369,6 +436,11 @@ KoPageLayout ViewBase::pageLayout() const
     return m_pagelayout;
 }
 
+void ViewBase::setPageLayout( const KoPageLayout &layout )
+{
+    m_pagelayout = layout;
+}
+
 bool ViewBase::isActive() const
 {
     if ( hasFocus() ) {
@@ -429,6 +501,42 @@ void ViewBase::slotOptionsFinished( int result )
     if ( sender() ) {
         sender()->deleteLater();
     }
+}
+
+bool ViewBase::loadContext( const KoXmlElement &context )
+{
+    KoXmlElement me;
+    forEachElement( me, context ) {
+        if ( me.tagName() == "page-layout" ) {
+            m_pagelayout.format = KoPageFormat::formatFromString( me.attribute( "format" ) );
+            m_pagelayout.orientation = me.attribute( "orientation" ) == "landscape" ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+            m_pagelayout.width = me.attribute( "width", "0.0" ).toDouble();
+            m_pagelayout.height = me.attribute( "height", "0.0" ).toDouble();
+            m_pagelayout.leftMargin = me.attribute( "left-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.rightMargin = me.attribute( "right-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.topMargin = me.attribute( "top-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.bottomMargin = me.attribute( "bottom-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+        } else if ( me.tagName() == "printing-options" ) {
+            m_printingOptions.loadXml( me );
+        }
+    }
+    return true;
+}
+
+void ViewBase::saveContext( QDomElement &context ) const
+{
+    QDomElement me = context.ownerDocument().createElement( "page-layout" );
+    context.appendChild( me );
+    me.setAttribute( "format", KoPageFormat::formatString( m_pagelayout.format ) );
+    me.setAttribute( "orientation", m_pagelayout.orientation == KoPageFormat::Portrait ? "portrait" : "landscape" );
+    me.setAttribute( "width", m_pagelayout.width );
+    me.setAttribute( "height",m_pagelayout. height );
+    me.setAttribute( "left-margin", m_pagelayout.leftMargin );
+    me.setAttribute( "right-margin", m_pagelayout.rightMargin );
+    me.setAttribute( "top-margin", m_pagelayout.topMargin );
+    me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
+
+    m_printingOptions.saveXml( context );
 }
 
 //----------------------
