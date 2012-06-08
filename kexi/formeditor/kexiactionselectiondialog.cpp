@@ -36,7 +36,6 @@
 #include <QBitmap>
 #include <QLabel>
 
-#include <Q3Header>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -44,30 +43,24 @@
 #include <QStackedWidget>
 
 #include <widget/utils/klistviewitemtemplate.h>
-#include <widget/navigator/KexiProjectListView.h>
-#include <widget/navigator/KexiProjectListViewItem.h>
+#include <widget/navigator/KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectModel.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-typedef KListViewItemTemplate<QString> ActionSelectorDialogListItemBase;
-
-class ActionSelectorDialogListItem : public ActionSelectorDialogListItemBase
+class ActionSelectorDialogListItem : public QListWidgetItem
 {
 public:
-    ActionSelectorDialogListItem(const QString& data, Q3ListView *parent, QString label1)
-            : ActionSelectorDialogListItemBase(data, parent, label1)
-            , fifoSorting(true) {
-        m_sortKey.sprintf("%2.2d", parent->childCount());
-    }
 
-    ActionSelectorDialogListItem(const QString& data, Q3ListViewItem *parent, QString label1)
-            : ActionSelectorDialogListItemBase(data, parent, label1)
+    ActionSelectorDialogListItem(const QString& data, QListWidget *parent, QString label1)
+            : QListWidgetItem(label1, parent)
             , fifoSorting(true) {
-        m_sortKey.sprintf("%2.2d", parent->childCount());
+        m_sortKey.sprintf("%2.2d", parent->count());
+	setData(Qt::UserRole, data);
     }
 
     virtual QString key(int column, bool ascending) const {
-        return fifoSorting ? m_sortKey : ActionSelectorDialogListItemBase::key(column, ascending);
+        return fifoSorting ? m_sortKey : text();
     }
 
     bool fifoSorting : 1;
@@ -79,37 +72,32 @@ protected:
 //---------------------------------------
 
 ActionsListViewBase::ActionsListViewBase(QWidget* parent)
-        : K3ListView(parent)
+        : QListWidget(parent)
 {
-    setResizeMode(Q3ListView::AllColumns);
-    addColumn("");
-    header()->hide();
-    setColumnWidthMode(0, Q3ListView::Maximum);
-    setAllColumnsShowFocus(true);
-    setTooltipColumn(0);
+    setResizeMode(QListView::Adjust);
 }
 
 ActionsListViewBase::~ActionsListViewBase()
 {
 }
 
-Q3ListViewItem *ActionsListViewBase::itemForAction(const QString& actionName)
+QListWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName)
 {
-    for (Q3ListViewItemIterator it(this); it.current(); ++it) {
-        ActionSelectorDialogListItem* item = dynamic_cast<ActionSelectorDialogListItem*>(it.current());
-        if (item && item->data == actionName)
-            return item;
+    for (int i = 0; i < count(); ++i) {
+        ActionSelectorDialogListItem* itm = dynamic_cast<ActionSelectorDialogListItem*>(item(i));
+        if (itm && itm->data(Qt::UserRole).toString() == actionName)
+            return itm;
     }
     return 0;
 }
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-    Q3ListViewItem *item = itemForAction(actionName);
+    QListWidgetItem *item = itemForAction(actionName);
     if (item) {
-        setSelected(item, true);
-        ensureItemVisible(firstChild());
-        ensureItemVisible(selectedItem());
+        item->setSelected(true);
+        //TODO ensureItemVisible(firstChild());
+        //TODO ensureItemVisible(selectedItem());
     }
 }
 
@@ -124,7 +112,7 @@ KActionsListViewBase::~KActionsListViewBase() {}
 
 void KActionsListViewBase::init()
 {
-    setSorting(0);
+    //TODO setSorting(0);
     const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
     QList<QAction*> sharedActions(KexiMainWindowIface::global()->allActions());
     const Kexi::ActionCategories *acat = Kexi::actionCategories();
@@ -144,9 +132,9 @@ void KActionsListViewBase::init()
             action->objectName(), this,
             action->toolTip().isEmpty() ? action->text().replace("&", "") : action->toolTip());
         pitem->fifoSorting = false; //alpha sort
-        pitem->setPixmap(0, action->icon().pixmap(16));
-        if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
-            pitem->setPixmap(0, noIcon);
+        pitem->setIcon(action->icon());
+        if (pitem->icon().isNull())
+            pitem->setIcon(noIcon);
     }
 }
 
@@ -188,12 +176,11 @@ class ActionCategoriesListView : public ActionsListViewBase
 public:
     ActionCategoriesListView(QWidget* parent) //, KexiProject& project)
             : ActionsListViewBase(parent) {
-        Q3ListViewItem *item = new ActionSelectorDialogListItem(
-            "noaction", this, i18n("No action"));
+        QListWidgetItem *itm = new ActionSelectorDialogListItem("noaction", this, i18n("No action"));
         const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
-        item->setPixmap(0, noIcon);
-        item = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions"));
-        item->setPixmap(0, SmallIcon("kexi"));
+        itm->setIcon(noIcon);
+        itm = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions"));
+        itm->setIcon(SmallIcon("kexi"));
 
         KexiPart::PartInfoList *pl = Kexi::partManager().infoList();
         if (pl) {
@@ -201,38 +188,40 @@ public:
                 KexiPart::Part *part = Kexi::partManager().part(info);
                 if (!info->isVisibleInNavigator() || !part)
                     continue;
-                item = new KexiProjectListViewItem(this, info);
-                item->setText(0, part->info()->instanceCaption());
+                itm = new QListWidgetItem(this);
+		itm->setData(Qt::UserRole, info->objectName());
+                itm->setText(part->info()->instanceCaption());
+		itm->setIcon(SmallIcon(part->info()->itemIcon()));
             }
         }
-        Q3ListViewItem *formItem = itemForAction("form");
+        /* TODO Move currentForm ??
+        QListWidgetItem *formItem = itemForAction("form");
         if (formItem) {
             item = new ActionSelectorDialogListItem("currentForm", formItem,
                                                     i18nc("Current form's actions", "Current"));
         }
-        adjustColumn(0);
-        setMinimumWidth(columnWidth(0) + 6);
+        */
     }
 
     ~ActionCategoriesListView() {
     }
 
     //! \return item for action \a actionName, reimplemented to support KexiBrowserItem items
-    virtual Q3ListViewItem *itemForAction(const QString& actionName) {
-        for (Q3ListViewItemIterator it(this); it.current(); ++it) {
+    virtual QListWidgetItem *itemForAction(const QString& actionName) {
+        for (int i = 0; i < count(); ++i) {
             //simple case
-            ActionSelectorDialogListItem* item
-            = dynamic_cast<ActionSelectorDialogListItem*>(it.current());
-            if (item) {
-                if (item->data == actionName)
-                    return it.current();
+            ActionSelectorDialogListItem* itm = dynamic_cast<ActionSelectorDialogListItem*>(item(i));
+            if (itm) {
+                if (itm->data(Qt::UserRole).toString() == actionName)
+                    return itm;
                 continue;
             }
-            KexiProjectListViewItem* bitem = dynamic_cast<KexiProjectListViewItem*>(it.current());
-            if (bitem) {
-                if (bitem->partInfo()->objectName() == actionName)
-                    return it.current();
-            }
+            /*TODO?
+            QListWidgetItem* bitm = item(i);
+            if (bitm) {
+                if (bitm->data().toString() == actionName)
+                    return bitm;
+            }*/
         }
         return 0;
     }
@@ -263,11 +252,11 @@ public:
         const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
         if (supportedViewModes & Kexi::DataViewMode) {
             item = new ActionSelectorDialogListItem("open", this, i18n("Open in Data View"));
-            item->setPixmap(0, SmallIcon("document-open"));
+            item->setIcon(SmallIcon("document-open"));
         }
         if (part->info()->isExecuteSupported()) {
             item = new ActionSelectorDialogListItem("execute", this, i18n("Execute"));
-            item->setPixmap(0, SmallIcon("media-playback-start"));
+            item->setIcon(SmallIcon("media-playback-start"));
         }
 #ifndef KEXI_NO_QUICK_PRINTING
         if (part->info()->isPrintingSupported()) {
@@ -290,34 +279,28 @@ public:
             ActionSelectorDialogListItem *exportItem = new ActionSelectorDialogListItem(
                 "exportToCSV", this,
                 i18nc("Note: use multiple rows if needed", "Export to File\nAs Data Table"));
-            exportItem->setMultiLinesEnabled(true);
-            exportItem->setPixmap(0, SmallIcon("table"));
+            //TODO exportItem->setMultiLinesEnabled(true);
+            exportItem->setIcon(SmallIcon("table"));
             item = new ActionSelectorDialogListItem("copyToClipboardAsCSV",
-                                                    exportItem,
+                                                    this,
                                                     i18nc("Note: use multiple rows if needed", "Copy to Clipboard\nAs Data Table"));
-            item->setPixmap(0, SmallIcon("table"));
-            item->setMultiLinesEnabled(true);
-            setOpen(exportItem, true);
-            exportItem->setExpandable(false);
+            item->setIcon(SmallIcon("table"));
+            //TODO item->setMultiLinesEnabled(true);
+            //TODO flattened list? setOpen(exportItem, true);
+            //TODO exportItem->setExpandable(false);
         }
         item = new ActionSelectorDialogListItem("new", this, i18n("Create New Object"));
-        item->setPixmap(0, SmallIcon("document-new"));
+        item->setIcon(SmallIcon("document-new"));
         if (supportedViewModes & Kexi::DesignViewMode) {
             item = new ActionSelectorDialogListItem("design", this, i18n("Open in Design View"));
-            item->setPixmap(0, SmallIcon("document-properties"));
+            item->setIcon(SmallIcon("document-properties"));
         }
         if (supportedViewModes & Kexi::TextViewMode) {
             item = new ActionSelectorDialogListItem("editText", this, i18n("Open in Text View"));
-            item->setPixmap(0, noIcon);
+            item->setIcon(noIcon);
         }
         item = new ActionSelectorDialogListItem("close", this, i18n("Close View"));
-        item->setPixmap(0, SmallIcon("window-close"));
-        updateWidth();
-    }
-
-    void updateWidth() {
-        adjustColumn(0);
-        setMinimumWidth(columnWidth(0));
+        item->setIcon(SmallIcon("window-close"));
     }
 
     QString m_currentPartClass;
@@ -375,7 +358,7 @@ public:
     ActionCategoriesListView* actionCategoriesListView; //!< for column #1
     QWidget *kactionPageWidget;
     KActionsListView* kactionListView;  //!< for column #2
-    KexiProjectListView* objectsListView; //!< for column #2
+    KexiProjectNavigator* objectsListView; //!< for column #2
     QWidget *currentFormActionsPageWidget; //!< for column #2
     CurrentFormActionsListView* currentFormActionsListView; //!< for column #2
     QWidget *emptyWidget;
@@ -434,8 +417,8 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->actionCategoriesListView = new ActionCategoriesListView(mainWidget);
     d->actionCategoriesListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
     d->glyr->addWidget(d->actionCategoriesListView, 1, 0);
-    connect(d->actionCategoriesListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
-            this, SLOT(slotActionCategorySelected(Q3ListViewItem*)));
+    connect(d->actionCategoriesListView, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(slotActionCategorySelected(QListWidgetItem*)));
 
     QLabel *lbl = new QLabel(i18n("Action category:"), mainWidget);
     lbl->setBuddy(d->actionCategoriesListView);
@@ -461,7 +444,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
     // 2nd column: list of actions/objects
-    d->objectsListView = new KexiProjectListView(d->secondAnd3rdColumnMainWidget, KexiProjectListView::NoFeatures);
+    d->objectsListView = new KexiProjectNavigator(d->secondAnd3rdColumnMainWidget, KexiProjectNavigator::NoFeatures);
     d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
     connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
             this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
@@ -483,10 +466,12 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->actionToExecuteListView->installEventFilter(this); //to be able to disable painting
     d->actionToExecuteListView->viewport()->installEventFilter(this); //to be able to disable painting
     d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-    connect(d->actionToExecuteListView, SIGNAL(executed(Q3ListViewItem*)),
-            this, SLOT(slotActionToExecuteItemExecuted(Q3ListViewItem*)));
-    connect(d->actionToExecuteListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
-            this, SLOT(slotActionToExecuteItemSelected(Q3ListViewItem*)));
+    
+    connect(d->actionToExecuteListView, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(slotActionToExecuteItemExecuted(QListWidgetItem*)));
+    connect(d->actionToExecuteListView, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(slotActionToExecuteItemSelected(QListWidgetItem*)));
+    
     d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
 
     d->actionToExecuteLbl = new QLabel(
@@ -503,7 +488,6 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->setActionToExecuteSectionVisible(true);
     adjustSize();
     resize(qMax(700, width()), qMax(450, height()));
-    d->actionToExecuteListView->updateWidth();
 
     bool ok;
     QString actionType, actionArg;
@@ -543,23 +527,23 @@ KexiActionSelectionDialog::~KexiActionSelectionDialog()
     delete d;
 }
 
-void KexiActionSelectionDialog::slotKActionItemExecuted(Q3ListViewItem*)
+void KexiActionSelectionDialog::slotKActionItemExecuted(QListWidgetItem*)
 {
     accept();
 }
 
-void KexiActionSelectionDialog::slotKActionItemSelected(Q3ListViewItem*)
+void KexiActionSelectionDialog::slotKActionItemSelected(QListWidgetItem*)
 {
     d->setActionToExecuteSectionVisible(false);
     updateOKButtonStatus();
 }
 
-void KexiActionSelectionDialog::slotCurrentFormActionItemExecuted(Q3ListViewItem*)
+void KexiActionSelectionDialog::slotCurrentFormActionItemExecuted(QListWidgetItem*)
 {
     accept();
 }
 
-void KexiActionSelectionDialog::slotCurrentFormActionItemSelected(Q3ListViewItem*)
+void KexiActionSelectionDialog::slotCurrentFormActionItemSelected(QListWidgetItem*)
 {
     d->setActionToExecuteSectionVisible(false);
     updateOKButtonStatus();
@@ -570,30 +554,29 @@ void KexiActionSelectionDialog::slotItemForOpeningOrExecutingSelected(KexiPart::
     d->setActionToExecuteSectionVisible(item);
 }
 
-void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(Q3ListViewItem* item)
+void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QListWidgetItem* item)
 {
     if (!item)
         return;
-    ActionSelectorDialogListItemBase *listItem
-    = dynamic_cast<ActionSelectorDialogListItemBase*>(item);
-    if (listItem && !listItem->data.isEmpty())
+    ActionSelectorDialogListItem *listItem = dynamic_cast<ActionSelectorDialogListItem*>(item);
+    if (listItem && listItem->data(Qt::UserRole).isValid())
         accept();
 }
 
-void KexiActionSelectionDialog::slotActionToExecuteItemSelected(Q3ListViewItem*)
+void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QListWidgetItem*)
 {
     updateOKButtonStatus();
 }
 
-void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
+void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item)
 {
     ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(item);
     // simple case: part-less item, e.g. kaction:
     if (simpleItem) {
-        d->updateSelectActionToBeExecutedMessage(simpleItem->data);
+        d->updateSelectActionToBeExecutedMessage(simpleItem->data(Qt::UserRole).toString());
         QString selectActionToBeExecutedMsg(
             I18N_NOOP("&Select action to be executed after clicking \"%1\" button:")); // msg for a label
-        if (simpleItem->data == "kaction") {
+        if (simpleItem->data(Qt::UserRole).toString() == "kaction") {
             if (!d->kactionPageWidget) {
                 //create lbl+list view with a vlayout
                 d->kactionPageWidget = new QWidget();
@@ -612,15 +595,15 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
                 vlyr->addWidget(lbl);
                 vlyr->addWidget(d->kactionListView);
                 d->secondAnd3rdColumnStack->addWidget(d->kactionPageWidget);
-                connect(d->kactionListView, SIGNAL(executed(Q3ListViewItem*)),
-                        this, SLOT(slotKActionItemExecuted(Q3ListViewItem*)));
-                connect(d->kactionListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
-                        this, SLOT(slotKActionItemSelected(Q3ListViewItem*)));
+                connect(d->kactionListView, SIGNAL(itemActivated(QListWidgetItem*)),
+                        this, SLOT(slotKActionItemExecuted(QListWidgetItem*)));
+                connect(d->kactionListView, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+                        this, SLOT(slotKActionItemSelected(QListWidgetItem*)));
             }
             d->setActionToExecuteSectionVisible(false);
             d->raiseWidget(d->kactionPageWidget);
-            slotKActionItemSelected(d->kactionListView->selectedItem()); //to refresh column #3
-        } else if (simpleItem->data == "currentForm") {
+            slotKActionItemSelected(d->kactionListView->currentItem()); //to refresh column #3
+        } else if (simpleItem->data(Qt::UserRole).toString() == "currentForm") { //TODO move currentForm
             if (!d->currentFormActionsPageWidget) {
                 //create lbl+list view with a vlayout
                 d->currentFormActionsPageWidget = new QWidget();
@@ -642,15 +625,15 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
                 vlyr->addWidget(lbl);
                 vlyr->addWidget(d->currentFormActionsListView);
                 d->secondAnd3rdColumnStack->addWidget(d->currentFormActionsPageWidget);
-                connect(d->currentFormActionsListView, SIGNAL(executed(Q3ListViewItem*)),
-                        this, SLOT(slotCurrentFormActionItemExecuted(Q3ListViewItem*)));
-                connect(d->currentFormActionsListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
-                        this, SLOT(slotCurrentFormActionItemSelected(Q3ListViewItem*)));
+                connect(d->currentFormActionsListView, SIGNAL(itemActivated(QListWidgetItem*)),
+                        this, SLOT(slotCurrentFormActionItemExecuted(QListWidgetItem*)));
+                connect(d->currentFormActionsListView, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+                        this, SLOT(slotCurrentFormActionItemSelected(QListWidgetItem*)));
             }
             d->setActionToExecuteSectionVisible(false);
             d->raiseWidget(d->currentFormActionsPageWidget);
-            slotCurrentFormActionItemSelected(d->currentFormActionsListView->selectedItem()); //to refresh column #3
-        } else if (simpleItem->data == "noaction") {
+            slotCurrentFormActionItemSelected(d->currentFormActionsListView->currentItem()); //to refresh column #3
+        } else if (simpleItem->data(Qt::UserRole).toString() == "noaction") {
             d->raiseWidget(d->emptyWidget);
             d->objectsListView->clearSelection();
             //hide column #3
@@ -661,22 +644,23 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
         return;
     }
     // other case
-    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(item);
-    if (browserItem) {
-        d->updateSelectActionToBeExecutedMessage(browserItem->partInfo()->objectName());
-        if (d->objectsListView->itemsPartClass() != browserItem->partInfo()->partClass()) {
-            d->objectsListView->setProject(
-                KexiMainWindowIface::global()->project(), browserItem->partInfo()->partClass());
-            d->actionToExecuteListView->showActionsForPartClass(browserItem->partInfo()->partClass());
-            d->setActionToExecuteSectionVisible(false);
-        }
-        if (d->secondAnd3rdColumnStack->currentWidget() != d->secondAnd3rdColumnMainWidget) {
-            d->raiseWidget(d->secondAnd3rdColumnMainWidget);
-            d->objectsListView->clearSelection();
-            d->setActionToExecuteSectionVisible(false, true);
-        } else
-            d->raiseWidget(d->secondAnd3rdColumnMainWidget);
+
+    QString partClass = item->data(Qt::UserRole).toString();
+    d->updateSelectActionToBeExecutedMessage(partClass);
+    if (d->objectsListView->itemsPartClass() != item->data(Qt::UserRole).toString()) {
+	d->objectsListView->setProject(
+	    KexiMainWindowIface::global()->project(), partClass);
+	d->actionToExecuteListView->showActionsForPartClass(partClass);
+	d->setActionToExecuteSectionVisible(false);
     }
+    if (d->secondAnd3rdColumnStack->currentWidget() != d->secondAnd3rdColumnMainWidget) {
+	d->raiseWidget(d->secondAnd3rdColumnMainWidget);
+	d->objectsListView->clearSelection();
+	d->setActionToExecuteSectionVisible(false, true);
+    } else
+	d->raiseWidget(d->secondAnd3rdColumnMainWidget);
+
+      
     d->actionCategoriesListView->update();
     updateOKButtonStatus();
 }
@@ -685,39 +669,43 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
 {
     KexiFormEventAction::ActionData data;
     ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(
-                d->actionCategoriesListView->selectedItem());
+                d->actionCategoriesListView->currentItem());
     // simple case: part-less item, e.g. kaction:
     if (simpleItem) {
-        if (simpleItem->data == "kaction") {
-            if (d->kactionListView->selectedItem()) {
+        if (simpleItem->data(Qt::UserRole).toString() == "kaction") {
+            if (d->kactionListView->currentItem()) {
                 data.string = QString("kaction:")
-                              + dynamic_cast<ActionSelectorDialogListItem*>(d->kactionListView->selectedItem())->data;
+                              + dynamic_cast<ActionSelectorDialogListItem*>(d->kactionListView->currentItem())->data(Qt::UserRole).toString();
                 return data;
             }
-        } else if (simpleItem->data == "currentForm") {
-            if (d->currentFormActionsListView->selectedItem()) {
+        } else if (simpleItem->data(Qt::UserRole).toString() == "currentForm") {
+            if (d->currentFormActionsListView->currentItem()) {
                 data.string = QString("currentForm:")
                               + dynamic_cast<ActionSelectorDialogListItem*>(
-                                  d->currentFormActionsListView->selectedItem())->data;
+                                  d->currentFormActionsListView->currentItem())->data(Qt::UserRole).toString();
                 return data;
             }
         }
     }
-    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(d->actionCategoriesListView->selectedItem());
+    
+    //TODO all this
+    /*
+    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(d->actionCategoriesListView->currentItem());
     if (browserItem) {
         ActionSelectorDialogListItem *actionToExecute = dynamic_cast<ActionSelectorDialogListItem*>(
-                    d->actionToExecuteListView->selectedItem());
+                    d->actionToExecuteListView->currentItem());
         if (d->objectsListView && actionToExecute && !actionToExecute->data.isEmpty()) {
             KexiPart::Item* partItem = d->objectsListView->selectedPartItem();
             KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForClass(partItem->partClass()) : 0;
             if (partInfo) {
                 // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
                 data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());
-                data.option = actionToExecute->data;
+                data.option = actionToExecute->data(Qt::UserRole).toString();
                 return data;
             }
         }
     }
+    */
     return data; // No Action
 }
 
@@ -725,9 +713,9 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
 {
     KPushButton *btn = button(Ok);
     ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(
-                d->actionCategoriesListView->selectedItem());
+                d->actionCategoriesListView->currentItem());
     btn->setEnabled(
-        (simpleItem && simpleItem->data == "noaction") || !currentAction().isEmpty());
+        (simpleItem && simpleItem->data(Qt::UserRole).toString() == "noaction") || !currentAction().isEmpty());
 }
 
 bool KexiActionSelectionDialog::eventFilter(QObject *o, QEvent *e)

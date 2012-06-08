@@ -23,7 +23,8 @@
 #include <KDialog>
 #include "kexiformeventhandler.h"
 
-class Q3ListViewItem;
+class QListWidgetItem;
+
 namespace KexiPart
 {
 class Item;
@@ -49,13 +50,13 @@ public:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
 protected slots:
-    void slotActionCategorySelected(Q3ListViewItem* item);
-    void slotKActionItemExecuted(Q3ListViewItem*);
-    void slotKActionItemSelected(Q3ListViewItem*);
-    void slotActionToExecuteItemExecuted(Q3ListViewItem* item);
-    void slotActionToExecuteItemSelected(Q3ListViewItem*);
-    void slotCurrentFormActionItemExecuted(Q3ListViewItem*);
-    void slotCurrentFormActionItemSelected(Q3ListViewItem*);
+    void slotActionCategorySelected(QListWidgetItem* item);
+    void slotKActionItemExecuted(QListWidgetItem*);
+    void slotKActionItemSelected(QListWidgetItem*);
+    void slotActionToExecuteItemExecuted(QListWidgetItem* item);
+    void slotActionToExecuteItemSelected(QListWidgetItem*);
+    void slotCurrentFormActionItemExecuted(QListWidgetItem*);
+    void slotCurrentFormActionItemSelected(QListWidgetItem*);
     void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
 protected:

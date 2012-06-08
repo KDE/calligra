@@ -20,17 +20,17 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_P_H
 #define KEXIACTIONSELECTIONDIALOG_P_H
 
-#include <k3listview.h>
+#include <QListWidget>
 
 //! @internal
-class ActionsListViewBase : public K3ListView
+class ActionsListViewBase : public QListWidget
 {
 public:
     ActionsListViewBase(QWidget* parent);
     virtual ~ActionsListViewBase();
 
     //! \return item for action \a actionName
-    virtual Q3ListViewItem *itemForAction(const QString& actionName);
+    virtual QListWidgetItem *itemForAction(const QString& actionName);
     void selectAction(const QString& actionName);
 };
 

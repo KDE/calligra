@@ -210,7 +210,6 @@ protected:
 #endif
 
     KActionMenu* m_exportActionMenu;
-//  KMenu* m_newObjectMenu;
     QAction *m_itemMenuTitle, *m_partMenuTitle,
     *m_exportActionMenu_sep, *m_pageSetupAction_sep;
 
@@ -221,6 +220,7 @@ protected:
     bool m_singleClick;
     bool m_readOnly;
     KexiProjectModel *m_model;
+    QString m_itemsPartClass;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)
