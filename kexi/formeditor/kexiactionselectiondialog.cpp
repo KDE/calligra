@@ -96,8 +96,6 @@ void ActionsListViewBase::selectAction(const QString& actionName)
     QListWidgetItem *item = itemForAction(actionName);
     if (item) {
         item->setSelected(true);
-        //TODO ensureItemVisible(firstChild());
-        //TODO ensureItemVisible(selectedItem());
     }
 }
 
@@ -112,7 +110,6 @@ KActionsListViewBase::~KActionsListViewBase() {}
 
 void KActionsListViewBase::init()
 {
-    //TODO setSorting(0);
     const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
     QList<QAction*> sharedActions(KexiMainWindowIface::global()->allActions());
     const Kexi::ActionCategories *acat = Kexi::actionCategories();
@@ -179,6 +176,10 @@ public:
         QListWidgetItem *itm = new ActionSelectorDialogListItem("noaction", this, i18n("No action"));
         const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
         itm->setIcon(noIcon);
+	
+	itm = new ActionSelectorDialogListItem("currentForm", this, i18nc("Current form's actions", "Current"));
+	itm->setIcon(SmallIcon("form"));
+	
         itm = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions"));
         itm->setIcon(SmallIcon("kexi"));
 
@@ -194,13 +195,10 @@ public:
 		itm->setIcon(SmallIcon(part->info()->itemIcon()));
             }
         }
-        /* TODO Move currentForm ??
-        QListWidgetItem *formItem = itemForAction("form");
-        if (formItem) {
-            item = new ActionSelectorDialogListItem("currentForm", formItem,
-                                                    i18nc("Current form's actions", "Current"));
-        }
-        */
+
+           
+        
+       
     }
 
     ~ActionCategoriesListView() {
