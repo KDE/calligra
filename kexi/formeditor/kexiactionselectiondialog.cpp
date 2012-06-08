@@ -93,9 +93,11 @@ QListWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName)
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-    QListWidgetItem *item = itemForAction(actionName);
-    if (item) {
-        item->setSelected(true);
+  kDebug() << "Selecting action:" << actionName;
+    QListWidgetItem *itm = itemForAction(actionName);
+    if (itm) {
+      setCurrentItem(itm);
+      itm->setSelected(true);
     }
 }
 
@@ -190,15 +192,12 @@ public:
                 if (!info->isVisibleInNavigator() || !part)
                     continue;
                 itm = new QListWidgetItem(this);
-		itm->setData(Qt::UserRole, info->partClass());
+		itm->setData(Qt::UserRole, info->objectName());
+		itm->setData(Qt::UserRole + 1, info->partClass());
                 itm->setText(part->info()->instanceCaption());
 		itm->setIcon(SmallIcon(part->info()->itemIcon()));
             }
-        }
-
-           
-        
-       
+	}
     }
 
     ~ActionCategoriesListView() {
@@ -206,22 +205,13 @@ public:
 
     //! \return item for action \a actionName, reimplemented to support KexiBrowserItem items
     virtual QListWidgetItem *itemForAction(const QString& actionName) {
-        for (int i = 0; i < count(); ++i) {
-            //simple case
-            ActionSelectorDialogListItem* itm = dynamic_cast<ActionSelectorDialogListItem*>(item(i));
-            if (itm) {
-                if (itm->data(Qt::UserRole).toString() == actionName)
-                    return itm;
-                continue;
-            }
-            /*TODO?
-            QListWidgetItem* bitm = item(i);
-            if (bitm) {
-                if (bitm->data().toString() == actionName)
-                    return bitm;
-            }*/
-        }
-        return 0;
+	for (int i = 0; i < count(); ++i) {
+	  QListWidgetItem *itm = item(i);
+	  kDebug() << "Checking if " << actionName << " == " << itm->data(Qt::UserRole).toString();
+	  if (itm->data(Qt::UserRole).toString() == actionName)
+	    return itm;
+	  }
+	return 0;
     }
 };
 
@@ -277,13 +267,14 @@ public:
             ActionSelectorDialogListItem *exportItem = new ActionSelectorDialogListItem(
                 "exportToCSV", this,
                 i18nc("Note: use multiple rows if needed", "Export to File\nAs Data Table"));
-            //TODO exportItem->setMultiLinesEnabled(true);
-            exportItem->setIcon(SmallIcon("table"));
+
+	    exportItem->setIcon(SmallIcon("table"));
             item = new ActionSelectorDialogListItem("copyToClipboardAsCSV",
                                                     this,
                                                     i18nc("Note: use multiple rows if needed", "Copy to Clipboard\nAs Data Table"));
             item->setIcon(SmallIcon("table"));
         }
+        
         item = new ActionSelectorDialogListItem("new", this, i18n("Create New Object"));
         item->setIcon(SmallIcon("document-new"));
         if (supportedViewModes & Kexi::DesignViewMode) {
@@ -599,7 +590,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item
             d->setActionToExecuteSectionVisible(false);
             d->raiseWidget(d->kactionPageWidget);
             slotKActionItemSelected(d->kactionListView->currentItem()); //to refresh column #3
-        } else if (simpleItem->data(Qt::UserRole).toString() == "currentForm") { //TODO move currentForm
+        } else if (simpleItem->data(Qt::UserRole).toString() == "currentForm") {
             if (!d->currentFormActionsPageWidget) {
                 //create lbl+list view with a vlayout
                 d->currentFormActionsPageWidget = new QWidget();
@@ -641,11 +632,11 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item
     }
     // other case
 
-    QString partClass = item->data(Qt::UserRole).toString();
+    QString partClass = item->data(Qt::UserRole + 1).toString();
     d->updateSelectActionToBeExecutedMessage(partClass);
     if (d->objectsListView->itemsPartClass() != item->data(Qt::UserRole).toString()) {
-	d->objectsListView->setProject(
-	    KexiMainWindowIface::global()->project(), partClass);
+        QString errorString;
+	d->objectsListView->setProject(KexiMainWindowIface::global()->project(), partClass, &errorString, false);
 	d->actionToExecuteListView->showActionsForPartClass(partClass);
 	d->setActionToExecuteSectionVisible(false);
     }

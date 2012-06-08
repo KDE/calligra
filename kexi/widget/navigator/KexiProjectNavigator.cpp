@@ -215,12 +215,14 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     slotSelectionChanged(QModelIndex());
 }
 
-void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
+void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages, bool addAsSearchableModel)
 {
     kDebug() << itemsPartClass << ".";
     m_itemsPartClass = itemsPartClass;
-    if (prj) {
-      m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+
+    m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+    
+    if (addAsSearchableModel) {
       KexiMainWindowIface::global()->addSearchableModel(m_model);
     }
     

@@ -113,7 +113,7 @@ public:
      items are displayed.
      Previous items are removed. */
     void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
-                    QString* partManagerErrorMessages = 0);
+                    QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
