@@ -1,5 +1,6 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
+/*  This file is part of the Calligra project, made within the KDE community.
+ *
+ * Copyright 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,34 +18,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ReferencesToolFactory.h"
-#include "ReferencesTool.h"
-#include "TextShape.h"
+#ifndef KOPAGENAVIGATORBUTTON_H
+#define KOPAGENAVIGATORBUTTON_H
 
-#include <KoCanvasBase.h>
+// Qt
+#include <QToolButton>
 
-#include <klocale.h>
+class QAction;
 
-ReferencesToolFactory::ReferencesToolFactory()
-        : KoToolFactoryBase("ReferencesToolFactory_ID")
+class KoPageNavigatorButton : public QToolButton
 {
-    setToolTip(i18n("References"));
-    setToolType("calligrawords");
-    setIcon("tool-references");
-    setPriority(20);
-    setActivationShapeId(TextShape_SHAPEID);
-}
+    Q_OBJECT
 
-ReferencesToolFactory::~ReferencesToolFactory()
-{
-}
+public:
+    KoPageNavigatorButton(const char *iconName, QWidget *parent);
 
-KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new ReferencesTool(canvas);
-}
+    void setAction(QAction *action);
 
-bool ReferencesToolFactory::canCreateTool(KoCanvasBase* canvas) const
-{
-    return true;
-}
+private Q_SLOTS:
+    void onActionChanged();
+    void onClicked();
+
+private:
+    QAction *m_action;
+};
+
+#endif

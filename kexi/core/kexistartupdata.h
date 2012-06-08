@@ -82,9 +82,9 @@ public:
     /*! \return true if the main menu (usually displayed as the tabbed toolbar) should be visible. */
     bool isMainMenuVisible() const;
 
-    /*! \return true is Kexi started fullscreen.
+    /*! \return true if Kexi started fullscreen.
       Used on startup (by --fullscreen commandline switch). */
-    bool forcedFullscreen() const;
+    bool forcedFullScreen() const;
 
 protected:
     KexiProjectData *m_projectData;
@@ -97,7 +97,7 @@ protected:
     bool m_createDB;
     bool m_dropDB;
     bool m_alsoOpenDB;
-    bool m_forcedFullscreen;
+    bool m_forcedFullScreen;
 };
 
 #endif

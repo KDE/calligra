@@ -80,6 +80,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
+    centralWidgetLayout->setMargin(0);
+    centralWidgetLayout->setSpacing(0);
 
     QLabel *slideShowsLabel = new QLabel(i18n("Slide Show: "));
     m_customSlideShowsList = new QComboBox;

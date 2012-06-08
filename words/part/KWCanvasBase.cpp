@@ -329,7 +329,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 m_toolProxy->paint(painter, *(viewConverter()));
                 painter.restore();
 
-                int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
+                int contentArea = vm.clipRect.width() * vm.clipRect.height();
                 if (contentArea > pageContentArea) {
                     pageContentArea = contentArea;
                 }
@@ -523,7 +523,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     m_toolProxy->paint(painter, *(viewConverter()));
                     painter.restore();
 
-                    int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
+                    int contentArea = vm.clipRect.width() * vm.clipRect.height();
                     if (contentArea > pageContentArea) {
                         pageContentArea = contentArea;
                     }

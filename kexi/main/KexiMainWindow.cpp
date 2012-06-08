@@ -344,9 +344,18 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
     connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
-    if (Kexi::startupHandler().forcedFullscreen()) {
+    if (Kexi::startupHandler().forcedFullScreen()) {
         toggleFullScreen(true);
     }
+
+    // --- global config
+    //! @todo move to specialized KexiConfig class
+    KConfigGroup tablesGroup(d->config->group("Tables"));
+    const int defaultMaxLengthForTextFields = tablesGroup.readEntry("DefaultMaxLengthForTextFields", int(-1));
+    if (defaultMaxLengthForTextFields >= 0) {
+        KexiDB::Field::setDefaultMaxLength(defaultMaxLengthForTextFields);
+    }
+    // --- /global config
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -885,6 +894,7 @@ void KexiMainWindow::setupActions()
             this, SLOT(activatePreviousWindow()));
 
     d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
+    ac->addAction("full_screen", d->action_window_fullscreen);
     QList<QKeySequence> shortcuts;
     KShortcut *shortcut = new KShortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
     shortcuts = shortcut->toList();
@@ -4517,36 +4527,16 @@ KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 
 void KexiMainWindow::toggleFullScreen(bool isFullScreen)
 {
-    static bool isNavigatorVisible;
-    static bool isPropEditorVisible;
     static bool isTabbarRolledDown;
 
     if (isFullScreen) {
-            isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+        isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
         if (isTabbarRolledDown) {
             d->tabbedToolBar->toggleRollDown();
-        }
-        if (d->navDockWidget && d->navDockWidget->isVisible()) {
-            isNavigatorVisible = true;
-            d->navDockWidget->hide();
-        } else {
-            isNavigatorVisible = false;
-        }
-        if (d->propEditorDockWidget && d->propEditorDockWidget->isVisible()) {
-            isPropEditorVisible = true;
-            d->propEditorDockWidget->hide();
-        } else {
-            isPropEditorVisible = false;
         }
     } else {
         if (isTabbarRolledDown && d->tabbedToolBar->isRolledUp()) {
             d->tabbedToolBar->toggleRollDown();
-        }
-        if (isNavigatorVisible) {
-            d->navDockWidget->show();
-        }
-        if (isPropEditorVisible) {
-            d->propEditorDockWidget->show();
         }
     }
 

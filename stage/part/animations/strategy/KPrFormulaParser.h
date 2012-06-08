@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,11 +20,12 @@
 
 /* heavily based on Ariya's work (see kspread/formula) -- all errors are my own! */
 
-#ifndef KPRVALUEPARSER_H
-#define KPRVALUEPARSER_H
+#ifndef KPRFORMULAPARSER_H
+#define KPRFORMULAPARSER_H
 
 #include <QVector>
 #include <QString>
+#include <QStack>
 
 class KoShape;
 class KoTextBlockData;
@@ -33,13 +35,13 @@ class Token
 {
 public:
     /**
-    * token types
+    * Token types
     */
     enum Type {
-        Unknown = 0, ///< unknown type
-        Number,     ///< 14, 3, 1977, 3.14
-        IdentifierName,      ///< "height", "x", "pi" ...
-        Operator,    ///< +, *, /, -
+        Unknown = 0,         ///< unknown type
+        Number,             ///< 14, 3, 1977, 3.14
+        IdentifierName,     ///< "height", "x", "pi" ...
+        Operator,           ///< +, *, /, -
     };
 
     /**
@@ -54,29 +56,30 @@ public:
         Caret,          ///<  ^ (power)
         LeftPar,        ///<  (
         RightPar,       ///<  )
+        Comma           ///< ,
     };
 
     /**
-    * Creates a token.
+    * Creates a Token.
     */
-    explicit Token(Type type = Unknown, const QString& text = QString(), int pos = -1);
+    explicit Token(Type type = Unknown, const QString &text = QString(), int pos = -1);
 
     static const Token null;
 
     Token(const Token&);
-    Token& operator=(const Token&);
+    Token &operator=(const Token&);
 
     /**
-    * Returns type of the token.
+    * Returns type of the Token.
     */
     Type type() const {
         return m_type;
     }
 
     /**
-    * Returns text associated with the token.
+    * Returns text associated with the Token.
     *
-    * If you want to obtain meaningful value of this token, instead of
+    * If you want to obtain meaningful value of this Token, instead of
     * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
     * etc.
     */
@@ -89,31 +92,31 @@ public:
     }
 
     /**
-    * Returns true if token is either integer or floating-point token.
+    * Returns true if Token is either integer or floating-point Token.
     */
     bool isNumber() const {
         return (m_type == Number);
     }
 
     /**
-    * Returns true if token is a string token.
+    * Returns true if Token is a string Token.
     */
     bool isIdentifierName() const {
         return m_type == IdentifierName;
     }
 
     /**
-    * Returns true if token is an operator token.
+    * Returns true if Token is an operator Token.
     */
     bool isOperator() const {
        return m_type == Operator;
    }
 
     /**
-    * Returns string value for a string token.
-    * For any other type of token, it returns QString().
+    * Returns string value for a string Token.
+    * For any other type of Token, it returns QString().
     *
-    * Note that token text for a string token still has leading and trailing
+    * Note that Token text for a string Token still has leading and trailing
     * double-quotes, i.e for "Calligra", text() return "Calligra"
     * (with the quotes, 9 characters) while asString() only return Calligra
     * (without quotes, 7 characters).
@@ -121,14 +124,14 @@ public:
     QString asIdentifierName() const;
 
     /**
-    * Returns operator value for an operator token.
-    * For any other type of token, returns Token::InvalidOp.
+    * Returns operator value for an operator Token.
+    * For any other type of Token, returns Token::InvalidOp.
     */
     Op asOperator() const;
 
     /**
-    * Returns qreal value for a qreal token.
-    * For any other type of token, returns 0.0.
+    * Returns qreal value for a qreal Token.
+    * For any other type of Token, returns 0.0.
     */
     qreal asNumber() const;
 
@@ -159,7 +162,7 @@ public:
     TokenStack();
     bool isEmpty() const;
     unsigned itemCount() const;
-    void push(const Token& token);
+    void push(const Token& Token);
     Token pop();
     const Token& top();
     const Token& top(unsigned index);
@@ -173,7 +176,7 @@ class Opcode
 public:
 
     enum { Nop = 0, Load, Identifier, Add, Sub, Neg, Mul, Div,
-           Pow
+           Pow, Function
          };
 
     unsigned type;
@@ -184,26 +187,36 @@ public:
     Opcode(unsigned t, unsigned i): type(t), index(i) {}
 };
 
-class KPrValueParser
+class KPrFormulaParser
 {
 public:
-    KPrValueParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData);
+    enum ParseType {
+        Values,
+        Formula
+    };
+
+    KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type);
     QString formula() const;
-    qreal eval(KPrAnimationCache * cache) const;
+    qreal eval(KPrAnimationCache *cache, const qreal time = -1) const;
     bool valid() const;
+
 protected:
-    Tokens scan(QString formula);
-    void compile(const Tokens& tokens) const;
-    qreal identifierToValue(QString identifier, KPrAnimationCache * cache) const;
+    Tokens scan(QString formula) const;
+    void compile(const Tokens &tokens);
+    qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
+    qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
+    qreal formulaToValue(QString identifier, qreal arg1) const;
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
     QString m_formula;
-    mutable bool m_compiled;
-    mutable bool m_valid;
+    bool m_fcompiled;
+    mutable bool m_fvalid;
     mutable QVector<Opcode> m_codes;
-    mutable QVector<qreal> m_constants;
-    mutable QVector<QString> m_identifier;
+    QVector<qreal> m_constants;
+    QVector<QString> m_identifier;
+    QVector<QString> m_functions;
+    ParseType m_type;
 };
 
-#endif // KPRVALUEPARSER_H
+#endif // KPRFORMULAPARSER_H

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,9 @@ using namespace KexiDB;
 Field::FieldTypeNames Field::m_typeNames;
 Field::FieldTypeGroupNames Field::m_typeGroupNames;
 
+//! @todo make this configurable
+static uint m_defaultMaxLength = 0; // unlimited
+
 Field::Field()
 {
     init();
@@ -66,12 +69,11 @@ Field::Field(QuerySchema *querySchema, BaseExpr* expr)
 }
 
 Field::Field(const QString& name, Type ctype,
-             uint cconst, uint options, uint length, uint precision,
+             uint cconst, uint options, uint maxLength, uint precision,
              QVariant defaultValue, const QString& caption, const QString& description,
              uint width)
         : m_parent(0)
         , m_name(name.toLower())
-        , m_length(length)
         , m_precision(precision)
         , m_visibleDecimalPlaces(-1)
         , m_options(options)
@@ -84,11 +86,8 @@ Field::Field(const QString& name, Type ctype,
         , m_customProperties(0)
         , m_type(ctype)
 {
+    setMaxLength(maxLength);
     setConstraints(cconst);
-    if (m_length == 0) {//0 means default length:
-        if (m_type == Field::Text)
-            m_length = defaultTextLength();
-    }
 }
 
 /*! Copy constructor. */
@@ -123,7 +122,6 @@ void Field::init()
     m_parent = 0;
     m_name = "";
     m_type = InvalidType;
-    m_length = 0;
     m_precision = 0;
     m_visibleDecimalPlaces = -1;
     m_options = NoOptions;
@@ -132,6 +130,8 @@ void Field::init()
     m_width = 0;
     m_expr = 0;
     m_customProperties = 0;
+    setMaxLength(0); // do not move this line up!
+    setMaxLengthStrategy(DefinedMaxLength); // do not move this line up!
 }
 
 Field::Type Field::type() const
@@ -361,12 +361,38 @@ Field::setConstraints(uint c)
     }
 }
 
+uint Field::defaultMaxLength()
+{
+    return m_defaultMaxLength;
+}
+
+void Field::setDefaultMaxLength(uint maxLength)
+{
+    m_defaultMaxLength = maxLength;
+}
+
+Field::MaxLengthStrategy Field::maxLengthStrategy() const
+{
+    return m_maxLengthStrategy;
+}
+
+void Field::setMaxLengthStrategy(MaxLengthStrategy strategy)
+{
+    m_maxLengthStrategy = strategy;
+}
+
+uint Field::maxLength() const
+{
+    return m_maxLength;
+}
+
 void
-Field::setLength(uint l)
+Field::setMaxLength(uint maxLength)
 {
     if (type() != Field::Text)
         return;
-    m_length = l;
+    m_maxLength = maxLength;
+    m_maxLengthStrategy = DefinedMaxLength;
 }
 
 void
@@ -382,7 +408,7 @@ Field::setScale(uint s)
 {
     if (!isFPNumericType())
         return;
-    m_length = s;
+    m_maxLength = s;
 }
 
 void
@@ -504,7 +530,7 @@ Field::setDefaultValue(const QByteArray& def)
         break;
     }
     case Text: {
-        if (def.isNull() || (def.length() > 255))
+        if (def.isNull() || (uint(def.length()) > maxLength()))
             m_defaultValue = QVariant();
         else
             m_defaultValue = QVariant((QString)def);
@@ -613,8 +639,8 @@ QString Field::debugString() const
             dbg += QString::fromLatin1("(%1,%2)").arg(m_precision).arg(scale());
         else
             dbg += QString::fromLatin1("(%1)").arg(m_precision);
-    } else if (m_type == Field::Text && m_length > 0)
-        dbg += QString::fromLatin1("(%1)").arg(m_length);
+    } else if (m_type == Field::Text && m_maxLength > 0)
+        dbg += QString::fromLatin1("(%1)").arg(m_maxLength);
     if (m_constraints & Field::AutoInc)
         dbg += " AUTOINC";
     if (m_constraints & Field::Unique)
