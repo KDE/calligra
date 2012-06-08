@@ -202,7 +202,7 @@ public:
 
 protected:
     Tokens scan(QString formula) const;
-    void compile(const Tokens &Tokens);
+    void compile(const Tokens &tokens);
     qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
     qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
     qreal formulaToValue(QString identifier, qreal arg1) const;

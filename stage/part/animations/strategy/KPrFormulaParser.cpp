@@ -76,7 +76,7 @@ static Token::Op matchOperator(const QString& text)
 const Token Token::null;
 
 /**********************
-    FToken
+    Token
  **********************/
 
 Token::Token(Type type, const QString &text, int pos)
@@ -124,7 +124,7 @@ qreal Token::asNumber() const
 }
 
 /**********************
-    FTokenStack
+    TokenStack
  **********************/
 
 TokenStack::TokenStack(): QVector<Token>()
@@ -143,10 +143,10 @@ unsigned TokenStack::itemCount() const
     return topIndex;
 }
 
-void TokenStack::push(const Token &ftoken)
+void TokenStack::push(const Token &token)
 {
     ensureSpace();
-    insert(topIndex++, ftoken);
+    insert(topIndex++, token);
 }
 
 Token TokenStack::pop()
@@ -194,28 +194,28 @@ QString KPrFormulaParser::formula() const
 
 Tokens KPrFormulaParser::scan(QString formula) const
 {
-    Tokens ftokens;
+    Tokens tokens;
     // parsing state
     enum { Start, Finish, InNumber, InIdentifierName } state;
     int i = 0;
     state = Start;
     bool parseError = false;
-    QString ftokenText;
-    int ftokenStart = 0;
+    QString tokenText;
+    int tokenStart = 0;
     QString f = formula;
     f.append(QChar());
     while( state != Finish && i < f.length()) {
         QChar c = f[i];
         switch (state) {
         case Start:
-            ftokenStart = i;
+            tokenStart = i;
             if (c.isLetter()) {
-                ftokenText.append(c);
+                tokenText.append(c);
                 state = InIdentifierName;
                 i++;
             }
             else if (c.isNumber() || c == '.') {
-                ftokenText.append(c);
+                tokenText.append(c);
                 state = InNumber;
                 i++;
             }
@@ -226,7 +226,7 @@ Tokens KPrFormulaParser::scan(QString formula) const
                 state = Finish;
             }
             else if (c == '$') {
-                ftokenText.append(c);
+                tokenText.append(c);
                 state = InIdentifierName;
                 i++;
             }
@@ -234,33 +234,33 @@ Tokens KPrFormulaParser::scan(QString formula) const
                 Token::Op op = matchOperator(c);
                 if (op == Token::InvalidOp) {
                     parseError = true;
-                    ftokens.append(Token(Token::Unknown, c, ftokenStart));
+                    tokens.append(Token(Token::Unknown, c, tokenStart));
                 } else {
-                    ftokens.append(Token(Token::Operator, c, ftokenStart));
+                    tokens.append(Token(Token::Operator, c, tokenStart));
                 }
                 i++;
             }
             break;
         case InNumber:
             if (c.isNumber() || c == '.') {
-                ftokenText.append(c);
+                tokenText.append(c);
                 i++;
             }
             else {
-                ftokens.append(Token(Token::Number, ftokenText, ftokenStart));
-                ftokenText.clear();
+                tokens.append(Token(Token::Number, tokenText, tokenStart));
+                tokenText.clear();
                 state = Start;
             }
             break;
         case InIdentifierName:
             if (c.isLetter()) {
-                ftokenText.append(c);
+                tokenText.append(c);
                 i++;
             }
             else {
-                Token t(Token::IdentifierName, ftokenText, ftokenStart);
-                ftokens.append(Token(Token::IdentifierName, ftokenText, ftokenStart));
-                ftokenText.clear();
+                Token t(Token::IdentifierName, tokenText, tokenStart);
+                tokens.append(Token(Token::IdentifierName, tokenText, tokenStart));
+                tokenText.clear();
                 state = Start;
             }
             break;
@@ -270,13 +270,13 @@ Tokens KPrFormulaParser::scan(QString formula) const
         }
     }
     if (parseError) {
-        ftokens.setValid(false);
+        tokens.setValid(false);
     }
 
-    return ftokens;
+    return tokens;
 }
 
-void KPrFormulaParser::compile(const Tokens &ftokens)
+void KPrFormulaParser::compile(const Tokens &tokens)
 {
     // initialize variables
     m_fvalid = false;
@@ -284,7 +284,7 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
     m_constants.clear();
     m_identifier.clear();
     m_functions.clear();
-    if (!ftokens.valid() || ftokens.count() == 0) {
+    if (!tokens.valid() || tokens.count() == 0) {
         return;
     }
 
@@ -292,30 +292,30 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
     QStack<int> argStack;
     unsigned argCount = 1;
 
-    for (int i = 0; i <= ftokens.count(); i++) {
-        // helper ftoken: InvalidOp is end-of-formula
-        Token ftoken = (i < ftokens.count()) ? ftokens[i] : Token(Token::Operator);
-        Token::Type ftokenType = ftoken.type();
+    for (int i = 0; i <= tokens.count(); i++) {
+        // helper token: InvalidOp is end-of-formula
+        Token token = (i < tokens.count()) ? tokens[i] : Token(Token::Operator);
+        Token::Type tokenType = token.type();
 
 
         // for constants, push immediately to stack
         // generate code to load from a constant
-        if (ftokenType == Token::Number) {
-            syntaxStack.push(ftoken);
-            m_constants.append(ftoken.asNumber());
+        if (tokenType == Token::Number) {
+            syntaxStack.push(token);
+            m_constants.append(token.asNumber());
             m_codes.append(Opcode(Opcode::Load, m_constants.count() - 1));
         }
 
         // for identifier push immediately to stack
         // generate code to load from reference
-        else if (ftokenType == Token::IdentifierName) {
-            syntaxStack.push(ftoken);
-            m_identifier.append(ftoken.asIdentifierName());
+        else if (tokenType == Token::IdentifierName) {
+            syntaxStack.push(token);
+            m_identifier.append(token.asIdentifierName());
             m_codes.append(Opcode(Opcode::Identifier, m_identifier.count() - 1));
         }
 
         // for any other operator, try to apply all parsing rules
-        else if (ftokenType == Token::Operator) {
+        else if (tokenType == Token::Operator) {
             // repeat until no more rule applies
             for (; ;) {
                 bool ruleFound = false;
@@ -332,12 +332,12 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                         }
                 }
 
-                // rule for function arguments, if ftoken is , or )
+                // rule for function arguments, if token is , or )
                 // id ( arg1 , arg2 -> id ( arg
                 if (!ruleFound)
                     if (syntaxStack.itemCount() >= 5)
-                        if ((ftoken.asOperator() == Token::RightPar) ||
-                                (ftoken.asOperator() == Token::Comma)) {
+                        if ((token.asOperator() == Token::RightPar) ||
+                                (token.asOperator() == Token::Comma)) {
                             Token arg2 = syntaxStack.top();
                             Token sep = syntaxStack.top(1);
                             Token arg1 = syntaxStack.top(2);
@@ -405,9 +405,9 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                 }
 
                 // rule for binary operator:  A (op) B -> A
-                // conditions: precedence of op >= precedence of ftoken
+                // conditions: precedence of op >= precedence of token
                 // action: push (op) to result
-                // e.g. "A * B" becomes 'A' if ftoken is operator '+'
+                // e.g. "A * B" becomes 'A' if token is operator '+'
                 if (!ruleFound) {
                     if (syntaxStack.itemCount() >= 3) {
                         Token b = syntaxStack.top();
@@ -416,8 +416,8 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                         if (!a.isOperator()) {
                             if (!b.isOperator()) {
                                 if (op.isOperator()) {
-                                    if ((ftoken.asOperator() != Token::LeftPar) && (ftoken.asOperator() != Token::Comma)) {
-                                        if (fopPrecedence(op.asOperator()) >= fopPrecedence(ftoken.asOperator())) {
+                                    if ((token.asOperator() != Token::LeftPar) && (token.asOperator() != Token::Comma)) {
+                                        if (fopPrecedence(op.asOperator()) >= fopPrecedence(token.asOperator())) {
                                             ruleFound = true;
                                             syntaxStack.pop();
                                             syntaxStack.pop();
@@ -442,11 +442,11 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                 }
 
                 // rule for unary operator:  (op1) (op2) X -> (op1) X
-                // conditions: op2 is unary, ftoken is not '('
+                // conditions: op2 is unary, token is not '('
                 // action: push (op2) to result
                 // e.g.  "* - 2" becomes '*'
                 if (!ruleFound) {
-                    if (ftoken.asOperator() != Token::LeftPar) {
+                    if (token.asOperator() != Token::LeftPar) {
                         if (syntaxStack.itemCount() >= 3) {
                             Token x = syntaxStack.top();
                             Token op2 = syntaxStack.top(1);
@@ -472,10 +472,10 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                 }
 
                 // auxiliary rule for unary operator:  (op) X -> X
-                // conditions: op is unary, op is first in syntax stack, ftoken is not '('
+                // conditions: op is unary, op is first in syntax stack, token is not '('
                 // action: push (op) to result
                 if (!ruleFound) {
-                    if (ftoken.asOperator() != Token::LeftPar) {
+                    if (token.asOperator() != Token::LeftPar) {
                         if (syntaxStack.itemCount() == 2) {
                             Token x = syntaxStack.top();
                             Token op = syntaxStack.top(1);
@@ -501,11 +501,11 @@ void KPrFormulaParser::compile(const Tokens &ftokens)
                     break;
                 }
             }
-            // can't apply rules anymore, push the ftoken
-            syntaxStack.push(ftoken);
+            // can't apply rules anymore, push the token
+            syntaxStack.push(token);
         }
-        // unknown ftoken is invalid
-        else if (ftokenType == Token::Unknown) {
+        // unknown token is invalid
+        else if (tokenType == Token::Unknown) {
             break;
         }
     }
