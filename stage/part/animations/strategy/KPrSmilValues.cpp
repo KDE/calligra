@@ -127,7 +127,7 @@ bool KPrSmilValues::loadFormula(QString values, QString keyTimes, QString keySpl
     } else {
         return false;
     }
-    return (retval);
+    return retval;
 }
 
 bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
