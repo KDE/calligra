@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -667,7 +667,8 @@ struct KexiDB_BuiltinFieldProperties {
         ADD("name");
         ADD("caption");
         ADD("description");
-        ADD("length");
+        ADD("maxLength");
+        ADD("maxLengthIsDefault");
         ADD("precision");
         ADD("defaultValue");
         ADD("width");
@@ -732,10 +733,15 @@ bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>&
         field.setCaption((*it).toString());
     if ((it = values.find("description")) != values.constEnd())
         field.setDescription((*it).toString());
-    if ((it = values.find("length")) != values.constEnd())
-        field.setLength((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
+    if ((it = values.find("maxLength")) != values.constEnd())
+        field.setMaxLength((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
     if (!ok)
         return false;
+    if ((it = values.find("maxLengthIsDefault")) != values.constEnd()
+            && (*it).toBool())
+    {
+        field.setMaxLengthStrategy(Field::DefaultMaxLength);
+    }
     if ((it = values.find("precision")) != values.constEnd())
         field.setPrecision((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
     if (!ok)
@@ -870,8 +876,11 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDescription(value.toString());
             return true;
         }
-        if ("length" == propertyName)
-            GET_INT(setLength);
+        if ("maxLength" == propertyName)
+            GET_INT(setMaxLength);
+        if ("maxLengthIsDefault" == propertyName) {
+            field.setMaxLengthStrategy(Field::DefaultMaxLength);
+        }
         if ("precision" == propertyName)
             GET_INT(setPrecision);
         if ("defaultValue" == propertyName) {
@@ -910,40 +919,55 @@ QString KexiDB::loadStringPropertyValueFromDom(const QDomNode& node, bool* ok)
     if (valueType != "string") {
         if (ok)
             *ok = false;
-        return 0;
+        return QString();
     }
+    if (ok)
+        *ok = true;
     return QDomNode(node).toElement().text();
 }
 
-QVariant KexiDB::loadPropertyValueFromDom(const QDomNode& node)
+QVariant KexiDB::loadPropertyValueFromDom(const QDomNode& node, bool* ok)
 {
     QByteArray valueType = node.nodeName().toLatin1();
-    if (valueType.isEmpty())
+    if (valueType.isEmpty()) {
+        if (ok)
+            *ok = false;
         return QVariant();
+    }
+    if (ok)
+        *ok = true;
     const QString text(QDomNode(node).toElement().text());
-    bool ok;
+    bool _ok;
     if (valueType == "string") {
         return text;
-    } else if (valueType == "cstring") {
+    }
+    else if (valueType == "cstring") {
         return text.toLatin1();
-    } else if (valueType == "number") { // integer or double
+    }
+    else if (valueType == "number") { // integer or double
         if (text.indexOf('.') != -1) {
-            double val = text.toDouble(&ok);
-            if (ok)
+            double val = text.toDouble(&_ok);
+            if (_ok)
                 return val;
-        } else {
-            const int val = text.toInt(&ok);
-            if (ok)
+        }
+        else {
+            const int val = text.toInt(&_ok);
+            if (_ok)
                 return val;
-            const qint64 valLong = text.toLongLong(&ok);
-            if (ok)
+            const qint64 valLong = text.toLongLong(&_ok);
+            if (_ok)
                 return valLong;
         }
-    } else if (valueType == "bool") {
+    }
+    else if (valueType == "bool") {
         return QVariant(text.toLower() == "true" || text == "1");
     }
+    else {
 //! @todo add more QVariant types
-    KexiDBWarn << "loadPropertyValueFromDom(): unknown type '" << valueType << "'";
+        KexiDBWarn << "loadPropertyValueFromDom(): unknown type '" << valueType << "'";
+    }
+    if (ok)
+        *ok = false;
     return QVariant();
 }
 

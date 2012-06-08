@@ -103,6 +103,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoModeBoxFactory.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -699,6 +700,7 @@ void View::initView()
     connect(d->selection, SIGNAL(modified(const Region&)), this, SLOT(refreshSelection(const Region&)));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(refreshSheetViews()), this, SLOT(refreshSheetViews()));
+    connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
     connect(this, SIGNAL(documentReadWriteToggled(bool)),
             d->selection, SIGNAL(documentReadWriteToggled(bool)));
     connect(this, SIGNAL(sheetProtectionToggled(bool)),
@@ -715,15 +717,15 @@ void View::initView()
 
     if (shell())
     {
-        // Setup the tool dock widget.
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-        KoToolBoxFactory toolBoxFactory(d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+        shell()->createDockWidget(&modeBoxFactory);
+        shell()->dockerManager()->removeToolOptionsDocker();
 
         // Setup the tool options dock widget manager.
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+        //        shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -2166,6 +2168,11 @@ KoPrintJob * View::createPrintJob()
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
+}
+
+void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+{
+    sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 #include "View.moc"
