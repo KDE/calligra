@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (  at your option ) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #ifndef KPRTIMELINEVIEW_H
 #define KPRTIMELINEVIEW_H
 
@@ -11,12 +30,15 @@ class TimeLineItem;
 class QAbstractItemModel;
 class QModelIndex;
 
-
+/**
+  This widget is part of Animations Time Line Widget
+  */
 class KPrTimeLineView: public QWidget
 {
      Q_OBJECT
 public:
     KPrTimeLineView(QWidget* parent = 0);
+
 signals:
     void clicked(const QModelIndex&);
     void scaleLimitReached();
@@ -42,19 +64,6 @@ private:
     void paintIconRow(QPainter *painter, int x, int y, int row, int column, int iconSize, const int RowHeight);
     double modD(double x, double y);
 
-    QGraphicsView *m_view;
-    QGraphicsScene *m_scene;
-    KPrTimeLineHeader *m_header;
-    qreal m_start;
-    qreal m_end;
-    qreal m_realEnd;
-    int m_height, m_steps;
-    int m_scroll;
-    QAbstractItemModel *m_model;
-    QList<TimeLineItem *> m_lines;
-    int m_current;
-    int m_rowHeight;
-    int m_visibleHeight;
     KPrAnimationsTimeLineView *m_mainView;
     bool m_resize;
     bool m_move;

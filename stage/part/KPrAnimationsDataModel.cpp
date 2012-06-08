@@ -1,24 +1,47 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (  at your option ) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "KPrAnimationsDataModel.h"
 
-#include <QDebug>
+#include <animations/KPrAnimationStep.h>
+#include "animations/KPrAnimationSubStep.h"
+#include <KPrPage.h>
+#include <KPrView.h>
+
+//KDE HEADERS
 #include <KIconLoader>
 #include <KLocale>
-#include <KPrPage.h>
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoShapePainter.h"
-#include <QImage>
-#include <QPainter>
-#include <animations/KPrAnimationStep.h>
-#include "animations/KPrAnimationSubStep.h"
-#include <QAbstractAnimation>
 #include <KoPADocument.h>
-#include <KPrView.h>
 #include <KoShapeManager.h>
 
-KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent) :
-    QAbstractTableModel(parent)
-  , m_activePage(0)
+//QT HEADERS
+#include <QImage>
+#include <QPainter>
+#include <QDebug>
+#include <QAbstractAnimation>
+
+KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_activePage(0)
 {
     m_data.clear();
 }
@@ -61,6 +84,17 @@ int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
     return 8;
 }
 
+enum ColumnNames {
+    Order = 0,
+    ShapeName = 1,
+    ShapeThumbnail = 2,
+    AnimationIcon = 3,
+    TriggerEventIcon = 4,
+    StartTime = 5,
+    EndTime = 6,
+    AnimationClass = 7
+};
+
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
     if (!m_activePage)
@@ -71,22 +105,22 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
         return int(Qt::AlignRight | Qt::AlignVCenter);
     } else if (role == Qt::DisplayRole) {
         switch (index.column()) {
-        case 0:
+        case Order:
             //TODO: Only return a number when animation starts on click
             return (m_data.at(index.row()).order == 0) ? QVariant() : m_data.at(index.row()).order;
-        case 1:
+        case ShapeName:
             return m_data.at(index.row()).name;
-        case 2:
+        case ShapeThumbnail:
             return QVariant();
-        case 3:
+        case AnimationIcon:
             return QVariant();
-        case 4:
+        case TriggerEventIcon:
             return QVariant();
-        case 5:
+        case StartTime:
             return m_data.at(index.row()).startTime;
-        case 6:
+        case EndTime:
             return m_data.at(index.row()).duration;
-        case 7:
+        case AnimationClass:
             return m_data.at(index.row()).type;
         default:
             return QVariant();
@@ -94,11 +128,11 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::DecorationRole) {
         switch (index.column()) {
-        case 2:
+        case ShapeThumbnail:
             return m_data.at(index.row()).thumbnail;
-        case 3:
+        case AnimationIcon:
             return m_data.at(index.row()).animationIcon;
-        case 4:
+        case TriggerEventIcon:
             if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::On_Click)
                 return KIconLoader::global()->loadIcon(QString("onclick"),
                                                        KIconLoader::NoGroup,
@@ -118,24 +152,24 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
             return Qt::AlignCenter;
     } else if (role == Qt::ToolTipRole) {
         switch (index.column()) {
-        case 0:
-        case 1:
-        case 2:
+        case Order:
+        case ShapeName:
+        case ShapeThumbnail:
             return QVariant();
-        case 3:
+        case AnimationIcon:
             return m_data.at(index.row()).animationName;
-        case 4:
+        case TriggerEventIcon:
             if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::On_Click)
                 return i18n("start on mouse click");
             if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::After_Previous)
                 return i18n("start after previous animation");
             if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::With_Previous)
                 return i18n("start with previous animation");
-        case 5:
+        case StartTime:
             return i18n("Start after %1 seconds. Duration of %2 seconds").
                     arg(m_data.at(index.row()).startTime).arg(m_data.at(index.row()).duration);
-        case 6:
-        case 7:
+        case EndTime:
+        case AnimationClass:
         default:
             return QVariant();
 
@@ -152,18 +186,8 @@ QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orienta
         return QVariant();
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case 0:
-            return QVariant();
-        case 1:
+        case ShapeName:
             return i18n("Seconds");
-        case 2:
-            return QVariant();
-        case 3:
-            return QVariant();
-        case 4:
-            return QVariant();
-        case 5:
-            return QVariant();
         default:
             return QVariant();
         }
@@ -176,28 +200,28 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
 {
     if (index.isValid() && role == Qt::EditRole) {
         switch (index.column()) {
-        case 0:
+        case Order:
             return false;
-        case 1:
+        case ShapeName:
             return false;
-        case 2:
+        case ShapeThumbnail:
             return false;
-        case 3:
+        case AnimationIcon:
             return false;
-        case 4:
+        case TriggerEventIcon:
             return false;
-        case 5:
+        case StartTime:
             //TODO: save new value in animation step.
             /*
             m_data[index.row()].startTime = value.toDouble();
             emit dataChanged(index, index);
             return true;
-        case 6:
+        case EndTime:
             m_data[index.row()].duration = value.toDouble();
             emit dataChanged(index, index);
             return true;
             */
-        case 7:
+        case AnimationClass:
             return false;
         default:
             return false;
@@ -222,18 +246,14 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
     int k = 0;
     int l = 1;
     foreach (KPrAnimationStep *step, m_steps) {
-        qDebug() << "Step count" << step->animationCount();
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-                qDebug() << "substep count" << a->animationCount();
-
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
 
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         k++;
-                        qDebug() << "is shape in view: " << m_view->shapeManager()->shapes().contains(b->shape());
                         if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
                             AnimationsData data1;
                             //Load start and end time, convert them to seconds
@@ -275,7 +295,6 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
                             data1.thumbnail = thumbnail;
 
                             m_data.append(data1);
-                            qDebug() << "Preset in model: " << b->presetClassText();
                             qDebug() << b->id();
                         }
 
@@ -344,7 +363,6 @@ void KPrAnimationsDataModel::setDocumentView(KPrView *view)
 
 void KPrAnimationsDataModel::update()
 {
-    qDebug() << "update animations model called";
     setActivePage(m_activePage);
     emit layoutAboutToBeChanged();
     emit layoutChanged();

@@ -135,7 +135,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     KPrAnimationSubStep *subStep = 0;
     KPrShapeAnimation::Node_Type l_nodeType = KPrShapeAnimation::On_Click;
     if (nodeType == "on-click") {
-        qDebug() << "case 1";
         // if there is allready an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             qDebug() << "New Step created";
@@ -148,7 +147,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par animation
     }
     else if (nodeType == "after-previous") {
-        qDebug() << "case 2";
         // add to sequence
         // add par
         subStep = new KPrAnimationSubStep();
@@ -160,19 +158,16 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         qDebug() << "case 3";
         if (nodeType != "with-previous") {
             kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
-            qDebug() << "case 3a";
         }
         // use the current substep
         if ((*animationStep)->animationCount()) {
             subStep = dynamic_cast<KPrAnimationSubStep*>((*animationStep)->animationAt((*animationStep)->animationCount() - 1));
             l_nodeType = KPrShapeAnimation::With_Previous;
-            qDebug() << "case 3b";
         }
         else {
             subStep = new KPrAnimationSubStep();
             (*animationStep)->addAnimation(subStep);
             l_nodeType = KPrShapeAnimation::With_Previous;
-            qDebug() << "case 3c";
         }
         // add par to current par
     }
@@ -217,13 +212,11 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
         if (shapeAnimation && animation) {
-            qDebug() << "Start" << animation->begin() << "End: " << animation->duration();
             shapeAnimation->addAnimation(animation);
         }
     }
 
     if (shapeAnimation) {
-        qDebug() << "shape animation found";
         subStep->addAnimation(shapeAnimation);
 
         shapeAnimation->setNodeType(l_nodeType);

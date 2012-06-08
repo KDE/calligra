@@ -171,8 +171,10 @@ void KPrAnimationsDocker::changeAnimationSelection()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
-    if (index.isValid()) {
-        m_animationsTimeLineView->setCurrentIndex(index);
+    if (!selection->selectedShapes().isEmpty()) {
+        QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
+        if (index.isValid()) {
+            m_animationsTimeLineView->setCurrentIndex(index);
+        }
     }
 }

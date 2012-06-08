@@ -21,9 +21,6 @@
 #define KPRANIMATIONSDOCKER_H
 
 #include <QDockWidget>
-#include <QMap>
-
-#include <klocale.h>
 
 class QListWidget;
 class QToolButton;

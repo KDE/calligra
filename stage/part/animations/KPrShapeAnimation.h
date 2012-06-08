@@ -97,7 +97,6 @@ public:
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
-
     Node_Type m_triggerEvent;
     Preset_Class m_class;
     QString m_id;
