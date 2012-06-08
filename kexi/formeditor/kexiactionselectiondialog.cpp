@@ -189,7 +189,7 @@ public:
                 if (!info->isVisibleInNavigator() || !part)
                     continue;
                 itm = new QListWidgetItem(this);
-		itm->setData(Qt::UserRole, info->objectName());
+		itm->setData(Qt::UserRole, info->partClass());
                 itm->setText(part->info()->instanceCaption());
 		itm->setIcon(SmallIcon(part->info()->itemIcon()));
             }
