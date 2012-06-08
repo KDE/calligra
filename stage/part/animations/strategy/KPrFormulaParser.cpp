@@ -127,46 +127,46 @@ qreal Token::asNumber() const
     FTokenStack
  **********************/
 
-FTokenStack::FTokenStack(): QVector<Token>()
+TokenStack::TokenStack(): QVector<Token>()
 {
     topIndex = 0;
     ensureSpace();
 }
 
-bool FTokenStack::isEmpty() const
+bool TokenStack::isEmpty() const
 {
     return topIndex == 0;
 }
 
-unsigned FTokenStack::itemCount() const
+unsigned TokenStack::itemCount() const
 {
     return topIndex;
 }
 
-void FTokenStack::push(const Token &ftoken)
+void TokenStack::push(const Token &ftoken)
 {
     ensureSpace();
     insert(topIndex++, ftoken);
 }
 
-Token FTokenStack::pop()
+Token TokenStack::pop()
 {
     return (topIndex > 0) ? Token(at(--topIndex)) : Token();
 }
 
-const Token& FTokenStack::top()
+const Token& TokenStack::top()
 {
     return top(0);
 }
 
-const Token& FTokenStack::top(unsigned index)
+const Token& TokenStack::top(unsigned index)
 {
     if (topIndex > index)
         return at(topIndex -index - 1);
     return Token::null;
 }
 
-void FTokenStack::ensureSpace()
+void TokenStack::ensureSpace()
 {
     while ((int) topIndex >= size()) {
         resize(size() + 10);
@@ -192,9 +192,9 @@ QString KPrFormulaParser::formula() const
     return m_formula;
 }
 
-FTokens KPrFormulaParser::scan(QString formula) const
+Tokens KPrFormulaParser::scan(QString formula) const
 {
-    FTokens ftokens;
+    Tokens ftokens;
     // parsing state
     enum { Start, Finish, InNumber, InIdentifierName } state;
     int i = 0;
@@ -276,7 +276,7 @@ FTokens KPrFormulaParser::scan(QString formula) const
     return ftokens;
 }
 
-void KPrFormulaParser::compile(const FTokens &ftokens)
+void KPrFormulaParser::compile(const Tokens &ftokens)
 {
     // initialize variables
     m_fvalid = false;
@@ -288,7 +288,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
         return;
     }
 
-    FTokenStack syntaxStack;
+    TokenStack syntaxStack;
     QStack<int> argStack;
     unsigned argCount = 1;
 
@@ -303,7 +303,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
         if (ftokenType == Token::Number) {
             syntaxStack.push(ftoken);
             m_constants.append(ftoken.asNumber());
-            m_codes.append(FOpcode(FOpcode::Load, m_constants.count() - 1));
+            m_codes.append(Opcode(Opcode::Load, m_constants.count() - 1));
         }
 
         // for identifier push immediately to stack
@@ -311,7 +311,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
         else if (ftokenType == Token::IdentifierName) {
             syntaxStack.push(ftoken);
             m_identifier.append(ftoken.asIdentifierName());
-            m_codes.append(FOpcode(FOpcode::Identifier, m_identifier.count() - 1));
+            m_codes.append(Opcode(Opcode::Identifier, m_identifier.count() - 1));
         }
 
         // for any other operator, try to apply all parsing rules
@@ -373,7 +373,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
                                         syntaxStack.pop();
                                         syntaxStack.pop();
                                         syntaxStack.push(argu);
-                                        m_codes.append(FOpcode(FOpcode::Function, argCount));
+                                        m_codes.append(Opcode(Opcode::Function, argCount));
                                         m_functions.append(id.text());
                                         argCount = argStack.empty() ? 0 : argStack.pop();
                                         argCount = 1;
@@ -425,11 +425,11 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
                                             syntaxStack.push(b);
                                             switch (op.asOperator()) {
                                                 // simple binary operations
-                                            case Token::Plus:        m_codes.append(FOpcode::Add); break;
-                                            case Token::Minus:       m_codes.append(FOpcode::Sub); break;
-                                            case Token::Asterisk:    m_codes.append(FOpcode::Mul); break;
-                                            case Token::Slash:       m_codes.append(FOpcode::Div); break;
-                                            case Token::Caret:       m_codes.append(FOpcode::Pow); break;
+                                            case Token::Plus:        m_codes.append(Opcode::Add); break;
+                                            case Token::Minus:       m_codes.append(Opcode::Sub); break;
+                                            case Token::Asterisk:    m_codes.append(Opcode::Mul); break;
+                                            case Token::Slash:       m_codes.append(Opcode::Div); break;
+                                            case Token::Caret:       m_codes.append(Opcode::Pow); break;
 
                                             default: break;
                                             };
@@ -461,7 +461,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
                                             syntaxStack.pop();
                                             syntaxStack.push(x);
                                             if (op2.asOperator() == Token::Minus) {
-                                                m_codes.append(FOpcode(FOpcode::Neg));
+                                                m_codes.append(Opcode(Opcode::Neg));
                                             }
                                         }
                                     }
@@ -488,7 +488,7 @@ void KPrFormulaParser::compile(const FTokens &ftokens)
                                         syntaxStack.pop();
                                         syntaxStack.push(x);
                                         if (op.asOperator() == Token::Minus) {
-                                            m_codes.append(FOpcode(FOpcode::Neg));
+                                            m_codes.append(Opcode(Opcode::Neg));
                                         }
                                     }
                                 }
@@ -544,52 +544,52 @@ qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
     }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
-        FOpcode &opcode = m_codes[pc];
+        Opcode &opcode = m_codes[pc];
         switch (opcode.type) {
         // load a constant, push to stack
-        case FOpcode::Load:
+        case Opcode::Load:
             stack.push(m_constants[opcode.index]);
             break;
 
         // unary operation
-        case FOpcode::Neg:
+        case Opcode::Neg:
             stack.push(stack.pop() * -1);
             break;
 
         // binary operation: take two values from stack, do the operation,
         // push the result to stack
-        case FOpcode::Add:
+        case Opcode::Add:
             val2 = stack.pop();
             val1 = stack.pop();
             stack.push(val1 + val2);
             break;
 
-        case FOpcode::Sub:
+        case Opcode::Sub:
             val2 = stack.pop();
             val1 = stack.pop();
             stack.push(val1 - val2);
             break;
 
-        case FOpcode::Mul:
+        case Opcode::Mul:
             val2 = stack.pop();
             val1 = stack.pop();
             stack.push(val1 * val2);
             break;
 
-        case FOpcode::Div:
+        case Opcode::Div:
             val2 = stack.pop();
             val1 = stack.pop();
             stack.push(val1 / val2);
             break;
 
-        case FOpcode::Pow:
+        case Opcode::Pow:
             val2 = stack.pop();
             val1 = stack.pop();
             val2 = ::pow(val1, val2);
             stack.push(val2);
             break;
 
-        case FOpcode::Function: {
+        case Opcode::Function: {
             val1 = stack.pop();
             if (opcode.index > 1) {
                 val2 = stack.pop();
@@ -601,7 +601,7 @@ qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
             break;
         }
 
-        case FOpcode::Identifier: {
+        case Opcode::Identifier: {
             if (m_functions.contains(m_identifier[opcode.index])) {
                 break;
             }

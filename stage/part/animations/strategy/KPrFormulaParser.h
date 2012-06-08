@@ -60,7 +60,7 @@ public:
     };
 
     /**
-    * Creates a FToken.
+    * Creates a Token.
     */
     explicit Token(Type type = Unknown, const QString &text = QString(), int pos = -1);
 
@@ -142,10 +142,10 @@ protected:
 
 };
 
-class FTokens: public QVector<Token>
+class Tokens: public QVector<Token>
 {
 public:
-    FTokens(): QVector<Token>(), m_valid(true) {}
+    Tokens(): QVector<Token>(), m_valid(true) {}
     bool valid() const {
         return m_valid;
     }
@@ -156,10 +156,10 @@ protected:
     bool m_valid;
 };
 
-class FTokenStack : public QVector<Token>
+class TokenStack : public QVector<Token>
 {
 public:
-    FTokenStack();
+    TokenStack();
     bool isEmpty() const;
     unsigned itemCount() const;
     void push(const Token& Token);
@@ -171,7 +171,7 @@ private:
     unsigned topIndex;
 };
 
-class FOpcode
+class Opcode
 {
 public:
 
@@ -182,9 +182,9 @@ public:
     unsigned type;
     unsigned index;
 
-    FOpcode(): type(Nop), index(0) {}
-    FOpcode(unsigned t): type(t), index(0) {}
-    FOpcode(unsigned t, unsigned i): type(t), index(i) {}
+    Opcode(): type(Nop), index(0) {}
+    Opcode(unsigned t): type(t), index(0) {}
+    Opcode(unsigned t, unsigned i): type(t), index(i) {}
 };
 
 class KPrFormulaParser
@@ -201,8 +201,8 @@ public:
     bool valid() const;
 
 protected:
-    FTokens scan(QString formula) const;
-    void compile(const FTokens &FTokens);
+    Tokens scan(QString formula) const;
+    void compile(const Tokens &Tokens);
     qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
     qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
     qreal formulaToValue(QString identifier, qreal arg1) const;
@@ -212,7 +212,7 @@ private:
     QString m_formula;
     bool m_fcompiled;
     mutable bool m_fvalid;
-    mutable QVector<FOpcode> m_codes;
+    mutable QVector<Opcode> m_codes;
     QVector<qreal> m_constants;
     QVector<QString> m_identifier;
     QVector<QString> m_functions;
