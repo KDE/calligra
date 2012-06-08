@@ -207,12 +207,12 @@ void PrintingDialog::setPrinterPageLayout()
 
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
+    // FIXME: this triggers a crash in QPrintPreviewDialog if printing options != default
     PrintingOptions opt;
     if ( m_widget ) {
         opt = m_widget->options();
     }
     setPrintingOptions( opt );
-    setPrinterPageLayout();
     KoPrintingDialog::startPrinting( removePolicy );
 }
 
