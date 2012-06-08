@@ -285,9 +285,6 @@ public:
                                                     this,
                                                     i18nc("Note: use multiple rows if needed", "Copy to Clipboard\nAs Data Table"));
             item->setIcon(SmallIcon("table"));
-            //TODO item->setMultiLinesEnabled(true);
-            //TODO flattened list? setOpen(exportItem, true);
-            //TODO exportItem->setExpandable(false);
         }
         item = new ActionSelectorDialogListItem("new", this, i18n("Create New Object"));
         item->setIcon(SmallIcon("document-new"));
@@ -565,7 +562,8 @@ void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QListWidgetItem*
 
 void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QListWidgetItem*)
 {
-    updateOKButtonStatus();
+  kDebug();
+  updateOKButtonStatus();
 }
 
 void KexiActionSelectionDialog::slotActionCategorySelected(QListWidgetItem* item)
@@ -688,34 +686,29 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
         }
     }
     
-    //TODO all this
-    /*
-    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(d->actionCategoriesListView->currentItem());
-    if (browserItem) {
-        ActionSelectorDialogListItem *actionToExecute = dynamic_cast<ActionSelectorDialogListItem*>(
-                    d->actionToExecuteListView->currentItem());
-        if (d->objectsListView && actionToExecute && !actionToExecute->data.isEmpty()) {
-            KexiPart::Item* partItem = d->objectsListView->selectedPartItem();
-            KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForClass(partItem->partClass()) : 0;
-            if (partInfo) {
-                // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
-                data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());
-                data.option = actionToExecute->data(Qt::UserRole).toString();
-                return data;
-            }
-        }
+
+    ActionSelectorDialogListItem *actionToExecute = dynamic_cast<ActionSelectorDialogListItem*>(d->actionToExecuteListView->currentItem());
+    if (d->objectsListView && actionToExecute && !actionToExecute->data(Qt::UserRole).toString().isEmpty()) {
+	KexiPart::Item* partItem = d->objectsListView->selectedPartItem();
+	KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForClass(partItem->partClass()) : 0;
+	if (partInfo) {
+	    // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
+	    data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());
+	    data.option = actionToExecute->data(Qt::UserRole).toString();
+	    return data;
+	}
     }
-    */
+
     return data; // No Action
 }
 
 void KexiActionSelectionDialog::updateOKButtonStatus()
 {
     KPushButton *btn = button(Ok);
-    ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(
-                d->actionCategoriesListView->currentItem());
-    btn->setEnabled(
-        (simpleItem && simpleItem->data(Qt::UserRole).toString() == "noaction") || !currentAction().isEmpty());
+    ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(d->actionCategoriesListView->currentItem());
+    
+    kDebug() << currentAction().string;
+    btn->setEnabled((simpleItem && simpleItem->data(Qt::UserRole).toString() == "noaction") || !currentAction().isEmpty());
 }
 
 bool KexiActionSelectionDialog::eventFilter(QObject *o, QEvent *e)

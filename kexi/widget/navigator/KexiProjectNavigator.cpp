@@ -219,8 +219,10 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
 {
     kDebug() << itemsPartClass << ".";
     m_itemsPartClass = itemsPartClass;
-    m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
-    KexiMainWindowIface::global()->addSearchableModel(m_model);
+    if (prj) {
+      m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+      KexiMainWindowIface::global()->addSearchableModel(m_model);
+    }
     
     m_list->expandAll();
     if (itemsPartClass.isEmpty()) {
