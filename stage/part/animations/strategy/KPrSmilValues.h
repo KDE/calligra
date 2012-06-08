@@ -21,7 +21,6 @@
 #define KPRSMILVALUES_H
 
 #include "KPrAnimationValue.h"
-//#include "KPrValueParser.h"
 #include <QList>
 #include <QPair>
 class KPrFormulaParser;
@@ -40,7 +39,6 @@ public:
     bool loadFormula(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode, QString formula);
     bool saveOdf(KoPASavingContext &paContext) const;
 protected:
-    //QList<KPrValueParser> m_values;
     QList<KPrFormulaParser> m_values;
     QList<qreal> m_times;
     QList<qreal> m_splines;

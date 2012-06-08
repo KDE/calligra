@@ -31,7 +31,7 @@ class KoShape;
 class KoTextBlockData;
 class KPrAnimationCache;
 
-class FToken
+class Token
 {
 public:
     /**
@@ -62,12 +62,12 @@ public:
     /**
     * Creates a FToken.
     */
-    explicit FToken(Type type = Unknown, const QString &text = QString(), int pos = -1);
+    explicit Token(Type type = Unknown, const QString &text = QString(), int pos = -1);
 
-    static const FToken null;
+    static const Token null;
 
-    FToken(const FToken&);
-    FToken &operator=(const FToken&);
+    Token(const Token&);
+    Token &operator=(const Token&);
 
     /**
     * Returns type of the FToken.
@@ -142,10 +142,10 @@ protected:
 
 };
 
-class FTokens: public QVector<FToken>
+class FTokens: public QVector<Token>
 {
 public:
-    FTokens(): QVector<FToken>(), m_valid(true) {}
+    FTokens(): QVector<Token>(), m_valid(true) {}
     bool valid() const {
         return m_valid;
     }
@@ -156,16 +156,16 @@ protected:
     bool m_valid;
 };
 
-class FTokenStack : public QVector<FToken>
+class FTokenStack : public QVector<Token>
 {
 public:
     FTokenStack();
     bool isEmpty() const;
     unsigned itemCount() const;
-    void push(const FToken& FToken);
-    FToken pop();
-    const FToken& top();
-    const FToken& top(unsigned index);
+    void push(const Token& Token);
+    Token pop();
+    const Token& top();
+    const Token& top(unsigned index);
 private:
     void ensureSpace();
     unsigned topIndex;
@@ -205,6 +205,7 @@ protected:
     void compile(const FTokens &FTokens);
     qreal identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const;
     qreal formulaToValue(QString identifier, qreal arg1, qreal arg2) const;
+    qreal formulaToValue(QString identifier, qreal arg1) const;
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;

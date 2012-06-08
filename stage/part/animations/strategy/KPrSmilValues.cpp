@@ -24,9 +24,11 @@
 #include "kdebug.h"
 #include "KPrFormulaParser.h"
 
-KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationValue(shapeAnimation)
+KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation)
+    : KPrAnimationValue(shapeAnimation)
+    , m_formulaParser(0)
 {
-    m_formulaParser = 0;
+
 }
 
 qreal KPrSmilValues::value(qreal time) const
@@ -36,9 +38,9 @@ qreal KPrSmilValues::value(qreal time) const
     qreal value2 = 0.0;
 
     if (m_formulaParser) {
-            value = m_formulaParser->eval(m_cache, time);
-
-    } else {
+        value = m_formulaParser->eval(m_cache, time);
+    }
+    else {
         for (int i = 0; i < m_values.size(); i++) {
             if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
                 value1 = m_values.at(i).eval(m_cache);
@@ -75,7 +77,6 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     }
 
     foreach (QString value, valuesList) {
-        //KPrValueParser parser(value, m_shape, m_textBlockData);
         KPrFormulaParser parser(value, m_shape, m_textBlockData, KPrFormulaParser::Values);
         if (!parser.valid()) {
             return false;
@@ -126,7 +127,7 @@ bool KPrSmilValues::loadFormula(QString values, QString keyTimes, QString keySpl
     } else {
         return false;
     }
-    return (true && retval);
+    return (retval);
 }
 
 bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
@@ -134,7 +135,6 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    //foreach (KPrValueParser valueParser, m_values) {
     foreach (KPrFormulaParser valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
@@ -145,7 +145,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     writer.addAttribute("smil:values", values);
     //Formula
     if (m_formulaParser) {
-        QString formula = QString("%1").arg(m_formulaParser->formula());
+        QString formula = m_formulaParser->formula();
         if (!formula.isEmpty()) {
             writer.addAttribute("anim:formula", formula);
         }
