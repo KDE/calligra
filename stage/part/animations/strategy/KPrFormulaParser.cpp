@@ -87,19 +87,19 @@ Token::Token(Type type, const QString &text, int pos)
 }
 
 // copy constructor
-Token::Token(const Token &ftoken)
+Token::Token(const Token &token)
 {
-    m_type = ftoken.m_type;
-    m_text = ftoken.m_text;
-    m_pos = ftoken.m_pos;
+    m_type = token.m_type;
+    m_text = token.m_text;
+    m_pos = token.m_pos;
 }
 
 // assignment operator
-Token& Token::operator=(const Token &ftoken)
+Token& Token::operator=(const Token &token)
 {
-    m_type = ftoken.m_type;
-    m_text = ftoken.m_text;
-    m_pos = ftoken.m_pos;
+    m_type = token.m_type;
+    m_text = token.m_text;
+    m_pos = token.m_pos;
     return *this;
 }
 

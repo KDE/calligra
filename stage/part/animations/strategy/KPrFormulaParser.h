@@ -35,7 +35,7 @@ class Token
 {
 public:
     /**
-    * FToken types
+    * Token types
     */
     enum Type {
         Unknown = 0,         ///< unknown type
@@ -70,16 +70,16 @@ public:
     Token &operator=(const Token&);
 
     /**
-    * Returns type of the FToken.
+    * Returns type of the Token.
     */
     Type type() const {
         return m_type;
     }
 
     /**
-    * Returns text associated with the FToken.
+    * Returns text associated with the Token.
     *
-    * If you want to obtain meaningful value of this FToken, instead of
+    * If you want to obtain meaningful value of this Token, instead of
     * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
     * etc.
     */
@@ -92,31 +92,31 @@ public:
     }
 
     /**
-    * Returns true if FToken is either integer or floating-point FToken.
+    * Returns true if Token is either integer or floating-point Token.
     */
     bool isNumber() const {
         return (m_type == Number);
     }
 
     /**
-    * Returns true if FToken is a string FToken.
+    * Returns true if Token is a string Token.
     */
     bool isIdentifierName() const {
         return m_type == IdentifierName;
     }
 
     /**
-    * Returns true if FToken is an operator FToken.
+    * Returns true if Token is an operator Token.
     */
     bool isOperator() const {
        return m_type == Operator;
    }
 
     /**
-    * Returns string value for a string FToken.
-    * For any other type of FToken, it returns QString().
+    * Returns string value for a string Token.
+    * For any other type of Token, it returns QString().
     *
-    * Note that FToken text for a string FToken still has leading and trailing
+    * Note that Token text for a string Token still has leading and trailing
     * double-quotes, i.e for "Calligra", text() return "Calligra"
     * (with the quotes, 9 characters) while asString() only return Calligra
     * (without quotes, 7 characters).
@@ -124,14 +124,14 @@ public:
     QString asIdentifierName() const;
 
     /**
-    * Returns operator value for an operator FToken.
-    * For any other type of FToken, returns FToken::InvalidOp.
+    * Returns operator value for an operator Token.
+    * For any other type of Token, returns Token::InvalidOp.
     */
     Op asOperator() const;
 
     /**
-    * Returns qreal value for a qreal FToken.
-    * For any other type of FToken, returns 0.0.
+    * Returns qreal value for a qreal Token.
+    * For any other type of Token, returns 0.0.
     */
     qreal asNumber() const;
 
