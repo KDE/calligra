@@ -38,6 +38,7 @@
 #include "Style.h"
 #include "Global.h"
 #include "ProtectableObject.h"
+#include "calligra_sheets_limits.h"
 
 class QAbstractItemModel;
 class QDomElement;
@@ -348,12 +349,6 @@ public:
 
     /**
      * \ingroup NativeFormat
-     * Saves a children
-     */
-    bool saveChildren(KoStore* _store, const QString &_path);
-
-    /**
-     * \ingroup NativeFormat
      * Loads a children
      */
     bool loadChildren(KoStore* _store);
@@ -590,6 +585,20 @@ public:
      * Used in resizing of rows.
      */
     void adjustDocumentHeight(double deltaHeight);
+
+    /**
+     * Adjusts the position of cell anchored shapes as a result of a column size change/insertion/removal.
+     * All cell anchored shapes with x coordinates >= minX and < maxX will be moved by delta.
+     */
+    void adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta);
+    void adjustCellAnchoredShapesX(qreal delta, int firstCol, int lastCol = KS_colMax);
+
+    /**
+     * Adjusts the position of cell anchored shapes as a result of a row size change/insertion/removal.
+     * All cell anchored shapes with y coordinates >= minY and < maxY will be moved by delta.
+     */
+    void adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta);
+    void adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow = KS_rowMax);
 
     //
     //END UNSORTED METHODS

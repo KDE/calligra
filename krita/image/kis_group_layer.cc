@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
@@ -37,9 +37,9 @@ struct KisGroupLayer::Private
 {
 public:
     Private()
-            : paintDevice(0)
-            , x(0)
-            , y(0) {
+        : paintDevice(0)
+        , x(0)
+        , y(0) {
     }
 
     KisPaintDeviceSP paintDevice;
@@ -48,15 +48,15 @@ public:
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
-        KisLayer(image, name, opacity),
-        m_d(new Private())
+    KisLayer(image, name, opacity),
+    m_d(new Private())
 {
     resetCache();
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
-        KisLayer(rhs),
-        m_d(new Private())
+    KisLayer(rhs),
+    m_d(new Private())
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->x = rhs.m_d->x;
@@ -111,9 +111,9 @@ bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
     return checkNodeRecursively(node) &&
-        (parent() ||
-         (node->inherits("KisSelectionMask") && !selectionMask()) ||
-         !node->inherits("KisMask"));
+            (parent() ||
+             (node->inherits("KisSelectionMask") && !selectionMask()) ||
+             !node->inherits("KisMask"));
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
@@ -136,6 +136,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)
         colorSpace = image()->colorSpace();
+
+    Q_ASSERT(colorSpace);
 
     if (!m_d->paintDevice) {
 
@@ -183,14 +185,14 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
     const KisLayer *child = onlyMeaningfulChild();
 
     if (child &&
-        child->channelFlags().isEmpty() &&
-        child->projection() &&
-        child->visible() &&
-        (child->compositeOpId() == COMPOSITE_OVER ||
-         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-         child->compositeOpId() == COMPOSITE_COPY) &&
-        child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+            child->channelFlags().isEmpty() &&
+            child->projection() &&
+            child->visible() &&
+            (child->compositeOpId() == COMPOSITE_OVER ||
+             child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+             child->compositeOpId() == COMPOSITE_COPY) &&
+            child->opacity() == OPACITY_OPAQUE_U8 &&
+            *child->projection()->colorSpace() == *colorSpace()) {
 
         return child->projection();
     }

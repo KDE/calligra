@@ -57,6 +57,7 @@
 //KDE Headers
 #include <klocale.h>
 #include <KDebug>
+#include <kicon.h>
 #include <kconfiggroup.h>
 #include <KIconLoader>
 #include <KGlobalSettings>
@@ -79,6 +80,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
+    centralWidgetLayout->setMargin(0);
+    centralWidgetLayout->setSpacing(0);
 
     QLabel *slideShowsLabel = new QLabel(i18n("Slide Show: "));
     m_customSlideShowsList = new QComboBox;
@@ -169,6 +172,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_slidesSorterView, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
     connect(m_slidesSorterView, SIGNAL(focusLost()), SLOT(disableEditActions()));
     connect(m_slidesSorterView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
+    connect(m_slidesSorterView, SIGNAL(zoomIn()), m_view->zoomController()->zoomAction(), SLOT(zoomIn()));
+    connect(m_slidesSorterView, SIGNAL(zoomOut()), m_view->zoomController()->zoomAction(), SLOT(zoomOut()));
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 

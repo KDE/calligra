@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010 Ko Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +20,10 @@
 
 #include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
+#include <KoClipPath.h>
 
 #include <qnumeric.h>
 
@@ -60,6 +61,27 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
+KoTextLayoutObstruction::KoTextLayoutObstruction(QRectF rect, bool rtl)
+    : m_side(None),
+    m_polygon(QPolygonF()),
+    m_line(QRectF()),
+    m_shape(0),
+    m_runAroundThreshold(0)
+{
+    qreal borderHalfWidth = 0;
+    qreal textRunAroundDistance = 1;
+
+    QPainterPath path;
+    path.addRect(rect);
+
+    init(QTransform(), path, textRunAroundDistance, borderHalfWidth);
+    if (rtl) {
+        m_side = Right;
+    } else {
+        m_side = Left;
+    }
+}
+
 QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const
 {
     const KoShapeGroup *shapeGroup = dynamic_cast<const KoShapeGroup *>(shape);
@@ -72,14 +94,24 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         return groupPath;
     }
 
-    QPainterPath path = shape->outline();
+    QPainterPath path;
+    if (shape->textRunAroundContour() != KoShape::ContourBox) {
+        KoClipPath *clipPath = shape->clipPath();
+        if (clipPath) {
+            path = clipPath->pathForSize(shape->size());
+        } else {
+            path = shape->outline();
+        }
+    } else {
+        path.addRect(shape->outlineRect());
+    }
 
     QRectF bb = shape->outlineRect();
     borderHalfWidth = 0;
  
-    if (shape->border()) {
+    if (shape->stroke()) {
         KoInsets insets;
-        shape->border()->borderInsets(shape, insets);
+        shape->stroke()->strokeInsets(shape, insets);
         /*
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();
@@ -108,22 +140,13 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
     distance += borderHalfWidth;
-    if (distance >= 0.0) {
-        QTransform grow = matrix;
-        grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-        qreal scaleX = 2 * distance;
-        if (m_bounds.width() > 0)
-            scaleX = (m_bounds.width() + 2 * distance) / m_bounds.width();
-        qreal scaleY = 2 * distance;
-        if (m_bounds.height() > 0)
-            scaleY = (m_bounds.height() + 2 * distance) / m_bounds.height();
-        Q_ASSERT(!qIsNaN(scaleY));
-        Q_ASSERT(!qIsNaN(scaleX));
-        grow.scale(scaleX, scaleY);
-        grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
+    if (distance > 0.0) {
+        QPainterPathStroker stroker;
+        stroker.setWidth(2 * distance);
+        stroker.setJoinStyle(Qt::MiterJoin);
+        stroker.setCapStyle(Qt::SquareCap);
+        path = stroker.createStroke(path) + path;
 
-        path =  grow.map(obstruction);
-        // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
         m_bounds = path.boundingRect();
     }
 

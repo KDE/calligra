@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QGraphicsScene>
 
 #include <kdebug.h>
 #include "krscriptfunctions.h"
@@ -53,11 +54,15 @@ KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {   
     setObjectName("KexiReportDesigner_DataView");
-    m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setBackgroundRole(QPalette::Dark);
-    m_scrollArea->viewport()->setAutoFillBackground(true);
 
-    layout()->addWidget(m_scrollArea);
+    m_reportView = new QGraphicsView(this);
+    layout()->addWidget(m_reportView);
+   
+    m_reportScene = new QGraphicsScene(this);
+    m_reportScene->setSceneRect(0,0,1000,2000);
+    m_reportView->setScene(m_reportScene);
+    
+    m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
     
 #ifndef KEXI_MOBILE
     m_pageSelector = new KexiRecordNavigator(this, 0);
@@ -73,19 +78,21 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("printer"), i18n("Print"), this));
+    viewActions << (a = new KAction(KIcon("document-print"), i18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 #endif
-    
+
+    // TODO: why is Words said below, but then Spreadsheet, not Sheets? And should not rather the file format be given,
+    // instead of a certaun application?
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(i18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
-    viewActions << (a = new KAction(KIcon("words"), QString(), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), QString(), this));
 #else
-    viewActions << (a = new KAction(KIcon("words"), i18nc("Note: do not translate 'Words'", "Save to Words"), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), i18nc("Note: do not translate 'Words'", "Save to Words"), this));
 #endif
     a->setObjectName("save_to_words");
     a->setToolTip(i18n("Save the report to a Words application's document"));
@@ -94,9 +101,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("tables"), " ", this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), " ", this));
 #else
-    viewActions << (a = new KAction(KIcon("tables"), i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet"), this));
+    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet"), this));
 #endif
     a->setObjectName("save_to_tables");
     a->setToolTip(i18n("Save the report to a spreadsheet"));
@@ -227,7 +234,7 @@ void KexiReportView::slotExportHTML()
 
     bool css = (KMessageBox::questionYesNo(this,
         i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
-             "or export using a Table which outputs a much simpler format."), i18n("Style"),
+             "or export using a HTML Table which outputs a much simpler format."), i18n("Style"),
              KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
     if (css){
@@ -308,10 +315,14 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 #endif
             }
 
-            m_reportWidget = new KoReportPage(this, m_reportDocument);
-            m_reportWidget->setObjectName("KexiReportPage");
-            m_scrollArea->setWidget(m_reportWidget);
-
+            m_reportPage = new KoReportPage(this, m_reportDocument);
+            m_reportPage->setObjectName("KexiReportPage");
+	    
+	    m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+	    m_reportScene->addItem(m_reportPage);
+	    m_reportPage->setPos(20,20);
+	    m_reportView->centerOn(0,0);
+	    
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
@@ -351,7 +362,7 @@ void KexiReportView::moveToFirstRecordRequested()
 {
 	if (m_currentPage != 1) {
 		m_currentPage = 1;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);  
 		#endif
@@ -362,7 +373,7 @@ void KexiReportView::moveToLastRecordRequested()
 {
 	if (m_currentPage != m_pageCount) {
 		m_currentPage = m_pageCount;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif
@@ -373,7 +384,7 @@ void KexiReportView::moveToNextRecordRequested()
 {
 	if (m_currentPage < m_pageCount) {
 		m_currentPage++;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif
@@ -384,7 +395,7 @@ void KexiReportView::moveToPreviousRecordRequested()
 {
 	if (m_currentPage > 1) {
 		m_currentPage--;
-		m_reportWidget->renderPage(m_currentPage);
+		m_reportPage->renderPage(m_currentPage);
 		#ifndef KEXI_MOBILE
 		m_pageSelector->setCurrentRecordNumber(m_currentPage);
 		#endif

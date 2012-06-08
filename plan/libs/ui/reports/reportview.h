@@ -35,6 +35,7 @@
 
 class KoDocument;
 class KoShape;
+class KoPageLayout;
 
 class KoReportPage;
 class KoReportData;
@@ -53,7 +54,8 @@ namespace KoProperty
 
 class KTabWidget;
 
-class QScrollArea;
+class QGraphicsView;
+class QGraphicsScene;
 class QDomElement;
 class QDockWidget;
 class QDomElement;
@@ -123,6 +125,9 @@ public slots:
 
     KoPrintJob *createPrintJob();
 
+    /// Return the page layout used for printing this view
+    KoPageLayout pageLayout() const;
+
 signals:
     void editReportDesign( ReportView *view );
 
@@ -157,8 +162,9 @@ private:
     KoReportPreRenderer *m_preRenderer;
     KoReportRendererFactory m_factory;
     ORODocument *m_reportDocument;
-    QScrollArea *m_scrollArea;
-    KoReportPage *m_reportWidget;
+    QGraphicsView *m_reportView;
+    QGraphicsScene *m_reportScene;
+    KoReportPage *m_reportPage;
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;

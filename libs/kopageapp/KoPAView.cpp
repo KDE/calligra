@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QTabBar>
 
+#include <KoServiceProvider.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -79,6 +80,7 @@
 #include "dialogs/KoPAMasterPageDialog.h"
 #include "dialogs/KoPAPageLayoutDialog.h"
 #include "dialogs/KoPAConfigureDialog.h"
+#include "widgets/KoPageNavigator.h"
 
 #include <kfiledialog.h>
 #include <kdebug.h>
@@ -147,7 +149,7 @@ public:
     QWidget *insideWidget;
 
     // status bar
-    QLabel *pageNumbers;  ///< page numbers
+    KoPageNavigator *pageNavigator;
     QLabel *status;       ///< ordinary status
     QWidget *zoomActionWidget;
 
@@ -251,13 +253,9 @@ void KoPAView::initGUI()
 
     d->zoomAction = d->zoomController->zoomAction();
 
-    d->pageNumbers = new QLabel(QString(), this);
-    d->pageNumbers->setFixedWidth(QFontMetrics(d->pageNumbers->font()).width("999/999"));
-    d->pageNumbers->setAlignment(Qt::AlignCenter);
-    updatePageCount();
-    connect(d->doc, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(updatePageCount()));
-    connect(d->doc, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(updatePageCount()));
-    addStatusBarItem(d->pageNumbers, 0);
+    // page/slide navigator
+    d->pageNavigator = new KoPageNavigator(this);
+    addStatusBarItem(d->pageNavigator, 0);
 
     // set up status bar message
     d->status = new QLabel(QString(), this);
@@ -290,6 +288,7 @@ void KoPAView::initGUI()
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
     setTabBarPosition(Qt::Horizontal);
 
+    gridLayout->addWidget(d->horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
@@ -308,7 +307,7 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools") );
+    KoToolBoxFactory toolBoxFactory(d->canvasController);
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
@@ -329,6 +328,10 @@ void KoPAView::initGUI()
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
+    }
+    if (d->doc->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 }
 
@@ -407,6 +410,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
     actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
     actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
+    d->pageNavigator->initActions();
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
     foreach(QAction *action, d->doc->inlineTextObjectManager()->createInsertVariableActions(d->canvas))
@@ -497,8 +501,8 @@ void KoPAView::importDocument()
 #if 1
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
 #else
-    mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
-                                              KoDocument::readExtraNativeMimeTypes() );
+    mimeFilter = KoFilterManager::mimeFilter( KoServiceProvider::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
+                                              KoServiceProvider::readExtraNativeMimeTypes() );
 #endif
 
     dialog->setMimeFilter( mimeFilter );
@@ -773,7 +777,6 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
         proxyObject->emitActivePageChanged();
-        updatePageCount();
     }
 
     // Set the current page number in the canvas resource provider
@@ -1236,16 +1239,6 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->horizontalRuler->setUnit(unit);
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
-}
-
-void KoPAView::updatePageCount()
-{
-    int pageNumber = d->doc->pageIndex(d->activePage) + 1;
-    if (pageNumber > 0) {
-        int pageCount = d->doc->pages(dynamic_cast<KoPAPage*>(d->activePage) == 0).size(); 
-        // TODO POST2.4 add 
-        d->pageNumbers->setText(QString("%1/%2").arg(pageNumber).arg(pageCount));
-    }
 }
 
 #include <KoPAView.moc>

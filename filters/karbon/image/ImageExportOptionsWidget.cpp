@@ -43,8 +43,8 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget * p
     widget.dpi->setSuffix(" DPI");
     widget.pxAspect->setKeepAspectRatio(true);
     widget.unitAspect->setKeepAspectRatio(true);
-    widget.unit->addItems(KoUnit::listOfUnitName());
-    widget.unit->setCurrentIndex(unit.indexInList());
+    widget.unit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
+    widget.unit->setCurrentIndex(unit.indexInListForUi(KoUnit::HidePixel));
     widget.backColor->setColor(Qt::white);
     widget.opacity->setMinimum(0.0);
     widget.opacity->setMaximum(100.0);
@@ -67,7 +67,7 @@ void ImageExportOptionsWidget::setUnit(const KoUnit &unit)
 {
     widget.unitWidth->setUnit(unit);
     widget.unitHeight->setUnit(unit);
-    widget.unit->setCurrentIndex(unit.indexInList());
+    widget.unit->setCurrentIndex(unit.indexInListForUi(KoUnit::HidePixel));
 }
 
 QSize ImageExportOptionsWidget::pixelSize() const
@@ -193,10 +193,12 @@ void ImageExportOptionsWidget::dpiChanged(int)
 
 void ImageExportOptionsWidget::unitChanged(int newUnit)
 {
-    KoUnit unit((KoUnit::Unit) newUnit);
     blockChildSignals(true);
+
+    const KoUnit unit = KoUnit::fromListForUi(newUnit, KoUnit::HidePixel);
     widget.unitWidth->setUnit(unit);
     widget.unitHeight->setUnit(unit);
+
     blockChildSignals(false);
 }
 

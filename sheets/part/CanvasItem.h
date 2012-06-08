@@ -124,6 +124,9 @@ public Q_SLOTS:
      * Handles damages that need visual updates.
      */
     void handleDamages(const QList<Damage*>& damages);
+
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
     void obscuredRangeChanged(const Calligra::Sheets::Sheet* sheet, const QSize&);

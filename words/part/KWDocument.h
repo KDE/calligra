@@ -62,7 +62,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit KWDocument(QObject* parent = 0);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -174,8 +174,6 @@ public:
 
     // reimplemented slot from KoDocument
     virtual void initEmpty();
-    // reimplemented slot from KoDocument
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 

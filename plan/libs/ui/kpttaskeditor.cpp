@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@
 #include "kptworkpackagesenddialog.h"
 #include "kptworkpackagesendpanel.h"
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -50,7 +51,6 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -879,6 +879,7 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -887,6 +888,7 @@ bool TaskEditor::loadContext( const KoXmlElement &context )
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( baseModel()->columnMap(), context );
 }
@@ -1127,6 +1129,7 @@ void TaskView::slotOptions()
 
 bool TaskView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -1135,6 +1138,7 @@ bool TaskView::loadContext( const KoXmlElement &context )
 
 void TaskView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
@@ -1471,11 +1475,13 @@ void TaskWorkPackageView::slotOptions()
 bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->baseModel()->columnMap(), context );
 }
 
 void TaskWorkPackageView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
 

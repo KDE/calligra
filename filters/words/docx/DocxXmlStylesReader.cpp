@@ -200,7 +200,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     if (m_currentParagraphStyle.property("fo:line-height").isEmpty() &&
-        m_currentParagraphStyle.property("fo:line-height-at-least").isEmpty()) {
+        m_currentParagraphStyle.property("style:line-height-at-least").isEmpty()) {
         m_currentParagraphStyle.addProperty("fo:line-height", "100%");
     }
 

@@ -90,6 +90,9 @@ public:
      */
     QPair<int, int> cursorRowAndColumn() const;
 
+protected:
+    virtual void wheelEvent(QWheelEvent *event);
+
 signals:
 
     /** Is emitted if the user has request a context menu */
@@ -115,6 +118,12 @@ signals:
     /** Is emitted when the view get focus */
     void focusGot();
 
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomIn();
+
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomOut();
+
 private:
 
     /**
@@ -125,21 +134,21 @@ private:
     QRect itemSize() const;
 
     /**
-     * Setter for the draging flag
+     * Setter for the dragging flag
      *
      * @param flag boolean
      */
-    void setDragingFlag(bool flag = true);
+    void setDraggingFlag(bool flag = true);
 
     /**
-     * Permit to know if a slide is draging
+     * Permit to know if a slide is dragging
      *
      * @return boolean
      */
-    bool isDraging() const;
+    bool isDragging() const;
 
     QRect m_itemSize;
-    bool m_dragingFlag;
+    bool m_draggingFlag;
     int margin;
 
 };

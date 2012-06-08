@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptnode.h"
 #include "kptschedule.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -41,7 +42,6 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -287,11 +287,13 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
@@ -581,11 +583,13 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.cpmTable->saveContext( model()->columnMap(), context );
 }
 

@@ -1512,13 +1512,14 @@ static int booleanValue(char *zArg){
 
 static int table_size(struct callback_data *p, const unsigned char* table)
 {
+  int rc;
   sqlite3_stmt *pSelect;
   const char *sqlPref = "SELECT COUNT() FROM ";
   char *sql = malloc(strlen(sqlPref) + 1 + strlen((const char*)table));
   strcpy(sql, sqlPref);
   strcat(sql, (const char*)table);
   /*fprintf(stderr, "%s", sql);*/
-  int rc = sqlite3_prepare(p->db, sql, -1, &pSelect, 0);
+  rc = sqlite3_prepare(p->db, sql, -1, &pSelect, 0);
   if( rc!=SQLITE_OK || !pSelect ){
     fprintf(p->out, "/**** ERROR: (%d) %s *****/\n", rc, sqlite3_errmsg(p->db));
     return -1;
@@ -1550,7 +1551,11 @@ static int table_size(struct callback_data *p, const unsigned char* table)
 */
 static int do_meta_command(char *zLine, struct callback_data *p){
   int i = 1;
-  UNUSED_PARAMETER(zLine);
+  sqlite3_stmt *pSelect;
+  int totalRecords;
+  int prevPercent;
+  int size;
+  int percent;
 #if 0
   int nArg = 0;
   int n, c;
@@ -1559,6 +1564,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
 #if 0
   char *azArg[50];
 #endif
+  UNUSED_PARAMETER(zLine);
 
 #if 0
   /* Parse the input line into tokens.
@@ -1662,7 +1668,6 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     if( nArg==1 ){
 #endif
 
-  sqlite3_stmt *pSelect;
   /* get table sizes */
   rc = sqlite3_prepare(p->db, 
         "SELECT name FROM sqlite_master "
@@ -1672,7 +1677,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     return rc;
   }
   rc = sqlite3_step(pSelect);
-  int totalRecords = 0;
+  totalRecords = 0;
   for(i=0; rc==SQLITE_ROW; i++){
     int size = table_size(p, sqlite3_column_text(pSelect, 0));
     if (size < 0) {
@@ -1721,7 +1726,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     return rc;
   }
   rc = sqlite3_step(pSelect);
-  int prevPercent = -1;
+  prevPercent = -1;
   for(i=0; rc==SQLITE_ROW;){
     zShellStatic = (const char*)sqlite3_column_text(pSelect, 0);
     run_schema_dump_query(p,
@@ -1735,12 +1740,12 @@ static int do_meta_command(char *zLine, struct callback_data *p){
       "  AND tbl_name LIKE shellstatic()", 0
     );
 
-    int size = table_size(p, sqlite3_column_text(pSelect, 0));
+    size = table_size(p, sqlite3_column_text(pSelect, 0));
     if (size < 0) {
       sqlite3_finalize(pSelect);
       return 1;
     }
-    int percent = 100 * i / totalRecords;
+    percent = 100 * i / totalRecords;
     if(prevPercent < percent){
       fprintf(stderr, "DUMP: %d%%\n", percent);
       prevPercent = percent;

@@ -406,7 +406,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     }
 
     // To make sure footnotes always end up at the bottom of the main area we need to set this
-    rootArea->setBottom(rootArea->top() + newSize.height());
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        rootArea->setBottom(rootArea->top() + newSize.height());
+    }
 
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
@@ -567,7 +569,8 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
+        || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
         QSizeF size = shape->size();
         size.setHeight(1E6);
         return size;

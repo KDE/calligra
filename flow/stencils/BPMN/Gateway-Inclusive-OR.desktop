@@ -2,6 +2,7 @@
 Name=Gateway-Inclusive-OR
 Name[ca]=Passarel·la-Inclusiu-OR
 Name[ca@valencia]=Passarel·la-Inclusiu-OR
+Name[el]=Πύλη-Inclusive-OR
 Name[es]=Puerta de enlace O inclusiva
 Name[et]=Inklusiivne (OR) värav
 Name[it]=Gateway-Inclusivo-OR
@@ -12,6 +13,7 @@ Name[pl]=Bramka-Alternatywy
 Name[pt]='Gateway'-OU-Inclusivo
 Name[pt_BR]=Gateway OR inclusivo
 Name[ru]=Оператор включающего ИЛИ
+Name[sk]=Gateway-Inclusive-OR
 Name[sv]=Port-inklusiv-eller
 Name[uk]=Шлюз включного АБО
 Name[x-test]=xxGateway-Inclusive-ORxx

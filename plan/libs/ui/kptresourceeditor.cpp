@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -46,9 +47,6 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -387,12 +385,14 @@ void ResourceEditor::slotDeleteSelection()
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }
 

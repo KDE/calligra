@@ -101,8 +101,10 @@ set(kotext_LIB_SRCS
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
+    commands/ResizeTableCommand.cpp
     commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp

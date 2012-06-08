@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2007, 2012 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
   This library is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptresourceappointmentsmodel.h"
+#include "kptdebug.h"
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
@@ -42,7 +43,6 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
-#include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
 
@@ -63,7 +63,6 @@
 #include "kdganttglobal.h"
 #include "kdganttstyleoptionganttitem.h"
 
-extern int planDbg();
 
 /// The main namespace
 namespace KPlato
@@ -748,6 +747,7 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( settings );
     bool show = (bool)(settings.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     m_gantt->model()->setShowProject( show ); // why is this not called by the action?
@@ -758,6 +758,7 @@ bool GanttView::loadContext( const KoXmlElement &settings )
 void GanttView::saveContext( QDomElement &settings ) const
 {
     kDebug(planDbg());
+    ViewBase::saveContext( settings );
     settings.setAttribute( "show-project", actionShowProject->isChecked() );
 
     m_gantt->saveContext( settings );
@@ -994,12 +995,14 @@ void MilestoneGanttView::slotOptions()
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( settings );
     return m_gantt->loadContext( settings );
 }
 
 void MilestoneGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug(planDbg());
+    ViewBase::saveContext( settings );
     return m_gantt->saveContext( settings );
 }
 
@@ -1123,6 +1126,7 @@ void ResourceAppointmentsGanttView::slotOptions()
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( settings );
     m_gantt->loadContext( settings );
     return treeView()->loadContext( m_model->columnMap(), settings );
 }
@@ -1130,6 +1134,7 @@ bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug(planDbg());
+    ViewBase::saveContext( settings );
     m_gantt->saveContext( settings );
     treeView()->saveContext( m_model->columnMap(), settings );
 }

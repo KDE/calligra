@@ -64,7 +64,7 @@
 
 #include <cmath>
 
-extern int planDbg();
+#include "kptdebug.h"
 
 namespace KPlato
 {

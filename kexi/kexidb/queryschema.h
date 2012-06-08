@@ -856,6 +856,8 @@ public:
      */
     QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
 
+    QueryAsterisk(const QueryAsterisk& asterisk);
+
     virtual ~QueryAsterisk();
 
     /*! \return Query object for that this asterisk object is defined */

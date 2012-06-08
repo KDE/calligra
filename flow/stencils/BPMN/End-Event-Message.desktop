@@ -2,6 +2,7 @@
 Name=End-Event-Message
 Name[ca]=Final-Esdeveniment-Missatge
 Name[ca@valencia]=Final-Esdeveniment-Missatge
+Name[el]=Μήνυμα-γεγονότος-τέλους
 Name[es]=Mensaje del evento final
 Name[et]=Lõpusündmuse sõnum
 Name[it]=Evento-finale-Messaggio
@@ -12,7 +13,9 @@ Name[pl]=Komunikat-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Mensagem
 Name[pt_BR]=Mensagem do evento final
 Name[ru]=Сообщение завершения события
+Name[sk]=End-Event-Message
 Name[sv]=Sluthändelse-brev
 Name[uk]=Повідомлення кінцевої події
 Name[x-test]=xxEnd-Event-Messagexx
+Name[zh_CN]=结束-事件-消息
 Name[zh_TW]=結束─事件─訊息

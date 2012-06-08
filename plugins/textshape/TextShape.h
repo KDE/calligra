@@ -59,6 +59,9 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
 
     ///reimplemented
@@ -66,6 +69,8 @@ public:
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
+
+    KoImageCollection *imageCollection();
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -117,6 +122,7 @@ private:
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
     KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
 };
 
 #endif

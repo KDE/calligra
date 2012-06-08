@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
- Copyright (C) 2004, 2010 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004, 2010, 2012 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
  Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
@@ -35,6 +35,7 @@
 #include "KPlatoXmlLoader.h"
 #include "kptpackage.h"
 #include "kptworkpackagemergedialog.h"
+#include "kptdebug.h"
 
 #include <KoZoomHandler.h>
 #include <KoStore.h>
@@ -65,14 +66,13 @@
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
 
-Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
-        : KoDocument( parentWidget, parent, singleViewMode ),
-        m_project( 0 ), m_parentWidget( parentWidget ),
+Part::Part(QObject *parent)
+        : KoDocument(parent),
+        m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
         m_viewlistModified( false ),
@@ -80,7 +80,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
-    m_config.setReadWrite( isReadWrite() || !isEmbedded() );
+    m_config.setReadWrite( isReadWrite() );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -118,7 +118,7 @@ Part::~Part()
 
 void Part::setReadWrite( bool rw )
 {
-    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in calligra doc
+    m_config.setReadWrite( rw );
     KoDocument::setReadWrite( rw );
 }
 

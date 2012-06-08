@@ -99,6 +99,7 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp 
     kis_zoom_manager.cc
+    thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kisexiv2/kis_exif_io.cpp
@@ -157,6 +158,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc 
     widgets/kis_gradient_slider_widget.cc
+    widgets/kis_gradient_slider.cpp
     widgets/kis_iconwidget.cc 
     widgets/kis_mask_widgets.cpp 
     widgets/kis_meta_data_merge_strategy_chooser_widget.cc
@@ -182,6 +184,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_categorized_list_view.cpp
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
+    widgets/kis_floating_message.cpp
 #    widgets/kis_light_source.cpp
 #    widgets/kis_light_stage.cpp
 )

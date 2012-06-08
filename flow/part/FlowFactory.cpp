@@ -45,18 +45,12 @@ FlowFactory::~FlowFactory()
   s_aboutData = 0;
 }
 
-QObject* FlowFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
   Q_UNUSED( args );
   Q_UNUSED( keyword );
-  bool singleViewMode = (strcmp(iface, "KoDocument") != 0);
-
-  FlowDocument* doc = new FlowDocument(parentWidget, parent, singleViewMode);
-
-  if(singleViewMode)
-    doc->setReadWrite(false);
-
+  FlowDocument* doc = new FlowDocument(parent);
   return doc;
 }
 

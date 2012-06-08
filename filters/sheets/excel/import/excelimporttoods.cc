@@ -726,6 +726,8 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     if(rowCount < maximalRowCount-1) {
         xmlWriter->startElement("table:table-row");
         xmlWriter->addAttribute("table:number-rows-repeated", maximalRowCount - 1 - rowCount);
+        xmlWriter->startElement("table:table-cell");
+        xmlWriter->endElement();
         xmlWriter->endElement();
     }
 
@@ -1004,6 +1006,8 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
 
     if (!row) {
         xmlWriter->startElement("table:table-row");
+        xmlWriter->startElement("table:table-cell");
+        xmlWriter->endElement();
         xmlWriter->endElement();
         return repeat;
     }
@@ -1024,7 +1028,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     // find the column of the rightmost cell (if any)
     const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     int i = 0;
-    while(i <= lastCol) {
+    do {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(store, cell, repeat, xmlWriter);
@@ -1034,7 +1038,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
             xmlWriter->endElement();
             ++i;
         }
-    }
+    } while(i <= lastCol);
 
     xmlWriter->endElement();  // table:table-row
     addProgress(repeat);
@@ -1177,7 +1181,7 @@ static QString convertDate(double serialNo, const QString& valueFormat)
     QDateTime dt(QDate(1899, 12, 30));
     dt = dt.addMSecs((qint64)(serialNo * 86400 * 1000)); // TODO: we probably need double precision here
 
-    //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with Calligra Tables but probably not with other customers...
+    //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with Calligra Sheets but probably not with other customers...
     //return dd.toString("yyyy-MM-dd");
     return dt.toString("yyyy-MM-ddThh:mm:ss");
 }

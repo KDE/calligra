@@ -24,7 +24,7 @@
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoViewConverter.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeSavingContext.h"
@@ -35,7 +35,7 @@
 #include "KoFilterEffectStack.h"
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -111,6 +111,57 @@ KoPathShape::~KoPathShape()
     clear();
 }
 
+void KoPathShape::saveContourOdf(KoShapeSavingContext &context, const QSizeF &scaleFactor) const
+{
+    Q_D(const KoPathShape);
+
+    if (m_subpaths.length() <= 1) {
+        QTransform matrix;
+        matrix.scale(scaleFactor.width(), scaleFactor.height());
+        QString points;
+        KoSubpath *subPath = m_subpaths.first();
+        KoSubpath::const_iterator pointIt(subPath->constBegin());
+
+        KoPathPoint *currPoint= 0;
+        // iterate over all points
+        for (; pointIt != subPath->constEnd(); ++pointIt) {
+            currPoint = *pointIt;
+
+            if (currPoint->activeControlPoint1() || currPoint->activeControlPoint2()) {
+                break;
+            }
+            const QPointF p = matrix.map(currPoint->point());
+            points += QString("%1,%2 ").arg(qRound(1000*p.x())).arg(qRound(1000*p.y()));
+        }
+
+        if (currPoint && !(currPoint->activeControlPoint1() || currPoint->activeControlPoint2())) {
+            context.xmlWriter().startElement("draw:contour-polygon");
+            context.xmlWriter().addAttributePt("svg:width", size().width());
+            context.xmlWriter().addAttributePt("svg:height", size().height());
+
+            const QSizeF s(size());
+            QString viewBox = QString("0 0 %1 %2").arg(qRound(1000*s.width())).arg(qRound(1000*s.height()));
+            context.xmlWriter().addAttribute("svg:viewBox", viewBox);
+
+            context.xmlWriter().addAttribute("draw:points", points);
+
+            context.xmlWriter().addAttribute("draw:recreate-on-edit", "true");
+            context.xmlWriter().endElement();
+
+            return;
+        }
+    }
+
+    // if we get here we couldn't save as polygon - let-s try contour-path
+    context.xmlWriter().startElement("draw:contour-path");
+    saveOdfAttributes(context, OdfViewbox);
+
+    context.xmlWriter().addAttribute("svg:d", toString());
+    context.xmlWriter().addAttribute("calligra:nodeTypes", d->nodeTypes());
+    context.xmlWriter().addAttribute("draw:recreate-on-edit", "true");
+    context.xmlWriter().endElement();
+}
+
 void KoPathShape::saveOdf(KoShapeSavingContext & context) const
 {
     Q_D(const KoPathShape);
@@ -123,6 +174,59 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfCommonChildElements(context);
     saveText(context);
     context.xmlWriter().endElement();
+}
+
+bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor)
+{
+    Q_D(KoPathShape);
+
+    // first clear the path data from the default path
+    clear();
+
+    if (element.localName() == "contour-polygon") {
+        QString points = element.attributeNS(KoXmlNS::draw, "points").simplified();
+        points.replace(',', ' ');
+        points.remove('\r');
+        points.remove('\n');
+        bool firstPoint = true;
+        const QStringList coordinateList = points.split(' ');
+        for (QStringList::ConstIterator it = coordinateList.constBegin(); it != coordinateList.constEnd(); ++it) {
+            QPointF point;
+            point.setX((*it).toDouble());
+            ++it;
+            point.setY((*it).toDouble());
+            if (firstPoint) {
+                moveTo(point);
+                firstPoint = false;
+            } else
+                lineTo(point);
+        }
+        close();
+    } else if (element.localName() == "contour-path") {
+        KoPathShapeLoader loader(this);
+        loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
+        d->loadNodeTypes(element);
+    }
+
+    // apply viewbox transformation
+    QRectF viewBox = KoPathShape::loadOdfViewbox(element);
+    if (! viewBox.isEmpty()) {
+        QSizeF size;
+        size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
+        size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
+
+        // create matrix to transform original path data into desired size and position
+        QTransform viewMatrix;
+        viewMatrix.translate(-viewBox.left(), -viewBox.top());
+        viewMatrix.scale(scaleFactor.width(), scaleFactor.height());
+        viewMatrix.scale(size.width() / viewBox.width(), size.height() / viewBox.height());
+
+        // transform the path data
+        d->map(viewMatrix);
+    }
+    setTransformation(QTransform());
+
+    return true;
 }
 
 bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -199,7 +303,7 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
 
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -207,13 +311,13 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
     d->startMarker.saveStyle(style, lineWidth, context);
     d->endMarker.saveStyle(style, lineWidth, context);
 
-    return KoShape::saveStyle(style, context);
+    return KoTosContainer::saveStyle(style, context);
 }
 
 void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     Q_D(KoPathShape);
-    KoShape::loadStyle(element, context);
+    KoTosContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
@@ -228,7 +332,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 #endif
     }
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -406,24 +510,19 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    Q_D(const KoPathShape);
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;
-    if (d->startMarker.marker() || d->endMarker.marker()) {
-        KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
-        QPen pen;
-        if (lineBorder) {
-            pen.setWidthF(lineBorder->lineWidth());
-        }
-        bb = transform.map(pathStroke(pen)).boundingRect();
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    QPen pen;
+    if (lineBorder) {
+        pen.setWidthF(lineBorder->lineWidth());
     }
-    else {
-        bb = transform.map(outline()).boundingRect();
-    }
-    if (border()) {
+    bb = transform.map(pathStroke(pen)).boundingRect();
+
+    if (stroke()) {
         KoInsets inset;
-        border()->borderInsets(this, inset);
+        stroke()->strokeInsets(this, inset);
 
         // calculate transformed border insets
         QPointF center = transform.map(QPointF());
@@ -1114,7 +1213,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
         KoPathShape *shape = new KoPathShape();
         if (! shape) continue;
 
-        shape->setBorder(border());
+        shape->setStroke(stroke());
         shape->setShapeId(shapeId());
 
         KoSubpath *newSubpath = new KoSubpath();
@@ -1379,9 +1478,9 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
     const QPainterPath outlinePath = outline();
-    if (border()) {
+    if (stroke()) {
         KoInsets insets;
-        border()->borderInsets(this, insets);
+        stroke()->strokeInsets(this, insets);
         QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
         roi.moveCenter(point);
         if (outlinePath.intersects(roi) || outlinePath.contains(roi))
