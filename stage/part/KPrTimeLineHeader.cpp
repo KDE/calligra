@@ -6,6 +6,8 @@
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QDebug>
+#include <QStyle>
+#include <QStyleOptionHeader>
 #include "KPrAnimationsTimeLineView.h"
 
 const int headerHeigth = 20;
@@ -62,7 +64,13 @@ void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, co
     QColor color = palette().button().color();
     gradient.setColorAt(0, color.lighter(125));
     gradient.setColorAt(1, color.darker(125));
-    painter->fillRect(rect, gradient);
+    //painter->fillRect(rect, gradient);
+
+    QStyleOptionHeader option;
+    option.initFrom(this);
+    option.rect = rect;
+    style()->drawControl(QStyle::CE_HeaderSection, &option, painter, this);
+
     m_mainView->paintItemBorder(painter, palette(), rect);
     painter->setPen(palette().buttonText().color());
     painter->drawText(rect, text, QTextOption(Qt::AlignCenter));
@@ -71,7 +79,7 @@ void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, co
 void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 {
     const int Padding = 3;
-    painter->setPen(palette().buttonText().color());
+    painter->setPen(palette().windowText().color());
     painter->setFont(QFont("", 8));
     int totalWidth = m_mainView->widthOfColumn(5);
     int stepScale = m_mainView->stepsScale();
