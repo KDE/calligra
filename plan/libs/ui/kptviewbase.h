@@ -194,7 +194,10 @@ public:
     virtual ~ViewBase();
     /// Return the part (document) this view handles
     KoDocument *part() const;
-    
+
+    /// Return the page layout used for printing this view
+    virtual KoPageLayout pageLayout() const;
+
     /// Return the type of view this is (class name)
     QString viewType() const { return metaObject()->className(); }
     
@@ -238,8 +241,6 @@ public:
     void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
-
-    KoPageLayout pageLayout() const { return m_pagelayout; }
 
 public slots:
     /// Activate/deactivate the gui

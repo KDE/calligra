@@ -364,6 +364,11 @@ KoDocument *ViewBase::part() const
      return koDocument();
 }
 
+KoPageLayout ViewBase::pageLayout() const
+{
+    return m_pagelayout;
+}
+
 bool ViewBase::isActive() const
 {
     if ( hasFocus() ) {
