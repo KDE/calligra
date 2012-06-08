@@ -389,8 +389,6 @@ uint Field::maxLength() const
 void
 Field::setMaxLength(uint maxLength)
 {
-    if (type() != Field::Text)
-        return;
     m_maxLength = maxLength;
     m_maxLengthStrategy = DefinedMaxLength;
 }
