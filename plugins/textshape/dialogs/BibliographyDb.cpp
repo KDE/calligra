@@ -160,11 +160,20 @@ QSortFilterProxyModel* BibliographyDb::proxyModel()
     return m_filterModel;
 }
 
-void BibliographyDb::setFilter(QRegExp expr)
+void BibliographyDb::setSearchFilter(QRegExp expr)
 {
     if (m_filterModel) {
         m_filterModel->setFilterRegExp(expr);
         m_filterModel->setFilterKeyColumn(-1);
+    }
+}
+
+void BibliographyDb::setFilter(QString filter)
+{
+    m_model->setFilter(filter);
+
+    if (m_model->lastError().isValid()) {
+        qDebug() << m_model->lastError().text();
     }
 }
 

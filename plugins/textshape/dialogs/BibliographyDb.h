@@ -46,7 +46,8 @@ public:
     bool createTable();
     QSqlTableModel* tableModel();
     QSortFilterProxyModel* proxyModel();
-    void setFilter(QRegExp);
+    void setSearchFilter(QRegExp);
+    void setFilter(QString filter);
     bool insertCitation(KoInlineCite *);
     QMap<QString, KoInlineCite *> citationRecords();
 
