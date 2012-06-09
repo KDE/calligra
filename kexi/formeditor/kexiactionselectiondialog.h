@@ -47,8 +47,6 @@ public:
      or "No action" has been selected. */
     KexiFormEventAction::ActionData currentAction() const;
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
 protected slots:
     void slotActionCategorySelected(QListWidgetItem* item);
     void slotKActionItemExecuted(QListWidgetItem*);
