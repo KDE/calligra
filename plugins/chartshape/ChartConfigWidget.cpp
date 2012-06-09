@@ -395,6 +395,17 @@ ChartConfigWidget::ChartConfigWidget()
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
 
+    // Insert error bars button
+    QMenu *insertErrorBarMenu = new QMenu(this);
+
+    insertErrorBarMenu->addAction(i18n("None"));
+    insertErrorBarMenu->addAction(i18n("Constant Error"));
+    insertErrorBarMenu->addAction(i18n("Percentage Error"));
+    insertErrorBarMenu->addAction("Standard Deviation");
+    insertErrorBarMenu->addAction(i18n("From Data Table"));
+
+    d->ui.insertErrorBarMenu->setMenu(insertErrorBarMenu);
+
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
             this,               SIGNAL(showTitleChanged(bool)));
