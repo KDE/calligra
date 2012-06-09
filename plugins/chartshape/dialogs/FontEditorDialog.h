@@ -22,16 +22,17 @@
 #define KCHART_FONT_EDITOR_DIALOG_H
 
 
-#include "ui_FontEditorDialog.h"
-
+#include <kfontchooser.h>
+#include <kdialog.h>
 
 namespace KChart {
 
-class FontEditorDialog : public QDialog, public Ui::FontEditorDialog
+class FontEditorDialog : public KDialog
 {
 public:
     FontEditorDialog(QWidget *parent = 0);
     ~FontEditorDialog();
+    KFontChooser *fontChooser;
 };
 
 } // Namespace KChart

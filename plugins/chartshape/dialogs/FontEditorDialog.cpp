@@ -21,13 +21,25 @@
 
 #include "FontEditorDialog.h"
 
+#include <kfontdialog.h>
+#include <klocale.h>
+
 using namespace KChart;
 
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)
-    : QDialog(parent)
+    : KDialog(parent)
 {
-    setupUi(this);
+    setCaption(i18n("Select Font"));
+    setModal(true);
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+
+    QStringList list;
+    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
+    fontChooser = new KFontChooser(this, KFontChooser::NoDisplayFlags, list, 7);
+
+    setMainWidget(fontChooser);
 }
 
 FontEditorDialog::~FontEditorDialog()
