@@ -101,6 +101,7 @@
      <string>Filter</string>
     </property>
     <addaction name="actionFilter"/>
+    <addaction name="actionClear_filters"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
@@ -172,6 +173,11 @@
    </property>
    <property name="text">
     <string>Fixed string</string>
+   </property>
+  </action>
+  <action name="actionClear_filters">
+   <property name="text">
+    <string>Clear filters</string>
    </property>
   </action>
  </widget>

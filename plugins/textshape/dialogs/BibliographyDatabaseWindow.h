@@ -49,6 +49,7 @@ public slots:
     void searchQueryChanged(QString query);
     void searchTypeChanged(QAction *action);
     void showFilters();
+    void clearFilters();
 
 private:
     Ui::BibliographyDatabaseWindow ui;

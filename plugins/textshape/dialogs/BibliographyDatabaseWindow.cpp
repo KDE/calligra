@@ -116,7 +116,7 @@ void BibliographyDatabaseWindow::searchQueryChanged(QString query)
     }
 
     QRegExp searchExp(ui.search->text(), Qt::CaseInsensitive, m_syntax);
-    m_table->setFilter(searchExp);
+    m_table->setSearchFilter(searchExp);
 }
 
 void BibliographyDatabaseWindow::insertBlankRow()
@@ -140,6 +140,9 @@ void BibliographyDatabaseWindow::setupActions()
 
     ui.actionFilter->setStatusTip(i18n("Edit filters"));
     connect(ui.actionFilter, SIGNAL(triggered()), this, SLOT(showFilters()));
+
+    ui.actionClear_filters->setStatusTip(i18n("Clear filters"));
+    connect(ui.actionClear_filters, SIGNAL(triggered()), this, SLOT(clearFilters()));
 
     QActionGroup *searchActions = new QActionGroup(this);
 
@@ -170,14 +173,26 @@ void BibliographyDatabaseWindow::searchTypeChanged(QAction *action)
 void BibliographyDatabaseWindow::showFilters()
 {
     if (m_filters->count() == 0) {
-        m_filters->append(new BibDbFilter("identifier", "", "NOT NULL"));
+        m_filters->append(new BibDbFilter(false));
     }
     EditFiltersDialog *dialog = new EditFiltersDialog(m_filters, this);
     if (dialog->exec() == QDialog::Accepted) {
+        QString filterString;
         foreach (BibDbFilter *filter, *m_filters) {
-            //Create filter string and apply it to model
+            filterString.append(filter->filterString());
+        }
+        qDebug() << filterString;
+        if (!filterString.isEmpty()) {
+            m_table->setFilter(filterString);
         }
     }
+}
+
+void BibliographyDatabaseWindow::clearFilters()
+{
+    m_table->setFilter("");
+    qDeleteAll(m_filters->begin(), m_filters->end());
+    m_filters->clear();
 }
 
 void BibliographyDatabaseWindow::newRecord()
