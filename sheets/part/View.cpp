@@ -1561,6 +1561,7 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
     setHeaderMinima();
+    d->canvas->update();
     d->columnHeader->update();
     d->rowHeader->update();
     d->selectAllButton->update();
