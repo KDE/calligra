@@ -344,8 +344,8 @@ public:
 
     // changes 3rd column visibility
     void setActionToExecuteSectionVisible(bool visible) {
-	actionToExecuteListView->setVisible(visible);;
-	actionToExecuteLbl->setVisible(visible);;
+	actionToExecuteListView->setVisible(visible);
+	actionToExecuteLbl->setVisible(visible);
     }
 
     QString actionWidgetName;
