@@ -38,6 +38,7 @@ KexiDBDatePicker::~KexiDBDatePicker()
 
 void KexiDBDatePicker::setInvalidState(const QString& displayText)
 {
+    Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
     setReadOnly(true);
