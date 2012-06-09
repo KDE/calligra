@@ -33,16 +33,27 @@ const QStringList EditFiltersDialog::filterConditions = QStringList() << "=" << 
                                                                       << ">" << ">=" << "LIKE" << "NOT LIKE"
                                                                       << "NULL" << "NOT NULL";
 
-BibDbFilter::BibDbFilter(QString leftOp, QString rightOp, QString comparison) :
-    m_leftOp(leftOp),
-    m_rightOp(rightOp),
-    m_comparison(comparison),
+BibDbFilter::BibDbFilter(bool hasPreCond) :
+    m_leftOp("identifier"),
+    m_comparison("<>"),
     m_field(new KComboBox),
     m_cond(new KComboBox),
     m_value(new KLineEdit),
     m_layout(new QHBoxLayout)
 {
     setLayout(m_layout);
+
+    if (hasPreCond) {
+        m_preOp = QString("AND");
+        m_preCond = new KComboBox;
+        m_layout->addWidget(m_preCond);
+        m_preCond->addItems(QStringList() << "AND" << "OR");
+
+        m_preCond->setCurrentIndex(0);
+        connect(m_preCond, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPreCondition(QString)));
+    } else {
+        m_layout->addSpacing(62);
+    }
 
     m_layout->addWidget(m_field);
     m_layout->addWidget(m_cond);
@@ -81,12 +92,21 @@ void BibDbFilter::setCondition(QString cond)
     m_comparison = cond;
 }
 
+void BibDbFilter::setPreCondition(QString preCond)
+{
+    m_preOp = preCond;
+}
+
 QString BibDbFilter::filterString() const
 {
     QString filter;
+    if (!m_preOp.isEmpty()) {
+        filter.append(" ").append(m_preOp);
+    }
+
     if (!m_leftOp.isEmpty()) {
-        filter.append(m_leftOp);
-    } else filter.append("identifier");
+        filter.append(" ").append(m_leftOp);
+    } else filter.append(" ").append("identifier");
 
     if (!m_comparison.isEmpty()) {
         filter.append(" ").append(m_comparison).append(" ");
@@ -95,7 +115,7 @@ QString BibDbFilter::filterString() const
     if (!m_rightOp.isEmpty()) {
         filter.append(QString(" '%1' ").arg(m_rightOp));
     } else if (m_comparison != "NULL" && m_comparison != "NOT NULL") {
-        filter.append(" '' ");
+        filter.append("''");
     }
 
     return filter;
@@ -124,7 +144,7 @@ EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *pare
 
     m_buttonBox->addButton("Apply filters", KDialogButtonBox::AcceptRole, this, SLOT(applyFilters()));
     m_buttonBox->addButton("Cancel", KDialogButtonBox::RejectRole, this, SLOT(reject()));
-    m_buttonBox->addButton("Clear filters", KDialogButtonBox::ActionRole, this, SLOT(clearFilters()));
+    //m_buttonBox->addButton("Clear filters", KDialogButtonBox::ActionRole, this, SLOT(clearFilters()));
     m_buttonLayout->addWidget(m_addFilter);
     m_buttonLayout->addWidget(m_buttonBox);
 
@@ -134,7 +154,12 @@ EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *pare
 
 void EditFiltersDialog::addFilter()
 {
-    BibDbFilter *filter = new BibDbFilter;
+    BibDbFilter *filter;
+    if (m_filters->size() == 0) {
+        filter = new BibDbFilter(false);
+    } else {
+        filter = new BibDbFilter(true);
+    }
     m_filters->append(filter);
     m_filterLayout->addWidget(filter);
 }
@@ -143,8 +168,3 @@ void EditFiltersDialog::applyFilters()
 {
     emit accept();
 }
-
-void EditFiltersDialog::clearFilters()
-{
-}
-

@@ -40,7 +40,6 @@ public:
 public slots:
     void addFilter();
     void applyFilters();
-    void clearFilters();
 private:
     QVBoxLayout *m_layout;
     QVBoxLayout *m_filterLayout;
@@ -55,18 +54,21 @@ class BibDbFilter : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BibDbFilter(QString leftOp = QString("identifier"), QString rightOp = QString(""), QString comparison = QString("<>"));
+    explicit BibDbFilter(bool hasPreCond = true);
     QString m_leftOp;
     QString m_rightOp;
     QString m_comparison;
+    QString m_preOp;
     KComboBox *m_field;
     KComboBox *m_cond;
     KLineEdit *m_value;
+    KComboBox *m_preCond;
     QString filterString() const;
 public slots:
     void setLeftOperand(QString op);
     void setRightOperand(QString op);
-    void setCondition(QString);
+    void setCondition(QString cond);
+    void setPreCondition(QString preCond);
 private:
     QHBoxLayout *m_layout;
 };
