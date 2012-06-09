@@ -50,7 +50,6 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
-    dialogs/FontEditorDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
