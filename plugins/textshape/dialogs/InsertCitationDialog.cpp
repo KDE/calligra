@@ -60,7 +60,7 @@ InsertCitationDialog::InsertCitationDialog(BibliographyDb *db, QWidget *parent) 
     m_table(db),
     m_mode(InsertCitationDialog::DB)
 {
-    Q_ASSERT(m_db);
+    Q_ASSERT(m_table);
 
     dialog.setupUi(this);
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));

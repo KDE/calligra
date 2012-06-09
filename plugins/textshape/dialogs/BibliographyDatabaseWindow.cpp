@@ -181,7 +181,7 @@ void BibliographyDatabaseWindow::showFilters()
         foreach (BibDbFilter *filter, *m_filters) {
             filterString.append(filter->filterString());
         }
-        qDebug() << filterString;
+
         if (!filterString.isEmpty()) {
             m_table->setFilter(filterString);
         }
