@@ -1,5 +1,7 @@
 
 Calligra Plan current:
+----------------------
+* Fix bug 301326 - Export to pdf does not respect reports page layout
 
 * Fix Bug 286564 -  plan do not update the resources allocation number when selected
 
