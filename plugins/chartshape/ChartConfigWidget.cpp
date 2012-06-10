@@ -1613,10 +1613,9 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged(bool b)
 void ChartConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
-    foreach (Axis *axis, d->axes) {
-        axis->setFont(font);
-        axis->setFontSize(font.pointSizeF());
-    }
+    Axis *axis = d->axes[d->ui.axes->currentIndex()];
+    axis->setFont(font);
+    axis->setFontSize(font.pointSizeF());
 }
 
 void ChartConfigWidget::ui_legendFontChanged()
@@ -1725,7 +1724,7 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
 
 void ChartConfigWidget::ui_axisEditFontButtonClicked()
 {
-    QFont font = d->axes.at(0)->font();
+    QFont font = d->axes[d->ui.axes->currentIndex()]->font();
     d->axisFontEditorDialog.fontChooser->setFont(font);
     d->axisFontEditorDialog.show();
 }
