@@ -1887,9 +1887,9 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
             KDChart::StockDiagram::Type type;
             switch (subType) {
 #if 0
-            case StackedChartSubtype:
+            case CandlestickChartSubtype:
                 type = KDChart::StockDiagram::Candlestick; break;
-            case PercentChartSubtype:
+            case OpenHighLowCloseChartSubtype:
                 type = KDChart::StockDiagram::OpenHighLowClose; break;
 #endif
             default:
