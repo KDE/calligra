@@ -135,18 +135,18 @@ static const char *ODF_CHARTTYPES[NUM_CHARTTYPES] = {
 };
 
 static const ChartSubtype defaultSubtypes[NUM_CHARTTYPES] = {
-    NormalChartSubtype,     // Bar
-    NormalChartSubtype,     // Line
-    NormalChartSubtype,     // Area
-    NoChartSubtype,         // Circle
-    NoChartSubtype,         // Ring
-    NoChartSubtype,         // Scatter
-    NormalChartSubtype,     // Radar
-    NormalChartSubtype,     // Filled Radar
-    NoChartSubtype,         // Stock
-    NoChartSubtype,         // Bubble
-    NoChartSubtype,         // Surface
-    NoChartSubtype          // Gantt
+    NormalChartSubtype,         // Bar
+    NormalChartSubtype,         // Line
+    NormalChartSubtype,         // Area
+    NoChartSubtype,             // Circle
+    NoChartSubtype,             // Ring
+    NoChartSubtype,             // Scatter
+    NormalChartSubtype,         // Radar
+    NormalChartSubtype,         // Filled Radar
+    HighLowCloseChartSubtype,   // Stock
+    NoChartSubtype,             // Bubble
+    NoChartSubtype,             // Surface
+    NoChartSubtype              // Gantt
 };
 
 

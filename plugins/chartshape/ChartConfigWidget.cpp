@@ -99,6 +99,7 @@ public:
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
     QMenu *dataSetRadarChartMenu;
+    QMenu *dataSetStockChartMenu;
 
     // chart type selection actions
     QAction  *normalBarChartAction;
@@ -121,7 +122,10 @@ public:
     QAction  *scatterChartAction;
     QAction  *bubbleChartAction;
 
-    QAction  *stockChartAction;
+    QAction  *hlcStockChartAction;
+    QAction  *ohlcStockChartAction;
+    QAction  *candlestickStockChartAction;
+
     QAction  *surfaceChartAction;
     QAction  *ganttChartAction;
 
@@ -144,7 +148,11 @@ public:
     QAction  *dataSetFilledRadarChartAction;
     QAction  *dataSetScatterChartAction;
     QAction  *dataSetBubbleChartAction;
-    QAction  *dataSetStockChartAction;
+
+    QAction  *dataSetHLCStockChartAction;
+    QAction  *dataSetOHLCStockChartAction;
+    QAction  *dataSetCandlestickStockChartAction;
+
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
 
@@ -209,6 +217,7 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetLineChartMenu = 0;
     dataSetAreaChartMenu = 0;
     dataSetRadarChartMenu = 0;
+    dataSetStockChartMenu = 0;
     dataSetNormalBarChartAction = 0;
     dataSetStackedBarChartAction = 0;
     dataSetPercentBarChartAction = 0;
@@ -223,7 +232,9 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
     dataSetFilledRadarChartAction = 0;
-    dataSetStockChartAction = 0;
+    dataSetHLCStockChartAction = 0;
+    dataSetOHLCStockChartAction = 0;
+    dataSetCandlestickStockChartAction = 0;
     dataSetBubbleChartAction = 0;
     dataSetSurfaceChartAction = 0;
     dataSetGanttChartAction = 0;
@@ -344,7 +355,15 @@ ChartConfigWidget::ChartConfigWidget()
 
     chartTypeMenu->addSeparator();
 
-    d->stockChartAction = chartTypeMenu->addAction(i18n("Stock Chart"));
+    // Stock Charts
+    QMenu *stockChartMenu = chartTypeMenu->addMenu(i18n("Stock Chart"));
+    d->hlcStockChartAction  = stockChartMenu->addAction(i18n("HighLowClose"));
+    d->hlcStockChartAction->setEnabled(false);
+    d->ohlcStockChartAction = stockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->ohlcStockChartAction->setEnabled(false);
+    d->candlestickStockChartAction = stockChartMenu->addAction(i18n("Candlestick"));
+    d->candlestickStockChartAction->setEnabled(false);
+
     d->surfaceChartAction = chartTypeMenu->addAction(i18n("Surface Chart"));
     d->surfaceChartAction->setEnabled(false);
     d->ganttChartAction = chartTypeMenu->addAction(i18n("Gantt Chart"));
@@ -385,7 +404,11 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar"), i18n("Normal"));
     d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar-filled"), i18n("Filled"));
 
-    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction(i18n("Stock Chart"));
+    d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu("Stock Chart");
+    d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("HighLowClose"));
+    d->dataSetOHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->dataSetCandlestickStockChartAction = d->dataSetStockChartMenu->addAction(i18n("Candlestick"));
+
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(i18n("Bubble Chart"));
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-scatter"), i18n("Scatter Chart"));
@@ -662,9 +685,20 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
         subtype = NoChartSubtype;
     }
 
-    else if (action == d->stockChartAction) {
+    // Stock charts
+    else if (action == d->hlcStockChartAction) {
         type    = StockChartType;
-        subtype = NoChartSubtype;
+        subtype = HighLowCloseChartSubtype;
+    }
+
+    else if (action == d->ohlcStockChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    }
+
+    else if (action == d->candlestickStockChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
     }
 
     else if (action == d->bubbleChartAction) {
@@ -740,7 +774,7 @@ void ChartConfigWidget::setCartesianChartTypesEnabled(bool enabled)
     d->dataSetAreaChartMenu->setEnabled(enabled);
     d->dataSetRadarChartMenu->setEnabled(enabled);
     d->dataSetScatterChartAction->setEnabled(enabled);
-    d->dataSetStockChartAction->setEnabled(enabled);
+    d->dataSetStockChartMenu->setEnabled(enabled);
     d->dataSetBubbleChartAction->setEnabled(enabled);
     // FIXME: Enable for:
     // pie, ring?
@@ -831,8 +865,18 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
         type = RingChartType;
     else if (action == d->dataSetScatterChartAction)
         type = ScatterChartType;
-    else if (action == d->dataSetStockChartAction)
-        type = StockChartType;
+
+    else if (action == d->dataSetHLCStockChartAction) {
+        type    = StockChartType;
+        subtype = HighLowCloseChartSubtype;
+    } else if (action == d->dataSetStackedAreaChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    } else if (action == d->dataSetPercentAreaChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
+    }
+
     else if (action == d->dataSetBubbleChartAction)
         type = BubbleChartType;
 
