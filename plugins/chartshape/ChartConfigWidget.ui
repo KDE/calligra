@@ -563,14 +563,14 @@ p, li { white-space: pre-wrap; }
         </layout>
        </item>
        <item row="7" column="0" colspan="3">
-        <widget class="Line" name="errorBarSeperator">
+        <widget class="Line" name="errorBarSeparator">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
        <item row="9" column="0" colspan="3">
-        <widget class="QWidget" name="errorBars" native="true">
+        <widget class="QWidget" name="errorBarProperties" native="true">
          <layout class="QGridLayout" name="gridLayout_6">
           <property name="leftMargin">
            <number>0</number>
@@ -615,7 +615,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="insertErrorBarMenu">
+           <widget class="QPushButton" name="errorBarTypeMenu">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -624,6 +624,12 @@ p, li { white-space: pre-wrap; }
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>96</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="text">
              <string>Insert</string>
@@ -636,7 +642,7 @@ p, li { white-space: pre-wrap; }
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+             <enum>QSizePolicy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>

@@ -69,11 +69,13 @@ public:
 public slots:
     void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
+    void errorBarTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
 
     void slotShowTableEditor();
     void slotShowCellRegionDialog();
+    void slotShowFormatErrorBarDialog();
 
     void dataSetChartTypeSelected(QAction *action);
     void datasetBrushSelected(const QColor& color);

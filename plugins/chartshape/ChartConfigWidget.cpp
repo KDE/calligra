@@ -63,6 +63,7 @@
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
 #include "FontEditorDialog.h"
+#include "FormatErrorBarDialog.h"
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
@@ -172,6 +173,7 @@ public:
     AxisScalingDialog axisScalingDialog;
     FontEditorDialog axisFontEditorDialog;
     FontEditorDialog legendFontEditorDialog;
+    FormatErrorBarDialog formatErrorBarDialog;
     CellRegionDialog  cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
@@ -184,6 +186,7 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     , axisScalingDialog(parent)
     , axisFontEditorDialog(parent)
     , legendFontEditorDialog(parent)
+    , formatErrorBarDialog(parent)
     , cellRegionDialog(parent)
 
 {
@@ -395,16 +398,19 @@ ChartConfigWidget::ChartConfigWidget()
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
 
-    // Insert error bars button
-    QMenu *insertErrorBarMenu = new QMenu(this);
+    // Error bar type menu button
+    QMenu *errorBarTypeMenu = new QMenu(this);
 
-    insertErrorBarMenu->addAction(i18n("None"));
-    insertErrorBarMenu->addAction(i18n("Constant Error"));
-    insertErrorBarMenu->addAction(i18n("Percentage Error"));
-    insertErrorBarMenu->addAction("Standard Deviation");
-    insertErrorBarMenu->addAction(i18n("From Data Table"));
+    errorBarTypeMenu->addAction(i18n("None"));
+    errorBarTypeMenu->addAction(i18n("Constant Error"));
+    errorBarTypeMenu->addAction(i18n("Percentage Error"));
+    errorBarTypeMenu->addAction("Standard Deviation");
+    errorBarTypeMenu->addAction(i18n("From Data Table"));
 
-    d->ui.insertErrorBarMenu->setMenu(insertErrorBarMenu);
+    d->ui.errorBarTypeMenu->setMenu(errorBarTypeMenu);
+
+    connect(errorBarTypeMenu, SIGNAL(triggered(QAction*)),
+            this,             SLOT(errorBarTypeSelected(QAction*)));
 
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
@@ -708,6 +714,11 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     update();
 }
 
+void ChartConfigWidget::errorBarTypeSelected(QAction *action)
+{
+    d->ui.errorBarTypeMenu->setText(action->text());
+}
+
 /**
  * Enabled/Disabled menu actions to set a polar chart type
  */
@@ -970,24 +981,32 @@ void ChartConfigWidget::update()
         || d->subtype != d->shape->chartSubType())
     {
         // Update the chart type specific settings in the "Data Sets" tab
-        bool needSeparator = false;
+        bool needPropertiesSeparator = false;
+        bool needErrorBarSeparator = false;
         if (d->shape->chartType() == BarChartType) {
             d->ui.barProperties->show();
             d->ui.pieProperties->hide();
-            needSeparator = true;
-        } else if (d->shape->chartType() == CircleChartType) {
+            d->ui.errorBarProperties->show();
+            needPropertiesSeparator = true;
+            needErrorBarSeparator = true;
+        } else if (d->shape->chartType() == LineChartType || d->shape->chartType() == AreaChartType
+                   || d->shape->chartType() == ScatterChartType) {
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->show();
+            needErrorBarSeparator = true;
+        } else if (d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->show();
-            needSeparator = true;
-        } else if (d->shape->chartType() == RingChartType) {
-            d->ui.barProperties->hide();
-            d->ui.pieProperties->show();
-            needSeparator = true;
+            d->ui.errorBarProperties->hide();
+            needPropertiesSeparator = true;
         } else {
             d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->hide();
         }
-        d->ui.propertiesSeparator->setVisible(needSeparator);
+        d->ui.propertiesSeparator->setVisible(needPropertiesSeparator);
+        d->ui.errorBarSeparator->setVisible(needErrorBarSeparator);
 
         // Set the chart type icon in the chart type button.
         QString iconName = chartTypeIcon(d->shape->chartType(), d->shape->chartSubType());
@@ -1067,6 +1086,12 @@ void ChartConfigWidget::slotShowCellRegionDialog()
     ui_dataSetSelectionChanged_CellRegionDialog(selectedDataSet);
 
     d->cellRegionDialog.show();
+}
+
+
+void ChartConfigWidget::slotShowFormatErrorBarDialog()
+{
+    d->formatErrorBarDialog.show();
 }
 
 
@@ -1196,6 +1221,10 @@ void ChartConfigWidget::setupDialogs()
     connect(d->ui.legendEditFontButton, SIGNAL(clicked()),
              this, SLOT(ui_legendEditFontButtonClicked()));
     connect(&d->legendFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_legendFontChanged()));
+
+    // Format Error Bars
+    connect(d->ui.formatErrorBar, SIGNAL(clicked()),
+             this, SLOT(slotShowFormatErrorBarDialog()));
 }
 
 void ChartConfigWidget::createActions()
