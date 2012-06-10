@@ -111,8 +111,6 @@ CSV Import TODO:
 *add "Skip empty rows" option
 *add "Skip empty columns" option
 
-===================== Kexi 2.4  =====================
-
 TODO:
 *Add Return shortcut to opening in data mode from navigator
 *Add Ctrl+Return shortcut to opening in design mode from navigator
@@ -146,12 +144,57 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
 
+TODO:
+Table Designer
+*Changing Length property does not trigger data removal
+BUG:301262
+
+TODO:
+KexiDB
+*MySQL Driver
+**add config option for the length limit
+
+2012-06-07
+KexiDB
+*Added maxLengthIsDefault property of table field for Text types to extended schema
+**stores a hint that limit comes from default setting
+CCBUG:301277
+*Added DefaultMaxLengthForTextFields config in Tables group
+**specifies default maximum length for fields of type Text
+**0 (the default) means unlimited or up to engine's limit
+CCBUG:301277
+TODO: Port to Predicate
+
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.91) ~~~~~~~~~~~~~~~~
+
 2012-03-03
 Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+===================== Kexi 2.4  =====================
+~~~~~~~~~~~~~~~~ 2.4.3 ~~~~~~~~~~~~~~~~
+
+2012-06-09
+KexiDB
+*MySQL Driver
+*set limit to 255 characters for Text type (VARCHAR)
+**call "SET SESSION sql_mode='TRADITIONAL'" on opening database - needed to turn warnings about trimming string values into SQL errors
+**practical solution for 'Kexi shows no indication that text is trimmed' bug in case of MySQL: error is displayed eg. "Record inserting on the server failed.Message from server: Data too long for column 'hn' at row 1. SQL statement: INSERT INTO table4 (hn) VALUES ('...................'). Server result: 1406"
+**More info on VARCHAR support in databases: http://www.ispirer.com/wiki/sqlways/mysql/data-types/varchar_n
+CCBUG:301277
+CCBUG:301136
+REVIEW:105182
+
+2012-06-06
+KexiDB
+*Remove limits for Text data type, leave as option
+**By default there are no limits in Text data type
+BUG:301277
+TODO: Port to Predicate
+
 ~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
+
 KexiDB
 *put DESC/ASC after COLLATE section, not before (needed at least for sqlite driver)
 *fixed crash because of invalid deletion order of query structures

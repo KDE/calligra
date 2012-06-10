@@ -346,11 +346,13 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 

@@ -114,7 +114,7 @@ set( calligrastageprivate_LIB_SRCS
      animations/KPrAnimationData.cpp
 
      animations/strategy/KPrAnimationValue.cpp
-     animations/strategy/KPrValueParser.cpp
+     animations/strategy/KPrFormulaParser.cpp
      animations/strategy/KPrAnimationAttribute.cpp
      animations/strategy/KPrSmilValues.cpp
      animations/strategy/KPrAttributeX.cpp

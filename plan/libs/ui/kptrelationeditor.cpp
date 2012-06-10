@@ -218,11 +218,13 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void RelationEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
