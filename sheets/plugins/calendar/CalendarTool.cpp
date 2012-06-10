@@ -107,7 +107,11 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         }
     }
 
+#if KDE_IS_VERSION(4, 6, 0)
+    KCalendarSystem* cs = KCalendarSystem::create(KLocale::GregorianCalendar);
+#else
     KCalendarSystem* cs = KCalendarSystem::create();
+#endif
 
     Q_ASSERT(cs);
 
@@ -164,7 +168,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
             monthheader = false;
         }
         if (weekheader) {
-            setText(sheet, row, colstart, QString::number(cs->weekNumber(current)));
+            setText(sheet, row, colstart, QString::number(cs->week(current)));
             col++;
             weekheader = false;
 

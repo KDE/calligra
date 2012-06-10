@@ -263,6 +263,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_KexiDBSlider"
             << "library_widget_KexiDBProgressBar"
             << "library_widget_KexiDBCommandLinkButton"
+            << "library_widget_KexiDBDatePicker"
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
