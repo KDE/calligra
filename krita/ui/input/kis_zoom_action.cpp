@@ -62,7 +62,7 @@ void KisZoomAction::inputEvent(QEvent* event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         if(mevent->buttons()) {
-            QPointF relMovement = mevent->posF() - d->lastMousePosition;
+            QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
 
             float zoom = m_inputManager->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
             m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom + relMovement.y() / 100);
