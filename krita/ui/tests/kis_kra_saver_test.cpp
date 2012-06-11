@@ -55,15 +55,17 @@ void KisKraSaverTest::testRoundTrip()
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
+    bool infiCanvastest_1 = doc->isCanvasInfinite();
 
     delete doc;
 
     KisDoc2 doc2;
     doc2.loadNativeFormat("roundtriptest.kra");
-
     KisCountVisitor cv2(list, KoProperties());
     doc2.image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
+    bool infiCanvastest_2 = doc2.isCanvasInfinite();
+    QCOMPARE(infiCanvastest_1,infiCanvastest_2);
 }
 
 QTEST_KDEMAIN(KisKraSaverTest, GUI)

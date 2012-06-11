@@ -39,6 +39,7 @@ void KisKraLoaderTest::testLoading()
     QCOMPARE(image->height(), 753);
     QCOMPARE(image->width(), 1000);
     QCOMPARE(image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id());
+    QCOMPARE(image->isCanvasInfinite(), doc.isCanvasInfinite());
 
     KisNodeSP node = image->root()->firstChild();
     QVERIFY(node);
