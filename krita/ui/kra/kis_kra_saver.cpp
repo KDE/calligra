@@ -87,6 +87,13 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
     imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
 
+    if (image->isCanvasInfinite())
+        {
+            imageElement.setAttribute(INFINITECANVAS,1);
+        }
+        else
+            imageElement.setAttribute(INFINITECANVAS,0);
+
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, true);
     visitor.setSelectedNodes(m_d->doc->activeNodes());
