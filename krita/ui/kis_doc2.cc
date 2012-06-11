@@ -399,7 +399,7 @@ bool KisDoc2::newImage(const QString& name,
 
     qApp->setOverrideCursor(Qt::BusyCursor);
 
-    image = new KisImage(createUndoStore(), width, height, cs, name, infiniteCanvas);
+    image = new KisImage(createUndoStore(), width, height, cs, name, true, infiniteCanvas);
     Q_CHECK_PTR(image);
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));

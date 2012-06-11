@@ -617,7 +617,7 @@ public slots:
 private:
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, bool infiniteCanvas);
+    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, bool infiniteCanvas = false);
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
