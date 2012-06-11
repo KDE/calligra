@@ -25,12 +25,22 @@
 class KisZoomAction : public KisAbstractInputAction
 {
 public:
+    enum Shortcuts {
+        ZoomToggleShortcut,
+        ZoomInShortcut,
+        ZoomOutShortcut,
+        ZoomResetShortcut,
+        ZoomToPageShortcut
+    };
     explicit KisZoomAction(KisInputManager* manager);
     virtual ~KisZoomAction();
 
-    virtual void begin();
+    virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual QString name() const;
+    virtual QHash< QString, int > shortcuts() const;
 
 private:
     class Private;
