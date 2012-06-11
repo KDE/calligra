@@ -147,6 +147,11 @@ void KPrAnimationsTimeLineView::setSelectedColumn(int column)
     m_selectedColumn = column;
 }
 
+QModelIndex KPrAnimationsTimeLineView::currentIndex()
+{
+    return m_model->index(m_selectedRow, m_selectedColumn, QModelIndex());
+}
+
 void KPrAnimationsTimeLineView::setCurrentIndex(const QModelIndex &index)
 {
     setSelectedRow(index.row());

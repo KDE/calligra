@@ -17,36 +17,42 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrAnimationsDocker.h"
+#include "KPrShapeAnimationDocker.h"
 
-#include "KPrView.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
 #include "KPrPage.h"
+#include "KPrView.h"
+#include "KPrViewModePreviewShapeAnimations.h"
+#include "animations/KPrShapeAnimation.h"
 
 //Qt Headers
 #include <QToolButton>
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QDebug>
 
 //KDE Headers
 #include <KIcon>
 #include <KLocale>
 #include <KIconLoader>
+
+//Calligra Headers
 #include <KoToolManager.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
+#include <KoPAViewBase.h>
+#include <KoPACanvasBase.h>
 
-KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
-: QDockWidget(parent, flags)
-, m_view(0)
+KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
+    : QWidget(parent)
+    , m_view(0)
+    , m_previewMode(0)
 {
-    setWindowTitle( i18n( "Shape Animations" ) );
-
-    QWidget* base = new QWidget( this );
+    setObjectName("KPrShapeAnimationDocker");
     QHBoxLayout *hlayout = new QHBoxLayout;
     QHBoxLayout *hlayout2 = new QHBoxLayout;
 
@@ -88,10 +94,20 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     m_buttonAnimationOrderDown->setIcon(SmallIcon("arrow-up"));
     m_buttonAnimationOrderDown->setToolTip(i18n("Move animation up"));
     m_buttonAnimationOrderDown->setEnabled(false);
+
+    m_buttonPreviewAnimation = new QToolButton();
+    m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
+    m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
+    m_buttonPreviewAnimation->setEnabled(true);
+
+    hlayout2->addWidget(m_buttonPreviewAnimation);
     hlayout2->addStretch();
     hlayout2->addWidget(orderLabel);
     hlayout2->addWidget(m_buttonAnimationOrderUp);
     hlayout2->addWidget(m_buttonAnimationOrderDown);
+
+    //Connect Signals.
+    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
 
 
     //load View
@@ -103,36 +119,25 @@ KPrAnimationsDocker::KPrAnimationsDocker(QWidget* parent, Qt::WindowFlags flags)
     layout->addLayout(hlayout);
     layout->addWidget(m_animationsTimeLineView);
     layout->addLayout(hlayout2);
-    base->setLayout(layout);
-    setWidget(base);
+    setLayout(layout);
+
 }
 
-void KPrAnimationsDocker::setView(KPrView* view)
+void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
 {
-    Q_ASSERT( view );
-    if (m_view) {
-        // don't disconnect the m_view->proxyObject as the object is already deleted
-        disconnect(m_animationsTimeLineView, 0, this, 0);
+    KPrView *n_view = dynamic_cast<KPrView *>(view);
+    if (n_view) {
+        m_view = n_view;
+        m_animationsModel->setDocumentView(m_view);
+
+        slotActivePageChanged();
+        connect(m_view->proxyObject, SIGNAL(activePageChanged()),
+                 this, SLOT(slotActivePageChanged()));
+        connect(m_animationsTimeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
     }
-    m_view = view;
-    m_animationsModel->setDocumentView(m_view);
-
-    slotActivePageChanged();
-    connect(m_view->proxyObject, SIGNAL(activePageChanged()),
-             this, SLOT(slotActivePageChanged()));
-    connect(m_animationsTimeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
-
-    // remove the layouts from the last view
-    //m_layoutsView->clear();
-
-
-    /*connect( m_layoutsView, SIGNAL( itemPressed( QListWidgetItem * ) ),
-             this, SLOT( slotItemPressed( QListWidgetItem * ) ) );
-    connect( m_layoutsView, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
-             this, SLOT( slotCurrentItemChanged( QListWidgetItem *, QListWidgetItem * ) ) );*/
 }
 
-void KPrAnimationsDocker::slotActivePageChanged()
+void KPrShapeAnimationDocker::slotActivePageChanged()
 {
     Q_ASSERT( m_view );
     KPrPage *page = dynamic_cast<KPrPage*>(m_view->activePage());
@@ -145,14 +150,16 @@ void KPrAnimationsDocker::slotActivePageChanged()
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(changeAnimationSelection()));
 }
 
-void KPrAnimationsDocker::changeSelection(const QModelIndex &index)
+void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
 {
     Q_ASSERT(index.internalPointer());
 
     if (!index.isValid())
         return;
-
-    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
+    if (!shapeAnimation)
+        return;
+    KoShape *shape = shapeAnimation->shape();
     if (!shape)
         return;
 
@@ -167,7 +174,7 @@ void KPrAnimationsDocker::changeSelection(const QModelIndex &index)
     shape->update();
 }
 
-void KPrAnimationsDocker::changeAnimationSelection()
+void KPrShapeAnimationDocker::changeAnimationSelection()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -177,4 +184,21 @@ void KPrAnimationsDocker::changeAnimationSelection()
             m_animationsTimeLineView->setCurrentIndex(index);
         }
     }
+}
+
+void KPrShapeAnimationDocker::slotAnimationPreview()
+{
+
+    QModelIndex index = m_animationsTimeLineView->currentIndex();
+    if (!index.isValid())
+        return;
+    KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
+    if (!shapeAnimation)
+        return;
+
+    if(!m_previewMode)
+        m_previewMode = new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas());
+
+    m_previewMode->setShapeAnimation(shapeAnimation);
+    m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)
 }

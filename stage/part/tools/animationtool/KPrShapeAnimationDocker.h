@@ -17,30 +17,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRANIMATIONSDOCKER_H
-#define KPRANIMATIONSDOCKER_H
+#ifndef KPRSHAPEANIMATIONDOCKER_H
+#define KPRSHAPEANIMATIONDOCKER_H
 
-#include <QDockWidget>
+#include <QWidget>
 
 class QListWidget;
 class QToolButton;
+class KoPAViewBase;
 class KPrView;
 class KPrAnimationsTimeLineView;
 class KPrAnimationsDataModel;
 class QModelIndex;
+class KPrViewModePreviewShapeAnimations;
 
-class KPrAnimationsDocker: public QDockWidget
+class KPrShapeAnimationDocker : public QWidget
 {
     Q_OBJECT
 public:
-    KPrAnimationsDocker(QWidget* parent = 0, Qt::WindowFlags flags = 0);
-    void setView(KPrView* view);
-
+    explicit KPrShapeAnimationDocker(QWidget *parent = 0);
+    void setView(KoPAViewBase *view);
+    
+signals:
+    
 public slots:
     void slotActivePageChanged();
     void changeSelection(const QModelIndex &index);
     void changeAnimationSelection();
-
+    void slotAnimationPreview();
 
 private:
     KPrView* m_view;
@@ -51,6 +55,9 @@ private:
     QToolButton *m_buttonRemoveAnimation;
     QToolButton *m_buttonAnimationOrderUp;
     QToolButton *m_buttonAnimationOrderDown;
+    QToolButton *m_buttonPreviewAnimation;
+    KPrViewModePreviewShapeAnimations *m_previewMode;
+    
 };
 
-#endif // KPRANIMATIONSDOCKER_H
+#endif // KPRSHAPEANIMATIONDOCKER_H

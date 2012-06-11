@@ -22,6 +22,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
      KPrViewModePreviewPageEffect.cpp
+     KPrViewModePreviewShapeAnimations.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp
@@ -88,8 +89,6 @@ set( calligrastageprivate_LIB_SRCS
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
      dockers/KPrPageLayoutDocker.cpp
-     dockers/KPrAnimationsDockerFactory
-     dockers/KPrAnimationsDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp

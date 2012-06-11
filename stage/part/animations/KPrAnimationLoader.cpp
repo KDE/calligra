@@ -64,7 +64,6 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
     forEachElement(stepElement, element) {
         if (stepElement.tagName() == "par" && stepElement.namespaceURI() == KoXmlNS::anim) {
             // this creates a new step
-            qDebug() << "Step created";
             KPrAnimationStep *animationStep = new KPrAnimationStep();
 
             KoXmlElement parElement;
@@ -76,7 +75,6 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
                     }
                 }
             }
-            qDebug() << "Step append: ";
             m_animations.append(animationStep);
         }
         else {
@@ -137,7 +135,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     if (nodeType == "on-click") {
         // if there is allready an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
-            qDebug() << "New Step created";
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();
         }
@@ -155,7 +152,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par animation
     }
     else {
-        qDebug() << "case 3";
         if (nodeType != "with-previous") {
             kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
         }

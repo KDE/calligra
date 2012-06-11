@@ -55,7 +55,7 @@ QModelIndex KPrAnimationsDataModel::index(int row, int column, const QModelIndex
     // check if parent is root node
     if(!parent.isValid()) {
         if(row >= 0 && row < rowCount(QModelIndex())) {
-            return createIndex(row, column, m_data.at(row).shape);
+            return createIndex(row, column, m_data.at(row).shapeAnimation);
         }
     }
     return QModelIndex();
@@ -66,10 +66,10 @@ QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
         int row = -1;
         foreach (AnimationsData data, m_data) {
             row++;
-            if (shape == data.shape)
+            if (shape == data.shapeAnimation->shape())
                 return index(row, 1);
         }
-        return index(row,1);
+        return index(-1,1);
 }
 
 int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
@@ -279,7 +279,7 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
                             data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                                               KIconLoader::NoGroup,
                                                                               KIconLoader::SizeMedium);
-                            data1.shape = b->shape();
+                            data1.shapeAnimation = b;
                             if (!b->shape()->name().isEmpty()) {
                                 data1.name = b->shape()->name();
                             }

@@ -25,6 +25,8 @@
 #include "KPrAnimationData.h"
 #include <QPair>
 
+#include "stage_export.h"
+
 class KoShape;
 class KoTextBlockData;
 class KoXmlElement;
@@ -32,7 +34,7 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KPrAnimationCache;
 
-class KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
+class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
 public:
 

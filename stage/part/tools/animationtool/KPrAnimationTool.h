@@ -53,8 +53,11 @@ public: // Events
 //    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
 //    virtual void keyPressEvent(QKeyEvent *event);
+    void repaintDecorations();
 
 protected:
+    QRectF handlesSize();
+
     QList<QWidget *> createOptionWidgets();
 
 private:

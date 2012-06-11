@@ -38,7 +38,7 @@ class KPrAnimationStep;
 class KoPADocument;
 class KPrView;
 
-class STAGE_TEST_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
+class STAGE_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ public:
         KPrShapeAnimation::Node_Type triggerEvent;
         qreal startTime;                //Animation start time
         qreal duration;
-        KoShape* shape;                 //pointer to target element (shape)
+        KPrShapeAnimation* shapeAnimation;                 //pointer to target element (shape)
 
     };
 

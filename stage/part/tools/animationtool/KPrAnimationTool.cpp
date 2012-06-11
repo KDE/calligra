@@ -20,17 +20,30 @@
 
 #include "KPrAnimationTool.h"
 
-#include <klocale.h>
-
+//Qt Headers
 #include <QList>
 #include <QLabel>
 #include <QPainter>
+#include <QDebug>
 
+//KDE Headers
+#include <klocale.h>
+
+//Calligra Headers
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
+#include <KoPAViewBase.h>
+#include <KoPADocument.h>
 #include <KoViewConverter.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+
+//internal Headers
 #include <KPrPageEffectDocker.h>
 #include "KPrClickActionDocker.h"
+#include "KPrShapeAnimationDocker.h"
+
+const int HANDLE_DISTANCE = 10;
 
 KPrAnimationTool::KPrAnimationTool( KoCanvasBase *canvas )
     : KoToolBase( canvas )
@@ -44,8 +57,23 @@ KPrAnimationTool::~KPrAnimationTool()
 
 void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( converter );
+    painter.save();
+
+    // save the original painter transformation
+    QTransform painterMatrix = painter.worldTransform();
+
+    painter.setPen( Qt::green );
+    foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection)) {
+        // apply the shape transformation on top of the old painter transformation
+        painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
+        // apply the zoom factor
+        KoShape::applyConversion( painter, converter );
+        // draw the shape bounding rect
+        painter.drawRect( QRectF( QPointF(), shape->size() ) );
+    }
+
+    painterMatrix = painter.worldTransform();
+    painter.restore();
 }
 
 
@@ -59,7 +87,18 @@ void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShap
 
 void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 {
-    event->ignore();
+    //canvas()->shapeManager()->shapesAt(event->pos())
+    KoShape *shape = canvas()->shapeManager()->shapeAt(event->point);
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    selection->deselectAll();
+    foreach (KoShape* shape, selection->selectedShapes()) {
+        shape->update();
+    }
+    if (shape) {
+        selection->select(shape);
+        selection->update();
+        shape->update();
+    }
 }
 
 void KPrAnimationTool::mouseMoveEvent( KoPointerEvent *event )
@@ -72,6 +111,24 @@ void KPrAnimationTool::mouseReleaseEvent( KoPointerEvent *event )
     Q_UNUSED( event );
 }
 
+void KPrAnimationTool::repaintDecorations()
+{
+    if (canvas()->shapeManager()->selection()->count() > 0) {
+        canvas()->updateCanvas(handlesSize());
+    }
+}
+
+QRectF KPrAnimationTool::handlesSize()
+{
+    QRectF bound = canvas()->shapeManager()->selection()->boundingRect();
+
+    // expansion Border
+    if (!canvas() || !canvas()->viewConverter()) return bound;
+
+    QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
+    bound.adjust(-border.x(), -border.y(), border.x(), border.y());
+    return bound;
+}
 
 QList<QWidget *> KPrAnimationTool::createOptionWidgets()
 {
@@ -81,11 +138,16 @@ QList<QWidget *> KPrAnimationTool::createOptionWidgets()
     KPrClickActionDocker *clickActionWidget = new KPrClickActionDocker();
     clickActionWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
+    KPrShapeAnimationDocker *shapeAnimationWidget = new KPrShapeAnimationDocker();
+    shapeAnimationWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
+
     QList<QWidget *> widgets;
     effectWidget->setWindowTitle(i18n("Slide Transitions"));
     widgets.append(effectWidget);
     clickActionWidget->setWindowTitle(i18n("Shape Click Actions"));
-    widgets.append(clickActionWidget);
+    widgets.append(clickActionWidget);   
+    shapeAnimationWidget->setWindowTitle(i18n("Shape Animations"));
+    widgets.append(shapeAnimationWidget);
     return widgets;
 }
 

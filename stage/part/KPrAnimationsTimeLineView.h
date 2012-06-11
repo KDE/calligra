@@ -30,12 +30,14 @@ class TimeLineWidget;
 class KPrTimeLineHeader;
 class QColor;
 
+#include "stage_export.h"
+
 /**
   Main Animations Time Line Widget it depends on
   KPrTimeLineHeader and KPrTimeLineView
   */
 
-class KPrAnimationsTimeLineView : public QWidget
+class STAGE_EXPORT  KPrAnimationsTimeLineView : public QWidget
 {
     Q_OBJECT
 public:
@@ -46,6 +48,7 @@ public:
     int widthOfColumn(int column) const;
     void setSelectedRow(int row);
     void setSelectedColumn(int column);
+    QModelIndex currentIndex();
     void setCurrentIndex(const QModelIndex &index);
     int rowsHeigth() const;
     int totalWidth() const;
