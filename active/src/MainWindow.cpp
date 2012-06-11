@@ -27,6 +27,7 @@
 
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
+#include <KDE/KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -75,6 +76,7 @@ MainWindow::MainWindow (QWidget* parent)
     }
 
     m_view->rootContext()->setContextProperty ("mainwindow", this);
+    loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
                                             + "/share/calligraactive/qml/HomeScreen.qml"));
@@ -106,6 +108,22 @@ void MainWindow::openFileDialog()
         QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (path)));
     }
 
+}
+
+void MainWindow::loadMetadataModel()
+{
+    if (!m_view) {
+        return;
+    }
+    QDeclarativeComponent component(m_view->engine());
+    component.setData("import org.kde.metadatamodels 0.1\nMetadataModel { sortOrder: Qt.AscendingOrder }\n", QUrl());
+
+    if (!component.isError()) {
+        m_view->rootContext()->setContextProperty("metadataInternalModel", component.create());
+    } else {
+        kDebug() << "Plasma Active Metadata Models are not installed, using built in model";
+        m_view->rootContext()->setContextProperty("metadataInternalModel", false);
+    }
 }
 
 MainWindow::~MainWindow()
