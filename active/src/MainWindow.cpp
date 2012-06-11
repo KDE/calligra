@@ -74,11 +74,6 @@ MainWindow::MainWindow (QWidget* parent)
         m_view->engine()->addImportPath (importPath);
     }
 
-
-    m_view->rootContext()->setContextProperty ("recentFilesModel", QVariant::fromValue (recentFiles));
-    m_view->rootContext()->setContextProperty ("recentTextDocsModel", QVariant::fromValue (recentTextDocs));
-    m_view->rootContext()->setContextProperty ("recentSpreadsheetsModel", QVariant::fromValue (recentSpreadsheets));
-    m_view->rootContext()->setContextProperty ("recentPresentationsModel", QVariant::fromValue (recentPresentations));
     m_view->rootContext()->setContextProperty ("mainwindow", this);
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
