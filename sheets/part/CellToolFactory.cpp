@@ -29,9 +29,9 @@ using namespace Calligra::Sheets;
 CellToolFactory::CellToolFactory(const QString& id)
         : KoToolFactoryBase(id)
 {
-    setToolTip(i18n("Cell Tool"));
+    setToolTip(i18n("Cell formatting"));
     setIcon("kspread");
-    setToolType("CalligraSheets");
+    setToolType(dynamicToolType()+",calligrasheets");
     setPriority(0);
     setActivationShapeId("flake/always");
 }

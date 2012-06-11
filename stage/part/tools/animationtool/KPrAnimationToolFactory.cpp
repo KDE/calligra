@@ -29,8 +29,8 @@
 KPrAnimationToolFactory::KPrAnimationToolFactory()
     : KoToolFactoryBase("Animation Tool")
 {
-    setToolTip(i18n("Animation tool"));
-    setToolType(mainToolType());
+    setToolTip(i18n("Animation"));
+    setToolType("calligrastage");
     setPriority(40);
     setIcon("animation-stage");
     setActivationShapeId("flake/edit");

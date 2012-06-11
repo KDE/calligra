@@ -88,6 +88,7 @@ public:
     
     void showTab(const QString& name);
     
+    bool isRolledUp();
 
 public slots:
     void setMainMenuContent(QWidget *w);
@@ -96,6 +97,7 @@ public slots:
     void hideMainMenu();
     void toggleMainMenu();
     void activateSearchLineEdit();
+    void toggleRollDown();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
@@ -1409,6 +1411,16 @@ void KexiTabbedToolBar::showTab(const QString& name)
     d->showTab(name);
 }
 
+bool KexiTabbedToolBar::isRolledUp()
+{
+    return d->rolledUp;
+}
+
+void KexiTabbedToolBar::toggleRollDown()
+{
+    slotTabDoubleClicked(-1);//use -1 just to rolldown/up the tabbar
+}
+
 
 //! @short A widget being main part of KexiMainWindow
 class KexiMainWidget : public KMainWindow
@@ -1979,7 +1991,7 @@ public:
     KActionMenu *action_tools_scripts;
 
     //! window menu
-    KAction *action_window_next, *action_window_previous;
+    KAction *action_window_next, *action_window_previous, *action_window_fullscreen;
 
     //! global
     KAction *action_show_help_menu;

@@ -2771,6 +2771,11 @@ QWidget *View::canvas() const
     return m_tab->currentWidget();//KoView::canvas();
 }
 
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
+}
+
 void View::slotCurrentChanged( int )
 {
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
