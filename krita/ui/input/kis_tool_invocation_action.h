@@ -27,10 +27,13 @@ public:
     explicit KisToolInvocationAction(KisInputManager *manager);
     virtual ~KisToolInvocationAction();
 
-    virtual void begin();
+    virtual void begin(int);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
     virtual bool handleTablet() const;
+    virtual QHash< QString, int > shortcuts() const;
+    virtual QString name() const;
 
 private:
     bool m_tablet;

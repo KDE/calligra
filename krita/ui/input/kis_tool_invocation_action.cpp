@@ -20,6 +20,8 @@
 
 #include <QDebug>
 
+#include <KLocalizedString>
+
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
@@ -36,7 +38,7 @@ KisToolInvocationAction::~KisToolInvocationAction()
 {
 }
 
-void KisToolInvocationAction::begin()
+void KisToolInvocationAction::begin(int /*shortcut*/)
 {
     if(m_inputManager->tabletPressEvent()) {
         m_inputManager->tabletPressEvent()->accept();
@@ -74,4 +76,16 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 bool KisToolInvocationAction::handleTablet() const
 {
     return true;
+}
+
+QHash< QString, int > KisToolInvocationAction::shortcuts() const
+{
+    QHash< QString, int> values;
+    values.insert(i18nc("Invoke Tool shortcut for Tool Invocation Action", "Invoke Tool"), 0);
+    return values;
+}
+
+QString KisToolInvocationAction::name() const
+{
+    return i18n("Tool Invocation");
 }
