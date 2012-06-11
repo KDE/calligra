@@ -22,14 +22,20 @@
 #include <QMouseEvent>
 #include <QApplication>
 
-#include "kis_input_manager.h"
-#include <kis_canvas2.h>
+#include <KLocalizedString>
+
 #include <KoCanvasController.h>
+
+#include <kis_canvas2.h>
+
+#include "kis_input_manager.h"
 
 class KisPanAction::Private
 {
 public:
+    Private() : active(false) { }
     QPointF lastMousePosition;
+    bool active;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -42,20 +48,39 @@ KisPanAction::~KisPanAction()
 {
 }
 
-void KisPanAction::begin()
+void KisPanAction::begin(int shortcut)
 {
-    d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
-    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    switch(shortcut)
+    {
+        case PanToggleShortcut:
+            d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            d->active = true;
+            break;
+        case PanLeftShortcut:
+            m_inputManager->canvas()->canvasController()->pan(QPoint(-10, 0));
+            break;
+        case PanRightShortcut:
+            m_inputManager->canvas()->canvasController()->pan(QPoint(10, 0));
+            break;
+        case PanUpShortcut:
+            m_inputManager->canvas()->canvasController()->pan(QPoint(0, -10));
+            break;
+        case PanDownShortcut:
+            m_inputManager->canvas()->canvasController()->pan(QPoint(0, 10));
+            break;
+    }
 }
 
 void KisPanAction::end()
 {
+    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
 void KisPanAction::inputEvent(QEvent *event)
 {
-    if(event->type() == QEvent::MouseMove) {
+    if(event->type() == QEvent::MouseMove && d->active) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         if(mevent->buttons()) {
             QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
@@ -68,4 +93,18 @@ void KisPanAction::inputEvent(QEvent *event)
     }
 }
 
+QString KisPanAction::name() const
+{
+    return i18n("Pan Canvas");
+}
 
+QHash< QString, int > KisPanAction::shortcuts() const
+{
+    QHash< QString, int> shortcuts;
+    shortcuts.insert(i18n("Toggle Pan Mode"), PanToggleShortcut);
+    shortcuts.insert(i18n("Pan Left"), PanLeftShortcut);
+    shortcuts.insert(i18n("Pan Right"), PanRightShortcut);
+    shortcuts.insert(i18n("Pan Up"), PanUpShortcut);
+    shortcuts.insert(i18n("Pan Down"), PanDownShortcut);
+    return shortcuts;
+}

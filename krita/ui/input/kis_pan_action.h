@@ -24,12 +24,23 @@
 class KisPanAction : public KisAbstractInputAction
 {
 public:
+    enum Shortcut {
+        PanToggleShortcut,
+        PanLeftShortcut,
+        PanRightShortcut,
+        PanUpShortcut,
+        PanDownShortcut
+    };
+
     explicit KisPanAction(KisInputManager *manager);
     virtual ~KisPanAction();
 
-    virtual void begin();
+    virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual QString name() const;
+    virtual QHash< QString, int > shortcuts() const;
 
 private:
     class Private;
