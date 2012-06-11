@@ -19,6 +19,7 @@
 
 #include "KPrShapeAnimationDocker.h"
 
+//Stage Headers
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
 #include "KPrPage.h"
@@ -68,6 +69,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     hlayout->addWidget(m_editAnimation);
     hlayout->addStretch();
 
+    //TODO: Implement Edition Features
     //m_editAnimationsPanel = new EditAnimationsPanel(mainWidget);
     //m_editAnimation->setMenu(m_editAnimationsPanel);
     //m_editAnimation->setPopupMode(QToolButton::InstantPopup);
@@ -141,7 +143,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
 {
     Q_ASSERT( m_view );
     KPrPage *page = dynamic_cast<KPrPage*>(m_view->activePage());
-    if ( page ) {
+    if (page) {
         m_animationsModel->setActivePage(page);
         m_animationsTimeLineView->update();
     }
@@ -152,16 +154,21 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
 
 void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
 {
+    //Update canvas with selected shape on Time Line View
     Q_ASSERT(index.internalPointer());
 
-    if (!index.isValid())
+    //Check if index is valid and it contains a shape with an animation
+    if (!index.isValid()) {
         return;
+    }
     KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
-    if (!shapeAnimation)
+    if (!shapeAnimation) {
         return;
+    }
     KoShape *shape = shapeAnimation->shape();
-    if (!shape)
+    if (!shape) {
         return;
+    }
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -176,6 +183,7 @@ void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
 
 void KPrShapeAnimationDocker::changeAnimationSelection()
 {
+    //Update Time Line View with selected shape on canvas
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (!selection->selectedShapes().isEmpty()) {
@@ -188,16 +196,18 @@ void KPrShapeAnimationDocker::changeAnimationSelection()
 
 void KPrShapeAnimationDocker::slotAnimationPreview()
 {
-
     QModelIndex index = m_animationsTimeLineView->currentIndex();
-    if (!index.isValid())
+    if (!index.isValid()) {
         return;
+    }
     KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
-    if (!shapeAnimation)
+    if (!shapeAnimation) {
         return;
+    }
 
-    if(!m_previewMode)
+    if(!m_previewMode) {
         m_previewMode = new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas());
+    }
 
     m_previewMode->setShapeAnimation(shapeAnimation);
     m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)

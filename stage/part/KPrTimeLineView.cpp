@@ -19,6 +19,7 @@
 
 #include "KPrTimeLineView.h"
 
+//Stage Headers
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
 
@@ -45,6 +46,7 @@ const int LINE_HEIGHT = 25;
 //Default invalid value for columns and rows index
 const int INVALID = -1;
 
+//Names of displayed columns
 enum ColumnNames {
     Order = 0,
     ShapeName = 1,
@@ -58,13 +60,13 @@ enum ColumnNames {
 
 KPrTimeLineView::KPrTimeLineView(QWidget *parent)
     : QWidget(parent)
+    , m_resize(false)
+    , m_move(false)
+    , m_adjust(false)
+    , m_resizedRow(INVALID)
+    , startDragPos(0)
 {
     m_mainView = qobject_cast<KPrAnimationsTimeLineView*>(parent);
-    m_resize = false;
-    m_move = false;
-    m_adjust = false;
-    m_resizedRow = -1;
-    startDragPos = 0;
     Q_ASSERT(m_mainView);
     setFocusPolicy(Qt::WheelFocus);
     setMinimumSize(minimumSizeHint());
@@ -185,7 +187,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
 {
     // Change size of line
     if (m_resize) {
-        const qreal subSteps=0.2;
+        const qreal subSteps = 0.2;
         int startPos = 0;
         for (int i = 0; i < StartTime; i++) {
             startPos = startPos + m_mainView->widthOfColumn(i);
@@ -426,8 +428,9 @@ void KPrTimeLineView::paintIconRow(QPainter *painter, int x, int y, int row, int
     qreal centerY = (RowHeight-heigth)/2;
     QRectF target(rect.x()+centerX, rect.y()+centerY, width, heigth);
     painter->save();
-    if (row == m_mainView->selectedRow())
+    if (row == m_mainView->selectedRow()) {
         painter->setCompositionMode(QPainter::CompositionMode_ColorBurn);
+    }
     painter->drawPixmap(target, thumbnail, thumbnail.rect());
     painter->restore();
 }

@@ -72,13 +72,15 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     }
 
     writer.addAttribute("presentation:node-type", nodeType);
-    if (!l_presetClass.isEmpty())
+    if (!l_presetClass.isEmpty()) {
         writer.addAttribute("presentation:preset-class", l_presetClass);
-    if (!l_id.isEmpty())
+    }
+    if (!l_id.isEmpty()) {
         writer.addAttribute("presentation:preset-id", l_id);
-    for(int i=0;i < this->animationCount(); i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+    }
+    for(int i = 0 ;i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             a->saveOdf(paContext);
         }
     }
@@ -121,10 +123,11 @@ bool KPrShapeAnimation::visible()
 
 QPair<int, int> KPrShapeAnimation::timeRange()
 {
-    int minStart = 99999;
+    const int INVALID_START = 99999;
+    int minStart = INVALID_START;
     int maxEnd = 0;
 
-    for(int i=0;i < this->animationCount(); i++) {
+    for (int i = 0;i < this->animationCount(); i++) {
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
             minStart = qMin(minStart, a->begin());
@@ -132,7 +135,7 @@ QPair<int, int> KPrShapeAnimation::timeRange()
         }
     }
     QPair<int, int> pair;
-    pair.first = (minStart==99999)? 0: minStart;
+    pair.first = (minStart == INVALID_START)? 0: minStart;
     pair.second = maxEnd;
     return pair;
 }

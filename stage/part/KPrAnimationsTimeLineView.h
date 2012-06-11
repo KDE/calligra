@@ -45,17 +45,50 @@ public:
     void setModel(KPrAnimationsDataModel *model);
     void resizeEvent(QResizeEvent *event);
     KPrAnimationsDataModel *model();
-    int widthOfColumn(int column) const;
-    void setSelectedRow(int row);
-    void setSelectedColumn(int column);
     QModelIndex currentIndex();
     void setCurrentIndex(const QModelIndex &index);
+    int rowCount() const;
+    friend class KPrTimeLineView;
+    friend class KPrTimeLineHeader;
+
+signals:
+    void clicked(const QModelIndex&);
+
+public slots:
+    //updates all widget
+    void update();
+
+    //recalculate column preferred width and update widget
+    void updateColumnsWidth();
+
+protected:
+    /// return width of column
+    int widthOfColumn(int column) const;
+
+    /// Set selected row and update view
+    void setSelectedRow(int row);
+
+    /// Set selected column and update view
+    void setSelectedColumn(int column);
+
+    /// Return row heigth
     int rowsHeigth() const;
+
+    /// Calculate width necesary to display all columns
     int totalWidth() const;
+
+    /// Returns selected row and column
     int selectedRow() const {return m_selectedRow;}
     int selectedColumn() const {return m_selectedColumn;}
+
+    /// Helper method to paint border for items on the view
     void paintItemBorder(QPainter *painter, const QPalette &palette, const QRect &rect);
+
+    /// Scroll area that contains the view
     QScrollArea *scrollArea() const;
+
+
+    /// Helper methods to manage the time scales in view and header
     int numberOfSteps() const;
     void setNumberOfSteps(int steps);
     void incrementScale();
@@ -63,14 +96,9 @@ public:
     int stepsScale();
     qreal maxLineLength() const;
     void setMaxLineLength(qreal length);
-    QColor colorforRow(int row);
-    int rowCount() const;
 
-signals:
-    void clicked(const QModelIndex&);
-public slots:
-    void update();
-    void updateColumnsWidth();
+    /// Return color of the bar depending on animation type: entrance, exit, etc.
+    QColor colorforRow(int row);
 
 private:
     KPrTimeLineView *m_view;

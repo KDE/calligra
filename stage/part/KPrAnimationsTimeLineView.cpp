@@ -19,6 +19,7 @@
 
 #include "KPrAnimationsTimeLineView.h"
 
+//Stage Headers
 #include "KPrAnimationsDataModel.h"
 #include "KPrTimeLineHeader.h"
 #include "KPrTimeLineView.h"
@@ -45,7 +46,7 @@ const int INVALID = -1;
 const int SCALE_LIMIT = 1000;
 
 
-
+// Names of displayed columns
 enum ColumnNames {
     Order = 0,
     ShapeName = 1,
@@ -84,7 +85,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_header);
     layout->addWidget(m_scrollArea);
-    layout->setContentsMargins(0,0,0,0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     setLayout(layout);
 
@@ -157,7 +158,7 @@ void KPrAnimationsTimeLineView::setCurrentIndex(const QModelIndex &index)
     setSelectedRow(index.row());
     setSelectedColumn(index.column());
     m_scrollArea->ensureVisible(widthOfColumn(index.row()),
-                                rowsHeigth()*index.row());
+                                rowsHeigth() * index.row());
 }
 
 int KPrAnimationsTimeLineView::rowsHeigth() const
@@ -199,7 +200,7 @@ void KPrAnimationsTimeLineView::setNumberOfSteps(int steps)
 void KPrAnimationsTimeLineView::incrementScale()
 {
     if ((numberOfSteps() + 1) < SCALE_LIMIT) {
-        setNumberOfSteps(numberOfSteps()+1);
+        setNumberOfSteps(numberOfSteps() + 1);
         m_header->update();
         m_view->update();
     }
@@ -211,8 +212,9 @@ void KPrAnimationsTimeLineView::adjustScale()
     for (int row = 0; row < m_model->rowCount(); ++ row){
         qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
                 m_model->data(m_model->index(row, EndTime)).toDouble();
-        if (length > m_maxLength)
+        if (length > m_maxLength) {
             m_maxLength = length;
+        }
     }
     const int spacing = 2;
     if ((m_maxLength - spacing * stepsScale()) < (numberOfSteps())) {
@@ -245,8 +247,9 @@ qreal KPrAnimationsTimeLineView::maxLineLength() const
 
 void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
 {
-    if (length > 0)
+    if (length > 0) {
         m_maxLength = length;
+    }
 }
 
 QColor KPrAnimationsTimeLineView::colorforRow(int row)
@@ -288,10 +291,12 @@ void KPrAnimationsTimeLineView::updateColumnsWidth()
         int size = m_model->data(m_model->index(row, ShapeName)).toString().length();
         qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
                 m_model->data(m_model->index(row, EndTime)).toDouble();
-        if (size > m_nameWidth)
+        if (size > m_nameWidth) {
             m_nameWidth = size;
-        if (length > m_maxLength)
+        }
+        if (length > m_maxLength) {
             m_maxLength = length;
+        }
     }
     QFontMetrics fm(font());
     m_shapeNameColumnWidth = fm.width(QString("%1W").arg(QString(m_nameWidth, 'M')));

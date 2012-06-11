@@ -39,8 +39,8 @@ KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBas
     , m_savedViewMode(0)
 {
     connect(&m_timeLine, SIGNAL(finished()), this, SLOT(activateSavedViewMode()));
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve );
-    m_timeLine.setUpdateInterval( 20 );
+    m_timeLine.setCurveShape(QTimeLine::LinearCurve);
+    m_timeLine.setUpdateInterval(20);
 }
 
 KPrViewModePreviewShapeAnimations::~KPrViewModePreviewShapeAnimations()
@@ -123,7 +123,7 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
     m_shapeAnimation->init(m_animationCache, 0);
     m_animationCache->startStep(0);
     m_timeLine.start();
-    connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
+    connect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
 }
 
 void KPrViewModePreviewShapeAnimations::deactivate()
@@ -135,7 +135,7 @@ void KPrViewModePreviewShapeAnimations::deactivate()
     m_shapeAnimation->deactivate();
     m_canvas->shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(m_canvas->shapeManager()));
     delete (m_animationCache);
-    disconnect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
+    disconnect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
 }
 
 void KPrViewModePreviewShapeAnimations::updateActivePage(KoPAPageBase *page)
@@ -146,7 +146,7 @@ void KPrViewModePreviewShapeAnimations::updateActivePage(KoPAPageBase *page)
 void KPrViewModePreviewShapeAnimations::setShapeAnimation(KPrShapeAnimation *shapeAnimation)
 {
     m_shapeAnimation = shapeAnimation;
-    if(m_savedViewMode) {//stop the previous playing
+    if(m_savedViewMode) {           //stop the previous playing
         activateSavedViewMode();
     }
 }

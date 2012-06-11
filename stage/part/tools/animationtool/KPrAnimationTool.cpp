@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
+   Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,6 @@
 #include <QList>
 #include <QLabel>
 #include <QPainter>
-#include <QDebug>
 
 //KDE Headers
 #include <klocale.h>
@@ -62,14 +62,14 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
     // save the original painter transformation
     QTransform painterMatrix = painter.worldTransform();
 
-    painter.setPen( Qt::green );
+    painter.setPen(Qt::green);
     foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
-        painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
+        painter.setWorldTransform(shape->absoluteTransformation(&converter) *painterMatrix);
         // apply the zoom factor
-        KoShape::applyConversion( painter, converter );
+        KoShape::applyConversion(painter, converter);
         // draw the shape bounding rect
-        painter.drawRect( QRectF( QPointF(), shape->size() ) );
+        painter.drawRect(QRectF(QPointF(), shape->size()));
     }
 
     painterMatrix = painter.worldTransform();
@@ -79,21 +79,23 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    useCursor(Qt::ArrowCursor);
-    repaintDecorations();
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
+    useCursor(Qt::ArrowCursor);
+    repaintDecorations();
 }
 
 void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 {
-    //canvas()->shapeManager()->shapesAt(event->pos())
-    KoShape *shape = canvas()->shapeManager()->shapeAt(event->point);
+    //If no shape was click deselect all
     KoSelection *selection = canvas()->shapeManager()->selection();
     selection->deselectAll();
     foreach (KoShape* shape, selection->selectedShapes()) {
         shape->update();
     }
+
+    //Select clicked shape
+    KoShape *shape = canvas()->shapeManager()->shapeAt(event->point);
     if (shape) {
         selection->select(shape);
         selection->update();
@@ -103,12 +105,12 @@ void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 
 void KPrAnimationTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event );
+    Q_UNUSED(event);
 }
 
 void KPrAnimationTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event );
+    Q_UNUSED(event);
 }
 
 void KPrAnimationTool::repaintDecorations()

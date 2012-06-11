@@ -31,6 +31,9 @@ class KPrAnimationsDataModel;
 class QModelIndex;
 class KPrViewModePreviewShapeAnimations;
 
+/**
+ * Shape animations docker widget: let's edition of animations.
+ */
 class KPrShapeAnimationDocker : public QWidget
 {
     Q_OBJECT
@@ -41,9 +44,16 @@ public:
 signals:
     
 public slots:
+    /// Update widget with animations of the new active page
     void slotActivePageChanged();
+
+    /// Update canvas with selected shape on Time Line View
     void changeSelection(const QModelIndex &index);
+
+    /// Update Time Line View with selected shape on canvas
     void changeAnimationSelection();
+
+    /// Plays a preview of the shape animation
     void slotAnimationPreview();
 
 private:

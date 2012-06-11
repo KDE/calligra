@@ -34,6 +34,7 @@
 //Default height of the header
 const int HEADER_HEIGHT = 20;
 
+//Names of displayed columns
 enum ColumnNames {
     Order = 0,
     ShapeName = 1,
@@ -46,7 +47,7 @@ enum ColumnNames {
 };
 
 KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
-    :QWidget(parent)
+    : QWidget(parent)
 {
     m_mainView = qobject_cast<KPrAnimationsTimeLineView*>(parent);
     Q_ASSERT(m_mainView);
@@ -116,22 +117,22 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
     int stepRatio = m_mainView->numberOfSteps()/m_mainView->stepsScale();
     int stepSize = totalWidth/stepRatio;
     for (int x = 0; x < totalWidth-Padding; x+=stepSize) {
-        int z=x+rect.x()+Padding;
-        if (z >0) {
+        int z = x + rect.x() + Padding;
+        if (z > 0) {
             // Draw numbers
             qreal number = x/stepSize*stepScale;
-            painter->drawText((z-19 > 1 ? z-19 : z-16), rect.y(), 38, rect.height(),
+            painter->drawText(((z - 19) > 1 ? (z - 19) : (z - 16)), rect.y(), 38, rect.height(),
                               Qt::AlignCenter, QString("%1").arg(number));
         }
     }
     // Draw substeps
     const int substeps = 5;
-    stepSize = totalWidth / (stepRatio*substeps);
-    for (qreal x = 0; x < totalWidth-Padding; x+=stepSize) {
-        int z=x+rect.x()+Padding;
-        if (z >0) {
+    stepSize = totalWidth / (stepRatio * substeps);
+    for (qreal x = 0; x < (totalWidth - Padding); x += stepSize) {
+        int z = x + rect.x() + Padding;
+        if (z > 0) {
             painter->drawLine(z, 1, z, 3);
-            painter->drawLine(z, rect.height() - 4, z, rect.height()-2);
+            painter->drawLine(z, rect.height() - 4, z, rect.height() - 2);
         }
     }
 }

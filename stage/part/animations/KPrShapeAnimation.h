@@ -86,12 +86,15 @@ public:
      */
     //QPair<KoShape *, KoTextBlockData *> animationShape() const;
 
+    /**
+      * Return the begin and end time of the animation as a QPair
+      */
     QPair<int, int> timeRange();
 
     void setNodeType(Node_Type type);
     void setPresetClass(Preset_Class presetClass);
     void setId(QString id);
-     Node_Type NodeType() const;
+    Node_Type NodeType() const;
     Preset_Class presetClass() const;
     QString id() const;
     QString presetClassText() const;

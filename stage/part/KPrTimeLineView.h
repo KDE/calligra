@@ -41,6 +41,8 @@ public:
 
 signals:
     void clicked(const QModelIndex&);
+
+    /// A bar has reached the right limit of the time scale
     void scaleLimitReached();
 
 private:
@@ -56,6 +58,7 @@ private:
     int rowAt(int ypos);
     int columnAt(int xpos);
 
+    /// Helper method to paint view items
     void paintEvent(QPaintEvent * event);
     void paintRow(QPainter *painter, int  row, int y, const int RowHeight);
     void paintItemBackground(QPainter *painter, const QRect &rect, bool selected);

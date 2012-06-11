@@ -69,7 +69,7 @@ QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
             if (shape == data.shapeAnimation->shape())
                 return index(row, 1);
         }
-        return index(-1,1);
+        return index(-1, 1);
 }
 
 int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
@@ -78,10 +78,11 @@ int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
     return m_data.count();
 }
 
+const int REAL_COLUMN_COUNT = 8;
 int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 8;
+    return REAL_COLUMN_COUNT;
 }
 
 enum ColumnNames {
@@ -97,16 +98,17 @@ enum ColumnNames {
 
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
-    if (!m_activePage)
+    if (!m_activePage) {
         return QVariant();
-    if (!index.isValid())
+    }
+    if (!index.isValid()) {
         return QVariant();
+    }
     if (role == Qt::TextAlignmentRole) {
         return int(Qt::AlignRight | Qt::AlignVCenter);
     } else if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case Order:
-            //TODO: Only return a number when animation starts on click
             return (m_data.at(index.row()).order == 0) ? QVariant() : m_data.at(index.row()).order;
         case ShapeName:
             return m_data.at(index.row()).name;
@@ -180,10 +182,12 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 
 QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (!m_activePage)
+    if (!m_activePage) {
         return QVariant();
-    if (role != Qt::DisplayRole)
+    }
+    if (role != Qt::DisplayRole) {
         return QVariant();
+    }
     if (orientation == Qt::Horizontal) {
         switch (section) {
         case ShapeName:
@@ -198,6 +202,7 @@ QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orienta
 
 bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    //TODO: Edition features are not yet implemented
     if (index.isValid() && role == Qt::EditRole) {
         switch (index.column()) {
         case Order:
@@ -251,7 +256,6 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
-
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         k++;
                         if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
@@ -275,7 +279,7 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
                             data1.type = b->presetClass();
                             setNameAndAnimationIcon(data1, b->id());
 
-                            //TODO: Draw image file to load when shape thumbnail is not loaded
+                            //TODO: Draw image file to load when shape thumbnail can't be created
                             data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
                                                                               KIconLoader::NoGroup,
                                                                               KIconLoader::SizeMedium);
@@ -307,16 +311,15 @@ void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
     emit layoutChanged();
 }
 
-QImage KPrAnimationsDataModel::createThumbnail(KoShape* shape, const QSize &thumbSize) const
+QImage KPrAnimationsDataModel::createThumbnail(KoShape *shape, const QSize &thumbSize) const
 {
     KoShapePainter painter;
-
     QList<KoShape*> shapes;
-
     shapes.append(shape);
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container)
+    if (container) {
         shapes.append(container->shapes());
+    }
 
     painter.setShapes(shapes);
 
@@ -342,9 +345,10 @@ void KPrAnimationsDataModel::setNameAndAnimationIcon(KPrAnimationsDataModel::Ani
         descriptionList.removeFirst();
         descriptionList.removeFirst();
     }
-    qDebug() << descriptionList;
     data.animationName = descriptionList.join(QString(" "));
+
     //TODO: Parse animation preset Class and read icon name
+    //At future these data will be loaded from a XML file
     data.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
                                                           KIconLoader::NoGroup,
                                                           KIconLoader::SizeMedium);

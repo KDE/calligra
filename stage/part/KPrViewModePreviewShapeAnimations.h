@@ -28,29 +28,34 @@
 
 class KPrShapeAnimation;
 
+/**
+  * This view mode play a specific shape animation preview
+  * and return to the previous view mode after finish.
+  */
 class STAGE_EXPORT KPrViewModePreviewShapeAnimations : public KoPAViewMode
 {
     Q_OBJECT
 public:
-    KPrViewModePreviewShapeAnimations(KoPAViewBase * view, KoPACanvasBase * canvas);
+    KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas);
     ~KPrViewModePreviewShapeAnimations();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
+    void tabletEvent(QTabletEvent *event, const QPointF &point);
+    void mousePressEvent(QMouseEvent *event, const QPointF &point);
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
-    void activate( KoPAViewMode * previousViewMode );
+    void activate(KoPAViewMode * previousViewMode);
     void deactivate();
 
     /// reimplemented
-    virtual void updateActivePage( KoPAPageBase *page );
+    virtual void updateActivePage(KoPAPageBase *page);
 
+    /// Set the shape animation to be played
     void setShapeAnimation(KPrShapeAnimation *shapeAnimation);
 
 public slots:

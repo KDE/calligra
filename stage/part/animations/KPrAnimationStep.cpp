@@ -21,8 +21,6 @@
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
 #include "KoXmlWriter.h"
-#include "KoShape.h"
-#include "KLocale"
 
 KPrAnimationStep::KPrAnimationStep()
 {

@@ -24,8 +24,6 @@
 #include <QSequentialAnimationGroup>
 #include "KPrAnimationData.h"
 
-class KoShape;
-
 class KPrAnimationStep : public QSequentialAnimationGroup, KPrAnimationData
 {
 public:
