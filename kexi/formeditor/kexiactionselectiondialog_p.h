@@ -21,17 +21,17 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_P_H
 #define KEXIACTIONSELECTIONDIALOG_P_H
 
-#include <QListWidget>
+#include <QTreeWidget>
 
 //! @internal
-class ActionsListViewBase : public QListWidget
+class ActionsListViewBase : public QTreeWidget
 {
 public:
     ActionsListViewBase(QWidget* parent);
     virtual ~ActionsListViewBase();
 
     //! \return item for action \a actionName
-    virtual QListWidgetItem *itemForAction(const QString& actionName);
+    virtual QTreeWidgetItem *itemForAction(const QString& actionName, QTreeWidgetItem *parent = 0);
     void selectAction(const QString& actionName);
 };
 

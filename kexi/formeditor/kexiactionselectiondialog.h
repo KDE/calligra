@@ -24,7 +24,7 @@
 #include <KDialog>
 #include "kexiformeventhandler.h"
 
-class QListWidgetItem;
+class QTreeWidgetItem;
 
 namespace KexiPart
 {
@@ -49,13 +49,13 @@ public:
     KexiFormEventAction::ActionData currentAction() const;
 
 protected slots:
-    void slotActionCategorySelected(QListWidgetItem* item);
-    void slotKActionItemExecuted(QListWidgetItem*);
-    void slotKActionItemSelected(QListWidgetItem*);
-    void slotActionToExecuteItemExecuted(QListWidgetItem* item);
-    void slotActionToExecuteItemSelected(QListWidgetItem*);
-    void slotCurrentFormActionItemExecuted(QListWidgetItem*);
-    void slotCurrentFormActionItemSelected(QListWidgetItem*);
+    void slotActionCategorySelected(QTreeWidgetItem* item);
+    void slotKActionItemExecuted(QTreeWidgetItem*);
+    void slotKActionItemSelected(QTreeWidgetItem*);
+    void slotActionToExecuteItemExecuted(QTreeWidgetItem* item);
+    void slotActionToExecuteItemSelected(QTreeWidgetItem*);
+    void slotCurrentFormActionItemExecuted(QTreeWidgetItem*);
+    void slotCurrentFormActionItemSelected(QTreeWidgetItem*);
     void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
 protected:
