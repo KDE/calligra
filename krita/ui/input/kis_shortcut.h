@@ -40,6 +40,8 @@ public:
     int priority() const;
     KisAbstractInputAction* action() const;
     void setAction(KisAbstractInputAction *action);
+    int shortcutIndex() const;
+    void setShortcutIndex(int index);
 
     void setKeys(const QList<Qt::Key> &keys);
     void setButtons(const QList<Qt::MouseButton> &buttons);

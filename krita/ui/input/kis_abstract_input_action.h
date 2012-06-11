@@ -19,6 +19,8 @@
 #ifndef KIS_ABSTRACT_INPUT_ACTION_H
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
+#include <QHash>
+
 class QEvent;
 class KisInputManager;
 class KisAbstractInputAction
@@ -27,10 +29,14 @@ public:
     explicit KisAbstractInputAction(KisInputManager *manager) : m_inputManager(manager) { }
     virtual ~KisAbstractInputAction() { }
 
-    virtual void begin() = 0;
+
+    virtual void begin(int shortcut) = 0;
     virtual void end() = 0;
     virtual void inputEvent(QEvent* event) = 0;
+
     virtual bool handleTablet() const { return false; }
+    virtual QHash<QString, int> shortcuts() const = 0;
+    virtual QString name() const = 0;
 
 protected:
     KisInputManager * const m_inputManager;

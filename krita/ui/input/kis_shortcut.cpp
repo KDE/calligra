@@ -26,17 +26,18 @@
 class KisShortcut::Private
 {
 public:
+    Private() : action(0), shortcutIndex(0) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
     QList<Qt::MouseButton> buttonState;
 
     KisAbstractInputAction *action;
+    int shortcutIndex;
 };
 
 KisShortcut::KisShortcut() : d(new Private)
 {
-
 }
 
 KisShortcut::~KisShortcut()
@@ -57,6 +58,16 @@ KisAbstractInputAction* KisShortcut::action() const
 void KisShortcut::setAction(KisAbstractInputAction* action)
 {
     d->action = action;
+}
+
+int KisShortcut::shortcutIndex() const
+{
+    return d->shortcutIndex;
+}
+
+void KisShortcut::setShortcutIndex(int index)
+{
+    d->shortcutIndex = index;
 }
 
 void KisShortcut::setButtons(const QList<Qt::MouseButton> &buttons)

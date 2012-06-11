@@ -30,16 +30,20 @@
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"
 #include "kis_pan_action.h"
-#include "kis_alternate_invocation_action.h"
-#include "kis_rotate_canvas_action.h"
+// #include "kis_alternate_invocation_action.h"
+// #include "kis_rotate_canvas_action.h"
 #include "kis_zoom_action.h"
-#include "kis_show_palette_action.h"
+// #include "kis_show_palette_action.h"
 
 class KisInputManager::Private
 {
 public:
-    Private() : toolProxy(0), currentAction(0), currentShortcut(0), tabletPressEvent(0) { }
+    Private(KisInputManager *qq) : q(qq), toolProxy(0), currentAction(0), currentShortcut(0), tabletPressEvent(0) { }
     void match(QEvent *event);
+    void setupActions();
+    KisShortcut *createShortcut(KisAbstractInputAction* action, int index);
+
+    KisInputManager *q;
 
     KisCanvas2 *canvas;
     KoToolProxy *toolProxy;
@@ -60,70 +64,12 @@ public:
 };
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
-    : QObject(canvas), d(new Private)
+    : QObject(canvas), d(new Private(this))
 {
     d->canvas = canvas;
     d->toolProxy = proxy;
 
-    KisAbstractInputAction* action = new KisToolInvocationAction(this);
-    KisShortcut* shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
-
-    action = new KisAlternateInvocationAction(this);
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
-
-    action = new KisPanAction(this);
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
-
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-    d->shortcuts.append(shortcut);
-
-    action = new KisRotateCanvasAction(this);
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
-
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-    d->shortcuts.append(shortcut);
-
-    action = new KisZoomAction(this);
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Space);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
-
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-    d->shortcuts.append(shortcut);
-
-    action = new KisShowPaletteAction(this);
-    shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
-    d->actions.append(action);
-    d->shortcuts.append(shortcut);
+    d->setupActions();
 
     d->potentialShortcuts = d->shortcuts;
 }
@@ -134,16 +80,18 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     switch(event->type()) {
         case QEvent::KeyPress:
         case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonDblClick: {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF());
             if(canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
                 canvas()->favoriteResourceManager()->slotShowPopupPalette();
             }
+        }
         case QEvent::MouseMove:
             if(event->type() == QEvent::MouseMove) {
-                QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-                d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF());
                 if(!d->currentAction) {
-                    d->toolProxy->mouseMoveEvent(mevent, d->mousePosition);
+                    QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+                    d->toolProxy->mouseMoveEvent(mevent, d->canvas->coordinatesConverter()->widgetToDocument(mevent->posF()));
                 }
             }
         case QEvent::KeyRelease:
@@ -184,22 +132,22 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
             return true;
         case QEvent::TabletPress: {
-            d->tabletPressEvent = static_cast<QTabletEvent*>(event);
+            QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
 
             QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
-                d->tabletPressEvent->pos(),
-                d->tabletPressEvent->globalPos(),
-                d->tabletPressEvent->hiResGlobalPos(),
-                d->tabletPressEvent->device(),
-                d->tabletPressEvent->pointerType(),
-                d->tabletPressEvent->pressure(),
-                d->tabletPressEvent->xTilt(),
-                d->tabletPressEvent->yTilt(),
-                d->tabletPressEvent->tangentialPressure(),
-                d->tabletPressEvent->rotation(),
-                d->tabletPressEvent->z(),
-                d->tabletPressEvent->modifiers(),
-                d->tabletPressEvent->uniqueId()
+                tevent->pos(),
+                tevent->globalPos(),
+                tevent->hiResGlobalPos(),
+                tevent->device(),
+                tevent->pointerType(),
+                tevent->pressure(),
+                tevent->xTilt(),
+                tevent->yTilt(),
+                tevent->tangentialPressure(),
+                tevent->rotation(),
+                tevent->z(),
+                tevent->modifiers(),
+                tevent->uniqueId()
             );
             d->tabletPressEvent = newEvent;
             event->ignore();
@@ -279,9 +227,94 @@ void KisInputManager::Private::match(QEvent* event)
         if(completedShortcut) {
             currentShortcut = completedShortcut;
             currentAction = completedShortcut->action();
-            currentAction->begin();
+            currentAction->begin(completedShortcut->shortcutIndex());
         }
 
         eventQueue.clear();
     }
+}
+
+void KisInputManager::Private::setupActions()
+{
+    KisAbstractInputAction* action = new KisToolInvocationAction(q);
+    actions.append(action);
+
+    KisShortcut* shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+
+//     action = new KisAlternateInvocationAction(this);
+//     shortcut = new KisShortcut;
+//     shortcut->setAction(action);
+//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+//     d->actions.append(action);
+//     d->shortcuts.append(shortcut);
+//
+    action = new KisPanAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+
+    shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
+    shortcut = createShortcut(action, KisPanAction::PanRightShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Right);
+    shortcut = createShortcut(action, KisPanAction::PanUpShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Up);
+    shortcut = createShortcut(action, KisPanAction::PanDownShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Down);
+//
+//     action = new KisRotateCanvasAction(this);
+//     shortcut = new KisShortcut;
+//     shortcut->setAction(action);
+//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
+//     d->actions.append(action);
+//     d->shortcuts.append(shortcut);
+//
+//     shortcut = new KisShortcut;
+//     shortcut->setAction(action);
+//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+//     d->shortcuts.append(shortcut);
+
+    action = new KisZoomAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
+    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Minus);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomResetShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_1);
+    shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_0);
+
+//     action = new KisShowPaletteAction(this);
+//     shortcut = new KisShortcut;
+//     shortcut->setAction(action);
+//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+//     d->actions.append(action);
+//     d->shortcuts.append(shortcut);
+}
+
+KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
+{
+    KisShortcut* shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setShortcutIndex(index);
+    shortcuts.append(shortcut);
+
+    return shortcut;
 }
