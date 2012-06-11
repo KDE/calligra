@@ -116,6 +116,7 @@ void DlgCanvasSize::slotCanvasInfinitenessChanged()
         m_page->newHeight->setEnabled(false);
         m_page->comboWidthUnit->setEnabled(false);
         m_page->comboHeightUnit->setEnabled(false);
+        m_page->aspectRatio->setEnabled(false);
         m_page->xOffset->setEnabled(false);
         m_page->yOffset->setEnabled(false);
         m_page->gridLayout_3->setEnabled(false);
@@ -128,6 +129,7 @@ void DlgCanvasSize::slotCanvasInfinitenessChanged()
         m_page->newHeight->setEnabled(true);
         m_page->comboWidthUnit->setEnabled(true);
         m_page->comboHeightUnit->setEnabled(true);
+        m_page->aspectRatio->setEnabled(true);
         m_page->xOffset->setEnabled(true);
         m_page->yOffset->setEnabled(true);
         m_page->gridLayout_3->setEnabled(true);
