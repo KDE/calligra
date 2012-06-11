@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,7 +48,8 @@ class BaseExpr;
  - type
  - database constraints
  - additional options
- - length (make sense mostly for string types)
+ - maxLength (makes sense mostly for string types)
+ - maxLengthStrategy (makes sense mostly for string types)
  - precision (for floating-point type)
  - defaultValue
  - caption (user readable name that can be e.g. translated)
@@ -97,8 +98,8 @@ public:
         Time = 8,        /*!< */
         Float = 9,       /*!< 4 bytes */
         Double = 10,     /*!< 8 bytes */
-        Text = 11,       /*!< Other name: Varchar; no more than 200 bytes, for efficiency */
-        LongText = 12,   /*!< Other name: Memo. More than 200 bytes*/
+        Text = 11,       /*!< Other name: Varchar */
+        LongText = 12,   /*!< Other name: Memo */
         BLOB = 13,       /*!< Large binary object */
 
         LastType = 13,   /*!< This line should be at the end of the list of types! */
@@ -112,11 +113,6 @@ public:
         Enum = 129,      /*!< An integer internal with a string list of hints */
         Map = 130        /*!< Mapping from string to string list (more generic than Enum */
     };
-
-//TODO: make this configurable
-    static uint defaultTextLength() {
-        return 200;
-    }
 
     /*! Type groups for fields. */
     enum TypeGroup {
@@ -149,19 +145,22 @@ public:
         Unsigned = 1
     };
 
-    /*! Creates a database field as a child of \a tableSchema table
+    /*! Creates a database field as a child of \a tableSchema table.
+     maxLength property is set to 0 (unlimited length).
      No other properties are set (even the name), so these should be set later. */
     Field(TableSchema *tableSchema);
 
-    /*! Creates a database field without any properties set.
-     These should be set later. */
+    /*! Creates a database field.
+     maxLength property is set to 0 (unlimited length).
+     No other properties are set (even the name), so these should be set later. */
     Field();
 
-    /*! Creates a database field with specified properties. */
+    /*! Creates a database field with specified properties.
+     For meaning of @a maxLength argument please refer to setMaxLength(). */
     Field(const QString& name, Type ctype,
           uint cconst = NoConstraints,
           uint options = NoOptions,
-          uint length = 0, uint precision = 0,
+          uint maxLength = 0, uint precision = 0,
           QVariant defaultValue = QVariant(),
           const QString& caption = QString(),
           const QString& description = QString(),
@@ -383,11 +382,54 @@ public:
         return m_defaultValue;
     }
 
-    /*! \return length of text, only meaningful if the field type is text.
-     0 means "default length". */
-    inline uint length() const {
-        return m_length;
-    }
+    /*! @return default maximum length of text.
+        Default is 0, i.e unlimited length (if the engine supports it). */
+    static uint defaultMaxLength();
+
+    /*! Sets default maximum length of text. 0 means unlimited length,
+        greater than 0 means specific maximum length. */
+    static void setDefaultMaxLength(uint maxLength);
+
+    /*! Strategy for defining maximum length of text for this field.
+      Only makes sense if the field type is of Text type.
+      Default strategy is DefinedMaxLength.
+     */
+    enum MaxLengthStrategy {
+        DefaultMaxLength,  //!< Default maximum text length defined globally by the application.
+                           //!< @see defaultMaxLength()
+        DefinedMaxLength   //!< Used if setMaxLength() was called to set specific maximum value
+                           //!< or to unlimited (0).
+    };
+
+    /*! \return a hint that indicates if the maximum length of text for this field is based on default setting
+      (defaultMaxLength()) or was explicitly set.
+      Only makes sense if the field type is Text. */
+    MaxLengthStrategy maxLengthStrategy() const;
+
+    /*! Sets strategy for defining maximum length of text for this field.
+      Only makes sense if the field type is Text.
+      Default strategy is DefinedMaxLength.
+      Changing this value does not affect maxLength property.
+
+      Fields with DefaultMaxLength strategy does not follow changes made by calling setDefaultMaxLength()
+      so to update the default maximum lengths in fields, the app has to iterate over all fields of type Text,
+      and reset to the new default as explained in setMaxLength() documentation.
+      See documentation for setMaxLength() for information how to reset maxLength to default value.
+
+      @see maxLengthStrategy(), setMaxLength() */
+    void setMaxLengthStrategy(MaxLengthStrategy strategy);
+
+    /*! \return maximum length of text allowed for this field. Only meaningful if the type is Text.
+      @see setMaxLength() */
+    uint maxLength() const;
+
+    /*! Sets maximum length for this field. Only works for Text type.
+     It can be specific maximum value or 0 for unlimited length (which will work if engine supports).
+     Resets maxLengthStrategy property to DefinedMaxLength.
+     To reset to default maximum length, call setMaxLength(defaultMaxLength()) and then
+     to indicate this is based on default setting, call setMaxLengthStrategy(DefaultMaxLength).
+     @see maxLength(), maxLengthStrategy() */
+    void setMaxLength(uint maxLength);
 
     /*! \return precision for numeric and other fields that have both length (scale)
      and precision (floating point types). */
@@ -403,7 +445,7 @@ public:
      to both sides of the decimal point. So the number 23.5141 has a precision
      of 6 and a scale of 4. Integers can be considered to have a scale of zero. */
     inline uint scale() const {
-        return m_length;
+        return m_maxLength;
     }
 
 //! @todo should we keep extended properties here or move them to a QVariant dictionary?
@@ -495,10 +537,6 @@ public:
      If Indexed is not set in \a c, constraits implied by not being are
      enforced as well (see setIndexed()). */
     void setConstraints(uint c);
-
-    /*! Sets length for this field. Only works for Text Type (even not LongText!).
-     0 means "default length". @see length() */
-    void setLength(uint l);
 
     /*! Sets scale for this field. Only works for floating-point types.
      @see scale() */
@@ -681,7 +719,8 @@ protected:
     QString m_name;
     QString m_subType;
     uint m_constraints;
-    uint m_length; //!< also used for storing scale for floating point types
+    MaxLengthStrategy m_maxLengthStrategy;
+    uint m_maxLength; //!< also used for storing scale for floating point types
     uint m_precision;
     int m_visibleDecimalPlaces; //!< used in visibleDecimalPlaces()
     uint m_options;

@@ -92,6 +92,7 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbcommandlinkbutton.cpp
   widgets/kexidbslider.cpp
   widgets/kexidbprogressbar.cpp
+  widgets/kexidbdatepicker.cpp
 )
 
 #obsolete	widgets/kexidbdoublespinbox.cpp
