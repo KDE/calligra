@@ -22,6 +22,7 @@
 #include <QtCore/QObject>
 
 class QPointF;
+class QTabletEvent;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
@@ -38,6 +39,7 @@ public:
     KisCanvas2 *canvas() const;
     KoToolProxy *toolProxy() const;
     QPointF mousePosition() const;
+    QTabletEvent *tabletPressEvent() const;
 
 private:
     class Private;

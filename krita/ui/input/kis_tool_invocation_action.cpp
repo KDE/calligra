@@ -18,6 +18,8 @@
 
 #include "kis_tool_invocation_action.h"
 
+#include <QDebug>
+
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
@@ -25,7 +27,7 @@
 #include "kis_input_manager.h"
 
 KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager)
+    : KisAbstractInputAction(manager), m_tablet(false)
 {
 
 }
@@ -36,14 +38,26 @@ KisToolInvocationAction::~KisToolInvocationAction()
 
 void KisToolInvocationAction::begin()
 {
-    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-    m_inputManager->toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
+    if(m_inputManager->tabletPressEvent()) {
+        m_inputManager->tabletPressEvent()->accept();
+        m_inputManager->toolProxy()->tabletEvent(m_inputManager->tabletPressEvent(), m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(m_inputManager->tabletPressEvent()->pos()));
+        m_tablet = true;
+    } else {
+        QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        m_inputManager->toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
+    }
 }
 
 void KisToolInvocationAction::end()
 {
-    QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-    m_inputManager->toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
+    if(m_tablet) {
+        QTabletEvent* pressEvent = m_inputManager->tabletPressEvent();
+        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, m_inputManager->mousePosition().toPoint(), m_inputManager->mousePosition().toPoint(), m_inputManager->mousePosition(), pressEvent->device(), pressEvent->pointerType(), 0.f, 0, 0, 0.f, 0.f, pressEvent->z(), 0, pressEvent->uniqueId());
+        m_inputManager->toolProxy()->tabletEvent(releaseEvent, releaseEvent->pos());
+    } else {
+        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        m_inputManager->toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
+    }
 }
 
 void KisToolInvocationAction::inputEvent(QEvent* event)

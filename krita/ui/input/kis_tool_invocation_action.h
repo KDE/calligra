@@ -31,6 +31,9 @@ public:
     virtual void end();
     virtual void inputEvent(QEvent* event);
     virtual bool handleTablet() const;
+
+private:
+    bool m_tablet;
 };
 
 #endif // KISTOOLINVOCATIONACTION_H

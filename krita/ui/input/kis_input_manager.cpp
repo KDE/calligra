@@ -38,7 +38,7 @@
 class KisInputManager::Private
 {
 public:
-    Private() : toolProxy(0), currentAction(0), currentShortcut(0) { }
+    Private() : toolProxy(0), currentAction(0), currentShortcut(0), tabletPressEvent(0) { }
     void match(QEvent *event);
 
     KisCanvas2 *canvas;
@@ -55,6 +55,8 @@ public:
     QPointF mousePosition;
 
     QQueue<QEvent*> eventQueue;
+
+    QTabletEvent *tabletPressEvent;
 };
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -154,6 +156,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                     d->currentAction = 0;
                     d->currentShortcut = 0;
                     d->potentialShortcuts = d->shortcuts;
+                    d->tabletPressEvent = 0;
                     d->eventQueue.clear();
                     break;
                 }
@@ -175,16 +178,41 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                 d->currentAction->end();
                 d->currentAction = 0;
                 d->currentShortcut = 0;
+                d->tabletPressEvent = 0;
                 d->potentialShortcuts = d->shortcuts;
                 d->eventQueue.clear();
             }
             return true;
+        case QEvent::TabletPress: {
+            d->tabletPressEvent = static_cast<QTabletEvent*>(event);
+
+            QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
+                d->tabletPressEvent->pos(),
+                d->tabletPressEvent->globalPos(),
+                d->tabletPressEvent->hiResGlobalPos(),
+                d->tabletPressEvent->device(),
+                d->tabletPressEvent->pointerType(),
+                d->tabletPressEvent->pressure(),
+                d->tabletPressEvent->xTilt(),
+                d->tabletPressEvent->yTilt(),
+                d->tabletPressEvent->tangentialPressure(),
+                d->tabletPressEvent->rotation(),
+                d->tabletPressEvent->z(),
+                d->tabletPressEvent->modifiers(),
+                d->tabletPressEvent->uniqueId()
+            );
+            d->tabletPressEvent = newEvent;
+            event->ignore();
+            break;
+        }
         case QEvent::TabletMove:
             if(d->currentAction && d->currentAction->handleTablet()) {
                 d->currentAction->inputEvent(event);
                 return true;
+            } else {
+                event->ignore();
             }
-        case QEvent::TabletPress:
+            break;
         case QEvent::TabletRelease:
             event->ignore();
         default:
@@ -207,6 +235,11 @@ KoToolProxy* KisInputManager::toolProxy() const
 QPointF KisInputManager::mousePosition() const
 {
     return d->mousePosition;
+}
+
+QTabletEvent* KisInputManager::tabletPressEvent() const
+{
+    return d->tabletPressEvent;
 }
 
 KisInputManager::~KisInputManager()
