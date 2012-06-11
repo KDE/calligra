@@ -37,6 +37,7 @@ public:
 
 private slots:
     void errorIndicatorChanged();
+    void errorTypeChanged(int currIndex);
     void setSameErrorValueForBoth(bool isChecked);
     void setSameErrorValueForBoth(double value);
 };

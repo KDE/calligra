@@ -28,15 +28,14 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     : QDialog(parent)
 {
     widget.setupUi(this);
-    widget.posAndNegIndicator->setChecked(true);
-    widget.positiveValue->setAccelerated(true);
-    widget.negativeValue->setAccelerated(true);
+    errorTypeChanged(0);
 
     connect(widget.posIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
     connect(widget.negIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
     connect(widget.posAndNegIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
     connect(widget.sameValueForBoth, SIGNAL(toggled(bool)), this, SLOT(setSameErrorValueForBoth(bool)));
     connect(widget.positiveValue, SIGNAL(valueChanged(double)), this, SLOT(setSameErrorValueForBoth(double)));
+    connect(widget.errorType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorTypeChanged(int)));
 }
 
 FormatErrorBarDialog::~FormatErrorBarDialog()
@@ -58,6 +57,24 @@ void FormatErrorBarDialog::errorIndicatorChanged()
         widget.negativeValue->setEnabled(true);
         widget.sameValueForBoth->setEnabled(true);
         setSameErrorValueForBoth(widget.sameValueForBoth->isChecked());
+    }
+}
+
+void FormatErrorBarDialog::errorTypeChanged(int currIndex)
+{
+    switch (currIndex) {
+    case 1:
+        widget.constantError->show();
+        widget.percentageError->hide();
+        break;
+    case 2:
+    case 3:
+        widget.constantError->hide();
+        widget.percentageError->show();
+        break;
+    default:
+        widget.constantError->hide();
+        widget.percentageError->hide();
     }
 }
 

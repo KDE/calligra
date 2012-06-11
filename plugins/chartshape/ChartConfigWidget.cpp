@@ -431,6 +431,8 @@ ChartConfigWidget::ChartConfigWidget()
     errorBarTypeMenu->addAction(i18n("From Data Table"));
 
     d->ui.errorBarTypeMenu->setMenu(errorBarTypeMenu);
+    d->ui.errorBarTypeMenu->setEnabled(false);
+    d->ui.formatErrorBar->setEnabled(false);
 
     connect(errorBarTypeMenu, SIGNAL(triggered(QAction*)),
             this,             SLOT(errorBarTypeSelected(QAction*)));
@@ -455,6 +457,8 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(datasetPenSelected(const QColor&)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowCategoryChanged(bool)));
+    connect(d->ui.datasetShowErrorBar, SIGNAL(toggled(bool)),
+            this, SLOT(ui_datasetShowErrorBarChanged(bool)));
     connect(d->ui.dataSetShowNumber, SIGNAL(toggled(bool)),
             this, SLOT(ui_dataSetShowNumberChanged(bool)));
     connect(d->ui.datasetShowPercent, SIGNAL(toggled(bool)),
@@ -1026,19 +1030,16 @@ void ChartConfigWidget::update()
     {
         // Update the chart type specific settings in the "Data Sets" tab
         bool needPropertiesSeparator = false;
-        bool needErrorBarSeparator = false;
         if (d->shape->chartType() == BarChartType) {
             d->ui.barProperties->show();
             d->ui.pieProperties->hide();
             d->ui.errorBarProperties->show();
             needPropertiesSeparator = true;
-            needErrorBarSeparator = true;
         } else if (d->shape->chartType() == LineChartType || d->shape->chartType() == AreaChartType
                    || d->shape->chartType() == ScatterChartType) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
             d->ui.errorBarProperties->show();
-            needErrorBarSeparator = true;
         } else if (d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->show();
@@ -1050,7 +1051,6 @@ void ChartConfigWidget::update()
             d->ui.errorBarProperties->hide();
         }
         d->ui.propertiesSeparator->setVisible(needPropertiesSeparator);
-        d->ui.errorBarSeparator->setVisible(needErrorBarSeparator);
 
         // Set the chart type icon in the chart type button.
         QString iconName = chartTypeIcon(d->shape->chartType(), d->shape->chartSubType());
@@ -1742,6 +1742,15 @@ void ChartConfigWidget::ui_datasetShowCategoryChanged(bool b)
         return;
 
     emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b);
+}
+
+void ChartConfigWidget::ui_datasetShowErrorBarChanged(bool b)
+{
+    if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
+        return;
+
+    d->ui.errorBarTypeMenu->setEnabled(b);
+    d->ui.formatErrorBar->setEnabled(b);
 }
 
 void ChartConfigWidget::ui_dataSetShowNumberChanged(bool b)

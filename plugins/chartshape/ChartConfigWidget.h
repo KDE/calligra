@@ -81,6 +81,7 @@ public slots:
     void datasetBrushSelected(const QColor& color);
     void datasetPenSelected(const QColor& color);
     void ui_datasetShowCategoryChanged(bool b);
+    void ui_datasetShowErrorBarChanged(bool b);
     void ui_dataSetShowNumberChanged(bool b);
     void ui_datasetShowPercentChanged(bool b);
     void ui_datasetShowSymbolChanged(bool b);
