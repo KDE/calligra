@@ -119,6 +119,7 @@ void DlgCanvasSize::slotCanvasInfinitenessChanged()
         m_page->xOffset->setEnabled(false);
         m_page->yOffset->setEnabled(false);
         m_page->gridLayout_3->setEnabled(false);
+        m_page->canvasPreview->setCanvasSize(m_page->canvasPreview->width()*maximumSize().width(), m_page->canvasPreview->height()*maximumSize().height());
     }
 
     else
@@ -130,6 +131,7 @@ void DlgCanvasSize::slotCanvasInfinitenessChanged()
         m_page->xOffset->setEnabled(true);
         m_page->yOffset->setEnabled(true);
         m_page->gridLayout_3->setEnabled(true);
+        m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
     }
 }
 
