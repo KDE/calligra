@@ -22,6 +22,7 @@
 #include <QApplication>
 
 #include <Eigen/Geometry>
+#include <KLocalizedString>
 
 #include "kis_canvas2.h"
 #include "kis_input_manager.h"
@@ -44,10 +45,23 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
 
 }
 
-void KisRotateCanvasAction::begin()
+void KisRotateCanvasAction::begin(int shortcut)
 {
-    d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
-    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    switch(shortcut) {
+        case RotateToggleShortcut:
+            d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            break;
+        case RotateLeftShortcut:
+            m_inputManager->canvas()->rotateCanvasLeft15();
+            break;
+        case RotateRightShortcut:
+            m_inputManager->canvas()->rotateCanvasRight15();
+            break;
+        case RotateResetShortcut:
+            m_inputManager->canvas()->resetCanvasTransformations();
+            break;
+    }
 }
 
 void KisRotateCanvasAction::end()
@@ -78,4 +92,19 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             QApplication::changeOverrideCursor(Qt::OpenHandCursor);
         }
     }
+}
+
+QString KisRotateCanvasAction::name() const
+{
+    return i18n("Rotate Canvas");
+}
+
+QHash< QString, int > KisRotateCanvasAction::shortcuts() const
+{
+    QHash<QString, int> shortcuts;
+    shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
+    shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
+    shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
+    shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
+    return shortcuts;
 }

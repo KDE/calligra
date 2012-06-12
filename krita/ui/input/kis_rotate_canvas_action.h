@@ -26,12 +26,21 @@ class KisRotateCanvasAction : public KisAbstractInputAction
 {
 
 public:
+    enum Shortcut {
+        RotateToggleShortcut,
+        RotateLeftShortcut,
+        RotateRightShortcut,
+        RotateResetShortcut
+    };
     explicit KisRotateCanvasAction(KisInputManager* manager);
     virtual ~KisRotateCanvasAction();
 
-    virtual void begin();
+    virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual QString name() const;
+    virtual QHash< QString, int > shortcuts() const;
 
 private:
     class Private;
