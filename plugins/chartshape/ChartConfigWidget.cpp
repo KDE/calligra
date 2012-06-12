@@ -299,6 +299,8 @@ static QString chartTypeIcon(ChartType type, ChartSubtype subtype)
         return "office-chart-polar";
     case FilledRadarChartType:
         return "office-chart-polar-filled";
+    case ScatterChartType:
+        return "office-chart-scatter";
     default:
         return "";
     }
@@ -1531,28 +1533,31 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
             }
             break;
         case CircleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_circle_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-pie"));
             break;
         case RingChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_ring_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-ring"));
             break;
         case ScatterChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_scatter_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-scatter"));
             break;
         case RadarChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_radar_normal"));
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar"));
+            break;
+        case FilledRadarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar-filled"));
             break;
         case StockChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_stock_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-stock"));
             break;
         case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_bubble_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-bubble"));
             break;
         case SurfaceChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_surface_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-surface"));
             break;
         case GanttChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_gantt_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-gantt"));
             break;
 
             // Fixes a warning that LastChartType isn't handled.
