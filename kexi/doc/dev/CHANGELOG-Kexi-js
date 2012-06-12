@@ -97,15 +97,7 @@ Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
 i18n TODO:
-"Save to Words" -> "Save as Text Document"
-i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet") -> i18n("Save as Spreadsheet")
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
-->
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Calligra Tables.", cxt.destinationUrl.prettyUrl()) , i18n("Note: do not translate 'Tables'", "Opening in Calligra Tables"));
-
-i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
-->
-i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
+--
 
 CSV Import TODO:
 *add "Skip empty rows" option
