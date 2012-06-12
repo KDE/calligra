@@ -133,7 +133,7 @@ void DlgCanvasSize::slotCanvasInfinitenessChanged()
         m_page->xOffset->setEnabled(true);
         m_page->yOffset->setEnabled(true);
         m_page->gridLayout_3->setEnabled(true);
-        m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
+        m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
     }
 }
 
