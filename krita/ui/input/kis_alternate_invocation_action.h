@@ -28,9 +28,16 @@ public:
     explicit KisAlternateInvocationAction(KisInputManager *manager);
     virtual ~KisAlternateInvocationAction();
 
-    virtual void begin();
+    virtual void begin(int /*shortcut*/);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual QString name() const;
+    virtual QHash< QString, int > shortcuts() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KIS_ALTERNATE_INVOCATION_ACTION_H

@@ -18,30 +18,66 @@
 
 #include "kis_alternate_invocation_action.h"
 
-#include <QDebug>
+#include <KLocalizedString>
+
+#include <KoColor.h>
+#include <KoCanvasResourceManager.h>
+
+#include <kis_paint_device.h>
+#include <kis_canvas2.h>
+#include <kis_view2.h>
+
+#include "kis_input_manager.h"
+
+class KisAlternateInvocationAction::Private
+{
+public:
+    KoColor pick(KisPaintDeviceSP dev, const QPoint& pos);
+};
 
 KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager)
+    : KisAbstractInputAction(manager), d(new Private)
 {
 
 }
 
 KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
-
+    delete d;
 }
 
-void KisAlternateInvocationAction::begin()
+void KisAlternateInvocationAction::begin(int /*shortcut*/)
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug(Q_FUNC_INFO);
+    KisPaintDeviceSP paintDevice = m_inputManager->canvas()->view()->activeDevice();
+    m_inputManager->canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, d->pick(paintDevice, m_inputManager->mousePosition().toPoint()));
 }
 
 void KisAlternateInvocationAction::end()
 {
-    qDebug() << Q_FUNC_INFO;
+
 }
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
+    Q_UNUSED(event);
+}
 
+QString KisAlternateInvocationAction::name() const
+{
+    return i18n("Alternate Invocation");
+}
+
+QHash< QString, int > KisAlternateInvocationAction::shortcuts() const
+{
+    QHash< QString, int> values;
+    values.insert(i18nc("Invoke Tool shortcut for Alternate Invocation Action", "Invoke Tool"), 0);
+    return values;
+}
+
+KoColor KisAlternateInvocationAction::Private::pick(KisPaintDeviceSP dev, const QPoint& pos)
+{
+    KoColor pickedColor;
+    dev->pixel(pos.x(), pos.y(), &pickedColor);
+    return pickedColor;
 }
