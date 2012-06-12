@@ -28,9 +28,12 @@ public:
     explicit KisShowPaletteAction(KisInputManager* manager);
     virtual ~KisShowPaletteAction();
 
-    virtual void begin();
+    virtual void begin(int /*shortcut*/);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual QString name() const;
+    virtual QHash< QString, int > shortcuts() const;
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H
