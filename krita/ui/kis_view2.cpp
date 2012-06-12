@@ -239,8 +239,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
-    canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    if(doc->isCanvasInfinite())
+    {
+        canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+    else
+    {
+        canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     KisConfig cfg;

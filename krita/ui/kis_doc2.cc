@@ -422,6 +422,15 @@ bool KisDoc2::newImage(const QString& name,
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
     cfg.defColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
+    if(isCanvasInfinite())
+    {
+        QColor bg = bgColor.toQColor();
+        cfg.setCanvasBorderColor(bg);
+    }
+    else
+    {
+        cfg.setCanvasBorderColor(Qt::gray);
+    }
 
     qApp->restoreOverrideCursor();
     return true;
