@@ -78,14 +78,14 @@ bool KisToolInvocationAction::handleTablet() const
     return true;
 }
 
+QString KisToolInvocationAction::name() const
+{
+    return i18n("Tool Invocation");
+}
+
 QHash< QString, int > KisToolInvocationAction::shortcuts() const
 {
     QHash< QString, int> values;
     values.insert(i18nc("Invoke Tool shortcut for Tool Invocation Action", "Invoke Tool"), 0);
     return values;
-}
-
-QString KisToolInvocationAction::name() const
-{
-    return i18n("Tool Invocation");
 }

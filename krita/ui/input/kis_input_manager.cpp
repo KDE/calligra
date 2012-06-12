@@ -30,10 +30,10 @@
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"
 #include "kis_pan_action.h"
-// #include "kis_alternate_invocation_action.h"
-// #include "kis_rotate_canvas_action.h"
+#include "kis_alternate_invocation_action.h"
+#include "kis_rotate_canvas_action.h"
 #include "kis_zoom_action.h"
-// #include "kis_show_palette_action.h"
+#include "kis_show_palette_action.h"
 
 class KisInputManager::Private
 {
@@ -242,14 +242,13 @@ void KisInputManager::Private::setupActions()
     KisShortcut* shortcut = createShortcut(action, 0);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
 
-//     action = new KisAlternateInvocationAction(this);
-//     shortcut = new KisShortcut;
-//     shortcut->setAction(action);
-//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
-//     d->actions.append(action);
-//     d->shortcuts.append(shortcut);
-//
+    action = new KisAlternateInvocationAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+
     action = new KisPanAction(q);
     actions.append(action);
 
@@ -267,19 +266,25 @@ void KisInputManager::Private::setupActions()
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Up);
     shortcut = createShortcut(action, KisPanAction::PanDownShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Down);
-//
-//     action = new KisRotateCanvasAction(this);
-//     shortcut = new KisShortcut;
-//     shortcut->setAction(action);
-//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
-//     d->actions.append(action);
-//     d->shortcuts.append(shortcut);
-//
-//     shortcut = new KisShortcut;
-//     shortcut->setAction(action);
-//     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
-//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-//     d->shortcuts.append(shortcut);
+
+    action = new KisRotateCanvasAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateLeftShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_4);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateRightShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_6);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateResetShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_5);
 
     action = new KisZoomAction(q);
     actions.append(action);
@@ -301,12 +306,11 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_0);
 
-//     action = new KisShowPaletteAction(this);
-//     shortcut = new KisShortcut;
-//     shortcut->setAction(action);
-//     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
-//     d->actions.append(action);
-//     d->shortcuts.append(shortcut);
+    action = new KisShowPaletteAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
