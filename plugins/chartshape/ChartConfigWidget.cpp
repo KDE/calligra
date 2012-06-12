@@ -427,7 +427,9 @@ ChartConfigWidget::ChartConfigWidget()
     errorBarTypeMenu->addAction(i18n("None"));
     errorBarTypeMenu->addAction(i18n("Constant Error"));
     errorBarTypeMenu->addAction(i18n("Percentage Error"));
+    errorBarTypeMenu->addAction(i18n("Error Margin"));
     errorBarTypeMenu->addAction(i18n("Standard Deviation"));
+    errorBarTypeMenu->addAction(i18n("Variance"));
     errorBarTypeMenu->addAction(i18n("From Data Table"));
 
     d->ui.errorBarTypeMenu->setMenu(errorBarTypeMenu);
