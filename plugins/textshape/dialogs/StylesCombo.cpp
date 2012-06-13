@@ -19,7 +19,7 @@
 #include "StylesCombo.h"
 #include <KoStyleThumbnailer.h>
 
-#include "StylesModel.h"
+#include "AbstractStylesModel.h"
 #include "StylesComboPreview.h"
 #include "StylesDelegate.h"
 
@@ -75,7 +75,7 @@ void StylesCombo::setStyleIsOriginal(bool original)
     }
 }
 
-void StylesCombo::setStylesModel(StylesModel *model)
+void StylesCombo::setStylesModel(AbstractStylesModel *model)
 {
     m_stylesModel = model;
     setModel(model);
@@ -137,7 +137,12 @@ void StylesCombo::slotItemClicked(QModelIndex index)
 
 void StylesCombo::slotUpdatePreview()
 {
+    kDebug() << "begin slot updatePreview";
+    kDebug() << "currentIndex: " << currentIndex();
+    kDebug() << "m_preview: " << m_preview;
+    kDebug() << "m_styleModel: " << m_stylesModel;
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
+    kDebug() << "preview set";
     update();
 }
 

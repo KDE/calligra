@@ -35,7 +35,7 @@
 #include <KDebug>
 
 StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *parent)
-    : QAbstractListModel(parent),
+    : AbstractStylesModel(parent),
       m_styleManager(0),
       m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
@@ -168,14 +168,14 @@ void StylesModel::setProvideStyleNone(bool provide)
         m_provideStyleNone = provide;
     }
 }
-
+/*
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
 {
     if (m_draftParStyleList.contains(index.internalId()))
         return m_draftParStyleList[index.internalId()];
     return m_styleManager->paragraphStyle(index.internalId());
 }
-
+*/
 QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
 {
     if (&style) {
@@ -186,14 +186,14 @@ QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) c
         return QModelIndex();
     }
 }
-
+/*
 KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
 {
     if (m_draftCharStyleList.contains(index.internalId()))
         return m_draftCharStyleList[index.internalId()];
     return m_styleManager->characterStyle(index.internalId());
 }
-
+*/
 QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
 {
     if (&style) {

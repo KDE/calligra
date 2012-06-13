@@ -36,6 +36,7 @@ class ParagraphLayout;
 class ParagraphDecorations;
 class ParagraphDropCaps;
 class StylesModel;
+class ValidParentStylesProxyModel;
 
 class ParagraphGeneral : public CharacterGeneral
 {
@@ -81,7 +82,7 @@ private:
     KoStyleManager *m_styleManager;
 
     KoStyleThumbnailer *m_thumbnail;
-    StylesModel *m_paragraphInheritedStyleModel;
+    ValidParentStylesProxyModel *m_paragraphValidParentStylesModel;
 };
 
 #endif

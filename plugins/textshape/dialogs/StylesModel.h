@@ -21,7 +21,10 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include "AbstractStylesModel.h"
+
 #include <QAbstractListModel>
+
 #include <KIcon>
 
 class KoStyleThumbnailer;
@@ -38,9 +41,15 @@ class QSize;
   * Character styles in ODF can be specified in two ways. First, a named character style, specifying character formatting properties. It is meant to be used on a couple of individual characters. Secondely, a paragraph style also specifies character formatting properties, which are to be considered the default for that particular paragraph.
   * For this reason, the @class Stylesmodel, when of the type @value characterStyle, do not list the paragraph style names. Only the specific named chracter styles are listed. Additionnaly, as the first item, a virtual style "As paragraph" is provided. Selecting this "style" will set the character properties as specified by the paragraph style currently applied to the selection.
   * This class requires that a @class KoStyleManager and a @class KoStyleThumbnailer be set. See below methods.
+  *
+  * The StylesModel re-implement the AbstractStylesModel interface. Several components assume the following properties:
+  * - the StylesModel is a flat list of items (this also means that "parent" QModelIndexes are always invalid)
+  * - the StylesModel has only one column
+  * - there is no header in the model
+  * - only the following methods are used when updating the underlying model's data: resetModel, insertRows, moveRows, removeRows
 */
 
-class StylesModel : public QAbstractListModel
+class StylesModel : public AbstractStylesModel
 {
     Q_OBJECT
 
@@ -73,12 +82,12 @@ public:
     void setProvideStyleNone(bool provide);
 
     /** Returns the @class KoParagraphStyle corresponding to the specified @param index. */
-    KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
+//    KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
 
     /** Returns the @class KoCharacterhStyle corresponding to the specified @param index. */
-    KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
+//    KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 

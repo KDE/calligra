@@ -33,8 +33,8 @@ SET ( textshape_SRCS
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
 
-    dialogs/StylesWidget.cpp
-    dialogs/SpecialButton.cpp
+#    dialogs/StylesWidget.cpp
+#    dialogs/SpecialButton.cpp
     dialogs/StylesCombo.cpp
     dialogs/StylesComboPreview.cpp
     dialogs/SimpleCharacterWidget.cpp
@@ -56,6 +56,8 @@ SET ( textshape_SRCS
     dialogs/ParagraphDropCaps.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
+    dialogs/AbstractStylesModel.cpp
+    dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp

@@ -32,6 +32,7 @@ class FontDecorations;
 class CharacterHighlighting;
 class LanguageTab;
 class StylesModel;
+class ValidParentStylesProxyModel;
 
 class CharacterGeneral : public QWidget
 {
@@ -63,6 +64,8 @@ private slots:
 
 protected:
     Ui::CharacterGeneral widget;
+    StylesModel *m_paragraphStyleModel;
+    ValidParentStylesProxyModel *m_validParentStylesModel;
 
 private:
     bool m_nameHidden;
@@ -74,8 +77,8 @@ private:
     KoCharacterStyle *m_style;
     KoStyleManager *m_styleManager;
     KoStyleThumbnailer *m_thumbnail;
-    StylesModel *m_paragraphStyleModel;
-    StylesModel *m_characterInheritedStyleModel;
+    StylesModel *m_characterStyleModel;
+//    StylesModel *m_characterInheritedStyleModel;
 };
 
 #endif

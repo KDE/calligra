@@ -28,6 +28,7 @@
 
 #include "StylesCombo.h"
 #include "StylesModel.h"
+#include "ValidParentStylesProxyModel.h"
 
 #include <KoParagraphStyle.h>
 #include <KoStyleThumbnailer.h>
@@ -37,30 +38,31 @@
 #include "kdebug.h"
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
-        : QWidget(parent)
-        , m_style(0)
-        , m_styleManager(0)
-        , m_thumbnail(new KoStyleThumbnailer())
-        , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
-        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
+        : QWidget(parent),
+        m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle)),
+        m_validParentStylesModel(new ValidParentStylesProxyModel()),
+        m_style(0),
+        m_styleManager(0),
+        m_thumbnail(new KoStyleThumbnailer()),
+        m_characterStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
+//        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     // we dont have next style for character styles
     widget.nextStyle->setVisible(false);
+    m_characterStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.nextStyle->setStylesModel(m_characterStyleModel);
     widget.label_2->setVisible(false);
     //
 
-    // paragraph style model
-    widget.nextStyle->showEditIcon(false);
-    widget.nextStyle->setStyleIsOriginal(true);
-    m_paragraphStyleModel->setStyleThumbnailer(m_thumbnail);
-    widget.nextStyle->setStylesModel(m_paragraphStyleModel);
     // inherited style model
     widget.inheritStyle->showEditIcon(false);
     widget.inheritStyle->setStyleIsOriginal(true);
     //for character General
-    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
-    widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
+//    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
+//    m_validParentStylesModel->setStyleThumbnailer(m_thumbnail);
+    m_validParentStylesModel->setStylesModel(m_characterStyleModel);
+    widget.inheritStyle->setStylesModel(m_validParentStylesModel);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
@@ -90,6 +92,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_style == 0)
         return;
     blockSignals(true);
+/*
     //filter m_inherited style model
 
     //
@@ -109,6 +112,8 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
         if (s == m_style->parent())
              widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*m_style).row());
     }
+*/
+    m_validParentStylesModel->setCurrentChildStyleId(style->styleId());
     if(!m_style->parentStyle())
         widget.inheritStyle->setCurrentIndex(-1);
 
@@ -123,7 +128,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*parentStyle).row());
+//            widget.inheritStyle->setCurrentIndex(m_validParentStylesModel->indexForCharacterStyle(*parentStyle).row());
         }
     }
 
@@ -146,7 +151,7 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     //m_languageTab->save(savingStyle);
     savingStyle->setName(widget.name->text());
     if (widget.inheritStyle->currentIndex() != -1) {
-        KoCharacterStyle *parent = m_styleManager->characterStyle(m_characterInheritedStyleModel->index(widget.inheritStyle->currentIndex()).internalId());
+        KoCharacterStyle *parent = m_styleManager->characterStyle(m_validParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
         savingStyle->setParentStyle(parent);
     }
 
@@ -188,8 +193,9 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
     if (!sm)
         return;
     m_styleManager = sm;
+    m_characterStyleModel->setStyleManager(m_styleManager);
     m_paragraphStyleModel->setStyleManager(m_styleManager);
-    m_characterInheritedStyleModel->setStyleManager(m_styleManager);
+    m_validParentStylesModel->setStyleManager(m_styleManager);
 }
 
 void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
