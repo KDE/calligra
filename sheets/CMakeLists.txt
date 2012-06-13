@@ -97,6 +97,11 @@ SET (dialogs_DIR_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
     dialogs/ValidityDialog.cpp
+    dialogs/pivot.cpp
+    dialogs/pivotmain.cpp
+    dialogs/pivotfilters
+    dialogs/pivotoptions
+    
     )
 
 
@@ -112,7 +117,11 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
-    )
+    dialogs/pivot.ui
+    dialogs/pivotfilters.ui
+    dialogs/pivotoptions.ui
+    dialogs/pivotmain.ui
+)
 
 SET (functions_DIR_SRCS
     functions/helper.cpp

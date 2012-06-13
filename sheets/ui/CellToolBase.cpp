@@ -102,6 +102,7 @@
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
+#include "dialogs/pivot.h"
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -715,10 +716,15 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(goalSeek()));
     action->setToolTip(i18n("Repeating calculation to find a specific value"));
 
-    action = new KAction(i18n("&Subtotals..."), this);
+    action = new KAction(i18n("&Sub totals..."), this);
     addAction("subtotals", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(subtotals()));
     action->setToolTip(i18n("Create different kind of subtotals to a list or database"));
+    
+    action = new KAction(i18n("&Pivot..."), this);
+    addAction("pivot", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(pivot()));
+    action->setToolTip(i18n("Pivot Tables"));
 
     action = new KAction(i18n("Area Name..."), this);
     addAction("setAreaName", action);
@@ -2818,6 +2824,18 @@ void CellToolBase::subtotals()
     }
 
     QPointer<SubtotalDialog> dialog = new SubtotalDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
+}
+
+void CellToolBase::pivot()
+{
+    /*if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
+        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
+        return;
+    }*/
+
+    QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget()/* ,selection()*/);
     dialog->exec();
     delete dialog;
 }
