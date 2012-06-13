@@ -34,6 +34,7 @@
 #include "kis_rotate_canvas_action.h"
 #include "kis_zoom_action.h"
 #include "kis_show_palette_action.h"
+#include "kis_change_primary_setting_action.h"
 
 class KisInputManager::Private
 {
@@ -248,6 +249,13 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, 0);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+
+    action = new KisChangePrimarySettingAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
 
     action = new KisPanAction(q);
     actions.append(action);
