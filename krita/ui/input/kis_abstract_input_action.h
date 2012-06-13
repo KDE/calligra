@@ -37,6 +37,7 @@ public:
     virtual bool handleTablet() const { return false; }
     virtual QHash<QString, int> shortcuts() const = 0;
     virtual QString name() const = 0;
+    virtual QString description() const { return QString(); }
 
 protected:
     KisInputManager * const m_inputManager;
