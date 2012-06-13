@@ -201,7 +201,11 @@ void BibliographyDatabaseWindow::clearFilters()
 
 void BibliographyDatabaseWindow::newRecord()
 {
-    new InsertCitationDialog(m_table, this);
+    if (m_table) {
+        new InsertCitationDialog(m_table, this);
+    } else {
+        QMessageBox::critical(this, i18n("Error opening bibliography database table"), i18n("Select at least one table"), QMessageBox::Ok);
+    }
 }
 
 void BibliographyDatabaseWindow::openFile()
