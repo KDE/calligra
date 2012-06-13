@@ -191,7 +191,11 @@ void BibliographyDatabaseWindow::showFilters()
 void BibliographyDatabaseWindow::clearFilters()
 {
     m_table->setFilter("");
-    qDeleteAll(m_filters->begin(), m_filters->end());
+    while(!m_filters->isEmpty()) {
+        BibDbFilter *filter = m_filters->last();
+        m_filters->removeLast();
+        delete filter;
+    }
     m_filters->clear();
 }
 
