@@ -39,12 +39,13 @@
 #include <QColor>
 #include <QByteArray>
 
+//#define USE_OFFICEARTDGG_CONTAINER
+//#define DEBUG_GHANDLER
+
 using namespace wvWare;
 using namespace MSO;
 
 using Conversion::twipsToPt;
-
-//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -956,7 +957,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1036,7 +1042,12 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1050,7 +1061,7 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     // NOTE: The default margin-left/margin-right values DO NOT make sense for
     // inline pictures, also after conversion of test files to DOCX, both
     // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
-    style.addPropertyPt("style:margin", 0);
+    style.addPropertyPt("fo:margin", 0);
 
     styleName = out.styles.insert(style);
 
@@ -1095,7 +1106,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+    DrawStyle ds(dgg, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1149,12 +1164,12 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
                 a = _v.data.mid(offset, _v.cbElem);
                 a2 = a.mid(0, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(",");
                 // y coordinate of this point
                 a2 = a.mid(_v.cbElem / 2, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(" ");
             }
             points.chop(1); //remove last space
@@ -1175,7 +1190,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1196,11 +1216,11 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
         break;
     case hAlignCenter:
         hrAlign = QString("center");
-        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0)).append("in");
+        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0), 'f').append("in");
         break;
     case hAlignRight:
         hrAlign = QString("right");
-        xPos = QString::number(base_width - (width * base_width) / 100.0).append("in");
+        xPos = QString::number(base_width - (width * base_width) / 100.0, 'f').append("in");
         break;
     }
     //process the content of HR specific properties
@@ -1221,10 +1241,10 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
 
-    QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
+    QString height = QString::number(ds.dxHeightHR() / 1440.0f, 'f').append("in");
     out.xml.addAttribute("svg:height", height);
 
-    QString width_str = QString::number(width * base_width / 100.0f).append("in");
+    QString width_str = QString::number(width * base_width / 100.0f, 'f').append("in");
     out.xml.addAttribute("svg:width", width_str);
     out.xml.addAttribute("svg:x", xPos);
 

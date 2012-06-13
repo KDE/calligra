@@ -27,8 +27,8 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
+#include <kptdebug.h>
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
 
@@ -36,7 +36,6 @@
 #include <QMap>
 #include <QApplication>
 
-extern int planDbg();
 
 static int insertProjectCmdDba() {
 #if KDE_IS_VERSION( 4, 3, 80 )
@@ -3512,16 +3511,16 @@ ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
-    m_oldvalue( locale->fracDigits() )
+    m_oldvalue( locale->monetaryDecimalPlaces() )
 {
 };
 void ModifyCurrencyFractionalDigitsCmd::execute()
 {
-    m_locale->setFracDigits( m_newvalue );
+    m_locale->setMonetaryDecimalPlaces( m_newvalue );
 }
 void ModifyCurrencyFractionalDigitsCmd::unexecute()
 {
-    m_locale->setFracDigits( m_oldvalue );
+    m_locale->setMonetaryDecimalPlaces( m_oldvalue );
 }
 
 ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )

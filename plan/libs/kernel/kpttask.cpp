@@ -30,6 +30,7 @@
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include <kptdebug.h>
 
 #include <KoXmlReader.h>
 
@@ -37,9 +38,7 @@
 #include <QBrush>
 //Added by qt3to4:
 #include <QList>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -332,12 +331,12 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             ResourceGroupRequest *r = m_requests.findGroupRequestById( e.attribute("group-id") );
             if ( r ) {
                 kWarning()<<"Multiple requests to same group, loading into existing group";
-                if ( ! r->load( e, status.project() ) ) {
+                if ( ! r->load( e, status ) ) {
                     kError()<<"Failed to load resource request";
                 }
             } else {
                 r = new ResourceGroupRequest();
-                if (r->load(e, status.project())) {
+                if (r->load(e, status)) {
                     addRequest(r);
                 } else {
                     kError()<<"Failed to load resource request";

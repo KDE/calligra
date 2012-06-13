@@ -75,6 +75,10 @@ protected:
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
 
+private:
+    int m_tabIndex;
+
+    void setTabIndexFromContextMenu(const int clickedIndex);
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
@@ -357,6 +361,7 @@ public slots:
     //! Shows Context sensitive ToolTab when changing current Object Tab
     void showTabIfNeeded();
 
+    void toggleFullScreen(bool isFullScreen);
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.

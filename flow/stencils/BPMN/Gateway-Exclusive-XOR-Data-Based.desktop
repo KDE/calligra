@@ -2,6 +2,7 @@
 Name=Gateway-Exclusive-XOR-Data-Based
 Name[ca]=Passarel·la-Exclusiu-XOR-Basat-Dades
 Name[ca@valencia]=Passarel·la-Exclusiu-XOR-Basat-Dades
+Name[el]=Πύλη-Exclusive-XOR-με-βάση-δεδομένα
 Name[es]=Puerta de enlace XOR exclusiva basada en datos
 Name[et]=Eksklusiivne (XOR) andmepõhine värav
 Name[it]=Gateway-Esclusivo-XOR-Basato-su-Dati
@@ -12,6 +13,7 @@ Name[pl]=Bramka-Alternatywy-Wykluczającej-Na-Podstawie-Danych
 Name[pt]='Gateway'-XOR-Exclusivo-Baseado-Dados
 Name[pt_BR]=Gateway XOR exclusivo baseado em dados
 Name[ru]=Оператор исключающего ИЛИ, управляемый данными
+Name[sk]=Gateway-Exclusive-XOR-Data-Based
 Name[sv]=Port-exklusiv-eller-databaserad
 Name[uk]=Шлюз виключного АБО на основі даних
 Name[x-test]=xxGateway-Exclusive-XOR-Data-Basedxx

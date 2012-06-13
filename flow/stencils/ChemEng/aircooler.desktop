@@ -1,11 +1,12 @@
 [Desktop Entry]
 Name=aircooler
-Name[ca]=refredador d'aire
+Name[ca]=refrigerador d'aire
 Name[ca@valencia]=refredador d'aire
 Name[de]=Kühlschlange
 Name[el]=aircooler
-Name[es]=refrigerador
+Name[es]=refrigerador por aire
 Name[et]=Õhujahuti
+Name[gl]=refrixerador
 Name[it]=raffreddamento-ad-aria
 Name[kk]=Ауа салқындатқышы
 Name[nb]=luftkjøler
@@ -14,6 +15,7 @@ Name[pl]=chłodnica powietrza
 Name[pt]=arrefecimento
 Name[pt_BR]=arrefecimento
 Name[ru]=Воздушный вентилятор
+Name[sk]=vzduchový chladič
 Name[sv]=luftkylare
 Name[uk]=Охолоджувач повітря
 Name[x-test]=xxaircoolerxx

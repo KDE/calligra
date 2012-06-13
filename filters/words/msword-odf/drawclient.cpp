@@ -25,7 +25,7 @@
 
 #include <QColor>
 
-#define USE_OFFICEARTDGG_CONTAINER
+//#define USE_OFFICEARTDGG_CONTAINER
 
 using namespace MSO;
 using namespace wvWare;

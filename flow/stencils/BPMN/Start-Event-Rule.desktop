@@ -2,6 +2,7 @@
 Name=Start-Event-Rule
 Name[ca]=Inicia-Esdeveniment-Regla
 Name[ca@valencia]=Inicia-Esdeveniment-Regla
+Name[el]=Κανόνας-γεγονότος-εκκίνησης
 Name[es]=Regla del evento incial
 Name[et]=Algussündmuse reegel
 Name[it]=Evento-iniziale-Regola
@@ -12,6 +13,7 @@ Name[pl]=Zasada-Zdarzenia-Rozpoczynającego
 Name[pt]=Evento-Inicial-Regra
 Name[pt_BR]=Regra do evento inicial
 Name[ru]=Начальное событие - правило
+Name[sk]=Start-Event-Rule
 Name[sv]=Starthändelse-regel
 Name[uk]=Правило початкової події
 Name[x-test]=xxStart-Event-Rulexx

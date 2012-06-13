@@ -24,7 +24,6 @@
 #include "kis_color_data_list.h"
 #include <QQueue>
 #include <QList>
-#include <QPixmap>
 #include "KoResourceServerObserver.h"
 
 class QString;
@@ -115,12 +114,13 @@ private:
     KisPaletteManager *m_favoriteBrushManager;
     KisPopupPalette* m_popupPalette;
     KisPaintopBox* m_paintopBox;
-    bool m_blockUpdates;
 
     QStringList m_favoritePresetsList;
 
     /**The list of recently used colors**/
     KisColorDataList * m_colorList;
+
+    bool m_blockUpdates;
 
     bool isFavoritePresetsFull();
     void saveFavoritePresets();

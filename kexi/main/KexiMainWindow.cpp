@@ -56,6 +56,7 @@
 #include <kdebug.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
+#include <ktogglefullscreenaction.h>
 
 #include <kglobalsettings.h>
 #include <ktip.h>
@@ -168,6 +169,7 @@ private:
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget* mainWidget)
         : KTabWidget(parent)
         , m_mainWidget(mainWidget)
+        , m_tabIndex(-1)
 {
     m_closeAction = new KAction(KIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
@@ -202,7 +204,7 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 
 void KexiMainWindowTabWidget::closeTab()
 {
-    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeCurrentWindow();
+    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
 }
 
 void KexiMainWindowTabWidget::tabInserted(int index)
@@ -216,10 +218,20 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     QMenu menu;
     menu.addAction(m_closeAction);
 //! @todo add "&Detach Tab"
+    setTabIndexFromContextMenu(index);
     menu.exec(point);
     KTabWidget::contextMenu(index, point);
 }
     
+void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
+{
+    if (currentIndex() == -1) {
+        m_tabIndex = -1;
+        return;
+    }
+    m_tabIndex = clickedIndex;
+}
+
 //-------------------------------------------------
 
 //static
@@ -332,6 +344,18 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
     connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
+    if (Kexi::startupHandler().forcedFullScreen()) {
+        toggleFullScreen(true);
+    }
+
+    // --- global config
+    //! @todo move to specialized KexiConfig class
+    KConfigGroup tablesGroup(d->config->group("Tables"));
+    const int defaultMaxLengthForTextFields = tablesGroup.readEntry("DefaultMaxLengthForTextFields", int(-1));
+    if (defaultMaxLengthForTextFields >= 0) {
+        KexiDB::Field::setDefaultMaxLength(defaultMaxLengthForTextFields);
+    }
+    // --- /global config
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -868,6 +892,17 @@ void KexiMainWindow::setupActions()
     d->action_window_previous->setWhatsThis(i18n("Switches to the previous window."));
     connect(d->action_window_previous, SIGNAL(triggered()),
             this, SLOT(activatePreviousWindow()));
+
+    d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
+    ac->addAction("full_screen", d->action_window_fullscreen);
+    QList<QKeySequence> shortcuts;
+    KShortcut *shortcut = new KShortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
+    shortcuts = shortcut->toList();
+    d->action_window_fullscreen->setShortcuts(shortcuts);
+    QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
+    connect(s, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
+    QShortcut *sa = new QShortcut(d->action_window_fullscreen->shortcut().alternate(), this);
+    connect(sa, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
 
     //SETTINGS MENU
 #ifdef __GNUC__
@@ -2624,7 +2659,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata, aFileName);
+        projectData = new KexiProjectData(cdata);
         deleteAfterOpen = true;
     }
     if (!projectData)
@@ -3423,7 +3458,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         return 0;
     }
     if (!d->prj || !item)
-        return false;
+        return 0;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
     KexiWindow *window = d->openedWindowFor(item, pendingType);
@@ -3930,7 +3965,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
                                           QDir::convertSeparators(cdata.fileName())));
             return;
         }
-        data = new KexiProjectData(cdata, cdata.fileName());
+        data = new KexiProjectData(cdata);
     } else {
         //sanity
         if (!(d->prj && d->prj->dbConnection()
@@ -4488,6 +4523,24 @@ void KexiMainWindow::showTabIfNeeded()
 KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 {
     return &d->userFeedback;
+}
+
+void KexiMainWindow::toggleFullScreen(bool isFullScreen)
+{
+    static bool isTabbarRolledDown;
+
+    if (isFullScreen) {
+        isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+        if (isTabbarRolledDown) {
+            d->tabbedToolBar->toggleRollDown();
+        }
+    } else {
+        if (isTabbarRolledDown && d->tabbedToolBar->isRolledUp()) {
+            d->tabbedToolBar->toggleRollDown();
+        }
+    }
+
+    KToggleFullScreenAction::setFullScreen(this, isFullScreen);
 }
 
 #include "KexiMainWindow.moc"

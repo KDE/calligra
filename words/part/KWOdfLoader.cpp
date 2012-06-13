@@ -46,8 +46,9 @@
 #include <KoProgressUpdater.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
+#ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
-
+#endif
 // KDE + Qt includes
 #include <QTextCursor>
 #include <KDebug>
@@ -257,7 +258,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
     if (!viewSettings.isNull()) {
-        m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        m_document->setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
     }
 
     KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");

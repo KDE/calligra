@@ -27,6 +27,7 @@ class KoStore;
 class KisDoc2;
 class KisNode;
 class KoColorSpace;
+class KisPaintingAssistant;
 
 #include <kis_types.h>
 
@@ -52,7 +53,15 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
+    vKisNodeSP selectedNodes() const;
+
+    // it's neater to follow the same design as with selectedNodes, so let's have a getter here
+    QList<KisPaintingAssistant*> assistants() const;
+
 private:
+
+    // this needs to be private, for neatness sake
+    void loadAssistants(KoStore* store, const QString & uri, bool external);
 
     KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
 
@@ -76,7 +85,9 @@ private:
 
     KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
+    void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
+    void loadAssistantsList(const KoXmlElement& elem);
 private:
 
     struct Private;

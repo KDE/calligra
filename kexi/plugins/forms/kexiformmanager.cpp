@@ -260,6 +260,10 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef CAN_USE_MARBLE
             << "library_widget_MapBrowserWidget"
 #endif
+            << "library_widget_KexiDBSlider"
+            << "library_widget_KexiDBProgressBar"
+            << "library_widget_KexiDBCommandLinkButton"
+            << "library_widget_KexiDBDatePicker"
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();

@@ -40,7 +40,6 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
 
 #include <netinet/in.h> // htonl
@@ -90,7 +89,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     : KisBrush(filename)
     , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -103,7 +101,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
                              : KisBrush(filename)
                              , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -119,7 +116,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisBrush()
     , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -138,7 +134,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 
     setImage(image);
     setName(name);
-    setBrushType(IMAGE);
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
@@ -254,7 +249,6 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setBrushType(MASK);
         setHasColor(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -272,7 +266,6 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setBrushType(IMAGE);
         setHasColor(true);
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -308,7 +301,6 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setImage(image->convertToQImage(0, x, y, w, h));
     setName(image->objectName());
 
-    setBrushType(IMAGE);
     setHasColor(true);
 
     return true;
@@ -407,13 +399,14 @@ QImage KisGbrBrush::image() const
 
 enumBrushType KisGbrBrush::brushType() const
 {
-    if (KisBrush::brushType() == IMAGE && useColorAsMask()) {
-        return MASK;
-    } else {
-        return KisBrush::brushType();
-    }
+    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
 }
 
+void KisGbrBrush::setBrushType(enumBrushType type)
+{
+    Q_UNUSED(type);
+    qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
+}
 
 void KisGbrBrush::setImage(const QImage& image)
 {
@@ -467,7 +460,6 @@ void KisGbrBrush::makeMaskImage()
         setImage(image);
     }
     
-    setBrushType(MASK);
     setHasColor(false);
     setUseColorAsMask(false);
     resetBoundary();

@@ -30,7 +30,8 @@
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
-
+#include <QDir>
+#include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -129,7 +130,6 @@ public:
 
             QString fname = QFileInfo(front).fileName();
 
-            //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
@@ -140,15 +140,15 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
-
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isNull() ) {
+                        if ( resource->name().isEmpty() ) {
                             resource->setName( fname );
                         }
+                        if (m_resourcesByName.contains(resource->name())) {
+                            resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
+                        }
                         m_resourcesByName[resource->name()] = resource;
-                        m_resources.append(resource);
-
                         notifyResourceAdded(resource);
                     }
                     else {
@@ -158,12 +158,19 @@ public:
                 m_loadLock.unlock();
             }
         }
+
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        m_resources = sortedNames.values();
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 
 
     /// Adds an already loaded resource to the server
-    bool addResource(T* resource, bool save = true) {
+    bool addResource(T* resource, bool save = true, bool infront = false) {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
@@ -195,7 +202,12 @@ public:
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
         m_resourcesByName[resource->name()] = resource;
-        m_resources.append(resource);
+        if (infront) {
+            m_resources.insert(0, resource);
+        }
+        else {
+            m_resources.append(resource);
+        }
 
         notifyResourceAdded(resource);
 
@@ -253,7 +265,7 @@ public:
     }
 
     /**
-     * Creates a new resourcea from a given file and adds them to the resource server
+     * Creates a new resource from a given file and adds them to the resource server
      * The base implementation does only load one resource per file, override to implement collections
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
@@ -476,7 +488,7 @@ protected:
               QDomNode n = file.firstChild();
               QDomElement e = n.toElement();
               if (e.tagName() == "name") {
-                  filenameList.append(e.text());
+                  filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
               }
              file = file.nextSiblingElement("file");
         }
@@ -519,7 +531,7 @@ protected:
 
        QDomElement fileEl = doc.createElement("file");
        QDomElement nameEl = doc.createElement("name");
-       QDomText nameText = doc.createTextNode(fileName);
+       QDomText nameText = doc.createTextNode(fileName.replace(QDir::homePath(),QString("~")));
        nameEl.appendChild(nameText);
        fileEl.appendChild(nameEl);
        root.appendChild(fileEl);

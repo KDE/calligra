@@ -32,7 +32,6 @@
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 #include <QVector>
@@ -47,7 +46,6 @@
 #include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"

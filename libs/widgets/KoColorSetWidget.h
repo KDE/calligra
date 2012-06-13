@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
    Copyright (c) 2007 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -83,7 +83,6 @@ signals:
 
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
-    Q_PRIVATE_SLOT(d, void filter(int))
     Q_PRIVATE_SLOT(d, void addRemoveColors())
 
     class KoColorSetWidgetPrivate;

@@ -81,6 +81,7 @@
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
 #include <kis_undo_stores.h>
+#include <kis_painting_assistants_manager.h>
 
 // Local
 #include "kis_factory2.h"
@@ -96,6 +97,7 @@
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
+#include "kis_node_manager.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -129,6 +131,7 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
 
     KisKraLoader* kraLoader;
@@ -137,11 +140,13 @@ public:
     QString error;
     bool dieOnError;
 
+    QList<KisPaintingAssistant*> assistants;
+
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
+KisDoc2::KisDoc2(QObject *parent)
+    : KoDocument(parent, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);
@@ -315,6 +320,14 @@ bool KisDoc2::completeLoading(KoStore *store)
 
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
+    vKisNodeSP preselectedNodes = m_d->kraLoader->selectedNodes();
+    if (preselectedNodes.size() > 0) {
+        m_d->preActivatedNode = preselectedNodes.first();
+    }
+
+    // before deleting the kraloader, get the list with preloaded assistants and save it
+    m_d->assistants = m_d->kraLoader->assistants();
+
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
@@ -372,6 +385,8 @@ bool KisDoc2::newImage(const QString& name,
                        const KoColorSpace* cs, const KoColor &bgColor,
                        const QString &description, const double imageResolution)
 {
+    Q_ASSERT(cs);
+
     if (!init())
         return false;
 
@@ -389,6 +404,7 @@ bool KisDoc2::newImage(const QString& name,
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
     image->setResolution(imageResolution, imageResolution);
+
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);
@@ -414,9 +430,8 @@ bool KisDoc2::newImage(const QString& name,
 KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 * v = new KisView2(this, parent);
+    KisView2 *v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
-
     m_d->shapeController->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
@@ -480,7 +495,6 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        //image.save("thumb.png");
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);
@@ -494,6 +508,52 @@ KoShapeBasedDocumentBase * KisDoc2::shapeController() const
 KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 {
     return m_d->shapeController->shapeForNode(layer);
+}
+
+vKisNodeSP KisDoc2::activeNodes() const
+{
+    vKisNodeSP nodes;
+    foreach(KoView *v, views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisNodeSP activeNode = view->activeNode();
+            if (!nodes.contains(activeNode)) {
+                if (activeNode->inherits("KisMask")) {
+                    activeNode = activeNode->parent();
+                }
+                nodes.append(activeNode);
+            }
+        }
+    }
+    return nodes;
+}
+
+QList<KisPaintingAssistant*> KisDoc2::assistants()
+{
+    QList<KisPaintingAssistant*> assistants;
+    foreach(KoView *v, views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();
+            assistants.append(assistantsmanager->assistants());
+        }
+    }
+    return assistants;
+}
+
+QList<KisPaintingAssistant *> KisDoc2::preLoadedAssistants()
+{
+    return m_d->assistants;
+}
+
+void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)
+{
+    m_d->preActivatedNode = activatedNode;
+}
+
+KisNodeSP KisDoc2::preActivatedNode() const
+{
+    return m_d->preActivatedNode;
 }
 
 void KisDoc2::prepareForImport()

@@ -18,6 +18,7 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
+#include "MsooXmlThemesReader.h"
 
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
@@ -35,8 +36,6 @@
 #include <KoXmlWriter.h>
 
 #include <QString>
-
-#define MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 using namespace MSOOXML;
 
@@ -991,11 +990,5 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
     READ_EPILOGUE
 }
 
-#define blipFill_NS "a"
+#include "MsooXmlDrawingMLSharedImpl.h"
 
-#include <MsooXmlCommonReaderImpl.h>
-
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-
-#include <MsooXmlCommonReaderDrawingMLImpl.h>

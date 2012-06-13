@@ -46,9 +46,7 @@ IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDES} )
-
-add_subdirectory( libexport )
+include_directories(${KOMAIN_INCLUDES} )
 
 IF( NOT TINY )
     macro_optional_find_package(WPD)
@@ -58,6 +56,7 @@ IF( NOT TINY )
     macro_optional_find_package(LibWPS)
     macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
 
+    add_subdirectory( applixword )
     add_subdirectory( html-odf )
     if(WPD_FOUND AND WPG_FOUND)
         add_subdirectory( wordperfect )
@@ -65,25 +64,6 @@ IF( NOT TINY )
     if(WPD_FOUND AND LIBWPS_FOUND)
         add_subdirectory( works )
     endif(WPD_FOUND AND LIBWPS_FOUND)
-
-    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
-#        if (TARGET kowmf)
-#            add_subdirectory( mswrite )
-#        endif (TARGET kowmf)
-        add_subdirectory( amipro )
-        add_subdirectory( applixword )
-        add_subdirectory( docbook )
-#	    add_subdirectory( html )
-	    add_subdirectory( kword1.3 )
-	    add_subdirectory( hancomword )
-	    add_subdirectory( oowriter )
-        add_subdirectory( palmdoc )
-	    add_subdirectory( wml )
-        add_subdirectory( abiword )
-	    #add_subdirectory( latex )
-    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA AND QT3SUPPORT)
-
-    
 ENDIF( NOT TINY )
 
 add_subdirectory( ascii )

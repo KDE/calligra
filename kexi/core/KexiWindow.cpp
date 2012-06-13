@@ -257,7 +257,7 @@ void KexiWindow::createSubwidgets()
     */
     /*TODO
     // "data_execute"
-      a = new KAction(KIcon("media-playback-start"), i18n("&Execute"), this);
+      a = new KAction(KIcon("system-run"), i18n("&Execute"), this);
       //a->setToolTip(i18n("")); //TODO
       //a->setWhatsThis(i18n("")); //TODO */
 

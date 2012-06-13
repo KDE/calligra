@@ -244,7 +244,7 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
     connect(newItemPath, SIGNAL(clicked()), this, SLOT(newItemByPath()));
 
     QToolButton *newItemName = new QToolButton(frame);
-    newItemName->setIconSet(KIcon("icons"));
+    newItemName->setIconSet(KIcon("list-add"));
     newItemName->setTextLabel(i18n("&Add an Icon"), true);
     vlayout->addWidget(newItemName);
     m_buttons.insert(BNewItemName, newItemName);

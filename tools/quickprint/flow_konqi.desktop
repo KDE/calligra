@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-flow
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/vnd.oasis.opendocument.graphics
 Type=Service
 Actions=Print;
 
@@ -66,5 +66,5 @@ Name[wa]=Imprimer...
 Name[x-test]=xxPrint...xx
 Name[zh_CN]=打印...
 Name[zh_TW]=列印...
-Exec=flow --print %U
+Exec=calligraflow --print %U
 Icon=filequickprint

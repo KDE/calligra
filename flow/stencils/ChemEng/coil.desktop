@@ -2,6 +2,7 @@
 Name=coil
 Name[ca]=resistència
 Name[ca@valencia]=resistència
+Name[el]=coil
 Name[es]=bobina
 Name[et]=Spiraaltoru
 Name[it]=serpentina
@@ -12,6 +13,7 @@ Name[pl]=coil
 Name[pt]=serpentina
 Name[pt_BR]=serpentina
 Name[ru]=Спираль
+Name[sk]=cievka
 Name[sv]=spole
 Name[uk]=Нагрівальний або охолоджувальний змійовик
 Name[x-test]=xxcoilxx

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
   Copyright (C) 2002 - 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -123,14 +124,13 @@
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
 #include "kptschedulesdocker.h"
+#include "kptdebug.h"
 
 #include "plansettings.h"
 
 // #include "KPtViewAdaptor.h"
 
 #include <assert.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -231,7 +231,7 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( part->isEmbedded() || shell() == 0 ) {
+    if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
@@ -2769,6 +2769,11 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 QWidget *View::canvas() const
 {
     return m_tab->currentWidget();//KoView::canvas();
+}
+
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
 }
 
 void View::slotCurrentChanged( int )

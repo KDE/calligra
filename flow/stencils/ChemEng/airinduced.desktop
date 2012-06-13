@@ -2,6 +2,7 @@
 Name=airinduced
 Name[ca]=induït per aire
 Name[ca@valencia]=induït per aire
+Name[el]=airinduced
 Name[es]=aire inducido
 Name[et]=Väljatõmme
 Name[it]=aria-indotta
@@ -12,6 +13,7 @@ Name[pl]=zaindukowane powietrzem
 Name[pt]=ar-induzido
 Name[pt_BR]=ar induzido
 Name[ru]=Воздушный вентилятор с принудительным отводом
+Name[sk]=airinduced
 Name[sv]=självdrag
 Name[uk]=Охолоджувач з примусовим затягуванням повітря
 Name[x-test]=xxairinducedxx

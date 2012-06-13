@@ -49,7 +49,6 @@
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
 #include "commands/kis_image_commands.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
@@ -77,6 +76,7 @@
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "kis_composite_progress_proxy.h"
+#include "kis_layer_composition.h"
 
 
 // #define SANITY_CHECKS
@@ -112,6 +112,7 @@ public:
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
+    QList<KisLayerComposition*> compositions;
 
     KisNameServer *nserver;
 
@@ -714,6 +715,9 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
 
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
+
+    Q_ASSERT(dstCs);
+    Q_ASSERT(srcCs);
 
     m_d->colorSpace = dstCs;
 
@@ -1421,6 +1425,22 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
     if (m_d->scheduler) {
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
+}
+
+QList<KisLayerComposition*> KisImage::compositions()
+{
+    return m_d->compositions;
+}
+
+void KisImage::addComposition(KisLayerComposition* composition)
+{
+    m_d->compositions.append(composition);
+}
+
+void KisImage::removeComposition(KisLayerComposition* composition)
+{
+    m_d->compositions.removeAll(composition);
+    delete composition;
 }
 
 #include "kis_image.moc"

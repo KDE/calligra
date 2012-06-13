@@ -37,11 +37,10 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_boundary.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
 #include "kis_scaled_brush.h"
 #include "kis_qimage_mask.h"
-
+#include "kis_iterator_ng.h"
 #include "kis_brush_registry.h"
 
 const static int MAXIMUM_MIPMAP_SCALE = 10;
@@ -72,13 +71,14 @@ void KisBrush::PlainColoringInformation::nextRow()
 {
 }
 
-KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width) : m_source(source), m_iterator(new KisHLineConstIteratorPixel(m_source->createHLineConstIterator(0, 0, width)))
+KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width)
+    : m_source(source)
+    , m_iterator(m_source->createHLineConstIteratorNG(0, 0, width))
 {
 }
 
 KisBrush::PaintDeviceColoringInformation::~PaintDeviceColoringInformation()
 {
-    delete m_iterator;
 }
 
 const quint8* KisBrush::PaintDeviceColoringInformation::color() const
@@ -88,7 +88,7 @@ const quint8* KisBrush::PaintDeviceColoringInformation::color() const
 
 void KisBrush::PaintDeviceColoringInformation::nextColumn()
 {
-    ++(*m_iterator);
+    m_iterator->nextPixel();
 }
 void KisBrush::PaintDeviceColoringInformation::nextRow()
 {
@@ -97,20 +97,31 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-    Private() : boundary(0), angle(0), scale(1.0) {}
+    Private()
+        : boundary(0)
+        , angle(0)
+        , scale(1.0)
+        , hasColor(false)
+	, brushType(INVALID)
+    {}
+
     ~Private() {
         delete boundary;
     }
+
+    mutable KisBoundary* boundary;
+    qreal angle;
+    qreal scale;
+    bool hasColor;
     enumBrushType brushType;
+
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
     mutable QVector<KisScaledBrush> scaledBrushes;
-    bool hasColor;
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
+
+
 };
 
 KisBrush::KisBrush()
@@ -400,8 +411,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     KisQImagemaskSP outputMask = createMask(scale, subPixelX, subPixelY);
 
-    if (angle != 0)
-    {
+    if (angle != 0) {
         outputMask->rotation(angle);
     }
 
@@ -409,14 +419,27 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     qint32 maskHeight = outputMask->height();
 
     if (coloringInformation || dst->data() == 0 || dst->bounds().isEmpty()) {
-        // new bounds. we don't care if there is some extra memory occcupied.
+        // Lazy initialization
         dst->setRect(QRect(0, 0, maskWidth, maskHeight));
         dst->initialize();
     }
 
+    {
+        QSize dabSize = dst->bounds().size();
+        if (dabSize.width() != maskWidth || dabSize.height() != maskHeight) {
+            qWarning() << "WARNING: KisBrush::generateMaskAndApplyMaskOrCreateDab";
+            qWarning() << "         the sizes of the mask and the supplied dab are not"
+                       << "equal. We shall workaround it now, but please report a bug.";
+            qWarning() << "        " << ppVar(maskWidth) << ppVar(maskHeight);
+            qWarning() << "        " << ppVar(dabSize);
+
+            dst->setRect(QRect(0, 0, maskWidth, maskHeight));
+            dst->initialize();
+        }
+    }
+
     Q_ASSERT(dst->bounds().size().width() >= maskWidth && dst->bounds().size().height() >= maskHeight);
 
-    quint8* dabPointer = dst->data();
     quint8* color = 0;
 
     if (coloringInformation) {
@@ -425,33 +448,29 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         }
     }
 
-    int rowWidth = dst->bounds().width();
-
+    quint8* dabPointer = dst->data();
     quint8* rowPointer = dabPointer;
+    int rowWidth = dst->bounds().width();
 
     for (int y = 0; y < maskHeight; y++) {
         quint8* maskPointer = outputMask->scanline(y);
-        for (int x = 0; x < maskWidth; x++) {
-            if (coloringInformation) {
+        if (coloringInformation) {
+            for (int x = 0; x < maskWidth; x++) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
                 } else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
+                dabPointer += pixelSize;
             }
-
-            dabPointer += pixelSize;
         }
         cs->applyAlphaU8Mask(rowPointer, maskPointer, maskWidth);
-        maskPointer += maskWidth;
-        rowPointer += maskWidth * pixelSize;
+        rowPointer += rowWidth * pixelSize;
+        dabPointer = rowPointer;
 
         if (!color && coloringInformation) {
             coloringInformation->nextRow();
-        }
-        if (maskWidth < rowWidth) {
-            dabPointer += (pixelSize * (rowWidth - maskWidth));
         }
     }
 }
@@ -572,7 +591,7 @@ void KisBrush::createScaledBrushes() const
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
     // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
-    // will not get scaled up anymore or the memory consumption gets to height
+    // will not get scaled up anymore or the memory consumption gets too high
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);
     int width  = ceil((double)(image().width()  * scale));

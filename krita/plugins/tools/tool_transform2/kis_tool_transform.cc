@@ -2,7 +2,7 @@
  *  kis_tool_transform.cc -- part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,7 @@
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
-        , m_canvas(canvas)
+         , m_canvas(canvas), m_isActive(false)
 {
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
@@ -706,7 +706,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
         }
     }
     else {
-        if (modifiers & Qt::MetaModifier) {
+        if (modifiers & Qt::AltModifier) {
             m_function = PERSPECTIVE;
             setFunctionalCursor();
             return;
@@ -829,7 +829,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
     if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::MetaModifier)) {
+                       Qt::LeftButton, Qt::AltModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -930,6 +930,14 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 
     setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     KisTool::keyReleaseEvent(event);
+}
+
+void KisToolTransform::resourceChanged(int key, const QVariant& res)
+{
+    KisTool::resourceChanged(key, res);
+    if(m_isActive && key == KisCanvasResourceProvider::CurrentKritaNode) {
+        initTransform(m_currentArgs.mode());
+    }
 }
 
 /* A sort of gradient descent method is used to find the correct scale
@@ -1978,7 +1986,12 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 }
     else if (dev) {
         // we take all of the paintDevice
-        dev->exactBounds(x, y, w, h);
+	QRect rc;
+	rc = dev->exactBounds();
+	x = rc.x();
+	y = rc.y();
+	w = rc.width();
+	h = rc.height();
         m_origSelection = 0;
     }
     else {
@@ -2092,6 +2105,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     else {
         updateOptionWidget();
     }
+    m_isActive = true;
 }
 
 void KisToolTransform::deactivate()
@@ -2110,6 +2124,7 @@ void KisToolTransform::deactivate()
     }
 
     KisTool::deactivate();
+    m_isActive = false;
 }
 
 void KisToolTransform::transform()

@@ -41,6 +41,14 @@
 #undef KexiDBDrvDbg
 #define KexiDBDrvDbg if (0) kDebug()
 
+#if defined(Q_OS_WIN)
+#define SHARED_LIB_EXTENSION ".dll"
+#elif defined(Q_OS_MAC)
+#define SHARED_LIB_EXTENSION ".dylib"
+#else
+#define SHARED_LIB_EXTENSION ".so"
+#endif
+
 using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal(Connection *connection)
@@ -211,7 +219,7 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
         }
         // Load ICU extension for unicode collations
         QString icuExtensionFilename(
-            KStandardDirs::locate("module", QLatin1String("kexidb_sqlite3_icu.so")));
+            KStandardDirs::locate("module", QLatin1String("kexidb_sqlite3_icu" SHARED_LIB_EXTENSION)));
         if (!loadExtension(icuExtensionFilename)) {
             drv_closeDatabaseSilently();
             return false;
@@ -439,7 +447,7 @@ bool SQLiteConnection::loadExtension(const QString& path)
         d->setExtensionsLoadingEnabled(false);
     }
     if (!ok) {
-        kWarning() << "Could not load SQLite extension" << path;
+        kWarning() << "Could not load SQLite extension" << path << ":" << d->errmsg_p;
     }
     return ok;
 }

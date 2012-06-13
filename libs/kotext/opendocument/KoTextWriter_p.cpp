@@ -193,6 +193,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
+            if (automatic && context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+                style.setAutoStyleInStylesDotXml(true);
             listStyle->saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
             listStyles[textList] = generatedName;
@@ -202,6 +204,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             KoListLevelProperties llp = KoListLevelProperties::fromTextList(textList);
             KoGenStyle style(KoGenStyle::ListAutoStyle);
+            if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+                style.setAutoStyleInStylesDotXml(true);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
             if (listStyle.isOulineStyle()) {
@@ -1406,6 +1410,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 paraTagInformation.addAttribute("text:level", numberedParagraphLevel);
                 paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
 
+                QString listId = numberedParagraphListIds.value(list, QString("list-%1").arg(createXmlId()));
+                numberedParagraphListIds.insert(list, listId);
+                paraTagInformation.addAttribute("text:list-id", listId);
+
                 int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                 closeTagRegion(changeId);
@@ -1454,8 +1462,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    while (KoList::level(block) >= (level + 1)) {
+                    while (KoList::level(block) >= (level + 1) && !(headingLevel || numberedParagraphLevel)) {
                         block = saveList(block, listStyles, level + 1, currentTable);
+
+                        blockFormat = block.blockFormat();
+                        headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+                        numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
                     }
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.

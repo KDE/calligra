@@ -329,7 +329,14 @@ public:
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
-    QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
+    QString defineDashStyle(KoGenStyles& styles, const quint32 lineDashing);
+
+    /**
+     * Define and insert standard marker style into styles collection.
+     * @return the name that has been assigned for the inserted style
+     * or an empty string in case of an unsupported arrowType.
+     */
+    QString defineMarkerStyle(KoGenStyles& styles, const quint32 arrowType);
 
     /**
      * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
@@ -360,5 +367,7 @@ const char* getVerticalPos(quint32 posV);
 const char* getVerticalRel(quint32 posRelV);
 const char* getHorizontalAlign(quint32 anchorText);
 const char* getVerticalAlign(quint32 anchorText);
+const char* getStrokeLineCap(quint32 capStyle);
+const char* getStrokeLineJoin(quint32 joinStyle);
 
 #endif

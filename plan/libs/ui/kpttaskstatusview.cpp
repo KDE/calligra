@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kpteffortcostmap.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -71,7 +72,6 @@
 #include "KDChartBackgroundAttributes"
 #include "KDChartGridAttributes"
 
-extern int planDbg();
 
 using namespace KDChart;
 
@@ -337,6 +337,7 @@ void TaskStatusView::slotOptions()
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
 
     m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
@@ -347,6 +348,7 @@ bool TaskStatusView::loadContext( const KoXmlElement &context )
 
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "period", m_view->period() );
     context.setAttribute( "periodtype", m_view->periodType() );
     context.setAttribute( "weekday", m_view->weekday() );
@@ -483,11 +485,13 @@ void ProjectStatusView::slotOptions()
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void ProjectStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 
@@ -1222,11 +1226,13 @@ void PerformanceStatusView::slotOptions()
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void PerformanceStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 

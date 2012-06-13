@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,19 +15,18 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "kptviewlistdialog.h"
 #include "kptviewlist.h"
 #include "kptview.h"
 #include "reports/reportview.h"
+#include <kptdebug.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {

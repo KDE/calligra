@@ -20,26 +20,28 @@
 #include "KarbonOutlinePaintingStrategy.h"
 #include <KoShapeManager.h>
 #include <KoShape.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
-class OutlineStroke : public KoLineBorder {
+class OutlineStroke : public KoShapeStroke {
 public:
     OutlineStroke()
-            : m_pen(Qt::black) {
+        : m_pen(Qt::black) {
     }
 
-    using KoLineBorder::paint;
+    using KoShapeStroke::paint;
 
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+    {
         KoShape::applyConversion(painter, converter);
         painter.strokePath(shape->outline(), m_pen);
     }
+
 private:
     QPen m_pen;
 };
 
 KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy(KoShapeManager * shapeManager)
-        : KoShapeManagerPaintingStrategy(shapeManager), m_border(new OutlineStroke())
+    : KoShapeManagerPaintingStrategy(shapeManager), m_stroke(new OutlineStroke())
 {
     Q_ASSERT(shapeManager);
     shapeManager->setPaintingStrategy(this);
@@ -47,7 +49,7 @@ KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy(KoShapeManager * sh
 
 KarbonOutlinePaintingStrategy::~KarbonOutlinePaintingStrategy()
 {
-    delete m_border;
+    delete m_stroke;
 }
 
 void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintContext*/)
@@ -55,7 +57,7 @@ void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, co
     painter.save();
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
-    m_border->paint(shape, painter, converter);
+    m_stroke->paint(shape, painter, converter);
 
     painter.restore();
 }

@@ -2,6 +2,7 @@
 Name=expended node
 Name[ca]=node expandit
 Name[ca@valencia]=node expandit
+Name[el]=expended node
 Name[es]=Nodo expandido
 Name[et]=Avatud sõlm
 Name[it]=nodo espanso
@@ -12,6 +13,7 @@ Name[pl]=poświęcony węzeł
 Name[pt]=nó expandido
 Name[pt_BR]=nó expandido
 Name[ru]=расширенный узел
+Name[sk]=vynaložený uzol
 Name[sv]=expanderad nod
 Name[uk]=Розширений вузол
 Name[x-test]=xxexpended nodexx

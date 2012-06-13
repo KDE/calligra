@@ -98,6 +98,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_flattenLayer(0)
         , m_rasterizeLayer(0)
         , m_duplicateLayer(0)
+        , m_addPaintLayer(0)
         , m_activeLayer(0)
         , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -164,6 +165,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_duplicateLayer->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
     actionCollection->addAction("duplicatelayer", m_duplicateLayer);
     connect(m_duplicateLayer, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
+
+    m_addPaintLayer = new KAction(i18n("Add new paint layer"), this);
+    m_addPaintLayer->setShortcut(KShortcut(Qt::Key_Insert));
+    actionCollection->addAction("add_new_paint_layer", m_addPaintLayer);
+    connect(m_addPaintLayer, SIGNAL(triggered()), this, SLOT(layerAdd()));
 }
 
 void KisLayerManager::addAction(QAction * action)
@@ -279,7 +285,7 @@ void KisLayerManager::layerProperties()
             }
 
         }
-    } else { // If layer == normal painting layer, shape layer, or group layer
+    } else { // If layer == normal painting layer, vector layer, or group layer
         KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);

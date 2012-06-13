@@ -33,7 +33,6 @@
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -58,12 +57,10 @@
 
 #include "kis_pixel_selection.h"
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
-#include "kis_iterator.h"
 #include "KoColor.h"
 #include "kis_selection.h"
-#include "kis_random_accessor_ng.h"
 
 KisFillPainter::KisFillPainter()
         : KisPainter()

@@ -912,6 +912,27 @@ PptToOdp::doConversion(KoStore* storeout)
     // store document styles
     styles.saveOdfStylesDotXml(storeout, manifest);
 
+    if (!storeout->open("meta.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-meta xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    if (!storeout->open("settings.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    storeout->close();
+    manifest->addManifestEntry("settings.xml", "text/xml");
+    manifest->addManifestEntry("meta.xml", "text/xml");
+
     odfWriter.closeManifestWriter();
 
     delete p;
@@ -1211,7 +1232,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
-    style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    if (cf.fontSize() > 0) {
+        style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    }
     // fo:font-style: "italic", "normal" or "oblique
     style.addProperty("fo:font-style", cf.italic() ?"italic" :"normal", text);
     // fo:font-variant: "normal" or "small-caps"
@@ -1232,7 +1255,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:country-complex
     // style:font-charset
     if (isSymbolFont) {
-        style.addProperty("fo:font-charset", "x-symbol", text);
+        style.addProperty("style:font-charset", "x-symbol", text);
     }
     // style:font-family-asian
     // style:font-family-complex
@@ -1625,6 +1648,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
+        out.addAttribute("xlink:type", "simple");
     }
     else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
@@ -1972,24 +1996,6 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
     }
 } //end defineAutomaticDrawingPageStyles()
 
-/**
- * Define the standard arrows used in PPT files.
- */
-void defineArrow(KoGenStyles& styles)
-{
-    KoGenStyle marker(KoGenStyle::MarkerStyle);
-    marker.addAttribute("draw:display-name", "msArrowEnd 5");
-    marker.addAttribute("svg:viewBox", "0 0 210 210");
-    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
-    styles.insert(marker, "msArrowEnd_20_5", KoGenStyles::DontAddNumberToName);
-    // TODO: define proper styles for these arrows
-    KoGenStyles::InsertionFlags flags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
-    styles.insert(marker, "msArrowStealthEnd_20_5", flags);
-    styles.insert(marker, "msArrowDiamondEnd_20_5", flags);
-    styles.insert(marker, "msArrowOvalEnd_20_5", flags);
-    styles.insert(marker, "msArrowOpenEnd_20_5", flags);
-}
-
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function follows the flow of the styles.xml file.
@@ -2016,9 +2022,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // draw:fill-image
     FillImageCollector fillImageCollector(styles, *this);
     collectGlobalObjects(fillImageCollector, *p);
-    // draw:marker
-    defineArrow(styles);
-    // draw:stroke-dash
+    // draw:marker (libmso)
+    // TODO: draw:stroke-dash
 //     StrokeDashCollector strokeDashCollector(styles, *this);
 //     collectGlobalObjects(strokeDashCollector, *p);
     // TODO: draw:opacity
@@ -2028,13 +2033,14 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     */
     // TODO:
 
-    /*
-       Define default styles for some of the 12 style families.
-       No default styles for the families 'text' and 'paragraph'
-       are defined, since these have higher precedence than the text and
-       paragraph settings for the other style families that may contain text and
-       paragraph settings, like 'graphic' and 'presentation'.
-    */
+
+    // Define default styles for some of the 12 style families.  No
+    // default styles for the families 'text' and 'paragraph' are
+    // defined, since these have higher precedence than the text and
+    // paragraph settings for the other style families that may
+    // contain text and paragraph settings, like 'graphic' and
+    // 'presentation'.
+
     //defineDefaultTextStyle(styles);
     //defineDefaultParagraphStyle(styles);
     defineDefaultSectionStyle(styles);
@@ -2050,10 +2056,11 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         (m_filter->*m_setProgress)(55);
     }
 
-    // NOTE: kpresenter specific: default graphic style and drawing-page style
-    // have higher precedence than those defined by the corresponding
-    // <master-page> element.  This is the case when the presentation slide
-    // inherits background objects from the master slide.
+    // NOTE: kpresenter specific: default graphic style and
+    // drawing-page style have higher precedence than those defined by
+    // the corresponding <master-page> element.  This is the case when
+    // the presentation slide inherits background objects from the
+    // master slide.
 
 //     defineDefaultGraphicStyle(styles);
 //     defineDefaultDrawingPageStyle(styles);
@@ -2211,7 +2218,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
     contentWriter.addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     contentWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    contentWriter.addAttribute("office:version", "1.0");
+    contentWriter.addAttribute("office:version", "1.2");
 
     // office:automatic-styles
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
@@ -2505,10 +2512,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     const MouseOverTextInfo* mouseover = 0;
     for (int i = 0; i < tc->interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc->interactive[i];
-        const MouseClickTextInfo* a =
-                ti.interactive.get<MouseClickTextInfo>();
-        const MouseOverTextInfo* b =
-                ti.interactive.get<MouseOverTextInfo>();
+        const MouseClickTextInfo *a = ti.interactive.get<MouseClickTextInfo>();
+        const MouseOverTextInfo *b = ti.interactive.get<MouseOverTextInfo>();
         if (a && start >= a->text.range.begin && start < a->text.range.end) {
             mouseclick = a;
         }
@@ -2542,27 +2547,44 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     out.xml.startElement("text:span", false);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
+    // [MS-PPT]: exHyperlinkIdRef must be ignored unless action is in
+    // {II_JumpAction, II_HyperlinkAction, II_CustomShowAction (0x7)}
+    //
+    // NOTE: Jumps to other slides and shows not supported atm.
     if (mouseclick) {
-        // The [MS-PPT] spec. states that exHyperlinkIdRef must be
-        // ignored unless action is equal to II_JumpAction (0x3),
-        // II_HyperlinkAction (0x4), or II_CustomShowAction (0x7).
+        const InteractiveInfoAtom *info = &mouseclick->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseclick = 0;
+        }
+    }
+    if (mouseover) {
+        const InteractiveInfoAtom *info = &mouseover->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseover = 0;
+        }
+    }
 
+    if (mouseclick) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else if (mouseover) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else {
         // count - specifies the number of characters of the

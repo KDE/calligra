@@ -27,7 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <klocale.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory()
@@ -37,12 +37,13 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
     setIcon("x-shape-connection");
     setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
+    setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create
 }
 
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setBorder(new KoLineBorder());
+    shape->setStroke(new KoShapeStroke());
     shape->setShapeId(KoPathShapeId);
     return shape;
 }

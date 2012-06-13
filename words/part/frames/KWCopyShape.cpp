@@ -25,7 +25,7 @@
 #include "KWTextFrameSet.h"
 #include "KWRootAreaProvider.h"
 
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
@@ -107,10 +107,10 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
                 }
             }
             painter.restore();
-            if (shape->border()) {
+            if (shape->stroke()) {
                 painter.save();
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-                shape->border()->paint(shape, painter, converter);
+                shape->stroke()->paint(shape, painter, converter);
                 painter.restore();
             }
         }
@@ -119,8 +119,8 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
         painter.save();
         m_original->paint(painter, converter, paintcontext);
         painter.restore();
-        if (m_original->border()) {
-            m_original->border()->paint(m_original, painter, converter);
+        if (m_original->stroke()) {
+            m_original->stroke()->paint(m_original, painter, converter);
         }
     }
 }

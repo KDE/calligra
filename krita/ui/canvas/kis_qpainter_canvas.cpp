@@ -30,7 +30,6 @@
 #include <QString>
 #include <QTime>
 #include <QTimer>
-#include <QPixmap>
 #include <QApplication>
 #include <QMenu>
 
@@ -66,10 +65,13 @@
 class KisQPainterCanvas::Private
 {
 public:
-    Private() {}
+    Private()
+        : smooth(true)
+    {}
 
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
+    bool smooth;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
@@ -96,6 +98,11 @@ KisQPainterCanvas::~KisQPainterCanvas()
 void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection)
 {
     m_d->prescaledProjection = prescaledProjection;
+}
+
+void KisQPainterCanvas::setSmoothingEnabled(bool smooth)
+{
+    m_d->smooth = smooth;
 }
 
 void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
@@ -137,6 +144,10 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.drawPolygon(polygon);
 
     gc.setTransform(imageTransform);
+    if (m_d->smooth) {
+        gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    }
+
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -192,11 +203,13 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
 {
+    m_d->smooth = false;
     processMousePressEvent(e);
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
+    m_d->smooth = true;
     processMouseReleaseEvent(e);
 }
 
