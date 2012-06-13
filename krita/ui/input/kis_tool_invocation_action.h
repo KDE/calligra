@@ -34,6 +34,7 @@ public:
     virtual bool handleTablet() const;
     virtual QHash< QString, int > shortcuts() const;
     virtual QString name() const;
+    virtual QString description() const;
 
 private:
     bool m_tablet;

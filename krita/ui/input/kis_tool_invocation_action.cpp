@@ -83,6 +83,11 @@ QString KisToolInvocationAction::name() const
     return i18n("Tool Invocation");
 }
 
+QString KisToolInvocationAction::description() const
+{
+    return i18n("Tool Invocation invokes the current tool, for example, using the brush tool, it will start painting.");
+}
+
 QHash< QString, int > KisToolInvocationAction::shortcuts() const
 {
     QHash< QString, int> values;
