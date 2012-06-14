@@ -21,6 +21,12 @@
 
 #include "kis_abstract_input_action.h"
 
+/**
+ * \brief Tool Invocation action of KisAbstractInputAction.
+ *
+ * The Tool Invocation action invokes the current tool, for example,
+ * using the brush tool, it will start painting.
+ */
 class KisToolInvocationAction : public KisAbstractInputAction
 {
 public:

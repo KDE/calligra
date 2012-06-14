@@ -21,15 +21,23 @@
 
 #include "kis_abstract_input_action.h"
 
+/**
+ * \brief Zoom Canvas implementation of KisAbstractInputAction.
+ *
+ * The Zoom Canvas action zooms the canvas.
+ */
 class KisZoomAction : public KisAbstractInputAction
 {
 public:
+    /**
+     * The different behaviours for this action.
+     */
     enum Shortcuts {
-        ZoomToggleShortcut,
-        ZoomInShortcut,
-        ZoomOutShortcut,
-        ZoomResetShortcut,
-        ZoomToPageShortcut
+        ZoomToggleShortcut, ///< Toggle zoom mode.
+        ZoomInShortcut, ///< Zoom in by a fixed amount.
+        ZoomOutShortcut, ///< Zoom out by a fixed amount.
+        ZoomResetShortcut, ///< Reset zoom to 100%.
+        ZoomToPageShortcut ///< Zoom fit to page.
     };
     explicit KisZoomAction(KisInputManager* manager);
     virtual ~KisZoomAction();

@@ -24,31 +24,79 @@
 
 class QEvent;
 class KisAbstractInputAction;
+
+/**
+ * \brief A combination of keys and buttons used for matching input.
+ *
+ * The Shortcut class manages a combination of keys and buttons and
+ * the state of those buttons. It can be used to detect whether a certain
+ * combination of inputs has been activated.
+ */
 class KisShortcut
 {
 
 public:
+    /**
+     * Describes how well recent input matches this shortcut.
+     */
     enum MatchLevel {
-        NoMatch,
-        PartialMatch,
-        CompleteMatch
+        NoMatch, ///< No match at all.
+        PartialMatch, ///< It may match, with additional input.
+        CompleteMatch ///< Completely matches the input sent.
     };
 
+    /**
+     * Constructor.
+     */
     KisShortcut();
+    /**
+     * Destructor.
+     */
     virtual ~KisShortcut();
 
+    /**
+     */
     int priority() const;
+    /**
+     * The action associated with this shortcut.
+     */
     KisAbstractInputAction* action() const;
+    /**
+     * Set the action associated with this shortcut.
+     */
     void setAction(KisAbstractInputAction *action);
+    /**
+     * The index of the shortcut.
+     *
+     * \see KisAbstractInputAction::begin()
+     */
     int shortcutIndex() const;
+    /**
+     * Set the index of the shortcut.
+     */
     void setShortcutIndex(int index);
-
+    /**
+     * Set the list of keys used by this shortcut.
+     */
     void setKeys(const QList<Qt::Key> &keys);
+    /**
+     * Set the list of buttons used by this shortcut.
+     */
     void setButtons(const QList<Qt::MouseButton> &buttons);
-
+    /**
+     * Returns how well this shortcut matches recent input.
+     */
     MatchLevel matchLevel();
-
+    /**
+     * Try to match input to the keys and buttons used by
+     * this shortcut.
+     *
+     * \param event An event to match.
+     */
     void match(QEvent* event);
+    /**
+     * Clear all state of this shortcut.
+     */
     void clear();
 
 private:

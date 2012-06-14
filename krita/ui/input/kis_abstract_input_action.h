@@ -27,6 +27,15 @@ class KisInputManager;
 /**
  * \brief Abstract base class for input actions.
  *
+ * Input actions represent actions to be performed when interacting
+ * with the canvas. They are managed by KisInputManager and activated
+ * when KisShortcut detects it matches a certain set of inputs.
+ *
+ * The begin() method uses an index for the type of behaviour to activate.
+ * This index can be used to trigger behaviour when different events occur.
+ * For example, in the Pan action, this is used to have a single toggle
+ * behaviour and four additional options to pan a fixed amount in a certain
+ * direction. Each action will always have at least one behaviour.
  */
 class KisAbstractInputAction
 {

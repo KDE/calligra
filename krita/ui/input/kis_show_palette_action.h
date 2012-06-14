@@ -21,6 +21,11 @@
 
 #include "kis_abstract_input_action.h"
 
+/**
+ * \brief Show Palette implementation of KisAbstractInputAction.
+ *
+ * The Show Palette action shows the popup palette.
+ */
 class KisShowPaletteAction : public KisAbstractInputAction
 {
 public:

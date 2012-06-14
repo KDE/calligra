@@ -21,6 +21,13 @@
 
 #include "kis_abstract_input_action.h"
 
+/**
+ * \brief Alternate Invocation implementation of KisAbstractInputAction.
+ *
+ * The Alternate Invocation action performs an alternate action with the
+ * current tool. For example, using the brush tool it picks a color from
+ * the canvas.
+ */
 class KisAlternateInvocationAction : public KisAbstractInputAction
 {
 public:

@@ -26,24 +26,73 @@ class QTabletEvent;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
+/**
+ * \brief Central object to manage canvas input.
+ *
+ * The Input Manager class manages all canvas input. It is created
+ * by KisCanvas2 and processes all events related to input sent to the
+ * canvas.
+ *
+ * The Input Manager keeps track of a set of actions and a set of
+ * shortcuts. The actions are pre-defined while the shortcuts are
+ * set from configuration.
+ *
+ * For each event, it will try to determine if there is a shortcut that
+ * matches the input. It will then activate this action and pass all
+ * consecutive events on to this action.
+ *
+ * \sa KisAbstractInputAction
+ *
+ * \todo Implement shortcut configuration
+ */
 class KisInputManager : public QObject
 {
     Q_OBJECT
 
 public:
+    /**
+     * Constructor.
+     *
+     * \param canvas The parent canvas.
+     * \param proxy The application's tool proxy.
+     */
     explicit KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy);
+    /**
+     * Destructor.
+     */
     ~KisInputManager();
 
+    /**
+     * Event filter method. Overridden from QObject.
+     */
     bool eventFilter(QObject* object, QEvent* event );
 
+    /**
+     * Return the canvas this input manager is associated with.
+     */
     KisCanvas2 *canvas() const;
+    /**
+     * The tool proxy of the current application.
+     */
     KoToolProxy *toolProxy() const;
+    /**
+     * The mouse position of the last mouse press event.
+     */
     QPointF mousePosition() const;
+    /**
+     * This method can be used by actions to check whether we are
+     * dealing with tablet events.
+     *
+     * \return A tablet press event if there was one, otherwise 0.
+     */
     QTabletEvent *tabletPressEvent() const;
+
+private Q_SLOTS:
+    void setMirrorAxis();
 
 private:
     class Private;
-    Private * const d;
+    Private* const d;
 };
 
 #endif // KIS_INPUTMANAGER_H

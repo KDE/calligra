@@ -21,6 +21,12 @@
 
 #include "kis_abstract_input_action.h"
 
+/**
+ * \brief Change Primary Setting implementation of KisAbstractInputAction.
+ *
+ * The Change Primary Setting action changes a tool's "Primary Setting",
+ * for example the brush size for the brush tool.
+ */
 class KisChangePrimarySettingAction : public KisAbstractInputAction
 {
 public:
