@@ -110,6 +110,7 @@ const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
     KDChart::MarkerAttributes::MarkerFastCross,
     KDChart::MarkerAttributes::Marker1Pixel,
     KDChart::MarkerAttributes::Marker4Pixels,
+    KDChart::MarkerAttributes::NoMarker
 };
 
 class DataSet::Private
@@ -474,9 +475,13 @@ QPen DataSet::Private::defaultPen() const
     QPen pen(Qt::black);
     ChartType chartType = effectiveChartType();
     if (chartType == LineChartType ||
-         chartType == ScatterChartType)
-        pen = QPen(defaultDataSetColor(num));
-
+         chartType == ScatterChartType) {
+        if (penIsSet) {
+            pen = pen;
+        } else {
+            pen = QPen(defaultDataSetColor(num));
+        }
+    }
     return pen;
 }
 
@@ -834,6 +839,35 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     attr.setMarkerAttributes(ma);
 
     return attr;
+}
+
+KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *success) const
+{
+    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
+    if (d->sectionsDataValueAttributes.contains(section))
+        attr = d->sectionsDataValueAttributes[section];
+
+    KDChart::MarkerAttributes ma(attr.markerAttributes());
+    ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
+    ma.setMarkerSize(QSize(10, 10));
+    ma.setVisible(true);
+
+    return ma;
+}
+
+void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int section)
+{
+    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
+    if (d->sectionsDataValueAttributes.contains(section))
+        attr = d->sectionsDataValueAttributes[section];
+
+    attr.setMarkerAttributes(attribs);
+    d->dataValueAttributes = attr;
+
+    d->symbolsActivated = true;
+    d->symbolID = attribs.markerStyle();
 }
 
 void DataSet::setPen(const QPen &pen)
@@ -1493,6 +1527,9 @@ bool DataSet::loadOdf(const KoXmlElement &n,
                 else
                     d->symbolID = 0;
             }
+        } else if (name == "none") {
+            d->symbolsActivated = false;
+            d->symbolID = 19;
         }
     }
 
@@ -1659,6 +1696,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         case 12: symbolName = "asterisk"; break;
         case 13: symbolName = "horizontal-bar"; break;
         case 14: symbolName = "vertical-bar"; break;
+        case 19: symbolType = "none"; break;
         default: symbolType = "automatic"; break;
         }
 

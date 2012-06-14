@@ -275,6 +275,8 @@ QWidget *ChartTool::createOptionWidget()
             this,   SLOT(setDataSetChartSubType(DataSet*, ChartSubtype)));
     connect(widget, SIGNAL(datasetBrushChanged(DataSet*, const QColor&)),
             this, SLOT(setDataSetBrush(DataSet*, const QColor&)));
+    connect(widget, SIGNAL(dataSetMarkerChanged(DataSet*,KDChart::MarkerAttributes::MarkerStyle)),
+            this, SLOT(setDataSetMarker(DataSet*,KDChart::MarkerAttributes::MarkerStyle)));
     connect(widget, SIGNAL(datasetPenChanged(DataSet*, const QColor&)),
             this, SLOT(setDataSetPen(DataSet*, const QColor&)));
     connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*, bool)),
@@ -463,6 +465,16 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
     d->shape->update();
 }
 
+void ChartTool::setDataSetMarker(DataSet *dataSet, KDChart::MarkerAttributes::MarkerStyle style)
+{
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    KDChart::MarkerAttributes matt = dataSet->getMarkerAttributes();
+    matt.setMarkerStyle(style);
+    dataSet->setMarkerAttributes(matt);
+}
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
 {
     Q_ASSERT(d->shape);

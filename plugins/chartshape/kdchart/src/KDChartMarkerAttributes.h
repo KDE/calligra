@@ -46,28 +46,26 @@ namespace KDChart {
 
         ~MarkerAttributes();
 
-        enum MarkerStyle { MarkerCircle  = 0,
-                           MarkerSquare  = 1,
-                           MarkerDiamond = 2,
-                           Marker1Pixel  = 3,
-                           Marker4Pixels = 4,
-                           MarkerRing    = 5,
-                           MarkerCross   = 6,
-                           MarkerFastCross = 7,
-                           NoMarker = 8,
-                           // Above is kept for backwards binary compatibility.
-                           // Below are added for compatibility with ODF
-                           MarkerArrowDown     =  9,
-                           MarkerArrowUp       = 10,
-                           MarkerArrowRight    = 11,
-                           MarkerArrowLeft     = 12,
-                           MarkerBowTie        = 13,
-                           MarkerHourGlass     = 14,
-                           MarkerStar          = 15,
-                           MarkerX             = 16,
-                           MarkerAsterisk      = 17,
-                           MarkerHorizontalBar = 18,
-                           MarkerVerticalBar   = 19 };
+        enum MarkerStyle { MarkerSquare         = 0,
+                           MarkerDiamond        = 1,
+                           MarkerArrowDown      = 2,
+                           MarkerArrowUp        = 3,
+                           MarkerArrowRight     = 4,
+                           MarkerArrowLeft      = 5,
+                           MarkerBowTie         = 6,
+                           MarkerHourGlass      = 7,
+                           MarkerCircle         = 8,
+                           MarkerStar           = 9,
+                           MarkerX              = 10,
+                           MarkerCross          = 11,
+                           MarkerAsterisk       = 12,
+                           MarkerHorizontalBar  = 13,
+                           MarkerVerticalBar    = 14,
+                           MarkerRing           = 15,
+                           MarkerFastCross      = 16,
+                           Marker1Pixel         = 17,
+                           Marker4Pixels        = 18,
+                           NoMarker             = 19   };
 
         enum MarkerSizeMode {
             /// the marker size is directly specified in pixels

@@ -8,6 +8,12 @@ odf-marker-types.diff
   This patch implements missing marker types that are present in ODF
   1.1 and 1.2 but were not implemented in KDChart.
 
+arrange-markers.diff
+  i) This patch arranges the marker types in enum in accordance with the
+  types in DataSet.cpp
+  ii) It also makes AbstractDiagram::paintMarker() method static to generate
+  icons for UI for marker settings
+
 text-overlap.diff
   This patch takes into consideration the value of 'chart:text-overlap' attribute
   while drawing labels

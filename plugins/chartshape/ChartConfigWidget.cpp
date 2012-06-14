@@ -50,6 +50,7 @@
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
 #include <KDChartTextAttributes>
+#include <KDChartMarkerAttributes>
 #include <KDChartMeasure>
 
 // KChart
@@ -155,6 +156,27 @@ public:
 
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
+
+    // marker selection actions for datasets
+    QAction *dataSetNoMarkerAction;
+    QAction *dataSetAutomaticMarkerAction;
+    QAction *dataSetMarkerCircleAction;
+    QAction *dataSetMarkerSquareAction;
+    QAction *dataSetMarkerDiamondAction;
+    QAction *dataSetMarkerRingAction;
+    QAction *dataSetMarkerCrossAction;
+    QAction *dataSetMarkerFastCrossAction;
+    QAction *dataSetMarkerArrowDownAction;
+    QAction *dataSetMarkerArrowUpAction;
+    QAction *dataSetMarkerArrowRightAction;
+    QAction *dataSetMarkerArrowLeftAction;
+    QAction *dataSetMarkerBowTieAction;
+    QAction *dataSetMarkerHourGlassAction;
+    QAction *dataSetMarkerStarAction;
+    QAction *dataSetMarkerXAction;
+    QAction *dataSetMarkerAsteriskAction;
+    QAction *dataSetMarkerHorizontalBarAction;
+    QAction *dataSetMarkerVerticalBarAction;
 
     // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
@@ -423,6 +445,38 @@ ChartConfigWidget::ChartConfigWidget()
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
 
+    // Setup marker menu
+    QMenu *datasetMarkerMenu = new QMenu(this);
+
+    // Default marker is Automatic
+    datasetMarkerMenu->setIcon(QIcon());
+
+    d->dataSetNoMarkerAction = datasetMarkerMenu->addAction(i18n("None"));
+    d->dataSetAutomaticMarkerAction = datasetMarkerMenu->addAction(i18n("Automatic"));
+
+    QMenu *datasetSelectMarkerMenu = datasetMarkerMenu->addMenu(i18n("Select"));
+    d->dataSetMarkerSquareAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerDiamondAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowDownAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowUpAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowRightAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowLeftAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerBowTieAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHourGlassAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCircleAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerStarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerXAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerAsteriskAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHorizontalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerVerticalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerRingAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerFastCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+
+    d->ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
+    connect(datasetMarkerMenu, SIGNAL(triggered(QAction*)),
+            this,              SLOT(datasetMarkerSelected(QAction*)));
+
     // Insert error bar button
     d->ui.formatErrorBar->setEnabled(false);
 
@@ -610,6 +664,53 @@ void ChartConfigWidget::save()
 KAction* ChartConfigWidget::createAction()
 {
     return 0;
+}
+
+QIcon ChartConfigWidget::datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStyle markerStyle)
+{
+    if (markerStyle != KDChart::MarkerAttributes::NoMarker) {
+        QPixmap *markerPixmap = new QPixmap(16,16);
+        markerPixmap->fill(QColor(255,255,255,0));
+        QPainter *painter = new QPainter(markerPixmap);
+        KDChart::MarkerAttributes matt;
+        matt.setMarkerStyle(markerStyle);
+        DataSet *dataSet = d->dataSets[d->ui.dataSets->currentIndex()];
+        QBrush brush = dataSet->brush();
+        QPen pen = dataSet->pen();
+        KDChart::AbstractDiagram::paintMarker(painter, matt, brush, pen, QPointF(7,7), QSizeF(12,12));
+        QIcon markerIcon = QIcon(*markerPixmap);
+        return markerIcon;
+    }
+    return QIcon();
+}
+
+void ChartConfigWidget::updateMarkers()
+{
+    d->dataSetMarkerCircleAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerCircle));
+    d->dataSetMarkerSquareAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerSquare));
+    d->dataSetMarkerDiamondAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerDiamond));
+    d->dataSetMarkerRingAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerRing));
+    d->dataSetMarkerCrossAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerCross));
+    d->dataSetMarkerFastCrossAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerFastCross));
+    d->dataSetMarkerArrowDownAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowDown));
+    d->dataSetMarkerArrowUpAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowUp));
+    d->dataSetMarkerArrowRightAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowRight));
+    d->dataSetMarkerArrowLeftAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowLeft));
+    d->dataSetMarkerBowTieAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerBowTie));
+    d->dataSetMarkerHourGlassAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerHourGlass));
+    d->dataSetMarkerStarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStar));
+    d->dataSetMarkerXAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerX));
+    d->dataSetMarkerAsteriskAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerAsterisk));
+    d->dataSetMarkerHorizontalBarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerHorizontalBar));
+    d->dataSetMarkerVerticalBarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerVerticalBar));
+
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    QIcon icon = datasetMarkerIcon(dataSet->getMarkerAttributes().markerStyle());
+    d->ui.datasetMarkerMenu->setIcon(icon);
 }
 
 void ChartConfigWidget::chartTypeSelected(QAction *action)
@@ -902,12 +1003,72 @@ void ChartConfigWidget::chartSubTypeSelected(int type)
     emit chartSubTypeChanged(d->subtype);
 }
 
+void ChartConfigWidget::datasetMarkerSelected(QAction *action)
+{
+    if (d->selectedDataSet < 0)
+        return;
+
+    const int numDefaultMarkerTypes = 15;
+    KDChart::MarkerAttributes::MarkerStyle style = KDChart::MarkerAttributes::MarkerCircle;
+
+    if (action == d->dataSetNoMarkerAction) {
+        style = KDChart::MarkerAttributes::NoMarker;
+    } else if (action == d->dataSetAutomaticMarkerAction) {
+        style = (KDChart::MarkerAttributes::MarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+    } else if (action == d->dataSetMarkerCircleAction) {
+        style = KDChart::MarkerAttributes::MarkerCircle;
+    } else if (action == d->dataSetMarkerSquareAction) {
+        style = KDChart::MarkerAttributes::MarkerSquare;
+    } else if (action == d->dataSetMarkerDiamondAction) {
+        style = KDChart::MarkerAttributes::MarkerDiamond;
+    } else if (action == d->dataSetMarkerRingAction) {
+        style = KDChart::MarkerAttributes::MarkerRing;
+    } else if (action == d->dataSetMarkerCrossAction) {
+        style = KDChart::MarkerAttributes::MarkerCross;
+    } else if (action == d->dataSetMarkerFastCrossAction) {
+        style = KDChart::MarkerAttributes::MarkerFastCross;
+    } else if (action == d->dataSetMarkerArrowDownAction) {
+        style = KDChart::MarkerAttributes::MarkerArrowDown;
+    } else if (action == d->dataSetMarkerArrowUpAction) {
+        style = KDChart::MarkerAttributes::MarkerArrowUp;
+    } else if (action == d->dataSetMarkerArrowRightAction) {
+        style = KDChart::MarkerAttributes::MarkerArrowRight;
+    } else if (action == d->dataSetMarkerArrowLeftAction) {
+        style = KDChart::MarkerAttributes::MarkerArrowLeft;
+    } else if (action == d->dataSetMarkerBowTieAction) {
+        style = KDChart::MarkerAttributes::MarkerBowTie;
+    } else if (action == d->dataSetMarkerHourGlassAction) {
+        style = KDChart::MarkerAttributes::MarkerHourGlass;
+    } else if (action == d->dataSetMarkerStarAction) {
+        style = KDChart::MarkerAttributes::MarkerStar;
+    } else if (action == d->dataSetMarkerXAction) {
+        style = KDChart::MarkerAttributes::MarkerX;
+    } else if (action == d->dataSetMarkerAsteriskAction) {
+        style = KDChart::MarkerAttributes::MarkerAsterisk;
+    } else if (action == d->dataSetMarkerHorizontalBarAction) {
+        style = KDChart::MarkerAttributes::MarkerHorizontalBar;
+    } else if (action == d->dataSetMarkerVerticalBarAction) {
+        style = KDChart::MarkerAttributes::MarkerVerticalBar;
+    }
+
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    d->ui.datasetMarkerMenu->setIcon(datasetMarkerIcon(style));
+    emit dataSetMarkerChanged(dataSet, style);
+
+    update();
+}
+
 void ChartConfigWidget::datasetBrushSelected(const QColor& color)
 {
     if (d->selectedDataSet < 0)
         return;
 
     emit datasetBrushChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::datasetPenSelected(const QColor& color)
@@ -916,6 +1077,7 @@ void ChartConfigWidget::datasetPenSelected(const QColor& color)
         return;
 
     emit datasetPenChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::setThreeDMode(bool threeD)
@@ -1094,11 +1256,6 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
     }
-
-    // "Fill" property of data set doesn't make sense for 2D line
-    // charts, there's nothing to fill.
-    bool enableFill = d->type != LineChartType || d->threeDMode;
-    d->ui.datasetBrush->setEnabled(enableFill);
 
     blockSignals(false);
 }
@@ -1560,6 +1717,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
     }
 
     d->selectedDataSet = index;
+    updateMarkers();
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)

@@ -27,6 +27,9 @@
 // Calligra
 #include <KoShapeConfigWidgetBase.h>
 
+// KDChart
+#include <KDChartMarkerAttributes>
+
 // KChart
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
@@ -66,6 +69,9 @@ public:
     /// This is called when e.g. the tool is deactivated.
     void deleteSubDialogs();
 
+    QIcon datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStyle markerStyle);
+    void updateMarkers();
+
 public slots:
     void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
@@ -77,6 +83,7 @@ public slots:
     void slotShowFormatErrorBarDialog();
 
     void dataSetChartTypeSelected(QAction *action);
+    void datasetMarkerSelected(QAction *action);
     void datasetBrushSelected(const QColor& color);
     void datasetPenSelected(const QColor& color);
     void ui_datasetShowCategoryChanged(bool b);
@@ -142,6 +149,7 @@ signals:
     
     void datasetPenChanged(DataSet *dataSet, const QColor& color);
     void datasetBrushChanged(DataSet *dataSet, const QColor& color);
+    void dataSetMarkerChanged(DataSet *dataSet, KDChart::MarkerAttributes::MarkerStyle style);
     void datasetShowCategoryChanged(DataSet *dataSet, bool b);
     void dataSetShowNumberChanged(DataSet *dataSet, bool b);
     void datasetShowPercentChanged(DataSet *dataSet, bool b);
