@@ -709,8 +709,21 @@ void ChartConfigWidget::updateMarkers()
     if (!dataSet)
         return;
 
-    QIcon icon = datasetMarkerIcon(dataSet->getMarkerAttributes().markerStyle());
-    d->ui.datasetMarkerMenu->setIcon(icon);
+    const int numDefaultMarkerTypes = 15;
+    KDChart::MarkerAttributes::MarkerStyle style = dataSet->getMarkerAttributes().markerStyle();
+    QIcon icon = datasetMarkerIcon(style);
+    if (!icon.isNull()) {
+        if (dataSet->markerAutoSet()) {
+            d->ui.datasetMarkerMenu->setText("Auto");
+            d->ui.datasetMarkerMenu->setIcon(QIcon());
+        } else {
+            d->ui.datasetMarkerMenu->setIcon(icon);
+            d->ui.datasetMarkerMenu->setText("");
+        }
+    } else {
+        d->ui.datasetMarkerMenu->setText("None");
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
 }
 
 void ChartConfigWidget::chartTypeSelected(QAction *action)
@@ -1009,12 +1022,16 @@ void ChartConfigWidget::datasetMarkerSelected(QAction *action)
         return;
 
     const int numDefaultMarkerTypes = 15;
+    bool isAuto = false;
     KDChart::MarkerAttributes::MarkerStyle style = KDChart::MarkerAttributes::MarkerCircle;
-
+    QString type = QString("");
     if (action == d->dataSetNoMarkerAction) {
         style = KDChart::MarkerAttributes::NoMarker;
+        type = "None";
     } else if (action == d->dataSetAutomaticMarkerAction) {
         style = (KDChart::MarkerAttributes::MarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        type = "Auto";
+        isAuto = true;
     } else if (action == d->dataSetMarkerCircleAction) {
         style = KDChart::MarkerAttributes::MarkerCircle;
     } else if (action == d->dataSetMarkerSquareAction) {
@@ -1056,7 +1073,14 @@ void ChartConfigWidget::datasetMarkerSelected(QAction *action)
     if (!dataSet)
         return;
 
-    d->ui.datasetMarkerMenu->setIcon(datasetMarkerIcon(style));
+    dataSet->setAutoMarker(isAuto);
+    if (type.isEmpty()) {
+        d->ui.datasetMarkerMenu->setIcon(datasetMarkerIcon(style));
+        d->ui.datasetMarkerMenu->setText("");
+    } else {
+        d->ui.datasetMarkerMenu->setText(type);
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
     emit dataSetMarkerChanged(dataSet, style);
 
     update();
@@ -1256,6 +1280,10 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
     }
+
+    bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
+                           || d->type == RingChartType || d->type == BubbleChartType);
+    d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
 
     blockSignals(false);
 }

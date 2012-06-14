@@ -143,6 +143,7 @@ public:
     qreal errorMargin() const;
     qreal lowerErrorLimit() const;
     qreal upperErrorLimit() const;
+    bool markerAutoSet() const;
 
     // Setter methods
     void setChartType(ChartType type);
@@ -153,6 +154,7 @@ public:
     void setBrush(const QBrush &brush);
     void setPen(int section, const QPen &pen);
     void setBrush(int section, const QBrush &brush);
+    void setAutoMarker(bool isAuto);
 
     void setPieExplodeFactor(int factor);
     void setPieExplodeFactor(int section, int factor);

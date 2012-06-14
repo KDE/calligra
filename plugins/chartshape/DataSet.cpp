@@ -178,6 +178,8 @@ public:
     bool penIsSet;
     // Determines whether brush has been set
     bool brushIsSet;
+    // Determines whether marker has been set automatically
+    bool markerIsAutoSet;
     QPen pen;
     QBrush brush;
     QMap<int, DataSet::ValueLabelType> valueLabelType;
@@ -235,6 +237,7 @@ DataSet::Private::Private(DataSet *parent, int dataSetNr) :
     upperErrorLimit(0.0),
     penIsSet(false),
     brushIsSet(false),
+    markerIsAutoSet(true),
     pen(QPen(Qt::black)),
     brush(QColor(Qt::white)),
     dataValueAttributes(defaultDataValueAttributes()),
@@ -764,6 +767,18 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
 //         ma.setMarkerStyle(defaultMarkerTypes[number() % numDefaultMarkerTypes]);
 //         ma.setVisible(true);
 //         break;
+    case BarChartType:
+    case CircleChartType:
+    case RingChartType:
+    case StockChartType:
+    {
+        Q_ASSERT(attr.isVisible());
+        ma.setMarkerStyle(KDChart::MarkerAttributes::MarkerSquare);
+        ma.setMarkerSize(QSize(10, 10));
+        ma.setVisible(true);
+        d->symbolsActivated = false;
+        break;
+    }
     case BubbleChartType:
     {
         Q_ASSERT(attachedAxis());
@@ -782,18 +797,18 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
             ma.setMarkerSizeMode(KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
-        ma.setVisible(true);        
+        ma.setVisible(true);
+        d->symbolsActivated = false;
         break;
     }
     default:
         // TODO: Make markers customizable even for other types
-        if (d->symbolsActivated) {            
-            Q_ASSERT(attr.isVisible());
-            ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
-            ma.setMarkerSize(QSize(10, 10));
-            ma.setVisible(true);
+        Q_ASSERT(attr.isVisible());
+        ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
+        ma.setMarkerSize(QSize(10, 10));
+        ma.setVisible(true);
+        d->symbolsActivated = true;
 //             attr.setVisible(true);
-        }
         // Do not overwrite visiblity in this case. It could very well have
         // been set to 'visible' on purpose by e.g. loadOdf().
         //else
@@ -856,6 +871,11 @@ KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *succes
     return ma;
 }
 
+bool DataSet::markerAutoSet() const
+{
+    return d->markerIsAutoSet;
+}
+
 void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int section)
 {
     KDChart::DataValueAttributes attr(d->dataValueAttributes);
@@ -868,6 +888,11 @@ void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int 
 
     d->symbolsActivated = true;
     d->symbolID = attribs.markerStyle();
+}
+
+void DataSet::setAutoMarker(bool isAuto)
+{
+    d->markerIsAutoSet = isAuto;
 }
 
 void DataSet::setPen(const QPen &pen)
@@ -1488,9 +1513,11 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         if (name == "automatic") {
             d->symbolsActivated = true;
             d->symbolID = d->num % numDefaultMarkerTypes;
+            d->markerIsAutoSet = true;
         }
         else if (name == "named-symbol") {
             d->symbolsActivated = true;
+            d->markerIsAutoSet = false;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
 
                 const QString type = styleStack.property(KoXmlNS::chart, "symbol-name");
@@ -1530,6 +1557,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         } else if (name == "none") {
             d->symbolsActivated = false;
             d->symbolID = 19;
+            d->markerIsAutoSet = false;
         }
     }
 
@@ -1680,24 +1708,28 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         QString symbolName = "";
         QString symbolType = "named-symbol";
 
-        switch (d->symbolID) {
-        case 0: symbolName = "square"; break;
-        case 1: symbolName = "diamond"; break;
-        case 2: symbolName = "arrow-down"; break;
-        case 3: symbolName = "arrow-up"; break;
-        case 4: symbolName = "arrow-right"; break;
-        case 5: symbolName = "arrow-left"; break;
-        case 6: symbolName = "bow-tie"; break;
-        case 7: symbolName = "hourglass"; break;
-        case 8: symbolName = "circle"; break;
-        case 9: symbolName = "star"; break;
-        case 10: symbolName = "x"; break;
-        case 11: symbolName = "plus"; break;
-        case 12: symbolName = "asterisk"; break;
-        case 13: symbolName = "horizontal-bar"; break;
-        case 14: symbolName = "vertical-bar"; break;
-        case 19: symbolType = "none"; break;
-        default: symbolType = "automatic"; break;
+        if (!d->markerIsAutoSet) {
+            switch (d->symbolID) {
+            case 0: symbolName = "square"; break;
+            case 1: symbolName = "diamond"; break;
+            case 2: symbolName = "arrow-down"; break;
+            case 3: symbolName = "arrow-up"; break;
+            case 4: symbolName = "arrow-right"; break;
+            case 5: symbolName = "arrow-left"; break;
+            case 6: symbolName = "bow-tie"; break;
+            case 7: symbolName = "hourglass"; break;
+            case 8: symbolName = "circle"; break;
+            case 9: symbolName = "star"; break;
+            case 10: symbolName = "x"; break;
+            case 11: symbolName = "plus"; break;
+            case 12: symbolName = "asterisk"; break;
+            case 13: symbolName = "horizontal-bar"; break;
+            case 14: symbolName = "vertical-bar"; break;
+            case 19: symbolType = "none"; break;
+            default: symbolType = "automatic"; break;
+            }
+        } else {
+            symbolType = "automatic";
         }
 
         style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);

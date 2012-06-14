@@ -474,6 +474,7 @@ void ChartTool::setDataSetMarker(DataSet *dataSet, KDChart::MarkerAttributes::Ma
     KDChart::MarkerAttributes matt = dataSet->getMarkerAttributes();
     matt.setMarkerStyle(style);
     dataSet->setMarkerAttributes(matt);
+    d->shape->update();
 }
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
 {
