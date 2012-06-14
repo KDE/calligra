@@ -717,7 +717,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+           <normaloff>.designer/backup</normaloff>.designer/backup</iconset>
          </property>
         </widget>
        </item>
@@ -773,7 +773,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+       <normaloff>.designer/backup</normaloff>.designer/backup</iconset>
      </property>
      <property name="iconSize">
       <size>
