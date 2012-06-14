@@ -31,7 +31,8 @@
 KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
     : KisAbstractInputAction(manager), m_tablet(false)
 {
-
+    setName(i18n("Tool Invocation"));
+    setDescription(i18n("Tool Invocation invokes the current tool, for example, using the brush tool, it will start painting."));
 }
 
 KisToolInvocationAction::~KisToolInvocationAction()
@@ -40,25 +41,25 @@ KisToolInvocationAction::~KisToolInvocationAction()
 
 void KisToolInvocationAction::begin(int /*shortcut*/)
 {
-    if(m_inputManager->tabletPressEvent()) {
-        m_inputManager->tabletPressEvent()->accept();
-        m_inputManager->toolProxy()->tabletEvent(m_inputManager->tabletPressEvent(), m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(m_inputManager->tabletPressEvent()->pos()));
+    if(inputManager()->tabletPressEvent()) {
+        inputManager()->tabletPressEvent()->accept();
+        inputManager()->toolProxy()->tabletEvent(inputManager()->tabletPressEvent(), inputManager()->canvas()->coordinatesConverter()->widgetToDocument(inputManager()->tabletPressEvent()->pos()));
         m_tablet = true;
     } else {
-        QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-        m_inputManager->toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
+        QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        inputManager()->toolProxy()->mousePressEvent(pressEvent, pressEvent->pos());
     }
 }
 
 void KisToolInvocationAction::end()
 {
     if(m_tablet) {
-        QTabletEvent* pressEvent = m_inputManager->tabletPressEvent();
-        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, m_inputManager->mousePosition().toPoint(), m_inputManager->mousePosition().toPoint(), m_inputManager->mousePosition(), pressEvent->device(), pressEvent->pointerType(), 0.f, 0, 0, 0.f, 0.f, pressEvent->z(), 0, pressEvent->uniqueId());
-        m_inputManager->toolProxy()->tabletEvent(releaseEvent, releaseEvent->pos());
+        QTabletEvent* pressEvent = inputManager()->tabletPressEvent();
+        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, inputManager()->mousePosition().toPoint(), inputManager()->mousePosition().toPoint(), inputManager()->mousePosition(), pressEvent->device(), pressEvent->pointerType(), 0.f, 0, 0, 0.f, 0.f, pressEvent->z(), 0, pressEvent->uniqueId());
+        inputManager()->toolProxy()->tabletEvent(releaseEvent, releaseEvent->pos());
     } else {
-        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-        m_inputManager->toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
+        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        inputManager()->toolProxy()->mouseReleaseEvent(releaseEvent, releaseEvent->pos());
     }
 }
 
@@ -66,31 +67,14 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        m_inputManager->toolProxy()->mouseMoveEvent(mevent, m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(mevent->posF()));
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, inputManager()->canvas()->coordinatesConverter()->widgetToDocument(mevent->posF()));
     } else if(event->type() == QEvent::TabletMove) {
         QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-        m_inputManager->toolProxy()->tabletEvent(tevent, m_inputManager->canvas()->coordinatesConverter()->widgetToDocument(tevent->pos()));
+        inputManager()->toolProxy()->tabletEvent(tevent, inputManager()->canvas()->coordinatesConverter()->widgetToDocument(tevent->pos()));
     }
 }
 
 bool KisToolInvocationAction::handleTablet() const
 {
     return true;
-}
-
-QString KisToolInvocationAction::name() const
-{
-    return i18n("Tool Invocation");
-}
-
-QString KisToolInvocationAction::description() const
-{
-    return i18n("Tool Invocation invokes the current tool, for example, using the brush tool, it will start painting.");
-}
-
-QHash< QString, int > KisToolInvocationAction::shortcuts() const
-{
-    QHash< QString, int> values;
-    values.insert(i18nc("Invoke Tool shortcut for Tool Invocation Action", "Invoke Tool"), 0);
-    return values;
 }

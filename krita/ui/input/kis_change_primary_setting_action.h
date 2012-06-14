@@ -30,10 +30,6 @@ public:
     virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
-
-    virtual QString name() const;
-    virtual QString description() const;
-    virtual QHash< QString, int > shortcuts() const;
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

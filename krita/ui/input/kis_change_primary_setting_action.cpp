@@ -26,7 +26,8 @@
 KisChangePrimarySettingAction::KisChangePrimarySettingAction(KisInputManager* manager)
     : KisAbstractInputAction(manager)
 {
-
+    setName(i18n("Change Tool Primary Setting"));
+    setDescription(i18n("Changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));
 }
 
 KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
@@ -36,37 +37,20 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 void KisChangePrimarySettingAction::begin(int shortcut)
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    m_inputManager->toolProxy()->mousePressEvent(mevent, m_inputManager->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
 }
 
 void KisChangePrimarySettingAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    m_inputManager->toolProxy()->mouseReleaseEvent(mevent, m_inputManager->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->mousePosition());
 }
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        m_inputManager->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
     }
-}
-
-QString KisChangePrimarySettingAction::name() const
-{
-    return i18n("Change Tool Primary Setting");
-}
-
-QString KisChangePrimarySettingAction::description() const
-{
-    return i18n("Changes a tool's \"Primary Setting\", for example the brush size for the brush tool.");
-}
-
-QHash< QString, int > KisChangePrimarySettingAction::shortcuts() const
-{
-    QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Change Setting"), 0);
-    return shortcuts;
 }

@@ -38,6 +38,13 @@ public:
 KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
     : KisAbstractInputAction(manager), d(new Private)
 {
+    setName(i18n("Rotate Canvas"));
+    QHash<QString, int> shortcuts;
+    shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
+    shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
+    shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
+    shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
+    setShortcutIndexes(shortcuts);
 }
 
 KisRotateCanvasAction::~KisRotateCanvasAction()
@@ -49,17 +56,17 @@ void KisRotateCanvasAction::begin(int shortcut)
 {
     switch(shortcut) {
         case RotateToggleShortcut:
-            d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+            d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             break;
         case RotateLeftShortcut:
-            m_inputManager->canvas()->rotateCanvasLeft15();
+            inputManager()->canvas()->rotateCanvasLeft15();
             break;
         case RotateRightShortcut:
-            m_inputManager->canvas()->rotateCanvasRight15();
+            inputManager()->canvas()->rotateCanvasRight15();
             break;
         case RotateResetShortcut:
-            m_inputManager->canvas()->resetCanvasTransformations();
+            inputManager()->canvas()->resetCanvasTransformations();
             break;
     }
 }
@@ -84,7 +91,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
                 angle *= dir.y() / qAbs(dir.y());
             }
 
-            m_inputManager->canvas()->rotateCanvas(angle);
+            inputManager()->canvas()->rotateCanvas(angle);
 
             d->lastMousePosition = mevent->posF();
             QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
@@ -92,19 +99,4 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             QApplication::changeOverrideCursor(Qt::OpenHandCursor);
         }
     }
-}
-
-QString KisRotateCanvasAction::name() const
-{
-    return i18n("Rotate Canvas");
-}
-
-QHash< QString, int > KisRotateCanvasAction::shortcuts() const
-{
-    QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
-    shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
-    shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
-    shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
-    return shortcuts;
 }

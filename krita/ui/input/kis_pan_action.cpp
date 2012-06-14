@@ -41,7 +41,15 @@ public:
 KisPanAction::KisPanAction(KisInputManager *manager)
     : KisAbstractInputAction(manager), d(new Private)
 {
+    setName(i18n("Pan Canvas"));
 
+    QHash< QString, int> shortcuts;
+    shortcuts.insert(i18n("Toggle Pan Mode"), PanToggleShortcut);
+    shortcuts.insert(i18n("Pan Left"), PanLeftShortcut);
+    shortcuts.insert(i18n("Pan Right"), PanRightShortcut);
+    shortcuts.insert(i18n("Pan Up"), PanUpShortcut);
+    shortcuts.insert(i18n("Pan Down"), PanDownShortcut);
+    setShortcutIndexes(shortcuts);
 }
 
 KisPanAction::~KisPanAction()
@@ -53,21 +61,21 @@ void KisPanAction::begin(int shortcut)
     switch(shortcut)
     {
         case PanToggleShortcut:
-            d->lastMousePosition = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+            d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->active = true;
             break;
         case PanLeftShortcut:
-            m_inputManager->canvas()->canvasController()->pan(QPoint(-10, 0));
+            inputManager()->canvas()->canvasController()->pan(QPoint(-10, 0));
             break;
         case PanRightShortcut:
-            m_inputManager->canvas()->canvasController()->pan(QPoint(10, 0));
+            inputManager()->canvas()->canvasController()->pan(QPoint(10, 0));
             break;
         case PanUpShortcut:
-            m_inputManager->canvas()->canvasController()->pan(QPoint(0, -10));
+            inputManager()->canvas()->canvasController()->pan(QPoint(0, -10));
             break;
         case PanDownShortcut:
-            m_inputManager->canvas()->canvasController()->pan(QPoint(0, 10));
+            inputManager()->canvas()->canvasController()->pan(QPoint(0, 10));
             break;
     }
 }
@@ -84,27 +92,11 @@ void KisPanAction::inputEvent(QEvent *event)
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         if(mevent->buttons()) {
             QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
-            m_inputManager->canvas()->canvasController()->pan(relMovement.toPoint());
+            inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
             d->lastMousePosition = mevent->posF();
             QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
         } else {
             QApplication::changeOverrideCursor(Qt::OpenHandCursor);
         }
     }
-}
-
-QString KisPanAction::name() const
-{
-    return i18n("Pan Canvas");
-}
-
-QHash< QString, int > KisPanAction::shortcuts() const
-{
-    QHash< QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Pan Mode"), PanToggleShortcut);
-    shortcuts.insert(i18n("Pan Left"), PanLeftShortcut);
-    shortcuts.insert(i18n("Pan Right"), PanRightShortcut);
-    shortcuts.insert(i18n("Pan Up"), PanUpShortcut);
-    shortcuts.insert(i18n("Pan Down"), PanDownShortcut);
-    return shortcuts;
 }

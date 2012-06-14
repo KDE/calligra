@@ -23,24 +23,86 @@
 
 class QEvent;
 class KisInputManager;
+
+/**
+ * \brief Abstract base class for input actions.
+ *
+ */
 class KisAbstractInputAction
 {
 public:
-    explicit KisAbstractInputAction(KisInputManager *manager) : m_inputManager(manager) { }
-    virtual ~KisAbstractInputAction() { }
+    /**
+     * Constructor.
+     *
+     * \param manager The InputManager this action belongs to.
+     */
+    explicit KisAbstractInputAction(KisInputManager *manager);
+    /**
+     * Destructor.
+     */
+    virtual ~KisAbstractInputAction();
 
-
+    /**
+     * Begin the action.
+     *
+     * \param shortcut The index of the behaviour to trigger.
+     */
     virtual void begin(int shortcut) = 0;
+    /**
+     * End the action.
+     */
     virtual void end() = 0;
+    /**
+     * Process an input event.
+     *
+     * \param event An event to process.
+     */
     virtual void inputEvent(QEvent* event) = 0;
 
-    virtual bool handleTablet() const { return false; }
-    virtual QHash<QString, int> shortcuts() const = 0;
-    virtual QString name() const = 0;
-    virtual QString description() const { return QString(); }
+    /**
+     * Does this action handle tablet events in a special way?
+     */
+    virtual bool handleTablet() const;
+    /**
+     * The indexes of shortcut behaviours available.
+     */
+    virtual QHash<QString, int> shortcutIndexes() const;
+    /**
+     * The name of this action.
+     */
+    virtual QString name() const;
+    /**
+     * A short description of this action.
+     */
+    virtual QString description() const;
 
 protected:
-    KisInputManager * const m_inputManager;
+    /**
+     * The input manager this action belongs to.
+     */
+    KisInputManager *inputManager() const;
+    /**
+     * Set the name of this action.
+     *
+     * \param name The new name.
+     */
+    void setName(const QString &name);
+    /**
+     * Set the description of this action.
+     *
+     * \param description The new description.
+     */
+    void setDescription(const QString &description);
+    /**
+     * Set the available indexes of shortcut behaviours.
+     *
+     * \param indexes The new indexes.
+     */
+    void setShortcutIndexes(const QHash<QString, int> &indexes);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KIS_ABSTRACT_INPUT_ACTION_H

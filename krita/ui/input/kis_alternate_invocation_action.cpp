@@ -30,6 +30,8 @@
 KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
     : KisAbstractInputAction(manager)
 {
+    setName(i18n("Alternate Invocation"));
+    setDescription(i18n("Alternate Invocation performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
 }
 
 KisAlternateInvocationAction::~KisAlternateInvocationAction()
@@ -38,37 +40,20 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 
 void KisAlternateInvocationAction::begin(int /*shortcut*/)
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    m_inputManager->toolProxy()->mousePressEvent(mevent, m_inputManager->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
 }
 
 void KisAlternateInvocationAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, m_inputManager->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    m_inputManager->toolProxy()->mousePressEvent(mevent, m_inputManager->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
 }
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        m_inputManager->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
     }
-}
-
-QString KisAlternateInvocationAction::name() const
-{
-    return i18n("Alternate Invocation");
-}
-
-QString KisAlternateInvocationAction::description() const
-{
-    return i18n("Alternate Invocation performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas.");
-}
-
-QHash< QString, int > KisAlternateInvocationAction::shortcuts() const
-{
-    QHash< QString, int> values;
-    values.insert(i18nc("Invoke Tool shortcut for Alternate Invocation Action", "Invoke Tool"), 0);
-    return values;
 }

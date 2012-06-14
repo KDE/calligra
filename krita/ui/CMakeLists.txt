@@ -189,6 +189,7 @@ set(kritaui_LIB_SRCS
 #    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_shortcut.cpp
+    input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
     input/kis_alternate_invocation_action.cpp

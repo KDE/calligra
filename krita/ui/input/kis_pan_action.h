@@ -19,7 +19,7 @@
 #ifndef KIS_PAN_ACTION_H
 #define KIS_PAN_ACTION_H
 
-#include "input/kis_abstract_input_action.h"
+#include "kis_abstract_input_action.h"
 
 class KisPanAction : public KisAbstractInputAction
 {
@@ -38,9 +38,6 @@ public:
     virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
-
-    virtual QString name() const;
-    virtual QHash< QString, int > shortcuts() const;
 
 private:
     class Private;

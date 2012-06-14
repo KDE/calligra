@@ -19,8 +19,8 @@
 #include "kis_show_palette_action.h"
 
 #include <KLocalizedString>
-#include <ko_favorite_resource_manager.h>
 
+#include <ko_favorite_resource_manager.h>
 #include <kis_canvas2.h>
 
 #include "kis_input_manager.h"
@@ -28,7 +28,7 @@
 KisShowPaletteAction::KisShowPaletteAction(KisInputManager* manager)
     : KisAbstractInputAction(manager)
 {
-
+    setName(i18n("Show Popup Palette"));
 }
 
 KisShowPaletteAction::~KisShowPaletteAction()
@@ -38,7 +38,7 @@ KisShowPaletteAction::~KisShowPaletteAction()
 
 void KisShowPaletteAction::begin(int /*shortcut*/)
 {
-    m_inputManager->canvas()->favoriteResourceManager()->slotShowPopupPalette(m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition()).toPoint());
+    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()).toPoint());
 }
 
 void KisShowPaletteAction::end()
@@ -49,16 +49,4 @@ void KisShowPaletteAction::end()
 void KisShowPaletteAction::inputEvent(QEvent* event)
 {
     Q_UNUSED(event);
-}
-
-QString KisShowPaletteAction::name() const
-{
-    return i18n("Show Popup Palette");
-}
-
-QHash< QString, int > KisShowPaletteAction::shortcuts() const
-{
-    QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Show the Palette"), 0);
-    return shortcuts;
 }

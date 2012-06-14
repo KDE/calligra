@@ -19,8 +19,7 @@
 #ifndef KIS_SHOW_PALETTE_ACTION_H
 #define KIS_SHOW_PALETTE_ACTION_H
 
-#include <input/kis_abstract_input_action.h>
-
+#include "kis_abstract_input_action.h"
 
 class KisShowPaletteAction : public KisAbstractInputAction
 {
@@ -31,9 +30,6 @@ public:
     virtual void begin(int /*shortcut*/);
     virtual void end();
     virtual void inputEvent(QEvent* event);
-
-    virtual QString name() const;
-    virtual QHash< QString, int > shortcuts() const;
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H

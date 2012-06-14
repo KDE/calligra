@@ -41,7 +41,15 @@ public:
 KisZoomAction::KisZoomAction(KisInputManager* manager)
     : KisAbstractInputAction(manager), d(new Private)
 {
+    setName(i18n("Zoom Canvas"));
 
+    QHash< QString, int > shortcuts;
+    shortcuts.insert(i18n("Toggle Zoom Mode"), ZoomToggleShortcut);
+    shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
+    shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
+    shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
+    shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
+    setShortcutIndexes(shortcuts);
 }
 
 KisZoomAction::~KisZoomAction()
@@ -54,12 +62,12 @@ void KisZoomAction::begin(int shortcut)
     switch(shortcut)
     {
         case ZoomToggleShortcut:
-            d->lastMousePosition = d->mouseStart = m_inputManager->canvas()->coordinatesConverter()->documentToWidget(m_inputManager->mousePosition());
+            d->lastMousePosition = d->mouseStart = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->active = true;
             break;
         case ZoomInShortcut: {
-            float zoom = m_inputManager->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
             if( zoom >= 10 ) {
                 zoom += 1.0;
             } else if (zoom >= 5) {
@@ -69,11 +77,11 @@ void KisZoomAction::begin(int shortcut)
             } else {
                 zoom += 0.1;
             }
-            m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
             break;
         }
         case ZoomOutShortcut: {
-            float zoom = m_inputManager->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
             if( zoom >= 10 ) {
                 zoom -= 1.0;
             } else if (zoom >= 5) {
@@ -83,14 +91,14 @@ void KisZoomAction::begin(int shortcut)
             } else {
                 zoom -= 0.1;
             }
-            m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
             break;
         }
         case ZoomResetShortcut:
-            m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;
         case ZoomToPageShortcut:
-            m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             break;
     }
 }
@@ -108,8 +116,8 @@ void KisZoomAction::inputEvent(QEvent* event)
         if(mevent->buttons()) {
             QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
 
-            float zoom = m_inputManager->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
-            m_inputManager->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
+            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
 
             d->lastMousePosition = mevent->posF();
             QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
@@ -117,20 +125,4 @@ void KisZoomAction::inputEvent(QEvent* event)
             QApplication::changeOverrideCursor(Qt::OpenHandCursor);
         }
     }
-}
-
-QString KisZoomAction::name() const
-{
-    return i18n("Zoom Canvas");
-}
-
-QHash< QString, int > KisZoomAction::shortcuts() const
-{
-    QHash< QString, int > shortcuts;
-    shortcuts.insert(i18n("Toggle Zoom Mode"), ZoomToggleShortcut);
-    shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
-    shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
-    shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
-    shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
-    return shortcuts;
 }
