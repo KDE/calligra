@@ -67,13 +67,6 @@ public:
     void focusInEvent(QFocusEvent *event);
 
     /**
-     * Setter of the size with a rect
-     *
-     * @param size which is a QRect
-     */
-    void setItemSize(QRect size);
-
-    /**
      * Creates a pixmap the contains the all icons of the items
      * that are dragged.
      */
@@ -125,7 +118,6 @@ signals:
     void zoomOut();
 
 private:
-
     /**
      * The rect of an items, essentialy used to have the size of the full icon
      *
