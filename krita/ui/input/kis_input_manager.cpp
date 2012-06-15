@@ -130,7 +130,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
         case QEvent::KeyRelease:
         case QEvent::MouseButtonRelease:
-        case QEvent::Wheel:
             if(d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
                 d->currentShortcut->match(event);
                 if(d->currentShortcut->matchLevel() == KisShortcut::NoMatch) {
@@ -146,6 +145,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                 d->match(event);
             }
             return true;
+        case QEvent::Wheel:
+            if (d->currentAction) {
+                d->currentAction->inputEvent(event);
+            } else {
+                d->match(event);
+                if(d->currentAction) {
+                    d->clearState();
+                }
+            }
         case QEvent::Enter:
             //Ensure we have focus so we get key events.
             d->canvas->canvasWidget()->setFocus();
@@ -248,7 +256,7 @@ void KisInputManager::Private::match(QEvent* event)
     }
 
     eventQueue.enqueue(event);
-    if(potentialShortcuts.count() == 1 || eventQueue.count() >= 5) {
+    if(potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || eventQueue.count() >= 5) {
         //Either we have only one possible match or we reached the queue threshold.
         KisShortcut* completedShortcut = 0;
         foreach(KisShortcut* shortcut, potentialShortcuts) {
@@ -342,6 +350,12 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    shortcut->setWheel(KisShortcut::WheelUp);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    shortcut->setWheel(KisShortcut::WheelDown);
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
