@@ -7,6 +7,7 @@
 //Stage Headers
 #include <animations/KPrAnimationStep.h>
 #include <animations/KPrAnimationSubStep.h>
+#include <KPrPage.h>
 
 //Calligra Headers
 #include <KoShapePainter.h>
@@ -15,10 +16,13 @@
 //Kde Headers
 #include <KIcon>
 #include <KIconLoader>
+#include <KLocale>
 
 KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPrCustomAnimationItem *parent)
     : m_shapeAnimation(animation)
     ,  m_parent(parent)
+    , isDefaultInitAnimation(false)
+    , m_activePage(0)
 {
     if (m_parent) {
         m_parent->addChild(this);
@@ -33,6 +37,9 @@ KPrCustomAnimationItem::~KPrCustomAnimationItem()
 void KPrCustomAnimationItem::setShapeAnimation(KPrShapeAnimation *animation)
 {
     m_shapeAnimation = animation;
+    if (isDefaultInitAnimation) {
+        isDefaultInitAnimation = false;
+    }
 }
 
 KPrShapeAnimation *KPrCustomAnimationItem::animation() const
@@ -44,6 +51,9 @@ QString KPrCustomAnimationItem::name() const
 {
     if (m_shapeAnimation) {
         return m_shapeAnimation->shape()->name();
+    }
+    else if (isDefaultInitAnimation) {
+        return m_activePage->name();
     }
     return QString();
 }
@@ -59,6 +69,12 @@ QPixmap KPrCustomAnimationItem::thumbnail() const
             thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
         }
         return thumbnail;
+    }
+    else if (isDefaultInitAnimation) {
+        QPixmap thumbnail;
+        if (thumbnail.convertFromImage(m_activePage->thumbImage(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))) {
+            return thumbnail;
+        }
     }
     return QPixmap();
 }
@@ -83,6 +99,9 @@ QString KPrCustomAnimationItem::animationName() const
             descriptionList.removeFirst();
         }
         return descriptionList.join(QString(" "));
+    }
+    else if (isDefaultInitAnimation) {
+        return i18n("Show Slide");
     }
     return QString();
 }
@@ -158,6 +177,21 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::takeChild(int row)
     Q_ASSERT(item);
     item->m_parent = 0;
     return item;
+}
+
+void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *page)
+{
+    if (page) {
+        qDeleteAll(m_children);
+        m_shapeAnimation = 0;
+        m_activePage = page;
+        isDefaultInitAnimation = true;
+    }
+}
+
+bool KPrCustomAnimationItem::isDefaulAnimation()
+{
+    return isDefaultInitAnimation;
 }
 
 QImage KPrCustomAnimationItem::createThumbnail(KoShape *shape, const QSize &thumbSize) const

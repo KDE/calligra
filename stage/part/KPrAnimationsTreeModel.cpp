@@ -338,6 +338,11 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
     m_rootItem = new KPrCustomAnimationItem;
     KPrCustomAnimationItem *parentItem = m_rootItem;
     KPrCustomAnimationItem *newItem;
+    //Start defaul event
+    newItem = new KPrCustomAnimationItem(0, m_rootItem);
+    newItem->initAsDefaultAnimation(activePage);
+    parentItem = newItem;
+    //Load animations
     foreach (KPrAnimationStep *step, activePage->animationSteps()) {
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);

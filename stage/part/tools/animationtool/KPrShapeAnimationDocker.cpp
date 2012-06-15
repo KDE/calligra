@@ -163,6 +163,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         m_animationsView->setColumnWidth(1, KIconLoader::SizeMedium + 6);
         m_animationsView->setColumnWidth(2, KIconLoader::SizeSmall + 6);
 
+        m_timeLineModel->setParentItem(0, m_animationsModel->rootItem());
         m_timeLineView->update();
     }
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -200,7 +201,6 @@ void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
 {
     KoShape *shape = itemByIndex(index)->shape();
     if (!shape) {
-        qDebug() << "No shape";
         return;
     }
 

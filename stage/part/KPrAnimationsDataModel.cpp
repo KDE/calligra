@@ -58,15 +58,19 @@ KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
 
 QModelIndex KPrAnimationsDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!m_rootItem || row < 0 || column < 0 || column > AnimationClass)
+    if (!m_rootItem || row < 0 || column < 0 || column > AnimationClass) {
         return QModelIndex();
+    }
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
     Q_ASSERT(parentItem);
-    if (row == 0) {
+    if ((row == 0) && !m_rootItem->isDefaulAnimation()) {
         return createIndex(row, column, m_rootItem);
     }
-    if (KPrCustomAnimationItem *item = parentItem->childAt(row - 1))
+    //Make sure of not display default init event
+    if (KPrCustomAnimationItem *item = parentItem->childAt(
+                parentItem->isDefaulAnimation() ? row : row - 1)) {
         return createIndex(row, column, item);
+    }
     return QModelIndex();
 }
 
@@ -88,8 +92,12 @@ QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
 QModelIndex KPrAnimationsDataModel::indexByItem(KPrCustomAnimationItem *item)
 {
     QModelIndex parent = QModelIndex();
-    if (!item)
+    if (!item) {
         return QModelIndex();
+    }
+    if (item->isDefaulAnimation()) {
+        return QModelIndex();
+    }
     for (int row = 0; row < rowCount(parent); ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
         KPrCustomAnimationItem *thisItem = itemForIndex(thisIndex);
@@ -105,7 +113,12 @@ int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
     if (parent.isValid())
         return 0;
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
-    return parentItem ? parentItem->childCount() + 1 : 0;
+    if (parentItem) {
+        return parentItem->isDefaulAnimation() ? parentItem->childCount() : parentItem->childCount() + 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const

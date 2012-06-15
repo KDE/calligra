@@ -9,6 +9,7 @@
 /*Data Model for Animations Time Line View
 It requires an activePage to be set*/
 
+class KPrPage;
 
 class STAGE_EXPORT KPrCustomAnimationItem
 {
@@ -38,6 +39,8 @@ public:
     void addChild(KPrCustomAnimationItem *item);
     void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
     KPrCustomAnimationItem *takeChild(int row);
+    void initAsDefaultAnimation(KPrPage *page);
+    bool isDefaulAnimation();
 
 
 
@@ -49,6 +52,8 @@ private:
     KPrShapeAnimation* m_shapeAnimation;          //pointer to target element (shape)
     KPrCustomAnimationItem *m_parent;
     QList <KPrCustomAnimationItem*> m_children;
+    bool isDefaultInitAnimation;
+    KPrPage *m_activePage;
 };
 
 #endif // KPRCUSTOMANIMATIONITEM_H
