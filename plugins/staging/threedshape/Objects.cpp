@@ -31,6 +31,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoShapeSavingContext.h>
 
 // Shape
 #include "utils.h"
@@ -41,6 +42,7 @@
 
 
 Object3D::Object3D()
+    : KoShape()
 {
 }
 
@@ -49,17 +51,31 @@ Object3D::~Object3D()
 }
 
 
-bool Object3D::loadOdf(const KoXmlElement &objectElement)
+void Object3D::paint(QPainter &painter, const KoViewConverter &converter,
+                     KoShapePaintingContext &context)
 {
-    // FIXME: Load style, layer, Z-index, id.
+    // The only 3D object with a real paint method is the Scene, and
+    // even there it is only used in the top level object.
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(context);
+}
+
+bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
+{
+    loadOdfAttributes(objectElement, context, OdfAllAttributes);
 
     return true;
 }
 
-void Object3D::saveOdf(KoXmlWriter &writer) const
+void Object3D::saveOdf(KoShapeSavingContext &context) const
 {
-    // FIXME: Save style, layer, Z-index, id.
+    KoXmlWriter &writer = context.xmlWriter();
+
     kDebug(31000) << "Saving Object3D";
+
+    writer.startElement(m_elementName);
+    saveOdfAttributes(context, OdfAllAttributes);
 }
 
 
@@ -69,6 +85,7 @@ void Object3D::saveOdf(KoXmlWriter &writer) const
 
 Sphere::Sphere()
 {
+    m_elementName = static_cast<char*>("dr3d:sphere");
 }
 
 Sphere::~Sphere()
@@ -76,9 +93,18 @@ Sphere::~Sphere()
 }
 
 
-bool Sphere::loadOdf(const KoXmlElement &objectElement)
+void Sphere::paint(QPainter &painter, const KoViewConverter &converter,
+                   KoShapePaintingContext &context)
 {
-    Object3D::loadOdf(objectElement);
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(context);
+}
+
+bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
+{
+    // Load style information.
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "center", "(0 0 0)");
@@ -90,13 +116,14 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement)
     return true;
 }
 
-void Sphere::saveOdf(KoXmlWriter &writer) const
+void Sphere::saveOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Sphere:" << m_center << m_size;
-    writer.startElement("dr3d:sphere");
 
-    Object3D::saveOdf(writer);
+    Object3D::saveOdf(context);
 
+    // Note that Object3D::saveOdf() already has started the element
+    KoXmlWriter &writer = context.xmlWriter();
     writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x())
                         .arg(m_center.y()).arg(m_center.z()));
     writer.addAttribute("dr3d:size", QString("(%1 %2 %3)").arg(m_size.x())
@@ -112,6 +139,7 @@ void Sphere::saveOdf(KoXmlWriter &writer) const
 
 Cube::Cube()
 {
+    m_elementName = static_cast<char*>("dr3d:cube");
 }
 
 Cube::~Cube()
@@ -119,9 +147,18 @@ Cube::~Cube()
 }
 
 
-bool Cube::loadOdf(const KoXmlElement &objectElement)
+void Cube::paint(QPainter &painter, const KoViewConverter &converter,
+                 KoShapePaintingContext &context)
 {
-    Object3D::loadOdf(objectElement);
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(context);
+}
+
+bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
+{
+    // Load style information.
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(0 0 0)");
@@ -133,13 +170,14 @@ bool Cube::loadOdf(const KoXmlElement &objectElement)
     return true;
 }
 
-void Cube::saveOdf(KoXmlWriter &writer) const
+void Cube::saveOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Cube:" << m_minEdge << m_maxEdge;
-    writer.startElement("dr3d:cube");
 
-    Object3D::saveOdf(writer);
+    Object3D::saveOdf(context);
 
+    // Note that Object3D::saveOdf() already has started the element
+    KoXmlWriter &writer = context.xmlWriter();
     writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
                         .arg(m_minEdge.y()).arg(m_minEdge.z()));
     writer.addAttribute("dr3d:max-edge", QString("(%1 %2 %3)").arg(m_maxEdge.x())

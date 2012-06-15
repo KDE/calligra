@@ -40,7 +40,12 @@ class ThreedShape : public QObject, public KoShape
     Q_OBJECT
 
 public:
-    ThreedShape();
+    // Constructor
+
+    // @param topLevel true if this is the top level scene
+    // element. The top level element is the only one that should read
+    // view parameters from the element.
+    ThreedShape(bool topLevel = false);
     virtual ~ThreedShape();
 
     // reimplemented from KoShape
@@ -54,9 +59,17 @@ public:
     // reimplemented from KoShape
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
+    // getters
+    Ko3dScene *threeDParams() const;
 
 private:
-    Scene  m_scene;
+    // View attributes
+    bool       m_topLevel;
+    Ko3dScene *m_threeDParams;    // Camera and rendering parameters plus lightsources.
+
+    // The objects in the scene.
+    QList<Object3D*>  m_objects; // value list. If necessary, we can make object3d shared.
+
 };
 
 

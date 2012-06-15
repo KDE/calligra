@@ -67,7 +67,7 @@ bool ThreedShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
 
 KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    ThreedShape * defaultShape = new ThreedShape();
+    ThreedShape *defaultShape = new ThreedShape(true);
     defaultShape->setShapeId(THREEDSHAPEID);
 
     return defaultShape;

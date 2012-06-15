@@ -26,25 +26,28 @@
 #include <QVector3D>
 
 // Calligra
-
+#include <KoShape.h>
 
 
 class KoXmlElement;
 class KoXmlWriter;
 
 
-class Object3D
+class Object3D : public KoShape
 {
 public:
     Object3D();
     virtual ~Object3D();
 
-    virtual bool loadOdf(const KoXmlElement &objectElement);
-    virtual void saveOdf(KoXmlWriter &writer) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context);
+    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // getters
 
-private:
+protected:
+    char *m_elementName;  // For saving. includes namespace
 };
 
 
@@ -54,12 +57,14 @@ public:
     Sphere();
     virtual ~Sphere();
 
-    virtual bool loadOdf(const KoXmlElement &objectElement);
-    virtual void saveOdf(KoXmlWriter &writer) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context);
+    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // getters
-    QVector3D center() const { return m_center; }
-    QVector3D size()   const { return m_size;   }
+    QVector3D sphereCenter() const { return m_center; }
+    QVector3D sphereSize()   const { return m_size;   }
 
 private:
     QVector3D  m_center;
@@ -72,8 +77,10 @@ public:
     Cube();
     virtual ~Cube();
 
-    virtual bool loadOdf(const KoXmlElement &objectElement);
-    virtual void saveOdf(KoXmlWriter &writer) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context);
+    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // getters
     QVector3D minEdge() const { return m_minEdge;   }

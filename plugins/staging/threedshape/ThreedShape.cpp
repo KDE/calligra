@@ -48,14 +48,16 @@
 #include "Scene.h"
 
 
-ThreedShape::ThreedShape()
+ThreedShape::ThreedShape(bool topLevel)
     : KoShape()
-    , m_scene()
+    , m_topLevel(topLevel)
+    , m_threeDParams(0)
 {
 }
 
 ThreedShape::~ThreedShape()
 {
+    delete m_threeDParams;
 }
 
 void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
@@ -95,9 +97,23 @@ void ThreedShape::saveOdf(KoShapeSavingContext &context) const
 
     writer.startElement("dr3d:scene");
     saveOdfAttributes(context, OdfAllAttributes);
+    if (m_topLevel && m_threeDParams)
+        m_threeDParams->saveOdfAttributes(writer);
 
     // Writes the attributes and children of the dr3d:scene element.
-    m_scene.saveOdf(context);
+    //m_scene.saveOdf(context);
+    // Write scene attributes
+    if (m_threeDParams)
+        m_threeDParams->saveOdfAttributes(writer);
+
+    // 2.1 Light sources
+    if (m_topLevel && m_threeDParams)
+        m_threeDParams->saveOdfChildren(writer);
+
+    // 2.2 Objects in the scene
+    foreach (const Object3D *object, m_objects) {
+        object->saveOdf(context);
+    }
 
     writer.endElement(); // dr3d:scene
 }
@@ -111,9 +127,65 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     // style should be used when rendering the scene.
     loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
-    bool result = m_scene.loadOdf(sceneElement, context);
+    // Load the view parameters.
+    if (m_topLevel) {
+        m_threeDParams = load3dScene(sceneElement);
+    }
 
-    return result;
+    // Load the child elements, i.e the scene itself.
+
+    // From the ODF 1.1 spec section 9.4.1:
+    //
+    // The elements that may be contained in the <dr3d:scene> element are:
+    //  * Title (short accessible name) – see section 9.2.20.
+    //  * Long description (in support of accessibility) – see section 9.2.20.
+    //  * Light – see section 9.4.2. (handled by Ko3DScene)
+    //
+    //  * Scene – see section 9.4.1.     [All of these can be 0 or more.]
+    //  * Extrude – see section 9.4.5.
+    //  * Sphere – see section 9.4.4.
+    //  * Rotate – see section 9.4.6.
+    //  * Cube – see section 9.4.3.
+    //
+    // The lights are skipped here, they are taken care of by the call
+    // to load3dScene() above.
+    KoXmlElement  elem;
+    forEachElement(elem, sceneElement) {
+
+        if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // FIXME: Recursive!  How does this work?
+        }
+        else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:center
+            // dr3d:size
+            // + a number of other standard attributes
+            Sphere  *sphere = new Sphere();
+            sphere->loadOdf(elem, context);
+            m_objects.append(sphere);
+        }
+        else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:min-edge
+            // dr3d:max-edge
+            // + a number of other standard attributes
+            Cube  *cube = new Cube();
+            cube->loadOdf(elem, context);
+            m_objects.append(cube);
+        }
+        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+        else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            // Attributes:
+            // dr3d:
+        }
+    }
+
+    kDebug(31000) << "Objects:" << m_objects.size();
+
+    return true;
 }
 
 
