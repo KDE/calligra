@@ -107,21 +107,21 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
 
   QDate day;
   int year = calendar->year(date);
-  calendar->setDate(day, year, 1, 1);
+  calendar->setYMD(day, year, 1, 1);
   int lastMonth = calendar->monthsInYear(day);
   QDate lastDay, firstDayOfLastMonth;
-  calendar->setDate(firstDayOfLastMonth, year, lastMonth, 1);
-  calendar->setDate(lastDay, year, lastMonth, calendar->daysInMonth(firstDayOfLastMonth));
+  calendar->setYMD(firstDayOfLastMonth, year, lastMonth, 1);
+  calendar->setYMD(lastDay, year, lastMonth, calendar->daysInMonth(firstDayOfLastMonth));
 
   for (; day <= lastDay ; day = calendar->addDays(day, 7 /*calendar->daysOfWeek()*/) )
   {
-    QString week = i18n("Week %1", calendar->week(day, &year));
+    QString week = i18n("Week %1", calendar->weekNumber(day, &year));
     if ( year != calendar->year(day) ) week += '*';  // show that this is a week from a different year
     d->selectWeek->addItem(week);
 
     // make sure that the week of the lastDay is always inserted: in Chinese calendar
     // system, this is not always the case
-    if(day < lastDay && day.daysTo(lastDay) < 7 && calendar->week(day) != calendar->week(lastDay))
+    if(day < lastDay && day.daysTo(lastDay) < 7 && calendar->weekNumber(day) != calendar->weekNumber(lastDay))
       day = lastDay.addDays(-7);
   }
 }
@@ -423,7 +423,7 @@ KDatePicker::dateChangedSlot(const QDate &date)
 
     // calculate the item num in the week combo box; normalize selected day so as if 1.1. is the first day of the week
     QDate firstDay;
-    calendar->setDate(firstDay, calendar->year(date), 1, 1);
+    calendar->setYMD(firstDay, calendar->year(date), 1, 1);
     d->selectWeek->setCurrentIndex((calendar->dayOfYear(date) + calendar->dayOfWeek(firstDay) - 2) / 7/*calendar->daysInWeek()*/);
     d->selectYear->setText(calendar->yearString(date, KCalendarSystem::ShortFormat));
 
@@ -503,7 +503,7 @@ KDatePicker::weekSelected(int week)
   QDate date = d->table->date();
   int year = calendar->year(date);
 
-  calendar->setDate(date, year, 1, 1);  // first day of selected year
+  calendar->setYMD(date, year, 1, 1);  // first day of selected year
 
   // calculate the first day in the selected week (day 1 is first day of week)
   date = calendar->addDays(date, week * 7/*calendar->daysOfWeek()*/ -calendar->dayOfWeek(date) + 1);
@@ -533,7 +533,7 @@ KDatePicker::selectMonthClicked()
 
   int day = calendar->day(date);
   // ----- construct a valid date in this month:
-  calendar->setDate(date, calendar->year(date), item->data().toInt(), 1);
+  calendar->setYMD(date, calendar->year(date), item->data().toInt(), 1);
   date = date.addDays(qMin(day, calendar->daysInMonth(date)) - 1);
   // ----- set this month
   setDate(date);
@@ -570,7 +570,7 @@ KDatePicker::selectYearClicked()
       // ----- construct a valid date in this month:
       //date.setYMD(year, date.month(), 1);
       //date.setYMD(year, date.month(), qMin(day, date.daysInMonth()));
-      calendar->setDate(date, year, calendar->month(date),
+      calendar->setYMD(date, year, calendar->month(date),
                        qMin(day, calendar->daysInMonth(date)));
       // ----- set this month
       setDate(date);
