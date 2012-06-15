@@ -36,14 +36,11 @@ const int HEADER_HEIGHT = 20;
 
 //Names of displayed columns
 enum ColumnNames {
-    Order = 0,
-    ShapeName = 1,
-    ShapeThumbnail = 2,
-    AnimationIcon = 3,
-    TriggerEventIcon = 4,
-    StartTime = 5,
-    EndTime = 6,
-    AnimationClass = 7
+    ShapeThumbnail = 0,
+    AnimationIcon = 1,
+    StartTime = 2,
+    EndTime = 3,
+    AnimationClass = 4
 };
 
 KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
@@ -139,17 +136,15 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 
 bool KPrTimeLineHeader::eventFilter(QObject *target, QEvent *event)
 {
-    int ExtraWidth = 5;
+    int ExtraWidth = 10;
     if (QScrollArea *scrollArea = m_mainView->scrollArea()) {
         if (target == scrollArea && event->type() == QEvent::Resize) {
             if (QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(event)) {
                 QSize size = resizeEvent->size();
                 size.setHeight(sizeHint().height());
-                int width = size.width() - (ExtraWidth +
-                                            scrollArea->verticalScrollBar()->sizeHint().width());
+                int width = size.width() + ExtraWidth - scrollArea->verticalScrollBar()->sizeHint().width();
                 size.setWidth(width);
-                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(StartTime) -
-                                     m_mainView->widthOfColumn(TriggerEventIcon), size.height()));
+                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(StartTime), size.height()));
                 resize(size);
             }
         }

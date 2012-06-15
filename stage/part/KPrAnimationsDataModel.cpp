@@ -23,6 +23,7 @@
 #include "animations/KPrAnimationSubStep.h"
 #include <KPrPage.h>
 #include <KPrView.h>
+#include <KPrCustomAnimationItem.h>
 
 //KDE HEADERS
 #include <KIconLoader>
@@ -39,142 +40,130 @@
 #include <QDebug>
 #include <QAbstractAnimation>
 
+const int REAL_COLUMN_COUNT = 3;
+
+enum ColumnNames {
+    ShapeThumbnail = 0,
+    AnimationIcon = 1,
+    StartTime = 2,
+    EndTime = 3,
+    AnimationClass = 4
+};
+
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
     : QAbstractTableModel(parent)
-    , m_activePage(0)
+    , m_rootItem(0)
 {
-    m_data.clear();
 }
 
 QModelIndex KPrAnimationsDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if(!m_activePage) {
+    if (!m_rootItem || row < 0 || column < 0 || column > AnimationClass)
         return QModelIndex();
+    KPrCustomAnimationItem *parentItem = itemForIndex(parent);
+    Q_ASSERT(parentItem);
+    if (row == 0) {
+        return createIndex(row, column, m_rootItem);
     }
-
-    // check if parent is root node
-    if(!parent.isValid()) {
-        if(row >= 0 && row < rowCount(QModelIndex())) {
-            return createIndex(row, column, m_data.at(row).shapeAnimation);
-        }
-    }
+    if (KPrCustomAnimationItem *item = parentItem->childAt(row - 1))
+        return createIndex(row, column, item);
     return QModelIndex();
 }
 
 QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
 {
-        int row = -1;
-        foreach (AnimationsData data, m_data) {
-            row++;
-            if (shape == data.shapeAnimation->shape())
-                return index(row, 1);
+    QModelIndex parent = QModelIndex();
+    if (!shape)
+        return QModelIndex();
+    for (int row = 0; row < rowCount(parent); ++row) {
+        QModelIndex thisIndex = index(row, 0, parent);
+        KPrCustomAnimationItem *item = itemForIndex(thisIndex);
+        if (item->shape() == shape) {
+            return thisIndex;
         }
-        return index(-1, 1);
+    }
+    return QModelIndex();
+}
+
+QModelIndex KPrAnimationsDataModel::indexByItem(KPrCustomAnimationItem *item)
+{
+    QModelIndex parent = QModelIndex();
+    if (!item)
+        return QModelIndex();
+    for (int row = 0; row < rowCount(parent); ++row) {
+        QModelIndex thisIndex = index(row, 0, parent);
+        KPrCustomAnimationItem *thisItem = itemForIndex(thisIndex);
+        if (item == thisItem) {
+            return thisIndex;
+        }
+    }
+    return QModelIndex();
 }
 
 int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);   
-    return m_data.count();
+{   
+    if (parent.isValid())
+        return 0;
+    KPrCustomAnimationItem *parentItem = itemForIndex(parent);
+    return parentItem ? parentItem->childCount() + 1 : 0;
 }
 
-const int REAL_COLUMN_COUNT = 8;
 int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return REAL_COLUMN_COUNT;
 }
 
-enum ColumnNames {
-    Order = 0,
-    ShapeName = 1,
-    ShapeThumbnail = 2,
-    AnimationIcon = 3,
-    TriggerEventIcon = 4,
-    StartTime = 5,
-    EndTime = 6,
-    AnimationClass = 7
-};
-
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
-    if (!m_activePage) {
+    if (!m_rootItem || !index.isValid() || index.column() < 0 ||
+        index.column() > AnimationClass)
         return QVariant();
-    }
-    if (!index.isValid()) {
-        return QVariant();
-    }
-    if (role == Qt::TextAlignmentRole) {
-        return int(Qt::AlignRight | Qt::AlignVCenter);
-    } else if (role == Qt::DisplayRole) {
-        switch (index.column()) {
-        case Order:
-            return (m_data.at(index.row()).order == 0) ? QVariant() : m_data.at(index.row()).order;
-        case ShapeName:
-            return m_data.at(index.row()).name;
-        case ShapeThumbnail:
-            return QVariant();
-        case AnimationIcon:
-            return QVariant();
-        case TriggerEventIcon:
-            return QVariant();
-        case StartTime:
-            return m_data.at(index.row()).startTime;
-        case EndTime:
-            return m_data.at(index.row()).duration;
-        case AnimationClass:
-            return m_data.at(index.row()).type;
-        default:
-            return QVariant();
+    if (KPrCustomAnimationItem *item = itemForIndex(index)) {
+        if (role == Qt::TextAlignmentRole) {
+            return int(Qt::AlignRight | Qt::AlignVCenter);
+        } else if (role == Qt::DisplayRole) {
+            switch (index.column()) {
+            case ShapeThumbnail:
+                return QVariant();
+            case AnimationIcon:
+                return QVariant();
+            case StartTime:
+                return item->startTime();
+            case EndTime:
+                return item->duration();
+            case AnimationClass:
+                return item->type();
+            default:
+                return QVariant();
 
-        }
-    } else if (role == Qt::DecorationRole) {
-        switch (index.column()) {
-        case ShapeThumbnail:
-            return m_data.at(index.row()).thumbnail;
-        case AnimationIcon:
-            return m_data.at(index.row()).animationIcon;
-        case TriggerEventIcon:
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::On_Click)
-                return KIconLoader::global()->loadIcon(QString("onclick"),
-                                                       KIconLoader::NoGroup,
-                                                       32);
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::After_Previous)
-                return KIconLoader::global()->loadIcon(QString("after_previous"),
-                                                       KIconLoader::NoGroup,
-                                                       32);
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::With_Previous)
-                return KIconLoader::global()->loadIcon(QString("with_previous"),
-                                                       KIconLoader::NoGroup,
-                                                       32);
-        default:
-            return QVariant();
-        }
-    } else if (role == Qt::TextAlignmentRole) {
-            return Qt::AlignCenter;
-    } else if (role == Qt::ToolTipRole) {
-        switch (index.column()) {
-        case Order:
-        case ShapeName:
-        case ShapeThumbnail:
-            return QVariant();
-        case AnimationIcon:
-            return m_data.at(index.row()).animationName;
-        case TriggerEventIcon:
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::On_Click)
-                return i18n("start on mouse click");
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::After_Previous)
-                return i18n("start after previous animation");
-            if (m_data.at(index.row()).triggerEvent == KPrShapeAnimation::With_Previous)
-                return i18n("start with previous animation");
-        case StartTime:
-            return i18n("Start after %1 seconds. Duration of %2 seconds").
-                    arg(m_data.at(index.row()).startTime).arg(m_data.at(index.row()).duration);
-        case EndTime:
-        case AnimationClass:
-        default:
-            return QVariant();
+            }
+        } else if (role == Qt::DecorationRole) {
+            switch (index.column()) {
+            case ShapeThumbnail:
+                return item->thumbnail();
+            case AnimationIcon:
+                return item->animationIcon();
+            default:
+                return QVariant();
+            }
+        } else if (role == Qt::TextAlignmentRole) {
+                return Qt::AlignCenter;
+        } else if (role == Qt::ToolTipRole) {
+            switch (index.column()) {
+            case ShapeThumbnail:
+                return QVariant();
+            case AnimationIcon:
+                return item->animationName();
+            case StartTime:
+                return i18n("Start after %1 seconds. Duration of %2 seconds").
+                        arg(item->startTime()).arg(item->duration());
+            case EndTime:
+            case AnimationClass:
+            default:
+                return QVariant();
 
+            }
         }
     }
     return QVariant();
@@ -182,15 +171,12 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 
 QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (!m_activePage) {
-        return QVariant();
-    }
     if (role != Qt::DisplayRole) {
         return QVariant();
     }
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case ShapeName:
+        case ShapeThumbnail:
             return i18n("Seconds");
         default:
             return QVariant();
@@ -205,15 +191,9 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
     //TODO: Edition features are not yet implemented
     if (index.isValid() && role == Qt::EditRole) {
         switch (index.column()) {
-        case Order:
-            return false;
-        case ShapeName:
-            return false;
         case ShapeThumbnail:
             return false;
         case AnimationIcon:
-            return false;
-        case TriggerEventIcon:
             return false;
         case StartTime:
             //TODO: save new value in animation step.
@@ -242,116 +222,22 @@ Qt::ItemFlags KPrAnimationsDataModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-void KPrAnimationsDataModel::setActivePage(KPrPage *activePage)
+void KPrAnimationsDataModel::setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem)
 {
-    Q_ASSERT(activePage);
-    m_activePage = activePage;
-    m_data.clear();
-    m_steps = activePage->animationSteps();
-    int k = 0;
-    int l = 1;
-    foreach (KPrAnimationStep *step, m_steps) {
-        for (int i=0; i < step->animationCount(); i++) {
-            QAbstractAnimation *animation = step->animationAt(i);
-            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-                for (int j=0; j < a->animationCount(); j++) {
-                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        k++;
-                        if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
-                            AnimationsData data1;
-                            //Load start and end time, convert them to seconds
-                            QPair <int, int> timeRange = b->timeRange();
-                            qDebug() << "Start at: " << timeRange.first << "end at: " << timeRange.second;
-                            data1.startTime = timeRange.first/1000.0;
-                            data1.duration = timeRange.second/1000.0;
-                            data1.triggerEvent = b->NodeType();
-
-                            if (data1.triggerEvent == KPrShapeAnimation::On_Click) {
-                                data1.order = l;
-                                l++;
-                            }
-                            else {
-                                data1.order = 0;
-                            }
-
-                            qDebug() << "node type: " << b->NodeType();
-                            data1.type = b->presetClass();
-                            setNameAndAnimationIcon(data1, b->id());
-
-                            //TODO: Draw image file to load when shape thumbnail can't be created
-                            data1.thumbnail = KIconLoader::global()->loadIcon(QString("stage"),
-                                                                              KIconLoader::NoGroup,
-                                                                              KIconLoader::SizeMedium);
-                            data1.shapeAnimation = b;
-                            if (!b->shape()->name().isEmpty()) {
-                                data1.name = b->shape()->name();
-                            }
-                            else {
-                                data1.name=i18n("Shape %1").arg(k);
-                            }
-
-                            QPixmap thumbnail;
-                            if (thumbnail.convertFromImage(createThumbnail(b->shape(),
-                                                                           QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))) {
-                                thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
-                            }
-                            data1.thumbnail = thumbnail;
-
-                            m_data.append(data1);
-                            qDebug() << b->id();
-                        }
-
-                    }
-                }
+    if (item) {
+        if (item->parent() == rootItem) {
+            if (m_rootItem != item) {
+                m_rootItem = item;
+                reset();
             }
         }
     }
+    else{
+        m_rootItem = 0;
+        reset();
+    }
     emit layoutAboutToBeChanged();
     emit layoutChanged();
-}
-
-QImage KPrAnimationsDataModel::createThumbnail(KoShape *shape, const QSize &thumbSize) const
-{
-    KoShapePainter painter;
-    QList<KoShape*> shapes;
-    shapes.append(shape);
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container) {
-        shapes.append(container->shapes());
-    }
-
-    painter.setShapes(shapes);
-
-    QImage thumb(thumbSize, QImage::Format_RGB32);
-    // draw the background of the thumbnail
-    thumb.fill(QColor(Qt::white).rgb());
-
-    QRect imageRect = thumb.rect();
-    // use 2 pixel border around the content
-    imageRect.adjust(2, 2, -2, -2);
-
-    QPainter p(&thumb);
-    painter.paint(p, imageRect, painter.contentRect());
-
-    return thumb;
-}
-
-void KPrAnimationsDataModel::setNameAndAnimationIcon(KPrAnimationsDataModel::AnimationsData &data, QString id)
-{
-    //TODO: Identify animations supported by stage
-    QStringList descriptionList = id.split("-");
-    if (descriptionList.count() > 2) {
-        descriptionList.removeFirst();
-        descriptionList.removeFirst();
-    }
-    data.animationName = descriptionList.join(QString(" "));
-
-    //TODO: Parse animation preset Class and read icon name
-    //At future these data will be loaded from a XML file
-    data.animationIcon = KIconLoader::global()->loadIcon(QString("unrecognized_animation"),
-                                                          KIconLoader::NoGroup,
-                                                          KIconLoader::SizeMedium);
 }
 
 void KPrAnimationsDataModel::setDocumentView(KPrView *view)
@@ -367,9 +253,21 @@ void KPrAnimationsDataModel::setDocumentView(KPrView *view)
 
 void KPrAnimationsDataModel::update()
 {
-    setActivePage(m_activePage);
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
+    if (!m_rootItem->shape()) {
+        m_rootItem = 0;
+        emit layoutAboutToBeChanged();
+        emit layoutChanged();
+    }
+}
+
+KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        if (KPrCustomAnimationItem *item = static_cast<KPrCustomAnimationItem*>(
+                index.internalPointer()))
+            return item;
+    }
+    return m_rootItem;
 }
 
 

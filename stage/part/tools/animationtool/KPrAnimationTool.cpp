@@ -89,11 +89,11 @@ void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 {
     //If no shape was click deselect all
     KoSelection *selection = canvas()->shapeManager()->selection();
-    selection->deselectAll();
+    //selection->deselectAll();
     foreach (KoShape* shape, selection->selectedShapes()) {
         shape->update();
     }
-
+    selection->deselectAll();
     //Select clicked shape
     KoShape *shape = canvas()->shapeManager()->shapeAt(event->point);
     if (shape) {

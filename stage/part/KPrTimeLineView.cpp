@@ -48,14 +48,11 @@ const int INVALID = -1;
 
 //Names of displayed columns
 enum ColumnNames {
-    Order = 0,
-    ShapeName = 1,
-    ShapeThumbnail = 2,
-    AnimationIcon = 3,
-    TriggerEventIcon = 4,
-    StartTime = 5,
-    EndTime = 6,
-    AnimationClass = 7
+    ShapeThumbnail = 0,
+    AnimationIcon = 1,
+    StartTime = 2,
+    EndTime = 3,
+    AnimationClass = 4
 };
 
 KPrTimeLineView::KPrTimeLineView(QWidget *parent)
@@ -85,7 +82,7 @@ QSize KPrTimeLineView::minimumSizeHint() const
 
     int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
-    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth() );
+    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth());
 }
 
 bool KPrTimeLineView::eventFilter(QObject *target, QEvent *event)
@@ -284,20 +281,10 @@ int KPrTimeLineView::rowAt(int ypos)
 int KPrTimeLineView::columnAt(int xpos)
 {
     int column;
-    if (xpos < m_mainView->widthOfColumn(Order))
-        column = Order;
-    else if (xpos  < m_mainView->widthOfColumn(Order) + m_mainView->widthOfColumn(ShapeName))
-        column = ShapeName;
-    else if (xpos  < m_mainView->widthOfColumn(Order) + m_mainView->widthOfColumn(ShapeName) +
-             m_mainView->widthOfColumn(ShapeThumbnail))
+    if (xpos  < m_mainView->widthOfColumn(ShapeThumbnail))
         column = ShapeThumbnail;
-    else if (xpos  < m_mainView->widthOfColumn(Order) + m_mainView->widthOfColumn(ShapeName) +
-             m_mainView->widthOfColumn(ShapeThumbnail) + m_mainView->widthOfColumn(AnimationIcon))
+    else if (xpos  < m_mainView->widthOfColumn(ShapeThumbnail) + m_mainView->widthOfColumn(AnimationIcon))
         column = AnimationIcon;
-    else if (xpos  < m_mainView->widthOfColumn(Order) + m_mainView->widthOfColumn(ShapeName) +
-             m_mainView->widthOfColumn(ShapeThumbnail) + m_mainView->widthOfColumn(AnimationIcon)
-             + m_mainView->widthOfColumn(TriggerEventIcon))
-        column = TriggerEventIcon;
     else
         column = StartTime;
     return column;
@@ -327,32 +314,17 @@ void KPrTimeLineView::paintEvent(QPaintEvent *event)
 
 void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowHeight)
 {
-    int column = Order;
     int start = 0;
     //Column 0
-    paintTextRow(painter, start, y, row, column, RowHeight);
-    //Column 1
-    column = ShapeName;
-    start = start + m_mainView->widthOfColumn(Order);
-    paintTextRow(painter, start, y, row, column, RowHeight);
-
-    //Column 2
-    column = ShapeThumbnail;
-    start = start + m_mainView->widthOfColumn(column - 1);
+    int column = ShapeThumbnail;
     paintIconRow(painter, start, y, row, column, RowHeight - 2, RowHeight);
 
-    //Column 3
+    //Column 1
     column = AnimationIcon;
     start = start + m_mainView->widthOfColumn(column - 1);
     paintIconRow(painter, start, y, row, column, RowHeight/2, RowHeight);
 
-
-    //Column 4
-    column = TriggerEventIcon;
-    start = start + m_mainView->widthOfColumn(column - 1);
-    paintIconRow(painter, start, y, row, column, RowHeight/2, RowHeight);
-
-    //Column 5 (6 y 7)
+    //Column 2 (6 y 7)
     column = StartTime;
     start = start + m_mainView->widthOfColumn(column - 1);
     QRect rect(start, y, m_mainView->widthOfColumn(column), RowHeight);
@@ -370,8 +342,8 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
     int lineHeigth = qMin(LINE_HEIGHT , rect.height());
     int vPadding = (rect.height() - lineHeigth)/2;
     int stepSize  = m_mainView->widthOfColumn(StartTime)/m_mainView->numberOfSteps();
-    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row,EndTime)).toDouble();
-    qreal start = m_mainView->model()->data(m_mainView->model()->index(row,StartTime)).toDouble();
+    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, EndTime)).toDouble();
+    qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble();
     QRectF lineRect(rect.x()+stepSize*start, rect.y()+vPadding, stepSize*duration, lineHeigth);
 
     QRectF fillRect (lineRect.x(),lineRect.y()+2,lineRect.width(),lineRect.height() - 4);

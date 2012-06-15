@@ -48,14 +48,11 @@ const int SCALE_LIMIT = 1000;
 
 // Names of displayed columns
 enum ColumnNames {
-    Order = 0,
-    ShapeName = 1,
-    ShapeThumbnail = 2,
-    AnimationIcon = 3,
-    TriggerEventIcon = 4,
-    StartTime = 5,
-    EndTime = 6,
-    AnimationClass = 7
+    ShapeThumbnail = 0,
+    AnimationIcon = 1,
+    StartTime = 2,
+    EndTime = 3,
+    AnimationClass = 4
 };
 
 KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
@@ -66,14 +63,8 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     , m_rowsHeigth(50)
     , m_stepsNumber(10)
     , m_scaleOversize(0)
-    , m_nameWidth(0)
     , m_maxLength(0.0)
 {
-    //Set a intial width for columns
-    QFontMetrics fm(font());
-    m_orderColumnWidth = fm.width(QString("W99W"));
-    m_shapeNameColumnWidth = fm.width(QString("WMMMW"));
-
     //Setup GUI
     m_view = new KPrTimeLineView(this);
     m_header = new KPrTimeLineHeader(this);
@@ -119,18 +110,12 @@ KPrAnimationsDataModel *KPrAnimationsTimeLineView::model()
 int KPrAnimationsTimeLineView::widthOfColumn(int column) const
 {
     switch (column) {
-    case 0:
-        return m_orderColumnWidth;
-    case 1:
-        return m_shapeNameColumnWidth;
-    case 2:
+    case ShapeThumbnail:
         return rowsHeigth()*3/2;
-    case 3:
-    case 4:
+    case AnimationIcon:
         return rowsHeigth()*5/4;
-    case 5:
-        return 2*(m_orderColumnWidth+m_shapeNameColumnWidth+
-                          +rowsHeigth()*2/3+rowsHeigth()*10/4 + 10);
+    case StartTime:
+        return 2*(rowsHeigth()*2/3+rowsHeigth()*10/4 + 10);
     default:
         return 0;
     }
@@ -288,17 +273,11 @@ void KPrAnimationsTimeLineView::update()
 void KPrAnimationsTimeLineView::updateColumnsWidth()
 {
     for (int row = 0; row < m_model->rowCount(); ++ row){
-        int size = m_model->data(m_model->index(row, ShapeName)).toString().length();
         qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
                 m_model->data(m_model->index(row, EndTime)).toDouble();
-        if (size > m_nameWidth) {
-            m_nameWidth = size;
-        }
         if (length > m_maxLength) {
             m_maxLength = length;
         }
     }
-    QFontMetrics fm(font());
-    m_shapeNameColumnWidth = fm.width(QString("%1W").arg(QString(m_nameWidth, 'M')));
     m_view->setMinimumSize(m_view->minimumSizeHint());
 }

@@ -110,9 +110,6 @@ private:
     int m_rowsHeigth;
     int m_stepsNumber;
     int m_scaleOversize;
-    int m_nameWidth;
-    int m_orderColumnWidth;
-    int m_shapeNameColumnWidth;
     qreal m_maxLength;
 };
 

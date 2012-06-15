@@ -23,18 +23,18 @@ enum Column {Name, Shape, TriggerEvent, Type};
 
 KPrAnimationsTreeModel::KPrAnimationsTreeModel(QObject *parent)
     : QAbstractItemModel(parent)
-    , rootItem(0)
+    , m_rootItem(0)
 {
 }
 
 KPrAnimationsTreeModel::~KPrAnimationsTreeModel()
 {
-    delete rootItem;
+    delete m_rootItem;
 }
 
 void KPrAnimationsTreeModel::clear()
 {
-    delete rootItem;
+    delete m_rootItem;
     reset();
 }
 
@@ -54,13 +54,13 @@ const int ColumnCount = 4;
 
 QVariant KPrAnimationsTreeModel::data(const QModelIndex &index, int role) const
 {
-    if (!rootItem || !index.isValid() || index.column() < 0 ||
+    if (!m_rootItem || !index.isValid() || index.column() < 0 ||
         index.column() >= ColumnCount)
         return QVariant();
-    if (KPrCustomAnimationItem*item = itemForIndex(index)) {
+    if (KPrCustomAnimationItem *item = itemForIndex(index)) {
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             switch (index.column()) {
-                case Name: return item->name();
+                case Name: return item->animationName();
                 case TriggerEvent: return QVariant();
                 case Shape: return QVariant();
                 case Type: return item->typeText();
@@ -73,7 +73,7 @@ QVariant KPrAnimationsTreeModel::data(const QModelIndex &index, int role) const
                                         Qt::AlignLeft);
             return static_cast<int>(Qt::AlignVCenter|Qt::AlignRight);
         }
-        if (role == Qt::DecorationRole)
+        if (role == Qt::DecorationRole) {
             switch (index.column()) {
                 case Name: return QVariant();
                 case TriggerEvent:
@@ -89,6 +89,31 @@ QVariant KPrAnimationsTreeModel::data(const QModelIndex &index, int role) const
                 case Shape: return item->thumbnail();
                 case Type: return QVariant();
                 default: Q_ASSERT(false);
+            }
+        }
+        if (role == Qt::SizeHintRole) {
+            switch (index.column()) {
+                case Name: return QVariant();
+                case TriggerEvent: return QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+                case Shape: return QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+                case Type: return QVariant();
+                default: Q_ASSERT(false);
+            }
+        }
+        if (role == Qt::ToolTipRole) {
+                switch (index.column()) {
+                case Name: return QVariant();
+                case TriggerEvent:
+                    if (item->triggerEvent() == KPrShapeAnimation::On_Click)
+                        return i18n("start on mouse click");
+                    if (item->triggerEvent() == KPrShapeAnimation::After_Previous)
+                        return i18n("start after previous animation");
+                    if (item->triggerEvent() == KPrShapeAnimation::With_Previous)
+                        return i18n("start with previous animation");
+                case Shape: return item->shape()->name();
+                case Type: return QVariant();
+                default: Q_ASSERT(false);
+                }
             }
     }
     return QVariant();
@@ -128,7 +153,7 @@ int KPrAnimationsTreeModel::columnCount(const QModelIndex &parent) const
 
 QModelIndex KPrAnimationsTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!rootItem || row < 0 || column < 0 || column >= ColumnCount
+    if (!m_rootItem || row < 0 || column < 0 || column >= ColumnCount
         || (parent.isValid() && parent.column() != 0))
         return QModelIndex();
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
@@ -144,7 +169,7 @@ QModelIndex KPrAnimationsTreeModel::parent(const QModelIndex &index) const
         return QModelIndex();
     if (KPrCustomAnimationItem *childItem = itemForIndex(index)) {
         if (KPrCustomAnimationItem *parentItem = childItem->parent()) {
-            if (parentItem == rootItem)
+            if (parentItem == m_rootItem)
                 return QModelIndex();
             if (KPrCustomAnimationItem *grandParentItem = parentItem->parent()) {
                 int row = grandParentItem->rowOfChild(parentItem);
@@ -163,10 +188,10 @@ bool KPrAnimationsTreeModel::setData(const QModelIndex &index, const QVariant &v
 
 bool KPrAnimationsTreeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    if (!rootItem)
-        rootItem = new  KPrCustomAnimationItem;
+    if (!m_rootItem)
+        m_rootItem = new  KPrCustomAnimationItem;
     KPrCustomAnimationItem *parentItem = parent.isValid() ? itemForIndex(parent)
-                                            : rootItem;
+                                            : m_rootItem;
     beginInsertRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i) {
         //TODO config new animation
@@ -179,10 +204,10 @@ bool KPrAnimationsTreeModel::insertRows(int row, int count, const QModelIndex &p
 
 bool KPrAnimationsTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    if (!rootItem)
+    if (!m_rootItem)
         return false;
     KPrCustomAnimationItem *item = parent.isValid() ? itemForIndex(parent)
-                                      : rootItem;
+                                      : m_rootItem;
     beginRemoveRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i)
         delete item->takeChild(row);
@@ -235,7 +260,7 @@ QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
         --row;
         return createIndex(row, 0, parent->childAt(row));
     }
-    if (parent != rootItem) {
+    if (parent != m_rootItem) {
         KPrCustomAnimationItem *grandParent = parent->parent();
         Q_ASSERT(grandParent);
         return createIndex(grandParent->rowOfChild(parent), 0, parent);
@@ -268,7 +293,7 @@ QModelIndex KPrAnimationsTreeModel::promote(const QModelIndex &index)
     Q_ASSERT(item);
     KPrCustomAnimationItem *parent = item->parent();
     Q_ASSERT(parent);
-    if (parent == rootItem)
+    if (parent == m_rootItem)
         return index; // Already a top-level item
 
     int row = parent->rowOfChild(item);
@@ -310,8 +335,8 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
     Q_ASSERT(activePage);
     m_activePage = activePage;
     clear();
-    rootItem = new KPrCustomAnimationItem;
-    KPrCustomAnimationItem *parentItem = rootItem;
+    m_rootItem = new KPrCustomAnimationItem;
+    KPrCustomAnimationItem *parentItem = m_rootItem;
     KPrCustomAnimationItem *newItem;
     foreach (KPrAnimationStep *step, activePage->animationSteps()) {
         for (int i=0; i < step->animationCount(); i++) {
@@ -322,7 +347,7 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
                             if (b->NodeType() == KPrShapeAnimation::On_Click) {
-                                newItem = new KPrCustomAnimationItem(b, rootItem);
+                                newItem = new KPrCustomAnimationItem(b, m_rootItem);
                                 parentItem = newItem;
                             } else {
                                 newItem = new KPrCustomAnimationItem(b, parentItem);
@@ -362,11 +387,30 @@ QModelIndex KPrAnimationsTreeModel::indexByShape(KoShape *shape)
     return QModelIndex();
 }
 
+QModelIndex KPrAnimationsTreeModel::indexByItem(KPrCustomAnimationItem *item)
+{
+    QModelIndex parent = QModelIndex();
+    if (!item)
+        return QModelIndex();
+    for (int row = 0; row < rowCount(parent); ++row) {
+        QModelIndex thisIndex = index(row, 0, parent);
+        KPrCustomAnimationItem *newItem = itemForIndex(thisIndex);
+        if (item == newItem) {
+            return thisIndex;
+        }
+    }
+    return QModelIndex();
+}
+
+KPrCustomAnimationItem *KPrAnimationsTreeModel::rootItem() const
+{
+    return m_rootItem;
+}
+
 void KPrAnimationsTreeModel::updateData()
 {
     setActivePage(m_activePage);
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
+    reset();
 }
 
 KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &index) const
@@ -376,12 +420,12 @@ KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &
                 index.internalPointer()))
             return item;
     }
-    return rootItem;
+    return m_rootItem;
 }
 
 void KPrAnimationsTreeModel::announceItemChanged(KPrCustomAnimationItem *item)
 {
-    if (item == rootItem)
+    if (item == m_rootItem)
         return;
     KPrCustomAnimationItem *parent = item->parent();
     Q_ASSERT(parent);

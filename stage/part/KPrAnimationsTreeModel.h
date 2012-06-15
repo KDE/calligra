@@ -65,6 +65,9 @@ public:
 
     /// Return the first animation index for the given shape
     QModelIndex indexByShape(KoShape* shape);
+    QModelIndex indexByItem(KPrCustomAnimationItem* item);
+
+    KPrCustomAnimationItem* rootItem() const;
 
 
 public slots:
@@ -77,7 +80,7 @@ private:
 
     KPrPage *m_activePage;
     KPrView *m_view;
-    KPrCustomAnimationItem *rootItem;
+    KPrCustomAnimationItem *m_rootItem;
     KPrCustomAnimationItem *cutItem;
 };
 

@@ -27,6 +27,9 @@
 #include "animations/KPrShapeAnimation.h"
 #include "KPrCustomAnimationItem.h"
 
+#include "KPrAnimationsTimeLineView.h"
+#include "KPrAnimationsDataModel.h"
+
 //Qt Headers
 #include <QToolButton>
 #include <QListWidget>
@@ -119,10 +122,17 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_animationsView->setAllColumnsShowFocus(true);
     m_animationsView->setModel(m_animationsModel);
 
+    m_timeLineModel = new KPrAnimationsDataModel(this);
+    m_timeLineView = new KPrAnimationsTimeLineView();
+    m_timeLineView->setModel(m_timeLineModel);
+    QLabel label(i18n("Manage time line delay and duration: "));
+
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(hlayout);
     layout->addWidget(m_animationsView);
     layout->addLayout(hlayout2);
+    layout->addWidget(&label);
+    layout->addWidget(m_timeLineView);
     setLayout(layout);
 
 }
@@ -133,12 +143,13 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
     if (n_view) {
         m_view = n_view;
         m_animationsModel->setDocumentView(m_view);
-        m_animationsView->adjustSize();
-
+        m_timeLineModel->setDocumentView(m_view);
         slotActivePageChanged();
         connect(m_view->proxyObject, SIGNAL(activePageChanged()),
                  this, SLOT(slotActivePageChanged()));
-        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
+        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
+        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateTimeLineModel(QModelIndex)));
+        connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(syncWithTimeLineIndex(QModelIndex)));
     }
 }
 
@@ -149,27 +160,47 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     if (page) {
         m_animationsModel->setActivePage(page);
         m_animationsView->update();
+        m_animationsView->setColumnWidth(1, KIconLoader::SizeMedium + 6);
+        m_animationsView->setColumnWidth(2, KIconLoader::SizeSmall + 6);
+
+        m_timeLineView->update();
     }
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(changeAnimationSelection()));
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
 }
 
-void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
+void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &index)
 {
-    //Update canvas with selected shape on Time Line View
-    Q_ASSERT(index.internalPointer());
+    syncCanvasWithIndex(index);
+    KPrCustomAnimationItem *item = itemByIndex(index);
+    if (item) {
+        // Change tree model index to time line index
+        QModelIndex newIndex = m_timeLineModel->indexByItem(item);
+        if (newIndex.isValid()) {
+            m_timeLineView->setCurrentIndex(index);
+        }
+    }
+}
 
-    //Check if index is valid and it contains a shape with an animation
-    if (!index.isValid()) {
-        return;
+void KPrShapeAnimationDocker::syncWithTimeLineIndex(const QModelIndex &index)
+{
+    syncCanvasWithIndex(index);
+    KPrCustomAnimationItem *item = itemByIndex(index);
+    if (item) {
+        // Change time line index to tree model index
+        QModelIndex newIndex = m_animationsModel->indexByItem(item);
+        if (newIndex.isValid()) {
+            m_animationsView->setCurrentIndex(index);
+        }
     }
-    KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
-    if (!shapeAnimation) {
-        return;
-    }
-    KoShape *shape = shapeAnimation->shape();
+}
+
+void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
+{
+    KoShape *shape = itemByIndex(index)->shape();
     if (!shape) {
+        qDebug() << "No shape";
         return;
     }
 
@@ -184,15 +215,68 @@ void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
     shape->update();
 }
 
-void KPrShapeAnimationDocker::changeAnimationSelection()
+KPrCustomAnimationItem *KPrShapeAnimationDocker::itemByIndex(const QModelIndex &index)
 {
-    //Update Time Line View with selected shape on canvas
+    //Update canvas with selected shape on Time Line View
+    Q_ASSERT(index.internalPointer());
+
+    //Check if index is valid and it contains a shape with an animation
+    if (!index.isValid()) {
+        return 0;
+    }
+    KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
+    if (!shapeAnimation) {
+        return 0;
+    }
+    return shapeAnimation;
+
+}
+
+void KPrShapeAnimationDocker::updateTimeLineModel(const QModelIndex &index)
+{
+    //Update canvas with selected shape on Time Line View
+    Q_ASSERT(index.internalPointer());
+
+    //Check if index is valid and it contains a shape with an animation
+    if (!index.isValid()) {
+        return;
+    }
+    KPrCustomAnimationItem *rootAnimation = m_animationsModel->rootItem();
+    KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
+
+    if (!shapeAnimation || !rootAnimation) {
+        return;
+    }
+
+    if (shapeAnimation->parent() == rootAnimation) {
+        m_timeLineModel->setParentItem(shapeAnimation, rootAnimation);
+        m_timeLineView->update();
+        m_timeLineView->setCurrentIndex(index);
+    }
+    else if (shapeAnimation->parent()->parent() == rootAnimation) {
+        m_timeLineModel->setParentItem(shapeAnimation->parent(), rootAnimation);
+        m_timeLineView->update();
+        m_timeLineView->setCurrentIndex(index);
+    }
+    else {
+        return;
+    }
+}
+
+void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
+{
+    //Update View with selected shape on canvas
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (!selection->selectedShapes().isEmpty()) {
         QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
         if (index.isValid()) {
             m_animationsView->setCurrentIndex(index);
+            updateTimeLineModel(index);
+        }
+        index = m_timeLineModel->indexByShape(selection->selectedShapes().first());
+        if (index.isValid()) {
+            m_timeLineView->setCurrentIndex(index);
         }
     }
 }

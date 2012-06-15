@@ -37,27 +37,12 @@ class KoShape;
 class KPrAnimationStep;
 class KoPADocument;
 class KPrView;
+class KPrCustomAnimationItem;
 
 class STAGE_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-
-    //Struct to resume animation data
-    struct AnimationsData {
-        QString name;                               //Shape Name
-        int order;                                  //Animation Order
-        QPixmap thumbnail;                           //Shape Thumbnail
-        QPixmap animationIcon;                      //Animation Icon
-        QString animationName;                      //Animation name
-        KPrShapeAnimation::Preset_Class type;       //Type: Entrance, exit, custom, etc
-        KPrShapeAnimation::Node_Type triggerEvent;  //On click, after previous, etc
-        qreal startTime;                            //Animation start time
-        qreal duration;
-        KPrShapeAnimation* shapeAnimation;          //pointer to target element (shape)
-
-    };
-
     explicit KPrAnimationsDataModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent) const;
@@ -66,8 +51,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    //An active page is required before use the model
-    void setActivePage(KPrPage *activePage);
+    void setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem);
 
     //requiere to update model if a shape is removed (or added with undo)
     void setDocumentView(KPrView *view);
@@ -77,21 +61,16 @@ public:
     /// Return the first animation index for the given shape
     QModelIndex indexByShape(KoShape* shape);
 
+    QModelIndex indexByItem(KPrCustomAnimationItem* item);
+
 public slots:
     /// Triggers an update of the complete model
     void update();
 
 private:
-    /// Generates a thumbnail of the animation target (shape)
-    QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
-
-    /// Parses Animation name and icon from data
-    void setNameAndAnimationIcon(AnimationsData &data, QString id);
-
-    QList<AnimationsData> m_data;
-    QList<KPrAnimationStep*> m_steps;
-    KPrPage *m_activePage;
+    KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
     KPrView *m_view;
+    KPrCustomAnimationItem *m_rootItem;
 };
 
 #endif // KPRANIMATIONSDATAMODEL_H

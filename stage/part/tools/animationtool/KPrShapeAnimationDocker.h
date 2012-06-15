@@ -28,8 +28,11 @@ class KoPAViewBase;
 class KPrView;
 class QTreeView;
 class KPrAnimationsTreeModel;
+class KPrAnimationsDataModel;
+class KPrAnimationsTimeLineView;
 class QModelIndex;
 class KPrViewModePreviewShapeAnimations;
+class KPrCustomAnimationItem;
 
 /**
  * Shape animations docker widget: let's edition of animations.
@@ -47,11 +50,21 @@ public slots:
     /// Update widget with animations of the new active page
     void slotActivePageChanged();
 
+    /// Update canvas with selected shape on Animations View
+    void SyncWithAnimationsViewIndex(const QModelIndex &index);
+
+    /// Update canvas with selected shape on Animations View
+    void syncWithTimeLineIndex(const QModelIndex &index);
+
+    void syncCanvasWithIndex(const QModelIndex &index);
+
+    KPrCustomAnimationItem *itemByIndex(const QModelIndex &index);
+
     /// Update canvas with selected shape on Time Line View
-    void changeSelection(const QModelIndex &index);
+    void updateTimeLineModel(const QModelIndex &index);
 
     /// Update Time Line View with selected shape on canvas
-    void changeAnimationSelection();
+    void syncWithCanvasSelectedShape();
 
     /// Plays a preview of the shape animation
     void slotAnimationPreview();
@@ -60,6 +73,8 @@ private:
     KPrView* m_view;
     QTreeView * m_animationsView;
     KPrAnimationsTreeModel *m_animationsModel;
+    KPrAnimationsTimeLineView *m_timeLineView;
+    KPrAnimationsDataModel *m_timeLineModel;
     QToolButton *m_editAnimation;
     QToolButton *m_buttonAddAnimation;
     QToolButton *m_buttonRemoveAnimation;
