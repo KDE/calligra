@@ -78,25 +78,33 @@ void KisRotateCanvasAction::end()
 
 void KisRotateCanvasAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove) {
-        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        if(mevent->buttons()) {
-            QPointF relMovement = mevent->posF() - d->lastMousePosition;
-            float angle = relMovement.manhattanLength();
-
-            Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
-            if(qAbs(dir.x()) > qAbs(dir.y())) {
-                angle *= dir.x() / qAbs(dir.x());
-            } else {
-                angle *= dir.y() / qAbs(dir.y());
-            }
-
-            inputManager()->canvas()->rotateCanvas(angle);
-
-            d->lastMousePosition = mevent->posF();
-            QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-        } else {
-            QApplication::changeOverrideCursor(Qt::OpenHandCursor);
+    switch (event->type()) {
+        case QEvent::MouseButtonPress: {
+            d->lastMousePosition = static_cast<QMouseEvent*>(event)->posF();
+            break;
         }
+        case QEvent::MouseMove: {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            if (mevent->buttons()) {
+                QPointF relMovement = mevent->posF() - d->lastMousePosition;
+                float angle = relMovement.manhattanLength();
+
+                Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
+                if (qAbs(dir.x()) > qAbs(dir.y())) {
+                    angle *= dir.x() / qAbs(dir.x());
+                } else {
+                    angle *= dir.y() / qAbs(dir.y());
+                }
+
+                inputManager()->canvas()->rotateCanvas(angle / 10.f);
+
+                d->lastMousePosition = mevent->posF();
+                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
+            } else {
+                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
+            }
+        }
+        default:
+            break;
     }
 }
