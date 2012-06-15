@@ -26,11 +26,13 @@
 class KisShortcut::Private
 {
 public:
-    Private() : action(0), shortcutIndex(0) { }
+    Private() : action(0), shortcutIndex(0), wheelState(WheelUndefined), currentWheelState(WheelUndefined) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
     QList<Qt::MouseButton> buttonState;
+    WheelState wheelState;
+    WheelState currentWheelState;
 
     KisAbstractInputAction *action;
     int shortcutIndex;
@@ -82,11 +84,16 @@ void KisShortcut::setKeys(const QList< Qt::Key >& keys)
     d->keyState.clear();
 }
 
+void KisShortcut::setWheel(KisShortcut::WheelState state)
+{
+    d->wheelState = state;
+}
+
 KisShortcut::MatchLevel KisShortcut::matchLevel()
 {
-    if( d->keys.count() == d->keyState.count() && d->buttons.count() == d->buttonState.count() ) {
+    if (d->keys.count() == d->keyState.count() && d->buttons.count() == d->buttonState.count() && (d->wheelState == WheelUndefined || d->currentWheelState == d->wheelState)) {
         return CompleteMatch;
-    } else if( d->keyState.count() > 0 || d->buttonState.count() > 0 ) {
+    } else if (d->keyState.count() > 0 || d->buttonState.count() > 0) {
         return PartialMatch;
     }
 
@@ -95,12 +102,12 @@ KisShortcut::MatchLevel KisShortcut::matchLevel()
 
 void KisShortcut::match(QEvent* event)
 {
-    switch(event->type()) {
+    switch (event->type()) {
         case QEvent::KeyPress: {
             QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
-            if(!kevent->isAutoRepeat()) {
+            if (!kevent->isAutoRepeat()) {
                 Qt::Key key = static_cast<Qt::Key>(kevent->key());
-                if(d->keys.contains(key) && !d->keyState.contains(key)) {
+                if (d->keys.contains(key) && !d->keyState.contains(key)) {
                     d->keyState.append(key);
                 }
             }
@@ -108,9 +115,9 @@ void KisShortcut::match(QEvent* event)
         }
         case QEvent::KeyRelease: {
             QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
-            if(!kevent->isAutoRepeat()) {
+            if (!kevent->isAutoRepeat()) {
                 Qt::Key key = static_cast<Qt::Key>(kevent->key());
-                if( d->keyState.contains(key) ) {
+                if (d->keyState.contains(key)) {
                     d->keyState.removeOne(key);
                 }
             }
@@ -118,17 +125,25 @@ void KisShortcut::match(QEvent* event)
         }
         case QEvent::MouseButtonPress: {
             Qt::MouseButton button = static_cast<QMouseEvent*>(event)->button();
-            if( d->buttons.contains( button ) && !d->buttonState.contains(button) ) {
-                d->buttonState.append( button );
+            if (d->buttons.contains(button) && !d->buttonState.contains(button)) {
+                d->buttonState.append(button);
             }
             break;
         }
         case QEvent::MouseButtonRelease: {
             Qt::MouseButton button = static_cast<QMouseEvent*>(event)->button();
-            if( d->buttonState.contains( button ) ) {
+            if (d->buttonState.contains(button)) {
                 d->buttonState.removeOne(button);
             }
             break;
+        }
+        case QEvent::Wheel: {
+            QWheelEvent *wevent = static_cast<QWheelEvent*>(event);
+            if (wevent->delta() > 0) {
+                d->currentWheelState = WheelUp;
+            } else {
+                d->currentWheelState = WheelDown;
+            }
         }
         default:
             break;
@@ -139,4 +154,5 @@ void KisShortcut::clear()
 {
     d->buttonState.clear();
     d->keyState.clear();
+    d->currentWheelState = WheelUndefined;
 }

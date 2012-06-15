@@ -46,6 +46,15 @@ public:
     };
 
     /**
+     * States the mouse wheel can be in.
+     */
+    enum WheelState {
+        WheelUndefined, ///< The state is unknown.
+        WheelUp, ///< Mouse wheel moves up.
+        WheelDown ///< Mouse wheel moves down.
+    };
+
+    /**
      * Constructor.
      */
     KisShortcut();
@@ -83,6 +92,10 @@ public:
      * Set the list of buttons used by this shortcut.
      */
     void setButtons(const QList<Qt::MouseButton> &buttons);
+    /**
+     * Set the wheel state to use for this shortcut.
+     */
+    void setWheel(WheelState state);
     /**
      * Returns how well this shortcut matches recent input.
      */
