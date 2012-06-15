@@ -11,6 +11,7 @@ class KoShape;
 
 class STAGE_EXPORT KPrAnimationsTreeModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
     explicit KPrAnimationsTreeModel(QObject *parent=0);
     ~KPrAnimationsTreeModel();

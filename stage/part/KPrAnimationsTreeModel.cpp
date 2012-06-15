@@ -35,6 +35,7 @@ KPrAnimationsTreeModel::~KPrAnimationsTreeModel()
 void KPrAnimationsTreeModel::clear()
 {
     delete rootItem;
+    reset();
 }
 
 Qt::ItemFlags KPrAnimationsTreeModel::flags(const QModelIndex &index) const
@@ -333,8 +334,6 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
             }
         }
     }
-    emit layoutAboutToBeChanged();
-    emit layoutChanged();
 }
 
 void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
