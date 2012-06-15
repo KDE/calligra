@@ -20,18 +20,19 @@
 #include "KPrShapeAnimationDocker.h"
 
 //Stage Headers
-#include "KPrAnimationsTimeLineView.h"
-#include "KPrAnimationsDataModel.h"
+#include "KPrAnimationsTreeModel.h"
 #include "KPrPage.h"
 #include "KPrView.h"
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
+#include "KPrCustomAnimationItem.h"
 
 //Qt Headers
 #include <QToolButton>
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QTreeView>
 #include <QDebug>
 
 //KDE Headers
@@ -112,14 +113,15 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
 
 
-    //load View
-    m_animationsTimeLineView = new KPrAnimationsTimeLineView();
-    m_animationsModel = new KPrAnimationsDataModel();
-    m_animationsTimeLineView->setModel(m_animationsModel);
+    //load View and model
+    m_animationsModel = new KPrAnimationsTreeModel(this);
+    m_animationsView = new QTreeView();
+    m_animationsView->setAllColumnsShowFocus(true);
+    m_animationsView->setModel(m_animationsModel);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(hlayout);
-    layout->addWidget(m_animationsTimeLineView);
+    layout->addWidget(m_animationsView);
     layout->addLayout(hlayout2);
     setLayout(layout);
 
@@ -131,11 +133,12 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
     if (n_view) {
         m_view = n_view;
         m_animationsModel->setDocumentView(m_view);
+        m_animationsView->adjustSize();
 
         slotActivePageChanged();
         connect(m_view->proxyObject, SIGNAL(activePageChanged()),
                  this, SLOT(slotActivePageChanged()));
-        connect(m_animationsTimeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
+        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeSelection(QModelIndex)));
     }
 }
 
@@ -145,7 +148,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     KPrPage *page = dynamic_cast<KPrPage*>(m_view->activePage());
     if (page) {
         m_animationsModel->setActivePage(page);
-        m_animationsTimeLineView->update();
+        m_animationsView->update();
     }
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -161,7 +164,7 @@ void KPrShapeAnimationDocker::changeSelection(const QModelIndex &index)
     if (!index.isValid()) {
         return;
     }
-    KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
+    KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
     if (!shapeAnimation) {
         return;
     }
@@ -189,18 +192,18 @@ void KPrShapeAnimationDocker::changeAnimationSelection()
     if (!selection->selectedShapes().isEmpty()) {
         QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
         if (index.isValid()) {
-            m_animationsTimeLineView->setCurrentIndex(index);
+            m_animationsView->setCurrentIndex(index);
         }
     }
 }
 
 void KPrShapeAnimationDocker::slotAnimationPreview()
 {
-    QModelIndex index = m_animationsTimeLineView->currentIndex();
+    QModelIndex index = m_animationsView->currentIndex();
     if (!index.isValid()) {
         return;
     }
-    KPrShapeAnimation *shapeAnimation = static_cast< KPrShapeAnimation*>(index.internalPointer());
+    KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
     if (!shapeAnimation) {
         return;
     }
@@ -209,6 +212,6 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
         m_previewMode = new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas());
     }
 
-    m_previewMode->setShapeAnimation(shapeAnimation);
+    m_previewMode->setShapeAnimation(shapeAnimation->animation());
     m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)
 }

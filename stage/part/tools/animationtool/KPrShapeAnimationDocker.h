@@ -26,8 +26,8 @@ class QListWidget;
 class QToolButton;
 class KoPAViewBase;
 class KPrView;
-class KPrAnimationsTimeLineView;
-class KPrAnimationsDataModel;
+class QTreeView;
+class KPrAnimationsTreeModel;
 class QModelIndex;
 class KPrViewModePreviewShapeAnimations;
 
@@ -58,8 +58,8 @@ public slots:
 
 private:
     KPrView* m_view;
-    KPrAnimationsTimeLineView * m_animationsTimeLineView;
-    KPrAnimationsDataModel *m_animationsModel;
+    QTreeView * m_animationsView;
+    KPrAnimationsTreeModel *m_animationsModel;
     QToolButton *m_editAnimation;
     QToolButton *m_buttonAddAnimation;
     QToolButton *m_buttonRemoveAnimation;

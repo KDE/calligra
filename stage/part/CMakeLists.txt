@@ -76,6 +76,8 @@ set( calligrastageprivate_LIB_SRCS
      KPrAnimationsTimeLineView.cpp
      KPrTimeLineHeader.cpp
      KPrTimeLineView.cpp
+     KPrAnimationsTreeModel.cpp
+     KPrCustomAnimationItem.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
