@@ -287,11 +287,13 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
@@ -581,11 +583,13 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.cpmTable->saveContext( model()->columnMap(), context );
 }
 

@@ -35,6 +35,7 @@
 
 class KoDocument;
 class KoShape;
+class KoPageLayout;
 
 class KoReportPage;
 class KoReportData;
@@ -123,6 +124,9 @@ public slots:
     QMap<QString, QAbstractItemModel*> createReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 ) const;
 
     KoPrintJob *createPrintJob();
+
+    /// Return the page layout used for printing this view
+    KoPageLayout pageLayout() const;
 
 signals:
     void editReportDesign( ReportView *view );

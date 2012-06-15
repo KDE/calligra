@@ -156,6 +156,8 @@ public:
 
     QWidget *canvas() const;
 
+    KoPageLayout pageLayout() const;
+
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
     void setActiveSchedule( long id );

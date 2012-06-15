@@ -221,13 +221,13 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     visible = KexiDB::Field::isNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
-    prop = &set["length"];
+    prop = &set["maxLength"];
     visible = (fieldType == KexiDB::Field::Text);
     if (prop->isVisible() != visible) {
 //    prop->setVisible( visible );
         //update the length when it makes sense
-        const int lengthToSet = visible ? KexiDB::Field::defaultTextLength() : 0;
-        setPropertyValueIfNeeded(set, "length", lengthToSet,
+        const int lengthToSet = visible ? KexiDB::Field::defaultMaxLength() : 0;
+        setPropertyValueIfNeeded(set, "maxLength", lengthToSet,
                                  commandGroup, false, false /*!rememberOldValue*/);
 //  if (lengthToSet != prop->value().toInt())
 //   prop->setValue( lengthToSet, false );

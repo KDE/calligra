@@ -203,6 +203,8 @@ signals:
     void selectionChanged();
     /// emitted when an object in the selection is changed (moved/rotated etc)
     void selectionContentChanged();
+    /// emitted when any object changed (moved/rotated etc)
+    void contentChanged();
 
 private:
 

@@ -62,6 +62,7 @@
 #include "widgets/kexidbcommandlinkbutton.h"
 #include "widgets/kexidbslider.h"
 #include "widgets/kexidbprogressbar.h"
+#include "widgets/kexidbdatepicker.h"
 #ifndef KEXI_NO_SUBFORM
 # include "widgets/kexidbsubform.h"
 #endif
@@ -344,6 +345,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setDescription(i18n("A Progress Bar widget"));
         addClass(wi);
     }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("dateedit");
+        wi->setClassName("KexiDBDatePicker");
+        wi->setName(i18n("Date Picker"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "datePicker"));
+        wi->setDescription(i18n("A Date Picker widget"));
+        addClass(wi);
+    }
 
     
 
@@ -456,6 +468,8 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KexiDBSlider(p);
     } else if (c == "KexiDBProgressBar") {
         w = new KexiDBProgressBar(p);
+    } else if (c == "KexiDBDatePicker") {
+        w = new KexiDBDatePicker(p);
     }
 
     else if (c == "KexiDBComboBox")

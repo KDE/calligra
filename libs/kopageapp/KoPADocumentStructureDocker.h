@@ -32,6 +32,7 @@ class KoShapeLayer;
 class KoPADocument;
 class KoPADocumentModel;
 class KoPAPageBase;
+class KoViewItemContextBar;
 class QModelIndex;
 class QAction;
 class QButtonGroup;
@@ -114,6 +115,7 @@ private:
     QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
+    KoViewItemContextBar *m_itemsContextBar;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

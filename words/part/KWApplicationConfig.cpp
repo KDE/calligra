@@ -51,7 +51,7 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setCursorInProtectedArea(interface.readEntry("cursorInProtectArea", true));
     // Config-file value in mm, default 10 pt
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
-    m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds));
+    m_autoSaveSeconds = interface.readEntry("AutoSave", m_autoSaveSeconds);
     document->setAutoSave(m_autoSaveSeconds);
 
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);

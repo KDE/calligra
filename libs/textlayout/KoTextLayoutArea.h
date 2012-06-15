@@ -111,6 +111,16 @@ public:
     /// The real bottom will be determined during layout
     qreal maximumAllowedBottom() const;
 
+    FrameIterator *footNoteCursorToNext() const;
+
+    KoInlineNote *continuedNoteToNext() const;
+
+    int footNoteAutoCount() const;
+
+    void setFootNoteCountInDoc(int count);
+
+    void setFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note);
+
     /// Sets the maximum allowed width before wrapping text.
     /// Setting this also indicates that we don't want wrapping.
     /// 0 means wrapping is allowed
@@ -162,9 +172,9 @@ protected:
     void setBottom(qreal bottom);
 
     /// If this area has the responsibility to show footnotes then store
-    /// it so it can later bein the m_pregisteredFootnotes
+    /// it so it can later be in the m_pregisteredFootnotes
     /// returns the height of the foot note
-    virtual qreal preregisterFootNote(KoInlineNote *note);
+    virtual qreal preregisterFootNote(KoInlineNote *note, qreal bottomOfText);
 
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();
@@ -190,7 +200,7 @@ private:
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
 
     /// looks for footnotes and preregisters them
-    void findFootNotes(QTextBlock block, const QTextLine &line);
+    void findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText);
 
     void clearPreregisteredFootNotes();
 
@@ -238,12 +248,18 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
+    FrameIterator *m_footNoteCursorToNext;
+    FrameIterator *m_footNoteCursorFromPrevious;
+    KoInlineNote *m_continuedNoteToNext;
+    KoInlineNote *m_continuedNoteFromPrevious;
+    int m_footNoteCountInDoc;
 
     bool m_acceptsPageBreak;
     bool m_virginPage;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
     qreal m_anchoringParagraphTop;
+    qreal m_anchoringParagraphContentTop;
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;

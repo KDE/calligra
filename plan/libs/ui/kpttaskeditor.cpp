@@ -879,6 +879,7 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -887,6 +888,7 @@ bool TaskEditor::loadContext( const KoXmlElement &context )
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( baseModel()->columnMap(), context );
 }
@@ -1127,6 +1129,7 @@ void TaskView::slotOptions()
 
 bool TaskView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -1135,6 +1138,7 @@ bool TaskView::loadContext( const KoXmlElement &context )
 
 void TaskView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
@@ -1471,11 +1475,13 @@ void TaskWorkPackageView::slotOptions()
 bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->baseModel()->columnMap(), context );
 }
 
 void TaskWorkPackageView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
 

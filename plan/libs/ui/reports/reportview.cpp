@@ -29,7 +29,7 @@
 #include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
 #include "kptdebug.h"
-
+#include "KoPageLayout.h"
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
@@ -323,6 +323,29 @@ void ReportView::slotExport()
     dia->show();
     dia->raise();
     dia->activateWindow();
+}
+
+KoPageLayout ReportView::pageLayout() const
+{
+    KoPageLayout p = ViewBase::pageLayout();
+    ReportPageOptions opt = m_reportDocument->pageOptions();
+    p.orientation = opt.isPortrait() ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+
+    if (opt.getPageSize().isEmpty()) {
+        p.format = KoPageFormat::CustomSize;
+        p.width = opt.getCustomWidth();
+        p.height = opt.getCustomHeight();
+    } else {
+        p.format = KoPageFormat::formatFromString(opt.getPageSize());
+    }
+    p.topMargin = opt.getMarginTop();
+    p.bottomMargin = opt.getMarginBottom();
+    p.leftMargin = opt.getMarginLeft();
+    p.rightMargin = opt.getMarginRight();
+
+    p.pageEdge = 0.0;
+    p.bindingSide = 0.0;
+    return p;
 }
 
 void ReportView::slotExportFinished( int result )

@@ -94,10 +94,10 @@
 #include <KoPathShape.h>
 #include <KoPathPointData.h>
 #include <KoPathCombineCommand.h>
-#include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
 #include <KoPathPointMoveCommand.h>
 #include <KoShapeTransformCommand.h>
+#include <KoShapeGroupCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -832,8 +832,31 @@ void KarbonView::separatePath()
         }
     }
 
-    if (paths.size())
-        d->canvas->addCommand(new KoPathSeparateCommand(part(), paths));
+    if (!paths.size()) {
+        return;
+    }
+
+    KUndo2Command *cmd = new KUndo2Command;
+    cmd->setText(i18nc("(qtundo-format)", "Separate paths"));
+
+    foreach(KoPathShape* p, paths) {
+        QList<KoPathShape*> separatedPaths;
+        QList<KoShape*> newShapes;
+        if (p->separate(separatedPaths)) {
+            foreach(KoPathShape *subPath, separatedPaths) {
+                new KoShapeCreateCommand(part(), subPath, cmd);
+                newShapes << subPath;
+            }
+            // make sure we put the new subpaths into the parent
+            // of the original path
+            KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(p->parent());
+            if (parentGroup) {
+                new KoShapeGroupCommand(parentGroup, newShapes, cmd);
+            }
+            new KoShapeDeleteCommand(part(), p, cmd);
+        }
+    }
+    d->canvas->addCommand(cmd);
 }
 
 void KarbonView::reversePath()

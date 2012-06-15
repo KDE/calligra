@@ -103,6 +103,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoModeBoxFactory.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -712,15 +713,15 @@ void View::initView()
 
     if (shell())
     {
-        // Setup the tool dock widget.
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-        KoToolBoxFactory toolBoxFactory(d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+        shell()->createDockWidget(&modeBoxFactory);
+        shell()->dockerManager()->removeToolOptionsDocker();
 
         // Setup the tool options dock widget manager.
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+        //        shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1555,6 +1556,7 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
     setHeaderMinima();
+    d->canvas->update();
     d->columnHeader->update();
     d->rowHeader->update();
     d->selectAllButton->update();
