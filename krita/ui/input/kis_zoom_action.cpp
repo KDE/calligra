@@ -31,11 +31,8 @@
 class KisZoomAction::Private
 {
 public:
-    Private() : active(false) { }
-
     QPointF mouseStart;
     QPointF lastMousePosition;
-    bool active;
 };
 
 KisZoomAction::KisZoomAction(KisInputManager* manager)
@@ -64,7 +61,6 @@ void KisZoomAction::begin(int shortcut)
         case ZoomToggleShortcut:
             d->lastMousePosition = d->mouseStart = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->active = true;
             break;
         case ZoomInShortcut: {
             float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
@@ -105,24 +101,30 @@ void KisZoomAction::begin(int shortcut)
 
 void KisZoomAction::end()
 {
-    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
 void KisZoomAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove && d->active) {
-        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        if(mevent->buttons()) {
-            QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
+    switch (event->type()) {
+        case QEvent::MouseButtonPress:
+            d->lastMousePosition = static_cast<QMouseEvent*>(event)->posF();
+            break;
+        case QEvent::MouseMove: {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            if(mevent->buttons()) {
+                QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
 
-            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+                float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
+                inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
 
-            d->lastMousePosition = mevent->posF();
-            QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-        } else {
-            QApplication::changeOverrideCursor(Qt::OpenHandCursor);
+                d->lastMousePosition = mevent->posF();
+                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
+            } else {
+                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
+            }
         }
+        default:
+            break;
     }
 }
