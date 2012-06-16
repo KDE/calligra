@@ -28,6 +28,7 @@
 #include "KoText.h"
 #include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
+#include <KoBorder.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -130,6 +131,7 @@ private:
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
+    friend class InsertNoteCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -161,7 +163,7 @@ public slots:
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
     void addCommand(KUndo2Command *command);
-    
+
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
     /// undostack while also adding representative subcommands to \ref command.
@@ -316,13 +318,18 @@ public slots:
 
     const QTextDocument *document() const;
 
-    //Starts a new custom command. Everything between these two is one custom command. These should not be called from whithin a KUndo2Command
-//    void beginCustomCommand();
-//    void endCustomCommand();
-
-    //Same as Qt, only to be used inside KUndo2Commands
+    /// Same as Qt, only to be used inside KUndo2Commands
     KUndo2Command *beginEditBlock(QString title = QString());
     void endEditBlock();
+
+    /**
+     * Delete one character in the specified direction or a selection.
+     * Warning: From the outside this method should only be used with a parent command
+     * and only if there is a selection
+     * @param previous should be true if act like backspace
+     */
+    void deleteChar(bool previous, KUndo2Command *parent = 0);
+
 
     bool hasComplexSelection() const;
 
@@ -375,23 +382,34 @@ public slots:
 
     /**
      * Sets the width of a table column.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
+     * @param column the column that is to be adjusted.
      */
     void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
 
     /**
      * Sets the height of a table row.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
+     * @param row the row that is to be adjusted.
      */
     void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
 
     /**
      * Changes the width of a table by adjusting the margins.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
      * @param dLeft delta value for the left margin.
      * @param dRight delta value for the right margin.
      */
     void adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight);
+
+    /**
+     * Sets the border formatting of a side in a table cell.
+     * @param table is the table to be adjusted.
+     * @param column the column coordinate of the cell that is to be adjusted.
+     * @param row the row coordinate of the cell that is to be adjusted.
+     */
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+                const KoBorder::BorderData &data);
 
     /**
      * Insert a footnote at the current cursor position
@@ -429,6 +447,8 @@ public slots:
 
     void newLine();
 
+    bool isWithinSelection(int position) const;
+
     int position() const;
 
     void select(QTextCursor::SelectionType selection);
@@ -460,12 +480,6 @@ signals:
     void textFormatChanged();
 
 protected:
-    /**
-     * Delete one character in the specified direction or a selection.
-     * @param previous should be true if act like backspace
-     */
-    void deleteChar(bool previous, KUndo2Command *parent = 0);
-
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:

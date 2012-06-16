@@ -54,7 +54,7 @@ K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &) : Plugin(parent)
 {
-    QAction *actionRefinePath  = new KAction(KIcon("14_refine"), i18n("&Refine Path..."), this);
+    QAction *actionRefinePath  = new KAction(KIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
 

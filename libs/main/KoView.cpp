@@ -30,6 +30,9 @@
 #include "KoViewAdaptor.h"
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
+#include "KoGlobal.h"
+#include "KoPageLayout.h"
+#include "KoPrintJob.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -43,6 +46,9 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
+#include <kselectaction.h>
+#include <kconfiggroup.h>
+#include <kdeprintdialog.h>
 
 #include <QTimer>
 #include <QDockWidget>
@@ -53,6 +59,8 @@
 #include <QDragEnterEvent>
 #include <QImage>
 #include <QUrl>
+#include <QPrintDialog>
+
 //static
 QString KoView::newObjectName()
 {
@@ -196,7 +204,7 @@ KoView::~KoView()
     kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
     if (!d->documentDeleted) {
-        if (koDocument() && !koDocument()->isSingleViewMode()) {
+        if (koDocument()) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
                 d->manager->removePart(koDocument());
             d->document->removeView(this);
@@ -278,8 +286,7 @@ bool KoView::documentDeleted() const
 void KoView::setPartManager(KParts::PartManager *manager)
 {
     d->manager = manager;
-    if (!koDocument()->isSingleViewMode() &&
-            !manager->parts().contains(koDocument())) {  // is there another view registered?
+    if (!manager->parts().contains(koDocument())) {  // is there another view registered?
         d->registered = true; // no, so we have to register now and ungregister again in the DTOR
         manager->addPart(koDocument(), false);
     } else
@@ -443,11 +450,6 @@ void KoView::disableAutoScroll()
     d->scrollTimer->stop();
 }
 
-void KoView::paintEverything(QPainter &painter, const QRect &rect)
-{
-    koDocument()->paintEverything(painter, rect, this);
-}
-
 int KoView::autoScrollAcceleration(int offset) const
 {
     if (offset < 40)
@@ -500,6 +502,20 @@ KoPrintJob * KoView::createPdfPrintJob()
     return createPrintJob();
 }
 
+KoPageLayout KoView::pageLayout() const
+{
+    return koDocument()->pageLayout();
+}
+
+QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
+{
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
+                                printJob->createOptionWidgets(), parent);
+    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    printDialog->setEnabledOptions(printJob->printDialogOptions());
+    return printDialog;
+}
+
 void KoView::setupGlobalActions()
 {
     KAction *actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
@@ -508,6 +524,30 @@ void KoView::setupGlobalActions()
 
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+
+    KSelectAction *actionAuthor  = new KSelectAction(KIcon("user-identity"), i18n("Active Author Profile"), this);
+    actionAuthor->addAction(i18n("Default Author Profile"));
+    actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
+    KConfig *config = KoGlobal::calligraConfig();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+
+    foreach (const QString &profile , profiles) {
+        actionAuthor->addAction(profile);
+    }
+    actionCollection()->addAction("settings_active_author", actionAuthor);
+
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profileName = appAuthorGroup.readEntry("active-profile", "");
+    if (profileName == "anonymous") {
+        actionAuthor->setCurrentItem(1);
+    } else if (profiles.contains(profileName)) {
+        actionAuthor->setCurrentAction(profileName);
+    } else {
+        actionAuthor->setCurrentItem(0);
+    }
+
+    connect(actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
 }
 
 void KoView::newView()
@@ -518,6 +558,19 @@ void KoView::newView()
     KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
     shell->setRootDocument(thisDocument);
     shell->show();
+}
+
+void KoView::changeAuthorProfile(const QString &profileName)
+{
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    if (profileName.isEmpty()) {
+        appAuthorGroup.writeEntry("active-profile", "");
+    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
+        appAuthorGroup.writeEntry("active-profile", "anonymous");
+    } else {
+        appAuthorGroup.writeEntry("active-profile", profileName);
+    }
+    appAuthorGroup.sync();
 }
 
 KoMainWindow * KoView::shell() const

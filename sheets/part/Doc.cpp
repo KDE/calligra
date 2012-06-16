@@ -144,8 +144,8 @@ static const char * CURRENT_DTD_VERSION = "1.2";
 QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
-        : DocBase(parentWidget, parent, singleViewMode)
+Doc::Doc(QObject* parent)
+        : DocBase(parent)
         , dd(new Private)
 {
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
@@ -204,9 +204,10 @@ void Doc::initEmpty()
 
 void Doc::saveConfig()
 {
-    if (isEmbedded() || !isReadWrite())
+    if (!isReadWrite())
         return;
     KSharedConfigPtr config = Factory::global().config();
+    Q_UNUSED(config);
 }
 
 void Doc::initConfig()
@@ -235,11 +236,6 @@ KoView* Doc::createViewInstance(QWidget* parent)
 QGraphicsItem *Doc::createCanvasItem()
 {
     return new CanvasItem(this);
-}
-
-bool Doc::saveChildren(KoStore* _store)
-{
-    return map()->saveChildren(_store);
 }
 
 int Doc::supportedSpecialFormats() const

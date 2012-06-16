@@ -275,6 +275,7 @@ public:
     void emitCloseEditor(bool saveChanges, bool expandMatrix = false);
     void emitRequestFocusEditor();
 
+    void scrollToCursor();
 signals:
     /**
      * Emitted when the Selection was changed.
@@ -300,6 +301,8 @@ signals:
 
     void documentReadWriteToggled(bool readWrite);
     void sheetProtectionToggled(bool protect);
+
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
 protected:
     class Point;

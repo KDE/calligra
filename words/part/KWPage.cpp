@@ -79,10 +79,8 @@ void KWPage::setPageSide(PageSide ps)
     if (page.pageSide == ps)
         return;
 
-    //const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
     page.pageSide = ps;
     priv->pages.insert(n, page);
-    //if (needsRenumbering) priv->setVisiblePageNumber(n, page.pageNumber);
 }
 
 KWPage::PageSide KWPage::pageSide() const
@@ -108,7 +106,7 @@ qreal KWPage::width() const
     if (! isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
-    return page.style.pageLayout().width * (page.pageSide == PageSpread ? 2 : 1);
+    return page.style.pageLayout().width;
 }
 
 qreal KWPage::height() const
@@ -272,10 +270,6 @@ const KWPage KWPage::next() const
     QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
     Q_ASSERT(iter != priv->pageNumbers.constEnd());
     ++iter;
-    if (priv->pages[n].pageSide == PageSpread) {// one more
-        Q_ASSERT(iter != priv->pageNumbers.constEnd());
-        ++iter;
-    }
     if (iter == priv->pageNumbers.constEnd())
         return KWPage();
     return KWPage(priv, iter.value());

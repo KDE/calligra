@@ -6,10 +6,6 @@ macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.
 macro_optional_find_package(WPG)
 macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 
-# for xsltfilter:
-check_include_files(unistd.h HAVE_UNISTD_H)
-check_include_files(sys/stat.h HAVE_SYS_STAT_H)
-check_include_files(stdlib.h HAVE_STDLIB_H)
 # for xpdf:
 check_include_files(ndir.h HAVE_NDIR_H)
 check_include_files(sys/dir.h HAVE_SYS_DIR_H)

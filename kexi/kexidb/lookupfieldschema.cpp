@@ -257,7 +257,12 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
             /* <bound-column>
                 <number>number</number> #in later implementation there can be more columns
                </bound-column> */
-            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild());
+            bool ok;
+            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild(), &ok);
+            if (!ok) {
+                delete lookupFieldSchema;
+                return 0;
+            }
             if (val.type() == QVariant::Int)
                 lookupFieldSchema->setBoundColumn(val.toInt());
         } else if (name == "visible-column") {
@@ -268,7 +273,12 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
                </visible-column> */
             QList<uint> list;
             for (QDomNode childNode = el.firstChild(); !childNode.isNull(); childNode = childNode.nextSibling()) {
-                const QVariant val = KexiDB::loadPropertyValueFromDom(childNode);
+                bool ok;
+                const QVariant val = KexiDB::loadPropertyValueFromDom(childNode, &ok);
+                if (!ok) {
+                    delete lookupFieldSchema;
+                    return 0;
+                }
                 if (val.type() == QVariant::Int)
                     list.append(val.toUInt());
             }
@@ -282,7 +292,12 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
             QVariant val;
             QList<int> columnWidths;
             for (el = el.firstChild().toElement(); !el.isNull(); el = el.nextSibling().toElement()) {
-                QVariant val = KexiDB::loadPropertyValueFromDom(el);
+                bool ok;
+                QVariant val = KexiDB::loadPropertyValueFromDom(el, &ok);
+                if (!ok) {
+                    delete lookupFieldSchema;
+                    return 0;
+                }
                 if (val.type() == QVariant::Int)
                     columnWidths.append(val.toInt());
             }
@@ -291,21 +306,36 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
             /* <show-column-headers>
                 <bool>true/false</bool>
                </show-column-headers> */
-            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild());
+            bool ok;
+            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild(), &ok);
+            if (!ok) {
+                delete lookupFieldSchema;
+                return 0;
+            }
             if (val.type() == QVariant::Bool)
                 lookupFieldSchema->setColumnHeadersVisible(val.toBool());
         } else if (name == "list-rows") {
             /* <list-rows>
                 <number>1..100</number>
                </list-rows> */
-            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild());
+            bool ok;
+            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild(), &ok);
+            if (!ok) {
+                delete lookupFieldSchema;
+                return 0;
+            }
             if (val.type() == QVariant::Int)
                 lookupFieldSchema->setMaximumListRows(val.toUInt());
         } else if (name == "limit-to-list") {
             /* <limit-to-list>
                 <bool>true/false</bool>
                </limit-to-list> */
-            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild());
+            bool ok;
+            const QVariant val = KexiDB::loadPropertyValueFromDom(el.firstChild(), &ok);
+            if (!ok) {
+                delete lookupFieldSchema;
+                return 0;
+            }
             if (val.type() == QVariant::Bool)
                 lookupFieldSchema->setLimitToList(val.toBool());
         } else if (name == "display-widget") {

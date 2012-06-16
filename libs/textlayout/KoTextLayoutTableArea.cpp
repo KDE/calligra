@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Elvis Stansvik <elvstone@gmail.org>
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -129,15 +129,20 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         } else if (qAbs(d->columnPositions[column+1] - point.x()) < 3.0) {
             pointedAt.tableHit = KoPointedAt::ColumnDivider;
             ++column;
-        } else if (qAbs(d->rowPositions[row] - point.y()) < 3.0) {
+        } else if (d->columnPositions[0] < point.x()
+                            && point.x() < d->columnPositions[d->table->columns()]
+                            && qAbs(d->rowPositions[row] - point.y()) < 3.0) {
             pointedAt.tableHit = KoPointedAt::RowDivider;
-        } else if (qAbs(d->rowPositions[row+1] - point.y()) < 3.0) {
+        } else if (d->columnPositions[0] < point.x()
+                            && point.x() < d->columnPositions[d->table->columns()]
+                            && qAbs(d->rowPositions[row+1] - point.y()) < 3.0) {
             pointedAt.tableHit = KoPointedAt::RowDivider;
             ++row;
         } else {
             QTextTableCell cell = d->table->cellAt(row, column);
             pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
         }
+
         if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
             if (column > 0) {
                 pointedAt.tableLeadSize = d->columnPositions[column] - d->columnPositions[column-1];

@@ -116,6 +116,7 @@
 #include <kis_paint_layer.h>
 #include "kis_progress_widget.h"
 #include "kis_shape_layer.h"
+#include "widgets/kis_floating_message.h"
 
 #include <QDebug>
 #include <QPoint>
@@ -392,6 +393,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     setAcceptDrops(true);
 
+    KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+    foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+        collection->setConfigGroup("krita/shortcuts");
+        collection->readSettings(&group);
+    }
+
+
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -409,8 +417,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
-    KConfigGroup group(KGlobal::config(), "theme");
-    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    }
+    {
+        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            collection->setConfigGroup("krita/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
     delete m_d;
 }
 
@@ -712,6 +729,13 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
+
+    // get the assistants and push them to the manager
+    QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
+    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+        m_d->paintingAssistantManager->addAssistant(assistant);
+    }
+
     /**
      * Dirty hack alert
      */
@@ -719,7 +743,12 @@ void KisView2::slotLoadingFinished()
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
-
+    if (m_d->paintingAssistantManager){
+        foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
+            m_d->paintingAssistantManager->addAssistant(assist);
+        }
+        m_d->paintingAssistantManager->setVisible(true);
+    }
     updateGUI();
 
     emit sigLoadingFinished();
@@ -1261,6 +1290,13 @@ void KisView2::showJustTheCanvas(bool toggled)
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         }
+    }
+
+    if (toggled) {
+        // show a fading heads-up display about the shortcut to go back
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
+        floatingMessage->showMessage();
     }
 }
 

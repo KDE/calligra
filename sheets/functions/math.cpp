@@ -59,6 +59,7 @@ Value func_count(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_counta(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_countblank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_countif(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_cur(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_div(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_eps(valVector args, ValueCalc *calc, FuncExtra *);
@@ -114,6 +115,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sum(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_suma(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *);     //here
 Value func_sumsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_transpose(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
@@ -266,6 +268,11 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
+    f = new Function("COUNTIFS",         func_countifs);
+    f->setParamCount(2, -1);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    add(f);
     f = new Function("DIV",           func_div);
     f->setParamCount(1, -1);
     f->setAcceptArray();
@@ -346,6 +353,11 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("SUMIF",         func_sumif);
     f->setParamCount(2, 3);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("SUMIFS",         func_sumifs);
+    f->setParamCount(3, -1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
@@ -566,6 +578,28 @@ Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
     } else {
         return calc->sumIf(checkRange, cond);
     }
+}
+
+//Function: SUMIFS
+Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    int lim = (int) (args.count()-1)/2;
+
+    QList<Value> c_Range;
+    QStringList condition;
+    QList<Condition> cond;
+
+    c_Range.append(args.value(0));           //first element - range to be operated on
+
+    for (int i = 1; i < args.count(); i += 2) {
+        c_Range.append(args[i]);
+        condition.append(calc->conv()->asString(args[i+1]).asString());
+        Condition c;
+        calc->getCond(c, Value(condition.last()));
+        cond.append(c);
+    }
+    Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    return calc->sumIfs(sumRangeStart, c_Range, cond, lim);
 }
 
 // Function: product
@@ -1017,6 +1051,30 @@ Value func_countif(valVector args, ValueCalc *calc, FuncExtra *e)
     calc->getCond(cond, Value(condition));
 
     return Value(calc->countIf(range, cond));
+}
+
+// Function: COUNTIFS
+Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    // the first parameter must be a reference
+    if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+        return Value::errorNA();
+
+    int lim = (int) (args.count()-1)/2; 
+
+    QList<Value> c_Range;
+    QStringList condition;
+    QList<Condition> cond;
+
+    for (int i = 0; i < args.count(); i += 2) {
+        c_Range.append(args[i]);
+        condition.append(calc->conv()->asString(args[i+1]).asString());
+        Condition c;
+        calc->getCond(c, Value(condition.last()));
+        cond.append(c);
+    }
+    Cell cntRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    return calc->countIfs(cntRangeStart, c_Range, cond, lim);
 }
 
 // Function: FIB

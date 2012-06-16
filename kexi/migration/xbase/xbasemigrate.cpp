@@ -163,7 +163,10 @@ bool xBaseMigrate::drv_readTableSchema(
         new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
 
     if ( fld->type() == KexiDB::Field::Text ) {
-      fld->setLength( tableDbf->GetFieldLen(i) );
+      uint len = tableDbf->GetFieldLen(i);
+      if (len < 255) { // limit for small lengths only
+          fld->setMaxLength(len);
+      }
     }
 
     if ( fld->isFPNumericType() ) {

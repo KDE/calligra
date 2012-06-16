@@ -24,8 +24,11 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
+#include <KoDockRegistry.h>
+
 #include "AboutData.h"
 #include "Doc.h"
+#include "ui/CellEditorDocker.h"
 
 using namespace Calligra::Sheets;
 
@@ -50,17 +53,11 @@ Factory::~Factory()
     s_global = 0;
 }
 
-QObject* Factory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
-
-    Doc *doc = new Doc(parentWidget, parent, !bWantKoDocument);
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
+    Doc *doc = new Doc(parent);
     return doc;
 }
 
@@ -80,6 +77,9 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
         s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
         s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->add(new CellEditorDockerFactory);
     }
     return *s_global;
 }

@@ -102,7 +102,7 @@ public:
      * \note Reimplemented for KSpread, because of the QRectF behaviour differs from
      * the one of QRect. Intersection or containment for boundary lines or points is
      * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
-     * QRect it does not. Therefore, this method substracts 0.1 from the width and
+     * QRect it does not. Therefore, this method subtracts 0.1 from the width and
      * height of \p rect .
      *
      * @param data
@@ -138,7 +138,7 @@ public:
      * \note Reimplemented for KSpread, because of the QRectF behaviour differs from
      * the one of QRect. Intersection or containment for boundary lines or points is
      * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
-     * QRect it does not. Therefore, this method substracts 0.1 from the width and
+     * QRect it does not. Therefore, this method subtracts 0.1 from the width and
      * height of \p rect .
      *
      * @param rect where the objects have to be in

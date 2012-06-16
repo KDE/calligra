@@ -54,7 +54,7 @@ K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent/*, name*/)
 {
-    KAction *actionFlattenPath  = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), this);
+    KAction *actionFlattenPath  = new KAction(KIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 

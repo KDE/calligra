@@ -43,7 +43,6 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
     , m_login(0)
 {
-    qDebug("This is to find if the item is created every time I press OD");
     setComponentData(OnlineDocumentFactory::componentData());
 
     KAction *action  = new KAction(i18n("&Google Online Document..."), this);
@@ -57,8 +56,8 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
         m_type = OnlineDocument::WORDS;
     } else if (name.contains("stage")) {
         m_type = OnlineDocument::STAGE;
-    } else if (name.contains("tables")) {
-        m_type = OnlineDocument::TABLES;
+    } else if (name.contains("sheets")) {
+        m_type = OnlineDocument::SHEETS;
     } else {
         m_type = OnlineDocument::UNKNOWN;
     }

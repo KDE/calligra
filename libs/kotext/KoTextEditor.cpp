@@ -50,6 +50,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
 #include "commands/DeleteTableColumnCommand.h"
@@ -63,6 +64,7 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
+#include "commands/InsertNoteCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -986,6 +988,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     QTextTableFormat tableFormat;
 
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    tableFormat.setProperty(KoTableStyle::CollapsingBorders, true);
     tableFormat.setMargin(5);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1228,36 +1231,52 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
+         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Change Border Formatting"));
+    d->caret.beginEditBlock();
+    QTextTableCell cell = table->cellAt(row, column);
+    QTextCharFormat fmt = cell.format();
+    KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
+
+    switch (cellSide) {
+    case KoBorder::Top:
+        border.setTopBorderData(data);
+        break;
+    case KoBorder::Left:
+        border.setLeftBorderData(data);
+        break;
+    case KoBorder::Bottom:
+        border.setBottomBorderData(data);
+        break;
+    case KoBorder::Right:
+        border.setRightBorderData(data);
+        break;
+    case KoBorder::TopLeftToBottomRight:
+        border.setTlbrBorderData(data);
+        break;
+    case KoBorder::BottomLeftToTopRight:
+        border.setTrblBorderData(data);
+        break;
+    }
+    fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
+    cell.setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
 KoInlineNote *KoTextEditor::insertFootNote()
 {
     if (isEditProtected()) {
         return 0;
     }
 
-    bool hasSelection = d->caret.hasSelection();
-    if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Footnote"));
-    } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Footnote"));
-        deleteChar(false, topCommand);
-        d->caret.beginEditBlock();
-    }
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
-    cursor()->setPosition(note->textFrame()->lastPosition());
-
-    if (hasSelection) {
-        d->caret.endEditBlock();
-        endEditBlock();
-    } else {
-        d->updateState(KoTextEditor::Private::NoOp);
-    }
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
+    addCommand(cmd);
 
     emit cursorPositionChanged();
-    return note;
+    return cmd->m_inlineNote;
 }
 
 KoInlineNote *KoTextEditor::insertEndNote()
@@ -1266,30 +1285,11 @@ KoInlineNote *KoTextEditor::insertEndNote()
         return 0;
     }
 
-    bool hasSelection = d->caret.hasSelection();
-    if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Endnote"));
-    } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Endnote"));
-        deleteChar(false, topCommand);
-        d->caret.beginEditBlock();
-    }
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
-    cursor()->setPosition(note->textFrame()->lastPosition());
- 
-    if (hasSelection) {
-        d->caret.endEditBlock();
-        endEditBlock();
-    } else {
-        d->updateState(KoTextEditor::Private::NoOp);
-    }
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
+    addCommand(cmd);
 
     emit cursorPositionChanged();
-    return note;
+    return cmd->m_inlineNote;
 }
 
 void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
@@ -1333,6 +1333,8 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(tocFormat);
     d->caret.movePosition(QTextCursor::Right);
 
@@ -1619,6 +1621,38 @@ void KoTextEditor::newLine()
     }
 
     emit cursorPositionChanged();
+}
+
+class WithinSelectionVisitor : public KoTextVisitor
+{
+public:
+    WithinSelectionVisitor(KoTextEditor *editor, int position)
+        : KoTextVisitor(editor)
+        , m_position(position)
+        , m_returnValue(false)
+    {
+    }
+
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        if (m_position >= qMax(block.position(), caret.selectionStart())
+                    && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {
+            m_returnValue = true;
+            setAbortVisiting(true);
+        }
+    }
+    int m_position; //the position we are searching for
+    bool m_returnValue; //if position is within the selection
+};
+
+bool KoTextEditor::isWithinSelection(int position) const
+{
+    // we know the visitor doesn't do anything with the texteditor so let's const cast
+    // to have a more beautiful outer api
+    WithinSelectionVisitor visitor(const_cast<KoTextEditor *>(this), position);
+
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+    return visitor.m_returnValue;
 }
 
 int KoTextEditor::position() const

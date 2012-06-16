@@ -348,7 +348,7 @@ KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyNam
  notation: &lt;number&gt;int&lt;/number&gt; or &lt;bool&gt;bool&lt;/bool&gt;, etc. Supported types are
  "string", "cstring", "bool", "number". For invalid values null QVariant is returned.
  You can check the validity of the returned value using QVariant::type(). */
-KEXI_DB_EXPORT QVariant loadPropertyValueFromDom(const QDomNode& node);
+KEXI_DB_EXPORT QVariant loadPropertyValueFromDom(const QDomNode& node, bool *ok);
 
 /*! Convenience version of loadPropertyValueFromDom(). \return int value. */
 KEXI_DB_EXPORT int loadIntPropertyValueFromDom(const QDomNode& node, bool* ok);
