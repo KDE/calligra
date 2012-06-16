@@ -492,7 +492,7 @@ QDate KDateTable::dateFromPos( int pos )
 {
   QDate pCellDate;
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  calendar->setDate(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
+  calendar->setYMD(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
 
   int firstWeekDay = KGlobal::locale()->weekStartDay();
   int offset = (d->firstday - firstWeekDay + 7) % 7;
@@ -532,7 +532,7 @@ bool KDateTable::event( QEvent *event )
             if ( d->m_weekNumberDelegate )
             {
                 const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-                text = d->m_weekNumberDelegate->data( calendar->week( pCellDate ), Qt::ToolTipRole, d->m_model ).toString();
+                text = d->m_weekNumberDelegate->data( calendar->weekNumber( pCellDate ), Qt::ToolTipRole, d->m_model ).toString();
             }
         }
         else
@@ -625,7 +625,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     QDate pCellDate = dateFromPos( pos );
     if ( d->m_weekNumberDelegate )
     {
-      size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, calendar->week( pCellDate ), d->m_model ).size();
+      size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, calendar->weekNumber( pCellDate ), d->m_model ).size();
     }
   }
   else
@@ -1014,7 +1014,7 @@ KDateTable::setDate(const QDate& date_)
   }
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
-  calendar->setDate(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
+  calendar->setYMD(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
   //temp.setYMD(d->mDate.year(), d->mDate.month(), 1);
   //kDebug(planDbg()) << "firstDayInWeek: " << temp.toString();
   d->firstday=temp.dayOfWeek();
@@ -1130,7 +1130,7 @@ KDateInternalYearSelector::yearEnteredSlot()
       return;
     }
   //date.setYMD(year, 1, 1);
-  KGlobal::locale()->calendar()->setDate(date, year, 1, 1);
+  KGlobal::locale()->calendar()->setYMD(date, year, 1, 1);
   if(!date.isValid())
     {
       KNotification::beep();
