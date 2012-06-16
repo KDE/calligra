@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ class BibliographyDb : public QObject
 {
     Q_OBJECT
 public:
-    explicit BibliographyDb(QObject *parent = 0, QString path = QString(), QString dbName = QString());
+    explicit BibliographyDb(QObject *parent = 0, const QString &path = QString(), const QString &dbName = QString());
     ~BibliographyDb();
     bool openDb();
     bool deleteDb();
@@ -51,7 +51,7 @@ public:
     bool insertCitation(KoInlineCite *);
     QMap<QString, KoInlineCite *> citationRecords();
 
-    static QSqlRecord sqlRecord(KoInlineCite* cite);
+    static QSqlRecord sqlRecord(const KoInlineCite* cite);
     static const QList<QString> dbFields;
 
 private:

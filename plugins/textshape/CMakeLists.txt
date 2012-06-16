@@ -124,7 +124,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/BibliographyConfigureDialog.ui
     dialogs/BibliographyDatabaseWindow.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/TableOfContentsStyleConfigure.ui 
+    dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui

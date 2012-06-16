@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,7 +52,7 @@ BibDbFilter::BibDbFilter(bool hasPreCond) :
         m_preCond->setCurrentIndex(0);
         connect(m_preCond, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPreCondition(QString)));
     } else {
-        m_layout->addSpacing(62);
+        m_layout->addSpacing(62);               //Free space instead of pre-operator combobox of size 62
     }
 
     m_layout->addWidget(m_field);
@@ -71,17 +71,17 @@ BibDbFilter::BibDbFilter(bool hasPreCond) :
     show();
 }
 
-void BibDbFilter::setLeftOperand(QString op)
+void BibDbFilter::setLeftOperand(const QString &op)
 {
     m_leftOp = op;
 }
 
-void BibDbFilter::setRightOperand(QString op)
+void BibDbFilter::setRightOperand(const QString &op)
 {
     m_rightOp = op;
 }
 
-void BibDbFilter::setCondition(QString cond)
+void BibDbFilter::setCondition(const QString &cond)
 {
     if (cond == "NULL" || cond == "NOT NULL") {
         m_value->clear();
@@ -92,7 +92,7 @@ void BibDbFilter::setCondition(QString cond)
     m_comparison = cond;
 }
 
-void BibDbFilter::setPreCondition(QString preCond)
+void BibDbFilter::setPreCondition(const QString &preCond)
 {
     m_preOp = preCond;
 }
@@ -144,7 +144,7 @@ EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *pare
 
     m_buttonBox->addButton("Apply filters", KDialogButtonBox::AcceptRole, this, SLOT(applyFilters()));
     m_buttonBox->addButton("Cancel", KDialogButtonBox::RejectRole, this, SLOT(reject()));
-    //m_buttonBox->addButton("Clear filters", KDialogButtonBox::ActionRole, this, SLOT(clearFilters()));
+
     m_buttonLayout->addWidget(m_addFilter);
     m_buttonLayout->addWidget(m_buttonBox);
 

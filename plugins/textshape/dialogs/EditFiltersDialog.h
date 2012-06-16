@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,10 +65,10 @@ public:
     KComboBox *m_preCond;
     QString filterString() const;
 public slots:
-    void setLeftOperand(QString op);
-    void setRightOperand(QString op);
-    void setCondition(QString cond);
-    void setPreCondition(QString preCond);
+    void setLeftOperand(const QString &op);
+    void setRightOperand(const QString &op);
+    void setCondition(const QString &cond);
+    void setPreCondition(const QString &preCond);
 private:
     QHBoxLayout *m_layout;
 };

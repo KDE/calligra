@@ -91,7 +91,9 @@ void InsertCitationDialog::insert()
             }
 
             emit accept();
-        } else return;
+        } else {
+            return;
+        }
     }
 
     if (dialog.shortName->text().isEmpty()) {

@@ -287,6 +287,12 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
     if (!value("custom5").isEmpty())
         writer->addAttribute("text:custom5", value("custom5"));
 
+    /*foreach(QString type, KoOdfBibliographyConfiguration::bibTypes) {
+        if (!value(type).isEmpty()) {
+            writer->addAttribute(QString("text:").append(type), value(type));
+        }
+    }*/
+
     writer->addTextNode(d->label);
     writer->endElement();
 }

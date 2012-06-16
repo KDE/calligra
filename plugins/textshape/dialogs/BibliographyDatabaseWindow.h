@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,13 +34,10 @@ class QDir;
 class BibliographyDatabaseWindow : public QMainWindow
 {
     Q_OBJECT
-    
 public:
     explicit BibliographyDatabaseWindow(QWidget *parent = 0);
     ~BibliographyDatabaseWindow();
     int loadBibliographyDbs();
-
-public:
     static QDir tableDir;
 
 public slots:
