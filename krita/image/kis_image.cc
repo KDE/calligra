@@ -1198,7 +1198,32 @@ void KisImage::notifyLayersChanged()
 
 QRect KisImage::bounds() const
 {
-    return QRect(0, 0, width(), height());
+    if(m_d->infiniteCanvas)
+    {
+        KisNodeSP root = m_d->rootLayer;
+        Q_ASSERT(!root.isNull());
+        QRect extent = QRect(0, 0, width(), height()) | root->extent();
+        while(!root.isNull())
+        {
+            while(!root.isNull())
+            {
+                extent |= root->extent();
+                if(!root->nextSibling().isNull())
+                    root = root->nextSibling();  //Not perfect -- just a start
+                else
+                    break;
+            }
+            if(!root->firstChild().isNull())
+                root = root->firstChild();
+            else
+                break;
+        }
+        return extent;
+    }
+    else
+    {
+        return QRect(0, 0, width(), height());
+    }
 }
 
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
