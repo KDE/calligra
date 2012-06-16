@@ -1202,12 +1202,12 @@ QRect KisImage::bounds() const
     {
         KisNodeSP root = m_d->rootLayer;
         Q_ASSERT(!root.isNull());
-        QRect extent = QRect(0, 0, width(), height()) | root->extent();
+        QRect extent = root->extent().united(QRect(0, 0, width(), height()) );
         while(!root.isNull())
         {
             while(!root.isNull())
             {
-                extent |= root->extent();
+                extent = root->extent().united(extent);
                 if(!root->nextSibling().isNull())
                     root = root->nextSibling();  //Not perfect -- just a start
                 else
