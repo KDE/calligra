@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@ const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" <<
                                                                           << "series" << "title" << "url" << "volume"
                                                                           << "year";
 
-BibliographyDb::BibliographyDb(QObject *parent, QString path, QString dbName) :
+BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QString &dbName) :
     QObject(parent),
     m_filterModel(new QSortFilterProxyModel(this)),
     m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
@@ -114,37 +114,37 @@ bool BibliographyDb::createTable()
         QString query("CREATE TABLE bibref"
                       "(id INTEGER PRIMARY KEY,"
                       "identifier TEXT NOT NULL UNIQUE,"
-                      "bibliography_type TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "address TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "annote TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "author TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "booktitle TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "chapter TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "edition TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "editor TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "howpublished TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "institution TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "journal TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "month TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "note TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "number TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "organizations TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "pages TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "publisher TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "school TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "series TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "title TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "report_type TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "volume TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "year TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "url TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "custom1 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "custom2 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "custom3 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "custom4 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "custom5 TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "isbn TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '',"
-                      "issn TEXT NOT NULL ON CONFLICT REPLACE DEFAULT '')");
+                      "bibliography_type TEXT,"
+                      "address TEXT,"
+                      "annote TEXT,"
+                      "author TEXT,"
+                      "booktitle TEXT,"
+                      "chapter TEXT,"
+                      "edition TEXT,"
+                      "editor TEXT,"
+                      "howpublished TEXT,"
+                      "institution TEXT,"
+                      "journal TEXT,"
+                      "month TEXT,"
+                      "note TEXT,"
+                      "number TEXT,"
+                      "organizations TEXT,"
+                      "pages TEXT,"
+                      "publisher TEXT,"
+                      "school TEXT,"
+                      "series TEXT,"
+                      "title TEXT,"
+                      "report_type TEXT,"
+                      "volume TEXT,"
+                      "year TEXT,"
+                      "url TEXT,"
+                      "custom1 TEXT,"
+                      "custom2 TEXT,"
+                      "custom3 TEXT,"
+                      "custom4 TEXT,"
+                      "custom5 TEXT,"
+                      "isbn TEXT,"
+                      "issn TEXT)");
         m_db.exec(query);
     }
     return ret;
@@ -208,7 +208,7 @@ BibliographyDb::~BibliographyDb()
     }
 }
 
-QSqlRecord BibliographyDb::sqlRecord(KoInlineCite *cite)
+QSqlRecord BibliographyDb::sqlRecord(const KoInlineCite *cite)
 {
     QSqlRecord record;
 
