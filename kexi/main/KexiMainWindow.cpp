@@ -347,6 +347,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     if (Kexi::startupHandler().forcedFullScreen()) {
         toggleFullScreen(true);
     }
+<<<<<<< HEAD
 
     // --- global config
     //! @todo move to specialized KexiConfig class
@@ -356,6 +357,8 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         KexiDB::Field::setDefaultMaxLength(defaultMaxLengthForTextFields);
     }
     // --- /global config
+=======
+>>>>>>> c33d0fe58dad15cc760c76942d856d0a3cc9ddbe
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -4530,7 +4533,11 @@ void KexiMainWindow::toggleFullScreen(bool isFullScreen)
     static bool isTabbarRolledDown;
 
     if (isFullScreen) {
+<<<<<<< HEAD
         isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+=======
+            isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+>>>>>>> c33d0fe58dad15cc760c76942d856d0a3cc9ddbe
         if (isTabbarRolledDown) {
             d->tabbedToolBar->toggleRollDown();
         }
