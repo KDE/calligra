@@ -129,25 +129,25 @@ QImage ValidParentStylesProxyModel::stylePreview(int row, QSize size)
 void ValidParentStylesProxyModel::setStylesModel(AbstractStylesModel *model)
 {
     if (m_sourceModel) {
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeInserted(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeMoved(const QModelIndex, int, int, const QModelIndex, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsMoved(const QModelIndex, int, int, const QModelIndex, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsRemoved(const QModelIndex, int, int)), this, SLOT(rowsRemoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
-        disconnect(m_sourceModel, SIGNAL(QAbstractItemModel::modelReset()), this, SLOT(modelReset()));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int, QModelIndex, int)));
+        disconnect(m_sourceModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
+        disconnect(m_sourceModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(QModelIndex, int, int, QModelIndex, int)));
+        disconnect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
+        disconnect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
     }
 
     m_sourceModel = model;
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeInserted(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeMoved(const QModelIndex, int, int, const QModelIndex, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsMoved(const QModelIndex, int, int, const QModelIndex, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::rowsRemoved(const QModelIndex, int, int)), this, SLOT(rowsRemoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
-    connect(m_sourceModel, SIGNAL(QAbstractItemModel::modelReset()), this, SLOT(modelReset()));
+    connect(m_sourceModel, SIGNAL(/*QAbstractItemModel::*/rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
+    connect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
+    connect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int, QModelIndex, int)));
+    connect(m_sourceModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
+    connect(m_sourceModel, SIGNAL(rowsMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
+    connect(m_sourceModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(QModelIndex &, int, int, QModelIndex, int)));
+    connect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
+    connect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 
     createMapping();
 }
@@ -220,33 +220,48 @@ void ValidParentStylesProxyModel::rowsRemoved(const QModelIndex &parent, int sta
 
 void ValidParentStylesProxyModel::createMapping()
 {
+    kDebug() << "createMapping. m_styleManager: " << m_styleManager;
+    if (!m_styleManager || !m_sourceModel) {
+        return;
+    }
     m_sourceToProxy.clear();
     m_proxyToSource.clear();
+    kDebug() << "m_sourcemodel.rowCount: " << m_sourceModel->rowCount(QModelIndex());
+    kDebug() << "currentChildStyleId: " << m_currentChildStyleId;
     for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
+        kDebug() << "looping over source model i: " << i;
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
+        kDebug() << "handling styleId: " << id;
         KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(id);
         if (paragraphStyle) {
+            kDebug() << "style is a paragraph style name: " << paragraphStyle->name();
             bool ok = true;
             KoParagraphStyle *testStyle = paragraphStyle;
             while (testStyle && ok) {
+                kDebug() << "testing. testStyle name: " << testStyle->name() << " styleId: " << testStyle->styleId();
                 ok = testStyle->styleId() != m_currentChildStyleId;
                 testStyle = testStyle->parentStyle();
             }
+            kDebug() << "testing finished. ok: " << ok;
             if (!ok) {
+                kDebug() << "cannot inherit, continue";
                 continue; //we cannot inherit ourself even indirectly through the parent chain
             }
+            kDebug() << "we can inherit appending styleId";
             m_proxyToSource.append(i); //the style is ok for parenting
         }
         else {
             KoCharacterStyle *characterStyle = m_styleManager->characterStyle(id);
             if (characterStyle) {
+                kDebug() << "we have a char style style name: " << characterStyle->name();
                 bool ok = true;
                 KoCharacterStyle *testStyle = characterStyle;
                 while (testStyle && ok) {
                     ok = testStyle->styleId() != m_currentChildStyleId;
                     testStyle = testStyle->parentStyle();
                 }
+                kDebug() << "testing finished. ok: " << ok;
                 if (!ok) {
                     continue; //we cannot inherit ourself even indirectly through the parent chain
                 }
@@ -254,10 +269,14 @@ void ValidParentStylesProxyModel::createMapping()
             }
         }
     }
+    kDebug() << "finished filling up the proxyToSource. size: " << m_proxyToSource.count();
     m_sourceToProxy.fill(-1, m_proxyToSource.count());
+    kDebug() << "will do sourceToProxy";
     for(int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
+    kDebug() << "m_proxyToSource count: " << m_proxyToSource.count();
+    kDebug() << "m_sourceToProxy count: " << m_sourceToProxy.count();
 }
 
 void ValidParentStylesProxyModel::setCurrentChildStyleId(int styleId)
