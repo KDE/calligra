@@ -19,7 +19,7 @@
  */
 
 // Own
-#include "ThreedShape.h"
+#include "SceneObject.h"
 
 // Qt
 #include <QPainter>
@@ -45,22 +45,23 @@
 #include <KoFilterEffectStack.h>
 
 // 3D shape
-#include "ThreedShape.h"
+#include "SceneObject.h"
 
 
-ThreedShape::ThreedShape(bool topLevel)
+SceneObject::SceneObject(bool topLevel)
     : Object3D()
     , m_topLevel(topLevel)
     , m_threeDParams(0)
 {
+    m_elementName = static_cast<char*>("dr3d:scene");
 }
 
-ThreedShape::~ThreedShape()
+SceneObject::~SceneObject()
 {
     delete m_threeDParams;
 }
 
-void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
+void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
                         KoShapePaintingContext &context)
 {
     //painter.setPen(QPen(QColor(172, 196, 206)));
@@ -91,12 +92,12 @@ void ThreedShape::paint(QPainter &painter, const KoViewConverter &converter,
 }
 
 
-void ThreedShape::saveOdf(KoShapeSavingContext &context) const
+void SceneObject::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter &writer = context.xmlWriter();
+    Object3D::saveOdf(context);
 
-    writer.startElement("dr3d:scene");
-    saveOdfAttributes(context, OdfAllAttributes);
+    // Note that Object3D::saveOdf() already has started the element.
+    KoXmlWriter &writer = context.xmlWriter();
     if (m_topLevel && m_threeDParams)
         m_threeDParams->saveOdfAttributes(writer);
 
@@ -118,14 +119,10 @@ void ThreedShape::saveOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:scene
 }
 
-bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
+bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
 {
-    kDebug(31000) << "========================================================== Starting 3D Scene";
-    kDebug(31000) <<"Loading ODF element: " << sceneElement.tagName();
-
-    // Load the graphic style into the shape. The attributes of this
-    // style should be used when rendering the scene.
-    loadOdfAttributes(sceneElement, context, OdfAllAttributes);
+    // Load style information.
+    Object3D::loadOdf(sceneElement, context);
 
     // Load the view parameters.
     if (m_topLevel) {
@@ -189,9 +186,9 @@ bool ThreedShape::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 }
 
 
-void ThreedShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
+void SceneObject::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
 }
 
 
-#include <ThreedShape.moc>
+#include <SceneObject.moc>

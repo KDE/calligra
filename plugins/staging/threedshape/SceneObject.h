@@ -35,7 +35,7 @@
 #define THREEDSHAPEID "ThreedShape"
 
 
-class ThreedShape : public QObject, public Object3D
+class SceneObject : public QObject, public Object3D
 {
     Q_OBJECT
 
@@ -45,8 +45,8 @@ public:
     // @param topLevel true if this is the top level scene
     // element. The top level element is the only one that should read
     // view parameters from the element.
-    ThreedShape(bool topLevel = false);
-    virtual ~ThreedShape();
+    SceneObject(bool topLevel = false);
+    virtual ~SceneObject();
 
     // reimplemented from KoShape
     virtual void paint(QPainter &painter, const KoViewConverter &converter,

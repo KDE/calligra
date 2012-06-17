@@ -5,11 +5,11 @@ include_directories( ${FLAKE_INCLUDES} )
 SET (threedshape_LIB_SRCS
     ThreedShapePlugin.cpp
     ThreedShapeFactory.cpp
-    ThreedShape.cpp
     #ThreedToolFactory.cpp
     #ThreedTool.cpp
     #ThreedShapeConfigWidget.cpp
 
+    SceneObject.cpp
     Objects.cpp
     utils.cpp
 

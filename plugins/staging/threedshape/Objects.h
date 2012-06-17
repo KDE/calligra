@@ -22,7 +22,6 @@
 #define OBJECTS_H
 
 // Qt
-//#include <QColor>
 #include <QVector3D>
 
 // Calligra

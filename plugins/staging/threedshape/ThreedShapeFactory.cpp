@@ -39,7 +39,7 @@
 #include <KoProperties.h>
 
 // 3D Shape
-#include "ThreedShape.h"
+#include "SceneObject.h"
 //#include "ThreedShapeConfigWidget.h"
 
 
@@ -67,7 +67,7 @@ bool ThreedShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
 
 KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    ThreedShape *defaultShape = new ThreedShape(true);
+    SceneObject *defaultShape = new SceneObject(true);
     defaultShape->setShapeId(THREEDSHAPEID);
 
     return defaultShape;
@@ -76,7 +76,7 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 KoShape *ThreedShapeFactory::createShape(const KoProperties *params,
                                          KoDocumentResourceManager *documentResources) const
 {
-    ThreedShape *shape = static_cast<ThreedShape*>(createDefaultShape(documentResources));
+    SceneObject *shape = static_cast<SceneObject*>(createDefaultShape(documentResources));
 
     return shape;
 }
