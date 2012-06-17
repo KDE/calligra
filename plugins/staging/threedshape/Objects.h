@@ -72,4 +72,22 @@ private:
     QVector3D  m_maxEdge;
 };
 
+class Extrude : public KoShape
+{
+public:
+    Extrude();
+    virtual ~Extrude();
+
+    virtual void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context);
+    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+
+    // getters
+    QString d() const { return m_d; }
+
+private:
+    QString  m_d;
+};
+
 #endif
