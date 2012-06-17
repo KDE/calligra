@@ -45,11 +45,10 @@
 #include <KoFilterEffectStack.h>
 
 // 3D shape
-#include "Scene.h"
+#include "ThreedShape.h"
 
 
 ThreedShape::ThreedShape(bool topLevel)
-//    : KoShape()
     : Object3D()
     , m_topLevel(topLevel)
     , m_threeDParams(0)

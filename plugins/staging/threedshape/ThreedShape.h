@@ -25,11 +25,10 @@
 #include <QObject>
 
 // Calligra
-//#include <KoTosContainer.h>
+#include <Ko3dScene.h>
 #include <KoShape.h>
 
 // Shape
-#include "Scene.h"
 #include "Objects.h"
 
 
