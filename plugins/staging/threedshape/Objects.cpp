@@ -31,7 +31,11 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoGenStyle.h>
+#include <KoStyleStack.h>
 #include <KoShapeSavingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 
 // Shape
 #include "utils.h"
@@ -202,6 +206,13 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
 
 Rotate::Rotate()
     : KoShape()
+    , m_d()
+    , m_horizontalSegments(-1)
+    , m_verticalSegments(-1)
+    , m_endAngle(360.0)
+    , m_closeFront(true)
+    , m_closeBack(true)
+    , m_backScale(1.0)
 {
 }
 
@@ -242,4 +253,82 @@ void Rotate::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("svg:d", m_d);
 
     writer.endElement(); // dr3d:rotate
+}
+
+void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+{
+    // Load the common parts of the style.
+    KoShape::loadStyle(element, context);
+
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.setTypeProperties("graphic");
+
+    QString dummy;
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "horizontal-segments")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "horizontal-segments");
+        bool ok;
+        int hs = dummy.toInt(&ok);
+        if (ok) {
+            m_verticalSegments = hs;
+        }
+    }
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "vertical-segments")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "vertical-segments");
+        bool ok;
+        int vs = dummy.toInt(&ok);
+        if (ok) {
+            m_verticalSegments = vs;
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "end-angle")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "end-angle");
+        bool ok;
+        qreal ea = dummy.toDouble(&ok);
+        if (ok) {
+            m_endAngle = ea;
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "close-front")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "close-front");
+        m_closeFront = (dummy == "true");
+    }
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "close-back")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "close-back");
+        m_closeBack = (dummy == "true");
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "back-scale")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "back-scale");
+        bool ok;
+        qreal bs = dummy.toDouble(&ok);
+        if (ok) {
+            m_backScale = bs;
+        }
+    }
+}
+
+QString Rotate::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+{
+    if (m_horizontalSegments != -1) {
+        style.addProperty("dr3d:horizontal-segments", QString("%1%").arg(m_horizontalSegments));
+    }
+    if (m_verticalSegments != -1) {
+        style.addProperty("dr3d:vertical-segments", QString("%1%").arg(m_verticalSegments));
+    }
+
+    if (m_endAngle != 360.0) {
+        style.addProperty("dr3d:end-angle", QString("%1%").arg(m_endAngle));
+    }
+
+    style.addProperty("dr3d:close-front", m_closeFront);
+    style.addProperty("dr3d:close-back",  m_closeBack);
+
+    if (m_backScale != 1.0) {
+        style.addProperty("dr3d:back-scale", QString("%1%").arg(m_backScale));
+    }
+
+    return KoShape::saveStyle(style, context);
 }

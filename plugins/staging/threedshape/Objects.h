@@ -101,11 +101,26 @@ public:
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+
     // getters
-    QString d() const { return m_d; }
+    QString d()                  const { return m_d; }
+    int     horizontalSegments() const { return m_horizontalSegments; }
+    int     verticalSegments()   const { return m_verticalSegments; }
+    qreal   endAngle()           const { return m_endAngle; }
+    bool    closeFront()         const { return m_closeFront; }
+    bool    closeBack()          const { return m_closeBack; }
+    qreal   backScale()          const { return m_backScale; }
 
 private:
-    QString  m_d;
+    QString  m_d;               // The polygon
+    int      m_horizontalSegments; // Defined in ODF
+    int      m_verticalSegments;   // Produced by OOo(!)
+    qreal    m_endAngle;
+    bool     m_closeFront;
+    bool     m_closeBack;
+    qreal    m_backScale;
 };
 
 #endif

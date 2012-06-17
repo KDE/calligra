@@ -10,8 +10,8 @@
     + Load object specific attributes
        - sphere                                         done
        - cube                                           done
-       - extrude
-       - rotate
+       - extrude (incl style)
+       - rotate (incl style)                            done
 
  * Store the 3D scene                                   DONE
 
@@ -22,8 +22,8 @@
     + Save object specific attributes
        - sphere                                         done
        - cube                                           done
-       - extrude
-       - rotate
+       - extrude (incl style)
+       - rotate (incl style)                            done
 
 ---------------- Milestone 2: Load/Store/Save ----------------
 
