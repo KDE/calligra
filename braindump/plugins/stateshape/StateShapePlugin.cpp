@@ -32,6 +32,7 @@ K_EXPORT_COMPONENT_FACTORY(stateshape,
 StateShapePlugin::StateShapePlugin(QObject *parent, const QStringList&)
     : QObject(parent)
 {
+    KGlobal::locale()->insertCatalog("braindump");
     // register the shape's factory
     KoShapeRegistry::instance()->add(
         new StateShapeFactory());
