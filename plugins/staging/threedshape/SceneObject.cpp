@@ -182,6 +182,8 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 
 void SceneObject::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
+    Q_UNUSED(converter);
+    Q_UNUSED(asynchronous);
 }
 
 

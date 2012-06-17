@@ -58,6 +58,8 @@ ThreedShapeFactory::ThreedShapeFactory()
 
 bool ThreedShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
+
     if (e.localName() == "scene" && e.namespaceURI() == KoXmlNS::dr3d) {
         return true;
     }
@@ -67,6 +69,8 @@ bool ThreedShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
 
 KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
+
     SceneObject *defaultShape = new SceneObject(true);
     defaultShape->setShapeId(THREEDSHAPEID);
 
@@ -76,6 +80,8 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 KoShape *ThreedShapeFactory::createShape(const KoProperties *params,
                                          KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(params);
+
     SceneObject *shape = static_cast<SceneObject*>(createDefaultShape(documentResources));
 
     return shape;
