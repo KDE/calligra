@@ -38,6 +38,7 @@ KexiDBDatePicker::~KexiDBDatePicker()
 
 void KexiDBDatePicker::setInvalidState(const QString& displayText)
 {
+    Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
     setReadOnly(true);
@@ -105,6 +106,7 @@ bool KexiDBDatePicker::cursorAtEnd()
 {
     const KLineEdit *lineEdit=findChild<KLineEdit*>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == lineEdit->text().length();
+}
 
 
 void KexiDBDatePicker::clear()
