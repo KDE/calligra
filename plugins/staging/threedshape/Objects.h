@@ -90,4 +90,22 @@ private:
     QString  m_d;
 };
 
+class Rotate : public KoShape
+{
+public:
+    Rotate();
+    virtual ~Rotate();
+
+    virtual void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context);
+    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+
+    // getters
+    QString d() const { return m_d; }
+
+private:
+    QString  m_d;
+};
+
 #endif

@@ -158,9 +158,15 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
             cube->loadOdf(elem, context);
             addShape(cube);
         }
-        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
-        }
         else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            Extrude  *extrude = new Extrude();
+            extrude->loadOdf(elem, context);
+            addShape(extrude);
+        }
+        else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
+            Rotate  *rotate = new Rotate();
+            rotate->loadOdf(elem, context);
+            addShape(rotate);
         }
     }
 

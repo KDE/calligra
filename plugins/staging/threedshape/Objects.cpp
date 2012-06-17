@@ -196,3 +196,50 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
 }
 
 
+// ================================================================
+//                             Rotate
+
+
+Rotate::Rotate()
+    : KoShape()
+{
+}
+
+Rotate::~Rotate()
+{
+}
+
+
+void Rotate::paint(QPainter &painter, const KoViewConverter &converter,
+                   KoShapePaintingContext &context)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(context);
+}
+
+bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
+{
+    // Load style information.
+    loadOdfAttributes(objectElement, context, OdfAllAttributes);
+
+    QString dummy;
+    m_d = objectElement.attributeNS(KoXmlNS::svg, "d", "");
+
+    kDebug(31000) << "Rotate:" << m_d;
+    return true;
+}
+
+void Rotate::saveOdf(KoShapeSavingContext &context) const
+{
+    kDebug(31000) << "Saving Rotate:" << m_d;
+
+    KoXmlWriter &writer = context.xmlWriter();
+    writer.startElement("dr3d:rotate");
+
+    saveOdfAttributes(context, OdfAllAttributes);
+
+    writer.addAttribute("svg:d", m_d);
+
+    writer.endElement(); // dr3d:rotate
+}
