@@ -32,25 +32,7 @@ class KoXmlElement;
 class KoXmlWriter;
 
 
-class Object3D : public KoShape
-{
-public:
-    Object3D();
-    virtual ~Object3D();
-
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
-    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-
-    // getters
-
-protected:
-    char *m_elementName;  // For saving. includes namespace
-};
-
-
-class Sphere : public Object3D
+class Sphere : public KoShape
 {
 public:
     Sphere();
@@ -70,7 +52,7 @@ private:
     QVector3D  m_size;
 };
 
-class Cube : public Object3D
+class Cube : public KoShape
 {
 public:
     Cube();

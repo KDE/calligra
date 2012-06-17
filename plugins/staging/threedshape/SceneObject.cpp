@@ -45,15 +45,14 @@
 #include <KoFilterEffectStack.h>
 
 // 3D shape
-#include "SceneObject.h"
+#include "Objects.h"
 
 
 SceneObject::SceneObject(bool topLevel)
-    : Object3D()
+    : KoShapeContainer()
     , m_topLevel(topLevel)
     , m_threeDParams(0)
 {
-    m_elementName = static_cast<char*>("dr3d:scene");
 }
 
 SceneObject::~SceneObject()
@@ -61,8 +60,8 @@ SceneObject::~SceneObject()
     delete m_threeDParams;
 }
 
-void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &context)
+void SceneObject::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                 KoShapePaintingContext &context)
 {
     //painter.setPen(QPen(QColor(172, 196, 206)));
     painter.setPen(QPen(QColor(0, 0, 0)));
@@ -94,17 +93,12 @@ void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
 
 void SceneObject::saveOdf(KoShapeSavingContext &context) const
 {
-    Object3D::saveOdf(context);
-
-    // Note that Object3D::saveOdf() already has started the element.
     KoXmlWriter &writer = context.xmlWriter();
-    if (m_topLevel && m_threeDParams)
-        m_threeDParams->saveOdfAttributes(writer);
 
-    // Writes the attributes and children of the dr3d:scene element.
-    //m_scene.saveOdf(context);
-    // Write scene attributes
-    if (m_threeDParams)
+    writer.startElement("dr3d:scene");
+    saveOdfAttributes(context, OdfAllAttributes);
+
+    if (m_topLevel && m_threeDParams)
         m_threeDParams->saveOdfAttributes(writer);
 
     // 2.1 Light sources
@@ -112,8 +106,8 @@ void SceneObject::saveOdf(KoShapeSavingContext &context) const
         m_threeDParams->saveOdfChildren(writer);
 
     // 2.2 Objects in the scene
-    foreach (const Object3D *object, m_objects) {
-        object->saveOdf(context);
+    foreach (const KoShape *shape, shapes()) {
+        shape->saveOdf(context);
     }
 
     writer.endElement(); // dr3d:scene
@@ -122,7 +116,7 @@ void SceneObject::saveOdf(KoShapeSavingContext &context) const
 bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    Object3D::loadOdf(sceneElement, context);
+    loadOdfAttributes(sceneElement, context, OdfAllAttributes);
 
     // Load the view parameters.
     if (m_topLevel) {
@@ -159,7 +153,7 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
             // + a number of other standard attributes
             Sphere  *sphere = new Sphere();
             sphere->loadOdf(elem, context);
-            m_objects.append(sphere);
+            addShape(sphere);
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // Attributes:
@@ -168,7 +162,7 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
             // + a number of other standard attributes
             Cube  *cube = new Cube();
             cube->loadOdf(elem, context);
-            m_objects.append(cube);
+            addShape(cube);
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
             // Attributes:
@@ -180,7 +174,7 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
         }
     }
 
-    kDebug(31000) << "Objects:" << m_objects.size();
+    kDebug(31000) << "Objects:" << shapeCount();
 
     return true;
 }

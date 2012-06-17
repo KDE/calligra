@@ -26,16 +26,15 @@
 
 // Calligra
 #include <Ko3dScene.h>
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 
 // Shape
-#include "Objects.h"
 
 
 #define THREEDSHAPEID "ThreedShape"
 
 
-class SceneObject : public QObject, public Object3D
+class SceneObject : public QObject, public KoShapeContainer
 {
     Q_OBJECT
 
@@ -49,8 +48,8 @@ public:
     virtual ~SceneObject();
 
     // reimplemented from KoShape
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &paintcontext);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                KoShapePaintingContext &paintcontext);
     // reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented from KoShape
@@ -67,9 +66,7 @@ private:
     bool       m_topLevel;
     Ko3dScene *m_threeDParams;    // Camera and rendering parameters plus lightsources.
 
-    // The objects in the scene.
-    QList<Object3D*>  m_objects; // value list. If necessary, we can make object3d shared.
-
+    // The objects in the scene are stored in the shape list of KoShapeContainer.
 };
 
 

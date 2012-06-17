@@ -5,10 +5,10 @@
  * Load 3D scene
     + Load Scene Attributes                             Done
     + Load Scene style                                  Done
-    + Convert 3D objects to KoShape
+    + Convert 3D objects to KoShape                     Done
        - Basic conversion                               done
-       - Make 3d scenes into shape containers
-    + Load generic scene object stuff
+       - Make 3d scenes into shape containers           done
+    + Load generic scene object stuff                   Done
        - Load generic object attributes
        - Load object style                              done
     + Load object specific attributes
@@ -17,18 +17,12 @@
        - extrude
        - rotate
 
- * Store the 3D scene
-    + Scene object                                      Done
-    + 3DObject baseclass
-       - sphere object                                  done
-       - cube object                                    done
-       - extrude object
-       - rotate object
+ * Store the 3D scene                                   DONE
 
  * Save the 3D scene
     + Save Scene attributes                             Done
     + Save Scene style                                  Done
-    + Save generic scene object stuff
+    + Save generic scene object stuff                   done
        - Save generic object attributes
        - Save object style                              done
     + Save object specific attributes
