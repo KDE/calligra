@@ -33,7 +33,6 @@
 
 // Shape
 #include "GraphicsProperties.h"
-//#include "Lightsource.h"
 #include "Objects.h"
 
 class KoXmlWriter;
@@ -41,21 +40,9 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 
 
-class Scene
+class Scene : public Object3D
 {
 public:
-    enum Projection {
-        Parallel,
-        Perspective
-    };
-
-    enum Shademode {
-        Flat,
-        Gouraud,
-        Phong,
-        Draft                   // Wireframe
-    };
-
     Scene();
     ~Scene();
 

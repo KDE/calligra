@@ -30,12 +30,13 @@
 
 // Shape
 #include "Scene.h"
+#include "Objects.h"
 
 
 #define THREEDSHAPEID "ThreedShape"
 
 
-class ThreedShape : public QObject, public KoShape
+class ThreedShape : public QObject, public Object3D
 {
     Q_OBJECT
 

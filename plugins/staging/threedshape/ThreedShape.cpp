@@ -49,7 +49,8 @@
 
 
 ThreedShape::ThreedShape(bool topLevel)
-    : KoShape()
+//    : KoShape()
+    : Object3D()
     , m_topLevel(topLevel)
     , m_threeDParams(0)
 {

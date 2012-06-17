@@ -42,7 +42,10 @@
 #include "GraphicsProperties.h"
 
 Scene::Scene()
-    : m_sceneProperties()
+    : Object3D()
+    , m_sceneProperties()
+    , m_threeDParams(0)
+    , m_objects()
 {
 }
 
