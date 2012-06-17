@@ -144,33 +144,23 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     forEachElement(elem, sceneElement) {
 
         if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // FIXME: Recursive!  How does this work?
+            SceneObject  *scene = new SceneObject(false);
+            scene->loadOdf(elem, context);
+            addShape(scene);
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:center
-            // dr3d:size
-            // + a number of other standard attributes
             Sphere  *sphere = new Sphere();
             sphere->loadOdf(elem, context);
             addShape(sphere);
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:min-edge
-            // dr3d:max-edge
-            // + a number of other standard attributes
             Cube  *cube = new Cube();
             cube->loadOdf(elem, context);
             addShape(cube);
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:
         }
         else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            // Attributes:
-            // dr3d:
         }
     }
 

@@ -6,11 +6,7 @@
     + Load Scene Attributes                             Done
     + Load Scene style                                  Done
     + Convert 3D objects to KoShape                     Done
-       - Basic conversion                               done
-       - Make 3d scenes into shape containers           done
     + Load generic scene object stuff                   Done
-       - Load generic object attributes
-       - Load object style                              done
     + Load object specific attributes
        - sphere                                         done
        - cube                                           done
@@ -22,9 +18,7 @@
  * Save the 3D scene
     + Save Scene attributes                             Done
     + Save Scene style                                  Done
-    + Save generic scene object stuff                   done
-       - Save generic object attributes
-       - Save object style                              done
+    + Save generic scene object stuff                   Done
     + Save object specific attributes
        - sphere                                         done
        - cube                                           done
