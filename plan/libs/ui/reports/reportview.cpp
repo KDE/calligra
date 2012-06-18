@@ -92,7 +92,7 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
 
     //FIXME: This should be done by KoReportPrintRender but setupPrinter() is private
     QPrinter *pPrinter = &printer();
-    pPrinter->setCreator("KPlato");
+    pPrinter->setCreator("Plan");
     pPrinter->setDocName(reportDocument->title());
     pPrinter->setFullPage(true);
     pPrinter->setOrientation((reportDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape));
@@ -103,6 +103,13 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     else
         pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(reportDocument->pageOptions().getPageSize())));
 
+    //FIXME: There is something wrong with koreport margins
+    qreal left = reportDocument->pageOptions().getMarginLeft();
+    qreal top = reportDocument->pageOptions().getMarginTop();
+    qreal right = reportDocument->pageOptions().getMarginRight();
+    qreal bottom = reportDocument->pageOptions().getMarginBottom();
+
+    pPrinter->setPageMargins( left, top, right, bottom, QPrinter::Point );
 }
 
 ReportPrintingDialog::~ReportPrintingDialog()
@@ -112,10 +119,12 @@ ReportPrintingDialog::~ReportPrintingDialog()
 
 void ReportPrintingDialog::startPrinting( RemovePolicy removePolicy )
 {
-     //HACK fix when KoRreportPrinter can print single pages
-    setPageRange( QList<int>() << printer().fromPage() );
-
-    KoPrintingDialog::startPrinting( removePolicy );
+    kDebug(planDbg());
+    QPainter p( &printer() );
+    printPage( 1,  p );
+    if ( removePolicy == DeleteWhenDone ) {
+        deleteLater();
+    }
 }
 
 int ReportPrintingDialog::documentLastPage() const

@@ -133,15 +133,17 @@ public:
     void paintHeaderFooter( QPainter &p, const PrintingOptions &options, int pageNumber, const Project &project );
     
     PrintingOptions printingOptions() const;
-    void setPrintingOptions( const PrintingOptions &opt);
     
     QWidget *createPageLayoutWidget() const;
     QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 signals:
     void changed( const PrintingOptions &opt );
+    void changed();
     
 public slots:
+    void setPrintingOptions( const PrintingOptions &opt);
+    void setPrinterPageLayout( const KoPageLayout &pagelayout );
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
@@ -149,11 +151,11 @@ protected:
     int headerFooterHeight( const PrintingOptions::Data &options ) const;
     void drawBottomRect( QPainter &p, const QRect &r );
 
-    void setPrinterPageLayout();
 
 protected:
     ViewBase *m_view;
     PrintingHeaderFooter *m_widget;
+    int m_textheight;
 };
 
 class KPLATOUI_EXPORT ViewActionLists
@@ -247,7 +249,8 @@ public:
 
     virtual KoPrintJob *createPrintJob();
     PrintingOptions printingOptions() const { return m_printingOptions; }
-    
+    static QWidget *createPageLayoutWidget( ViewBase *view );
+    static PrintingHeaderFooter *createHeaderFooterWidget( ViewBase *view );
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
 public slots:

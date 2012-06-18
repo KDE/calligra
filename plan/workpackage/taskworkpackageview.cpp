@@ -374,7 +374,7 @@ void TaskWorkPackageView::slotSplitView()
 void TaskWorkPackageView::slotOptions()
 {
     kDebug(planworkDbg());
-    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( m_view, this );
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( 0, m_view, this );
     dlg->exec();
     delete dlg;
     saveContext();
