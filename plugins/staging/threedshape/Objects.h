@@ -83,11 +83,22 @@ public:
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+
     // getters
-    QString d() const { return m_d; }
+    QString d()          const { return m_d; }
+    int     depth()      const { return m_depth; }
+    bool    closeFront() const { return m_closeFront; }
+    bool    closeBack()  const { return m_closeBack; }
+    qreal   backScale()  const { return m_backScale; }
 
 private:
-    QString  m_d;
+    QString  m_d;               // The polygon
+    qreal    m_depth;
+    bool     m_closeFront;
+    bool     m_closeBack;
+    qreal    m_backScale;
 };
 
 class Rotate : public KoShape

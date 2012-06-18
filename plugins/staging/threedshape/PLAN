@@ -7,11 +7,7 @@
     + Load Scene style                                  Done
     + Convert 3D objects to KoShape                     Done
     + Load generic scene object stuff                   Done
-    + Load object specific attributes
-       - sphere                                         done
-       - cube                                           done
-       - extrude (incl style)
-       - rotate (incl style)                            done
+    + Load object specific attributes                   Done
 
  * Store the 3D scene                                   DONE
 
@@ -19,11 +15,11 @@
     + Save Scene attributes                             Done
     + Save Scene style                                  Done
     + Save generic scene object stuff                   Done
-    + Save object specific attributes
-       - sphere                                         done
-       - cube                                           done
-       - extrude (incl style)
-       - rotate (incl style)                            done
+    + Save object specific attributes                   Done
+
+ * Test roundtrip with all types
+    + ODG
+    + ODT
 
 ---------------- Milestone 2: Load/Store/Save ----------------
 

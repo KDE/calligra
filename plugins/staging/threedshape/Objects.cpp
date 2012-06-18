@@ -157,6 +157,11 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
 
 Extrude::Extrude()
     : KoShape()
+    , m_d()
+    , m_depth(1.0)
+    , m_closeFront(true)
+    , m_closeBack(true)
+    , m_backScale(1.0)
 {
 }
 
@@ -197,6 +202,58 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("svg:d", m_d);
 
     writer.endElement(); // dr3d:extrude
+}
+
+void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+{
+    // Load the common parts of the style.
+    KoShape::loadStyle(element, context);
+
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.setTypeProperties("graphic");
+
+    QString dummy;
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "depth")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "depth");
+        bool ok;
+        qreal depth = dummy.toDouble(&ok);
+        if (ok) {
+            m_depth = depth;
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "close-front")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "close-front");
+        m_closeFront = (dummy == "true");
+    }
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "close-back")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "close-back");
+        m_closeBack = (dummy == "true");
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::dr3d, "back-scale")) {
+        dummy = styleStack.property(KoXmlNS::dr3d, "back-scale");
+        bool ok;
+        qreal bs = dummy.toDouble(&ok);
+        if (ok) {
+            m_backScale = bs;
+        }
+    }
+}
+
+QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+{
+    style.addProperty("dr3d:depth", QString("%1%").arg(m_depth));
+
+    style.addProperty("dr3d:close-front", m_closeFront);
+    style.addProperty("dr3d:close-back",  m_closeBack);
+
+    if (m_backScale != 1.0) {
+        style.addProperty("dr3d:back-scale", QString("%1%").arg(m_backScale));
+    }
+
+    return KoShape::saveStyle(style, context);
 }
 
 
