@@ -12,10 +12,6 @@ SET (threedshape_LIB_SRCS
     SceneObject.cpp
     Objects.cpp
     utils.cpp
-
-    GraphicsProperties.cpp
-
-    #ChangeImageCommand.cpp
 )
 
 kde4_add_plugin(threedshape ${threedshape_LIB_SRCS})
