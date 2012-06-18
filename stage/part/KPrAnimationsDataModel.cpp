@@ -77,8 +77,9 @@ QModelIndex KPrAnimationsDataModel::index(int row, int column, const QModelIndex
 QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
 {
     QModelIndex parent = QModelIndex();
-    if (!shape)
+    if (!shape) {
         return QModelIndex();
+    }
     for (int row = 0; row < rowCount(parent); ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
         KPrCustomAnimationItem *item = itemForIndex(thisIndex);
@@ -110,8 +111,9 @@ QModelIndex KPrAnimationsDataModel::indexByItem(KPrCustomAnimationItem *item)
 
 int KPrAnimationsDataModel::rowCount(const QModelIndex &parent) const
 {   
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
     if (parentItem) {
         return parentItem->isDefaulAnimation() ? parentItem->childCount() : parentItem->childCount() + 1;
@@ -130,8 +132,9 @@ int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
     if (!m_rootItem || !index.isValid() || index.column() < 0 ||
-        index.column() > AnimationClass)
+        index.column() > AnimationClass) {
         return QVariant();
+    }
     if (KPrCustomAnimationItem *item = itemForIndex(index)) {
         if (role == Qt::TextAlignmentRole) {
             return int(Qt::AlignRight | Qt::AlignVCenter);

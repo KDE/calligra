@@ -1,3 +1,21 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (  at your option ) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 #ifndef KPRANIMATIONSTREEMODEL_H
 #define KPRANIMATIONSTREEMODEL_H
 
@@ -9,6 +27,8 @@ class KPrView;
 class KPrCustomAnimationItem;
 class KoShape;
 
+
+/** Data model for the animations tree view (see animation tool)*/
 class STAGE_EXPORT KPrAnimationsTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -57,24 +77,29 @@ public:
      QModelIndex demote(const QModelIndex &index);
 
 
-    //An active page is required before use the model
+    /// An active page is required before use the model
     void setActivePage(KPrPage *activePage);
 
-    //requiere to update model if a shape is removed (or added with undo)
+    /// requiere to update model if a shape is removed (or added with undo)
     void setDocumentView(KPrView *view);
 
     /// Return the first animation index for the given shape
     QModelIndex indexByShape(KoShape* shape);
+    /// Return the index of a given item or an invalid index if it isn't on the model
     QModelIndex indexByItem(KPrCustomAnimationItem* item);
-
+    /// Return the parent item
     KPrCustomAnimationItem* rootItem() const;
 
 
 public slots:
     /// Triggers an update of the complete model
     void updateData();
+
 private:
+    /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
+
+    /// Emit standard signals when a group of items is changed
     void announceItemChanged(KPrCustomAnimationItem *item);
     QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
 

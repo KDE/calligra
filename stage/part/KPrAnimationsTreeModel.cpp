@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (  at your option ) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "KPrAnimationsTreeModel.h"
 
 //Qt Headers
@@ -55,8 +74,9 @@ const int ColumnCount = 4;
 QVariant KPrAnimationsTreeModel::data(const QModelIndex &index, int role) const
 {
     if (!m_rootItem || !index.isValid() || index.column() < 0 ||
-        index.column() >= ColumnCount)
+        index.column() >= ColumnCount) {
         return QVariant();
+    }
     if (KPrCustomAnimationItem *item = itemForIndex(index)) {
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             switch (index.column()) {
@@ -140,8 +160,9 @@ QVariant KPrAnimationsTreeModel::headerData(int section, Qt::Orientation orienta
 
 int KPrAnimationsTreeModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid() && parent.column() != 0)
+    if (parent.isValid() && parent.column() != 0) {
         return 0;
+    }
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
     return parentItem ? parentItem->childCount() : 0;
 }
@@ -154,19 +175,22 @@ int KPrAnimationsTreeModel::columnCount(const QModelIndex &parent) const
 QModelIndex KPrAnimationsTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!m_rootItem || row < 0 || column < 0 || column >= ColumnCount
-        || (parent.isValid() && parent.column() != 0))
+        || (parent.isValid() && parent.column() != 0)) {
         return QModelIndex();
+    }
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
     Q_ASSERT(parentItem);
-    if (KPrCustomAnimationItem *item = parentItem->childAt(row))
+    if (KPrCustomAnimationItem *item = parentItem->childAt(row)) {
         return createIndex(row, column, item);
+    }
     return QModelIndex();
 }
 
 QModelIndex KPrAnimationsTreeModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QModelIndex();
+    }
     if (KPrCustomAnimationItem *childItem = itemForIndex(index)) {
         if (KPrCustomAnimationItem *parentItem = childItem->parent()) {
             if (parentItem == m_rootItem)
@@ -188,8 +212,9 @@ bool KPrAnimationsTreeModel::setData(const QModelIndex &index, const QVariant &v
 
 bool KPrAnimationsTreeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    if (!m_rootItem)
+    if (!m_rootItem) {
         m_rootItem = new  KPrCustomAnimationItem;
+    }
     KPrCustomAnimationItem *parentItem = parent.isValid() ? itemForIndex(parent)
                                             : m_rootItem;
     beginInsertRows(parent, row, row + count - 1);
@@ -204,21 +229,24 @@ bool KPrAnimationsTreeModel::insertRows(int row, int count, const QModelIndex &p
 
 bool KPrAnimationsTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    if (!m_rootItem)
+    if (!m_rootItem) {
         return false;
+    }
     KPrCustomAnimationItem *item = parent.isValid() ? itemForIndex(parent)
                                       : m_rootItem;
     beginRemoveRows(parent, row, row + count - 1);
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < count; ++i) {
         delete item->takeChild(row);
+    }
     endRemoveRows();
     return true;
 }
 
 QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
 {
-    if (!index.isValid() || index.row() <= 0)
+    if (!index.isValid() || index.row() <= 0) {
         return index;
+    }
     KPrCustomAnimationItem *item = itemForIndex(index);
     Q_ASSERT(item);
     KPrCustomAnimationItem *parent = item->parent();
@@ -228,21 +256,24 @@ QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
 
 QModelIndex KPrAnimationsTreeModel::moveDown(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return index;
+    }
     KPrCustomAnimationItem *item = itemForIndex(index);
     Q_ASSERT(item);
     KPrCustomAnimationItem *parent = item->parent();
     int newRow = index.row() + 1;
-    if (!parent || parent->childCount() <= newRow)
+    if (!parent || parent->childCount() <= newRow) {
         return index;
+    }
     return moveItem(parent, index.row(), newRow);
 }
 
 QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return index;
+    }
     delete cutItem;
     cutItem = itemForIndex(index);
     Q_ASSERT(cutItem);
@@ -270,8 +301,9 @@ QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
 
 QModelIndex KPrAnimationsTreeModel::paste(const QModelIndex &index)
 {
-    if (!index.isValid() || !cutItem)
+    if (!index.isValid() || !cutItem) {
         return index;
+    }
     KPrCustomAnimationItem *sibling = itemForIndex(index);
     Q_ASSERT(sibling);
     KPrCustomAnimationItem *parent = sibling->parent();
@@ -287,14 +319,16 @@ QModelIndex KPrAnimationsTreeModel::paste(const QModelIndex &index)
 
 QModelIndex KPrAnimationsTreeModel::promote(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return index;
+    }
     KPrCustomAnimationItem *item = itemForIndex(index);
     Q_ASSERT(item);
     KPrCustomAnimationItem *parent = item->parent();
     Q_ASSERT(parent);
-    if (parent == m_rootItem)
+    if (parent == m_rootItem) {
         return index; // Already a top-level item
+    }
 
     int row = parent->rowOfChild(item);
     KPrCustomAnimationItem *child = parent->takeChild(row);
@@ -310,15 +344,17 @@ QModelIndex KPrAnimationsTreeModel::promote(const QModelIndex &index)
 
 QModelIndex KPrAnimationsTreeModel::demote(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return index;
+    }
     KPrCustomAnimationItem *item = itemForIndex(index);
     Q_ASSERT(item);
     KPrCustomAnimationItem *parent = item->parent();
     Q_ASSERT(parent);
     int row = parent->rowOfChild(item);
-    if (row == 0)
+    if (row == 0) {
         return index; // No preceding sibling to move this under
+    }
     KPrCustomAnimationItem *child = parent->takeChild(row);
     Q_ASSERT(child == item);
     KPrCustomAnimationItem *sibling = parent->childAt(row - 1);
@@ -380,8 +416,9 @@ void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
 QModelIndex KPrAnimationsTreeModel::indexByShape(KoShape *shape)
 {
     QModelIndex parent = QModelIndex();
-    if (!shape)
+    if (!shape) {
         return QModelIndex();
+    }
     for (int row = 0; row < rowCount(parent); ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
         KPrCustomAnimationItem *item = itemForIndex(thisIndex);
@@ -395,8 +432,9 @@ QModelIndex KPrAnimationsTreeModel::indexByShape(KoShape *shape)
 QModelIndex KPrAnimationsTreeModel::indexByItem(KPrCustomAnimationItem *item)
 {
     QModelIndex parent = QModelIndex();
-    if (!item)
+    if (!item) {
         return QModelIndex();
+    }
     for (int row = 0; row < rowCount(parent); ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
         KPrCustomAnimationItem *newItem = itemForIndex(thisIndex);
@@ -430,8 +468,9 @@ KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &
 
 void KPrAnimationsTreeModel::announceItemChanged(KPrCustomAnimationItem *item)
 {
-    if (item == m_rootItem)
+    if (item == m_rootItem) {
         return;
+    }
     KPrCustomAnimationItem *parent = item->parent();
     Q_ASSERT(parent);
     int row = parent->rowOfChild(item);

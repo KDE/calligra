@@ -34,15 +34,6 @@
 //Default height of the header
 const int HEADER_HEIGHT = 20;
 
-//Names of displayed columns
-enum ColumnNames {
-    ShapeThumbnail = 0,
-    AnimationIcon = 1,
-    StartTime = 2,
-    EndTime = 3,
-    AnimationClass = 4
-};
-
 KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
     : QWidget(parent)
 {

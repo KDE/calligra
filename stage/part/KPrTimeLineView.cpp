@@ -46,15 +46,6 @@ const int LINE_HEIGHT = 25;
 //Default invalid value for columns and rows index
 const int INVALID = -1;
 
-//Names of displayed columns
-enum ColumnNames {
-    ShapeThumbnail = 0,
-    AnimationIcon = 1,
-    StartTime = 2,
-    EndTime = 3,
-    AnimationClass = 4
-};
-
 KPrTimeLineView::KPrTimeLineView(QWidget *parent)
     : QWidget(parent)
     , m_resize(false)

@@ -45,16 +45,6 @@ const int INVALID = -1;
 //Max value for time scale
 const int SCALE_LIMIT = 1000;
 
-
-// Names of displayed columns
-enum ColumnNames {
-    ShapeThumbnail = 0,
-    AnimationIcon = 1,
-    StartTime = 2,
-    EndTime = 3,
-    AnimationClass = 4
-};
-
 KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     : QWidget(parent)
     , m_model(0)

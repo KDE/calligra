@@ -32,9 +32,18 @@ class QColor;
 
 #include "stage_export.h"
 
+/// Names of displayed columns
+enum ColumnNames {
+    ShapeThumbnail = 0,
+    AnimationIcon = 1,
+    StartTime = 2,
+    EndTime = 3,
+    AnimationClass = 4
+};
+
 /**
-  Main Animations Time Line Widget it depends on
-  KPrTimeLineHeader and KPrTimeLineView
+ Animations Time Line Widget for groups of time related animations
+ it depends on KPrTimeLineHeader and KPrTimeLineView
   */
 
 class STAGE_EXPORT  KPrAnimationsTimeLineView : public QWidget
@@ -55,10 +64,10 @@ signals:
     void clicked(const QModelIndex&);
 
 public slots:
-    //updates all widget
+    /// updates all widget
     void update();
 
-    //recalculate column preferred width and update widget
+    /// recalculate column preferred width and update widget
     void updateColumnsWidth();
 
 protected:

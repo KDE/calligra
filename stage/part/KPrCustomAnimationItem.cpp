@@ -133,7 +133,7 @@ KPrShapeAnimation::Node_Type KPrCustomAnimationItem::triggerEvent() const
 qreal KPrCustomAnimationItem::startTime() const
 {
     if (m_shapeAnimation) {
-        return m_shapeAnimation->timeRange().first/1000.0;
+        return m_shapeAnimation->timeRange().first / 1000.0;
     }
     return 0;
 }
@@ -141,7 +141,7 @@ qreal KPrCustomAnimationItem::startTime() const
 qreal KPrCustomAnimationItem::duration() const
 {
     if (m_shapeAnimation) {
-        return m_shapeAnimation->timeRange().second/1000.0;
+        return m_shapeAnimation->timeRange().second / 1000.0;
     }
     return 0;
 }

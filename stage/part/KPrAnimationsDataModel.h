@@ -28,8 +28,8 @@
 
 #include "stage_export.h"
 
-/*Data Model for Animations Time Line View
-It requires an activePage to be set*/
+/** Data Model for Animations Time Line View
+It requires an parent item from KPrAnimationsTreeModel*/
 
 class KPrPage;
 class QImage;
@@ -61,6 +61,7 @@ public:
     /// Return the first animation index for the given shape
     QModelIndex indexByShape(KoShape* shape);
 
+    /// Return the index of a given item or an invalid index if it isn't on the model
     QModelIndex indexByItem(KPrCustomAnimationItem* item);
 
 public slots:
@@ -68,6 +69,7 @@ public slots:
     void update();
 
 private:
+    /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
