@@ -31,7 +31,7 @@
 
 // 3D shape
 #include "ThreedShapeFactory.h"
-#include "ThreedToolFactory.h"
+//#include "ThreedToolFactory.h"
 
 
 K_PLUGIN_FACTORY(ThreedShapePluginFactory, registerPlugin<ThreedShapePlugin>();)
