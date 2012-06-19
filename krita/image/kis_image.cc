@@ -1200,16 +1200,36 @@ QRect KisImage::bounds() const
 {
     if(m_d->infiniteCanvas)
     {
-        KisNodeSP root = m_d->rootLayer;
-        Q_ASSERT(!root.isNull());
-        QRect extent = root->extent();
-        extent = realNodeExtent(root,extent);
+        KisNodeSP rootNode = rootLayer();
+        Q_ASSERT(!rootNode.isNull());
+        QRect extent = QRect(QPoint(0,0),QSize(m_d->width,m_d->height));
+        qDebug() << "Extent's original Width"<< ppVar(extent.width());
+        qDebug() << "Extent's original Height"<< ppVar(extent.height());
+        extent = dynamicSize(rootNode,extent);
+        //extent |= realNodeExtent(rootNode,extent);
+        qDebug() << "Extent's actual Width"<< ppVar(extent.width());
+        qDebug() << "Extent's actual height"<< ppVar(extent.height());
+        //setSize(extent.size());
         return extent;
     }
     else
     {
         return QRect(0, 0, width(), height());
     }
+}
+
+QRect KisImage::dynamicSize(KisNodeSP rootNode, QRect extent)
+{
+    if(rootNode)
+    {
+        extent |= rootNode->extent();
+
+        qDebug() << "Width of node"<< ppVar(rootNode->extent().width());
+        qDebug() << "Height of node"<< ppVar(rootNode->extent().height());
+        dynamicSize(rootNode->nextSibling(),extent);
+        dynamicSize(rootNode->firstChild(),extent);
+    }
+    return extent;
 }
 
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
