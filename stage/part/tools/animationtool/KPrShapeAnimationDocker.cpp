@@ -150,6 +150,7 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateTimeLineModel(QModelIndex)));
         connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(syncWithTimeLineIndex(QModelIndex)));
+        connect(m_animationsModel, SIGNAL(rootChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     }
 }
 

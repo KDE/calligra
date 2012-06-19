@@ -68,6 +68,9 @@ public slots:
     /// Triggers an update of the complete model
     void update();
 
+    /// set model to 0
+    void removeModel();
+
 private:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;

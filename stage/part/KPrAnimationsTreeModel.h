@@ -90,6 +90,8 @@ public:
     /// Return the parent item
     KPrCustomAnimationItem* rootItem() const;
 
+signals:
+    void rootChanged();
 
 public slots:
     /// Triggers an update of the complete model

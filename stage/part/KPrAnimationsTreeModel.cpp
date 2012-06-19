@@ -400,6 +400,7 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
             }
         }
     }
+    emit rootChanged();
 }
 
 void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
@@ -425,6 +426,14 @@ QModelIndex KPrAnimationsTreeModel::indexByShape(KoShape *shape)
         if (item->shape() == shape) {
             return thisIndex;
         }
+        if (item->childCount() > 0) {
+            foreach (KPrCustomAnimationItem *child, item->children()) {
+                if (child->shape() == shape) {
+                    thisIndex = indexByItem(child);
+                    return thisIndex;
+                }
+            }
+        }
     }
     return QModelIndex();
 }
@@ -440,6 +449,16 @@ QModelIndex KPrAnimationsTreeModel::indexByItem(KPrCustomAnimationItem *item)
         KPrCustomAnimationItem *newItem = itemForIndex(thisIndex);
         if (item == newItem) {
             return thisIndex;
+        }
+        if (newItem->childCount() > 0) {
+            int childRow = 0;
+            foreach (KPrCustomAnimationItem *child, newItem->children()) {
+                if (child == item) {
+                    QModelIndex childIndex = index(childRow, 0, thisIndex);
+                    return childIndex;
+                }
+                childRow++;
+            }
         }
     }
     return QModelIndex();

@@ -261,8 +261,8 @@ void KPrAnimationsDataModel::setDocumentView(KPrView *view)
     m_view = view;
     if (m_view->kopaDocument())
     {
-        connect(m_view->kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(update()));
-        connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(update()));
+        connect(m_view->kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeModel()));
+        connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(removeModel()));
     }
     reset();
 }
@@ -274,6 +274,13 @@ void KPrAnimationsDataModel::update()
         emit layoutAboutToBeChanged();
         emit layoutChanged();
     }
+}
+
+void KPrAnimationsDataModel::removeModel()
+{
+    m_rootItem = 0;
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
 }
 
 KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &index) const
