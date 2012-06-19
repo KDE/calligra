@@ -35,6 +35,7 @@
 #include "kis_selection.h"
 #include <kis_debug.h>
 #include <kis_layer_composition.h>
+#include <kis_painter.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
@@ -169,6 +170,31 @@ void KisImageTest::testLayerComposition()
     QVERIFY(!layer2->visible());
 }
 
+void KisImageTest::testDynamicImage()
+{
+    const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, cs8, "Dynamic Bounds' Test", true, true);
+    QVERIFY(image->rootLayer() != 0);
+    qDebug() << "OldWidth = "<< ppVar(image->width());
+    qDebug() << "OldHeight = "<< ppVar(image->height());
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(cs8);
+    KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    image->addNode(paint1, image->root());
+
+    QVERIFY(image->rootLayer()->firstChild()->objectName() == paint1->objectName());
+
+    KisPainter* painter1 = new KisPainter();
+    painter1->begin(device1);
+    painter1->paintRect(QRect(1,1,120,120));
+    painter1->bitBlt(QPoint(10,10), device1,QRect(1,1,120,120));
+    qDebug() << "painter's Width = "<< ppVar(painter1->bounds().width());
+    qDebug() << "painter's height = "<< ppVar(painter1->bounds().height());
+    image->refreshGraph();
+    image->bounds();
+    qDebug() << "NewWidth = "<< ppVar(image->width());
+    qDebug() << "NewHeight = "<< ppVar(image->height());
+}
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

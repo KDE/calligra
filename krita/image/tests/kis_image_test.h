@@ -32,6 +32,7 @@ private slots:
     void testConvertImageColorSpace();
     void testGlobalSelection();
     void testLayerComposition();
+    void testDynamicImage();
 };
 
 #endif
