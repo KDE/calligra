@@ -1,6 +1,14 @@
 
 Calligra Plan current:
 ----------------------
+
+* Improve printing:
+    Add printing options to view configuration dialog
+    Save/load option settings
+
+Release 2.5:
+------------
+
 * Fix crash when two dependent tasks are deleted in one go
 
 * Fix bug 301888 - New: setting task duration messes up schedule
