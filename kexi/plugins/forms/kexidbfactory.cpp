@@ -336,7 +336,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("progress-bar");
+        wi->setPixmap("progress");
         wi->setClassName("KexiDBProgressBar");
         wi->setName(i18n("Progress Bar"));
         wi->setNamePrefix(
