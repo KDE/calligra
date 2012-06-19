@@ -205,7 +205,7 @@ void KisCustomImageWidget::createImage()
 
     if(chkInfiniteCanvas->isChecked())
     {
-        m_doc->newImage(txtName->text(), 0, 0, cs, bgColor, txtDescription->toPlainText(), resolution, true);
+        m_doc->newImage(txtName->text(), 1, 1, cs, bgColor, txtDescription->toPlainText(), resolution, true);
 
     }
 
