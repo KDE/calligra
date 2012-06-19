@@ -1,6 +1,10 @@
 
 Calligra Plan current:
 ----------------------
+* Fix crash when two dependent tasks are deleted in one go
+
+* Fix bug 301888 - New: setting task duration messes up schedule
+
 * Fix bug 301326 - Export to pdf does not respect reports page layout
 
 * Fix Bug 286564 -  plan do not update the resources allocation number when selected
