@@ -21,7 +21,10 @@
 
 #include "kptaccountsview.h"
 #include "kptaccountsmodel.h"
+#include "kptviewbase.h"
 #include "kptdebug.h"
+
+#include "KoPageLayoutWidget.h"
 
 #include <QCheckBox>
 #include <QDateTime>
@@ -34,16 +37,17 @@
 namespace KPlato
 {
 
-AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWidget *p)
-    : KDialog(p),
-    m_view( view )
+AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *p)
+    : KPageDialog(p),
+    m_view( view ),
+    m_treeview( treeview )
 {
     setCaption( i18n("Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    m_panel = new AccountsviewConfigPanel(this);
-    switch ( view->startMode() ) {
+    m_panel = new AccountsviewConfigPanel( this );
+    switch ( treeview->startMode() ) {
         case CostBreakdownItemModel::StartMode_Project: 
             m_panel->ui_projectstartBtn->setChecked( true );
             m_panel->ui_startdate->setEnabled( false );
@@ -52,7 +56,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
             m_panel->ui_startdateBtn->setChecked( true );
             break;
     }
-    switch ( view->endMode() ) {
+    switch ( treeview->endMode() ) {
         case CostBreakdownItemModel::EndMode_Project:
             m_panel->ui_projectendBtn->setChecked( true );
             m_panel->ui_enddate->setEnabled( false );
@@ -65,14 +69,30 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
             m_panel->ui_enddate->setEnabled( false );
             break;
     }
-    m_panel->ui_startdate->setDate( view->startDate() );
-    m_panel->ui_enddate->setDate( view->endDate() );
-    m_panel->ui_periodBox->setCurrentIndex( view->periodType() );
-    m_panel->ui_cumulative->setChecked( view->cumulative() );
-    m_panel->ui_showBox->setCurrentIndex( view->showMode() );
-    setMainWidget(m_panel);
+    m_panel->ui_startdate->setDate( treeview->startDate() );
+    m_panel->ui_enddate->setDate( treeview->endDate() );
+    m_panel->ui_periodBox->setCurrentIndex( treeview->periodType() );
+    m_panel->ui_cumulative->setChecked( treeview->cumulative() );
+    m_panel->ui_showBox->setCurrentIndex( treeview->showMode() );
 
-    enableButtonOk(false);
+    KPageWidgetItem *page = addPage( m_panel, i18n( "General" ) );
+    page->setHeader( i18n( "View Settings" ) );
+
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 
     connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOk(bool)));
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
@@ -82,24 +102,27 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
 void AccountsviewConfigDialog::slotOk()
 {
     kDebug(planDbg());
-    m_view->setPeriodType( m_panel->ui_periodBox->currentIndex() );
-    m_view->setCumulative( m_panel->ui_cumulative->isChecked() );
-    m_view->setShowMode( m_panel->ui_showBox->currentIndex() );
+    m_treeview->setPeriodType( m_panel->ui_periodBox->currentIndex() );
+    m_treeview->setCumulative( m_panel->ui_cumulative->isChecked() );
+    m_treeview->setShowMode( m_panel->ui_showBox->currentIndex() );
     if ( m_panel->ui_startdateBtn->isChecked() ) {
-        m_view->setStartDate( m_panel->ui_startdate->date() );
-        m_view->setStartMode( CostBreakdownItemModel::StartMode_Date );
+        m_treeview->setStartDate( m_panel->ui_startdate->date() );
+        m_treeview->setStartMode( CostBreakdownItemModel::StartMode_Date );
     } else {
-        m_view->setStartMode( CostBreakdownItemModel::StartMode_Project );
+        m_treeview->setStartMode( CostBreakdownItemModel::StartMode_Project );
     }
 
     if ( m_panel->ui_enddateBtn->isChecked() ) {
-        m_view->setEndDate( m_panel->ui_enddate->date() );
-        m_view->setEndMode( CostBreakdownItemModel::EndMode_Date );
+        m_treeview->setEndDate( m_panel->ui_enddate->date() );
+        m_treeview->setEndMode( CostBreakdownItemModel::EndMode_Date );
     } else if ( m_panel->ui_currentdateBtn->isChecked() ) {
-        m_view->setEndMode( CostBreakdownItemModel::EndMode_CurrentDate );
+        m_treeview->setEndMode( CostBreakdownItemModel::EndMode_CurrentDate );
     } else {
-        m_view->setEndMode( CostBreakdownItemModel::EndMode_Project );
+        m_treeview->setEndMode( CostBreakdownItemModel::EndMode_Project );
     }
+
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
 }
 
 
