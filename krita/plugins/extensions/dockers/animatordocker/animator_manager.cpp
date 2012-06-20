@@ -177,7 +177,7 @@ void AnimatorManager::initLayers()
 }
 
 
-void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
+void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNodeSP content)
 {
     if (!ready())
         return;
@@ -185,12 +185,14 @@ void AnimatorManager::setFrameContent(SimpleFrameLayer* frame, KisNode* content)
     if (!content)
         return;
 
-    if (frame->getContent())
+    if (frame->getContent()) {
         m_nodeManager->removeNode(frame->getContent());
+    }
 
     putNodeAt(content, frame, 0);
-    if (! content->name().startsWith("_"))
+    if (! content->name().startsWith("_")) {
         content->setName("_");
+    }
 }
 
 void AnimatorManager::setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLayer *filter)
@@ -295,16 +297,16 @@ void AnimatorManager::calculateFramesNumber()
 }
 
 
-void AnimatorManager::activate(int frameNumber, KisNode* node)
+void AnimatorManager::activate(int frameNumber, KisNodeSP node)
 {
     if (frameNumber >= 0)
         getSwitcher()->goFrame(frameNumber);
 
-    if (node)
-    {
-        SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(node);
-        if (frame)
+    if (node) {
+        SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(node.data());
+        if (frame) {
             node = frame->getContent();
+        }
         m_nodeManager->slotNonUiActivatedNode(node);
     }
 

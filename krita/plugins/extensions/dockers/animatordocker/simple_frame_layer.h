@@ -31,8 +31,8 @@ public:
     SimpleFrameLayer(const KisGroupLayer& source);
     
 public:
-    virtual KisNode* getContent();
-    virtual void setContent(KisNode* c);
+    virtual KisNodeSP getContent();
+    virtual void setContent(KisNodeSP c);
     
 public:
     virtual bool isKeyFrame();

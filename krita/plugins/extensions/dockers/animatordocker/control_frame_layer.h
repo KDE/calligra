@@ -32,8 +32,8 @@ public:
     virtual ~ControlFrameLayer();
     
 public:
-    virtual void setContent(KisNode* c);
-    virtual KisNode* getContent();
+    virtual void setContent(KisNodeSP c);
+    virtual KisNodeSP getContent();
     virtual bool isKeyFrame();
     
 public:

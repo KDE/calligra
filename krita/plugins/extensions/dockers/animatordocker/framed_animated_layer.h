@@ -42,7 +42,7 @@ public:
 public:
     virtual FrameLayer* emptyFrame();
     
-    virtual FrameLayer* frameAt(int num) const;
+    virtual FrameLayer* frameAt(int num);
     virtual void insertFrame(FrameLayer* frame);
     virtual void createFrame(int num, bool isKey);
     virtual void createFrame(int num, bool isKey, KisNodeSP content);
@@ -51,15 +51,15 @@ public:
     virtual void swapFrames(int first, int second);
 
 public:
-    virtual FrameLayer* getCachedFrame(int num) const;
-    virtual FrameLayer* getKeyFrame(int num) const;
+    virtual FrameLayer* getCachedFrame(int num);
+    virtual FrameLayer* getKeyFrame(int num);
 
 public:
     virtual bool displayable() const;
     virtual bool hasPreview() const;
     
 public:
-    virtual bool isKeyFrame(int num) const;
+    virtual bool isKeyFrame(int num);
 
     virtual int getNextKey(int num) const;
     virtual int getPreviousKey(int num) const;

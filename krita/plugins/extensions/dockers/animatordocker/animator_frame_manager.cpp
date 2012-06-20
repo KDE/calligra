@@ -19,6 +19,8 @@
 
 #include "animator_frame_manager.h"
 #include "animator_switcher.h"
+#include "frame_layer.h"
+#include "simple_frame_layer.h"
 #include <cstdlib>
 
 
@@ -181,12 +183,16 @@ void AnimatorFrameManager::copyFrame(FramedAnimatedLayer *layer, int from, int t
     if (!layer || !layer->frameAt(from) || layer->frameAt(to))
         return;
     
-    KisNode *content = qobject_cast<SimpleFrameLayer*>(layer->frameAt(from))->getContent();
-    if (!content)
+    FrameLayer *frameLayer = layer->frameAt(from);
+    SimpleFrameLayer *simpleFrameLayer= dynamic_cast<SimpleFrameLayer*>(frameLayer);
+    KisNodeSP node = simpleFrameLayer->getContent();
+
+    if (!node) {
         return;
-    
+    }
+    simpleFrameLayer = qobject_cast<SimpleFrameLayer*>(node.data());
     layer->createFrame(to, true);
-    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(content->clone().data());
+    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(simpleFrameLayer->clone());
 }
 
 

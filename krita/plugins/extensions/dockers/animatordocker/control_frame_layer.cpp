@@ -38,13 +38,13 @@ ControlFrameLayer::~ControlFrameLayer()
 {
 }
 
-void ControlFrameLayer::setContent(KisNode* c)
+void ControlFrameLayer::setContent(KisNodeSP c)
 {
     SimpleFrameLayer::setContent(c);
     load();
 }
 
-KisNode* ControlFrameLayer::getContent()
+KisNodeSP ControlFrameLayer::getContent()
 {
     KisNode* content = SimpleFrameLayer::getContent();
     if (!content)

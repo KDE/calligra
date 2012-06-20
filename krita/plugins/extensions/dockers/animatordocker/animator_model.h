@@ -36,7 +36,7 @@ public slots:
     virtual void removeThis();
     
     virtual void layoutChangedSlot();
-    virtual void dataChangedSlot(KisNode* node);
+    virtual void dataChangedSlot(KisNodeSP node);
     virtual void dataChangedSlot(int from, int to);
     
 public:
@@ -65,10 +65,10 @@ public:
     virtual int frameNumber(const QModelIndex& index) const;
     virtual int frameNumber(int column) const;
     
-    virtual KisNode* nodeFromIndex(const QModelIndex& index) const;
+    virtual KisNodeSP nodeFromIndex(const QModelIndex& index) const;
     
 protected:
-    virtual QModelIndex indexFromNode(const KisNode* node) const;
+    virtual QModelIndex indexFromNode(const KisNodeSP node) const;
     
 private:
     int m_frameWidth;

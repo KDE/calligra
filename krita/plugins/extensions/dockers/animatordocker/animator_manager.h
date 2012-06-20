@@ -110,7 +110,7 @@ public:
     virtual void createLoopFrame(int target, int repeat);
 
 public:
-    virtual void setFrameContent(SimpleFrameLayer* frame, KisNode* content);
+    virtual void setFrameContent(SimpleFrameLayer* frame, KisNodeSP content);
     virtual void setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLayer *filter);
     virtual void putNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     virtual void removeNode(KisNodeSP node);
@@ -127,7 +127,7 @@ public:
     virtual int framesNumber() const;
 
 public:
-    virtual void activate(int frameNumber, KisNode* node);
+    virtual void activate(int frameNumber, KisNodeSP node);
     virtual void activateKeyFrame(AnimatedLayer* alayer, int frameNumber);
 
 public:

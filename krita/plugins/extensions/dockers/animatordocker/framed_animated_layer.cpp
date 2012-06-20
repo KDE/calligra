@@ -61,10 +61,11 @@ bool FramedAnimatedLayer::hasPreview() const
 }
 
 
-FrameLayer* FramedAnimatedLayer::frameAt(int num) const
+FrameLayer* FramedAnimatedLayer::frameAt(int num)
 {
-    if (num >= dataStart() && num < dataEnd())
+    if (num >= dataStart() && num < dataEnd()) {
         return m_frames[num];
+    }
     return 0;
 }
 
@@ -160,7 +161,7 @@ void FramedAnimatedLayer::swapFrames(int first, int second)
 }
 
 
-FrameLayer* FramedAnimatedLayer::getKeyFrame(int num) const
+FrameLayer* FramedAnimatedLayer::getKeyFrame(int num)
 {
     if (isKeyFrame(num))
     {
@@ -170,7 +171,7 @@ FrameLayer* FramedAnimatedLayer::getKeyFrame(int num) const
     return 0;
 }
 
-FrameLayer* FramedAnimatedLayer::getCachedFrame(int num) const
+FrameLayer* FramedAnimatedLayer::getCachedFrame(int num)
 {
     FrameLayer* frame = frameAt(num);
     if (frame)
@@ -209,9 +210,11 @@ int FramedAnimatedLayer::getPreviousKey(int num) const
     return -1;
 }
 
-bool FramedAnimatedLayer::isKeyFrame(int num) const
+bool FramedAnimatedLayer::isKeyFrame(int num)
 {
-    return frameAt(num) && qobject_cast<SimpleFrameLayer*>(frameAt(num))->isKeyFrame();
+    const SimpleFrameLayer* simpleFrameLayer = qobject_cast<const SimpleFrameLayer*>(frameAt(num));
+    SimpleFrameLayer *sfl = const_cast<SimpleFrameLayer*>(simpleFrameLayer);
+    return (frameAt(num) && sfl->isKeyFrame());
 }
 
 int FramedAnimatedLayer::dataStart() const

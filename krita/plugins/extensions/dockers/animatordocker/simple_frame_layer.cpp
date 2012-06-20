@@ -28,16 +28,15 @@ SimpleFrameLayer::SimpleFrameLayer(const KisGroupLayer& source): FrameLayer(sour
 {
 }
 
-KisNode* SimpleFrameLayer::getContent()
+KisNodeSP SimpleFrameLayer::getContent()
 {
-    if (at(0) && at(0)->name().startsWith("_"))
-    {
+    if (at(0) && at(0)->name().startsWith("_"))  {
         return at(0).data();
     }
     return 0;
 }
 
-void SimpleFrameLayer::setContent(KisNode* c)
+void SimpleFrameLayer::setContent(KisNodeSP c)
 {
     AnimatorManagerFactory::instance()->getManager(image().data())->setFrameContent(this, c);
 }

@@ -40,7 +40,7 @@ public:
     virtual bool displayable() const;
     virtual bool hasPreview() const;
     
-    virtual FrameLayer* getCachedFrame(int num) const;
+    virtual FrameLayer* getCachedFrame(int num);
     
     virtual int dataStart() const;
     virtual int dataEnd() const;

@@ -50,7 +50,7 @@ void AnimatedLayer::updateFrame(int num)
     Q_UNUSED(num);
 }
 
-bool AnimatedLayer::enabled()
+bool AnimatedLayer::enabled() const
 {
     return m_enabled;
 }

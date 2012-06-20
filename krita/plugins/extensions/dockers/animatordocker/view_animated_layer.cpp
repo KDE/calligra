@@ -121,7 +121,7 @@ QImage ViewAnimatedLayer::getThumbnail(int fnum, int size)
 
 
 // Not supported yet
-FrameLayer* ViewAnimatedLayer::getCachedFrame(int num) const
+FrameLayer* ViewAnimatedLayer::getCachedFrame(int num)
 {
     return 0;
 }
