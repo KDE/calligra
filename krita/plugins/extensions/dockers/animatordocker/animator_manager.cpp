@@ -347,7 +347,7 @@ QList< AnimatedLayerSP > AnimatorManager::layers()
 KisNodeSP AnimatorManager::getAnimatedLayerByChild(KisNodeSP child) const
 {
     KisNodeSP node = child;
-    while (node->parent()) {
+    while (node && node->parent()) {
         if (node->inherits("AnimatedLayer")) {
             return node;
         }
@@ -382,7 +382,7 @@ void AnimatorManager::createAnimatedLayer()
         m_nodeAdapter->addNode(newLayer, parent, parent->index(alayer));
     } else {
         m_nodeAdapter->addNode(newLayer, image()->root(), 0);
-//        m_nodeAdapter->moveNode(newLayer, activeNode);
+        //        m_nodeAdapter->moveNode(newLayer, activeNode);
     }
 }
 

@@ -157,7 +157,7 @@ QVariant AnimatorModel::data(const QModelIndex& ind, int role) const
     else if (ind.column() == 1) {
         if (role == Qt::CheckStateRole) {
             KisNodeSP node = nodeFromIndex(index(ind.row(), 0, ind.parent()));
-            return (node->visible())?Qt::Checked:Qt::Unchecked;
+            return (node && node->visible())?Qt::Checked:Qt::Unchecked;
         }
     }
     else if (ind.column() == 2) {
