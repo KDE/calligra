@@ -493,7 +493,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->actionToExecuteListView = new ActionToExecuteListView(d->secondAnd3rdColumnMainWidget);
     d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
     
-    connect(d->actionToExecuteListView, SIGNAL(itemActivated(QTreeWidgetItem*)),
+    connect(d->actionToExecuteListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotActionToExecuteItemExecuted(QTreeWidgetItem*)));
     connect(d->actionToExecuteListView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(slotActionToExecuteItemSelected(QTreeWidgetItem*)));
@@ -624,7 +624,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
                 vlyr->addWidget(lbl);
                 vlyr->addWidget(d->kactionListView);
                 d->secondAnd3rdColumnStack->addWidget(d->kactionPageWidget);
-                connect(d->kactionListView, SIGNAL(itemActivated(QTreeWidgetItem*)),
+                connect(d->kactionListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
                         this, SLOT(slotKActionItemExecuted(QTreeWidgetItem*)));
                 connect(d->kactionListView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
                         this, SLOT(slotKActionItemSelected(QTreeWidgetItem*)));
