@@ -24,6 +24,7 @@
 //Stage Headers
 #include "KPrPage.h"
 #include "KPrView.h"
+#include "KPrDocument.h"
 #include <KPrCustomAnimationItem.h>
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
@@ -410,6 +411,11 @@ void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
     {
         connect(m_view->kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(updateData()));
         connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(updateData()));
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        if (doc) {
+            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(updateData()));
+            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(updateData()));
+        }
     }
     reset();
 }

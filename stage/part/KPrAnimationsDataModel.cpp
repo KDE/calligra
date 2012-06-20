@@ -23,6 +23,7 @@
 #include "animations/KPrAnimationSubStep.h"
 #include <KPrPage.h>
 #include <KPrView.h>
+#include <KPrDocument.h>
 #include <KPrCustomAnimationItem.h>
 
 //KDE HEADERS
@@ -263,6 +264,11 @@ void KPrAnimationsDataModel::setDocumentView(KPrView *view)
     {
         connect(m_view->kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeModel()));
         connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(removeModel()));
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        if (doc) {
+            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(removeModel()));
+            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(removeModel()));
+        }
     }
     reset();
 }

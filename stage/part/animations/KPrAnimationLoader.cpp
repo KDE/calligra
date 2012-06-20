@@ -214,9 +214,9 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
 
     if (shapeAnimation) {
         subStep->addAnimation(shapeAnimation);
-
         shapeAnimation->setNodeType(l_nodeType);
-
+        shapeAnimation->setSubStep(subStep);
+        shapeAnimation->setStep((*animationStep));
         if (presetClass == "custom") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
         }

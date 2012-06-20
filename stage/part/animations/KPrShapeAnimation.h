@@ -33,6 +33,8 @@ class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KPrAnimationCache;
+class KPrAnimationStep;
+class KPrAnimationSubStep;
 
 class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
@@ -98,6 +100,19 @@ public:
     Preset_Class presetClass() const;
     QString id() const;
     QString presetClassText() const;
+    void setStep(KPrAnimationStep *step);
+    void setSubStep(KPrAnimationSubStep *subStep);
+    KPrAnimationStep *step();
+    KPrAnimationSubStep *subStep();
+
+    /// Store index for undo redo commands
+    void setStepIndex(int index);
+    void setSubStepIndex(int index);
+    void setAnimIndex(int index);
+    int stepIndex();
+    int subStepIndex();
+    int animIndex();
+
 
 private:
     KoShape *m_shape;
@@ -105,6 +120,11 @@ private:
     Node_Type m_triggerEvent;
     Preset_Class m_class;
     QString m_id;
+    KPrAnimationStep *m_step;
+    KPrAnimationSubStep *m_subStep;
+    int m_stepIndex;
+    int m_subStepIndex;
+    int m_animIndex;
 };
 
 #endif /* KPRSHAPEANIMATION_H */

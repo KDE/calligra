@@ -35,6 +35,10 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockD
 , m_triggerEvent(KPrShapeAnimation::On_Click)
 , m_class(KPrShapeAnimation::None)
 , m_id(QString())
+, m_step(0)
+, m_subStep(0)
+, m_stepIndex(-1)
+, m_subStepIndex(-1)
 {
     // this is needed so we save the xml id's on saving and therefor are able to 
     // save animation back even when they have not yet run.
@@ -210,4 +214,54 @@ QString KPrShapeAnimation::presetClassText() const
     else {
         return QString("custom");
     }
+}
+
+void KPrShapeAnimation::setStep(KPrAnimationStep *step)
+{
+    m_step = step;
+}
+
+void KPrShapeAnimation::setSubStep(KPrAnimationSubStep *subStep)
+{
+    m_subStep = subStep;
+}
+
+KPrAnimationStep *KPrShapeAnimation::step()
+{
+    return m_step;
+}
+
+KPrAnimationSubStep *KPrShapeAnimation::subStep()
+{
+    return m_subStep;
+}
+
+void KPrShapeAnimation::setStepIndex(int index)
+{
+    m_stepIndex = index;
+}
+
+void KPrShapeAnimation::setSubStepIndex(int index)
+{
+    m_subStepIndex = index;
+}
+
+void KPrShapeAnimation::setAnimIndex(int index)
+{
+    m_animIndex = index;
+}
+
+int KPrShapeAnimation::stepIndex()
+{
+    return m_stepIndex;
+}
+
+int KPrShapeAnimation::subStepIndex()
+{
+    return m_subStepIndex;
+}
+
+int KPrShapeAnimation::animIndex()
+{
+    return m_animIndex;
 }

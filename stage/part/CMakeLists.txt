@@ -80,6 +80,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrCustomAnimationItem.cpp
 
      commands/KPrAnimationCreateCommand.cpp
+     commands/KPrAnimationRemoveCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp

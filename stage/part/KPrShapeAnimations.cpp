@@ -22,6 +22,9 @@
 #include <kdebug.h>
 #include "KoShape.h"
 #include "KPrShapeAnimations.h"
+#include "animations/KPrAnimationStep.h"
+#include "animations/KPrAnimationSubStep.h"
+#include "animations/KPrShapeAnimation.h"
 
 KPrShapeAnimations::KPrShapeAnimations()
 {
@@ -36,14 +39,49 @@ void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
     m_shapeAnimations = animations;
 }
 
-void KPrShapeAnimations::add( KPrShapeAnimation * animation )
+void KPrShapeAnimations::add(KPrShapeAnimation * animation)
 {
-    Q_UNUSED(animation);
+    if (!steps().contains(animation->step())) {
+        if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= steps().count())) {
+            steps().insert(animation->stepIndex(), animation->step());
+        }
+        else {
+            steps().append(animation->step());
+        }
+    }
+    if (!(animation->step()->indexOfAnimation(animation->subStep()) > 0)) {
+        if ((animation->subStepIndex() >= 0) &&
+                (animation->subStepIndex() <= animation->step()->animationCount())) {
+            animation->step()->insertAnimation(animation->subStepIndex(), animation->subStep());
+        }
+        else {
+            animation->step()->addAnimation(animation);
+        }
+    }
+    if ((animation->animIndex() >= 0) &&
+            (animation->animIndex() <= animation->subStep()->animationCount())) {
+        animation->subStep()->insertAnimation(animation->animIndex(), animation);
+    }
+    else {
+        animation->subStep()->addAnimation(animation);
+    }
+    return;
 }
 
-void KPrShapeAnimations::remove( KPrShapeAnimation * animation )
+void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
 {
-    Q_UNUSED(animation);
+    KPrAnimationStep *step = animation->step();
+    KPrAnimationSubStep *subStep = animation->subStep();
+    if (subStep->animationCount() <= 1) {
+        if (step->animationCount() <= 1) {
+            animation->setStepIndex(steps().indexOf(step));
+            steps().removeAll(step);
+        }
+        animation->setSubStepIndex(step->indexOfAnimation(subStep));
+        step->removeAnimation(subStep);
+    }
+    animation->setAnimIndex(subStep->indexOfAnimation(animation));
+    subStep->removeAnimation(animation);
 }
 
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const

@@ -23,12 +23,14 @@
 #include "KPrAnimationsTreeModel.h"
 #include "KPrPage.h"
 #include "KPrView.h"
+#include "KPrDocument.h"
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
 #include "KPrCustomAnimationItem.h"
 
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
+#include "commands/KPrAnimationRemoveCommand.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -114,6 +116,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
 
     //Connect Signals.
     connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
+    connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
 
 
     //load View and model
@@ -154,6 +157,17 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
     }
 }
 
+void KPrShapeAnimationDocker::checkAnimationSelected()
+{
+    QModelIndex index = m_animationsView->currentIndex();
+    KPrCustomAnimationItem *item = itemByIndex(index);
+    if (item) {
+        m_buttonRemoveAnimation->setEnabled(true);
+        return;
+    }
+m_buttonRemoveAnimation->setEnabled(false);
+}
+
 void KPrShapeAnimationDocker::slotActivePageChanged()
 {
     Q_ASSERT( m_view );
@@ -170,6 +184,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
+    checkAnimationSelected();
 }
 
 void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &index)
@@ -183,6 +198,7 @@ void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &ind
             m_timeLineView->setCurrentIndex(index);
         }
     }
+    checkAnimationSelected();
 }
 
 void KPrShapeAnimationDocker::syncWithTimeLineIndex(const QModelIndex &index)
@@ -196,6 +212,7 @@ void KPrShapeAnimationDocker::syncWithTimeLineIndex(const QModelIndex &index)
             m_animationsView->setCurrentIndex(index);
         }
     }
+    checkAnimationSelected();
 }
 
 void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
@@ -214,17 +231,18 @@ void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
     selection->select(shape);
     selection->update();
     shape->update();
+    checkAnimationSelected();
 }
 
 KPrCustomAnimationItem *KPrShapeAnimationDocker::itemByIndex(const QModelIndex &index)
 {
-    //Update canvas with selected shape on Time Line View
-    Q_ASSERT(index.internalPointer());
-
     //Check if index is valid and it contains a shape with an animation
     if (!index.isValid()) {
         return 0;
     }
+    //Update canvas with selected shape on Time Line View
+    Q_ASSERT(index.internalPointer());
+
     KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
     if (!shapeAnimation) {
         return 0;
@@ -299,4 +317,15 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
 
     m_previewMode->setShapeAnimation(shapeAnimation->animation());
     m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)
+}
+
+void KPrShapeAnimationDocker::slotRemoveAnimations()
+{
+    QModelIndex index = m_animationsView->currentIndex();
+    KPrCustomAnimationItem *item = itemByIndex(index);
+    if (item) {
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(doc, item->animation());
+        doc->addCommand(command);
+    }
 }

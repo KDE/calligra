@@ -43,6 +43,8 @@ class KPrShapeAnimationDocker : public QWidget
 public:
     explicit KPrShapeAnimationDocker(QWidget *parent = 0);
     void setView(KoPAViewBase *view);
+
+    void checkAnimationSelected();
     
 signals:
     
@@ -68,6 +70,10 @@ public slots:
 
     /// Plays a preview of the shape animation
     void slotAnimationPreview();
+
+    /// Remove selected animations
+    void slotRemoveAnimations();
+
 
 private:
     KPrView* m_view;
