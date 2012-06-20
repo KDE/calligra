@@ -337,6 +337,7 @@ void TaskStatusView::slotOptions()
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
 
     m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
@@ -347,6 +348,7 @@ bool TaskStatusView::loadContext( const KoXmlElement &context )
 
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "period", m_view->period() );
     context.setAttribute( "periodtype", m_view->periodType() );
     context.setAttribute( "weekday", m_view->weekday() );
@@ -483,11 +485,13 @@ void ProjectStatusView::slotOptions()
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void ProjectStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 
@@ -1222,11 +1226,13 @@ void PerformanceStatusView::slotOptions()
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void PerformanceStatusView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 

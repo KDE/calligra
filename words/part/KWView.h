@@ -40,6 +40,7 @@ class KWGui;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
+class KoFindStyle;
 class KoRdfSemanticItem;
 class KoTextAnchor;
 
@@ -170,14 +171,12 @@ private slots:
     void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
-    /// Wrap the selected frames into a clipping shape container.
-    void createFrameClipping();
-    /// unwrap the selected frames into a clipping shape container.
-    void removeFrameClipping();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
     void updateStatusBarAction();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
+    /// open the configure dialog.
+    void configure();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.

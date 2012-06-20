@@ -538,7 +538,7 @@ public:
         return QHash<Key, T>::insertMulti(key.toLower(), value);
     }
     const Key key(const T& value, const Key& defaultKey) const {
-        return QHash<Key, T>::key(value, key.toLower());
+        return QHash<Key, T>::key(value, defaultKey.toLower());
     }
     int remove(const Key& key) {
         return QHash<Key, T>::remove(key.toLower());

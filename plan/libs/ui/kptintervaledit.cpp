@@ -26,6 +26,7 @@
 #include <QTreeWidget>
 #include <QList>
 
+#include <kicon.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>

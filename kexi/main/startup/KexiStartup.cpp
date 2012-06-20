@@ -368,6 +368,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     m_forcedDesignMode = args->isSet("design-mode");
     m_isProjectNavigatorVisible = args->isSet("show-navigator");
     m_isMainMenuVisible = !args->isSet("hide-menu");
+    m_forcedFullScreen = args->isSet("fullscreen");
     bool createDB = args->isSet("createdb");
     const bool alsoOpenDB = args->isSet("create-opendb");
     if (alsoOpenDB)

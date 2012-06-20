@@ -286,7 +286,7 @@ public:
 
     /*! Defines an action for changing a single property value of a table field.
      Supported properties are currently:
-     "name", "type", "caption", "description", "unsigned", "length", "precision",
+     "name", "type", "caption", "description", "unsigned", "maxLength", "precision",
      "width", "defaultValue", "primaryKey", "unique", "notNull", "allowEmpty",
      "autoIncrement", "indexed", "visibleDecimalPlaces"
 

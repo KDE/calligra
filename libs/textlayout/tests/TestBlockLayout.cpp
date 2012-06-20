@@ -2,7 +2,7 @@
  *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1020,8 +1020,8 @@ void TestBlockLayout::testDropCaps()
     qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
     //qDebug()<<line.position().x();
-    QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 45.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() > 49.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 54.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since
     // it should still be influenced by the dropcap
@@ -1030,8 +1030,8 @@ void TestBlockLayout::testDropCaps()
     line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
     QCOMPARE(line.position().x(), linexpos);
-    QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 45.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() > 49.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 54.0); // can't get a tight-boundingrect here.
 
     style.setDropCaps(false); // remove it
     style.applyStyle(block);

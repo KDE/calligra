@@ -20,13 +20,12 @@
 #ifndef _OUTPUTFILEHELPER_HXX
 #define _OUTPUTFILEHELPER_HXX
 
-#include "writerperfect_export.h"
 #include <OdfDocumentHandler.hxx>
 
 class WPXInputStream;
 class OutputFileHelperImpl;
 
-class WRITERPERFECT_EXPORT OutputFileHelper
+class OutputFileHelper
 {
 public:
 	OutputFileHelper(const char* outFileName, const char *password);

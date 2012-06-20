@@ -739,7 +739,7 @@ public:
     /// Team resources are included but *not* the team members.
     /// Any dynamically allocated resource is not included.
     QList<Resource*> requestedResources() const;
-    bool load( KoXmlElement &element, Project &project );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     /// The number of requested resources

@@ -2002,19 +2002,188 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
     for (unsigned int r = 0; r < rows; r++)
         for (unsigned int c = 0; c < cols; c++) {
             Value v = range.element(c, r);
-
             if (v.isArray())
                 return Value::errorVALUE();
 
             if (matches(cond, v)) {
                 Value val = Cell(sumRangeStart.sheet(), sumRangeStart.column() + c, sumRangeStart.row() + r).value();
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
-                    //kDebug()<<"add "<<val;
                     res = add(res, val);
                 }
             }
         }
 
+    return res;
+}
+
+Value ValueCalc::sumIfs(const Cell &sumRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+{
+    if(range[0].isError())
+        return range[0];
+
+    Value res(0);
+    Value val;
+
+    unsigned int rows = range[0].rows();
+    unsigned int cols = range[0].columns();
+    for (unsigned int r = 0; r < rows; r++) {
+        for (unsigned int c = 0; c < cols; c++) {
+            for (unsigned int i = 1; i <= limit ; i++) {
+
+                if(range[i].isError())
+                    return range[0];
+
+                if (!range[i].isArray()) {
+                    if (matches(cond[i-1], range[i].element(0, 0))) {
+                        return sumRangeStart.value();
+                    }
+                    return Value(0.0);
+                }
+
+                Value v = range[i].element(c, r);
+                if (v.isArray()) {
+                    return Value::errorVALUE();
+                }
+
+                if (!matches(cond[i-1], v)) {
+                    val = Value(0.0);
+                    break;
+                }
+                val = range[0].element(c, r);
+            }
+            if (val.isNumber()) {// only add numbers, no conversion from string allowed
+                res = add(res, val);
+            }
+        }
+    }
+    return res;
+}
+
+Value ValueCalc::averageIf(const Value &range, const Condition &cond)
+{
+    if(range.isError())
+        return range;
+
+    if (!range.isArray()) {
+        if (matches(cond, range.element(0, 0))) {
+            return range;
+        }
+        return Value(0.0);
+    }
+
+    Value res(0);
+    Value tmp;
+
+    unsigned int rows = range.rows();
+    unsigned int cols = range.columns();
+    unsigned int cnt = 0;
+    for (unsigned int r = 0; r < rows; r++)
+        for (unsigned int c = 0; c < cols; c++) {
+            Value v = range.element(c, r);
+
+            if (v.isArray())
+                tmp = averageIf(v, cond);
+            if (tmp.isNumber()) {// only add numbers, no conversion from string allowed
+                res = add(res, tmp);
+            } else if (matches(cond, v)) {
+                if (v.isNumber()) {// only add numbers, no conversion from string allowed
+                    //kDebug()<<"add "<<v;
+                    res = add(res, v);
+                    cnt++;
+                }
+            }
+        }
+
+    res = div(res, cnt);
+    return res;
+}
+
+Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const Condition &cond)
+{
+    if(range.isError())
+        return range;
+
+    if (!range.isArray()) {
+        if (matches(cond, range.element(0, 0))) {
+            return avgRangeStart.value();
+        }
+        return Value(0.0);
+    }
+
+    Value res(0);
+
+    unsigned int rows = range.rows();
+    unsigned int cols = range.columns();
+    unsigned int cnt = 0;
+    for (unsigned int r = 0; r < rows; r++)
+        for (unsigned int c = 0; c < cols; c++) {
+            Value v = range.element(c, r);
+
+            if (v.isArray())
+                return Value::errorVALUE();
+
+            if (matches(cond, v)) {
+                Value val = Cell(avgRangeStart.sheet(), avgRangeStart.column() + c, avgRangeStart.row() + r).value();
+                if (val.isNumber()) {// only add numbers, no conversion from string allowed
+                    //kDebug()<<"add "<<val;
+                    res = add(res, val);
+                    cnt++;
+                }
+            }
+        }
+
+    res = div(res, cnt);
+    return res;
+}
+
+Value ValueCalc::averageIfs(const Cell &avgRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+{
+    if(range[0].isError())
+        return range[0];
+
+    Value res(0);
+    Value val;
+
+    unsigned int rows = range[0].rows();
+    unsigned int cols = range[0].columns();
+    unsigned int cnt = 0;
+    for (unsigned int r = 0; r < rows; r++) {
+        for (unsigned int c = 0; c < cols; c++) {
+            bool flag = true;
+            for (unsigned int i = 1; i <= limit ; i++) {
+
+                if(range[i].isError())
+                    return range[0];
+
+                if (!range[i].isArray()) {
+                    if (matches(cond[i-1], range[i].element(0, 0))) {
+                        return avgRangeStart.value();
+                    }
+                    return Value(0.0);
+                }
+
+                Value v = range[i].element(c, r);
+                if (v.isArray()) {
+                    return Value::errorVALUE();
+                }
+
+                if (!matches(cond[i-1], v)) {
+                    flag = false;
+                    val = Value(0.0);
+                    break;
+                }
+                val = range[0].element(c, r);
+            }
+            if (flag) {
+                cnt++;
+                flag = true;
+            }
+            if (val.isNumber()) {// only add numbers, no conversion from string allowed
+                res = add(res, val);
+            }
+        }
+    }
+    res = div(res, cnt);
     return res;
 }
 
@@ -2052,6 +2221,52 @@ int ValueCalc::countIf(const Value &range, const Condition &cond)
             res++;
     }
 
+    return res;
+}
+
+Value ValueCalc::countIfs(const Cell &cntRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+{
+    if (!range[0].isArray())
+        return Value(0.0);
+
+    if(range[0].isError())
+        return range[0];
+
+    Value res(0);
+
+    unsigned int rows = range[0].rows();
+    unsigned int cols = range[0].columns();
+    for (unsigned int r = 0; r < rows; r++) {
+        for (unsigned int c = 0; c < cols; c++) {
+            bool flag = true;
+            for (unsigned int i = 0; i <= limit ; i++) {
+
+                if(range[i].isError())
+                    return range[0];
+
+                if (!range[i].isArray()) {
+                    if (matches(cond[i], range[i].element(0, 0))) {
+                        return cntRangeStart.value();
+                    }
+                    return Value(0.0);
+                }
+
+                Value v = range[i].element(c, r);
+                if (v.isArray()) {
+                    return Value::errorVALUE();
+                }
+
+                if (!matches(cond[i], v)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                res = add(res, 1);
+                flag = true;
+            }
+        }
+    }
     return res;
 }
 
@@ -2201,7 +2416,6 @@ Value::Format ValueCalc::format(Value a, Value b)
         return bf;
     return af;
 }
-
 
 // ------------------------------------------------------
 

@@ -237,7 +237,7 @@ QString ChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, K
                 color = QColor("#FFFFFF");
             style.addProperty( "draw:fill-color", color.name(), KoGenStyle::GraphicType );
             if ( color.alpha() < 255 )
-                style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
+                style.addProperty( "draw:opacity", QString( "%1%" ).arg( chart()->m_areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
     }
     return styles.insert( style, "ch" );
@@ -299,7 +299,7 @@ QString ChartExport::genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, K
                 color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
             style.addProperty( "draw:fill-color", color.name(), KoGenStyle::GraphicType );
             if ( color.alpha() < 255 )
-                style.addProperty( "draw:opacity", QString( "%1\%" ).arg( areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
+                style.addProperty( "draw:opacity", QString( "%1%" ).arg( areaFormat->m_foreground.alphaF() * 100.0 ), KoGenStyle::GraphicType );
         }
     }
     return styles.insert( style, "ch" );

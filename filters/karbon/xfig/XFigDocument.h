@@ -145,19 +145,63 @@ private:
     QString m_Comment;
 };
 
+enum XFigFillType {
+    XFigFillNone,
+    XFigFillSolid,
+    XFigFillPattern
+};
+
+
+enum XFigFillPatternType
+{
+    XFigFillLeftDiagonal30Degree,
+    XFigFillRightDiagonal30Degree,
+    XFigFillCrossHatch30Degree,
+    XFigFillLeftDiagonal45Degree,
+    XFigFillRightDiagonal45Degree,
+    XFigFillCrossHatch45Degree,
+    XFigFillHorizontalBricks,
+    XFigFillVerticalBricks,
+    XFigFillHorizontalLines,
+    XFigFillVerticalLines,
+    XFigFillCrossHatch,
+    XFigFillHorizontalShinglesSkewedRight,
+    XFigFillHorizontalShinglesSkewedLeft,
+    XFigFillVerticalShinglesSkewedDown,
+    XFigFillVerticalShinglesSkewedUp,
+    XFigFillFishScales,
+    XFigFillSmallFishScales,
+    XFigFillCircles,
+    XFigFillHexagons,
+    XFigFillOctagons,
+    XFigFillHorizontalTireTreads,
+    XFigFillVerticalTireTreads
+};
 
 class XFigFillable
 {
 protected:
-    XFigFillable() {}
+    XFigFillable() : mFillType(XFigFillNone) {}
 public:
-    void setFill( qint32 styleId, qint32 colorId ) { mFillStyleId = styleId; mFillColorId = colorId; }
+    void setFillColorId(qint32 colorId) { mFillColorId = colorId; }
+    void setFillPatternType(XFigFillPatternType patternType)
+    { mFillType = XFigFillPattern; mPatternType = patternType; }
+    void setFillTinting(qint32 tinting)
+    { mFillType = XFigFillSolid; mTinting = tinting; }
+    void setFillNone()
+    { mFillType = XFigFillNone; }
 
-    qint32 fillStyleId() const { return mFillStyleId; }
     qint32 fillColorId() const { return mFillColorId; }
+    XFigFillType fillType() const { return mFillType; }
+    XFigFillPatternType fillPatternType() const { return mPatternType; }
+    qint32 fillTinting() const { return mTinting; }
 private:
-    qint32 mFillStyleId;
     qint32 mFillColorId;
+    XFigFillType mFillType;
+    union {
+        XFigFillPatternType mPatternType;
+        qint32 mTinting;
+    };
 };
 
 class XFigAbstractGraphObject : public XFigAbstractObject
@@ -167,15 +211,10 @@ protected:
     : XFigAbstractObject( typeId ) {}
 public:
     void setDepth( qint32 depth ) { m_Depth = depth; }
-    void setPen( qint32 styleId, qint32 colorId ) { m_PenStyleId = styleId; m_PenColorId = colorId; }
 
     qint32 depth() const { return m_Depth; }
-    qint32 penStyleId() const { return m_PenStyleId; }
-    qint32 penColorId() const { return m_PenColorId; }
 private:
     qint32 m_Depth;
-    qint32 m_PenStyleId;
-    qint32 m_PenColorId;
 };
 
 enum XFigLineType

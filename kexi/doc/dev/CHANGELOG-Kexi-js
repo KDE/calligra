@@ -97,21 +97,11 @@ Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
 i18n TODO:
-"Save to Words" -> "Save as Text Document"
-i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet") -> i18n("Save as Spreadsheet")
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
-->
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Calligra Tables.", cxt.destinationUrl.prettyUrl()) , i18n("Note: do not translate 'Tables'", "Opening in Calligra Tables"));
-
-i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
-->
-i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
+--
 
 CSV Import TODO:
 *add "Skip empty rows" option
 *add "Skip empty columns" option
-
-===================== Kexi 2.4  =====================
 
 TODO:
 *Add Return shortcut to opening in data mode from navigator
@@ -146,12 +136,84 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
 
+TODO:
+Table Designer
+*Changing Length property does not trigger data removal
+BUG:301262
+
+TODO:
+KexiDB
+*MySQL Driver
+**add config option for the length limit
+
+2012-06-07
+KexiDB
+*Added maxLengthIsDefault property of table field for Text types to extended schema
+**stores a hint that limit comes from default setting
+CCBUG:301277
+*Added DefaultMaxLengthForTextFields config in Tables group
+**specifies default maximum length for fields of type Text
+**0 (the default) means unlimited or up to engine's limit
+CCBUG:301277
+TODO: Port to Predicate
+
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.91) ~~~~~~~~~~~~~~~~
+
 2012-03-03
 Main Window
 *User feedback: added anti-DOS protection when updating feedback ui
 *User feedback: added checking format of the .list files to avoid erroneous HTTP requests
 
+===================== Kexi 2.4  =====================
+~~~~~~~~~~~~~~~~ 2.4.3 ~~~~~~~~~~~~~~~~
+
+2012-06-09
+KexiDB
+*MySQL Driver
+*set limit to 255 characters for Text type (VARCHAR)
+**call "SET SESSION sql_mode='TRADITIONAL'" on opening database - needed to turn warnings about trimming string values into SQL errors
+**practical solution for 'Kexi shows no indication that text is trimmed' bug in case of MySQL: error is displayed eg. "Record inserting on the server failed.Message from server: Data too long for column 'hn' at row 1. SQL statement: INSERT INTO table4 (hn) VALUES ('...................'). Server result: 1406"
+**More info on VARCHAR support in databases: http://www.ispirer.com/wiki/sqlways/mysql/data-types/varchar_n
+CCBUG:301277
+CCBUG:301136
+REVIEW:105182
+
+2012-06-06
+KexiDB
+*Remove limits for Text data type, leave as option
+**By default there are no limits in Text data type
+BUG:301277
+TODO: Port to Predicate
+
+~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
+
+KexiDB
+*put DESC/ASC after COLLATE section, not before (needed at least for sqlite driver)
+*fixed crash because of invalid deletion order of query structures
+*fixed crash because of invalid deletion relationship structures
+BUG:298197
+
+~~~~~~~~~~~~~~~~ 2.4.1 ~~~~~~~~~~~~~~~~
+
+Tables
+*Fixed bug: Cannot update field name from Property Editor
+BUG:278296
+
+2012-04-06
+KexiDB
+*SQLite Driver
+**Fixed error when attempting to compact database opened from Open view
+TODO: port to Predicate
+
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
+
+2012-04-04
+KoProperty
+*When property set is cleared, clear model(s) for associated views
+**This fixes random crashes in Property Editor
+Forms
+*Fixed saving "Enabled" property
+BUG:278424
 
 2012-03-28
 KexiDB
@@ -439,12 +501,6 @@ BUG:288085
 2011-11-30
 Reports
 *Fix bug: no indication of selected toolbox action for report element
-BUG:283888
-*After inserting element, respective toolbox action is deselected
-
-2011-11-30
-Reports
-*Fix bug: no indication of selected toolbox action for report element
 BUG:285583
 *After inserting element, respective toolbox action is deselected
 
@@ -465,8 +521,8 @@ Startup
 Startup
 *Remove duplicated entries of recent files at startup so the newest entry for given database is displayed
 Main Window
-BUG:282651
 *fix build of search line edit for msvc
+BUG:282651
 
 ~~~~~~~~~~~~~~~~ 2.4 Beta 4 (2.3.84) ~~~~~~~~~~~~~~~~
 
@@ -520,10 +576,6 @@ Forms
 **first commit by Dimitrios Tanis
 Documentation
 *Official Kexi handbook is now at http://userbase.kde.org/Kexi/Handbook
-
-2011-10-12
-Main Window
-*Simplified background below menu to make it flicker less
 
 2011-10-12
 Main Window
@@ -587,6 +639,7 @@ Reports
 **fixed all issues noted in review, cleaned up code using astyle
 
 2011-09-23
+Startup
 *Fix: properly show server-based items on the Recent Projects list
 BUG:282651
 

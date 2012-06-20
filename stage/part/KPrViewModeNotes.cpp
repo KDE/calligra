@@ -56,22 +56,24 @@ KPrViewModeNotes::~KPrViewModeNotes()
 {
 }
 
-void KPrViewModeNotes::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
+void KPrViewModeNotes::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {
 #ifdef NDEBUG
     Q_UNUSED(canvas);
 #endif
-    Q_ASSERT( m_canvas == canvas );
+    Q_ASSERT(m_canvas == canvas);
 
+    painter.translate(m_canvas->documentOrigin());
     painter.translate(-m_canvas->documentOffset());
-    painter.setRenderHint( QPainter::Antialiasing );
-    QRectF clipRect = paintRect.translated(m_canvas->documentOffset());
-    painter.setClipRect( clipRect );
+    painter.setRenderHint(QPainter::Antialiasing);
+    QRectF clipRect = paintRect.translated(m_canvas->documentOffset() - m_canvas->documentOrigin());
+    painter.setClipRect(clipRect);
 
-    KoViewConverter *converter = m_view->viewConverter( m_canvas );
+    KoViewConverter *converter = m_view->viewConverter(m_canvas);
+    const KoPageLayout &layout = activePageLayout();
+    painter.fillRect(converter->documentToView(QRectF(0, 0, layout.width, layout.height)), Qt::white);
     m_canvas->shapeManager()->paint(painter, *converter, false);
     m_toolProxy->paint(painter, *converter);
-
 }
 
 void KPrViewModeNotes::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -159,37 +161,24 @@ void KPrViewModeNotes::deactivate()
     m_view->doUpdateActivePage(m_view->activePage());
 }
 
-void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
+void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
 {
-    if ( m_view->activePage() != page ) {
-        m_view->setActivePage( page );
+    if (m_view->activePage() != page) {
+        m_view->setActivePage(page);
     }
 
-    KPrPage *prPage = dynamic_cast<KPrPage *>( page );
-    if ( !prPage ) return;
-
+    KPrPage *prPage = static_cast<KPrPage *>(page);
+    if (prPage == 0) {
+        return;
+    }
     KPrNotes *notes = prPage->pageNotes();
     notes->updatePageThumbnail();
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( notes->shapes().last() );
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(notes->shapes().last());
 
-    KoPageLayout &layout = notes->pageLayout();
-    QSize size(layout.width, layout.height);
-
-    KoPAView *view = dynamic_cast<KoPAView*>(m_view);
-    if (view) {
-        view->horizontalRuler()->setRulerLength(layout.width);
-        view->verticalRuler()->setRulerLength(layout.height);
-        view->horizontalRuler()->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
-        view->verticalRuler()->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
-    }
-
-    m_canvas->setDocumentOrigin( QPointF( 0, 0 ) );
-    m_view->zoomController()->setPageSize(size);
-    m_view->zoomController()->setDocumentSize(size);
-    m_canvas->repaint();
-
-    m_canvas->shapeManager()->setShapes( layer->shapes() );
+    m_canvas->shapeManager()->setShapes(layer->shapes());
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());
+
+    static_cast<KoPAView*>(m_view)->updateCanvasSize(true);
 
     m_view->updatePageNavigationActions();
 
@@ -215,7 +204,8 @@ void KPrViewModeNotes::addShape( KoShape *shape )
     }
 
     if ( notes ) {
-        KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
+        Q_ASSERT(dynamic_cast<KPrPage *>(m_view->activePage()));
+        KPrPage *activePage = static_cast<KPrPage *>(m_view->activePage());
         if ( notes == activePage->pageNotes() ) {
             m_view->kopaCanvas()->shapeManager()->addShape( shape );
         }
@@ -236,5 +226,13 @@ void KPrViewModeNotes::removeShape( KoShape *shape )
             m_view->kopaCanvas()->shapeManager()->remove( shape );
         }
     }
+}
+
+const KoPageLayout &KPrViewModeNotes::activePageLayout() const
+{
+    KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
+    KPrNotes *notes = activePage->pageNotes();
+
+    return notes->pageLayout();
 }
 

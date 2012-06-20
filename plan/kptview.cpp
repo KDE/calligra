@@ -231,7 +231,7 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( part->isEmbedded() || shell() == 0 ) {
+    if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
@@ -2769,6 +2769,11 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 QWidget *View::canvas() const
 {
     return m_tab->currentWidget();//KoView::canvas();
+}
+
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
 }
 
 void View::slotCurrentChanged( int )

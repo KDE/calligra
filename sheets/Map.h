@@ -222,7 +222,6 @@ public:
 
 
     bool loadChildren(KoStore* _store);
-    bool saveChildren(KoStore* _store);
 
     /**
      * The sheet named @p _from is being moved to the sheet @p _to.

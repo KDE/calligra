@@ -40,15 +40,3 @@ if (POPPLER_FOUND AND NOT WIN32)
 endif (POPPLER_FOUND AND NOT WIN32)
 add_subdirectory( xfig )
 
-# enable again when these filters are ported
-message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, msod and oodraw filters")
-
-if(FALSE)
-add_subdirectory( ai )
-add_subdirectory( kontour )
-add_subdirectory( xcf )
-add_subdirectory( msod )
-add_subdirectory( oodraw )
-endif(FALSE)
-
-

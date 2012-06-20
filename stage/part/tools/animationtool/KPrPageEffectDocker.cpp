@@ -91,6 +91,14 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     layout->setMargin(0);
     layout->addLayout( optionLayout);
     layout->addWidget( m_subTypeCombo );
+
+    // The following widget activates a special feature in the
+    // ToolOptionsDocker that makes the components of the widget align
+    // to the top if there is extra space.
+    QWidget *specialSpacer = new QWidget(this);
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer);
+
     setLayout( layout );
 }
 

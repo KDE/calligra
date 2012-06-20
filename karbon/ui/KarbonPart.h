@@ -10,7 +10,7 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -53,8 +53,7 @@ class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeBasedDocumen
 {
     Q_OBJECT
 public:
-    explicit KarbonPart(QWidget* parentWidget = 0L, const char* widgetName = 0L,
-                        QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false);
+    explicit KarbonPart(QObject* parent = 0L);
     virtual ~KarbonPart();
 
     /// reimplemented form KoDocument

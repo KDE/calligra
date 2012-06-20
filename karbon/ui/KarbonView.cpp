@@ -17,7 +17,7 @@
  * Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005-2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
  * Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
@@ -93,10 +93,10 @@
 #include <KoPathShape.h>
 #include <KoPathPointData.h>
 #include <KoPathCombineCommand.h>
-#include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
 #include <KoPathPointMoveCommand.h>
 #include <KoShapeTransformCommand.h>
+#include <KoShapeGroupCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -327,6 +327,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // layout:
     QGridLayout *layout = new QGridLayout();
     layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(d->horizRuler->tabChooser(), 0, 0);
     layout->addWidget(d->horizRuler, 0, 1);
     layout->addWidget(d->vertRuler, 1, 0);
     layout->addWidget(canvasController, 1, 1);
@@ -828,8 +830,31 @@ void KarbonView::separatePath()
         }
     }
 
-    if (paths.size())
-        d->canvas->addCommand(new KoPathSeparateCommand(part(), paths));
+    if (!paths.size()) {
+        return;
+    }
+
+    KUndo2Command *cmd = new KUndo2Command;
+    cmd->setText(i18nc("(qtundo-format)", "Separate paths"));
+
+    foreach(KoPathShape* p, paths) {
+        QList<KoPathShape*> separatedPaths;
+        QList<KoShape*> newShapes;
+        if (p->separate(separatedPaths)) {
+            foreach(KoPathShape *subPath, separatedPaths) {
+                new KoShapeCreateCommand(part(), subPath, cmd);
+                newShapes << subPath;
+            }
+            // make sure we put the new subpaths into the parent
+            // of the original path
+            KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(p->parent());
+            if (parentGroup) {
+                new KoShapeGroupCommand(parentGroup, newShapes, cmd);
+            }
+            new KoShapeDeleteCommand(part(), p, cmd);
+        }
+    }
+    d->canvas->addCommand(cmd);
 }
 
 void KarbonView::reversePath()

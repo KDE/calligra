@@ -95,7 +95,7 @@ KPlato::Part* Module::part()
             d->doc = v->getPart();
         }
         if( ! d->doc ) {
-            d->doc = new KPlato::Part(0, this);
+            d->doc = new KPlato::Part(this);
         }
     }
     return d->doc;

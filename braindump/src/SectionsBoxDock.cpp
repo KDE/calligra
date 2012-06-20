@@ -20,6 +20,7 @@
 #include "SectionsBoxDock.h"
 
 #include <KMenu>
+#include <KIcon>
 
 #include "DocumentModel.h"
 #include "Section.h"
