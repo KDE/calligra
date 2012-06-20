@@ -39,4 +39,5 @@ public:
     FrameLayer(const KisGroupLayer& source);
 };
 
+typedef KisSharedPtr<FrameLayer> FrameLayerSP;
 #endif // FRAME_LAYER_H

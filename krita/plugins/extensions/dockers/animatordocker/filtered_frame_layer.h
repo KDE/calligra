@@ -24,15 +24,17 @@
 class FilteredFrameLayer : public SimpleFrameLayer
 {
     Q_OBJECT
-    
+
 public:
     FilteredFrameLayer(const KisGroupLayer& source);
     FilteredFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     virtual ~FilteredFrameLayer();
-    
+
 public:
     void setFilter(KisAdjustmentLayerSP filter);
     KisAdjustmentLayerSP filter() const;
 };
+
+typedef KisSharedPtr<FilteredFrameLayer> FilteredFrameLayerSP;
 
 #endif // FILTERED_FRAME_LAYER_H

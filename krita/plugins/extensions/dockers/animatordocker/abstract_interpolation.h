@@ -31,10 +31,10 @@ class AbstractInterpolation
 public:
     AbstractInterpolation(){}
     virtual ~AbstractInterpolation(){}
-    
+
 public:
-    virtual KisCloneLayer* makeLayer(KisNode* from, KisCloneLayer* to, double position);
-    virtual void changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position) = 0;
+    virtual KisCloneLayerSP makeLayer(KisNodeSP from, KisCloneLayerSP to, double position);
+    virtual void changeLayer(KisCloneLayerSP layer, KisNodeSP from, KisCloneLayerSP to, double position) = 0;
 };
 
 #endif // ABSTRACT_INTERPOLATION_H

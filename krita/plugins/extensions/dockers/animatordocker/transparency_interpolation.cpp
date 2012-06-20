@@ -20,7 +20,7 @@
 
 #include "transparency_interpolation.h"
 
-void TransparencyInterpolation::changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position)
+void TransparencyInterpolation::changeLayer(KisCloneLayerSP layer, KisNodeSP from, KisCloneLayerSP to, double position)
 {
     layer->setOpacity(from->opacity()*(1.0-position)+to->opacity()*position);
 }

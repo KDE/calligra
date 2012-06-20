@@ -1,5 +1,4 @@
 /*
- *  Interpolated layer: allows several ways of interpolating
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -34,18 +33,21 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
 {
     if (isKeyFrame(num))
         return;
-    
+
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
     if (!manager->ready())
         return;
-    
+
     int inxt = getNextKey(num);
-    KisCloneLayer* next = 0;
-    if (isKeyFrame(inxt))
-        next = qobject_cast<KisCloneLayer*>( qobject_cast<SimpleFrameLayer*>(getKeyFrame(inxt))->getContent() );
-    
+    KisCloneLayerSP next = 0;
+    if (isKeyFrame(inxt)) {
+        FrameLayer *frameLayer = const_cast<FrameLayer*>(getKeyFrame(inxt));
+        SimpleFrameLayer *simpleFrameLayer = qobject_cast<SimpleFrameLayer*>(frameLayer);
+        next = qobject_cast<KisCloneLayer*>(simpleFrameLayer->getContent().data());
+    }
+
     int ipre = getPreviousKey(num);
-    KisNode* prev = 0;
+    KisNodeSP prev = 0;
     if (isKeyFrame(ipre))
         prev = qobject_cast<SimpleFrameLayer*>(getKeyFrame(ipre))->getContent();
 
@@ -56,7 +58,7 @@ void InterpolatedAnimatedLayer::updateFrame(int num)
         double pre = ipre;
         double nxt = inxt;
         double p = (cur-pre) / (nxt-pre);
-        
+
         SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(frameAt(num));
         if (!frame) {
             manager->createFrame(this, num, "", false);           // this will create frame without content

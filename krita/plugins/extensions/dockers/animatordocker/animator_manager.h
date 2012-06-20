@@ -53,30 +53,30 @@ public:
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
 
-    virtual bool ready();
+    virtual bool ready() const;
 
 public:
-    virtual AnimatorFrameManager* getFrameManager();
-    virtual AnimatorSwitcher* getSwitcher();
-    virtual AnimatorUpdater* getUpdater();
-    virtual AnimatorLoader* getLoader();
-    virtual AnimatorPlayer* getPlayer();
-    virtual AnimatorExporter* getExporter();
-    virtual AnimatorImporter* getImporter();
+    virtual AnimatorFrameManager* getFrameManager() const;
+    virtual AnimatorSwitcher* getSwitcher() const;
+    virtual AnimatorUpdater* getUpdater() const;
+    virtual AnimatorLoader* getLoader() const;
+    virtual AnimatorPlayer* getPlayer() const;
+    virtual AnimatorExporter* getExporter() const;
+    virtual AnimatorImporter* getImporter() const;
 
-    virtual KisImage* image();
+    virtual KisImage* image() const;
 
 public:
-    virtual void layerFramesNumberChange(AnimatedLayer* layer, int number);
+    virtual void layerFramesNumberChange(AnimatedLayerSP layer, int number);
 
 signals:
-    void layerFramesNumberChanged(AnimatedLayer* layer, int number);
-    void framesNumberChanged(int number);
+    void layerFramesNumberChanged(AnimatedLayerSP layer, int number) const;
+    void framesNumberChanged(int number) const;
 
-    void animatedLayerActivated(AnimatedLayer* layer);
+    void animatedLayerActivated(KisNodeSP layer) const;
 
 protected slots:
-    virtual void framesNumberCheck(AnimatedLayer* layer, int number);
+    virtual void framesNumberCheck(AnimatedLayerSP layer, int number);
 
 public:
     virtual void setKraMetaInfo(AnimatorMetaInfo* info);
@@ -93,30 +93,30 @@ public:
     virtual void createControlLayer();
     virtual void convertToViewLayer(int from, int to);
     virtual void removeLayer();
-    virtual void renameLayer(KisNode* layer, const QString& name);
+    virtual void renameLayer(KisNodeSP layer, const QString& name);
     virtual void renameLayer(const QString& name);
 
     virtual void calculateActiveLayer();
-    virtual void calculateLayer(AnimatedLayer *layer);
+    virtual void calculateLayer(AnimatedLayerSP layer);
 
-    virtual AnimatedLayer* getAnimatedLayerByChild(KisNode* child);
-    virtual KisNode* activeLayer();
+    virtual KisNodeSP getAnimatedLayerByChild(KisNodeSP child) const;
+    virtual KisNodeSP activeLayer() const;
 
-    virtual void createFrame(AnimatedLayer* layer, int frameNumber, const QString& ftype, bool iskey = true);
-    virtual void createFrame(AnimatedLayer* layer, const QString& ftype, bool iskey = true);
+    virtual void createFrame(AnimatedLayerSP layer, int frameNumber, const QString& ftype, bool iskey = true);
+    virtual void createFrame(AnimatedLayerSP layer, const QString& ftype, bool iskey = true);
     virtual void createFrame(const QString& ftype, bool iskey = true);
     virtual void interpolate();
 
     virtual void createLoopFrame(int target, int repeat);
 
 public:
-    virtual void setFrameContent(SimpleFrameLayer* frame, KisNodeSP content);
-    virtual void setFrameFilter(FilteredFrameLayer *frame, KisAdjustmentLayer *filter);
+    virtual void setFrameContent(SimpleFrameLayerSP frame, KisNodeSP content);
+    virtual void setFrameFilter(FilteredFrameLayerSP frame, KisAdjustmentLayerSP filter);
     virtual void putNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     virtual void removeNode(KisNodeSP node);
 
-    virtual void insertLayer(AnimatedLayer* layer, KisNodeSP parent, int index);
-    virtual void removeLayer(KisNode* layer);
+    virtual void insertLayer(AnimatedLayerSP layer, KisNodeSP parent, int index);
+    virtual void removeLayer(KisNodeSP layer);
 
     virtual KisNodeSP createLayerAt(const QString &layerType, KisNodeSP parent, int index);
 
@@ -127,18 +127,18 @@ public:
     virtual int framesNumber() const;
 
 public:
-    virtual void activate(int frameNumber, KisNodeSP node);
-    virtual void activateKeyFrame(AnimatedLayer* alayer, int frameNumber);
+    virtual void activate(int frameNumber, KisNodeSP node) const;
+    virtual void activateKeyFrame(AnimatedLayerSP alayer, int frameNumber);
 
 public:
-    virtual QList<AnimatedLayer*> layers();
+    virtual QList<AnimatedLayerSP> layers();
 
 protected:
     virtual void calculateFramesNumber();
 
 protected:
-    virtual void layerAdded(AnimatedLayer* layer);
-    virtual void layerRemoved(AnimatedLayer* layer);
+    virtual void layerAdded(KisNodeSP layer);
+    virtual void layerRemoved(KisNodeSP layer);
 
 private:
     KisImage* m_image;
@@ -154,9 +154,8 @@ private:
     AnimatorImporter* m_importer;
     AnimatorMetaInfo* m_info;
 
-
-    QList<AnimatedLayer*> m_layers;
-    AnimatedLayer* m_maxFrameLayer;
+    QList<AnimatedLayerSP> m_layers;
+    KisNodeSP m_maxFrameLayer;
 
     int m_framesNumber;
 };

@@ -31,21 +31,23 @@
 class InterpolatedAnimatedLayer : public FramedAnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     InterpolatedAnimatedLayer(const KisGroupLayer& source);
     InterpolatedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
-    
+
 protected:
     virtual void updateFrame(int num);
 
 protected:
-    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double position) = 0;
-    
+    virtual KisCloneLayerSP interpolate(KisNodeSP from, KisCloneLayerSP to, double position) = 0;
+
     virtual QString getNameForFrame(int num, bool iskey) const;
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
-    
+
 private:
 };
+
+typedef KisSharedPtr<InterpolatedAnimatedLayer> InterpolatedAnimatedLayerSP;
 
 #endif // INTERPOLATED_ANIMATED_LAYER_H

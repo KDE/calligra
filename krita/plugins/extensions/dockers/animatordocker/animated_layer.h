@@ -31,44 +31,45 @@
 class AnimatedLayer : public KisGroupLayer
 {
     Q_OBJECT
-    
+
 public:
     AnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     AnimatedLayer(const KisGroupLayer& source);
-    
+
 public:
-    virtual QString aName() const = 0;
-    virtual void setAName(const QString& name) = 0;
-    
+    virtual QString animationName() const = 0;
+    virtual void setAnimationName(const QString& name) = 0;
+
 public:
     virtual FrameLayer* getUpdatedFrame(int num);
     virtual FrameLayer* getCachedFrame(int num) = 0;
     virtual void updateAllFrames();
-    
+
 public:
     virtual void setEnabled(bool val);
     virtual bool enabled() const;
-    
+
 public:
     virtual bool displayable() const = 0;
     virtual bool hasPreview() const = 0;
-    
+
 public:
     /**
      * @return number of first frame with some info
      */
     virtual int dataStart() const = 0;
-    
+
     /**
      * @return number of last frame with some info+1 [firstFrame; lastFrame)
      */
     virtual int dataEnd() const = 0;
-    
+
 protected:
     virtual void updateFrame(int num);
-    
+
 private:
     bool m_enabled;
 };
 
+typedef KisSharedPtr<AnimatedLayer> AnimatedLayerSP;
 #endif // ANIMATED_LAYER_H

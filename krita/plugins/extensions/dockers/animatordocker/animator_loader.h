@@ -25,21 +25,21 @@
 class AnimatorLoader : public QObject
 {
     Q_OBJECT
-    
+
 public:
     AnimatorLoader(AnimatorManager* manager);
-    
+
 public:
     virtual void loadAll();
     virtual void loadLayers(KisNodeSP rootNode);
     virtual void loadLayer(KisNodeSP node);
-    
+
 protected:
     virtual bool loadLegacy(int majorv);
     virtual bool convertAll();
     virtual bool convertLayers(KisNodeSP rootNode);
     virtual void convertLayer(KisNodeSP node);
-    
+
 protected:
     template <class CustomAnimatedLayer, class CustomFrameLayer> CustomAnimatedLayer* loadFramedLayer(KisNodeSP node);
 

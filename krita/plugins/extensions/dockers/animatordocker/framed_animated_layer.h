@@ -26,23 +26,23 @@
 /**
  *  Simple animated layer -- just group layer with frames as it was in old
  *  AnimatorModel before splitting.
- */ 
+ */
 class FramedAnimatedLayer : public AnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     FramedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     FramedAnimatedLayer(const KisGroupLayer& source);
 
 public:
-    virtual QString aName() const;
-    virtual void setAName(const QString& name);
-    
+    virtual QString animationName() const;
+    virtual void setAnimationName(const QString& name);
+
 public:
     virtual FrameLayer* emptyFrame();
-    
-    virtual FrameLayer* frameAt(int num);
+
+    virtual FrameLayer* frameAt(int num) const;
     virtual void insertFrame(FrameLayer* frame);
     virtual void createFrame(int num, bool isKey);
     virtual void createFrame(int num, bool isKey, KisNodeSP content);
@@ -57,9 +57,9 @@ public:
 public:
     virtual bool displayable() const;
     virtual bool hasPreview() const;
-    
+
 public:
-    virtual bool isKeyFrame(int num);
+    virtual bool isKeyFrame(int num) const;
 
     virtual int getNextKey(int num) const;
     virtual int getPreviousKey(int num) const;
@@ -67,22 +67,24 @@ public:
 public:
     virtual int dataStart() const;
     virtual int dataEnd() const;
-    
+
 public:
     virtual QString getNameForFrame(int num, bool iskey) const;
-    
+
 // protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
-    
+
 protected:
     virtual void setFrameAt(int fnum, FrameLayer* frame);
-    
+
     virtual QList<FrameLayer*> frames();
-    
+
 private:
     int m_firstFrame;
 
     QList< FrameLayer* > m_frames;
 };
+
+typedef KisSharedPtr<FramedAnimatedLayer> FramedAnimatedLayerSP;
 
 #endif // SIMPLE_ANIMATED_LAYER_H

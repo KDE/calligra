@@ -28,7 +28,7 @@ SimpleFrameLayer::SimpleFrameLayer(const KisGroupLayer& source): FrameLayer(sour
 {
 }
 
-KisNodeSP SimpleFrameLayer::getContent()
+KisNodeSP SimpleFrameLayer::getContent() const
 {
     if (at(0) && at(0)->name().startsWith("_"))  {
         return at(0).data();
@@ -41,7 +41,7 @@ void SimpleFrameLayer::setContent(KisNodeSP c)
     AnimatorManagerFactory::instance()->getManager(image().data())->setFrameContent(this, c);
 }
 
-bool SimpleFrameLayer::isKeyFrame()
+bool SimpleFrameLayer::isKeyFrame() const
 {
-    return ! name().endsWith("_");
+    return !name().endsWith("_");
 }

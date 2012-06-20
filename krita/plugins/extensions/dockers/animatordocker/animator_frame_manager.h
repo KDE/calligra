@@ -44,12 +44,12 @@ public:
     // These can work on all or on selected layer
     virtual void moveRange(int n, int dist);
     virtual void moveRange(int from, int n, int dist);
-    virtual void moveRange(FramedAnimatedLayer* layer, int from, int n, int dist);
+    virtual void moveRange(FramedAnimatedLayerSP layer, int from, int n, int dist);
     virtual void moveRangeActive(int n, int dist);
     
     virtual void clearRange(int n);
     virtual void clearRange(int from, int n);
-    virtual void clearRange(FramedAnimatedLayer* layer, int from, int n);
+    virtual void clearRange(FramedAnimatedLayerSP layer, int from, int n);
     virtual void clearRangeActive(int n);
     
     //
@@ -61,14 +61,14 @@ public:
      * This function just move source frame to target position;
      * no checking for frame at target position.
      */
-    virtual void moveTo(FramedAnimatedLayer* source, int sourceFrame, int targetFrame);
+    virtual void moveTo(FramedAnimatedLayerSP source, int sourceFrame, int targetFrame);
     
     /**
      * Like previous function, but between different layers.
      * Not implemented yer
      */
-    virtual void moveTo(FramedAnimatedLayer* source, int sourceFrame,
-                        FramedAnimatedLayer* target, int targetFrame);
+    virtual void moveTo(FramedAnimatedLayerSP source, int sourceFrame,
+                        FramedAnimatedLayerSP target, int targetFrame);
     
 private:
     AnimatorManager* m_manager;

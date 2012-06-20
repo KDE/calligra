@@ -37,7 +37,8 @@ public:
     NormalAnimatedLayer(const KisGroupLayer& source);
 
 protected:
-    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double position);
+    virtual KisCloneLayerSP interpolate(KisNodeSP from, KisCloneLayerSP to, double position);
 };
 
+typedef KisSharedPtr<NormalAnimatedLayer> NormalAnimatedLayerSP;
 #endif // NORMAL_ANIMATED_LAYER_H

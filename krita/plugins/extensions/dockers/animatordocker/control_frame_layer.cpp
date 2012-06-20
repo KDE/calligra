@@ -44,19 +44,18 @@ void ControlFrameLayer::setContent(KisNodeSP c)
     load();
 }
 
-KisNodeSP ControlFrameLayer::getContent()
+KisNodeSP ControlFrameLayer::getContent() const
 {
-    KisNode* content = SimpleFrameLayer::getContent();
-    if (!content)
-    {
+    KisNodeSP content = SimpleFrameLayer::getContent();
+    if (!content) {
         AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
-        manager->putNodeAt(new KisGroupLayer(image(), "_", 255), this, 0);
+        manager->putNodeAt(new KisGroupLayer(image(), "_", 255), const_cast<ControlFrameLayer*>(this), 0);
     }
     content = SimpleFrameLayer::getContent();
     return content;
 }
 
-bool ControlFrameLayer::isKeyFrame()
+bool ControlFrameLayer::isKeyFrame() const
 {
     return true;
 }
@@ -121,7 +120,7 @@ bool ControlFrameLayer::pass()
 {
     if (!enabled())
         return true;
-    
+
     if (m_remaining < 0)
         return false;
     --m_remaining;

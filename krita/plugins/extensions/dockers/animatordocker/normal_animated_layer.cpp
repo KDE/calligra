@@ -27,9 +27,9 @@ NormalAnimatedLayer::NormalAnimatedLayer(const KisGroupLayer& source): Interpola
 {
 }
 
-KisCloneLayer* NormalAnimatedLayer::interpolate(KisNode* from, KisCloneLayer* to, double position)
+KisCloneLayerSP NormalAnimatedLayer::interpolate(KisNodeSP from, KisCloneLayerSP to, double position)
 {
-    KisCloneLayer* result = MovingInterpolation::makeLayer(from, to, position);
+    KisCloneLayerSP result = MovingInterpolation::makeLayer(from, to, position);
     TransparencyInterpolation::changeLayer(result, from, to, position);
 //     YetAnotherInterpolation::changeLayer(result, from, to, position);
     return result;

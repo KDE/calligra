@@ -55,7 +55,7 @@ AnimatorActions::~AnimatorActions()
 void AnimatorActions::setManager(AnimatorManager* manager)
 {
     m_manager = manager;
-    connect(m_manager, SIGNAL(animatedLayerActivated(AnimatedLayer*)), SLOT(setupFrameActions(AnimatedLayer*)));
+    connect(m_manager, SIGNAL(animatedLayerActivated(KisNodeSP)), SLOT(setupFrameActions(KisNodeSP)));
 }
 
 
@@ -87,113 +87,113 @@ QList< QAction* > AnimatorActions::actions(const QString& category) const
 void AnimatorActions::initActions()
 {
     QAction* t;
-    
+
     // UTIL
 #if !LOAD_ON_START
     t = new QAction(SmallIcon("system-run"), i18n("Load layers"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(loadLayers()));
     addAction("util", t);
 #endif
-    
+
     t = new QAction(SmallIcon("tool-animator"), i18n("Make this file animated"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(makeAnimated()));
     addAction("util", t);
-    
+
     t = new QAction(SmallIcon("document-import"), i18n("Import from image sequence"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(importFrames()));
     addAction("util", t);
-    
+
     t = new QAction(SmallIcon("document-export"), i18n("Export to png sequence"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(exportFrames()));
     addAction("util", t);
-    
+
     // PLAYER
     t = new QAction(SmallIcon("media-playback-start"), i18n("Play/pause"), this);
     t->setCheckable(true);
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(playPause(bool)));
     addAction("player", t);
-    
+
     t = new QAction(SmallIcon("task-recurring"), i18n("Toggle player looping"), this);
     t->setCheckable(true);
     t->setChecked(false);
     connect(t, SIGNAL(triggered(bool)), SLOT(toggleLooping(bool)));
     addAction("player", t);
-    
+
     // LAYERS
     t = new QAction(SmallIcon("list-add"), i18n("Add normal layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createNormalLayer()));
     addAction("layers", t);
-    
+
     t = new QAction(SmallIcon("fork"), i18n("Add control layer (only one layer will work now)"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createControlLayer()));
     addAction("layers", t);
-    
+
     t = new QAction(SmallIcon("image-preview"), i18n("Convert current layer to view layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(convertToViewLayer()));
     addAction("layers", t);
-    
+
     t = new QAction(SmallIcon("list-remove"), i18n("Remove layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(removeLayer()));
     addAction("layers", t);
-    
+
     t = new QAction(SmallIcon("edit-rename"), i18n("Rename layer"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(renameLayer()));
     addAction("layers", t);
-    
+
     t = new QAction(SmallIcon("tools-wizard"), i18n("Calculate layer interpolatation"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(calculateLayer()));
     addAction("layers", t);
-    
+
     // FRAMES
     t = new QAction(SmallIcon("document-new"), i18n("Create paint frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createPaintFrame()));
     addAction("frames-adding-normal", t);
-    
+
     t = new QAction(SmallIcon("bookmark-new"), i18n("Create shape frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createShapeFrame()));
     addAction("frames-adding-normal", t);
-    
+
     t = new QAction(SmallIcon("folder-new"), i18n("Create group frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createGroupFrame()));
     addAction("frames-adding-normal", t);
-    
+
     t = new QAction(SmallIcon("tools-wizard"), i18n("Interpolate"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(interpolate()));
     addAction("frames-adding-normal", t);
-    
+
     t = new QAction(SmallIcon("fork"), i18n("Create loop"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(createLoop()));
     addAction("frames-adding-control", t);
-    
+
     t = new QAction(SmallIcon("edit-clear"), i18n("Clear frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(clearFrame()));
     addAction("frames-edit-one", t);
-    
+
     t = new QAction(SmallIcon("edit-copy"), i18n("Copy previous frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(copyPrevious()));
     addAction("frames-edit-one", t);
-    
+
     t = new QAction(SmallIcon("edit-copy"), i18n("Copy next frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(copyNext()));
     addAction("frames-edit-one", t);
-    
+
     t = new QAction(SmallIcon("go-previous"), i18n("Move frame left"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveLeft()));
     addAction("frames-editing", t);
-    
+
     t = new QAction(SmallIcon("go-next"), i18n("Move frame right"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(moveRight()));
     addAction("frames-editing", t);
-    
+
     t = new QAction(SmallIcon("edit-table-insert-column-left"), i18n("Insert frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(insertFrame()));
     addAction("frames-editing", t);
-    
+
     t = new QAction(SmallIcon("edit-table-delete-column"), i18n("Remove frame"), this);
     connect(t, SIGNAL(triggered(bool)), SLOT(removeFrame()));
     addAction("frames-editing", t);
-    
+
     // LIGHT TABLE
     t = new QAction(SmallIcon("document-properties"), i18n("Enable/disable light table (see additional docker)"), this);
     t->setCheckable(true);
@@ -202,15 +202,18 @@ void AnimatorActions::initActions()
     addAction("light-table", t);
 }
 
-void AnimatorActions::setupFrameActions(AnimatedLayer* layer)
+void AnimatorActions::setupFrameActions(KisNodeSP layer)
 {
-    if (qobject_cast<NormalAnimatedLayer*>(layer))
+    if (qobject_cast<NormalAnimatedLayer*>(layer.data())) {
         m_frameActionsType = "frames-adding-normal";
-    else if (qobject_cast<ControlAnimatedLayer*>(layer))
+    }
+    else if (qobject_cast<ControlAnimatedLayer*>(layer.data())) {
         m_frameActionsType = "frames-adding-control";
-    else
+    }
+    else {
         m_frameActionsType = "none";
-    
+    }
+
     emit frameActionsChanges();
 }
 
@@ -273,39 +276,39 @@ void AnimatorActions::createControlLayer()
 void AnimatorActions::convertToViewLayer()
 {
     Q_ASSERT(m_manager);
-    
+
     KDialog* setLoopDialog = new KDialog();
     setLoopDialog->setModal(true);
     setLoopDialog->setAttribute(Qt::WA_DeleteOnClose);
     setLoopDialog->setButtons(KDialog::Ok | KDialog::Cancel);
     setLoopDialog->setCaption(i18n("Create loop"));
-    
+
     QWidget* mainWidget = new QWidget(setLoopDialog);
     QVBoxLayout* layout = new QVBoxLayout(mainWidget);
     QLabel* label = new QLabel(i18n("Set start and end of new view layer"), mainWidget);
     QHBoxLayout* spinLayout = new QHBoxLayout(mainWidget);
     QSpinBox* fromSpin = new QSpinBox(mainWidget);
     QSpinBox* toSpin = new QSpinBox(mainWidget);
-    
+
     spinLayout->addWidget(fromSpin);
     spinLayout->addWidget(toSpin);
     layout->addWidget(label);
     layout->addLayout(spinLayout);
-    
+
     mainWidget->setLayout(layout);
-    
+
     connect(fromSpin, SIGNAL(valueChanged(int)), SLOT(setConvertFrom(int)));
     connect(toSpin, SIGNAL(valueChanged(int)), SLOT(setConvertTo(int)));
-    
+
     fromSpin->setRange(0, 0xffff);
     fromSpin->setValue(0);
     setConvertFrom(0);
     toSpin->setRange(0, 0xffff);
     toSpin->setValue(0);
     setConvertTo(0);
-    
+
     connect(setLoopDialog, SIGNAL(accepted()), SLOT(doConvertToViewLayer()));
-    
+
     setLoopDialog->setMainWidget(mainWidget);
     setLoopDialog->show();
 }
@@ -313,7 +316,7 @@ void AnimatorActions::convertToViewLayer()
 void AnimatorActions::doConvertToViewLayer()
 {
     Q_ASSERT(m_manager);
-    
+
     m_manager->convertToViewLayer(m_convertFrom, m_convertTo);
 }
 
@@ -337,40 +340,40 @@ void AnimatorActions::removeLayer()
 void AnimatorActions::renameLayer()
 {
     Q_ASSERT(m_manager);
-    KisNode* layer = m_manager->activeLayer();
+    KisNodeSP layer = m_manager->activeLayer();
     QString name;
-    
-    AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(layer);
+
+    AnimatedLayerSP alayer = qobject_cast<AnimatedLayer*>(layer.data());
     if (alayer)
-        name = alayer->aName();
+        name = alayer->animationName();
     else
         name = layer->name();
-    
+
     KDialog* renameDialog = new KDialog();
     renameDialog->setModal(true);
     renameDialog->setAttribute(Qt::WA_DeleteOnClose);
     renameDialog->setButtons(KDialog::Ok | KDialog::Cancel);
     renameDialog->setCaption(i18n("Rename layer"));
-    
+
     QWidget* main_widget = new QWidget(renameDialog);
     QVBoxLayout* layout = new QVBoxLayout(main_widget);
     QLabel* label = new QLabel(i18n("Rename layer"), main_widget);
     KLineEdit* ledit = new KLineEdit(main_widget);
     ledit->setClearButtonShown(true);
-    
+
     setRenameString(name);
     ledit->setText(name);
     ledit->setFocus();
-    
+
     layout->addWidget(label);
     layout->addWidget(ledit);
-    
+
     connect(ledit, SIGNAL(textChanged(QString)), this, SLOT(setRenameString(QString)));
-    
+
     renameDialog->setMainWidget(main_widget);
-    
+
     connect(renameDialog, SIGNAL(accepted()), this, SLOT(doRenameLayer()));
-    
+
     renameDialog->show();
 }
 
@@ -420,39 +423,39 @@ void AnimatorActions::interpolate()
 void AnimatorActions::createLoop()
 {
     Q_ASSERT(m_manager);
-    
+
     KDialog* setLoopDialog = new KDialog();
     setLoopDialog->setModal(true);
     setLoopDialog->setAttribute(Qt::WA_DeleteOnClose);
     setLoopDialog->setButtons(KDialog::Ok | KDialog::Cancel);
     setLoopDialog->setCaption(i18n("Create loop"));
-    
+
     QWidget* mainWidget = new QWidget(setLoopDialog);
     QVBoxLayout* layout = new QVBoxLayout(mainWidget);
     QLabel* label = new QLabel(i18n("Set loop begining and repeatition number"), mainWidget);
     QHBoxLayout* spinLayout = new QHBoxLayout(mainWidget);
     QSpinBox* targetSpin = new QSpinBox(mainWidget);
     QSpinBox* repeatSpin = new QSpinBox(mainWidget);
-    
+
     spinLayout->addWidget(targetSpin);
     spinLayout->addWidget(repeatSpin);
     layout->addWidget(label);
     layout->addLayout(spinLayout);
-    
+
     mainWidget->setLayout(layout);
-    
+
     connect(targetSpin, SIGNAL(valueChanged(int)), SLOT(setLoopTarget(int)));
     connect(repeatSpin, SIGNAL(valueChanged(int)), SLOT(setLoopRepeat(int)));
-    
+
     targetSpin->setRange(0, 0xffff);
     targetSpin->setValue(0);
     setLoopTarget(0);
     repeatSpin->setRange(-1, 0xff);
     repeatSpin->setValue(-1);
     setLoopRepeat(-1);
-    
+
     connect(setLoopDialog, SIGNAL(accepted()), SLOT(doCreateLoop()));
-    
+
     setLoopDialog->setMainWidget(mainWidget);
     setLoopDialog->show();
 }
@@ -460,7 +463,7 @@ void AnimatorActions::createLoop()
 void AnimatorActions::doCreateLoop()
 {
     Q_ASSERT(m_manager);
-    
+
     m_manager->createLoopFrame(m_loopTarget, m_loopRepeat);
 }
 
