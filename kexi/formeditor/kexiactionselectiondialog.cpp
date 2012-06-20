@@ -43,7 +43,6 @@
 #include <QPixmap>
 #include <QStackedWidget>
 
-#include <widget/utils/klistviewitemtemplate.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
 #include <kexiutils/utils.h>
