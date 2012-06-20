@@ -1,5 +1,4 @@
 /*
- *  Frame manager control all actions related to frames
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -23,7 +22,9 @@
 #include <QObject>
 #include "animator_manager.h"
 
-
+/**
+ *  Frame manager control all actions related to frames
+ */
 class AnimatorFrameManager : public QObject
 {
     Q_OBJECT

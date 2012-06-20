@@ -1,5 +1,4 @@
 /*
- *  Interpolation method for layers with changing transparency
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -23,6 +22,9 @@
 
 #include "abstract_interpolation.h"
 
+/**
+ *  Interpolation method for layers with changing transparency
+ */
 class TransparencyInterpolation : public AbstractInterpolation
 {
 public:

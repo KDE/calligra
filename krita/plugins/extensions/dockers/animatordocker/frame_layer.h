@@ -1,5 +1,4 @@
 /*
- *  Frame layer class
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -27,6 +26,9 @@
 #include <kis_node_manager.h>
 #include <kis_image.h>
 
+/**
+ *  Frame layer class
+ */
 class FrameLayer : public KisGroupLayer
 {
     Q_OBJECT

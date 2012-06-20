@@ -1,5 +1,4 @@
 /*
- *  Animated layer class
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,6 +25,9 @@
 
 #include "frame_layer.h"
 
+/**
+ *  Animated layer class
+ */
 class AnimatedLayer : public KisGroupLayer
 {
     Q_OBJECT

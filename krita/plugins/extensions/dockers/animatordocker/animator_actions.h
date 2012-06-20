@@ -1,5 +1,4 @@
 /*
- *  Contains all GUI actions and provide access for them
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -28,6 +27,9 @@
 
 #include "animator_config.h"
 
+/**
+ *  Contains all GUI actions and provide access for them
+ */
 class AnimatorActions : public QObject
 {
     Q_OBJECT

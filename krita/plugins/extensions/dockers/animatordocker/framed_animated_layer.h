@@ -1,7 +1,4 @@
 /*
- *  Simple animated layer -- just group layer with frames as it was in old
- *  AnimatorModel before splitting.
- *  
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,6 +23,10 @@
 #include "animated_layer.h"
 #include "simple_frame_layer.h"
 
+/**
+ *  Simple animated layer -- just group layer with frames as it was in old
+ *  AnimatorModel before splitting.
+ */ 
 class FramedAnimatedLayer : public AnimatedLayer
 {
     Q_OBJECT

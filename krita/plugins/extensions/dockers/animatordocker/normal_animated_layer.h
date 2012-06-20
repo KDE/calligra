@@ -1,5 +1,4 @@
 /*
- *  Normal animated layer: class for most usually used, universal layer
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,6 +25,9 @@
 #include "moving_interpolation.h"
 #include "transparency_interpolation.h"
 
+/**
+ *  Normal animated layer: class for most usually used, universal layer
+ */
 class NormalAnimatedLayer : public InterpolatedAnimatedLayer, public MovingInterpolation, public TransparencyInterpolation
 {
     Q_OBJECT

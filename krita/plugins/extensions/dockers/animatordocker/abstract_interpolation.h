@@ -1,5 +1,4 @@
 /*
- *  Abstract class for interpolation methods
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,6 +23,9 @@
 #include "kis_node.h"
 #include "kis_clone_layer.h"
 
+/**
+ *  Abstract class for interpolation methods
+ */
 class AbstractInterpolation
 {
 public:
