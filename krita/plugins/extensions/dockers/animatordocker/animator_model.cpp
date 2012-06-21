@@ -28,7 +28,7 @@
 #include "animator_switcher.h"
 #include "view_animated_layer.h"
 
-AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
+AnimatorModel::AnimatorModel(KisImageWSP image): QAbstractItemModel(0)
 {
     m_image = image;
 
@@ -76,7 +76,7 @@ void AnimatorModel::layoutChangedSlot()
 }
 
 
-KisImage* AnimatorModel::image() const
+KisImageWSP AnimatorModel::image() const
 {
     return m_image;
 }

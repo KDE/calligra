@@ -23,7 +23,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 
-AnimatorFilteredLT::AnimatorFilteredLT(KisImage *image) : AnimatorLT()
+AnimatorFilteredLT::AnimatorFilteredLT(KisImageWSP image) : AnimatorLT()
 {
     m_leftFilter = 0;
     m_rightFilter = 0;

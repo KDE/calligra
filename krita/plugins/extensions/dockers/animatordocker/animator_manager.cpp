@@ -37,7 +37,7 @@
 #include "control_animated_layer.h"
 #include "view_animated_layer.h"
 
-AnimatorManager::AnimatorManager(KisImage* image)
+AnimatorManager::AnimatorManager(KisImageWSP image)
 {
     m_image = image;
     m_nodeManager = 0;
@@ -130,7 +130,7 @@ AnimatorFrameManager* AnimatorManager::getFrameManager() const
 }
 
 
-KisImage* AnimatorManager::image() const
+KisImageWSP AnimatorManager::image() const
 {
     return m_image;
 }

@@ -27,29 +27,29 @@
 class AnimatorFilteredLT : public AnimatorLT
 {
     Q_OBJECT
-    
+
 public:
-    AnimatorFilteredLT(KisImage *image);
+    AnimatorFilteredLT(KisImageWSP image);
     virtual ~AnimatorFilteredLT();
-    
+
 public:
     virtual KisAdjustmentLayerSP filter(int relFrame);
-    
+
     virtual void setBasicFilter(KisAdjustmentLayerSP layer);
     virtual void setFilterUsed(int relFrame, bool used);
-    
+
     virtual void update();
-    
+
 private:
     KisAdjustmentLayerSP m_leftFilter;
     KisAdjustmentLayerSP m_rightFilter;
-   
+
     bool m_usedL;
     bool m_usedR;
-    
+
     KisAdjustmentLayerSP m_basicFilter;
-    
-    KisImage *m_image;
+
+    KisImageWSP m_image;
 };
 
 #endif // ANIMATOR_FILTERED_LT_H

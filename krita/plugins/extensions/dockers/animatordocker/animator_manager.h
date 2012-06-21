@@ -46,7 +46,7 @@ class AnimatorManager : public QObject, KoCanvasObserverBase {
     Q_OBJECT
 
 public:
-    AnimatorManager(KisImage* image);
+    AnimatorManager(KisImageWSP image);
     virtual ~AnimatorManager();
 
 public:
@@ -64,7 +64,7 @@ public:
     virtual AnimatorExporter* getExporter() const;
     virtual AnimatorImporter* getImporter() const;
 
-    virtual KisImage* image() const;
+    virtual KisImageWSP image() const;
 
 public:
     virtual void layerFramesNumberChange(AnimatedLayerSP layer, int number);
@@ -141,7 +141,7 @@ protected:
     virtual void layerRemoved(KisNodeSP layer);
 
 private:
-    KisImage* m_image;
+    KisImageWSP m_image;
     KisNodeManager* m_nodeManager;
     KisNodeCommandsAdapter *m_nodeAdapter;
 

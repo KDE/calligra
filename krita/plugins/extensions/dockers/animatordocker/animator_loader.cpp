@@ -40,7 +40,7 @@ void AnimatorLoader::loadAll()
         warnKrita << "trying to load layers before AnimatorManager is ready";
         return;
     }
-    KisImage* image = m_manager->image();
+    KisImageWSP image = m_manager->image();
     KisNodeSP rootNode = image->root();
 
     // first, check signature
