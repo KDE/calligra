@@ -582,12 +582,6 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
         }
     }
     m_cmd = new MacroCommand( "" );
-    foreach ( Relation * r, node->dependChildNodes() ) {
-        m_cmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
-    }
-    foreach ( Relation * r, node->dependParentNodes() ) {
-        m_cmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
-    }
     QList<Node*> lst = node->childNodeIterator();
     for ( int i = lst.count(); i > 0; --i ) {
         m_cmd->addCommand( new NodeDeleteCmd( lst[ i - 1 ] ) );
@@ -616,6 +610,17 @@ void NodeDeleteCmd::execute()
     if ( m_parent && m_project ) {
         m_index = m_parent->findChildNode( m_node );
         //kDebug(planDbg())<<m_node->name()<<""<<m_index;
+        if ( m_relCmd.isEmpty() ) {
+            // Only add delete relation commands if we (still) have relations
+            // The other node might have deleted them...
+            foreach ( Relation * r, m_node->dependChildNodes() ) {
+                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+            }
+            foreach ( Relation * r, m_node->dependParentNodes() ) {
+                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+            }
+        }
+        m_relCmd.execute();
         if ( m_cmd ) {
             m_cmd->execute();
         }
@@ -632,6 +637,7 @@ void NodeDeleteCmd::unexecute()
         if ( m_cmd ) {
             m_cmd->unexecute();
         }
+        m_relCmd.unexecute();
         m_mine = false;
         setSchScheduled();
     }
