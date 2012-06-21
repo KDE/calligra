@@ -2,6 +2,8 @@
 Calligra Plan current:
 ----------------------
 
+* Bug 286332 - Auto allocate selected resources to new tasks
+
 * Improve printing:
     Add printing options to view configuration dialog
     Save/load option settings

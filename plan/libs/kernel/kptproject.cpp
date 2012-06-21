@@ -1767,6 +1767,17 @@ ResourceGroup *Project::groupByName( const QString& name ) const
     return 0;
 }
 
+QList<Resource*> Project::autoAllocateResources() const
+{
+    QList<Resource*> lst;
+    foreach ( Resource *r, resourceIdDict ) {
+        if ( r->autoAllocate() ) {
+            lst << r;
+        }
+    }
+    return lst;
+}
+
 void Project::insertResourceId( const QString &id, Resource *resource )
 {
     resourceIdDict.insert( id, resource );
