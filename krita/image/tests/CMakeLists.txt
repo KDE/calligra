@@ -292,6 +292,12 @@ target_link_libraries(KisImageTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LI
 
 ########### next target ###############
 
+set(kis_dynamic_bounds_test_SRCS kis_dynamic_bounds_test.cc )
+kde4_add_unit_test(KisDynamicBoundsTest TESTNAME krita-image-KisDynamicBoundsTest ${kis_dynamic_bounds_test_SRCS})
+target_link_libraries(KisDynamicBoundsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_image_signal_router_test_SRCS kis_image_signal_router_test.cpp )
 kde4_add_unit_test(KisImageSignalRouterTest TESTNAME krita-image-KisImageSignalRouterTest ${kis_image_signal_router_test_SRCS})
 target_link_libraries(KisImageSignalRouterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
