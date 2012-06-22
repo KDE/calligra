@@ -96,7 +96,11 @@ void SceneObject::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter &writer = context.xmlWriter();
 
     writer.startElement("dr3d:scene");
-    saveOdfAttributes(context, OdfAllAttributes);
+    if (m_topLevel) {
+        saveOdfAttributes(context, (OdfAdditionalAttributes | OdfMandatories | OdfGeometry));
+    } else {
+        saveOdfAttributes(context, (OdfAdditionalAttributes | OdfMandatories));
+    }
 
     if (m_topLevel && m_threeDParams)
         m_threeDParams->saveOdfAttributes(writer);
@@ -116,7 +120,11 @@ void SceneObject::saveOdf(KoShapeSavingContext &context) const
 bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    loadOdfAttributes(sceneElement, context, OdfAllAttributes);
+    if (m_topLevel) {
+        loadOdfAttributes(sceneElement, context, (OdfAdditionalAttributes | OdfMandatories | OdfGeometry));
+    } else {
+        loadOdfAttributes(sceneElement, context, (OdfAdditionalAttributes | OdfMandatories));
+    }
 
     // Load the view parameters.
     if (m_topLevel) {

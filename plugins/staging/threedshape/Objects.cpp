@@ -41,6 +41,9 @@
 #include "utils.h"
 
 
+//#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
+#define OdfObjectAttributes (OdfAdditionalAttributes | OdfMandatories)
+
 // ================================================================
 //                             Sphere
 
@@ -66,7 +69,7 @@ void Sphere::paint(QPainter &painter, const KoViewConverter &converter,
 bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    loadOdfAttributes(objectElement, context, OdfAllAttributes);
+    loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "center", "(0 0 0)");
@@ -85,7 +88,7 @@ void Sphere::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:sphere");
 
-    saveOdfAttributes(context, OdfAllAttributes);
+    saveOdfAttributes(context, OdfObjectAttributes);
 
     writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x())
                         .arg(m_center.y()).arg(m_center.z()));
@@ -121,7 +124,7 @@ void Cube::paint(QPainter &painter, const KoViewConverter &converter,
 bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    loadOdfAttributes(objectElement, context, OdfAllAttributes);
+    loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(0 0 0)");
@@ -140,7 +143,7 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:cube");
 
-    saveOdfAttributes(context, OdfAllAttributes);
+    saveOdfAttributes(context, OdfObjectAttributes);
 
     writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
                         .arg(m_minEdge.y()).arg(m_minEdge.z()));
@@ -181,7 +184,7 @@ void Extrude::paint(QPainter &painter, const KoViewConverter &converter,
 bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    loadOdfAttributes(objectElement, context, OdfAllAttributes);
+    loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
     m_d = objectElement.attributeNS(KoXmlNS::svg, "d", "");
@@ -197,7 +200,7 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:extrude");
 
-    saveOdfAttributes(context, OdfAllAttributes);
+    saveOdfAttributes(context, OdfObjectAttributes);
 
     writer.addAttribute("svg:d", m_d);
 
@@ -289,7 +292,7 @@ void Rotate::paint(QPainter &painter, const KoViewConverter &converter,
 bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
     // Load style information.
-    loadOdfAttributes(objectElement, context, OdfAllAttributes);
+    loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
     m_d = objectElement.attributeNS(KoXmlNS::svg, "d", "");
@@ -305,7 +308,7 @@ void Rotate::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:rotate");
 
-    saveOdfAttributes(context, OdfAllAttributes);
+    saveOdfAttributes(context, OdfObjectAttributes);
 
     writer.addAttribute("svg:d", m_d);
 

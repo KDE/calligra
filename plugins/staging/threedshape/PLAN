@@ -2,24 +2,32 @@
 
 ---------------- Milestone 1: Shape plugin ----------------
 
- * Load 3D scene
-    + Load Scene Attributes                             Done
-    + Load Scene style                                  Done
-    + Convert 3D objects to KoShape                     Done
-    + Load generic scene object stuff                   Done
-    + Load object specific attributes                   Done
+ * Load 3D scene                                        DONE
 
  * Store the 3D scene                                   DONE
 
- * Save the 3D scene
-    + Save Scene attributes                             Done
-    + Save Scene style                                  Done
-    + Save generic scene object stuff                   Done
-    + Save object specific attributes                   Done
+ * Save the 3D scene                                    DONE
+
+ * More feature
+    + 
 
  * Test roundtrip with all types
-    + ODG
-    + ODT
+    + ODG                                               Done
+    + ODT                                               Done
+    + ODS
+    + ODP
+
+ * Fix bugs / feedback from the review
+    + Only toplevel scenes support position/size        Done
+    + losing precision when saving coordinates
+    + All level objects should have layer
+    + Separate Objects into their own files.
+
+ * Integrate with the apps
+    + Karbon: Fix the layer bug
+    + Words:  Inline text manager thingie
+    + Sheets: Test it
+    + Stage:  ?
 
 ---------------- Milestone 2: Load/Store/Save ----------------
 
