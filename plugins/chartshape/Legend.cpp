@@ -526,8 +526,8 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
             setLegendPosition(EndPosition);
         }
 
-        if (legendElement.hasAttributeNS(KoXmlNS::calligra, "title")) {
-            setTitle(legendElement.attributeNS(KoXmlNS::calligra, "title", QString()));
+        if (legendElement.hasAttributeNS(KoXmlNS::office, "title")) {
+            setTitle(legendElement.attributeNS(KoXmlNS::office, "title", QString()));
         }
 
         styleStack.setTypeProperties("text");

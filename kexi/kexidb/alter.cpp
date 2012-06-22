@@ -129,7 +129,7 @@ struct KexiDB_AlterTableHandlerStatic {
         I("caption", MainSchemaAlteringRequired);
         I("description", MainSchemaAlteringRequired);
         I2("unsigned", PhysicalAlteringRequired, DataConversionRequired); // always?
-        I2("length", PhysicalAlteringRequired, DataConversionRequired); // always?
+        I2("maxLength", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("precision", PhysicalAlteringRequired, DataConversionRequired); // always?
         I("width", MainSchemaAlteringRequired);
         // defaultValue: depends on backend, for mysql it can only by a constant or now()...
@@ -455,7 +455,7 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
          TODO: more cases to check
         */
     }
-    if (m_propertyName == "length") {
+    if (m_propertyName == "maxLength") {
         //use "select max( length(o_name) ) from kexi__Objects"
 
     }

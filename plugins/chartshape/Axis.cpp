@@ -191,6 +191,7 @@ public:
     // TODO: Save
     // See ODF v1.2 $19.12 (chart:display-label)
     bool showLabels;
+    bool showOverlappingDataLabels;
 
     bool isVisible;
 };
@@ -243,6 +244,8 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     showInnerMajorTicks = false;
     showOuterMajorTicks = true;
 
+    showOverlappingDataLabels = false;
+
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;
@@ -267,9 +270,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT(plotArea);
 
-    delete numericStyleFormat;
-
     delete kdBarDiagram;
+    delete kdLineDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
     delete kdRingDiagram;
@@ -279,6 +281,8 @@ Axis::Private::~Private()
     delete kdBubbleDiagram;
     delete kdSurfaceDiagram;
     delete kdGanttDiagram;
+
+    delete numericStyleFormat;
 
     delete kdAxis;
 
@@ -499,6 +503,8 @@ void Axis::Private::createBarDiagram()
     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
     kdBarDiagram->setPen(QPen(Qt::black, 0.0));
 
+    kdBarDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
+
     if (plotAreaChartSubType == StackedChartSubtype)
         kdBarDiagram->setType(KDChart::BarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype) {
@@ -535,6 +541,8 @@ void Axis::Private::createLineDiagram()
 
     kdLineDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdLineDiagram);
+
+    kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdLineDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -579,6 +587,8 @@ void Axis::Private::createAreaDiagram()
     // KD Chart by default draws the first data set as last line in a normal
     // line diagram, we however want the first series to appear in front.
     kdAreaDiagram->setReverseDatasetOrder(true);
+
+    kdAreaDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdAreaDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -911,6 +921,11 @@ bool Axis::showLabels() const
     return d->showLabels;
 }
 
+bool Axis::showOverlappingDataLabels() const
+{
+    return d->showOverlappingDataLabels;
+}
+
 QString Axis::id() const
 {
     return d->id;
@@ -1225,6 +1240,11 @@ void Axis::setShowLabels(bool show)
     d->kdAxis->setTextAttributes(textAttr);
 }
 
+void Axis::setShowOverlappingDataLabels(bool show)
+{
+    d->showOverlappingDataLabels = show;
+}
+
 Qt::Orientation Axis::orientation()
 {
     bool chartIsVertical = d->plotArea->isVertical();
@@ -1282,23 +1302,33 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     d->title->setPosition(QPointF(x, y));
                 }
 
-                if (n.hasAttributeNS(KoXmlNS::svg, "width")
-                    && n.hasAttributeNS(KoXmlNS::svg, "height"))
-                {
-                    const qreal width = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "width"));
-                    const qreal height = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "height"));
-                    d->title->setSize(QSizeF(width, height));
-                }
-
                 if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
                     styleStack.clear();
                     context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
+
+                    if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
+                        qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
+
+                        if (kdAxis()->position() == KDChart::CartesianAxis::Left)
+                            rotationAngle = 90 + rotationAngle;
+                        else if (kdAxis()->position() == KDChart::CartesianAxis::Right)
+                            rotationAngle = -90 + rotationAngle;
+                        d->title->rotate(rotationAngle);
+                    }
+
                     styleStack.setTypeProperties("text");
 
                     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
                         const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
                         QFont font = d->titleData->document()->defaultFont();
                         font.setPointSizeF(fontSize);
+                        d->titleData->document()->setDefaultFont(font);
+                    }
+
+                    if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+                        const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
+                        QFont font = d->titleData->document()->defaultFont();
+                        font.setFamily(fontFamily);
                         d->titleData->document()->setDefaultFont(font);
                     }
                 }
@@ -1310,6 +1340,18 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 }
                 else {
                     qWarning() << "Error: Axis' <chart:title> element contains no <text:p>";
+                }
+
+                if (n.hasAttributeNS(KoXmlNS::svg, "width")
+                    && n.hasAttributeNS(KoXmlNS::svg, "height"))
+                {
+                    const qreal width = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "width"));
+                    const qreal height = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "height"));
+                    d->title->setSize(QSizeF(width, height));
+                }  else {
+                    QTextDocument* doc = d->titleData->document();
+                    QRect r = QFontMetrics(doc->defaultFont()).boundingRect(doc->toPlainText());
+                    d->title->setSize(r.size());
                 }
             }
             else if (n.localName() == "grid") {
@@ -1401,6 +1443,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         if (styleStack.hasProperty(KoXmlNS::chart, "display-label"))
             setShowLabels(styleStack.property(KoXmlNS::chart, "display-label") != "false");
+        if (styleStack.hasProperty(KoXmlNS::chart, "text-overlap"))
+            setShowOverlappingDataLabels(styleStack.property(KoXmlNS::chart, "text-overlap") != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "visible"))
             setVisible(styleStack.property(KoXmlNS::chart, "visible")  != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "minimum")) {
@@ -1564,6 +1608,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:tick-marks-major-outer", showOuterMajorTicks());
 
     axisStyle.addProperty("chart:display-label", showLabels());
+    axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
     axisStyle.addProperty("chart:visible", isVisible());
     axisStyle.addPropertyPt("chart:gap-width", d->gapBetweenSets);
     axisStyle.addPropertyPt("chart:overlap", -d->gapBetweenBars);
@@ -1635,6 +1680,17 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     bodyWriter.addAttributePt("svg:y", d->title->position().y());
     bodyWriter.addAttributePt("svg:width", d->title->size().width());
     bodyWriter.addAttributePt("svg:height", d->title->size().height());
+
+    KoGenStyle axisTitleStyle(KoGenStyle::ChartAutoStyle, "chart");
+    axisTitleStyle.addPropertyPt("style:rotation-angle", 360 - d->title->rotation());
+
+    QTextCursor cursor(d->titleData->document());
+    QFont titleFont = cursor.charFormat().font();
+    axisTitleStyle.addProperty("fo:font-family", titleFont.family(), KoGenStyle::TextType);
+    axisTitleStyle.addPropertyPt("fo:font-size", titleFont.pointSize(), KoGenStyle::TextType);
+
+    const QString titleStyleName = mainStyles.insert(axisTitleStyle, "ch");
+    bodyWriter.addAttribute("chart:style-name", titleStyleName);
 
     QString axisLabel = d->titleData->document()->toPlainText();
     if (!axisLabel.isEmpty()) {
