@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Sand brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritasandpaintop
+X-Krita-Version=5
