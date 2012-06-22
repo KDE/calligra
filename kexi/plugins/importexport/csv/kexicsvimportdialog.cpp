@@ -132,6 +132,11 @@ void installRecursiveEventFilter(QObject *filter, QObject *object)
     }
 }
 
+static bool shouldSaveRow(int row, bool firstRowForFieldNames)
+{
+    return row > (firstRowForFieldNames ? 1 : 0);
+}
+
 KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         : KDialog(parent),
         m_cancelled(false),
@@ -872,7 +877,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             lastCharDelimiter = false;
 
         if (nextRow) {
-            if (!inGUI && row == 1 && m_1stRowForFieldNames->isChecked()) {
+            if (!inGUI && !shouldSaveRow(row - m_startline, m_1stRowForFieldNames->isChecked())) {
                 // do not save to the database 1st row if it contains column names
                 m_importingStatement->clearArguments();
             } else if (!saveRow(inGUI))
@@ -1125,7 +1130,7 @@ void KexiCSVImportDialog::updateColumnVectorSize()
 void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool inGUI)
 {
     if (!inGUI) {
-        if (row == 1 && m_1stRowForFieldNames->isChecked())
+        if (!shouldSaveRow(row, m_1stRowForFieldNames->isChecked()))
             return; // do not care about this value if it contains column names (these were already used)
 
         //save text directly to database buffer
