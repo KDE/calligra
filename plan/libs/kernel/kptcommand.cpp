@@ -1611,8 +1611,6 @@ void ModifyResourceNameCmd::execute()
 void ModifyResourceNameCmd::unexecute()
 {
     m_resource->setName( m_oldvalue );
-
-
 }
 ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Resource *resource, const QString& value, const QString& name )
         : NamedCommand( name ),
@@ -1643,14 +1641,25 @@ ModifyResourceEmailCmd::ModifyResourceEmailCmd( Resource *resource, const QStrin
 void ModifyResourceEmailCmd::execute()
 {
     m_resource->setEmail( m_newvalue );
-
-
 }
 void ModifyResourceEmailCmd::unexecute()
 {
     m_resource->setEmail( m_oldvalue );
-
-
+}
+ModifyResourceAutoAllocateCmd::ModifyResourceAutoAllocateCmd( Resource *resource,bool value, const QString& name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_newvalue( value )
+{
+    m_oldvalue = resource->autoAllocate();
+}
+void ModifyResourceAutoAllocateCmd::execute()
+{
+    m_resource->setAutoAllocate( m_newvalue );
+}
+void ModifyResourceAutoAllocateCmd::unexecute()
+{
+    m_resource->setAutoAllocate( m_oldvalue );
 }
 ModifyResourceTypeCmd::ModifyResourceTypeCmd( Resource *resource, int value, const QString& name )
         : NamedCommand( name ),
