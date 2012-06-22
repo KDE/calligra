@@ -1209,6 +1209,7 @@ QRect KisImage::bounds() const
         //extent |= realNodeExtent(rootNode,extent);
         qDebug() << "Extent's actual Width"<< ppVar(extent.width());
         qDebug() << "Extent's actual height"<< ppVar(extent.height());
+        qDebug() << "--------------------------------------------------------------";
         //setSize(extent.size());
         return extent;
     }
