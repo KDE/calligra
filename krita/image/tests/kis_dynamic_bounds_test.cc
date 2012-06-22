@@ -50,37 +50,5 @@ void KisDynamicBoundsTest::drawRectTest()
     BaseDynamicBoundsTest tester;
     tester.test("drawRect", device1);
 }
-/*
-void KisDynamicBoundsTest::testTransformVisitorScale()
-{
-    KisDynamicBoundsTest tester;
 
-    KisFilterStrategy * filter = new KisBoxFilterStrategy();
-
-    KisProcessingVisitorSP visitor =
-        new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
-                                          0,
-                                          0,0,
-                                          filter);
-
-    tester.test("transform_scale", visitor);
-}
-
-void KisDynamicBoundsTest::testTransformVisitorScaleRotate()
-{
-    KisDynamicBoundsTest tester;
-
-    KisFilterStrategy * filter = new KisBoxFilterStrategy();
-
-    KisProcessingVisitorSP visitor =
-        new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
-                                          M_PI,
-                                          320,221,
-                                          filter);
-
-    tester.test("transform_scale_rotate", visitor);
-}
-*/
 QTEST_KDEMAIN(KisDynamicBoundsTest, GUI)
