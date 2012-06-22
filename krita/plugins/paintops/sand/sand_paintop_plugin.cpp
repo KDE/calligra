@@ -44,6 +44,7 @@ SandPaintOpPlugin::SandPaintOpPlugin(QObject *parent, const QVariantList &)
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisSandPaintOp, KisSandPaintOpSettings, KisSandPaintOpSettingsWidget>("sandbrush", i18n("Sand brush"), 
                                                                                                                 KisPaintOpFactory::categoryExperimental(), "krita-sand.png"));
+    qDebug() << "Sand paintop loaded!" ;
 
 }
 
