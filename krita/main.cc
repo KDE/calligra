@@ -56,7 +56,15 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QPixmap pm(splash_screen_xpm);
+    QPixmap pm;
+    int i = random() % 3;
+    if (i < 1) {
+        pm = QPixmap(tear);
+    }
+    else {
+        pm = QPixmap(notear);
+    }
+    
     QSplashScreen *splash = new KSplashScreen(pm);
     app.setSplashScreen(splash);
 
