@@ -21,6 +21,7 @@
 #define BRIDGEREQUESTHANDLER_H
 
 #include <QObject>
+#include <QMetaType>
 
 class QLocalSocket;
 class QDataStream;
