@@ -19,6 +19,7 @@
 
 #include "ReferencesTool.h"
 #include "TextShape.h"
+#include "BridgeServer.h"
 #include "dialogs/SimpleTableOfContentsWidget.h"
 #include "dialogs/SimpleCitationBibliographyWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
@@ -84,6 +85,7 @@ ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_stocw(0)
 {
     createActions();
+    BridgeServer *server = new BridgeServer(this);
 }
 
 ReferencesTool::~ReferencesTool()
