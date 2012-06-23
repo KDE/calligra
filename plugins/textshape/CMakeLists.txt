@@ -32,6 +32,8 @@ SET ( textshape_SRCS
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
+    BridgeServer.cpp
+    BridgeRequestHandler.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
@@ -135,7 +137,7 @@ kde4_add_ui_files(textshape_SRCS
 
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-target_link_libraries(textshape kotext textlayout komain ${QT_QTSQL_LIBRARY} ${EXTRA_LIBS})
+target_link_libraries(textshape kotext textlayout komain ${QT_QTSQL_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTCORE_LIBRARY} ${EXTRA_LIBS})
 if( Soprano_FOUND )
     target_link_libraries(textshape ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
