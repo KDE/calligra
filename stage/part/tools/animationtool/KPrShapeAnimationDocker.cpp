@@ -153,7 +153,6 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateTimeLineModel(QModelIndex)));
         connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(syncWithTimeLineIndex(QModelIndex)));
-        connect(m_animationsModel, SIGNAL(rootChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     }
 }
 
@@ -161,7 +160,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
 {
     QModelIndex index = m_animationsView->currentIndex();
     KPrCustomAnimationItem *item = itemByIndex(index);
-    if (item) {
+    if (item && (!item->isDefaulAnimation())) {
         m_buttonRemoveAnimation->setEnabled(true);
         return;
     }
@@ -288,14 +287,17 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (!selection->selectedShapes().isEmpty()) {
-        QModelIndex index = m_animationsModel->indexByShape(selection->selectedShapes().first());
-        if (index.isValid()) {
-            m_animationsView->setCurrentIndex(index);
-            updateTimeLineModel(index);
-        }
-        index = m_timeLineModel->indexByShape(selection->selectedShapes().first());
-        if (index.isValid()) {
-            m_timeLineView->setCurrentIndex(index);
+        if (selection->selectedShapes().first()) {
+            KoShape *selectedShape = selection->selectedShapes().first();
+            QModelIndex index = m_animationsModel->indexByShape(selectedShape);
+            if (index.isValid()) {
+                m_animationsView->setCurrentIndex(index);
+                updateTimeLineModel(index);
+            }
+            index = m_timeLineModel->indexByShape(selectedShape);
+            if (index.isValid()) {
+                m_timeLineView->setCurrentIndex(index);
+            }
         }
     }
 }
@@ -323,7 +325,7 @@ void KPrShapeAnimationDocker::slotRemoveAnimations()
 {
     QModelIndex index = m_animationsView->currentIndex();
     KPrCustomAnimationItem *item = itemByIndex(index);
-    if (item) {
+    if (item && (!item->isDefaulAnimation())) {
         KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
         KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(doc, item->animation());
         doc->addCommand(command);

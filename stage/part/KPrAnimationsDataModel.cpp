@@ -83,9 +83,13 @@ QModelIndex KPrAnimationsDataModel::indexByShape(KoShape *shape)
     }
     for (int row = 0; row < rowCount(parent); ++row) {
         QModelIndex thisIndex = index(row, 0, parent);
-        KPrCustomAnimationItem *item = itemForIndex(thisIndex);
-        if (item->shape() == shape) {
-            return thisIndex;
+        if (thisIndex.isValid()) {
+            KPrCustomAnimationItem *item = itemForIndex(thisIndex);
+            if (item->shape()) {
+                if (item->shape() == shape) {
+                    return thisIndex;
+                }
+            }
         }
     }
     return QModelIndex();
