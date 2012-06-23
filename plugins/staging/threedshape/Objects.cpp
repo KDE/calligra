@@ -160,7 +160,7 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
 
 Extrude::Extrude()
     : KoShape()
-    , m_d()
+    , m_path()
     , m_depth(1.0)
     , m_closeFront(true)
     , m_closeBack(true)
@@ -187,22 +187,22 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
-    m_d = objectElement.attributeNS(KoXmlNS::svg, "d", "");
+    m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
 
-    kDebug(31000) << "Extrude:" << m_d;
+    kDebug(31000) << "Extrude:" << m_path;
     return true;
 }
 
 void Extrude::saveOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Extrude:" << m_d;
+    kDebug(31000) << "Saving Extrude:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:extrude");
 
     saveOdfAttributes(context, OdfObjectAttributes);
 
-    writer.addAttribute("svg:d", m_d);
+    writer.addAttribute("svg:d", m_path);
 
     writer.endElement(); // dr3d:extrude
 }
@@ -266,7 +266,7 @@ QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) con
 
 Rotate::Rotate()
     : KoShape()
-    , m_d()
+    , m_path()
     , m_horizontalSegments(-1)
     , m_verticalSegments(-1)
     , m_endAngle(360.0)
@@ -295,22 +295,22 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
 
     QString dummy;
-    m_d = objectElement.attributeNS(KoXmlNS::svg, "d", "");
+    m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
 
-    kDebug(31000) << "Rotate:" << m_d;
+    kDebug(31000) << "Rotate:" << m_path;
     return true;
 }
 
 void Rotate::saveOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Rotate:" << m_d;
+    kDebug(31000) << "Saving Rotate:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:rotate");
 
     saveOdfAttributes(context, OdfObjectAttributes);
 
-    writer.addAttribute("svg:d", m_d);
+    writer.addAttribute("svg:d", m_path);
 
     writer.endElement(); // dr3d:rotate
 }

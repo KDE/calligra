@@ -87,14 +87,14 @@ public:
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
 
     // getters
-    QString d()          const { return m_d; }
+    QString path()       const { return m_path; }
     int     depth()      const { return m_depth; }
     bool    closeFront() const { return m_closeFront; }
     bool    closeBack()  const { return m_closeBack; }
     qreal   backScale()  const { return m_backScale; }
 
 private:
-    QString  m_d;               // The polygon
+    QString  m_path;            // The polygon
     qreal    m_depth;
     bool     m_closeFront;
     bool     m_closeBack;
@@ -116,7 +116,7 @@ public:
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
 
     // getters
-    QString d()                  const { return m_d; }
+    QString path()               const { return m_path; }
     int     horizontalSegments() const { return m_horizontalSegments; }
     int     verticalSegments()   const { return m_verticalSegments; }
     qreal   endAngle()           const { return m_endAngle; }
@@ -125,7 +125,7 @@ public:
     qreal   backScale()          const { return m_backScale; }
 
 private:
-    QString  m_d;               // The polygon
+    QString  m_path;               // The polygon
     int      m_horizontalSegments; // Defined in ODF
     int      m_verticalSegments;   // Produced by OOo(!)
     qreal    m_endAngle;
