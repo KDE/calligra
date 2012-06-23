@@ -8,6 +8,7 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrPageEffectDocker.cpp
     KPrClickActionDocker.cpp
     KPrShapeAnimationDocker.cpp
+    KPrEditAnimationsWidget.cpp
     )
 
 

@@ -64,6 +64,9 @@ public:
     /// Return the index of a given item or an invalid index if it isn't on the model
     QModelIndex indexByItem(KPrCustomAnimationItem* item);
 
+    /// Return an item for the given index
+    KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
+
 public slots:
     /// Triggers an update of the complete model
     void update();
@@ -72,8 +75,6 @@ public slots:
     void removeModel();
 
 private:
-    /// Return an item for the given index
-    KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
 };

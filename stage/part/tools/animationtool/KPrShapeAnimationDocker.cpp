@@ -27,6 +27,7 @@
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
 #include "KPrCustomAnimationItem.h"
+#include "KPrEditAnimationsWidget.h"
 
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
@@ -38,6 +39,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTreeView>
+#include <QMenu>
 #include <QDebug>
 
 //KDE Headers
@@ -53,6 +55,23 @@
 #include <KoShapeManager.h>
 #include <KoPAViewBase.h>
 #include <KoPACanvasBase.h>
+
+//This class is needed so that the menu returns a sizehint based on the layout and not on the number (0) of menu items
+class DialogMenu : public QMenu
+{
+    public:
+        DialogMenu(QWidget * parent = 0);
+        virtual QSize sizeHint() const;
+};
+
+DialogMenu::DialogMenu(QWidget * parent)
+ : QMenu(parent)
+{
+}
+QSize DialogMenu::sizeHint() const
+{
+    return layout()->sizeHint();
+}
 
 KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     : QWidget(parent)
@@ -76,9 +95,12 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     hlayout->addStretch();
 
     //TODO: Implement Edition Features
-    //m_editAnimationsPanel = new EditAnimationsPanel(mainWidget);
-    //m_editAnimation->setMenu(m_editAnimationsPanel);
-    //m_editAnimation->setPopupMode(QToolButton::InstantPopup);
+    DialogMenu *editMenu = new DialogMenu(this);
+    m_editAnimationsPanel = new KPrEditAnimationsWidget;
+    QGridLayout *containerLayout = new QGridLayout(editMenu);
+    containerLayout->addWidget(m_editAnimationsPanel,0,0);
+    m_editAnimation->setMenu(editMenu);
+    m_editAnimation->setPopupMode(QToolButton::InstantPopup);
 
     m_buttonAddAnimation = new QToolButton();
     m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
@@ -146,12 +168,14 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
     if (n_view) {
         m_view = n_view;
         m_animationsModel->setDocumentView(m_view);
+        m_editAnimationsPanel->setView(m_view);
         m_timeLineModel->setDocumentView(m_view);
         slotActivePageChanged();
         connect(m_view->proxyObject, SIGNAL(activePageChanged()),
                  this, SLOT(slotActivePageChanged()));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateTimeLineModel(QModelIndex)));
+        connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithTimeLineIndex(QModelIndex)));
         connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(syncWithTimeLineIndex(QModelIndex)));
     }
 }
@@ -162,9 +186,11 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
     KPrCustomAnimationItem *item = itemByIndex(index);
     if (item && (!item->isDefaulAnimation())) {
         m_buttonRemoveAnimation->setEnabled(true);
+        m_editAnimation->setEnabled(true);
         return;
     }
 m_buttonRemoveAnimation->setEnabled(false);
+m_editAnimation->setEnabled(false);
 }
 
 void KPrShapeAnimationDocker::slotActivePageChanged()
@@ -178,6 +204,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         m_animationsView->setColumnWidth(2, KIconLoader::SizeSmall + 6);
 
         m_timeLineModel->setParentItem(0, m_animationsModel->rootItem());
+        m_editAnimationsPanel->setParentItem(0, m_animationsModel->rootItem());
         m_timeLineView->update();
     }
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -189,6 +216,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
 void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &index)
 {
     syncCanvasWithIndex(index);
+    m_editAnimationsPanel->setCurrentIndex(index);
     KPrCustomAnimationItem *item = itemByIndex(index);
     if (item) {
         // Change tree model index to time line index
@@ -270,11 +298,15 @@ void KPrShapeAnimationDocker::updateTimeLineModel(const QModelIndex &index)
         m_timeLineModel->setParentItem(shapeAnimation, rootAnimation);
         m_timeLineView->update();
         m_timeLineView->setCurrentIndex(index);
+        m_editAnimationsPanel->setParentItem(shapeAnimation, rootAnimation);
+        m_editAnimationsPanel->setCurrentIndex(index);
     }
     else if (shapeAnimation->parent()->parent() == rootAnimation) {
         m_timeLineModel->setParentItem(shapeAnimation->parent(), rootAnimation);
         m_timeLineView->update();
         m_timeLineView->setCurrentIndex(index);
+        m_editAnimationsPanel->setParentItem(shapeAnimation->parent(), rootAnimation);
+        m_editAnimationsPanel->setCurrentIndex(index);
     }
     else {
         return;
@@ -298,6 +330,7 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
             if (index.isValid()) {
                 m_timeLineView->setCurrentIndex(index);
             }
+            m_editAnimationsPanel->setActiveShape(selectedShape);
         }
     }
 }

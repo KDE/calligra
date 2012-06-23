@@ -30,9 +30,10 @@ class QTreeView;
 class KPrAnimationsTreeModel;
 class KPrAnimationsDataModel;
 class KPrAnimationsTimeLineView;
-class QModelIndex;
 class KPrViewModePreviewShapeAnimations;
 class KPrCustomAnimationItem;
+class KPrEditAnimationsWidget;
+class QModelIndex;
 
 /**
  * Shape animations docker widget: let's edition of animations.
@@ -82,6 +83,7 @@ private:
     KPrAnimationsTimeLineView *m_timeLineView;
     KPrAnimationsDataModel *m_timeLineModel;
     QToolButton *m_editAnimation;
+    KPrEditAnimationsWidget *m_editAnimationsPanel;
     QToolButton *m_buttonAddAnimation;
     QToolButton *m_buttonRemoveAnimation;
     QToolButton *m_buttonAnimationOrderUp;
