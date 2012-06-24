@@ -141,7 +141,8 @@ qreal KPrCustomAnimationItem::startTime() const
 qreal KPrCustomAnimationItem::duration() const
 {
     if (m_shapeAnimation) {
-        return m_shapeAnimation->timeRange().second / 1000.0;
+        QPair <int, int> timeRange = m_shapeAnimation->timeRange();
+        return (timeRange.second-timeRange.first)/ 1000.0;
     }
     return 0;
 }
@@ -152,6 +153,21 @@ KoShape *KPrCustomAnimationItem::shape() const
         return m_shapeAnimation->shape();
     }
     return 0;
+}
+
+void KPrCustomAnimationItem::setStartTime(int timeMS)
+{
+    //Add a command
+    if (m_shapeAnimation) {
+        m_shapeAnimation->setBeginTime(timeMS);
+    }
+}
+
+void KPrCustomAnimationItem::setDuration(int timeMS)
+{
+    if (m_shapeAnimation) {
+        m_shapeAnimation->setGlobalDuration(timeMS);
+    }
 }
 
 KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const

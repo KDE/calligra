@@ -45,6 +45,8 @@ signals:
     /// A bar has reached the right limit of the time scale
     void scaleLimitReached();
 
+    void timeValuesChanged(const QModelIndex&);
+
 private:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;

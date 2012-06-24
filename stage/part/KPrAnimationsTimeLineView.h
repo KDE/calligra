@@ -37,8 +37,9 @@ enum ColumnNames {
     ShapeThumbnail = 0,
     AnimationIcon = 1,
     StartTime = 2,
-    EndTime = 3,
-    AnimationClass = 4
+    Duration = 3,
+    AnimationClass = 4,
+    TriggerEvent =5
 };
 
 /**
@@ -62,6 +63,7 @@ public:
 
 signals:
     void clicked(const QModelIndex&);
+    void timeValuesChanged(const QModelIndex&);
 
 public slots:
     /// updates all widget
@@ -110,6 +112,8 @@ protected:
     QColor colorforRow(int row);
 
 private:
+    double calculateStartOffset(int row);
+
     KPrTimeLineView *m_view;
     KPrTimeLineHeader *m_header;
     KPrAnimationsDataModel *m_model;

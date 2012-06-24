@@ -67,6 +67,9 @@ public:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
+    /// Return the parent item
+    qreal rootItemEnd() const;
+
 public slots:
     /// Triggers an update of the complete model
     void update();

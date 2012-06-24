@@ -37,7 +37,6 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QToolTip>
-#include <QDebug>
 #include <qmath.h>
 
 //Default height for rows
@@ -144,8 +143,10 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
         int lineHeigth = qMin(LINE_HEIGHT , rect.height());
         int yCenter = (rect.height() - lineHeigth)/2;
         qreal stepSize  = m_mainView->widthOfColumn(StartTime)/m_mainView->numberOfSteps();
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, EndTime)).toDouble();
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble();
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, Duration)).toDouble();
+        int startOffSet = m_mainView->calculateStartOffset(row);
+        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble() +
+                startOffSet;
 
         QRectF lineRect(rect.x() + stepSize*start+stepSize*duration - 6, rect.y() + yCenter,
                         8, lineHeigth);
@@ -181,16 +182,20 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             startPos = startPos + m_mainView->widthOfColumn(i);
         }
         int row = m_resizedRow;
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble();
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, EndTime)).toDouble();
+        //calculate real start
+        int startOffSet = m_mainView->calculateStartOffset(row);
+
+        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble() + startOffSet;
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, Duration)).toDouble();
         qreal totalSteps = m_mainView->numberOfSteps();
-        qreal stepSize  = m_mainView->widthOfColumn(5)/totalSteps;
+        qreal stepSize  = m_mainView->widthOfColumn(StartTime)/totalSteps;
 
         if ((event->pos().x() > (startPos+stepSize*start - 5)) &&
                 ((event->pos().x()) < (startPos+m_mainView->widthOfColumn(StartTime)))) {
             qreal newLength = (event->pos().x() - startPos - stepSize*start)/(stepSize);
             newLength = qFloor((newLength - modD(newLength, subSteps))*100.0)/100.0;
-            m_mainView->model()->setData(m_mainView->model()->index(row, EndTime),newLength);
+            m_mainView->model()->setData(m_mainView->model()->index(row, Duration),newLength*1000);
+            emit timeValuesChanged(m_mainView->model()->index(row, Duration));
             m_adjust = false;
             if (newLength < duration)
                 m_adjust = true;
@@ -207,8 +212,11 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             startPos = startPos + m_mainView->widthOfColumn(i);
         }
         int row = m_resizedRow;
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, EndTime)).toDouble();
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble();
+        //calculate real start
+        int startOffSet = m_mainView->calculateStartOffset(row);
+
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, Duration)).toDouble();
+        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble() + startOffSet;
         qreal totalSteps = m_mainView->numberOfSteps();
         qreal stepSize  = m_mainView->widthOfColumn(StartTime)/totalSteps;
 
@@ -217,7 +225,8 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
                  (startPos+m_mainView->widthOfColumn(StartTime)))) {
             qreal newPos = (event->pos().x() - (startPos + startDragPos))/(stepSize);
             newPos = qFloor((newPos - modD(newPos, subSteps))*100.0)/100.0;
-            m_mainView->model()->setData(m_mainView->model()->index(row, StartTime),newPos);
+            m_mainView->model()->setData(m_mainView->model()->index(row, StartTime),(newPos - startOffSet) * 1000);
+            emit timeValuesChanged(m_mainView->model()->index(row, StartTime));
             m_adjust = false;
             if (newPos <= start) {
                 m_adjust = true;
@@ -333,8 +342,10 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
     int lineHeigth = qMin(LINE_HEIGHT , rect.height());
     int vPadding = (rect.height() - lineHeigth)/2;
     int stepSize  = m_mainView->widthOfColumn(StartTime)/m_mainView->numberOfSteps();
-    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, EndTime)).toDouble();
-    qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble();
+    int startOffSet = m_mainView->calculateStartOffset(row);
+    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, Duration)).toDouble();
+
+    qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble() + startOffSet;
     QRectF lineRect(rect.x()+stepSize*start, rect.y()+vPadding, stepSize*duration, lineHeigth);
 
     QRectF fillRect (lineRect.x(),lineRect.y()+2,lineRect.width(),lineRect.height() - 4);

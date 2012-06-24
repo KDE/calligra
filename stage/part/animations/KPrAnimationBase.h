@@ -41,6 +41,8 @@ public:
 
     virtual int duration() const;
     virtual int begin() const;
+    virtual void setBegin(int value);
+    virtual void setDuration(int value);
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
     int animationDuration() const;
     virtual bool saveAttribute(KoPASavingContext &paContext) const;

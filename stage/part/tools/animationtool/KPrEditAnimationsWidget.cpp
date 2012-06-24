@@ -112,6 +112,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SIGNAL(requestAnimationPreview()));
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(itemClicked(QModelIndex)));
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
+    connect(m_timeLineView, SIGNAL(timeValuesChanged(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
 }
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)

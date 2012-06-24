@@ -47,8 +47,9 @@ enum ColumnNames {
     ShapeThumbnail = 0,
     AnimationIcon = 1,
     StartTime = 2,
-    EndTime = 3,
-    AnimationClass = 4
+    Duration = 3,
+    AnimationClass = 4,
+    TriggerEvent = 5
 };
 
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
@@ -59,7 +60,7 @@ KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
 
 QModelIndex KPrAnimationsDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!m_rootItem || row < 0 || column < 0 || column > AnimationClass) {
+    if (!m_rootItem || row < 0 || column < 0 || column > TriggerEvent) {
         return QModelIndex();
     }
     KPrCustomAnimationItem *parentItem = itemForIndex(parent);
@@ -137,7 +138,7 @@ int KPrAnimationsDataModel::columnCount(const QModelIndex &parent) const
 QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
 {
     if (!m_rootItem || !index.isValid() || index.column() < 0 ||
-        index.column() > AnimationClass) {
+        index.column() > TriggerEvent) {
         return QVariant();
     }
     if (KPrCustomAnimationItem *item = itemForIndex(index)) {
@@ -151,10 +152,12 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
                 return QVariant();
             case StartTime:
                 return item->startTime();
-            case EndTime:
+            case Duration:
                 return item->duration();
             case AnimationClass:
                 return item->type();
+            case TriggerEvent:
+                return item->triggerEvent();
             default:
                 return QVariant();
 
@@ -179,8 +182,9 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
             case StartTime:
                 return i18n("Start after %1 seconds. Duration of %2 seconds").
                         arg(item->startTime()).arg(item->duration());
-            case EndTime:
+            case Duration:
             case AnimationClass:
+                return item->type();
             default:
                 return QVariant();
 
@@ -210,28 +214,31 @@ QVariant KPrAnimationsDataModel::headerData(int section, Qt::Orientation orienta
 bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     //TODO: Edition features are not yet implemented
-    if (index.isValid() && role == Qt::EditRole) {
-        switch (index.column()) {
-        case ShapeThumbnail:
-            return false;
-        case AnimationIcon:
-            return false;
-        case StartTime:
-            //TODO: save new value in animation step.
-            /*
-            m_data[index.row()].startTime = value.toDouble();
-            emit dataChanged(index, index);
-            return true;
-        case EndTime:
-            m_data[index.row()].duration = value.toDouble();
-            emit dataChanged(index, index);
-            return true;
-            */
-        case AnimationClass:
-            return false;
-        default:
-            return false;
+    if (!m_rootItem || !index.isValid() || index.column() < 0 ||
+        index.column() > TriggerEvent) {
+        return false;
+    }
+    if (KPrCustomAnimationItem *item = itemForIndex(index)) {
+        if (role == Qt::EditRole) {
+            switch (index.column()) {
+            case ShapeThumbnail:
+                return false;
+            case AnimationIcon:
+                return false;
+            case StartTime:
+                item->setStartTime(value.toInt());
+                emit dataChanged(index, index);
+                return true;
+            case Duration:
+                item->setDuration(value.toInt());
+                emit dataChanged(index, index);
+                return true;
+            case AnimationClass:
+                return false;
+            default:
+                return false;
 
+            }
         }
     }
     return false;
@@ -303,4 +310,11 @@ KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &
     return m_rootItem;
 }
 
+qreal KPrAnimationsDataModel::rootItemEnd() const
+{
+    if (m_rootItem) {
+        return m_rootItem->duration() + m_rootItem->startTime();
+    }
+    return 0.0;
+}
 

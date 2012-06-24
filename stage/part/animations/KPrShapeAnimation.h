@@ -92,6 +92,8 @@ public:
       * Return the begin and end time of the animation as a QPair
       */
     QPair<int, int> timeRange();
+    void setBeginTime(int timeMS);
+    void setGlobalDuration(int timeMS);
 
     void setNodeType(Node_Type type);
     void setPresetClass(Preset_Class presetClass);

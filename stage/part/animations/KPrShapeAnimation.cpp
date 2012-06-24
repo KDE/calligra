@@ -135,13 +135,46 @@ QPair<int, int> KPrShapeAnimation::timeRange()
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
             minStart = qMin(minStart, a->begin());
-            maxEnd = qMax(maxEnd, a->begin() + a->duration());
+            maxEnd = qMax(maxEnd, a->duration());
         }
     }
     QPair<int, int> pair;
     pair.first = (minStart == INVALID_START)? 0: minStart;
     pair.second = maxEnd;
     return pair;
+}
+
+void KPrShapeAnimation::setBeginTime(int timeMS)
+{
+    if (timeMS < 0) {
+        return;
+    }
+    //Add timeMS to all animations begin time, relative to the first animation
+    int minStart = timeRange().first;
+    int timeDiff = timeMS - minStart;
+    for (int i = 0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+
+            a->setBegin(a->begin()+timeDiff);
+        }
+    }
+}
+
+void KPrShapeAnimation::setGlobalDuration(int timeMS)
+{
+    if (timeMS < 100) {
+        return;
+    }
+    //Add timeMS duration to all animations, proportional to the max duration
+    int maxDuration = timeRange().second;
+    qreal timeRatio = timeMS / (qreal)maxDuration;
+    for (int i = 0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+            a->setDuration((a->duration())*timeRatio);
+        }
+    }
 }
 
 void KPrShapeAnimation::deactivate()

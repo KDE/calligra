@@ -58,6 +58,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     //Setup GUI
     m_view = new KPrTimeLineView(this);
     m_header = new KPrTimeLineHeader(this);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_scrollArea = new QScrollArea;
     m_scrollArea->setBackgroundRole(QPalette::Light);
     m_scrollArea->setWidget(m_view);
@@ -72,6 +73,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
 
     //Connect Signals
     connect(m_view, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
+    connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
 }
 
 void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
@@ -80,6 +82,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
     updateColumnsWidth();
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(update()));
+    adjustScale();
     m_header->update();
     m_view->update();
 }
@@ -144,7 +147,7 @@ int KPrAnimationsTimeLineView::rowsHeigth() const
 int KPrAnimationsTimeLineView::totalWidth() const
 {
     int width = 0;
-    for (int i = 0; i < EndTime; i++){
+    for (int i = 0; i < Duration; i++){
         width = width + widthOfColumn(i);
     }
     return width;
@@ -185,8 +188,9 @@ void KPrAnimationsTimeLineView::adjustScale()
 {
     m_maxLength = 10;
     for (int row = 0; row < m_model->rowCount(); ++ row){
+        int startOffSet = calculateStartOffset(row);
         qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
-                m_model->data(m_model->index(row, EndTime)).toDouble();
+                m_model->data(m_model->index(row, Duration)).toDouble() + startOffSet;
         if (length > m_maxLength) {
             m_maxLength = length;
         }
@@ -245,6 +249,17 @@ QColor KPrAnimationsTimeLineView::colorforRow(int row)
     return Qt::gray;
 }
 
+double KPrAnimationsTimeLineView::calculateStartOffset(int row)
+{
+    //calculate real start
+    KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
+               m_model->data(m_model->index(row, TriggerEvent)).toInt());
+    if (triggerEvent == KPrShapeAnimation::After_Previous) {
+        return m_model->rootItemEnd();
+    }
+    return 0;
+}
+
 int KPrAnimationsTimeLineView::rowCount() const
 {
     if (m_model) {
@@ -264,7 +279,7 @@ void KPrAnimationsTimeLineView::updateColumnsWidth()
 {
     for (int row = 0; row < m_model->rowCount(); ++ row){
         qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
-                m_model->data(m_model->index(row, EndTime)).toDouble();
+                m_model->data(m_model->index(row, Duration)).toDouble();
         if (length > m_maxLength) {
             m_maxLength = length;
         }

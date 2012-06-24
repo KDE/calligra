@@ -29,6 +29,9 @@ public:
     qreal duration() const;
     KoShape *shape() const;
 
+    void setStartTime(int timeMS);
+    void setDuration(int timeMS);
+
     KPrCustomAnimationItem *parent() const;
     KPrCustomAnimationItem *childAt(int row) const {return m_children.value(row);}
     int rowOfChild(KPrCustomAnimationItem *child) const {return m_children.indexOf(child); }

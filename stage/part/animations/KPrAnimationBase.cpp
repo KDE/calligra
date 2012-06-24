@@ -44,12 +44,22 @@ KPrAnimationBase::~KPrAnimationBase()
 
 int KPrAnimationBase::duration() const
 {
-    return m_duration;
+    return m_duration + m_begin;
 }
 
 int KPrAnimationBase::begin() const
 {
     return m_begin;
+}
+
+void KPrAnimationBase::setBegin(int value)
+{
+    m_begin = value;
+}
+
+void KPrAnimationBase::setDuration(int value)
+{
+    m_duration = value;
 }
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
