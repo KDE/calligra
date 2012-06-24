@@ -825,11 +825,15 @@ QRectF KisImage::pixelToDocument(const QRectF &pixelCoord) const
 
 qint32 KisImage::width() const
 {
+    if(m_d->infiniteCanvas)
+        return bounds().width();
     return m_d->width;
 }
 
 qint32 KisImage::height() const
 {
+    if(m_d->infiniteCanvas)
+        return bounds().height();
     return m_d->height;
 }
 
