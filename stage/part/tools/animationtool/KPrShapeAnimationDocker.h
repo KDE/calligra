@@ -44,8 +44,6 @@ class KPrShapeAnimationDocker : public QWidget
 public:
     explicit KPrShapeAnimationDocker(QWidget *parent = 0);
     void setView(KoPAViewBase *view);
-
-    void checkAnimationSelected();
     
 signals:
     
@@ -57,14 +55,14 @@ public slots:
     void SyncWithAnimationsViewIndex(const QModelIndex &index);
 
     /// Update canvas with selected shape on Animations View
-    void syncWithTimeLineIndex(const QModelIndex &index);
+    void syncWithEditDialogIndex(const QModelIndex &index);
 
     void syncCanvasWithIndex(const QModelIndex &index);
 
     KPrCustomAnimationItem *itemByIndex(const QModelIndex &index);
 
     /// Update canvas with selected shape on Time Line View
-    void updateTimeLineModel(const QModelIndex &index);
+    void updateEditDialogIndex(const QModelIndex &index);
 
     /// Update Time Line View with selected shape on canvas
     void syncWithCanvasSelectedShape();
@@ -75,13 +73,13 @@ public slots:
     /// Remove selected animations
     void slotRemoveAnimations();
 
+    void checkAnimationSelected();
+
 
 private:
     KPrView* m_view;
     QTreeView * m_animationsView;
     KPrAnimationsTreeModel *m_animationsModel;
-    KPrAnimationsTimeLineView *m_timeLineView;
-    KPrAnimationsDataModel *m_timeLineModel;
     QToolButton *m_editAnimation;
     KPrEditAnimationsWidget *m_editAnimationsPanel;
     QToolButton *m_buttonAddAnimation;

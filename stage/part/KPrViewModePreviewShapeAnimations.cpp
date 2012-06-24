@@ -33,6 +33,7 @@
 #include <KoPAViewBase.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
+#include <KoZoomController.h>
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -50,10 +51,9 @@ KPrViewModePreviewShapeAnimations::~KPrViewModePreviewShapeAnimations()
 
 void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {
-    KoZoomHandler m_zoomHandler;
     painter.setClipRect(paintRect);
     painter.setRenderHint(QPainter::Antialiasing);
-    canvas->shapeManager()->paint(painter, m_zoomHandler, true);
+    canvas->shapeManager()->paint(painter, *(view()->zoomHandler()), true);
 }
 
 void KPrViewModePreviewShapeAnimations::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -115,10 +115,10 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
     m_timeLine.setDuration(m_shapeAnimation->duration());
     m_timeLine.setCurrentTime(0);
     m_animationCache->clear();
-    m_animationCache->setPageSize(m_view->activePage()->size());
+    //m_animationCache->setPageSize(m_view->activePage()->size());
+    m_animationCache->setPageSize(view()->zoomController()->documentSize());
     qreal zoom;
-    KoZoomHandler m_zoomHandler;
-    m_zoomHandler.zoom(&zoom, &zoom);
+    view()->zoomHandler()->zoom(&zoom, &zoom);
     m_animationCache->setZoom(zoom);
     m_shapeAnimation->init(m_animationCache, 0);
     m_animationCache->startStep(0);

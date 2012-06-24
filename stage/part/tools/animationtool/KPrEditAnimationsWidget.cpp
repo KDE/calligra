@@ -43,6 +43,8 @@
 #include <QMenu>
 #include <QModelIndex>
 #include <QDebug>
+#include <QComboBox>
+#include <QTimeEdit>
 
 //KDE Headers
 #include <KIcon>
@@ -69,17 +71,51 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     m_timeLineModel = new KPrAnimationsDataModel(this);
     m_timeLineView = new KPrAnimationsTimeLineView();
     m_timeLineView->setModel(m_timeLineModel);
-    QLabel label(i18n("Manage time line delay and duration: "));
-    layout->addWidget(&label);
+    QLabel *label = new QLabel(i18n("Manage animation delay and duration: "));
+    QLabel *startLabel = new QLabel(i18n("Start: "));
+    m_triggerEventList = new QComboBox;
+    m_triggerEventList->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    m_triggerEventList->setEditable(false);
+    m_triggerEventList->addItem(KIcon("onclick"), i18n("on mouse click"));
+    m_triggerEventList->addItem(KIcon("after_previous"), i18n("after previous animation"));
+    m_triggerEventList->addItem(KIcon("with_previous"), i18n("with previous animation"));
+
+    QLabel *delayLabel = new QLabel(i18n("Delay: "));
+    m_delayEdit = new QTimeEdit;
+    m_delayEdit->setTimeRange(QTime(0,0,0), QTime(0,30,0));
+    m_delayEdit->setDisplayFormat("mm:ss.zzz");
+
+    QLabel *durationLabel = new QLabel(i18n("Duration: "));
+    m_durationEdit = new QTimeEdit;
+    m_durationEdit->setTimeRange(QTime(0,0,0), QTime(1,0,0));
+    m_durationEdit->setDisplayFormat("H:mm:ss.zzz");
+
+    QToolButton *m_buttonPreviewAnimation = new QToolButton();
+    m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
+    m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
+    m_buttonPreviewAnimation->setEnabled(true);
+
+    layout->addWidget(m_buttonPreviewAnimation);
+    layout->addWidget(label);
     layout->addWidget(m_timeLineView);
+    layout->addWidget(startLabel);
+    layout->addWidget(m_triggerEventList);
+    QHBoxLayout *hlayout = new QHBoxLayout;
+    hlayout->addWidget(delayLabel);
+    hlayout->addWidget(m_delayEdit);
+    hlayout->addWidget(durationLabel);
+    hlayout->addWidget(m_durationEdit);
+    layout->addLayout(hlayout);
     setLayout(layout);
 
+    //Connect Signals.
+    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SIGNAL(requestAnimationPreview()));
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(itemClicked(QModelIndex)));
+    connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
 }
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
 {
-    qDebug() << "Set View";
     KPrView *n_view = dynamic_cast<KPrView *>(view);
     if (n_view) {
         m_view = n_view;
@@ -90,14 +126,12 @@ void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
 
 void KPrEditAnimationsWidget::setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem)
 {
-    qDebug() << "Set Parent Item";
     m_timeLineModel->setParentItem(item, rootItem);
     m_timeLineView->update();
 }
 
 void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
 {
-    qDebug() << "Set Current Item";
     if (!index.isValid()) {
         return;
     }
@@ -107,6 +141,7 @@ void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
         QModelIndex newIndex = m_timeLineModel->indexByItem(item);
         if (newIndex.isValid()) {
             m_timeLineView->setCurrentIndex(index);
+            updateIndex(index);
         }
     }
     m_timeLineView->update();
@@ -114,10 +149,19 @@ void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
 
 void KPrEditAnimationsWidget::setActiveShape(KoShape *shape)
 {
-    qDebug() << "SetActiveShape";
     QModelIndex index = m_timeLineModel->indexByShape(shape);
     if (index.isValid()) {
         m_timeLineView->setCurrentIndex(index);
     }
     m_timeLineView->update();
+}
+
+void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
+{
+    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
+    if (item) {
+        m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
+        m_delayEdit->setTime(QTime().addMSecs(item->startTime()*1000));
+        m_durationEdit->setTime(QTime().addMSecs(item->duration()*1000));
+    }
 }
