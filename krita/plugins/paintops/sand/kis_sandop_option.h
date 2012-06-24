@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Francisco Fernandes <francisco.fernandes.j@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,16 +15,49 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+/**
+ * These options are for the sand addition/deletion brush. We will have two ways for this brush work:
+ *
+ * (1) Add / Delete sand grains, where the sand addition/removal will follow the mouse
+ * position and dynamics.
+ * 
+ *  a) Add an AMOUNT of particles with initial conditions (velocity, position and acceleration) based
+ *     on the mouse movements. As the user will be adding some sand, the amount falling will be reduced as it moves.
+ *  b) Remove all the particles under the brush RADIUS. It's independent of the mouse dynamics.
+ *  c) The particle properties will be default. Perhaps in the future we can let a user modify the radius, friction
+ *     and dissipation properties of a grain.
+ *  
+ *  
+ * 
+ */
 #ifndef KIS_SANDOP_OPTION_H
 #define KIS_SANDOP_OPTION_H
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+/*
+ * Sand add/remove strings
+ */
 const QString SAND_RADIUS = "Sand/radius";
-const QString SAND_INK_DEPLETION = "Sand/inkDepletion";
-const QString SAND_USE_OPACITY = "Sand/opacity";
-const QString SAND_USE_SATURATION = "Sand/saturation";
+const QString SAND_AMOUNT = "Sand/amount";
+const QString SAND_DEPLETION = "Sand/sandDepletion";
+
+/*
+ * Sand spread strings
+ * Obs.: Have to choose a better name for this functionality
+ * Particle (*)
+ * Brush
+ * Spread
+ * Stroke
+ * (...)
+ */
+
+// const QString SAND_MODE = "Sand/mode"    //set the operation mode for this brush
+// const QString SAND_MASS = "Sand/mass"
+// const QString SAND_FRICTION = "Sand/friction"
+// const QString SAND_DISSIPATION = "Sand/dissipation"
 
 class KisSandOpOptionsWidget;
 
@@ -35,11 +68,20 @@ public:
     ~KisSandOpOption();
 
     void setRadius(int radius) const;
-    int radius() const;
+    void setAmount(int amount) const;
 
-    bool inkDepletion() const; 
-    bool saturation() const;
-    bool opacity() const;
+    int radius() const;
+    bool sandDepletion() const;
+
+/*
+ * SPREAD MODE
+ */
+//     void setFriction(float friction) const;
+//     void setDissipation(float dissipation) const;
+//     void setMass(float mass) const;
+//     float friction () const;
+//     float dissipation () const;
+//     float mass () const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -52,17 +94,29 @@ private:
 };
 
 class SandProperties {
+    
 public:
     int radius;
-    bool inkDepletion;
-    bool useOpacity;
-    bool useSaturation;
+    int amount;
+    bool sandDepletion;
+
+    //bool mode;
+    //float mass;
+    //float friction;
+    //float dissipation;
+    
     
     void readOptionSetting(const KisPropertiesConfiguration* settings){
-            radius = settings->getInt(SAND_RADIUS);
-            inkDepletion = settings->getBool(SAND_INK_DEPLETION);
-            useOpacity = settings->getBool(SAND_USE_OPACITY);
-            useSaturation = settings->getBool(SAND_USE_SATURATION);
+        radius = settings->getInt(SAND_RADIUS);
+        amount = settings->getInt(SAND_AMOUNT);
+        sandDepletion = settings->getBool(SAND_DEPLETION);
+
+        //mode = settings->getBool(SAND_MODE); //??
+        //mass = settings->getFloat(SAND_MASS);
+        //friction = settings->getFloat(SAND_FRICTION);
+        //dissipation = settings->getFloat(SAND_DISSIPATION);
+
+
     }
 };
 
