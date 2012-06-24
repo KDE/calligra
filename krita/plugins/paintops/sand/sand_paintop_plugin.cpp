@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
+ *  Copyright (c) YEAR YOUR_NAME <YOUR_EMAIL>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@
 #include "kis_sand_paintop.h"
 #include "kis_simple_paintop_factory.h"
 
+#include "kis_sand_paintop_settings.h"
+#include "kis_sand_paintop_settings_widget.h"
+
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(SandPaintOpPluginFactory, registerPlugin<SandPaintOpPlugin>();)
@@ -40,12 +43,11 @@ K_EXPORT_PLUGIN(SandPaintOpPluginFactory("krita"))
 SandPaintOpPlugin::SandPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    qDebug() << "Loading sand paintop..." ;
+    qDebug() << "Loading Sand Paintop...";
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSandPaintOp, KisSandPaintOpSettings, KisSandPaintOpSettingsWidget>("sandbrush", i18n("Sand brush"), 
-                                                                                                                KisPaintOpFactory::categoryExperimental(), "krita-sand.png"));
-    qDebug() << "Sand paintop loaded!" ;
-
+    r->add(new KisSimplePaintOpFactory<KisSandPaintOp, KisSandPaintOpSettings, KisSandPaintOpSettingsWidget>("sandbrush", i18n("Sand brush"),
+                                                          KisPaintOpFactory::categoryExperimental(), "krita-sand.png"));
+    qDebug() << "Sand Paintop loaded!";
 }
 
 SandPaintOpPlugin::~SandPaintOpPlugin()

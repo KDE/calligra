@@ -72,7 +72,7 @@ public:
               float radius = 1,
               int lifespan = 10000,
               float friction = 0.00005, //default value of friction
-              float friction = 0.0; //dissipation constant
+              float dissipation = 0.0; //dissipation constant
               QPoint * position = 0,
               QPointF * velocity = 0,
               QPointF * acceleration = 0;
@@ -93,9 +93,11 @@ public:
     bool isAlive() const{return _life;}
     int lifespan() const {return lifespan;}
     float mass() const {return _mass;}
+    float force() const {return _force;}
     float radius() const {return _radius;}
     float friction() const {return _friction;}
     float dissipation() const {return _dissipation;}
+    
     QPoint * pos(){return _pos;}
     QPointF * vel(){return _vel;}
     QPointF * accel(){return _accel;}
@@ -103,6 +105,7 @@ public:
     //Sets
     void setLife(bool lf){ _life = lf;}
     void setMass(float m) { _mass = m;}
+    void force(float f) const {_force = f;}
     void setRadius(float r) { _radius = r;}
     void setLife(int l) { _lifespan = l;}
     void setFriction(float f) { _friction = f;}
@@ -125,6 +128,9 @@ private:
     ///This particle mass.
     float _mass;
 
+    ///The force been applied on this particle
+    float _force;
+    
     ///Size of this particle radius
     float _radius;
 

@@ -57,161 +57,84 @@ Particle::Particle( bool life = true, float mass = 1.0; float radius = 1, int li
  * The emission of grains will be responsible by the ParticleEmitter, but will use this method as well.
  * ?: Perhaps I should set this method as a slot
  */ 
-void Particle::applyForce()
+
 {
-    /*
-     * Calculate the distance of between the particle centers
-     */
-    double dx = normalize( p1.x() - p2.x(), lx);
-    double dy = normalize( p1.y() - p2.y(), ly);
-    double rr = sqrt( dx*dx + dy*dy );
 
     /*
-     * Particles radius
+     * xi calculation is imcomplete. It should be like this:
+     * 
+     * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
+     * dist_y = _position->y() - mouse_position->y();   //distance between particle centers: Y
+     * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
+     * double xi = _radius + brush_size - dist_centers
+     * 
+     * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-    double r1 = p1.r();
-    double r2 = p2.r();
+    double xi = _radius ;
 
-    /*
-     * Mutual compression of the particles:
-     */
-    double xi = r1 + r2 - rr;
-
-    /*
-     * Two particles are in contact if the sum of it's radius exceeds
-     * the distance of their centers.
-     * i.e. :
-     *
-     * xi > 0
-     */
-    if(xi>0){
-//         cout << " The particles colide." << endl;
+    //this is a simple formality, the collision detection will be made before the force application
+    if( xi > 0){
+        
+        /* normalized young modulus between the MOUSE (brush) particle and this particle
+         * double Y = _friction * brush_friction / (friction + brush_friction)
+         */
+        double Y = _friction;  // Young modulus
+        /*
+         * dissipative constant: function of the material viscosity
+         * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
+         * double A = 0.5*( _dissipation + brush_dissipation );
+         */
+        double A =  _dissipation;
 
         /*
-         * Material coefficients of the particles
+         * ATTENTION: IN A SITUATION WHERE PARTICLES HAVE ANGULAR MOVEMENT (ROTATIONS), WE WOULD NEED THE
+         * mu AND gamma COEFFICIENTS
          */
 
-        //normal coefficients
-        double Y = p1.Y * p2.Y / ( p1.Y + p2.Y);  // Young modulus
-        double A = 0.5*( p1.A + p2.A );           //dissipative constant: function of the material viscosity
+        /*
+         * double reff = ( _radius * brush_size )/( _radius + brush_size );
+         */
+        double reff = _radius;
 
-        //tangencial coefficients
-        double mu = ( p1.mu < p2.mu ? p1.mu : p2.mu ); //friction parameter for Coulomb's friction law
-        double gamma = ( p1.gamma < p2.gamma ? p1.gamma : p2.gamma ); //damping constant
-
-//         cout << " Calculating the normal forces..." << endl;
-
-        /**
+        /*
+         * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
+         * MOUSE particle:
          *
-         * Normal force calculation terms for viscoelastic spheres
+         * double dvx = _velocity->x() - _brush_velocity->x()
+         * double dvy = _velocity->y() - _brush_velocity->y()
+         * 
+         */
+        double dvx = _velocity->x();
+        double dvy = _velocity->y();
+
+
+        /*
+         * rr_rez = 1 /dist_centers 
+         */
+        double rr_rez = 1 / radius;
+
+        /*
+         * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
+         * dist_y = _position->y() - mouse_position->y();   //distance between particle centers: Y
          *
+         * double ex = dist_x * rr_rez;
+         * double ey = dist_y * rr_rez;
          */
 
-        /*
-         * effective radius of colliding spheres
-         */
-        double reff = ( r1 * r2 )/( r1 + r2 );
+        double ex = 1;  //modify
+        double ey = 1;  //modify
+        double xidot = - (ex*dvx + ey*dvy);
 
-        /*
-         * velocity difference between the particles in the
-         * x and y coordinates. Used to obtain the derivation
-         * of the xi coefficient
-         */
-        double dvx = p1.vx() - p2.vx();
-        double dvy = p1.vy() - p2.vy();
-
-        /*
-         * xi derivation :
-         */
-
-        // the derivation of the mutual compression coefficient (xi) means the
-        // variation of this value. The variation of the xi it's due to the velocity
-        // and the positions of the particle through the time. So this is why we use
-        // the velocities in the x and y coordinates and the position through the time.
-
-        double rr_rez = 1/rr;
-
-        double ex = dx * rr_rez;
-        double ey = dy * rr_rez;
-
-        //first derivative of the xi coefficient
-        double xidot = -( ex*dvx + ey*dvy);
-
-        /*
-         * Normal force : responsible for the translational aspect of the
-         * particle motion.
-         *
-         * (?) : have to search for the reasons why the Poisson's ratio was removed .
-         *
-         */
-
-        // Obs.: have to try to implement a more simple normal force equation, since
-        // we don't need a accurate data simulation, just the visual aspects of
-        // the viscoelastic particles simulation
-
-        cout << "xi =  " << xi << endl;
-        cout << "Y  =  " << Y << endl;
-        cout << "reff =  " << reff << endl;
-        cout << "A =  " << A << endl;
-        cout << "xidot =  " << xidot << endl;
+        //NORMAL FORCE ON THIS PARTICLE
         double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot);
 
-//         cout << " Calculating the tangencial forces..." << endl;
-
-        /**
-         *
-         * Tangencial force calculation terms
-         *
-         */
-
-        // Relative velocity of the spheres : difference between the velocities
-        // and the relative center positions
-        double vtrel = -dvx*ey + dvy*ex + p1.omega()*p1.r() - p2.omega()*p2.r();
-
-        /*
-         * Tangencial force : responsible for the rotational aspect of the
-         * particle motion
-         */
-        double ft = -gamma*vtrel;
-
-
-
-        if(fn<0)
+        //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
+         if( fn< 0)
             fn = 0;
-
-        /*
-         * Coulomb's friction law : The shear force is limited by this law :
-         *
-         * |ft| <= mu|fn|
-         *
-         * for large relative velocity (vtrel) or small normal force
-         * the tangencial force assume the value of the coefficient of
-         * friction (mu) times the normal force
-         *
-         */
-        if(ft < -mu*fn)
-            ft = -mu*fn;
-
-        if(ft > mu*fn)
-            ft = mu*fn;
-
-        /*
-         * Update the particle forces for spherical shapes (_ptype == 0 )
-         */
-        if(p1.ptype()==0) {
-            p1.add_force(Vector(fn*ex-ft*ey, fn*ey+ft*ex, r1*ft));
-        }
-
-        if(p2.ptype()==0) {
-            p2.add_force(Vector(-fn*ex+ft*ey, -fn*ey-ft*ex, -r2*ft));
-        }
+         else
+             _force += fn; 
+        
     }
-
-
-
-
-
-    
 }
 
 ///rk4 implementation for this particle
