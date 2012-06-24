@@ -35,7 +35,7 @@
 #include <KMenu>
 #include <kmessagebox.h>
 #include <kiconeffect.h>
-#include <k3command.h>
+#include <QUndoCommand>
 #include <KActionCollection>
 
 #include <koproperty/Set.h>
@@ -534,7 +534,7 @@ void KexiTableDesignerView::slotTogglePrimaryKey()
 }
 
 void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
-        bool set, bool aWasPKey, CommandGroup* commandGroup)
+        bool set, bool aWasPKey, QUndoCommand* commandGroup)
 {
     const bool was_pkey = aWasPKey || propertySet["primaryKey"].value().toBool();
 // propertySet["primaryKey"] = QVariant(set);
@@ -689,32 +689,30 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             QString oldName(propertySetForRecord->property("name").value().toString());
             QString oldCaption(propertySetForRecord->property("caption").value().toString());
 
-            //we need to create the action now as set["name"] will be changed soon..
-            ChangeFieldPropertyCommand *changeCaptionCommand
-            = new ChangeFieldPropertyCommand(this, *propertySetForRecord, "caption",
-                                             oldCaption, newValue);
-
-            //update field caption and name
-            propertySetForRecord->changeProperty("caption", newValue);
-            propertySetForRecord->changeProperty("name",
-                KexiUtils::string2Identifier(newValue.toString()));
-
             //remember this action containing 2 subactions
-            CommandGroup *changeCaptionAndNameCommand = new CommandGroup(
+            //Parent command is a QUndoCommand containing 2 child commands
+            QUndoCommand *changeCaptionAndNameCommand = new QUndoCommand(
                 i18n(
                     "Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"",
                     oldName, propertySetForRecord->property("name").value().toString(),
                     oldCaption, newValue.toString()));
-            changeCaptionAndNameCommand->addCommand(changeCaptionCommand);
-//     new ChangeFieldPropertyCommand( this, *propertySetForRecord,
-            //      "caption", oldCaption, newValue)
-            //  );
-            changeCaptionAndNameCommand->addCommand(
-                new ChangeFieldPropertyCommand(this, *propertySetForRecord,
-                                               "name", oldName, propertySetForRecord->property("name").value().toString())
-            );
-            addHistoryCommand(changeCaptionAndNameCommand, false /* !execute */);
+            
+            //we need to create the action now as set["name"] will be changed soon.
+            //Child 1 is the caption
+            ChangeFieldPropertyCommand *changeCaptionCommand
+            = new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, "", this, *propertySetForRecord, "caption",
+                                             oldCaption, newValue);
+            
+            //update field caption and name
+            propertySetForRecord->changeProperty("caption", newValue);
+            propertySetForRecord->changeProperty("name",
+                                                 KexiUtils::string2Identifier(newValue.toString()));
+            
 
+            //Child 2 is the name
+            ChangeFieldPropertyCommand *changeNameCommand = new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, "", this, *propertySetForRecord,
+                                               "name", oldName, propertySetForRecord->property("name").value().toString());
+            addHistoryCommand(changeCaptionAndNameCommand, false /* !execute */);
             d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
         }
     } else if (colnum == COLUMN_ID_TYPE) {//'type'
@@ -772,7 +770,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         kDebug() << subTypeProperty->value();
 
         // *** this action contains subactions ***
-        CommandGroup *changeDataTypeCommand = new CommandGroup(
+        QUndoCommand *changeDataTypeCommand = new QUndoCommand(
             i18n("Change data type for field \"%1\" to \"%2\"",
                  set["name"].value().toString(), KexiDB::Field::typeName(fieldType)));
 
@@ -917,7 +915,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
 
         if (row >= 0) {
             if (d->addHistoryCommand_in_slotRowUpdated_enabled) {
-                addHistoryCommand(new InsertFieldCommand(this, row, *newSet /*propertySet()*/),    //, field /*will be copied*/
+                addHistoryCommand(new InsertFieldCommand(0, "", this, row, *newSet /*propertySet()*/),    //, field /*will be copied*/
                                   false /* !execute */);
             }
         } else {

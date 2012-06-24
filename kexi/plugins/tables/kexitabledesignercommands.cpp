@@ -35,8 +35,8 @@
 using namespace KexiTableDesignerCommands;
 
 
-Command::Command(KexiTableDesignerView* view)
-        : K3Command()
+Command::Command(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view)
+        : QUndoCommand(parent, text)
         , m_view(view)
 {
 }
@@ -48,12 +48,12 @@ Command::~Command()
 //--------------------------------------------------------
 
 ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
-    KexiTableDesignerView* view,
+    QUndoCommand* parent, const QString& text, KexiTableDesignerView* view,
     const KoProperty::Set& set, const QByteArray& propertyName,
     const QVariant& oldValue, const QVariant& newValue,
     KoProperty::Property::ListData* const oldListData,
     KoProperty::Property::ListData* const newListData)
-        : Command(view)
+        : Command(parent, text, view)
         , m_alterTableAction(
             propertyName == "name" ? oldValue.toString() : set.property("name").value().toString(),
             propertyName, newValue, set["uid"].value().toInt())
@@ -122,9 +122,9 @@ KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction(
 
 //--------------------------------------------------------
 
-RemoveFieldCommand::RemoveFieldCommand(KexiTableDesignerView* view, int fieldIndex,
+RemoveFieldCommand::RemoveFieldCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view, int fieldIndex,
                                        const KoProperty::Set* set)
-        : Command(view)
+        : Command(parent, text, view)
         , m_alterTableAction(set ? (*set)["name"].value().toString() : QString(),
                              set ? (*set)["uid"].value().toInt() : -1)
         , m_set(set ? new KoProperty::Set(*set /*deep copy*/) : 0)
@@ -175,9 +175,9 @@ KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction()
 
 //--------------------------------------------------------
 
-InsertFieldCommand::InsertFieldCommand(KexiTableDesignerView* view,
+InsertFieldCommand::InsertFieldCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view,
                                        int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set)
-        : Command(view)
+        : Command(parent, text, view)
         , m_alterTableAction(0) //fieldIndex, new KexiDB::Field(field) /*deep copy*/)
         , m_set(set)   //? new KoProperty::Set(*set) : 0 )
 {
@@ -216,9 +216,9 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
 
 //--------------------------------------------------------
 
-ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(KexiTableDesignerView* view,
+ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view,
         const KoProperty::Set& set, const QByteArray& propertyName, bool visible)
-        : Command(view)
+        : Command(parent, text, view)
         , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
 // , m_fieldUID(set["uid"].value().toInt())
         , m_oldVisibility(set.property(propertyName).isVisible())
@@ -256,8 +256,8 @@ void ChangePropertyVisibilityCommand::unexecute()
 
 //--------------------------------------------------------
 
-InsertEmptyRowCommand::InsertEmptyRowCommand(KexiTableDesignerView* view, int row)
-        : Command(view)
+InsertEmptyRowCommand::InsertEmptyRowCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view, int row)
+        : Command(parent, text, view)
         , m_alterTableAction(true) //unused, null action
         , m_row(row)
 {
