@@ -174,26 +174,44 @@ void KisImageTest::testDynamicImage()
 {
     const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, cs8, "Dynamic Bounds' Test", true, true);
-    QVERIFY(image->rootLayer() != 0);
-    qDebug() << "OldWidth = "<< ppVar(image->width());
-    qDebug() << "OldHeight = "<< ppVar(image->height());
+    QVERIFY(image->rootLayer());
 
     KisPaintDeviceSP device1 = new KisPaintDevice(cs8);
     KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     image->addNode(paint1, image->root());
-
     QVERIFY(image->rootLayer()->firstChild()->objectName() == paint1->objectName());
+
+    qDebug() << "Image bounds before painting:" << ppVar(image->bounds());
+    QCOMPARE(image->bounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+    QCOMPARE(image->width(), IMAGE_WIDTH);
+    QCOMPARE(image->height(), IMAGE_HEIGHT);
+
 
     KisPainter* painter1 = new KisPainter();
     painter1->begin(device1);
+    painter1->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter1->setPaintColor(KoColor(Qt::red, cs8));
+
     painter1->paintRect(QRect(1,1,120,120));
     painter1->bitBlt(QPoint(10,10), device1,QRect(1,1,120,120));
-    qDebug() << "painter's Width = "<< ppVar(painter1->bounds().width());
-    qDebug() << "painter's height = "<< ppVar(painter1->bounds().height());
-    image->refreshGraph();
-    image->bounds();
-    qDebug() << "NewWidth = "<< ppVar(image->width());
-    qDebug() << "NewHeight = "<< ppVar(image->height());
+
+    device1->convertToQImage(0).save("painted_image.png");
+
+    qDebug() << "Image bounds after painting before updates:" << ppVar(image->bounds());
+    QCOMPARE(image->bounds(), QRect(0, 0, 192, 192));
+    QCOMPARE(image->width(), 192);
+    QCOMPARE(image->height(), 192);
+
+
+    paint1->setDirty(painter1->takeDirtyRegion());
+    image->waitForDone();
+
+    delete painter1;
+
+    qDebug() << "Image bounds after painting after updates:" << ppVar(image->bounds());
+    QCOMPARE(image->bounds(), QRect(0, 0, 192, 192));
+    QCOMPARE(image->width(), 192);
+    QCOMPARE(image->height(), 192);
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
