@@ -32,17 +32,18 @@ class BridgeServer : public QObject
     Q_OBJECT
 public:
     explicit BridgeServer(QObject *parent = 0);
+    ~BridgeServer();
     void initServer();
 
-    static const QDir socketDir;
+    static const QString pipeIn;
+    static const QString pipeOut;
     
 signals:
     
 public slots:
     void handleNewEngine();
 private:
-    QLocalServer *m_inSocket;
-    QLocalServer *m_outSocket;
+    QLocalServer *m_server;
     QList<BridgeRequestHandler*> *m_handles;
 };
 

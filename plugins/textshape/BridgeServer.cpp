@@ -25,19 +25,22 @@
 #include <QList>
 #include <QDataStream>
 #include <QMessageBox>
-#include <QtNetwork/QLocalServer>
-#include <QtNetwork/QLocalSocket>
-#include <QtNetwork>
+#include <QLocalServer>
+#include <QLocalSocket>
 
 #ifdef Q_OS_UNIX
-const QDir BridgeServer::socketDir = QDir(QDir::home().absolutePath().append(QDir::separator()).append(".calligra"));
+const QString BridgeServer::pipeIn = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
+        .append(QDir::separator()).append("pipe.in");
+const QString BridgeServer::pipeOut = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
+        .append(QDir::separator()).append("pipe.out");
 #else
-const QDir BridgeServer::socketDir = QDir("\\\\.\\pipe\\");
+const QString BridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
+const QString BridgeServer::pipeOut = QDir("\\\\.\\pipe\\pipe.out");
 #endif
 
 BridgeServer::BridgeServer(QObject *parent) :
     QObject(parent),
-    m_inSocket(new QLocalServer(this)),
+    m_server(new QLocalServer(this)),
     m_handles(new QList<BridgeRequestHandler*>())
 {
     initServer();
@@ -45,16 +48,22 @@ BridgeServer::BridgeServer(QObject *parent) :
 
 void BridgeServer::initServer()
 {
-    if(!m_inSocket->listen(socketDir.absolutePath().append(QDir::separator()).append("pipe.in"))) {
-        QMessageBox::warning(0, "Error while listening on local server", m_inSocket->errorString());
+    if(!m_server->listen(pipeIn)) {
+        qDebug() << "Listen call to local socket failed" << m_server->errorString();
         return;
     } else {
-        connect(m_inSocket, SIGNAL(newConnection()), this, SLOT(handleNewEngine()));
+        connect(m_server, SIGNAL(newConnection()), this, SLOT(handleNewEngine()));
     }
 }
 
 void BridgeServer::handleNewEngine()
 {
-    QLocalSocket *socket = m_inSocket->nextPendingConnection();
+    QLocalSocket *socket = m_server->nextPendingConnection();
     m_handles->append(new BridgeRequestHandler(socket));
+}
+
+BridgeServer::~BridgeServer()
+{
+    m_server->close();
+    qDeleteAll(m_handles->begin(), m_handles->end());
 }
