@@ -18,57 +18,73 @@
 
 #include "testutil.h"
 #include "qimage_based_test.h"
+#include <KoColor.h>
 #include "kis_image.h"
 #include "kis_dynamic_bounds_test.h"
 #include <qtest_kde.h>
 #include "kis_painter.h"
 
+
+
 class BaseDynamicBoundsTest : public TestUtil::QImageBasedTest
 {
 public:
     BaseDynamicBoundsTest()
-        : QImageBasedTest("bounds")
+        : QImageBasedTest("dynamic_bounds")
     {
     }
 
-    void test(const QString &testname, KisPaintDeviceSP dev) {
 
-        KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
-        KisImageSP image = createImage(undoStore);
-        image->setCanvasInfinite();
+    void testPaintRect() {
+        beginTest();
 
-        image->initialRefreshGraph();
+        KisNodeSP paint1 = findNode(m_image->root(), "paint1");
+        KisPaintDeviceSP device1 = paint1->paintDevice();
 
-        QVERIFY(checkLayers(image, "initial"));
+        qDebug() << "Image bounds before painting:" << ppVar(m_image->bounds());
 
-        KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
-        layer->paintDevice() = dev;
-        image->addNode(layer.data());
+        KisPainter* painter1 = new KisPainter();
+        painter1->begin(device1);
+        painter1->setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter1->setPaintColor(KoColor(Qt::red, paint1->colorSpace()));
 
-        image->waitForDone();
-        image->resizeImage(image->bounds());
+        painter1->paintRect(QRect(900,900,120,120));
 
-        QVERIFY(checkLayers(image, testname));
+        paint1->setDirty(painter1->takeDirtyRegion());
+        m_image->waitForDone();
 
-        undoStore->undo();
-        image->waitForDone();
+        delete painter1;
 
-        QVERIFY(checkLayers(image, "initial"));
+        qDebug() << "Image bounds after painting:" << ppVar(m_image->bounds());
+        QVERIFY(checkLayers(m_image, "extended"));
 
+        endTest();
     }
+
+private:
+    void beginTest() {
+        KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+        m_image = createImage(undoStore);
+        m_image->setCanvasInfinite();
+        m_image->initialRefreshGraph();
+
+        QVERIFY(checkLayers(m_image, "initial"));
+    }
+
+    void endTest() {
+        //undoStore->undo();
+        //m_image->waitForDone();
+        //QVERIFY(checkLayers(m_image, "initial"));
+    }
+
+private:
+    KisImageSP m_image;
 };
 
 void KisDynamicBoundsTest::drawRectTest()
 {
-    const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP device1 = new KisPaintDevice(cs8);
-    KisPainter* painter1 = new KisPainter();
-    painter1->begin(device1);
-    painter1->paintRect(QRect(1,1,120,120));
-
     BaseDynamicBoundsTest tester;
-    tester.test("drawRect", device1);
-    delete painter1;
+    tester.testPaintRect();
 }
 
 QTEST_KDEMAIN(KisDynamicBoundsTest, GUI)
