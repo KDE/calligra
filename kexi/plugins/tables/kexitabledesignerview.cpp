@@ -958,8 +958,8 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
     }
 
     //setting autonumber requires setting PK as well
-    CommandGroup *setAutonumberCommand = 0;
-    CommandGroup *toplevelCommand = 0;
+    QUndoCommand *setAutonumberCommand = 0;
+    QUndoCommand *toplevelCommand = 0;
     if (pname == "autoIncrement" && property.value().toBool() == true) {
         if (set["primaryKey"].value().toBool() == false) {//we need PKEY here!
             QString msg = QString("<p>")
@@ -977,12 +977,12 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
                 setPrimaryKey = true;
                 //switchPrimaryKey(set, true);
                 // this will be toplevel command
-                setAutonumberCommand = new CommandGroup(
+                setAutonumberCommand = new QUndoCommand(
                     i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()));
                 toplevelCommand = setAutonumberCommand;
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(true), setAutonumberCommand);
             } else {
-                setAutonumberCommand = new CommandGroup(
+                setAutonumberCommand = new QUndoCommand(
                     i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()));
                 //d->slotPropertyChanged_enabled = false;
 //     set["autoIncrement"].setValue( QVariant(false), false/*don't save old*/);
@@ -1002,7 +1002,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         changePrimaryKey = true;
         setPrimaryKey = false;
         // this will be toplevel command
-        CommandGroup *unsetIndexedOrUniquOrNotNullCommand = new CommandGroup(
+        QUndoCommand *unsetIndexedOrUniquOrNotNullCommand = new QUndoCommand(
             i18n("Set \"%1\" property for field \"%2\"",
                  property.caption(), set["name"].value().toString()));
         toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
@@ -1047,7 +1047,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //  kDebug() << property.value().toString();
 //  kDebug() << set["type"].value();
 //  if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
-        CommandGroup* changeFieldTypeCommand = new CommandGroup(
+        QUndoCommand* changeFieldTypeCommand = new QUndoCommand(
             i18n(
                 "Change type for field \"%1\" to \"%2\"",
                 set["name"].value().toString(), typeName));
@@ -1077,9 +1077,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //  d->slotPropertyChanged_subType_enabled = true;
 //  return;
     }
-
+    //!todo add command text
     if (d->addHistoryCommand_in_slotPropertyChanged_enabled && !changePrimaryKey/*we'll add multiple commands for PK*/) {
-        addHistoryCommand(new ChangeFieldPropertyCommand(this, set,
+        addHistoryCommand(new ChangeFieldPropertyCommand(0, "", this, set,
                           property.name(), property.oldValue() /* ??? */, property.value()),
                           false /* !execute */);
     }
@@ -1092,7 +1092,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //   d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
 
             //this action contains subactions
-            CommandGroup *setPrimaryKeyCommand = new CommandGroup(
+            QUndoCommand *setPrimaryKeyCommand = new QUndoCommand(
                 i18n("Set primary key for field \"%1\"",
                      set["name"].value().toString()));
             if (toplevelCommand)
@@ -1118,7 +1118,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //down   addHistoryCommand( toplevelCommand, false /* !execute */ );
         } else {//! set PK to false
             //remember this action containing 2 subactions
-            CommandGroup *setPrimaryKeyCommand = new CommandGroup(
+            QUndoCommand *setPrimaryKeyCommand = new QUndoCommand(
                 i18n("Unset primary key for field \"%1\"",
                      set["name"].value().toString()));
             if (toplevelCommand)
@@ -1150,7 +1150,8 @@ void KexiTableDesignerView::slotRowInserted()
     if (d->addHistoryCommand_in_slotRowInserted_enabled) {
         const int row = d->view->currentRow();
         if (row >= 0) {
-            addHistoryCommand(new InsertEmptyRowCommand(this, row), false /* !execute */);
+            //!todo add command text
+            addHistoryCommand(new InsertEmptyRowCommand(0, "", this, row), false /* !execute */);
         }
     }
     //TODO?
@@ -1169,7 +1170,8 @@ void KexiTableDesignerView::slotAboutToDeleteRow(
         KoProperty::Set *set = row >= 0 ? d->sets->at(row) : 0;
         //set can be 0 here, what means "removing empty row"
         addHistoryCommand(
-            new RemoveFieldCommand(this, row, set),
+            //!todo add command text
+            new RemoveFieldCommand(0, "", this, row, set),
             false /* !execute */
         );
     }
