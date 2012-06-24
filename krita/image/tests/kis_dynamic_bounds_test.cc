@@ -55,8 +55,6 @@ public:
 
         QVERIFY(checkLayers(image, "initial"));
 
-        delete layer;
-        delete undoStore;
     }
 };
 
@@ -71,7 +69,6 @@ void KisDynamicBoundsTest::drawRectTest()
     BaseDynamicBoundsTest tester;
     tester.test("drawRect", device1);
     delete painter1;
-    delete device1;
 }
 
 QTEST_KDEMAIN(KisDynamicBoundsTest, GUI)
