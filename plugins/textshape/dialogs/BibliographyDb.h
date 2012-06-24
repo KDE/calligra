@@ -42,7 +42,7 @@ public:
     bool deleteDb();
     void closeDb();
     QSqlError lastError() const;
-    // creates bibliography table in SQLITE database
+    bool isValid() const;
     bool createTable();
     QSqlTableModel* tableModel();
     QSortFilterProxyModel* proxyModel();
@@ -60,6 +60,7 @@ private:
     QSqlDatabase m_db;
     QString m_dbName;
     QString m_fullPath;
+    bool m_valid;
 };
 
 #endif // BIBLIOGRAPHYDB_H
