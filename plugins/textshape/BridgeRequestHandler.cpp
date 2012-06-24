@@ -18,34 +18,44 @@
  */
 
 #include "BridgeRequestHandler.h"
+#include "BridgeServer.h"
 
 #include <QDataStream>
 #include <QByteArray>
 #include <QLocalSocket>
+#include <QDir>
 
-BridgeRequestHandler::BridgeRequestHandler(QLocalSocket *socket, QObject *parent) :
+BridgeRequestHandler::BridgeRequestHandler(QLocalSocket *inSocket, QObject *parent) :
     QObject(parent),
-    m_socket(socket),
-    isActive(false)
+    m_inSocket(inSocket),
+    m_stream(m_inSocket)
 {
-    Q_ASSERT(m_socket);
+    Q_ASSERT(m_inSocket);
 
-    connect(m_socket, SIGNAL(disconnected()), m_socket, SLOT(deleteLater()));
-    connect(m_socket, SIGNAL(disconnected()), this, SLOT(deactivateHandler()));
-    handle();
-}
-
-void BridgeRequestHandler::deactivateHandler()
-{
-    isActive = false;
+    connect(m_inSocket, SIGNAL(disconnected()), m_inSocket, SLOT(deleteLater()));
+    connect(m_inSocket, SIGNAL(readyRead()), this, SLOT(handle()));
 }
 
 void BridgeRequestHandler::handle()
 {
-    while (isActive) {
-        QString data;
-        QDataStream stream(m_socket);
-        stream >> data;
-        qDebug() << data << " recved";
+    QString data;
+
+    m_stream >> data;
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::ReadWrite);
+
+    //add return statuses to output stream
+
+    out.device()->seek(0);
+    qint64 bytesWritten = m_inSocket->write(block);        //write block to output socket
+    m_inSocket->flush();
+
+    if (bytesWritten < 0) {
+        qDebug() << "Error while writing to output socket. " << m_outSocket->errorString();
     }
+}
+
+BridgeRequestHandler::~BridgeRequestHandler()
+{
 }

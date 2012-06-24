@@ -30,17 +30,15 @@ class BridgeRequestHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit BridgeRequestHandler(QLocalSocket *socket, QObject *parent = 0);
-    void handle();
-    
+    explicit BridgeRequestHandler(QLocalSocket *inSocket, QObject *parent = 0);
+    ~BridgeRequestHandler();
 signals:
 
 public slots:
-    void deactivateHandler();
+    void handle();
 private:
-    QLocalSocket *m_socket;
-    bool isActive;
-    
+    QLocalSocket *m_inSocket;
+    QDataStream m_stream;
 };
 
 Q_DECLARE_METATYPE(BridgeRequestHandler*)
