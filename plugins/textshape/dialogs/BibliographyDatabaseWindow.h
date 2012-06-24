@@ -38,10 +38,12 @@ public:
     explicit BibliographyDatabaseWindow(QWidget *parent = 0);
     ~BibliographyDatabaseWindow();
     int loadBibliographyDbs();
+    void addTableEntry(QFileInfo fileInfo);
+    void removeTableEntry(int index);
     static QDir tableDir;
 
 public slots:
-    void tableChanged(QString);
+    void tableChanged(int);
     void insertBlankRow();
     void searchQueryChanged(QString query);
     void searchTypeChanged(QAction *action);
@@ -54,6 +56,7 @@ private:
     BibliographyDb *m_table;
     QRegExp::PatternSyntax m_syntax;
     QList<BibDbFilter*> *m_filters;
+    QFileInfoList m_tables;
     void setupActions();
 
 private slots:
