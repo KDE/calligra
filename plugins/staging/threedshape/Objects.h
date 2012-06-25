@@ -99,6 +99,7 @@ public:
 
     // getters
     QString path()       const { return m_path; }
+    QString viewBox()    const { return m_viewBox; }
     int     depth()      const { return m_depth; }
     bool    closeFront() const { return m_closeFront; }
     bool    closeBack()  const { return m_closeBack; }
@@ -106,6 +107,7 @@ public:
 
 private:
     QString  m_path;            // The polygon
+    QString  m_viewBox;         // Defines the coordinate system for svg:d
     qreal    m_depth;
     bool     m_closeFront;
     bool     m_closeBack;
@@ -131,6 +133,7 @@ public:
 
     // getters
     QString path()               const { return m_path; }
+    QString viewBox()            const { return m_viewBox; }
     int     horizontalSegments() const { return m_horizontalSegments; }
     int     verticalSegments()   const { return m_verticalSegments; }
     qreal   endAngle()           const { return m_endAngle; }
@@ -140,6 +143,7 @@ public:
 
 private:
     QString  m_path;               // The polygon
+    QString  m_viewBox;            // Defines the coordinate system for svg:d
     int      m_horizontalSegments; // Defined in ODF
     int      m_verticalSegments;   // Produced by OOo(!)
     qreal    m_endAngle;

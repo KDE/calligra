@@ -203,6 +203,7 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
 
     QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
+    m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 
     kDebug(31000) << "Extrude:" << m_path;
     return true;
@@ -224,6 +225,7 @@ void Extrude::saveOdf2(KoShapeSavingContext &context) const
     Object3D::saveOdf2(context);
 
     writer.addAttribute("svg:d", m_path);
+    writer.addAttribute("svg:viewBox", m_viewBox);
 
     writer.endElement(); // dr3d:extrude
 }
@@ -268,13 +270,13 @@ void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& cont
 
 QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
 {
-    style.addProperty("dr3d:depth", QString("%1%").arg(m_depth));
+    style.addProperty("dr3d:depth", QString("%1").arg(m_depth));
 
     style.addProperty("dr3d:close-front", m_closeFront);
     style.addProperty("dr3d:close-back",  m_closeBack);
 
     if (m_backScale != 1.0) {
-        style.addProperty("dr3d:back-scale", QString("%1%").arg(m_backScale));
+        style.addProperty("dr3d:back-scale", QString("%1").arg(m_backScale));
     }
 
     return KoShape::saveStyle(style, context);
@@ -318,6 +320,7 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
 
     QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
+    m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 
     kDebug(31000) << "Rotate:" << m_path;
     return true;
@@ -339,6 +342,7 @@ void Rotate::saveOdf2(KoShapeSavingContext &context) const
     Object3D::saveOdf2(context);
 
     writer.addAttribute("svg:d", m_path);
+    writer.addAttribute("svg:viewBox", m_viewBox);
 
     writer.endElement(); // dr3d:rotate
 }
@@ -401,21 +405,21 @@ void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& conte
 QString Rotate::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
 {
     if (m_horizontalSegments != -1) {
-        style.addProperty("dr3d:horizontal-segments", QString("%1%").arg(m_horizontalSegments));
+        style.addProperty("dr3d:horizontal-segments", QString("%1").arg(m_horizontalSegments));
     }
     if (m_verticalSegments != -1) {
-        style.addProperty("dr3d:vertical-segments", QString("%1%").arg(m_verticalSegments));
+        style.addProperty("dr3d:vertical-segments", QString("%1").arg(m_verticalSegments));
     }
 
     if (m_endAngle != 360.0) {
-        style.addProperty("dr3d:end-angle", QString("%1%").arg(m_endAngle));
+        style.addProperty("dr3d:end-angle", QString("%1").arg(m_endAngle));
     }
 
     style.addProperty("dr3d:close-front", m_closeFront);
     style.addProperty("dr3d:close-back",  m_closeBack);
 
     if (m_backScale != 1.0) {
-        style.addProperty("dr3d:back-scale", QString("%1%").arg(m_backScale));
+        style.addProperty("dr3d:back-scale", QString("%1").arg(m_backScale));
     }
 
     return KoShape::saveStyle(style, context);
