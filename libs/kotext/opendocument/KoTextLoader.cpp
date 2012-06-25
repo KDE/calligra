@@ -784,7 +784,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             kWarning(32500) << "unhandled text:" << localName;
                         }
                     }
-                } else if (tag.namespaceURI() == KoXmlNS::draw) {
+                } else if (tag.namespaceURI() == KoXmlNS::draw
+                           || tag.namespaceURI() == KoXmlNS::dr3d) {
                     loadShape(tag, cursor);
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
@@ -1718,6 +1719,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isDr3dNS = ts.namespaceURI() == KoXmlNS::dr3d;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
         //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
 
@@ -1938,7 +1940,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
         } else if ((isDrawNS) && localName == "a") { // draw:a
             loadShapeWithHyperLink(ts, cursor);
-        } else if (isDrawNS) {
+        } else if (isDrawNS || isDr3dNS) {
             loadShape(ts, cursor);
         } else {
             KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
