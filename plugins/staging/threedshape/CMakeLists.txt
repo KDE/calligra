@@ -9,6 +9,7 @@ SET (threedshape_LIB_SRCS
     #ThreedTool.cpp
     #ThreedShapeConfigWidget.cpp
 
+    Object3D.cpp
     SceneObject.cpp
     Objects.cpp
     utils.cpp

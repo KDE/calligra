@@ -49,7 +49,8 @@
 
 
 SceneObject::SceneObject(bool topLevel)
-    : KoShapeContainer()
+    : Object3D()
+      //, KoShapeContainer()
     , m_topLevel(topLevel)
     , m_threeDParams(0)
 {
@@ -58,10 +59,11 @@ SceneObject::SceneObject(bool topLevel)
 SceneObject::~SceneObject()
 {
     delete m_threeDParams;
+    qDeleteAll(m_objects);
 }
 
-void SceneObject::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                 KoShapePaintingContext &context)
+void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
+                        KoShapePaintingContext &context)
 {
     //painter.setPen(QPen(QColor(172, 196, 206)));
     painter.setPen(QPen(QColor(0, 0, 0)));
@@ -93,6 +95,13 @@ void SceneObject::paintComponent(QPainter &painter, const KoViewConverter &conve
 
 void SceneObject::saveOdf(KoShapeSavingContext &context) const
 {
+    if (m_topLevel) {
+        saveOdf2(context);
+    }
+}
+
+void SceneObject::saveOdf2(KoShapeSavingContext &context) const
+{
     KoXmlWriter &writer = context.xmlWriter();
 
     writer.startElement("dr3d:scene");
@@ -110,8 +119,8 @@ void SceneObject::saveOdf(KoShapeSavingContext &context) const
         m_threeDParams->saveOdfChildren(writer);
 
     // 2.2 Objects in the scene
-    foreach (const KoShape *shape, shapes()) {
-        shape->saveOdf(context);
+    foreach (const Object3D *object, m_objects) {
+        object->saveOdf2(context);
     }
 
     writer.endElement(); // dr3d:scene
@@ -141,10 +150,10 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     //  * Light – see section 9.4.2. (handled by Ko3DScene)
     //
     //  * Scene – see section 9.4.1.     [All of these can be 0 or more.]
-    //  * Extrude – see section 9.4.5.
-    //  * Sphere – see section 9.4.4.
-    //  * Rotate – see section 9.4.6.
     //  * Cube – see section 9.4.3.
+    //  * Sphere – see section 9.4.4.
+    //  * Extrude – see section 9.4.5.
+    //  * Rotate – see section 9.4.6.
     //
     // The lights are skipped here, they are taken care of by the call
     // to load3dScene() above.
@@ -154,31 +163,31 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
         if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
             SceneObject  *scene = new SceneObject(false);
             scene->loadOdf(elem, context);
-            addShape(scene);
+            m_objects.append(scene);
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Sphere  *sphere = new Sphere();
             sphere->loadOdf(elem, context);
-            addShape(sphere);
+            m_objects.append(sphere);
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Cube  *cube = new Cube();
             cube->loadOdf(elem, context);
-            addShape(cube);
+            m_objects.append(cube);
         }
         else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Extrude  *extrude = new Extrude();
             extrude->loadOdf(elem, context);
-            addShape(extrude);
+            m_objects.append(extrude);
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Rotate  *rotate = new Rotate();
             rotate->loadOdf(elem, context);
-            addShape(rotate);
+            m_objects.append(rotate);
         }
     }
 
-    kDebug(31000) << "Objects:" << shapeCount();
+    kDebug(31000) << "Objects:" << m_objects.size();
 
     return true;
 }

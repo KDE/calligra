@@ -25,14 +25,16 @@
 #include <QVector3D>
 
 // Calligra
-#include <KoShape.h>
 
+
+// Shape
+#include "Object3D.h"
 
 class KoXmlElement;
 class KoXmlWriter;
 
 
-class Sphere : public KoShape
+class Sphere : public Object3D
 {
 public:
     Sphere();
@@ -43,6 +45,9 @@ public:
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
+    // Really save the object.  See the explanation in Object3D.h.
+    virtual void saveOdf2(KoShapeSavingContext &context) const;
+
     // getters
     QVector3D sphereCenter() const { return m_center; }
     QVector3D sphereSize()   const { return m_size;   }
@@ -52,7 +57,7 @@ private:
     QVector3D  m_size;
 };
 
-class Cube : public KoShape
+class Cube : public Object3D
 {
 public:
     Cube();
@@ -63,6 +68,9 @@ public:
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
+    // Really save the object.  See the explanation in Object3D.h.
+    virtual void saveOdf2(KoShapeSavingContext &context) const;
+
     // getters
     QVector3D minEdge() const { return m_minEdge;   }
     QVector3D maxEdge() const { return m_maxEdge; }
@@ -72,7 +80,7 @@ private:
     QVector3D  m_maxEdge;
 };
 
-class Extrude : public KoShape
+class Extrude : public Object3D
 {
 public:
     Extrude();
@@ -85,6 +93,9 @@ public:
 
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+
+    // Really save the object.  See the explanation in Object3D.h.
+    virtual void saveOdf2(KoShapeSavingContext &context) const;
 
     // getters
     QString path()       const { return m_path; }
@@ -101,7 +112,7 @@ private:
     qreal    m_backScale;
 };
 
-class Rotate : public KoShape
+class Rotate : public Object3D
 {
 public:
     Rotate();
@@ -114,6 +125,9 @@ public:
 
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+
+    // Really save the object.  See the explanation in Object3D.h.
+    virtual void saveOdf2(KoShapeSavingContext &context) const;
 
     // getters
     QString path()               const { return m_path; }

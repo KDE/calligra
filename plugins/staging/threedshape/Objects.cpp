@@ -49,7 +49,7 @@
 
 
 Sphere::Sphere()
-    : KoShape()
+    : Object3D()
 {
 }
 
@@ -70,6 +70,7 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
 {
     // Load style information.
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "center", "(0 0 0)");
@@ -83,12 +84,18 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
 
 void Sphere::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
+}
+
+void Sphere::saveOdf2(KoShapeSavingContext &context) const
+{
     kDebug(31000) << "Saving Sphere:" << m_center << m_size;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:sphere");
 
     saveOdfAttributes(context, OdfObjectAttributes);
+    Object3D::saveOdf2(context);
 
     writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x())
                         .arg(m_center.y()).arg(m_center.z()));
@@ -104,7 +111,7 @@ void Sphere::saveOdf(KoShapeSavingContext &context) const
 
 
 Cube::Cube()
-    : KoShape()
+    : Object3D()
 {
 }
 
@@ -125,6 +132,7 @@ bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &con
 {
     // Load style information.
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(0 0 0)");
@@ -138,12 +146,18 @@ bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &con
 
 void Cube::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
+}
+
+void Cube::saveOdf2(KoShapeSavingContext &context) const
+{
     kDebug(31000) << "Saving Cube:" << m_minEdge << m_maxEdge;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:cube");
 
     saveOdfAttributes(context, OdfObjectAttributes);
+    Object3D::saveOdf2(context);
 
     writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
                         .arg(m_minEdge.y()).arg(m_minEdge.z()));
@@ -159,7 +173,7 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
 
 
 Extrude::Extrude()
-    : KoShape()
+    : Object3D()
     , m_path()
     , m_depth(1.0)
     , m_closeFront(true)
@@ -185,6 +199,7 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
 {
     // Load style information.
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
@@ -195,12 +210,18 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
 
 void Extrude::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
+}
+
+void Extrude::saveOdf2(KoShapeSavingContext &context) const
+{
     kDebug(31000) << "Saving Extrude:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:extrude");
 
     saveOdfAttributes(context, OdfObjectAttributes);
+    Object3D::saveOdf2(context);
 
     writer.addAttribute("svg:d", m_path);
 
@@ -265,7 +286,7 @@ QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) con
 
 
 Rotate::Rotate()
-    : KoShape()
+    : Object3D()
     , m_path()
     , m_horizontalSegments(-1)
     , m_verticalSegments(-1)
@@ -293,6 +314,7 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
 {
     // Load style information.
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
+    Object3D::loadOdf(objectElement, context);
 
     QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
@@ -303,12 +325,18 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
 
 void Rotate::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
+}
+
+void Rotate::saveOdf2(KoShapeSavingContext &context) const
+{
     kDebug(31000) << "Saving Rotate:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:rotate");
 
     saveOdfAttributes(context, OdfObjectAttributes);
+    Object3D::saveOdf2(context);
 
     writer.addAttribute("svg:d", m_path);
 
