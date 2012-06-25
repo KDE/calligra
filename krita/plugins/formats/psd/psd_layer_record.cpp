@@ -521,7 +521,7 @@ bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
-bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
+bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
 {
     return false;
 }
@@ -530,7 +530,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 {
     quint64 oldPosition = io->pos();
 
-    int width = right - left;
+    quint64 width = right - left;
     int channelSize = m_header.channelDepth / 8;
     int uncompressedLength = width * channelSize;
 
@@ -636,7 +636,7 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
     qDebug() << "top" << top << "bottom" << bottom << "left" << left << "right" << right;
     quint64 oldPosition = io->pos();
 
-    int width = right - left;
+    quint64 width = right - left;
     int channelSize = m_header.channelDepth / 8;
     int uncompressedLength = width * channelSize;
 
@@ -749,7 +749,7 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
 bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
 {    quint64 oldPosition = io->pos();
 
-     int width = right - left;
+     quint64 width = right - left;
      int channelSize = m_header.channelDepth / 8;
      int uncompressedLength = width * channelSize;
 
