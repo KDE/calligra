@@ -57,22 +57,23 @@ BibliographyGenerator::~BibliographyGenerator()
 
 static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
-    if ( keyIndex == sortKeys.size() ) return false;
-    else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
+    if ( keyIndex == sortKeys.size() ) {
+        return false;
+    } else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
         if (c1->value(sortKeys[keyIndex].first) < c2->value(sortKeys[keyIndex].first)) {
             return true;
-        }
-        else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) {
+        } else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) {
             return false;
         }
     } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
         if (c1->value(sortKeys[keyIndex].first ) < c2->value(sortKeys[keyIndex].first)) {
             return false;
-        }
-        else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) {
+        } else if (c1->value(sortKeys[keyIndex].first) > c2->value(sortKeys[keyIndex].first)) {
             return true;
         }
-    } else return compare_on( keyIndex + 1, c1, c2 );
+    } else {
+        return compare_on( keyIndex + 1, c1, c2 );
+    }
 
     return false;
 }
