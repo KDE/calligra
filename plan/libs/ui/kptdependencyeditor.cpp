@@ -55,6 +55,13 @@
 #include <kactioncollection.h>
 #include <kdeversion.h>
 
+
+#if QT_VERSION >= 0x040700
+#define ConnectCursor Qt::DragLinkCursor
+#else
+#define ConnectCursor Qt::UpArrowCursor
+#endif
+
 namespace KPlato
 {
 
@@ -478,7 +485,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     m_ctype( type ),
     m_editable( false )
 {
-    setCursor( Qt::UpArrowCursor );
+    setCursor( ConnectCursor);
     setAcceptsHoverEvents( true );
     setZValue( 500.0 );
 
@@ -1060,7 +1067,7 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
                 }
             }
         }
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         m_connectionitem->setPredConnector( item );
         m_connectionitem->show();
     } else {
@@ -1087,8 +1094,7 @@ bool DependencyScene::connectionIsValid( DependencyConnectorItem *pred, Dependen
 void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool entered )
 {
     //kDebug(planDependencyEditorDbg())<<entered;
-    //TODO special cursor
-    item->setCursor( Qt::UpArrowCursor );
+    item->setCursor( ConnectCursor );
     if ( ! entered ) {
         // when we leave a connector we don't have a successor
         m_connectionitem->setSuccConnector( 0 );
@@ -1096,7 +1102,7 @@ void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool ente
     }
     if ( m_connectionitem->predConnector == item ) {
         // when inside the predecessor, clicking is allowed (deselects connector)
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         return;
     }
     if ( ! m_connectionitem->isVisible() ) {
@@ -1929,17 +1935,19 @@ void DependencyView::mouseMoveEvent( QMouseEvent *mouseEvent )
         foreach ( QGraphicsItem *i, itemScene()->items( spos ) ) {
             if ( i->type() == DependencyConnectorItem::Type ) {
                 if ( i == itemScene()->fromItem() ) {
-                    c = Qt::UpArrowCursor;
+                    c = ConnectCursor;
                 } else {
                     if ( itemScene()->connectionIsValid( itemScene()->fromItem(), static_cast<DependencyConnectorItem*>( i ) ) ) {
-                        c = Qt::UpArrowCursor;
+                        c = ConnectCursor;
                     } else {
                         c = Qt::ForbiddenCursor;
                     }
                 }
             }
         }
-        viewport()->setCursor( c );
+        if ( viewport()->cursor().shape() != c ) {
+            viewport()->setCursor( c );
+        }
     }
     QGraphicsView::mouseMoveEvent( mouseEvent );
     //kDebug(planDependencyEditorDbg())<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
