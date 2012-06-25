@@ -39,6 +39,8 @@ class EditFiltersDialog : public QDialog
 public:
     explicit EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *parent);
     static const QList<ConditionPair> filterConditions;
+signals:
+    void changedFilterString(QString);
 public slots:
     void addFilter();
     void applyFilters();

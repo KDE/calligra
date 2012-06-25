@@ -158,6 +158,7 @@ EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *pare
     m_layout->addWidget(m_group);
 
     m_buttonBox->addButton("Apply filters", KDialogButtonBox::AcceptRole, this, SLOT(applyFilters()));
+    //m_buttonBox->addButton("Clear filters", KDialogButtonBox::RejectRole, this, SLOT(clearFilters()));
     m_buttonBox->addButton("Cancel", KDialogButtonBox::RejectRole, this, SLOT(reject()));
 
     m_buttonLayout->addWidget(m_addFilter);
@@ -181,5 +182,13 @@ void EditFiltersDialog::addFilter()
 
 void EditFiltersDialog::applyFilters()
 {
+    QString filterString;
+    foreach (BibDbFilter *filter, *m_filters) {
+        filterString.append(filter->filterString());
+    }
+
+    if (!filterString.isEmpty()) {
+        emit changedFilterString(filterString);
+    }
     emit accept();
 }

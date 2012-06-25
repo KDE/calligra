@@ -21,6 +21,7 @@
 #include "BibliographyDb.h"
 #include "InsertCitationDialog.h"
 #include "EditFiltersDialog.h"
+#include "BibliographyTypeEntryDelegate.h"
 
 #include <QTableView>
 #include <QHeaderView>
@@ -51,9 +52,19 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     setupActions();
 
     m_bibTableView = new QTableView(ui.centralwidget);
+
     m_bibTableView->setCornerButtonEnabled(true);
+    m_bibTableView->setSortingEnabled(true);
+
+    m_bibTableView->horizontalHeader()->setSortIndicatorShown(true);
     m_bibTableView->verticalHeader()->setDefaultSectionSize(20);
+
     m_bibTableView->setEditTriggers(QTableView::AllEditTriggers);
+    m_bibTableView->setSelectionBehavior(QTableView::SelectItems);
+    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
+    m_bibTableView->resizeColumnsToContents();
+
+    m_bibTableView->show();
 
     ui.centralwidget->layout()->addWidget(m_bibTableView);
 
@@ -112,13 +123,11 @@ void BibliographyDatabaseWindow::tableChanged(int index)
 
     m_bibTableView->setModel(m_table->tableModel());
     m_bibTableView->hideColumn(0);      // hide ID column
-    m_bibTableView->resizeColumnsToContents();
-    m_bibTableView->horizontalHeader()->setSortIndicatorShown(true);
-    m_bibTableView->setSortingEnabled(true);
-    m_bibTableView->show();
+
 
     this->setWindowTitle(QString("Bibliography Database - ").append(m_tables.at(index).fileName()));
     ui.search->clear();                 //clears search query before loading new table
+
     clearFilters();                     //clear filters
     //We add extra row to insert new citation record
     //m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
@@ -193,23 +202,21 @@ void BibliographyDatabaseWindow::showFilters()
         m_filters->append(new BibDbFilter(false));
     }
     EditFiltersDialog *dialog = new EditFiltersDialog(m_filters, this);
-    if (dialog->exec() == QDialog::Accepted) {
-        QString filterString;
-        foreach (BibDbFilter *filter, *m_filters) {
-            filterString.append(filter->filterString());
-        }
-
-        if (!filterString.isEmpty()) {
-            m_table->setFilter(filterString);
-        }
-    }
+    connect(dialog, SIGNAL(changedFilterString(QString)), this, SLOT(applyFilters(QString)));
 }
 
 void BibliographyDatabaseWindow::clearFilters()
 {
     m_table->setFilter("");
-    qDeleteAll(m_filters->begin(), m_filters->end());
-    m_filters->clear();
+    if (!m_filters->isEmpty()) {
+        qDeleteAll(m_filters->begin(), m_filters->end());
+        m_filters->clear();
+    }
+}
+
+void BibliographyDatabaseWindow::applyFilters(QString filter)
+{
+    m_table->setFilter(filter);
 }
 
 void BibliographyDatabaseWindow::newRecord()
