@@ -67,6 +67,7 @@ private:
         m_image = createImage(undoStore);
         m_image->setCanvasInfinite();
         m_image->initialRefreshGraph();
+        findNode(m_image->root(),"tmask1")->setVisible(false);
 
         QVERIFY(checkLayers(m_image, "initial"));
     }
