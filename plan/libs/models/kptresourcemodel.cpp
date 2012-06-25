@@ -88,7 +88,11 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
+            return res->name();
         case Qt::ToolTipRole:
+            if ( res->autoAllocate() ) {
+                return i18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
+            }
             return res->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -98,6 +102,8 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
                 return KIcon( "view-time-schedule-baselined" );
              }
              break;
+        case Qt::CheckStateRole:
+            return res->autoAllocate() ? Qt::Checked : Qt::Unchecked;
         default:
             break;
     }
@@ -662,7 +668,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
         flags |= Qt::ItemIsDragEnabled;
         switch ( index.column() ) {
             case ResourceModel::ResourceName:
-                flags |= Qt::ItemIsEditable;
+                flags |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
                 break;
             case ResourceModel::ResourceType:
                 if ( ! r->isBaselined() ) {
@@ -795,7 +801,6 @@ QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->name();
-            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -811,6 +816,9 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
                 return false;
             }
             emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource name" ) ) );
+            return true;
+        case Qt::CheckStateRole:
+            emit executeCommand( new ModifyResourceAutoAllocateCmd( res, value.toBool(), i18nc( "(qtundo-format)", "Modify resource auto allocate" ) ) );
             return true;
     }
     return false;
@@ -1076,7 +1084,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 ||  ! ( role == Qt::EditRole || role == Qt::CheckStateRole ) ) {
         return false;
     }
     QObject *obj = object( index );
