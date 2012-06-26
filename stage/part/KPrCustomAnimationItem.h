@@ -9,9 +9,12 @@
 /*Data Model for Animations Time Line View
 It requires an activePage to be set*/
 
+#include <QObject>
+
 class KPrPage;
 
-class STAGE_EXPORT KPrCustomAnimationItem
+
+class STAGE_EXPORT KPrCustomAnimationItem : QObject
 {
 public:
     explicit KPrCustomAnimationItem(KPrShapeAnimation *animation = 0, KPrCustomAnimationItem *parent=0);

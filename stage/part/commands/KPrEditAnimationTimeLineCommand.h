@@ -17,33 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-#ifndef KPRANIMATIONREMOVECOMMAND_H
-#define KPRANIMATIONREMOVECOMMAND_H
+#ifndef KPREDITANIMATIONTIMELINECOMMAND_H
+#define KPREDITANIMATIONTIMELINECOMMAND_H
 
 #include <kundo2command.h>
 
 #include "stage_export.h"
 
-class KPrDocument;
 class KPrShapeAnimation;
 
-/// Command to remove an animation
-class STAGE_EXPORT KPrAnimationRemoveCommand : public KUndo2Command
+/// Command to modify an animation start time and duration
+class KPrEditAnimationTimeLineCommand : public KUndo2Command
 {
 public:
-    KPrAnimationRemoveCommand(KPrDocument * doc, KPrShapeAnimation * animation);
-    virtual ~KPrAnimationRemoveCommand();
+    KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation, const int begin, const int duration, KUndo2Command *parent = 0);
+
+    virtual ~KPrEditAnimationTimeLineCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
-    KPrDocument * m_doc;
-    KPrShapeAnimation * m_animation;
-    bool m_deleteAnimation;
+    KPrShapeAnimation *m_animation;
+    int m_newBegin;
+    int m_newDuration;
+    int m_oldBegin;
+    int m_oldDuration;
+
 };
 
-#endif // KPRANIMATIONREMOVECOMMAND_H
+#endif // KPREDITANIMATIONTIMELINECOMMAND_H

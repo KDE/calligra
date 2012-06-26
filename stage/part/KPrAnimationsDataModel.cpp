@@ -25,6 +25,7 @@
 #include <KPrView.h>
 #include <KPrDocument.h>
 #include <KPrCustomAnimationItem.h>
+#include <commands/KPrEditAnimationTimeLineCommand.h>
 
 //KDE HEADERS
 #include <KIconLoader>
@@ -42,6 +43,7 @@
 #include <QAbstractAnimation>
 
 const int REAL_COLUMN_COUNT = 3;
+const int INVALID = -1;
 
 enum ColumnNames {
     ShapeThumbnail = 0,
@@ -55,6 +57,10 @@ enum ColumnNames {
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
     : QAbstractTableModel(parent)
     , m_rootItem(0)
+    , m_oldBegin(INVALID)
+    , m_oldDuration(INVALID)
+    , m_firstEdition(true)
+    , m_currentEditedItem(0)
 {
 }
 
@@ -226,11 +232,11 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
             case AnimationIcon:
                 return false;
             case StartTime:
-                item->setStartTime(value.toInt());
+                setTimeRange(item, value.toInt(), item->duration()*1000);
                 emit dataChanged(index, index);
                 return true;
             case Duration:
-                item->setDuration(value.toInt());
+                setTimeRange(item, item->startTime()*1000, value.toInt());
                 emit dataChanged(index, index);
                 return true;
             case AnimationClass:
@@ -293,6 +299,25 @@ void KPrAnimationsDataModel::update()
     }
 }
 
+void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration)
+{
+    if (m_firstEdition) {
+        m_oldBegin = begin;
+        m_oldDuration = duration;
+        m_currentEditedItem = item;
+        m_firstEdition = false;
+    }
+    if (item == m_currentEditedItem) {
+        item->setStartTime(begin);
+        item->setDuration(duration);
+    }
+    else {
+        endTimeLineEdition();
+    }
+
+
+}
+
 void KPrAnimationsDataModel::removeModel()
 {
     m_rootItem = 0;
@@ -316,5 +341,27 @@ qreal KPrAnimationsDataModel::rootItemEnd() const
         return m_rootItem->duration() + m_rootItem->startTime();
     }
     return 0.0;
+}
+
+void KPrAnimationsDataModel::endTimeLineEdition()
+{
+    if (!m_firstEdition && m_currentEditedItem && (!m_currentEditedItem->isDefaulAnimation()) &&
+            (m_oldBegin != INVALID) && (m_oldDuration != INVALID)) {
+        int begin = m_currentEditedItem->startTime()*1000;
+        int duration = m_currentEditedItem->duration()*1000;
+        if ((begin != m_oldBegin) || (duration != m_oldDuration)) {
+            m_currentEditedItem->setStartTime(m_oldBegin);
+            m_currentEditedItem->setDuration(m_oldDuration);
+
+            KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+            KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(m_currentEditedItem->animation(),
+                                                                                           begin, duration);
+            doc->addCommand(command);
+        }
+        m_oldBegin = INVALID;
+        m_oldDuration = INVALID;
+    }
+    m_firstEdition = true;
+    m_currentEditedItem = 0;
 }
 

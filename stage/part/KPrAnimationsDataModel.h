@@ -70,9 +70,14 @@ public:
     /// Return the parent item
     qreal rootItemEnd() const;
 
+    /// Save a edit command
+    void endTimeLineEdition();
+
 public slots:
     /// Triggers an update of the complete model
     void update();
+
+    void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
 
     /// set model to 0
     void removeModel();
@@ -80,6 +85,10 @@ public slots:
 private:
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
+    int m_oldBegin;
+    int m_oldDuration;
+    bool m_firstEdition;
+    KPrCustomAnimationItem *m_currentEditedItem;
 };
 
 #endif // KPRANIMATIONSDATAMODEL_H

@@ -167,12 +167,13 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
         return;
     }
     //Add timeMS duration to all animations, proportional to the max duration
-    int maxDuration = timeRange().second;
+    int maxDuration = timeRange().second - timeRange().first;
     qreal timeRatio = timeMS / (qreal)maxDuration;
     for (int i = 0;i < this->animationCount(); i++) {
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
-            a->setDuration((a->duration())*timeRatio);
+            a->setDuration((a->duration()-a->begin())*timeRatio);
+            a->setBegin(a->begin()*timeRatio);
         }
     }
 }

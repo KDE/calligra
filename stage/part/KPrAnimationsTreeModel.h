@@ -72,6 +72,7 @@ public:
      QModelIndex moveUp(const QModelIndex &index);
      QModelIndex moveDown(const QModelIndex &index);
      QModelIndex cut(const QModelIndex &index);
+     QModelIndex removeItemByIndex(const QModelIndex &index);
      QModelIndex paste(const QModelIndex &index);
      QModelIndex promote(const QModelIndex &index);
      QModelIndex demote(const QModelIndex &index);

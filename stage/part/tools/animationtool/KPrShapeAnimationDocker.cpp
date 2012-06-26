@@ -28,10 +28,8 @@
 #include "animations/KPrShapeAnimation.h"
 #include "KPrCustomAnimationItem.h"
 #include "KPrEditAnimationsWidget.h"
-
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
-#include "commands/KPrAnimationRemoveCommand.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -330,10 +328,5 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
 void KPrShapeAnimationDocker::slotRemoveAnimations()
 {
     QModelIndex index = m_animationsView->currentIndex();
-    KPrCustomAnimationItem *item = itemByIndex(index);
-    if (item && (!item->isDefaulAnimation())) {
-        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
-        KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(doc, item->animation());
-        doc->addCommand(command);
-    }
+    m_animationsModel->removeItemByIndex(index);
 }

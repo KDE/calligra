@@ -28,6 +28,7 @@
 #include <KPrCustomAnimationItem.h>
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
+#include "commands/KPrAnimationRemoveCommand.h"
 
 //Calligra Headers
 #include <KoShape.h>
@@ -296,6 +297,22 @@ QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
         KPrCustomAnimationItem *grandParent = parent->parent();
         Q_ASSERT(grandParent);
         return createIndex(grandParent->rowOfChild(parent), 0, parent);
+    }
+    return QModelIndex();
+}
+
+QModelIndex KPrAnimationsTreeModel::removeItemByIndex(const QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return index;
+    }
+    KPrCustomAnimationItem *item = itemForIndex(index);
+    Q_ASSERT(item);
+
+    if (item && (!item->isDefaulAnimation())) {
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(doc, item->animation());
+        doc->addCommand(command);
     }
     return QModelIndex();
 }
