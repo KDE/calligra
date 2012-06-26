@@ -24,6 +24,7 @@ set( kformulalib_PART_SRCS
    elements/FractionElement.cpp
    elements/SpaceElement.cpp
    elements/GlyphElement.cpp
+   elements/CollectionElement.cpp
    elements/IdentifierElement.cpp
    elements/OperatorElement.cpp
    elements/MultiscriptElement.cpp

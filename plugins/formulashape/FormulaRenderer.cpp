@@ -101,3 +101,5 @@ qreal FormulaRenderer::elementScaleFactor( BasicElement* element ) const
     AttributeManager am;
     return -1;  // FIXME!
 }
+
+

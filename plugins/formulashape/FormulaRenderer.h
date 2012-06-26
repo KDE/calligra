@@ -77,6 +77,7 @@ public:
     /// Just for updating one elements layout after a change
     void updateElementLayout( BasicElement* element );
 
+
 private:
     qreal elementScaleFactor( BasicElement* element ) const;
 

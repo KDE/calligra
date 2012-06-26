@@ -27,9 +27,13 @@
 #include <QString>
 #include <QPair>
 #include "FormulaData.h"
+#include "CollectionElement.h"
 #include "FormulaCursor.h"
+#include "FormulaRenderer.h"
+#include "TokenElement.h"
 
 class BasicElement;
+class GroupElement;
 class QString;
 class QPainter;
 class QPointF;
@@ -78,13 +82,13 @@ public:
 
     /// Manipulate the rows/columns of a table
     FormulaCommand* changeTable(bool insert, bool rows);
-    
+
     /**
      * Remove an element from the formula
      * @param elementBeforePosition Indicates removal of element before or after cursor
      */
     FormulaCommand* remove( bool elementBeforePosition );
-    
+
     /// @return The FormulaData which is navigated by this cursor
     FormulaData* formulaData() const;
 
@@ -97,22 +101,31 @@ public:
     /// set the cursor that holds the current position and selection
     void setCursor(FormulaCursor& cursor);
 
-    /// @return the cursor that contains the current selection and position 
+    /// @return the cursor that contains the current selection and position
     FormulaCursor& cursor();
+
+    bool insideCollectionElement();
 
 private:
     /// @return the mathml token element, that should be used for this character
     QString tokenType(const QChar& character) const;
 
 private:
-    /// the cursor that contains the current selection and position 
+    /// the cursor that contains the current selection and position
     FormulaCursor m_cursor;
 
-    /// The formulaData 
+    /// The formulaData
     FormulaData* m_data;
+
+
+    CollectionElement* m_collector;
+
 
     /// Buffer for the user input
     QString m_inputBuffer;
+
+    bool m_isspace;
+
 
 };
 
