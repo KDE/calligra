@@ -1092,13 +1092,12 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //   d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
 
             //this action contains subactions
-            QUndoCommand *setPrimaryKeyCommand = new QUndoCommand(
+            QUndoCommand * setPrimaryKeyCommand = new QUndoCommand(
                 i18n("Set primary key for field \"%1\"",
-                     set["name"].value().toString()));
-            if (toplevelCommand)
-                toplevelCommand->addCommand(setPrimaryKeyCommand);
-            else
-                toplevelCommand = setPrimaryKeyCommand;
+                     set["name"].value().toString()), toplevelCommand);
+            if (!toplevelCommand) {
+                 toplevelCommand = setPrimaryKeyCommand;
+            }
 
             d->setPropertyValueIfNeeded(set, "primaryKey", QVariant(true), setPrimaryKeyCommand,
                                         true /*forceAddCommand*/);
@@ -1120,12 +1119,10 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
             //remember this action containing 2 subactions
             QUndoCommand *setPrimaryKeyCommand = new QUndoCommand(
                 i18n("Unset primary key for field \"%1\"",
-                     set["name"].value().toString()));
-            if (toplevelCommand)
-                toplevelCommand->addCommand(setPrimaryKeyCommand);
-            else
+                     set["name"].value().toString()), toplevelCommand);
+            if (!toplevelCommand) {
                 toplevelCommand = setPrimaryKeyCommand;
-
+            }
             d->setPropertyValueIfNeeded(set, "primaryKey", QVariant(false), setPrimaryKeyCommand,
                                         true /*forceAddCommand*/);
             d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(false), setPrimaryKeyCommand);
@@ -1354,17 +1351,14 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 
 //! @internal
 //! A recursive function for copying alter table actions from undo/redo commands.
-static void copyAlterTableActions(K3Command* command,
+static void copyAlterTableActions(const QUndoCommand* command,
                                   KexiDB::AlterTableHandler::ActionList &actions)
 {
-    CommandGroup* cmdGroup = dynamic_cast<CommandGroup*>(command);
-    if (cmdGroup) {//command group: flatten it
-        foreach(K3Command* c, cmdGroup->commands()) {
-            copyAlterTableActions(c, actions);
-        }
-        return;
+    for (int i = 0; i < command->childCount(); ++i) {
+            copyAlterTableActions(command->child(i), actions);
     }
-    Command* cmd = dynamic_cast<Command*>(command);
+    
+    const Command* cmd = dynamic_cast<const Command*>(command);
     if (!cmd) {
         kWarning() << "cmd is not of type 'Command'!";
         return;
@@ -1380,10 +1374,15 @@ tristate KexiTableDesignerView::buildAlterTableActions(
 {
     actions.clear();
     kDebug()
-        << d->history->commands().count()
+        << d->history->count()
         << " top-level command(s) to process...";
+#if 0
     foreach(K3Command* c, d->history->commands()) {
         copyAlterTableActions(c, actions);
+    }
+#endif
+    for (int i = 0; i < d->history->count(); ++i) {
+      copyAlterTableActions(d->history->command(i), actions);
     }
     return true;
 }
@@ -1610,13 +1609,14 @@ void KexiTableDesignerView::debugCommand(K3Command* command, int nestingLevel)
 }
 #endif
 
-void KexiTableDesignerView::addHistoryCommand(K3Command* command, bool execute)
+void KexiTableDesignerView::addHistoryCommand(QUndoCommand* command, bool execute)
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
     debugCommand(command, 0);
 # endif
-    d->history->addCommand(command, execute);
+//!qundo    d->history->addCommand(command, execute);
+    d->history->push(command);
     updateUndoRedoActions();
 #endif
 }
@@ -1651,7 +1651,7 @@ void KexiTableDesignerView::slotRedo()
 #endif
 }
 
-void KexiTableDesignerView::slotCommandExecuted(K3Command *command)
+void KexiTableDesignerView::slotCommandExecuted(QUndoCommand *command)
 {
 #ifdef KEXI_DEBUG_GUI
     debugCommand(command, 1);

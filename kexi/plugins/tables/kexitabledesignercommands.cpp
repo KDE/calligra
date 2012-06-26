@@ -36,7 +36,7 @@ using namespace KexiTableDesignerCommands;
 
 
 Command::Command(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view)
-        : QUndoCommand(parent, text)
+        : QUndoCommand(text, parent)
         , m_view(view)
 {
 }
@@ -71,7 +71,7 @@ ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
     delete m_listData;
 }
 
-QString ChangeFieldPropertyCommand::name() const
+QString ChangeFieldPropertyCommand::text() const
 {
     return i18n(
                "Change \"%1\" property for table field from \"%2\" to \"%3\"",
@@ -82,7 +82,7 @@ QString ChangeFieldPropertyCommand::name() const
 
 QString ChangeFieldPropertyCommand::debugString()
 {
-    QString s(name());
+    QString s(text());
     if (m_oldListData || m_listData)
         s += QString("\nAnd list data from [%1]\n  to [%2]")
              .arg(m_oldListData ?
@@ -96,7 +96,7 @@ QString ChangeFieldPropertyCommand::debugString()
     return s + QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
-void ChangeFieldPropertyCommand::execute()
+void ChangeFieldPropertyCommand::redo()
 {
     m_view->changeFieldProperty(
         m_alterTableAction.uid(),
@@ -104,7 +104,7 @@ void ChangeFieldPropertyCommand::execute()
         m_alterTableAction.newValue(), m_listData);
 }
 
-void ChangeFieldPropertyCommand::unexecute()
+void ChangeFieldPropertyCommand::undo()
 {
     m_view->changeFieldProperty(
         m_alterTableAction.uid(),
@@ -112,7 +112,7 @@ void ChangeFieldPropertyCommand::unexecute()
         m_oldValue, m_oldListData);
 }
 
-KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction()
+KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction() const
 {
     if (m_alterTableAction.propertyName() == "subType") {//skip these properties
         return 0;
@@ -137,7 +137,7 @@ RemoveFieldCommand::~RemoveFieldCommand()
     delete m_set;
 }
 
-QString RemoveFieldCommand::name() const
+QString RemoveFieldCommand::text() const
 {
     if (m_set)
         return i18n("Remove table field \"%1\"", m_alterTableAction.fieldName());
@@ -145,13 +145,13 @@ QString RemoveFieldCommand::name() const
     return QString("Remove empty row at position %1").arg(m_fieldIndex);
 }
 
-void RemoveFieldCommand::execute()
+void RemoveFieldCommand::redo()
 {
 // m_view->deleteField( m_fieldIndex );
     m_view->deleteRow(m_fieldIndex);
 }
 
-void RemoveFieldCommand::unexecute()
+void RemoveFieldCommand::undo()
 {
     m_view->insertEmptyRow(m_fieldIndex);
     if (m_set)
@@ -161,14 +161,14 @@ void RemoveFieldCommand::unexecute()
 QString RemoveFieldCommand::debugString()
 {
     if (!m_set)
-        return name();
+        return text();
 
-    return name() + "\nAT ROW " + QString::number(m_fieldIndex)
+    return text() + "\nAT ROW " + QString::number(m_fieldIndex)
            + ", FIELD: " + (*m_set)["caption"].value().toString()
            + QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
-KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction()
+KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction() const
 {
     return new KexiDB::AlterTableHandler::RemoveFieldAction(m_alterTableAction);
 }
@@ -194,22 +194,22 @@ InsertFieldCommand::~InsertFieldCommand()
     delete m_alterTableAction;
 }
 
-QString InsertFieldCommand::name() const
+QString InsertFieldCommand::text() const
 {
     return i18n("Insert table field \"%1\"", m_set["caption"].value().toString());
 }
 
-void InsertFieldCommand::execute()
+void InsertFieldCommand::redo()
 {
     m_view->insertField(m_alterTableAction->index(), /*m_alterTableAction.field(),*/ m_set);
 }
 
-void InsertFieldCommand::unexecute()
+void InsertFieldCommand::undo()
 {
     m_view->clearRow(m_alterTableAction->index());  //m_alterTableAction.index() );
 }
 
-KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
+KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
 {
     return new KexiDB::AlterTableHandler::InsertFieldAction(*m_alterTableAction);
 }
@@ -230,7 +230,7 @@ ChangePropertyVisibilityCommand::~ChangePropertyVisibilityCommand()
 {
 }
 
-QString ChangePropertyVisibilityCommand::name() const
+QString ChangePropertyVisibilityCommand::text() const
 {
     return QString("[internal] Change \"%1\" visibility from \"%2\" to \"%3\"")
            .arg(m_alterTableAction.propertyName())
@@ -238,7 +238,7 @@ QString ChangePropertyVisibilityCommand::name() const
            .arg(m_alterTableAction.newValue().toBool() ? "true" : "false");
 }
 
-void ChangePropertyVisibilityCommand::execute()
+void ChangePropertyVisibilityCommand::redo()
 {
     m_view->changePropertyVisibility(
         m_alterTableAction.uid(),
@@ -246,7 +246,7 @@ void ChangePropertyVisibilityCommand::execute()
         m_alterTableAction.newValue().toBool());
 }
 
-void ChangePropertyVisibilityCommand::unexecute()
+void ChangePropertyVisibilityCommand::undo()
 {
     m_view->changePropertyVisibility(
         m_alterTableAction.uid(),
@@ -267,17 +267,17 @@ InsertEmptyRowCommand::~InsertEmptyRowCommand()
 {
 }
 
-QString InsertEmptyRowCommand::name() const
+QString InsertEmptyRowCommand::text() const
 {
     return QString("Insert empty row at position %1").arg(m_row);
 }
 
-void InsertEmptyRowCommand::execute()
+void InsertEmptyRowCommand::redo()
 {
     m_view->insertEmptyRow(m_row);
 }
 
-void InsertEmptyRowCommand::unexecute()
+void InsertEmptyRowCommand::undo()
 {
     // let's assume the row is empty...
     m_view->deleteRow(m_row);

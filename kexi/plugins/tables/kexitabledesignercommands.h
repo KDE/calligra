@@ -43,7 +43,7 @@ public:
 
     //! Used to collect actions data for AlterTableHandler
     //! Can return 0 if the action should not be passed to AlterTableHandler
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() {
+    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const {
         return 0;
     }
 
@@ -77,7 +77,7 @@ public:
     virtual QString text() const;
     virtual void redo();
     virtual void undo();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction();
+    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
     virtual QString debugString();
 
 protected:
@@ -98,10 +98,10 @@ public:
 
     virtual ~RemoveFieldCommand();
 
-    virtual QString name() const;
-    virtual void execute();
-    virtual void unexecute();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction();
+    virtual QString text() const;
+    virtual void redo();
+    virtual void undo();
+    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString();
 
@@ -122,7 +122,7 @@ public:
     virtual QString text() const;
     virtual void redo();
     virtual void undo();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction();
+    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
 
     virtual QString debugString() {
         return text() + "\nAT ROW " + QString::number(m_alterTableAction->index()) //m_alterTableAction.index())
