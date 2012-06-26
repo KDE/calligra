@@ -745,6 +745,35 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
             }
         }
     }
+    
+    // Text Highlighting for spelling and grammar check
+    QList<QTextLayout::FormatRange> spellRanges = layout->additionalFormats();
+    foreach (const QTextLayout::FormatRange &range, spellRanges) {
+        QString txt = block.text().mid(range.start, range.length);
+        int firstLine = layout->lineForTextPosition(range.start).lineNumber();
+        int lastLine = layout->lineForTextPosition(range.start + range.length).lineNumber();
+        for (int i = firstLine ; i <= lastLine ; ++i) {
+            QTextLine line = layout->lineAt(i);
+
+            int p1 = range.start;
+            if (i > firstLine) {
+                p1 = line.textStart();
+            }
+
+            int p2 = range.start + range.length;
+            int lineEnd = line.textStart() + line.textLength();
+            while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
+                --lineEnd;
+            }
+            if (lineEnd < p2) { //line caps
+                            p2 = lineEnd;
+            }
+
+            qreal x1 = line.cursorToX(p1);
+            qreal x2 = line.cursorToX(p2);
+            drawHighlights(painter, range.format, txt, line, x1, x2, range.start, qMax(range.start - line.textStart(), 0));
+        }
+    }
 
     if (showFormattingCharacters) {
         QTextLine line = layout->lineForTextPosition(block.length()-1);
@@ -895,6 +924,63 @@ void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextCharFormat &
                     fontUnderLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
         } else {
             drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
+        }
+    }
+}
+
+void KoTextLayoutArea::drawHighlights(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
+{
+    KoCharacterStyle::Category highlightCategory = (KoCharacterStyle::Category)
+        currentCharFormat.intProperty(KoCharacterStyle::HighlightCategory);
+    if (highlightCategory != KoCharacterStyle::NoHighlight) {
+        KoCharacterStyle::LineStyle highlightStyle = KoCharacterStyle::WaveLine;
+        KoCharacterStyle::LineType highlightType = KoCharacterStyle::SingleLine;
+        QTextCharFormat::VerticalAlignment valign = currentCharFormat.verticalAlignment();
+
+        QFont font(currentCharFormat.font());
+        if (valign == QTextCharFormat::AlignSubScript
+            || valign == QTextCharFormat::AlignSuperScript)
+            font.setPointSize(font.pointSize() * 2 / 3);
+        QFontMetricsF metrics(font, d->documentLayout->paintDevice());
+
+        qreal y = line.position().y();
+        if (valign == QTextCharFormat::AlignSubScript)
+            y += line.height() - metrics.descent() + metrics.underlinePos();
+        else if (valign == QTextCharFormat::AlignSuperScript)
+            y += metrics.ascent() + metrics.underlinePos();
+        else
+            y += line.ascent() + metrics.underlinePos();
+
+        QColor color;
+        KoCharacterStyle::Category category = (KoCharacterStyle::Category)
+            currentCharFormat.intProperty(KoCharacterStyle::HighlightCategory);
+        if (category == KoCharacterStyle::Spelling)
+        {
+            color = Qt::red;
+        }
+        else if (category == KoCharacterStyle::Grammar)
+        {
+            color = Qt::green;
+        }
+
+        KoCharacterStyle::LineMode highlightMode = KoCharacterStyle::SkipWhiteSpaceLineMode;
+        qreal width = computeWidth( // line thickness
+        (KoCharacterStyle::LineWeight) currentCharFormat.intProperty(KoCharacterStyle::HighlightWeight),
+                                    currentCharFormat.doubleProperty(KoCharacterStyle::HighlightWidth),
+                                    font);
+        y += width;
+        if (category == KoCharacterStyle::Grammar)
+            y += width * 2;
+
+        if (valign == QTextCharFormat::AlignSubScript
+            || valign == QTextCharFormat::AlignSuperScript) // adjust size.
+        width = width * 2 / 3;
+
+        if (highlightMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
+            drawDecorationWords(painter, line, text, color, highlightType,
+                                highlightStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
+        } else {
+            drawDecorationLine(painter, color, highlightType, highlightStyle, width, x1, x2, y);
         }
     }
 }

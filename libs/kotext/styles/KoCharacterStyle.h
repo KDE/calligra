@@ -80,6 +80,13 @@ public:
         UnderlineWidth,
         UnderlineWeight,
         UnderlineMode,
+	HighlightStyle,
+	HighlightType,
+	HighlightColor,
+	HighlightWidth,
+	HighlightWeight,
+	HighlightMode,
+	HighlightCategory,
         Language,
         Country,
         FontCharset,
@@ -170,6 +177,12 @@ public:
         NoLineMode,
         ContinuousLineMode,
         SkipWhiteSpaceLineMode
+    };
+    
+    enum Category {
+	NoHighlight,
+	Spelling,
+	Grammar
     };
 
     enum RotationScale {
