@@ -81,12 +81,14 @@ private:
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
-    
+
+    KUrl getExportUrl(const QString &mimetype, const QString &caption);
+
 private slots:
     void slotPrintReport();
-    void slotRenderTables();
-    void slotExportHTML();
-    void slotRenderODT();
+    void slotExportAsSpreadsheet();
+    void slotExportAsWebPage();
+    void slotExportAsTextDocument();
 };
 
 #endif

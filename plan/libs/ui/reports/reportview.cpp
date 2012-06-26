@@ -29,7 +29,7 @@
 #include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
 #include "kptdebug.h"
-
+#include "KoPageLayout.h"
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
@@ -92,7 +92,7 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
 
     //FIXME: This should be done by KoReportPrintRender but setupPrinter() is private
     QPrinter *pPrinter = &printer();
-    pPrinter->setCreator("KPlato");
+    pPrinter->setCreator("Plan");
     pPrinter->setDocName(reportDocument->title());
     pPrinter->setFullPage(true);
     pPrinter->setOrientation((reportDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape));
@@ -103,6 +103,13 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     else
         pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(reportDocument->pageOptions().getPageSize())));
 
+    //FIXME: There is something wrong with koreport margins
+    qreal left = reportDocument->pageOptions().getMarginLeft();
+    qreal top = reportDocument->pageOptions().getMarginTop();
+    qreal right = reportDocument->pageOptions().getMarginRight();
+    qreal bottom = reportDocument->pageOptions().getMarginBottom();
+
+    pPrinter->setPageMargins( left, top, right, bottom, QPrinter::Point );
 }
 
 ReportPrintingDialog::~ReportPrintingDialog()
@@ -112,10 +119,12 @@ ReportPrintingDialog::~ReportPrintingDialog()
 
 void ReportPrintingDialog::startPrinting( RemovePolicy removePolicy )
 {
-     //HACK fix when KoRreportPrinter can print single pages
-    setPageRange( QList<int>() << printer().fromPage() );
-
-    KoPrintingDialog::startPrinting( removePolicy );
+    kDebug(planDbg());
+    QPainter p( &printer() );
+    printPage( 1,  p );
+    if ( removePolicy == DeleteWhenDone ) {
+        deleteLater();
+    }
 }
 
 int ReportPrintingDialog::documentLastPage() const
@@ -323,6 +332,29 @@ void ReportView::slotExport()
     dia->show();
     dia->raise();
     dia->activateWindow();
+}
+
+KoPageLayout ReportView::pageLayout() const
+{
+    KoPageLayout p = ViewBase::pageLayout();
+    ReportPageOptions opt = m_reportDocument->pageOptions();
+    p.orientation = opt.isPortrait() ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+
+    if (opt.getPageSize().isEmpty()) {
+        p.format = KoPageFormat::CustomSize;
+        p.width = opt.getCustomWidth();
+        p.height = opt.getCustomHeight();
+    } else {
+        p.format = KoPageFormat::formatFromString(opt.getPageSize());
+    }
+    p.topMargin = opt.getMarginTop();
+    p.bottomMargin = opt.getMarginBottom();
+    p.leftMargin = opt.getMarginLeft();
+    p.rightMargin = opt.getMarginRight();
+
+    p.pageEdge = 0.0;
+    p.bindingSide = 0.0;
+    return p;
 }
 
 void ReportView::slotExportFinished( int result )

@@ -33,6 +33,7 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
+#include "KoUnit.h"
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -45,22 +46,84 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
-
+#include <QPainter>
 
 namespace KPlato
 {
 
+bool PrintingOptions::loadXml( KoXmlElement &element )
+{
+    KoXmlElement e;
+    forEachElement( e, element ) {
+        if ( e.tagName() == "header" ) {
+            headerOptions.group = e.attribute( "group", "0" ).toInt();
+            headerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            headerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            headerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            headerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        } else if ( e.tagName() == "footer" ) {
+            footerOptions.group = e.attribute( "group", "0" ).toInt();
+            footerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            footerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            footerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            footerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        }
+    }
+    return true;
+}
+
+void PrintingOptions::saveXml( QDomElement &element ) const
+{
+    QDomElement me = element.ownerDocument().createElement( "printing-options" );
+    element.appendChild( me );
+
+    QDomElement h = me.ownerDocument().createElement( "header" );
+    me.appendChild( h );
+    h.setAttribute( "group", headerOptions.group );
+    h.setAttribute( "project", headerOptions.project );
+    h.setAttribute( "date", headerOptions.date );
+    h.setAttribute( "manager", headerOptions.manager );
+    h.setAttribute( "page", headerOptions.page );
+
+    QDomElement f = me.ownerDocument().createElement( "footer" );
+    me.appendChild( f );
+    f.setAttribute( "group", footerOptions.group );
+    f.setAttribute( "project", footerOptions.project );
+    f.setAttribute( "date", footerOptions.date );
+    f.setAttribute( "manager", footerOptions.manager );
+    f.setAttribute( "page", footerOptions.page );
+}
+
+//----------------------
 PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
     setWindowTitle( i18n("Header and Footer" ));
     setOptions( opt );
+
+    connect(ui_header, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_headerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+
+    connect(ui_footer, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_footerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
 }
 
 PrintingHeaderFooter::~PrintingHeaderFooter()
 {
     //kDebug(planDbg());
+}
+
+void PrintingHeaderFooter::slotChanged()
+{
+    kDebug(planDbg());
+    emit changed( options() );
 }
 
 void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
@@ -103,7 +166,18 @@ PrintingDialog::PrintingDialog( ViewBase *view )
     m_view( view ),
     m_widget( 0 )
 {
-    setPrinterPageLayout();
+    setPrinterPageLayout( view->pageLayout() );
+    QImage px( 100, 600, QImage::Format_Mono );
+    int dpm = printer().resolution() * 40;
+    px.setDotsPerMeterX( dpm );
+    px.setDotsPerMeterY( dpm );
+    QPainter p( &px );
+    m_textheight = p.boundingRect( QRectF(), Qt::AlignTop, "Aj" ).height();
+    kDebug(planDbg())<<"textheight:"<<m_textheight;
+}
+
+PrintingDialog::~PrintingDialog()
+{
 }
 
 QAbstractPrintDialog::PrintDialogOptions PrintingDialog::printDialogOptions() const
@@ -121,61 +195,47 @@ PrintingOptions PrintingDialog::printingOptions() const
 
 void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
 {
-    return m_view->setPrintingOptions( opt );
+    kDebug(planDbg());
+    m_view->setPrintingOptions( opt );
+    emit changed( opt );
+    emit changed();
 }
 
-void PrintingDialog::setPrinterPageLayout()
+void PrintingDialog::setPrinterPageLayout( const KoPageLayout &pagelayout )
 {
     QPrinter &p = printer();
-    KoPageLayout l = m_view->pageLayout();
     QPrinter::Orientation o;
-    switch ( l.orientation ) {
+    switch ( pagelayout.orientation ) {
         case KoPageFormat::Portrait: o = QPrinter::Portrait; break;
         case KoPageFormat::Landscape: o = QPrinter::Landscape; break;
         default: o = QPrinter::Portrait; break;
     }
     p.setOrientation( o );
-    p.setPaperSize( KoPageFormat::printerPageSize( l.format ) );
-    p.setPageMargins( l.leftMargin, l.topMargin, l.rightMargin, l.bottomMargin, QPrinter::Point );
+    p.setPaperSize( KoPageFormat::printerPageSize( pagelayout.format ) );
+    p.setPageMargins( pagelayout.leftMargin, pagelayout.topMargin, pagelayout.rightMargin, pagelayout.bottomMargin, QPrinter::Point );
 }
 
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    PrintingOptions opt;
-    if ( m_widget ) {
-        opt = m_widget->options();
-    }
-    setPrintingOptions( opt );
-    setPrinterPageLayout();
+    setPrinterPageLayout( m_view->pageLayout() ); // FIXME: Something resets printer().paperSize() to A4 !
     KoPrintingDialog::startPrinting( removePolicy );
 }
 
 QWidget *PrintingDialog::createPageLayoutWidget() const
 {
-    QWidget *widget = new QWidget();
-    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
-
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-
-    KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
-    w->showPageSpread( false );
-    lay->addWidget( w, 1 );
-
-    KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
-    prev->setPageLayout( m_view->pageLayout() );
-    lay->addWidget( prev, 1 );
-
-    connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
-
-    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
-
-    return widget;
+    QWidget *w = ViewBase::createPageLayoutWidget( m_view );
+    KoPageLayoutWidget *pw = w->findChild<KoPageLayoutWidget*>();
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(setPrinterPageLayout(const KoPageLayout&)));
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SIGNAL(changed()));
+    return w;
 }
 
 QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
     //kDebug(planDbg());
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
+    connect(w, SIGNAL(changed(PrintingOptions)), this, SLOT(setPrintingOptions(const PrintingOptions&)));
     const_cast<PrintingDialog*>( this )->m_widget = w;
 
     return QList<QWidget*>() << w;
@@ -216,14 +276,14 @@ QRect PrintingDialog::footerRect() const
 
 int PrintingDialog::headerFooterHeight( const PrintingOptions::Data &options ) const
 {
-    int height = 0;
+    int height = 0.0;
     if ( options.page == Qt::Checked || options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
-        height += painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
-        height *= 1.5;
+        height += m_textheight * 1.5;
     }
     if (  options.project == Qt::Checked && options.manager == Qt::Checked && ( options.date == Qt::Checked || options.page == Qt::Checked ) ) {
-        height *= 2.0;
+       height *= 2.0;
     }
+    kDebug(planDbg())<<height;
     return height;
 }
 
@@ -364,6 +424,16 @@ KoDocument *ViewBase::part() const
      return koDocument();
 }
 
+KoPageLayout ViewBase::pageLayout() const
+{
+    return m_pagelayout;
+}
+
+void ViewBase::setPageLayout( const KoPageLayout &layout )
+{
+    m_pagelayout = layout;
+}
+
 bool ViewBase::isActive() const
 {
     if ( hasFocus() ) {
@@ -400,6 +470,37 @@ KoPrintJob *ViewBase::createPrintJob()
     return 0;
 }
 
+/*static*/
+QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
+{
+    QWidget *widget = new QWidget();
+    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+
+    QHBoxLayout *lay = new QHBoxLayout(widget);
+
+    KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, view->pageLayout() );
+    w->showPageSpread( false );
+    lay->addWidget( w, 1 );
+
+    KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
+    prev->setPageLayout( view->pageLayout() );
+    lay->addWidget( prev, 1 );
+
+    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+
+    return widget;
+}
+
+/*static*/
+PrintingHeaderFooter *ViewBase::createHeaderFooterWidget( ViewBase *view )
+{
+    PrintingHeaderFooter *widget = new PrintingHeaderFooter( view->printingOptions() );
+    widget->setWindowTitle( i18nc( "@title:tab", "Header and Footer" ) );
+    widget->setOptions( view->printingOptions() );
+
+    return widget;
+}
+
 void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 {
     kDebug(planDbg());
@@ -426,6 +527,42 @@ void ViewBase::slotOptionsFinished( int result )
     }
 }
 
+bool ViewBase::loadContext( const KoXmlElement &context )
+{
+    KoXmlElement me;
+    forEachElement( me, context ) {
+        if ( me.tagName() == "page-layout" ) {
+            m_pagelayout.format = KoPageFormat::formatFromString( me.attribute( "format" ) );
+            m_pagelayout.orientation = me.attribute( "orientation" ) == "landscape" ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+            m_pagelayout.width = me.attribute( "width", "0.0" ).toDouble();
+            m_pagelayout.height = me.attribute( "height", "0.0" ).toDouble();
+            m_pagelayout.leftMargin = me.attribute( "left-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.rightMargin = me.attribute( "right-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.topMargin = me.attribute( "top-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.bottomMargin = me.attribute( "bottom-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+        } else if ( me.tagName() == "printing-options" ) {
+            m_printingOptions.loadXml( me );
+        }
+    }
+    return true;
+}
+
+void ViewBase::saveContext( QDomElement &context ) const
+{
+    QDomElement me = context.ownerDocument().createElement( "page-layout" );
+    context.appendChild( me );
+    me.setAttribute( "format", KoPageFormat::formatString( m_pagelayout.format ) );
+    me.setAttribute( "orientation", m_pagelayout.orientation == KoPageFormat::Portrait ? "portrait" : "landscape" );
+    me.setAttribute( "width", m_pagelayout.width );
+    me.setAttribute( "height",m_pagelayout. height );
+    me.setAttribute( "left-margin", m_pagelayout.leftMargin );
+    me.setAttribute( "right-margin", m_pagelayout.rightMargin );
+    me.setAttribute( "top-margin", m_pagelayout.topMargin );
+    me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
+
+    m_printingOptions.saveXml( context );
+}
+
 //----------------------
 TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview, Project *project )
     : PrintingDialog( view ),
@@ -433,12 +570,15 @@ TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *tr
     m_project( project ),
     m_firstRow( -1 )
 {
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 int TreeViewPrintingDialog::documentLastPage() const
 {
     int page = documentFirstPage();
-    while ( firstRow( page ) != -1 ) { ++page; }
+    while ( firstRow( page ) != -1 ) {
+        ++page;
+    }
     if ( page > documentFirstPage() ) {
         --page;
     }
@@ -488,7 +628,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug(planDbg())<<row<<rowsPrPage;
+    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -502,8 +642,6 @@ QList<QWidget*> TreeViewPrintingDialog::createOptionWidgets() const
 
 void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
-    painter.save();
-
     m_firstRow = firstRow( page );
 
     QHeaderView *mh = m_tree->header();
@@ -562,7 +700,6 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     }
     if ( m_firstRow == -1 ) {
         kDebug(planDbg())<<"No data";
-        painter.restore();
         return;
     }
     painter.setBrush( QBrush() );
@@ -587,7 +724,6 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
         ++numRows;
         idx = m_tree->indexBelow( idx );
     }
-    painter.restore();
 }
 
 /**
@@ -1271,12 +1407,16 @@ DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, Doub
     m_project( project ),
     m_firstRow( -1 )
 {
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 int DoubleTreeViewPrintingDialog::documentLastPage() const
 {
+    kDebug(planDbg())<<KoPageFormat::formatString( m_view->pageLayout().format );
     int page = documentFirstPage();
-    while ( firstRow( page ) != -1 ) { ++page; }
+    while ( firstRow( page ) != -1 ) {
+        ++page;
+    }
     if ( page > documentFirstPage() ) {
         --page;
     }
@@ -1304,6 +1444,9 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
     }
     int rowsPrPage = pageHeight / height;
 
+    kDebug(planDbg())<<"rowsPrPage"<<rowsPrPage;
+    Q_ASSERT( rowsPrPage > 0 );
+
     int rows = m_tree->model()->rowCount();
     int row = -1;
     for ( int i = 0; i < rows; ++i ) {
@@ -1327,7 +1470,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug(planDbg())<<row<<rowsPrPage;
+    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -1341,6 +1484,10 @@ QList<QWidget*> DoubleTreeViewPrintingDialog::createOptionWidgets() const
 
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
+    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<"---------------------------";
+    setPrinterPageLayout( m_view->pageLayout() );
+    qreal t, l, b, r; printer().getPageMargins( &l, &t, &r, &b, QPrinter::Point );
+    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<printer().pageRect()<<l<<t<<r<<b;
     painter.save();
 
     m_firstRow = firstRow( page );
@@ -1403,16 +1550,21 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
         }
         //kDebug(planDbg())<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
-    if ( m_firstRow == -1 ) {
+    if ( m_firstRow == -1 || model->rowCount() == 0 ) {
         kDebug(planDbg())<<"No data";
         painter.restore();
         return;
     }
     painter.setBrush( QBrush() );
-    QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
+
+    QModelIndex idx = model->index( 0, 0 );
+    for ( int r = 0; r < m_firstRow && idx.isValid(); ++r ) {
+        idx = m_tree->masterView()->indexBelow( idx );
+    }
     int numRows = 0;
     //kDebug(planDbg())<<page<<rowsPrPage;
     while ( idx.isValid() && numRows < rowsPrPage ) {
+        kDebug(planDbg())<<"print:"<<idx;
         painter.translate( 0, height );
         h += height;
         for ( int i = 0; i < mh->count(); ++i ) {

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,11 +20,12 @@
 
  /* heavily based on Ariya's work (see kspread/formula) -- all errors are my own! */
 
-#include "KPrValueParser.h"
+#include "KPrFormulaParser.h"
 
 #include <QStack>
 #include <QString>
 #include <math.h>
+#include <qmath.h>
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 #include "KoTextBlockData.h"
@@ -32,7 +34,7 @@
 #include <QTextDocument>
 #include <QTextBlock>
 
-static int opPrecedence(Token::Op op)
+static int fopPrecedence(Token::Op op)
 {
     int prec = -1;
     switch (op) {
@@ -42,12 +44,12 @@ static int opPrecedence(Token::Op op)
     case Token::Plus         : prec = 3; break;
     case Token::Minus        : prec = 3; break;
     case Token::RightPar     : prec = 0; break;
+    case Token::Comma        : prec = 0; break;
     case Token::LeftPar      : prec = -1; break;
     default: prec = -1; break;
     }
     return prec;
 }
-
 
 static Token::Op matchOperator(const QString& text)
 {
@@ -63,6 +65,7 @@ static Token::Op matchOperator(const QString& text)
         case '^': result = Token::Caret; break;
         case '(': result = Token::LeftPar; break;
         case ')': result = Token::RightPar; break;
+        case ',': result = Token::Comma; break;
         default : result = Token::InvalidOp; break;
         }
     }
@@ -76,7 +79,7 @@ const Token Token::null;
     Token
  **********************/
 
-Token::Token(Type type, const QString& text, int pos)
+Token::Token(Type type, const QString &text, int pos)
 {
     m_type = type;
     m_text = text;
@@ -84,7 +87,7 @@ Token::Token(Type type, const QString& text, int pos)
 }
 
 // copy constructor
-Token::Token(const Token& token)
+Token::Token(const Token &token)
 {
     m_type = token.m_type;
     m_text = token.m_text;
@@ -92,7 +95,7 @@ Token::Token(const Token& token)
 }
 
 // assignment operator
-Token& Token::operator=(const Token & token)
+Token& Token::operator=(const Token &token)
 {
     m_type = token.m_type;
     m_text = token.m_text;
@@ -140,7 +143,7 @@ unsigned TokenStack::itemCount() const
     return topIndex;
 }
 
-void TokenStack::push(const Token& token)
+void TokenStack::push(const Token &token)
 {
     ensureSpace();
     insert(topIndex++, token);
@@ -171,24 +174,25 @@ void TokenStack::ensureSpace()
 }
 
 /**********************
-    KPrValueParser
+    KPrFormulaParser
  **********************/
-KPrValueParser::KPrValueParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData)
+KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type)
     : m_shape(shape)
     , m_textBlockData(textBlockData)
     , m_formula(formula)
-    , m_compiled(false)
-    , m_valid(false)
+    , m_fcompiled(false)
+    , m_fvalid(false)
+    , m_type(type)
 {
     compile(scan(formula));
 }
 
-QString KPrValueParser::formula() const
+QString KPrFormulaParser::formula() const
 {
     return m_formula;
 }
 
-Tokens KPrValueParser::scan(QString formula)
+Tokens KPrFormulaParser::scan(QString formula) const
 {
     Tokens tokens;
     // parsing state
@@ -220,6 +224,11 @@ Tokens KPrValueParser::scan(QString formula)
             }
             else if (c == QChar::Null) {
                 state = Finish;
+            }
+            else if (c == '$') {
+                tokenText.append(c);
+                state = InIdentifierName;
+                i++;
             }
             else {
                 Token::Op op = matchOperator(c);
@@ -260,25 +269,28 @@ Tokens KPrValueParser::scan(QString formula)
             break;
         }
     }
-    if (parseError)
+    if (parseError) {
         tokens.setValid(false);
+    }
 
     return tokens;
 }
 
-void KPrValueParser::compile(const Tokens& tokens) const
+void KPrFormulaParser::compile(const Tokens &tokens)
 {
     // initialize variables
-    m_valid = false;
+    m_fvalid = false;
     m_codes.clear();
     m_constants.clear();
     m_identifier.clear();
+    m_functions.clear();
     if (!tokens.valid() || tokens.count() == 0) {
         return;
     }
 
     TokenStack syntaxStack;
     QStack<int> argStack;
+    unsigned argCount = 1;
 
     for (int i = 0; i <= tokens.count(); i++) {
         // helper token: InvalidOp is end-of-formula
@@ -307,6 +319,66 @@ void KPrValueParser::compile(const Tokens& tokens) const
             // repeat until no more rule applies
             for (; ;) {
                 bool ruleFound = false;
+
+                // are we entering a function ?
+                // if stack already has: id (
+                if (syntaxStack.itemCount() >= 2) {
+                    Token par = syntaxStack.top();
+                    Token id = syntaxStack.top(1);
+                    if (par.asOperator() == Token::LeftPar)
+                        if (id.isIdentifierName()) {
+                            argStack.push(argCount);
+
+                        }
+                }
+
+                // rule for function arguments, if token is , or )
+                // id ( arg1 , arg2 -> id ( arg
+                if (!ruleFound)
+                    if (syntaxStack.itemCount() >= 5)
+                        if ((token.asOperator() == Token::RightPar) ||
+                                (token.asOperator() == Token::Comma)) {
+                            Token arg2 = syntaxStack.top();
+                            Token sep = syntaxStack.top(1);
+                            Token arg1 = syntaxStack.top(2);
+                            Token par = syntaxStack.top(3);
+                            Token id = syntaxStack.top(4);
+                            if (!arg2.isOperator())
+                                if (sep.asOperator() == Token::Comma)
+                                    if (!arg1.isOperator())
+                                        if (par.asOperator() == Token::LeftPar)
+                                            if (id.isIdentifierName()) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                argCount++;
+                                            }
+                        }
+
+                // rule for function last argument:
+                //  id ( arg ) -> arg
+                if (!ruleFound)
+                    if (syntaxStack.itemCount() >= 4) {
+                        Token par2 = syntaxStack.top();
+                        Token argu = syntaxStack.top(1);
+                        Token par1 = syntaxStack.top(2);
+                        Token id = syntaxStack.top(3);
+                        if (par2.asOperator() == Token::RightPar)
+                            if (!argu.isOperator())
+                                if (par1.asOperator() == Token::LeftPar)
+                                    if (id.isIdentifierName()) {
+                                        ruleFound = true;
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.push(argu);
+                                        m_codes.append(Opcode(Opcode::Function, argCount));
+                                        m_functions.append(id.text());
+                                        argCount = argStack.empty() ? 0 : argStack.pop();
+                                        argCount = 1;
+                                    }
+                    }
 
                 // rule for parenthesis:  ( Y ) -> Y
                 if (!ruleFound) {
@@ -344,8 +416,8 @@ void KPrValueParser::compile(const Tokens& tokens) const
                         if (!a.isOperator()) {
                             if (!b.isOperator()) {
                                 if (op.isOperator()) {
-                                    if (token.asOperator() != Token::LeftPar) {
-                                        if (opPrecedence(op.asOperator()) >= opPrecedence(token.asOperator())) {
+                                    if ((token.asOperator() != Token::LeftPar) && (token.asOperator() != Token::Comma)) {
+                                        if (fopPrecedence(op.asOperator()) >= fopPrecedence(token.asOperator())) {
                                             ruleFound = true;
                                             syntaxStack.pop();
                                             syntaxStack.pop();
@@ -424,6 +496,7 @@ void KPrValueParser::compile(const Tokens& tokens) const
                         }
                     }
                 }
+
                 if (!ruleFound) {
                     break;
                 }
@@ -438,35 +511,40 @@ void KPrValueParser::compile(const Tokens& tokens) const
     }
 
     // syntaxStack must left only one operand and end-of-formula (i.e. InvalidOp)
-    m_valid = false;
+    m_fvalid = false;
     if (syntaxStack.itemCount() == 2) {
         if (syntaxStack.top().asOperator() == Token::InvalidOp) {
             if (!syntaxStack.top(1).isOperator()) {
-                m_valid = true;
+                m_fvalid = true;
             }
         }
     }
 
     // bad parsing ? clean-up everything
-    m_compiled = true;
-    if (!m_valid) {
+    m_fcompiled = true;
+    if (!m_fvalid) {
         m_constants.clear();
         m_codes.clear();
         m_identifier.clear();
-        m_compiled=false;
+        m_functions.clear();
+        m_fcompiled=false;
     }
 }
 
-qreal KPrValueParser::eval(KPrAnimationCache * cache) const
+qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
 {
     QStack<qreal> stack;
     qreal val1, val2;
-    if (!m_valid || !m_compiled) {
+    int funcCount = 0;
+    if (!m_fvalid || !m_fcompiled) {
+        return 0.0;
+    }
+    if ((m_type == KPrFormulaParser::Formula) && (time < 0)) {
         return 0.0;
     }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
-        Opcode& opcode = m_codes[pc];
+        Opcode &opcode = m_codes[pc];
         switch (opcode.type) {
         // load a constant, push to stack
         case Opcode::Load:
@@ -511,11 +589,26 @@ qreal KPrValueParser::eval(KPrAnimationCache * cache) const
             stack.push(val2);
             break;
 
-        case Opcode::Identifier: {
-            stack.push(identifierToValue(m_identifier[opcode.index], cache));
+        case Opcode::Function: {
+            val1 = stack.pop();
+            if (opcode.index > 1) {
+                val2 = stack.pop();
+                stack.push(formulaToValue(m_functions[funcCount], val1, val2));
+            } else {
+                stack.push(formulaToValue(m_functions[funcCount], val1));
+            }
+            funcCount++;
+            break;
         }
-        break;
 
+        case Opcode::Identifier: {
+            if (m_functions.contains(m_identifier[opcode.index])) {
+                break;
+            }
+
+            stack.push(identifierToValue(m_identifier[opcode.index], cache, time));
+        }
+            break;
         default:
             break;
         }
@@ -523,19 +616,19 @@ qreal KPrValueParser::eval(KPrAnimationCache * cache) const
 
     // more than one value in stack ? unsuccessful execution...
     if (stack.count() != 1) {
-        m_valid = false;
+        m_fvalid = false;
         return 0.0;
     }
 
     return stack.pop();
 }
 
-bool KPrValueParser::valid() const
+bool KPrFormulaParser::valid() const
 {
-    return m_valid;
+    return m_fvalid;
 }
 
-qreal KPrValueParser::identifierToValue(QString identifier, KPrAnimationCache * cache) const
+qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const
 {
     if (identifier == "width") {
         if (m_textBlockData) {
@@ -553,7 +646,8 @@ qreal KPrValueParser::identifierToValue(QString identifier, KPrAnimationCache * 
         else {
             return m_shape->size().width() / cache->pageSize().width();
         }
-    } else if (identifier == "height") {
+    }
+    else if (identifier == "height") {
         if (m_textBlockData) {
             if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
                 QTextDocument *textDocument = textShapeData->document();
@@ -569,10 +663,67 @@ qreal KPrValueParser::identifierToValue(QString identifier, KPrAnimationCache * 
         else {
             return m_shape->size().height() / cache->pageSize().height();
         }
-    } else if (identifier == "x") {
+    }
+    else if (identifier == "x") {
         return m_shape->position().x() / cache->pageSize().width();
-    } else if (identifier == "y") {
+    }
+    else if (identifier == "y") {
         return m_shape->position().y() / cache->pageSize().height();
+    }
+    else if ((identifier == "$") && (m_type == KPrFormulaParser::Formula) ) {
+        return time;
+    }
+    else if (identifier == "pi") {
+        return M_PI;
+    }
+    else if (identifier == "e") {
+        return exp(1);
+    }
+    return 0.0;
+}
+
+qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1) const
+{
+    if (identifier == "sin") {
+        return sin(arg1);
+    }
+    else if (identifier == "cos") {
+        return cos(arg1);
+    }
+    else if (identifier == "abs") {
+        return qAbs(arg1);
+    }
+    else if (identifier == "sqrt") {
+        return sqrt(arg1);
+    }
+    else if (identifier == "tan") {
+        return tan(arg1);
+    }
+    else if (identifier == "atan") {
+        return atan(arg1);
+    }
+    else if (identifier == "acos") {
+        return acos(arg1);
+    }
+    else if (identifier == "asin") {
+        return asin(arg1);
+    }
+    else if (identifier == "exp") {
+        return exp(arg1);
+    }
+    else if (identifier == "log") {
+        return log(arg1);
+    }
+    return 0.0;
+}
+
+qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1, qreal arg2) const
+{
+    if (identifier == "min") {
+        return qMin(arg1, arg2);
+    }
+    else if (identifier == "max") {
+        return qMax(arg1, arg2);
     }
     return 0.0;
 }

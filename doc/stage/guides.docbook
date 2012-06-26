@@ -129,11 +129,11 @@ it.</para>
 <para>Open &stage; and create a new document.</para>
 
 <para>To add a little sparkle to the blank slide, we can change the slide
-background - do this by selecting the <guilabel>Background editing tool</guilabel> 
+background - do this by selecting the <guilabel>Document background</guilabel> tool
 in the Tools docker.</para>
 
 <para>We want the background to look attractive, so you may choose to use an image as a
-background by clicking the <guibutton>Select background image</guibutton> button: feel free to
+background by clicking the <guibutton>Set image</guibutton> button: feel free to
 experiment, but keep it beautiful!</para>
 
 <screenshot>
