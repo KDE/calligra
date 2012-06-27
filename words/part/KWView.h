@@ -43,6 +43,7 @@ class KoFindText;
 class KoFindStyle;
 class KoRdfSemanticItem;
 class KoTextAnchor;
+typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 
 class KToggleAction;
 /**
@@ -178,7 +179,7 @@ private slots:
     /// open the configure dialog.
     void configure();
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
     /// The document has finished loading. This is used to update the text that can be searched.
