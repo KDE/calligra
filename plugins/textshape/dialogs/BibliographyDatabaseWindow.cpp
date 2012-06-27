@@ -61,7 +61,6 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
 
     m_bibTableView->setEditTriggers(QTableView::AllEditTriggers);
     m_bibTableView->setSelectionBehavior(QTableView::SelectItems);
-    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
     m_bibTableView->resizeColumnsToContents();
 
     m_bibTableView->show();
@@ -105,10 +104,12 @@ int BibliographyDatabaseWindow::loadBibliographyDbs()
 void BibliographyDatabaseWindow::tableChanged(int index)
 {
     if (m_table) {
+        m_table->tableModel()->submitAll();
         delete m_table;
     }
 
     m_table = new BibliographyDb(this, m_tables.at(index).absoluteDir().absolutePath(), m_tables.at(index).fileName());
+    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
 
     if (!m_table->isValid()) {
         int ret = QMessageBox::warning(this, i18n("Error opening bibref table")

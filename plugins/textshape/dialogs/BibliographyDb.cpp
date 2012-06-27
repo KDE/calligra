@@ -69,7 +69,7 @@ BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QStri
     if (openDb()) {
         m_model = new QSqlTableModel(this, m_db);
         m_model->setTable("bibref");
-        m_model->setEditStrategy(QSqlTableModel::OnRowChange);
+        m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
         m_model->select();
 
         m_filterModel->setSourceModel(m_model);
@@ -212,6 +212,7 @@ BibliographyDb::~BibliographyDb()
 {
     closeDb();
     if (m_model) {
+        m_model->submitAll();
         delete m_model;
     }
 }
