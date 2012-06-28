@@ -342,7 +342,7 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
     int lineHeigth = qMin(LINE_HEIGHT , rect.height());
     int vPadding = (rect.height() - lineHeigth)/2;
     int stepSize  = m_mainView->widthOfColumn(StartTime)/m_mainView->numberOfSteps();
-    int startOffSet = m_mainView->calculateStartOffset(row);
+    qreal startOffSet = m_mainView->calculateStartOffset(row);
     qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, Duration)).toDouble();
 
     qreal start = m_mainView->model()->data(m_mainView->model()->index(row, StartTime)).toDouble() + startOffSet;

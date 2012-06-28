@@ -76,6 +76,7 @@ private:
     QTimeLine m_timeLine;
     KPrShapeAnimation *m_shapeAnimation;
     KPrAnimationCache * m_animationCache;
+    QRect m_pageRect;
 };
 
 #endif // KPRVIEWMODEPREVIEWSHAPEANIMATIONS_H

@@ -34,6 +34,9 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoZoomController.h>
+#include <KoPAUtil.h>
+#include <KoCanvasController.h>
+#include <KoZoomController.h>
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -51,9 +54,18 @@ KPrViewModePreviewShapeAnimations::~KPrViewModePreviewShapeAnimations()
 
 void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {
-    painter.setClipRect(paintRect);
+#ifdef NDEBUG
+    Q_UNUSED(canvas);
+#endif
+    Q_ASSERT(m_canvas == canvas);
+    painter.translate(-m_canvas->documentOffset());
     painter.setRenderHint(QPainter::Antialiasing);
-    canvas->shapeManager()->paint(painter, *(view()->zoomHandler()), true);
+    QRect clipRect = paintRect.translated(m_canvas->documentOffset()).toRect();
+    painter.setClipRect(clipRect);
+    painter.translate(m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y());
+    KoViewConverter *converter = m_view->viewConverter(m_canvas);
+    view()->activePage()->paintBackground(painter, *converter);
+    canvas->shapeManager()->paint(painter, *converter, true);
 }
 
 void KPrViewModePreviewShapeAnimations::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -106,16 +118,35 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 {
     m_savedViewMode = previousViewMode;               // store the previous view mode
     m_animationCache = new KPrAnimationCache();
-    m_canvas->shapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(), m_animationCache,
+    m_canvas->shapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(),
+                                                                                       m_animationCache,
                                                        new KPrPageSelectStrategyActive(m_canvas)));
 
     // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
-    canvas()->repaint();
+
+    const KoPageLayout &layout = activePageLayout();
+
+    QSizeF pageSize(layout.width, layout.height);
+
+    //calculate size of union page + viewport
+    QSizeF documentMinSize(view()->zoomController()->documentSize());
+
+    // create a rect out of it with origin in tp left of page
+    QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5,
+                               (documentMinSize.height() - layout.height) * -0.5),
+                       documentMinSize);
+
+    QPointF offset = -documentRect.topLeft();
+    m_canvas->setDocumentOrigin(offset);
+    m_view->zoomController()->setPageSize(pageSize);
+
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
+    m_canvas->repaint();
+
 
     m_timeLine.setDuration(m_shapeAnimation->duration());
     m_timeLine.setCurrentTime(0);
     m_animationCache->clear();
-    //m_animationCache->setPageSize(m_view->activePage()->size());
     m_animationCache->setPageSize(view()->zoomController()->documentSize());
     qreal zoom;
     view()->zoomHandler()->zoom(&zoom, &zoom);
