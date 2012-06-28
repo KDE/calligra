@@ -111,7 +111,7 @@ static KoDocumentRdf *loadDocument(const QString &odt)
 void TestRdf::basicload()
 {
     RDEBUG;
-
+    
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
@@ -873,7 +873,7 @@ void TestRdf::testRoundtrip()
         editor->movePosition(QTextCursor::PreviousCharacter);
         editor->insertInlineObject(startmark);
 
-        KoRdfLocation *location = new KoRdfLocation(this, rdfDoc);
+        hKoRdfLocation location(new KoRdfLocation(0, rdfDoc));
         location->setDlat(5.0);
         location->setDlong(10.0);
 
@@ -977,8 +977,9 @@ void TestRdf::testRoundtrip()
         Q_ASSERT(location->xmlIdList().length() == 1);
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(xmlid);
+        // TODO: Why is this like the above but both - 1 ?
         Q_ASSERT(position.first == 443);
-        Q_ASSERT(position.second == 546);
+        Q_ASSERT(position.second == 496);
 
         // check whether the table between the bookmarks is in the right position
         // after loading
