@@ -30,6 +30,7 @@ class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+class KoPageLayout;
 
 // KDE classes
 class KStatusBar;
@@ -40,7 +41,7 @@ class KAction;
 class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
-
+class QPrintDialog;
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -225,6 +226,18 @@ public:
      * The default implementation call createPrintJob.
      */
     virtual KoPrintJob * createPdfPrintJob();
+
+    /**
+     * @return the page layout to be used for printing.
+     * Default is the documents layout.
+     * Reimplement if your application needs to use a different layout.
+     */
+    virtual KoPageLayout pageLayout() const;
+
+    /**
+     * Create a QPrintDialog based on the @p printJob
+     */
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);
 
     /**
      * @return the KoMainWindow in which this view is currently.

@@ -3840,7 +3840,21 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    emit executeCommand( new TaskAddCmd( m_project, node, after, i18nc( "(qtundo-format)", "Add task" ) ) );
+    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Add task" ) );
+    cmd->addCommand( new TaskAddCmd( m_project, node, after ) );
+    if ( m_project && node->type() == Node::Type_Task ) {
+        QMap<ResourceGroup*, ResourceGroupRequest*> groups;
+        foreach ( Resource *r, m_project->autoAllocateResources() ) {
+            if ( ! groups.contains( r->parentGroup() ) ) {
+                ResourceGroupRequest *gr = new ResourceGroupRequest( r->parentGroup() );
+                cmd->addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>(*node), gr ) );
+                groups[ r->parentGroup() ] = gr;
+            }
+            ResourceRequest *rr = new ResourceRequest( r, 100 );
+            cmd->addCommand( new AddResourceRequestCmd( groups[ r->parentGroup() ], rr ) );
+        }
+    }
+    emit executeCommand( cmd );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );

@@ -385,7 +385,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
 
-    QSizeF newSize = rootArea->associatedShape()->size();
+    QSizeF newSize = rootArea->associatedShape()->size()
+                    - QSizeF(data->leftPadding() + data->rightPadding(),
+                             data->topPadding() + data->bottomPadding());
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
@@ -410,6 +412,8 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         rootArea->setBottom(rootArea->top() + newSize.height());
     }
 
+    newSize += QSizeF(data->leftPadding() + data->rightPadding(),
+                      data->topPadding() + data->bottomPadding());
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
         rootArea->associatedShape()->setSize(newSize);
@@ -569,14 +573,15 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
+    QSizeF size = shape->size() - QSizeF(data->leftPadding() + data->rightPadding(), data->topPadding() + data->bottomPadding());
+    size.setWidth(qMax(size.width(), qreal(1.0)));
+    size.setHeight(qMax(size.height(), qreal(1.0)));
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
         || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
-        QSizeF size = shape->size();
         size.setHeight(1E6);
-        return size;
     }
 
-    return shape->size();
+    return size;
 }
 
 QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)

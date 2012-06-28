@@ -215,11 +215,16 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     slotSelectionChanged(QModelIndex());
 }
 
-void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
+void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages, bool addAsSearchableModel)
 {
     kDebug() << itemsPartClass << ".";
+    m_itemsPartClass = itemsPartClass;
+
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
-    KexiMainWindowIface::global()->addSearchableModel(m_model);
+    
+    if (addAsSearchableModel) {
+      KexiMainWindowIface::global()->addSearchableModel(m_model);
+    }
     
     m_list->expandAll();
     if (itemsPartClass.isEmpty()) {
@@ -229,12 +234,15 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
     }
 }
 
+QString KexiProjectNavigator::itemsPartClass() const
+{
+  return m_itemsPartClass;
+}
+
 KexiProjectNavigator::~KexiProjectNavigator()
 {
     delete m_model;
 }
-
-
 
 KAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon, const QString& text,
                                 const QString& toolTip, const QString& whatsThis, const char* slot)

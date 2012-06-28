@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009-2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
@@ -78,6 +78,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
 
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change paragraph format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
 
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));

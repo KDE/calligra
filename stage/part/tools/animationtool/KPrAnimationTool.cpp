@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -82,15 +82,10 @@ QList<QWidget *> KPrAnimationTool::createOptionWidgets()
     clickActionWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
     QList<QWidget *> widgets;
-    effectWidget->setWindowTitle(i18n("Transitions"));
+    effectWidget->setWindowTitle(i18n("Slide Transitions"));
     widgets.append(effectWidget);
-    clickActionWidget->setWindowTitle(i18n("Click Actions"));
+    clickActionWidget->setWindowTitle(i18n("Shape Click Actions"));
     widgets.append(clickActionWidget);
-    QLabel *label =new QLabel(i18n("Not implemented in 2.0"));
-    label->setMinimumWidth(180); //try to make it visible
-    label->setObjectName( "ShapeAnimationLabel" );
-    label->setWindowTitle(i18n("Shape Animation"));
-    widgets.append(label);
     return widgets;
 }
 

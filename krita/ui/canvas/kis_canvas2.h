@@ -171,13 +171,15 @@ public slots:
     void updateCanvasProjection(KisUpdateInfoSP info);
 
     void startResizingImage(qint32 w, qint32 h);
-    void finishResisingImage(qint32 w, qint32 h);
+    void finishResizingImage(qint32 w, qint32 h);
 
     /// adjust the origin of the document
     void adjustOrigin();
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
     void rotateCanvas(qreal angle, bool updateOffset=true);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
