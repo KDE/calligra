@@ -33,6 +33,11 @@ class KPrCustomAnimationItem;
 class QComboBox;
 class QTimeEdit;
 
+/** This Widget holds the configuration popup dialog
+    used to edit animation properties of existing or new
+    animation.
+    Animations on this view are displayed in groups that
+    have as parent animations started by a click*/
 class KPrEditAnimationsWidget : public QWidget
 {
     Q_OBJECT

@@ -13,7 +13,10 @@ It requires an activePage to be set*/
 
 class KPrPage;
 
-
+/// Basic data structure for KPrAnimationsTreeModel.
+/// Keeps pointers of KPrShapeAnimation objects and
+/// provides a interface more suitable for the tree and
+/// time line view.
 class STAGE_EXPORT KPrCustomAnimationItem : QObject
 {
 public:
@@ -32,9 +35,12 @@ public:
     qreal duration() const;
     KoShape *shape() const;
 
+    /// Set start time / animation delay (Takes timeMS in miliseconds)
     void setStartTime(int timeMS);
+    /// Set duration (Takes timeMS in miliseconds)
     void setDuration(int timeMS);
 
+    /// Helper methods to manage tre view
     KPrCustomAnimationItem *parent() const;
     KPrCustomAnimationItem *childAt(int row) const {return m_children.value(row);}
     int rowOfChild(KPrCustomAnimationItem *child) const {return m_children.indexOf(child); }
@@ -45,6 +51,8 @@ public:
     void addChild(KPrCustomAnimationItem *item);
     void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
     KPrCustomAnimationItem *takeChild(int row);
+
+    /// Set Item as default (Root item that holds show slide event)
     void initAsDefaultAnimation(KPrPage *page);
     bool isDefaulAnimation();
 
