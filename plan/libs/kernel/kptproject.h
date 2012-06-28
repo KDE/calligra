@@ -337,6 +337,9 @@ public:
     /// returns a unique resourcegroup id
     QString uniqueResourceGroupId() const;
 
+    /// Return a list of resources that will be allocated to new tasks
+    QList<Resource*> autoAllocateResources() const;
+
     Resource *findResource( const QString &id ) const
     {
         if ( resourceIdDict.contains( id ) )

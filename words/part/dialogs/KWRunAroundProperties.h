@@ -60,7 +60,9 @@ private:
     Ui::KWRunAroundProperties widget;
     FrameConfigSharedState *m_state;
 
-    QButtonGroup *m_runAroundSide, *m_runAround;
+    QButtonGroup *m_runAroundSide;
+    QButtonGroup *m_runAround;
+    QButtonGroup *m_runAroundContour;
     QList<KWFrame*> m_frames;
     KoShape *m_shape;
 };

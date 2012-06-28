@@ -32,7 +32,8 @@ namespace Calligra
 {
 namespace Sheets
 {
-class CellToolBase;
+class Selection;
+class Sheet;
 
 /**
  * \class LocationComboBox
@@ -46,7 +47,9 @@ class LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    explicit LocationComboBox(CellToolBase *cellTool, QWidget *parent = 0);
+    explicit LocationComboBox(QWidget *parent = 0);
+
+    void setSelection(Selection* selection);
 
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);
@@ -64,14 +67,19 @@ public slots:
 protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);
 
+Q_SIGNALS:
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+
 private Q_SLOTS:
     void slotActivateItem();
+    void slotSelectionChanged();
+    void slotActiveSheetChanged(Sheet* sheet);
 
 private:
     bool activateItem();
 
 private:
-    CellToolBase *m_cellTool;
+    QPointer<Selection> m_selection;
     KCompletion completionList;
 };
 

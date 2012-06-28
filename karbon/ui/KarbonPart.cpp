@@ -20,7 +20,7 @@
  * Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
  * Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * Copyright (C) 2006 Jaison Lee <lee.jaison@gmail.com>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
  * Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
  *

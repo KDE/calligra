@@ -31,6 +31,8 @@
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"
+#include "KoPageLayout.h"
+#include "KoPrintJob.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -46,6 +48,7 @@
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
+#include <kdeprintdialog.h>
 
 #include <QTimer>
 #include <QDockWidget>
@@ -56,6 +59,8 @@
 #include <QDragEnterEvent>
 #include <QImage>
 #include <QUrl>
+#include <QPrintDialog>
+
 //static
 QString KoView::newObjectName()
 {
@@ -495,6 +500,20 @@ KoPrintJob * KoView::createPrintJob()
 KoPrintJob * KoView::createPdfPrintJob()
 {
     return createPrintJob();
+}
+
+KoPageLayout KoView::pageLayout() const
+{
+    return koDocument()->pageLayout();
+}
+
+QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
+{
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
+                                printJob->createOptionWidgets(), parent);
+    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    printDialog->setEnabledOptions(printJob->printDialogOptions());
+    return printDialog;
 }
 
 void KoView::setupGlobalActions()

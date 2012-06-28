@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<optionWidgets>
+  <optionWidget name="Font">
+    <group>
+      <action name="font" />
+      <action name="fontSize" />
+    </group>
+    <group>
+      <action name="bold" />
+      <action name="italic" />
+      <action name="underline" />
+    </group>
+    <group>
+      <action name="increaseFontSize" />
+      <action name="decreaseFontSize" />
+    </group>
+  </optionWidget>
+  <optionWidget name="Alignment">
+    <group>
+      <action name="alignLeft" />
+      <action name="alignCenter" />
+      <action name="alignRight" />
+    </group>
+    <group>
+      <action name="alignTop" />
+      <action name="alignMiddle" />
+      <action name="alignBottom" />
+    </group>
+    <group>
+      <action name="wrapText" />
+      <action name="changeAngle" />
+      <action name="verticalText" />
+    </group>
+    <group>
+      <action name="decreaseIndentation" />
+      <action name="increaseIndentation" />
+    </group>
+  </optionWidget>
+  <optionWidget name="Borders">
+    <group>
+      <action name="borderLeft" />
+      <action name="borderRight" />
+      <action name="borderTop" />
+      <action name="borderBottom" />
+    </group>
+    <group>
+      <action name="borderAll" />
+      <action name="borderOutline" />
+      <action name="borderRemove" />
+    </group>
+    <group>
+      <action name="borderColor" />
+    </group>
+  </optionWidget>
+  <optionWidget name="Number format">
+    <group>
+      <action name="percent" />
+      <action name="currency" />
+    </group>
+    <group>
+      <action name="increasePrecision" />
+      <action name="decreasePrecision" />
+    </group>
+  </optionWidget>
+  <optionWidget name="Merge">
+    <group>
+      <action name="mergeCells" />
+      <action name="mergeCellsHorizontal" />
+      <action name="mergeCellsVertical" />
+      <action name="dissociateCells" />
+    </group>
+  </optionWidget>
+</optionWidgets>

@@ -1845,9 +1845,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     // update automatic numbering info
     if (listInfo->type() == wvWare::ListInfo::NumberType) {
         if (m_continueListNum.contains(listId)) {
-            if (listLevel <= m_continueListNum[listId].first) {
-                m_continueListNum[listId].second = true;
-            } else {
+            if ( !(listLevel <= m_continueListNum[listId].first) ) {
 
                 // TODO: Check if any of the lists that inherit numbering
                 // from the abstract numbering definition was opened.
@@ -1863,6 +1861,15 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                     --i;
                 }
             }
+        }
+    } else {
+        // update all items with listLevel > m_currentListLevel
+        QMap<int, QPair<quint8, bool> >::const_iterator i = m_continueListNum.constBegin();
+        while (i != m_continueListNum.constEnd()) {
+            if (i.value().first > listLevel) {
+                m_continueListNum[i.key()].second = false;
+            }
+            i++;
         }
     }
 
@@ -1904,7 +1911,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             (m_continueListNum.contains(listId) && !m_continueListNum[listId].second)) {
             writer->addAttribute("text:start-value", listInfo->startAt());
         }
-        m_continueListNum[listId] = qMakePair(listLevel, false);
+        m_continueListNum[listId] = qMakePair(listLevel, true);
     }
 
     return true;

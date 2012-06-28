@@ -253,11 +253,16 @@ public:
     void setEmail( const QString email );
     const QString &email() const { return m_email;}
 
+    /// Returns true if this resource will be allocated by default to new tasks
+    bool autoAllocate() const;
+    /// Set if this resource will be allocated by default to new tasks
+    void setAutoAllocate( bool on );
+
     void copy( Resource *resource );
     
     void setParentGroup( ResourceGroup *parent ) { m_parent = parent; }
     ResourceGroup *parentGroup() const { return m_parent; }
-    
+
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const QDateTime &af ) { m_availableFrom = af; changed();}
     /// Set the time from when the resource is available to this project
@@ -546,6 +551,7 @@ private:
     QString m_name;
     QString m_initials;
     QString m_email;
+    bool m_autoAllocate;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
     QMap<QString, Appointment*> m_externalAppointments;
