@@ -71,6 +71,7 @@ public:
     void setAmount(int amount) const;
 
     int radius() const;
+    int amount() const;
     bool sandDepletion() const;
 
 /*

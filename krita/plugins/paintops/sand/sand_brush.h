@@ -40,6 +40,7 @@ private:
     const SandProperties * m_properties;
     KoColorTransformation* m_transfo;
     int m_saturationId;
+    int m_amount;
 
 };
 

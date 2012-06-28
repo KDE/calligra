@@ -53,6 +53,7 @@ SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* tr
 
     m_counter = 0;
     m_properties = properties;
+    m_amount = m_properties->amount;
     srand48(time(0));
 }
 
@@ -66,48 +67,47 @@ SandBrush::~SandBrush()
 void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
     m_inkColor = color;
+    
     m_counter++;
 
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
+    //obs
+    m_amount = m_amount - 5;
 
-    qreal result;
-    if (m_properties->inkDepletion) {
-        //count decrementing of saturation and opacity
-        result = log((qreal)m_counter);
-        result = -(result * 10) / 100.0;
+    if( m_amount ){ //only paint if there is enough sand
 
-        if (m_properties->useSaturation) {
-            if (m_transfo) {
-                m_transfo->setParameter(m_saturationId,result);
-                m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
-            }
-            
-        }
+        qint32 pixelSize = dev->colorSpace()->pixelSize();
+        KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
-        if (m_properties->useOpacity) {
+        qreal result;
+        if (m_properties->sandDepletion) {
+            //count decrementing of saturation and opacity
+            result = log((qreal)m_counter);
+            result = -(result * 10) / 100.0;
+
+
             qreal opacity = (1.0f + result);
             m_inkColor.setOpacity(opacity);
+
         }
-    }
-    
-    int pixelX, pixelY;
-    int radiusSquared = m_properties->radius * m_properties->radius;
-    double dirtThreshold = 0.5;
-    
-    for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
-        int bySquared = by*by;
-        for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
-            // let's call that noise from ground to sand :)
-            if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
-                continue;
+
+        int pixelX, pixelY;
+        int radiusSquared = m_properties->radius * m_properties->radius;
+        double dirtThreshold = 0.95;
+
+        for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
+            int bySquared = by*by;
+            for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
+                // let's call that noise from ground to sand :)
+                if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
+                    continue;
+                }
+
+                pixelX = qRound(x + bx);
+                pixelY = qRound(y + by);
+
+                accessor->moveTo(pixelX, pixelY);
+                memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
             }
-
-            pixelX = qRound(x + bx);
-            pixelY = qRound(y + by);
-
-            accessor->moveTo(pixelX, pixelY);
-            memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
         }
     }
 }
