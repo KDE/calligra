@@ -176,16 +176,19 @@ void BibliographyDatabaseWindow::setupActions()
     QAction *action = new QAction(i18n("Regular expression"), this);
     action->setCheckable(true);
     action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::RegExp));
+    ui.searchButton->addAction(action);
     searchActions->addAction(action);
 
     action = new QAction(i18n("Widcard"), this);
     action->setCheckable(true);
     action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::Wildcard));
+    ui.searchButton->addAction(action);
     searchActions->addAction(action);
 
     action = new QAction(i18n("Fixed string"), this);
     action->setCheckable(true);
     action->setData(QVariant::fromValue<QRegExp::PatternSyntax>(QRegExp::FixedString));
+    ui.searchButton->addAction(action);
     searchActions->addAction(action)->setChecked(true);
 
     ui.menuSearch->addActions(searchActions->actions());

@@ -51,9 +51,18 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="searchLabel">
+          <widget class="FormattingButton" name="searchButton">
            <property name="text">
             <string>Search</string>
+           </property>
+           <property name="popupMode">
+            <enum>QToolButton::InstantPopup</enum>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextOnly</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -77,7 +86,7 @@
      <x>0</x>
      <y>0</y>
      <width>726</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -186,6 +195,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FormattingButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">dialogs/FormattingButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
