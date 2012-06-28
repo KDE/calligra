@@ -5,7 +5,9 @@ set(desktop_FILES
     blue_orange_vector.desktop
     burning_desire.desktop
     business.desktop
+    curious_penguin.desktop
     flood_light.desktop
+    kde_events.desktop
     simple_waves.desktop
     rounded_square.desktop
     skyline_monotone.desktop
@@ -21,7 +23,9 @@ set(otp_FILES
     blue_orange_vector.otp
     burning_desire.otp
     business.otp
+    curious_penguin.otp
     flood_light.otp
+    kde_events.otp
     rounded_square.otp
     simple_waves.otp
     skyline_monotone.otp
