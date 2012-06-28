@@ -41,6 +41,9 @@ public:
         KisNodeSP paint1 = findNode(m_image->root(), "paint1");
         KisPaintDeviceSP device1 = paint1->paintDevice();
 
+        removeMaskEffects();
+        m_image->refreshGraph(m_image->root(),m_image->bounds(),QRect(0,0,0,0));
+
         qDebug() << "Image bounds before painting:" << ppVar(m_image->bounds());
 
         KisPainter* painter1 = new KisPainter();
@@ -66,8 +69,8 @@ private:
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         m_image = createImage(undoStore);
         m_image->setCanvasInfinite();
+        removeMaskEffects();
         m_image->initialRefreshGraph();
-        findNode(m_image->root(),"tmask1")->setVisible(false);
 
         QVERIFY(checkLayers(m_image, "initial"));
     }
@@ -76,6 +79,17 @@ private:
         //undoStore->undo();
         //m_image->waitForDone();
         //QVERIFY(checkLayers(m_image, "initial"));
+    }
+
+    inline void removeMaskEffects()
+    {
+
+        KisTransparencyMaskSP tmask= dynamic_cast<KisTransparencyMask*>(findNode(m_image->root(),"tmask1").data());
+        tmask->selection()->clear();
+        tmask->selection()->getOrCreatePixelSelection()->clear();
+        tmask->selection()->getOrCreatePixelSelection()->invert();
+        KisCloneLayerSP clone=dynamic_cast<KisCloneLayer*>(findNode(m_image->root(),"clone1").data());
+        clone=dynamic_cast<KisCloneLayer*>((findNode(m_image->root(),"paint1")->clone()).data());
     }
 
 private:
