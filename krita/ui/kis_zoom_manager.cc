@@ -79,8 +79,19 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
 
     KisImageWSP image = m_view->image();
-    m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
-    m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
+    /* If the image has an infinite canvas, the zoom had better be set to the screen size.
+      Else, the viewport will be focussed on a 1x1 box on startup and the brush strokes will therefore not look good */
+    if(m_view->image()->isCanvasInfinite())
+    {
+        QSize sz = QApplication::desktop()->screenGeometry(this).size();
+        m_zoomController->setPageSize(QSizeF(sz.width() / image->xRes(), sz.height() / image->yRes()));
+        m_zoomController->setDocumentSize(QSizeF(sz.width() / image->xRes(), sz.height() / image->yRes()), true);
+    }
+    else  ///If it's not infiniteCanvas, the pagesize may well be set by taking the image's static dimensions
+    {
+        m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
+        m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
+    }
 
     m_zoomAction = m_zoomController->zoomAction();
     actionCollection->addAction("zoom", m_zoomAction);
