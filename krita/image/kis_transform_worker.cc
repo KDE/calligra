@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
- *  Copyright (c) 2005-2007 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005-2007 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
@@ -507,7 +507,7 @@ bool KisTransformWorker::run()
     if (m_xscale == 0 || m_yscale == 0) return false;
 
     // Progress info
-    m_progressTotalSteps = 0;
+    m_progressTotalSteps = 1;
     m_progressStep = 0;
 
     KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
@@ -534,9 +534,6 @@ bool KisTransformWorker::run()
     double rotation = m_rotation;
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
-
-
-    m_progressTotalSteps = 0;
 
     // Apply shear X and Y
     if (xshear != 0 || yshear != 0) {

@@ -192,13 +192,12 @@ void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, cons
 
 QRect KPrSlidesManagerView::itemSize() const
 {
-    return m_itemSize;
-}
-
-void KPrSlidesManagerView::setItemSize(QRect size)
-{
-    m_itemSize = size;
-    setSpacing(m_itemSize.width() / 10);
+    if (model()) {
+        return (this->visualRect(model()->index(0,0,QModelIndex())));
+    }
+    else {
+        return QRect();
+    }
 }
 
 void KPrSlidesManagerView::setDraggingFlag(bool flag)

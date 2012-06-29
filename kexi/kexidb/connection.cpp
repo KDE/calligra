@@ -47,7 +47,13 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#define KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION 1
+/*! Version number of extended table schema.
+
+  List of changes:
+  * 2: (Kexi 2.5.0) Added maxLengthIsDefault property (type: bool, if true, Field::maxLengthStrategy() == Field::DefaultMaxLength)
+  * 1: (Kexi 1.x) Initial version
+*/
+#define KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION 2
 
 //#define KEXIDB_LOOKUP_FIELD_TEST
 
@@ -987,8 +993,24 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
                     v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
                 else
                     v += QString::fromLatin1("(%1)").arg(field->precision());
-            } else if (field->type() == Field::Text && field->length() > 0)
-                v += QString::fromLatin1("(%1)").arg(field->length());
+            }
+            else if (field->type() == Field::Text) {
+                uint realMaxLen;
+                if (m_driver->beh->TEXT_TYPE_MAX_LENGTH == 0) {
+                    realMaxLen = field->maxLength(); // allow to skip (N)
+                }
+                else { // max length specified by driver
+                    if (field->maxLength() == 0) { // as long as possible
+                        realMaxLen = m_driver->beh->TEXT_TYPE_MAX_LENGTH;
+                    }
+                    else { // not longer than specified by driver
+                        realMaxLen = qMin(m_driver->beh->TEXT_TYPE_MAX_LENGTH, field->maxLength());
+                    }
+                }
+                if (realMaxLen > 0) {
+                    v += QString::fromLatin1("(%1)").arg(realMaxLen);
+                }
+            }
 
             if (autoinc)
                 v += (" " +
@@ -1562,6 +1584,14 @@ static FieldList* createFieldListForKexi__Fields(TableSchema *kexi__fieldsSchema
            );
 }
 
+static QVariant buildLengthValue(const Field& f)
+{
+    if (f.isFPNumericType()) {
+        return f.scale();
+    }
+    return f.maxLength();
+}
+
 //! builds a list of values for field's \a f properties. Used by createTable().
 void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
 {
@@ -1570,7 +1600,7 @@ void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
     << QVariant(f->table()->id())
     << QVariant(f->type())
     << QVariant(f->name())
-    << QVariant(f->isFPNumericType() ? f->scale() : f->length())
+    << buildLengthValue(*f)
     << QVariant(f->isFPNumericType() ? f->precision() : 0)
     << QVariant(f->constraints())
     << QVariant(f->options())
@@ -2689,6 +2719,15 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
                 extendedTableSchemaMainEl, extendedTableSchemaFieldEl,
                 extendedTableSchemaStringIsEmpty);
         }
+        if (f->type() == Field::Text) {
+            if (f->maxLengthStrategy() == Field::DefaultMaxLength) {
+                addFieldPropertyToExtendedTableSchemaData(
+                    f, "maxLengthIsDefault", true, doc,
+                    extendedTableSchemaMainEl, extendedTableSchemaFieldEl,
+                    extendedTableSchemaStringIsEmpty);
+            }
+        }
+
         // boolean field with "not null"
 
         // add custom properties
@@ -2800,20 +2839,36 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
                         QByteArray propertyName = propEl.attribute("name").toLatin1();
                         if (propEl.attribute("custom") == "true") {
                             //custom property
-                            f->setCustomProperty(propertyName,
-                                                 KexiDB::loadPropertyValueFromDom(propEl.firstChild()));
-                        } else if (propertyName == "visibleDecimalPlaces"
-                                   && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
-                            intValue = KexiDB::loadIntPropertyValueFromDom(propEl.firstChild(), &ok);
-                            if (ok)
-                                f->setVisibleDecimalPlaces(intValue);
+                            const QVariant v(KexiDB::loadPropertyValueFromDom(propEl.firstChild(), &ok));
+                            if (ok) {
+                                f->setCustomProperty(propertyName, v);
+                            }
+                        }
+                        else if (propertyName == "visibleDecimalPlaces") {
+                            if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
+                                intValue = KexiDB::loadIntPropertyValueFromDom(propEl.firstChild(), &ok);
+                                if (ok)
+                                    f->setVisibleDecimalPlaces(intValue);
+                            }
+                        }
+                        else if (propertyName == "maxLengthIsDefault") {
+                            if (f->type() == Field::Text) {
+                                const bool maxLengthIsDefault
+                                    = KexiDB::loadPropertyValueFromDom(propEl.firstChild(), &ok).toBool();
+                                if (ok) {
+                                    f->setMaxLengthStrategy(
+                                        maxLengthIsDefault ? Field::DefaultMaxLength : Field::DefinedMaxLength);
+                                }
+                            }
+
                         }
 //! @todo more properties...
                     } else if (propEl.tagName() == "lookup-column") {
                         LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromDom(propEl);
-                        if (lookupFieldSchema)
+                        if (lookupFieldSchema) {
                             lookupFieldSchema->debug();
-                        tableSchema.setLookupFieldSchema(f->name(), lookupFieldSchema);
+                            tableSchema.setLookupFieldSchema(f->name(), lookupFieldSchema);
+                        }
                     }
                 }
             } else {
@@ -2835,9 +2890,15 @@ KexiDB::Field* Connection::setupField(const RecordData &data)
     if (!ok)
         return 0;
     Field::Type f_type = (Field::Type)f_int_type;
-    int f_len = qMax(0, data.at(3).toInt(&ok));
-    if (!ok)
+    int f_len = qMax(0, data.at(3).toInt(&ok)); // defined limit
+    if (!ok) {
         return 0;
+    }
+    if (f_len < 0) {
+        f_len = 0;
+    }
+//! @todo load maxLengthStrategy info to see if the maxLength is the default
+
     int f_prec = data.at(4).toInt(&ok);
     if (!ok)
         return 0;

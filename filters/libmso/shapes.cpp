@@ -418,7 +418,10 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     if (!ds.pib()) return;
 
     out.xml.startElement("draw:frame");
-    processStyleAndText(o, out);
+    processStyle(o, out);
+
+    //NOTE: OfficeArtClienData might contain additional information
+    //about a shape.
 
     QString url;
     if (client) {

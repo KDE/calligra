@@ -188,7 +188,7 @@ void RelationEditor::slotOptions()
         v = m_view->masterView();
         col0 = true;
     }
-    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( v, col0, this );
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( this, v, col0, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -218,11 +218,13 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void RelationEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->model()->columnMap(), context );
 }
 

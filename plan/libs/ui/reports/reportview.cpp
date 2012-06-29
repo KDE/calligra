@@ -29,7 +29,7 @@
 #include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
 #include "kptdebug.h"
-
+#include "KoPageLayout.h"
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
@@ -66,7 +66,8 @@
 #include <QPrinter>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QScrollArea>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 #include <QLayout>
 #include <QDockWidget>
 #include <QModelIndex>
@@ -91,7 +92,7 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
 
     //FIXME: This should be done by KoReportPrintRender but setupPrinter() is private
     QPrinter *pPrinter = &printer();
-    pPrinter->setCreator("KPlato");
+    pPrinter->setCreator("Plan");
     pPrinter->setDocName(reportDocument->title());
     pPrinter->setFullPage(true);
     pPrinter->setOrientation((reportDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape));
@@ -102,6 +103,13 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     else
         pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(reportDocument->pageOptions().getPageSize())));
 
+    //FIXME: There is something wrong with koreport margins
+    qreal left = reportDocument->pageOptions().getMarginLeft();
+    qreal top = reportDocument->pageOptions().getMarginTop();
+    qreal right = reportDocument->pageOptions().getMarginRight();
+    qreal bottom = reportDocument->pageOptions().getMarginBottom();
+
+    pPrinter->setPageMargins( left, top, right, bottom, QPrinter::Point );
 }
 
 ReportPrintingDialog::~ReportPrintingDialog()
@@ -111,10 +119,12 @@ ReportPrintingDialog::~ReportPrintingDialog()
 
 void ReportPrintingDialog::startPrinting( RemovePolicy removePolicy )
 {
-     //HACK fix when KoRreportPrinter can print single pages
-    setPageRange( QList<int>() << printer().fromPage() );
-
-    KoPrintingDialog::startPrinting( removePolicy );
+    kDebug(planDbg());
+    QPainter p( &printer() );
+    printPage( 1,  p );
+    if ( removePolicy == DeleteWhenDone ) {
+        deleteLater();
+    }
 }
 
 int ReportPrintingDialog::documentLastPage() const
@@ -145,11 +155,15 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
 
     m_preRenderer = 0;
     setObjectName("ReportView");
-    m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setBackgroundRole(QPalette::Dark);
-    m_scrollArea->viewport()->setAutoFillBackground(true);
+    
+    m_reportView = new QGraphicsView(this);   
+    m_reportScene = new QGraphicsScene(this);
+    m_reportScene->setSceneRect(0,0,1000,2000);
+    m_reportView->setScene(m_reportScene);
+    m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
+    
     QVBoxLayout *l = new QVBoxLayout( this );
-    l->addWidget( m_scrollArea );
+    l->addWidget( m_reportView );
     m_pageSelector = new ReportNavigator( this );
     l->addWidget( m_pageSelector );
 
@@ -269,7 +283,7 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
 
 void ReportView::renderPage( int page )
 {
-    m_reportWidget->renderPage( page );
+    m_reportPage->renderPage( page );
 }
 
 void ReportView::nextPage()
@@ -318,6 +332,29 @@ void ReportView::slotExport()
     dia->show();
     dia->raise();
     dia->activateWindow();
+}
+
+KoPageLayout ReportView::pageLayout() const
+{
+    KoPageLayout p = ViewBase::pageLayout();
+    ReportPageOptions opt = m_reportDocument->pageOptions();
+    p.orientation = opt.isPortrait() ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+
+    if (opt.getPageSize().isEmpty()) {
+        p.format = KoPageFormat::CustomSize;
+        p.width = opt.getCustomWidth();
+        p.height = opt.getCustomHeight();
+    } else {
+        p.format = KoPageFormat::formatFromString(opt.getPageSize());
+    }
+    p.topMargin = opt.getMarginTop();
+    p.bottomMargin = opt.getMarginBottom();
+    p.leftMargin = opt.getMarginLeft();
+    p.rightMargin = opt.getMarginRight();
+
+    p.pageEdge = 0.0;
+    p.bindingSide = 0.0;
+    return p;
 }
 
 void ReportView::slotExportFinished( int result )
@@ -464,9 +501,14 @@ void ReportView::slotRefreshView()
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
 
-    m_reportWidget = new KoReportPage(this, m_reportDocument);
-    m_reportWidget->setObjectName("ReportPage");
-    m_scrollArea->setWidget(m_reportWidget);
+    m_reportPage = new KoReportPage(this, m_reportDocument);
+    m_reportPage->setObjectName("ReportPage");
+    
+    m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+    m_reportScene->addItem(m_reportPage);
+    m_reportPage->setPos(20,20);
+    m_reportView->centerOn(0,0);
+	    
     return;
 }
 

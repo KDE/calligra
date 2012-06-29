@@ -127,6 +127,7 @@
 #include "kptdebug.h"
 
 #include "plansettings.h"
+#include "kptprintingcontrolprivate.h"
 
 // #include "KPtViewAdaptor.h"
 
@@ -231,7 +232,7 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( part->isEmbedded() || shell() == 0 ) {
+    if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
@@ -2771,6 +2772,27 @@ QWidget *View::canvas() const
     return m_tab->currentWidget();//KoView::canvas();
 }
 
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
+}
+
+QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
+{
+    kDebug(planDbg())<<printJob;
+    KoPrintingDialog *job = dynamic_cast<KoPrintingDialog*>( printJob );
+    if ( ! job ) {
+        return 0;
+    }
+    QPrintDialog *dia = KoView::createPrintDialog( job, parent );
+
+    PrintingDialog *j = dynamic_cast<PrintingDialog*>( job );
+    if ( j ) {
+        new PrintingControlPrivate( j, dia );
+    }
+    return dia;
+}
+
 void View::slotCurrentChanged( int )
 {
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
@@ -3081,7 +3103,34 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
+//---------------------------------
+PrintingControlPrivate::PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia )
+    : QObject( dia ),
+    m_job( job ),
+    m_dia( dia )
+{
+    connect(job, SIGNAL(changed()), SLOT(slotChanged()));
+}
+
+void PrintingControlPrivate::slotChanged()
+{
+    if ( ! m_job || ! m_dia ) {
+        return;
+    }
+    QSpinBox *to = m_dia->findChild<QSpinBox*>("to");
+    QSpinBox *from = m_dia->findChild<QSpinBox*>("from");
+    if ( to && from ) {
+        from->setMinimum( m_job->documentFirstPage() );
+        from->setMaximum( m_job->documentLastPage() );
+        from->setValue( from->minimum() );
+        to->setMinimum( from->minimum() );
+        to->setMaximum( from->maximum() );
+        to->setValue( to->maximum() );
+    }
+}
+
 
 }  //KPlato namespace
 
+#include "kptprintingcontrolprivate.moc"
 #include "kptview.moc"

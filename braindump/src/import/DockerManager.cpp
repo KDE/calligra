@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2008,2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2008,2010 C. Boemann <cbo@boemann.dk>
  * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ public:
     }
 
     QDockWidget* createDockWidget() {
-        return new QDockWidget(i18n("Tool Bars Docker"));
+        return new QDockWidget(i18n("Tool Bars"));
     }
 
     DockPosition defaultDockPosition() const {

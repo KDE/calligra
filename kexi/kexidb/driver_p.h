@@ -135,6 +135,13 @@ public:
     /*! True if "SELECT 1 from (subquery)" is supported. False by default.
      Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
     bool SELECT_1_SUBQUERY_SUPPORTED : 1;
+
+    /*! Specifies maximum length for Text type. If 0, there is are limits and length argument is not needed,
+     e.g. VARCHAR works for the driver this is the case for SQLite and PostgreSQL.
+     If greater than 0, this value should be used to express maximum value, e.g. VARCHAR(...).
+     This is the case for MySQL.
+     The default is 0. */
+    uint TEXT_TYPE_MAX_LENGTH;
 };
 
 /*! Private driver's data members. Available for implementation. */

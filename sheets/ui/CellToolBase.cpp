@@ -30,12 +30,12 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "ActionOptionWidget.h"
 #include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellEditor.h"
-#include "CellToolOptionWidget.h"
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
@@ -132,6 +132,7 @@
 #include <KMessageBox>
 #include <KReplace>
 #include <KStandardAction>
+#include <KStandardDirs>
 #include <KToggleAction>
 
 // Qt
@@ -153,9 +154,9 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
         , d(new Private(this))
 {
     d->cellEditor = 0;
+    d->externalEditor = 0;
     d->formulaDialog = 0;
     d->specialCharDialog = 0;
-    d->optionWidget = 0;
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
@@ -1136,16 +1137,36 @@ void CellToolBase::init()
 QList <QWidget*> CellToolBase::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    d->optionWidget = new CellToolOptionWidget(this);
 
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotAddAreaName(const QString&)));
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
+    QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
+    kDebug() << xmlName;
+    if (xmlName.isEmpty()) {
+        kWarning() << "couldn't find CellToolOptionWidgets.xml file";
+        return widgets;
+    }
 
-    selection()->update(); // initialize the location combobox
-    d->optionWidget->setWindowTitle(i18n("Cell Editor"));
-    widgets.append(d->optionWidget);
+    QFile f(xmlName);
+    if (!f.open(QIODevice::ReadOnly)) {
+        kWarning() << "couldn't open CellToolOptionWidgets.xml file";
+        return widgets;
+    }
+
+    QDomDocument doc(QString::fromLatin1("optionWidgets"));
+    QString errorMsg;
+    int errorLine, errorCol;
+    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
+        f.close();
+        kWarning() << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
+        return widgets;
+    }
+    f.close();
+
+    QDomNodeList widgetNodes = doc.elementsByTagName("optionWidget");
+    for (int i = 0; i < widgetNodes.size(); i++) {
+        QDomElement e = widgetNodes.at(i).toElement();
+        widgets.append(new ActionOptionWidget(this, e));
+    }
+
     return widgets;
 }
 
@@ -1245,7 +1266,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 void CellToolBase::selectionChanged(const Region& region)
 {
     Q_UNUSED(region);
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     // Update the editor, if the reference selection is enabled.
@@ -1353,14 +1374,15 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
-    if(d->optionWidget && d->optionWidget->editor()) {
-        connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
-                d->optionWidget->editor(), SLOT(setText(const QString &)));
-        connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
-                d->cellEditor, SLOT(setText(const QString &)));
-        d->optionWidget->applyButton()->setEnabled(true);
-        d->optionWidget->cancelButton()->setEnabled(true);
-    }
+
+        if(d->externalEditor) {
+            connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
+                    d->externalEditor, SLOT(setText(const QString &)));
+            connect(d->externalEditor, SIGNAL(textChanged(const QString &)),
+                    d->cellEditor, SLOT(setText(const QString &)));
+            d->externalEditor->applyAction()->setEnabled(true);
+            d->externalEditor->cancelAction()->setEnabled(true);
+        }
 
         double w = cell.width();
         double h = cell.height();
@@ -1450,8 +1472,8 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->optionWidget->applyButton()->setEnabled(false);
-    d->optionWidget->cancelButton()->setEnabled(false);
+    d->externalEditor->applyAction()->setEnabled(false);
+    d->externalEditor->cancelAction()->setEnabled(false);
     canvas()->canvasWidget()->setFocus();
 }
 
@@ -1477,7 +1499,7 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 
 void CellToolBase::updateEditor()
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
@@ -1497,13 +1519,13 @@ void CellToolBase::focusEditorRequested()
     // This screws up <Tab> though (David)
     if (selection()->originSheet() != selection()->activeSheet()) {
         // Always focus the external editor, if not on the origin sheet.
-        d->optionWidget->editor()->setFocus();
+        d->externalEditor->setFocus();
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->widget()->setFocus();
         } else {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         }
     }
 }
@@ -1541,7 +1563,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(readWrite);
@@ -1549,7 +1571,7 @@ void CellToolBase::documentReadWriteToggled(bool readWrite)
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(!protect);
@@ -2874,7 +2896,7 @@ void CellToolBase::edit()
     } else {
         // Switch focus.
         if (editor()->widget()->hasFocus()) {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         } else {
             editor()->widget()->setFocus();
         }
@@ -3524,4 +3546,9 @@ void CellToolBase::breakBeforeRow(bool enable)
     command->setReverse(!enable);
     command->add(*selection());
     command->execute(canvas());
+}
+
+void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)
+{
+    d->externalEditor = editor;
 }

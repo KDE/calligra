@@ -80,7 +80,7 @@ Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
         if (Calligra::Sheets::View* v = kspreadView())
             d->doc = v->doc();
         if (! d->doc)
-            d->doc = new Calligra::Sheets::Doc(0, this);
+            d->doc = new Calligra::Sheets::Doc(this);
     }
     return d->doc;
 }

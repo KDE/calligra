@@ -41,6 +41,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class ExternalEditor;
 class SheetView;
 class CellEditorBase;
 
@@ -94,11 +95,15 @@ public:
     void setLastEditorWithFocus(Editor type);
 
     /**
+     * Sets an external editor to be associated with the internal editor of this tool.
+     */
+    void setExternalEditor(Calligra::Sheets::ExternalEditor* editor);
+public Q_SLOTS:
+    /**
      * Scrolls to the cell located at \p location.
      */
     void scrollToCell(const QPoint &location);
 
-public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 

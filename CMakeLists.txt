@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "9.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "9")
+set(GENERIC_CALLIGRA_LIB_VERSION "10.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "10")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -28,8 +28,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
-option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -47,9 +45,7 @@ IF (TINY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -66,9 +62,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -85,9 +79,7 @@ ELSE()
     set(SHOULD_BUILD_FLOW TRUE)
     set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
-    set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
@@ -523,7 +515,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.10)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.12)
     set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
@@ -560,10 +552,6 @@ endif(SHOULD_BUILD_WORDS)
 if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
-
-if (SHOULD_BUILD_KOUNAVAIL)
-    macro_optional_add_subdirectory(kounavail)
-endif (SHOULD_BUILD_KOUNAVAIL)
 
 if (SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(kdgantt)
@@ -612,18 +600,6 @@ endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
       OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
      )
 
-if(SHOULD_BUILD_KOABSTRACTION)
-    # koabstraction depends on kotext & flake
-    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                        ${KOTEXT_INCLUDES}
-                        ${FLAKE_INCLUDES}
-                        ${KOPAGEAPP_INCLUDES}
-                        ${KOMAIN_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_MOBILE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION)
-
 if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
 else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
@@ -662,7 +638,6 @@ macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})

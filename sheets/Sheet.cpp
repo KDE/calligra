@@ -3354,23 +3354,6 @@ void Sheet::showStatusMessage(const QString &message, int timeout)
     emit statusMessage(message, timeout);
 }
 
-bool Sheet::saveChildren(KoStore* _store, const QString &_path)
-{
-    Q_UNUSED(_store);
-    Q_UNUSED(_path);
-#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
-    int i = 0;
-    foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
-            QString path = QString("%1/%2").arg(_path).arg(i++);
-            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
-                return false;
-        }
-    }
-#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
-    return true;
-}
-
 void Sheet::hideSheet(bool _hide)
 {
     setHidden(_hide);

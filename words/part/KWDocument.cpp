@@ -5,7 +5,7 @@
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2010 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -91,8 +91,8 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode),
+KWDocument::KWDocument(QObject *parent)
+        : KoDocument(parent),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -828,8 +828,7 @@ void KWDocument::saveConfig()
         return;
 //   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
-    if (isEmbedded())
-        return;
+
     m_config.save();
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
