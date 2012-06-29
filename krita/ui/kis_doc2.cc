@@ -424,7 +424,7 @@ bool KisDoc2::newImage(const QString& name,
     cfg.defColorProfile(image->colorSpace()->profile()->name());
     if(isCanvasInfinite())
     {
-        QColor bg = bgColor.toQColor();
+        QColor bg = bgColor.toQColor().setAlpha(bgColor.opacityU8());
         cfg.setCanvasBorderColor(bg);
     }
     else
