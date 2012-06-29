@@ -1220,9 +1220,13 @@ QRect KisImage::dynamicSize(KisNodeSP rootNode, QRect extent)
 {
     if(rootNode)
     {
-        extent |= rootNode->extent();
+        if(rootNode->name().compare("background"))
+            extent |= QRect(0,0,1,1);
+        else
+            extent |= rootNode->extent();
         extent |= dynamicSize(rootNode->nextSibling(),extent);
         extent |= dynamicSize(rootNode->firstChild(),extent);
+
     }
     return extent;
 }
