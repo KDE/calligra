@@ -455,8 +455,6 @@ public:
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
 
-    static QRect dynamicSize(KisNodeSP rootNode, QRect extent = QRect());
-
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
@@ -663,6 +661,12 @@ private:
      * \see deselectGlobalSelection()
      */
     void reselectGlobalSelection();
+
+    /**
+     * Used to calculate the extent of the exact data in the nodes recursively.
+     * Used by KisImage::bounds()
+     */
+    static QRect dynamicSize(KisNodeSP rootNode, QRect extent = QRect());
 
 private:
     class KisImagePrivate;
