@@ -22,6 +22,8 @@
 
 #include <QToolBar>
 #include <QGridLayout>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <kactioncollection.h>
 #include <kstandardaction.h>
@@ -83,7 +85,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
       Else, the viewport will be focussed on a 1x1 box on startup and the brush strokes will therefore not look good */
     if(m_view->image()->isCanvasInfinite())
     {
-        QSize sz = QApplication::desktop()->screenGeometry(this).size();
+        QSize sz = QApplication::desktop()->screen()->size();
         m_zoomController->setPageSize(QSizeF(sz.width() / image->xRes(), sz.height() / image->yRes()));
         m_zoomController->setDocumentSize(QSizeF(sz.width() / image->xRes(), sz.height() / image->yRes()), true);
     }
