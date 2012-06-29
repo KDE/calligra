@@ -82,6 +82,9 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
     updateColumnsWidth();
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(update()));
+    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    //It works only if one item could be selected each time
+    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
     adjustScale();
     m_header->update();
     m_view->update();

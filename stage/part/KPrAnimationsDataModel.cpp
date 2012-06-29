@@ -157,9 +157,9 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
             case AnimationIcon:
                 return QVariant();
             case StartTime:
-                return item->startTime();
+                return item->startTimeSeconds();
             case Duration:
-                return item->duration();
+                return item->durationSeconds();
             case AnimationClass:
                 return item->type();
             case TriggerEvent:
@@ -187,7 +187,7 @@ QVariant KPrAnimationsDataModel::data(const QModelIndex &index, int role) const
                 return item->animationName();
             case StartTime:
                 return i18n("Start after %1 seconds. Duration of %2 seconds").
-                        arg(item->startTime()).arg(item->duration());
+                        arg(item->startTimeSeconds()).arg(item->durationSeconds());
             case Duration:
             case AnimationClass:
                 return item->type();
@@ -232,11 +232,11 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
             case AnimationIcon:
                 return false;
             case StartTime:
-                setTimeRange(item, value.toInt(), item->duration()*1000);
+                setTimeRange(item, value.toInt(), item->duration());
                 emit dataChanged(index, index);
                 return true;
             case Duration:
-                setTimeRange(item, item->startTime()*1000, value.toInt());
+                setTimeRange(item, item->startTime(), value.toInt());
                 emit dataChanged(index, index);
                 return true;
             case AnimationClass:
@@ -302,8 +302,8 @@ void KPrAnimationsDataModel::update()
 void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration)
 {
     if (m_firstEdition) {
-        m_oldBegin = begin;
-        m_oldDuration = duration;
+        m_oldBegin = item->startTime();
+        m_oldDuration = item->duration();
         m_currentEditedItem = item;
         m_firstEdition = false;
     }
@@ -325,6 +325,18 @@ void KPrAnimationsDataModel::removeModel()
     emit layoutChanged();
 }
 
+void KPrAnimationsDataModel::notifyTimeRangeChanged(int begin, int end)
+{
+    Q_UNUSED(begin);
+    Q_UNUSED(end);
+    if(KPrCustomAnimationItem *item = qobject_cast<KPrCustomAnimationItem*>(sender())) {
+        QModelIndex index = indexByItem(item);
+        if (index.isValid()) {
+            emit dataChanged(index, index);
+        }
+    }
+}
+
 KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &index) const
 {
     if (index.isValid()) {
@@ -338,7 +350,7 @@ KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &
 qreal KPrAnimationsDataModel::rootItemEnd() const
 {
     if (m_rootItem) {
-        return m_rootItem->duration() + m_rootItem->startTime();
+        return m_rootItem->durationSeconds() + m_rootItem->startTimeSeconds();
     }
     return 0.0;
 }
@@ -347,16 +359,16 @@ void KPrAnimationsDataModel::endTimeLineEdition()
 {
     if (!m_firstEdition && m_currentEditedItem && (!m_currentEditedItem->isDefaulAnimation()) &&
             (m_oldBegin != INVALID) && (m_oldDuration != INVALID)) {
-        int begin = m_currentEditedItem->startTime()*1000;
-        int duration = m_currentEditedItem->duration()*1000;
+        int begin = m_currentEditedItem->startTime();
+        int duration = m_currentEditedItem->duration();
         if ((begin != m_oldBegin) || (duration != m_oldDuration)) {
             m_currentEditedItem->setStartTime(m_oldBegin);
             m_currentEditedItem->setDuration(m_oldDuration);
-
             KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
             KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(m_currentEditedItem->animation(),
                                                                                            begin, duration);
             doc->addCommand(command);
+            connect(m_currentEditedItem, SIGNAL(timeChanged(int,int)), this, SLOT(notifyTimeRangeChanged(int,int)));
         }
         m_oldBegin = INVALID;
         m_oldDuration = INVALID;

@@ -144,6 +144,12 @@ QPair<int, int> KPrShapeAnimation::timeRange()
     return pair;
 }
 
+int KPrShapeAnimation::globalDuration()
+{
+    QPair<int, int> range = timeRange();
+    return range.second - range.first;
+}
+
 void KPrShapeAnimation::setBeginTime(int timeMS)
 {
     if (timeMS < 0) {
@@ -159,6 +165,7 @@ void KPrShapeAnimation::setBeginTime(int timeMS)
             a->setBegin(a->begin()+timeDiff);
         }
     }
+    emit timeChanged(timeMS, timeRange().second);
 }
 
 void KPrShapeAnimation::setGlobalDuration(int timeMS)
@@ -176,6 +183,7 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
             a->setBegin(a->begin()*timeRatio);
         }
     }
+    emit timeChanged(timeRange().first, timeMS);
 }
 
 void KPrShapeAnimation::deactivate()

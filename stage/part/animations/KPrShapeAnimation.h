@@ -38,6 +38,7 @@ class KPrAnimationSubStep;
 
 class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
+    Q_OBJECT
 public:
 
     enum Node_Type {
@@ -92,6 +93,10 @@ public:
       * Return the begin and end time of the animation as a QPair
       */
     QPair<int, int> timeRange();
+    /**
+      * Return global duration of the shape animation
+      */
+    int globalDuration();
     void setBeginTime(int timeMS);
     void setGlobalDuration(int timeMS);
 
@@ -114,6 +119,9 @@ public:
     int stepIndex();
     int subStepIndex();
     int animIndex();
+
+signals:
+    void timeChanged(int begin, int end);
 
 
 private:

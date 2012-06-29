@@ -17,8 +17,9 @@ class KPrPage;
 /// Keeps pointers of KPrShapeAnimation objects and
 /// provides a interface more suitable for the tree and
 /// time line view.
-class STAGE_EXPORT KPrCustomAnimationItem : QObject
+class STAGE_EXPORT KPrCustomAnimationItem : public QObject
 {
+    Q_OBJECT
 public:
     explicit KPrCustomAnimationItem(KPrShapeAnimation *animation = 0, KPrCustomAnimationItem *parent=0);
     ~KPrCustomAnimationItem();
@@ -31,8 +32,10 @@ public:
     KPrShapeAnimation::Preset_Class type() const;       //Type: Entrance, exit, custom, etc
     QString typeText() const;
     KPrShapeAnimation::Node_Type triggerEvent() const;  //On click, after previous, etc
-    qreal startTime() const;                            //Animation start time
-    qreal duration() const;
+    qreal startTimeSeconds() const;                            //Animation start time
+    int startTime() const;
+    qreal durationSeconds() const;
+    int duration() const;
     KoShape *shape() const;
 
     /// Set start time / animation delay (Takes timeMS in miliseconds)
@@ -56,7 +59,8 @@ public:
     void initAsDefaultAnimation(KPrPage *page);
     bool isDefaulAnimation();
 
-
+signals:
+    void timeChanged(int begin, int end);
 
 private:
 

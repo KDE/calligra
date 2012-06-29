@@ -27,6 +27,9 @@ KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPr
     if (m_parent) {
         m_parent->addChild(this);
     }
+    if (m_shapeAnimation) {
+        connect(m_shapeAnimation, SIGNAL(timeChanged(int, int)), this, SIGNAL(timeChanged(int, int)));
+    }
 }
 
 KPrCustomAnimationItem::~KPrCustomAnimationItem()
@@ -130,7 +133,7 @@ KPrShapeAnimation::Node_Type KPrCustomAnimationItem::triggerEvent() const
     return KPrShapeAnimation::On_Click;
 }
 
-qreal KPrCustomAnimationItem::startTime() const
+qreal KPrCustomAnimationItem::startTimeSeconds() const
 {
     if (m_shapeAnimation) {
         return m_shapeAnimation->timeRange().first / 1000.0;
@@ -138,11 +141,26 @@ qreal KPrCustomAnimationItem::startTime() const
     return 0;
 }
 
-qreal KPrCustomAnimationItem::duration() const
+int KPrCustomAnimationItem::startTime() const
 {
     if (m_shapeAnimation) {
-        QPair <int, int> timeRange = m_shapeAnimation->timeRange();
-        return (timeRange.second-timeRange.first)/ 1000.0;
+        return m_shapeAnimation->timeRange().first;
+    }
+    return 0;
+}
+
+qreal KPrCustomAnimationItem::durationSeconds() const
+{
+    if (m_shapeAnimation) {
+        return m_shapeAnimation->globalDuration() / 1000.0;
+    }
+    return 0;
+}
+
+int KPrCustomAnimationItem::duration() const
+{
+    if (m_shapeAnimation) {
+        return m_shapeAnimation->globalDuration();
     }
     return 0;
 }

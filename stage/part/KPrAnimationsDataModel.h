@@ -73,6 +73,7 @@ public:
     /// Save a edit command
     void endTimeLineEdition();
 
+
 public slots:
     /// Triggers an update of the complete model
     void update();
@@ -81,6 +82,9 @@ public slots:
 
     /// set model to 0
     void removeModel();
+
+    /// Notify a external edition of begin or end time
+    void notifyTimeRangeChanged(int begin, int end);
 
 private:
     KPrView *m_view;

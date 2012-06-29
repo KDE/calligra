@@ -162,7 +162,7 @@ void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
     KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
     if (item) {
         m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
-        m_delayEdit->setTime(QTime().addMSecs(item->startTime()*1000));
-        m_durationEdit->setTime(QTime().addMSecs(item->duration()*1000));
+        m_delayEdit->setTime(QTime().addMSecs(item->startTime()));
+        m_durationEdit->setTime(QTime().addMSecs(item->duration()));
     }
 }
