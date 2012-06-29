@@ -404,7 +404,7 @@ void KisCanvas2::connectCurrentImage()
     connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
             this, SLOT(finishResizingImage(qint32, qint32)));
 
-    startResizingImage(image->width(), image->height());
+    startResizingImage(image->bounds().width(), image->bounds().height());
 
     emit imageChanged(image);
 }
