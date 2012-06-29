@@ -837,3 +837,23 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }
+
+QString KisConfig::defaultPalette()
+{
+    return m_cfg.readEntry("defaultPalette", QString());
+}
+
+void KisConfig::setDefaultPalette(const QString& name)
+{
+    m_cfg.writeEntry("defaultPalette", name);
+}
+
+bool KisConfig::useSystemMonitorProfile() const
+{
+    return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);
+}
+
+void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
+{
+    m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
+}
