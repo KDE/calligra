@@ -114,6 +114,26 @@
      <height>121</height>
     </rect>
    </property>
+   <item>
+    <property name="text">
+     <string>item1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item3</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item4</string>
+    </property>
+   </item>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
@@ -141,7 +161,7 @@
     <string>Drag from Labels and Drop in desired field</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -152,7 +172,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -185,7 +205,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -220,5 +240,22 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>PivotMain</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>183</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
