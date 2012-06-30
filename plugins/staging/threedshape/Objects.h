@@ -46,7 +46,7 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
     QVector3D sphereCenter() const { return m_center; }
@@ -69,7 +69,7 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
     QVector3D minEdge() const { return m_minEdge;   }
@@ -95,7 +95,7 @@ public:
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
     QString path()       const { return m_path; }
@@ -129,7 +129,7 @@ public:
     virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
     QString path()               const { return m_path; }

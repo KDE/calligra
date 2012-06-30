@@ -61,7 +61,7 @@ public:
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
     Ko3dScene *threeDParams() const;

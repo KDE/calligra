@@ -73,7 +73,7 @@ class KoXmlWriter;
 //       they will be saved inline in the document contents.  But ODF
 //       only allows 3D objects inside a dr3d:scene, so this is
 //       invalid XML.  Thus, we have to create an empty saveOdf() and
-//       instead introduce a new saving function (saveOdf2()) that is
+//       instead introduce a new saving function (saveObjectOdf()) that is
 //       only called from the saveOdf() of the top level dr3d:scene
 //       object, thus reimplementing some of the features of
 //       KoShapeContainer.
@@ -96,7 +96,7 @@ public:
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
-    virtual void saveOdf2(KoShapeSavingContext &context) const;
+    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
 
 protected:

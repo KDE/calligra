@@ -85,7 +85,7 @@ void Object3D::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 
 }
-void Object3D::saveOdf2(KoShapeSavingContext &context) const
+void Object3D::saveObjectOdf(KoShapeSavingContext &context) const
 {
     if (!m_transform3D.isEmpty()) {
         KoXmlWriter &writer = context.xmlWriter();

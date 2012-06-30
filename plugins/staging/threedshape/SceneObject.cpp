@@ -96,11 +96,11 @@ void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
 void SceneObject::saveOdf(KoShapeSavingContext &context) const
 {
     if (m_topLevel) {
-        saveOdf2(context);
+        saveObjectOdf(context);
     }
 }
 
-void SceneObject::saveOdf2(KoShapeSavingContext &context) const
+void SceneObject::saveObjectOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter &writer = context.xmlWriter();
 
@@ -120,7 +120,7 @@ void SceneObject::saveOdf2(KoShapeSavingContext &context) const
 
     // 2.2 Objects in the scene
     foreach (const Object3D *object, m_objects) {
-        object->saveOdf2(context);
+        object->saveObjectOdf(context);
     }
 
     writer.endElement(); // dr3d:scene

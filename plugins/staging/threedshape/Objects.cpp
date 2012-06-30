@@ -87,7 +87,7 @@ void Sphere::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void Sphere::saveOdf2(KoShapeSavingContext &context) const
+void Sphere::saveObjectOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Sphere:" << m_center << m_size;
 
@@ -95,7 +95,7 @@ void Sphere::saveOdf2(KoShapeSavingContext &context) const
     writer.startElement("dr3d:sphere");
 
     saveOdfAttributes(context, OdfObjectAttributes);
-    Object3D::saveOdf2(context);
+    Object3D::saveObjectOdf(context);
 
     writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x())
                         .arg(m_center.y()).arg(m_center.z()));
@@ -149,7 +149,7 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void Cube::saveOdf2(KoShapeSavingContext &context) const
+void Cube::saveObjectOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Cube:" << m_minEdge << m_maxEdge;
 
@@ -157,7 +157,7 @@ void Cube::saveOdf2(KoShapeSavingContext &context) const
     writer.startElement("dr3d:cube");
 
     saveOdfAttributes(context, OdfObjectAttributes);
-    Object3D::saveOdf2(context);
+    Object3D::saveObjectOdf(context);
 
     writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
                         .arg(m_minEdge.y()).arg(m_minEdge.z()));
@@ -214,7 +214,7 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void Extrude::saveOdf2(KoShapeSavingContext &context) const
+void Extrude::saveObjectOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Extrude:" << m_path;
 
@@ -222,7 +222,7 @@ void Extrude::saveOdf2(KoShapeSavingContext &context) const
     writer.startElement("dr3d:extrude");
 
     saveOdfAttributes(context, OdfObjectAttributes);
-    Object3D::saveOdf2(context);
+    Object3D::saveObjectOdf(context);
 
     writer.addAttribute("svg:d", m_path);
     writer.addAttribute("svg:viewBox", m_viewBox);
@@ -331,7 +331,7 @@ void Rotate::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void Rotate::saveOdf2(KoShapeSavingContext &context) const
+void Rotate::saveObjectOdf(KoShapeSavingContext &context) const
 {
     kDebug(31000) << "Saving Rotate:" << m_path;
 
@@ -339,7 +339,7 @@ void Rotate::saveOdf2(KoShapeSavingContext &context) const
     writer.startElement("dr3d:rotate");
 
     saveOdfAttributes(context, OdfObjectAttributes);
-    Object3D::saveOdf2(context);
+    Object3D::saveObjectOdf(context);
 
     writer.addAttribute("svg:d", m_path);
     writer.addAttribute("svg:viewBox", m_viewBox);
