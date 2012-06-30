@@ -130,7 +130,15 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.save();
 
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-    gc.fillRect(QRect(QPoint(0, 0), size()), borderColor());
+    if(image->isCanvasInfinite())
+    {
+        gc.fillRect(QRect(QPoint(0, 0), size()), m_d->checkBrush);
+    }
+    else
+    {
+        gc.fillRect(QRect(QPoint(0, 0), size()), borderColor());
+    }
+
 
     QTransform checkersTransform;
     QPointF brushOrigin;
