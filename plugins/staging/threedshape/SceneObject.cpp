@@ -48,8 +48,8 @@
 #include "Objects.h"
 
 
-SceneObject::SceneObject(bool topLevel)
-    : Object3D()
+SceneObject::SceneObject(Object3D *parent, bool topLevel)
+    : Object3D(parent)
       //, KoShapeContainer()
     , m_topLevel(topLevel)
     , m_threeDParams(0)
@@ -134,6 +134,7 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     } else {
         loadOdfAttributes(sceneElement, context, (OdfAdditionalAttributes | OdfMandatories));
     }
+    Object3D::loadOdf(sceneElement, context);
 
     // Load the view parameters.
     if (m_topLevel) {
@@ -161,27 +162,27 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
     forEachElement(elem, sceneElement) {
 
         if (elem.localName() == "scene" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            SceneObject  *scene = new SceneObject(false);
+            SceneObject  *scene = new SceneObject(this, false);
             scene->loadOdf(elem, context);
             m_objects.append(scene);
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Sphere  *sphere = new Sphere();
+            Sphere  *sphere = new Sphere(this);
             sphere->loadOdf(elem, context);
             m_objects.append(sphere);
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Cube  *cube = new Cube();
+            Cube  *cube = new Cube(this);
             cube->loadOdf(elem, context);
             m_objects.append(cube);
         }
         else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Extrude  *extrude = new Extrude();
+            Extrude  *extrude = new Extrude(this);
             extrude->loadOdf(elem, context);
             m_objects.append(extrude);
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
-            Rotate  *rotate = new Rotate();
+            Rotate  *rotate = new Rotate(this);
             rotate->loadOdf(elem, context);
             m_objects.append(rotate);
         }

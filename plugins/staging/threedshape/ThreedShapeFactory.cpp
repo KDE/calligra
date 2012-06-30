@@ -71,7 +71,7 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 {
     Q_UNUSED(documentResources);
 
-    SceneObject *defaultShape = new SceneObject(true);
+    SceneObject *defaultShape = new SceneObject(0, true);
     defaultShape->setShapeId(THREEDSHAPEID);
 
     return defaultShape;

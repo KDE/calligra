@@ -37,7 +37,7 @@ class KoXmlWriter;
 class Sphere : public Object3D
 {
 public:
-    Sphere();
+    explicit Sphere(Object3D *parent);
     virtual ~Sphere();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
@@ -60,7 +60,7 @@ private:
 class Cube : public Object3D
 {
 public:
-    Cube();
+    explicit Cube(Object3D *parent);
     virtual ~Cube();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
@@ -83,7 +83,7 @@ private:
 class Extrude : public Object3D
 {
 public:
-    Extrude();
+    explicit Extrude(Object3D *parent);
     virtual ~Extrude();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
@@ -117,7 +117,7 @@ private:
 class Rotate : public Object3D
 {
 public:
-    Rotate();
+    explicit Rotate(Object3D *parent);
     virtual ~Rotate();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter,

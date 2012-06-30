@@ -46,7 +46,7 @@ public:
     // @param topLevel true if this is the top level scene
     // element. The top level element is the only one that should read
     // view parameters from the element.
-    SceneObject(bool topLevel = false);
+    SceneObject(Object3D *parent, bool topLevel = false);
     virtual ~SceneObject();
 
     // reimplemented from KoShape

@@ -84,10 +84,11 @@ class KoXmlWriter;
 class Object3D : public KoShape
 {
 public:
-    Object3D();
+    explicit Object3D(Object3D *parent);
     virtual ~Object3D();
 
     // getters
+    Object3D *parent();
     QString transform();
 
     // reimplemented
@@ -100,7 +101,8 @@ public:
 
 
 protected:
-    QString  m_transform3D;
+    Object3D *m_parent;
+    QString   m_transform3D;
 };
 
 

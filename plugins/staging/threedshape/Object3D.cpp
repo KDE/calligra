@@ -47,8 +47,9 @@
 //                             Object3D
 
 
-Object3D::Object3D()
+Object3D::Object3D(Object3D *parent)
     : KoShape()
+    , m_parent(parent)
 {
 }
 
@@ -60,6 +61,11 @@ Object3D::~Object3D()
 QString Object3D::transform()
 {
     return m_transform3D;
+}
+
+Object3D *Object3D::parent()
+{
+    return m_parent;
 }
 
 
