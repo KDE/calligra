@@ -22,6 +22,8 @@
 
 #include <QDialog>
 
+typedef QPair<QString, QString> ConditionPair;
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGroupBox;
@@ -36,7 +38,9 @@ class EditFiltersDialog : public QDialog
     Q_OBJECT
 public:
     explicit EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *parent);
-    static const QStringList filterConditions;
+    static const QList<ConditionPair> filterConditions;
+signals:
+    void changedFilterString(QString);
 public slots:
     void addFilter();
     void applyFilters();
@@ -67,7 +71,7 @@ public:
 public slots:
     void setLeftOperand(const QString &op);
     void setRightOperand(const QString &op);
-    void setCondition(const QString &cond);
+    void setCondition(int index);
     void setPreCondition(const QString &preCond);
 private:
     QHBoxLayout *m_layout;

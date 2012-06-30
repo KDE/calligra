@@ -42,7 +42,6 @@
 #include <QTextOption>
 #include <QBuffer>
 #include <QMap>
-//#include <QMessageBox>
 
 class KoInlineCite::Private
 {
@@ -87,12 +86,12 @@ void KoInlineCite::setField(QString fieldName, QString fieldValue)
     }
 }
 
-void KoInlineCite::setFields(QMap<QString, QString> fields)
+void KoInlineCite::setFields(const QMap<QString, QString> &fields)
 {
     d->fields = fields;
 }
 
-QString KoInlineCite::value(QString fieldName) const
+QString KoInlineCite::value(const QString &fieldName) const
 {
     return d->fields[fieldName];
 }
@@ -222,76 +221,11 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:bibliography-mark", false);
 
-    if (!value("identifier").isEmpty())
-        writer->addAttribute("text:identifier", value("identifier"));
-    if (!value("bibliography-type").isEmpty())
-        writer->addAttribute("text:bibliography-type", value("bibliography-type"));
-    if (!value("address").isEmpty())
-        writer->addAttribute("text:address", value("identifier"));
-    if (!value("annote").isEmpty())
-        writer->addAttribute("text:annote", value("annote"));
-    if (!value("author").isEmpty())
-        writer->addAttribute("text:author", value("author"));
-    if (!value("booktitle").isEmpty())
-        writer->addAttribute("text:booktitle", value("booktitle"));
-    if (!value("chapter").isEmpty())
-        writer->addAttribute("text:chapter", value("chapter"));
-    if (!value("edition").isEmpty())
-        writer->addAttribute("text:edition", value("edition"));
-    if (!value("editor").isEmpty())
-        writer->addAttribute("text:editor", value("editor"));
-    if (!value("howpublished").isEmpty())
-        writer->addAttribute("text:howpublished", value("howpublished"));
-    if (!value("institution").isEmpty())
-        writer->addAttribute("text:institution", value("institution"));
-    if (!value("journal").isEmpty())
-        writer->addAttribute("text:journal", value("journal"));
-    if (!value("month").isEmpty())
-        writer->addAttribute("text:month", value("month"));
-    if (!value("note").isEmpty())
-        writer->addAttribute("text:note", value("note"));
-    if (!value("number").isEmpty())
-        writer->addAttribute("text:number", value("number"));
-    if (!value("organizations").isEmpty())
-        writer->addAttribute("text:organizations", value("organizations"));
-    if (!value("pages").isEmpty())
-        writer->addAttribute("text:pages", value("pages"));
-    if (!value("publisher").isEmpty())
-        writer->addAttribute("text:publisher", value("publisher"));
-    if (!value("school").isEmpty())
-        writer->addAttribute("text:school", value("school"));
-    if (!value("series").isEmpty())
-        writer->addAttribute("text:series", value("series"));
-    if (!value("title").isEmpty())
-        writer->addAttribute("text:title", value("title"));
-    if (!value("report-type").isEmpty())
-        writer->addAttribute("text:report-type", value("report-type"));
-    if (!value("volume").isEmpty())
-        writer->addAttribute("text:volume", value("volume"));
-    if (!value("year").isEmpty())
-        writer->addAttribute("text:year", value("year"));
-    if (!value("url").isEmpty())
-        writer->addAttribute("text:url", value("url"));
-    if (!value("isbn").isEmpty())
-        writer->addAttribute("text:isbn", value("isbn"));
-    if (!value("issn").isEmpty())
-        writer->addAttribute("text:issn", value("issn"));
-    if (!value("custom1").isEmpty())
-        writer->addAttribute("text:custom1", value("custom1"));
-    if (!value("custom2").isEmpty())
-        writer->addAttribute("text:custom2", value("custom2"));
-    if (!value("custom3").isEmpty())
-        writer->addAttribute("text:custom3", value("custom3"));
-    if (!value("custom4").isEmpty())
-        writer->addAttribute("text:custom4", value("custom4"));
-    if (!value("custom5").isEmpty())
-        writer->addAttribute("text:custom5", value("custom5"));
-
-    /*foreach(QString type, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach(QString type, KoOdfBibliographyConfiguration::bibDataFields) {
         if (!value(type).isEmpty()) {
-            writer->addAttribute(QString("text:").append(type), value(type));
+            writer->addAttribute(qPrintable(QString("text:").append(type)), value(type));
         }
-    }*/
+    }
 
     writer->addTextNode(d->label);
     writer->endElement();

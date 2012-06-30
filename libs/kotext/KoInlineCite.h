@@ -65,9 +65,9 @@ public:
 
     void setField(QString fieldName, QString fieldValue);
 
-    void setFields(QMap<QString, QString> fields);
+    void setFields(const QMap<QString, QString> &fields);
 
-    QString value(QString fieldName) const;
+    QString value(const QString &fieldName) const;
 
     QMap<QString, QString> fieldMap() const;
 

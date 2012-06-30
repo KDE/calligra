@@ -21,6 +21,7 @@
 #include "BibliographyDb.h"
 #include "InsertCitationDialog.h"
 #include "EditFiltersDialog.h"
+#include "BibliographyTypeEntryDelegate.h"
 
 #include <QTableView>
 #include <QHeaderView>
@@ -31,7 +32,7 @@
 #include <QVariant>
 #include <QAction>
 #include <QActionGroup>
-#include <QDebug>
+#include <QFileDialog>
 
 #include <KoOdfBibliographyConfiguration.h>
 #include <klocale.h>
@@ -50,13 +51,19 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     ui.setupUi(this);
     setupActions();
 
-    connect(ui.tableList, SIGNAL(currentIndexChanged(QString)), this, SLOT(tableChanged(QString)));
-    connect(ui.search, SIGNAL(textChanged(QString)), this, SLOT(searchQueryChanged(QString)));
-
     m_bibTableView = new QTableView(ui.centralwidget);
+
     m_bibTableView->setCornerButtonEnabled(true);
+    m_bibTableView->setSortingEnabled(true);
+
+    m_bibTableView->horizontalHeader()->setSortIndicatorShown(true);
     m_bibTableView->verticalHeader()->setDefaultSectionSize(20);
+
     m_bibTableView->setEditTriggers(QTableView::AllEditTriggers);
+    m_bibTableView->setSelectionBehavior(QTableView::SelectItems);
+    m_bibTableView->resizeColumnsToContents();
+
+    m_bibTableView->show();
 
     ui.centralwidget->layout()->addWidget(m_bibTableView);
 
@@ -65,9 +72,15 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
             QMessageBox::warning(this, i18n("Error"), QString(i18n("Error creating directory ")).append(tableDir.absolutePath()));
             emit close();
         }
-    } else if (loadBibliographyDbs() == 0) {
-        ui.tableList->addItem("bibliography.sqlite", QVariant::fromValue<QString>(tableDir.absolutePath()));
     }
+
+    if (loadBibliographyDbs() == 0) {
+        QFileInfo fileInfo(tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
+        addTableEntry(fileInfo);
+    }
+
+    connect(ui.tableList, SIGNAL(currentIndexChanged(int)), this, SLOT(tableChanged(int)));
+    connect(ui.search, SIGNAL(textChanged(QString)), this, SLOT(searchQueryChanged(QString)));
 }
 
 BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
@@ -81,28 +94,42 @@ int BibliographyDatabaseWindow::loadBibliographyDbs()
                                               QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
 
     QFileInfoList tableFiles = tableDir.entryInfoList();
-    for( int i = 0; i < tableFiles.size(); i++) {
-        ui.tableList->addItem(tableFiles.at(i).fileName(), QVariant::fromValue<QString>(tableFiles.at(i).dir().absolutePath()));
+    foreach(QFileInfo fileInfo, tableFiles) {
+        addTableEntry(fileInfo);
     }
 
     return tableFiles.size();
 }
 
-void BibliographyDatabaseWindow::tableChanged(QString newTable)
+void BibliographyDatabaseWindow::tableChanged(int index)
 {
     if (m_table) {
+        m_table->tableModel()->submitAll();
         delete m_table;
     }
 
-    m_table = new BibliographyDb(this, ui.tableList->itemData(ui.tableList->currentIndex()).value<QString>(), newTable);
+    m_table = new BibliographyDb(this, m_tables.at(index).absoluteDir().absolutePath(), m_tables.at(index).fileName());
+    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
+
+    if (!m_table->isValid()) {
+        int ret = QMessageBox::warning(this, i18n("Error opening bibref table")
+                                       , i18n("This database does not have bibref table. Do you want to create one?")
+                                       , QMessageBox::Yes, QMessageBox::No);
+        if (ret == QMessageBox::Yes) {
+            m_table->createTable();             //create bibref table manually
+        } else {
+            removeTableEntry(index);
+        }
+    }
+
     m_bibTableView->setModel(m_table->tableModel());
     m_bibTableView->hideColumn(0);      // hide ID column
-    m_bibTableView->resizeColumnsToContents();
-    m_bibTableView->horizontalHeader()->setSortIndicatorShown(true);
-    m_bibTableView->setSortingEnabled(true);
-    m_bibTableView->show();
 
-    this->setWindowTitle(QString("Bibliography Database - ").append(newTable));
+
+    this->setWindowTitle(QString("Bibliography Database - ").append(m_tables.at(index).fileName()));
+    ui.search->clear();                 //clears search query before loading new table
+
+    clearFilters();                     //clear filters
     //We add extra row to insert new citation record
     //m_bibTableView->model()->insertRow(m_bibTableView->model()->rowCount());
 }
@@ -176,23 +203,21 @@ void BibliographyDatabaseWindow::showFilters()
         m_filters->append(new BibDbFilter(false));
     }
     EditFiltersDialog *dialog = new EditFiltersDialog(m_filters, this);
-    if (dialog->exec() == QDialog::Accepted) {
-        QString filterString;
-        foreach (BibDbFilter *filter, *m_filters) {
-            filterString.append(filter->filterString());
-        }
-
-        if (!filterString.isEmpty()) {
-            m_table->setFilter(filterString);
-        }
-    }
+    connect(dialog, SIGNAL(changedFilterString(QString)), this, SLOT(applyFilters(QString)));
 }
 
 void BibliographyDatabaseWindow::clearFilters()
 {
     m_table->setFilter("");
-    qDeleteAll(m_filters->begin(), m_filters->end());
-    m_filters->clear();
+    if (!m_filters->isEmpty()) {
+        qDeleteAll(m_filters->begin(), m_filters->end());
+        m_filters->clear();
+    }
+}
+
+void BibliographyDatabaseWindow::applyFilters(QString filter)
+{
+    m_table->setFilter(filter);
 }
 
 void BibliographyDatabaseWindow::newRecord()
@@ -212,27 +237,57 @@ void BibliographyDatabaseWindow::openFile()
 
     if (!tableFile.isEmpty()) {
         QFileInfo fileInfo(tableFile);
-
-        ui.tableList->addItem(fileInfo.fileName(), QVariant::fromValue<QString>(fileInfo.dir().absolutePath()));
-        ui.tableList->setCurrentIndex(ui.tableList->count() - 1);
+        addTableEntry(fileInfo);
     }
 }
 
 void BibliographyDatabaseWindow::newDatabase()
 {
-    QString fileName = KFileDialog::getSaveFileName(
-                KUrl(tableDir.absolutePath()), i18n("*.sqlite|SQLITE citation database (*.sqlite)"), this,
-                i18n("Save Bibliography database table to file"));
-    //Create database file
+    QString fileName = QFileDialog::getSaveFileName(
+                this, i18n("Save Bibliography database table to file"),
+                tableDir.absolutePath(), i18n("SQLITE citation database (*.sqlite);;All files(*.*)"));
+
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFileInfo fileInfo(fileName);
     QFile dbFile(fileName);
-    dbFile.open(QIODevice::WriteOnly);
+
+    if (m_tables.contains(fileInfo)) {
+        removeTableEntry(m_tables.indexOf(fileInfo));
+
+        if (!dbFile.remove()) {
+            QMessageBox::warning(this, i18n("Error creating citation database"), i18n("Error while overwriting citation database"));
+            return;
+        }
+    }
+
+    dbFile.open(QIODevice::WriteOnly);              //Create database file
     dbFile.close();
 
-    //creates bibref table in database file
-    QFileInfo fileInfo(dbFile);
-    new BibliographyDb(this, fileInfo.dir().absolutePath(), fileInfo.fileName());
+    BibliographyDb *table = new BibliographyDb(this, fileInfo.dir().absolutePath(), fileInfo.fileName());
+    if (!table->isValid()) {
+        table->createTable();            //creates bibref table in database file
+    }
 
     //add to table list
-    ui.tableList->addItem(fileInfo.fileName(), QVariant::fromValue<QString>(fileInfo.dir().absolutePath()));
-    ui.tableList->setCurrentIndex(ui.tableList->count() - 1);
+    addTableEntry(fileInfo);
+}
+
+void BibliographyDatabaseWindow::addTableEntry(QFileInfo fileInfo)
+{
+    if (!m_tables.contains(fileInfo)) {
+        m_tables.append(fileInfo);
+        ui.tableList->addItem(fileInfo.fileName(), QVariant::fromValue<QString>(fileInfo.dir().absolutePath()));
+        ui.tableList->setCurrentIndex(m_tables.indexOf(fileInfo));
+    } else {
+        ui.tableList->setCurrentIndex(m_tables.indexOf(fileInfo));
+    }
+}
+
+void BibliographyDatabaseWindow::removeTableEntry(int index)
+{
+    ui.tableList->removeItem(index);
+    m_tables.removeAt(index);
 }

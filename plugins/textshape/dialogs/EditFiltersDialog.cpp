@@ -28,10 +28,20 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QPair>
+#include <QList>
+#include <QDebug>
 
-const QStringList EditFiltersDialog::filterConditions = QStringList() << "=" << "<>" << "<" << "<="
-                                                                      << ">" << ">=" << "LIKE" << "NOT LIKE"
-                                                                      << "NULL" << "NOT NULL";
+const QList<ConditionPair> EditFiltersDialog::filterConditions = QList<ConditionPair>() << ConditionPair("=", "equals to")
+                                                                                        << ConditionPair("<>", "not equals to")
+                                                                                        << ConditionPair("<", "less than")
+                                                                                        << ConditionPair("<=", "less than or equal to")
+                                                                                        << ConditionPair(">", "greater than")
+                                                                                        << ConditionPair(">=", "greater than or equal to")
+                                                                                        << ConditionPair("LIKE", "is like")
+                                                                                        << ConditionPair("NOT LIKE", "isn't like")
+                                                                                        << ConditionPair("NULL", "is blank")
+                                                                                        << ConditionPair("NOT NULL", "isn't blank");
 
 BibDbFilter::BibDbFilter(bool hasPreCond) :
     m_leftOp("identifier"),
@@ -60,14 +70,17 @@ BibDbFilter::BibDbFilter(bool hasPreCond) :
     m_layout->addWidget(m_value);
 
     m_field->addItems(BibliographyDb::dbFields);
-    m_cond->addItems(EditFiltersDialog::filterConditions);
+
+    foreach(ConditionPair cond, EditFiltersDialog::filterConditions) {
+        m_cond->addItem(cond.second);
+    }
 
     m_field->setCurrentIndex(m_field->findText(m_leftOp, Qt::MatchFixedString));
-    m_cond->setCurrentIndex(m_cond->findText(m_comparison, Qt::MatchFixedString));
+    m_cond->setCurrentIndex(1);
 
     connect(m_field, SIGNAL(currentIndexChanged(QString)), this, SLOT(setLeftOperand(QString)));
     connect(m_value, SIGNAL(textEdited(QString)), this, SLOT(setRightOperand(QString)));
-    connect(m_cond, SIGNAL(currentIndexChanged(QString)), this, SLOT(setCondition(QString)));
+    connect(m_cond, SIGNAL(currentIndexChanged(int)), this, SLOT(setCondition(int)));
     show();
 }
 
@@ -81,15 +94,16 @@ void BibDbFilter::setRightOperand(const QString &op)
     m_rightOp = op;
 }
 
-void BibDbFilter::setCondition(const QString &cond)
+void BibDbFilter::setCondition(int index)
 {
-    if (cond == "NULL" || cond == "NOT NULL") {
+    if (EditFiltersDialog::filterConditions.at(index).first == "NULL" ||
+            EditFiltersDialog::filterConditions.at(index).first == "NOT NULL") {
         m_value->clear();
         m_value->setDisabled(true);
         m_rightOp = "";
     } else m_value->setEnabled(true);
 
-    m_comparison = cond;
+    m_comparison = EditFiltersDialog::filterConditions.at(index).first;
 }
 
 void BibDbFilter::setPreCondition(const QString &preCond)
@@ -118,6 +132,7 @@ QString BibDbFilter::filterString() const
         filter.append("''");
     }
 
+    qDebug() << "Filter string is " << filter;
     return filter;
 }
 
@@ -143,6 +158,7 @@ EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *pare
     m_layout->addWidget(m_group);
 
     m_buttonBox->addButton("Apply filters", KDialogButtonBox::AcceptRole, this, SLOT(applyFilters()));
+    //m_buttonBox->addButton("Clear filters", KDialogButtonBox::RejectRole, this, SLOT(clearFilters()));
     m_buttonBox->addButton("Cancel", KDialogButtonBox::RejectRole, this, SLOT(reject()));
 
     m_buttonLayout->addWidget(m_addFilter);
@@ -166,5 +182,13 @@ void EditFiltersDialog::addFilter()
 
 void EditFiltersDialog::applyFilters()
 {
+    QString filterString;
+    foreach (BibDbFilter *filter, *m_filters) {
+        filterString.append(filter->filterString());
+    }
+
+    if (!filterString.isEmpty()) {
+        emit changedFilterString(filterString);
+    }
     emit accept();
 }

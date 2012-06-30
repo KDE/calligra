@@ -48,11 +48,12 @@ const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" <<
 BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QString &dbName) :
     QObject(parent),
     m_filterModel(new QSortFilterProxyModel(this)),
-    m_db(QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
+    m_db(QSqlDatabase::addDatabase("QSQLITE")),
     m_dbName(dbName),
-    m_fullPath(path)
+    m_fullPath(path),
+    m_valid(false)
 {
-#ifdef Q_OS_LINUX
+#ifdef Q_OS_UNIX
     m_fullPath.append(QDir::separator()).append(m_dbName);
     m_fullPath = QDir::toNativeSeparators(m_fullPath);
     m_db.setDatabaseName(m_fullPath);
@@ -68,7 +69,7 @@ BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QStri
     if (openDb()) {
         m_model = new QSqlTableModel(this, m_db);
         m_model->setTable("bibref");
-        m_model->setEditStrategy(QSqlTableModel::OnRowChange);
+        m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
         m_model->select();
 
         m_filterModel->setSourceModel(m_model);
@@ -79,7 +80,9 @@ BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QStri
 bool BibliographyDb::openDb()
 {
     if ( m_db.open() && !m_db.tables(QSql::Tables).contains("bibref")) {
-        createTable();
+        m_valid = false;
+    } else {
+        m_valid = true;
     }
 
     return m_db.isOpen();
@@ -103,6 +106,11 @@ void BibliographyDb::closeDb()
 QSqlError BibliographyDb::lastError() const
 {
     return m_model->lastError();
+}
+
+bool BibliographyDb::isValid() const
+{
+    return m_valid;
 }
 
 bool BibliographyDb::createTable()
@@ -204,6 +212,7 @@ BibliographyDb::~BibliographyDb()
 {
     closeDb();
     if (m_model) {
+        m_model->submitAll();
         delete m_model;
     }
 }
