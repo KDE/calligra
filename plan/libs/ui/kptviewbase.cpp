@@ -23,10 +23,12 @@
 #include "kptdebug.h"
 
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
+#include <knotification.h>
 
 #include "calligraversion.h"
 #include <KoDocument.h>
@@ -47,10 +49,68 @@
 #include <QPainter>
 #include <QMenu>
 #include <QPainter>
+#include <QMainWindow>
 
 namespace KPlato
 {
 
+
+DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &title )
+    : QDockWidget( v ),
+    view( v ),
+    id( identity ),
+    location( Qt::RightDockWidgetArea ),
+    editor( false ),
+    m_shown( true )
+{
+    setWindowTitle( title );
+    setObjectName( v->objectName() + '-' + identity );
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
+}
+
+void DockWidget::activate( QMainWindow *shell )
+{
+    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
+    setVisible( m_shown );
+    shell->addDockWidget( location, this );
+}
+
+void DockWidget::deactivate( QMainWindow *shell )
+{
+    disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
+    shell->removeDockWidget( this );
+}
+
+void DockWidget::setShown( bool show )
+{
+    m_shown = show;
+    setVisible( show );
+}
+
+void DockWidget::setLocation( Qt::DockWidgetArea area )
+{
+    location = area;
+}
+
+bool DockWidget::saveXml( QDomElement &context ) const
+{
+    QDomElement e = context.ownerDocument().createElement( "docker" );
+    context.appendChild( e );
+    e.setAttribute( "id", id );
+    e.setAttribute( "location", location );
+    e.setAttribute( "floating", isFloating() );
+    e.setAttribute( "visible", m_shown );
+    return true;
+}
+
+void DockWidget::loadXml(const KoXmlElement& context)
+{
+    location = static_cast<Qt::DockWidgetArea>( context.attribute( "location", "0" ).toInt() );
+    setFloating( (bool) context.attribute( "floating", "0" ).toInt() );
+    m_shown = context.attribute( "visible", "1" ).toInt();
+}
+
+//------------------------
 bool PrintingOptions::loadXml( KoXmlElement &element )
 {
     KoXmlElement e;
@@ -419,6 +479,12 @@ ViewBase::~ViewBase()
     }
 }
 
+void ViewBase::setProject( Project *project )
+{
+    m_proj = project;
+    emit projectChanged( project );
+}
+
 KoDocument *ViewBase::part() const
 {
      return koDocument();
@@ -450,6 +516,7 @@ bool ViewBase::isActive() const
 void ViewBase::updateReadWrite( bool readwrite )
 {
     m_readWrite = readwrite;
+    emit readWriteChanged( readwrite );
 }
 
 void ViewBase::setGuiActive( bool active ) // virtual slot
@@ -542,6 +609,14 @@ bool ViewBase::loadContext( const KoXmlElement &context )
             m_pagelayout.bottomMargin = me.attribute( "bottom-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
         } else if ( me.tagName() == "printing-options" ) {
             m_printingOptions.loadXml( me );
+        } else if ( me.tagName() == "dockers" ) {
+            KoXmlElement e;
+            forEachElement ( e, me ) {
+                DockWidget *ds = findDocker( e.attribute( "id" ) );
+                if ( ds ) {
+                    ds->loadXml( e );
+                }
+            }
         }
     }
     return true;
@@ -561,6 +636,35 @@ void ViewBase::saveContext( QDomElement &context ) const
     me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
 
     m_printingOptions.saveXml( context );
+
+    if ( ! m_dockers.isEmpty() ) {
+        QDomElement e = context.ownerDocument().createElement( "dockers" );
+        context.appendChild( e );
+        foreach ( const DockWidget *ds, m_dockers ) {
+            ds->saveXml( e );
+        }
+    }
+}
+
+void ViewBase::addDocker( DockWidget *ds )
+{
+    addAction( "view_docker_list", ds->toggleViewAction() );
+    m_dockers << ds;
+}
+
+QList<DockWidget*> ViewBase::dockers() const
+{
+    return m_dockers;
+}
+
+DockWidget* ViewBase::findDocker( const QString &id ) const
+{
+    foreach ( DockWidget *ds, m_dockers ) {
+        if ( ds->id == id ) {
+            return ds;
+        }
+    }
+    return 0;
 }
 
 //----------------------
@@ -740,12 +844,19 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     m_readWrite( false )
 
 {
+    setDefaultDropAction( Qt::MoveAction );
     setItemDelegate( new ItemDelegate( this ) );
     setAlternatingRowColors ( true );
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
 
     connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+void TreeViewBase::dropEvent( QDropEvent *e )
+{
+    kDebug(planDbg());
+    QTreeView::dropEvent( e );
 }
 
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
@@ -1260,17 +1371,24 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         if ( ! m_acceptDropsOnView ) {
             event->ignore();
         }
-        //kDebug(planDbg())<<"On viewport:"<<event->isAccepted();
-        return;
+        kDebug(planDbg())<<"On viewport:"<<event->isAccepted();
+    } else {
+        QModelIndex index = indexAt( event->pos() );
+        if ( index.isValid() ) {
+            emit dropAllowed( index, dropIndicatorPosition(), event );
+        } else {
+            event->ignore();
+            kDebug(planDbg())<<"Invalid index:"<<event->isAccepted();
+        }
     }
-    QModelIndex index = indexAt( event->pos() );
-    if ( ! index.isValid() ) {
-        event->ignore();
-        //kDebug(planDbg())<<"Invalid index:"<<event->isAccepted();
-        return;
+    if ( event->isAccepted() ) {
+        if ( viewport()->cursor().shape() == Qt::ForbiddenCursor ) {
+            viewport()->unsetCursor();
+        }
+    } else if ( viewport()->cursor().shape() != Qt::ForbiddenCursor ) {
+        viewport()->setCursor( Qt::ForbiddenCursor );
     }
-    emit dropAllowed( index, dropIndicatorPosition(), event );
-    //kDebug(planDbg())<<event->isAccepted();
+    kDebug(planDbg())<<event->isAccepted()<<viewport()->cursor().shape();
 }
 
 QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
@@ -1926,31 +2044,43 @@ void DoubleTreeViewBase::edit( const QModelIndex &index )
 void DoubleTreeViewBase::setDragDropMode( QAbstractItemView::DragDropMode mode )
 {
     m_leftview->setDragDropMode( mode );
+    m_rightview->setDragDropMode( mode );
+}
+
+void DoubleTreeViewBase::setDragDropOverwriteMode( bool mode )
+{
+    m_leftview->setDragDropOverwriteMode( mode );
+    m_rightview->setDragDropOverwriteMode( mode );
 }
 
 void DoubleTreeViewBase::setDropIndicatorShown( bool mode )
 {
     m_leftview->setDropIndicatorShown( mode );
+    m_rightview->setDropIndicatorShown( mode );
 }
 
 void DoubleTreeViewBase::setDragEnabled ( bool mode )
 {
     m_leftview->setDragEnabled( mode );
+    m_rightview->setDragEnabled( mode );
 }
 
 void DoubleTreeViewBase::setAcceptDrops( bool mode )
 {
     m_leftview->setAcceptDrops( mode );
+    m_rightview->setAcceptDrops( mode );
 }
 
 void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
 {
     m_leftview->setAcceptDropsOnView( mode );
+    m_rightview->setAcceptDropsOnView( mode );
 }
 
 void DoubleTreeViewBase::setDefaultDropAction( Qt::DropAction action )
 {
     m_leftview->setDefaultDropAction( action );
+    m_rightview->setDefaultDropAction( action );
 }
 
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )

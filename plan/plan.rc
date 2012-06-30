@@ -33,8 +33,9 @@
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
             <Separator/>
-            <ActionList name="view_schedule_list"/>
+            <ActionList name="view_docker_list"/>
             <Separator/>
+            <ActionList name="view_schedule_list"/>
         </Menu>
 <!--        <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>

@@ -171,13 +171,11 @@ void ResourceEditor::updateReadWrite( bool readwrite )
     m_view->setReadWrite( readwrite );
 }
 
-void ResourceEditor::draw( Project &project )
+void ResourceEditor::setProject( Project *project )
 {
-    m_view->setProject( &project );
-}
-
-void ResourceEditor::draw()
-{
+    kDebug(planDbg())<<project;
+    m_view->setProject( project );
+    ViewBase::setProject( project );
 }
 
 void ResourceEditor::setGuiActive( bool activate )
