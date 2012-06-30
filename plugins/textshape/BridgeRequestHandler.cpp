@@ -52,7 +52,7 @@ void BridgeRequestHandler::handle()
     m_inSocket->flush();
 
     if (bytesWritten < 0) {
-        qDebug() << "Error while writing to output socket. " << m_outSocket->errorString();
+        qDebug() << "Error while writing to output socket. " << m_inSocket->errorString();
     }
 }
 
