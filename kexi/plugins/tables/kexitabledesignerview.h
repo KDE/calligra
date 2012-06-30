@@ -32,7 +32,7 @@ namespace KexiDB
 class RecordData;
 }
 class KexiTableDesignerViewPrivate;
-class QUndoCommand;
+class KUndo2Command;
 
 namespace KoProperty
 {
@@ -168,7 +168,7 @@ protected slots:
     void slotRedo();
 
     /*! Reaction on command execution from the command history */
-    void slotCommandExecuted(QUndoCommand *command);
+    void slotCommandExecuted(KUndo2Command *command);
 
     /*! Simulates real execution of the Alter Table. For debugging. */
     void slotSimulateAlterTableExecution();
@@ -223,7 +223,7 @@ protected:
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
     void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
-                          QUndoCommand* commandGroup = 0);
+                          KUndo2Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
     void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
@@ -231,13 +231,13 @@ protected:
 
     /*! Adds history command \a command to the undo/redo buffer.
      If \a execute is true, the command is executed afterwards. */
-    void addHistoryCommand(QUndoCommand* command, bool execute);
+    void addHistoryCommand(KUndo2Command* command, bool execute);
 
     //! Updates undo/redo shared actions availability by looking at command history's action
     void updateUndoRedoActions();
 
 #ifdef KEXI_DEBUG_GUI
-    void debugCommand(QUndoCommand* command, int nestingLevel);
+    void debugCommand(KUndo2Command* command, int nestingLevel);
 #endif
 
     /*! Inserts a new \a field for \a row.

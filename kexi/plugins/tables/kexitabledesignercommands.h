@@ -22,9 +22,9 @@
 
 #include <QPointer>
 
-#include <QUndoCommand>
 #include <kexidb/alter.h>
 #include <koproperty/Set.h>
+#include <libs/kundo2/kundo2command.h>
 
 #include "kexitabledesignerview.h"
 
@@ -35,10 +35,10 @@ namespace KexiTableDesignerCommands
 {
 
 //! @short Base class for all Table Designer's commands
-class Command : public QUndoCommand
+class Command : public KUndo2Command
 {
 public:
-    Command(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view);
+    Command(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view);
     virtual ~Command();
 
     //! Used to collect actions data for AlterTableHandler
@@ -66,7 +66,7 @@ public:
      \a oldlistData and and \a newListData can be specified so Property::setListData() will be called
      on execute() and unexecute().
     */
-    ChangeFieldPropertyCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view, 
+    ChangeFieldPropertyCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view, 
                                const KoProperty::Set& set, const QByteArray& propertyName,
                                const QVariant& oldValue, const QVariant& newValue,
                                KoProperty::Property::ListData* const oldListData = 0,
@@ -93,7 +93,7 @@ class RemoveFieldCommand : public Command
 public:
     /*! Constructs RemoveFieldCommand object.
      If \a set is 0, the action only means removing empty row (internal). */
-    RemoveFieldCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view, int fieldIndex,
+    RemoveFieldCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view, int fieldIndex,
                        const KoProperty::Set* set);
 
     virtual ~RemoveFieldCommand();
@@ -115,7 +115,7 @@ protected:
 class InsertFieldCommand : public Command
 {
 public:
-    InsertFieldCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view,
+    InsertFieldCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view,
                        int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set);
     virtual ~InsertFieldCommand();
 
@@ -147,7 +147,7 @@ public:
      for field by name when more than one field exists with the same name
      (it's invalid but allowed in design time).
     */
-    ChangePropertyVisibilityCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view,
+    ChangePropertyVisibilityCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view,
                                     const KoProperty::Set& set, const QByteArray& propertyName,
                                     bool visible);
 
@@ -169,7 +169,7 @@ class InsertEmptyRowCommand : public Command
 {
 public:
     /*! Creates the InsertEmptyRowCommand object. */
-    InsertEmptyRowCommand(QUndoCommand* parent, const QString& text, KexiTableDesignerView* view, int row);
+    InsertEmptyRowCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view, int row);
     virtual ~InsertEmptyRowCommand();
 
     virtual QString text() const;

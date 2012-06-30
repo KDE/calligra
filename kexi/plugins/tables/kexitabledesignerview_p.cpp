@@ -112,7 +112,9 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
 {
     historyActionCollection = new KActionCollection((QWidget*)0);
     //history = new CommandHistory(historyActionCollection, true);
-    history = new QUndoStack();
+    history = new KUndo2Stack();
+    historyActionCollection->addAction("edit_undo", history->createUndoAction(historyActionCollection, "edit_undo"));
+    historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
     
     internalPropertyNames
     << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
@@ -133,7 +135,7 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, const QVariant& oldValue, QUndoCommand* commandGroup,
+    const QVariant& newValue, const QVariant& oldValue, KUndo2Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -172,7 +174,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, QUndoCommand* commandGroup,
+    const QVariant& newValue, KUndo2Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -183,7 +185,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
-        bool visible, bool &changed, QUndoCommand *commandGroup)
+        bool visible, bool &changed, KUndo2Command *commandGroup)
 {
     if (prop->isVisible() != visible) {
         if (commandGroup) { //!qundo
@@ -195,7 +197,7 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& 
 }
 
 bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-        QUndoCommand *commandGroup)
+        KUndo2Command *commandGroup)
 {
     bool changed = false;
     KoProperty::Property *prop;
