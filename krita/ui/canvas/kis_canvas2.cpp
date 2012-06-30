@@ -694,6 +694,9 @@ void KisCanvas2::adjustOrigin()
             newOrigin.ry() = qRound(0.5 * heightDiff);
     }
 
+    if(m_d->view->image()->isCanvasInfinite())
+        newOrigin = QPoint(0,0);
+
     m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
 
     emit documentOriginChanged();
