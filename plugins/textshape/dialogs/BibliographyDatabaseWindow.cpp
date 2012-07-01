@@ -74,13 +74,13 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
         }
     }
 
+    connect(ui.tableList, SIGNAL(currentIndexChanged(int)), this, SLOT(tableChanged(int)));
+    connect(ui.search, SIGNAL(textChanged(QString)), this, SLOT(searchQueryChanged(QString)));
+
     if (loadBibliographyDbs() == 0) {
         QFileInfo fileInfo(tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
         addTableEntry(fileInfo);
     }
-
-    connect(ui.tableList, SIGNAL(currentIndexChanged(int)), this, SLOT(tableChanged(int)));
-    connect(ui.search, SIGNAL(textChanged(QString)), this, SLOT(searchQueryChanged(QString)));
 }
 
 BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
