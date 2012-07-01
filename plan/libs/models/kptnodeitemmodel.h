@@ -283,7 +283,6 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
-    virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
 
@@ -314,6 +313,7 @@ public:
     QModelIndex insertSubtask( Node *node, Node *parent );
     
     QList<Node*> nodeList( QDataStream &stream );
+    QList<Resource*> resourceList( QDataStream &stream );
     static QList<Node*> removeChildNodes( const QList<Node*> nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
     
@@ -329,6 +329,7 @@ signals:
     void projectShownChanged( bool );
 
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
     void setShowProject( bool on );
 
@@ -350,6 +351,9 @@ protected:
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setAllocation( Node *node, const QVariant &value, int role );
 
+    bool dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    KUndo2Command *createAllocationCommand( Task &task, const QList<Resource*> &lst );
+
 protected:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
@@ -367,8 +371,7 @@ public:
 
     explicit GeneralNodeItemModel( QObject *parent = 0 );
     ~GeneralNodeItemModel();
-    
-    void setProject( Project *project );
+
     void setModus( int modus );
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
@@ -384,6 +387,9 @@ public:
 
     Node *node( const QModelIndex &index ) const;
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
+
+public slots:
+    virtual void setProject( Project *project );
 
 protected slots:
     virtual void slotWbsDefinitionChanged();
@@ -448,7 +454,6 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
-    virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
 
@@ -487,6 +492,7 @@ public:
     QList<Node*> mileStones() const;
     
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
 
 protected slots:
