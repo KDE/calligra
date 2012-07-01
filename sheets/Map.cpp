@@ -742,16 +742,6 @@ Sheet * Map::previousSheet(Sheet * currentSheet) const
     return 0;
 }
 
-bool Map::saveChildren(KoStore * _store)
-{
-    foreach(Sheet* sheet, d->lstSheets) {
-        // set the child document's url to an internal url (ex: "tar:/0/1")
-        if (!sheet->saveChildren(_store, sheet->sheetName()))
-            return false;
-    }
-    return true;
-}
-
 bool Map::loadChildren(KoStore * _store)
 {
     foreach(Sheet* sheet, d->lstSheets) {

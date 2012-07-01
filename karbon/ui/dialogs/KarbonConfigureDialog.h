@@ -29,6 +29,7 @@ class KarbonConfigInterfacePage;
 class KoConfigMiscPage;
 class KoConfigGridPage;
 class KoConfigDocumentPage;
+class KoConfigAuthorPage;
 
 class KarbonConfigureDialog : public KPageDialog
 {
@@ -46,6 +47,7 @@ private:
     KoConfigMiscPage* m_miscPage;
     KoConfigGridPage* m_gridPage;
     KoConfigDocumentPage* m_defaultDocPage;
+    KoConfigAuthorPage *m_authorPage;
 };
 
 #endif // KARBONCONFIGUREDIALOG_H

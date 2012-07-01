@@ -249,13 +249,23 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->handleRadius();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->handleRadius();
+    } else {
+        return 3;
+    }
 }
 
 uint KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    } else {
+        return 3;
+    }
 }
 
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
@@ -296,6 +306,23 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+void KoToolBase::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+void KoToolBase::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KoToolBase::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
 }
 
 bool KoToolBase::hasSelection()

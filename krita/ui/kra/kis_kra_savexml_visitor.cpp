@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -213,6 +213,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
+    el.setAttribute(COLLAPSED, layer->collapsed());
 
     foreach (KisNodeSP node, m_selectedNodes) {
         if (node.data() == layer) {

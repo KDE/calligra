@@ -74,7 +74,7 @@ public:
 /*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
+             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -273,6 +273,7 @@ private:
     LEInputStream& m_wdstm;
     LEInputStream* m_tblstm;
     LEInputStream* m_datastm;
+    LEInputStream* m_sistm;
     POLE::Stream& m_tblstm_pole;
 
     //A stack for background-colors, which represets a background color context

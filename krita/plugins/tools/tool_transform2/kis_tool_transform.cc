@@ -2,7 +2,7 @@
  *  kis_tool_transform.cc -- part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -706,7 +706,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
         }
     }
     else {
-        if (modifiers & Qt::MetaModifier) {
+        if (modifiers & Qt::ControlModifier) {
             m_function = PERSPECTIVE;
             setFunctionalCursor();
             return;
@@ -828,8 +828,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::MetaModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -1986,7 +1985,12 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 }
     else if (dev) {
         // we take all of the paintDevice
-        dev->exactBounds(x, y, w, h);
+	QRect rc;
+	rc = dev->exactBounds();
+	x = rc.x();
+	y = rc.y();
+	w = rc.width();
+	h = rc.height();
         m_origSelection = 0;
     }
     else {

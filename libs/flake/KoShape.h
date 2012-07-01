@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006, 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
@@ -144,6 +144,13 @@ public:
         RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    /// The behavior text should do when intersecting this shape.
+    enum TextRunAroundContour {
+        ContourBox,     /// Run other text around a bounding rect of the outline
+        ContourFull,   ///< Run other text around also on the inside
+        ContourOutside   ///< Run other text around only on the outside
+    };
+
     /**
      * TODO
      */
@@ -212,8 +219,18 @@ public:
      * This method can be used while saving the shape as Odf to add common child elements
      *
      * The office:event-listeners and draw:glue-point are saved.
+     * @param context the context for the current save.
      */
     void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
+
+    /**
+     * This method can be used to save contour data from the clipPath()
+     *
+     * The draw:contour-polygon or draw:contour-path elements are saved.
+     * @param context the context for the current save.
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -373,16 +390,52 @@ public:
     void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
-     * The space between this shape's edge and text that runs around this shape.
+     * The space between this shape's left edge and text that runs around this shape.
      * @return the space around this shape to keep free from text
      */
-    qreal textRunAroundDistance() const;
+    qreal textRunAroundDistanceLeft() const;
 
     /**
-     * Set the space between this shape's edge and the text that run around this shape.
+     * Set the space between this shape's left edge and the text that run around this shape.
      * @param distance the space around this shape to keep free from text
      */
-    void setTextRunAroundDistance(qreal distance);
+    void setTextRunAroundDistanceLeft(qreal distance);
+
+    /**
+     * The space between this shape's top edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceTop() const;
+
+    /**
+     * Set the space between this shape's top edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceTop(qreal distance);
+
+    /**
+     * The space between this shape's right edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceRight() const;
+
+    /**
+     * Set the space between this shape's right edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceRight(qreal distance);
+
+    /**
+     * The space between this shape's bottom edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceBottom() const;
+
+    /**
+     * Set the space between this shape's bottom edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceBottom(qreal distance);
 
     /**
      * Return the threshold above which text should flow around this shape.
@@ -399,6 +452,18 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Return the how tight text run around is done around this shape.
+     * @return the contour
+     */
+    TextRunAroundContour textRunAroundContour() const;
+
+    /**
+     * Set how tight text run around is done around this shape.
+     * @param contour the new contour
+     */
+    void setTextRunAroundContour(TextRunAroundContour contour);
 
     /**
      * Set the background of the shape.
@@ -636,6 +701,18 @@ public:
      * @returns the outline of the shape in the form of a rect.
      */
     virtual QRectF outlineRect() const;
+
+    /**
+     * returns the outline of the shape in the form of a path for the use of painting a shadow.
+     *
+     * Normally this would be the same as outline() if there is a fill (background) set on the
+     * shape and empty if not.  However, a shape could reimplement this to return an outline
+     * even if no fill is defined. A typical example of this would be the picture shape
+     * which has a picture but almost never a background. 
+     *
+     * @returns the outline of the shape in the form of a path.
+     */
+    virtual QPainterPath shadowOutline() const;
 
     /**
      * Returns the currently set stroke, or 0 if there is no stroke.
@@ -1079,6 +1156,9 @@ protected:
 
     /// Loads the connection points
     void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// Loads the clip contour
+    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /* ** end loading saving */
 

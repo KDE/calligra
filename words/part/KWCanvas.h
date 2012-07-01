@@ -69,6 +69,9 @@ public:
     virtual bool snapToGrid() const;
 
     /// reimplemented method from superclass
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+
+    /// reimplemented method from superclass
     virtual QWidget *canvasWidget() {
         return this;
     }

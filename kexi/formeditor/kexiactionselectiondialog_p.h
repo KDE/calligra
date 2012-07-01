@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,17 +21,17 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_P_H
 #define KEXIACTIONSELECTIONDIALOG_P_H
 
-#include <k3listview.h>
+#include <QTreeWidget>
 
 //! @internal
-class ActionsListViewBase : public K3ListView
+class ActionsListViewBase : public QTreeWidget
 {
 public:
     ActionsListViewBase(QWidget* parent);
     virtual ~ActionsListViewBase();
 
     //! \return item for action \a actionName
-    virtual Q3ListViewItem *itemForAction(const QString& actionName);
+    virtual QTreeWidgetItem *itemForAction(const QString& actionName, QTreeWidgetItem *parent = 0);
     void selectAction(const QString& actionName);
 };
 

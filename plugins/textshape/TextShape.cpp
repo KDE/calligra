@@ -168,6 +168,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
+    painter.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
@@ -407,4 +408,9 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
         // layouts are scheduled then we don't need to wait for them here but can just continue.
         lay->layout();
     }
+}
+
+KoImageCollection *TextShape::imageCollection()
+{
+    return m_imageCollection;
 }

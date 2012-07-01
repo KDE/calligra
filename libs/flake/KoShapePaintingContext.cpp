@@ -42,13 +42,14 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
         showTextShapeOutlines = false;
         showFormattingCharacters = false;
         showListVisualizer = false;
+        showTableBorders = false;
     } else {
         showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
-    }
-    if (rm->hasResource(KoCanvasResourceManager::ShowTableBorders)) {
-        showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
-    } else {
-        showTableBorders = true;
+        if (rm->hasResource(KoCanvasResourceManager::ShowTableBorders)) {
+            showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
+        } else {
+            showTableBorders = true;
+        }
     }
     showSpellChecking = !forPrint;
     showSelections = !forPrint;

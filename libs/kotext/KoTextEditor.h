@@ -131,6 +131,7 @@ private:
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
+    friend class InsertNoteCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -162,7 +163,7 @@ public slots:
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
     void addCommand(KUndo2Command *command);
-    
+
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
     /// undostack while also adding representative subcommands to \ref command.
@@ -317,13 +318,18 @@ public slots:
 
     const QTextDocument *document() const;
 
-    //Starts a new custom command. Everything between these two is one custom command. These should not be called from whithin a KUndo2Command
-//    void beginCustomCommand();
-//    void endCustomCommand();
-
-    //Same as Qt, only to be used inside KUndo2Commands
+    /// Same as Qt, only to be used inside KUndo2Commands
     KUndo2Command *beginEditBlock(QString title = QString());
     void endEditBlock();
+
+    /**
+     * Delete one character in the specified direction or a selection.
+     * Warning: From the outside this method should only be used with a parent command
+     * and only if there is a selection
+     * @param previous should be true if act like backspace
+     */
+    void deleteChar(bool previous, KUndo2Command *parent = 0);
+
 
     bool hasComplexSelection() const;
 
@@ -441,6 +447,8 @@ public slots:
 
     void newLine();
 
+    bool isWithinSelection(int position) const;
+
     int position() const;
 
     void select(QTextCursor::SelectionType selection);
@@ -472,12 +480,6 @@ signals:
     void textFormatChanged();
 
 protected:
-    /**
-     * Delete one character in the specified direction or a selection.
-     * @param previous should be true if act like backspace
-     */
-    void deleteChar(bool previous, KUndo2Command *parent = 0);
-
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:

@@ -37,7 +37,6 @@
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_iterator.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -139,6 +138,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
     m_image->lock();
+
+    // set the correct resolution
+    RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+    if (resInfo) {
+        m_image->setResolution(resInfo->hRes, resInfo->vRes);
+        // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+    }
 
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {

@@ -59,6 +59,9 @@ class FontSizeAction;
 
 class KUndo2Command;
 
+class QDrag;
+class QMimeData;
+
 class MockCanvas;
 class TextToolSelection;
 
@@ -112,6 +115,13 @@ public:
     /// reimplemented from superclass
     virtual QStringList supportedPasteMimeTypes() const;
     /// reimplemented from superclass
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    /// reimplemented from superclass
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    /// reimplemented from superclass
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
+
+    /// reimplemented from superclass
     virtual void repaintDecorations();
 
     /// reimplemented from superclass
@@ -133,7 +143,7 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    QRectF caretRect(QTextCursor *cursor) const;
+    QRectF caretRect(QTextCursor *cursor, bool *upToDate=0) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
@@ -275,8 +285,8 @@ private slots:
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 
-    //Show tooltip with change info
-    void showChangeTip();
+    //Show tooltip with editing info
+    void showEditTip();
 
     /// print debug about the details of the text document
     void debugTextDocument();
@@ -307,6 +317,8 @@ private:
     void finishedParagraph();
     void runUrl(KoPointerEvent *event, QString &url);
     void useTableBorderCursor();
+
+    QMimeData *generateMimeData() const;
 
 private:
     friend class UndoTextCommand;
@@ -362,9 +374,10 @@ private:
     bool m_textTyping;
     bool m_textDeleting;
 
-    QTimer m_changeTipTimer;
-    int m_changeTipCursorPos;
-    QPoint m_changeTipPos;
+    QTimer m_editTipTimer;
+    KoPointedAt m_editTipPointedAt;
+    QPoint m_editTipPos;
+
     bool m_delayedEnsureVisible;
     TextToolSelection *m_toolSelection;
 
@@ -377,6 +390,10 @@ private:
     bool m_tablePenMode;
     KoBorder::BorderData m_tablePenBorderData;
     mutable QRectF m_lastImMicroFocus;
+
+    bool m_clickWithinSelection;
+    QDrag *m_drag;
+    QAbstractTextDocumentLayout::Selection m_preDragSelection;
 };
 
 #endif

@@ -70,9 +70,9 @@
 namespace KPlato
 {
 
-Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
-        : KoDocument( parentWidget, parent, singleViewMode ),
-        m_project( 0 ), m_parentWidget( parentWidget ),
+Part::Part(QObject *parent)
+        : KoDocument(parent),
+        m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
         m_viewlistModified( false ),
@@ -80,7 +80,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
-    m_config.setReadWrite( isReadWrite() || !isEmbedded() );
+    m_config.setReadWrite( isReadWrite() );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -118,7 +118,7 @@ Part::~Part()
 
 void Part::setReadWrite( bool rw )
 {
-    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in calligra doc
+    m_config.setReadWrite( rw );
     KoDocument::setReadWrite( rw );
 }
 

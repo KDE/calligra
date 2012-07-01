@@ -579,7 +579,7 @@ public:
     T firstInRow(int row, int* newCol = 0) const {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's empty?
-        if ((row < m_rows.count()) && m_rows.value(row - 1) == m_rows.value(row)) {
+        if (row > m_rows.count() || ((row < m_rows.count()) && m_rows.value(row - 1) == m_rows.value(row))) {
             if (newCol)
                 *newCol = 0;
             return T();
