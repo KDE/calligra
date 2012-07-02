@@ -52,7 +52,7 @@ QRect KisDefaultBounds::bounds() const
     /**
      * By default return infinite rect to cover everything
      */
-    return infiniteRect;
+    return m_d->image? m_d->image->bounds(): infiniteRect;
 }
 
 
