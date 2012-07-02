@@ -33,8 +33,6 @@
 #include "IdentifierElement.h"
 #include "ElementFactory.h"
 #include "FormulaCommand.h"
-#include "CollectionElement.h"
-#include "FormulaRenderer.h"
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
@@ -50,15 +48,12 @@ FormulaEditor::FormulaEditor( FormulaCursor cursor, FormulaData* data )
 {
     m_cursor=cursor;
     m_data=data;
-    m_collector=NULL;
 }
-
 
 FormulaEditor::FormulaEditor ( FormulaData* data )
 {
     m_cursor=FormulaCursor(data->formulaElement(),0);
     m_data=data;
-    m_collector=NULL;
 }
 
 
@@ -72,135 +67,26 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
 {
     FormulaCommand *undo = 0;
     m_inputBuffer = text;
-
-
-    qDebug("before if");
-
-    if(insideCollectionElement())
-    {
-        qDebug("inside if");
-        if(m_collector->addCharacter(text))
-        {
-           // m_collector->group().chop(1);
-            qDebug("after space");
-             if(m_collector->group().toInt())                         //when space
-             {
-                 //NumberElement* number = static_cast<NumberElement*>(ElementFactory::createElement(tokenType(m_collector->group().at(0)),0));
-               //  NumberElement* number = new NumberElement();
-
-                 NumberElement* number = static_cast<NumberElement*>
-                             (ElementFactory::createElement(tokenType(m_collector->group().at(0)),0));
-                 qDebug("ok till here");
-                 qDebug(tokenType(m_collector->group().at(0)).toAscii().data());
-                 qDebug("ok till here1");
-
-                 if(number->insertText(0,m_collector->group()))
-                     qDebug("true");
-                 qDebug("ok till here2");
-                 undo=insertElement(number);	//fails !
-                 if(undo==NULL)
-                 qDebug("ok till here3");
-                 if (undo) {
-                     undo->setRedoCursorPosition(FormulaCursor(number,m_collector->group().length()));
-                     qDebug("ok till here4");
-                 }
-                 qDebug("ok till here5");
-                 delete(m_collector);
-                 qDebug("ok till here6");
-
-
-
-
-             }
-
-             else if(tokenType(m_collector->group().at(0))=="mo")
-             {
-                 OperatorElement* opt = static_cast<OperatorElement*>(ElementFactory::createElement(tokenType(m_collector->group().at(0)),0));
-                 opt->insertText(0,m_collector->group());
-                 undo=insertElement(opt);
-                 if (undo) {
-                     undo->setRedoCursorPosition(FormulaCursor(opt,m_collector->group().length()));
-                 }
-                 delete(m_collector);
-             }
-             else
-             {
-                 IdentifierElement* id = static_cast<IdentifierElement*>(ElementFactory::createElement(tokenType(m_collector->group().at(0)),0));
-                 id->insertText(0,m_collector->group());
-                 undo=insertElement(id);
-                 if (undo) {
-                     undo->setRedoCursorPosition(FormulaCursor(id,m_collector->group().length()));
-                 }
-                 delete(m_collector);
-             }
-
-
+    if (m_cursor.insideToken()) {
+        TokenElement* token=static_cast<TokenElement*>(m_cursor.currentElement());
+        if (m_cursor.hasSelection()) {
+            undo=new FormulaCommandReplaceText(token,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,text);
+        } else {
+            undo=new FormulaCommandReplaceText(token,m_cursor.position(),0,text);
         }
-
-        else
-        {
-            TokenElement* token=static_cast<TokenElement*>(m_cursor.currentElement());
-            undo = new FormulaCommandReplaceText(token,m_cursor.position(),0,text);
-       //    m_collector->insertText(0,text);
-        //  undo = insertElement(m_collector);
-         // if (undo) {
-           //           undo->setRedoCursorPosition(FormulaCursor(m_collector,text.length()));
-             //     }                                                          //display needed
-
-        }
-
-    }
-
-    else{
-
-        qDebug("in else");
-        m_collector=new CollectionElement();
-        m_collector->addCharacter(text);
-
-
-        qDebug("Before undo");
-//        undo = new FormulaCommandReplaceText(m_collector,m_cursor.position(),0,text);
-        qDebug("After undo");
-         undo = new FormulaCommandReplaceText(m_collector,m_cursor.position(),0,text);
-        m_collector->insertText(0,text);
-       undo = insertElement(m_collector);
-        qDebug("after insert");
-       // undo=insertElement(m_collecundo = new FormulaCommandReplaceText(m_collector,m_cursor.position(),0,text);tor);
-        qDebug("not here");
-   //     formulaData()->notifyDataChange(undo,0);
-        qDebug("after notify");
+    } else {
+        TokenElement* token = static_cast<TokenElement*>
+            (ElementFactory::createElement(tokenType(text[0]),0));
+        token->insertText(0,text);
+        undo=insertElement(token);
         if (undo) {
-                    undo->setRedoCursorPosition(FormulaCursor(m_collector,text.length()));
-                }
-
-
+            undo->setRedoCursorPosition(FormulaCursor(token,text.length()));
+        }
     }
-
-   /* else
-    {
-        m_collector=new CollectionElement();
-         qDebug("here1");
-         m_collector->addCharacter(text);
-         TokenElement* token = static_cast<TokenElement*>
-                    (ElementFactory::createElement(tokenType(text[0]),0));
-         qDebug("here2");
-         token->insertText(0,QString("Please"));
-         undo=insertElement(token);
-         qDebug("here3");
-                 if (undo) {
-                     undo->setRedoCursorPosition(FormulaCursor(token,text.length()));
-                 }
-         qDebug("Else ");
-
-    }
-
-*/
     if (undo) {
         undo->setText(i18nc("(qtundo-format)", "Add text"));
     }
     return undo;
-
-
 }
 
 FormulaCommand* FormulaEditor::insertMathML( const QString& data )
@@ -263,21 +149,18 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
 {
     FormulaCommand *undo = 0;
     if (m_cursor.insideInferredRow()) {
-        qDebug("here1");
         RowElement* tmprow=static_cast<RowElement*>(m_cursor.currentElement());
         QList<BasicElement*> list;
         list<<element;
         if (m_cursor.hasSelection()) {
             undo=new FormulaCommandReplaceElements(tmprow,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,list,true);
         } else {
-            qDebug("here2");
             undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),0,list,false);
         }
     } else if (m_cursor.insideToken() && element->elementType()==Glyph) {
         //TODO: implement the insertion of glyphs
     }
     if (undo) {
-        qDebug("here3");
         undo->setText(i18nc("(qtundo-format)", "Insert formula elements."));
         undo->setUndoCursorPosition(cursor());
     }
@@ -335,7 +218,6 @@ QString FormulaEditor::inputBuffer() const
 
 QString FormulaEditor::tokenType ( const QChar& character ) const
 {
-    qDebug("tokentype");
     QChar::Category chat=character.category();
     if (character.isNumber()) {
         return "mn";
@@ -346,10 +228,7 @@ QString FormulaEditor::tokenType ( const QChar& character ) const
              chat==QChar::Punctuation_Close ||
              chat==QChar::Punctuation_InitialQuote ||
              chat==QChar::Punctuation_FinalQuote ||
-             chat==QChar::Symbol_Math ||
-             character.unicode()=='*' ||
-             character.unicode()=='/')
-    {
+             chat==QChar::Symbol_Math) {
         return "mo";
     }
     else if (character.isLetter()) {
@@ -369,8 +248,3 @@ void FormulaEditor::setCursor ( FormulaCursor& cursor )
     m_cursor=cursor;
 }
 
-bool FormulaEditor::insideCollectionElement()
-{
-    return(!m_collector==NULL);
-
-}

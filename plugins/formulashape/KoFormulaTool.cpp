@@ -34,7 +34,6 @@
 #include <KAction>
 #include <QPainter>
 #include <kdebug.h>
-
 #include <QFile>
 #include <QSignalMapper>
 #include <KFileDialog>

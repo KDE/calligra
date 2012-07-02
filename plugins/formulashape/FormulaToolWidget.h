@@ -22,6 +22,7 @@
 
 #include <QTabWidget>
 #include <QMenu>
+#include <QLabel>
 #include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
@@ -47,17 +48,28 @@ public:
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );
 
+    KoFormulaTool* formulatool();
+
 public slots:
     void insertSymbol(QTableWidgetItem* item);
+    void insertFormula(int,int);
 
 private:
     void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
+
+    void setupformulaButton(QList<QString>);
 
     static QList<QString> symbolsInRange(int start, int length);
     
 private:
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;
+
+    /// Holds the HTML tags of the 8 commonly used formula
+    QLabel* m_formulalabel[8];
+
+    /// holds the formulae that are to be rendered
+    QList<QString> m_printformula;
 
     QMenu m_scriptsMenu;
     QMenu m_fractionMenu;
@@ -71,6 +83,9 @@ private:
     QMenu m_operatorMenu;
     QMenu m_alterTableMenu;
     QMenu m_rowMenu;
+    QMenu m_formulaMenu;
 };
+
+
 
 #endif // FORMULATOOLWIDGET_H

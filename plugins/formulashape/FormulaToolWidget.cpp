@@ -25,13 +25,17 @@
 #include "BasicElement.h"
 #include <QWidgetAction>
 #include <QTableWidget>
-
+#include <QTextEdit>
 #include <KAction>
-
+#include <QMouseEvent>
 #include <KMessageBox>
 #include <QMenu>
+#include <QLabel>
 #include <kdebug.h>
+#include <QMessageBox>
 #include "FormulaCursor.h"
+#include "IdentifierElement.h"
+#include "SubSupElement.h"
 
 FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
                   : QTabWidget( parent )
@@ -98,7 +102,35 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     setupButton(buttonMisc,m_miscMenu,i18n("Miscellaneous"), symbolsInRange(0x2200,0x2205)
                                                                    <<symbolsInRange(0x221F,0x2222));
 
-    buttonRow->hide();
+  //  buttonRow->hide();
+    buttonFormula->setText("Formulae");
+    buttonFormula->setMenu(&m_formulaMenu);
+    buttonFormula->setToolTip("Insert common formulae");
+  //  setupButton(buttonFormula,m_formulaMenu,i18n("Insert common formulae"),symbolsInRange(0x41,0x45),1);
+
+    QList<QString> formulalist;
+    formulalist<<QString("<pre>A = &Pi;r<sup>2</sup></pre>");
+    formulalist<<QString("<pre>(x+a)<sup>n</sup> = <sup>n</sup><strong>&Sigma;</strong><sub>k=0</sub> <sup>n</sup>C<sub>k</sub> x<sup>k</sup> a<sup>n-k</sup> </pre>");
+    formulalist<<QString("<pre>(1+x)<sup>n</sup> = 1 + nx/1! + n(n-1)x<sup>2</sup>/2!+...</pre>");
+    formulalist<<QString("<pre>x = -b &plusmn; &radic;(b<sup>2</sup> - 4ac) / 2a</pre>");
+    formulalist<<QString("<pre><strong>e<sup>n</sup></strong> = 1 + n/1! + n<sup>2</sup>/2! + n<sup>3</sup>/3! + ... </pre>");
+    formulalist<<QString("<pre><strong>sin</strong>&alpha; &plusmn; <strong>sin</strong>&beta; = 2<strong>sin</strong>(&alpha; &plusmn; &beta;)/2 <strong>cos</strong>(&alpha; &plusmn; &beta;)/2 </pre>");
+    formulalist<<QString("<pre><strong>cos</strong>&alpha; + <strong>cos</strong>&beta; = 2 <strong>cos</strong>(&alpha; + &beta;)/2 <strong>cos</strong>(&alpha; - &beta;)/2</pre>");
+    formulalist<<QString("<pre><strong>cos</strong>&alpha; - <strong>cos</strong>&beta; = 2 <strong>sin</strong>(&alpha; + &beta;)/2 <strong>sin</strong>(&beta; - &alpha;)/2</pre>");
+
+
+    m_printformula<<QString("A = ")+QString(0x03C0)+QString("r")+QString(0x00B2);
+    m_printformula<<QString("(x+a)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x/2! + ...");
+    m_printformula<<QString("(1+x)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x")+QString(0x00B2)+QString("/2! + n(n-1)(n-2)x")+QString(0x00B3)+QString("/3! + ...");
+    m_printformula<<QString("x = -b ")+QString(0x00B1)+QString(" ")+QString(0x221A)+QString("(b")+QString(0x00B2)+QString(" - 4ac) / 2a");
+    m_printformula<<QString("e")+QString(0x207F)+QString(" = 1 + n/1! + n")+QString(0x00B2)+QString("/2! + n")+QString(0x00B3)+QString("/3! + ...");
+    m_printformula<<QString("sin")+QString(0x03B1)+QString(" ")+QString(0x00B1)+QString(" sin")+QString(0x03B2)+QString(" = ")+QString("2sin(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ");
+    m_printformula<<QString("cos")+QString(0x03B1)+QString(" + cos")+QString(0x03B2)+QString(" = 2cos(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString("-")+QString(0x03B2)+QString(")/2 ");
+    m_printformula<<QString("cos")+QString(0x03B1)+QString(" - cos")+QString(0x03B2)+QString(" = 2sin(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("sin(")+QString(0x03B2)+QString("-")+QString(0x03B1)+QString(")/2 ");
+    setupformulaButton(formulalist);
+
+
+
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
     connect( buttonAlterTable, SIGNAL( triggered( QAction* ) ), m_tool, SLOT( changeTable(QAction*)));
@@ -119,6 +151,24 @@ void FormulaToolWidget::insertSymbol ( QTableWidgetItem* item )
     m_tool->insertSymbol(item->text());
 }
 
+void FormulaToolWidget::insertFormula (int a,int b)
+{
+        //qDebug(m_printformula.at(a).toAscii().data());
+    /*    SubSupElement* character = new SubSupElement(0,SupScript);
+        QList<BasicElement*>list = character->elementsBetween(0,2);
+        if(list.isEmpty())
+            qDebug("Empty");
+        IdentifierElement* x = new IdentifierElement();
+        x->insertText(0,QString("x"));
+        character->replaceChild(NULL,(BasicElement*)x);
+     //   QList<BasicElement*> children = character->elementsBetween(0,2);
+
+        b=0; // there is no need */
+        Q_UNUSED(b);
+        m_tool->insertSymbol(m_printformula.at(a));
+        m_formulaMenu.hide();
+}
+
 
 void FormulaToolWidget::setupButton ( QToolButton* button, QMenu& menu, const QString& text, QList<QString> list, int length)
 {
@@ -135,7 +185,7 @@ void FormulaToolWidget::setupButton ( QToolButton* button, QMenu& menu, const QS
     table->verticalHeader()->hide();
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
-    table->setShowGrid(false);
+    table->setShowGrid(true);
     table->setFixedSize(table->horizontalHeader()->length(), table->verticalHeader()->length());
     button->setToolTip(text);
     //TODO: that is a little bit hackish
@@ -159,6 +209,47 @@ QList< QString > FormulaToolWidget::symbolsInRange ( int first, int last )
         list.append(QChar(i));
     }
     return list;
+}
+
+void FormulaToolWidget::setupformulaButton(QList<QString>list)
+{
+    QWidgetAction *widgetaction=new QWidgetAction(buttonFormula);
+    QTableWidget* table= new QTableWidget(list.length(),1,buttonFormula);
+
+
+    for(int i=0;i<list.length();i++)
+     {
+         m_formulalabel[i] = new QLabel(list[i]);
+       //  txtedit->setText(list[i]);
+       //  txtedit->insertHtml(list[i]);
+        //txtedit->setReadOnly(true);
+       //  txtedit->setContextMenuPolicy(Qt::NoContextMenu);
+         table->setCellWidget(i,0,m_formulalabel[i]);
+       //  txtedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+
+     }
+    //table->setItem(0,0, newItem);
+    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->horizontalHeader()->hide();
+    table->verticalHeader()->hide();
+    table->resizeColumnsToContents();
+   // table->setFixedSize(table->horizontalHeader()->length(), table->verticalHeader()->length());
+
+
+    connect( table,SIGNAL(cellPressed(int,int)),
+             this, SLOT( insertFormula(int,int)));
+
+    buttonFormula->setPopupMode(QToolButton::InstantPopup);
+    widgetaction->setDefaultWidget(table);
+    m_formulaMenu.addAction(widgetaction);
+
+}
+
+KoFormulaTool* FormulaToolWidget:: formulatool()
+{
+    return m_tool;
 }
 
 
