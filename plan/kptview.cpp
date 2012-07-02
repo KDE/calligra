@@ -812,7 +812,7 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
 {
     ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
-    resourceeditor->draw( getProject() );
+    resourceeditor->setProject( &(getProject()) );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "", index );
     ViewInfo vi = defaultViewInfo( "ResourceEditor" );
@@ -850,7 +850,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
         i->setToolTip( 0, tip );
     }
 
-    taskeditor->draw( getProject() );
+    taskeditor->setProject( &(getProject()) );
     taskeditor->setScheduleManager( currentScheduleManager() );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( setScheduleManager( ScheduleManager* ) ) );
@@ -2568,6 +2568,16 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
         foreach( const QString &name, view->actionListNames() ) {
             plugActionList( name, view->actionList( name ) );
         }
+        foreach ( DockWidget *ds, view->dockers() ) {
+            m_dockers.append( ds );
+            ds->activate( shell() );
+        }
+        kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
+    } else {
+        kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
+        while ( ! m_dockers.isEmpty() ) {
+            m_dockers.takeLast()->deactivate( shell() );
+        }
     }
 }
 
@@ -2866,7 +2876,7 @@ bool View::loadContext()
 {
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
-        return true;
+        return false;
     }
     KoXmlElement n = ctx->context();
     QString cv = n.attribute( "current-view" );
