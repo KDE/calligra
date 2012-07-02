@@ -22,6 +22,7 @@
 
 #include <QTabWidget>
 #include <QMenu>
+#include <QLabel>
 #include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
@@ -49,9 +50,12 @@ public:
 
 public slots:
     void insertSymbol(QTableWidgetItem* item);
+    void insertSymbol(QLabel* label);
 
 private:
     void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
+
+    void setupformulaButton(QList<QString>);
 
     static QList<QString> symbolsInRange(int start, int length);
     
@@ -71,6 +75,9 @@ private:
     QMenu m_operatorMenu;
     QMenu m_alterTableMenu;
     QMenu m_rowMenu;
+    QMenu m_formulaMenu;
 };
+
+
 
 #endif // FORMULATOOLWIDGET_H
