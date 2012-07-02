@@ -57,6 +57,7 @@ Value func_combina(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_correl_pop(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_covar(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_critbinom(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsqa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_expondist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -84,6 +85,8 @@ Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychitest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_linest(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_logest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_loginv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lognormdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_median(valVector args, ValueCalc *calc, FuncExtra *);
@@ -199,6 +202,9 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
+    f = new Function("CRITBINOM", func_critbinom);
+    f->setParamCount(3);
+    add(f);
     f = new Function("DEVSQ", func_devsq);
     f->setParamCount(1, -1);
     f->setAcceptArray();
@@ -300,6 +306,14 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     // this is meant to be a copy of the function NORMSINV.
     // required for OpenFormula compliance.
     f = new Function("LEGACYNORMSINV", func_normsinv);
+    add(f);
+    f = new Function("LINEST", func_linest);
+    f->setParamCount(4);
+    f->setAcceptArray();
+    add(f);
+    f = new Function("LOGEST", func_logest);
+    f->setParamCount(4);
+    f->setAcceptArray();
     add(f);
     f = new Function("LOGINV", func_loginv);
     f->setParamCount(1, 3);
@@ -1196,6 +1210,50 @@ Value func_covar(valVector args, ValueCalc *calc, FuncExtra *)
 
     Value covar = func_covar_helper(args[0], args[1], calc, avg1, avg2);
     return calc->div(covar, number);
+}
+
+//
+// function: critbinom
+//
+Value func_critbinom(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    int trials = calc->conv()->asInteger(args[0]).asInteger();
+    double sp = calc->conv()->asFloat(args[1]).asFloat();
+    double alpha = calc->conv()->asFloat(args[2]).asFloat();
+
+    double result = 0;
+
+    if (trials <= 0)
+        return Value::errorNUM();
+    if ((alpha <= 0) || (alpha >= 1))
+        return Value::errorNUM();
+    if ((sp <= 0) || (sp >= 1))
+        return Value::errorNUM();
+
+    double t;
+    double NApprox;     // normsinv approximation
+
+    if (alpha <= 0.5) {
+        t = sqrt(log(1/pow(alpha, 2)));
+        NApprox = -t + (2.515517 + 0.802853*t + 0.010328*t*t)/(1 + 1.432788*t + 0.189269*t*t + 0.001308*t*t*t);
+    }
+    else if (alpha > 0.5) {
+        t = sqrt(log(1/pow((1 - alpha), 2)));
+        NApprox = t - (2.515517 + 0.802853*t + 0.010328*t*t)/(1 + 1.432788*t + 0.189269*t*t + 0.001308*t*t*t);
+    }
+
+    result = trials*sp + NApprox*sqrt(trials*sp*(1 - sp));
+
+    if (result < 0)
+        result = 0;
+    if (result > trials)
+        result = trials;
+
+    // for getting the best approximate value
+    if ((result - floor(result)) > 0.502)
+        return Value(ceil(result));
+    else
+        return Value(floor(result));
 }
 
 //
@@ -2106,6 +2164,205 @@ Value func_legacyfinv(valVector args, ValueCalc *calc, FuncExtra *)
     if (convergenceError)
         return Value::errorVALUE();
 
+    return result;
+}
+
+//
+// function: linest
+//
+// TODO: For multiple arrays of X
+Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value knownY = args[0];
+    Value knownX = args[1];
+    bool lConst = calc->conv()->asBoolean(args[2]).asBoolean();
+    bool lStatus = calc->conv()->asBoolean(args[3]).asBoolean();
+
+    // if X param left empty
+    Value temp(Value::Array);
+    if (args[1].isEmpty()) {        // assign default array
+        Value cnt(0);
+        for (unsigned int i = 1; i <= knownY.count(); i++) {
+            cnt = calc->add(1, cnt);
+            temp.setElement(0, i-1, cnt);
+        }
+        args[1] = temp;
+        knownX = args[1];
+    }
+    else if (!args[1].isArray()) {  // single value passed
+        Value val = calc->conv()->asFloat(args[1]);
+        for (unsigned int i = 0; i < knownY.count(); i++) {
+            temp.setElement(0, i, val);
+        }
+        args[1] = temp;
+        knownX = args[1];
+    }
+
+    // constraints
+    if (!(knownY.columns() == knownX.columns()) && !(knownY.rows() == knownX.rows()))
+        if (!(knownY.columns() == 1) && !(knownY.rows() == knownX.rows()))
+            if(!(knownY.columns() == knownX.columns()) && !(knownY.rows() == 1))
+                return Value::errorNA();
+
+    double k;                               // no. of elems in Y values
+    double n;                               // no. of arrays in X param
+    Value avgY = calc->avg(args[0]);        // average of Y values
+
+    if ((knownY.columns() == knownX.columns()) && (knownY.rows() == knownX.rows())) {
+        n = 1;
+        k = knownY.columns() * knownY.rows();
+    }
+    else if (knownY.columns() == 1) {
+        n = knownX.columns();
+        k = knownY.rows();
+    }
+    else if (knownY.rows() == 1) {
+        n = knownX.rows();
+        k = knownY.columns();
+    }
+
+    // constraints on n and k
+    if ((lConst && (k <= n+1)) || (!lConst && (k <= n)))
+        return Value::errorNA();
+
+    // splitting matrix X into single cloumn/row vectors
+    valVector argsX;
+    Value tempX(Value::Array);
+
+    //qDebug() << "\n\n vals: " << n << k;
+
+    for (uint i = 0; i < n; i++) {
+        for (uint j = 0; j < k; j++) {
+            if (knownY.rows() > 1)
+                tempX.setElement(0, j, args[1].element(i, j));
+            else
+                tempX.setElement(j, 0, args[1].element(j, i));
+        }
+        argsX.append(tempX);
+    }
+
+    valVector slope;
+    valVector stderrSlope;
+    Value stderrIntercept(0);
+    Value stderrY;
+    Value intercept(0);
+    Value SSresid(0);
+    Value SSreg(0);
+    Value rsq(0);
+    Value F;
+    double DF;
+
+    // calculating slope for all x's
+    for (uint i = 0; i < n; i++) {
+        slope.append(calc->div(FunctionCaller(func_slope, valVector() << args[0] << argsX[i], calc).exec(), Value(n)));
+        if (lConst)
+            intercept = calc->add(intercept, FunctionCaller(func_intercept, valVector() << args[0] << argsX[i], calc).exec());
+        //qDebug() << "\n\nslope: " << slope.value(i);
+    }
+
+    // calculating intercept
+    intercept = calc->div(intercept, Value(n));
+
+    // calculating other factors
+    if (lConst) {
+        if (lStatus) {
+            for (uint j = 0; j < k; j++) {
+                Value bx(0);
+                for (uint i = 0; i < n; i++) {
+                    bx = calc->add(bx, calc->mul(slope[i], argsX[i].element(j)));
+                }
+                rsq = calc->add(rsq, calc->sqr(calc->sub(args[0].element(j), avgY)));
+                SSresid = calc->add(SSresid, calc->sqr(calc->add(calc->sub(bx, args[0].element(j)), intercept)));
+                SSreg = calc->add(SSreg, calc->sqr(calc->add(calc->sub(bx, avgY), intercept)));
+            }
+            rsq = calc->div(SSreg, rsq);
+            DF = k-n-1;
+            stderrY = calc->sqrt(calc->div(SSresid, Value(DF)));
+            F = calc->div(calc->div(SSreg, Value(n)), calc->div(SSresid, Value(DF)));
+        }
+
+        for (uint i = 0; i < n; i++) {
+            Value dino = calc->sub(calc->mul(k, calc->sumsq(argsX[i])), calc->sqr(calc->sum(argsX[i])));
+            stderrSlope.append(calc->mul(stderrY, calc->sqrt(calc->div(k, dino))));
+            //qDebug() << "\n\nstderrslope: " << stderrSlope.value(i);
+        }
+            stderrIntercept = calc->sub(calc->mul(k, calc->sumsq(argsX[0])), calc->sqr(calc->sum(argsX[0])));
+            stderrIntercept = calc->mul(stderrY, calc->sqrt(calc->div(calc->sumsq(argsX[0]), stderrIntercept)));
+    }
+    else {
+        if (lStatus) {
+            for (uint j = 0; j < k; j++) {
+                Value bx(0);
+                for (uint i = 0; i < n; i++) {
+                    bx = calc->add(bx, calc->mul(slope[i], argsX[i].element(j)));
+                }
+                SSresid = calc->add(SSresid, calc->sqr(calc->sub(bx, args[0].element(j))));
+                SSreg = calc->add(SSreg, calc->sqr(calc->add(calc->sub(bx, avgY), intercept)));
+            }
+            DF = k-n;
+            stderrY = calc->sqrt(calc->div(SSresid, Value(DF)));
+            rsq = calc->div(SSreg, calc->sumsq(args[0]));
+            F = calc->div(calc->div(SSreg, Value(n)), calc->div(SSresid, Value(DF)));
+        }
+
+        for (uint i = 0; i < n; i++)
+            stderrSlope.append(calc->div(stderrY, calc->sqrt(calc->sumsq(argsX[i]))));
+        stderrIntercept = Value::errorNUM();
+    }
+    //qDebug() << "\n\nvalues: " << slope << intercept << stderrSlope << stderrIntercept << rsq <<
+                //stderrY << F << DF << SSreg << SSresid;
+
+    // storing result
+    Value result(Value::Array);
+
+    for (uint i = 0; i < n; i++) {
+        result.setElement(i, 0, slope[i]);
+        result.setElement(i, 1, stderrSlope[i]);
+    }
+    result.setElement(n, 0, intercept);
+    result.setElement(n, 1, stderrIntercept);
+
+    if (lStatus) {
+        result.setElement(0, 2, rsq);                   // ------------------------------+----------------
+        result.setElement(1, 2, stderrY);               // slope(b1, b2,.., bn)          | intercept
+        result.setElement(0, 3, F);                     // stderrSlope(sb1, sb2,.., sbn) | stderrIntercept
+        result.setElement(1, 3, Value(DF));             // rsq                           | stderrY
+        result.setElement(0, 4, SSreg);                 // F stats                       | DoF
+        result.setElement(1, 4, SSresid);               // SSregression                  | SSresidual
+    }
+
+    // printing
+    /*for (uint i = 0; i < n; i++) {
+        qDebug() << result.element(i, 0);
+    }
+    qDebug() << result.element(n, 0) << "\n";
+    for (uint i = 0; i < n; i++) {
+        qDebug() << result.element(i, 1);
+    }
+    qDebug() << result.element(n, 1) << "\n";
+
+    for (uint i = 2; i < result.rows(); i++)
+        qDebug() << result.element(0, i) << result.element(1, i) << "\n";
+    */
+    return result;
+}
+
+//
+// function: logest
+//
+// TODO: For multiple arrays of X
+Value func_logest(valVector args, ValueCalc *calc, FuncExtra *) {
+
+    for (uint i = 0; i < args.value(0).count(); i++)
+        args[0].element(i) = calc->ln(args[0].element(i));
+
+    Value result(Value::Array);
+
+    result = FunctionCaller(func_linest, valVector() << args[0] << args[1] << args[2] << args[3], calc).exec();
+    result.setElement(0, 0, calc->exp(result.element(0, 0)));
+
+    //for (uint i = 0; i < result.rows(); i++)
+        //qDebug() << "\n\nresult: " << result.element(0, i) << result.element(1, i);
     return result;
 }
 

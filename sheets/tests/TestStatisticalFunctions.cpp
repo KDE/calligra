@@ -549,6 +549,11 @@ void TestStatisticalFunctions::testCOVAR()
     CHECK_EVAL("COVAR(B14:B17;C13:C17)", Value::errorNUM());       // TODO should we check for "array sizes don't match" or "value counts" in array?.
 }
 
+void TestStatisticalFunctions::testCRITBINOM()
+{
+    CHECK_EVAL("CRITBINOM(100;0.5;0.1)", Value(44));
+}
+
 void TestStatisticalFunctions::testDEVSQ()
 {
     // ODF-tests

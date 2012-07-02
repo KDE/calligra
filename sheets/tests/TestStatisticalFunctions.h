@@ -57,6 +57,7 @@ private slots:
     void testCONFIDENCE();
     void testCORREL();
     void testCOVAR();
+    void testCRITBINOM();
     void testDEVSQ();
 //     void testDEVSQA(); // no ODF-test available
     void testEXPONDIST();
