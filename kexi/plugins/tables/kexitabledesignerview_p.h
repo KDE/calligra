@@ -22,7 +22,7 @@
 
 #include "kexitabledesignerview.h"
 #include <QList>
-#include <libs/kundo2/kundo2command.h>
+#include <kundo2command.h>
 #include <QByteArray>
 
 class KexiDataAwarePropertySet;

@@ -24,7 +24,7 @@
 
 #include <kexidb/alter.h>
 #include <koproperty/Set.h>
-#include <libs/kundo2/kundo2command.h>
+#include <kundo2command.h>
 
 #include "kexitabledesignerview.h"
 
@@ -74,7 +74,6 @@ public:
 
     virtual ~ChangeFieldPropertyCommand();
 
-    virtual QString text() const;
     virtual void redo();
     virtual void undo();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
@@ -98,7 +97,6 @@ public:
 
     virtual ~RemoveFieldCommand();
 
-    virtual QString text() const;
     virtual void redo();
     virtual void undo();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
@@ -119,7 +117,6 @@ public:
                        int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set);
     virtual ~InsertFieldCommand();
 
-    virtual QString text() const;
     virtual void redo();
     virtual void undo();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
@@ -153,7 +150,6 @@ public:
 
     virtual ~ChangePropertyVisibilityCommand();
 
-    virtual QString text() const;
     virtual void redo();
     virtual void undo();
 
@@ -172,7 +168,6 @@ public:
     InsertEmptyRowCommand(KUndo2Command* parent, const QString& text, KexiTableDesignerView* view, int row);
     virtual ~InsertEmptyRowCommand();
 
-    virtual QString text() const;
     virtual void redo();
     virtual void undo();
 

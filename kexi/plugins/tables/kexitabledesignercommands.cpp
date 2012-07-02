@@ -62,6 +62,11 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
         , m_oldListData(oldListData ? new KoProperty::Property::ListData(*oldListData) : 0)
         , m_listData(newListData ? new KoProperty::Property::ListData(*newListData) : 0)
 {
+    setText(i18n("Change \"%1\" property for table field from \"%2\" to \"%3\"",
+                m_alterTableAction.propertyName(),
+                m_oldValue.toString(),
+                m_alterTableAction.newValue().toString()));
+
     kDebug() << debugString();
 }
 
@@ -69,15 +74,6 @@ ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
 {
     delete m_oldListData;
     delete m_listData;
-}
-
-QString ChangeFieldPropertyCommand::text() const
-{
-    return i18n(
-               "Change \"%1\" property for table field from \"%2\" to \"%3\"",
-               m_alterTableAction.propertyName(),
-               m_oldValue.toString(),
-               m_alterTableAction.newValue().toString());
 }
 
 QString ChangeFieldPropertyCommand::debugString()
@@ -130,19 +126,15 @@ RemoveFieldCommand::RemoveFieldCommand(KUndo2Command* parent, const QString& tex
         , m_set(set ? new KoProperty::Set(*set /*deep copy*/) : 0)
         , m_fieldIndex(fieldIndex)
 {
+    if (m_set)
+        setText(i18n("Remove table field \"%1\"", m_alterTableAction.fieldName()));
+    else
+        setText(i18n("Remove empty row at position %1").arg(m_fieldIndex));
 }
 
 RemoveFieldCommand::~RemoveFieldCommand()
 {
     delete m_set;
-}
-
-QString RemoveFieldCommand::text() const
-{
-    if (m_set)
-        return i18n("Remove table field \"%1\"", m_alterTableAction.fieldName());
-
-    return QString("Remove empty row at position %1").arg(m_fieldIndex);
 }
 
 void RemoveFieldCommand::redo()
@@ -187,16 +179,13 @@ InsertFieldCommand::InsertFieldCommand(KUndo2Command* parent, const QString& tex
             fieldIndex, f, set["uid"].value().toInt());
     else //null action
         m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(true);
+    
+    setText(i18n("Insert table field \"%1\"", m_set["caption"].value().toString()));
 }
 
 InsertFieldCommand::~InsertFieldCommand()
 {
     delete m_alterTableAction;
-}
-
-QString InsertFieldCommand::text() const
-{
-    return i18n("Insert table field \"%1\"", m_set["caption"].value().toString());
 }
 
 void InsertFieldCommand::redo()
@@ -223,19 +212,16 @@ ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(KUndo2Command* 
 // , m_fieldUID(set["uid"].value().toInt())
         , m_oldVisibility(set.property(propertyName).isVisible())
 {
+    setText(QString("[internal] Change \"%1\" visibility from \"%2\" to \"%3\"")
+            .arg(m_alterTableAction.propertyName())
+            .arg(m_oldVisibility ? "true" : "false")
+            .arg(m_alterTableAction.newValue().toBool() ? "true" : "false"));
+    
     kDebug() << debugString();
 }
 
 ChangePropertyVisibilityCommand::~ChangePropertyVisibilityCommand()
 {
-}
-
-QString ChangePropertyVisibilityCommand::text() const
-{
-    return QString("[internal] Change \"%1\" visibility from \"%2\" to \"%3\"")
-           .arg(m_alterTableAction.propertyName())
-           .arg(m_oldVisibility ? "true" : "false")
-           .arg(m_alterTableAction.newValue().toBool() ? "true" : "false");
 }
 
 void ChangePropertyVisibilityCommand::redo()
@@ -261,15 +247,11 @@ InsertEmptyRowCommand::InsertEmptyRowCommand(KUndo2Command* parent, const QStrin
         , m_alterTableAction(true) //unused, null action
         , m_row(row)
 {
+    setText(QString("Insert empty row at position %1").arg(m_row));
 }
 
 InsertEmptyRowCommand::~InsertEmptyRowCommand()
 {
-}
-
-QString InsertEmptyRowCommand::text() const
-{
-    return QString("Insert empty row at position %1").arg(m_row);
 }
 
 void InsertEmptyRowCommand::redo()
