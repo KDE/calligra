@@ -35,12 +35,16 @@
 #include <QSplitter>
 #include <QList>
 #include <QPointer>
+#include <QDockWidget>
 
 class KAction;
+class KToggleAction;
 
 class QWidget;
 class QMetaEnum;
 class QAbstractItemModel;
+class QDockWidget;
+class QMainWindow;
 
 class KoDocument;
 class KoPrintJob;
@@ -62,6 +66,31 @@ class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
 
+//------------------
+class KPLATOUI_EXPORT DockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    DockWidget( ViewBase *v, const QString &identity, const QString &title );
+
+    void activate( QMainWindow *shell );
+    void deactivate( QMainWindow *shell );
+
+    bool saveXml( QDomElement &context ) const;
+    void loadXml( const KoXmlElement &context );
+
+    const ViewBase *view;        /// The view this docker belongs to
+    QString id;                  /// Docker identity
+    Qt::DockWidgetArea location; /// The area the docker should go when visible
+    bool editor;                 /// Editor dockers will not be shown in read only mode
+
+public slots:
+    void setShown( bool show );
+    void setLocation( Qt::DockWidgetArea area );
+
+private:
+    bool m_shown;                /// The dockers visivbility when the view is active
+};
 
 //------------------
 class KPLATOUI_EXPORT PrintingOptions
@@ -216,7 +245,7 @@ public:
     bool isActive() const;
     
     /// Set the project this view shall handle.
-    virtual void setProject( Project *project ) { m_proj = project; }
+    virtual void setProject( Project *project );
     /// Return the project
     virtual Project *project() const { return m_proj; }
     /// Draw data from current part / project
@@ -253,6 +282,11 @@ public:
     static PrintingHeaderFooter *createHeaderFooterWidget( ViewBase *view );
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
+    virtual void createDockers() {}
+    void addDocker( DockWidget *ds );
+    QList<DockWidget*> dockers() const;
+    DockWidget *findDocker( const QString &id ) const;
+
 public slots:
     void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     /// Activate/deactivate the gui
@@ -277,6 +311,9 @@ signals:
     /// Emitted when options are modified
     void optionsModified();
 
+    void projectChanged( Project *project );
+    void readWriteChanged( bool );
+
 protected slots:
     virtual void slotOptions() {}
     virtual void slotOptionsFinished( int result );
@@ -291,6 +328,8 @@ protected:
     ScheduleManager *m_schedulemanager;
     
     KoPageLayout m_pagelayout;
+
+    QList<DockWidget*> m_dockers;
 };
 
 //------------------
@@ -411,7 +450,7 @@ protected:
     void contextMenuEvent ( QContextMenuEvent * event );
 
     void dragMoveEvent(QDragMoveEvent *event);
-
+    void dropEvent( QDropEvent *e );
     void updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event );
 
 protected slots:
@@ -496,6 +535,7 @@ public:
     void setAcceptDropsOnView( bool );
     void setDropIndicatorShown( bool );
     void setDragDropMode( QAbstractItemView::DragDropMode mode );
+    void setDragDropOverwriteMode( bool mode );
     void setDragEnabled ( bool mode );
     void setDefaultDropAction( Qt::DropAction action );
 
@@ -588,7 +628,7 @@ protected slots:
 protected:
     void init();
     QList<int> expandColumnList( const QList<int> lst ) const;
-    
+
 protected:
     TreeViewBase *m_leftview;
     TreeViewBase *m_rightview;

@@ -499,13 +499,18 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
-        //This is the first call of loadBody.
-        //Store the default block and char formats
-        //Will be used whenever a new block is inserted
-        d->defaultBlockFormat = cursor.blockFormat();
-        d->defaultCharFormat = cursor.charFormat();
-        KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
-        KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        if (document->resource(KoTextDocument::FrameCharFormat, KoTextDocument::FrameCharFormatUrl).isValid()) {
+            d->defaultBlockFormat = KoTextDocument(document).frameBlockFormat();
+            d->defaultCharFormat = KoTextDocument(document).frameCharFormat();
+        } else {
+            // This is the first call of loadBody on the document.
+            // Store the default block and char formats
+            // Will be used whenever a new block is inserted
+            d->defaultCharFormat = cursor.charFormat();
+            KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
+            d->defaultBlockFormat = cursor.blockFormat();
+            KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        }
     }
     rootCallChecker++;
 
@@ -1139,12 +1144,6 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
-    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-
-    bool stripLeadingSpace = true;
-    loadSpan(element, cursor, &stripLeadingSpace);
-    cursor.setCharFormat(cf);   // restore the cursor char format
-
     QTextBlock block = cursor.block();
     // Set the paragraph-style on the block
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
@@ -1156,6 +1155,12 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         paragraphStyle->applyStyle(block, (d->currentListLevel > 1) &&
                                    d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
     }
+
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+
+    bool stripLeadingSpace = true;
+    loadSpan(element, cursor, &stripLeadingSpace);
+    cursor.setCharFormat(cf);   // restore the cursor char format
 
     if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
         level = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
