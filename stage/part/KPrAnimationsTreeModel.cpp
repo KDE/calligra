@@ -238,6 +238,7 @@ bool KPrAnimationsTreeModel::removeRows(int row, int count, const QModelIndex &p
                                       : m_rootItem;
     beginRemoveRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i) {
+        //delete item
         delete item->takeChild(row);
     }
     endRemoveRows();
@@ -430,8 +431,8 @@ void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
         connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(updateData()));
         KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
         if (doc) {
-            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(updateData()));
-            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(updateData()));
+            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(updateAnimationData(KPrShapeAnimation*)));
+            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(updateAnimationData(KPrShapeAnimation*)));
         }
     }
     reset();
@@ -496,6 +497,74 @@ void KPrAnimationsTreeModel::updateData()
 {
     setActivePage(m_activePage);
     reset();
+}
+
+void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnimation)
+{
+    bool animationDeleted = true;
+    bool updateAllData = false;
+    KPrCustomAnimationItem *parentItem = m_rootItem;
+    KPrCustomAnimationItem *newItem;
+    int clickItem = 0;
+    int childItem = 0;
+    //Look for added animation
+    foreach (KPrAnimationStep *step, m_activePage->animationSteps()) {
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
+                            //Animation Added
+                            if (b == modifiedAnimation) {
+                                animationDeleted = false;
+                                if (b->NodeType() == KPrShapeAnimation::On_Click) {
+                                    updateAllData = true;
+                                    break;
+                                } else {
+                                    parentItem = m_rootItem->childAt(clickItem);
+                                    newItem = new KPrCustomAnimationItem(b, 0);
+                                    parentItem->insertChild(childItem, newItem);
+                                    QModelIndex index = indexByItem(newItem);
+                                    if (index.isValid()) {
+                                       beginInsertRows(index.parent(), index.row(), index.row());
+                                       endInsertRows();
+                                    }
+                                    return;
+                                }
+                            }
+                            if (b->NodeType() == KPrShapeAnimation::On_Click) {
+                                clickItem++;
+                            } else {
+                                childItem++;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    if (animationDeleted) {
+        // look in tree for deleted animation:
+        foreach (KPrCustomAnimationItem *item, m_rootItem->children()) {
+            if (item->animation() == modifiedAnimation) {
+                updateAllData = true;
+                break;
+            }
+            foreach (KPrCustomAnimationItem *childItem, item->children()) {
+                if (childItem->animation() == modifiedAnimation) {
+                    QModelIndex index = indexByItem(childItem);
+                    removeRows(index.row(), 1, index.parent());
+                    return;
+                }
+            }
+        }
+    }
+    if (updateAllData) {
+        updateData();
+    }
 }
 
 KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &index) const

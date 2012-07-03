@@ -26,7 +26,7 @@ class KPrPage;
 class KPrView;
 class KPrCustomAnimationItem;
 class KoShape;
-
+class KPrShapeAnimation;
 
 /** Data model for the animations tree view (see animation tool)*/
 class STAGE_EXPORT KPrAnimationsTreeModel : public QAbstractItemModel
@@ -88,6 +88,7 @@ public:
     QModelIndex indexByShape(KoShape* shape);
     /// Return the index of a given item or an invalid index if it isn't on the model
     QModelIndex indexByItem(KPrCustomAnimationItem* item);
+
     /// Return the parent item
     KPrCustomAnimationItem* rootItem() const;
 
@@ -97,6 +98,9 @@ signals:
 public slots:
     /// Triggers an update of the complete model
     void updateData();
+
+private slots:
+    void updateAnimationData(KPrShapeAnimation* modifiedAnimation);
 
 private:
     /// Return an item for the given index
