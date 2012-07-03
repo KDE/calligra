@@ -22,15 +22,17 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <qjson/parser.h>
 
 class QLocalSocket;
 class QDataStream;
+class KoTextEditor;
 
 class BridgeRequestHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit BridgeRequestHandler(QLocalSocket *inSocket, QObject *parent = 0);
+    explicit BridgeRequestHandler(QLocalSocket *inSocket, KoTextEditor *editor, QObject *parent = 0);
     ~BridgeRequestHandler();
 signals:
 
@@ -39,6 +41,9 @@ public slots:
 private:
     QLocalSocket *m_inSocket;
     QDataStream m_stream;
+    QJson::Parser m_parser;
+    KoTextEditor *m_editor;
+    bool m_ok;
 };
 
 Q_DECLARE_METATYPE(BridgeRequestHandler*)

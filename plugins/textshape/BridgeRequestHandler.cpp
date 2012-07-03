@@ -17,20 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "qjson/parser.h"
+
 #include "BridgeRequestHandler.h"
 #include "BridgeServer.h"
+#include "BridgeActions.h"
 
 #include <QDataStream>
 #include <QByteArray>
 #include <QLocalSocket>
+#include <QVariantMap>
 #include <QDir>
 
-BridgeRequestHandler::BridgeRequestHandler(QLocalSocket *inSocket, QObject *parent) :
+BridgeRequestHandler::BridgeRequestHandler(QLocalSocket *inSocket, KoTextEditor *editor, QObject *parent) :
     QObject(parent),
     m_inSocket(inSocket),
-    m_stream(m_inSocket)
+    m_stream(m_inSocket),
+    m_editor(editor)
 {
     Q_ASSERT(m_inSocket);
+    Q_ASSERT(m_editor);
 
     connect(m_inSocket, SIGNAL(disconnected()), m_inSocket, SLOT(deleteLater()));
     connect(m_inSocket, SIGNAL(readyRead()), this, SLOT(handle()));
@@ -38,19 +44,34 @@ BridgeRequestHandler::BridgeRequestHandler(QLocalSocket *inSocket, QObject *pare
 
 void BridgeRequestHandler::handle()
 {
-    QString data;
+    QString buffer;
+    QByteArray bufferData, block;
+    QDataStream out(&block, QIODevice::WriteOnly);
 
-    m_stream >> data;
+    m_stream >> buffer;
 
-    QByteArray block;
-    QDataStream out(&block, QIODevice::ReadWrite);
+    bufferData.append(qPrintable(buffer));
+    QVariantMap res = m_parser.parse(bufferData, &m_ok).toMap();
 
-    //add return statuses to output stream
+    if (!res.keys().contains(QString("action"))) {         //check for actions
+        out << "Invalid message. Specify action parameter";
+        return;
+    } else if (res["action"].toString() == "insert_citation") {
+        qDebug() << "Action insert_citation";
+        new InsertCitationBridgeAction(res, m_editor);
+    } else if (res["action"].toString() == "insert_bibliography") {
+        qDebug() << "Action insert_bibliography";
+        new InsertBibliographyBridgeAction(res, m_editor);
+    } else if (res["action"].toString() == "insert_cite_record") {
+        qDebug() << "Action insert_cite_record";
+        new InsertCiteRecordBridgeAction(res);
+    }
 
     out.device()->seek(0);
     qint64 bytesWritten = m_inSocket->write(block);        //write block to output socket
     m_inSocket->flush();
 
+    qDebug() << "Wrote " << bytesWritten;
     if (bytesWritten < 0) {
         qDebug() << "Error while writing to output socket. " << m_inSocket->errorString();
     }
