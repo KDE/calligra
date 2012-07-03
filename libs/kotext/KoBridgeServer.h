@@ -21,12 +21,13 @@
 #define BRIDGESERVER_H
 
 #include <QObject>
+#include <qjson/parser.h>
 
 class QLocalServer;
 class QLocalSocket;
 class QDir;
-class BridgeRequestHandler;
 class KoTextEditor;
+class QSignalMapper;
 
 class BridgeServer : public QObject
 {
@@ -43,10 +44,13 @@ signals:
     
 public slots:
     void handleNewEngine();
+    void handle(QObject *o);
 private:
     QLocalServer *m_server;
-    QList<BridgeRequestHandler*> *m_handles;
     KoTextEditor *m_editor;
+    QSignalMapper *m_mapper;
+    QJson::Parser m_parser;
+    bool m_ok;
 };
 
 #endif // BRIDGESERVER_H

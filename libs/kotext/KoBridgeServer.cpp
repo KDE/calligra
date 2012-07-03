@@ -18,7 +18,6 @@
  */
 
 #include "BridgeServer.h"
-#include "BridgeRequestHandler.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -27,6 +26,7 @@
 #include <QMessageBox>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QSignalMapper>
 
 #ifdef Q_OS_UNIX
 const QString BridgeServer::pipeIn = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
@@ -38,11 +38,12 @@ const QString BridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
 BridgeServer::BridgeServer(KoTextEditor *editor, QObject *parent) :
     QObject(parent),
     m_server(new QLocalServer(this)),
-    m_handles(new QList<BridgeRequestHandler*>()),
-    m_editor(editor)
+    m_mapper(new QSignalMapper(this))
 {
     Q_ASSERT(m_editor);
     initServer();
+
+    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(handle(QObject*)));
 }
 
 void BridgeServer::initServer()
@@ -58,12 +59,53 @@ void BridgeServer::initServer()
 void BridgeServer::handleNewEngine()
 {
     QLocalSocket *socket = m_server->nextPendingConnection();
-    qDebug() << "New connection ";
-    m_handles->append(new BridgeRequestHandler(socket, m_editor));
+    connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+    connect(socket, SIGNAL(readyRead()), m_mapper, SLOT(map()));
+    qDebug() << "New engine request";
+    m_mapper->setMapping(socket, socket);
+
+    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(handle(QObject*)));
+}
+
+void BridgeServer::handle(QObject *o)
+{
+    QLocalSocket *socket = static_cast<QLocalSocket*>(o);
+
+    QDataStream in(socket);
+    QString buffer;
+    QByteArray bufferData, block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_0);
+
+    in >> buffer;
+
+    bufferData.append(qPrintable(buffer));
+    QVariantMap res = m_parser.parse(bufferData, &m_ok).toMap();
+
+    if (res["action"].toString().isEmpty()) {         //check for actions
+        return;
+    } else if (res["action"].toString() == "insert_citation") {
+        out << "Action insert_citation";
+//        new InsertCitationBridgeAction(res, m_editor);
+    } else if (res["action"].toString() == "insert_bibliography") {
+        out << "Action insert_bibliography";
+//        new InsertBibliographyBridgeAction(res, m_editor);
+    } else if (res["action"].toString() == "insert_cite_record") {
+        out << "Action insert_cite_record";
+//        new InsertCiteRecordBridgeAction(res);
+    }
+
+    out.device()->seek(0);
+    qint64 bytesWritten = socket->write(block);        //write block to output socket
+    socket->flush();
+
+    qDebug() << "Wrote " << bytesWritten;
+    if (bytesWritten < 0) {
+        qDebug() << "Error while writing to output socket. " << socket->errorString();
+    }
 }
 
 BridgeServer::~BridgeServer()
 {
     m_server->close();
-    qDeleteAll(m_handles->begin(), m_handles->end());
 }

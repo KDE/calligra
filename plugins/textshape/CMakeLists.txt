@@ -32,9 +32,6 @@ SET ( textshape_SRCS
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
-    BridgeServer.cpp
-    BridgeRequestHandler.cpp
-    BridgeActions.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp

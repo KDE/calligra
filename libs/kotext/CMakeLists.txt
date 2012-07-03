@@ -63,6 +63,8 @@ set(kotext_LIB_SRCS
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
+    KoBridgeServer.cpp
+    KoBridgeActions.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -127,6 +129,11 @@ if( Soprano_FOUND )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
+
+
+if( QJSON_FOUND )
+    target_link_libraries(kotext ${QJSON_LIBRARIES})
+endif( QJSON_FOUND )
 
 if( FONTCONFIG_FOUND )
     target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
