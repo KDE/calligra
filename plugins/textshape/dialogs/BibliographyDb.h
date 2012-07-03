@@ -53,6 +53,7 @@ public:
 
     static QSqlRecord sqlRecord(const KoInlineCite* cite);
     static const QList<QString> dbFields;
+    static const QDir tableDir;
 
 private:
     QSqlTableModel *m_model;

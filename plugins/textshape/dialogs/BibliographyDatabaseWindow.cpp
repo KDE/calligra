@@ -39,9 +39,6 @@
 #include <KFileDialog>
 #include <KUrl>
 
-QDir BibliographyDatabaseWindow::tableDir = QDir(QDir::home().path().append(QDir::separator()).append(".calligra"),
-                                          QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-
 BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     QMainWindow(parent),
     m_table(0),
@@ -67,15 +64,15 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
 
     ui.centralwidget->layout()->addWidget(m_bibTableView);
 
-    if (!tableDir.exists()) {
-        if (!tableDir.mkpath(tableDir.absolutePath())) {
-            QMessageBox::warning(this, i18n("Error"), QString(i18n("Error creating directory ")).append(tableDir.absolutePath()));
+    if (!BibliographyDb::tableDir.exists()) {
+        if (!BibliographyDb::tableDir.mkpath(BibliographyDb::tableDir.absolutePath())) {
+            QMessageBox::warning(this, i18n("Error"), QString(i18n("Error creating directory ")).append(BibliographyDb::tableDir.absolutePath()));
             emit close();
         }
     }
 
     if (loadBibliographyDbs() == 0) {
-        QFileInfo fileInfo(tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
+        QFileInfo fileInfo(BibliographyDb::tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
         addTableEntry(fileInfo);
     }
 
@@ -90,10 +87,7 @@ BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
 
 int BibliographyDatabaseWindow::loadBibliographyDbs()
 {
-    BibliographyDatabaseWindow::tableDir = QDir(QDir::home().path().append(QDir::separator()).append(".calligra"),
-                                              QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-
-    QFileInfoList tableFiles = tableDir.entryInfoList();
+    QFileInfoList tableFiles = BibliographyDb::tableDir.entryInfoList();
     foreach(QFileInfo fileInfo, tableFiles) {
         addTableEntry(fileInfo);
     }
@@ -232,7 +226,7 @@ void BibliographyDatabaseWindow::newRecord()
 void BibliographyDatabaseWindow::openFile()
 {
     QString tableFile = KFileDialog::getOpenFileName(
-                KUrl(tableDir.absolutePath()), i18n("*.sqlite|SQLITE citation database (*.sqlite)"),
+                KUrl(BibliographyDb::tableDir.absolutePath()), i18n("*.sqlite|SQLITE citation database (*.sqlite)"),
                 this, i18n("Open Bibliography database table from file"));
 
     if (!tableFile.isEmpty()) {
@@ -245,7 +239,7 @@ void BibliographyDatabaseWindow::newDatabase()
 {
     QString fileName = QFileDialog::getSaveFileName(
                 this, i18n("Save Bibliography database table to file"),
-                tableDir.absolutePath(), i18n("SQLITE citation database (*.sqlite);;All files(*.*)"));
+                BibliographyDb::tableDir.absolutePath(), i18n("SQLITE citation database (*.sqlite);;All files(*.*)"));
 
     if (fileName.isEmpty()) {
         return;

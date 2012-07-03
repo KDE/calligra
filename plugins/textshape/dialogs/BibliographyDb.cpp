@@ -45,6 +45,9 @@ const QList<QString> BibliographyDb::dbFields = QList<QString>() << "address" <<
                                                                           << "series" << "title" << "url" << "volume"
                                                                           << "year";
 
+const QDir BibliographyDb::tableDir = QDir(QDir::home().path().append(QDir::separator()).append(".calligra"),
+                                          QString(), QDir::Name, QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+
 BibliographyDb::BibliographyDb(QObject *parent, const QString &path, const QString &dbName) :
     QObject(parent),
     m_filterModel(new QSortFilterProxyModel(this)),

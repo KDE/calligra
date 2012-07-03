@@ -40,7 +40,6 @@ public:
     int loadBibliographyDbs();
     void addTableEntry(QFileInfo fileInfo);
     void removeTableEntry(int index);
-    static QDir tableDir;
 
 public slots:
     void tableChanged(int);
