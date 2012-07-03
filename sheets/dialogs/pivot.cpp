@@ -20,30 +20,61 @@
 // Local
 
 
+// #include "SubtotalDialog.h"
+
+// #include "ui_SubtotalWidget.h"
+//#include "ui_SubtotalsDetailsWidget.h"
+
 
 #include "pivot.h"
 #include "ui_pivot.h"
+#include "ui_pivotmain.h"
 #include "pivotmain.h"
+#include <QApplication>
 
-Pivot::Pivot(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Pivot)
+#include "Sheet.h"
+#include "ui/Selection.h"
+using namespace Calligra::Sheets;
+
+class Pivot::Private
 {
-    ui->setupUi(this);
-    ui->Current->setChecked(true);
+public:
+    Selection *selection;
+    Ui::Pivot mainWidget;
+    Ui::PivotMain pivotWidget;
+};
+
+
+Pivot::Pivot(QWidget* parent,Selection* selection):
+    KDialog(parent),
+    d(new Private)
+{
+    setCaption(i18n("Select Source"));
+    
+  
+    QWidget* widget = new QWidget(this);
+    d->mainWidget.setupUi(widget);
+    setButtons(Ok|Cancel);   
+    //enableButton(KDialog::Ok, false); 
+    d->mainWidget.Current->setChecked(true);
+    setMainWidget(widget);
+    d->selection=selection;
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotUser2Clicked()));
 }
 
 Pivot::~Pivot()
 {
-    delete ui;
+    delete d;
 }
 
-void Pivot::on_Ok_clicked()
+void Pivot::slotUser2Clicked()
 {
-    if(ui->Current->isChecked())
-    {
-        PivotMain pMain;
-        pMain.setModal(true);
-        pMain.exec();
-    }
+	if(d->mainWidget.Current->isChecked())
+	{
+	    enableButton(KDialog::Ok, true); 
+	    PivotMain *pMain= new PivotMain(this,d->selection);
+	    pMain->setModal(true);
+	    pMain->exec();
+	}
+  
 }

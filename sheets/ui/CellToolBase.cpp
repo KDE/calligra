@@ -2852,12 +2852,12 @@ void CellToolBase::subtotals()
 
 void CellToolBase::pivot()
 {
-    /*if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
+    if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
         KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
-    }*/
+    }
 
-    QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget()/* ,selection()*/);
+    QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget() ,selection());
     dialog->exec();
     delete dialog;
 }

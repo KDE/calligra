@@ -20,21 +20,34 @@
 // Local
 #include "pivotsubtotals.h"
 #include "ui_pivotsubtotals.h"
+#include "Sheet.h"
+#include "ui/Selection.h"
+using namespace Calligra::Sheets;
 
-PivotSubTotals::PivotSubTotals(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PivotSubTotals)
+class PivotSubTotals::Private
 {
-    ui->setupUi(this);
-    ui->None->setChecked(true);
-    ui->SortBy->setChecked(true);
-    ui->Order->addItem("Ascending");
-    ui->Order->addItem("Descending");
+public:
+    Selection *selection;
+    Ui::PivotSubTotals mainWidget;
+};
 
+
+PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
+    KDialog(parent),
+    d(new Private)
+{
+  
+    QWidget* widget = new QWidget(this);
+    d->mainWidget.setupUi(widget);    
+    setMainWidget(widget);
+    d->selection=selection;
+    d->mainWidget.None->setChecked(true);
+    d->mainWidget.SortBy->setChecked(true);
+    
 
 }
 
 PivotSubTotals::~PivotSubTotals()
 {
-    delete ui;
+    delete d;
 }

@@ -21,22 +21,30 @@
 #ifndef PIVOTOPTIONS_H
 #define PIVOTOPTIONS_H
 
-#include <QDialog>
-
-namespace Ui {
-    class PivotOptions;
-}
-
-class PivotOptions : public QDialog
+#include <KDialog>
+namespace Calligra{
+  namespace Sheets{
+    /**
+ * \ingroup UI
+ * Dialog to create PivotOptions.
+ */
+// namespace Ui {
+//     class PivotOptions;
+// }
+class Selection;
+class PivotOptions : public KDialog
 {
-  //  Q_OBJECT
+   //Q_OBJECT
 
 public:
-    explicit PivotOptions(QWidget *parent = 0);
+    explicit PivotOptions(QWidget* parent, Selection* selection);
     ~PivotOptions();
 
 private:
-    Ui::PivotOptions *ui;
+    void extractColumnNames();
+    class Private;
+    Private *const d;
 };
-
+  }
+}
 #endif // PIVOTOPTIONS_H

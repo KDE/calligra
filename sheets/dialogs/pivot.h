@@ -23,25 +23,39 @@
 #ifndef PIVOT_H
 #define PIVOT_H
 
-#include <QDialog>
+#include <KDialog>
 
-namespace Ui {
-    class Pivot;
-}
+namespace Calligra{
+  namespace Sheets{
+/**
+ * \ingroup UI
+ * Dialog to create Pivot.
+ */
 
-class Pivot : public QDialog
+
+class Selection;
+  
+
+class Pivot : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit Pivot(QWidget *parent = 0);
+    Pivot(QWidget* parent,Selection* selection);
     ~Pivot();
 
 private slots:
-    void on_Ok_clicked();
+    void slotUser2Clicked();
 
 private:
-    Ui::Pivot *ui;
+     
+    class Private;
+    Private *const d;
 };
+}
+}
+//}
+  
+
 
 #endif // PIVOT_H

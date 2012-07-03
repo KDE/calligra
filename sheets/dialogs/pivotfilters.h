@@ -22,22 +22,23 @@
 #ifndef PIVOTFILTERS_H
 #define PIVOTFILTERS_H
 
-#include <QDialog>
+#include <KDialog>
 
-namespace Ui {
-    class PivotFilters;
-}
-
-class PivotFilters : public QDialog
+namespace Calligra{
+  namespace Sheets{
+class Selection;    
+class PivotFilters : public KDialog
 {
   //  Q_OBJECT
 
 public:
-    explicit PivotFilters(QWidget *parent = 0);
+    explicit PivotFilters(QWidget* parent,Selection* selection);
     ~PivotFilters();
 
 private:
-    Ui::PivotFilters *ui;
+    class Private;
+    Private *const d;
 };
-
+}
+}
 #endif // PIVOTFILTERS_H

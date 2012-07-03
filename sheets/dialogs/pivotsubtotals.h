@@ -22,22 +22,24 @@
 #ifndef PIVOTSUBTOTALS_H
 #define PIVOTSUBTOTALS_H
 
-#include <QDialog>
+#include <KDialog>
 
-namespace Ui {
-    class PivotSubTotals;
-}
+namespace Calligra;
+  namespace Sheets{
 
-class PivotSubTotals : public QDialog
+class Selection;
+
+class PivotSubTotals : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit PivotSubTotals(QWidget *parent = 0);
+    explicit PivotSubTotals(QWidget* parent,Selection* selection);
     ~PivotSubTotals();
 
 private:
-    Ui::PivotSubTotals *ui;
+    class Private;
+    Private *const d;
 };
 
 #endif // PIVOTSUBTOTALS_H

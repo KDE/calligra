@@ -22,28 +22,31 @@
 #ifndef PIVOTMAIN_H
 #define PIVOTMAIN_H
 
-#include <QDialog>
+#include <KDialog>
+namespace Calligra{
+  namespace Sheets{
 
-namespace Ui {
-    class PivotMain;
-}
-
-class PivotMain : public QDialog
+class Selection;
+class PivotMain : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit PivotMain(QWidget *parent = 0);
+    explicit PivotMain(QWidget* parent,Selection* selection);
     ~PivotMain();
 
 private slots:
+      
+   void on_Options_clicked();
 
-    void on_Options_clicked();
-
-    void on_AddFilter_clicked();
+   void on_AddFilter_clicked();
 
 private:
-    Ui::PivotMain *ui;
+    void extractColumnNames();
+    PivotMain *ui;
+    class Private;
+    Private *const d;
 };
-
+}
+}
 #endif // PIVOTMAIN_H

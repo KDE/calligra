@@ -20,15 +20,58 @@
 // Local
 #include "pivotoptions.h"
 #include "ui_pivotoptions.h"
+#include "Sheet.h"
+#include "ui/Selection.h"
 
-PivotOptions::PivotOptions(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PivotOptions)
+using namespace Calligra::Sheets;
+
+class PivotOptions::Private
 {
-    ui->setupUi(this);
+public:
+    Selection *selection;
+    Ui::PivotOptions mainWidget;
+};
+
+PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
+    KDialog(parent),
+    d(new Private)
+    //ui(new Ui::PivotOptions)
+{
+   // ui->setupUi(this);
+   QWidget* widget = new QWidget;
+   d->mainWidget.setupUi(widget);
+   setCaption(i18n("Pivot Options"));
+   setMainWidget(widget);
+   d->selection= selection;
+    extractColumnNames();
+  
+}
+
+void PivotOptions::extractColumnNames()
+{
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int row = range.top();
+
+    Cell cell;
+    
+    QString text;
+
+    int index = 0;
+    for (int i = range.left(); i <= r; ++i) {
+        cell = Cell(sheet, i, row);
+        text = cell.displayText();
+	
+	if(text.length() >0)
+	{
+        d->mainWidget.BaseItem->addItem(text);
+	}
+    }
 }
 
 PivotOptions::~PivotOptions()
 {
-    delete ui;
+    delete d;
 }

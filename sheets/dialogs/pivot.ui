@@ -1,89 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Pivot</class>
- <widget class="QDialog" name="Pivot">
+ <widget class="QWidget" name="Pivot">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>277</width>
-    <height>142</height>
+    <width>136</width>
+    <height>62</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Select Source</string>
+  <property name="acceptDrops">
+   <bool>false</bool>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>30</y>
-     <width>171</width>
-     <height>48</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QRadioButton" name="Current">
-      <property name="text">
-       <string>Current Selection</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="External">
-      <property name="text">
-       <string>External Source</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>100</y>
-     <width>211</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QPushButton" name="Ok">
-      <property name="text">
-       <string>Ok</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="Cancel">
-      <property name="text">
-       <string>Cancel</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <property name="windowTitle">
+   <string>Pivot</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QRadioButton" name="Current">
+       <property name="text">
+        <string>Current Selection</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="External">
+       <property name="text">
+        <string>External Source</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout"/>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>Cancel</sender>
-   <signal>clicked()</signal>
-   <receiver>Pivot</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>193</x>
-     <y>117</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>257</x>
-     <y>113</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

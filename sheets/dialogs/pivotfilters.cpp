@@ -20,15 +20,29 @@
 // Local
 #include "pivotfilters.h"
 #include "ui_pivotfilters.h"
+#include "Sheet.h"
+#include "ui/Selection.h"
+using namespace Calligra::Sheets;
 
-PivotFilters::PivotFilters(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PivotFilters)
+class PivotFilters::Private
 {
-    ui->setupUi(this);
+public:
+    Selection *selection;
+    Ui::PivotFilters mainWidget;
+};
+
+
+PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
+    KDialog(parent),
+    d(new Private)
+{
+    QWidget* widget = new QWidget(this);
+    d->mainWidget.setupUi(widget);    
+    setMainWidget(widget);
+    d->selection=selection;
 }
 
 PivotFilters::~PivotFilters()
 {
-    delete ui;
+    delete d;
 }
