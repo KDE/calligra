@@ -20,6 +20,8 @@
 #ifndef KOBRIDGESERVER_H
 #define KOBRIDGESERVER_H
 
+#include "kotext_export.h"
+
 #include <QObject>
 #include <qjson/parser.h>
 
@@ -29,7 +31,7 @@ class QDir;
 class KoTextEditor;
 class QSignalMapper;
 
-class KoBridgeServer : public QObject
+class KOTEXT_EXPORT KoBridgeServer : public QObject
 {
     Q_OBJECT
 public:
