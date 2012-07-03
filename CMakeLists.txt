@@ -282,6 +282,13 @@ if(LCMS2_FOUND)
     set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
+
+##
+## Test for QJSON
+##
+macro_optional_find_package(QJSON)
+macro_log_feature(QJSON_FOUND "QJSON" "Maps JSON data to QVariant objects" "http://qjson.sourceforge.net" FALSE "" "Required to handle bibliography interface in Words")
+
 ##
 ## Test for Nepomuk
 ##

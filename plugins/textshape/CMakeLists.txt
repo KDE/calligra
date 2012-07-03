@@ -34,6 +34,7 @@ SET ( textshape_SRCS
     ReferencesToolFactory.cpp
     BridgeServer.cpp
     BridgeRequestHandler.cpp
+    BridgeActions.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
@@ -143,6 +144,9 @@ if( Soprano_FOUND )
     target_link_libraries(textshape ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 
+if( QJSON_FOUND )
+    target_link_libraries(textshape ${QJSON_LIBRARIES})
+endif( QJSON_FOUND )
 
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
