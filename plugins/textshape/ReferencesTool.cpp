@@ -85,7 +85,7 @@ ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_stocw(0)
 {
     createActions();
-    BridgeServer *server = new BridgeServer(this);
+    BridgeServer *server = new BridgeServer(editor(), this);
 }
 
 ReferencesTool::~ReferencesTool()

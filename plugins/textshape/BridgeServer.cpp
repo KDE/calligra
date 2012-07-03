@@ -38,11 +38,13 @@ const QString BridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
 const QString BridgeServer::pipeOut = QDir("\\\\.\\pipe\\pipe.out");
 #endif
 
-BridgeServer::BridgeServer(QObject *parent) :
+BridgeServer::BridgeServer(KoTextEditor *editor, QObject *parent) :
     QObject(parent),
     m_server(new QLocalServer(this)),
-    m_handles(new QList<BridgeRequestHandler*>())
+    m_handles(new QList<BridgeRequestHandler*>()),
+    m_editor(editor)
 {
+    Q_ASSERT(m_editor);
     initServer();
 }
 
@@ -59,7 +61,8 @@ void BridgeServer::initServer()
 void BridgeServer::handleNewEngine()
 {
     QLocalSocket *socket = m_server->nextPendingConnection();
-    m_handles->append(new BridgeRequestHandler(socket));
+    qDebug() << "New connection ";
+    m_handles->append(new BridgeRequestHandler(socket, m_editor));
 }
 
 BridgeServer::~BridgeServer()

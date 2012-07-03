@@ -26,12 +26,13 @@ class QLocalServer;
 class QLocalSocket;
 class QDir;
 class BridgeRequestHandler;
+class KoTextEditor;
 
 class BridgeServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit BridgeServer(QObject *parent = 0);
+    explicit BridgeServer(KoTextEditor *editor, QObject *parent = 0);
     ~BridgeServer();
     void initServer();
 
@@ -45,6 +46,7 @@ public slots:
 private:
     QLocalServer *m_server;
     QList<BridgeRequestHandler*> *m_handles;
+    KoTextEditor *m_editor;
 };
 
 #endif // BRIDGESERVER_H
