@@ -86,7 +86,9 @@ MainWindow::MainWindow (QWidget* parent)
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
     resize (800, 600);
 
-    QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    if (!documentPath.isEmpty()) {
+        QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    }
 }
 
 void MainWindow::openFile (const QString& path)
@@ -132,10 +134,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::checkForAndOpenDocument()
 {
-    if (documentPath.isEmpty()) {
-        return;
-    }
-
     QObject* object = m_view->rootObject();
     QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
 }

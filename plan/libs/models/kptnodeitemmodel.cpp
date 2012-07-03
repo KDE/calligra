@@ -3646,7 +3646,7 @@ Qt::DropActions NodeItemModel::supportedDropActions() const
 
 QStringList NodeItemModel::mimeTypes() const
 {
-    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal";
+    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal" << "application/x-vnd.kde.plan.resourceitemmodel.internal";
 }
 
 QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -3671,7 +3671,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    //kDebug(planDbg());
+    kDebug(planDbg());
     if ( m_projectshown && ! index.isValid() ) {
         return false;
     }
@@ -3680,28 +3680,59 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
         kError()<<"no node to drop on!";
         return false; // hmmm
     }
-    switch ( dropIndicatorPosition ) {
-        case ItemModelBase::AboveItem:
-        case ItemModelBase::BelowItem:
-            // dn == sibling, if not project
-            if ( dn == m_project ) {
+    if ( data->hasFormat("application/x-vnd.kde.plan.resourceitemmodel.internal") ) {
+        switch ( dropIndicatorPosition ) {
+            case ItemModelBase::OnItem:
+                if ( index.column() == NodeModel::NodeAllocation ) {
+                    kDebug(planDbg())<<"resource:"<<index<<(dn->type() == Node::Type_Task);
+                    return dn->type() == Node::Type_Task;
+                } else if ( index.column() == NodeModel::NodeResponsible ) {
+                    kDebug(planDbg())<<"resource:"<<index<<true;
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+    } else if ( data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
+        switch ( dropIndicatorPosition ) {
+            case ItemModelBase::AboveItem:
+            case ItemModelBase::BelowItem:
+                // dn == sibling, if not project
+                if ( dn == m_project ) {
+                    return dropAllowed( dn, data );
+                }
+                return dropAllowed( dn->parentNode(), data );
+            case ItemModelBase::OnItem:
+                // dn == new parent
                 return dropAllowed( dn, data );
-            }
-            return dropAllowed( dn->parentNode(), data );
-        case ItemModelBase::OnItem:
-            // dn == new parent
-            return dropAllowed( dn, data );
-        default:
-            break;
+            default:
+                break;
+        }
+    } else {
+        kDebug(planDbg())<<"Unknown mimetype";
     }
     return false;
 }
 
+QList<Resource*> NodeItemModel::resourceList( QDataStream &stream )
+{
+    QList<Resource*> lst;
+    while (!stream.atEnd()) {
+        QString id;
+        stream >> id;
+        kDebug(planDbg())<<"id"<<id;
+        Resource *r = m_project->findResource( id );
+        if ( r ) {
+            lst << r;
+        }
+    }
+    kDebug(planDbg())<<lst;
+    return lst;
+}
+
 bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
 {
-    if ( !data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
-        return false;
-    }
     if ( ! m_projectshown && on == m_project ) {
         return true;
     }
@@ -3767,11 +3798,97 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     return lst;
 }
 
-bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
+bool NodeItemModel::dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex &parent )
 {
-    //kDebug(planDbg())<<action;
+    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
+        return true;
+    }
+    kDebug(planDbg())<<n->name();
+    if ( parent.column() == NodeModel::NodeResponsible ) {
+        QString s;
+        foreach ( Resource *r, resourceList( stream ) ) {
+            s += r->name();
+        }
+        if ( ! s.isEmpty() ) {
+            if ( action == Qt::CopyAction && ! n->leader().isEmpty() ) {
+                s += ',' + n->leader();
+            }
+            KUndo2Command *cmd = m_nodemodel.setLeader( n, s, Qt::EditRole );
+            if ( cmd ) {
+                emit executeCommand( cmd );
+            }
+            kDebug(planDbg())<<s;
+        }
+        return true;
+    }
+    if ( n->type() == Node::Type_Task ) {
+        QList<Resource*> lst = resourceList( stream );
+        if ( action == Qt::CopyAction ) {
+            lst += static_cast<Task*>( n )->requestedResources();
+        }
+        KUndo2Command *cmd = createAllocationCommand( static_cast<Task&>( *n ), lst );
+        if ( cmd ) {
+            emit executeCommand( cmd );
+        }
+        return true;
+    }
+    return true;
+}
+
+KUndo2Command *NodeItemModel::createAllocationCommand( Task &task, const QList<Resource*> &lst )
+{
+    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify resource allocations" ) );
+    QMap<ResourceGroup*, ResourceGroupRequest*> groups;
+    foreach ( Resource *r, lst ) {
+        if ( ! groups.contains( r->parentGroup() ) && task.resourceGroupRequest( r->parentGroup() ) == 0 ) {
+            ResourceGroupRequest *gr = new ResourceGroupRequest( r->parentGroup() );
+            groups[ r->parentGroup() ] = gr;
+            cmd->addCommand( new AddResourceGroupRequestCmd( task, gr ) );
+        }
+    }
+    QList<Resource*> resources = task.requestedResources();
+    foreach ( Resource *r, lst ) {
+        if ( resources.contains( r ) ) {
+            continue;
+        }
+        ResourceGroupRequest *gr = groups.value( r->parentGroup() );
+        if ( gr == 0 ) {
+            gr = task.resourceGroupRequest( r->parentGroup() );
+        }
+        if ( gr == 0 ) {
+            kError()<<"No group request found, cannot add resource request:"<<r->name();
+            continue;
+        }
+        cmd->addCommand( new AddResourceRequestCmd( gr, new ResourceRequest( r, 100 ) ) );
+    }
+    foreach ( Resource *r, resources ) {
+        if ( ! lst.contains( r ) ) {
+            ResourceGroupRequest *gr = task.resourceGroupRequest( r->parentGroup() );
+            ResourceRequest *rr = task.requests().find( r );
+            if ( gr && rr ) {
+                cmd->addCommand( new RemoveResourceRequestCmd( gr, rr ) );
+            }
+        }
+    }
+    if ( cmd->isEmpty() ) {
+        delete cmd;
+        return 0;
+    }
+    return cmd;
+}
+
+bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    kDebug(planDbg())<<action;
     if (action == Qt::IgnoreAction) {
         return true;
+    }
+    if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
+        return dropResourceMimeData( data, action, row, column, parent );
     }
     if ( !data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
         return false;
