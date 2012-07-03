@@ -25,12 +25,8 @@
 // Calligra
 #include <KoToolBase.h>
 
-// KDChart
-#include <KDChartMarkerAttributes>
-
 // KChart
 #include "ChartShape.h"
-
 
 class QAction;
 
@@ -92,7 +88,7 @@ private slots:
 
     void setDataSetPen(DataSet *dataSet, const QColor& color);
     void setDataSetBrush(DataSet *dataSet, const QColor& color);
-    void setDataSetMarker(DataSet *dataSet, KDChart::MarkerAttributes::MarkerStyle style);
+    void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
     
     // Plot Area

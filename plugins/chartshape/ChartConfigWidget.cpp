@@ -666,52 +666,34 @@ KAction* ChartConfigWidget::createAction()
     return 0;
 }
 
-QIcon ChartConfigWidget::datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStyle markerStyle)
-{
-    if (markerStyle != KDChart::MarkerAttributes::NoMarker) {
-        QPixmap *markerPixmap = new QPixmap(16,16);
-        markerPixmap->fill(QColor(255,255,255,0));
-        QPainter *painter = new QPainter(markerPixmap);
-        KDChart::MarkerAttributes matt;
-        matt.setMarkerStyle(markerStyle);
-        DataSet *dataSet = d->dataSets[d->ui.dataSets->currentIndex()];
-        QBrush brush = dataSet->brush();
-        QPen pen = dataSet->pen();
-        KDChart::AbstractDiagram::paintMarker(painter, matt, brush, pen, QPointF(7,7), QSizeF(12,12));
-        QIcon markerIcon = QIcon(*markerPixmap);
-        return markerIcon;
-    }
-    return QIcon();
-}
-
 void ChartConfigWidget::updateMarkers()
 {
-    d->dataSetMarkerCircleAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerCircle));
-    d->dataSetMarkerSquareAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerSquare));
-    d->dataSetMarkerDiamondAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerDiamond));
-    d->dataSetMarkerRingAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerRing));
-    d->dataSetMarkerCrossAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerCross));
-    d->dataSetMarkerFastCrossAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerFastCross));
-    d->dataSetMarkerArrowDownAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowDown));
-    d->dataSetMarkerArrowUpAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowUp));
-    d->dataSetMarkerArrowRightAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowRight));
-    d->dataSetMarkerArrowLeftAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerArrowLeft));
-    d->dataSetMarkerBowTieAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerBowTie));
-    d->dataSetMarkerHourGlassAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerHourGlass));
-    d->dataSetMarkerStarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStar));
-    d->dataSetMarkerXAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerX));
-    d->dataSetMarkerAsteriskAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerAsterisk));
-    d->dataSetMarkerHorizontalBarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerHorizontalBar));
-    d->dataSetMarkerVerticalBarAction->setIcon(datasetMarkerIcon(KDChart::MarkerAttributes::MarkerVerticalBar));
-
     DataSet *dataSet = d->dataSets[d->selectedDataSet];
+
+    d->dataSetMarkerCircleAction->setIcon(dataSet->markerIcon(MarkerCircle));
+    d->dataSetMarkerSquareAction->setIcon(dataSet->markerIcon(MarkerSquare));
+    d->dataSetMarkerDiamondAction->setIcon(dataSet->markerIcon(MarkerDiamond));
+    d->dataSetMarkerRingAction->setIcon(dataSet->markerIcon(MarkerRing));
+    d->dataSetMarkerCrossAction->setIcon(dataSet->markerIcon(MarkerCross));
+    d->dataSetMarkerFastCrossAction->setIcon(dataSet->markerIcon(MarkerFastCross));
+    d->dataSetMarkerArrowDownAction->setIcon(dataSet->markerIcon(MarkerArrowDown));
+    d->dataSetMarkerArrowUpAction->setIcon(dataSet->markerIcon(MarkerArrowUp));
+    d->dataSetMarkerArrowRightAction->setIcon(dataSet->markerIcon(MarkerArrowRight));
+    d->dataSetMarkerArrowLeftAction->setIcon(dataSet->markerIcon(MarkerArrowLeft));
+    d->dataSetMarkerBowTieAction->setIcon(dataSet->markerIcon(MarkerBowTie));
+    d->dataSetMarkerHourGlassAction->setIcon(dataSet->markerIcon(MarkerHourGlass));
+    d->dataSetMarkerStarAction->setIcon(dataSet->markerIcon(MarkerStar));
+    d->dataSetMarkerXAction->setIcon(dataSet->markerIcon(MarkerX));
+    d->dataSetMarkerAsteriskAction->setIcon(dataSet->markerIcon(MarkerAsterisk));
+    d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
+    d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
+
     Q_ASSERT(dataSet);
     if (!dataSet)
         return;
 
-    const int numDefaultMarkerTypes = 15;
-    KDChart::MarkerAttributes::MarkerStyle style = dataSet->getMarkerAttributes().markerStyle();
-    QIcon icon = datasetMarkerIcon(style);
+    OdfMarkerStyle style = dataSet->markerStyle();
+    QIcon icon = dataSet->markerIcon(style);
     if (!icon.isNull()) {
         if (dataSet->markerAutoSet()) {
             d->ui.datasetMarkerMenu->setText("Auto");
@@ -1023,49 +1005,49 @@ void ChartConfigWidget::datasetMarkerSelected(QAction *action)
 
     const int numDefaultMarkerTypes = 15;
     bool isAuto = false;
-    KDChart::MarkerAttributes::MarkerStyle style = KDChart::MarkerAttributes::MarkerCircle;
+    OdfMarkerStyle style = MarkerSquare;
     QString type = QString("");
     if (action == d->dataSetNoMarkerAction) {
-        style = KDChart::MarkerAttributes::NoMarker;
+        style = NoMarker;
         type = "None";
     } else if (action == d->dataSetAutomaticMarkerAction) {
-        style = (KDChart::MarkerAttributes::MarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
         type = "Auto";
         isAuto = true;
     } else if (action == d->dataSetMarkerCircleAction) {
-        style = KDChart::MarkerAttributes::MarkerCircle;
+        style = MarkerCircle;
     } else if (action == d->dataSetMarkerSquareAction) {
-        style = KDChart::MarkerAttributes::MarkerSquare;
+        style = MarkerSquare;
     } else if (action == d->dataSetMarkerDiamondAction) {
-        style = KDChart::MarkerAttributes::MarkerDiamond;
+        style = MarkerDiamond;
     } else if (action == d->dataSetMarkerRingAction) {
-        style = KDChart::MarkerAttributes::MarkerRing;
+        style = MarkerRing;
     } else if (action == d->dataSetMarkerCrossAction) {
-        style = KDChart::MarkerAttributes::MarkerCross;
+        style = MarkerCross;
     } else if (action == d->dataSetMarkerFastCrossAction) {
-        style = KDChart::MarkerAttributes::MarkerFastCross;
+        style = MarkerFastCross;
     } else if (action == d->dataSetMarkerArrowDownAction) {
-        style = KDChart::MarkerAttributes::MarkerArrowDown;
+        style = MarkerArrowDown;
     } else if (action == d->dataSetMarkerArrowUpAction) {
-        style = KDChart::MarkerAttributes::MarkerArrowUp;
+        style = MarkerArrowUp;
     } else if (action == d->dataSetMarkerArrowRightAction) {
-        style = KDChart::MarkerAttributes::MarkerArrowRight;
+        style = MarkerArrowRight;
     } else if (action == d->dataSetMarkerArrowLeftAction) {
-        style = KDChart::MarkerAttributes::MarkerArrowLeft;
+        style = MarkerArrowLeft;
     } else if (action == d->dataSetMarkerBowTieAction) {
-        style = KDChart::MarkerAttributes::MarkerBowTie;
+        style = MarkerBowTie;
     } else if (action == d->dataSetMarkerHourGlassAction) {
-        style = KDChart::MarkerAttributes::MarkerHourGlass;
+        style = MarkerHourGlass;
     } else if (action == d->dataSetMarkerStarAction) {
-        style = KDChart::MarkerAttributes::MarkerStar;
+        style = MarkerStar;
     } else if (action == d->dataSetMarkerXAction) {
-        style = KDChart::MarkerAttributes::MarkerX;
+        style = MarkerX;
     } else if (action == d->dataSetMarkerAsteriskAction) {
-        style = KDChart::MarkerAttributes::MarkerAsterisk;
+        style = MarkerAsterisk;
     } else if (action == d->dataSetMarkerHorizontalBarAction) {
-        style = KDChart::MarkerAttributes::MarkerHorizontalBar;
+        style = MarkerHorizontalBar;
     } else if (action == d->dataSetMarkerVerticalBarAction) {
-        style = KDChart::MarkerAttributes::MarkerVerticalBar;
+        style = MarkerVerticalBar;
     }
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet];
@@ -1075,7 +1057,7 @@ void ChartConfigWidget::datasetMarkerSelected(QAction *action)
 
     dataSet->setAutoMarker(isAuto);
     if (type.isEmpty()) {
-        d->ui.datasetMarkerMenu->setIcon(datasetMarkerIcon(style));
+        d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(style));
         d->ui.datasetMarkerMenu->setText("");
     } else {
         d->ui.datasetMarkerMenu->setText(type);

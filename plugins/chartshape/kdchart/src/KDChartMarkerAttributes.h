@@ -46,14 +46,14 @@ namespace KDChart {
 
         ~MarkerAttributes();
 
-        enum MarkerStyle { MarkerCircle         = 0,
-                           MarkerSquare         = 1,
-                           MarkerDiamond        = 2,
-                           Marker1Pixel         = 3,
-                           Marker4Pixels        = 4,
-                           MarkerRing           = 5,
-                           MarkerCross          = 6,
-                           MarkerFastCross      = 7,
+        enum MarkerStyle { MarkerCircle  = 0,
+                           MarkerSquare  = 1,
+                           MarkerDiamond = 2,
+                           Marker1Pixel  = 3,
+                           Marker4Pixels = 4,
+                           MarkerRing    = 5,
+                           MarkerCross   = 6,
+                           MarkerFastCross = 7,
                            NoMarker = 8,
                            // Above is kept for backwards binary compatibility.
                            // Below are added for compatibility with ODF

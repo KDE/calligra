@@ -31,6 +31,7 @@
 #include <QString>
 #include <QPen>
 #include <QColor>
+#include <QPainter>
 
 // KDE
 #include <KLocale>
@@ -112,6 +113,8 @@ const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
     KDChart::MarkerAttributes::Marker4Pixels,
     KDChart::MarkerAttributes::NoMarker
 };
+
+static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 
 class DataSet::Private
 {
@@ -696,6 +699,27 @@ QBrush DataSet::brush() const
     return d->brushIsSet ? d->brush : d->defaultBrush();
 }
 
+OdfMarkerStyle DataSet::markerStyle() const
+{
+    OdfMarkerStyle style = (OdfMarkerStyle)(d->symbolID);
+    return style;
+}
+
+QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
+{
+    if (markerStyle != NoMarker) {
+        QPixmap *markerPixmap = new QPixmap(16,16);
+        markerPixmap->fill(QColor(255,255,255,0));
+        QPainter *painter = new QPainter(markerPixmap);
+        KDChart::MarkerAttributes matt;
+        matt.setMarkerStyle(odf2kdMarker(markerStyle));
+        KDChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        QIcon markerIcon = QIcon(*markerPixmap);
+        return markerIcon;
+    }
+    return QIcon();
+}
+
 QPen DataSet::pen(int section) const
 {
     if (d->pens.contains(section))
@@ -804,7 +828,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     default:
         // TODO: Make markers customizable even for other types
         Q_ASSERT(attr.isVisible());
-        ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
+        ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
         ma.setMarkerSize(QSize(10, 10));
         ma.setVisible(true);
         d->symbolsActivated = true;
@@ -864,7 +888,7 @@ KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *succes
         attr = d->sectionsDataValueAttributes[section];
 
     KDChart::MarkerAttributes ma(attr.markerAttributes());
-    ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
+    ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
     ma.setMarkerSize(QSize(10, 10));
     ma.setVisible(true);
 
@@ -885,9 +909,6 @@ void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int 
 
     attr.setMarkerAttributes(attribs);
     d->dataValueAttributes = attr;
-
-    d->symbolsActivated = true;
-    d->symbolID = attribs.markerStyle();
 }
 
 void DataSet::setAutoMarker(bool isAuto)
@@ -957,6 +978,16 @@ void DataSet::setBrush(int section, const QBrush &brush)
 //     KDChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
 //     mas.setMarkerColor(brush.color());
 //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
+}
+
+void DataSet::setMarkerStyle(OdfMarkerStyle style)
+{
+    KDChart::MarkerAttributes matt = getMarkerAttributes();
+    matt.setMarkerStyle(odf2kdMarker(style));
+    setMarkerAttributes(matt);
+
+    d->symbolsActivated = true;
+    d->symbolID = style;
 }
 
 void DataSet::setPieExplodeFactor(int section, int factor)
@@ -1775,4 +1806,51 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     }
 
     bodyWriter.endElement(); // chart:series
+}
+
+static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) {
+    switch (style) {
+    case MarkerSquare:
+        return KDChart::MarkerAttributes::MarkerSquare;
+    case MarkerDiamond:
+        return KDChart::MarkerAttributes::MarkerDiamond;
+    case MarkerArrowDown:
+        return KDChart::MarkerAttributes::MarkerArrowDown;
+    case MarkerArrowUp:
+        return KDChart::MarkerAttributes::MarkerArrowUp;
+    case MarkerArrowRight:
+        return KDChart::MarkerAttributes::MarkerArrowRight;
+    case MarkerArrowLeft:
+        return KDChart::MarkerAttributes::MarkerArrowLeft;
+    case MarkerBowTie:
+        return KDChart::MarkerAttributes::MarkerBowTie;
+    case MarkerHourGlass:
+        return KDChart::MarkerAttributes::MarkerHourGlass;
+    case MarkerCircle:
+        return KDChart::MarkerAttributes::MarkerCircle;
+    case MarkerStar:
+        return KDChart::MarkerAttributes::MarkerStar;
+    case MarkerX:
+        return KDChart::MarkerAttributes::MarkerX;
+    case MarkerCross:
+        return KDChart::MarkerAttributes::MarkerCross;
+    case MarkerAsterisk:
+        return KDChart::MarkerAttributes::MarkerAsterisk;
+    case MarkerHorizontalBar:
+        return KDChart::MarkerAttributes::MarkerHorizontalBar;
+    case MarkerVerticalBar:
+        return KDChart::MarkerAttributes::MarkerVerticalBar;
+    case MarkerRing:
+        return KDChart::MarkerAttributes::MarkerRing;
+    case MarkerFastCross:
+        return KDChart::MarkerAttributes::MarkerFastCross;
+    case Marker1Pixel:
+        return KDChart::MarkerAttributes::Marker1Pixel;
+    case Marker4Pixels:
+        return KDChart::MarkerAttributes::Marker4Pixels;
+    case NoMarker:
+        return KDChart::MarkerAttributes::NoMarker;
+    }
+
+    return KDChart::MarkerAttributes::MarkerSquare;
 }

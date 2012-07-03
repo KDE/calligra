@@ -28,7 +28,6 @@
 #include <KoShapeConfigWidgetBase.h>
 
 // KDChart
-#include <KDChartMarkerAttributes>
 
 // KChart
 #include "ChartShape.h"
@@ -69,7 +68,6 @@ public:
     /// This is called when e.g. the tool is deactivated.
     void deleteSubDialogs();
 
-    QIcon datasetMarkerIcon(KDChart::MarkerAttributes::MarkerStyle markerStyle);
     void updateMarkers();
 
 public slots:
@@ -149,7 +147,7 @@ signals:
     
     void datasetPenChanged(DataSet *dataSet, const QColor& color);
     void datasetBrushChanged(DataSet *dataSet, const QColor& color);
-    void dataSetMarkerChanged(DataSet *dataSet, KDChart::MarkerAttributes::MarkerStyle style);
+    void dataSetMarkerChanged(DataSet *dataSet, OdfMarkerStyle style);
     void datasetShowCategoryChanged(DataSet *dataSet, bool b);
     void dataSetShowNumberChanged(DataSet *dataSet, bool b);
     void datasetShowPercentChanged(DataSet *dataSet, bool b);
