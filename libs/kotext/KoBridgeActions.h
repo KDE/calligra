@@ -25,7 +25,7 @@
 class QDataStream;
 class KoTextEditor;
 
-class BridgeAction
+class KoBridgeAction
 {
 public:
     enum Action {
@@ -34,8 +34,8 @@ public:
         InsertCiteRecord
     };
 
-    BridgeAction(const QVariantMap &map, Action _name);
-    virtual ~BridgeAction();
+    KoBridgeAction(const QVariantMap &map, Action _name);
+    virtual ~KoBridgeAction();
     virtual void performAction() = 0;
     virtual QByteArray data();
     QVariantMap m_data;
@@ -45,7 +45,7 @@ private:
     Action name;
 };
 
-class InsertCitationBridgeAction : public BridgeAction
+class InsertCitationBridgeAction : public KoBridgeAction
 {
 public:
     InsertCitationBridgeAction(const QVariantMap &map, KoTextEditor *editor);
@@ -54,7 +54,7 @@ private:
     KoTextEditor *m_editor;
 };
 
-class InsertBibliographyBridgeAction : public BridgeAction
+class InsertBibliographyBridgeAction : public KoBridgeAction
 {
 public:
     InsertBibliographyBridgeAction(const QVariantMap &map, KoTextEditor *editor);
@@ -63,7 +63,7 @@ private:
     KoTextEditor *m_editor;
 };
 
-class InsertCiteRecordBridgeAction : public BridgeAction
+class InsertCiteRecordBridgeAction : public KoBridgeAction
 {
 public:
     InsertCiteRecordBridgeAction(const QVariantMap &map);

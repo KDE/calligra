@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "BridgeServer.h"
+#include "KoBridgeServer.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -29,15 +29,16 @@
 #include <QSignalMapper>
 
 #ifdef Q_OS_UNIX
-const QString BridgeServer::pipeIn = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
+const QString KoBridgeServer::pipeIn = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
         .append(QDir::separator()).append("pipe.in");
 #else
-const QString BridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
+const QString KoBridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
 #endif
 
-BridgeServer::BridgeServer(KoTextEditor *editor, QObject *parent) :
+KoBridgeServer::KoBridgeServer(KoTextEditor *editor, QObject *parent) :
     QObject(parent),
     m_server(new QLocalServer(this)),
+    m_editor(editor),
     m_mapper(new QSignalMapper(this))
 {
     Q_ASSERT(m_editor);
@@ -46,7 +47,7 @@ BridgeServer::BridgeServer(KoTextEditor *editor, QObject *parent) :
     connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(handle(QObject*)));
 }
 
-void BridgeServer::initServer()
+void KoBridgeServer::initServer()
 {
     if(!m_server->listen(pipeIn)) {
         qDebug() << "Listen call to local socket failed" << m_server->errorString();
@@ -56,7 +57,7 @@ void BridgeServer::initServer()
     }
 }
 
-void BridgeServer::handleNewEngine()
+void KoBridgeServer::handleNewEngine()
 {
     QLocalSocket *socket = m_server->nextPendingConnection();
     connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
@@ -67,7 +68,7 @@ void BridgeServer::handleNewEngine()
     connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(handle(QObject*)));
 }
 
-void BridgeServer::handle(QObject *o)
+void KoBridgeServer::handle(QObject *o)
 {
     QLocalSocket *socket = static_cast<QLocalSocket*>(o);
 
@@ -105,7 +106,7 @@ void BridgeServer::handle(QObject *o)
     }
 }
 
-BridgeServer::~BridgeServer()
+KoBridgeServer::~KoBridgeServer()
 {
     m_server->close();
 }

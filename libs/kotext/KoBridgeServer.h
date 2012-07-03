@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef BRIDGESERVER_H
-#define BRIDGESERVER_H
+#ifndef KOBRIDGESERVER_H
+#define KOBRIDGESERVER_H
 
 #include <QObject>
 #include <qjson/parser.h>
@@ -29,16 +29,15 @@ class QDir;
 class KoTextEditor;
 class QSignalMapper;
 
-class BridgeServer : public QObject
+class KoBridgeServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit BridgeServer(KoTextEditor *editor, QObject *parent = 0);
-    ~BridgeServer();
+    explicit KoBridgeServer(KoTextEditor *editor, QObject *parent = 0);
+    ~KoBridgeServer();
     void initServer();
 
     static const QString pipeIn;
-    static const QString pipeOut;
     
 signals:
     
@@ -53,4 +52,4 @@ private:
     bool m_ok;
 };
 
-#endif // BRIDGESERVER_H
+#endif // KOBRIDGESERVER_H

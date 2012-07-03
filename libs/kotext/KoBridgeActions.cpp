@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "BridgeActions.h"
+#include "KoBridgeActions.h"
 #include "KoInlineCite.h"
 #include "KoTextEditor.h"
 #include <KoOdfBibliographyConfiguration.h>
@@ -25,25 +25,25 @@
 #include <QDataStream>
 #include <QVariantMap>
 
-BridgeAction::BridgeAction(const QVariantMap &map, Action _name) :
+KoBridgeAction::KoBridgeAction(const QVariantMap &map, Action _name) :
     m_data(map),
     m_out(&m_block, QIODevice::WriteOnly),
     name(_name)
 {
 }
 
-BridgeAction::~BridgeAction()
+KoBridgeAction::~KoBridgeAction()
 {
 
 }
 
-QByteArray BridgeAction::data()
+QByteArray KoBridgeAction::data()
 {
     return m_block;
 }
 
 InsertCitationBridgeAction::InsertCitationBridgeAction(const QVariantMap &map, KoTextEditor *editor) :
-    BridgeAction(map, BridgeAction::InsertCitation),
+    KoBridgeAction(map, KoBridgeAction::InsertCitation),
     m_editor(editor)
 {
     performAction();
@@ -59,7 +59,7 @@ void InsertCitationBridgeAction::performAction()
 }
 
 InsertBibliographyBridgeAction::InsertBibliographyBridgeAction(const QVariantMap &map, KoTextEditor *editor) :
-    BridgeAction(map, BridgeAction::InsertBibliography),
+    KoBridgeAction(map, KoBridgeAction::InsertBibliography),
     m_editor(editor)
 {
     performAction();
@@ -71,7 +71,7 @@ void InsertBibliographyBridgeAction::performAction()
 }
 
 InsertCiteRecordBridgeAction::InsertCiteRecordBridgeAction(const QVariantMap &map) :
-    BridgeAction(map, BridgeAction::InsertCiteRecord)
+    KoBridgeAction(map, KoBridgeAction::InsertCiteRecord)
 {
     performAction();
 }
