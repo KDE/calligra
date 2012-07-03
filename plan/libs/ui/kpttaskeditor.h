@@ -112,9 +112,9 @@ public:
     TaskEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    void setProject( Project *project );
     Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
-    virtual void draw();
+    virtual void createDockers();
 
     virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
@@ -134,6 +134,7 @@ public:
     virtual KoPrintJob *createPrintJob();
     
 signals:
+    void taskSelected( Task *task );
     void openNode();
     void addTask();
     void addMilestone();

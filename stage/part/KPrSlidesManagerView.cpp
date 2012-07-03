@@ -86,7 +86,7 @@ void KPrSlidesManagerView::contextMenuEvent(QContextMenuEvent *event)
 void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     event->accept();
-    QListView::mouseDoubleClickEvent(event);
+    // do not call QListView::mouseDoubleClickEvent(event); here as this triggers a rename command to be added
     emit slideDblClick();
 }
 

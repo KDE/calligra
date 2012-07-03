@@ -751,7 +751,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18nc("(qtundo-format)", "Currency Format"));
         command->setFormatType(Format::Money);
-        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
+        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
         break;
 
     case Qt::Key_Percent:

@@ -122,11 +122,13 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 void Task::addRequest(ResourceGroupRequest *request) {
     //kDebug(planDbg())<<m_name<<request<<request->group()<<request->group()->id()<<request->group()->name();
     m_requests.addRequest(request);
+    changed( this );
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
     //kDebug(planDbg())<<request;
     m_requests.takeRequest(request);
+    changed( this );
 }
 
 QStringList Task::requestNameList() const {
