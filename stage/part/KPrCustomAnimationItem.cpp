@@ -141,7 +141,7 @@ qreal KPrCustomAnimationItem::startTimeSeconds() const
     return 0;
 }
 
-int KPrCustomAnimationItem::startTime() const
+int KPrCustomAnimationItem::beginTime() const
 {
     if (m_shapeAnimation) {
         return m_shapeAnimation->timeRange().first;

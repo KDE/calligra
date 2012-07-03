@@ -33,7 +33,7 @@ public:
     QString typeText() const;
     KPrShapeAnimation::Node_Type triggerEvent() const;  //On click, after previous, etc
     qreal startTimeSeconds() const;                            //Animation start time
-    int startTime() const;
+    int beginTime() const;
     qreal durationSeconds() const;
     int duration() const;
     KoShape *shape() const;

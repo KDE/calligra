@@ -232,11 +232,11 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
             case AnimationIcon:
                 return false;
             case StartTime:
-                setTimeRange(item, value.toInt(), item->duration());
+                setTimeRangeIncrementalChange(item, value.toInt(), item->duration());
                 emit dataChanged(index, index);
                 return true;
             case Duration:
-                setTimeRange(item, item->startTime(), value.toInt());
+                setTimeRangeIncrementalChange(item, item->beginTime(), value.toInt());
                 emit dataChanged(index, index);
                 return true;
             case AnimationClass:
@@ -299,10 +299,10 @@ void KPrAnimationsDataModel::update()
     }
 }
 
-void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration)
+void KPrAnimationsDataModel::setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration)
 {
     if (m_firstEdition) {
-        m_oldBegin = item->startTime();
+        m_oldBegin = item->beginTime();
         m_oldDuration = item->duration();
         m_currentEditedItem = item;
         m_firstEdition = false;
@@ -314,8 +314,6 @@ void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const in
     else {
         endTimeLineEdition();
     }
-
-
 }
 
 void KPrAnimationsDataModel::removeModel()
@@ -334,6 +332,35 @@ void KPrAnimationsDataModel::notifyTimeRangeChanged(int begin, int end)
         if (index.isValid()) {
             emit dataChanged(index, index);
         }
+    }
+}
+
+void KPrAnimationsDataModel::setBeginTime(const QModelIndex &index, const int begin)
+{
+    KPrCustomAnimationItem *item = itemForIndex(index);
+    if (item && (!item->isDefaulAnimation())) {
+        setTimeRange(item, begin, item->duration());
+        emit dataChanged(index, index);
+    }
+}
+
+void KPrAnimationsDataModel::setDuration(const QModelIndex &index, const int duration)
+{
+    KPrCustomAnimationItem *item = itemForIndex(index);
+    if (item && (!item->isDefaulAnimation())) {
+        setTimeRange(item, item->beginTime(), duration);
+        emit dataChanged(index, index);
+    }
+}
+
+void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration)
+{
+    if (item && (!item->isDefaulAnimation())) {
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(item->animation(),
+                                                                                     begin, duration);
+        doc->addCommand(command);
+        connect(item->animation(), SIGNAL(timeChanged(int,int)), this, SLOT(notifyTimeRangeChanged(int,int)));
     }
 }
 
@@ -359,16 +386,12 @@ void KPrAnimationsDataModel::endTimeLineEdition()
 {
     if (!m_firstEdition && m_currentEditedItem && (!m_currentEditedItem->isDefaulAnimation()) &&
             (m_oldBegin != INVALID) && (m_oldDuration != INVALID)) {
-        int begin = m_currentEditedItem->startTime();
+        int begin = m_currentEditedItem->beginTime();
         int duration = m_currentEditedItem->duration();
         if ((begin != m_oldBegin) || (duration != m_oldDuration)) {
             m_currentEditedItem->setStartTime(m_oldBegin);
             m_currentEditedItem->setDuration(m_oldDuration);
-            KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
-            KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(m_currentEditedItem->animation(),
-                                                                                           begin, duration);
-            doc->addCommand(command);
-            connect(m_currentEditedItem, SIGNAL(timeChanged(int,int)), this, SLOT(notifyTimeRangeChanged(int,int)));
+            setTimeRange(m_currentEditedItem, begin, duration);
         }
         m_oldBegin = INVALID;
         m_oldDuration = INVALID;

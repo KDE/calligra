@@ -54,6 +54,9 @@ signals:
 
 public slots:
     void updateIndex(const QModelIndex &index);
+    void setBeginTime();
+    void setDuration();
+
 
 private:
     KPrView* m_view;

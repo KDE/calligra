@@ -45,6 +45,7 @@
 #include <QDebug>
 #include <QComboBox>
 #include <QTimeEdit>
+#include <QTime>
 
 //KDE Headers
 #include <KIcon>
@@ -113,6 +114,8 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(itemClicked(QModelIndex)));
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
     connect(m_timeLineView, SIGNAL(timeValuesChanged(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
+    connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
+    connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
 }
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
@@ -162,7 +165,21 @@ void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
     KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
     if (item) {
         m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
-        m_delayEdit->setTime(QTime().addMSecs(item->startTime()));
+        m_delayEdit->setTime(QTime().addMSecs(item->beginTime()));
         m_durationEdit->setTime(QTime().addMSecs(item->duration()));
+    }
+}
+
+void KPrEditAnimationsWidget::setBeginTime()
+{
+    if (m_timeLineView->currentIndex().isValid()) {
+        m_timeLineModel->setBeginTime(m_timeLineView->currentIndex(), -m_delayEdit->time().msecsTo(QTime()));
+    }
+}
+
+void KPrEditAnimationsWidget::setDuration()
+{
+    if (m_timeLineView->currentIndex().isValid()) {
+        m_timeLineModel->setDuration(m_timeLineView->currentIndex(), -m_durationEdit->time().msecsTo(QTime()));
     }
 }

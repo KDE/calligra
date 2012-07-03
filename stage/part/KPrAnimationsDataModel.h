@@ -78,13 +78,17 @@ public slots:
     /// Triggers an update of the complete model
     void update();
 
-    void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
+    void setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration);
 
     /// set model to 0
     void removeModel();
 
     /// Notify a external edition of begin or end time
     void notifyTimeRangeChanged(int begin, int end);
+
+    void setBeginTime(const QModelIndex &index, const int begin);
+    void setDuration(const QModelIndex &index, const int duration);
+    void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
 
 private:
     KPrView *m_view;
