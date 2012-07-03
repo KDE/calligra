@@ -61,8 +61,8 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     //for character General
 //    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
 //    m_validParentStylesModel->setStyleThumbnailer(m_thumbnail);
-    m_validParentStylesModel->setStylesModel(m_characterStyleModel);
-    widget.inheritStyle->setStylesModel(m_validParentStylesModel);
+//    m_validParentStylesModel->setStylesModel(m_characterStyleModel);
+//    widget.inheritStyle->setStylesModel(m_validParentStylesModel);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
@@ -88,6 +88,7 @@ void CharacterGeneral::hideStyleName(bool hide)
 
 void CharacterGeneral::setStyle(KoCharacterStyle *style)
 {
+    kDebug() << "in characterGeneral updateStyle. model: " << m_validParentStylesModel;
     m_style = style;
     if (m_style == 0)
         return;
@@ -114,8 +115,8 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     }
 */
     m_validParentStylesModel->setCurrentChildStyleId(style->styleId());
-    if(!m_style->parentStyle())
-        widget.inheritStyle->setCurrentIndex(-1);
+//    if(!m_style->parentStyle())
+//        widget.inheritStyle->setCurrentIndex(-1);
 
     if (!m_nameHidden)
         widget.name->setText(style->name());
@@ -150,11 +151,11 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     m_characterHighlighting->save(savingStyle);
     //m_languageTab->save(savingStyle);
     savingStyle->setName(widget.name->text());
-    if (widget.inheritStyle->currentIndex() != -1) {
+/*    if (widget.inheritStyle->currentIndex() != -1) {
         KoCharacterStyle *parent = m_styleManager->characterStyle(m_validParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
         savingStyle->setParentStyle(parent);
     }
-
+*/
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);
     }

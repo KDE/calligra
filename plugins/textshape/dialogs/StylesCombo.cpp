@@ -77,8 +77,12 @@ void StylesCombo::setStyleIsOriginal(bool original)
 
 void StylesCombo::setStylesModel(AbstractStylesModel *model)
 {
+    kDebug() << "styleCombo: " << this << " model: " << model;
     m_stylesModel = model;
     setModel(model);
+
+    connect(m_stylesModel, SIGNAL(modelAboutToBeReset()), this, SLOT(testModelSignalAboutToBeReset()));
+    connect(m_stylesModel, SIGNAL(modelReset()), this, SLOT(testModelSignalReset()));
 }
 
 void StylesCombo::setEditable(bool editable)
@@ -137,10 +141,13 @@ void StylesCombo::slotItemClicked(QModelIndex index)
 
 void StylesCombo::slotUpdatePreview()
 {
-    kDebug() << "begin slot updatePreview";
+    kDebug() << "begin slot updatePreview: " << this;
     kDebug() << "currentIndex: " << currentIndex();
     kDebug() << "m_preview: " << m_preview;
     kDebug() << "m_styleModel: " << m_stylesModel;
+    if (!m_stylesModel) {
+        return;
+    }
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
     kDebug() << "preview set";
     update();
@@ -188,6 +195,16 @@ void StylesCombo::showEditIcon(bool show){
     StylesDelegate *delegate = new StylesDelegate();
     delegate->setEditButtonEnable(show);
     setItemDelegate(delegate);
+}
+
+void StylesCombo::testModelSignalAboutToBeReset()
+{
+    kDebug() << "received modelAboutToBeReset signal";
+}
+
+void StylesCombo::testModelSignalReset()
+{
+    kDebug() << "received modelReset signal";
 }
 
 #include <StylesCombo.moc>

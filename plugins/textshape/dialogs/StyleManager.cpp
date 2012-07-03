@@ -302,7 +302,7 @@ void StyleManager::slotStyleSelected(QModelIndex index)
         }
         return;
     }
-    KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(index.internalId());;
+    KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(index.internalId());
     if (!paragraphStyle && m_draftParagraphStyles.contains(index.internalId())) {
         paragraphStyle = m_draftParagraphStyles[index.internalId()];
     }

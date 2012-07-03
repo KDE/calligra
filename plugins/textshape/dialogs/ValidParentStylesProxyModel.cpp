@@ -42,36 +42,40 @@ void ValidParentStylesProxyModel::setStyleManager(KoStyleManager *sm)
 
 QModelIndex ValidParentStylesProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column != 0 || parent.isValid()) {
+    if (row < 0 || column != 0)
         return QModelIndex();
+
+    if (!parent.isValid()) {
+        if (row >= m_proxyToSource.count())
+            return QModelIndex();
+        return createIndex(row, column, -1);
     }
-    return m_sourceModel->index(m_proxyToSource.at(row), column, parent);
+    return QModelIndex();
 }
 
 int ValidParentStylesProxyModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
+        kDebug() << "will return row count: " << m_proxyToSource.count();
         return m_proxyToSource.size();
     }
+    kDebug() << "will return 0 rows";
     return 0;
+
 }
 
 QVariant ValidParentStylesProxyModel::data(const QModelIndex &index, int role) const
 {
-    kDebug() << "begin data request, index isValid: " << index.isValid() << ". index row: " << index.row() << " role: " << role;
-    if (!index.isValid() || index.column() != 0 || index.parent().isValid()) {
-        kDebug() << "invalid index, about to return empty QVariant";
+    if (!index.isValid())
         return QVariant();
-    }
 
     switch (role){
     case Qt::DisplayRole: {
         return QVariant();
     }
     case Qt::DecorationRole: {
-        kDebug() << "will request the data from sourceModdel";
-        kDebug() << "index in the source model: " << m_proxyToSource.at(index.row());
         return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+        break;
     }
     case Qt::SizeHintRole: {
         return QVariant(QSize(250, 48));
@@ -149,22 +153,28 @@ void ValidParentStylesProxyModel::setStylesModel(AbstractStylesModel *model)
     connect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
     connect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 
+    kDebug() << "sourceModel set: " << model << " with n rows: " << model->rowCount(QModelIndex());
+    beginResetModel();
     createMapping();
+    endResetModel();
 }
 
 void ValidParentStylesProxyModel::modelAboutToBeReset()
 {
+    kDebug() << "in slot modelAboutToBeReset. model row count: " << m_sourceModel->rowCount(QModelIndex());
     beginResetModel();
 }
 
 void ValidParentStylesProxyModel::modelReset()
 {
+    kDebug() << "in slot modelReset. model row count: " << m_sourceModel->rowCount(QModelIndex());
     createMapping();
     endResetModel();
 }
 
 void ValidParentStylesProxyModel::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
+    kDebug() << "in slot rowsAboutToBeInserted. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
@@ -173,6 +183,7 @@ void ValidParentStylesProxyModel::rowsAboutToBeInserted(const QModelIndex &paren
 
 void ValidParentStylesProxyModel::rowsInserted(const QModelIndex &parent, int start, int end)
 {
+    kDebug() << "in slot rowsInserted. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
@@ -182,6 +193,7 @@ void ValidParentStylesProxyModel::rowsInserted(const QModelIndex &parent, int st
 
 void ValidParentStylesProxyModel::rowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
 {
+    kDebug() << "in slot rowsAboutToBeMoved. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
     Q_UNUSED(sourceEnd);
@@ -192,6 +204,7 @@ void ValidParentStylesProxyModel::rowsAboutToBeMoved(const QModelIndex &sourcePa
 
 void ValidParentStylesProxyModel::rowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
 {
+    kDebug() << "in slot rowsMoved. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
     Q_UNUSED(sourceEnd);
@@ -203,6 +216,7 @@ void ValidParentStylesProxyModel::rowsMoved(const QModelIndex &sourceParent, int
 
 void ValidParentStylesProxyModel::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
+    kDebug() << "in slot rowsAboutToBeRemoved. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
@@ -211,6 +225,7 @@ void ValidParentStylesProxyModel::rowsAboutToBeRemoved(const QModelIndex &parent
 
 void ValidParentStylesProxyModel::rowsRemoved(const QModelIndex &parent, int start, int end)
 {
+    kDebug() << "in slot rowsRemoved. model row count: " << m_sourceModel->rowCount(QModelIndex());
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
@@ -220,7 +235,9 @@ void ValidParentStylesProxyModel::rowsRemoved(const QModelIndex &parent, int sta
 
 void ValidParentStylesProxyModel::createMapping()
 {
+
     kDebug() << "createMapping. m_styleManager: " << m_styleManager;
+    kDebug() << "model: " << this;
     if (!m_styleManager || !m_sourceModel) {
         return;
     }
@@ -228,6 +245,13 @@ void ValidParentStylesProxyModel::createMapping()
     m_proxyToSource.clear();
     kDebug() << "m_sourcemodel.rowCount: " << m_sourceModel->rowCount(QModelIndex());
     kDebug() << "currentChildStyleId: " << m_currentChildStyleId;
+/*
+    for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i)  {
+        m_proxyToSource.append(i);
+        m_sourceToProxy.append(i);
+    }
+*/
+
     for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         kDebug() << "looping over source model i: " << i;
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
@@ -275,19 +299,22 @@ void ValidParentStylesProxyModel::createMapping()
     for(int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
+
     kDebug() << "m_proxyToSource count: " << m_proxyToSource.count();
     kDebug() << "m_sourceToProxy count: " << m_sourceToProxy.count();
 }
 
 void ValidParentStylesProxyModel::setCurrentChildStyleId(int styleId)
 {
-    kDebug() << "begin";
+    kDebug() << "begin model: " << this;
     m_currentChildStyleId = styleId;
     kDebug() << "set member";
-    beginResetModel();
+//    beginResetModel();
+    emit layoutAboutToBeChanged();
     kDebug() << "sent begin reset";
     createMapping();
-    kDebug() << "map created";
-    endResetModel();
+    kDebug() << "map created proxy item count: " << m_proxyToSource.count();
+//    endResetModel();
+    emit layoutChanged();
     kDebug() << "end";
 }

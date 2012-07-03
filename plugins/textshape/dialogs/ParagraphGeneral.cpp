@@ -56,7 +56,11 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     m_paragraphValidParentStylesModel->setStylesModel(m_paragraphStyleModel);
     kDebug() << "m_paragraphValidParentStyleModel: " << m_paragraphValidParentStylesModel;
+    kDebug() << "inherit style combo: " << widget.inheritStyle;
     widget.inheritStyle->setStylesModel(m_paragraphValidParentStylesModel);
+//    widget.inheritStyle->setStylesModel(m_paragraphStyleModel);
+
+    connect(m_paragraphValidParentStylesModel, SIGNAL(modelReset()), this, SLOT(testParentComboSignals()));
 
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
@@ -110,6 +114,7 @@ void ParagraphGeneral::selectName()
 
 void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
 {
+    kDebug() << "in paragraphGeneral updateStyle. model: " << m_paragraphValidParentStylesModel;
     m_style = style;
     if (m_style == 0)
         return;
@@ -138,14 +143,17 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
+    kDebug() << "will update the current selected style";
     m_paragraphValidParentStylesModel->setCurrentChildStyleId(style->styleId());
 
     if (m_styleManager) {
         CharacterGeneral::updateNextStyleCombo(m_styleManager->paragraphStyle(style->nextStyle()));
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-//            widget.inheritStyle->setCurrentIndex(m_paragraphValidParentStylesModel->indexForParagraphStyle(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_paragraphValidParentStylesModel->indexForParagraphStyle(*parentStyle).row());
+//            widget.inheritStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*parentStyle).row());
         }
+//        widget.inheritStyle->update();
     }
 
     m_paragraphIndentSpacing->setDisplay(style);
@@ -188,6 +196,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
     if (widget.inheritStyle->currentIndex() != -1) {
         KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphValidParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
+//        KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
         savingStyle->setParentStyle(parent);
     }
 
@@ -229,6 +238,11 @@ void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
     m_styleManager = sm;
     CharacterGeneral::setStyleManager(m_styleManager);
     m_paragraphValidParentStylesModel->setStyleManager(m_styleManager);
+}
+
+void ParagraphGeneral::testParentComboSignals()
+{
+    kDebug() << "received signal modelReset";
 }
 
 #include <ParagraphGeneral.moc>
