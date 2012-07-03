@@ -31,11 +31,8 @@
 #ifdef Q_OS_UNIX
 const QString BridgeServer::pipeIn = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
         .append(QDir::separator()).append("pipe.in");
-const QString BridgeServer::pipeOut = QDir::home().absolutePath().append(QDir::separator()).append(".calligra")
-        .append(QDir::separator()).append("pipe.out");
 #else
 const QString BridgeServer::pipeIn = QDir("\\\\.\\pipe\\pipe.in");
-const QString BridgeServer::pipeOut = QDir("\\\\.\\pipe\\pipe.out");
 #endif
 
 BridgeServer::BridgeServer(KoTextEditor *editor, QObject *parent) :
