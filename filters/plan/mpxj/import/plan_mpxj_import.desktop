@@ -1,9 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Plan MS Project Import Filter
+Name[da]=MS Project-importfilter til Plan
 Name[el]=Φίλτρο εισαγωγής Plan MS Project
 Name[et]=Plani MS Projecti impordifilter
-Name[gl]=Filtro de importación de MS Project para Plan
+Name[gl]=Filtro para Plan de importación de MS Project
+Name[hu]=Plan MS Project importszűrő
 Name[ja]=Plan MS Project インポートフィルタ
 Name[nl]=Plan importfilter voor MS Project
 Name[pl]=Filtr importu MS Project do Plan
