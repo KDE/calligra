@@ -21,7 +21,7 @@ class STAGE_EXPORT KPrCustomAnimationItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit KPrCustomAnimationItem(KPrShapeAnimation *animation = 0, KPrCustomAnimationItem *parent=0);
+    explicit KPrCustomAnimationItem(KPrShapeAnimation *animation = 0, KPrCustomAnimationItem *root=0);
     ~KPrCustomAnimationItem();
     void setShapeAnimation(KPrShapeAnimation *animation);
     KPrShapeAnimation *animation() const;
@@ -44,20 +44,22 @@ public:
     void setDuration(int timeMS);
 
     /// Helper methods to manage tre view
-    KPrCustomAnimationItem *parent() const;
-    KPrCustomAnimationItem *childAt(int row) const {return m_children.value(row);}
-    int rowOfChild(KPrCustomAnimationItem *child) const {return m_children.indexOf(child); }
-    int childCount() const {return m_children.count(); }
-    bool hasChildren() const {return !m_children.isEmpty(); }
-    QList <KPrCustomAnimationItem *> children() const {return m_children; }
-    void insertChild(int row, KPrCustomAnimationItem *item);
-    void addChild(KPrCustomAnimationItem *item);
-    void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
-    KPrCustomAnimationItem *takeChild(int row);
+    KPrShapeAnimation *parent() const;
+    KPrShapeAnimation *childAt(int row) const;
+    int rowOfChild(KPrCustomAnimationItem *child) const;
+    int childCount() const;
+    QList<KPrShapeAnimation *> children() const;
+    //void insertChild(int row, KPrCustomAnimationItem *item);
+    //void addChild(KPrCustomAnimationItem *item);
+    //void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
+    //KPrCustomAnimationItem *takeChild(int row);
 
     /// Set Item as default (Root item that holds show slide event)
     void initAsDefaultAnimation(KPrPage *page);
     bool isDefaulAnimation();
+
+    void initAsRootAnimation(KPrPage *page);
+    bool isRootAnimation();
 
 signals:
     void timeChanged(int begin, int end);
@@ -69,9 +71,10 @@ private:
     QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
 
     KPrShapeAnimation* m_shapeAnimation;          //pointer to target element (shape)
-    KPrCustomAnimationItem *m_parent;
-    QList <KPrCustomAnimationItem*> m_children;
+    KPrCustomAnimationItem *m_root;
+    QList <KPrShapeAnimation*> m_children;
     bool isDefaultInitAnimation;
+    bool m_isRootAnimation;
     KPrPage *m_activePage;
 };
 

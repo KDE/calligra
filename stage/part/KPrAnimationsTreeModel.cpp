@@ -56,6 +56,8 @@ KPrAnimationsTreeModel::~KPrAnimationsTreeModel()
 void KPrAnimationsTreeModel::clear()
 {
     delete m_rootItem;
+    qDeleteAll(m_animationItems);
+    m_animationItems.clear();
     reset();
 }
 
@@ -194,10 +196,10 @@ QModelIndex KPrAnimationsTreeModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
     if (KPrCustomAnimationItem *childItem = itemForIndex(index)) {
-        if (KPrCustomAnimationItem *parentItem = childItem->parent()) {
+        if (KPrCustomAnimationItem *parentItem = itemByAnimation(childItem->parent())) {
             if (parentItem == m_rootItem)
                 return QModelIndex();
-            if (KPrCustomAnimationItem *grandParentItem = parentItem->parent()) {
+            if (KPrCustomAnimationItem *grandParentItem = itemByAnimation(parentItem->parent())) {
                 int row = grandParentItem->rowOfChild(parentItem);
                 return createIndex(row, 0, parentItem);
             }
@@ -217,13 +219,11 @@ bool KPrAnimationsTreeModel::insertRows(int row, int count, const QModelIndex &p
     if (!m_rootItem) {
         m_rootItem = new  KPrCustomAnimationItem;
     }
-    KPrCustomAnimationItem *parentItem = parent.isValid() ? itemForIndex(parent)
-                                            : m_rootItem;
+    //KPrCustomAnimationItem *parentItem = parent.isValid() ? itemForIndex(parent)
+    //                                        : m_rootItem;
     beginInsertRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i) {
         //TODO config new animation
-        KPrCustomAnimationItem *item = new KPrCustomAnimationItem();
-        parentItem->insertChild(row, item);
     }
     endInsertRows();
     return true;
@@ -239,13 +239,12 @@ bool KPrAnimationsTreeModel::removeRows(int row, int count, const QModelIndex &p
     beginRemoveRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i) {
         //delete item
-        delete item->takeChild(row);
     }
     endRemoveRows();
     return true;
 }
 
-QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
+/*QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
 {
     if (!index.isValid() || index.row() <= 0) {
         return index;
@@ -300,7 +299,7 @@ QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
         return createIndex(grandParent->rowOfChild(parent), 0, parent);
     }
     return QModelIndex();
-}
+}*/
 
 QModelIndex KPrAnimationsTreeModel::removeItemByIndex(const QModelIndex &index)
 {
@@ -318,7 +317,7 @@ QModelIndex KPrAnimationsTreeModel::removeItemByIndex(const QModelIndex &index)
     return QModelIndex();
 }
 
-QModelIndex KPrAnimationsTreeModel::paste(const QModelIndex &index)
+/*QModelIndex KPrAnimationsTreeModel::paste(const QModelIndex &index)
 {
     if (!index.isValid() || !cutItem) {
         return index;
@@ -384,19 +383,19 @@ QModelIndex KPrAnimationsTreeModel::demote(const QModelIndex &index)
     emit dataChanged(newIndex, newIndex);
     return newIndex;
 }
-
+*/
 void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
 {
     Q_ASSERT(activePage);
     m_activePage = activePage;
     clear();
     m_rootItem = new KPrCustomAnimationItem;
-    KPrCustomAnimationItem *parentItem = m_rootItem;
+    m_rootItem->initAsRootAnimation(activePage);
     KPrCustomAnimationItem *newItem;
     //Start defaul event
     newItem = new KPrCustomAnimationItem(0, m_rootItem);
     newItem->initAsDefaultAnimation(activePage);
-    parentItem = newItem;
+    m_animationItems.append(newItem);
     //Load animations
     foreach (KPrAnimationStep *step, activePage->animationSteps()) {
         for (int i=0; i < step->animationCount(); i++) {
@@ -406,14 +405,9 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
-                            if (b->NodeType() == KPrShapeAnimation::On_Click) {
                                 newItem = new KPrCustomAnimationItem(b, m_rootItem);
-                                parentItem = newItem;
-                            } else {
-                                newItem = new KPrCustomAnimationItem(b, parentItem);
-                            }
+                                m_animationItems.append(newItem);
                         }
-
                     }
                 }
             }
@@ -502,11 +496,7 @@ void KPrAnimationsTreeModel::updateData()
 void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnimation)
 {
     bool animationDeleted = true;
-    bool updateAllData = false;
-    KPrCustomAnimationItem *parentItem = m_rootItem;
     KPrCustomAnimationItem *newItem;
-    int clickItem = 0;
-    int childItem = 0;
     //Look for added animation
     foreach (KPrAnimationStep *step, m_activePage->animationSteps()) {
         for (int i=0; i < step->animationCount(); i++) {
@@ -519,28 +509,23 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
                             //Animation Added
                             if (b == modifiedAnimation) {
                                 animationDeleted = false;
-                                if (b->NodeType() == KPrShapeAnimation::On_Click) {
-                                    updateAllData = true;
-                                    break;
-                                } else {
-                                    parentItem = m_rootItem->childAt(clickItem);
-                                    newItem = new KPrCustomAnimationItem(b, 0);
-                                    parentItem->insertChild(childItem, newItem);
+                                newItem = new KPrCustomAnimationItem(b, m_rootItem);
+                                m_animationItems.append(newItem);
+                                int count = newItem->childCount();
+                                if (count > 0) {
                                     QModelIndex index = indexByItem(newItem);
                                     if (index.isValid()) {
-                                       beginInsertRows(index.parent(), index.row(), index.row());
-                                       endInsertRows();
+                                        beginInsertRows(index.parent(), index.row(), index.row());
+                                        endInsertRows();
                                     }
-                                    return;
+                                    QModelIndex endIndex = indexByItem(itemByAnimation(newItem->childAt(count - 1)));
+                                    if (endIndex.isValid()) {
+                                        emit dataChanged(index, endIndex);
+                                    }
                                 }
-                            }
-                            if (b->NodeType() == KPrShapeAnimation::On_Click) {
-                                clickItem++;
-                            } else {
-                                childItem++;
+                                return;
                             }
                         }
-
                     }
                 }
             }
@@ -548,22 +533,15 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
     }
     if (animationDeleted) {
         // look in tree for deleted animation:
-        foreach (KPrCustomAnimationItem *item, m_rootItem->children()) {
+        foreach (KPrCustomAnimationItem *item, m_animationItems) {
             if (item->animation() == modifiedAnimation) {
-                updateAllData = true;
-                break;
-            }
-            foreach (KPrCustomAnimationItem *childItem, item->children()) {
-                if (childItem->animation() == modifiedAnimation) {
-                    QModelIndex index = indexByItem(childItem);
-                    removeRows(index.row(), 1, index.parent());
-                    return;
-                }
+                QModelIndex index = indexByItem(item);
+                m_animationItems.removeAll(item);
+                delete(item);
+                removeRows(index.row(), 1, index.parent());
+                return;
             }
         }
-    }
-    if (updateAllData) {
-        updateData();
     }
 }
 
@@ -575,6 +553,16 @@ KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &
             return item;
     }
     return m_rootItem;
+}
+
+KPrCustomAnimationItem *KPrAnimationsTreeModel::itemByAnimation(const KPrShapeAnimation *animation) const
+{
+    foreach(KPrCustomAnimationItem *item, m_animationItems) {
+        if (item->animation() == animation) {
+            return item;
+        }
+    }
+    return 0;
 }
 
 void KPrAnimationsTreeModel::announceItemChanged(KPrCustomAnimationItem *item)

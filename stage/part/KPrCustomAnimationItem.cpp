@@ -18,15 +18,13 @@
 #include <KIconLoader>
 #include <KLocale>
 
-KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPrCustomAnimationItem *parent)
+KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPrCustomAnimationItem *root)
     : m_shapeAnimation(animation)
-    ,  m_parent(parent)
+    ,  m_root(root)
     , isDefaultInitAnimation(false)
+    , m_isRootAnimation(false)
     , m_activePage(0)
 {
-    if (m_parent) {
-        m_parent->addChild(this);
-    }
     if (m_shapeAnimation) {
         connect(m_shapeAnimation, SIGNAL(timeChanged(int, int)), this, SIGNAL(timeChanged(int, int)));
         connect(m_shapeAnimation, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this,
@@ -36,7 +34,7 @@ KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPr
 
 KPrCustomAnimationItem::~KPrCustomAnimationItem()
 {
-    qDeleteAll(m_children);
+    m_children.clear();
 }
 
 void KPrCustomAnimationItem::setShapeAnimation(KPrShapeAnimation *animation)
@@ -190,11 +188,81 @@ void KPrCustomAnimationItem::setDuration(int timeMS)
     }
 }
 
-KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const
+KPrShapeAnimation *KPrCustomAnimationItem::parent() const
 {
-    return m_parent;
+    if (m_isRootAnimation || !(m_shapeAnimation)) {
+        return 0;
+    }
+    else if (isDefaulAnimation()) {
+        return m_root->animation();
+    }
+    else {
+        return m_shapeAnimation->step()->animationAt(0)->children().first();
+    }
 }
 
+KPrShapeAnimation *KPrCustomAnimationItem::childAt(int row) const
+{
+    return children().at(row);
+}
+
+int KPrCustomAnimationItem::rowOfChild(KPrCustomAnimationItem *child) const
+{
+    return children().indexOf(child);
+}
+
+int KPrCustomAnimationItem::childCount() const
+{
+    return children().count();
+}
+
+QList<KPrShapeAnimation *> KPrCustomAnimationItem::children() const
+{
+    m_children.clear();
+    if (isRootAnimation() && m_activePage) {
+        foreach (KPrAnimationStep *step, m_activePage->animationSteps()) {
+            for (int i=0; i < step->animationCount(); i++) {
+                QAbstractAnimation *animation = step->animationAt(i);
+                if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                    for (int j=0; j < a->animationCount(); j++) {
+                        QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                        if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                            if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                                m_children.append(b);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return m_children;
+    }
+    if (m_shapeAnimation->subStep()->indexOfAnimation(m_shapeAnimation) == 0) {
+        if (m_shapeAnimation->step()->indexOfAnimation(m_shapeAnimation->subStep()) == 0) {
+            KPrAnimationStep *step = m_shapeAnimation->step();
+            for (int i=0; i < step->animationCount(); i++) {
+                QAbstractAnimation *animation = step->animationAt(i);
+                if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                    for (int j=0; j < a->animationCount(); j++) {
+                        QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                        if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                            if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                                if (b != m_shapeAnimation) {
+                                    m_children.append(b);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            return m_children;
+        }
+    }
+    return m_children;
+}
+
+/*
 void KPrCustomAnimationItem::insertChild(int row, KPrCustomAnimationItem *item)
 {
     item->m_parent = this;
@@ -213,7 +281,7 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::takeChild(int row)
     Q_ASSERT(item);
     item->m_parent = 0;
     return item;
-}
+}*/
 
 void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *page)
 {
@@ -228,6 +296,19 @@ void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *page)
 bool KPrCustomAnimationItem::isDefaulAnimation()
 {
     return isDefaultInitAnimation;
+}
+
+void KPrCustomAnimationItem::initAsRootAnimation(KPrPage *page)
+{
+    m_shapeAnimation = new KPrShapeAnimation(0,0,true);
+    m_activePage = page;
+    qDeleteAll(m_children);
+    m_isRootAnimation = true;
+}
+
+bool KPrCustomAnimationItem::isRootAnimation()
+{
+    return m_isRootAnimation;
 }
 
 QImage KPrCustomAnimationItem::createThumbnail(KoShape *shape, const QSize &thumbSize) const

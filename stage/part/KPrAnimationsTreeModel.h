@@ -69,13 +69,13 @@ public:
 
      bool hasCutItem() const { return cutItem; }
  */
-     QModelIndex moveUp(const QModelIndex &index);
-     QModelIndex moveDown(const QModelIndex &index);
-     QModelIndex cut(const QModelIndex &index);
+     //QModelIndex moveUp(const QModelIndex &index);
+     //QModelIndex moveDown(const QModelIndex &index);
+     //QModelIndex cut(const QModelIndex &index);
      QModelIndex removeItemByIndex(const QModelIndex &index);
-     QModelIndex paste(const QModelIndex &index);
-     QModelIndex promote(const QModelIndex &index);
-     QModelIndex demote(const QModelIndex &index);
+     //QModelIndex paste(const QModelIndex &index);
+     //QModelIndex promote(const QModelIndex &index);
+     //QModelIndex demote(const QModelIndex &index);
 
 
     /// An active page is required before use the model
@@ -106,6 +106,8 @@ private:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
+    KPrCustomAnimationItem* itemByAnimation(const KPrShapeAnimation *animation) const;
+
     /// Emit standard signals when a group of items is changed
     void announceItemChanged(KPrCustomAnimationItem *item);
     QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
@@ -114,6 +116,7 @@ private:
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
     KPrCustomAnimationItem *cutItem;
+    QList<KPrCustomAnimationItem *> m_animationItems;
 };
 
 #endif // KPRANIMATIONSTREEMODEL_H
