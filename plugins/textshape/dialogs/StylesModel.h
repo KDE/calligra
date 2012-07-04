@@ -81,13 +81,9 @@ public:
     */
     void setProvideStyleNone(bool provide);
 
-    /** Returns the @class KoParagraphStyle corresponding to the specified @param index. */
-//    KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
 
-    /** Returns the @class KoCharacterhStyle corresponding to the specified @param index. */
-//    KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 

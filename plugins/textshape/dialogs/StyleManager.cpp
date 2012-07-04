@@ -132,12 +132,17 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
     m_blockStyleChangeSignals = true;
-    m_selectedCharStyle = 0;
-    m_selectedParagStyle = style;
     widget.characterStylePage->save();
     widget.characterStylePage->setStyle(0);
     widget.paragraphStylePage->save();
+
+    if (!style) {
+        return;
+    }
+
     KoParagraphStyle *localStyle;
+    m_selectedCharStyle = 0;
+    m_selectedParagStyle = style;
 
     if (m_draftParagraphStyles.contains(style->styleId())) {
         localStyle = m_draftParagraphStyles[style->styleId()];
@@ -164,14 +169,19 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
     m_blockStyleChangeSignals = true;
     m_selectedParagStyle = 0;
-    m_selectedCharStyle = style;
     widget.paragraphStylePage->save();
     widget.paragraphStylePage->setStyle(0);
     widget.characterStylePage->save();
-    KoCharacterStyle *localStyle;
 
-    if (m_draftParagraphStyles.contains(style->styleId())) {
-        localStyle = m_draftParagraphStyles[style->styleId()];
+    if (!style) {
+        return;
+    }
+
+    KoCharacterStyle *localStyle;
+    m_selectedCharStyle = style;
+
+    if (m_draftCharacterStyles.contains(style->styleId())) {
+        localStyle = m_draftCharacterStyles[style->styleId()];
     }
     else if (!m_alteredCharacterStyles.contains(style->styleId())) {
         localStyle = style->clone();
@@ -207,6 +217,7 @@ void StyleManager::save()
     m_styleManager->beginEdit();
 
     m_paragraphStylesModel->clearDraftStyles(); // clear draft styles in Style Model.
+    m_characterStylesModel->clearDraftStyles();
     foreach(KoParagraphStyle *style, m_draftParagraphStyles.values()) {
         m_styleManager->add(style);
     }
@@ -277,10 +288,14 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 
 void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 {
+    kDebug() << "in addCharacter";
     if (m_blockSignals) return;
 
+    kDebug() << "will update gui";
     widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
+    kDebug() << "combos done";
     setCharacterStyle(style);
+    kDebug() << "finifshed updating gui";
     m_unappliedStyleChanges = true;
 }
 
@@ -331,6 +346,7 @@ void StyleManager::slotStyleSelected(QModelIndex index)
 
 void StyleManager::buttonNewPressed()
 {
+    kDebug() << "begin new";
     if (!checkUniqueStyleName()) {
         m_blockSignals = true;
         if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
@@ -339,10 +355,18 @@ void StyleManager::buttonNewPressed()
             widget.characterStylePage->selectName();
         }
         m_blockSignals = false;
+        kDebug() << "non unique style name returning";
         return;
     }
+    kDebug() << "after check of double names";
     if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
-        KoParagraphStyle *newStyle = m_selectedParagStyle->clone();
+        KoParagraphStyle *newStyle;
+        if (m_selectedParagStyle) {
+            newStyle = m_selectedParagStyle->clone();
+        }
+        else {
+            newStyle = new KoParagraphStyle();
+        }
         newStyle->setName(i18n("New Style"));
         m_paragraphStylesModel->addDraftParagraphStyle(newStyle);
         m_draftParagraphStyles.insert(newStyle->styleId(), newStyle);
@@ -350,12 +374,24 @@ void StyleManager::buttonNewPressed()
         widget.paragraphStylePage->selectName();
     }
     else {
-        KoCharacterStyle *newStyle = m_selectedCharStyle->clone();
+        kDebug() << "in adding new charStyle";
+        KoCharacterStyle *newStyle;
+        if (m_selectedCharStyle) {
+            kDebug() << "by cloning " << m_selectedCharStyle->name();
+            newStyle = m_selectedCharStyle->clone();
+        }
+        else {
+            kDebug() << "by creating a new style";
+            newStyle = new KoCharacterStyle();
+        }
         newStyle->setName(i18n("New Style"));
+        kDebug() << "name of the new style set to New Style";
         m_characterStylesModel->addDraftCharacterStyle(newStyle);
         m_draftCharacterStyles.insert(newStyle->styleId(), newStyle);
+        kDebug() << "style added to model and list";
         addCharacterStyle(newStyle);
         widget.characterStylePage->selectName();
+        kDebug() << "finifshed";
     }
 }
 
@@ -399,7 +435,7 @@ bool StyleManager::unappliedStyleChanges()
 
 bool StyleManager::checkUniqueStyleName()
 {
-    if (m_selectedParagStyle) {
+    if (m_selectedParagStyle && !widget.paragraphStylePage->styleName().isEmpty()) {
         QList<int> styleListPar = m_paragraphStylesModel->StyleList();
         QList<int>::iterator iterPar = styleListPar.begin();
         for ( ; iterPar != styleListPar.end(); ++iterPar) {
@@ -415,14 +451,21 @@ bool StyleManager::checkUniqueStyleName()
 
         }
     }
-    if (m_selectedCharStyle) {
+    if (m_selectedCharStyle && !widget.characterStylePage->styleName().isEmpty()) {
+        kDebug() << "characterStyle selected: " << m_selectedCharStyle;
         QList<int> styleListChar = m_characterStylesModel->StyleList();
+        kDebug() << "the characterStyle list contains " << styleListChar.count() << " styles";
         QList<int>::iterator iterChar = styleListChar.begin();
         for ( ; iterChar != styleListChar.end(); ++iterChar) {
-            KoCharacterStyle *temp = m_styleManager->characterStyle(*iterChar);;
-            if (!temp && m_draftCharacterStyles.contains(*iterChar))
+            KoCharacterStyle *temp = m_styleManager->characterStyle(*iterChar);
+            kDebug() << "iterating style: " << *iterChar;
+            kDebug() << "temp style: " << temp;
+            if (!temp && m_draftCharacterStyles.contains(*iterChar)) {
+                kDebug() << "have found a temporary style for this id";
                 temp = m_draftCharacterStyles[*iterChar];
+            }
 
+            kDebug() << "temp style is now: " << temp;
             if (widget.characterStylePage->styleName() == temp->name()) {
                 if (temp != m_selectedCharStyle) {
                     QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.").arg(temp->name()));

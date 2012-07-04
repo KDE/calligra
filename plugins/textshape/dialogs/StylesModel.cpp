@@ -168,14 +168,7 @@ void StylesModel::setProvideStyleNone(bool provide)
         m_provideStyleNone = provide;
     }
 }
-/*
-KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
-{
-    if (m_draftParStyleList.contains(index.internalId()))
-        return m_draftParStyleList[index.internalId()];
-    return m_styleManager->paragraphStyle(index.internalId());
-}
-*/
+
 QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
 {
     if (&style) {
@@ -186,14 +179,7 @@ QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) c
         return QModelIndex();
     }
 }
-/*
-KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
-{
-    if (m_draftCharStyleList.contains(index.internalId()))
-        return m_draftCharStyleList[index.internalId()];
-    return m_styleManager->characterStyle(index.internalId());
-}
-*/
+
 QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
 {
     if (&style) {
@@ -349,6 +335,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
         }
         ++index;
     }
+    kDebug() << "will insert style: " << style->styleId() << " at index: " << index;
     beginInsertRows(QModelIndex(), index, index);
     m_styleList.insert(index, style->styleId());
     endInsertRows();
@@ -378,9 +365,11 @@ void StylesModel::updateCharacterStyles()
     qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
 
     foreach(KoCharacterStyle *style, styles) {
-        m_styleList.append(style->styleId());
-        m_styleMapper->setMapping(style, style->styleId());
-        connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+        if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
+            m_styleList.append(style->styleId());
+            m_styleMapper->setMapping(style, style->styleId());
+            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+        }
     }
 
     endResetModel();
@@ -516,12 +505,15 @@ void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
 
 void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 {
-    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
-        style->setStyleId(-(m_draftCharStyleList.count()+2));
-    else
-        style->setStyleId(-(m_draftCharStyleList.count()+1));
+    kDebug() << "starting to add the draft in the model";
+//    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
+        style->setStyleId(-(m_draftCharStyleList.count()+2)); //we have a virtual characterStyle with style id -1, so we need to skip it
+//    else
+//        style->setStyleId(-(m_draftCharStyleList.count()+1));
     m_draftCharStyleList.insert(style->styleId(), style);
+    kDebug() << "style inserted in the draft list";
     addCharacterStyle(style);
+    kDebug() << "draft added to the model";
 }
 
 void StylesModel::clearDraftStyles()

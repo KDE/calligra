@@ -103,6 +103,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     m_characterHighlighting->setDisplay(style);
     //m_languageTab->setDisplay(style);
 
+    kDebug() << "first place style: " << style;
     widget.preview->setCharacterStyle(style);
 
     if (m_styleManager) {
@@ -157,6 +158,7 @@ void CharacterGeneral::setPreviewCharacterStyle()
     KoCharacterStyle *charStyle = new KoCharacterStyle();
     save(charStyle);
     if (charStyle) {
+        kDebug() << "second place" << charStyle;
         widget.preview->setCharacterStyle(charStyle);
     }
 

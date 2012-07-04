@@ -176,7 +176,7 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dx2 = -2;
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (editRect.contains(mouseEvent->pos())){
+        if (editRect.contains(mouseEvent->pos()) && m_enableEditButton){
             emit styleManagerButtonClicked(index);
             return true;
         }
