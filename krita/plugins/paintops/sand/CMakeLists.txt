@@ -4,7 +4,8 @@ set(kritasandpaintop_PART_SRCS
     kis_sandop_option.cpp
     kis_sand_paintop_settings.cpp
     kis_sand_paintop_settings_widget.cpp
-    sand_brush.cpp	
+    sand_brush.cpp
+    particle.cpp
     )
 
 kde4_add_ui_files(kritasandpaintop_PART_SRCS wdgsandoptions.ui )

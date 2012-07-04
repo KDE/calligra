@@ -34,8 +34,26 @@
 #include "particle.h"
 
 ///Parameterized constructor
-Particle::Particle( bool life = true, float mass = 1.0; float radius = 1, int lifespan = 10000, float friction = 0.00005, float dissipation = 0.0, //dissipation constant
-            QVector2D * position = 0, QVector2D * velocity = 0, QVector2D * acceleration = 0, QObject * parent = 0)
+// Particle::Particle( bool life = true,
+//                     float mass = 1.0,
+//                     float radius = 1,
+//                     int lifespan = 10000,
+//                     float friction = 0.00005,
+//                     float dissipation = 0.0, //dissipation constant
+//                     QPoint * position = 0,
+//                     QPointF * velocity = 0,
+//                     QPointF * acceleration = 0,
+//                     QObject * parent = 0)
+Particle::Particle( bool life,
+                    float mass,
+                    float radius,
+                    int lifespan,
+                    float friction,
+                    float dissipation, //dissipation constant
+                    QPoint * position,
+                    QPointF * velocity,
+                    QPointF * acceleration
+                  )
 {
     _life   = life,
     _mass   = mass;
@@ -55,26 +73,26 @@ Particle::Particle( bool life = true, float mass = 1.0; float radius = 1, int li
  *  the grains on the canvas.
  *
  * The emission of grains will be responsible by the ParticleEmitter, but will use this method as well.
- * ?: Perhaps I should set this method as a slot
+ * OBS: Perhaps I should set this method as a slot
  */ 
 
-{
+void Particle::applyForce(){
 
     /*
      * xi calculation is imcomplete. It should be like this:
-     * 
+     *
      * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
      * dist_y = _position->y() - mouse_position->y();   //distance between particle centers: Y
      * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
      * double xi = _radius + brush_size - dist_centers
-     * 
+     *
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
     double xi = _radius ;
 
     //this is a simple formality, the collision detection will be made before the force application
     if( xi > 0){
-        
+
         /* normalized young modulus between the MOUSE (brush) particle and this particle
          * double Y = _friction * brush_friction / (friction + brush_friction)
          */
@@ -100,18 +118,18 @@ Particle::Particle( bool life = true, float mass = 1.0; float radius = 1, int li
          * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
          * MOUSE particle:
          *
-         * double dvx = _velocity->x() - _brush_velocity->x()
-         * double dvy = _velocity->y() - _brush_velocity->y()
-         * 
+         * double dvx = _vel->x() - _brush_vel->x()
+         * double dvy = _vel->y() - _brush_vel->y()
+         *
          */
-        double dvx = _velocity->x();
-        double dvy = _velocity->y();
+        double dvx = _vel->x();
+        double dvy = _vel->y();
 
 
         /*
-         * rr_rez = 1 /dist_centers 
+         * rr_rez = 1 /dist_centers
          */
-        double rr_rez = 1 / radius;
+//         double rr_rez = 1 / radius;
 
         /*
          * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
@@ -132,23 +150,27 @@ Particle::Particle( bool life = true, float mass = 1.0; float radius = 1, int li
          if( fn< 0)
             fn = 0;
          else
-             _force += fn; 
-        
+             _force += fn;
+
     }
 }
 
-///rk4 implementation for this particle
-void Particle::integrationStep();
+
+
 
 Derivative Particle::eval(const State & init, double dt, const Derivative & der)
 {
     State st;
-    st.pos = init.pos + der.dpos*dt;            //apply the position modification
-    st.vel = init.pos + der.dvel*dt;            //apply the velocity modification
+    st.pos.rx() = init.pos.x() + der.dpos.x()*dt;            //apply the position modification
+    st.pos.ry() = init.pos.y() + der.dpos.y()*dt;
+
+    st.vel.rx() = init.pos.x() + der.dvel.x()*dt;            //apply the velocity modification
+    st.vel.ry() = init.pos.y() + der.dvel.y()*dt;
 
     Derivative out;                             //output derivative
 
-    out.dpos = st.vel;                          //derivative velocity
+    out.dpos.rx() = st.vel.x();                          //derivative velocity
+    out.dpos.ry() = st.vel.y();
     out.dvel = accel(st, dt);                   //derivative acceleration
 
     return out;
@@ -165,12 +187,15 @@ QPointF Particle::accel(const State &state, double t)
     return QPointF( qreal(-k * state.pos.x() - b*state.vel.x() ), qreal(-k * state.pos.y() - b*state.vel.y()));
 }
 
+///rk4 implementation for this particle
 void Particle::integrationStep(double dt)
 {
     //this particle current state
     State state;
-    state.pos = _pos;
-    state.vel = _vel;
+    state.pos.rx() = _pos->x();
+    state.pos.ry() = _pos->y();
+    state.vel.rx() = _vel->x();
+    state.vel.ry() = _vel->y();
 
     //derivatives for the RK terms
     Derivative k1 = eval(state, 0.0, Derivative());
@@ -181,6 +206,8 @@ void Particle::integrationStep(double dt)
     QPointF d_pos = 1.0/6.0 * (k1.dpos + 2*(k2.dpos + k3.dpos) + k4.dpos);
     QPointF d_vel = 1.0/6.0 * (k1.dvel + 2*(k2.dvel + k3.dvel) + k4.dvel);
 
-    _pos += d_pos*dt;
-    _vel += d_vel*dt;
+    _pos->rx() += (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
+    _pos->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
+    _vel->rx() += (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
+    _vel->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
 }

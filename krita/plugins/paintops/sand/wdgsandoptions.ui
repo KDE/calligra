@@ -47,7 +47,7 @@
          <number>400</number>
         </property>
         <property name="value">
-         <number>5</number>
+         <number>10</number>
         </property>
        </widget>
       </item>
@@ -57,7 +57,7 @@
          <number>400</number>
         </property>
         <property name="value">
-         <number>5</number>
+         <number>10</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

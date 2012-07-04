@@ -22,9 +22,12 @@
 #include <QVector>
 
 #include <KoColor.h>
+#include <kis_painter.h>
 
 #include "kis_sandop_option.h"
 #include "kis_paint_device.h"
+
+#include "particle.h"
 
 class SandBrush
 {
@@ -33,6 +36,7 @@ public:
     SandBrush(const SandProperties * properties, KoColorTransformation* transformation);
     ~SandBrush();
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
+    void drawParticle(KisPainter &painter, qreal x, qreal y); //Obs
 
 private:
     KoColor m_inkColor;
@@ -40,7 +44,7 @@ private:
     const SandProperties * m_properties;
     KoColorTransformation* m_transfo;
     int m_saturationId;
-    int m_amount;
+
 
 };
 

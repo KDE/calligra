@@ -29,13 +29,16 @@ inline double drand48() {
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
-
+#include <kis_painter.h>
 #include <QVariant>
 #include <QHash>
 
 #include "kis_random_accessor_ng.h"
 #include <cmath>
 #include <ctime>
+#include "particle.h"
+
+
 
 
 SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* transformation)
@@ -51,9 +54,9 @@ SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* tr
     }
     
 
+//     m_counter = m_properties->radius;
     m_counter = 0;
     m_properties = properties;
-    m_amount = m_properties->amount;
     srand48(time(0));
 }
 
@@ -66,49 +69,80 @@ SandBrush::~SandBrush()
 
 void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    m_inkColor = color;
+
+    //We do not need to, in every mouse movement, add pixels, so it has been randomized (as in
+    // the dirtThreshold), so it can drop particles more faster
+    double moveThreshold = 0.9;
+    double mRan = drand48();
+    if ( mRan < moveThreshold) {
+        return;
+    }
     
     m_counter++;
 
-    //obs
-    m_amount = m_amount - 5;
+    qreal result = 0;
+    if (m_properties->sandDepletion) {
+        result = log((qreal)m_counter * m_properties->radius)/10;
+    }
 
-    if( m_amount ){ //only paint if there is enough sand
+    int r = m_properties->radius - int(result)*m_properties->radius;
+    m_inkColor = color;
+    int pixelX, pixelY;
+    int radiusSquared =  r*r;
+    double dirtThreshold = 0.9;
+    
+    KisPainter drawer(dev);
+    drawer.setPaintColor(m_inkColor);
+  
 
-        qint32 pixelSize = dev->colorSpace()->pixelSize();
-        KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
+    qint32 pixelSize = dev->colorSpace()->pixelSize();
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
-        qreal result;
-        if (m_properties->sandDepletion) {
-            //count decrementing of saturation and opacity
-            result = log((qreal)m_counter);
-            result = -(result * 10) / 100.0;
-
-
-            qreal opacity = (1.0f + result);
-            m_inkColor.setOpacity(opacity);
-
-        }
-
-        int pixelX, pixelY;
-        int radiusSquared = m_properties->radius * m_properties->radius;
-        double dirtThreshold = 0.95;
-
-        for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
-            int bySquared = by*by;
-            for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
-                // let's call that noise from ground to sand :)
-                if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
-                    continue;
-                }
-
-                pixelX = qRound(x + bx);
-                pixelY = qRound(y + by);
-
-                accessor->moveTo(pixelX, pixelY);
-                memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
+    qDebug() <<"(r, result, m_counter )" << "(" << r << ", " << result << ", " << m_counter ;
+    
+    for (int by = -r; by <= r; by++) {
+        int bySquared = by*by;
+        for (int bx = -r; bx <= r; bx++) {
+            // let's call that noise from ground to sand :)
+            double ran = drand48();
+            if ( ((bx*bx + bySquared) > radiusSquared) || ran < dirtThreshold) {
+                continue;
             }
+
+            pixelX = qRound((x + (bx*ran*10)));
+            pixelY = qRound((y + (by*ran*10)));
+//             pixelX = qRound(x + bx);
+//             pixelY = qRound(y + by);
+
+            drawParticle(drawer, pixelX , pixelY);
         }
     }
 }
 
+void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y)
+{
+    QVector<QPointF> points;
+    // circle x, circle y
+    qreal cx, cy;
+    int steps = 10;
+    int radius = 5;
+
+
+    qreal length = 2.0 * 3.14;
+    qreal step = 1.0 / steps;
+    for (int i = 0; i < steps; i++) {
+        cx = cos(i * step * length);
+        cy = sin(i * step * length);
+
+        cx *= radius;
+        cy *= radius;
+
+        cx += x;
+        cy += y;
+
+        points.append(QPointF(cx, cy));
+    }
+
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.paintPolygon(points);
+}

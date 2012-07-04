@@ -47,9 +47,7 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
     m_properties.readOptionSetting(settings);
 
     KoColorTransformation* transfo = 0;
-//     if (m_properties.sandDepletion ){
-//         transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-//     }
+
     m_sandBrush = new SandBrush( &m_properties, transfo );
 }
 
