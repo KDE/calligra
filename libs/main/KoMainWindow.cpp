@@ -64,7 +64,6 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kdeprintdialog.h>
 #include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
@@ -1300,11 +1299,8 @@ void KoMainWindow::slotFilePrint()
     if (printJob == 0)
         return;
     d->applyDefaultSettings(printJob->printer());
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
-                                printJob->createOptionWidgets(), this);
-    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
-    printDialog->setEnabledOptions(printJob->printDialogOptions());
-    if (printDialog->exec() == QDialog::Accepted)
+    QPrintDialog *printDialog = rootView()->createPrintDialog( printJob, this );
+    if (printDialog && printDialog->exec() == QDialog::Accepted)
         printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     else
         delete printJob;
@@ -1387,8 +1383,7 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
     if (!rootView())
         return 0;
     KoPageLayout pageLayout;
-    if (d->rootDoc)
-        pageLayout = d->rootDoc->pageLayout();
+    pageLayout = rootView()->pageLayout();
     return exportToPdf(pageLayout, pdfFileName);
 }
 

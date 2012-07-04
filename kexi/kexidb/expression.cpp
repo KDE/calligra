@@ -522,8 +522,11 @@ Field::Type ConstExpr::type()
         return Field::BigInteger;
     } else if (m_token == CHARACTER_STRING_LITERAL) {
 //TODO: Field::defaultTextLength() is hardcoded now!
-        if (value.toString().length() > (int)Field::defaultTextLength())
+        if (Field::defaultMaxLength() > 0
+            && uint(value.toString().length()) > Field::defaultMaxLength())
+        {
             return Field::LongText;
+        }
         else
             return Field::Text;
     } else if (m_token == REAL_CONST)

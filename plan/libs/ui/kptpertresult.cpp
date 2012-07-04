@@ -223,7 +223,8 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -287,11 +288,13 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
@@ -421,7 +424,8 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -581,11 +585,13 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.cpmTable->saveContext( model()->columnMap(), context );
 }
 

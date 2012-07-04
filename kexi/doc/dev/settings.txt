@@ -7,6 +7,8 @@ All other settings are unofficial and are subject to change.
 Started: 2004-08-20, js
 -----------------------------------------------------------
 
+TODO: use kconf_update to migrate old keys starting with lowercase to new keys (http://techbase.kde.org/Development/Tutorials/Updating_KConfig_Files)
+
 Group: MainWindow
 # percentage width of the Project Navigator pane
 -LeftDockPosition [integer: 0..100]
@@ -64,8 +66,13 @@ Group: TableDesigner
 -autogeneratePrimaryKeysOnTableDesignSaving [boolean]
 TODO: -defaultFieldType [the list of types], default=Text
 TODO: -autoPrimaryKeyForFieldNames [stringlist]
-TODO: -defaultTextFieldLength [uint, <255] default=50
 TODO: -defaultIntegerFieldSubtype [the list of types (byte, short, etc.)] default=long
+
+# Settings related to handling of database tables
+Group: Tables
+# TODO: value of DefaultTextFieldMaxLength should be also used on other places where we create tables with Text fields, e.g. on table importing
+# Default maximum length for fields of type Text
+-DefaultMaxLengthForTextFields [uint] (0: unlimited or up to engine's limit, default=0)
 
 Group: QueryDesigner
 TODO: -autoJoinOnTableInserting [boolean]

@@ -193,7 +193,10 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphDecorations->save(savingStyle);
     m_paragraphDropCaps->save(savingStyle);
     savingStyle->setName(widget.name->text());
-    savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
+
+    if (int nextStyleId = CharacterGeneral::nextStyleId()) {
+        savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
+    }
     if (widget.inheritStyle->currentIndex() != -1) {
         KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphValidParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
 //        KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());

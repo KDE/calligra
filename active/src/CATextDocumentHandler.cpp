@@ -83,7 +83,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoDocument* doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument> (mimetype, 0, 0, QString(),
+    KoDocument* doc = KMimeTypeTrader::createInstanceFromQuery<KoDocument> (mimetype, QLatin1String("CalligraPart"), 0, QString(),
                       QVariantList(), &error);
 
     if (!doc) {

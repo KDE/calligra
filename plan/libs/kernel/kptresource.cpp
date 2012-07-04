@@ -319,7 +319,7 @@ Resource::Resource()
     : QObject( 0 ), // atm QObject is only for casting
     m_project(0),
     m_parent( 0 ),
-    m_schedules(),
+    m_autoAllocate( false ),
     m_currentSchedule( 0 )
 {
     m_type = Type_Work;
@@ -389,6 +389,7 @@ void Resource::copy(Resource *resource) {
     m_name = resource->name();
     m_initials = resource->initials();
     m_email = resource->email();
+    m_autoAllocate = resource->m_autoAllocate;
     m_availableFrom = resource->availableFrom();
     m_availableUntil = resource->availableUntil();
     
@@ -464,6 +465,19 @@ void Resource::setEmail( const QString email )
     changed();
 }
 
+bool Resource::autoAllocate() const
+{
+    return m_autoAllocate;
+}
+
+void Resource::setAutoAllocate( bool on )
+{
+    if ( m_autoAllocate != on ) {
+        m_autoAllocate = on;
+        changed();
+    }
+}
+
 void Resource::setUnits( int units )
 {
     m_units = units;
@@ -512,6 +526,7 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     m_name = element.attribute("name");
     m_initials = element.attribute("initials");
     m_email = element.attribute("email");
+    m_autoAllocate = (bool)(element.attribute( "auto-allocate", "0" ).toInt());
     setType(element.attribute("type"));
     m_calendar = status.project().findCalendar(element.attribute("calendar-id"));
     m_units = element.attribute("units", "100").toInt();
@@ -605,6 +620,7 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("name", m_name);
     me.setAttribute("initials", m_initials);
     me.setAttribute("email", m_email);
+    me.setAttribute("auto-allocate", m_autoAllocate );
     me.setAttribute("type", typeToString());
     me.setAttribute("units", m_units);
     if ( m_availableFrom.isValid() ) {

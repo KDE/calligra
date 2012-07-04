@@ -50,13 +50,11 @@
   <Action name="view_fullscreen"/>
  </Menu>
  
- <!--
- <Menu name="semantic"><text">Semantics</text>
+ <Menu name="semantic"><text>Semantics</text>
   <Action name="insert_semanticobject_ref"/>
   <Action name="insert_semanticobject_new"/>
   <Action name="edit_semantic_stylesheets"/>
  </Menu>
- -->
  
  <!-- leftovers from insert menu - to be moved to texttool
   <Action name="insert_link"/>

@@ -10,7 +10,7 @@
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005-2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
  * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>

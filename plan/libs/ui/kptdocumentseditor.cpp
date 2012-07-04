@@ -239,7 +239,7 @@ void DocumentsEditor::setupGui()
 void DocumentsEditor::slotOptions()
 {
     kDebug(planDbg());
-    ItemViewSettupDialog dlg( m_view/*->masterView()*/ );
+    ItemViewSettupDialog dlg( this, m_view/*->masterView()*/ );
     dlg.exec();
 }
 
