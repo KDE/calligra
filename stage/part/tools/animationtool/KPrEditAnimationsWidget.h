@@ -56,6 +56,7 @@ public slots:
     void updateIndex(const QModelIndex &index);
     void setBeginTime();
     void setDuration();
+    void setTriggerEvent(int row);
 
 
 private:

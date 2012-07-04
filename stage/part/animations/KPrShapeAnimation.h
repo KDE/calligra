@@ -122,6 +122,7 @@ public:
 
 signals:
     void timeChanged(int begin, int end);
+    void triggerEventChanged(KPrShapeAnimation::Node_Type event);
 
 
 private:

@@ -203,6 +203,7 @@ void KPrShapeAnimation::deactivate()
 void KPrShapeAnimation::setNodeType(KPrShapeAnimation::Node_Type type)
 {
     m_triggerEvent = type;
+    emit triggerEventChanged(type);
 }
 
 void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::Preset_Class presetClass)

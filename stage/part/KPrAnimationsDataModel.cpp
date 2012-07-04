@@ -26,6 +26,7 @@
 #include <KPrDocument.h>
 #include <KPrCustomAnimationItem.h>
 #include <commands/KPrEditAnimationTimeLineCommand.h>
+#include <commands/KPrAnimationEditNodeTypeCommand.h>
 
 //KDE HEADERS
 #include <KIconLoader>
@@ -323,10 +324,8 @@ void KPrAnimationsDataModel::removeModel()
     emit layoutChanged();
 }
 
-void KPrAnimationsDataModel::notifyTimeRangeChanged(int begin, int end)
+void KPrAnimationsDataModel::notifyAnimationEdited()
 {
-    Q_UNUSED(begin);
-    Q_UNUSED(end);
     if(KPrCustomAnimationItem *item = qobject_cast<KPrCustomAnimationItem*>(sender())) {
         QModelIndex index = indexByItem(item);
         if (index.isValid()) {
@@ -360,8 +359,41 @@ void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const in
         KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(item->animation(),
                                                                                      begin, duration);
         doc->addCommand(command);
-        connect(item->animation(), SIGNAL(timeChanged(int,int)), this, SLOT(notifyTimeRangeChanged(int,int)));
+        connect(item, SIGNAL(timeChanged(int,int)), this, SLOT(notifyAnimationEdited()));
     }
+}
+
+bool KPrAnimationsDataModel::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
+{
+    qDebug() << "set Trigger Event" << type;
+    KPrCustomAnimationItem *item = itemForIndex(index);
+    if (item && (!item->isDefaulAnimation())) {
+         qDebug() << "Item found and not is default";
+        if (item->triggerEvent() == KPrShapeAnimation::After_Previous) {
+             qDebug() << "Item is After previous";
+            // After Previous to With Previous
+            if (type == KPrShapeAnimation::With_Previous) {
+                 qDebug() << "new type is Wit previous";
+                KPrCustomAnimationItem *parent = item->parent();
+                int currentIndex = parent->children().indexOf(item);
+                qDebug() << "Current Index: " << currentIndex;
+                //use previous animation to reparent current animation
+                KPrCustomAnimationItem *previousItem = (currentIndex > 0) ? parent->childAt(currentIndex-1) :
+                                                                            parent;
+
+                KPrAnimationSubStep *newSubStep = previousItem->animation()->subStep();
+
+                KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+                KPrAnimationEditNodeTypeCommand *command =
+                        new KPrAnimationEditNodeTypeCommand(item->animation(), item->animation()->step(),
+                                                            newSubStep, type);
+                connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                doc->addCommand(command);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &index) const

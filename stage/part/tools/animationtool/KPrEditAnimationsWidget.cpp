@@ -116,6 +116,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     connect(m_timeLineView, SIGNAL(timeValuesChanged(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
     connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
     connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
+    connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
 }
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
@@ -181,5 +182,20 @@ void KPrEditAnimationsWidget::setDuration()
 {
     if (m_timeLineView->currentIndex().isValid()) {
         m_timeLineModel->setDuration(m_timeLineView->currentIndex(), -m_durationEdit->time().msecsTo(QTime()));
+    }
+}
+
+void KPrEditAnimationsWidget::setTriggerEvent(int row)
+{
+    if ((row >= 0) && m_timeLineView->currentIndex().isValid()) {
+        KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(m_timeLineView->currentIndex());
+        if (row != ((int)item->triggerEvent())) {
+            qDebug() << "Change trigger Event" << row;
+            KPrShapeAnimation::Node_Type newType;
+            if (row == 0) newType = KPrShapeAnimation::On_Click;
+            else if (row == 1) newType = KPrShapeAnimation::After_Previous;
+            else newType = KPrShapeAnimation::With_Previous;
+            m_timeLineModel->setTriggerEvent(m_timeLineView->currentIndex(), newType);
+        }
     }
 }

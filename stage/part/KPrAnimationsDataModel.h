@@ -84,11 +84,13 @@ public slots:
     void removeModel();
 
     /// Notify a external edition of begin or end time
-    void notifyTimeRangeChanged(int begin, int end);
+    void notifyAnimationEdited();
 
     void setBeginTime(const QModelIndex &index, const int begin);
     void setDuration(const QModelIndex &index, const int duration);
     void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
+
+    bool setTriggerEvent(const QModelIndex &index,const KPrShapeAnimation::Node_Type type);
 
 private:
     KPrView *m_view;

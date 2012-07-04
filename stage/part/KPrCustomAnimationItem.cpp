@@ -29,6 +29,8 @@ KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPr
     }
     if (m_shapeAnimation) {
         connect(m_shapeAnimation, SIGNAL(timeChanged(int, int)), this, SIGNAL(timeChanged(int, int)));
+        connect(m_shapeAnimation, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this,
+                SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)));
     }
 }
 
