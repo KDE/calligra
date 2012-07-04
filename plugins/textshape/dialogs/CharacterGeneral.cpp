@@ -88,32 +88,11 @@ void CharacterGeneral::hideStyleName(bool hide)
 
 void CharacterGeneral::setStyle(KoCharacterStyle *style)
 {
-    kDebug() << "in characterGeneral updateStyle. model: " << m_validParentStylesModel;
     m_style = style;
     if (m_style == 0)
         return;
     blockSignals(true);
-/*
-    //filter m_inherited style model
 
-    //
-    //m_characterInheritedStyleModel->clearStyleModel(); This Line has problem, a weird problem.
-    //
-
-    foreach(KoCharacterStyle *s, m_styleManager->characterStyles()) {
-        KoCharacterStyle *parent = s;
-        bool ok = true;
-        while (ok && parent) {
-            ok = parent->styleId() != m_style->styleId();
-
-            parent = parent->parentStyle();
-        }
-        if (! ok) continue; // can't inherit from itself, even indirectly.
-        m_characterInheritedStyleModel->addCharacterStyle(s);
-        if (s == m_style->parent())
-             widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*m_style).row());
-    }
-*/
     m_validParentStylesModel->setCurrentChildStyleId(style->styleId());
 //    if(!m_style->parentStyle())
 //        widget.inheritStyle->setCurrentIndex(-1);

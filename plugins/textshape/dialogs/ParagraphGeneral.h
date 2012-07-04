@@ -68,8 +68,6 @@ signals:
 private slots:
     void setPreviewParagraphStyle();
 
-    void testParentComboSignals();
-
 private:
     bool m_nameHidden;
 

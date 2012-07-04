@@ -50,7 +50,6 @@ StylesDelegate::StylesDelegate()
 void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1,
                             const QModelIndex &index) const
 {
-    kDebug() << "painting items in drop down. item row: " << index.row();
     QStyleOptionViewItemV4 option = optionV1;
     initStyleOption(&option, index);
     QStyledItemDelegate::paint(painter, option, index);
@@ -106,7 +105,6 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 QSize StylesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(option);
-    kDebug() << "delegate index sizHint: " << index.data(Qt::SizeHintRole).toSize();
     return index.data(Qt::SizeHintRole).toSize();
 }
 

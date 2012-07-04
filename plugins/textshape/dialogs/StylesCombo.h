@@ -93,9 +93,6 @@ private slots:
     void slotItemClicked(QModelIndex);
     void slotPreviewClicked();
 
-    void testModelSignalAboutToBeReset();
-    void testModelSignalReset();
-
 private:
     AbstractStylesModel *m_stylesModel;
     StylesComboPreview *m_preview;
