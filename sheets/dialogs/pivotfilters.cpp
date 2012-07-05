@@ -40,6 +40,32 @@ PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
     d->mainWidget.setupUi(widget);    
     setMainWidget(widget);
     d->selection=selection;
+    selectFields();
+}
+
+void PivotFilters::selectFields()
+{
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int row = range.top();
+
+    Cell cell;
+    
+    QString text;
+
+    int index = 0;
+    for (int i = range.left(); i <= r; ++i) {
+        cell = Cell(sheet, i, row);
+        text = cell.displayText();
+	
+	if(text.length() >0)
+	{
+        d->mainWidget.Field->addItem(text);
+	d->mainWidget.Field2->addItem(text);
+	}
+    }
 }
 
 PivotFilters::~PivotFilters()

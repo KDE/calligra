@@ -121,7 +121,10 @@ void PivotMain::extractColumnNames()
 	}
 	  
     }
+
+  
 }
+
 
 void PivotMain::on_Options_clicked()
 {

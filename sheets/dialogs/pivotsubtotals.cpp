@@ -43,8 +43,31 @@ PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
     d->selection=selection;
     d->mainWidget.None->setChecked(true);
     d->mainWidget.SortBy->setChecked(true);
-    
+    selectLabels();
 
+}
+void PivotFilters::selectLabels()
+{
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int row = range.top();
+
+    Cell cell;
+    
+    QString text;
+
+    int index = 0;
+    for (int i = range.left(); i <= r; ++i) {
+        cell = Cell(sheet, i, row);
+        text = cell.displayText();
+	
+	if(text.length() >0)
+	{
+	  d->mainWidget.LabelSelect->addItem(text);
+	}
+    }
 }
 
 PivotSubTotals::~PivotSubTotals()

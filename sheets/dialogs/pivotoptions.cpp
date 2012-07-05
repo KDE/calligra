@@ -43,11 +43,11 @@ PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
    setCaption(i18n("Pivot Options"));
    setMainWidget(widget);
    d->selection= selection;
-    extractColumnNames();
+   selectBase();
   
 }
 
-void PivotOptions::extractColumnNames()
+void PivotOptions::selectBase()
 {
     Sheet *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
@@ -66,7 +66,9 @@ void PivotOptions::extractColumnNames()
 	
 	if(text.length() >0)
 	{
-        d->mainWidget.BaseItem->addItem(text);
+           d->mainWidget.BaseItem->addItem(text);
+	   d->mainWidget.BaseField->addItem(text); 
+	  
 	}
     }
 }

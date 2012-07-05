@@ -27,7 +27,38 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="SelectFunction"/>
+      <widget class="QListWidget" name="SelectFunction">
+       <item>
+        <property name="text">
+         <string>Sum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Count</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Average</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Max</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Min</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Product</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>
@@ -41,7 +72,43 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="ValueType"/>
+      <widget class="QComboBox" name="ValueType">
+       <item>
+        <property name="text">
+         <string>Normal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>% of</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>% Difference from</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>% of Row</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>% of Column</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>% of Total</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string> </string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>

@@ -41,7 +41,7 @@ public:
     ~PivotOptions();
 
 private:
-    void extractColumnNames();
+    void selectBase();
     class Private;
     Private *const d;
 };

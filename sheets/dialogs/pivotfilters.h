@@ -36,6 +36,7 @@ public:
     ~PivotFilters();
 
 private:
+    void selectFields();
     class Private;
     Private *const d;
 };

@@ -26,13 +26,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="Automatic">
-         <property name="text">
-          <string>Automatic</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QRadioButton" name="ManualSelection">
          <property name="text">
           <string>Manual Selection</string>
@@ -42,7 +35,38 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="QListWidget" name="Functions"/>
+      <widget class="QListWidget" name="Functions">
+       <item>
+        <property name="text">
+         <string>Sum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Count</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Average</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Max</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Min</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Product</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item row="2" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">

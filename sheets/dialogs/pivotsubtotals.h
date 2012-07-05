@@ -38,6 +38,7 @@ public:
     ~PivotSubTotals();
 
 private:
+    void selectLabels();
     class Private;
     Private *const d;
 };

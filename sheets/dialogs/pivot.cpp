@@ -31,6 +31,7 @@
 #include "ui_pivotmain.h"
 #include "pivotmain.h"
 #include <QApplication>
+#include <QMessageBox>
 
 #include "Sheet.h"
 #include "ui/Selection.h"
@@ -41,7 +42,6 @@ class Pivot::Private
 public:
     Selection *selection;
     Ui::Pivot mainWidget;
-    Ui::PivotMain pivotWidget;
 };
 
 
@@ -55,11 +55,11 @@ Pivot::Pivot(QWidget* parent,Selection* selection):
     QWidget* widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
     setButtons(Ok|Cancel);   
-    //enableButton(KDialog::Ok, false); 
     d->mainWidget.Current->setChecked(true);
     setMainWidget(widget);
     d->selection=selection;
     connect(this, SIGNAL(okClicked()), this, SLOT(slotUser2Clicked()));
+
 }
 
 Pivot::~Pivot()
@@ -71,10 +71,19 @@ void Pivot::slotUser2Clicked()
 {
 	if(d->mainWidget.Current->isChecked())
 	{
-	    enableButton(KDialog::Ok, true); 
 	    PivotMain *pMain= new PivotMain(this,d->selection);
 	    pMain->setModal(true);
 	    pMain->exec();
 	}
-  
+	
+	if(d->mainWidget.External->isChecked())
+	{
+	    QMessageBox msgBox;
+	    msgBox.setText("Functionality Yet to be Added");
+	    msgBox.exec();
+	    
+	    Pivot *p=new Pivot(this,d->selection);
+	    p->setModal(true);
+	    p->exec();
+	}
 }

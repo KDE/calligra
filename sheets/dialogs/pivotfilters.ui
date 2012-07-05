@@ -34,7 +34,7 @@
       <widget class="QComboBox" name="Field"/>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_5"/>
+      <widget class="QComboBox" name="Field2"/>
      </item>
     </layout>
    </item>
@@ -48,10 +48,52 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="Condition"/>
+      <widget class="QComboBox" name="Condition">
+       <item>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>==</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>!=</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_6"/>
+      <widget class="QComboBox" name="comboBox_6">
+       <item>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>==</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>!=</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>
@@ -73,7 +115,23 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QComboBox" name="Operator"/>
+    <widget class="QComboBox" name="Operator">
+     <item>
+      <property name="text">
+       <string>None</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>And</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Or</string>
+      </property>
+     </item>
+    </widget>
    </item>
   </layout>
  </widget>
