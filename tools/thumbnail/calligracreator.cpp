@@ -70,7 +70,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     QString mimetype = KMimeType::findByPath( path )->name();
 
-    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>( mimetype );
+    m_doc = KMimeTypeTrader::self()->createInstanceFromQuery<KoDocument>(mimetype, QLatin1String("CalligraPart"));
 
     if (!m_doc) return false;
 
