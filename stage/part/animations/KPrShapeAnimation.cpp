@@ -29,21 +29,17 @@
 #include "KoTextBlockData.h"
 #include "KPrTextBlockPaintStrategy.h"
 
-KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData, bool isRootAnimation)
+KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
 , m_triggerEvent(KPrShapeAnimation::On_Click)
 , m_class(KPrShapeAnimation::None)
 , m_id(QString())
-, m_isRootAnimation(isRootAnimation)
 , m_step(0)
 , m_subStep(0)
 , m_stepIndex(-1)
 , m_subStepIndex(-1)
 {
-    if (m_isRootAnimation) {
-        m_shape = 0;
-    }
     // this is needed so we save the xml id's on saving and therefor are able to 
     // save animation back even when they have not yet run.
     if (m_textBlockData) {

@@ -49,9 +49,9 @@ KPrTimeLineView::KPrTimeLineView(QWidget *parent)
     : QWidget(parent)
     , m_resize(false)
     , m_move(false)
-    , m_adjust(false)
     , m_resizedRow(INVALID)
     , startDragPos(0)
+    , m_adjust(false)
 {
     m_mainView = qobject_cast<KPrAnimationsTimeLineView*>(parent);
     Q_ASSERT(m_mainView);

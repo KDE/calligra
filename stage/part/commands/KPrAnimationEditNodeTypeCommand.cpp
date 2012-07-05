@@ -50,12 +50,10 @@ void KPrAnimationEditNodeTypeCommand::redo()
 {
     if (m_animation) {
         if (m_newSubStep != m_oldSubStep) {
-            qDebug() << "reasign subStep";
             m_newSubStep->addAnimation(m_oldSubStep->takeAnimation(m_oldSubStep->indexOfAnimation(m_animation)));
             m_animation->setSubStep(m_newSubStep);
         }
         if (m_newStep != m_newSubStep->parent()) {
-            qDebug() << "reasign parent";
             m_newStep->addAnimation(m_newSubStep);
             m_animation->setStep(m_newStep);
         }
@@ -67,12 +65,10 @@ void KPrAnimationEditNodeTypeCommand::undo()
 {
     if (m_animation) {
         if (m_newSubStep != m_oldSubStep) {
-            qDebug() << "reasign subStep undo";
             m_oldSubStep->addAnimation(m_newSubStep->takeAnimation(m_newSubStep->indexOfAnimation(m_animation)));
             m_animation->setSubStep(m_oldSubStep);
         }
         if (m_oldStep != m_oldSubStep->parent()) {
-            qDebug() << "reasign parent";
             m_oldStep->addAnimation(m_oldSubStep);
             m_animation->setStep(m_oldStep);
         }

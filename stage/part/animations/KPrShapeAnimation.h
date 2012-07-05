@@ -62,7 +62,7 @@ public:
         Invalid
     };
 
-    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData, bool isRootAnimation = false);
+    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
     virtual ~KPrShapeAnimation();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -133,7 +133,6 @@ private:
     QString m_id;
     KPrAnimationStep *m_step;
     KPrAnimationSubStep *m_subStep;
-    bool m_isRootAnimation;
     int m_stepIndex;
     int m_subStepIndex;
     int m_animIndex;

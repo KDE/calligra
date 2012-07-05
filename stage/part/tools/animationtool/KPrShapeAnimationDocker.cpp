@@ -204,7 +204,8 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
 void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &index)
 {
     syncCanvasWithIndex(index);
-    m_editAnimationsPanel->setCurrentIndex(index);
+    KPrCustomAnimationItem *item = itemByIndex(index);
+    m_editAnimationsPanel->setCurrentItem(item);
     checkAnimationSelected();
 }
 
@@ -216,7 +217,7 @@ void KPrShapeAnimationDocker::syncWithEditDialogIndex(const QModelIndex &index)
         // Change time line index to tree model index
         QModelIndex newIndex = m_animationsModel->indexByItem(item);
         if (newIndex.isValid()) {
-            m_animationsView->setCurrentIndex(index);
+            m_animationsView->setCurrentIndex(newIndex);
         }
     }
     checkAnimationSelected();
@@ -276,11 +277,11 @@ void KPrShapeAnimationDocker::updateEditDialogIndex(const QModelIndex &index)
 
     if (shapeAnimation->parent() == rootAnimation) {
         m_editAnimationsPanel->setParentItem(shapeAnimation, rootAnimation);
-        m_editAnimationsPanel->setCurrentIndex(index);
+        m_editAnimationsPanel->setCurrentItem(shapeAnimation);
     }
     else if (shapeAnimation->parent()->parent() == rootAnimation) {
         m_editAnimationsPanel->setParentItem(shapeAnimation->parent(), rootAnimation);
-        m_editAnimationsPanel->setCurrentIndex(index);
+        m_editAnimationsPanel->setCurrentItem(shapeAnimation);
     }
     else {
         return;

@@ -45,7 +45,7 @@ public:
     explicit KPrEditAnimationsWidget(QWidget *parent = 0);
     void setView(KoPAViewBase *view);
     void setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem);
-    void setCurrentIndex(const QModelIndex &index);
+    void setCurrentItem(KPrCustomAnimationItem *item);
     void setActiveShape(KoShape *shape);
     
 signals:

@@ -135,18 +135,14 @@ void KPrEditAnimationsWidget::setParentItem(KPrCustomAnimationItem *item, KPrCus
     m_timeLineView->update();
 }
 
-void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
+void KPrEditAnimationsWidget::setCurrentItem(KPrCustomAnimationItem *item)
 {
-    if (!index.isValid()) {
-        return;
-    }
-    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
     if (item) {
         // Change tree model index to time line index
         QModelIndex newIndex = m_timeLineModel->indexByItem(item);
         if (newIndex.isValid()) {
-            m_timeLineView->setCurrentIndex(index);
-            updateIndex(index);
+            m_timeLineView->setCurrentIndex(newIndex);
+            updateIndex(newIndex);
         }
     }
     m_timeLineView->update();

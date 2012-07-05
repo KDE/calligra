@@ -106,17 +106,14 @@ private:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
-    KPrCustomAnimationItem* itemByAnimation(const KPrShapeAnimation *animation) const;
-
     /// Emit standard signals when a group of items is changed
     void announceItemChanged(KPrCustomAnimationItem *item);
-    QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
+    //QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
 
     KPrPage *m_activePage;
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
     KPrCustomAnimationItem *cutItem;
-    QList<KPrCustomAnimationItem *> m_animationItems;
 };
 
 #endif // KPRANIMATIONSTREEMODEL_H

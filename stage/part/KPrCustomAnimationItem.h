@@ -44,19 +44,24 @@ public:
     void setDuration(int timeMS);
 
     /// Helper methods to manage tre view
-    KPrShapeAnimation *parent() const;
-    KPrShapeAnimation *childAt(int row) const;
-    int rowOfChild(KPrCustomAnimationItem *child) const;
-    int childCount() const;
-    QList<KPrShapeAnimation *> children() const;
+    KPrCustomAnimationItem *parent() const;
+    KPrCustomAnimationItem *childAt(int row);
+    int rowOfChild(KPrCustomAnimationItem *child);
+    int childCount();
+    QList<KPrCustomAnimationItem *> children();
     //void insertChild(int row, KPrCustomAnimationItem *item);
-    //void addChild(KPrCustomAnimationItem *item);
+    void addChild(KPrShapeAnimation *animation, KPrCustomAnimationItem *item);
+    void removeChild(KPrCustomAnimationItem *item);
+    KPrCustomAnimationItem *itemByAnimation(KPrShapeAnimation *animation) const;
+    KPrCustomAnimationItem *defaultAnimation();
+    void setDefaultAnimation(KPrCustomAnimationItem *animation);
+    KPrPage *activePage();
+
     //void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
-    //KPrCustomAnimationItem *takeChild(int row);
 
     /// Set Item as default (Root item that holds show slide event)
     void initAsDefaultAnimation(KPrPage *page);
-    bool isDefaulAnimation();
+    bool isDefaulAnimation() const;
 
     void initAsRootAnimation(KPrPage *page);
     bool isRootAnimation();
@@ -72,7 +77,10 @@ private:
 
     KPrShapeAnimation* m_shapeAnimation;          //pointer to target element (shape)
     KPrCustomAnimationItem *m_root;
-    QList <KPrShapeAnimation*> m_children;
+    KPrCustomAnimationItem *m_defaultAnimation;
+    QList <KPrCustomAnimationItem*> m_children;
+    QHash<KPrShapeAnimation*, KPrCustomAnimationItem*> m_itemList;
+
     bool isDefaultInitAnimation;
     bool m_isRootAnimation;
     KPrPage *m_activePage;
