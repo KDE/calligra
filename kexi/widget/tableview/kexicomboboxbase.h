@@ -21,10 +21,10 @@
 #ifndef _KEXICOMBOBOXBASE_H_
 #define _KEXICOMBOBOXBASE_H_
 
-#include "kexidb/field.h"
+#include <db/field.h>
 #include "kexiinputtableedit.h"
-#include <kexidb/lookupfieldschema.h>
-#include <kexiutils/tristate.h>
+#include <db/lookupfieldschema.h>
+#include <db/tristate.h>
 
 class KexiComboBoxPopup;
 class KexiTableViewColumn;

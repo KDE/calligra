@@ -24,7 +24,7 @@
 #include <KexiWindow.h>
 #include "widgets/AutoForm.h"
 
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 #include <KexiMainWindowIface.h>
 
 #ifndef KEXI_MOBILE

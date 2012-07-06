@@ -23,6 +23,7 @@ target_link_libraries(
     kexicore
     keximigrate
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiutils
     kexiextendedwidgets
     keximain

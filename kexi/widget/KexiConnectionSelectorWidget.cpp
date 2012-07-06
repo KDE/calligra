@@ -23,9 +23,10 @@
 #include "kexiprjtypeselector.h"
 #include "kexidbconnectionwidget.h"
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
+#include <kexiutils/utils.h>
 
 #include <core/kexi.h>
 

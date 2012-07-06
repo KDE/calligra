@@ -47,6 +47,7 @@ target_link_libraries(kexihandler_report
     ${QT_QTSCRIPT_LIBRARY}
     ${KDE4_KPARTS_LIBS}
     kexidb
+    ${CALLIGRADB_LIBS}
     kexicore
     ${KOPROPERTY_LIBS}
     kexiguiutils

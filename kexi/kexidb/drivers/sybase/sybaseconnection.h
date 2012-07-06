@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "sybasecursor.h"
 
 namespace KexiDB

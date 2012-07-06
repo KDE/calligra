@@ -46,11 +46,11 @@
 #define BOOL bool
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexidb/drivers/mySQL/mysqlconnection_p.cpp>
-#include <kexidb/drivermanager.h>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;

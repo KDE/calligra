@@ -20,6 +20,7 @@
 #define KEXIRELATIONDESIGNTOOL_H
 
 #include <KoToolBase.h>
+#include <KUrl>
 #include <core/kexi.h>
 
 class KexiRelationDesignShape;

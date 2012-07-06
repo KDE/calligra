@@ -20,7 +20,7 @@
 #ifndef KEXIDB_DRIVER_PQXX_H
 #define KEXIDB_DRIVER_PQXX_H
 
-#include <kexidb/driver.h>
+#include <db/driver.h>
 //#include <pqxx/connection>
 //#include <pqxx/nontransaction>
 
