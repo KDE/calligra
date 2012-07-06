@@ -37,12 +37,14 @@
 #include <KoRulerController.h>
 #include <KActionCollection>
 #include <KApplication>
+#include <KoInteractionTool.h>
+#include <KoMainWindow.h>
+#include <KoToolProxy.h>
 
 #include <QGridLayout>
 #include <QTimer>
 #include <QAction>
 #include <QScrollBar>
-#include <KoMainWindow.h>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),
@@ -70,6 +72,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_canvasController->setCanvasMode(KoCanvasController::AlignTop);
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
+    m_canvas->toolProxy()->appendFallbackTool(KoToolManager::instance()->toolById(m_canvas, KoInteractionTool_ID));
 
     if (m_view->shell())
     {

@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QPointF>
+#include <QList>
 
 class KoPointerEvent;
 class KoToolBase;
@@ -63,6 +64,9 @@ public:
     int multiClickCount;
     QPointF multiClickGlobalPoint;
     QTime multiClickTimeStamp;
+
+    QList<KoToolBase *> fallbackTools;
+    KoToolBase *activeFallbackTool;
 };
 
 #endif

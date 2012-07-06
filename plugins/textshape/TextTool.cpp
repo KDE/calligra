@@ -860,6 +860,9 @@ void TextTool::updateSelectedShape(const QPointF &point)
 
 void TextTool::mousePressEvent(KoPointerEvent *event)
 {
+    event->ignore();
+    return;
+
     if (m_textEditor.isNull())
         return;
 
@@ -1273,6 +1276,9 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    event->ignore();
+    return;
+
     m_editTipPos = event->globalPos();
 
     if (event->buttons()) {
@@ -1459,6 +1465,8 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
 void TextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    event->ignore();
+    return;
     event->ignore();
     editingPluginEvents();
 

@@ -65,6 +65,8 @@ public:
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~KoToolProxy();
 
+    void appendFallbackTool(KoToolBase *tool);
+
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
     /// Forwarded to the current KoToolBase
