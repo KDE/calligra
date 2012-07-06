@@ -536,6 +536,7 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
         // look in tree for deleted animation:
         foreach (KPrCustomAnimationItem *item, m_rootItem->children()) {
             if (item->animation() == modifiedAnimation) {
+                qDebug() << "item recognized";
                 announceItemChanged(item);
                 delete(item);
                 return;

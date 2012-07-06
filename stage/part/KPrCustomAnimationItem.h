@@ -50,11 +50,11 @@ public:
     int childCount();
     QList<KPrCustomAnimationItem *> children();
     //void insertChild(int row, KPrCustomAnimationItem *item);
-    void addChild(KPrShapeAnimation *animation, KPrCustomAnimationItem *item);
-    void removeChild(KPrCustomAnimationItem *item);
-    KPrCustomAnimationItem *itemByAnimation(KPrShapeAnimation *animation) const;
-    KPrCustomAnimationItem *defaultAnimation();
-    void setDefaultAnimation(KPrCustomAnimationItem *animation);
+    static void addChild(KPrShapeAnimation *animation, KPrCustomAnimationItem *item);
+    static void removeChild(KPrCustomAnimationItem *item);
+    static KPrCustomAnimationItem *itemByAnimation(KPrShapeAnimation *animation);
+    static KPrCustomAnimationItem *defaultAnimation();
+    static void setDefaultAnimation(KPrCustomAnimationItem *animation);
     KPrPage *activePage();
 
     //void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
@@ -77,9 +77,9 @@ private:
 
     KPrShapeAnimation* m_shapeAnimation;          //pointer to target element (shape)
     KPrCustomAnimationItem *m_root;
-    KPrCustomAnimationItem *m_defaultAnimation;
+    static KPrCustomAnimationItem *m_defaultAnimation;
     QList <KPrCustomAnimationItem*> m_children;
-    QHash<KPrShapeAnimation*, KPrCustomAnimationItem*> m_itemList;
+    static QHash<KPrShapeAnimation*, KPrCustomAnimationItem*> m_itemList;
 
     bool isDefaultInitAnimation;
     bool m_isRootAnimation;

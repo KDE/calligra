@@ -17,17 +17,17 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <KLocale>
+QHash<KPrShapeAnimation*, KPrCustomAnimationItem*> KPrCustomAnimationItem::m_itemList;
 
 KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPrCustomAnimationItem *root)
     : m_shapeAnimation(animation)
     , m_root(root)
-    , m_defaultAnimation(0)
     , isDefaultInitAnimation(false)
     , m_isRootAnimation(false)
     , m_activePage(0)
 {
     if (m_shapeAnimation) {
-        m_root->addChild(animation, this);
+        KPrCustomAnimationItem::addChild(animation, this);
         connect(m_shapeAnimation, SIGNAL(timeChanged(int, int)), this, SIGNAL(timeChanged(int, int)));
         connect(m_shapeAnimation, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this,
                 SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)));
@@ -38,11 +38,11 @@ KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPr
 KPrCustomAnimationItem::~KPrCustomAnimationItem()
 {
     m_children.clear();
-    if (!m_isRootAnimation && m_root->isRootAnimation()) {
-        m_root->removeChild(this);
+    if (!m_isRootAnimation && m_root->isRootAnimation() && m_root) {
+        KPrCustomAnimationItem::removeChild(this);
     }
-    else {
-        m_itemList.clear();
+    if (m_isRootAnimation) {
+        KPrCustomAnimationItem::m_itemList.clear();
     }
 }
 
@@ -223,7 +223,7 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const
                             if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                                 if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
                                     if (b->NodeType() == KPrShapeAnimation::On_Click) {
-                                        return m_root->itemByAnimation(b);
+                                        return KPrCustomAnimationItem::itemByAnimation(b);
                                     }
                                 }
                             }
@@ -231,6 +231,7 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const
                     }
                 }
             }
+            return KPrCustomAnimationItem::defaultAnimation();
         }
     }
     return 0;
@@ -254,9 +255,9 @@ int KPrCustomAnimationItem::childCount()
 QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
 {
     m_children.clear();
-    if (isRootAnimation() && m_activePage) {
-        if (defaultAnimation()) {
-            m_children.append(defaultAnimation());
+    if ((isRootAnimation() && m_activePage) || isDefaulAnimation()) {
+        if (KPrCustomAnimationItem::defaultAnimation() && isRootAnimation()) {
+            m_children.append(KPrCustomAnimationItem::defaultAnimation());
         }
         foreach (KPrAnimationStep *step, m_activePage->animationSteps()) {
             for (int i=0; i < step->animationCount(); i++) {
@@ -265,9 +266,18 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
                     for (int j=0; j < a->animationCount(); j++) {
                         QAbstractAnimation *shapeAnimation = a->animationAt(j);
                         if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                            if ((b->presetClass() != KPrShapeAnimation::None) &&
-                                    b->NodeType() == KPrShapeAnimation::On_Click && (b->shape())) {
-                                m_children.append(m_root->itemByAnimation(b));
+                            if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                                if (b->NodeType() == KPrShapeAnimation::On_Click) {
+                                    if (isRootAnimation()) {
+                                        m_children.append(KPrCustomAnimationItem::itemByAnimation(b));
+                                    }
+                                    else if (isDefaulAnimation()) {
+                                        return m_children;
+                                    }
+                                }
+                                if (isDefaulAnimation()) {
+                                    m_children.append(KPrCustomAnimationItem::itemByAnimation(b));
+                                }
                             }
                         }
                     }
@@ -276,10 +286,7 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
         }
         return m_children;
     }
-    if (!m_shapeAnimation) {
-        return m_children;
-    }
-    if (triggerEvent() != KPrShapeAnimation::On_Click) {
+    if (!m_shapeAnimation || (triggerEvent() != KPrShapeAnimation::On_Click)) {
         return m_children;
     }
 
@@ -298,7 +305,7 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
                             if (b->NodeType() == KPrShapeAnimation::On_Click) {
                                 return m_children;
                             }
-                            m_children.append(m_root->itemByAnimation(b));
+                            m_children.append(KPrCustomAnimationItem::itemByAnimation(b));
                         }
                     }
                 }
@@ -311,32 +318,29 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
 //Methods only used in root animation
 void KPrCustomAnimationItem::addChild(KPrShapeAnimation *animation, KPrCustomAnimationItem *item)
 {
-    Q_ASSERT(m_isRootAnimation);
     m_itemList.insert(animation, item);
 }
 
 void KPrCustomAnimationItem::removeChild(KPrCustomAnimationItem *item)
 {
-    Q_ASSERT(m_isRootAnimation);
+    if (m_itemList.isEmpty()) {
+        return;
+    }
     m_itemList.remove(item->animation());
-    m_children.removeAll(item);
 }
 
-KPrCustomAnimationItem *KPrCustomAnimationItem::itemByAnimation(KPrShapeAnimation *animation) const
+KPrCustomAnimationItem *KPrCustomAnimationItem::itemByAnimation(KPrShapeAnimation *animation)
 {
-    Q_ASSERT(m_isRootAnimation);
     return m_itemList.value(animation);
 }
 
 KPrCustomAnimationItem *KPrCustomAnimationItem::defaultAnimation()
 {
-    Q_ASSERT(m_isRootAnimation);
     return m_defaultAnimation;
 }
 
 void KPrCustomAnimationItem::setDefaultAnimation(KPrCustomAnimationItem *animation)
 {
-    Q_ASSERT(m_isRootAnimation);
     m_defaultAnimation = animation;
 }
 
@@ -373,7 +377,7 @@ void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *page)
         m_shapeAnimation = 0;
         m_activePage = page;
         isDefaultInitAnimation = true;
-        m_root->setDefaultAnimation(this);
+        KPrCustomAnimationItem::setDefaultAnimation(this);
     }
 }
 
@@ -421,3 +425,5 @@ QImage KPrCustomAnimationItem::createThumbnail(KoShape *shape, const QSize &thum
 
     return thumb;
 }
+
+KPrCustomAnimationItem *KPrCustomAnimationItem::m_defaultAnimation = 0;
