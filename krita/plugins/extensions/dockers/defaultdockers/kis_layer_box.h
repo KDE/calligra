@@ -95,6 +95,7 @@ private slots:
 
     void slotMergeLayer();
     void slotNewPaintLayer();
+    void slotNewItemLayer();	//layer to work with the  sand paintop
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
     void slotNewGeneratorLayer();
@@ -126,12 +127,14 @@ private:
     KAction* m_newGroupLayerAction;
     KAction* m_newCloneLayerAction;
     KAction* m_newShapeLayerAction;
+    KAction* m_newItemLayerAction;    //item layer add
     KAction* m_newAdjustmentLayerAction;
     KAction* m_newGeneratorLayerAction;
     KAction* m_newTransparencyMaskAction;
     KAction* m_newEffectMaskAction;
     KAction* m_newSelectionMaskAction;
 
+public slots:
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

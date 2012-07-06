@@ -164,6 +164,7 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
+   kis_item_layer.cpp   #item layer for sand painting
    kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp

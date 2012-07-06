@@ -184,6 +184,9 @@ KisLayerBox::KisLayerBox()
 
     m_newGeneratorLayerAction = new KAction(KIcon("view-filter"), i18n("&Generated Layer..."), this);
     connect(m_newGeneratorLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGeneratorLayer()));
+    
+    m_newItemLayerAction = new KAction(KIcon("document-new"), i18n("&Item Layer"), this);//item layer
+    connect(m_newItemLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewItemLayer()));
 
     m_newTransparencyMaskAction = new KAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this);
     connect(m_newTransparencyMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewTransparencyMask()));
@@ -204,6 +207,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(m_newShapeLayerAction);
     m_newLayerMenu->addAction(m_newAdjustmentLayerAction);
     m_newLayerMenu->addAction(m_newGeneratorLayerAction);
+    m_newLayerMenu->addAction(m_newItemLayerAction);    //item layer
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(m_newTransparencyMaskAction);
     m_newLayerMenu->addAction(m_newEffectMaskAction);
@@ -485,6 +489,13 @@ void KisLayerBox::slotNewGeneratorLayer()
 {
     if(!m_canvas) return;
     m_nodeManager->createNode("KisGeneratorLayer");
+}
+
+//item layer for the sand painting
+void KisLayerBox::slotNewItemLayer()
+{
+    if(!m_canvas) return;
+    m_nodeManager->createNode("KisItemLayer");
 }
 
 void KisLayerBox::slotNewTransparencyMask()

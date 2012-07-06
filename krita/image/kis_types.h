@@ -101,6 +101,10 @@ class KisGroupLayer;
 typedef KisSharedPtr<KisGroupLayer> KisGroupLayerSP;
 typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 
+/*item layer for the sand paintop*/
+class KisItemLayer;
+typedef KisSharedPtr<KisItemLayer> KisItemLayerSP;
+
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
 typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;

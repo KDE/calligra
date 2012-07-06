@@ -126,6 +126,11 @@ private slots:
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
+    /*
+     * Item layer to deal with objects in the canvas
+     */
+    void addItemLayer();
+    void addItemLayer(KisNodeSP parent, KisNodeSP above);
 
 private:
 

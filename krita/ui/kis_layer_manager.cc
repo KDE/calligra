@@ -50,6 +50,7 @@
 #include <kis_mask.h>
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
+#include <kis_item_layer.h> //layer for the sand
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
@@ -850,6 +851,33 @@ bool KisLayerManager::activeLayerHasSelection()
     return (activeLayer()->selection() != 0);
 }
 
+
+/*Sand paintop layer add*/
+
+void KisLayerManager::addItemLayer()
+{
+    KisImageWSP image = m_view->image();
+    if (image && activeLayer()) {
+        addItemLayer(activeLayer()->parent(), activeLayer());
+    } else if (image)
+        addItemLayer(image->rootLayer(), KisLayerSP(0));
+}
+
+void KisLayerManager::addItemLayer(KisNodeSP parent, KisNodeSP above)
+{
+    KisImageWSP image = m_view->image();
+    if (image) {
+        KisConfig cfg;
+        QString profilename;
+        KisLayerSP layer = new KisItemLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+        if (layer) {
+            layer->setCompositeOp(COMPOSITE_OVER);
+            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
+        } else {
+            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+        }
+    }
+}
 
 #include "kis_layer_manager.moc"
 

@@ -54,10 +54,10 @@ const QString SAND_DEPLETION = "Sand/sandDepletion";
  * (...)
  */
 
-// const QString SAND_MODE = "Sand/mode"    //set the operation mode for this brush
-// const QString SAND_MASS = "Sand/mass"
-// const QString SAND_FRICTION = "Sand/friction"
-// const QString SAND_DISSIPATION = "Sand/dissipation"
+// const QString SAND_MODE = "Sand/mode"    //set the operation mode for this brush (drop or spread)
+// const QString SAND_MASS = "Sand/mass"    //
+// const QString SAND_FRICTION = "Sand/friction"    //Young modulus -
+// const QString SAND_DISSIPATION = "Sand/dissipation" //living time of a particle (this is necessary?)
 
 class KisSandOpOptionsWidget;
 
