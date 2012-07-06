@@ -114,6 +114,7 @@ private:
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
     KPrCustomAnimationItem *cutItem;
+    QModelIndex m_lastRemovedIndex;
 };
 
 #endif // KPRANIMATIONSTREEMODEL_H

@@ -17,6 +17,9 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <KLocale>
+
+// Initialize static data
+KPrCustomAnimationItem *KPrCustomAnimationItem::m_defaultAnimation = 0;
 QHash<KPrShapeAnimation*, KPrCustomAnimationItem*> KPrCustomAnimationItem::m_itemList;
 
 KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPrCustomAnimationItem *root)
@@ -200,13 +203,16 @@ void KPrCustomAnimationItem::setDuration(int timeMS)
 KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const
 {
     if (isDefaulAnimation()) {
+        // "Show slide" event parent
         return m_root;
     }
     else if (m_isRootAnimation || !(m_shapeAnimation)) {
+        // Root item has no valid parent
         return 0;
     }
     else {
         if (triggerEvent() == KPrShapeAnimation::On_Click) {
+            // All on click events has root as parent
             return m_root;
         }
         else {
@@ -231,6 +237,7 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::parent() const
                     }
                 }
             }
+            // return appropiate parent for childs of "show slide" event
             return KPrCustomAnimationItem::defaultAnimation();
         }
     }
@@ -254,7 +261,9 @@ int KPrCustomAnimationItem::childCount()
 
 QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
 {
+    // update children list to always keep in sync with step-substep-animation structure
     m_children.clear();
+    // Populate children list for root and "show slide" items
     if ((isRootAnimation() && m_activePage) || isDefaulAnimation()) {
         if (KPrCustomAnimationItem::defaultAnimation() && isRootAnimation()) {
             m_children.append(KPrCustomAnimationItem::defaultAnimation());
@@ -286,10 +295,12 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
         }
         return m_children;
     }
+    // Leafs don't have children
     if (!m_shapeAnimation || (triggerEvent() != KPrShapeAnimation::On_Click)) {
         return m_children;
     }
 
+    // Children list for "On click" animations
     for (int stepNumber =
          m_root->activePage()->animationSteps().indexOf(m_shapeAnimation->step());
          stepNumber < m_root->activePage()->animationSteps().count(); stepNumber++) {
@@ -371,11 +382,11 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::takeChild(int row)
     return item;
 }*/
 
-void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *page)
+void KPrCustomAnimationItem::initAsDefaultAnimation(KPrPage *activePage)
 {
-    if (page) {
+    if (activePage) {
         m_shapeAnimation = 0;
-        m_activePage = page;
+        m_activePage = activePage;
         isDefaultInitAnimation = true;
         KPrCustomAnimationItem::setDefaultAnimation(this);
     }
@@ -386,13 +397,31 @@ bool KPrCustomAnimationItem::isDefaulAnimation() const
     return isDefaultInitAnimation;
 }
 
-void KPrCustomAnimationItem::initAsRootAnimation(KPrPage *page)
+void KPrCustomAnimationItem::initAsRootAnimation(KPrPage *activePage)
 {
+    Q_ASSERT(activePage);
     m_shapeAnimation = 0;
-    m_activePage = page;
+    m_activePage = activePage;
     qDeleteAll(m_children);
     m_isRootAnimation = true;
     m_root = this;
+    KPrCustomAnimationItem *newItem;
+    //Load animations
+    foreach (KPrAnimationStep *step, activePage->animationSteps()) {
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                                newItem = new KPrCustomAnimationItem(b, this);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 bool KPrCustomAnimationItem::isRootAnimation()
@@ -425,5 +454,3 @@ QImage KPrCustomAnimationItem::createThumbnail(KoShape *shape, const QSize &thum
 
     return thumb;
 }
-
-KPrCustomAnimationItem *KPrCustomAnimationItem::m_defaultAnimation = 0;

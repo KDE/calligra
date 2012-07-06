@@ -16,14 +16,23 @@ class KPrPage;
 /// Basic data structure for KPrAnimationsTreeModel.
 /// Keeps pointers of KPrShapeAnimation objects and
 /// provides a interface more suitable for the tree and
-/// time line view.
+/// time line view of slide animations.
+/// Tree structure has 2 levels (beside the main root)
+/// "Show slide" Event
+///   |_ After/With previous animations
+/// "On click Animation"
+///   |_ After/With previous animations
 class STAGE_EXPORT KPrCustomAnimationItem : public QObject
 {
     Q_OBJECT
 public:
     explicit KPrCustomAnimationItem(KPrShapeAnimation *animation = 0, KPrCustomAnimationItem *root=0);
     ~KPrCustomAnimationItem();
+
+    /// Initialize item to hold a shapeAnimation
     void setShapeAnimation(KPrShapeAnimation *animation);
+
+    /// Quick access to KPrShapeAnimation properties:
     KPrShapeAnimation *animation() const;
     QString name() const;
     QPixmap thumbnail() const;                           //Shape Thumbnail
@@ -59,11 +68,17 @@ public:
 
     //void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
 
-    /// Set Item as default (Root item that holds show slide event)
-    void initAsDefaultAnimation(KPrPage *page);
+    /** Set item as "show slide" default event
+        It must be the firs element of the animations list
+    */
+    void initAsDefaultAnimation(KPrPage *activePage);
     bool isDefaulAnimation() const;
 
-    void initAsRootAnimation(KPrPage *page);
+    /** Set Item as tree root (Root item that holds all other animations)
+     Used to start the data structure and create list for quick
+     search of childs and parents
+    */
+    void initAsRootAnimation(KPrPage *activePage);
     bool isRootAnimation();
 
 signals:

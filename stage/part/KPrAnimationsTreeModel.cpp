@@ -45,6 +45,7 @@ enum Column {Name, Shape, TriggerEvent, Type};
 KPrAnimationsTreeModel::KPrAnimationsTreeModel(QObject *parent)
     : QAbstractItemModel(parent)
     , m_rootItem(0)
+    , m_lastRemovedIndex(QModelIndex())
 {
 }
 
@@ -393,27 +394,12 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
     m_activePage = activePage;
     clear();
     m_rootItem = new KPrCustomAnimationItem;
+    // Initialize tree
     m_rootItem->initAsRootAnimation(activePage);
     KPrCustomAnimationItem *newItem;
     //Start defaul event
     newItem = new KPrCustomAnimationItem(0, m_rootItem);
     newItem->initAsDefaultAnimation(activePage);
-    //Load animations
-    foreach (KPrAnimationStep *step, activePage->animationSteps()) {
-        for (int i=0; i < step->animationCount(); i++) {
-            QAbstractAnimation *animation = step->animationAt(i);
-            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-                for (int j=0; j < a->animationCount(); j++) {
-                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        if ((b->presetClass() != KPrShapeAnimation::None) && (m_view->shapeManager()->shapes().contains(b->shape()))) {
-                                newItem = new KPrCustomAnimationItem(b, m_rootItem);
-                        }
-                    }
-                }
-            }
-        }
-    }
     emit rootChanged();
 }
 
@@ -511,13 +497,14 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
                             if (b == modifiedAnimation) {
                                 animationDeleted = false;
                                 newItem = new KPrCustomAnimationItem(b, m_rootItem);
-                                int count = newItem->childCount();
                                 QModelIndex index = indexByItem(newItem);
                                 if (index.isValid()) {
+                                    m_lastRemovedIndex = index;
                                     beginInsertRows(index.parent(), index.row(), index.row());
                                     endInsertRows();
-                                    announceItemChanged(newItem);
+                                    //announceItemChanged(newItem);
                                 }
+                                int count = newItem->childCount();
                                 if (count > 0) {
                                     QModelIndex endIndex = indexByItem(newItem->childAt(count - 1));
                                     if (endIndex.isValid()) {
@@ -533,14 +520,10 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
         }
     }
     if (animationDeleted) {
-        // look in tree for deleted animation:
-        foreach (KPrCustomAnimationItem *item, m_rootItem->children()) {
-            if (item->animation() == modifiedAnimation) {
-                qDebug() << "item recognized";
-                announceItemChanged(item);
-                delete(item);
-                return;
-            }
+        // look for deleted animation:
+        if (m_lastRemovedIndex.isValid()) {
+             beginRemoveRows(m_lastRemovedIndex.parent(), m_lastRemovedIndex.row(), m_lastRemovedIndex.row());
+             endRemoveRows();
         }
     }
 }
