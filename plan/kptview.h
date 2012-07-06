@@ -86,6 +86,8 @@ class ReportView;
 
 class ReportDesignDialog;
 
+class DockWidget;
+
 class ConfigDialog : public KConfigDialog
 {
     Q_OBJECT
@@ -383,6 +385,8 @@ private:
     QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
+
+    QList<DockWidget*> m_dockers;
 
     // ------ File
     QAction *actionCreateTemplate;

@@ -53,6 +53,9 @@
 #include <KTabWidget>
 #include <KAction>
 #include <KActionCollection>
+#include <KStandardAction>
+#include <KStandardGuiItem>
+#include <KGuiItem>
 #include <KMessageBox>
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
@@ -874,11 +877,29 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 void ReportDesignPanel::populateToolbar( KToolBar *tb )
 {
     tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    KAction *a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
-    a->setObjectName("sectionedit");
-    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
+    KAction *a = 0;
+
+    a =  KStandardAction::cut( this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCut()));
     tb->addAction( a );
+
+    a =  KStandardAction::copy( this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditCopy()));
+    tb->addAction( a );
+
+    a =  KStandardAction::paste( this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditPaste()));
+    tb->addAction( a );
+
+    const KGuiItem del = KStandardGuiItem::del();
+    a = new KAction( del.icon(), del.text(), this );
+    a->setToolTip( del.toolTip() );
+    a->setShortcut( QKeySequence::Delete );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
+    tb->addAction( a );
+
     tb->addSeparator();
+
     a = new KAction( KIcon( "arrow-up" ), i18n( "Raise" ), this );
     connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
     tb->addAction( a );
@@ -886,8 +907,11 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
     tb->addAction( a );
 
-    a = new KAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
+    tb->addSeparator();
+
+    a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
+    a->setObjectName("sectionedit");
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
     tb->addAction( a );
 
     tb->addSeparator();
