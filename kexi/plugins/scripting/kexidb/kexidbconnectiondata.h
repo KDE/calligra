@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <kexidb/connection.h>
-#include <kexidb/connectiondata.h>
+#include <db/connection.h>
+#include <db/connectiondata.h>
 
 namespace Scripting
 {

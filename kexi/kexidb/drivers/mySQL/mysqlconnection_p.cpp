@@ -27,7 +27,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "mysqlconnection_p.h"
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 
 #ifdef MYSQLMIGRATE_H
 #define NAMESPACE KexiMigration

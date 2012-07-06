@@ -37,9 +37,9 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 

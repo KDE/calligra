@@ -27,9 +27,9 @@
 #include "xbaseconnection_p.h"
 #include "xbaseexport.h"
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
-#include <kexidb/connectiondata.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
+#include <db/connectiondata.h>
 #include <migration/keximigrate.h>
 #include <migration/migratemanager.h>
 

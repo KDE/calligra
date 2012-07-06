@@ -19,8 +19,8 @@
 
 #include "kexicsvexportwizard.h"
 #include "kexicsvwidgets.h"
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>

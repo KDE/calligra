@@ -73,9 +73,9 @@
 #include <core/kexipartinfo.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
-#include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/transaction.h>
+#include <db/connection.h>
+#include <db/tableschema.h>
+#include <db/transaction.h>
 #include <widget/kexicharencodingcombobox.h>
 
 #include "kexicsvwidgets.h"

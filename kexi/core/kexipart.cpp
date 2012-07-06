@@ -30,7 +30,7 @@
 #include "KexiMainWindowIface.h"
 #include "kexi.h"
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 

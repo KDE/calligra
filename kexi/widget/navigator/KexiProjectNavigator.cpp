@@ -55,7 +55,7 @@
 #include <kexiutils/identifier.h>
 #include <kexiutils/FlowLayout.h>
 #include <kexiutils/SmallToolButton.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexi_global.h>
 
 
