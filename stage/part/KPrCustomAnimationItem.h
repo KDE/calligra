@@ -55,6 +55,7 @@ public:
     /// Helper methods to manage tre view
     KPrCustomAnimationItem *parent() const;
     KPrCustomAnimationItem *childAt(int row);
+    QList<KPrCustomAnimationItem *> childrenAt(const int beginRow, const int endRow);
     int rowOfChild(KPrCustomAnimationItem *child);
     int childCount();
     QList<KPrCustomAnimationItem *> children();
@@ -81,9 +82,12 @@ public:
     void initAsRootAnimation(KPrPage *activePage);
     bool isRootAnimation();
 
+    void notifyRootModified();
+
 signals:
     void timeChanged(int begin, int end);
     void triggerEventChanged(KPrShapeAnimation::Node_Type event);
+    void rootModified();
 
 private:
 

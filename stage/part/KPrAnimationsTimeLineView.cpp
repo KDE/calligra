@@ -258,7 +258,10 @@ double KPrAnimationsTimeLineView::calculateStartOffset(int row)
     KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
                m_model->data(m_model->index(row, TriggerEvent)).toInt());
     if (triggerEvent == KPrShapeAnimation::After_Previous) {
-        return m_model->rootItemEnd();
+        return m_model->previousItemEnd(m_model->index(row, TriggerEvent));
+    }
+    if (triggerEvent == KPrShapeAnimation::With_Previous) {
+        return m_model->previousItemBegin(m_model->index(row, TriggerEvent));
     }
     return 0;
 }

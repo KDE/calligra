@@ -41,6 +41,7 @@
 #include <KLocale>
 
 enum Column {Name, Shape, TriggerEvent, Type};
+const int COLUMN_COUNT = 4;
 
 KPrAnimationsTreeModel::KPrAnimationsTreeModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -72,12 +73,10 @@ Qt::ItemFlags KPrAnimationsTreeModel::flags(const QModelIndex &index) const
     return theFlags;
 }
 
-const int ColumnCount = 4;
-
 QVariant KPrAnimationsTreeModel::data(const QModelIndex &index, int role) const
 {
     if (!m_rootItem || !index.isValid() || index.column() < 0 ||
-        index.column() >= ColumnCount) {
+        index.column() >= COLUMN_COUNT) {
         return QVariant();
     }
     if (KPrCustomAnimationItem *item = itemForIndex(index)) {
@@ -174,12 +173,12 @@ int KPrAnimationsTreeModel::rowCount(const QModelIndex &parent) const
 
 int KPrAnimationsTreeModel::columnCount(const QModelIndex &parent) const
 {
-    return parent.isValid() && parent.column() != 0 ? 0 : ColumnCount;
+    return parent.isValid() && parent.column() != 0 ? 0 : COLUMN_COUNT;
 }
 
 QModelIndex KPrAnimationsTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!m_rootItem || row < 0 || column < 0 || column >= ColumnCount
+    if (!m_rootItem || row < 0 || column < 0 || column >= COLUMN_COUNT
         || (parent.isValid() && parent.column() != 0)) {
         return QModelIndex();
     }
@@ -396,10 +395,7 @@ void KPrAnimationsTreeModel::setActivePage(KPrPage *activePage)
     m_rootItem = new KPrCustomAnimationItem;
     // Initialize tree
     m_rootItem->initAsRootAnimation(activePage);
-    KPrCustomAnimationItem *newItem;
-    //Start defaul event
-    newItem = new KPrCustomAnimationItem(0, m_rootItem);
-    newItem->initAsDefaultAnimation(activePage);
+    connect(m_rootItem, SIGNAL(rootModified()), this, SLOT(update()));
     emit rootChanged();
 }
 
@@ -478,6 +474,13 @@ void KPrAnimationsTreeModel::updateData()
 {
     setActivePage(m_activePage);
     reset();
+}
+
+void KPrAnimationsTreeModel::update()
+{
+    emit layoutAboutToBeChanged();
+    reset();
+    emit layoutChanged();
 }
 
 void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnimation)

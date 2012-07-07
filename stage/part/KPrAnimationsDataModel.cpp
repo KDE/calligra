@@ -58,6 +58,7 @@ enum ColumnNames {
 KPrAnimationsDataModel::KPrAnimationsDataModel(QObject *parent)
     : QAbstractTableModel(parent)
     , m_rootItem(0)
+    , m_mainRoot(0)
     , m_oldBegin(INVALID)
     , m_oldDuration(INVALID)
     , m_firstEdition(true)
@@ -259,19 +260,24 @@ Qt::ItemFlags KPrAnimationsDataModel::flags(const QModelIndex &index) const
 
 void KPrAnimationsDataModel::setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem)
 {
+    emit layoutAboutToBeChanged();
     if (item) {
+        qDebug() << "item found in setPArent";
+        m_mainRoot = rootItem;
         if (item->parent() == rootItem) {
+            qDebug() << "item parent is root";
             if (m_rootItem != item) {
+                qDebug() << "root is not item";
                 m_rootItem = item;
                 reset();
             }
         }
     }
     else{
+        qDebug() << "no item found in setParent";
         m_rootItem = 0;
         reset();
     }
-    emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
 
@@ -334,6 +340,25 @@ void KPrAnimationsDataModel::notifyAnimationEdited()
     }
 }
 
+void KPrAnimationsDataModel::initializeNewParent()
+{
+    if (m_mainRoot) {
+        qDebug() << "main root found";
+        if(KPrCustomAnimationItem *item = qobject_cast<KPrCustomAnimationItem*>(sender())) {
+            qDebug() << "item casted" << item->animationName() << item->parent()->animationName();
+            if (item->triggerEvent() == KPrShapeAnimation::On_Click) {
+                qDebug() << "item is on click";
+                setParentItem(item, m_mainRoot);
+            }
+            else if (item->parent()->triggerEvent() == KPrShapeAnimation::On_Click) {
+                qDebug() << "parent is on click";
+                setParentItem(item->parent(), m_mainRoot);
+            }
+        }
+    }
+    m_mainRoot->notifyRootModified();
+}
+
 void KPrAnimationsDataModel::setBeginTime(const QModelIndex &index, const int begin)
 {
     KPrCustomAnimationItem *item = itemForIndex(index);
@@ -365,10 +390,14 @@ void KPrAnimationsDataModel::setTimeRange(KPrCustomAnimationItem *item, const in
 
 bool KPrAnimationsDataModel::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
 {
+    bool success = false;
+    KPrAnimationEditNodeTypeCommand *command = 0;
     qDebug() << "set Trigger Event" << type;
     KPrCustomAnimationItem *item = itemForIndex(index);
     if (item && (!item->isDefaulAnimation())) {
-         qDebug() << "Item found and not is default";
+        QList<KPrShapeAnimation *> movedChildren = QList<KPrShapeAnimation *>();
+        QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
+        qDebug() << "Item found and not is default";
         if (item->triggerEvent() == KPrShapeAnimation::After_Previous) {
              qDebug() << "Item is After previous";
             // After Previous to With Previous
@@ -382,16 +411,105 @@ bool KPrAnimationsDataModel::setTriggerEvent(const QModelIndex &index, const KPr
                                                                             parent;
 
                 KPrAnimationSubStep *newSubStep = previousItem->animation()->subStep();
-
-                KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
-                KPrAnimationEditNodeTypeCommand *command =
+                command =
                         new KPrAnimationEditNodeTypeCommand(item->animation(), item->animation()->step(),
                                                             newSubStep, type);
                 connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
-                doc->addCommand(command);
-                return true;
+                success = true;
+            }
+
+            // After Previous to On Click
+            if (type == KPrShapeAnimation::On_Click) {
+                 qDebug() << "new type is On Click";
+                 KPrCustomAnimationItem *parent = item->parent();
+                 int currentIndex = parent->children().indexOf(item);
+                 int childrenCount = parent->childCount();
+                 qDebug() << "Current Index: " << currentIndex << childrenCount;
+                 // Get index of current substep
+                 int currentSubStepIndex = item->animation()->step()->indexOfAnimation(item->animation()->subStep());
+                 int subStepCount = item->animation()->step()->animationCount();
+
+                 qDebug() << "currentSubStepIndex: " << currentSubStepIndex << subStepCount;
+
+                 //Create new step to reparent currrent item and all following items.
+                 KPrAnimationStep *newStep = new KPrAnimationStep();
+
+                 // Add step after original one
+                 KPrPage *activePage = dynamic_cast<KPrPage *>(m_view->activePage());
+                 if (!activePage) {
+                     qDebug() << "active page missing";
+                     return false;
+                 }
+                 int currentStepIndex = activePage->animationSteps().indexOf(item->animation()->step());
+                 qDebug() << "currentStepIndex: " << currentStepIndex << activePage->animationSteps().count();
+                 activePage->animations().insertStep(currentStepIndex + 1, newStep);
+                 qDebug() << activePage->animationSteps().count();
+
+                 //reparent children
+                 connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(initializeNewParent()));
+                 qDebug() << "reparent main" << item->animationName();
+
+                 if (currentSubStepIndex < subStepCount-1) {
+                     for (int i =currentSubStepIndex + 1; i < subStepCount; i++) {
+                         if (KPrAnimationSubStep *substep = dynamic_cast<KPrAnimationSubStep *>(item->animation()->step()->animationAt(i))) {
+                            movedSubSteps.append(substep);
+                         }
+                     }
+
+                 }
+
+                 command =
+                         new KPrAnimationEditNodeTypeCommand(item->animation(), newStep, item->animation()->subStep(),
+                                                             type, movedChildren, movedSubSteps);
+                 success = true;
             }
         }
+        if (item->triggerEvent() == KPrShapeAnimation::With_Previous) {
+            qDebug() << "Item is With previous";
+           // With Previous to After Previous
+           if (type == KPrShapeAnimation::After_Previous) {
+                qDebug() << "new type is After previous";
+               KPrCustomAnimationItem *parent = item->parent();
+               int currentIndex = parent->children().indexOf(item);
+               int childrenCount = parent->childCount();
+               qDebug() << "Current Index: " << currentIndex << childrenCount;
+               // Get index of current substep
+               int currentSubStepIndex = item->animation()->step()->indexOfAnimation(item->animation()->subStep());
+               qDebug() << "currentSubStepIndex: " << currentSubStepIndex;
+               //Create new substep to reparent currrent item and all following items.
+               KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+
+               // Add substep after original one
+               qDebug() << "substeps at step" << item->animation()->step()->animationCount();
+               item->animation()->step()->insertAnimation(currentSubStepIndex+1, newSubStep);
+
+               //reparent children
+               connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+               qDebug() << "reparent main" << item->animationName();
+               if (currentIndex < childrenCount-1) {
+                   foreach (KPrCustomAnimationItem *subItem, parent->childrenAt(currentIndex + 1, childrenCount - 1)) {
+                       if ((subItem->triggerEvent() == KPrShapeAnimation::After_Previous)) {
+                           qDebug() << "break";
+                           break;
+                       }
+                       qDebug() << "reparent" << subItem->animationName();
+                       movedChildren.append(subItem->animation());
+                       connect(subItem, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                   }
+               }
+               command =
+                       new KPrAnimationEditNodeTypeCommand(item->animation(), item->animation()->step(),
+                                                           newSubStep, type, movedChildren);
+               success = true;
+           }
+        }
+
+        if (success) {
+            KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+            doc->addCommand(command);
+            return true;
+        }
+
     }
     return false;
 }
@@ -406,10 +524,55 @@ KPrCustomAnimationItem *KPrAnimationsDataModel::itemForIndex(const QModelIndex &
     return m_rootItem;
 }
 
-qreal KPrAnimationsDataModel::rootItemEnd() const
+qreal KPrAnimationsDataModel::previousItemEnd(const QModelIndex &index)
 {
-    if (m_rootItem) {
-        return m_rootItem->durationSeconds() + m_rootItem->startTimeSeconds();
+    if (m_rootItem && index.isValid()) {
+        if (index.row() > 1) {
+            KPrCustomAnimationItem *previousItem = m_rootItem->childAt(index.row() - 2);
+            if (previousItem->triggerEvent() == KPrShapeAnimation::With_Previous) {
+                //qDebug() << "return previous item end for " << index.row() << previousItem->durationSeconds() + previousItemBegin(indexByItem(previousItem)) << previousItem->animationName();
+                return previousItem->durationSeconds() + previousItemBegin(indexByItem(previousItem));
+            }
+            else if (previousItem->triggerEvent() == KPrShapeAnimation::After_Previous) {
+                //qDebug() << "return previous item end for " << index.row() << previousItem->durationSeconds() + previousItemEnd(indexByItem(previousItem)) << previousItem->animationName();
+                return previousItem->durationSeconds() + previousItemEnd(indexByItem(previousItem));
+            }
+            else {
+                //qDebug() << "return previous item end for " << index.row() << previousItem->durationSeconds() + previousItem->beginTime() << previousItem->animationName();
+                return previousItem->durationSeconds() + previousItem->beginTime();
+            }
+
+        }
+        else {
+            //qDebug() << "root item end for" << index.row() << m_rootItem->durationSeconds() + m_rootItem->startTimeSeconds() << m_rootItem->animationName();
+            return m_rootItem->durationSeconds() + m_rootItem->startTimeSeconds();
+        }
+    }
+    return 0.0;
+}
+
+qreal KPrAnimationsDataModel::previousItemBegin(const QModelIndex &index)
+{
+    if (m_rootItem && index.isValid()) {
+        if (index.row() > 1) {
+            KPrCustomAnimationItem *previousItem = m_rootItem->childAt(index.row() - 2);
+            if (previousItem->triggerEvent() == KPrShapeAnimation::With_Previous) {
+                //qDebug() << "return previous item start for " << index.row() << previousItemBegin(indexByItem(previousItem)) << previousItem->animationName();
+                return previousItemBegin(indexByItem(previousItem));
+            }
+            else if (previousItem->triggerEvent() == KPrShapeAnimation::After_Previous) {
+                //qDebug() << "return previous item start for " << index.row() << previousItemEnd(indexByItem(previousItem)) << previousItem->animationName();
+                return previousItemEnd(indexByItem(previousItem));
+            }
+            else {
+                //qDebug() << "return previous item start for " << index.row() << previousItem->durationSeconds() + previousItem->beginTime() << previousItem->animationName();
+                return previousItem->beginTime();
+            }
+        }
+        else {
+            //qDebug() << "root item start for" << index.row() << m_rootItem->startTimeSeconds() << m_rootItem->animationName();
+            return m_rootItem->startTimeSeconds();
+        }
     }
     return 0.0;
 }

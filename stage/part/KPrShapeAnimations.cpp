@@ -84,6 +84,13 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
     subStep->removeAnimation(animation);
 }
 
+void KPrShapeAnimations::insertStep(const int i, KPrAnimationStep *step)
+{
+    if (step) {
+        m_shapeAnimations.insert(i, step);
+    }
+}
+
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
 {
     return m_shapeAnimations;

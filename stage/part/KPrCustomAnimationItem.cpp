@@ -29,6 +29,7 @@ KPrCustomAnimationItem::KPrCustomAnimationItem(KPrShapeAnimation *animation, KPr
     , m_isRootAnimation(false)
     , m_activePage(0)
 {
+    m_children = QList <KPrCustomAnimationItem*>();
     if (m_shapeAnimation) {
         KPrCustomAnimationItem::addChild(animation, this);
         connect(m_shapeAnimation, SIGNAL(timeChanged(int, int)), this, SIGNAL(timeChanged(int, int)));
@@ -249,6 +250,21 @@ KPrCustomAnimationItem *KPrCustomAnimationItem::childAt(int row)
     return children().value(row);
 }
 
+QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::childrenAt(const int beginRow, const int endRow)
+{
+    QList<KPrCustomAnimationItem *> allChildren = children();
+    Q_ASSERT(beginRow >= 0);
+    QList<KPrCustomAnimationItem *> newList = QList<KPrCustomAnimationItem *>();
+    if (allChildren.isEmpty())
+        return newList;
+    Q_ASSERT(endRow < allChildren.count());
+    for (int i = beginRow; i <= endRow; i++) {
+        newList.append(allChildren.at(i));
+    }
+    return newList;
+}
+
+
 int KPrCustomAnimationItem::rowOfChild(KPrCustomAnimationItem *child)
 {
     return children().indexOf(child);
@@ -301,6 +317,10 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
     }
 
     // Children list for "On click" animations
+    if (m_root->activePage()->animationSteps().indexOf(m_shapeAnimation->step()) == -1) {
+        qDebug() << "Step Not found";
+        return m_children;
+    }
     for (int stepNumber =
          m_root->activePage()->animationSteps().indexOf(m_shapeAnimation->step());
          stepNumber < m_root->activePage()->animationSteps().count(); stepNumber++) {
@@ -402,10 +422,13 @@ void KPrCustomAnimationItem::initAsRootAnimation(KPrPage *activePage)
     Q_ASSERT(activePage);
     m_shapeAnimation = 0;
     m_activePage = activePage;
-    qDeleteAll(m_children);
+    qDeleteAll(children());
     m_isRootAnimation = true;
     m_root = this;
     KPrCustomAnimationItem *newItem;
+    //Start defaul event
+    newItem = new KPrCustomAnimationItem(0, this);
+    newItem->initAsDefaultAnimation(activePage);
     //Load animations
     foreach (KPrAnimationStep *step, activePage->animationSteps()) {
         for (int i=0; i < step->animationCount(); i++) {
@@ -422,11 +445,17 @@ void KPrCustomAnimationItem::initAsRootAnimation(KPrPage *activePage)
             }
         }
     }
+    Q_UNUSED(newItem);
 }
 
 bool KPrCustomAnimationItem::isRootAnimation()
 {
     return m_isRootAnimation;
+}
+
+void KPrCustomAnimationItem::notifyRootModified()
+{
+    emit rootModified();
 }
 
 QImage KPrCustomAnimationItem::createThumbnail(KoShape *shape, const QSize &thumbSize) const

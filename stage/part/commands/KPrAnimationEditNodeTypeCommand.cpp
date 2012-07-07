@@ -35,6 +35,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_newSubStep(newSubStep)
     , m_newType(newType)
 {
+    m_children = QList<KPrShapeAnimation *>();
     setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
     m_oldStep = m_animation->step();
     m_oldSubStep = m_animation->subStep();
@@ -42,21 +43,79 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
 
 }
 
+KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
+                                                                 KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
+                                                                 QList<KPrShapeAnimation *> children, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_animation(animation)
+    , m_newStep(newStep)
+    , m_newSubStep(newSubStep)
+    , m_newType(newType)
+    , m_children(children)
+{
+    m_substeps = QList<KPrAnimationSubStep *>();
+    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
+    m_oldStep = m_animation->step();
+    m_oldSubStep = m_animation->subStep();
+    m_oldType = m_animation->NodeType();
+}
+
+KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_animation(animation)
+    , m_newStep(newStep)
+    , m_newSubStep(newSubStep)
+    , m_newType(newType)
+    , m_children(children)
+    , m_substeps(movedSubSteps)
+{
+    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
+    m_oldStep = m_animation->step();
+    m_oldSubStep = m_animation->subStep();
+    m_oldType = m_animation->NodeType();
+}
+
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
 {
+    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
+    m_oldStep = m_animation->step();
+    m_oldSubStep = m_animation->subStep();
+    m_oldType = m_animation->NodeType();
 }
 
 void KPrAnimationEditNodeTypeCommand::redo()
 {
     if (m_animation) {
+        qDebug() << "redo for" << m_animation->id();
         if (m_newSubStep != m_oldSubStep) {
             m_newSubStep->addAnimation(m_oldSubStep->takeAnimation(m_oldSubStep->indexOfAnimation(m_animation)));
             m_animation->setSubStep(m_newSubStep);
+            if (!m_children.isEmpty()) {
+                foreach(KPrShapeAnimation *anim, m_children) {
+                    m_newSubStep->addAnimation(m_oldSubStep->takeAnimation(m_oldSubStep->indexOfAnimation(anim)));
+                    anim->setSubStep(m_newSubStep);
+                }
+            }
         }
         if (m_newStep != m_newSubStep->parent()) {
-            m_newStep->addAnimation(m_newSubStep);
-            m_animation->setStep(m_newStep);
+            if (m_substeps.isEmpty()) {
+                m_substeps.append(m_newSubStep);
+            }
+            else {
+                m_substeps.insert(0, m_newSubStep);
+            }
+            foreach(KPrAnimationSubStep *subStep, m_substeps) {
+                m_newStep->addAnimation(subStep);
+                for (int j=0; j < subStep->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        b->setStep(m_newStep);
+                    }
+                }
+            }
         }
+
+
         m_animation->setNodeType(m_newType);
     }
 }
@@ -64,13 +123,34 @@ void KPrAnimationEditNodeTypeCommand::redo()
 void KPrAnimationEditNodeTypeCommand::undo()
 {
     if (m_animation) {
+        qDebug() << "undo for" << m_animation->id();
         if (m_newSubStep != m_oldSubStep) {
             m_oldSubStep->addAnimation(m_newSubStep->takeAnimation(m_newSubStep->indexOfAnimation(m_animation)));
             m_animation->setSubStep(m_oldSubStep);
+            if (!m_children.isEmpty()) {
+                foreach(KPrShapeAnimation *anim, m_children) {
+                    m_oldSubStep->addAnimation(m_newSubStep->takeAnimation(m_newSubStep->indexOfAnimation(anim)));
+                    anim->setSubStep(m_oldSubStep);
+                }
+            }
         }
         if (m_oldStep != m_oldSubStep->parent()) {
-            m_oldStep->addAnimation(m_oldSubStep);
-            m_animation->setStep(m_oldStep);
+            if (m_substeps.isEmpty()) {
+                m_substeps.append(m_oldSubStep);
+            }
+            else {
+                m_substeps.removeAll(m_newSubStep);
+                m_substeps.insert(0, m_oldSubStep);
+            }
+            foreach(KPrAnimationSubStep *subStep, m_substeps) {
+                m_oldStep->addAnimation(subStep);
+                for (int j=0; j < subStep->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        b->setStep(m_oldStep);
+                    }
+                }
+            }
         }
         m_animation->setNodeType(m_oldType);
     }

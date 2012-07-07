@@ -67,8 +67,11 @@ public:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
-    /// Return the parent item
-    qreal rootItemEnd() const;
+    /// Return previous item end time
+    qreal previousItemEnd(const QModelIndex &index);
+
+    /// Return previous item begin time
+    qreal previousItemBegin(const QModelIndex &index);
 
     /// Save a edit command
     void endTimeLineEdition();
@@ -86,6 +89,8 @@ public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
 
+    void initializeNewParent();
+
     void setBeginTime(const QModelIndex &index, const int begin);
     void setDuration(const QModelIndex &index, const int duration);
     void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
@@ -95,6 +100,7 @@ public slots:
 private:
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
+    KPrCustomAnimationItem *m_mainRoot;
     int m_oldBegin;
     int m_oldDuration;
     bool m_firstEdition;

@@ -98,6 +98,7 @@ signals:
 public slots:
     /// Triggers an update of the complete model
     void updateData();
+    void update();
 
 private slots:
     void updateAnimationData(KPrShapeAnimation* modifiedAnimation);
