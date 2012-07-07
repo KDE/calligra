@@ -177,7 +177,8 @@ macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabl
 ##
 find_package(ICU REQUIRED)
 macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                    "http://icu-project.org" FALSE "" "Required by Kexi")
+                    "http://icu-project.org" FALSE ""
+                    "Required by Calligra's default database handler.")
 
  ################################
 #################################
