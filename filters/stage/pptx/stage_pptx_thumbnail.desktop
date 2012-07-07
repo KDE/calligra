@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Powerpoint 2007 Presentations
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true
