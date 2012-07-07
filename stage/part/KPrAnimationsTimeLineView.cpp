@@ -81,7 +81,8 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
     m_model = model;
     updateColumnsWidth();
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
-    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(update()));
+    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(resetData()));
+    connect(m_model, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
@@ -274,6 +275,11 @@ int KPrAnimationsTimeLineView::rowCount() const
     return 0;
 }
 
+QSize KPrAnimationsTimeLineView::sizeHint() const
+{
+    return QSize(m_view->sizeHint().width(), m_view->sizeHint().height() + m_header->sizeHint().height());
+}
+
 void KPrAnimationsTimeLineView::update()
 {
     m_view->update();
@@ -291,4 +297,11 @@ void KPrAnimationsTimeLineView::updateColumnsWidth()
         }
     }
     m_view->setMinimumSize(m_view->minimumSizeHint());
+}
+
+void KPrAnimationsTimeLineView::resetData()
+{
+    m_selectedRow = INVALID;
+    m_selectedColumn = INVALID;
+    update();
 }

@@ -49,6 +49,7 @@ public:
     void remove( KPrShapeAnimation * animation );
 
     void insertStep(const int i, KPrAnimationStep *step);
+    void removeStep(KPrAnimationStep *step);
 
     /**
      * Get the animations for the given step

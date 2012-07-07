@@ -114,6 +114,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(itemClicked(QModelIndex)));
     connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
     connect(m_timeLineView, SIGNAL(timeValuesChanged(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
+    connect(m_timeLineView, SIGNAL(layoutChanged()), this, SLOT(syncCurrentItem()));
     connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
     connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
     connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
@@ -132,7 +133,8 @@ void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
 void KPrEditAnimationsWidget::setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem)
 {
     m_timeLineModel->setParentItem(item, rootItem);
-    m_timeLineView->update();
+    m_timeLineView->updateGeometry();
+    updateGeometry();
 }
 
 void KPrEditAnimationsWidget::setCurrentItem(KPrCustomAnimationItem *item)
@@ -193,5 +195,15 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
             else newType = KPrShapeAnimation::With_Previous;
             m_timeLineModel->setTriggerEvent(m_timeLineView->currentIndex(), newType);
         }
+    }
+}
+
+void KPrEditAnimationsWidget::syncCurrentItem()
+{
+    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(m_timeLineView->currentIndex());
+    if (item) {
+        m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
+        m_delayEdit->setTime(QTime().addMSecs(item->beginTime()));
+        m_durationEdit->setTime(QTime().addMSecs(item->duration()));
     }
 }

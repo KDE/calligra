@@ -57,6 +57,7 @@ public slots:
     void setBeginTime();
     void setDuration();
     void setTriggerEvent(int row);
+    void syncCurrentItem();
 
 
 private:

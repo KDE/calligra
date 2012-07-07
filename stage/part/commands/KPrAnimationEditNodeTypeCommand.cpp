@@ -23,6 +23,7 @@
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
+#include "KPrPage.h"
 #include "KLocale"
 #include "KDebug"
 
@@ -34,6 +35,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_newStep(newStep)
     , m_newSubStep(newSubStep)
     , m_newType(newType)
+    , m_activePage(0)
 {
     m_children = QList<KPrShapeAnimation *>();
     setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
@@ -52,6 +54,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_newSubStep(newSubStep)
     , m_newType(newType)
     , m_children(children)
+    , m_activePage(0)
 {
     m_substeps = QList<KPrAnimationSubStep *>();
     setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
@@ -60,7 +63,10 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     m_oldType = m_animation->NodeType();
 }
 
-KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps, KUndo2Command *parent)
+KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
+                                                                 KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
+                                                                 QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps,
+                                                                 KPrPage *activePage, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_animation(animation)
     , m_newStep(newStep)
@@ -68,6 +74,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_newType(newType)
     , m_children(children)
     , m_substeps(movedSubSteps)
+    , m_activePage(activePage)
 {
     setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
     m_oldStep = m_animation->step();
@@ -77,10 +84,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
 
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
 {
-    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
-    m_oldStep = m_animation->step();
-    m_oldSubStep = m_animation->subStep();
-    m_oldType = m_animation->NodeType();
+
 }
 
 void KPrAnimationEditNodeTypeCommand::redo()
@@ -115,7 +119,14 @@ void KPrAnimationEditNodeTypeCommand::redo()
             }
         }
 
-
+        if (m_oldSubStep->children().isEmpty()) {
+            qDebug() << "set remove substep";
+            m_oldSubStep->setParent(0);
+        }
+        if (m_oldStep->children().isEmpty() && m_activePage) {
+            qDebug() << "set remove step";
+            m_activePage->animations().removeStep(m_oldStep);
+        }
         m_animation->setNodeType(m_newType);
     }
 }
@@ -151,6 +162,14 @@ void KPrAnimationEditNodeTypeCommand::undo()
                     }
                 }
             }
+        }
+        if (m_newSubStep->children().isEmpty()) {
+            qDebug() << "set remove new substep";
+            m_newSubStep->setParent(0);
+        }
+        if (m_newStep->children().isEmpty() && m_activePage) {
+            qDebug() << "set remove new step";
+            m_activePage->animations().removeStep(m_newStep);
         }
         m_animation->setNodeType(m_oldType);
     }

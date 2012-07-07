@@ -60,10 +60,12 @@ public:
     int rowCount() const;
     friend class KPrTimeLineView;
     friend class KPrTimeLineHeader;
+    virtual QSize sizeHint() const;
 
 signals:
     void clicked(const QModelIndex&);
     void timeValuesChanged(const QModelIndex&);
+    void layoutChanged();
 
 public slots:
     /// updates all widget
@@ -71,6 +73,8 @@ public slots:
 
     /// recalculate column preferred width and update widget
     void updateColumnsWidth();
+
+    void resetData();
 
 protected:
     /// return width of column
