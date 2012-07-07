@@ -85,7 +85,6 @@ ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_stocw(0)
 {
     createActions();
-    KoBridgeServer *server = new KoBridgeServer(editor(), this);
 }
 
 ReferencesTool::~ReferencesTool()
@@ -149,12 +148,12 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Insert a custom Bibliography into the document."));
 
     action = new KAction(i18n("Configure"),this);
-    addAction("configure_bibliography",action);
+    addAction("configure_bibliography", action);
     action->setToolTip(i18n("Configure the bibliography"));
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 
     action = new KAction(i18n("Bibliography Database"),this);
-    addAction("bibliography_database",action);
+    addAction("bibliography_database", action);
     action->setToolTip(i18n("Bibliography Database"));
     connect(action, SIGNAL(triggered()), this, SLOT(showBibliographyDatabase()));
 }
@@ -197,6 +196,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     widgets.append(m_scbw);
     //widgets.insert(i18n("Captions"), scapw);
     connect(textEditor(), SIGNAL(cursorPositionChanged()), this, SLOT(updateButtons()));
+    KoBridgeServer *server = new KoBridgeServer(editor(), this);
     return widgets;
 }
 

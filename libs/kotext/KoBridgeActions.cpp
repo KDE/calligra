@@ -46,6 +46,8 @@ InsertCitationBridgeAction::InsertCitationBridgeAction(const QVariantMap &map, K
     KoBridgeAction(map, KoBridgeAction::InsertCitation),
     m_editor(editor)
 {
+    Q_ASSERT(m_editor);
+
     performAction();
 }
 

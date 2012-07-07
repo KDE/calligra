@@ -18,6 +18,7 @@
  */
 
 #include "KoBridgeServer.h"
+#include "KoBridgeActions.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -87,13 +88,13 @@ void KoBridgeServer::handle(QObject *o)
         return;
     } else if (res["action"].toString() == "insert_citation") {
         out << "Action insert_citation";
-//        new InsertCitationBridgeAction(res, m_editor);
+        new InsertCitationBridgeAction(res, m_editor);
     } else if (res["action"].toString() == "insert_bibliography") {
         out << "Action insert_bibliography";
-//        new InsertBibliographyBridgeAction(res, m_editor);
+        new InsertBibliographyBridgeAction(res, m_editor);
     } else if (res["action"].toString() == "insert_cite_record") {
         out << "Action insert_cite_record";
-//        new InsertCiteRecordBridgeAction(res);
+        new InsertCiteRecordBridgeAction(res);
     }
 
     out.device()->seek(0);
