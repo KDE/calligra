@@ -8,7 +8,7 @@ kde4_add_plugin(calligrathumbnail ${calligrathumbnail_SRCS})
 target_link_libraries(calligrathumbnail komain)
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-if( BUILD_krita )
+if( BUILD_krita OR BUILD_flow OR BUILD_karbon)
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
     kde4_add_plugin(calligraimagethumbnail ${calligraimagethumbnail_SRCS})
     macro_add_compile_flags(calligraimagethumbnail "-DNO_ICON_BLENDING")
