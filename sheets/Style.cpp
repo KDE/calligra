@@ -37,6 +37,7 @@
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoOdfWorkaround.h>
 
 #include "Condition.h"
 #include "Currency.h"
@@ -109,7 +110,7 @@ QString SubStyle::name(Style::Key key)
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
-    case Style::ThousandsSep:           name = "Thousands seperator"; break;
+    case Style::ThousandsSep:           name = "Thousands separator"; break;
     case Style::FormatTypeKey:          name = "Format type"; break;
     case Style::FloatFormatKey:         name = "Float format"; break;
     case Style::FloatColorKey:          name = "Float color"; break;
@@ -411,6 +412,9 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     }
     if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
         str = styleStack.property(KoXmlNS::style, "cell-protect");
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(str);
+#endif
         if (str == "none")
             setNotProtected(true);
         else if (str == "hidden-and-protected")
@@ -1352,9 +1356,9 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         if (isNotProtected && !hideFormula)
             style.addProperty("style:cell-protect", "none");
         else if (isNotProtected && hideFormula)
-            style.addProperty("style:cell-protect", "Formula.hidden");
+            style.addProperty("style:cell-protect", "formula-hidden");
         else if (hideFormula)
-            style.addProperty("style:cell-protect", "protected Formula.hidden");
+            style.addProperty("style:cell-protect", "protected formula-hidden");
         else if (keysToStore.contains(NotProtected) && !isNotProtected)
             // write out, only if it is explicitly set
             style.addProperty("style:cell-protect", "protected");

@@ -20,7 +20,7 @@
 
 #include "AutoLineEdit.h"
 #include <KDebug>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include "AutoForm.h"
 
 AutoLineEdit::AutoLineEdit(AutoForm* parent): AutoWidget(parent)

@@ -26,8 +26,8 @@
 #include <KIconLoader>
 #include <KIconEffect>
 
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"

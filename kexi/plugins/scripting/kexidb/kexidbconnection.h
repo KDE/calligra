@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 namespace Scripting
 {

@@ -26,8 +26,8 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KexiWindowData.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/connection.h>
+#include <db/queryschema.h>
+#include <db/connection.h>
 
 namespace KexiDB
 {

@@ -19,6 +19,7 @@ target_link_libraries(
     kexihandler_query
     kexicore
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexidataviewcommon
     kexidatatable

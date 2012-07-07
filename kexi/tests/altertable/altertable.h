@@ -23,7 +23,7 @@
 #include <QUrlOperator>
 #include <QtNetwork>
 #include <QNetworkProtocol>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 class KexiTableDesignerInterface;
 class KexiWindow;

@@ -48,7 +48,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 //        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
-    // we dont have next style for character styles
+    // we don't have next style for character styles
     widget.nextStyle->setVisible(false);
     m_characterStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.nextStyle->setStylesModel(m_characterStyleModel);

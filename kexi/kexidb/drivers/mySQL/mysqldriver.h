@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef MYSQLDB_H
 #define MYSQLDB_H
 
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 namespace KexiDB
 {

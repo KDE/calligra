@@ -23,7 +23,7 @@
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 #include <KDateTime>
 #include <KDebug>

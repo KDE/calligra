@@ -412,7 +412,7 @@ bool ExcelImport::Private::createStyles(KoStore* store, KoXmlWriter* manifestWri
     return store->close();
 }
 
-// Writes meta-informations into the meta.xml
+// Writes meta-information into the meta.xml
 bool ExcelImport::Private::createMeta(KoOdfWriteStore* store)
 {
     if (!store->store()->open("meta.xml"))
@@ -703,7 +703,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     }
 
     // in odf default-cell-style's only apply to cells/rows/columns that are present in the file while in Excel
-    // row/column styles should apply to all cells in that row/column. So, try to fake that behavior by writting
+    // row/column styles should apply to all cells in that row/column. So, try to fake that behavior by writing
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
     if (columnCount < maximalColumnCount-1) {
         xmlWriter->startElement("table:table-column");

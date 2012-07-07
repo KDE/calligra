@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Excel 2007 Spreadsheets
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

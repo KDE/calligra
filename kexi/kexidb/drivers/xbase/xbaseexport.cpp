@@ -24,10 +24,10 @@
 
 #include <kdebug.h>
 
-#include <kexidb/field.h>
-#include <kexidb/RecordData.h>
-#include <kexidb/cursor.h>
-#include <kexidb/drivermanager.h>
+#include <db/field.h>
+#include <db/RecordData.h>
+#include <db/cursor.h>
+#include <db/drivermanager.h>
 #include <core/kexi.h>
 #include <migration/keximigratedata.h>
 

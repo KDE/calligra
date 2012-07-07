@@ -23,7 +23,7 @@
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 #include <KDebug>
 

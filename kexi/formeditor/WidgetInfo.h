@@ -27,7 +27,7 @@
 #include <QHash>
 
 #include <kexi_export.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 namespace KFormDesigner
 {

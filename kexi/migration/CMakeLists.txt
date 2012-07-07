@@ -66,6 +66,7 @@ target_link_libraries(
     kexiextendedwidgets
     keximain
     kexiutils
+    ${CALLIGRADB_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
