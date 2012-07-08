@@ -121,9 +121,15 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
     m_d->projectionBackend->setImage(image);
 }
 
-QImage KisPrescaledProjection::prescaledQImage() const
+QImage KisPrescaledProjection::prescaledQImage()
 {
+    preScale();
     return m_d->prescaledQImage;
+}
+
+KisImageSP KisPrescaledProjection::image()
+{
+    return m_d->image.data();
 }
 
 void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter)
@@ -175,7 +181,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
-    updateViewportSize();
+    if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     newImage.fill(0);
@@ -267,7 +274,8 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
-    updateViewportSize();
+    if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
     QRect imageRect =
         m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
@@ -308,6 +316,9 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 void KisPrescaledProjection::updateViewportSize()
 {
     QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
+    qDebug() << ppVar(imageRect);
+    if(!image().isNull() && image()->isCanvasInfinite())
+        m_d->canvasSize = imageRect.toRect().size();
     QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
                        qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
     QRectF minimalRect(QPointF(0,0), minimalSize);
@@ -357,7 +368,8 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
 void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
                                                      KisPPUpdateInfoSP info)
 {
-    updateViewportSize();
+    if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();
     m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas

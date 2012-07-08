@@ -59,7 +59,8 @@ public:
      * Return the prescaled QImage. The prescaled image is exactly as big as
      * the canvas widget in pixels.
      */
-    QImage prescaledQImage() const;
+    QImage prescaledQImage();
+    KisImageSP image();
 
     void setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter);
 
