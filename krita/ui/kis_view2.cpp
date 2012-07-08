@@ -420,6 +420,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         existingShortcuts.insert(action->shortcut());
     }
 #endif
+    if(canvasBase()->isCanvasInfinite())
+        m_d->zoomManager->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
 }
 
 
