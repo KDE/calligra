@@ -71,7 +71,10 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.125);
+    if(m_view->image()->isCanvasInfinite())
+        KoZoomMode::setMinimumZoom(0.005);
+    else
+        KoZoomMode::setMinimumZoom(0.125);
     KoZoomMode::setMaximumZoom(64.0);
 
     KisConfig cfg;
