@@ -143,6 +143,8 @@ public: // KisCanvas2 methods
 
     bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
+    bool isCanvasInfinite();
+    /// @return true if the image in question has infinite canvas enabled
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 

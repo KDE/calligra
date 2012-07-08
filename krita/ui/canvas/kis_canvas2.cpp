@@ -638,6 +638,11 @@ bool KisCanvas2::usingHDRExposureProgram()
     return false;
 }
 
+bool KisCanvas2::isCanvasInfinite()
+{
+    return image()->isCanvasInfinite();
+}
+
 void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
