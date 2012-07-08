@@ -56,6 +56,7 @@ public:
     KoZoomController * zoomController() {
         return m_zoomController;
     }
+    qreal zoom();
 
 private slots:
 

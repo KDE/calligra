@@ -216,5 +216,9 @@ void KisZoomManager::zoomTo100()
     m_view->canvasBase()->notifyZoomChanged();
 }
 
+qreal KisZoomManager::zoom()
+{
+    return m_zoomHandler->zoom();
+}
 
 #include "kis_zoom_manager.moc"
