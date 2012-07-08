@@ -175,6 +175,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
+    updateViewportSize();
+
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     newImage.fill(0);
 
@@ -265,6 +267,7 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
+    updateViewportSize();
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
     QRect imageRect =
         m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
@@ -354,6 +357,7 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
 void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
                                                      KisPPUpdateInfoSP info)
 {
+    updateViewportSize();
     m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas
