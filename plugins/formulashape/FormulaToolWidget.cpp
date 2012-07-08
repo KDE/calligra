@@ -231,7 +231,7 @@ void FormulaToolWidget::setupformulaButton(QList<QString>list)
      }
     //table->setItem(0,0, newItem);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->horizontalHeader()->hide();
     table->verticalHeader()->hide();
     table->resizeColumnsToContents();
