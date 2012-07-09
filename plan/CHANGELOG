@@ -2,6 +2,8 @@
 Calligra Plan current:
 ----------------------
 
+* Bug 186639 -  Use a more "descriptive" mouse cursor for wiring tasks in the graphic
+
 * Bug 286332 - Auto allocate selected resources to new tasks
 
 * Improve printing:
