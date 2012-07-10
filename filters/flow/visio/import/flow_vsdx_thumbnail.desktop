@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Visio Documents
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.visio;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

@@ -97,15 +97,7 @@ Startup
 *show mysql/pgsql logos for icons fetched & cached at runtime, e.g. from wiki commons, details: http://how-to.wikia.com/wiki/How_to_download_all_image_files_in_a_Wikimedia_Commons_page_or_directory
 
 i18n TODO:
-"Save to Words" -> "Save as Text Document"
-i18nc("Note: do not translate 'Tables'", "Save to Spreadsheet") -> i18n("Save as Spreadsheet")
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Tables application.", cxt.destinationUrl.prettyUrl()) , i18n("Opening in Tables application failed"));
-->
-i18nc("Note: do not translate 'Tables'", "Failed to open %1 in Calligra Tables.", cxt.destinationUrl.prettyUrl()) , i18n("Note: do not translate 'Tables'", "Opening in Calligra Tables"));
-
-i18nc("Note: do not translate 'Words'", "Failed to save %1 to Words applications", cxt.destinationUrl.prettyUrl()) , i18n("Saving to Words application failed"));
-->
-i18n("Failed to save %1 as text document", cxt.destinationUrl.prettyUrl()) , i18n("Saving as text document failed"));
+--
 
 CSV Import TODO:
 *add "Skip empty rows" option
@@ -152,8 +144,7 @@ BUG:301262
 TODO:
 KexiDB
 *MySQL Driver
-**set limit of 255 for Text type (VARCHAR)
-**add config option for the limit
+**add config option for the length limit
 
 2012-06-07
 KexiDB
@@ -175,6 +166,17 @@ Main Window
 
 ===================== Kexi 2.4  =====================
 ~~~~~~~~~~~~~~~~ 2.4.3 ~~~~~~~~~~~~~~~~
+
+2012-06-09
+KexiDB
+*MySQL Driver
+*set limit to 255 characters for Text type (VARCHAR)
+**call "SET SESSION sql_mode='TRADITIONAL'" on opening database - needed to turn warnings about trimming string values into SQL errors
+**practical solution for 'Kexi shows no indication that text is trimmed' bug in case of MySQL: error is displayed eg. "Record inserting on the server failed.Message from server: Data too long for column 'hn' at row 1. SQL statement: INSERT INTO table4 (hn) VALUES ('...................'). Server result: 1406"
+**More info on VARCHAR support in databases: http://www.ispirer.com/wiki/sqlways/mysql/data-types/varchar_n
+CCBUG:301277
+CCBUG:301136
+REVIEW:105182
 
 2012-06-06
 KexiDB

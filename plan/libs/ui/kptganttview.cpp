@@ -43,6 +43,7 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
+#include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
 
@@ -53,6 +54,7 @@
 #include <QMenu>
 #include <QModelIndex>
 #include <QPainter>
+#include <QTabWidget>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -125,14 +127,33 @@ void GanttChartDisplayOptionsPanel::setDefault()
 }
 
 //----
-GanttViewSettingsDialog::GanttViewSettingsDialog( TreeViewBase *view, GanttItemDelegate *delegate, QWidget *parent )
-    : ItemViewSettupDialog( view, true, parent )
+GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view )
+    : ItemViewSettupDialog( view, gantt->treeView(), true, view ),
+    m_gantt( gantt )
 {
     GanttChartDisplayOptionsPanel *panel = new GanttChartDisplayOptionsPanel( delegate );
     /*KPageWidgetItem *page = */insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
+    QTabWidget *tab = new QTabWidget();
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
 
+    m_printingoptions = new GanttPrintingOptionsWidget( this );
+    m_printingoptions->setOptions( gantt->printingOptions() );
+    tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
+    /*KPageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+}
+
+void GanttViewSettingsDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_gantt->setPrintingOptions( m_printingoptions->options());
+    ItemViewSettupDialog::slotOk();
 }
 
 //-------------------------
@@ -149,6 +170,7 @@ bool GanttPrintingOptions::loadContext( const KoXmlElement &settings )
         printRowLabels = (bool)( e.attribute( "print-rowlabels", "0" ).toInt() );
         singlePage = (bool)( e.attribute( "print-singlepage", "0" ).toInt() );
     }
+    kDebug()<<"..........."<<printRowLabels<<singlePage;
     return true;
 }
 
@@ -166,6 +188,21 @@ GanttPrintingOptionsWidget::GanttPrintingOptionsWidget( QWidget *parent )
     setupUi( this );
     setWindowTitle( i18nc( "@title:tab", "Chart" ) );
 }
+
+GanttPrintingOptions GanttPrintingOptionsWidget::options() const
+{
+    GanttPrintingOptions opt;
+    opt.printRowLabels = printRowLabels();
+    opt.singlePage = singlePage();
+    return opt;
+}
+
+void GanttPrintingOptionsWidget::setOptions( const GanttPrintingOptions &opt )
+{
+    setPrintRowLabels( opt.printRowLabels );
+    setSinglePage(opt.singlePage );
+}
+
 
 //----------------
 GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
@@ -188,25 +225,25 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
         c -= printer().pageRect().height();
     }
     kDebug(planDbg())<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
-    printer().setFromTo( documentFirstPage(), documentFirstPage() + ( m_horPages * m_vertPages  ) - 1 );
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
-void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
-{
-    QList<int> pages;
-    if ( printer().fromPage() > 0 ) {
-        pages << printer().fromPage();
-        if ( ! m_gantt->m_printOptions.singlePage ) {
-            int last = printer().toPage();
-            for ( int i = pages.first() + 1; i <= last; ++i ) {
-                pages << i;
-            }
-        }
-    }
-    setPageRange( pages );
-
-    PrintingDialog::startPrinting( removePolicy );
-}
+// void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
+// {
+//     QList<int> pages;
+//     if ( printer().fromPage() > 0 ) {
+//         pages << printer().fromPage();
+//         if ( ! m_gantt->m_printOptions.singlePage ) {
+//             int last = printer().toPage();
+//             for ( int i = pages.first() + 1; i <= last; ++i ) {
+//                 pages << i;
+//             }
+//         }
+//     }
+//     setPageRange( pages );
+//
+//     PrintingDialog::startPrinting( removePolicy );
+// }
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
@@ -229,6 +266,7 @@ void GanttPrintingDialog::slotPrintRowLabelsToogled( bool on )
 void GanttPrintingDialog::slotSinglePageToogled( bool on )
 {
     m_gantt->m_printOptions.singlePage = on;
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 int GanttPrintingDialog::documentLastPage() const
@@ -302,6 +340,12 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     }
 }
 
+GanttTreeView *GanttViewBase::treeView() const
+{
+    QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
+    return static_cast<GanttTreeView*>( v );
+}
+
 bool GanttViewBase::loadContext( const KoXmlElement &settings )
 {
     KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
@@ -356,12 +400,6 @@ void NodeGanttViewBase::setItemModel( ItemModelBase *model )
 ItemModelBase *NodeGanttViewBase::model() const
 {
     return sfModel()->itemModel();
-}
-
-GanttTreeView *NodeGanttViewBase::treeView() const
-{
-    QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
-    return static_cast<GanttTreeView*>( v );
 }
 
 void NodeGanttViewBase::setProject( Project *project )
@@ -621,7 +659,7 @@ void GanttView::setupGui()
 void GanttView::slotOptions()
 {
     kDebug(planDbg());
-    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt->treeView(), m_gantt->delegate(), this );
+    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt, m_gantt->delegate(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -771,6 +809,32 @@ void GanttView::updateReadWrite( bool on )
     m_readWrite = on;
 }
 
+//----
+MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view )
+    : ItemViewSettupDialog( view, gantt->treeView(), true, view ),
+    m_gantt( gantt )
+{
+    QTabWidget *tab = new QTabWidget();
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_printingoptions = new GanttPrintingOptionsWidget( this );
+    m_printingoptions->setOptions( gantt->printingOptions() );
+    tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
+    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+}
+
+void MilestoneGanttViewSettingsDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_gantt->setPrintingOptions( m_printingoptions->options());
+    ItemViewSettupDialog::slotOk();
+}
+
 //------------------------
 MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     : NodeGanttViewBase( parent ),
@@ -881,7 +945,7 @@ MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool 
         m_readWrite( readWrite ),
         m_project( 0 )
 {
-    kDebug(planDbg()) <<" ---------------- KPlato: Creating Milesone GanttView ----------------";
+    kDebug(planDbg()) <<" ---------------- Plan: Creating Milesone GanttView ----------------";
 
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -985,7 +1049,7 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
 void MilestoneGanttView::slotOptions()
 {
     kDebug(planDbg());
-    ItemViewSettupDialog *dlg =  new ItemViewSettupDialog( m_gantt->treeView(), true, this );
+    MilestoneGanttViewSettingsDialog *dlg =  new MilestoneGanttViewSettingsDialog( m_gantt, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1014,6 +1078,18 @@ void MilestoneGanttView::updateReadWrite( bool on )
 KoPrintJob *MilestoneGanttView::createPrintJob()
 {
     return new GanttPrintingDialog( this, m_gantt );
+}
+
+//--------------------
+ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettingsDialog( ViewBase *view,  GanttTreeView *treeview )
+: ItemViewSettupDialog( view, treeview, true, view )
+{
+    QTabWidget *tab = new QTabWidget();
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 }
 
 //------------------------------------------
@@ -1118,7 +1194,8 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, c
 void ResourceAppointmentsGanttView::slotOptions()
 {
     kDebug(planDbg());
-    QPointer<ItemViewSettupDialog> dlg = new ItemViewSettupDialog( treeView(), true, this );
+    QPointer<ItemViewSettupDialog> dlg = new ResourceAppointmentsGanttViewSettingsDialog( this, treeView() );
+//     dlg->addPrintingOptions();
     dlg->exec();
     delete dlg;
 }

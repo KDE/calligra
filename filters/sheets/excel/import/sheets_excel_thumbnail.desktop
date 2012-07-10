@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Excel Spreadsheets
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.ms-excel;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

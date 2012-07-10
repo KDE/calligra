@@ -174,6 +174,10 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the paragraph content rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringParagraphContentRect(const QRectF &paragraphContentRect);
+
     /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
@@ -202,6 +206,9 @@ public:
      * @return the KoTextLayoutRootArea the text is laid-out in. Or 0 if there is no shape for that text character.
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
+
+
+    KoTextLayoutRootArea *rootAreaForPoint(const QPointF &point) const;
 
     /**
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .

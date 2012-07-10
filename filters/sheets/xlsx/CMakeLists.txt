@@ -40,6 +40,8 @@ install( FILES
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
+install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
 ########## unit tests ###################
 
 set(TestFormulaParser_SRCS

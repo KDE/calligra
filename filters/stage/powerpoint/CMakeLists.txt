@@ -18,3 +18,4 @@ target_link_libraries(powerpointimport ppttoodplib komain)
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
+install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

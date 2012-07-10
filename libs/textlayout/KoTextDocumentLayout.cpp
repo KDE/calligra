@@ -106,6 +106,7 @@ public:
     bool anAnchorIsPlaced;
     int anchoringSoftBreak;
     QRectF anchoringParagraphRect;
+    QRectF anchoringParagraphContentRect;
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
@@ -348,6 +349,18 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
     return 0;
 }
 
+KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &point) const
+{
+    foreach(KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (!rootArea->isDirty()) {
+            if (rootArea->boundingRect().contains(point)) {
+                return rootArea;
+            }
+        }
+    }
+    return 0;
+}
+
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
@@ -442,6 +455,11 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
+void KoTextDocumentLayout::setAnchoringParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    d->anchoringParagraphContentRect = paragraphContentRect;
+}
+
 void KoTextDocumentLayout::setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
 {
     d->anchoringLayoutEnvironmentRect = layoutEnvironmentRect;
@@ -506,6 +524,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
@@ -861,7 +880,8 @@ void KoTextDocumentLayout::setContinuationObstruction(KoTextLayoutObstruction *c
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()
 {
     if (d->continuationObstruction) {
-        return d->freeObstructions + d->anchoredObstructions.values() << d->continuationObstruction;
+        // () is needed so we append to a local list and not anchoredObstructions
+        return (d->freeObstructions + d->anchoredObstructions.values()) << d->continuationObstruction;
     } else {
         return d->freeObstructions + d->anchoredObstructions.values();
     }

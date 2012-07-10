@@ -29,7 +29,9 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoSelection.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeStroke.h>
+#include <KoViewConverter.h>
 
 #include <KLocale>
 #include <KGlobalSettings>
@@ -94,7 +96,9 @@ protected:
                 painter.setPen(Qt::NoPen);
                 QPainterPath p;
                 p.addRect(rect());
-                m_fill->paint(painter, p);
+                KoViewConverter converter;
+                KoShapePaintingContext context;
+                m_fill->paint(painter, converter, context, p);
             }
         } else {
             painter.setFont(KGlobalSettings::smallestReadableFont());

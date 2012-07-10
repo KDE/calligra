@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Word 2007 Documents
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true
