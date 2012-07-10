@@ -36,10 +36,13 @@
 
 #include "KDChartBarDiagram"
 
+
 class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
+class KoPageLayoutWidget;
+class PrintingHeaderFooter;
 
 class KAction;
 
@@ -172,7 +175,7 @@ class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsDialog( ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -442,7 +445,7 @@ class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -450,8 +453,15 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0 );
 
+protected slots:
+    void slotOk();
+
+private:
+    ViewBase *m_base;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 

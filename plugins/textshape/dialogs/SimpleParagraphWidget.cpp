@@ -78,6 +78,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
 
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change paragraph format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
 
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
@@ -295,7 +296,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     if (m_blockSignals) return;
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
-    llp.setLevel(0);
+    llp.setLevel(1);
     m_tool->textEditor()->setListProperties(llp);
 }
 

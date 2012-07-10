@@ -52,13 +52,13 @@ public:
     virtual ~KWPageBackground()
     {
     }
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
     {
         if (background()) {
             applyConversion(painter, converter);
             QPainterPath p;
             p.addRect(QRectF(QPointF(), size()));
-            background()->paint(painter, p);
+            background()->paint(painter, converter, paintContext, p);
         }
     }
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)

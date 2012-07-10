@@ -22,7 +22,6 @@
 import QtQuick 1.0
 import CalligraActive 1.0
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.metadatamodels 0.1 as MetadataModels
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 ListView {
@@ -36,21 +35,8 @@ ListView {
 
     PlasmaCore.SortFilterModel {
         id: metadataModel
-        sourceModel: MetadataModels.MetadataModel {
-            id: metadataInternalModel
-            resourceType: "nfo:" + typeFilter
-            sortOrder: Qt.AscendingOrder
-
-            onResourceTypeChanged: {
-                if (resourceType == "nfo:PaginatedTextDocument") {
-                    metadataModel.filterRole = "mimeType";
-                    metadataModel.filterRegExp = "application/vnd.oasis.opendocument.text";
-                } else {
-                    metadataModel.filterRole = "";
-                    metadataModel.filterRegExp = "";
-                }
-            }
-        }
+        sourceModel: metadataInternalModel
+        sortOrder: Qt.AscendingOrder
     }
 
     model: metadataModel
@@ -74,5 +60,22 @@ ListView {
 
             onClicked: homeScreen.openDocument(model["url"]);
         }
+
+    onTypeFilterChanged: {
+        metadataInternalModel.resourceType = "nfo:" + typeFilter;
+        if (typeFilter == "PaginatedTextDocument") {
+            metadataModel.filterRole = "mimeType";
+            metadataModel.filterRegExp = "application/vnd.oasis.opendocument.text";
+        } else {
+            metadataModel.filterRole = "";
+            metadataModel.filterRegExp = "";
+        }
+    }
+
+    PlasmaComponents.Label {
+        text: "No files here"
+        anchors.centerIn: parent
+        visible: recentFilesListView.count == 0 && typeFilter != ""
+    }
 }
 

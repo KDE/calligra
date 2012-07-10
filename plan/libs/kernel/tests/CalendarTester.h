@@ -41,7 +41,7 @@ private slots:
     void workIntervalsFullDays();
 
 private:
-    KTempDir m_tmp;
+    void removeDir(const QString &dir);
 };
 
 } //namespace KPlato

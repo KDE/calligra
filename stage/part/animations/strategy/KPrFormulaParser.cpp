@@ -677,7 +677,7 @@ qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache 
         return M_PI;
     }
     else if (identifier == "e") {
-        return exp(1);
+        return exp(1.0);
     }
     return 0.0;
 }

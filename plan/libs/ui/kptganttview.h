@@ -65,6 +65,7 @@ class MyKDGanttView;
 class GanttPrintingOptions;
 class GanttViewBase;
 class NodeGanttViewBase;
+class GanttPrintingOptionsWidget;
 
 //---------------------------------------
 class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
@@ -90,8 +91,14 @@ class GanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit GanttViewSettingsDialog( TreeViewBase *view, GanttItemDelegate *delegate, QWidget *parent = 0 );
+    explicit GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view );
 
+protected slots:
+    void slotOk();
+
+private:
+    GanttViewBase *m_gantt;
+    GanttPrintingOptionsWidget *m_printingoptions;
 };
 
 //--------------------
@@ -113,12 +120,16 @@ class KPLATOUI_EXPORT GanttPrintingOptionsWidget : public QWidget, public Ui::Ga
 public:
     explicit GanttPrintingOptionsWidget( QWidget *parent = 0 );
 
+    GanttPrintingOptions options() const;
+
     void setPrintRowLabels( bool value ) { ui_printRowLabels->setChecked( value ); }
     bool printRowLabels() const { return ui_printRowLabels->isChecked(); }
     
     void setSinglePage( bool value )  { value ? ui_singlePage->setChecked( false ) : ui_multiplePages->setChecked( true ); }
     bool singlePage() const { return ui_singlePage->isChecked(); }
 
+public slots:
+    void setOptions(const GanttPrintingOptions &opt);
 };
 
 class GanttPrintingDialog : public PrintingDialog
@@ -127,7 +138,7 @@ class GanttPrintingDialog : public PrintingDialog
 public:
     GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt );
     
-    void startPrinting( RemovePolicy removePolicy );
+//     void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
     void printPage( int page, QPainter &painter );
     
@@ -160,8 +171,14 @@ class GanttViewBase : public KDGantt::View
 public:
     GanttViewBase( QWidget *parent );
 
+    GanttTreeView *treeView() const;
+    GanttPrintingOptions printingOptions() const { return m_printOptions; }
+
     bool loadContext( const KoXmlElement &settings );
     void saveContext( QDomElement &settings ) const;
+
+public slots:
+    void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
 
 protected:
     friend class GanttPrintingDialog;
@@ -180,8 +197,6 @@ public:
     ItemModelBase *model() const;
     void setProject( Project *project );
     Project *project() const { return m_project; }
-
-    GanttTreeView *treeView() const;
     
     GanttItemDelegate *delegate() const { return m_ganttdelegate; }
     
@@ -192,8 +207,6 @@ protected:
     Project *m_project;
     GanttItemDelegate *m_ganttdelegate;
     NodeItemModel m_defaultModel;
-    friend class GanttPrintingDialog;
-    GanttPrintingOptions m_printOptions;
     KDGantt::TreeViewRowController *m_rowController;
 };
 
@@ -286,6 +299,21 @@ private:
     KAction *actionShowProject;
 };
 
+class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
+{
+    Q_OBJECT
+public:
+    MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view );
+
+protected slots:
+    virtual void slotOk();
+
+private:
+    GanttViewBase *m_gantt;
+    GanttPrintingOptionsWidget *m_printingoptions;
+};
+
+
 class KPLATOUI_EXPORT MilestoneKDGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
@@ -360,6 +388,13 @@ private:
     bool m_showNoInformation;
     Project *m_project;
 
+};
+
+class ResourceAppointmentsGanttViewSettingsDialog : public ItemViewSettupDialog
+{
+    Q_OBJECT
+public:
+    ResourceAppointmentsGanttViewSettingsDialog( ViewBase *view, GanttTreeView *treeview );
 };
 
 class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
