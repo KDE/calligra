@@ -34,7 +34,6 @@ class KPrViewModePreviewShapeAnimations;
 class KPrCustomAnimationItem;
 class KPrEditAnimationsWidget;
 class QModelIndex;
-class QGridLayout;
 
 /**
  * Shape animations docker widget: let's edition of animations.

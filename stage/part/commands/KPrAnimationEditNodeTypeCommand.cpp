@@ -27,42 +27,6 @@
 #include "KLocale"
 #include "KDebug"
 
-KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation,
-                                                                 KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
-                                                                 KPrShapeAnimation::Node_Type newType, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , m_animation(animation)
-    , m_newStep(newStep)
-    , m_newSubStep(newSubStep)
-    , m_newType(newType)
-    , m_activePage(0)
-{
-    m_children = QList<KPrShapeAnimation *>();
-    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
-    m_oldStep = m_animation->step();
-    m_oldSubStep = m_animation->subStep();
-    m_oldType = m_animation->NodeType();
-
-}
-
-KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
-                                                                 KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
-                                                                 QList<KPrShapeAnimation *> children, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , m_animation(animation)
-    , m_newStep(newStep)
-    , m_newSubStep(newSubStep)
-    , m_newType(newType)
-    , m_children(children)
-    , m_activePage(0)
-{
-    m_substeps = QList<KPrAnimationSubStep *>();
-    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
-    m_oldStep = m_animation->step();
-    m_oldSubStep = m_animation->subStep();
-    m_oldType = m_animation->NodeType();
-}
-
 KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
                                                                  KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
                                                                  QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps,

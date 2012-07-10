@@ -98,6 +98,10 @@ public slots:
     bool setTriggerEvent(const QModelIndex &index,const KPrShapeAnimation::Node_Type type);
 
 private:
+    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
+                                   KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,
+                                   QList<KPrAnimationSubStep *> movedSubSteps, KPrPage *activePage = 0);
+
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;
     KPrCustomAnimationItem *m_mainRoot;
