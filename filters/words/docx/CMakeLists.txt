@@ -61,8 +61,9 @@ ENDIF(FALSE)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
   words_docx_import.desktop
 #todo  words_docx_export.desktop
+  words_docx_thumbnail.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )

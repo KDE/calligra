@@ -71,5 +71,11 @@ ListView {
             metadataModel.filterRegExp = "";
         }
     }
+
+    PlasmaComponents.Label {
+        text: "No files here"
+        anchors.centerIn: parent
+        visible: recentFilesListView.count == 0 && typeFilter != ""
+    }
 }
 

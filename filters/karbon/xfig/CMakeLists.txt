@@ -14,5 +14,5 @@ target_link_libraries( karbonxfigimport
 
 install(TARGETS karbonxfigimport  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-
 install( FILES  karbon_xfig_import.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES  karbon_xfig_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

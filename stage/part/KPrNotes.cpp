@@ -211,11 +211,14 @@ QPixmap KPrNotes::generateThumbnail( const QSize& )
 
 void KPrNotes::updatePageThumbnail()
 {
-    // set image at least to 150 dpi we might need more when printing
     QSizeF thumbnameSize(m_thumbnailShape->size());
 
     if (!thumbnameSize.isNull()) {
-        KoImageData *imageData = m_imageCollection->createImageData(m_doc->pageThumbnail(m_page, (m_thumbnailShape->size() * 150 / 72.).toSize()).toImage());
+        // set image at least to 150 dpi we might need more when printing
+        thumbnameSize *= 150 / 72.;
+        // using KoPADocument::pageThumbnail(...) ensures that the page data is up-to-date
+        const QImage pageThumbnail = m_doc->pageThumbImage(m_page, thumbnameSize.toSize());
+        KoImageData *imageData = m_imageCollection->createImageData(pageThumbnail);
         m_thumbnailShape->setUserData( imageData );
     }
 }

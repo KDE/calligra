@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "10.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "10")
+set(GENERIC_CALLIGRA_LIB_VERSION "11.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "11")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -261,8 +261,8 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-	file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-	string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
@@ -320,20 +320,26 @@ endif(WIN32)
 ##
 ## Test for Fontconfig
 ##
-macro_optional_find_package(Fontconfig)
-macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Fontconfig)
+    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 ##
 ## Test for Freetype
 ##
-macro_optional_find_package(Freetype)
-macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Freetype)
+    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+    add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
   
 ##
@@ -515,7 +521,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.12)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.13)
     set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"

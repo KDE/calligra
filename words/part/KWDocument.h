@@ -77,6 +77,8 @@ public:
 
     // KoDocument interface
     /// reimplemented from KoDocument
+    virtual QPixmap generatePreview(const QSize& size);
+    /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
     virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);

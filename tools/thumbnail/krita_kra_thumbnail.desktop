@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Krita Documents
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-krita;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true
