@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=WMF Images
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=image/x-wmf;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

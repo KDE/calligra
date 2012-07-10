@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=KPresenter Presentations
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-kpresenter;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

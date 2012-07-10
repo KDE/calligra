@@ -9,4 +9,5 @@ target_link_libraries(wpgimport komain ${LIBWPG_LIBRARIES} ${LIBWPG_STREAM_LIBRA
 
 install(TARGETS wpgimport DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES karbon_wpg_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES karbon_wpg_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
