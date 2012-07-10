@@ -26,6 +26,8 @@
 
 #include <kis_config.h>
 #include <kis_image.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 
 struct KisCoordinatesConverter::Private {
@@ -60,7 +62,11 @@ void KisCoordinatesConverter::recalculateTransformations() const
 
     QRectF irect = imageRectInWidgetPixels();
     QRectF wrect = QRectF(QPoint(0,0), m_d->canvasWidgetSize);
-    QRectF rrect = irect & wrect;
+    QRectF rrect;
+    if(m_d->image->isCanvasInfinite())
+        rrect = irect | wrect;
+    else
+        rrect = irect & wrect;
 
     QTransform reversedTransform = flakeToWidgetTransform().inverted();
     QRectF     canvasBounds      = reversedTransform.mapRect(rrect);
@@ -259,12 +265,22 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
     *modelRect = viewportRect;
 }
 
+QRectF KisCoordinatesConverter::totalImageBounds() const
+{
+    QRectF boundingRect = QRectF(m_d->image.data()->bounds());
+    return boundingRect | QRectF(QPointF(0,0), m_d->canvasWidgetSize) | QRectF((QApplication::desktop()->screenGeometry(-1)));
+}
+
 QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
 {
     if(!m_d->image)
         return QPointF();
     
-    QPolygonF poly = imageToWidget(QPolygon(m_d->image->bounds()));
+    QPolygonF poly;
+    if(m_d->image.data()->isCanvasInfinite())
+        imageToWidget(QPolygon(totalImageBounds().toRect()));
+    else
+        imageToWidget(QPolygon(m_d->image->bounds()));
     return (poly[0] + poly[1] + poly[2] + poly[3]) / 4.0;
 }
 
@@ -274,13 +290,19 @@ QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
 {
     if(!m_d->image) return QRectF();
-    return imageToWidget(m_d->image->bounds());
+    if(m_d->image.data()->isCanvasInfinite())
+        return imageToWidget(totalImageBounds());
+    else
+        return imageToWidget(m_d->image->bounds());
 }
 
 QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
 {
     if(!m_d->image) return QRectF();
-    return imageToViewport(m_d->image->bounds());
+    if(m_d->image->isCanvasInfinite())
+        return imageToViewport(totalImageBounds());
+    else
+        return imageToViewport(m_d->image->bounds());
 }
 
 QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
@@ -289,7 +311,11 @@ QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 
     qreal scaleX, scaleY;
     imageScale(&scaleX, &scaleY);
-    QSize imageSize = m_d->image->size();
+    QSize imageSize;
+    if(m_d->image->isCanvasInfinite())
+        imageSize = totalImageBounds().toRect().size();
+    else
+        imageSize = m_d->image->size();
 
     return QSizeF(imageSize.width() * scaleX, imageSize.height() * scaleY);
 }

@@ -127,6 +127,7 @@ public:
 
 private:
     void recalculateTransformations() const;
+    QRectF totalImageBounds() const;
 
 private:
     struct Private;

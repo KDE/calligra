@@ -181,8 +181,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
-    if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();
+    /*if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();*/
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     newImage.fill(0);
@@ -274,8 +274,8 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
-    if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();
+    /*if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();*/
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
     QRect imageRect =
         m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
@@ -317,8 +317,8 @@ void KisPrescaledProjection::updateViewportSize()
 {
     QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
     qDebug() << ppVar(imageRect);
-    if(!image().isNull() && image()->isCanvasInfinite())
-        m_d->canvasSize = imageRect.toRect().size();
+    /*if(!image().isNull() && image()->isCanvasInfinite())
+        m_d->canvasSize = imageRect.toRect().size();*/
     QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
                        qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
     QRectF minimalRect(QPointF(0,0), minimalSize);
@@ -368,8 +368,8 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
 void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
                                                      KisPPUpdateInfoSP info)
 {
-    if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();
+    /*if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();*/
     m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas
