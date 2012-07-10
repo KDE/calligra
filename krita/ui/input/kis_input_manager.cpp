@@ -367,7 +367,11 @@ void KisInputManager::Private::setupActions()
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
 
     shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
@@ -386,7 +390,11 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisRotateCanvasAction::RotateLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_4);
@@ -405,7 +413,11 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setWheel(KisShortcut::WheelUp);
