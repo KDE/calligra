@@ -33,6 +33,6 @@ install(TARGETS wmfexport
 
 ########### install files ###############
 
-install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop
+install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop karbon_wmf_thumbnail.desktop
         DESTINATION ${SERVICES_INSTALL_DIR})
 
