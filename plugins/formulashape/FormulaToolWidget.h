@@ -57,6 +57,9 @@ public slots:
 
     void insertSymbol(QLabel* label);
 
+    void insertFormula(int,int);
+
+    void insertSymbol(QLabel* label);
 
 private:
     void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
