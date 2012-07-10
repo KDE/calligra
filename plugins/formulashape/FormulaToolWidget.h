@@ -53,10 +53,9 @@ public:
 public slots:
     void insertSymbol(QTableWidgetItem* item);
 
-    void insertFormula(int,int);
-
     void insertSymbol(QLabel* label);
 
+    void insertFormula(int,int);
 
 private:
     void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
