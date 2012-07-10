@@ -37,6 +37,7 @@
 #include <KoPAUtil.h>
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
+#include <KoShapePaintingContext.h>
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -64,7 +65,8 @@ void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &
     painter.setClipRect(clipRect);
     painter.translate(m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y());
     KoViewConverter *converter = m_view->viewConverter(m_canvas);
-    view()->activePage()->paintBackground(painter, *converter);
+    KoShapePaintingContext context;
+    view()->activePage()->paintBackground(painter, *converter, context);
     canvas->shapeManager()->paint(painter, *converter, true);
 }
 

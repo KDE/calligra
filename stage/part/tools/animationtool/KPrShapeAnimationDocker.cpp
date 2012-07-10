@@ -232,9 +232,15 @@ void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    // Don't update if shape is already selected
+    if (selection->selectedShapes().contains(shape)) {
+        return;
+    }
+
     foreach (KoShape* shape, selection->selectedShapes()) {
         shape->update();
     }
+
     selection->deselectAll();
     selection->select(shape);
     selection->update();
@@ -296,6 +302,13 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
     if (!selection->selectedShapes().isEmpty()) {
         if (selection->selectedShapes().first()) {
             KoShape *selectedShape = selection->selectedShapes().first();
+            QModelIndex currentIndex = m_animationsView->currentIndex();
+            if (currentIndex.isValid()) {
+                KoShape *currentSelectedShape = itemByIndex(currentIndex)->shape();
+                if (currentSelectedShape == selectedShape) {
+                    return;
+                }
+            }
             QModelIndex index = m_animationsModel->indexByShape(selectedShape);
             if (index.isValid()) {
                 m_animationsView->setCurrentIndex(index);
