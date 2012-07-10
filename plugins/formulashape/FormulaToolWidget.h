@@ -52,23 +52,11 @@ public:
 
 public slots:
     void insertSymbol(QTableWidgetItem* item);
-<<<<<<< HEAD
-
-    void insertSymbol(QLabel* label);
-
-    void insertFormula(int,int);
-
-=======
 
     void insertFormula(int,int);
 
     void insertSymbol(QLabel* label);
 
-    void insertFormula(int,int);
-
-    void insertSymbol(QLabel* label);
-
->>>>>>> origin/formulashape-abhishek
 private:
     void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
 
