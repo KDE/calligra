@@ -1242,6 +1242,16 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
+        d->ui.legendShowFrame->setChecked(d->shape->legend()->showFrame());
+        d->ui.legendTitle->blockSignals(false);
+
+        if (d->shape->legend()->expansion() == HighLegendExpansion) {
+            d->ui.legendOrientationIsVertical->setChecked(true);
+        } else {
+            d->ui.legendOrientationIsHorizontal->setChecked(true);
+        }
     }
 
     bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
@@ -1770,8 +1780,8 @@ void ChartConfigWidget::ui_axisLabelsFontChanged()
 void ChartConfigWidget::ui_legendFontChanged()
 {
     QFont font = d->legendFontEditorDialog.fontChooser->font();
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->setFontSize(font.pointSizeF());
+
+    emit legendFontChanged(font);
 }
 
 void ChartConfigWidget::ui_axisAdded()

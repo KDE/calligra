@@ -62,6 +62,7 @@
 #include "ChartConfigWidget.h"
 #include "KDChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
+#include "commands/LegendCommand.h"
 
 
 using namespace KChart;
@@ -357,7 +358,9 @@ QWidget *ChartTool::createOptionWidget()
             this,   SLOT(setLegendShowFrame(bool)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()),
-            widget,     SLOT(update()));
+            widget,   SLOT(update()));
+    connect(d->shape->legend(), SIGNAL(updateConfigWidget()),
+            widget,             SLOT(update()));
 
 
     return widget;
@@ -595,8 +598,11 @@ void ChartTool::setLegendTitle(const QString &title)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setTitle(title);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    if (command!=0) {
+        command->setLegendTitle(title);
+        canvas()->addCommand(command);
+    }
 }
 
 void ChartTool::setLegendFont(const QFont &font)
@@ -605,8 +611,11 @@ void ChartTool::setLegendFont(const QFont &font)
     Q_ASSERT(d->shape->legend());
 
     // There only is a general font, for the legend items and the legend title
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    if (command!=0) {
+        command->setLegendFont(font);
+        canvas()->addCommand(command);
+    }
 }
 
 void ChartTool::setLegendFontSize(int size)
@@ -614,8 +623,11 @@ void ChartTool::setLegendFontSize(int size)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setFontSize(size);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    if (command!=0) {
+        command->setLegendFontSize(size);
+        canvas()->addCommand(command);
+    }
 }
 
 void ChartTool::setLegendOrientation(Qt::Orientation orientation)
@@ -623,8 +635,11 @@ void ChartTool::setLegendOrientation(Qt::Orientation orientation)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setExpansion(QtOrientationToLegendExpansion(orientation));
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    if (command!=0) {
+        command->setLegendExpansion(QtOrientationToLegendExpansion(orientation));
+        canvas()->addCommand(command);
+    }
 }
 
 void ChartTool::setLegendAlignment(Qt::Alignment alignment)
@@ -673,8 +688,11 @@ void ChartTool::setLegendShowFrame(bool show)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setShowFrame(show);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    if (command!=0) {
+        command->setLegendShowFrame(show);
+        canvas()->addCommand(command);
+    }
 }
 
 
