@@ -41,7 +41,7 @@ set(kritapsdexport_PART_SRCS
 
 kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
 target_link_libraries(kritapsdexport kritaui )
-#install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES krita_psd_import.desktop 
 #               krita_psd_export.desktop  
