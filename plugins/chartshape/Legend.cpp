@@ -347,7 +347,6 @@ void Legend::setExpansion(LegendExpansion expansion)
     d->kdLegend->setOrientation(LegendExpansionToQtOrientation(expansion));
     d->pixmapRepaintRequested = true;
 
-    qDebug()<<d->expansion;
     emit updateConfigWidget();
 }
 
