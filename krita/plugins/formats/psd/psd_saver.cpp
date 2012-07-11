@@ -22,9 +22,67 @@
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
+#include <KoCompositeOp.h>
+
+#include <kis_annotation.h>
+#include <kis_types.h>
+#include <kis_paint_layer.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_paint_device.h>
+#include <kis_transaction.h>
+
+#include "psd.h"
+#include "psd_header.h"
+#include "psd_colormode_block.h"
+#include "psd_utils.h"
+#include "psd_resource_section.h"
+#include "psd_layer_section.h"
+#include "psd_resource_block.h"
+#include "psd_image_data.h"
+
+
+
+QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
+{
+    PSDColorMode colorMode = UNKNOWN;
+    if (colorSpaceId == RGBAColorModelID.id()) {
+        colorMode = RGB;
+    }
+    else if (colorSpaceId == CMYKAColorModelID.id()) {
+        colorMode = CMYK;
+    }
+    else if (colorSpaceId == GrayAColorModelID.id()) {
+        colorMode = Grayscale;
+    }
+    else if (colorSpaceId == LABAColorModelID.id()) {
+        colorMode = Lab;
+    }
+
+    quint16 depth = 0;
+
+    if (colorDepthId ==  Integer8BitsColorDepthID.id()) {
+        depth = 8;
+    }
+    else if (colorDepthId == Integer16BitsColorDepthID.id()) {
+        depth = 16;
+    }
+    else if (colorDepthId == Float32BitsColorDepthID.id()) {
+        depth = 32;
+    }
+    else if (colorDepthId == Float32BitsColorDepthID.id()) {
+        depth = 32;
+    }
+
+    return QPair<PSDColorMode, quint16>(colorMode, depth);
+}
+
 
 
 PSDSaver::PSDSaver(KisDoc2 *doc)
@@ -58,16 +116,25 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP laye
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
     // Open file for writing
-#if 0
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-    uint height = image->height();
-    uint width = image->width();
-#endif
+    QFile f(uri.toLocalFile());
+    f.open(QIODevice::WriteOnly);
+
+    PSDHeader header;
+    header.version = 2;
+    header.nChannels = image->colorSpace()->channelCount();
+    header.width = image->width();
+    header.height = image->height();
+
+    QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(image->colorSpace()->colorModelId().id(),
+                                                                          image->colorSpace()->colorDepthId().id());
+    header.colormode = colordef.first;
+    header.channelDepth = colordef.second;
+
+    if (!header.write(&f)) return KisImageBuilder_RESULT_FAILURE;
+
+    f.close();
 
     return KisImageBuilder_RESULT_OK;
 }
