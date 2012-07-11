@@ -18,6 +18,7 @@
  */
 
 #include "KoBridgeActions.h"
+#include "BibliographyDb.h"
 #include "KoInlineCite.h"
 #include "KoTextEditor.h"
 #include <KoOdfBibliographyConfiguration.h>
@@ -72,13 +73,19 @@ void InsertBibliographyBridgeAction::performAction()
 
 }
 
-InsertCiteRecordBridgeAction::InsertCiteRecordBridgeAction(const QVariantMap &map) :
-    KoBridgeAction(map, KoBridgeAction::InsertCiteRecord)
+InsertCiteRecordBridgeAction::InsertCiteRecordBridgeAction(const QVariantMap &map, BibliographyDb *biblioDb) :
+    KoBridgeAction(map, KoBridgeAction::InsertCiteRecord),
+    m_db(biblioDb)
 {
     performAction();
 }
 
 void InsertCiteRecordBridgeAction::performAction()
 {
+    KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
 
+    foreach(const QString field, KoOdfBibliographyConfiguration::bibDataFields) {
+        cite->setField(field, m_data[field].toString());
+    }
+    m_db->insertCitation(cite);
 }

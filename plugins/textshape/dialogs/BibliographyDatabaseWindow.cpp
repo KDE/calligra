@@ -83,7 +83,11 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
 
 BibliographyDatabaseWindow::~BibliographyDatabaseWindow()
 {
-    delete m_table;
+    if (m_table) {
+        m_table->submitAll();
+        delete m_table;
+        m_table = 0;
+    }
 }
 
 int BibliographyDatabaseWindow::loadBibliographyDbs()

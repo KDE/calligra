@@ -24,6 +24,7 @@
 
 class QDataStream;
 class KoTextEditor;
+class BibliographyDb;
 
 class KoBridgeAction
 {
@@ -66,8 +67,10 @@ private:
 class InsertCiteRecordBridgeAction : public KoBridgeAction
 {
 public:
-    InsertCiteRecordBridgeAction(const QVariantMap &map);
+    InsertCiteRecordBridgeAction(const QVariantMap &map, BibliographyDb *biblioDb);
     virtual void performAction();
+private:
+    BibliographyDb *m_db;
 };
 
 #endif // BRIDGEACTION_H

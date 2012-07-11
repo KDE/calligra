@@ -221,7 +221,7 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:bibliography-mark", false);
 
-    foreach(QString type, KoOdfBibliographyConfiguration::bibDataFields) {
+    foreach(const QString &type, KoOdfBibliographyConfiguration::bibDataFields) {
         if (!value(type).isEmpty()) {
             writer->addAttribute(qPrintable(QString("text:").append(type)), value(type));
         }

@@ -18,7 +18,8 @@
  */
 
 #include "EditFiltersDialog.h"
-#include "BibliographyDb.h"
+
+#include <BibliographyDb.h>
 
 #include <KComboBox>
 #include <KLineEdit>
