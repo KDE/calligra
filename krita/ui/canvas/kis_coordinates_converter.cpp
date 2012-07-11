@@ -268,7 +268,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 QRectF KisCoordinatesConverter::totalImageBounds() const
 {
     QRectF boundingRect = QRectF(m_d->image.data()->bounds());
-    return boundingRect | QRectF(QPointF(0,0), m_d->canvasWidgetSize) | QRectF((QApplication::desktop()->screenGeometry(-1)));
+    return QRectF(boundingRect | imageToWidget(QRectF(QPointF(0,0), m_d->canvasWidgetSize)));
 }
 
 QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const

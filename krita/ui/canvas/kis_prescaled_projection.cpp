@@ -183,6 +183,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 
     /*if(!image().isNull() && image()->isCanvasInfinite())
         updateViewportSize();*/
+    qDebug() << ppVar(m_d->viewportSize);
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     newImage.fill(0);
@@ -193,6 +194,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
      * outside QImage and copyQImage will not chatch it
      */
     QRect newViewportRect = QRect(QPoint(0,0), m_d->viewportSize);
+    //if(!image().isNull() && image()->isCanvasInfinite())
+        //newViewportRect = m_d->coordinatesConverter->;
     QRect oldViewportRect = newViewportRect.translated(alignedOffset);
 
     QRegion updateRegion = newViewportRect;
@@ -316,14 +319,27 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 void KisPrescaledProjection::updateViewportSize()
 {
     QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
-    qDebug() << ppVar(imageRect);
+    //qDebug() << ppVar(imageRect);
     /*if(!image().isNull() && image()->isCanvasInfinite())
         m_d->canvasSize = imageRect.toRect().size();*/
-    QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
-                       qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
-    QRectF minimalRect(QPointF(0,0), minimalSize);
+    if(!image().isNull() && image()->isCanvasInfinite())
+    {
 
-    m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
+        QSizeF maximalSize(qMax(imageRect.width(), (qreal)m_d->canvasSize.width()),
+                           qMax(imageRect.height(), (qreal)m_d->canvasSize.height()));
+        QRectF maximalRect(QPointF(0,0), maximalSize);
+
+        m_d->viewportSize = m_d->viewportSize.expandedTo( m_d->coordinatesConverter->widgetToViewport(maximalRect).toAlignedRect().size() );
+    }
+    else
+    {
+
+        QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
+                           qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
+        QRectF minimalRect(QPointF(0,0), minimalSize);
+
+        m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
+    }
 
     if (m_d->prescaledQImage.isNull() ||
         m_d->prescaledQImage.size() != m_d->viewportSize) {
