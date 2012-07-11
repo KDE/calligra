@@ -106,14 +106,33 @@ void BibliographyDb::closeDb()
     m_db.close();
 }
 
-QSqlError BibliographyDb::lastError() const
+QString BibliographyDb::lastError() const
 {
-    return m_model->lastError();
+    return m_model->lastError().text();
 }
 
+bool BibliographyDb::isLastErrorValid() const
+{
+    return m_model->lastError().isValid();
+}
 bool BibliographyDb::isValid() const
 {
     return m_valid;
+}
+
+int BibliographyDb::rowCount() const
+{
+    return m_model->rowCount();
+}
+
+void BibliographyDb::removeRow(int index)
+{
+    m_model->removeRow(index);
+}
+
+void BibliographyDb::submitAll()
+{
+    m_model->submitAll();
 }
 
 bool BibliographyDb::createTable()

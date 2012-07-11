@@ -20,6 +20,8 @@
 #ifndef BIBLIOGRAPHYDB_H
 #define BIBLIOGRAPHYDB_H
 
+#include "kotext_export.h"
+
 #include <QObject>
 #include <QSqlDatabase>
 #include <QMap>
@@ -32,7 +34,7 @@ class QSortFilterProxyModel;
 
 class KoInlineCite;
 
-class BibliographyDb : public QObject
+class KOTEXT_EXPORT BibliographyDb : public QObject
 {
     Q_OBJECT
 public:
@@ -41,8 +43,12 @@ public:
     bool openDb();
     bool deleteDb();
     void closeDb();
-    QSqlError lastError() const;
+    QString lastError() const;
     bool isValid() const;
+    bool isLastErrorValid() const;
+    int rowCount() const;
+    void removeRow(int index);
+    void submitAll();
     bool createTable();
     QSqlTableModel* tableModel();
     QSortFilterProxyModel* proxyModel();

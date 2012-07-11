@@ -18,10 +18,11 @@
  */
 
 #include "BibliographyDatabaseWindow.h"
-#include "BibliographyDb.h"
 #include "InsertCitationDialog.h"
 #include "EditFiltersDialog.h"
 #include "BibliographyTypeEntryDelegate.h"
+
+#include <BibliographyDb.h>
 
 #include <QTableView>
 #include <QHeaderView>
@@ -98,7 +99,7 @@ int BibliographyDatabaseWindow::loadBibliographyDbs()
 void BibliographyDatabaseWindow::tableChanged(int index)
 {
     if (m_table) {
-        m_table->tableModel()->submitAll();
+        m_table->submitAll();
         delete m_table;
     }
 

@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "InsertCitationDialog.h"
-#include "BibliographyDb.h"
+
+#include <BibliographyDb.h>
 
 #include <KAction>
 #include <KDebug>
@@ -26,10 +27,6 @@
 #include <KoTextDocument.h>
 
 #include <QMessageBox>
-#include <QSqlRecord>
-#include <QSqlTableModel>
-#include <QDataWidgetMapper>
-#include <QSqlError>
 
 InsertCitationDialog::InsertCitationDialog(KoTextEditor *editor ,QWidget *parent) :
     QDialog(parent),
@@ -104,12 +101,12 @@ void InsertCitationDialog::insert()
 
     if (m_mode == InsertCitationDialog::DB) {
 
-        if (!m_table->insertCitation(toCite()) && m_table->lastError().isValid()) {
+        if (!m_table->insertCitation(toCite()) && m_table->isLastErrorValid()) {
             QMessageBox::critical(this, i18n("Error"), QString(i18n("Unable to insert citation record to database. "))
-                                  .append(m_table->lastError().text()), QMessageBox::Ok);
+                                  .append(m_table->lastError()), QMessageBox::Ok);
 
             //Remove invalid row appended last
-            m_table->tableModel()->removeRow(m_table->tableModel()->rowCount() - 1);
+            m_table->removeRow(m_table->rowCount() - 1);
             return;
         }
 
