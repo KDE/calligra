@@ -113,7 +113,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
             channelInfo.compressionType = Compression::RLE;
-            for (int row = 0; row < m_header->height; row++ ) {
+            for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
                     psdread(io,(quint16*)&rlelength);
                 }
@@ -218,7 +218,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -258,7 +258,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
@@ -313,7 +313,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -359,7 +359,7 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
@@ -421,7 +421,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
 
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -467,7 +467,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
