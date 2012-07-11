@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=XFig Images
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=image/x-xfig;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true
