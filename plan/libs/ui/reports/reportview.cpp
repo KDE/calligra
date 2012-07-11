@@ -152,7 +152,8 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 
 //---------------------
 ReportView::ReportView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+    : ViewBase( part, parent ),
+    m_reportdatamodels( Report::createBaseReportDataModels() )
 {
 //    kDebug(planDbg())<<"--------------- ReportView ------------------";
 
@@ -179,107 +180,6 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     connect(m_pageSelector->ui_selector, SIGNAL(valueChanged(int)), SLOT(renderPage(int)));
 
     slotRefreshView();
-}
-
-QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *project, ScheduleManager *manager, QObject *parent ) const
-{
-    QMap<QString, QAbstractItemModel*> map;
-    QSortFilterProxyModel *sf = 0;
-    ItemModelBase *m = 0;
-
-    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    FlatProxyModel *fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new GeneralNodeItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "tasks", sf );
-
-    //QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new TaskStatusItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "taskstatus", sf );
-
-    QRegExp rrex( QString( "^(%1)$" ).arg( (int)OT_Appointment ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( 0 );
-    sf->setFilterRole( Role::ObjectType );
-    sf->setFilterRegExp( rrex );
-    sf->setDynamicSortFilter( true );
-    fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new ResourceAppointmentsRowModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resourceassignments", sf );
-
-    rex.setPattern( QString( "^(%1)$" ).arg( (int)OT_Resource ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( 0 );
-    sf->setFilterRole( Role::ObjectType );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new ResourceItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resources", sf );
-
-    ChartProxyModel *cpm = new ChartProxyModel( parent );
-    // hide effort
-    cpm->setRejectColumns( QList<int>() << 3 << 4 << 5 );
-    cpm->setZeroColumns( QList<int>() << 3 << 4 << 5 );
-    m = new ChartItemModel( cpm );
-    cpm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-    static_cast<ChartItemModel*>( m )->setNodes( QList<Node*>() << project );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "costperformance", cpm  );
-
-    cpm = new ChartProxyModel( parent );
-    // hide cost
-    cpm->setRejectColumns( QList<int>() << 0 << 1 << 2 );
-    cpm->setZeroColumns( QList<int>() << 0 << 1 << 2 );
-    m = new ChartItemModel( cpm );
-    cpm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-    static_cast<ChartItemModel*>( m )->setNodes( QList<Node*>() << project );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "effortperformance", cpm  );
-
-    fm = new FlatProxyModel( parent );
-    m = new CostBreakdownItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "costbreakdown", fm  );
-
-    return map;
 }
 
 //-----------------
@@ -472,17 +372,6 @@ void ReportView::setGuiActive( bool active ) // virtual slot
     ViewBase::setGuiActive( active );
 }
 
-QMap<QString, QAbstractItemModel*> ReportView::reportModels() const
-{
-    return m_modelmap;
-}
-
-void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map )
-{
-    qDeleteAll( m_modelmap );
-    m_modelmap = map;
-}
-
 void ReportView::slotRefreshView()
 {
     if ( ! isVisible() ) {
@@ -515,6 +404,11 @@ void ReportView::slotRefreshView()
     return;
 }
 
+void ReportView::setReportDataModels( const QList<ReportData*> &models )
+{
+    m_reportdatamodels = models;
+}
+
 ReportData *ReportView::createReportData( const QDomElement &element )
 {
     // get the data source
@@ -524,32 +418,17 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     return createReportData( modelname );
 }
 
-void ReportView::createReportData( const QString &type, ReportData *rd )
-{
-    Q_ASSERT( rd );
-    rd->setDataSource( createReportData( type ) );
-}
-
 ReportData *ReportView::createReportData( const QString &type )
 {
-    kDebug(planDbg())<<type;
-    //FIXME a smarter report data creator
-    ReportData *r = 0;
-    if ( type == "costbreakdown" || type =="costperformance" || type =="effortperformance" ) {
-        r = new ChartReportData();
-        static_cast<ChartReportData*>( r )->cbs = ( type == "costbreakdown" ? true : false );
-    } else {
-        r = new ReportData();
-        if ( type == "tasks" || type == "taskstatus" ) {
-            r->setColumnRole( NodeModel::NodeDescription, Qt::EditRole );
-        }
+    kDebug(planDbg())<<type<<m_reportdatamodels;
+    ReportData *r = Report::findReportData( m_reportdatamodels, type );
+    Q_ASSERT( r );
+    if ( r ) {
+        r = r->clone();
+        r->setParent( this );
+        r->setProject( project() );
+        r->setScheduleManager( m_schedulemanager );
     }
-    r->setModel( m_modelmap.value( type ) );
-    r->setProject( project() );
-    r->setScheduleManager( m_schedulemanager );
-    r->setObjectName( type );
-    connect( r, SIGNAL(createReportData(const QString&, ReportData*)), SLOT(createReportData(const QString&, ReportData*)));
-
     return r;
 }
 
@@ -642,7 +521,7 @@ ReportDesignDialog::ReportDesignDialog( QWidget *parent )
     setMainWidget( m_panel );
 }
 
-ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
+ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent )
     : KDialog( parent ),
     m_view( 0 )
 {
@@ -653,7 +532,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
 
-    m_panel = new ReportDesignPanel( project, manager, element, models, this );
+    m_panel = new ReportDesignPanel( element, models, this );
 
     setMainWidget( m_panel );
 
@@ -661,7 +540,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
 
-ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, ReportView *view, QWidget *parent )
+ReportDesignDialog::ReportDesignDialog( ReportView *view, QWidget *parent )
     : KDialog( parent ),
     m_view( view )
 {
@@ -672,13 +551,11 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
 
-    QMap<QString, QAbstractItemModel*> models;
     QDomElement e;
     if ( view ) {
         e = view->document().documentElement();
-        models = view->reportModels();
     }
-    m_panel = new ReportDesignPanel( project, manager, e, models, this );
+    m_panel = new ReportDesignPanel( e, view->reportDataModels(), this );
 
     setMainWidget( m_panel );
 
@@ -782,7 +659,8 @@ QDomDocument ReportDesignDialog::document() const
 //----
 ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     : QWidget( parent ),
-    m_modified( false )
+    m_modified( false ),
+    m_reportdatamodels( Report::createBaseReportDataModels( this ) )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
 
@@ -822,9 +700,10 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     populateToolbar( tb );
 }
 
-ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*manager*/, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
+ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent )
     : QWidget( parent ),
-    m_modified( false )
+    m_modified( false ),
+    m_reportdatamodels( models )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
 
@@ -859,7 +738,6 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
     }
     sa->setWidget( m_designer );
 
-    m_modelmap = models;
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
 
@@ -983,23 +861,9 @@ QDomDocument ReportDesignPanel::document() const
     return document;
 }
 
-void ReportDesignPanel::createReportData( const QString &type, ReportData *rd )
-{
-    Q_ASSERT( rd );
-    rd->setDataSource( createReportData( type ) );
-}
-
 ReportData *ReportDesignPanel::createReportData( const QString &type )
 {
-    //FIXME a smarter report data creator
-    ReportData *r = 0;
-    if ( type == "costbreakdown" || type == "earnedvalue" ) {
-        r = new ChartReportData();
-    } else {
-        r = new ReportData();
-    }
-    connect( r, SIGNAL(createReportData(const QString&, ReportData*)), SLOT(createReportData(const QString&, ReportData*)));
-    r->setModel( m_modelmap.value( type ) );
+    ReportData *r = Report::findReportData( m_reportdatamodels, type );
     Q_ASSERT( r );
     return r;
 }

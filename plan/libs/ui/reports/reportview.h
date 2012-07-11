@@ -72,6 +72,7 @@ class ReportNavigator;
 class ReportDesignPanel;
 class ReportSourceModel;
 
+
 class ReportPrintingDialog : public KoPrintingDialog
 {
     Q_OBJECT
@@ -118,15 +119,13 @@ public slots:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
-    QMap<QString, QAbstractItemModel*> reportModels() const;
-    void setReportModels( const QMap<QString, QAbstractItemModel*> &map );
-
-    QMap<QString, QAbstractItemModel*> createReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 ) const;
-
     KoPrintJob *createPrintJob();
 
     /// Return the page layout used for printing this view
     KoPageLayout pageLayout() const;
+
+    void setReportDataModels( const QList<ReportData*> &models );
+    QList<ReportData*> reportDataModels() const { return m_reportdatamodels; }
 
 signals:
     void editReportDesign( ReportView *view );
@@ -148,8 +147,6 @@ private slots:
     void slotExport();
     void slotExportFinished( int result );
 
-    void createReportData( const QString &type, ReportData *rd );
-
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
@@ -168,7 +165,7 @@ private:
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
-    QMap<QString, QAbstractItemModel*> m_modelmap;
+    QList<ReportData*> m_reportdatamodels;
     QDomDocument m_design;
 };
 
@@ -194,10 +191,10 @@ class KPLATOUI_EXPORT ReportDesignDialog : public KDialog
 public:
     explicit ReportDesignDialog( QWidget *parent = 0 );
     
-    ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent = 0 );
+    ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
     
     /// Edit the report definition in @p view
-    ReportDesignDialog( Project *project, ScheduleManager *manager, ReportView *view, QWidget *parent = 0 );
+    ReportDesignDialog( ReportView *view, QWidget *parent = 0 );
 
     QDomDocument document() const;
 

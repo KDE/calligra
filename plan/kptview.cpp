@@ -207,12 +207,12 @@ bool ConfigDialog::isDefault()
 
 //------------------------------------
 View::View( Part* part, QWidget* parent )
-        : KoView( part, parent ),
-        m_currentEstimateType( Estimate::Use_Expected ),
-        m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_trigged( false ),
-        m_nextScheduleManager( 0 ),
-        m_readWrite( false )
+    : KoView( part, parent ),
+    m_currentEstimateType( Estimate::Use_Expected ),
+    m_scheduleActionGroup( new QActionGroup( this ) ),
+    m_trigged( false ),
+    m_nextScheduleManager( 0 ),
+    m_readWrite( false )
 {
     //kDebug(planDbg());
 //    getProject().setCurrentSchedule( Schedule::Expected );
@@ -1334,7 +1334,6 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
@@ -2632,7 +2631,7 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
 void View::slotCreateReport()
 {
     ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
@@ -2679,7 +2678,7 @@ void View::slotOpenReportFileFinished( int result )
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
     ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, v.reportModels(), this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( e, v.reportDataModels(), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
@@ -2695,7 +2694,7 @@ void View::slotEditReportDesign( ReportView *view )
     if ( view == 0 ) {
         return;
     }
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();

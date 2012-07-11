@@ -47,6 +47,7 @@ class QActionGroup;
 namespace KPlato
 {
 
+class ReportData;
 
 class ReportDesignPanel : public QWidget
 {
@@ -54,13 +55,12 @@ class ReportDesignPanel : public QWidget
 public:
     explicit ReportDesignPanel( QWidget *parent = 0 );
 
-    ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent );
+    ReportDesignPanel( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
     
     QDomDocument document() const;
     
     KoReportDesigner *m_designer;
     KoProperty::EditorView *m_propertyeditor;
-    QMap<QString, QAbstractItemModel*> m_modelmap;
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
     QActionGroup *m_actionGroup;
@@ -75,7 +75,6 @@ public slots:
     void slotInsertAction();
     
     void setReportData( const QString &tag );
-    void createReportData( const QString &type, ReportData *rd );
     
     void setModified() { m_modified = true; }
     void slotItemInserted(const QString &item);
@@ -85,7 +84,7 @@ protected:
     void populateToolbar( KToolBar *tb );
 
 private:
-    
+    QList<ReportData*> m_reportdatamodels;
 };
 
 
