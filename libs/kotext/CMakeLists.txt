@@ -63,6 +63,7 @@ set(kotext_LIB_SRCS
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
+    BibliographyDb.cpp
     KoBridgeServer.cpp
     KoBridgeActions.cpp
 
@@ -124,7 +125,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext flake)
+target_link_libraries(kotext flake ${QT_QTSQL_LIBRARY})
 if( Soprano_FOUND )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
