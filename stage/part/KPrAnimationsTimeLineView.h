@@ -76,6 +76,8 @@ public slots:
 
     void resetData();
 
+    void adjustScale();
+
 protected:
     /// return width of column
     int widthOfColumn(int column) const;
@@ -106,9 +108,8 @@ protected:
     /// Helper methods to manage the time scales in view and header
     int numberOfSteps() const;
     void setNumberOfSteps(int steps);
-    void incrementScale();
+    void incrementScale(int step = 1);
     void changeStartLimit(const int row);
-    void adjustScale();
     int stepsScale();
     qreal maxLineLength() const;
     void setMaxLineLength(qreal length);

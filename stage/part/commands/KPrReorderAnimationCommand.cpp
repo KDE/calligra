@@ -21,16 +21,20 @@
 #include "KPrReorderAnimationCommand.h"
 
 #include "KPrPage.h"
+#include "KPrAnimationsTreeModel.h"
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
 #include "animations/KPrShapeAnimation.h"
 #include "KLocale"
 
-KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrPage *activePage, KPrAnimationStep *step, KPrAnimationStep *newStep, KUndo2Command *parent)
+KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrPage *activePage, KPrAnimationStep *step,
+                                                       KPrAnimationStep *newStep, KPrAnimationsTreeModel *model,
+                                                       KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_activePage(activePage)
     , m_step(step)
     , m_newStep(newStep)
+    , m_model(model)
 {
     setText(i18nc("(qtundo-format)", "Reorder animations"));
     m_oldRow = activePage->animationSteps().indexOf(m_step);
@@ -49,4 +53,5 @@ void KPrReorderAnimationCommand::redo()
 void KPrReorderAnimationCommand::undo()
 {
     m_activePage->animations().swap(m_newRow, m_oldRow);
+    m_model->update();
 }

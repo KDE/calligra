@@ -318,7 +318,6 @@ QList<KPrCustomAnimationItem *> KPrCustomAnimationItem::children()
 
     // Children list for "On click" animations
     if (m_root->activePage()->animationSteps().indexOf(m_shapeAnimation->step()) == -1) {
-        qDebug() << "Step Not found";
         return m_children;
     }
     for (int stepNumber =

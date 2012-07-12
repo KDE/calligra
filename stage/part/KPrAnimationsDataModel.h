@@ -44,6 +44,12 @@ class STAGE_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+    enum TimeUpdated {
+        BeginTime,
+        DurationTime,
+        BothTimes
+    };
+
     explicit KPrAnimationsDataModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent) const;
@@ -82,7 +88,7 @@ public slots:
     /// Triggers an update of the complete model
     void update();
 
-    void setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration);
+    void setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration, TimeUpdated updatedTimes);
 
     /// set model to 0
     void removeModel();
@@ -100,6 +106,8 @@ public slots:
 
     bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
     void recalculateStart(const QModelIndex &mIndex);
+signals:
+    void timeScaleModified();
 
 private:
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,

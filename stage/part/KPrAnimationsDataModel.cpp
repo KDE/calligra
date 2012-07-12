@@ -234,11 +234,11 @@ bool KPrAnimationsDataModel::setData(const QModelIndex &index, const QVariant &v
             case AnimationIcon:
                 return false;
             case StartTime:
-                setTimeRangeIncrementalChange(item, value.toInt(), item->duration());
+                setTimeRangeIncrementalChange(item, value.toInt(), item->duration(), BeginTime);
                 emit dataChanged(index, index);
                 return true;
             case Duration:
-                setTimeRangeIncrementalChange(item, item->beginTime(), value.toInt());
+                setTimeRangeIncrementalChange(item, item->beginTime(), value.toInt(), DurationTime);
                 emit dataChanged(index, index);
                 return true;
             case AnimationClass:
@@ -303,7 +303,7 @@ void KPrAnimationsDataModel::update()
     }
 }
 
-void KPrAnimationsDataModel::setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration)
+void KPrAnimationsDataModel::setTimeRangeIncrementalChange(KPrCustomAnimationItem *item, const int begin, const int duration, TimeUpdated updatedTimes)
 {
     if (m_firstEdition) {
         m_oldBegin = item->beginTime();
@@ -312,8 +312,12 @@ void KPrAnimationsDataModel::setTimeRangeIncrementalChange(KPrCustomAnimationIte
         m_firstEdition = false;
     }
     if (item == m_currentEditedItem) {
-        item->setStartTime(begin);
-        item->setDuration(duration);
+        if ((updatedTimes == BothTimes) || (updatedTimes == BeginTime)) {
+            item->setStartTime(begin);
+        }
+        if ((updatedTimes == BothTimes) || (updatedTimes == DurationTime)) {
+            item->setDuration(duration);
+        }
     }
     else {
         endTimeLineEdition();
@@ -569,6 +573,7 @@ bool KPrAnimationsDataModel::createTriggerEventEditCmd(KPrShapeAnimation *animat
                                                 newType, children, movedSubSteps, activePage);
     if (KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument())) {
         doc->addCommand(command);
+        emit timeScaleModified();
         return true;
     }
     return false;
@@ -665,6 +670,7 @@ void KPrAnimationsDataModel::endTimeLineEdition()
             m_currentEditedItem->setStartTime(m_oldBegin);
             m_currentEditedItem->setDuration(m_oldDuration);
             setTimeRange(m_currentEditedItem, begin, duration);
+            emit timeScaleModified();
         }
         m_oldBegin = INVALID;
         m_oldDuration = INVALID;

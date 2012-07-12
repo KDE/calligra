@@ -472,6 +472,14 @@ KPrCustomAnimationItem *KPrAnimationsTreeModel::rootItem() const
     return m_rootItem;
 }
 
+void KPrAnimationsTreeModel::notifyBranchesSwap(KPrCustomAnimationItem *itemOld, KPrCustomAnimationItem *itemNew)
+{
+    layoutAboutToBeChanged();
+    updateBranch(itemOld);
+    updateBranch(itemNew);
+    layoutChanged();
+}
+
 void KPrAnimationsTreeModel::updateData()
 {
     setActivePage(m_activePage);
@@ -533,6 +541,28 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
     }
 }
 
+void KPrAnimationsTreeModel::updateBranch(KPrCustomAnimationItem *item)
+{
+    if (!item) {
+        return;
+    }
+    KPrCustomAnimationItem *parent = item->parent();
+    Q_ASSERT(parent);
+    int row = parent->rowOfChild(item);
+    QModelIndex startIndex = createIndex(row, static_cast<int>(Name),
+                                         item);
+    QModelIndex endIndex = createIndex(row, static_cast<int>(Type),
+                                       item);
+    emit dataChanged(startIndex, endIndex);
+    if (item->children().isEmpty()) {
+        return;
+    }
+    // update Childs
+    foreach (KPrCustomAnimationItem *child, item->children()) {
+        updateBranch(child);
+    }
+}
+
 KPrCustomAnimationItem *KPrAnimationsTreeModel::itemForIndex(const QModelIndex &index) const
 {
     if (!m_rootItem) {
@@ -568,7 +598,6 @@ QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int
     //First item can't be moved
     Q_ASSERT(0 < oldRow && oldRow < parent->childCount() &&
              0 < newRow && newRow < parent->childCount());
-    QModelIndex oldIndex;
     QModelIndex newIndex;
     // swap top level items
     if (parent == m_rootItem) {
@@ -576,14 +605,12 @@ QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int
         KPrCustomAnimationItem *itemNew = itemForIndex(index(newRow, 0));
         if (itemOld && itemNew) {
             if (KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument())) {
-                KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(m_activePage, itemOld->animation()->step(), itemNew->animation()->step());
+                KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(m_activePage, itemOld->animation()->step(), itemNew->animation()->step(), this);
                 doc->addCommand(cmd);
-                oldIndex = indexByItem(itemOld);
                 newIndex = indexByItem(itemNew);
+                notifyBranchesSwap(itemOld, itemNew);
             }
         }
     }
-    emit dataChanged(oldIndex, newIndex);
-    update();
     return newIndex;
 }

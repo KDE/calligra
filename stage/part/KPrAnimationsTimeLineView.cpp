@@ -86,6 +86,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
+    connect(m_model, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
     adjustScale();
     m_header->update();
     m_view->update();
@@ -179,10 +180,10 @@ void KPrAnimationsTimeLineView::setNumberOfSteps(int steps)
     m_stepsNumber = steps;
 }
 
-void KPrAnimationsTimeLineView::incrementScale()
+void KPrAnimationsTimeLineView::incrementScale(int step)
 {
-    if ((numberOfSteps() + 1) < SCALE_LIMIT) {
-        setNumberOfSteps(numberOfSteps() + 1);
+    if ((numberOfSteps() + step) < SCALE_LIMIT) {
+        setNumberOfSteps(numberOfSteps() + step);
         m_header->update();
         m_view->update();
     }
@@ -190,7 +191,6 @@ void KPrAnimationsTimeLineView::incrementScale()
 
 void KPrAnimationsTimeLineView::changeStartLimit(const int row)
 {
-    qDebug() << "Change start";
     // If user wants a after_previous animation start before previous animation switch to with_previous
     QModelIndex index = m_model->index(row, 0);
     if (index.isValid()) {
@@ -210,24 +210,32 @@ void KPrAnimationsTimeLineView::adjustScale()
         }
     }
     const int spacing = 2;
+    // Increment Scale if maxLength is out of range
+    if ((m_maxLength + spacing * stepsScale()) > (numberOfSteps())) {
+        incrementScale(m_maxLength + spacing * stepsScale() - numberOfSteps());
+        m_header->update();
+    }
+    // Decrement scale if maxLength is too short
     if ((m_maxLength - spacing * stepsScale()) < (numberOfSteps())) {
-        setNumberOfSteps(m_maxLength + spacing * stepsScale());
+        incrementScale(m_maxLength + spacing * stepsScale() - numberOfSteps());
         m_header->update();
     }
 }
 
 int KPrAnimationsTimeLineView::stepsScale()
 {
-    if (numberOfSteps() < 25)
+    if (numberOfSteps() < 15)
         return 1;
-    else if (numberOfSteps() < 60)
+    else if (numberOfSteps() < 50)
         return 2;
-    else if (numberOfSteps() < 120)
+    else if (numberOfSteps() < 100)
         return 5;
-    else if (numberOfSteps() < 250)
+    else if (numberOfSteps() < 200)
         return 10;
-    else if (numberOfSteps() < 500)
+    else if (numberOfSteps() < 300)
         return 20;
+    else if (numberOfSteps() < 500)
+        return 25;
     else if (numberOfSteps() < SCALE_LIMIT)
         return 60;
     return 1;

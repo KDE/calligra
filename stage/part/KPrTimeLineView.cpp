@@ -133,6 +133,8 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
     if (column == StartTime) {
+        m_resize = false;
+        m_move = false;
         int startPos = 0;
         for (int i = 0; i < StartTime; i++) {
             startPos = startPos + m_mainView->widthOfColumn(i);
@@ -190,16 +192,17 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         qreal totalSteps = m_mainView->numberOfSteps();
         qreal stepSize  = m_mainView->widthOfColumn(StartTime)/totalSteps;
 
-        if ((event->pos().x() > (startPos + startOffSet*stepSize + stepSize*start - 5)) &&
-                ((event->pos().x()) < (startPos+m_mainView->widthOfColumn(StartTime)))) {
-            qreal newLength = (event->pos().x() - startPos - stepSize*start)/(stepSize) - startOffSet;
-            newLength = qFloor((newLength - modD(newLength, subSteps))*100.0)/100.0;
-            m_mainView->model()->setData(m_mainView->model()->index(row, Duration),newLength*1000);
+        if ((event->pos().x() > (startPos + startOffSet*stepSize + stepSize * start - 5)) &&
+                ((event->pos().x()) < (startPos + m_mainView->widthOfColumn(StartTime)))) {
+            qreal newLength = (event->pos().x() - startPos - stepSize * start) / (stepSize) - startOffSet;
+            newLength = qFloor((newLength - modD(newLength, subSteps)) * 100.0) / 100.0;
+            m_mainView->model()->setData(m_mainView->model()->index(row, Duration), newLength*1000);
             emit timeValuesChanged(m_mainView->model()->index(row, Duration));
             m_adjust = false;
             if (newLength < duration)
                 m_adjust = true;
         } else if ( ((event->pos().x()) > (startPos + m_mainView->widthOfColumn(StartTime)))) {
+            m_mainView->incrementScale();
             m_adjust = true;
         }
         update();
@@ -221,10 +224,10 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         qreal totalSteps = m_mainView->numberOfSteps();
         qreal stepSize  = m_mainView->widthOfColumn(StartTime)/totalSteps;
         if ((event->pos().x() > (startPos + startDragPos + startOffSet*stepSize)) &&
-                ((event->pos().x() + (duration*stepSize-startDragPos) + Padding*2)  <
+                ((event->pos().x() + (duration*stepSize-startDragPos) + Padding * 2)  <
                  (startPos+m_mainView->widthOfColumn(StartTime)))) {
             qreal newPos = (event->pos().x() - (startPos + startDragPos))/(stepSize) - startOffSet;
-            newPos = qFloor((newPos - modD(newPos, subSteps))*100.0)/100.0;
+            newPos = qFloor((newPos - modD(newPos, subSteps)) * 100.0) / 100.0;
             m_mainView->model()->setData(m_mainView->model()->index(row, StartTime), newPos * 1000);
             emit timeValuesChanged(m_mainView->model()->index(row, StartTime));
             m_adjust = false;

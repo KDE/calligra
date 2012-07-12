@@ -27,11 +27,12 @@
 
 class KPrPage;
 class KPrAnimationStep;
+class KPrAnimationsTreeModel;
 
 class STAGE_EXPORT KPrReorderAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReorderAnimationCommand(KPrPage *activePage, KPrAnimationStep *step, KPrAnimationStep *newStep, KUndo2Command *parent = 0);
+    KPrReorderAnimationCommand(KPrPage *activePage, KPrAnimationStep *step, KPrAnimationStep *newStep, KPrAnimationsTreeModel *model, KUndo2Command *parent = 0);
 
     virtual ~KPrReorderAnimationCommand();
 
@@ -44,6 +45,7 @@ private:
     KPrPage *m_activePage;
     KPrAnimationStep *m_step;
     KPrAnimationStep *m_newStep;
+    KPrAnimationsTreeModel *m_model;
     int m_newRow;
     int m_oldRow;
 };

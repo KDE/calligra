@@ -92,16 +92,22 @@ public:
     /// Return the parent item
     KPrCustomAnimationItem* rootItem() const;
 
+    void notifyBranchesSwap(KPrCustomAnimationItem *itemOld, KPrCustomAnimationItem *itemNew);
+
 signals:
     void rootChanged();
 
 public slots:
-    /// Triggers an update of the complete model
+    /// Triggers an update of the complete model (Update KPrAnimationsDataModel after using this)
     void updateData();
+    /// Triggers an update of the complete model
     void update();
 
 private slots:
     void updateAnimationData(KPrShapeAnimation* modifiedAnimation);
+
+    /// Update Item and all his children
+    void updateBranch(KPrCustomAnimationItem *item);
 
 private:
     /// Return an item for the given index
