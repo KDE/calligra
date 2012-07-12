@@ -177,16 +177,17 @@ void Document::finishDocument()
                                "text:master-page-name=\"Footnote\" "
                                "style:num-format=\"%1\" "
                                "text:start-value=\"%2\" "
-                               "text:footnotes-position=\"page\" "
-                               "text:start-numbering-at=\"%3\" "
+                               "text:footnotes-position=\"%3\" "
+                               "text:start-numbering-at=\"%4\" "
                                "/>");
         //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
         //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
-                                                       .arg(dop.nFtn)
-                                                       .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
-                                                       .toLatin1());
+                                         .arg(dop.nFtn)
+                                         .arg(Conversion::fpcToFtnPosition(dop.fpc))
+                                         .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
+                                         .toLatin1());
 
         // MS Word has start-numbering-at (rncEdn) for endnotes, but ODF doesn't really support it
         QString endnoteConfig("<text:notes-configuration "
@@ -204,9 +205,9 @@ void Document::finishDocument()
         //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
-                                                      .arg(dop.nEdn)
-//                                                           .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
-                                                      .toLatin1());
+                                         .arg(dop.nEdn)
+                                         // .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
+                                         .toLatin1());
     }
 }
 
