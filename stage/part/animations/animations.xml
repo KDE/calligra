@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<anim:seq xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" 
+xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:calligra="http://www.calligra.org/2005/" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:delta="http://www.deltaxml.com/ns/track-changes/delta-namespace" xmlns:split="http://www.deltaxml.com/ns/track-changes/split-namespace" xmlns:ac="http://www.deltaxml.com/ns/track-changes/attribute-change-namespace" office:version="1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" presentation:node-type="main-sequence">
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel">
+      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
+      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-bounce">
+      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
+      <anim:transitionFilter smil:begin="0" smil:dur="0.58" smil:type="barWipe" smil:subtype="topToBottom"/>
+      <anim:animate smil:begin="0" smil:dur="1.822" smil:attributeName="x" smil:values="x-0.25;x" smil:keyTimes="0;1" smil:keySplines="0,0;0.14,0.36;0.43,0.73;0.71,0.91;1,1"/>
+      <anim:animate smil:begin="0" smil:dur="0.664" smil:attributeName="y" smil:values="0.5;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/3" smil:keySplines="0,0;0.25,0.07;0.5,0.2;0.75,0.467;1,1"/>
+      <anim:animate smil:begin="0.664" smil:dur="0.664" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/9" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+      <anim:animate smil:begin="1.324" smil:dur="0.332" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/27" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+      <anim:animate smil:begin="1.656" smil:dur="0.164" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/81" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+      <anim:animateTransform smil:begin="0.65" smil:dur="0.026" smil:to="1,0.6" svg:type="scale"/>
+      <anim:animateTransform smil:begin="0.676" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.312" smil:dur="0.026" smil:to="1,0.8" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.338" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.642" smil:dur="0.026" smil:to="1,0.9" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.668" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.808" smil:dur="0.026" smil:to="1,0.95" svg:type="scale"/>
+      <anim:animateTransform smil:begin="1.834" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-spiral-in">
+      <anim:set smil:begin="0s" smil:dur="2ms" smil:attributeName="visibility" smil:to="visible"/>
+      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="x" smil:values="0;1" smil:keyTimes="0;1" anim:formula="x+(cos(-2*pi*(1-$))*-x-sin(-2*pi*(1-$))*(1-y))*(1-$)"/>
+      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y+(sin(-2*pi*(1-$))*-x+cos(-2*pi*(1-$))*(1-y))*(1-$)"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-bounce">
+	<anim:animate smil:begin="0" smil:dur="1.822" smil:attributeName="x" smil:values="x;x+0.25" smil:keyTimes="0;1" smil:keySplines="0,0;0.14,0.31;0.43,0.73;0.71,0.91;1,1"/>
+	<anim:animate smil:begin="1.822" smil:dur="0.178" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+	<anim:animate smil:begin="0" smil:dur="0.664" smil:attributeName="y" smil:values="y;y+0.026;y+0.052;y+0.078;y+0.103;y+0.151;y+0.196;y+0.236;y+0.270;y+0.297;y+0.317;y+0.329;y+0.333" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.25,0.07;0.5,0.2;0.75,0.467;1,1"/>
+	<anim:animate smil:begin="0.664" smil:dur="0.664" smil:attributeName="y" smil:values="y;y-0.034;y-0.065;y-0.090;y-0.106;y-0.111;y-0.106;y-0.090;y-0.065;y-0.034;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+	<anim:animate smil:begin="1.324" smil:dur="0.332" smil:attributeName="y" smil:values="y;y-0.011;y-0.022;y-0.030;y-0.035;y-0.037;y-0.035;y-0.030;y-0.022;y-0.011;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+	<anim:animate smil:begin="1.656" smil:dur="0.164" smil:attributeName="y" smil:values="y;y-0.004;y-0.007;y-0.010;y-0.012;y-0.0123;y-0.012;y-0.010;y-0.007;y-0.004;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
+	<anim:animate smil:begin="1.82" smil:dur="0.18" smil:accelerate="0.5" smil:attributeName="y" smil:values="y;y+height" smil:keyTimes="0;1"/>
+	<anim:animateTransform smil:begin="0.62" smil:dur="0.026" smil:to="1,0.6" svg:type="scale"/>
+	<anim:animateTransform smil:begin="0.646" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.312" smil:dur="0.026" smil:to="1,0.8" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.338" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.642" smil:dur="0.026" smil:to="1,0.9" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.668" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.808" smil:dur="0.026" smil:to="1,0.95" svg:type="scale"/>
+	<anim:animateTransform smil:begin="1.834" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+	<anim:set smil:begin="1.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+</anim:seq>

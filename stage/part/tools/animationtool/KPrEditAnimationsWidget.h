@@ -21,6 +21,7 @@
 #define KPREDITANIMATIONSWIDGET_H
 
 #include <QWidget>
+#include <QMap>
 
 class KPrAnimationsTimeLineView;
 class KPrAnimationsDataModel;
@@ -32,6 +33,13 @@ class QModelIndex;
 class KPrCustomAnimationItem;
 class QComboBox;
 class QTimeEdit;
+class QListWidget;
+class QListView;
+class KPrShapeAnimation;
+class KoXmlElement;
+class KoShapeLoadingContext;
+class KPrCollectionItemModel;
+class QListWidgetItem;
 
 /** This Widget holds the configuration popup dialog
     used to edit animation properties of existing or new
@@ -59,14 +67,34 @@ public slots:
     void setTriggerEvent(int row);
     void syncCurrentItem();
 
+protected slots:
+    /**
+     * Changes the current shape collection
+     */
+    void activateShapeCollection(QListWidgetItem *item);
 
 private:
+    void loadDefaultAnimations();
+    void readDefaultAnimations();
+    QString animationName(const QString id) const;
+    QIcon loadAnimationIcon(const QString id);
+    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /**
+     * Add a collection to the docker
+     */
+    bool addCollection(const QString& id, const QString& title, KPrCollectionItemModel* model);
+
     KPrView* m_view;
     KPrAnimationsTimeLineView *m_timeLineView;
     KPrAnimationsDataModel *m_timeLineModel;
     QComboBox *m_triggerEventList;
     QTimeEdit *m_delayEdit;
     QTimeEdit *m_durationEdit;
+    QListWidget *m_collectionChooser;
+    QListView *m_collectionView;
+    QList<KPrShapeAnimation *> m_animations;
+    QMap<QString, KPrCollectionItemModel*> m_modelMap;
     
 };
 

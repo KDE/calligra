@@ -198,6 +198,11 @@ install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
 install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
+### Predefined Animations ###
+install(FILES
+        animations/animations.xml
+        DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
+
 ### Include files ###
 install( FILES 
         stage_export.h
