@@ -43,6 +43,9 @@
 const QString SAND_RADIUS = "Sand/radius";
 const QString SAND_AMOUNT = "Sand/amount";
 const QString SAND_DEPLETION = "Sand/sandDepletion";
+const QString SAND_SIZE = "Sand/size"; //size of a grain (particle)
+const QString SAND_MASS = "Sand/mass";    //
+const QString SAND_FRICTION = "Sand/friction";    //Young modulus -
 
 /*
  * Sand spread strings
@@ -55,8 +58,6 @@ const QString SAND_DEPLETION = "Sand/sandDepletion";
  */
 
 // const QString SAND_MODE = "Sand/mode"    //set the operation mode for this brush (drop or spread)
-// const QString SAND_MASS = "Sand/mass"    //
-// const QString SAND_FRICTION = "Sand/friction"    //Young modulus -
 // const QString SAND_DISSIPATION = "Sand/dissipation" //living time of a particle (this is necessary?)
 
 class KisSandOpOptionsWidget;
@@ -67,26 +68,28 @@ public:
     KisSandOpOption();
     ~KisSandOpOption();
 
+    int radius() const;
     void setRadius(int radius) const;
+
+    int amount() const;
     void setAmount(int amount) const;
 
-    int radius() const;
-    int amount() const;
+    int size() const;
+    void setSize(int size) const;
+    
+    double friction () const;
+    void setFriction(double friction) const;
+    
+    double mass () const;
+    void setMass(double mass) const;
+    
     bool sandDepletion() const;
 
-/*
- * SPREAD MODE
- */
-//     void setFriction(float friction) const;
 //     void setDissipation(float dissipation) const;
-//     void setMass(float mass) const;
-//     float friction () const;
 //     float dissipation () const;
-//     float mass () const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-
 
 private:
 
@@ -100,10 +103,11 @@ public:
     int radius;
     int amount;
     bool sandDepletion;
-
+    int size;
+    double mass;
+    double friction;
+    
     //bool mode;
-    //float mass;
-    //float friction;
     //float dissipation;
     
     
@@ -111,13 +115,11 @@ public:
         radius = settings->getInt(SAND_RADIUS);
         amount = settings->getInt(SAND_AMOUNT);
         sandDepletion = settings->getBool(SAND_DEPLETION);
-
-        //mode = settings->getBool(SAND_MODE); //??
-        //mass = settings->getFloat(SAND_MASS);
-        //friction = settings->getFloat(SAND_FRICTION);
-        //dissipation = settings->getFloat(SAND_DISSIPATION);
-
-
+        size = settings->getInt(SAND_SIZE);
+        mass = settings->getFloat(SAND_MASS);
+        friction = settings->getFloat(SAND_FRICTION);
+//         mode = settings->getBool(SAND_MODE); //??
+//         dissipation = settings->getFloat(SAND_DISSIPATION);
     }
 };
 

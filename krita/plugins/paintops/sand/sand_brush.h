@@ -29,22 +29,26 @@
 
 #include "particle.h"
 
+class KisPaintInformation;
+
 class SandBrush
 {
 
 public:
     SandBrush(const SandProperties * properties, KoColorTransformation* transformation);
     ~SandBrush();
-    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
-    void drawParticle(KisPainter &painter, qreal x, qreal y); //Obs
+    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
+    void drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel); //Obs
 
 private:
     KoColor m_inkColor;
-    int m_counter;
+    int m_counter;  //to calculate the mouse reduction in the sand depletion
+    unsigned int m_grainCount;   //to calculate the amount of particles to be spread
     const SandProperties * m_properties;
     KoColorTransformation* m_transfo;
     int m_saturationId;
-
+    int m_prevTime;
+    QPointF m_prevVel; //previous mouse velocity to calculate acceleration
 
 };
 

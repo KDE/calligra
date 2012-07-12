@@ -29,6 +29,7 @@ inline double drand48() {
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <kis_paint_information.h>
 #include <kis_painter.h>
 #include <QVariant>
 #include <QHash>
@@ -37,8 +38,6 @@ inline double drand48() {
 #include <cmath>
 #include <ctime>
 #include "particle.h"
-
-
 
 
 SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* transformation)
@@ -53,11 +52,14 @@ SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* tr
         m_saturationId = -1;
     }
     
-
 //     m_counter = m_properties->radius;
-    m_counter = 0;
     m_properties = properties;
+    m_grainCount = properties->amount * 100; //obs.: modify this later
+    m_counter = 0;
     srand48(time(0));
+    m_prevTime = 0;
+    m_prevVel = QPointF(0,0);
+    
 }
 
 
@@ -67,28 +69,47 @@ SandBrush::~SandBrush()
 }
 
 
-void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
+void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
 {
-
     //We do not need to, in every mouse movement, add pixels, so it has been randomized (as in
     // the dirtThreshold), so it can drop particles more faster
+
+    if(m_properties->sandDepletion && m_grainCount == 0)
+        return;
+    
     double moveThreshold = 0.9;
     double mRan = drand48();
-    if ( mRan < moveThreshold) {
+    if ( mRan < moveThreshold ) {
         return;
     }
+
+    int time = m_prevTime;
+    //mouse velocity and acceleration calc
+    if(info.currentTime() != m_prevTime)
+        time = info.currentTime() - time;
+    
+    QPointF pos = toQPointF(info.movement()); //obs: this is an inline function
+    QPointF vel(pos.x()/time, pos.y()/time);    //current velocity
+    QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current accel
+
+    qDebug() <<"time : " << time << "\n";
+    qDebug() <<"(pos, vel, accel ) : " << "(" << pos.x() << ", " << pos.y() << ")\n "
+                                    << "(" << vel.x() << ", " << vel.y() << ")\n "
+                                    << "(" << accel.x() << ", " << accel.y() << ")\n ";
     
     m_counter++;
 
+    // sand depletion: it's not working as it should. get an assymptotic function to reduce the radius
     qreal result = 0;
-    if (m_properties->sandDepletion) {
-        result = log((qreal)m_counter * m_properties->radius)/10;
-    }
+//     if (m_properties->sandDepletion) {
+//         result = log((qreal)m_counter * m_properties->radius)/10;
+//     }
 
     int r = m_properties->radius - int(result)*m_properties->radius;
     m_inkColor = color;
     int pixelX, pixelY;
     int radiusSquared =  r*r;
+
     double dirtThreshold = 0.9;
     
     KisPainter drawer(dev);
@@ -98,7 +119,7 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     qint32 pixelSize = dev->colorSpace()->pixelSize();
     KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
-    qDebug() <<"(r, result, m_counter )" << "(" << r << ", " << result << ", " << m_counter ;
+//     qDebug() <<"(r, result, m_counter )" << "(" << r << ", " << result << ", " << m_counter ;
     
     for (int by = -r; by <= r; by++) {
         int bySquared = by*by;
@@ -109,23 +130,42 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
                 continue;
             }
 
-            pixelX = qRound((x + (bx*ran*10)));
-            pixelY = qRound((y + (by*ran*10)));
-//             pixelX = qRound(x + bx);
-//             pixelY = qRound(y + by);
 
-            drawParticle(drawer, pixelX , pixelY);
+            
+            pixelX = qRound(x + bx*vel.x()*10);
+            pixelY = qRound(y + by*vel.y()*10);
+
+
+            drawParticle(drawer, pixelX , pixelY, vel, accel);
+            if(m_grainCount > 0)
+                m_grainCount--; //decrease the amount of grains
+            else
+                m_grainCount = 0;
         }
     }
+
+    m_prevVel = vel;
+    m_prevTime = info.currentTime();
 }
 
-void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y)
+void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel)
 {
+
+//     Particle p( bool life,
+//                 float( m_properties->mass()),
+//                 float( m_properties->radius()),
+//                 int lifespan,
+//                 float( m_properties->friction()),
+//                 new QPoint(x, y),
+//                 new QPointF(vel.x(), vel.y()),
+//                 new QPointF(accel.x(), accel.y()),
+//                 );
+    
     QVector<QPointF> points;
     // circle x, circle y
     qreal cx, cy;
     int steps = 10;
-    int radius = 5;
+    int radius = m_properties->size;
 
 
     qreal length = 2.0 * 3.14;

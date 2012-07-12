@@ -40,11 +40,13 @@ KisSandOpOption::KisSandOpOption()
     connect(m_options->amountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->sandDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
 
-//Sand spread mode signals and slots
-//     connect(m_options->modeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-//     connect(m_options->massSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-//     connect(m_options->frictionSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+
+    connect(m_options->sizeSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->massDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->frictionDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    
 //     connect(m_options->dissipationSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+//     connect(m_options->modeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -87,43 +89,50 @@ bool KisSandOpOption::sandDepletion() const
  * SPREAD MODE FUNCTIONS:
  * FIX THESE FUNCTIONS FOR WORK WITH PROPER FLOAT WIDGETS
  */
-
-
 // bool KisSandOpOption::mode() const
 // {
 //     return m_options->modeCHBox->isChecked();
 // }
-// float KisSandOpOption::friction() const
-// {
-//     return m_options->frictionSpinBox->value();
-// }
-// float KisSandOpOption::mass() const
-// {
-//     return m_options->massSpinBox->value();
-// }
-//
-// void KisSandOpOption::setMass(float mass) const
-// {
-//     m_options->massSpinBox->setValue( mass );
-// }
-// 
-// 
-// void KisSandOpOption::setFriction(float friction) const
-// {
-//     m_options->frictionSpinBox->setValue( friction );
-// }
-// 
-// float KisSandOpOption::dissipation() const
+
+int KisSandOpOption::size() const
+{
+    return m_options->sizeSpinBox->value();
+}
+
+void KisSandOpOption::setSize(int size) const
+{
+    m_options->sizeSpinBox->setValue( size );
+}
+
+double KisSandOpOption::friction() const
+{
+    return m_options->frictionDoubleSpinBox->value();
+}
+
+void KisSandOpOption::setFriction(double friction) const
+{
+    m_options->frictionDoubleSpinBox->setValue( friction );
+}
+
+double KisSandOpOption::mass() const
+{
+    return m_options->massDoubleSpinBox->value();
+}
+
+void KisSandOpOption::setMass(double mass) const
+{
+    m_options->massDoubleSpinBox->setValue( mass );
+}
+
+// double KisSandOpOption::dissipation() const
 // {
 //     return m_options->dissipationSpinBox->value();
 // }
-// 
-// void KisSandOpOption::setFriction(float dissipation) const
+
+// void KisSandOpOption::setDissipation(double dissipation) const
 // {
 //     m_options->dissipationSpinBox->setValue( dissipation );
 // }
-
-
 
 void KisSandOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
@@ -131,12 +140,16 @@ void KisSandOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(SAND_AMOUNT, amount());
     setting->setProperty(SAND_DEPLETION, sandDepletion());
 
+    setting->setProperty(SAND_SIZE, size());
+    setting->setProperty(SAND_MASS, mass());
+    setting->setProperty(SAND_FRICTION, friction());
+
 //Sand spread mode write settings
 //     setting->setProperty(SAND_MODE, mode());
-//     setting->setProperty(SAND_MASS, mass());
-//     setting->setProperty(SAND_FRICTION, sandFriction());
 //     setting->setProperty(SAND_DISSIPATION, sandDissipation());
 }
+
+
 
 void KisSandOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
@@ -144,10 +157,10 @@ void KisSandOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->amountSpinBox->setValue(setting->getInt(SAND_AMOUNT));
     m_options->sandDepletionCHBox->setChecked(setting->getBool(SAND_DEPLETION));
 
-//Sand spread mode read settings
-//     m_options->modeCHBox->setChecked(setting->getBool(SAND_MODE));
-//     m_options->massSpinBox->setValue(setting->getInt(SAND_MASS));
-//     m_options->frictionSpinBox->setValue(setting->getInt(SAND_FRICTION));
-//     m_options->dissipationSpinBox->setValue(setting->getInt(SAND_DISSIPATION));
+    m_options->sizeSpinBox->setValue(setting->getInt(SAND_SIZE));
+    m_options->massDoubleSpinBox->setValue(setting->getDouble(SAND_MASS));
+    m_options->frictionDoubleSpinBox->setValue(setting->getDouble(SAND_FRICTION));
     
+//     m_options->modeCHBox->setChecked(setting->getBool(SAND_MODE));
+//     m_options->dissipationSpinBox->setValue(setting->getInt(SAND_DISSIPATION));   
 }

@@ -72,7 +72,7 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
     y1 = info.pos().y();
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_sandBrush->paint(m_dab, x1, y1, painter()->paintColor());
+    m_sandBrush->paint(m_dab, x1, y1, painter()->paintColor(), info);
 
     QRect rc = m_dab->extent();
 

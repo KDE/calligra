@@ -140,7 +140,6 @@ void KisItemLayer::setDirty(const QRect & rect)
 {
      KisIndirectPaintingSupport::setDirty(rect);
      KisLayer::setDirty(rect);
-     paintScene(rect); //test
 }
 
 QIcon KisItemLayer::icon() const
@@ -232,13 +231,6 @@ void KisItemLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
-}
-
-void KisItemLayer::addGrains(QVector<Particle> & grains)
-{
-    for(int i = 0; i < grains.size(); i++ ){
-        scene->append(grains[i]);
-    }
 }
 
 #include "kis_item_layer.moc"

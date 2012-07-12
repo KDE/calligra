@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
-    <height>160</height>
+    <width>482</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,102 +22,199 @@
     <height>60</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>1</x>
-     <y>11</y>
-     <width>401</width>
-     <height>131</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="radiusLayout">
-      <item>
-       <widget class="QLabel" name="radiusLabel">
-        <property name="text">
-         <string>radius</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="radiusSpinBox">
-        <property name="maximum">
-         <number>400</number>
-        </property>
-        <property name="value">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="radiusSlider">
-        <property name="maximum">
-         <number>400</number>
-        </property>
-        <property name="value">
-         <number>10</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="amountLayout">
-      <item>
-       <widget class="QLabel" name="amountLabel">
-        <property name="text">
-         <string>amount</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="amountSpinBox">
-        <property name="maximum">
-         <number>400</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="amountSlider">
-        <property name="maximum">
-         <number>400</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="sandDepletionCHBox">
-      <property name="text">
-       <string>Sand depletion</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QGroupBox" name="brushBox">
+       <property name="title">
+        <string>Brush</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <layout class="QHBoxLayout" name="radiusLayout">
+          <item>
+           <widget class="QLabel" name="radiusLabel">
+            <property name="text">
+             <string>radius</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="radiusSpinBox">
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="radiusSlider">
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="amountLayout">
+          <item>
+           <widget class="QLabel" name="amountLabel">
+            <property name="text">
+             <string>amount</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="amountSpinBox">
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="amountSlider">
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="depletionLayout">
+          <item>
+           <widget class="QCheckBox" name="sandDepletionCHBox">
+            <property name="text">
+             <string>Sand depletion</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="grainBox">
+       <property name="title">
+        <string>Grains</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <layout class="QHBoxLayout" name="sizeLayout">
+          <item>
+           <widget class="QLabel" name="sizeLabel">
+            <property name="text">
+             <string>size</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sizeSpinBox">
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="sizeSlider">
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="massLayout">
+          <item>
+           <widget class="QLabel" name="massLabel">
+            <property name="text">
+             <string>mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="massDoubleSpinBox">
+            <property name="value">
+             <double>0.050000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="frictionLayout">
+          <item>
+           <widget class="QLabel" name="frictionLabel">
+            <property name="text">
+             <string>friction</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="frictionDoubleSpinBox">
+            <property name="decimals">
+             <number>7</number>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.050000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>amountLabel_3</zorder>
+  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <resources/>
  <connections>
@@ -182,6 +279,38 @@
     <hint type="destinationlabel">
      <x>257</x>
      <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>sizeSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>67</x>
+     <y>172</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>sizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>173</y>
     </hint>
    </hints>
   </connection>

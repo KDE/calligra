@@ -90,10 +90,6 @@ public:
 
     void setAlphaLocked(bool lock);
 
-    void paintScene(const QRect & rect); //
-
-    void addGrains(QVector<Particle> grains);
-
 public slots:
 
     // KisIndirectPaintingSupport
