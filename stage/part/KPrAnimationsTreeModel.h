@@ -69,8 +69,8 @@ public:
 
      bool hasCutItem() const { return cutItem; }
  */
-     //QModelIndex moveUp(const QModelIndex &index);
-     //QModelIndex moveDown(const QModelIndex &index);
+     QModelIndex moveUp(const QModelIndex &index);
+     QModelIndex moveDown(const QModelIndex &index);
      //QModelIndex cut(const QModelIndex &index);
      QModelIndex removeItemByIndex(const QModelIndex &index);
      //QModelIndex paste(const QModelIndex &index);
@@ -109,7 +109,7 @@ private:
 
     /// Emit standard signals when a group of items is changed
     void announceItemChanged(KPrCustomAnimationItem *item);
-    //QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
+    QModelIndex moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow);
 
     KPrPage *m_activePage;
     KPrView *m_view;

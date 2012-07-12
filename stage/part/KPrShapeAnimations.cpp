@@ -98,6 +98,11 @@ void KPrShapeAnimations::removeStep(KPrAnimationStep *step)
     }
 }
 
+void KPrShapeAnimations::swap(int i, int j)
+{
+    m_shapeAnimations.swap(i, j);
+}
+
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
 {
     return m_shapeAnimations;

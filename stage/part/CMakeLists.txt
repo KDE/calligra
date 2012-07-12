@@ -90,6 +90,7 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrDeleteSlidesCommand.cpp
      commands/KPrEditAnimationTimeLineCommand.cpp
      commands/KPrAnimationEditNodeTypeCommand.cpp
+     commands/KPrReorderAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp

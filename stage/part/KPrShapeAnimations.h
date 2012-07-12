@@ -51,6 +51,9 @@ public:
     void insertStep(const int i, KPrAnimationStep *step);
     void removeStep(KPrAnimationStep *step);
 
+    void swap (int i, int j);
+
+
     /**
      * Get the animations for the given step
      *

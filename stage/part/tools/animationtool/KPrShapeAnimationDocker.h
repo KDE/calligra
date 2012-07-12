@@ -75,6 +75,9 @@ public slots:
 
     void checkAnimationSelected();
 
+    void moveAnimationUp();
+    void moveAnimationDown();
+
 
 private:
     KPrView* m_view;

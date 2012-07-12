@@ -29,6 +29,7 @@
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
 #include "commands/KPrAnimationRemoveCommand.h"
+#include "commands/KPrReorderAnimationCommand.h"
 
 //Calligra Headers
 #include <KoShape.h>
@@ -244,9 +245,9 @@ bool KPrAnimationsTreeModel::removeRows(int row, int count, const QModelIndex &p
     return true;
 }
 
-/*QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
+QModelIndex KPrAnimationsTreeModel::moveUp(const QModelIndex &index)
 {
-    if (!index.isValid() || index.row() <= 0) {
+    if (!index.isValid() || index.row() < 0) {
         return index;
     }
     KPrCustomAnimationItem *item = itemForIndex(index);
@@ -271,6 +272,7 @@ QModelIndex KPrAnimationsTreeModel::moveDown(const QModelIndex &index)
     return moveItem(parent, index.row(), newRow);
 }
 
+/*
 QModelIndex KPrAnimationsTreeModel::cut(const QModelIndex &index)
 {
     if (!index.isValid()) {
@@ -561,15 +563,27 @@ void KPrAnimationsTreeModel::announceItemChanged(KPrCustomAnimationItem *item)
     announceItemChanged(parent);
 }
 
-/*QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow)
+QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int oldRow, int newRow)
 {
-    Q_ASSERT(0 <= oldRow && oldRow < parent->childCount() &&
-             0 <= newRow && newRow < parent->childCount());
-    parent->swapChildren(oldRow, newRow);
-    QModelIndex oldIndex = createIndex(oldRow, 0,
-                                       parent->childAt(oldRow));
-    QModelIndex newIndex = createIndex(newRow, 0,
-                                       parent->childAt(newRow));
+    //First item can't be moved
+    Q_ASSERT(0 < oldRow && oldRow < parent->childCount() &&
+             0 < newRow && newRow < parent->childCount());
+    QModelIndex oldIndex;
+    QModelIndex newIndex;
+    // swap top level items
+    if (parent == m_rootItem) {
+        KPrCustomAnimationItem *itemOld = itemForIndex(index(oldRow, 0));
+        KPrCustomAnimationItem *itemNew = itemForIndex(index(newRow, 0));
+        if (itemOld && itemNew) {
+            if (KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument())) {
+                KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(m_activePage, itemOld->animation()->step(), itemNew->animation()->step());
+                doc->addCommand(cmd);
+                oldIndex = indexByItem(itemOld);
+                newIndex = indexByItem(itemNew);
+            }
+        }
+    }
     emit dataChanged(oldIndex, newIndex);
+    update();
     return newIndex;
-}*/
+}

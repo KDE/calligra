@@ -114,13 +114,13 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
 
     QLabel *orderLabel = new QLabel(i18n("Order: "));
     m_buttonAnimationOrderUp = new QToolButton();
-    m_buttonAnimationOrderUp->setIcon(SmallIcon("arrow-down"));
-    m_buttonAnimationOrderUp->setToolTip(i18n("Move animation down"));
+    m_buttonAnimationOrderUp->setIcon(SmallIcon("arrow-up"));
+    m_buttonAnimationOrderUp->setToolTip(i18n("Move animation up"));
     m_buttonAnimationOrderUp->setEnabled(false);
 
     m_buttonAnimationOrderDown = new QToolButton();
-    m_buttonAnimationOrderDown->setIcon(SmallIcon("arrow-up"));
-    m_buttonAnimationOrderDown->setToolTip(i18n("Move animation up"));
+    m_buttonAnimationOrderDown->setIcon(SmallIcon("arrow-down"));
+    m_buttonAnimationOrderDown->setToolTip(i18n("Move animation down"));
     m_buttonAnimationOrderDown->setEnabled(false);
 
     m_buttonPreviewAnimation = new QToolButton();
@@ -137,7 +137,8 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     //Connect Signals.
     connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
     connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
-
+    connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
+    connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
 
     //load View and model
     m_animationsModel = new KPrAnimationsTreeModel(this);
@@ -178,10 +179,31 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
     if (item && (!item->isDefaulAnimation())) {
         m_buttonRemoveAnimation->setEnabled(true);
         m_editAnimation->setEnabled(true);
+        if (item->triggerEvent() == KPrShapeAnimation::On_Click) {
+            m_buttonAnimationOrderUp->setEnabled(true);
+            m_buttonAnimationOrderDown->setEnabled(true);
+        }
+        else {
+            m_buttonAnimationOrderUp->setEnabled(false);
+            m_buttonAnimationOrderDown->setEnabled(false);
+        }
+
         return;
     }
 m_buttonRemoveAnimation->setEnabled(false);
 m_editAnimation->setEnabled(false);
+}
+
+void KPrShapeAnimationDocker::moveAnimationUp()
+{
+    QModelIndex index = m_animationsView->currentIndex();
+    m_animationsModel->moveUp(index);
+}
+
+void KPrShapeAnimationDocker::moveAnimationDown()
+{
+    QModelIndex index = m_animationsView->currentIndex();
+    m_animationsModel->moveDown(index);
 }
 
 void KPrShapeAnimationDocker::slotActivePageChanged()
