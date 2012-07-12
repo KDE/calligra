@@ -162,7 +162,7 @@ void KPrEditAnimationsWidget::setActiveShape(KoShape *shape)
 void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 {
     KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
-    if (item) {
+    if (item && (index == m_timeLineView->currentIndex())) {
         m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
         m_delayEdit->setTime(QTime().addMSecs(item->beginTime()));
         m_durationEdit->setTime(QTime().addMSecs(item->duration()));
@@ -188,7 +188,6 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
     if ((row >= 0) && m_timeLineView->currentIndex().isValid()) {
         KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(m_timeLineView->currentIndex());
         if (row != ((int)item->triggerEvent())) {
-            qDebug() << "Change trigger Event" << row;
             KPrShapeAnimation::Node_Type newType;
             if (row == 0) newType = KPrShapeAnimation::On_Click;
             else if (row == 1) newType = KPrShapeAnimation::After_Previous;

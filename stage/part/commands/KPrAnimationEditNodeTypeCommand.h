@@ -34,11 +34,6 @@ class STAGE_EXPORT KPrAnimationEditNodeTypeCommand : public KUndo2Command
 {
 public:
     KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
-                                    KPrShapeAnimation::Node_Type type, KUndo2Command *parent = 0);
-    //Reparent children (Node_Type is not changed in children
-    KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
-                                    KPrShapeAnimation::Node_Type type, QList<KPrShapeAnimation *> children, KUndo2Command *parent = 0);
-    KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
                                     KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,
                                     QList<KPrAnimationSubStep *> movedSubSteps, KPrPage *activePage = 0, KUndo2Command *parent=0);
 
@@ -61,6 +56,10 @@ private:
     QList<KPrShapeAnimation *> m_children;
     QList<KPrAnimationSubStep *> m_substeps;
     KPrPage *m_activePage;
+    int m_oldSubstepRow;
+    int m_newSubstepRow;
+    int m_oldStepRow;
+    int m_newStepRow;
 };
 
 #endif // KPRANIMATIONEDITNODETYPECOMMAND_H

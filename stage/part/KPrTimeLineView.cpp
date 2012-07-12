@@ -174,7 +174,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 
 void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
 {
-    // Change size of line
+    // Resize the bar
     if (m_resize) {
         const qreal subSteps = 0.2;
         int startPos = 0;
@@ -204,6 +204,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         update();
     }
+    //Move the bar
     if (m_move) {
         const int Padding = 2;
         int startPos = 0;
@@ -230,9 +231,13 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             if (newPos <= start) {
                 m_adjust = true;
             }
-        } else if (((event->pos().x() + (duration*stepSize-startDragPos) + Padding*2)  >
+        }
+        else if (((event->pos().x() + (duration*stepSize-startDragPos) + Padding*2)  >
                     (startPos+m_mainView->widthOfColumn(StartTime)))) {
             m_mainView->incrementScale();
+        }
+        else {
+            m_mainView->changeStartLimit(row);
         }
         update();
     }

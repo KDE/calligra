@@ -42,9 +42,6 @@ public:
 signals:
     void clicked(const QModelIndex&);
 
-    /// A bar has reached the right limit of the time scale
-    void scaleLimitReached();
-
     void timeValuesChanged(const QModelIndex&);
 
 private:

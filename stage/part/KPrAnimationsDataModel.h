@@ -38,6 +38,7 @@ class KPrAnimationStep;
 class KoPADocument;
 class KPrView;
 class KPrCustomAnimationItem;
+class KUndo2Command;
 
 class STAGE_EXPORT KPrAnimationsDataModel : public QAbstractTableModel
 {
@@ -67,7 +68,7 @@ public:
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
-    /// Return previous item end time
+    /// Return previous item end time in seconds
     qreal previousItemEnd(const QModelIndex &index);
 
     /// Return previous item begin time
@@ -93,14 +94,19 @@ public slots:
 
     void setBeginTime(const QModelIndex &index, const int begin);
     void setDuration(const QModelIndex &index, const int duration);
+
+    /// Set time range for item (times in miliseconds)
     void setTimeRange(KPrCustomAnimationItem *item, const int begin, const int duration);
 
-    bool setTriggerEvent(const QModelIndex &index,const KPrShapeAnimation::Node_Type type);
+    bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
+    void recalculateStart(const QModelIndex &mIndex);
 
 private:
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
                                    KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,
                                    QList<KPrAnimationSubStep *> movedSubSteps, KPrPage *activePage = 0);
+    QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
+    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrCustomAnimationItem *parent, int from, int to, bool connectItems = false);
 
     KPrView *m_view;
     KPrCustomAnimationItem *m_rootItem;

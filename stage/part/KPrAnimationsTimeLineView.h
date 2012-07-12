@@ -107,6 +107,7 @@ protected:
     int numberOfSteps() const;
     void setNumberOfSteps(int steps);
     void incrementScale();
+    void changeStartLimit(const int row);
     void adjustScale();
     int stepsScale();
     qreal maxLineLength() const;

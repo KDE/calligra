@@ -188,6 +188,16 @@ void KPrAnimationsTimeLineView::incrementScale()
     }
 }
 
+void KPrAnimationsTimeLineView::changeStartLimit(const int row)
+{
+    qDebug() << "Change start";
+    // If user wants a after_previous animation start before previous animation switch to with_previous
+    QModelIndex index = m_model->index(row, 0);
+    if (index.isValid()) {
+        m_model->recalculateStart(index);
+    }
+}
+
 void KPrAnimationsTimeLineView::adjustScale()
 {
     m_maxLength = 10;
