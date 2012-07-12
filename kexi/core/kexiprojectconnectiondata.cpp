@@ -33,8 +33,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/connectiondata.h>
-#include <kexidb/drivermanager.h>
+#include <db/connectiondata.h>
+#include <db/drivermanager.h>
 #include "kexiprojectconnectiondata.h"
 
 KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData()

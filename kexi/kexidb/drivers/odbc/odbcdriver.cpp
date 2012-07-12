@@ -24,9 +24,9 @@
 #include "odbctypeinfoqueryunit.h"
 #include "odbcspecialcolumnsqueryunit.h"
 
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>

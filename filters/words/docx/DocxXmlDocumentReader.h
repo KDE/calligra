@@ -103,6 +103,9 @@ protected:
     KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
+    KoFilter::ConversionStatus read_numRestart();
+    KoFilter::ConversionStatus read_numStart();
+    KoFilter::ConversionStatus read_pos();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_del();

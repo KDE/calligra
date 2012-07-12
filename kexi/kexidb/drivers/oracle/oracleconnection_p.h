@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KEXIDB_ORACLECLIENT_P_H  
 	#include <occi.h>
 	#include <QString>
-	#include <kexidb/connection_p.h>
+	#include <db/connection_p.h>
 	#include <vector>
 	#undef bool
 #ifdef ORACLEMIGRATE_H

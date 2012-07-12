@@ -19,7 +19,8 @@
 
 
 #include "KexiFieldListModelItem.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
+#include <kexiutils/utils.h>
 #include <klocalizedstring.h>
 
 KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey) : m_fieldName(fname), m_dateType(dtype)

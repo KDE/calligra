@@ -10,5 +10,5 @@ set(kexialtertabletest_SRCS main.cpp )
 
 kde4_add_executable(kexialtertabletest ${kexialtertabletest_SRCS})
 
-target_link_libraries(kexialtertabletest  ${KDE4_KDECORE_LIBS} kexidb ) 
+target_link_libraries(kexialtertabletest  ${KDE4_KDECORE_LIBS} kexidb ${CALLIGRADB_LIBS})
 

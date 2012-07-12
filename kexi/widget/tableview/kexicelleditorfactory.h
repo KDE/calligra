@@ -24,7 +24,7 @@
 #include <QWidget>
 
 #include <kexi_global.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 
 class KexiCellEditorFactoryItem;
 class KexiTableEdit;

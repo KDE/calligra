@@ -20,7 +20,7 @@
 #include "kexitextmsghandler.h"
 
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 
 KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)

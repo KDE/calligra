@@ -29,8 +29,8 @@
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/parser/parser.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"

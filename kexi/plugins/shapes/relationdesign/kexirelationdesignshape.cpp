@@ -19,11 +19,11 @@
 #include "kexirelationdesignshape.h"
 #include <QPainter>
 #include "KoViewConverter.h"
-#include "kexidb/connection.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
 #include <kdebug.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>

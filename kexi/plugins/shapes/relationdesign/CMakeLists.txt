@@ -14,7 +14,7 @@ kde4_add_plugin(kexirelationdesignshape ${kexirelationdesignshape_PART_SRCS})
 
 target_link_libraries(
 kexirelationdesignshape
-kexidb
+${CALLIGRADB_LIBS}
 kexicore
 keximain
 komain

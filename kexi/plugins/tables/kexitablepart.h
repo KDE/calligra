@@ -27,7 +27,7 @@
 #include <KexiWindow.h>
 #include <KexiWindowData.h>
 #include <kexipartitem.h>
-#include <kexidb/fieldlist.h>
+#include <db/fieldlist.h>
 
 class KexiLookupColumnPage;
 

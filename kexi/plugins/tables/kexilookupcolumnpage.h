@@ -20,8 +20,8 @@
 #define KEXILOOKUPCOLUMNPAGE_H
 
 #include <widget/properties/KexiPropertyPaneViewBase.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/utils.h>
 #include <koproperty/Set.h>
 
 class KexiProject;

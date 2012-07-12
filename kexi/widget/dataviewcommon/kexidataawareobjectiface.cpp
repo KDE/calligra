@@ -39,7 +39,7 @@
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 
 //#include "kexitableviewheader.h"
 
