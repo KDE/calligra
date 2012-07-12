@@ -122,6 +122,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP laye
     f.open(QIODevice::WriteOnly);
 
     PSDHeader header;
+    header.signature = "8BPS";
     header.version = 2;
     header.nChannels = image->colorSpace()->channelCount();
     header.width = image->width();
