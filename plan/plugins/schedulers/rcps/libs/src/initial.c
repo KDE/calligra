@@ -1,4 +1,6 @@
-#include <malloc.h>
+#ifdef _WIN32
+# include <malloc.h>
+#endif
 #include <stdlib.h>
 #include <assert.h>
 

@@ -1,5 +1,7 @@
 #include <assert.h>
-#include <malloc.h>
+#ifdef _WIN32
+# include <malloc.h>
+#endif
 #include <stdio.h>
 
 #include "fitness.h"
