@@ -26,11 +26,14 @@
 #include <KoView.h>
 
 #include "kptcontext.h"
+#include "kptviewbase.h"
 
 #include <QMenu>
 #include <QDockWidget>
 #include <QTimer>
 #include <QMap>
+#include <QPointer>
+#include <QPrintDialog>
 
 #include <KConfigDialog>
 
@@ -83,6 +86,8 @@ class HtmlView;
 class ReportView;
 
 class ReportDesignDialog;
+
+class DockWidget;
 
 class ConfigDialog : public KConfigDialog
 {
@@ -191,6 +196,7 @@ public:
     ViewBase *createReportView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
+    QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
 
     virtual KoZoomController *zoomController() const {
         return 0;
@@ -383,6 +389,8 @@ private:
 
     bool m_readWrite;
 
+    QList<DockWidget*> m_dockers;
+
     // ------ File
     QAction *actionCreateTemplate;
 
@@ -434,6 +442,7 @@ private:
 
     KoPart *m_partpart;
 };
+
 
 } //Kplato namespace
 

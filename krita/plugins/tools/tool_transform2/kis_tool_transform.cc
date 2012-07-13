@@ -706,7 +706,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
         }
     }
     else {
-        if (modifiers & Qt::AltModifier || modifiers & Qt::MetaModifier) {
+        if (modifiers & Qt::ControlModifier) {
             m_function = PERSPECTIVE;
             setFunctionalCursor();
             return;
@@ -828,8 +828,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::AltModifier)
-            || !PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::MetaModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -904,6 +903,10 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());
@@ -2143,6 +2146,10 @@ void KisToolTransform::applyTransform()
     if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
+    if (!nodeEditable()) {
+        return;
+    }
+
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     if (!canvas)
         return;
@@ -2758,6 +2765,10 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
     QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
 
     if (button == applyButton) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());

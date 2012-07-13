@@ -21,7 +21,7 @@ kde4_add_plugin(kexidb_mysqldriver ${kexidb_mysqldriver_PART_SRCS})
 
 
 target_link_libraries(kexidb_mysqldriver ${MYSQL_LIBRARIES} 
- ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )
+ ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${CALLIGRADB_LIBS} kexidb)
 
 install(TARGETS kexidb_mysqldriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

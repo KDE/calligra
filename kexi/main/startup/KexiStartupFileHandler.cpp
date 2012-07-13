@@ -20,8 +20,8 @@
 #include "KexiStartupFileHandler.h"
 #include <kexi_global.h>
 
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiContextMessage.h>

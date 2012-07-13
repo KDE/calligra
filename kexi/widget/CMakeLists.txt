@@ -48,8 +48,8 @@ IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
-    navigator/KexiProjectListView.cpp
-    navigator/KexiProjectListViewItem.cpp
+    #navigator/KexiProjectListView.cpp
+    #navigator/KexiProjectListViewItem.cpp
     
     kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
@@ -83,6 +83,7 @@ target_link_libraries(
     kexicore
     ktexteditor
     kexidb
+    ${CALLIGRADB_LIBS}
     ${KOPROPERTY_LIBS}
     ${KDE4_KDEUI_LIBS}
 )

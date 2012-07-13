@@ -948,7 +948,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
-void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QString &xmlid)
+void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();

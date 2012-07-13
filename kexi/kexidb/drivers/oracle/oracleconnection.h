@@ -19,7 +19,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 #ifndef ORACLECONNECTION_H
 #define ORACLECONNECTION_H
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QStringList>
 #include "oraclecursor.h"
 #include "oracleconnection_p.h"

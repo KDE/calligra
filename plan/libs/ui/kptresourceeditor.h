@@ -67,8 +67,7 @@ public:
     
     void setupGui();
     Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
-    virtual void draw();
+    virtual void setProject( Project *project );
 
     ResourceItemModel *model() const { return m_view->model(); }
     

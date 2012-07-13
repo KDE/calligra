@@ -22,7 +22,8 @@
 #ifndef KEXI_MIGRATE_DATA_H
 #define KEXI_MIGRATE_DATA_H
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
+#include <kexidb/kexidb_export.h>
 
 class KexiProjectData;
 

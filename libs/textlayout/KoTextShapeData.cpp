@@ -297,8 +297,9 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 
 
     if (style) {
-        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
         styleStack.setTypeProperties("graphic");
         // Spacing (padding)
         const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
@@ -321,7 +322,15 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
         if (!padding.isEmpty()) {
             setPadding(KoUnit::parseValue(padding));
         }
+        styleStack.restore();
 
+        QString family = style->attributeNS(KoXmlNS::style, "family", "graphic");
+        KoParagraphStyle *defaultStyle = 0;
+        const KoXmlElement *dstyle = context.odfLoadingContext().stylesReader().defaultStyle(family);
+        if (dstyle) {
+            defaultStyle = new KoParagraphStyle();
+            defaultStyle->loadOdf(dstyle, context);
+        }
         // graphic styles don't support inheritance yet therefor some additional work is needed here.
         QList<KoParagraphStyle *> paragraphStyles;
         while (style) {
@@ -331,16 +340,13 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
                 paragraphStyles.last()->setParentStyle(pStyle);
             }
             paragraphStyles.append(pStyle);
-            QString family = style->attributeNS(KoXmlNS::style, "family", "paragraph");
+            QString family = style->attributeNS(KoXmlNS::style, "family", "graphic");
             style = context.odfLoadingContext().stylesReader().findStyle(
                     style->attributeNS(KoXmlNS::style, "parent-style-name"), family.toLocal8Bit().constData(),
                     context.odfLoadingContext().useStylesAutoStyles());
-            if (!style && paragraphStyles.size() == 1) {
-                style = context.odfLoadingContext().stylesReader().findStyle(
-                        "standard", family.toLocal8Bit().constData(),
-                        context.odfLoadingContext().useStylesAutoStyles());
-            }
         }
+        // rather than setting default style and apply to block we just set a final parent
+        paragraphStyles.last()->setParentStyle(defaultStyle);
 
         QTextDocument *document = this->document();
         QTextCursor cursor(document);

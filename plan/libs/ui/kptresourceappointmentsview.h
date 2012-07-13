@@ -75,8 +75,15 @@ class ResourceAppointmentsSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ResourceAppointmentsSettingsDialog( ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
+    explicit ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
 
+public slots:
+    void slotOk();
+
+private:
+    ViewBase *m_view;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 //------------------------
@@ -103,6 +110,9 @@ public:
 
 protected slots:
     void slotRefreshed();
+
+private:
+    ViewBase *m_view;
 };
 
 class KPLATOUI_EXPORT ResourceAppointmentsView : public ViewBase

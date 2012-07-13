@@ -38,8 +38,8 @@
 #include <core/kexi.h>
 #include <core/kexipart.h>
 #include <core/KexiMainWindowIface.h>
-#include <kexidb/utils.h>
-#include <kexidb/connection.h>
+#include <db/utils.h>
+#include <db/connection.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
@@ -336,7 +336,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("progress-bar");
+        wi->setPixmap("progress");
         wi->setClassName("KexiDBProgressBar");
         wi->setName(i18n("Progress Bar"));
         wi->setNamePrefix(

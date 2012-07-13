@@ -202,6 +202,23 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
     }
 }
 
+QPixmap KWDocument::generatePreview(const QSize &size)
+{
+    // use first page as preview for all pages
+    KWPage firstPage = pageManager()->begin();
+    if (! firstPage.isValid()) {
+        // TODO: what to return for no page?
+        return QPixmap();
+    }
+
+    // use shape manager from canvasItem even for QWidget environments
+    // if using the shape manager from one of the views there is no guarantee
+    // that the view, its canvas and the shapemanager is not destroyed in between
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
+}
+
 void KWDocument::paintContent(QPainter &, const QRect &)
 {
 }

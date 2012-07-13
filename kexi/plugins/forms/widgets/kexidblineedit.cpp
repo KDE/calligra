@@ -35,9 +35,9 @@
 
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
-#include <kexidb/queryschema.h>
 #include <kexidb/fieldvalidator.h>
-#include <kexiutils/utils.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator

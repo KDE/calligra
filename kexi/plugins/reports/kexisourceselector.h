@@ -25,7 +25,7 @@
 #include <KLineEdit>
 #include <KPushButton>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <KoReportData.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"

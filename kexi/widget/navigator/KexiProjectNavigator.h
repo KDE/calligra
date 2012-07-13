@@ -113,7 +113,7 @@ public:
      items are displayed.
      Previous items are removed. */
     void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
-                    QString* partManagerErrorMessages = 0);
+                    QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
@@ -210,7 +210,6 @@ protected:
 #endif
 
     KActionMenu* m_exportActionMenu;
-//  KMenu* m_newObjectMenu;
     QAction *m_itemMenuTitle, *m_partMenuTitle,
     *m_exportActionMenu_sep, *m_pageSetupAction_sep;
 
@@ -221,6 +220,7 @@ protected:
     bool m_singleClick;
     bool m_readOnly;
     KexiProjectModel *m_model;
+    QString m_itemsPartClass;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)

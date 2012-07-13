@@ -223,7 +223,8 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -423,7 +424,8 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

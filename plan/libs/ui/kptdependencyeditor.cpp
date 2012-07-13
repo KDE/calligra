@@ -29,6 +29,7 @@
 #include "kptdebug.h"
 
 #include "calligraversion.h"
+#include "KoPageLayoutWidget.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
@@ -53,6 +54,13 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 #include <kdeversion.h>
+
+
+#if QT_VERSION >= 0x040700
+#define ConnectCursor Qt::DragLinkCursor
+#else
+#define ConnectCursor Qt::UpArrowCursor
+#endif
 
 namespace KPlato
 {
@@ -477,7 +485,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     m_ctype( type ),
     m_editable( false )
 {
-    setCursor( Qt::UpArrowCursor );
+    setCursor( ConnectCursor);
     setAcceptsHoverEvents( true );
     setZValue( 500.0 );
 
@@ -1059,7 +1067,7 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
                 }
             }
         }
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         m_connectionitem->setPredConnector( item );
         m_connectionitem->show();
     } else {
@@ -1086,8 +1094,7 @@ bool DependencyScene::connectionIsValid( DependencyConnectorItem *pred, Dependen
 void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool entered )
 {
     //kDebug(planDependencyEditorDbg())<<entered;
-    //TODO special cursor
-    item->setCursor( Qt::UpArrowCursor );
+    item->setCursor( ConnectCursor );
     if ( ! entered ) {
         // when we leave a connector we don't have a successor
         m_connectionitem->setSuccConnector( 0 );
@@ -1095,7 +1102,7 @@ void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool ente
     }
     if ( m_connectionitem->predConnector == item ) {
         // when inside the predecessor, clicking is allowed (deselects connector)
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         return;
     }
     if ( ! m_connectionitem->isVisible() ) {
@@ -1928,17 +1935,19 @@ void DependencyView::mouseMoveEvent( QMouseEvent *mouseEvent )
         foreach ( QGraphicsItem *i, itemScene()->items( spos ) ) {
             if ( i->type() == DependencyConnectorItem::Type ) {
                 if ( i == itemScene()->fromItem() ) {
-                    c = Qt::UpArrowCursor;
+                    c = ConnectCursor;
                 } else {
                     if ( itemScene()->connectionIsValid( itemScene()->fromItem(), static_cast<DependencyConnectorItem*>( i ) ) ) {
-                        c = Qt::UpArrowCursor;
+                        c = ConnectCursor;
                     } else {
                         c = Qt::ForbiddenCursor;
                     }
                 }
             }
         }
-        viewport()->setCursor( c );
+        if ( viewport()->cursor().shape() != c ) {
+            viewport()->setCursor( c );
+        }
     }
     QGraphicsView::mouseMoveEvent( mouseEvent );
     //kDebug(planDependencyEditorDbg())<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
@@ -1953,6 +1962,40 @@ void DependencyView::slotAutoScroll()
 }
 
 //-----------------------------------
+DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWidget *p)
+    : KPageDialog(p),
+    m_view( view )
+{
+    setCaption( i18n("Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+}
+
+void DependencyeditorConfigDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
+}
+
+//--------------------
 DependencyEditor::DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent),
     m_currentnode( 0 ),
@@ -2171,6 +2214,11 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
     //kDebug(planDependencyEditorDbg())<<name;
     if ( ! name.isEmpty() ) {
         emit requestPopupMenu( name, pos );
+    } else {
+        QList<QAction*> lst = contextActionList();
+        if ( ! lst.isEmpty() ) {
+            QMenu::exec( lst, pos,  lst.first() );
+        }
     }
     m_currentnode = 0;
     m_currentrelation = 0;
@@ -2292,6 +2340,18 @@ void DependencyEditor::setupGui()
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );
+
+    createOptionAction();
+}
+
+void DependencyEditor::slotOptions()
+{
+    kDebug(planDbg());
+    DependencyeditorConfigDialog *dlg = new DependencyeditorConfigDialog( this, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void DependencyEditor::slotAddTask()

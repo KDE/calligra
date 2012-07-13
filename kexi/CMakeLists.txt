@@ -114,7 +114,7 @@ ELSE(KEXI_MOBILE)
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
     ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
-    kexidb
+    ${CALLIGRADB_LIBS}
     keximain
     kexicore
   )
