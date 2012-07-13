@@ -20,7 +20,7 @@
 
 #include "AutoWidget.h"
 #include <QLabel>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <QHBoxLayout>
 #include <QEvent>
 

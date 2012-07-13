@@ -864,8 +864,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lnNumType()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
  - pos (Footnote Placement) §17.11.21
 
 */
@@ -874,10 +874,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer endBuf;
+    body = endBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "endnote");
 
@@ -886,17 +884,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString endStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString endStyle;
+    body = endBuf.releaseWriter(endStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, endStyle.toUtf8());
 
     READ_EPILOGUE
@@ -913,9 +909,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
- - pos (Footnote Placement) §17.11.21
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] pos (Footnote Placement) §17.11.21
 
 */
 //! @todo support all elements
@@ -923,31 +919,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer footBuf;
+    body = footBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "footnote");
-    body->addAttribute("text:footnotes-position", "page");
-    body->addAttribute("text:start-numbering-at", "document");
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
+            ELSE_TRY_READ_IF(pos)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString footStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString footStyle;
+    body = footBuf.releaseWriter(footStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, footStyle.toUtf8());
 
     READ_EPILOGUE
@@ -955,17 +946,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 
 #undef CURRENT_EL
 #define CURRENT_EL numFmt
-//! w:numFmt handler (Footnote Numbering format)
+//! numFmt handler (Footnote Numbering format)
 /*
  Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
  - [done] footnotePr (§17.11.12)
  - [done] footnotePr (§17.11.11)
 
  Child elements:
  - none
-
 */
-//! @toodo support all elements
+//! @todo support all attributes
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 {
     READ_PROLOGUE
@@ -977,12 +969,125 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
         if (val == "upperLetter") {
             body->addAttribute("style:num-format", "A");
         }
-        else if (val == "decimal") {
+        else if (val == "lowerLetter") {
+            body->addAttribute("style:num-format", "a");
+        }
+        else if (val == "upperRoman") {
+            body->addAttribute("style:num-format", "I");
+        }
+        else if (val == "lowerRoman") {
+            body->addAttribute("style:num-format", "i");
+        }
+        else if (val == "none") {
+            body->addAttribute("style:num-format", "");
+        }
+        else {
             body->addAttribute("style:num-format", "1");
         }
     }
-    else { // For now let's use letter format as the default
-        body->addAttribute("style:num-format", "A");
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numRestart
+//! numRestart (Footnote and Endnote Numbering Restart Location)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numRestart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "eachPage") {
+            body->addAttribute("text:start-numbering-at", "page");
+        }
+        else if (val == "eachSect") {
+            body->addAttribute("text:start-numbering-at", "chapter");
+        }
+        else { //continuous
+            body->addAttribute("text:start-numbering-at", "document");
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numStart
+//! numStart (Footnote and Endnote Numbering Starting Value)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numStart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        body->addAttribute("text:start-value", val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pos
+//! pos (Footnote Placement)
+/*
+ Parent elements:
+ - [not applicable] endnotePr (§17.11.4)
+ - [not applicable] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+ */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_pos()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "beneathText") {
+            body->addAttribute("text:footnotes-position", "text");
+        }
+        else if (val == "docEnd") {
+            body->addAttribute("text:footnotes-position", "document");
+        }
+        else if (val == "sectEnd") {
+            body->addAttribute("text:footnotes-position", "section");
+        }
+        else { // pageBottom
+            body->addAttribute("text:footnotes-position", "page");
+        }
     }
 
     readNext();
@@ -1000,7 +1105,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 
  Child Elements:
  - col (Single Column Definition) §17.6.3
-
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()

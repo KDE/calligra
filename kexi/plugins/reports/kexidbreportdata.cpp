@@ -18,7 +18,7 @@
 
 #include "kexidbreportdata.h"
 #include <kdebug.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <core/kexipart.h>
 #include <QDomDocument>
 

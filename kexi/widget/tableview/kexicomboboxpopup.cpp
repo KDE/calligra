@@ -24,10 +24,10 @@
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
-#include <kexidb/connection.h>
-#include <kexidb/lookupfieldschema.h>
-#include <kexidb/expression.h>
-#include <kexidb/parser/sqlparser.h>
+#include <db/connection.h>
+#include <db/lookupfieldschema.h>
+#include <db/expression.h>
+#include <db/parser/sqlparser.h>
 
 #include <kdebug.h>
 

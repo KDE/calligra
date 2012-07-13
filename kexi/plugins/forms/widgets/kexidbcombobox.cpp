@@ -32,7 +32,7 @@
 #include <QCursor>
 #include <QList>
 
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <widget/tableview/kexicomboboxpopup.h>
 #include <widget/tableview/kexicelleditorfactory.h>
 #include <kexiutils/utils.h>

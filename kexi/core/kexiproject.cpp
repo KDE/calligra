@@ -28,14 +28,14 @@
 
 #include <kexiutils/identifier.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/msghandler.h>
-#include <kexidb/dbproperties.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
+#include <db/parser/parser.h>
+#include <db/msghandler.h>
+#include <db/dbproperties.h>
 #include <kexiutils/utils.h>
 
 #include "kexiproject.h"
@@ -644,7 +644,7 @@ bool KexiProject::retrieveItems()
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
-                && KexiUtils::isIdentifier(objName))
+                && KexiDB::isIdentifier(objName))
         {
             KexiPart::Item *it = new KexiPart::Item();
             it->setIdentifier(ident);

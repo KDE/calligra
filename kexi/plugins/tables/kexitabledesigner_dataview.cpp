@@ -19,8 +19,8 @@
 
 #include "kexitabledesigner_dataview.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 #include <kexiutils/utils.h>
 #include "kexitableview.h"
 #include "kexidatatableview.h"

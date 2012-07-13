@@ -2291,7 +2291,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     m_currentParagraphStyle.addProperty("fo:line-height", "100%" );
 #endif
     bool pprRead = false;
@@ -2372,6 +2371,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     if (!pprRead) {
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
+    }
+    if (m_currentParagraphStyle.property("fo:line-height").endsWith('%')) {
+        m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true");
     }
 #else
     Q_UNUSED(pprRead);
@@ -3134,30 +3136,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     TRY_READ_ATTR_WITHOUT_NS(indent)
     TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
-    bool ok = false;
-
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayout, SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-        m_currentBulletProperties.setMargin(marginal);
+        qreal marLeft;
+        STRING_TO_QREAL(marL, marLeft, "attr:marL")
+        marLeft = EMU_TO_POINT(marLeft);
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
+        m_currentBulletProperties.setMargin(marLeft);
         m_listStylePropertiesAltered = true;
     }
     if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        qreal firstInd;
+        STRING_TO_QREAL(indent, firstInd, "attr:indent")
+        firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
         m_listStylePropertiesAltered = true;
     }
 
     if (!marR.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+        qreal marRight;
+        STRING_TO_QREAL(marR, marRight, "attr:marR")
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
+        qreal tabSize;
+        STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
 
     m_currentTextStyleProperties = new KoCharacterStyle();
@@ -5051,7 +5057,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentListLevel = QString(level.at(3)).toInt();
 
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
-
     Q_ASSERT(m_currentListLevel > 0);
     m_currentBulletProperties.m_level = m_currentListLevel;
 
@@ -5060,35 +5065,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     TRY_READ_ATTR_WITHOUT_NS(indent)
     TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
-    bool ok = false;
-
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     inheritTextStyle(m_currentTextStyle);
 #endif
 
     // Following settings are only applied if defined so they don't overwrite
     // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-        m_currentBulletProperties.setMargin(marginal);
+        qreal marLeft;
+        STRING_TO_QREAL(marL, marLeft, "attr:marL")
+        marLeft = EMU_TO_POINT(marLeft);
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
+        m_currentBulletProperties.setMargin(marLeft);
     }
     if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        qreal firstInd;
+        STRING_TO_QREAL(indent, firstInd, "attr:indent")
+        firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+        qreal marRight;
+        STRING_TO_QREAL(marR, marRight, "attr:marR")
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
+        qreal tabSize;
+        STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -5894,14 +5902,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
 
 #undef CURRENT_EL
 #define CURRENT_EL spcPts
-//! spcPts - spacing points
+//! spcPts (Spacing Points), ECMA-376, DrawingML 21.1.2.2.12, p.3600
 /*!
  Parent elements:
  - [done] lnSpc (§21.1.2.2.5)
  - [done] spcAft (§21.1.2.2.9)
  - [done] spcBef (§21.1.2.2.10)
 */
-//! @todo support all attributes
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 {
     READ_PROLOGUE
@@ -5910,21 +5917,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    bool ok = false;
-    const int margin = val.toDouble(&ok);
+    int margin;
+    STRING_TO_INT(val, margin, "attr:val")
 
-    if (ok) {
-        switch (m_currentSpacingType) {
-            case (spacingMarginTop):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
-                break;
-            case (spacingMarginBottom):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
-                break;
-            case (spacingLines):
-                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
-                break;
-        }
+    switch (m_currentSpacingType) {
+    case (spacingMarginTop):
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
+        break;
+    case (spacingMarginBottom):
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
+        break;
+    case (spacingLines):
+        m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
+        break;
     }
 
     readNext();
@@ -5933,7 +5938,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
 #undef CURRENT_EL
 #define CURRENT_EL spcPct
-//! spcPct - spacing percentage
+//! spcPct (Spacing Percent), ECMA-376, DrawingML 21.1.2.2.11, p.3599
 /*!
  Parent elements:
  - [done] lnSpc (§21.1.2.2.5)
@@ -5948,23 +5953,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(val)
-    bool ok = false;
-    int lineSpace = val.toDouble(&ok)/1000;
-    if (ok) {
-        QString space = "%1";
-        space = space.arg(lineSpace);
-        space.append('%');
-        switch (m_currentSpacingType) {
-            case (spacingMarginTop):
-                m_currentParagraphStyle.addProperty("fo:margin-top", space);
-                break;
-            case (spacingMarginBottom):
-                m_currentParagraphStyle.addProperty("fo:margin-bottom", space);
-                break;
-            case (spacingLines):
-                m_currentParagraphStyle.addProperty("fo:line-height", space);
-                break;
-        }
+
+    int lineSpace;
+    STRING_TO_INT(val, lineSpace, "attr:val")
+
+    QString space = "%1";
+    space = space.arg(lineSpace/1000.0);
+    space.append('%');
+
+    switch (m_currentSpacingType) {
+    case (spacingMarginTop):
+        m_currentParagraphStyle.addProperty("fo:margin-top", space);
+        break;
+    case (spacingMarginBottom):
+        m_currentParagraphStyle.addProperty("fo:margin-bottom", space);
+        break;
+    case (spacingLines):
+        m_currentParagraphStyle.addProperty("fo:line-height", space);
+        break;
     }
 
     readNext();

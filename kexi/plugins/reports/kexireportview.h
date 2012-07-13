@@ -20,7 +20,7 @@
 #define KEXIREPORTVIEW_H
 
 #include <core/KexiView.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QDomDocument>
 #include "kexireportpart.h"
 #include <KoReportRendererBase.h>

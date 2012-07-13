@@ -25,9 +25,9 @@
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
 
-#include <kexidb/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
+#include <db/utils.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>

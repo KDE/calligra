@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 
 //! @internal
 class KexiProjectDataPrivate
@@ -227,7 +227,7 @@ bool KexiProjectData::isReadOnly() const
 */
 
 #include "kexiprojectdata.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
