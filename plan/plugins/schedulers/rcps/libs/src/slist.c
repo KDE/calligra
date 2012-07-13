@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdio.h>
-#include <malloc.h>
+#ifdef _WIN32
+# include <malloc.h>
+#endif
 #include <string.h>
 
 #include "slist.h"
