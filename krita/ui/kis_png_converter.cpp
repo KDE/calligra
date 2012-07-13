@@ -47,7 +47,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoUnit.h>
+#include <KoColor.h>
 
+#include <kis_painter.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
@@ -804,6 +806,17 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     // Setup the writing callback of libpng
     int height = image->height();
     int width = image->width();
+
+    if (!options.alpha) {
+        KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
+        KoColor c(options.transparencyFillColor, device->colorSpace());
+        tmp->fill(QRect(0, 0, width, height), c);
+        KisPainter gc(tmp);
+        gc.bitBlt(QPoint(0, 0), device, QRect(0, 0, width, height));
+        gc.end();
+        device = tmp;
+    }
+
     // Initialize structures
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {

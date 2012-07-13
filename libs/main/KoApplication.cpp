@@ -29,6 +29,7 @@
 #include "KoMainWindow.h"
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
+#include "KoServiceProvider.h"
 
 #include <kdeversion.h>
 #include <klocale.h>
@@ -147,7 +148,7 @@ bool KoApplication::start()
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
@@ -317,7 +318,13 @@ bool KoApplication::start()
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
                                       || koargs->isSet("benchmark-loading-show-window")
                                       || !roundtripFileName.isEmpty();
-        const bool showShell = koargs->isSet("benchmark-loading-show-window");
+        // only show the shell when no command-line mode option is passed
+        const bool showShell =
+                koargs->isSet("benchmark-loading-show-window") || (
+                    !koargs->isSet("export-pdf")
+                    && !koargs->isSet("benchmark-loading")
+                    && !koargs->isSet("roundtrip-filename")
+                    && roundtripFileName.isEmpty());
         const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
@@ -339,7 +346,7 @@ bool KoApplication::start()
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                if (showShell || !benchmarkLoading) {
+                if (showShell) {
                     shell->show();
                 }
                 if (benchmarkLoading) {

@@ -55,7 +55,6 @@ public:
 private slots:
     void updateDataForced();
     void updateData();
-    void setAutoUpdate(int);
     void showSemanticViewContextMenu(const QPoint &);
     void semanticObjectAdded(KoRdfSemanticItem *item);
     void semanticObjectUpdated(KoRdfSemanticItem *item);
@@ -64,10 +63,8 @@ private slots:
 private:
     KoCanvasBase *m_canvas;
     int m_lastCursorPosition;
-    bool m_autoUpdate;
     KWDocument *m_document;
     KoSelection *m_selection;
-    QTimer *m_timer;
     QTextDocument *m_textDocument;
     KoRdfSemanticTree m_rdfSemanticTree;
 

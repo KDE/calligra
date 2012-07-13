@@ -29,9 +29,9 @@
 #include <string>
 #include <vector>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexiutils/identifier.h>
 #include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
 

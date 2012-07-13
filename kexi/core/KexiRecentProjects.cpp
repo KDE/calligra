@@ -19,9 +19,9 @@
 
 #include "KexiRecentProjects.h"
 
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/msghandler.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/msghandler.h>
 #include <core/kexidbshortcutfile.h>
 
 #include <KStandardDirs>

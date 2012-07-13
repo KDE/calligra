@@ -372,8 +372,7 @@ void Document::processAssociatedStrings()
         m_metaWriter->endElement();
     }
     if (!comments.isEmpty()) {
-        //TODO: LO/MSOffice use dc:description
-        m_metaWriter->startElement("meta:comments");
+        m_metaWriter->startElement("dc:description");
         m_metaWriter->addTextNode(comments);
         m_metaWriter->endElement();
     }
@@ -1173,7 +1172,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 #if 0
         qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
         if (headerMarginTop > 0) {
-            header.append(QString::number(headerMarginTop / 20.0));
+            header.append(QString::number(headerMarginTop / 20.0, 'f'));
         } else
 #endif
             header.append("0");
@@ -1197,7 +1196,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         footer.append(" fo:margin-top=\"");
         qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
         if (headerMarginBottom >= 400) {
-            footer.append(QString::number(headerMarginBottom / 20.0));
+            footer.append(QString::number(headerMarginBottom / 20.0, 'f'));
         } else {
             footer.append("14");
         }

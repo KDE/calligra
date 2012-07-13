@@ -54,7 +54,6 @@ public:
     enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
         Right,      ///< A right page. Used for odd numbered pages
-        PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
     };
 
     /// return the width of this page (in pt)

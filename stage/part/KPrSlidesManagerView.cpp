@@ -34,7 +34,7 @@
 
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
-    , m_dragingFlag(false)
+    , m_draggingFlag(false)
     , margin(23)
 {
     setViewMode(QListView::IconMode);
@@ -58,7 +58,7 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
     QListView::paintEvent(event);
 
     // Paint the line where the slide should go
-    if (isDraging()) {
+    if (isDragging()) {
         QSize size(itemSize().width() + spacing(), itemSize().height() + spacing());
         QPair <int, int> m_pair = cursorRowAndColumn();
         int numberColumn = m_pair.first;
@@ -86,7 +86,7 @@ void KPrSlidesManagerView::contextMenuEvent(QContextMenuEvent *event)
 void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     event->accept();
-    QListView::mouseDoubleClickEvent(event);
+    // do not call QListView::mouseDoubleClickEvent(event); here as this triggers a rename command to be added
     emit slideDblClick();
 }
 
@@ -110,7 +110,7 @@ void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
 
 void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 {
-    setDragingFlag(false);
+    setDraggingFlag(false);
     ev->setDropAction(Qt::IgnoreAction);
     ev->accept();
 
@@ -136,7 +136,7 @@ void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
     QListView::dragMoveEvent(ev);
-    setDragingFlag();
+    setDraggingFlag();
     viewport()->update();
 }
 
@@ -149,7 +149,7 @@ void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
 void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e);
-    setDragingFlag(false);
+    setDraggingFlag(false);
 }
 
 void KPrSlidesManagerView::focusOutEvent(QFocusEvent *event)
@@ -162,6 +162,21 @@ void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
 {
     Q_UNUSED(event);
     emit focusGot();
+}
+
+void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
+{
+    if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+        if (event->delta() > 0) {
+            emit zoomIn();
+        }
+        else {
+            emit zoomOut();
+        }
+    }
+    else {
+        QListView::wheelEvent(event);
+    }
 }
 
 void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
@@ -177,23 +192,22 @@ void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, cons
 
 QRect KPrSlidesManagerView::itemSize() const
 {
-    return m_itemSize;
+    if (model()) {
+        return (this->visualRect(model()->index(0,0,QModelIndex())));
+    }
+    else {
+        return QRect();
+    }
 }
 
-void KPrSlidesManagerView::setItemSize(QRect size)
+void KPrSlidesManagerView::setDraggingFlag(bool flag)
 {
-    m_itemSize = size;
-    setSpacing(m_itemSize.width() / 10);
+    m_draggingFlag = flag;
 }
 
-void KPrSlidesManagerView::setDragingFlag(bool flag)
+bool KPrSlidesManagerView::isDragging() const
 {
-    m_dragingFlag = flag;
-}
-
-bool KPrSlidesManagerView::isDraging() const
-{
-    return m_dragingFlag;
+    return m_draggingFlag;
 }
 
 bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)

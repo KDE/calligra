@@ -92,10 +92,12 @@ public:
     int protectContent : 1;
 
     KoShape::TextRunAroundSide textRunAroundSide;
-
-    qreal textRunAroundDistance;
-
+    qreal textRunAroundDistanceLeft;
+    qreal textRunAroundDistanceTop;
+    qreal textRunAroundDistanceRight;
+    qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
+    KoShape::TextRunAroundContour textRunAroundContour;
 
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;

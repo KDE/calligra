@@ -29,6 +29,8 @@
 #include "kptworkpackagesendpanel.h"
 #include "kptdatetime.h"
 #include "kptdebug.h"
+#include "kptresourcemodel.h"
+#include "kptresourceallocationmodel.h"
 
 #include <KoDocument.h>
 
@@ -38,6 +40,7 @@
 #include <QWidget>
 #include <QMenu>
 #include <QDragMoveEvent>
+#include <QDockWidget>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -228,6 +231,7 @@ void TaskEditorTreeView::slotDropAllowed( const QModelIndex &index, int dropIndi
     if ( pr ) {
         idx = pr->mapToSource( index );
     }
+    event->ignore();
     if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
         event->accept();
     }
@@ -264,6 +268,7 @@ void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorP
     if ( pr ) {
         idx = pr->mapToSource( index );
     }
+    event->ignore();
     if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
         event->accept();
     }
@@ -284,7 +289,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    m_view->setDragDropMode( QAbstractItemView::InternalMove );
+    m_view->setDragDropMode( QAbstractItemView::DragDrop );
     m_view->setDropIndicatorShown( true );
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( true );
@@ -365,13 +370,60 @@ void TaskEditor::updateReadWrite( bool rw )
     ViewBase::updateReadWrite( rw );
 }
 
-void TaskEditor::draw( Project &project )
+void TaskEditor::setProject( Project *project )
 {
-    m_view->setProject( &project );
+    kDebug(planDbg())<<project;
+    m_view->setProject( project );
+    ViewBase::setProject( project );
 }
 
-void TaskEditor::draw()
+void TaskEditor::createDockers()
 {
+    // Add dockers
+    DockWidget *ds = new DockWidget( this, "Allocations", i18nc( "@title resource allocations", "Allocations" ) );
+    QTreeView *x = new QTreeView( ds );
+    AllocatedResourceItemModel *m1 = new AllocatedResourceItemModel( x );
+    x->setModel( m1 );
+    m1->setProject( project() );
+//     x->setHeaderHidden( true );
+    x->setSelectionBehavior( QAbstractItemView::SelectRows );
+    x->setSelectionMode( QAbstractItemView::ExtendedSelection );
+    x->expandAll();
+    x->resizeColumnToContents( 0 );
+    x->setDragDropMode( QAbstractItemView::DragOnly );
+    x->setDragEnabled ( true );
+    ds->setWidget( x );
+    connect(this, SIGNAL(projectChanged(Project*)), m1, SLOT(setProject(Project*)));
+    connect(this, SIGNAL(taskSelected(Task*)), m1, SLOT(setTask(Task*)));
+    connect(m1, SIGNAL(expandAll()), x, SLOT(expandAll()));
+    connect(m1, SIGNAL(resizeColumnToContents(int)), x, SLOT(resizeColumnToContents(int)));
+    addDocker( ds );
+
+    ds = new DockWidget( this, "Resources", i18nc( "@title", "Resources" ) );
+    ds->setToolTip( i18nc( "@info:tooltip",
+                          "Drag resources into the Task Editor"
+                          " and drop into the allocations- or responsible column" ) );
+    QTreeView *e = new QTreeView( ds );
+    ResourceItemModel *m = new ResourceItemModel( e );
+    e->setModel( m );
+    m->setProject( project() );
+    m->setReadWrite( isReadWrite() );
+    QList<int> show; show << ResourceModel::ResourceName;
+    for ( int i = m->columnCount() - 1; i >= 0; --i ) {
+        e->setColumnHidden( i, ! show.contains( i ) );
+    }
+    e->setHeaderHidden( true );
+    e->setSelectionBehavior( QAbstractItemView::SelectRows );
+    e->setSelectionMode( QAbstractItemView::ExtendedSelection );
+    e->expandAll();
+    e->resizeColumnToContents( ResourceModel::ResourceName );
+    e->setDragDropMode( QAbstractItemView::DragOnly );
+    e->setDragEnabled ( true );
+    ds->setWidget( e );
+    connect(this, SIGNAL(projectChanged(Project*)), m, SLOT(setProject(Project*)));
+    connect(this, SIGNAL(readWriteChanged(bool)), m, SLOT(setReadWrite(bool)));
+    connect(m, SIGNAL(executeCommand(KUndo2Command*)), part(), SLOT(addCommand(KUndo2Command*)));
+    addDocker( ds );
 }
 
 void TaskEditor::setGuiActive( bool activate )
@@ -384,7 +436,7 @@ void TaskEditor::setGuiActive( bool activate )
     }
 }
 
-void TaskEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
+void TaskEditor::slotCurrentChanged( const QModelIndex &curr, const QModelIndex & )
 {
     kDebug(planDbg())<<curr.row()<<","<<curr.column();
     slotEnableActions();
@@ -394,6 +446,7 @@ void TaskEditor::slotSelectionChanged( const QModelIndexList list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
+    emit taskSelected( dynamic_cast<Task*>( selectedNode() ) );
 }
 
 QModelIndexList TaskEditor::selectedRows() const
@@ -682,6 +735,8 @@ void TaskEditor::setupGui()
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
+
+    createDockers();
 }
 
 void TaskEditor::slotSplitView()
@@ -695,7 +750,8 @@ void TaskEditor::slotSplitView()
 void TaskEditor::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -879,6 +935,7 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -887,6 +944,7 @@ bool TaskEditor::loadContext( const KoXmlElement &context )
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( baseModel()->columnMap(), context );
 }
@@ -1118,7 +1176,8 @@ void TaskView::slotSplitView()
 void TaskView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1127,6 +1186,7 @@ void TaskView::slotOptions()
 
 bool TaskView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
@@ -1135,6 +1195,7 @@ bool TaskView::loadContext( const KoXmlElement &context )
 
 void TaskView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
@@ -1180,6 +1241,7 @@ void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropInd
     if ( pr ) {
         idx = pr->mapToSource( index );
     }
+    event->ignore();
     if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
         event->accept();
     }
@@ -1461,7 +1523,8 @@ void TaskWorkPackageView::slotSplitView()
 void TaskWorkPackageView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1471,11 +1534,13 @@ void TaskWorkPackageView::slotOptions()
 bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->baseModel()->columnMap(), context );
 }
 
 void TaskWorkPackageView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
 

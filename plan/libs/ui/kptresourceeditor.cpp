@@ -171,13 +171,11 @@ void ResourceEditor::updateReadWrite( bool readwrite )
     m_view->setReadWrite( readwrite );
 }
 
-void ResourceEditor::draw( Project &project )
+void ResourceEditor::setProject( Project *project )
 {
-    m_view->setProject( &project );
-}
-
-void ResourceEditor::draw()
-{
+    kDebug(planDbg())<<project;
+    m_view->setProject( project );
+    ViewBase::setProject( project );
 }
 
 void ResourceEditor::setGuiActive( bool activate )
@@ -313,7 +311,8 @@ void ResourceEditor::slotSplitView()
 void ResourceEditor::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -385,12 +384,14 @@ void ResourceEditor::slotDeleteSelection()
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }
 

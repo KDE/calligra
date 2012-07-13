@@ -33,7 +33,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqlconnection_p.h"
 #include "mysqlcursor.h"
 #include "mysqlpreparedstatement.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;

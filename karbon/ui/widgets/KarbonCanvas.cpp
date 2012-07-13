@@ -9,7 +9,7 @@
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
 

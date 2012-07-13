@@ -54,6 +54,7 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -89,6 +90,7 @@ set(komain_LIB_SRCS
     KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
+    KoFindStyle.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -164,11 +166,11 @@ if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
-#if( MARBLE_FOUND )
-#    include_directories(${MARBLE_INCLUDE_DIR})
-#    target_link_libraries(komain ${MARBLE_LIBRARIES})
-#    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
-#endif( MARBLE_FOUND )
+if( MARBLE_FOUND )
+    include_directories(${MARBLE_INCLUDE_DIR})
+    target_link_libraries(komain ${MARBLE_LIBRARIES})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+endif( MARBLE_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -217,6 +219,7 @@ install( FILES
     KoGridData.h
     KoMainWindow.h
     KoModeBoxFactory.h
+    KoServiceProvider.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

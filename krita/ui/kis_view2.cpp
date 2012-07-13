@@ -79,6 +79,7 @@
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
+#include <KoProperties.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -393,6 +394,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     setAcceptDrops(true);
 
+    KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+    foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+        collection->setConfigGroup("krita/shortcuts");
+        collection->readSettings(&group);
+    }
+
+
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -410,8 +418,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
-    KConfigGroup group(KGlobal::config(), "theme");
-    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    }
+    {
+        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            collection->setConfigGroup("krita/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
     delete m_d;
 }
 
@@ -663,6 +680,19 @@ KisSelectionSP KisView2::selection()
     return image()->globalSelection();
 }
 
+bool KisView2::selectionEditable()
+{
+    KisLayerSP layer = activeLayer();
+    if (layer) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
+        if (masks.size() == 1) {
+            return masks[0]->isEditable();
+        }
+    }
+    // global selection is always editable
+    return true;
+}
 
 KisUndoAdapter * KisView2::undoAdapter()
 {
@@ -713,6 +743,13 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
+
+    // get the assistants and push them to the manager
+    QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
+    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+        m_d->paintingAssistantManager->addAssistant(assistant);
+    }
+
     /**
      * Dirty hack alert
      */
@@ -720,7 +757,12 @@ void KisView2::slotLoadingFinished()
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
-
+    if (m_d->paintingAssistantManager){
+        foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
+            m_d->paintingAssistantManager->addAssistant(assist);
+        }
+        m_d->paintingAssistantManager->setVisible(true);
+    }
     updateGUI();
 
     emit sigLoadingFinished();
@@ -811,6 +853,7 @@ void KisView2::connectCurrentImage()
 
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
         /**
@@ -891,6 +934,10 @@ void KisView2::slotImageSizeChanged()
     canvas()->update();
 }
 
+void KisView2::slotNodeChanged()
+{
+    updateGUI();
+}
 
 void KisView2::loadPlugins()
 {

@@ -28,7 +28,7 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/KexiLinkWidget.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexi.h>

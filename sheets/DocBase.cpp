@@ -60,8 +60,8 @@ int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-DocBase::DocBase(QWidget *parentWidget, QObject* parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode)
+DocBase::DocBase(QObject* parent)
+    : KoDocument(parent)
     , d(new Private)
 {
     d->resourceManager = new KoDocumentResourceManager();
@@ -158,7 +158,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.
-    map()->saveOdf(*contentWriter, savingContext);
+    map()->saveOdf(*bodyWriter, savingContext);
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body

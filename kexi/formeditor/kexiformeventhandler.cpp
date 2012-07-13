@@ -27,7 +27,7 @@
 #include <kaction.h>
 
 #include <dataviewcommon/kexitableviewdata.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <KexiMainWindowIface.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
@@ -158,8 +158,9 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
 //! @todo look for other widgets too
     QList<QWidget*> widgets(m_mainWidget->findChildren<QWidget*>());
     foreach(QWidget *widget, widgets) {
-        if (!widget->inherits("KexiPushButton"))
+        if (!widget->inherits("QPushButton") ){
             continue;
+        }
         bool ok;
         KexiFormEventAction::ActionData data;
         data.string = widget->property("onClickAction").toString();

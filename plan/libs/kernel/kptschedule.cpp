@@ -1137,10 +1137,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
                 if ( units <= i.load() ) {
                     ci.first = t; // fully booked, so move forvard to appointment end
                 }
-                if ( ! res.first.isValid() ) {
-                    res.first = ci.first;
-                }
-                res.second = ci.second;
+                res = ci;
                 //kDebug(planDbg())<<"available next 2:"<<interval<<i<<":"<<ci<<res;
                 continue;
             }

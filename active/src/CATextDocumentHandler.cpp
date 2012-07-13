@@ -61,7 +61,7 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
     , d (new Private())
 {
     QList<QTextDocument*> texts;
-    d->findText = new KoFindText (texts, this);
+    d->findText = new KoFindText(this);
     connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
     connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
     connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
@@ -83,7 +83,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoDocument* doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument> (mimetype, 0, 0, QString(),
+    KoDocument* doc = KMimeTypeTrader::createInstanceFromQuery<KoDocument> (mimetype, QLatin1String("CalligraPart"), 0, QString(),
                       QVariantList(), &error);
 
     if (!doc) {
@@ -144,7 +144,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
-    d->findText->addDocuments(texts);
+    d->findText->setDocuments(texts);
 
     KAction *action = doc->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(canvas(), action);

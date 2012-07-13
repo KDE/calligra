@@ -27,6 +27,7 @@
 
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
+#include <KDE/KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -74,12 +75,8 @@ MainWindow::MainWindow (QWidget* parent)
         m_view->engine()->addImportPath (importPath);
     }
 
-
-    m_view->rootContext()->setContextProperty ("recentFilesModel", QVariant::fromValue (recentFiles));
-    m_view->rootContext()->setContextProperty ("recentTextDocsModel", QVariant::fromValue (recentTextDocs));
-    m_view->rootContext()->setContextProperty ("recentSpreadsheetsModel", QVariant::fromValue (recentSpreadsheets));
-    m_view->rootContext()->setContextProperty ("recentPresentationsModel", QVariant::fromValue (recentPresentations));
     m_view->rootContext()->setContextProperty ("mainwindow", this);
+    loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
                                             + "/share/calligraactive/qml/HomeScreen.qml"));
@@ -89,7 +86,9 @@ MainWindow::MainWindow (QWidget* parent)
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
     resize (800, 600);
 
-    QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    if (!documentPath.isEmpty()) {
+        QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    }
 }
 
 void MainWindow::openFile (const QString& path)
@@ -113,16 +112,28 @@ void MainWindow::openFileDialog()
 
 }
 
+void MainWindow::loadMetadataModel()
+{
+    if (!m_view) {
+        return;
+    }
+    QDeclarativeComponent component(m_view->engine());
+    component.setData("import org.kde.metadatamodels 0.1\nMetadataModel { sortOrder: Qt.AscendingOrder }\n", QUrl());
+
+    if (!component.isError()) {
+        m_view->rootContext()->setContextProperty("metadataInternalModel", component.create());
+    } else {
+        kDebug() << "Plasma Active Metadata Models are not installed, using built in model";
+        m_view->rootContext()->setContextProperty("metadataInternalModel", false);
+    }
+}
+
 MainWindow::~MainWindow()
 {
 }
 
 void MainWindow::checkForAndOpenDocument()
 {
-    if (documentPath.isEmpty()) {
-        return;
-    }
-
     QObject* object = m_view->rootObject();
     QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
 }

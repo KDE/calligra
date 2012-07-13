@@ -9,7 +9,7 @@
    Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2007 David Faure <faure@kde.org>
 

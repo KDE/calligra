@@ -62,23 +62,12 @@ KarbonFactory::~KarbonFactory()
     s_aboutData = 0L;
 }
 
-QObject* KarbonFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
-    // If classname is "KoDocument", our host is a calligra application
-    // otherwise, the host wants us as a simple part, so switch to readonly and
-    // single view.
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
-
-    // parentWidget and widgetName are used by KoDocument for the
-    // "readonly+singleView" case.
-    KarbonPart* part = new KarbonPart(parentWidget, 0, parent, 0, !bWantKoDocument);
-
-    if (!bWantKoDocument)
-        part->setReadWrite(false);
-
+    KarbonPart* part = new KarbonPart(parent);
     return part;
 }
 

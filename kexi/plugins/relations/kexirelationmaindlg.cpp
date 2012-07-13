@@ -25,7 +25,7 @@
 
 #include <QVBoxLayout>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"

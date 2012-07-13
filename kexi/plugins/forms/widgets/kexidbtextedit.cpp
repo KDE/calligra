@@ -20,7 +20,7 @@
 
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <kexiutils/utils.h>
 
 #include <kapplication.h>
@@ -205,7 +205,9 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 
     if (cinfo->field->isTextType()) {
         if (!designMode()) {
-            m_length = cinfo->field->length();
+            if (cinfo->field->maxLength() > 0) {
+                m_length = cinfo->field->maxLength();
+            }
         }
     }
 

@@ -714,7 +714,7 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
         break;
     }
 
-    QString width =  QString::number(w) + "pt";
+    QString width =  QString::number(w,'f') + "pt";
 
     QString value(width);
     value.append(" ");

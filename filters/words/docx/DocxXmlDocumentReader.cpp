@@ -2,7 +2,7 @@
  * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2010 KoGmbh (casper.boemann@kogmbh.com).
+ * Copyright (C) 2010 KoGmbh (cbo@kogmbh.com).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -153,6 +153,7 @@ void DocxXmlDocumentReader::init()
     m_wasCaption = false;
     m_closeHyperlink = false;
     m_listFound = false;
+    m_insideParagraph = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
@@ -863,8 +864,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lnNumType()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
  - pos (Footnote Placement) §17.11.21
 
 */
@@ -873,10 +874,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer endBuf;
+    body = endBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "endnote");
 
@@ -885,17 +884,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString endStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString endStyle;
+    body = endBuf.releaseWriter(endStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, endStyle.toUtf8());
 
     READ_EPILOGUE
@@ -912,9 +909,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
- - pos (Footnote Placement) §17.11.21
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] pos (Footnote Placement) §17.11.21
 
 */
 //! @todo support all elements
@@ -922,31 +919,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer footBuf;
+    body = footBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "footnote");
-    body->addAttribute("text:footnotes-position", "page");
-    body->addAttribute("text:start-numbering-at", "document");
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
+            ELSE_TRY_READ_IF(pos)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString footStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString footStyle;
+    body = footBuf.releaseWriter(footStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, footStyle.toUtf8());
 
     READ_EPILOGUE
@@ -954,17 +946,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 
 #undef CURRENT_EL
 #define CURRENT_EL numFmt
-//! w:numFmt handler (Footnote Numbering format)
+//! numFmt handler (Footnote Numbering format)
 /*
  Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
  - [done] footnotePr (§17.11.12)
  - [done] footnotePr (§17.11.11)
 
  Child elements:
  - none
-
 */
-//! @toodo support all elements
+//! @todo support all attributes
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 {
     READ_PROLOGUE
@@ -976,12 +969,125 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
         if (val == "upperLetter") {
             body->addAttribute("style:num-format", "A");
         }
-        else if (val == "decimal") {
+        else if (val == "lowerLetter") {
+            body->addAttribute("style:num-format", "a");
+        }
+        else if (val == "upperRoman") {
+            body->addAttribute("style:num-format", "I");
+        }
+        else if (val == "lowerRoman") {
+            body->addAttribute("style:num-format", "i");
+        }
+        else if (val == "none") {
+            body->addAttribute("style:num-format", "");
+        }
+        else {
             body->addAttribute("style:num-format", "1");
         }
     }
-    else { // For now let's use letter format as the default
-        body->addAttribute("style:num-format", "A");
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numRestart
+//! numRestart (Footnote and Endnote Numbering Restart Location)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numRestart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "eachPage") {
+            body->addAttribute("text:start-numbering-at", "page");
+        }
+        else if (val == "eachSect") {
+            body->addAttribute("text:start-numbering-at", "chapter");
+        }
+        else { //continuous
+            body->addAttribute("text:start-numbering-at", "document");
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numStart
+//! numStart (Footnote and Endnote Numbering Starting Value)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numStart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        body->addAttribute("text:start-value", val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pos
+//! pos (Footnote Placement)
+/*
+ Parent elements:
+ - [not applicable] endnotePr (§17.11.4)
+ - [not applicable] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+ */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_pos()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "beneathText") {
+            body->addAttribute("text:footnotes-position", "text");
+        }
+        else if (val == "docEnd") {
+            body->addAttribute("text:footnotes-position", "document");
+        }
+        else if (val == "sectEnd") {
+            body->addAttribute("text:footnotes-position", "section");
+        }
+        else { // pageBottom
+            body->addAttribute("text:footnotes-position", "page");
+        }
     }
 
     readNext();
@@ -999,7 +1105,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 
  Child Elements:
  - col (Single Column Definition) §17.6.3
-
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
@@ -1439,36 +1544,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(id)
 
-    /*
-    # example endnote from odt document converted with OpenOffice
-    <text:note xml:id="ftn1" text:id="ftn1" text:note-class="endnote">
-    <text:note-citation>1</text:note-citation>
-    <text:note-body>
-    <text:p text:style-name="P2">
-    <text:span text:style-name="endnote_20_reference" />studies</text:p>
-    <text:p text:style-name="endnote" />
-    </text:note-body>
-    </text:note>
-    */
+    // # example endnote from odt document converted with OpenOffice
+    // <text:note xml:id="ftn1" text:id="ftn1" text:note-class="endnote">
+    // <text:note-citation>1</text:note-citation>
+    // <text:note-body>
+    // <text:p text:style-name="P2">
+    // <text:span text:style-name="endnote_20_reference" />studies</text:p>
+    // <text:p text:style-name="endnote" />
+    // </text:note-body>
+    // </text:note>
 
     body->startElement("text:note");
     body->addAttribute("text:id", QString("endn").append(id));
-    body->addAttribute("xml:id", QString("endn").append(id));
     body->addAttribute("text:note-class", "endnote");
-
     body->startElement("text:note-citation");
 
-    // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
-    // for it
+    // NOTE: This line is meaningless in the sense that office
+    // programs are supposed to autogenerate the value based on the
+    // footnote style, it is hardcoded for the moment as calligra has
+    // no support for it.
     body->addTextSpan(id);
 
     body->endElement(); // text:note-citation
-
     body->startElement("text:note-body");
-
     body->addCompleteElement(m_context->m_endnotes[id].toUtf8());
-
     body->endElement(); // text:note-body
     body->endElement(); // text:note
 
@@ -1496,36 +1595,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(id)
 
-    /*
-    # example endnote from odt document converted with OpenOffice
-    <text:note text:id="ftn1" xml:id="ftn1" text:note-class="footnote">
-    <text:note-citation>1</text:note-citation>
-    <text:note-body>
-    <text:p text:style-name="P2">
-    <text:span text:style-name="footnote_20_reference" />studies</text:p>
-    <text:p text:style-name="Footnote" />
-    </text:note-body>
-    </text:note>
-    */
+    // # example endnote from odt document converted with OpenOffice
+    // <text:note text:id="ftn1" xml:id="ftn1" text:note-class="footnote">
+    // <text:note-citation>1</text:note-citation>
+    // <text:note-body>
+    // <text:p text:style-name="P2">
+    // <text:span text:style-name="footnote_20_reference" />studies</text:p>
+    // <text:p text:style-name="Footnote" />
+    // </text:note-body>
+    // </text:note>
 
     body->startElement("text:note");
     body->addAttribute("text:id", QString("ftn").append(id));
-    body->addAttribute("xml:id", QString("ftn").append(id));
     body->addAttribute("text:note-class", "footnote");
-
     body->startElement("text:note-citation");
 
-    // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
-    // the value based on the footnote style, it is hardcoded for the moment as calligra has no support
-    // for it
+    // NOTE: This line is meaningless in the sense that office
+    // programs are supposed to autogenerate the value based on the
+    // footnote style, it is hardcoded for the moment as calligra has
+    // no support for it.
     body->addTextSpan(id);
 
     body->endElement(); // text:note-citation
-
     body->startElement("text:note-body");
-
     body->addCompleteElement(m_context->m_footnotes[id].toUtf8());
-
     body->endElement(); // text:note-body
     body->endElement(); // text:note
 
@@ -2112,6 +2205,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 {
     READ_PROLOGUE
+    m_insideParagraph = true;
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
     m_listFound = false;
@@ -2403,7 +2497,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         m_wasCaption = true;
                     }
                 }
-                //insert the XML snippet representing a floating table
+                //insert the bookmark-start/bookmark-end XML snippet
+                if (!m_bookmarkSnippet.isEmpty()) {
+                    body->addCompleteElement(m_bookmarkSnippet.toUtf8());
+                }
+
+                //insert the floating table XML snippet
                 if (!m_floatingTable.isEmpty()) {
                     body->addCompleteElement(m_floatingTable.toUtf8());
                     m_floatingTable.clear();
@@ -2411,6 +2510,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
                 (void)textPBuf.releaseWriter();
                 body->endElement(); //text:p
+
                 if (m_listFound) {
                     for (int i = 0; i <= m_currentListLevel; ++i) {
                         body->endElement(); //text:list-item
@@ -2430,6 +2530,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     }
 
     m_currentStyleName.clear();
+    m_insideParagraph = false;
 
     m_currentParagraphStyle = activeStyles.last();
     activeStyles.pop_back();
@@ -3059,11 +3160,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
 
     TRY_READ_ATTR(name)
     TRY_READ_ATTR(id)
+
     if (!name.isEmpty() && !id.isEmpty()) {
+        MSOOXML::Utils::XmlWriteBuffer buffer;
+
+        //bookmark presence limitation by ODF 1.2
+        if (!m_insideParagraph) {
+            body = buffer.setWriter(body);
+        }
         body->startElement("text:bookmark-start");
         body->addAttribute("text:name", name);
         body->endElement(); // text:bookmark-start
         m_bookmarks[id] = name;
+
+        if (!m_insideParagraph) {
+            body = buffer.releaseWriter(m_bookmarkSnippet);
+        }
     }
 
     readNext();
@@ -3127,9 +3239,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
 
     TRY_READ_ATTR(id)
     if (!id.isEmpty()) {
+        MSOOXML::Utils::XmlWriteBuffer buffer;
+
+        //bookmark presence limitation by ODF 1.2
+        if (!m_insideParagraph) {
+            body = buffer.setWriter(body);
+        }
         body->startElement("text:bookmark-end");
         body->addAttribute("text:name", m_bookmarks[id]);
         body->endElement(); // text:bookmark-end
+
+        if (!m_insideParagraph) {
+            body = buffer.releaseWriter(m_bookmarkSnippet);
+        }
     }
 
     readNext();
@@ -3354,8 +3476,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->startElement("draw:g");
     } else {
         body->startElement("draw:frame");
+        body->addAttribute("draw:layer", "layout");
+
+        if (m_hasPosOffsetH) {
+            kDebug() << "m_posOffsetH" << m_posOffsetH;
+            m_svgX += m_posOffsetH;
+        }
+        if (m_hasPosOffsetV) {
+            kDebug() << "m_posOffsetV" << m_posOffsetV;
+            m_svgY += m_posOffsetV;
+        }
+
+        if (!m_docPrName.isEmpty()) { // from docPr/@name
+            body->addAttribute("draw:name", m_docPrName);
+        }
+
+        if (m_rot == 0) {
+            body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+            body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+        } else {
+            // m_rot is in 1/60,000th of a degree
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+            body->addAttribute("draw:transform", rotString);
+        }
+
+        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
     }
 
+//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
@@ -3462,42 +3614,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
-//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
-    if (m_hasPosOffsetH) {
-        kDebug() << "m_posOffsetH" << m_posOffsetH;
-        m_svgX += m_posOffsetH;
-    }
-    if (m_hasPosOffsetV) {
-        kDebug() << "m_posOffsetV" << m_posOffsetV;
-        m_svgY += m_posOffsetV;
-    }
-
-    if (!m_docPrName.isEmpty()) { // from docPr/@name
-        body->addAttribute("draw:name", m_docPrName);
-    }
-    body->addAttribute("draw:layer", "layout");
-
-    if (m_rot == 0) {
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-    }
-    else {
-        // m_rot is in 1/60,000th of a degree
-        qreal angle, xDiff, yDiff;
-        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
-        QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-        body->addAttribute("draw:transform", rotString);
-    }
-
-    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-
     popCurrentDrawStyle();
 
     (void)buffer.releaseWriter();
 
-    body->endElement(); // draw:frame
+    body->endElement(); // draw:frame/draw:g
 
     if (m_hyperLink) {
         body->endElement(); // text:a
@@ -3830,7 +3951,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     if (ok) {
         if (lineRule == "atLeast") {
             lineSpace = TWIP_TO_POINT(lineSpace);
-            m_currentParagraphStyle.addPropertyPt("fo:line-height-at-least", lineSpace);
+            m_currentParagraphStyle.addPropertyPt("style:line-height-at-least", lineSpace);
         } else if (lineRule == "exact") {
             lineSpace = TWIP_TO_POINT(lineSpace);
             m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
@@ -4686,6 +4807,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
         }
         else if (val == "decimal") {
             body->addAttribute("style:type", "char");
+            body->addAttribute("style:char", "." );
         }
         else if (val == "end" || val == "right") {
             body->addAttribute("style:type", "right");
@@ -6029,8 +6151,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 
 #undef CURRENT_EL
 #define CURRENT_EL vAlign
-//! vAlign Handler (Table Cell Vertical Alignement)
-/*
+//! vAlign Handler (Table Cell Vertical Alignment)
+/*! ECMA-376, 17.4.84, p. 519.
+
  Parent elements:
  - [done] tcPr (§17.7.6.8);
  - [done] tcPr (§17.7.6.9);
@@ -6048,7 +6171,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vAlign()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentTableStyleProperties->verticalAlign = val;
+        if (val == "both" || val == "center") {
+            m_currentTableStyleProperties->verticalAlign = "middle";
+        }
+        else if (val == "top" || val == "bottom") {
+            m_currentTableStyleProperties->verticalAlign = val;
+        } else {
+            m_currentTableStyleProperties->verticalAlign = "automatic";
+        }
         m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
     }
 

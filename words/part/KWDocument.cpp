@@ -5,7 +5,7 @@
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2010 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -91,8 +91,8 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode),
+KWDocument::KWDocument(QObject *parent)
+        : KoDocument(parent),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -209,6 +209,23 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
     for (; it != anchors.constEnd(); ++it) {
         it.key()->removeAnchors(it.value(), command);
     }
+}
+
+QPixmap KWDocument::generatePreview(const QSize &size)
+{
+    // use first page as preview for all pages
+    KWPage firstPage = pageManager()->begin();
+    if (! firstPage.isValid()) {
+        // TODO: what to return for no page?
+        return QPixmap();
+    }
+
+    // use shape manager from canvasItem even for QWidget environments
+    // if using the shape manager from one of the views there is no guarantee
+    // that the view, its canvas and the shapemanager is not destroyed in between
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -756,14 +773,6 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
-QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
-{
-    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
-    if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-words"); // we can't save this, only load.
-    return answer;
-}
-
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "pageStyleName=" << style.name();
@@ -835,8 +844,7 @@ void KWDocument::saveConfig()
         return;
 //   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
-    if (isEmbedded())
-        return;
+
     m_config.save();
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
