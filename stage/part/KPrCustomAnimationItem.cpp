@@ -99,12 +99,19 @@ QPixmap KPrCustomAnimationItem::thumbnail() const
 
 QPixmap KPrCustomAnimationItem::animationIcon() const
 {
-    //TODO: Parse animation preset Class and read icon name
-    //At future these data will be loaded from a XML file
-    if (m_shapeAnimation) {
-        return KIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+    if (!m_shapeAnimation) {
+        return QPixmap();
     }
-    return QPixmap();
+    QString name = animationName();
+    if (!name.isEmpty()) {
+        name = name.append("_animation");
+        name.replace(" ", "_");
+        QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
+        if (!path.isNull()) {
+            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+        }
+    }
+    return KIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 }
 
 QString KPrCustomAnimationItem::animationName() const

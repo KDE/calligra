@@ -119,6 +119,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     m_collectionChooser = new QListWidget;
     containerLayout->addWidget(m_collectionChooser);
     m_collectionChooser->setViewMode(QListView::IconMode);
+    m_collectionChooser->setIconSize(QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge));
     m_collectionChooser->setSelectionMode(QListView::SingleSelection);
     m_collectionChooser->setResizeMode(QListView::Adjust);
     m_collectionChooser->setGridSize(QSize(75, 64));
@@ -131,10 +132,11 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     m_collectionView = new QListView;
     containerLayout->addWidget(m_collectionView);
     m_collectionView->setViewMode(QListView::IconMode);
+    m_collectionView->setIconSize(QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge));
     m_collectionView->setDragDropMode(QListView::DragOnly);
     m_collectionView->setSelectionMode(QListView::SingleSelection);
     m_collectionView->setResizeMode(QListView::Adjust);
-    m_collectionView->setGridSize(QSize(48+20, 48));
+    m_collectionView->setGridSize(QSize(75, 64));
     m_collectionView->setWordWrap(true);
 
     connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
@@ -434,7 +436,7 @@ QIcon KPrEditAnimationsWidget::loadAnimationIcon(const QString id)
     if (!name.isEmpty()) {
         name = name.append("_animation");
         name.replace(" ", "_");
-        QString path = KIconLoader::global()->iconPath(name, KIconLoader::Small, true);
+        QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
             return KIcon(name);
         }
@@ -504,10 +506,12 @@ bool KPrEditAnimationsWidget::addCollection(const QString &id, const QString &ti
     if(m_modelMap.contains(id))
         return false;
     m_modelMap.insert(id, model);
+    QString iconName = id;
+    iconName.append("_animations");
     QIcon icon;
-    QString path = KIconLoader::global()->iconPath(id, KIconLoader::Small, true);
+    QString path = KIconLoader::global()->iconPath(iconName, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(id);
+        icon = KIcon(iconName);
     }
     else {
         icon = KIcon("unrecognized_animation");
