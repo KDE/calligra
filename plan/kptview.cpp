@@ -59,7 +59,6 @@
 #include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
@@ -451,20 +450,8 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = getPart()->generatePreview(QSize(width, height));
-
-    KTemporaryFile tempFile;
-    tempFile.setSuffix( ".plant" );
-    //Check that creation of temp file was successful
-    if ( ! tempFile.open() ) {
-        kWarning()<<"Creation of temprary file to store template failed.";
-        return;
-    }
-    kDebug(planDbg())<<"Created temporaray file:"<<tempFile.fileName();
-    getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+                                        Factory::global(), getPart(), this);
 }
 
 void View::createViews()
