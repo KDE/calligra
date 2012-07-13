@@ -247,11 +247,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    // Save user defined variable declarations
-    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
-        variableManager->saveOdf(bodyWriter);
-    }
-
     calculateZindexOffsets();
 
     KWTextFrameSet *mainTextFrame = 0;
@@ -333,6 +328,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     tmpChangeFile.close();
 
     bodyWriter->addCompleteElement(&tmpChangeFile);
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     // Do not write out text:page-sequence, if there is a maintTextFrame
     // The ODF specification does not allow text:page-sequence in office:text
