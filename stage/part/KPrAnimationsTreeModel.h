@@ -77,7 +77,6 @@ public:
      //QModelIndex promote(const QModelIndex &index);
      //QModelIndex demote(const QModelIndex &index);
 
-
     /// An active page is required before use the model
     void setActivePage(KPrPage *activePage);
 
@@ -105,6 +104,8 @@ public slots:
 
 private slots:
     void updateAnimationData(KPrShapeAnimation* modifiedAnimation);
+
+    void updateByAnimationReplaced(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 
     /// Update Item and all his children
     void updateBranch(KPrCustomAnimationItem *item);

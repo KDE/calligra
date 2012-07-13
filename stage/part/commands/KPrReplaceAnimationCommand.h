@@ -17,35 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrAnimationRemoveCommand.h"
+#ifndef KPRREPLACEANIMATIONCOMMAND_H
+#define KPRREPLACEANIMATIONCOMMAND_H
 
-#include "KPrDocument.h"
-#include "KPrShapeAnimations.h"
+#include <kundo2command.h>
+
+#include "stage_export.h"
 #include "animations/KPrShapeAnimation.h"
 
-KPrAnimationRemoveCommand::KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeAnimation *animation)
-    : m_doc(doc)
-    , m_animation(animation)
-    , m_deleteAnimation(true)
-{
-    setText(i18nc("(qtundo-format)", "Remove shape animation"));
-}
+class KPrDocument;
 
-KPrAnimationRemoveCommand::~KPrAnimationRemoveCommand()
+/// Command to replace an animation
+class STAGE_EXPORT KPrReplaceAnimationCommand : public KUndo2Command
 {
-    if (m_deleteAnimation) {
-        delete m_animation;
-    }
-}
+public:
+    KPrReplaceAnimationCommand(KPrDocument * doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent=0);
 
-void KPrAnimationRemoveCommand::redo()
-{
-    m_doc->removeAnimation(m_animation, false);
-    m_deleteAnimation = true;
-}
+    virtual ~KPrReplaceAnimationCommand();
 
-void KPrAnimationRemoveCommand::undo()
-{
-    m_doc->addAnimation(m_animation);
-    m_deleteAnimation = false;
-}
+    /// redo the command
+    void redo ();
+    /// revert the actions done in redo
+    void undo ();
+
+private:
+    KPrShapeAnimation *m_oldAnimation;
+    KPrShapeAnimation *m_newAnimation;
+    KPrDocument *m_document;
+    bool m_deleteAnimation;
+};
+
+#endif // KPRREPLACEANIMATIONCOMMAND_H

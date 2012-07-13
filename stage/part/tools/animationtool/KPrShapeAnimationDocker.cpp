@@ -169,6 +169,7 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(requestAnimationPreview()), this, SLOT(slotAnimationPreview()));
         connect(m_animationsModel, SIGNAL(rootChanged()), this, SLOT(checkAnimationSelected()));
+        connect(m_editAnimationsPanel, SIGNAL(rootRemoved()), this, SLOT(reParentEditDialog()));
     }
 }
 
@@ -268,6 +269,18 @@ void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
     selection->update();
     shape->update();
     checkAnimationSelected();
+}
+
+void KPrShapeAnimationDocker::reParentEditDialog()
+{
+    QModelIndex index = m_animationsView->currentIndex();
+    if (index.isValid()) {
+        KPrCustomAnimationItem *item = itemByIndex(index);
+        m_editAnimationsPanel->setParentItem(item, m_animationsModel->rootItem());
+    }
+    else {
+        m_editAnimation->setEnabled(false);
+    }
 }
 
 KPrCustomAnimationItem *KPrShapeAnimationDocker::itemByIndex(const QModelIndex &index)

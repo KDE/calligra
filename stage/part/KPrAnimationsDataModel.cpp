@@ -27,6 +27,7 @@
 #include <KPrCustomAnimationItem.h>
 #include <commands/KPrEditAnimationTimeLineCommand.h>
 #include <commands/KPrAnimationEditNodeTypeCommand.h>
+#include <commands/KPrReplaceAnimationCommand.h>
 
 //KDE HEADERS
 #include <KIconLoader>
@@ -118,6 +119,26 @@ QModelIndex KPrAnimationsDataModel::indexByItem(KPrCustomAnimationItem *item)
         KPrCustomAnimationItem *thisItem = itemForIndex(thisIndex);
         if (item == thisItem) {
             return thisIndex;
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex KPrAnimationsDataModel::indexByAnimation(KPrShapeAnimation *animation)
+{
+    QModelIndex parent = QModelIndex();
+    if (!animation) {
+        return QModelIndex();
+    }
+    for (int row = 0; row < rowCount(parent); ++row) {
+        QModelIndex thisIndex = index(row, 0, parent);
+        if (thisIndex.isValid()) {
+            KPrCustomAnimationItem *item = itemForIndex(thisIndex);
+            if (item) {
+                if (item->animation() == animation) {
+                    return thisIndex;
+                }
+            }
         }
     }
     return QModelIndex();
@@ -287,8 +308,9 @@ void KPrAnimationsDataModel::setDocumentView(KPrView *view)
         connect(m_view->kopaDocument(), SIGNAL(shapeAdded(KoShape*)), this, SLOT(removeModel()));
         KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
         if (doc) {
-            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(removeModel()));
-            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(removeModel()));
+            connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(updateByAnimationAdded(KPrShapeAnimation*)));
+            connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(updateByAnimationRemoved(KPrShapeAnimation*)));
+            connect(doc, SIGNAL(animationReplaced(KPrShapeAnimation*,KPrShapeAnimation*)), this, SLOT(updateByAnimationReplaced(KPrShapeAnimation*,KPrShapeAnimation*)));
         }
     }
     reset();
@@ -563,6 +585,80 @@ void KPrAnimationsDataModel::recalculateStart(const QModelIndex &mIndex)
     }
 }
 
+void KPrAnimationsDataModel::updateByAnimationAdded(KPrShapeAnimation *animation)
+{
+    if (!m_rootItem) {
+        return;
+    }
+    emit layoutAboutToBeChanged();
+    QModelIndex index = indexByAnimation(animation);
+    if (index.isValid()) {
+        KPrCustomAnimationItem *item = itemForIndex(index);
+        QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
+                                             item);
+        QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
+                                           item);
+        emit dataChanged(startIndex, endIndex);
+    }
+    emit layoutChanged();
+}
+
+void KPrAnimationsDataModel::updateByAnimationRemoved(KPrShapeAnimation *animation)
+{
+    if ((animation->NodeType() == KPrShapeAnimation::On_Click) ||
+            (!m_rootItem || !m_rootItem->animation()) ||
+            (animation == m_rootItem->animation())) {
+        removeModel();
+        emit rootRemoved();
+        return;
+    }
+    emit layoutAboutToBeChanged();
+    int row = 0;
+    foreach(KPrCustomAnimationItem *item, m_rootItem->children()) {
+        row++;
+        if (item->animation() == animation) {
+            beginRemoveRows(QModelIndex(), row, row);
+            endRemoveRows();
+        }
+    }
+    emit layoutChanged();
+}
+
+void KPrAnimationsDataModel::updateByAnimationReplaced(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    if (oldAnimation == m_rootItem->animation()) {
+        m_rootItem->setShapeAnimation(newAnimation);
+        QModelIndex index = indexByItem(m_rootItem);
+        QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
+                                             m_rootItem);
+        QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
+                                           m_rootItem);
+        emit dataChanged(startIndex, endIndex);
+        return;
+    }
+    foreach(KPrCustomAnimationItem *item, m_rootItem->children()) {
+        if (item->animation() == oldAnimation) {
+            QModelIndex index = indexByItem(item);
+            QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
+                                                 item);
+            QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
+                                               item);
+            emit dataChanged(startIndex, endIndex);
+            return;
+        }
+    }
+    QModelIndex index = indexByAnimation(newAnimation);
+    if (index.isValid()) {
+        KPrCustomAnimationItem *item = itemForIndex(index);
+        QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
+                                             item);
+        QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
+                                           item);
+        emit dataChanged(startIndex, endIndex);
+        return;
+    }
+}
+
 bool KPrAnimationsDataModel::createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
                                                        KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
                                                        QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps,
@@ -677,5 +773,23 @@ void KPrAnimationsDataModel::endTimeLineEdition()
     }
     m_firstEdition = true;
     m_currentEditedItem = 0;
+}
+
+QModelIndex KPrAnimationsDataModel::replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation)
+{
+    if (!index.isValid()) {
+        return index;
+    }
+    KPrCustomAnimationItem *item = itemForIndex(index);
+    Q_ASSERT(item);
+
+    if (!item->isDefaulAnimation()) {
+        KPrShapeAnimation *oldAnimation = item->animation();
+        KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
+        KPrReplaceAnimationCommand *cmd = new KPrReplaceAnimationCommand(doc, oldAnimation, newAnimation);
+        doc->addCommand(cmd);
+        return index;
+    }
+    return QModelIndex();
 }
 

@@ -59,6 +59,8 @@ public slots:
 
     void syncCanvasWithIndex(const QModelIndex &index);
 
+    void reParentEditDialog();
+
     KPrCustomAnimationItem *itemByIndex(const QModelIndex &index);
 
     /// Update canvas with selected shape on Time Line View

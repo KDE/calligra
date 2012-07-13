@@ -65,14 +65,15 @@ public:
     static KPrCustomAnimationItem *itemByAnimation(KPrShapeAnimation *animation);
     static KPrCustomAnimationItem *defaultAnimation();
     static void setDefaultAnimation(KPrCustomAnimationItem *animation);
-    KPrPage *activePage();
+    static KPrPage *activePage();
+    static void setActivePage(KPrPage *page);
 
     //void swapChildren(int oldRow, int newRow) {m_children.swap(oldRow, newRow); }
 
     /** Set item as "show slide" default event
         It must be the firs element of the animations list
     */
-    void initAsDefaultAnimation(KPrPage *activePage);
+    void initAsDefaultAnimation();
     bool isDefaulAnimation() const;
 
     /** Set Item as tree root (Root item that holds all other animations)
@@ -102,7 +103,7 @@ private:
 
     bool isDefaultInitAnimation;
     bool m_isRootAnimation;
-    KPrPage *m_activePage;
+    static KPrPage *m_activePage;
 };
 
 #endif // KPRCUSTOMANIMATIONITEM_H

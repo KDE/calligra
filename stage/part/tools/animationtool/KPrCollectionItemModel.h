@@ -26,24 +26,18 @@
 #include <QList>
 #include <QString>
 #include <QIcon>
-
-class KPrShapeAnimation;
+#include <KoXmlReader.h>
 
 /**
  * Struct containing the information stored in CollectionItemModel item
  */
 struct KPrCollectionItem
 {
-    KPrCollectionItem()
-    {
-        animation = 0;
-    };
-
     QString id;
     QString name;
     QString toolTip;
     QIcon icon;
-    KPrShapeAnimation *animation;
+    KoXmlElement animationContext;
 };
 
 class KPrCollectionItemModel : public QAbstractListModel
@@ -61,6 +55,8 @@ class KPrCollectionItemModel : public QAbstractListModel
          */
         void setAnimationClassList(const QList<KPrCollectionItem>& newlist);
         QList<KPrCollectionItem> animationClassList () const { return m_animationClassList; }
+
+        KoXmlElement animationContext(const QModelIndex& index) const;
 
     private:
         QList<KPrCollectionItem> m_animationClassList;

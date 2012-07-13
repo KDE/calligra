@@ -315,8 +315,8 @@ QModelIndex KPrAnimationsTreeModel::removeItemByIndex(const QModelIndex &index)
         beginRemoveRows(index.parent(), index.row(), index.row());
         KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument());
         KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(doc, item->animation());
-        doc->addCommand(command);
         delete(item);
+        doc->addCommand(command);
         endRemoveRows();
     }
     return QModelIndex();
@@ -412,6 +412,7 @@ void KPrAnimationsTreeModel::setDocumentView(KPrView *view)
         if (doc) {
             connect(doc, SIGNAL(animationAdded(KPrShapeAnimation*)), this, SLOT(updateAnimationData(KPrShapeAnimation*)));
             connect(doc, SIGNAL(animationRemoved(KPrShapeAnimation*)), this, SLOT(updateAnimationData(KPrShapeAnimation*)));
+            connect(doc, SIGNAL(animationReplaced(KPrShapeAnimation*,KPrShapeAnimation*)), this, SLOT(updateByAnimationReplaced(KPrShapeAnimation*,KPrShapeAnimation*)));
         }
     }
     reset();
@@ -538,6 +539,40 @@ void KPrAnimationsTreeModel::updateAnimationData(KPrShapeAnimation *modifiedAnim
              beginRemoveRows(m_lastRemovedIndex.parent(), m_lastRemovedIndex.row(), m_lastRemovedIndex.row());
              endRemoveRows();
         }
+    }
+}
+
+void KPrAnimationsTreeModel::updateByAnimationReplaced(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    int updateRow = -1;
+    int row = 0;
+    KPrCustomAnimationItem *itemToUpdate = 0;
+    foreach (KPrCustomAnimationItem *item, m_rootItem->children()) {
+        if (row > 0) {
+            if ((item->animation() == oldAnimation) || (item->animation() == newAnimation) ) {
+                updateRow = row;
+                itemToUpdate = item;
+                break;
+            }
+            int childRow = 0;
+            foreach (KPrCustomAnimationItem *child, item->children()) {
+                if ((child->animation() == newAnimation) || (child->animation() == oldAnimation)) {
+                    updateRow = childRow;
+                    itemToUpdate = child;
+                    break;
+                }
+                childRow++;
+            }
+        }
+        row++;
+    }
+
+    if (updateRow >= 0) {
+        QModelIndex startIndex = createIndex(updateRow, static_cast<int>(Name),
+                                             itemToUpdate);
+        QModelIndex endIndex = createIndex(updateRow, static_cast<int>(Type),
+                                           itemToUpdate);
+        emit dataChanged(startIndex, endIndex);
     }
 }
 

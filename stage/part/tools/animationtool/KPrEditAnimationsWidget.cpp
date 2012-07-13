@@ -75,7 +75,6 @@
 #include <KoPACanvasBase.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
@@ -85,6 +84,9 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     : QWidget(parent)
     , m_view(0)
 {
+    m_animations = QList<KPrShapeAnimation *>();
+    m_animationContext = QList<KoXmlElement>();
+
     QVBoxLayout *layout = new QVBoxLayout;
     m_timeLineModel = new KPrAnimationsDataModel(this);
     m_timeLineView = new KPrAnimationsTimeLineView();
@@ -135,8 +137,8 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
     m_collectionView->setGridSize(QSize(48+20, 48));
     m_collectionView->setWordWrap(true);
 
-    //connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
-    //        this, SLOT(activateShapeCreationTool(const QModelIndex&)));
+    connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(setAnimation(const QModelIndex&)));
 
 
     layout->addLayout(containerLayout);
@@ -172,6 +174,7 @@ void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
     if (n_view) {
         m_view = n_view;
         m_timeLineModel->setDocumentView(m_view);
+        connect(m_timeLineModel, SIGNAL(rootRemoved()), this, SIGNAL(rootRemoved()));
     }
     m_timeLineView->update();
 }
@@ -266,6 +269,27 @@ void KPrEditAnimationsWidget::activateShapeCollection(QListWidgetItem *item)
     }
 }
 
+void KPrEditAnimationsWidget::setAnimation(const QModelIndex &index)
+{
+    if(!index.isValid()) {
+        return;
+    }
+    KoXmlElement newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    QModelIndex itemIndex = m_timeLineView->currentIndex();
+    if (!itemIndex.isValid()) {
+        return;
+    }
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext context(stylesReader, 0);
+    KoShapeLoadingContext shapeContext(context, 0);
+    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(itemIndex);
+    KoShape *shape = item->shape();
+    KPrShapeAnimation *newAnimation = loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
+    if (newAnimation) {
+        m_timeLineModel->replaceAnimation(itemIndex, newAnimation);
+    }
+}
+
 void KPrEditAnimationsWidget::loadDefaultAnimations()
 {
     readDefaultAnimations();
@@ -286,7 +310,7 @@ void KPrEditAnimationsWidget::loadDefaultAnimations()
         temp.name = animationName(animation->id());
         temp.toolTip = animationName(animation->id());
         temp.icon = loadAnimationIcon(animation->id());
-        temp.animation = animation;
+        temp.animationContext = m_animationContext.value(m_animations.indexOf(animation));
         if (animation->presetClass() == KPrShapeAnimation::Entrance) {
             entranceList.append(temp);
         }
@@ -377,6 +401,7 @@ void KPrEditAnimationsWidget::readDefaultAnimations()
                         shapeAnimation = loadOdfShapeAnimation(animation, shapeContext);
                         if (shapeAnimation) {
                             m_animations.append(shapeAnimation);
+                            m_animationContext.append(animation);
                         }
                     }
                 }
@@ -417,13 +442,12 @@ QIcon KPrEditAnimationsWidget::loadAnimationIcon(const QString id)
     return KIcon("unrecognized_animation");
 }
 
-KPrShapeAnimation *KPrEditAnimationsWidget::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context)
+KPrShapeAnimation *KPrEditAnimationsWidget::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape)
 {
     // load preset and id
     //TODO: motion-path, ole-action, media-call are not supported
     QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
     QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
-    QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type");
 
     KPrShapeAnimation::Node_Type l_nodeType = KPrShapeAnimation::On_Click;
 
@@ -432,7 +456,7 @@ KPrShapeAnimation *KPrEditAnimationsWidget::loadOdfShapeAnimation(const KoXmlEle
     KoXmlElement e;
     forEachElement(e, element) {
         if (shapeAnimation == 0) {
-            KoShape *shape = 0;
+            KoShape *shape = animShape;
             KoTextBlockData *textBlockData = 0;
             shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
         }
@@ -468,7 +492,6 @@ KPrShapeAnimation *KPrEditAnimationsWidget::loadOdfShapeAnimation(const KoXmlEle
         else{
             shapeAnimation->setPresetClass(KPrShapeAnimation::None);
         }
-        //TODO: Check if id is one of Stage Predefined animations
         if (!animationId.isEmpty()) {
             shapeAnimation->setId(animationId);
         }

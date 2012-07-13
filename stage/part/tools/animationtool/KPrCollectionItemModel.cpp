@@ -20,10 +20,8 @@
 // Heavily based in CollectionItemModel work of Peter Simonsson <peter.simonsson@gmail.com>
 
 #include "KPrCollectionItemModel.h"
-#include "animations/KPrShapeAnimation.h"
 
 #include <kdebug.h>
-#include <QMimeData>
 
 KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -67,6 +65,11 @@ void KPrCollectionItemModel::setAnimationClassList(const QList<KPrCollectionItem
 {
     m_animationClassList = newlist;
     reset();
+}
+
+KoXmlElement KPrCollectionItemModel::animationContext(const QModelIndex &index) const
+{
+    return m_animationClassList.value(index.row()).animationContext;
 }
 
 Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex& index) const

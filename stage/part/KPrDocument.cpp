@@ -237,6 +237,16 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
     emit animationRemoved(animation);
 }
 
+void KPrDocument::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    KoShape *shape = oldAnimation->shape();
+    KPrShapeAnimations &animations(animationsByPage(pageByShape(shape)));
+
+    // remove animation from the list of animations
+    animations.replaceAnimation(oldAnimation, newAnimation);
+    emit animationReplaced(oldAnimation, newAnimation);
+}
+
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
 {
     Q_UNUSED( page );

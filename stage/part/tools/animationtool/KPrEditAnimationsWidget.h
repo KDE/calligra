@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QMap>
+#include <KoXmlReader.h>
 
 class KPrAnimationsTimeLineView;
 class KPrAnimationsDataModel;
@@ -59,6 +60,7 @@ public:
 signals:
     void itemClicked(const QModelIndex &index);
     void requestAnimationPreview();
+    void rootRemoved();
 
 public slots:
     void updateIndex(const QModelIndex &index);
@@ -73,12 +75,14 @@ protected slots:
      */
     void activateShapeCollection(QListWidgetItem *item);
 
+    void setAnimation(const QModelIndex& index);
+
 private:
     void loadDefaultAnimations();
     void readDefaultAnimations();
     QString animationName(const QString id) const;
     QIcon loadAnimationIcon(const QString id);
-    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context);
+    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape = 0);
 
     /**
      * Add a collection to the docker
@@ -94,6 +98,7 @@ private:
     QListWidget *m_collectionChooser;
     QListView *m_collectionView;
     QList<KPrShapeAnimation *> m_animations;
+    QList<KoXmlElement> m_animationContext;
     QMap<QString, KPrCollectionItemModel*> m_modelMap;
     
 };

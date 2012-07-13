@@ -17,35 +17,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrAnimationRemoveCommand.h"
 
+#include "KPrReplaceAnimationCommand.h"
 #include "KPrDocument.h"
-#include "KPrShapeAnimations.h"
-#include "animations/KPrShapeAnimation.h"
 
-KPrAnimationRemoveCommand::KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeAnimation *animation)
-    : m_doc(doc)
-    , m_animation(animation)
+KPrReplaceAnimationCommand::KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation,  KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_oldAnimation(oldAnimation)
+    , m_newAnimation(newAnimation)
+    , m_document(doc)
     , m_deleteAnimation(true)
 {
-    setText(i18nc("(qtundo-format)", "Remove shape animation"));
+
 }
 
-KPrAnimationRemoveCommand::~KPrAnimationRemoveCommand()
+KPrReplaceAnimationCommand::~KPrReplaceAnimationCommand()
 {
     if (m_deleteAnimation) {
-        delete m_animation;
+        delete m_oldAnimation;
+    }
+    else {
+        delete m_newAnimation;
     }
 }
 
-void KPrAnimationRemoveCommand::redo()
+void KPrReplaceAnimationCommand::redo()
 {
-    m_doc->removeAnimation(m_animation, false);
+    m_document->replaceAnimation(m_oldAnimation, m_newAnimation);
     m_deleteAnimation = true;
 }
 
-void KPrAnimationRemoveCommand::undo()
+void KPrReplaceAnimationCommand::undo()
 {
-    m_doc->addAnimation(m_animation);
+    m_document->replaceAnimation(m_newAnimation, m_oldAnimation);
     m_deleteAnimation = false;
 }

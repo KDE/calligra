@@ -71,6 +71,8 @@ public:
     /// Return the index of a given item or an invalid index if it isn't on the model
     QModelIndex indexByItem(KPrCustomAnimationItem* item);
 
+    QModelIndex indexByAnimation(KPrShapeAnimation *animation);
+
     /// Return an item for the given index
     KPrCustomAnimationItem* itemForIndex(const QModelIndex &index) const;
 
@@ -82,6 +84,8 @@ public:
 
     /// Save a edit command
     void endTimeLineEdition();
+
+    QModelIndex replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation);
 
 
 public slots:
@@ -106,8 +110,14 @@ public slots:
 
     bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
     void recalculateStart(const QModelIndex &mIndex);
+
+    void updateByAnimationAdded(KPrShapeAnimation *animation);
+    void updateByAnimationRemoved(KPrShapeAnimation *animation);
+    void updateByAnimationReplaced(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
+
 signals:
     void timeScaleModified();
+    void rootRemoved();
 
 private:
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,

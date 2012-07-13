@@ -99,6 +99,7 @@ public:
     int globalDuration();
     void setBeginTime(int timeMS);
     void setGlobalDuration(int timeMS);
+    void setKoTextBlockData(KoTextBlockData *textBlockData);
 
     void setNodeType(Node_Type type);
     void setPresetClass(Preset_Class presetClass);

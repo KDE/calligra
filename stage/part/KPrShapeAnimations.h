@@ -53,6 +53,8 @@ public:
 
     void swap (int i, int j);
 
+    void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
+
 
     /**
      * Get the animations for the given step

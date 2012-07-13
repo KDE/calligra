@@ -103,6 +103,18 @@ void KPrShapeAnimations::swap(int i, int j)
     m_shapeAnimations.swap(i, j);
 }
 
+void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    KPrAnimationSubStep *subStep = oldAnimation->subStep();
+    int currentAnimationIndex = subStep->indexOfAnimation(oldAnimation);
+    newAnimation->setStep(oldAnimation->step());
+    newAnimation->setSubStep(oldAnimation->subStep());
+    newAnimation->setNodeType(oldAnimation->NodeType());
+    newAnimation->setKoTextBlockData(oldAnimation->textBlockData());
+    subStep->insertAnimation(currentAnimationIndex, newAnimation);
+    subStep->removeAnimation(oldAnimation);
+}
+
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
 {
     return m_shapeAnimations;

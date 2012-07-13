@@ -91,6 +91,7 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrEditAnimationTimeLineCommand.cpp
      commands/KPrAnimationEditNodeTypeCommand.cpp
      commands/KPrReorderAnimationCommand.cpp
+     commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp

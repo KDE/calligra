@@ -187,6 +187,14 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
     emit timeChanged(timeRange().first, timeMS);
 }
 
+void KPrShapeAnimation::setKoTextBlockData(KoTextBlockData *textBlockData)
+{
+    if (textBlockData) {
+        m_textBlockData = textBlockData;
+        m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+    }
+}
+
 void KPrShapeAnimation::deactivate()
 {
     if (m_textBlockData) {
