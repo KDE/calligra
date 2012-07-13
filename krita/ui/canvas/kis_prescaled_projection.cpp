@@ -181,8 +181,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
-    /*if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();*/
+    if(!image().isNull() && image()->isCanvasInfinite())
+        updateViewportSize();
     qDebug() << ppVar(m_d->viewportSize);
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);

@@ -201,7 +201,10 @@ void KisCanvas2::pan(QPoint shift)
     KoCanvasControllerWidget* controller =
         dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     controller->pan(shift);
-    updateCanvas();
+    if(!image().isNull() && image()->isCanvasInfinite())
+        updateCanvas(m_d->coordinatesConverter->imageRectInWidgetPixels());
+    else
+        updateCanvas();
 }
 
 void KisCanvas2::mirrorCanvas(bool enable)
