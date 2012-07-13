@@ -568,11 +568,12 @@ void KPrAnimationsTreeModel::updateByAnimationReplaced(KPrShapeAnimation *oldAni
     }
 
     if (updateRow >= 0) {
-        QModelIndex startIndex = createIndex(updateRow, static_cast<int>(Name),
-                                             itemToUpdate);
-        QModelIndex endIndex = createIndex(updateRow, static_cast<int>(Type),
-                                           itemToUpdate);
-        emit dataChanged(startIndex, endIndex);
+        if (itemToUpdate->animation() == oldAnimation) {
+            itemToUpdate->setShapeAnimation(newAnimation);
+        }
+        layoutAboutToBeChanged();
+        announceItemChanged(itemToUpdate);
+        layoutChanged();
     }
 }
 

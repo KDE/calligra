@@ -636,18 +636,18 @@ void KPrAnimationsDataModel::updateByAnimationReplaced(KPrShapeAnimation *oldAni
         emit dataChanged(startIndex, endIndex);
         return;
     }
-    foreach(KPrCustomAnimationItem *item, m_rootItem->children()) {
-        if (item->animation() == oldAnimation) {
-            QModelIndex index = indexByItem(item);
-            QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
-                                                 item);
-            QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
-                                               item);
-            emit dataChanged(startIndex, endIndex);
-            return;
-        }
+    QModelIndex index = indexByAnimation(oldAnimation);
+    if (index.isValid()) {
+        KPrCustomAnimationItem *item = itemForIndex(index);
+        item->setShapeAnimation(newAnimation);
+        QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),
+                                             item);
+        QModelIndex endIndex = createIndex(index.row(), static_cast<int>(TriggerEvent),
+                                           item);
+        emit dataChanged(startIndex, endIndex);
+        return;
     }
-    QModelIndex index = indexByAnimation(newAnimation);
+    index = indexByAnimation(newAnimation);
     if (index.isValid()) {
         KPrCustomAnimationItem *item = itemForIndex(index);
         QModelIndex startIndex = createIndex(index.row(), static_cast<int>(ShapeThumbnail),

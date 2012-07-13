@@ -361,6 +361,8 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
     if (!index.isValid()) {
         return;
     }
+    // Sometimes index is not updated fast enough
+    index = m_animationsModel->index(index.row(), index.column(), index.parent());
     KPrCustomAnimationItem *shapeAnimation = static_cast< KPrCustomAnimationItem*>(index.internalPointer());
     if (!shapeAnimation) {
         return;
