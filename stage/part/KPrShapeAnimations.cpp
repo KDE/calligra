@@ -17,21 +17,251 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+//Qt Headers
 #include <QList>
 #include <QSet>
-#include <kdebug.h>
-#include "KoShape.h"
-#include "KPrShapeAnimations.h"
-#include "animations/KPrAnimationStep.h"
-#include "animations/KPrAnimationSubStep.h"
-#include "animations/KPrShapeAnimation.h"
 
-KPrShapeAnimations::KPrShapeAnimations()
+//Stage Headers
+#include "KPrPage.h"
+#include "KPrView.h"
+#include "KPrDocument.h"
+#include <KPrCustomAnimationItem.h>
+#include "animations/KPrAnimationSubStep.h"
+#include "commands/KPrAnimationRemoveCommand.h"
+#include "commands/KPrReorderAnimationCommand.h"
+#include <commands/KPrEditAnimationTimeLineCommand.h>
+#include <commands/KPrAnimationEditNodeTypeCommand.h>
+#include <commands/KPrReplaceAnimationCommand.h>
+
+//Calligra Headers
+#include <KoShape.h>
+#include <KoShapeManager.h>
+#include <KoPADocument.h>
+#include <KoShapePainter.h>
+#include <KoShapeContainer.h>
+
+//KDE Headers
+#include <KIcon>
+#include <KIconLoader>
+#include <KLocale>
+#include <kdebug.h>
+
+const int COLUMN_COUNT = 9;
+const int INVALID = -1;
+
+KPrShapeAnimations::KPrShapeAnimations(QObject *parent)
+    :QAbstractTableModel(parent)
+    , m_currentEditedAnimation(0)
+    , m_firstEdition(true)
+    , m_oldBegin(INVALID)
+    , m_oldDuration(INVALID)
+    , m_document(0)
 {
 }
 
 KPrShapeAnimations::~KPrShapeAnimations()
 {
+}
+
+Qt::ItemFlags KPrShapeAnimations::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags theFlags = QAbstractTableModel::flags(index);
+    if (index.isValid()) {
+        theFlags |= Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+        //if (index.column() == Name)
+            //theFlags |= Qt::ItemIsEditable;//|
+                        //Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled;
+    }
+    return theFlags;
+}
+
+QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || index.column() < 0 ||
+            index.column() >= COLUMN_COUNT || index.row() < 0
+            || index.column() > = rowCount(QModelIndex())) {
+        return QVariant();
+    }
+
+    // Read Data
+    int groupCount = -1;
+    KPrShapeAnimation *thisAnimation = animationByRow(index.row(), groupCount);
+    if (!thisAnimation) {
+        return QVariant();
+    }
+
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        switch (index.column()) {
+            case Group: return groupCount;
+            case StepCount:
+                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click) {
+                    return groupCount;
+                }
+                else {
+                    return QVariant();
+                }
+            case TriggerEvent: return QVariant();
+            case Name: return getAnimationName(thisAnimation);
+            case ShapeThumbnail: return QVariant();
+            case AnimationIcon: return QVariant();
+            case StartTime: return thisAnimation->timeRange().first;
+            case Duration: return thisAnimation->globalDuration();
+            case AnimationClass: return thisAnimation->presetClass();
+            default: Q_ASSERT(false);
+        }
+    }
+    if (role == Qt::TextAlignmentRole) {
+        if (index.column() == Name)
+            return static_cast<int>(Qt::AlignVCenter|
+                                    Qt::AlignLeft);
+        return static_cast<int>(Qt::AlignVCenter|Qt::AlignRight);
+    }
+    if (role == Qt::DecorationRole) {
+        switch (index.column()) {
+            case Group: return QVariant();
+            case StepCount: return QVariant();
+            case TriggerEvent:
+                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click)
+                    return KIcon("onclick").pixmap(KIconLoader::SizeSmall,
+                                                   KIconLoader::SizeSmall);
+                if (thisAnimation->NodeType() == KPrShapeAnimation::After_Previous)
+                    return KIcon("after_previous").pixmap(KIconLoader::SizeSmall,
+                                                          KIconLoader::SizeSmall);
+                if (thisAnimation->NodeType() == KPrShapeAnimation::With_Previous)
+                    return KIcon("with_previous").pixmap(KIconLoader::SizeSmall,
+                                                         KIconLoader::SizeSmall);
+            case Name: return QVariant();
+            case ShapeThumbnail: return getAnimationShapeThumbnail(thisAnimation);
+            case AnimationIcon:  return getAnimationIcon(thisAnimation);
+            case StartTime: return QVariant();
+            case Duration: return QVariant();
+            case AnimationClass: return QVariant();
+            default: Q_ASSERT(false);
+        }
+    }
+    if (role == Qt::SizeHintRole) {
+        switch (index.column()) {
+            case Group:
+            case StepCount: return QVariant();
+            case TriggerEvent: return QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+            case Name: return QVariant();
+            case ShapeThumbnail: return QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+            case AnimationIcon:
+            case StartTime:
+            case Duration:
+            case AnimationClass: return QVariant();
+            default: Q_ASSERT(false);
+        }
+    }
+    if (role == Qt::ToolTipRole) {
+            switch (index.column()) {
+            case Group:
+            case StepCount: return QVariant();
+            case TriggerEvent:
+                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click)
+                    return i18n("start on mouse click");
+                if (thisAnimation->NodeType() == KPrShapeAnimation::After_Previous)
+                    return i18n("start after previous animation");
+                if (thisAnimation->NodeType() == KPrShapeAnimation::With_Previous)
+                    return i18n("start with previous animation");
+            case Name: return QVariant();
+            case ShapeThumbnail: return thisAnimation->shape()->name();
+            case AnimationIcon: return getAnimationName(thisAnimation);
+            case StartTime: return i18n("Start after %1 seconds. Duration of %2 seconds").
+                                    arg(thisAnimation->timeRange().first / 1000).
+                                    arg(thisAnimation->globalDuration() / 1000);
+            case Duration: return QVariant();
+            case AnimationClass: return thisAnimation->presetClassText();
+            default: Q_ASSERT(false);
+            }
+        }
+    return QVariant();
+}
+
+QVariant KPrShapeAnimations::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if (section == Name) {
+            return i18n("Animation");
+        }
+        else if (section == TriggerEvent) {
+            return QString();
+        }
+        else if (section == Shape) {
+            return i18n("Shape");
+        }
+    }
+    return QVariant();
+}
+
+int KPrShapeAnimations::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return 0;
+    int rowCount = 0;
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                            rowCount++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return rowCount;
+
+}
+
+int KPrShapeAnimations::columnCount(const QModelIndex &parent) const
+{
+    return parent.isValid() ? 0 : COLUMN_COUNT;
+}
+
+bool KPrShapeAnimations::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid() || index.column() < 0 ||
+        index.column() > columnCount(QModelIndex)) {
+        return false;
+    }
+    // Read Data
+    int groupCount = -1;
+    KPrShapeAnimation *thisAnimation = animationByRow(index.row(), groupCount);
+    if (!thisAnimation) {
+        return false;
+    }
+    if (role == Qt::EditRole) {
+        switch (index.column()) {
+            case Group:
+            case StepCount:
+            case TriggerEvent:
+            case Name:
+            case ShapeThumbnail:
+                return false;
+            case AnimationIcon:
+                return false;
+            case StartTime:
+                setTimeRangeIncrementalChange(thisAnimation, value.toInt(), thisAnimation->globalDuration(), BeginTime);
+                emit dataChanged(index, index);
+                return true;
+            case Duration:
+                setTimeRangeIncrementalChange(thisAnimation, thisAnimation->timeRange().first, value.toInt(), DurationTime);
+                emit dataChanged(index, index);
+                return true;
+            case AnimationClass:
+                return false;
+            default:
+                return false;
+
+        }
+    }
+    return false;
 }
 
 void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
@@ -118,4 +348,421 @@ void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrSh
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
 {
     return m_shapeAnimations;
+}
+
+void KPrShapeAnimations::endTimeLineEdition()
+{
+    if (!m_firstEdition && m_currentEditedAnimation && (m_oldBegin != INVALID) && (m_oldDuration != INVALID)) {
+        int begin = m_currentEditedAnimation->timeRange().first;
+        int duration = m_currentEditedAnimation->globalDuration();
+        if ((begin != m_oldBegin) || (duration != m_oldDuration)) {
+            m_currentEditedAnimation->setBeginTime(m_oldBegin);
+            m_currentEditedAnimation->setGlobalDuration(m_oldDuration);
+            setTimeRange(m_currentEditedAnimation, begin, duration);
+            emit timeScaleModified();
+        }
+        m_oldBegin = INVALID;
+        m_oldDuration = INVALID;
+    }
+    m_firstEdition = true;
+    m_currentEditedAnimation = 0;
+}
+
+void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, const int duration)
+{
+    if (item && m_document) {
+        KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(item->animation(),
+                                                                                     begin, duration);
+        m_document->addCommand(command);
+        //connect(item, SIGNAL(timeChanged(int,int)), this, SLOT(notifyAnimationEdited()));
+    }
+}
+
+void KPrShapeAnimations::setDocument(KPrDocument *document)
+{
+    m_document = document;
+    reset();
+}
+
+qreal KPrShapeAnimations::previousItemEnd(const QModelIndex &index)
+{
+    if (index.isValid()) {
+        KPrShapeAnimation *previousAnimation = animationByRow(index.row());
+        if (previousAnimation->NodeType() == KPrShapeAnimation::On_Click) {
+            return previousAnimation->timeRange().second;
+        }
+        if (previousAnimation->NodeType() == KPrShapeAnimation::With_Previous) {
+            return previousAnimation->globalDuration() +
+                    previousItemBegin(this->index(index.row - 1, index.column(), QModelIndex()));
+        }
+        else if (previousAnimation->NodeType() == KPrShapeAnimation::After_Previous) {
+            return previousAnimation->globalDuration() +
+                    previousItemEnd(this->index(index.row - 1, index.column(), QModelIndex()));
+        }
+    }
+    return 0.0;
+}
+
+qreal KPrShapeAnimations::previousItemBegin(const QModelIndex &index)
+{
+    if (index.isValid()) {
+        KPrShapeAnimation *previousAnimation = animationByRow(index.row());
+        if (previousAnimation->NodeType() == KPrShapeAnimation::On_Click) {
+            return previousAnimation->timeRange().first;
+        }
+        if (previousItem->triggerEvent() == KPrShapeAnimation::With_Previous) {
+            return previousItemBegin(this->index(index.row - 1, index.column(), QModelIndex()));
+        }
+        else if (previousItem->triggerEvent() == KPrShapeAnimation::After_Previous) {
+            return previousItemEnd(this->index(index.row - 1, index.column(), QModelIndex()));
+        }
+    }
+    return 0.0;
+}
+
+QModelIndex KPrShapeAnimations::replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation)
+{
+    if (!index.isValid() || !m_document) {
+        return QModelIndex();
+    }
+    KPrShapeAnimation *oldAnimation = animationByRow(index.row());
+    Q_ASSERT(oldAnimation);
+    KPrReplaceAnimationCommand *cmd = new KPrReplaceAnimationCommand(m_document, oldAnimation, newAnimation);
+    m_document->addCommand(cmd);
+    return index;
+}
+
+bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
+{
+    KPrShapeAnimation *item = animationByRow(index.row());
+    if (item) {
+        QList<KPrShapeAnimation *> movedChildren = QList<KPrShapeAnimation *>();
+        QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
+        KPrCustomAnimationItem *parent = item->parent();
+        int currentIndex = parent->children().indexOf(item);
+        if (item->NodeType() == KPrShapeAnimation::After_Previous) {
+            // After Previous to With Previous
+            if (type == KPrShapeAnimation::With_Previous) {
+                //use previous animation to reparent current animation
+                Q_ASSERT(index.row() > 0);
+                KPrShapeAnimation * previousAnimation = animationByRow(this->index(index.row() - 1, index.column()));
+                KPrAnimationSubStep *newSubStep = previousAnimation->subStep();
+                movedChildren = getWithPreviousSiblings(item, true);
+                return createTriggerEventEditCmd(item, item->step(),
+                                                 newSubStep, type, movedChildren, movedSubSteps);
+            }
+
+            // After Previous to On Click
+            if (type == KPrShapeAnimation::On_Click) {
+                 // Get index of current substep
+                 int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+                 int subStepCount = item->step()->animationCount();
+
+                 //Create new step to reparent currrent item and all following items.
+                 KPrAnimationStep *newStep = new KPrAnimationStep();
+
+                 // Add step after original one
+                 int currentStepIndex = steps().indexOf(item->animation()->step());
+                 insertStep(currentStepIndex + 1, newStep);
+
+                 //reparent children
+                 connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited());
+                 if (currentSubStepIndex < subStepCount-1) {
+                     movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->step());
+                 }
+                 return createTriggerEventEditCmd(item, newStep, item->subStep(),
+                                                  type, movedChildren, movedSubSteps, activePage);
+            }
+        }
+        if (item->NodeType() == KPrShapeAnimation::With_Previous) {
+           // With Previous to After Previous
+           if (type == KPrShapeAnimation::After_Previous) {
+               //int childrenCount = parent->childCount();
+               // Get index of current substep
+               int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+               //Create new substep to reparent currrent item and all following items.
+               KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+
+               // Add substep after original one
+               item->step()->insertAnimation(currentSubStepIndex + 1, newSubStep);
+
+               //reparent children
+               connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+               movedChildren = getWithPreviousSiblings(item, true);
+               return createTriggerEventEditCmd(item, item->step(),
+                                                newSubStep, type, movedChildren, movedSubSteps);
+           }
+           // With Previous to On Click
+           if (type == KPrShapeAnimation::On_Click) {
+                //int childrenCount = parent->childCount();
+                // Get index of current substep
+                int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+                int subStepCount = item->step()->animationCount();
+
+                //Create new step to reparent currrent item and all following items.
+                KPrAnimationStep *newStep = new KPrAnimationStep();
+
+                //Create new substep to reparent currrent item and all following items.
+                KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+
+                // Add step after original one
+                //insert new Step
+                int currentStepIndex = steps().indexOf(item->step());
+                insertStep(currentStepIndex + 1, newStep);
+
+                //reparent children
+                connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                if (currentSubStepIndex < subStepCount - 1) {
+                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->animation()->step());
+                }
+                movedChildren = getWithPreviousSiblings(item, false);
+                return createTriggerEventEditCmd(item, newStep, newSubStep,
+                                                 type, movedChildren, movedSubSteps, activePage);
+
+           }
+        }
+        if (item->NodeType() == KPrShapeAnimation::On_Click) {
+             if (index.row() < 1) {
+                 // Resync trigger event edit widget
+                 emit layoutChanged();
+                 return false;
+             }
+            // On click to With Previous
+            if (type == KPrShapeAnimation::With_Previous) {
+                // Get previous animation
+                KPrShapeAnimation *previousAnimation = animationByRow(this->index(index.row() - 1, index.column()));
+                KPrAnimationStep *newStep = previousAnimation->step();
+                KPrAnimationSubStep *newSubStep = previousAnimation->subStep();
+
+                movedChildren = getWithPreviousSiblings(item, false);
+
+                int subStepCount = item->step()->animationCount();
+                int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+                if (subStepCount > 1) {
+                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->step());
+                }
+                connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                return createTriggerEventEditCmd(item, newStep, newSubStep,
+                                                 type, movedChildren, movedSubSteps);
+            }
+
+            // On click to After Previous
+            if (type == KPrShapeAnimation::After_Previous) {
+                 // Get previous animation
+                 KPrShapeAnimation *previousAnimation = animationByRow(this->index(index.row() - 1, index.column()));
+                 KPrAnimationStep *newStep = previousAnimation->step();
+
+                 int subStepCount = item->step()->animationCount();
+                 if (subStepCount > 1) {
+                     movedSubSteps = getSubSteps(1, subStepCount, item->step());
+                 }
+                 connect(item, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                 return createTriggerEventEditCmd(item, newStep, item->subStep(),
+                                                  type, movedChildren, movedSubSteps);
+            }
+        }
+    }
+    return false;
+}
+
+void KPrShapeAnimations::recalculateStart(const QModelIndex &mIndex)
+{
+
+}
+
+void KPrShapeAnimations::notifyAnimationEdited()
+{
+    if(KPrShapeAnimation *animation = qobject_cast<KPrShapeAnimation*>(sender())) {
+        QModelIndex index = indexByAnimation(animation);
+        if (index.isValid()) {
+            emit dataChanged(index, index);
+        }
+    }
+}
+
+KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupCount)
+{
+    int rowCount = 0;
+    groupCount = 0;
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                            if (b->NodeType() == KPrShapeAnimation::On_Click) {
+                                groupCount = groupCount + 1;
+                            }
+                            if (rowCount == row) {
+                                return b;
+                            }
+                            rowCount++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row)
+{
+    int groupCount = 0;
+    return animationByRow(row, groupCount);
+}
+
+QString *KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation)
+{
+    if (animation) {
+        QStringList descriptionList = animation->id().split("-");
+        if (descriptionList.count() > 2) {
+            descriptionList.removeFirst();
+            descriptionList.removeFirst();
+        }
+        return descriptionList.join(QString(" "));
+    }
+    return QString();
+}
+
+QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animation)
+{
+    if (animation) {
+        //TODO: Draw image file to load when shape thumbnail can't be created
+       QPixmap thumbnail = KIcon("stage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+
+        if (thumbnail.convertFromImage(createThumbnail(animation->shape(),
+                                                       QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))) {
+            thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
+        }
+        return thumbnail;
+    }
+    return QPixmap();
+}
+
+QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation)
+{
+    if (!animation) {
+        return QPixmap();
+    }
+    QString name = getAnimationName(animation);
+    if (!name.isEmpty()) {
+        name = name.append("_animation");
+        name.replace(" ", "_");
+        QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
+        if (!path.isNull()) {
+            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+        }
+    }
+    return KIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+}
+
+QImage KPrShapeAnimations::createThumbnail(KoShape *shape, const QSize &thumbSize) const
+{
+    KoShapePainter painter;
+    QList<KoShape*> shapes;
+    shapes.append(shape);
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container) {
+        shapes.append(container->shapes());
+    }
+
+    painter.setShapes(shapes);
+
+    QImage thumb(thumbSize, QImage::Format_RGB32);
+    // draw the background of the thumbnail
+    thumb.fill(QColor(Qt::white).rgb());
+
+    QRect imageRect = thumb.rect();
+    // use 2 pixel border around the content
+    imageRect.adjust(2, 2, -2, -2);
+
+    QPainter p(&thumb);
+    painter.paint(p, imageRect, painter.contentRect());
+
+    return thumb;
+}
+
+void KPrShapeAnimations::setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes)
+{
+    if (m_firstEdition) {
+        m_oldBegin = item->timeRange().first;
+        m_oldDuration = item->timeRange().second;
+        m_currentEditedAnimation = item;
+        m_firstEdition = false;
+    }
+    if (item == m_currentEditedAnimation) {
+        if ((updatedTimes == BothTimes) || (updatedTimes == BeginTime)) {
+            item->setBeginTime(begin);
+        }
+        if ((updatedTimes == BothTimes) || (updatedTimes == DurationTime)) {
+            item->setGlobalDuration(duration);
+        }
+    }
+    else {
+        endTimeLineEdition();
+    }
+}
+
+QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation)
+{
+    int rowCount = 0;
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *subStep = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(subStep)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                            if (b == animation) {
+                                return this->index(rowCount, 0, QModelIndex());
+                            }
+                            rowCount++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return QModelIndex();
+}
+
+QList<KPrAnimationSubStep *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems)
+{
+    bool startAdding = false;
+    QList<KPrAnimationSubStep *> siblings = QList<KPrAnimationSubStep *>();
+
+    if (KPrAnimationSubStep *a = animation->subStep()) {
+        for (int j=0; j < a->animationCount(); j++) {
+            QAbstractAnimation *shapeAnimation = a->animationAt(j);
+            if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                    if (startAdding) {
+                        if (connectItems) {
+                            connect(b, SIGNAL(triggerEventChanged(KPrShapeAnimation::Node_Type)), this, SLOT(notifyAnimationEdited()));
+                        }
+                        siblings.append(b);
+                    }
+                    if (b == animation) {
+                        startAdding = true;
+                    }
+                }
+            }
+        }
+    }
+    return siblings;
+}
+
+QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end, KPrAnimationStep *step)
+{
+    QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
+    for (int i = start; i < end; i++) {
+        if (KPrAnimationSubStep *substep = dynamic_cast<KPrAnimationSubStep *>(step->animationAt(i))) {
+           movedSubSteps.append(substep);
+        }
+    }
+    return movedSubSteps;
 }

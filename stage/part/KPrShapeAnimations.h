@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright ( C ) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright ( C ) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,15 +23,51 @@
 #define KPRSHAPEANIMATIONS_H
 
 #include <QList>
+#include <QAbstractTableModel>
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationStep.h"
 
+class KPrDocument;
 
-class KPrShapeAnimations
+enum ColumnNames {
+    Group = 0,
+    StepCount = 1,
+    TriggerEvent = 2,
+    Name = 3,
+    ShapeThumbnail = 4,
+    AnimationIcon = 5,
+    StartTime = 6,
+    Duration = 7,
+    AnimationClass = 8
+};
+
+class KPrShapeAnimations : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
-    KPrShapeAnimations();
+    enum TimeUpdated {
+        BeginTime,
+        DurationTime,
+        BothTimes
+    };
+    explicit KPrShapeAnimations(QObject *parent = 0);
     ~KPrShapeAnimations();
+
+    // Model Methods
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant data(const QModelIndex &index,
+               int role=Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                     int role=Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent=QModelIndex()) const;
+    int columnCount(const QModelIndex &parent=QModelIndex()) const;
+    bool setHeaderData(int, Qt::Orientation, const QVariant&,
+                       int=Qt::EditRole) { return false; }
+    bool setData(const QModelIndex &index, const QVariant &value,
+                 int role=Qt::EditRole);
+
+
+
     void init(const QList<KPrAnimationStep *> animations);
     /**
      * Add animation to the animations
@@ -70,8 +107,50 @@ public:
      */
     QList<KPrAnimationStep *> steps() const;
 
+    /// Save a edit command
+    void endTimeLineEdition();
+
+    /// Set time range for item (times in miliseconds)
+    void setTimeRange(KPrShapeAnimation *item, const int begin, const int duration);
+
+    /// requiere to send commands
+    void setDocument(KPrDocument *document);
+
+    /// Return previous item end time in seconds
+    qreal previousItemEnd(const QModelIndex &index);
+
+    /// Return previous item begin time
+    qreal previousItemBegin(const QModelIndex &index);
+
+    QModelIndex replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation);
+    bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
+    void recalculateStart(const QModelIndex &mIndex);
+
+public slots:
+    /// Notify a external edition of begin or end time
+    void notifyAnimationEdited();
+
+signals:
+    void timeScaleModified();
+
 private:
+    KPrShapeAnimation *animationByRow(const int row, int &groupCount);
+    KPrShapeAnimation *animationByRow(const int row);
+    QString *getAnimationName(KPrShapeAnimation *animation);
+    QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation);
+    QPixmap getAnimationIcon(KPrShapeAnimation *animation);
+    QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
+    void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
+    QModelIndex indexByAnimation(KPrShapeAnimation *animation);
+    QList<KPrAnimationSubStep *> getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems);
+    QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
+
     QList<KPrAnimationStep *> m_shapeAnimations;
+    KPrShapeAnimation *m_currentEditedAnimation;
+    bool m_firstEdition;
+    int m_oldBegin;
+    int m_oldDuration;
+    KPrDocument *m_document;
 };
 
 #endif /* KPRSHAPEANIMATIONS_H */
