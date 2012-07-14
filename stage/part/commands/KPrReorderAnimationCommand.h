@@ -25,14 +25,13 @@
 
 #include "stage_export.h"
 
-class KPrPage;
+class KPrShapeAnimations;
 class KPrAnimationStep;
-class KPrAnimationsTreeModel;
 
 class STAGE_EXPORT KPrReorderAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReorderAnimationCommand(KPrPage *activePage, KPrAnimationStep *step, KPrAnimationStep *newStep, KPrAnimationsTreeModel *model, KUndo2Command *parent = 0);
+    KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrAnimationStep *step, KPrAnimationStep *newStep, KUndo2Command *parent = 0);
 
     virtual ~KPrReorderAnimationCommand();
 
@@ -42,10 +41,9 @@ public:
     void undo ();
 
 private:
-    KPrPage *m_activePage;
+    KPrShapeAnimations *m_shapeAnimationsModel;
     KPrAnimationStep *m_step;
     KPrAnimationStep *m_newStep;
-    KPrAnimationsTreeModel *m_model;
     int m_newRow;
     int m_oldRow;
 };

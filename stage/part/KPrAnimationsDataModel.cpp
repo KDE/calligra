@@ -664,14 +664,14 @@ bool KPrAnimationsDataModel::createTriggerEventEditCmd(KPrShapeAnimation *animat
                                                        QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps,
                                                        KPrPage *activePage)
 {
-    KPrAnimationEditNodeTypeCommand *command =
+    /*KPrAnimationEditNodeTypeCommand *command =
             new KPrAnimationEditNodeTypeCommand(animation, newStep, newSubStep,
                                                 newType, children, movedSubSteps, activePage);
     if (KPrDocument *doc = dynamic_cast<KPrDocument*>(m_view->kopaDocument())) {
         doc->addCommand(command);
         emit timeScaleModified();
         return true;
-    }
+    }*/
     return false;
 }
 

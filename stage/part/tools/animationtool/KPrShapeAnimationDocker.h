@@ -21,19 +21,24 @@
 #define KPRSHAPEANIMATIONDOCKER_H
 
 #include <QWidget>
+#include <animations/KPrShapeAnimation.h>
 
 class QListWidget;
 class QToolButton;
 class KoPAViewBase;
 class KPrView;
 class QTreeView;
-class KPrAnimationsTreeModel;
+//class KPrAnimationsTreeModel;
+class KPrAnimationGroupProxyModel;
+class KPrShapeAnimations;
 class KPrAnimationsDataModel;
 class KPrAnimationsTimeLineView;
 class KPrViewModePreviewShapeAnimations;
 class KPrCustomAnimationItem;
 class KPrEditAnimationsWidget;
 class QModelIndex;
+class KoPAPageBase;
+class KoShape;
 
 /**
  * Shape animations docker widget: let's edition of animations.
@@ -59,10 +64,6 @@ public slots:
 
     void syncCanvasWithIndex(const QModelIndex &index);
 
-    void reParentEditDialog();
-
-    KPrCustomAnimationItem *itemByIndex(const QModelIndex &index);
-
     /// Update canvas with selected shape on Time Line View
     void updateEditDialogIndex(const QModelIndex &index);
 
@@ -80,11 +81,22 @@ public slots:
     void moveAnimationUp();
     void moveAnimationDown();
 
+    void setBeginTime(const QModelIndex &index, const int begin);
+    void setDuration(const QModelIndex &index, const int duration);
+
+    bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
+
+    KPrShapeAnimations *mainModel();
 
 private:
+
+    KPrShapeAnimations *animationsByPage(KoPAPageBase *page);
+
     KPrView* m_view;
     QTreeView * m_animationsView;
-    KPrAnimationsTreeModel *m_animationsModel;
+    //KPrAnimationsTreeModel *m_animationsModel;
+    KPrShapeAnimations *m_animationsModel;
+    KPrAnimationGroupProxyModel *m_animationGroupModel;
     QToolButton *m_editAnimation;
     KPrEditAnimationsWidget *m_editAnimationsPanel;
     QToolButton *m_buttonAddAnimation;

@@ -29,9 +29,9 @@
 #include "KPrDocument.h"
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
-#include "KPrCustomAnimationItem.h"
 #include "KPrEditAnimationsWidget.h"
 #include "KPrCollectionItemModel.h"
+#include "KPrAnimationGroupProxyModel.h"
 
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationsDataModel.h"
@@ -80,17 +80,16 @@
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 
-KPrEditAnimationsWidget::KPrEditAnimationsWidget(QWidget *parent)
+KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent)
     : QWidget(parent)
     , m_view(0)
+    , m_docker(docker)
 {
     m_animations = QList<KPrShapeAnimation *>();
     m_animationContext = QList<KoXmlElement>();
 
     QVBoxLayout *layout = new QVBoxLayout;
-    m_timeLineModel = new KPrAnimationsDataModel(this);
     m_timeLineView = new KPrAnimationsTimeLineView();
-    m_timeLineView->setModel(m_timeLineModel);
     QLabel *label = new QLabel(i18n("Manage animation delay and duration: "));
     QLabel *startLabel = new QLabel(i18n("Start: "));
     m_triggerEventList = new QComboBox;
@@ -175,86 +174,67 @@ void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
     KPrView *n_view = dynamic_cast<KPrView *>(view);
     if (n_view) {
         m_view = n_view;
-        m_timeLineModel->setDocumentView(m_view);
-        connect(m_timeLineModel, SIGNAL(rootRemoved()), this, SIGNAL(rootRemoved()));
     }
-    m_timeLineView->update();
 }
 
-void KPrEditAnimationsWidget::setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem)
+void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
 {
-    m_timeLineModel->setParentItem(item, rootItem);
-    m_timeLineView->updateGeometry();
-    updateGeometry();
+    Q_ASSERT(m_timeLineModel);
+    m_timeLineView->setCurrentIndex(index);
 }
 
-void KPrEditAnimationsWidget::setCurrentItem(KPrCustomAnimationItem *item)
+void KPrEditAnimationsWidget::setProxyModel(KPrAnimationGroupProxyModel *model)
 {
-    if (item) {
-        // Change tree model index to time line index
-        QModelIndex newIndex = m_timeLineModel->indexByItem(item);
-        if (newIndex.isValid()) {
-            m_timeLineView->setCurrentIndex(newIndex);
-            updateIndex(newIndex);
-        }
-    }
-    m_timeLineView->update();
-}
-
-void KPrEditAnimationsWidget::setActiveShape(KoShape *shape)
-{
-    QModelIndex index = m_timeLineModel->indexByShape(shape);
-    if (index.isValid()) {
-        m_timeLineView->setCurrentIndex(index);
-    }
-    m_timeLineView->update();
+    m_timeLineModel = model;
+    m_timeLineView->setModel(m_timeLineModel);
 }
 
 void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 {
-    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(index);
-    if (item && (index == m_timeLineView->currentIndex())) {
-        m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
-        m_delayEdit->setTime(QTime().addMSecs(item->beginTime()));
-        m_durationEdit->setTime(QTime().addMSecs(item->duration()));
+    if (index.isValid() && (index == m_timeLineView->currentIndex())) {
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::TriggerEvent);
+        QModelIndex beginTimeIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::StartTime);
+        QModelIndex durationIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Duration);
+        m_triggerEventList->setCurrentIndex(m_timeLineModel->data(triggerIndex).toInt());
+        m_delayEdit->setTime(QTime().addMSecs(m_timeLineModel->data(beginTimeIndex).toInt()));
+        m_durationEdit->setTime(QTime().addMSecs(m_timeLineModel->data(durationIndex).toInt()));
     }
 }
 
 void KPrEditAnimationsWidget::setBeginTime()
 {
     if (m_timeLineView->currentIndex().isValid()) {
-        m_timeLineModel->setBeginTime(m_timeLineView->currentIndex(), -m_delayEdit->time().msecsTo(QTime()));
+        m_docker->setBeginTime(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_delayEdit->time().msecsTo(QTime()));
     }
 }
 
 void KPrEditAnimationsWidget::setDuration()
 {
     if (m_timeLineView->currentIndex().isValid()) {
-        m_timeLineModel->setDuration(m_timeLineView->currentIndex(), -m_durationEdit->time().msecsTo(QTime()));
+        m_docker->setDuration(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_durationEdit->time().msecsTo(QTime()));
     }
 }
 
 void KPrEditAnimationsWidget::setTriggerEvent(int row)
 {
-    if ((row >= 0) && m_timeLineView->currentIndex().isValid()) {
-        KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(m_timeLineView->currentIndex());
-        if (row != ((int)item->triggerEvent())) {
+    QModelIndex index = m_timeLineView->currentIndex();
+    if ((row >= 0) && index.isValid()) {
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::TriggerEvent);
+        if (row != m_timeLineModel->data(triggerIndex).toInt()) {
             KPrShapeAnimation::Node_Type newType;
             if (row == 0) newType = KPrShapeAnimation::On_Click;
             else if (row == 1) newType = KPrShapeAnimation::After_Previous;
             else newType = KPrShapeAnimation::With_Previous;
-            m_timeLineModel->setTriggerEvent(m_timeLineView->currentIndex(), newType);
+            m_docker->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
         }
     }
 }
 
 void KPrEditAnimationsWidget::syncCurrentItem()
 {
-    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(m_timeLineView->currentIndex());
-    if (item) {
-        m_triggerEventList->setCurrentIndex((int)item->triggerEvent());
-        m_delayEdit->setTime(QTime().addMSecs(item->beginTime()));
-        m_durationEdit->setTime(QTime().addMSecs(item->duration()));
+    QModelIndex index = m_timeLineView->currentIndex();
+    if (index.isValid()) {
+        updateIndex(index);
     }
 }
 
@@ -284,11 +264,11 @@ void KPrEditAnimationsWidget::setAnimation(const QModelIndex &index)
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext context(stylesReader, 0);
     KoShapeLoadingContext shapeContext(context, 0);
-    KPrCustomAnimationItem *item = m_timeLineModel->itemForIndex(itemIndex);
-    KoShape *shape = item->shape();
+
+    KoShape *shape = m_docker->mainModel()->shapeByIndex(m_timeLineModel->mapToSource(itemIndex));
     KPrShapeAnimation *newAnimation = loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
     if (newAnimation) {
-        m_timeLineModel->replaceAnimation(itemIndex, newAnimation);
+        m_docker->mainModel()->replaceAnimation(itemIndex, newAnimation);
     }
 }
 

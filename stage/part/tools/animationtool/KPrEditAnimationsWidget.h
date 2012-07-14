@@ -25,7 +25,6 @@
 #include <KoXmlReader.h>
 
 class KPrAnimationsTimeLineView;
-class KPrAnimationsDataModel;
 class KPrView;
 class KoPAViewBase;
 class QModelIndex;
@@ -41,6 +40,8 @@ class KoXmlElement;
 class KoShapeLoadingContext;
 class KPrCollectionItemModel;
 class QListWidgetItem;
+class KPrAnimationGroupProxyModel;
+class KPrShapeAnimationDocker;
 
 /** This Widget holds the configuration popup dialog
     used to edit animation properties of existing or new
@@ -51,11 +52,10 @@ class KPrEditAnimationsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrEditAnimationsWidget(QWidget *parent = 0);
+    explicit KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent = 0);
     void setView(KoPAViewBase *view);
-    void setParentItem(KPrCustomAnimationItem *item, KPrCustomAnimationItem *rootItem);
-    void setCurrentItem(KPrCustomAnimationItem *item);
-    void setActiveShape(KoShape *shape);
+    void setCurrentIndex(const QModelIndex &index);
+    void setProxyModel(KPrAnimationGroupProxyModel *model);
     
 signals:
     void itemClicked(const QModelIndex &index);
@@ -91,7 +91,7 @@ private:
 
     KPrView* m_view;
     KPrAnimationsTimeLineView *m_timeLineView;
-    KPrAnimationsDataModel *m_timeLineModel;
+    KPrAnimationGroupProxyModel *m_timeLineModel;
     QComboBox *m_triggerEventList;
     QTimeEdit *m_delayEdit;
     QTimeEdit *m_durationEdit;
@@ -100,7 +100,7 @@ private:
     QList<KPrShapeAnimation *> m_animations;
     QList<KoXmlElement> m_animationContext;
     QMap<QString, KPrCollectionItemModel*> m_modelMap;
-    
+    KPrShapeAnimationDocker *m_docker;
 };
 
 #endif // KPREDITANIMATIONSWIDGET_H

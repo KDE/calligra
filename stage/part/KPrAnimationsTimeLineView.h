@@ -22,25 +22,16 @@
 
 #include <QWidget>
 class QTableView;
-class KPrAnimationsDataModel;
+class KPrShapeAnimations;
 class KPrTimeLineView;
 class QScrollArea;
 class QModelIndex;
 class TimeLineWidget;
 class KPrTimeLineHeader;
 class QColor;
+class KPrAnimationGroupProxyModel;
 
 #include "stage_export.h"
-
-/// Names of displayed columns
-enum ColumnNames {
-    ShapeThumbnail = 0,
-    AnimationIcon = 1,
-    StartTime = 2,
-    Duration = 3,
-    AnimationClass = 4,
-    TriggerEvent =5
-};
 
 /**
  Animations Time Line Widget for groups of time related animations
@@ -52,15 +43,18 @@ class STAGE_EXPORT  KPrAnimationsTimeLineView : public QWidget
     Q_OBJECT
 public:
     explicit KPrAnimationsTimeLineView(QWidget *parent = 0);
-    void setModel(KPrAnimationsDataModel *model);
+    void setModel(KPrAnimationGroupProxyModel *model);
     void resizeEvent(QResizeEvent *event);
-    KPrAnimationsDataModel *model();
+    KPrAnimationGroupProxyModel *model();
+    KPrShapeAnimations *animationsModel();
     QModelIndex currentIndex();
     void setCurrentIndex(const QModelIndex &index);
     int rowCount() const;
     friend class KPrTimeLineView;
     friend class KPrTimeLineHeader;
     virtual QSize sizeHint() const;
+    int startColumn() const;
+    int endColumn() const;
 
 signals:
     void clicked(const QModelIndex&);
@@ -122,7 +116,8 @@ private:
 
     KPrTimeLineView *m_view;
     KPrTimeLineHeader *m_header;
-    KPrAnimationsDataModel *m_model;
+    KPrAnimationGroupProxyModel *m_model;
+    KPrShapeAnimations *m_shapeModel;
     int m_selectedRow;
     int m_selectedColumn;
     QScrollArea *m_scrollArea;

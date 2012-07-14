@@ -32,7 +32,7 @@ const int INVALID = -1;
 KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrAnimationStep *newStep,
                                                                  KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType,
                                                                  QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps,
-                                                                 KPrPage *activePage, KUndo2Command *parent)
+                                                                 KPrShapeAnimations *animationModel, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_animation(animation)
     , m_newStep(newStep)
@@ -40,7 +40,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_newType(newType)
     , m_children(children)
     , m_substeps(movedSubSteps)
-    , m_activePage(activePage)
+    , m_animationsModel(animationModel)
     , m_oldSubstepRow(INVALID)
     , m_newSubstepRow(INVALID)
     , m_oldStepRow(INVALID)
@@ -108,18 +108,18 @@ void KPrAnimationEditNodeTypeCommand::redo()
             m_oldSubstepRow = m_oldStep->indexOfAnimation(m_oldSubStep);
             m_oldSubStep->setParent(0);
         }
-        if (m_oldStep->children().isEmpty() && m_activePage) {
-            m_oldStepRow = m_activePage->animationSteps().indexOf(m_oldStep);
-            m_activePage->animations().removeStep(m_oldStep);
+        if (m_oldStep->children().isEmpty() && m_animationsModel) {
+            m_oldStepRow =m_animationsModel->steps().indexOf(m_oldStep);
+            m_animationsModel->removeStep(m_oldStep);
         }
 
         // If new Step is not in step lists add it.
-        if (m_activePage && !m_activePage->animationSteps().contains(m_newStep)) {
+        if (m_animationsModel && !m_animationsModel->steps().contains(m_newStep)) {
             if (m_newStepRow != INVALID) {
-                m_activePage->animations().insertStep(m_newStepRow, m_newStep);
+                m_animationsModel->insertStep(m_newStepRow, m_newStep);
             }
             else {
-                m_activePage->animations().insertStep(m_activePage->animationSteps().count(), m_newStep);
+                m_animationsModel->insertStep(m_animationsModel->steps().count(), m_newStep);
             }
         }
 
@@ -180,18 +180,18 @@ void KPrAnimationEditNodeTypeCommand::undo()
             }
             m_newSubStep->setParent(0);
         }
-        if (m_newStep->children().isEmpty() && m_activePage) {
-            m_newStepRow = m_activePage->animationSteps().indexOf(m_newStep);
-            m_activePage->animations().removeStep(m_newStep);
+        if (m_newStep->children().isEmpty() && m_animationsModel) {
+            m_newStepRow =m_animationsModel->steps().indexOf(m_newStep);
+            m_animationsModel->removeStep(m_newStep);
         }
 
         // If old Step is not in step lists add it.
-        if (m_activePage && !m_activePage->animationSteps().contains(m_oldStep)) {
+        if (m_animationsModel && !m_animationsModel->steps().contains(m_oldStep)) {
             if (m_oldStepRow != INVALID) {
-                m_activePage->animations().insertStep(m_oldStepRow, m_oldStep);
+                m_animationsModel->insertStep(m_oldStepRow, m_oldStep);
             }
             else {
-                m_activePage->animations().insertStep(m_activePage->animationSteps().count(), m_oldStep);
+                m_animationsModel->insertStep(m_animationsModel->steps().count(), m_oldStep);
             }
         }
         m_animation->setNodeType(m_oldType);

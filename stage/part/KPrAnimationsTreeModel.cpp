@@ -635,7 +635,7 @@ QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int
     Q_ASSERT(0 < oldRow && oldRow < parent->childCount() &&
              0 < newRow && newRow < parent->childCount());
     QModelIndex newIndex;
-    // swap top level items
+ /*   // swap top level items
     if (parent == m_rootItem) {
         KPrCustomAnimationItem *itemOld = itemForIndex(index(oldRow, 0));
         KPrCustomAnimationItem *itemNew = itemForIndex(index(newRow, 0));
@@ -648,5 +648,6 @@ QModelIndex KPrAnimationsTreeModel::moveItem(KPrCustomAnimationItem *parent, int
             }
         }
     }
+    */
     return newIndex;
 }

@@ -20,10 +20,11 @@
 #include "KPrAnimationsTimeLineView.h"
 
 //Stage Headers
-#include "KPrAnimationsDataModel.h"
 #include "KPrTimeLineHeader.h"
 #include "KPrTimeLineView.h"
+#include "KPrShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
+#include "tools/animationtool/KPrAnimationGroupProxyModel.h"
 
 //KDE HEADERS
 
@@ -31,7 +32,7 @@
 //QT HEADERS
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QAbstractItemModel>
+#include <QAbstractTableModel>
 #include <QScrollArea>
 #include <QPainter>
 #include <QFontMetrics>
@@ -44,10 +45,13 @@ const int INVALID = -1;
 
 //Max value for time scale
 const int SCALE_LIMIT = 1000;
+const int START_COLUMN = 4;
+const int END_COLUMN = 6;
 
 KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     : QWidget(parent)
     , m_model(0)
+    , m_shapeModel(0)
     , m_selectedRow(INVALID)
     , m_selectedColumn(INVALID)
     , m_rowsHeigth(50)
@@ -76,9 +80,11 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
 }
 
-void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
+void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
 {
     m_model = model;
+    m_shapeModel = dynamic_cast<KPrShapeAnimations *>(model->sourceModel());
+    Q_ASSERT(m_shapeModel);
     updateColumnsWidth();
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
     connect(m_model, SIGNAL(layoutChanged()), this, SLOT(resetData()));
@@ -86,7 +92,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationsDataModel *model)
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
-    connect(m_model, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
+    connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
     adjustScale();
     m_header->update();
     m_view->update();
@@ -100,19 +106,24 @@ void KPrAnimationsTimeLineView::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-KPrAnimationsDataModel *KPrAnimationsTimeLineView::model()
+KPrAnimationGroupProxyModel *KPrAnimationsTimeLineView::model()
 {
     return m_model;
+}
+
+KPrShapeAnimations *KPrAnimationsTimeLineView::animationsModel()
+{
+    return m_shapeModel;
 }
 
 int KPrAnimationsTimeLineView::widthOfColumn(int column) const
 {
     switch (column) {
-    case ShapeThumbnail:
+    case KPrShapeAnimations::ShapeThumbnail:
         return rowsHeigth()*3/2;
-    case AnimationIcon:
+    case KPrShapeAnimations::AnimationIcon:
         return rowsHeigth()*5/4;
-    case StartTime:
+    case KPrShapeAnimations::StartTime:
         return 2*(rowsHeigth()*2/3+rowsHeigth()*10/4 + 10);
     default:
         return 0;
@@ -152,7 +163,7 @@ int KPrAnimationsTimeLineView::rowsHeigth() const
 int KPrAnimationsTimeLineView::totalWidth() const
 {
     int width = 0;
-    for (int i = 0; i < Duration; i++){
+    for (int i = 0; i < KPrShapeAnimations::Duration; i++){
         width = width + widthOfColumn(i);
     }
     return width;
@@ -194,7 +205,8 @@ void KPrAnimationsTimeLineView::changeStartLimit(const int row)
     // If user wants a after_previous animation start before previous animation switch to with_previous
     QModelIndex index = m_model->index(row, 0);
     if (index.isValid()) {
-        m_model->recalculateStart(index);
+        QModelIndex sourceIndex = m_model->mapToSource(index);
+        m_shapeModel->recalculateStart(sourceIndex);
     }
 }
 
@@ -203,8 +215,8 @@ void KPrAnimationsTimeLineView::adjustScale()
     m_maxLength = 10;
     for (int row = 0; row < m_model->rowCount(); ++ row){
         int startOffSet = calculateStartOffset(row);
-        qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
-                m_model->data(m_model->index(row, Duration)).toDouble() + startOffSet;
+        qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toDouble() +
+                m_model->data(m_model->index(row,KPrShapeAnimations:: Duration)).toDouble() + startOffSet;
         if (length > m_maxLength) {
             m_maxLength = length;
         }
@@ -257,7 +269,7 @@ QColor KPrAnimationsTimeLineView::colorforRow(int row)
 {
     if (m_model) {
         KPrShapeAnimation::Preset_Class type =
-                static_cast<KPrShapeAnimation::Preset_Class>(m_model->data(m_model->index(row, AnimationClass)).toInt());
+                static_cast<KPrShapeAnimation::Preset_Class>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
         if (type == KPrShapeAnimation::Entrance) {
             return Qt::darkGreen;
         } else if (type == KPrShapeAnimation::Emphasis) {
@@ -275,12 +287,14 @@ double KPrAnimationsTimeLineView::calculateStartOffset(int row)
 {
     //calculate real start
     KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
-               m_model->data(m_model->index(row, TriggerEvent)).toInt());
+               m_model->data(m_model->index(row, KPrShapeAnimations::TriggerEvent)).toInt());
     if (triggerEvent == KPrShapeAnimation::After_Previous) {
-        return m_model->previousItemEnd(m_model->index(row, TriggerEvent));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::TriggerEvent));
+        return m_shapeModel->previousItemEnd(sourceIndex);
     }
     if (triggerEvent == KPrShapeAnimation::With_Previous) {
-        return m_model->previousItemBegin(m_model->index(row, TriggerEvent));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::TriggerEvent));
+        return m_shapeModel->previousItemBegin(sourceIndex);
     }
     return 0;
 }
@@ -298,6 +312,16 @@ QSize KPrAnimationsTimeLineView::sizeHint() const
     return QSize(m_view->sizeHint().width(), m_view->sizeHint().height() + m_header->sizeHint().height());
 }
 
+int KPrAnimationsTimeLineView::startColumn() const
+{
+    return START_COLUMN;
+}
+
+int KPrAnimationsTimeLineView::endColumn() const
+{
+    return END_COLUMN;
+}
+
 void KPrAnimationsTimeLineView::update()
 {
     m_view->update();
@@ -308,8 +332,8 @@ void KPrAnimationsTimeLineView::update()
 void KPrAnimationsTimeLineView::updateColumnsWidth()
 {
     for (int row = 0; row < m_model->rowCount(); ++ row){
-        qreal length = m_model->data(m_model->index(row, StartTime)).toDouble() +
-                m_model->data(m_model->index(row, Duration)).toDouble();
+        qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toDouble() +
+                m_model->data(m_model->index(row, KPrShapeAnimations::Duration)).toDouble();
         if (length > m_maxLength) {
             m_maxLength = length;
         }

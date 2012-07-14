@@ -27,21 +27,11 @@
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationStep.h"
 
+#include "stage_export.h"
+
 class KPrDocument;
 
-enum ColumnNames {
-    Group = 0,
-    StepCount = 1,
-    TriggerEvent = 2,
-    Name = 3,
-    ShapeThumbnail = 4,
-    AnimationIcon = 5,
-    StartTime = 6,
-    Duration = 7,
-    AnimationClass = 8
-};
-
-class KPrShapeAnimations : public QAbstractTableModel
+class STAGE_EXPORT KPrShapeAnimations : public QAbstractTableModel
 {
     Q_OBJECT
 public:
@@ -50,6 +40,19 @@ public:
         DurationTime,
         BothTimes
     };
+
+    enum ColumnNames {
+        Group = 0,
+        StepCount = 1,
+        TriggerEvent = 2,
+        Name = 3,
+        ShapeThumbnail = 4,
+        AnimationIcon = 5,
+        StartTime = 6,
+        Duration = 7,
+        AnimationClass = 8
+    };
+
     explicit KPrShapeAnimations(QObject *parent = 0);
     ~KPrShapeAnimations();
 
@@ -126,6 +129,21 @@ public:
     bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
     void recalculateStart(const QModelIndex &mIndex);
 
+    QModelIndex moveUp(const QModelIndex &index);
+    QModelIndex moveDown(const QModelIndex &index);
+    QModelIndex moveItem(int oldRow, int newRow);
+
+    QModelIndex removeItemByIndex(const QModelIndex &index);
+    KoShape *shapeByIndex(const QModelIndex &index);
+
+    /// Return the first animation index for the given shape
+    QModelIndex indexByShape(KoShape* shape);
+
+    void setBeginTime(const QModelIndex &index, const int begin);
+    void setDuration(const QModelIndex &index, const int duration);
+
+    KPrShapeAnimation *animationByRow(const int row) const;
+
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
@@ -134,16 +152,18 @@ signals:
     void timeScaleModified();
 
 private:
-    KPrShapeAnimation *animationByRow(const int row, int &groupCount);
-    KPrShapeAnimation *animationByRow(const int row);
-    QString *getAnimationName(KPrShapeAnimation *animation);
-    QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation);
-    QPixmap getAnimationIcon(KPrShapeAnimation *animation);
+    KPrShapeAnimation *animationByRow(const int row, int &groupCount) const;
+    QString getAnimationName(KPrShapeAnimation *animation) const;
+    QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
+    QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
     QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
     void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
     QModelIndex indexByAnimation(KPrShapeAnimation *animation);
-    QList<KPrAnimationSubStep *> getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems);
+    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems);
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
+    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
+                                   KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,
+                                   QList<KPrAnimationSubStep *> movedSubSteps, KPrShapeAnimations *shapeAnimations);
 
     QList<KPrAnimationStep *> m_shapeAnimations;
     KPrShapeAnimation *m_currentEditedAnimation;

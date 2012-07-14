@@ -20,6 +20,7 @@
 #include "KPrTimeLineHeader.h"
 
 #include "KPrAnimationsTimeLineView.h"
+#include "KPrShapeAnimations.h"
 
 //QT Headers
 #include <QPainter>
@@ -63,17 +64,17 @@ void KPrTimeLineHeader::paintHeader(QPainter *painter, const int RowHeight)
     int scroll = m_mainView->scrollArea()->horizontalScrollBar()->value();
     QFontMetrics fm(font());
     int minimumSize = fm.width(QString("W%1W").arg("seconds"));
-    if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(StartTime) - minimumSize)) {
+    if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - minimumSize)) {
         //Seconds Header
-        QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(StartTime) - scroll, RowHeight);
+        QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
         paintHeaderItem(painter, rect, QString("seconds"));
-    } else if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(StartTime)) - 2) {
-        QRect rect(0, 0, m_mainView->totalWidth()-m_mainView->widthOfColumn(StartTime) - scroll, RowHeight);
+    } else if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)) - 2) {
+        QRect rect(0, 0, m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
         paintHeaderItem(painter, rect, QString(""));
     }
     // Paint time scale header
-    QRect rect(m_mainView->totalWidth()-m_mainView->widthOfColumn(StartTime) - scroll,
-               0, m_mainView->widthOfColumn(StartTime), RowHeight);
+    QRect rect(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll,
+               0, m_mainView->widthOfColumn(KPrShapeAnimations::StartTime), RowHeight);
     paintHeaderItem(painter, rect, QString());
     paintTimeScale(painter, rect);
 
@@ -100,7 +101,7 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
     const int Padding = 3;
     painter->setPen(palette().windowText().color());
     painter->setFont(QFont("", 8));
-    int totalWidth = m_mainView->widthOfColumn(StartTime);
+    int totalWidth = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime);
     int stepScale = m_mainView->stepsScale();
     int stepRatio = m_mainView->numberOfSteps()/m_mainView->stepsScale();
     int stepSize = totalWidth/stepRatio;
@@ -135,7 +136,7 @@ bool KPrTimeLineHeader::eventFilter(QObject *target, QEvent *event)
                 size.setHeight(sizeHint().height());
                 int width = size.width() + ExtraWidth - scrollArea->verticalScrollBar()->sizeHint().width();
                 size.setWidth(width);
-                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(StartTime), size.height()));
+                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime), size.height()));
                 resize(size);
             }
         }

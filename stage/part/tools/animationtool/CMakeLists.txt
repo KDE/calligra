@@ -10,6 +10,7 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrShapeAnimationDocker.cpp
     KPrEditAnimationsWidget.cpp
     KPrCollectionItemModel.cpp
+    KPrAnimationGroupProxyModel.cpp
     )
 
 
