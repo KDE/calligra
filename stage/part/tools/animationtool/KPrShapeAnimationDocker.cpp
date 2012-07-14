@@ -20,7 +20,6 @@
 #include "KPrShapeAnimationDocker.h"
 
 //Stage Headers
-#include "KPrAnimationsTreeModel.h"
 #include "KPrPage.h"
 #include "KPrView.h"
 #include "KPrDocument.h"
@@ -29,7 +28,6 @@
 #include "KPrEditAnimationsWidget.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationGroupProxyModel.h"
-//#include "KPrAnimationsDataModel.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -142,10 +140,8 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
 
     //load View and model
-    //m_animationsModel = new KPrAnimationsTreeModel(this);
     m_animationsView = new QTreeView();
     m_animationsView->setAllColumnsShowFocus(true);
-    //m_animationsView->setModel(m_animationsModel);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(hlayout);
@@ -240,6 +236,15 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         Q_ASSERT(doc);
         m_animationsModel->setDocument(doc);
         m_animationsView->setModel(m_animationsModel);
+        //Config columns
+        m_animationsView->hideColumn(0);
+        m_animationsView->setColumnWidth(1, 3);
+        m_animationsView->hideColumn(6);
+        m_animationsView->hideColumn(7);
+        m_animationsView->hideColumn(8);
+        m_animationsView->setColumnWidth(5, 32);
+
+        m_animationGroupModel = new KPrAnimationGroupProxyModel;
         m_animationGroupModel->setSourceModel(m_animationsModel);
         m_editAnimationsPanel->setProxyModel(m_animationGroupModel);
 
