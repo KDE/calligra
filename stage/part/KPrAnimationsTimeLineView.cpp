@@ -45,8 +45,8 @@ const int INVALID = -1;
 
 //Max value for time scale
 const int SCALE_LIMIT = 1000;
-const int START_COLUMN = 4;
-const int END_COLUMN = 6;
+const int START_COLUMN = (int)KPrShapeAnimations::ShapeThumbnail;
+const int END_COLUMN = (int)KPrShapeAnimations::StartTime;
 
 KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     : QWidget(parent)
@@ -86,12 +86,12 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     m_shapeModel = dynamic_cast<KPrShapeAnimations *>(model->sourceModel());
     Q_ASSERT(m_shapeModel);
     updateColumnsWidth();
-    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
-    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(resetData()));
-    connect(m_model, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
-    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
+    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(resetData()));
+    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
-    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
+    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
     connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
     adjustScale();
     m_header->update();
@@ -215,8 +215,9 @@ void KPrAnimationsTimeLineView::adjustScale()
     m_maxLength = 10;
     for (int row = 0; row < m_model->rowCount(); ++ row){
         int startOffSet = calculateStartOffset(row);
-        qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toDouble() +
-                m_model->data(m_model->index(row,KPrShapeAnimations:: Duration)).toDouble() + startOffSet;
+        qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toInt() +
+                m_model->data(m_model->index(row,KPrShapeAnimations:: Duration)).toInt() + startOffSet;
+        length = length / 1000;
         if (length > m_maxLength) {
             m_maxLength = length;
         }
@@ -283,17 +284,17 @@ QColor KPrAnimationsTimeLineView::colorforRow(int row)
     return Qt::gray;
 }
 
-double KPrAnimationsTimeLineView::calculateStartOffset(int row)
+int KPrAnimationsTimeLineView::calculateStartOffset(int row)
 {
     //calculate real start
     KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
-               m_model->data(m_model->index(row, KPrShapeAnimations::TriggerEvent)).toInt());
+               m_model->data(m_model->index(row, KPrShapeAnimations::Node_Type)).toInt());
     if (triggerEvent == KPrShapeAnimation::After_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::TriggerEvent));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::Node_Type));
         return m_shapeModel->previousItemEnd(sourceIndex);
     }
     if (triggerEvent == KPrShapeAnimation::With_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::TriggerEvent));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::Node_Type));
         return m_shapeModel->previousItemBegin(sourceIndex);
     }
     return 0;
@@ -302,7 +303,7 @@ double KPrAnimationsTimeLineView::calculateStartOffset(int row)
 int KPrAnimationsTimeLineView::rowCount() const
 {
     if (m_model) {
-        return m_model->rowCount(QModelIndex());
+        return m_model->rowCount();
     }
     return 0;
 }
@@ -325,6 +326,8 @@ int KPrAnimationsTimeLineView::endColumn() const
 void KPrAnimationsTimeLineView::update()
 {
     m_view->update();
+    m_view->updateGeometry();
+    this->updateGeometry();
     m_header->update();
     QWidget::update();
 }

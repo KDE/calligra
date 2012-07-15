@@ -50,7 +50,8 @@ public:
         AnimationIcon = 5,
         StartTime = 6,
         Duration = 7,
-        AnimationClass = 8
+        AnimationClass = 8,
+        Node_Type = 9
     };
 
     explicit KPrShapeAnimations(QObject *parent = 0);
@@ -91,7 +92,7 @@ public:
     void insertStep(const int i, KPrAnimationStep *step);
     void removeStep(KPrAnimationStep *step);
 
-    void swap (int i, int j);
+    void swapSteps(int i, int j);
 
     void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 

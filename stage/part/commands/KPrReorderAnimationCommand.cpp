@@ -45,10 +45,10 @@ KPrReorderAnimationCommand::~KPrReorderAnimationCommand()
 
 void KPrReorderAnimationCommand::redo()
 {
-    m_shapeAnimationsModel->swap(m_oldRow, m_newRow);
+    m_shapeAnimationsModel->swapSteps(m_oldRow, m_newRow);
 }
 
 void KPrReorderAnimationCommand::undo()
 {
-    m_shapeAnimationsModel->swap(m_newRow, m_oldRow);
+    m_shapeAnimationsModel->swapSteps(m_newRow, m_oldRow);
 }

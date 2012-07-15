@@ -70,7 +70,6 @@ QSize KPrTimeLineView::sizeHint() const
 
 QSize KPrTimeLineView::minimumSizeHint() const
 {
-
     int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
     return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth());
@@ -146,10 +145,10 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
         int lineHeigth = qMin(LINE_HEIGHT, rect.height());
         int yCenter = (rect.height() - lineHeigth)/2;
         qreal  stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)/m_mainView->numberOfSteps();
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toDouble();
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
         int startOffSet = m_mainView->calculateStartOffset(row);
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toDouble() +
-                startOffSet;
+        qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
+                startOffSet) / 1000.0;
 
         QRectF lineRect(rect.x() + stepSize * start + stepSize * duration - 6, rect.y() + yCenter,
                         8, lineHeigth);
@@ -186,18 +185,18 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         int row = m_resizedRow;
         //calculate real start
-        int startOffSet = m_mainView->calculateStartOffset(row);
+        qreal startOffSet = m_mainView->calculateStartOffset(row) / 1000.0;
 
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toDouble();
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toDouble();
+        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0;
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
         qreal totalSteps = m_mainView->numberOfSteps();
-        qreal stepSize  = m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)/totalSteps;
+        qreal stepSize  = m_mainView->widthOfColumn( KPrShapeAnimations::StartTime) / totalSteps;
 
         if ((event->pos().x() > (startPos + startOffSet*stepSize + stepSize * start - 5)) &&
                 ((event->pos().x()) < (startPos + m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
             qreal newLength = (event->pos().x() - startPos - stepSize * start) / (stepSize) - startOffSet;
             newLength = qFloor((newLength - modD(newLength, subSteps)) * 100.0) / 100.0;
-            m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::Duration), newLength*1000);
+            m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::Duration), newLength * 1000);
             emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::Duration));
             m_adjust = false;
             if (newLength < duration)
@@ -218,12 +217,12 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         int row = m_resizedRow;
         //calculate real start
-        int startOffSet = m_mainView->calculateStartOffset(row);
+        qreal startOffSet = m_mainView->calculateStartOffset(row);
 
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toDouble();
-        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toDouble();
+        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
+        qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0;
         qreal totalSteps = m_mainView->numberOfSteps();
-        qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)/totalSteps;
+        qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / totalSteps;
         if ((event->pos().x() > (startPos + startDragPos + startOffSet*stepSize)) &&
                 ((event->pos().x() + (duration*stepSize-startDragPos) + Padding * 2)  <
                  (startPos+m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
@@ -313,7 +312,8 @@ void KPrTimeLineView::paintEvent(QPaintEvent *event)
     int row = MinY/RowHeigth;
     int y = row * RowHeigth;
 
-    for (; row < m_mainView->rowCount(); ++row) {
+    int rowCount = m_mainView->rowCount();
+    for (; row < rowCount; ++row) {
         paintRow(&painter, row, y, RowHeigth);
         y += RowHeigth;
         if (y > MaxY)
@@ -350,11 +350,11 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
     QColor m_color = m_mainView->colorforRow(row);
     int lineHeigth = qMin(LINE_HEIGHT , rect.height());
     int vPadding = (rect.height() - lineHeigth)/2;
-    int stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)/m_mainView->numberOfSteps();
-    qreal startOffSet = m_mainView->calculateStartOffset(row);
-    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toDouble();
-
-    qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toDouble() + startOffSet;
+    qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / m_mainView->numberOfSteps();
+    qreal startOffSet = m_mainView->calculateStartOffset(row) / 1000.0;
+    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
+    qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0
+            + startOffSet;
     QRectF lineRect(rect.x()+stepSize*start, rect.y()+vPadding, stepSize*duration, lineHeigth);
 
     QRectF fillRect (lineRect.x(),lineRect.y()+2,lineRect.width(),lineRect.height() - 4);

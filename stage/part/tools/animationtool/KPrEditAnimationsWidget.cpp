@@ -189,10 +189,16 @@ void KPrEditAnimationsWidget::setProxyModel(KPrAnimationGroupProxyModel *model)
     m_timeLineView->setModel(m_timeLineModel);
 }
 
+void KPrEditAnimationsWidget::updateView()
+{
+    m_timeLineView->update();
+    updateGeometry();
+}
+
 void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 {
     if (index.isValid() && (index == m_timeLineView->currentIndex())) {
-        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::TriggerEvent);
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
         QModelIndex beginTimeIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::StartTime);
         QModelIndex durationIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Duration);
         m_triggerEventList->setCurrentIndex(m_timeLineModel->data(triggerIndex).toInt());
@@ -219,7 +225,7 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
 {
     QModelIndex index = m_timeLineView->currentIndex();
     if ((row >= 0) && index.isValid()) {
-        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::TriggerEvent);
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
         if (row != m_timeLineModel->data(triggerIndex).toInt()) {
             KPrShapeAnimation::Node_Type newType;
             if (row == 0) newType = KPrShapeAnimation::On_Click;

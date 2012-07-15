@@ -112,7 +112,7 @@ protected:
     QColor colorforRow(int row);
 
 private:
-    double calculateStartOffset(int row);
+    int calculateStartOffset(int row);
 
     KPrTimeLineView *m_view;
     KPrTimeLineHeader *m_header;

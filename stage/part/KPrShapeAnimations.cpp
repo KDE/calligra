@@ -48,7 +48,7 @@
 #include <KLocale>
 #include <kdebug.h>
 
-const int COLUMN_COUNT = 9;
+const int COLUMN_COUNT = 10;
 const int INVALID = -1;
 
 KPrShapeAnimations::KPrShapeAnimations(QObject *parent)
@@ -81,7 +81,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.column() < 0 ||
             index.column() >= COLUMN_COUNT || index.row() < 0
-            || index.column() >= rowCount(QModelIndex())) {
+            || index.row() >= rowCount(QModelIndex())) {
         return QVariant();
     }
 
@@ -110,6 +110,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime: return thisAnimation->timeRange().first;
             case Duration: return thisAnimation->globalDuration();
             case AnimationClass: return thisAnimation->presetClass();
+            case Node_Type: return thisAnimation->NodeType();
             default: Q_ASSERT(false);
         }
     }
@@ -139,6 +140,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime: return QVariant();
             case Duration: return QVariant();
             case AnimationClass: return QVariant();
+            case Node_Type: return QVariant();
             default: Q_ASSERT(false);
         }
     }
@@ -153,6 +155,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime:
             case Duration:
             case AnimationClass: return QVariant();
+            case Node_Type: return QVariant();
             default: Q_ASSERT(false);
         }
     }
@@ -175,6 +178,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
                                     arg(thisAnimation->globalDuration() / 1000);
             case Duration: return QVariant();
             case AnimationClass: return thisAnimation->presetClassText();
+            case Node_Type: return QVariant();
             default: Q_ASSERT(false);
             }
         }
@@ -297,11 +301,20 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
     else {
         animation->subStep()->addAnimation(animation);
     }
+
+    //updateModel
+    QModelIndex index = indexByAnimation(animation);
+    beginInsertRows(QModelIndex(), index.row(), index.row());
+    endInsertRows();
     return;
 }
 
 void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
 {
+    //updateModel
+    QModelIndex index = indexByAnimation(animation);
+    beginRemoveRows(QModelIndex(), index.row(), index.row());
+
     KPrAnimationStep *step = animation->step();
     KPrAnimationSubStep *subStep = animation->subStep();
     if (subStep->animationCount() <= 1) {
@@ -314,6 +327,7 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
     }
     animation->setAnimIndex(subStep->indexOfAnimation(animation));
     subStep->removeAnimation(animation);
+    endRemoveRows();
 }
 
 void KPrShapeAnimations::insertStep(const int i, KPrAnimationStep *step)
@@ -330,9 +344,12 @@ void KPrShapeAnimations::removeStep(KPrAnimationStep *step)
     }
 }
 
-void KPrShapeAnimations::swap(int i, int j)
+void KPrShapeAnimations::swapSteps(int i, int j)
 {
+    qDebug() << "swaping steps" << i << j;
     m_shapeAnimations.swap(i, j);
+    emit dataChanged(this->index(i,0), this->index(i, COLUMN_COUNT));
+    emit dataChanged(this->index(j,0), this->index(j, COLUMN_COUNT));
 }
 
 void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
@@ -345,6 +362,8 @@ void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrSh
     newAnimation->setKoTextBlockData(oldAnimation->textBlockData());
     subStep->insertAnimation(currentAnimationIndex, newAnimation);
     subStep->removeAnimation(oldAnimation);
+    QModelIndex indexModified = indexByAnimation(newAnimation);
+    emit dataChanged(this->index(indexModified.row(), 0), this->index(indexModified.row(), COLUMN_COUNT));
 }
 
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const
@@ -590,29 +609,55 @@ QModelIndex KPrShapeAnimations::moveUp(const QModelIndex &index)
     if (!index.isValid() || index.row() < 1) {
         return QModelIndex();
     }
-    return moveItem(index.row(), index.row() - 1);
+    KPrShapeAnimation *animationOld = animationByRow(index.row());
+    if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
+        if (steps().indexOf(animationOld->step()) < 1) {
+            return QModelIndex();
+        }
+        int oldRow = -1;
+        for (int i = index.row() - 1; i >= 0; i--) {
+            if (animationByRow(i)->NodeType() == KPrShapeAnimation::On_Click) {
+                oldRow = i;
+                break;
+            }
+        }
+        return moveItem(index.row(), oldRow);
+    }
+    return QModelIndex();
 }
 
 QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
 {
-    if (!index.isValid()) {
+    if (!index.isValid() || (index.row() >= (rowCount() - 1))) {
         return QModelIndex();
     }
-    return moveItem(index.row(), index.row() + 1);
+    KPrShapeAnimation *animationOld = animationByRow(index.row());
+    if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
+        if (steps().indexOf(animationOld->step()) > (steps().count() - 1)) {
+            return QModelIndex();
+        }
+        int oldRow = -1;
+        for (int i = index.row() + animationOld->subStep()->animationCount(); i < rowCount(); i++) {
+            if (animationByRow(i)->NodeType() == KPrShapeAnimation::On_Click) {
+                oldRow = i;
+                break;
+            }
+        }
+        return moveItem(index.row(), oldRow);
+    }
+    return QModelIndex();
 }
 
 QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
 {
-    //First item can't be moved
-    Q_ASSERT(0 < oldRow && oldRow < rowCount() &&
-             0 < newRow && newRow < rowCount());
+    Q_ASSERT(0 <= oldRow && oldRow < rowCount() &&
+             0 <= newRow && newRow < rowCount());
     QModelIndex newIndex;
     // swap top level items
     KPrShapeAnimation *animationOld = animationByRow(oldRow);
     Q_ASSERT(animationOld);
     if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
         KPrShapeAnimation *animationNew = animationByRow(newRow);
-
         if (animationOld && animationNew) {
             if (m_document) {
                 KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(this, animationOld->step(), animationNew->step());

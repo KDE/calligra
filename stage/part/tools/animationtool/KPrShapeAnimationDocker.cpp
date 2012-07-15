@@ -176,7 +176,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
     if (index.isValid()) {
         m_buttonRemoveAnimation->setEnabled(true);
         m_editAnimation->setEnabled(true);
-        QModelIndex triggerEventIndex = m_animationsModel->index(index.row(), KPrShapeAnimations::TriggerEvent);
+        QModelIndex triggerEventIndex = m_animationsModel->index(index.row(), KPrShapeAnimations::Node_Type);
         if (static_cast<KPrShapeAnimation::Node_Type>(m_animationsModel->data(triggerEventIndex).toInt()) ==
                 KPrShapeAnimation::On_Click) {
             m_buttonAnimationOrderUp->setEnabled(true);
@@ -239,10 +239,11 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         //Config columns
         m_animationsView->hideColumn(0);
         m_animationsView->setColumnWidth(1, 3);
+        m_animationsView->hideColumn(5);
         m_animationsView->hideColumn(6);
         m_animationsView->hideColumn(7);
         m_animationsView->hideColumn(8);
-        m_animationsView->setColumnWidth(5, 32);
+        m_animationsView->hideColumn(9);
 
         m_animationGroupModel = new KPrAnimationGroupProxyModel;
         m_animationGroupModel->setSourceModel(m_animationsModel);
@@ -260,14 +261,16 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
 void KPrShapeAnimationDocker::SyncWithAnimationsViewIndex(const QModelIndex &index)
 {
     syncCanvasWithIndex(index);
-    m_animationGroupModel->setCurrentIndex(index);
+    if (m_animationGroupModel->setCurrentIndex(index)) {
+        m_editAnimationsPanel->updateView();
+    }
     checkAnimationSelected();
 }
 
 void KPrShapeAnimationDocker::syncWithEditDialogIndex(const QModelIndex &index)
 {
-    syncCanvasWithIndex(index);
     QModelIndex newIndex = m_animationGroupModel->mapToSource(index);
+    syncCanvasWithIndex(newIndex);
     m_animationsView->setCurrentIndex(newIndex);
     checkAnimationSelected();
 }
@@ -323,6 +326,10 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
             QModelIndex index = m_animationsModel->indexByShape(selectedShape);
             if (index.isValid()) {
                 m_animationsView->setCurrentIndex(index);
+                if (m_animationGroupModel->setCurrentIndex(index)) {
+                    m_editAnimationsPanel->updateView();
+                }
+                updateEditDialogIndex(index);
             }
         }
     }

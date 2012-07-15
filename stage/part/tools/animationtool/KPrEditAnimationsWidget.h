@@ -56,6 +56,7 @@ public:
     void setView(KoPAViewBase *view);
     void setCurrentIndex(const QModelIndex &index);
     void setProxyModel(KPrAnimationGroupProxyModel *model);
+    void updateView();
     
 signals:
     void itemClicked(const QModelIndex &index);
