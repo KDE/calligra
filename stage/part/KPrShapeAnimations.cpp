@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright ( C ) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright ( C ) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +28,6 @@
 #include "KPrPage.h"
 #include "KPrView.h"
 #include "KPrDocument.h"
-#include <KPrCustomAnimationItem.h>
 #include "animations/KPrAnimationSubStep.h"
 #include "commands/KPrAnimationRemoveCommand.h"
 #include "commands/KPrReorderAnimationCommand.h"

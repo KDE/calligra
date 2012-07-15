@@ -72,12 +72,9 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
-     KPrAnimationsDataModel.cpp
      KPrAnimationsTimeLineView.cpp
      KPrTimeLineHeader.cpp
      KPrTimeLineView.cpp
-     KPrAnimationsTreeModel.cpp
-     KPrCustomAnimationItem.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
@@ -218,7 +215,6 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        KPrAnimationsDataModel.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part)
 
 install( FILES 

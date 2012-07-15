@@ -21,7 +21,6 @@
 #include "KPrReorderAnimationCommand.h"
 
 #include "KPrShapeAnimations.h"
-#include "KPrAnimationsTreeModel.h"
 #include "animations/KPrAnimationStep.h"
 #include "animations/KPrAnimationSubStep.h"
 #include "animations/KPrShapeAnimation.h"

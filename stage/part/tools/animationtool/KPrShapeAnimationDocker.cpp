@@ -24,7 +24,6 @@
 #include "KPrView.h"
 #include "KPrDocument.h"
 #include "KPrViewModePreviewShapeAnimations.h"
-#include "KPrCustomAnimationItem.h"
 #include "KPrEditAnimationsWidget.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationGroupProxyModel.h"

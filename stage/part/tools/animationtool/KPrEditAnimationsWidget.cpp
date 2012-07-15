@@ -23,7 +23,6 @@
 
 //Stage Headers
 #include "KPrShapeAnimationDocker.h"
-#include "KPrAnimationsTreeModel.h"
 #include "KPrPage.h"
 #include "KPrView.h"
 #include "KPrDocument.h"
@@ -34,7 +33,6 @@
 #include "KPrAnimationGroupProxyModel.h"
 
 #include "KPrAnimationsTimeLineView.h"
-#include "KPrAnimationsDataModel.h"
 #include "animations/KPrAnimationBase.h"
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationFactory.h"
