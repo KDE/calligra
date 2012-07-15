@@ -82,12 +82,12 @@ void initDrawingML();
 
 /**
  * @return true in case a custom or supported predefined shape is
- * beeing processed and false in case of a text-box and rectangle.
+ * being processed and false in case of a text-box and rectangle.
  */
 bool isCustomShape();
 
 /**
- * @return true in case an unsupported shape is beeing processed.
+ * @return true in case an unsupported shape is being processed.
  */
 bool unsupportedPredefinedShape();
 

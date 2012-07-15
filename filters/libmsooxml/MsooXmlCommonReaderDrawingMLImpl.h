@@ -4923,7 +4923,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
     TRY_READ_ATTR_WITHOUT_NS(fmla)
 
     // In theory we should interpret all possible values here, not just "val"
-    // in practise it does not happen
+    // in practice it does not happen
     if (fmla.startsWith("val ")) {
         fmla = fmla.mid(4);
     }

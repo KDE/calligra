@@ -79,7 +79,7 @@ struct DTTM {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -164,7 +164,7 @@ struct PRM2 {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -221,7 +221,7 @@ struct PRM {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -291,7 +291,7 @@ struct SHD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -417,7 +417,7 @@ struct PHE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -515,7 +515,7 @@ struct BRC {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -610,7 +610,7 @@ struct TLP {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -726,7 +726,7 @@ struct TC {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -815,7 +815,7 @@ struct DPHEAD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -885,7 +885,7 @@ struct DPTXBX {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -995,7 +995,7 @@ struct DPPOLYLINE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1156,7 +1156,7 @@ struct TAP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1311,7 +1311,7 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -1383,7 +1383,7 @@ struct ANLD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1613,7 +1613,7 @@ struct ANLV {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1812,7 +1812,7 @@ struct BKF {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1880,7 +1880,7 @@ struct BKL {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1923,7 +1923,7 @@ struct BRC10 {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1993,7 +1993,7 @@ struct BTE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2039,7 +2039,7 @@ struct CHP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2423,7 +2423,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -2488,7 +2488,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -2568,7 +2568,7 @@ struct DCS {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2635,7 +2635,7 @@ struct DO {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2715,7 +2715,7 @@ struct DOP {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3191,7 +3191,7 @@ struct DPARC {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3289,7 +3289,7 @@ struct DPCALLOUT {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3362,7 +3362,7 @@ struct DPELLIPSE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3450,7 +3450,7 @@ struct DPLINE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3579,7 +3579,7 @@ struct DPRECT {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3677,7 +3677,7 @@ struct DPSAMPLE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3834,7 +3834,7 @@ struct FDOA {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3894,7 +3894,7 @@ bool operator!=(const FDOA &lhs, const FDOA &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -3988,7 +3988,7 @@ struct WV2_EXPORT FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -4885,7 +4885,7 @@ bool operator!=(const FIB &lhs, const FIB &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -4931,7 +4931,7 @@ struct LSPD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -4987,7 +4987,7 @@ struct METAFILEPICT {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5072,7 +5072,7 @@ struct OBJHEADER {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5134,7 +5134,7 @@ struct OLST {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5223,7 +5223,7 @@ struct PAP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5572,7 +5572,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -5655,7 +5655,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -5745,7 +5745,7 @@ struct PCD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5820,7 +5820,7 @@ struct PGD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5925,7 +5925,7 @@ struct PICF : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6136,7 +6136,7 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -6187,7 +6187,7 @@ struct SED {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6262,7 +6262,7 @@ struct SEP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6540,7 +6540,7 @@ struct SEPX {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6592,7 +6592,7 @@ struct STSHI {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
