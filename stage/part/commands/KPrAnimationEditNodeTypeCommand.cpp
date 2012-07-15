@@ -59,6 +59,7 @@ KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
 
 void KPrAnimationEditNodeTypeCommand::redo()
 {
+    bool notifyOnClickChange = false;
     if (m_animation) {
         // if new subStep reparent main item and children
         if (m_newSubStep != m_oldSubStep) {
@@ -98,6 +99,7 @@ void KPrAnimationEditNodeTypeCommand::redo()
                     QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         b->setStep(m_newStep);
+                        notifyOnClickChange = true;
                     }
                 }
             }
@@ -124,11 +126,15 @@ void KPrAnimationEditNodeTypeCommand::redo()
         }
 
         m_animation->setNodeType(m_newType);
+        if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
+            m_animationsModel->notifyOnClickEventChanged();
+        }
     }
 }
 
 void KPrAnimationEditNodeTypeCommand::undo()
 {
+    bool notifyOnClickChange = false;
     if (m_animation) {
         if (m_newSubStep != m_oldSubStep) {
             if (m_newSubStep->indexOfAnimation(m_animation) >= 0) {
@@ -167,6 +173,7 @@ void KPrAnimationEditNodeTypeCommand::undo()
                     QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         b->setStep(m_oldStep);
+                        notifyOnClickChange = true;
                     }
                 }
             }
@@ -195,5 +202,8 @@ void KPrAnimationEditNodeTypeCommand::undo()
             }
         }
         m_animation->setNodeType(m_oldType);
+        if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
+            m_animationsModel->notifyOnClickEventChanged();
+        }
     }
 }

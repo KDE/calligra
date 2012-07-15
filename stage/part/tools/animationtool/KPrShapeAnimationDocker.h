@@ -88,6 +88,9 @@ public slots:
 
     KPrShapeAnimations *mainModel();
 
+private slots:
+    void testEditPanelRoot();
+
 private:
 
     KPrShapeAnimations *animationsByPage(KoPAPageBase *page);

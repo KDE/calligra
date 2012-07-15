@@ -34,7 +34,10 @@ public:
 
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
+    // Takes a source model index to set the group to be displayed
     bool setCurrentIndex(const QModelIndex &index);
+
+    void forceUpdateModel();
     
 signals:
     

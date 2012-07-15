@@ -91,7 +91,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
     connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
-    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
+    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(notifyTimeValuesChanged(QModelIndex)));
     connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
     adjustScale();
     m_header->update();
@@ -235,6 +235,12 @@ void KPrAnimationsTimeLineView::adjustScale()
     }
 }
 
+void KPrAnimationsTimeLineView::notifyTimeValuesChanged(const QModelIndex &index)
+{
+    QModelIndex newIndex = m_model->mapFromSource(index);
+    emit timeValuesChanged(newIndex);
+}
+
 int KPrAnimationsTimeLineView::stepsScale()
 {
     if (numberOfSteps() < 15)
@@ -289,12 +295,15 @@ int KPrAnimationsTimeLineView::calculateStartOffset(int row)
     //calculate real start
     KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
                m_model->data(m_model->index(row, KPrShapeAnimations::Node_Type)).toInt());
+    if (row <= 0) {
+        return 0;
+    }
     if (triggerEvent == KPrShapeAnimation::After_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::Node_Type));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
         return m_shapeModel->previousItemEnd(sourceIndex);
     }
     if (triggerEvent == KPrShapeAnimation::With_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row, KPrShapeAnimations::Node_Type));
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
         return m_shapeModel->previousItemBegin(sourceIndex);
     }
     return 0;

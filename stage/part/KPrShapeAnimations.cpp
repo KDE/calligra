@@ -413,11 +413,11 @@ qreal KPrShapeAnimations::previousItemEnd(const QModelIndex &index)
             return previousAnimation->timeRange().second;
         }
         if (previousAnimation->NodeType() == KPrShapeAnimation::With_Previous) {
-            return previousAnimation->globalDuration() +
+            return previousAnimation->timeRange().second +
                     previousItemBegin(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousAnimation->NodeType() == KPrShapeAnimation::After_Previous) {
-            return previousAnimation->globalDuration() +
+            return previousAnimation->timeRange().second +
                     previousItemEnd(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
@@ -751,6 +751,11 @@ void KPrShapeAnimations::notifyAnimationEdited()
             emit dataChanged(index, index);
         }
     }
+}
+
+void KPrShapeAnimations::notifyOnClickEventChanged()
+{
+    emit onClickEventChanged();
 }
 
 KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupCount) const

@@ -57,6 +57,7 @@ public:
     void setCurrentIndex(const QModelIndex &index);
     void setProxyModel(KPrAnimationGroupProxyModel *model);
     void updateView();
+    QModelIndex currentIndex();
     
 signals:
     void itemClicked(const QModelIndex &index);

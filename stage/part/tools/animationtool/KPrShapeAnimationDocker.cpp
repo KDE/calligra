@@ -165,8 +165,6 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(requestAnimationPreview()), this, SLOT(slotAnimationPreview()));
-        //connect(m_animationsModel, SIGNAL(rootChanged()), this, SLOT(checkAnimationSelected()));
-        //connect(m_editAnimationsPanel, SIGNAL(rootRemoved()), this, SLOT(reParentEditDialog()));
     }
 }
 
@@ -255,6 +253,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
+    connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
     checkAnimationSelected();
 }
 
@@ -367,4 +366,17 @@ void KPrShapeAnimationDocker::slotRemoveAnimations()
 KPrShapeAnimations *KPrShapeAnimationDocker::mainModel()
 {
     return m_animationsModel;
+}
+
+void KPrShapeAnimationDocker::testEditPanelRoot()
+{
+    QModelIndex editPanelIndex = m_animationGroupModel->mapToSource(m_editAnimationsPanel->currentIndex());
+
+    if (!editPanelIndex.isValid()) {
+        editPanelIndex = m_animationsView->currentIndex();
+    }
+    m_animationGroupModel->setCurrentIndex(editPanelIndex);
+    m_animationGroupModel->forceUpdateModel();
+    m_editAnimationsPanel->updateView();
+    updateEditDialogIndex(editPanelIndex);
 }

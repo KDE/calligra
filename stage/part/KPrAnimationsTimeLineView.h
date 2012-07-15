@@ -72,6 +72,8 @@ public slots:
 
     void adjustScale();
 
+    void notifyTimeValuesChanged(const QModelIndex& index);
+
 protected:
     /// return width of column
     int widthOfColumn(int column) const;

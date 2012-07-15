@@ -181,6 +181,7 @@ void KPrEditAnimationsWidget::setCurrentIndex(const QModelIndex &index)
 {
     Q_ASSERT(m_timeLineModel);
     m_timeLineView->setCurrentIndex(index);
+    updateIndex(index);
 }
 
 void KPrEditAnimationsWidget::setProxyModel(KPrAnimationGroupProxyModel *model)
@@ -195,9 +196,14 @@ void KPrEditAnimationsWidget::updateView()
     updateGeometry();
 }
 
+QModelIndex KPrEditAnimationsWidget::currentIndex()
+{
+    return m_timeLineView->currentIndex();
+}
+
 void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 {
-    if (index.isValid() && (index == m_timeLineView->currentIndex())) {
+    if (index.isValid() && (index.row() == m_timeLineView->currentIndex().row())) {
         QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
         QModelIndex beginTimeIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::StartTime);
         QModelIndex durationIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Duration);
@@ -263,7 +269,7 @@ void KPrEditAnimationsWidget::setAnimation(const QModelIndex &index)
         return;
     }
     KoXmlElement newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
-    QModelIndex itemIndex = m_timeLineView->currentIndex();
+    QModelIndex itemIndex = m_timeLineModel->mapToSource(m_timeLineView->currentIndex());
     if (!itemIndex.isValid()) {
         return;
     }
@@ -271,7 +277,7 @@ void KPrEditAnimationsWidget::setAnimation(const QModelIndex &index)
     KoOdfLoadingContext context(stylesReader, 0);
     KoShapeLoadingContext shapeContext(context, 0);
 
-    KoShape *shape = m_docker->mainModel()->shapeByIndex(m_timeLineModel->mapToSource(itemIndex));
+    KoShape *shape = m_docker->mainModel()->shapeByIndex(itemIndex);
     KPrShapeAnimation *newAnimation = loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
     if (newAnimation) {
         m_docker->mainModel()->replaceAnimation(itemIndex, newAnimation);

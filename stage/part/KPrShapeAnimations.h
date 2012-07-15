@@ -148,9 +148,11 @@ public:
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
+    void notifyOnClickEventChanged();
 
 signals:
     void timeScaleModified();
+    void onClickEventChanged();
 
 private:
     KPrShapeAnimation *animationByRow(const int row, int &groupCount) const;
