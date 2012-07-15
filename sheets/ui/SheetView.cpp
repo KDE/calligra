@@ -306,7 +306,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     //              no layout direction consideration; independent from painter
     //              transformations
 
-    // NOTE Stefan: The painting is splitted into several steps. In each of these all cells in
+    // NOTE Stefan: The painting is split into several steps. In each of these all cells in
     //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
     //              ensures that the borders are not erased by the background of adjacent cells.
 

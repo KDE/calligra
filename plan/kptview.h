@@ -377,7 +377,7 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    // if multiple changes occure, only issue the last change
+    // if multiple changes occur, only issue the last change
     bool m_trigged;
     ScheduleManager *m_nextScheduleManager;
 
