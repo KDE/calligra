@@ -338,8 +338,8 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupPropertyEditor();
     }
 
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
@@ -1420,8 +1420,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     d->tabbedToolBar->showTab("data");
     d->tabbedToolBar->showTab("external");
     d->tabbedToolBar->showTab("tools");
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
     //d->tabbedToolBar->showTab("form");
     //d->tabbedToolBar->showTab("report");
 

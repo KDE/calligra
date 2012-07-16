@@ -2933,7 +2933,7 @@ void PyramidAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
-//NOTE I start to assume that the parent layout-algorithms are also resposible for setting defaults at children
+//NOTE I start to assume that the parent layout-algorithms are also responsible for setting defaults at children
 //layout-algorithms. If that's the case then the question is how/where that happens. To bad the specs are
 //missing the most basic information :-(
 qreal SpaceAlg::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {

@@ -6280,7 +6280,7 @@ struct LFOLVL {
     U8 fStartAt:1;
 
     /**
-     * true if the formatting is overriden (in which case the LFOLVL should
+     * true if the formatting is overridden (in which case the LFOLVL should
      * contain a pointer to a LVL)
      */
     U8 fFormatting:1;
@@ -6510,7 +6510,7 @@ struct LVLF {
 
     /**
      * true if this level was from a converted Word 6 document. If it is true,
-     * all of the Word 6 compability options become valid; otherwise they are
+     * all of the Word 6 compatibility options become valid; otherwise they are
      * ignored.
      */
     U8 fWord6:1;

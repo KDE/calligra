@@ -1642,7 +1642,7 @@ void KexiCSVImportDialog::accept()
     msgboxResult = KMessageBox::questionYesNo(this,
                        i18n("Data has been successfully imported to table \"%1\".",
                             m_destinationTableSchema->name()),
-//! @todo 2.5 add title "Successfull import"
+//! @todo 2.5 add title "Successful import"
                        QString(),
 //! @todo 2.5 change to "Open Imported Table"
                        KStandardGuiItem::open(),

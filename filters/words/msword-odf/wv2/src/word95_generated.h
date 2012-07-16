@@ -2900,36 +2900,36 @@ struct DOP {
     U8 fEmbedFonts:1;
 
     /**
-     * compatability option: when 1, don?t add automatic tab stops for hanging
+     * compatibility option: when 1, don?t add automatic tab stops for hanging
      * indent
      */
     U16 copts_fNoTabForInd:1;
 
     /**
-     * compatability option: when 1, don?t add extra space for raised or lowered
+     * compatibility option: when 1, don?t add extra space for raised or lowered
      * characters
      */
     U16 copts_fNoSpaceRaiseLower:1;
 
     /**
-     * compatability option: when 1, supress the paragraph Space Before and
+     * compatibility option: when 1, supress the paragraph Space Before and
      * Space After options after a page break
      */
     U16 copts_fSuppressSpbfAfterPageBreak:1;
 
     /**
-     * compatability option: when 1, wrap trailing spaces at the end of a
+     * compatibility option: when 1, wrap trailing spaces at the end of a
      * line to the next line
      */
     U16 copts_fWrapTrailSpaces:1;
 
     /**
-     * compatability option: when 1, print colors as black on non-color printers
+     * compatibility option: when 1, print colors as black on non-color printers
      */
     U16 copts_fMapPrintTextColor:1;
 
     /**
-     * compatability option: when 1, don?t balance columns for Continuous
+     * compatibility option: when 1, don?t balance columns for Continuous
      * Section starts
      */
     U16 copts_fNoColumnBalance:1;
@@ -2937,29 +2937,29 @@ struct DOP {
     U16 copts_fConvMailMergeEsc:1;
 
     /**
-     * compatability option: when 1, supress extra line spacing at top of
+     * compatibility option: when 1, suppress extra line spacing at top of
      * page
      */
     U16 copts_fSupressTopSpacing:1;
 
     /**
-     * compatability option: when 1, combine table borders like Word 5.x for
+     * compatibility option: when 1, combine table borders like Word 5.x for
      * the Macintosh
      */
     U16 copts_fOrigWordTableRules:1;
 
     /**
-     * compatability option: when 1, don?t blank area between metafile pictures
+     * compatibility option: when 1, don?t blank area between metafile pictures
      */
     U16 copts_fTransparentMetafiles:1;
 
     /**
-     * compatability option: when 1, show hard page or column breaks in frames
+     * compatibility option: when 1, show hard page or column breaks in frames
      */
     U16 copts_fShowBreaksInFrames:1;
 
     /**
-     * compatability option: when 1, swap left and right pages on odd facing
+     * compatibility option: when 1, swap left and right pages on odd facing
      * pages
      */
     U16 copts_fSwapBordersFacingPgs:1;
@@ -4090,7 +4090,7 @@ struct WV2_EXPORT FIB {
     U8 unused19;
 
     /**
-     * default extended character set id for text in document stream. (overidden
+     * default extended character set id for text in document stream. (overridden
      * by chp.chse)
      * 0 by default characters in doc stream should be interpreted using the
      * ANSI character set used by Windows
@@ -6303,7 +6303,7 @@ struct SEP : public Shared {
     U16 dxaColumns;
 
     /**
-     * only for Mac compatability, used only during open, when 1, sep.dxaPgn
+     * only for Mac compatibility, used only during open, when 1, sep.dxaPgn
      * and sep.dyaPgn are valid page number locations
      */
     U8 fAutoPgn;
