@@ -136,7 +136,7 @@ public:
     // initialize step with values that will be there at the end of the step
     // step 0 is the value the object has before any animation is started
     // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
-    // e.g. the object has been moved to its original position, one the animation is done the value is removed
+    // e.g. the object has been moved to its original position, once the animation is done the value is removed
     void init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
 
     // update step value by values
