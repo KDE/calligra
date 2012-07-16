@@ -63,6 +63,7 @@
 #include "KDChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
+#include "commands/AxisCommand.h"
 
 
 using namespace KChart;
@@ -334,6 +335,8 @@ QWidget *ChartTool::createOptionWidget()
             this,   SLOT(setAxisUseAutomaticStepWidth(Axis*, bool)));
     connect(widget, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*, bool)),
             this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*, bool)));
+    connect(widget, SIGNAL(axisLabelsFontChanged(Axis*, const QFont&)),
+            this,   SLOT(setAxisLabelsFont(Axis*, const QFont&)));
 
     connect(widget, SIGNAL(legendTitleChanged(const QString&)),
             this,   SLOT(setLegendTitle(const QString&)));
@@ -715,7 +718,14 @@ void ChartTool::removeAxis(Axis *axis)
 
 void ChartTool::setAxisTitle(Axis *axis, const QString& title)
 {
-    axis->setTitleText(title);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisTitle(title);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
@@ -723,44 +733,103 @@ void ChartTool::setAxisShowTitle(Axis *axis, bool show)
 {
     Q_ASSERT(d->shape);
 
-    axis->title()->setVisible(show);
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisShowTitle(show);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisShowGridLines(Axis *axis, bool b)
 {
-    axis->setShowMajorGrid(b);
-    axis->setShowMinorGrid(b);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisShowGridLines(b);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseLogarithmicScaling(Axis *axis, bool b)
 {
-    axis->setScalingLogarithmic(b);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisUseLogarithmicScaling(b);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisStepWidth(Axis *axis, qreal width)
 {
-    axis->setMajorInterval(width);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisStepWidth(width);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisSubStepWidth(Axis *axis, qreal width)
 {
-    axis->setMinorInterval(width);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisSubStepWidth(width);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticStepWidth(Axis *axis, bool automatic)
 {
-    axis->setUseAutomaticMajorInterval(automatic);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisUseAutomaticStepWidth(automatic);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic)
 {
-    axis->setUseAutomaticMinorInterval(automatic);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisUseAutomaticSubStepWidth(automatic);
+        canvas()->addCommand(command);
+    }
+
+    d->shape->update();
+}
+
+void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
+{
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    if (command!=0) {
+        command->setAxisLabelsFont(font);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 

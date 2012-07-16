@@ -1773,8 +1773,8 @@ void ChartConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
     Axis *axis = d->axes[d->ui.axes->currentIndex()];
-    axis->setFont(font);
-    axis->setFontSize(font.pointSizeF());
+
+    emit axisLabelsFontChanged(axis, font);
 }
 
 void ChartConfigWidget::ui_legendFontChanged()
