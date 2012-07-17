@@ -183,7 +183,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 
     if(!image().isNull() && image()->isCanvasInfinite())
         updateViewportSize();
-    qDebug() << ppVar(m_d->viewportSize);
+    //qDebug() << ppVar(m_d->viewportSize);
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     newImage.fill(0);
@@ -253,7 +253,10 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     if (croppedImageRect.isEmpty()) return new KisPPUpdateInfo();
 
     KisPPUpdateInfoSP info = getInitialUpdateInformation(croppedImageRect);
-    m_d->projectionBackend->updateCache(croppedImageRect);
+    if(m_d->image->isCanvasInfinite())
+        m_d->projectionBackend->updateCache(dirtyImageRect);
+    else
+        m_d->projectionBackend->updateCache(croppedImageRect);
 
     return info;
 }
