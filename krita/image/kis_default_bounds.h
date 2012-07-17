@@ -36,6 +36,7 @@ public:
     virtual ~KisDefaultBounds();
 
     virtual QRect bounds() const;
+    virtual bool isCanvasInfinite() const;
 
 protected:
     static const QRect infiniteRect;

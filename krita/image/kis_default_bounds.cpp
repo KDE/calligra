@@ -55,6 +55,11 @@ QRect KisDefaultBounds::bounds() const
     return m_d->image? m_d->image->bounds(): infiniteRect;
 }
 
+bool KisDefaultBounds::isCanvasInfinite() const
+{
+    return m_d->image? m_d->image->isCanvasInfinite(): false;
+}
+
 
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */
