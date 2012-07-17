@@ -38,8 +38,10 @@
 #include <QPoint>
 #include <QPointF>
 #include <QColor>
+#include <QDataStream>
 #include <iostream>
 #include <math.h>
+#include <QDebug>
 
 using namespace std;
 
@@ -68,9 +70,9 @@ public:
      explicit Particle(QObject *parent = 0);
 
     ///Parameterized constructor
-    Particle( bool life = true,
+    Particle( bool life,
               float mass = 1.0,
-              float radius = 1,
+              int radius = 1,
               int lifespan = 10000,
               float friction = 0.00005, //default value of friction
               float dissipation = 0.0, //dissipation constant
@@ -78,6 +80,8 @@ public:
               QPointF * velocity = 0,
               QPointF * acceleration = 0
             );
+
+    Particle(const Particle & p);
 
     //Methods of the particle dynamics
 
@@ -95,29 +99,33 @@ public:
     int lifespan() const {return _lifespan;}
     float mass() const {return _mass;}
     float force() const {return _force;}
-    float radius() const {return _radius;}
+    int radius() const {return _radius;}
     float friction() const {return _friction;}
     float dissipation() const {return _dissipation;}
     
-    QPoint * pos(){return _pos;}
-    QPointF * vel(){return _vel;}
-    QPointF * accel(){return _accel;}
+    QPoint * pos() const {return _pos;}
+    QPointF * vel() const {return _vel;}
+    QPointF * accel()const {return _accel;}
 
     //Sets
     void setLife(bool lf){ _life = lf;}
     void setMass(float m) { _mass = m;}
-    void force(float f) {_force = f;}
-    void setRadius(float r) { _radius = r;}
-    void setLife(int l) { _lifespan = l;}
+    void setForce(float f) {_force = f;}
+    void setRadius(int r) { _radius = r;}
+    void setLifespan(int l) { _lifespan = l;}
     void setFriction(float f) { _friction = f;}
     void setDissipation(float d) {_dissipation = d;}
 
     void setPos(QPoint * p){ _pos = p;}
     void setVel(QPointF * v){ _vel = v;}
-    void setPos(QPointF * a){ _accel = a;}
+    void setAccel(QPointF * a){ _accel = a;}
 
 
+    ///Operator overload to serialization of the Particle to use KisAnnotation
+    friend QDataStream &operator<<(QDataStream &out, const Particle &particle);
+    friend QDataStream &operator>>(QDataStream &in, Particle &particle);
 
+//     Particle& operator=(const Particle & p);
 signals:
 
 public slots:
@@ -133,7 +141,7 @@ private:
     float _force;
     
     ///Size of this particle radius
-    float _radius;
+    int _radius;
 
     ///Quantity of timesteps this particle endures
     int _lifespan;
@@ -154,6 +162,9 @@ private:
     QPointF * _accel;
 
 };
+
+
+
 
 #endif // PARTICLE_H
  

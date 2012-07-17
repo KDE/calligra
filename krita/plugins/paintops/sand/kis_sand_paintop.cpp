@@ -21,7 +21,7 @@
 
 #include <cmath>
 #include <QRect>
-
+#include <QFile>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
@@ -38,9 +38,9 @@
 #include <kis_pressure_opacity_option.h>
 
 KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+        : KisPaintOp(painter),
+          m_image(image)
 {
-    Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.sensor()->reset();
 
@@ -49,6 +49,16 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
     KoColorTransformation* transfo = 0;
 
     m_sandBrush = new SandBrush( &m_properties, transfo );
+
+    if(m_image->annotation("Particle")){
+        qDebug() << "Retrieving particles...\n" ;
+        retrieveParticles();
+    }
+    //if we have an annotation of Particle type, initialize the particles in the paintop
+//     if(m_image->annotation("Particle")){
+//         
+//         m_sandBrush.setGrains();
+//     }
 }
 
 KisSandPaintOp::~KisSandPaintOp()
@@ -56,8 +66,27 @@ KisSandPaintOp::~KisSandPaintOp()
     delete m_sandBrush;
 }
 
+
+/**
+ * Where the painting operation really happens...
+ */
 qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 {
+//     Particle *p = new Particle(true, 0.5, 1, 100,
+//                                0.4, 1, new QPoint(1,3),
+//                                new QPointF(2,4), new QPointF(3,5));
+//     Particle *p2 = new Particle(true);
+//     QByteArray * b_array = new QByteArray();
+//     QDataStream stream(b_array, QIODevice::ReadWrite);
+//     
+//     stream << *p;
+// 
+//     stream.device()->reset();
+//     stream >> *p2;
+// 
+//     qDebug() << "p " << p->radius();
+//     qDebug() << "p2 " << p2->radius();
+
     if (!painter()) return 1.0;
 
     if (!m_dab) {
@@ -79,5 +108,42 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc,m_dab);
     painter()->setOpacity(origOpacity);
+
+    /*
+     * Add particles to annotation
+     */
+
+    //Serialize the particles in the m_grains
+    QList<Particle *> parts;
+    m_sandBrush->getGrains(parts);
+    if(parts.size() > 0){
+        QByteArray * b_array = new QByteArray();
+        QDataStream stream(b_array, QIODevice::ReadWrite);
+        for(int i = 0; i < parts.size(); i++){
+            stream << *parts.at(i);
+        }
+
+//     qDebug() << b_array;
+    m_image->addAnnotation(KisAnnotationSP(new KisAnnotation("Particle", "Set of grains that was added by the paintop", *b_array)));
+
+    }
+    
     return 1.0;
+}
+
+
+void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
+{
+    KisAnnotationSP annot = m_image->annotation("Particle");
+    QByteArray * array = &annot->annotation();
+    
+    QDataStream data( array , QIODevice::ReadWrite);
+
+    while(!data.atEnd()){
+        Particle *part;
+        p.append(part);
+    }
+
+    
+
 }

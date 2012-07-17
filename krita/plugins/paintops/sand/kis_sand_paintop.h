@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008, 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Francisco Fernandes <francisco.fernandes.j@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +21,7 @@
 
 #include <kis_paintop.h>
 #include <kis_types.h>
+#include <kis_annotation.h>
 
 #include "sand_brush.h"
 #include "kis_sand_paintop_settings.h"
@@ -38,11 +38,15 @@ public:
 
     qreal paintAt(const KisPaintInformation& info);
 
+    void retrieveParticles();
+
 private:
+    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     SandBrush * m_sandBrush;
     KisPressureOpacityOption m_opacityOption;
     SandProperties m_properties;
+
 };
 
 #endif // KIS_SAND_PAINTOP_H_

@@ -50,7 +50,6 @@
 class KisAnnotation : public KisShared
 {
 
-
 public:
 
     /**

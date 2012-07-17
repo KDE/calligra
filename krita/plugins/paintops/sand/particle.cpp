@@ -42,11 +42,11 @@
 //                     float dissipation = 0.0, //dissipation constant
 //                     QPoint * position = 0,
 //                     QPointF * velocity = 0,
-//                     QPointF * acceleration = 0,
-//                     QObject * parent = 0)
+//                     QPointF * acceleration = 0
+//                   )
 Particle::Particle( bool life,
                     float mass,
-                    float radius,
+                    int radius,
                     int lifespan,
                     float friction,
                     float dissipation, //dissipation constant
@@ -55,9 +55,9 @@ Particle::Particle( bool life,
                     QPointF * acceleration
                   )
 {
-    _life   = life,
+    _life   = life;
     _mass   = mass;
-    _radius =  radius = 1;
+    _radius =  radius;
     _lifespan = lifespan;
     _friction = friction;
     _dissipation = dissipation;
@@ -66,12 +66,27 @@ Particle::Particle( bool life,
     _accel = acceleration;
 }
 
+///Copy constructor
+Particle::Particle(const Particle & p)
+{
+    _life   = p.isAlive();
+    _mass   = p.mass();
+    _radius =  p.radius();
+    _lifespan = p.lifespan();
+    _friction = p.friction();
+    _dissipation = p.dissipation();
+    _pos = p.pos();
+    _vel = p.vel();
+    _accel = p.accel();
+}
+
+
 //Methods of the particle dynamics
 
 /** Responsible for update the actual force interacting with this particle. The force is applied by the mouse,
  *  which should behave like there is a particle on it's position, so we could do a simple collision and move
  *  the grains on the canvas.
- *
+    *
  * The emission of grains will be responsible by the ParticleEmitter, but will use this method as well.
  * OBS: Perhaps I should set this method as a slot
  */ 
@@ -88,7 +103,7 @@ void Particle::applyForce(){
      *
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-    double xi = _radius ;
+    double xi = double(_radius) ;
 
     //this is a simple formality, the collision detection will be made before the force application
     if( xi > 0){
@@ -112,7 +127,7 @@ void Particle::applyForce(){
         /*
          * double reff = ( _radius * brush_size )/( _radius + brush_size );
          */
-        double reff = _radius;
+        double reff = double(_radius);
 
         /*
          * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
@@ -211,3 +226,52 @@ void Particle::integrationStep(double dt)
     _vel->rx() += (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
     _vel->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
 }
+
+
+QDataStream &operator<<(QDataStream &out, const Particle &particle)
+{   
+    out << particle.isAlive()
+        << quint32(particle.lifespan())
+        << particle.mass()
+        << particle.force()
+        << quint32(particle.radius())
+        << particle.friction()
+        << particle.dissipation()
+        << *particle.pos()
+        << *particle.vel()
+        << *particle.accel();
+        
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Particle &particle)
+{
+    bool life;
+    float mass;
+    float force;
+    int radius;
+    int lifespan;
+    float friction;
+    float dissipation;
+    QPoint   pos;
+    QPointF  vel;
+    QPointF  accel;
+
+    in >> life >> lifespan >> mass
+       >> force >> radius >> friction
+       >> dissipation >> pos >> vel >> accel;
+    
+    particle.setLife(life);
+    particle.setMass(mass);
+    particle.setForce(force);
+    particle.setRadius(radius);
+    particle.setLifespan(lifespan);
+    particle.setFriction(friction);
+    particle.setDissipation(dissipation);
+    particle.setPos(new QPoint(pos));
+    particle.setVel(new QPointF(vel));
+    particle.setAccel(new QPointF(accel));
+
+    return in;
+}
+

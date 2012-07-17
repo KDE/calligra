@@ -92,10 +92,10 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     QPointF vel(pos.x()/time, pos.y()/time);    //current velocity
     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current accel
 
-    qDebug() <<"time : " << time << "\n";
-    qDebug() <<"(pos, vel, accel ) : " << "(" << pos.x() << ", " << pos.y() << ")\n "
-                                    << "(" << vel.x() << ", " << vel.y() << ")\n "
-                                    << "(" << accel.x() << ", " << accel.y() << ")\n ";
+//     qDebug() <<"time : " << time << "\n";
+//     qDebug() <<"(pos, vel, accel ) : " << "(" << pos.x() << ", " << pos.y() << ")\n "
+//                                     << "(" << vel.x() << ", " << vel.y() << ")\n "
+//                                     << "(" << accel.x() << ", " << accel.y() << ")\n ";
     
     m_counter++;
 
@@ -116,7 +116,7 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     drawer.setPaintColor(m_inkColor);
   
 
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
+//     qint32 pixelSize = dev->colorSpace()->pixelSize();
     KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
 //     qDebug() <<"(r, result, m_counter )" << "(" << r << ", " << result << ", " << m_counter ;
@@ -150,16 +150,31 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
 
 void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel)
 {
+    Particle *p = new Particle ( true,
+                                 float( m_properties->mass),
+                                 float( m_properties->size),
+                                 1000,
+                                 float( m_properties->friction),
+                                 0.0,
+                                 new QPoint(x, y),
+                                 new QPointF(vel.x(), vel.y()),
+                                 new QPointF(accel.x(), accel.y())
+                               );
+//     qDebug() << "Size -> " << m_properties->size;
 
-//     Particle p( bool life,
-//                 float( m_properties->mass()),
-//                 float( m_properties->radius()),
-//                 int lifespan,
-//                 float( m_properties->friction()),
-//                 new QPoint(x, y),
-//                 new QPointF(vel.x(), vel.y()),
-//                 new QPointF(accel.x(), accel.y()),
-//                 );
+    m_grains.append(p);
+
+//     qDebug() << "Particle : \n"  << "Life" << p->lifespan() << "\n"
+//                             << "Mass" << p->mass() << "\n"
+//                             << "Radius" << p->radius() << "\n"
+//                             << "Friction" << p->friction() << "\n"
+//                             << "Dissipation" << p->dissipation() << "\n"
+//                             << "Pos(x)" << p->pos()->x() << "\n"
+//                             << "Pos(y)" << p->pos()->y() << "\n"
+//                             << "Vel(x)" << p->vel()->x() << "\n"
+//                             << "Vel(y)" << p->vel()->y() << "\n"
+//                             << "Accel(x)" << p->accel()->x() << "\n"
+//                             << "Accel(y)" << p->accel()->y() << "\n";
     
     QVector<QPointF> points;
     // circle x, circle y
