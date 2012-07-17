@@ -1,6 +1,8 @@
 [Desktop Entry]
-X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-kspread
 Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
+
 Actions=Print;
 
 [Desktop Action Print]
@@ -66,5 +68,6 @@ Name[wa]=Imprimer...
 Name[x-test]=xxPrint...xx
 Name[zh_CN]=打印...
 Name[zh_TW]=列印...
-Exec=kspread --print %U
-Icon=filequickprint
+
+Exec=calligrasheets --print %U
+Icon=document-print
