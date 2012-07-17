@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef BRIDGEACTION_H
-#define BRIDGEACTION_H
+#ifndef KOBRIDGEACTION_H
+#define KOBRIDGEACTION_H
 
 #include <QVariantMap>
 
@@ -73,4 +73,4 @@ private:
     BibliographyDb *m_db;
 };
 
-#endif // BRIDGEACTION_H
+#endif // KOBRIDGEACTION_H
