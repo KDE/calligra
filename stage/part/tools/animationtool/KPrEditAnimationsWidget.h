@@ -53,6 +53,7 @@ class KPrEditAnimationsWidget : public QWidget
     Q_OBJECT
 public:
     explicit KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent = 0);
+    ~KPrEditAnimationsWidget();
     void setView(KoPAViewBase *view);
     void setCurrentIndex(const QModelIndex &index);
     void setProxyModel(KPrAnimationGroupProxyModel *model);
@@ -79,6 +80,10 @@ protected slots:
 
     void setAnimation(const QModelIndex& index);
 
+    void automaticPreviewRequested(const QModelIndex &index);
+    void setPreviewState(bool isEnable);
+
+
 private:
     void loadDefaultAnimations();
     void readDefaultAnimations();
@@ -90,6 +95,11 @@ private:
      * Add a collection to the docker
      */
     bool addCollection(const QString& id, const QString& title, KPrCollectionItemModel* model);
+
+
+    /// load / save automatic preview checkbox state
+    bool loadPreviewConfig();
+    void savePreviewConfig();
 
     KPrView* m_view;
     KPrAnimationsTimeLineView *m_timeLineView;
@@ -103,6 +113,8 @@ private:
     QList<KoXmlElement> m_animationContext;
     QMap<QString, KPrCollectionItemModel*> m_modelMap;
     KPrShapeAnimationDocker *m_docker;
+    KPrShapeAnimation *m_previewAnimation;
+    bool showAutomaticPreview;
 };
 
 #endif // KPREDITANIMATIONSWIDGET_H

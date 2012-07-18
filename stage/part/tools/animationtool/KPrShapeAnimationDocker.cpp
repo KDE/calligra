@@ -354,6 +354,16 @@ KPrShapeAnimations *KPrShapeAnimationDocker::mainModel()
     return m_animationsModel;
 }
 
+KPrViewModePreviewShapeAnimations *KPrShapeAnimationDocker::previewMode()
+{
+    return m_previewMode;
+}
+
+void KPrShapeAnimationDocker::setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode)
+{
+    m_previewMode = previewMode;
+}
+
 void KPrShapeAnimationDocker::testEditPanelRoot()
 {
     QModelIndex editPanelIndex = m_animationGroupModel->mapToSource(m_editAnimationsPanel->currentIndex());

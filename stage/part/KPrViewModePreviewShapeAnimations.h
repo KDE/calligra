@@ -58,6 +58,8 @@ public:
     /// Set the shape animation to be played
     void setShapeAnimation(KPrShapeAnimation *shapeAnimation);
 
+    void stopAnimation();
+
 public slots:
     /**
      * @brief Activate the saved view mode

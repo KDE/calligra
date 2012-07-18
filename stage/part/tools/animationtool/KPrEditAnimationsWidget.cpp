@@ -31,12 +31,13 @@
 #include "KPrEditAnimationsWidget.h"
 #include "KPrCollectionItemModel.h"
 #include "KPrAnimationGroupProxyModel.h"
-
+#include "KPrViewModePreviewShapeAnimations.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "animations/KPrAnimationBase.h"
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationFactory.h"
 #include "commands/KPrAnimationRemoveCommand.h"
+#include "KPrFactory.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -55,12 +56,16 @@
 #include <QListWidgetItem>
 #include <QListWidget>
 #include <QFile>
+#include <QCheckBox>
 
 //KDE Headers
 #include <KIcon>
 #include <KLocale>
 #include <KIconLoader>
 #include <KStandardDirs>
+#include <KComponentData>
+#include <KConfigGroup>
+#include <KSharedConfigPtr>
 #include <KDebug>
 
 //Calligra Headers
@@ -82,6 +87,8 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     : QWidget(parent)
     , m_view(0)
     , m_docker(docker)
+    , m_previewAnimation(0)
+    , showAutomaticPreview(true)
 {
     m_animations = QList<KPrShapeAnimation *>();
     m_animationContext = QList<KoXmlElement>();
@@ -111,6 +118,9 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
     m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
     m_buttonPreviewAnimation->setEnabled(true);
+    QCheckBox *previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
+    previewCheckBox->setChecked(loadPreviewConfig());
+    showAutomaticPreview = previewCheckBox->isChecked();
 
     QHBoxLayout *containerLayout = new QHBoxLayout;
     m_collectionChooser = new QListWidget;
@@ -135,13 +145,17 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     m_collectionView->setResizeMode(QListView::Adjust);
     m_collectionView->setGridSize(QSize(75, 64));
     m_collectionView->setWordWrap(true);
-
+    m_collectionView->viewport()->setMouseTracking(true);
     connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(setAnimation(const QModelIndex&)));
 
-
+    // layout widgets
     layout->addLayout(containerLayout);
-    layout->addWidget(m_buttonPreviewAnimation);
+    QHBoxLayout *hlayout0 = new QHBoxLayout;
+    hlayout0->addWidget(m_buttonPreviewAnimation);
+    hlayout0->addStretch();
+    hlayout0->addWidget(previewCheckBox);
+    layout->addLayout(hlayout0);
     layout->addWidget(label);
     layout->addWidget(m_timeLineView);
     layout->addWidget(startLabel);
@@ -163,8 +177,22 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
     connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
     connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
+    connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
+    connect(previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
 
     loadDefaultAnimations();
+}
+
+KPrEditAnimationsWidget::~KPrEditAnimationsWidget()
+{
+    savePreviewConfig();
+    // stop animation before delete it
+    if (m_docker->previewMode()) {
+        m_docker->previewMode()->stopAnimation();
+    }
+    if (m_previewAnimation) {
+        delete(m_previewAnimation);
+    }
 }
 
 void KPrEditAnimationsWidget::setView(KoPAViewBase *view)
@@ -246,6 +274,40 @@ void KPrEditAnimationsWidget::syncCurrentItem()
     if (index.isValid()) {
         updateIndex(index);
     }
+}
+
+void KPrEditAnimationsWidget::automaticPreviewRequested(const QModelIndex &index)
+{
+    if(!index.isValid()  || !showAutomaticPreview) {
+        return;
+    }
+    KoXmlElement newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    QModelIndex itemIndex = m_timeLineModel->mapToSource(m_timeLineView->currentIndex());
+    if (!itemIndex.isValid()) {
+        return;
+    }
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext context(stylesReader, 0);
+    KoShapeLoadingContext shapeContext(context, 0);
+
+    KoShape *shape = m_docker->mainModel()->shapeByIndex(itemIndex);
+    if (!shape) {
+        return;
+    }
+    m_previewAnimation = loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
+    if (m_previewAnimation) {
+        m_previewAnimation->setKoTextBlockData(m_docker->mainModel()->animationByRow(itemIndex.row())->textBlockData());
+        if(!m_docker->previewMode()) {
+            m_docker->setPreviewMode(new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas()));
+        }
+        m_docker->previewMode()->setShapeAnimation(m_previewAnimation);
+        m_view->setViewMode(m_docker->previewMode()); // play the effect (it reverts to normal  when done)
+    }
+}
+
+void KPrEditAnimationsWidget::setPreviewState(bool isEnable)
+{
+    showAutomaticPreview = isEnable;
 }
 
 void KPrEditAnimationsWidget::activateShapeCollection(QListWidgetItem *item)
@@ -511,4 +573,23 @@ bool KPrEditAnimationsWidget::addCollection(const QString &id, const QString &ti
     collectionChooserItem->setData(Qt::UserRole, id);
     m_collectionChooser->addItem(collectionChooserItem);
     return true;
+}
+
+bool KPrEditAnimationsWidget::loadPreviewConfig()
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+    bool showPreview = true;
+
+    if (config->hasGroup("Interface")) {
+        const KConfigGroup interface = config->group("Interface");
+        showPreview = interface.readEntry("ShowAutomaticPreviewAnimationEditDocker", showPreview);
+    }
+    return showPreview;
+}
+
+void KPrEditAnimationsWidget::savePreviewConfig()
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+    KConfigGroup interface = config->group("Interface");
+    interface.writeEntry("ShowAutomaticPreviewAnimationEditDocker", showAutomaticPreview);
 }

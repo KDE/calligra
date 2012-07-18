@@ -184,6 +184,13 @@ void KPrViewModePreviewShapeAnimations::setShapeAnimation(KPrShapeAnimation *sha
     }
 }
 
+void KPrViewModePreviewShapeAnimations::stopAnimation()
+{
+    if (m_shapeAnimation) {
+        m_timeLine.stop();
+    }
+}
+
 void KPrViewModePreviewShapeAnimations::activateSavedViewMode()
 {
     m_view->setViewMode(m_savedViewMode);

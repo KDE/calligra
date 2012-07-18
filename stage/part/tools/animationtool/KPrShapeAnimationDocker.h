@@ -81,6 +81,8 @@ public slots:
     void moveAnimationDown();
 
     KPrShapeAnimations *mainModel();
+    KPrViewModePreviewShapeAnimations *previewMode();
+    void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
 
 private slots:
     void testEditPanelRoot();
