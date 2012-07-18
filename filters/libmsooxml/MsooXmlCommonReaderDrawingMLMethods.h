@@ -228,16 +228,10 @@ KoFilter::ConversionStatus read_spAutoFit();
 //! Inherit default body properties
 void inheritDefaultBodyProperties();
 
-//! Sets the style:wrap attribute of graphic-properties for read_anchor().
-void saveStyleWrap(const char *style);
-
 void algnToODF(const char *odfEl, const QString& emuValue);
 
 //! Sets the fo:margin-* attribute of graphic-properties for read_anchor().
 void distToODF(const char *odfEl, const QString& emuValue);
-
-//! Used by read_wrap*()
-void readWrap();
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == (DRAWINGML_NS || DRAWINGML_TXBODY_NS)

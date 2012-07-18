@@ -4283,11 +4283,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
 #define MSOOXML_CURRENT_NS DRAWINGML_NS
 #endif
 
-void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
-{
-    m_currentDrawStyle->addProperty("style:wrap", style, KoGenStyle::GraphicType);
-}
-
 void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)
 {
     if (ov.isEmpty())
@@ -4315,21 +4310,6 @@ void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString& emuValu
     if (!s.isEmpty()) {
         m_currentDrawStyle->addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
     }
-}
-
-//! @todo Currently all read_wrap*() uses the same read_wrap(), no idea if they can behave differently
-//! CASE #1425
-void MSOOXML_CURRENT_CLASS::readWrap()
-{
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(wrapText)
-    if (wrapText == "bothSides")
-        saveStyleWrap("parallel");
-    else if (wrapText == "largest")
-        saveStyleWrap("dynamic");
-    else
-        saveStyleWrap(wrapText.toLatin1());
-//! @todo Is saveStyleWrap(wrapText) OK?
 }
 
 #undef CURRENT_EL
