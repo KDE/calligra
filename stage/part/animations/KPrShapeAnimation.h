@@ -41,12 +41,14 @@ class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimat
     Q_OBJECT
 public:
 
+    /// Node Type (Trigger Event of the animation)
     enum Node_Type {
         On_Click,
         After_Previous,
         With_Previous
     };
 
+    /// Animation class
     enum Preset_Class {
         None,
         Entrance,
@@ -57,6 +59,8 @@ public:
         Ole_Action,
         Media_Call
     };
+
+    /// State of the animation
     enum Animation_State {
         Valid,
         Invalid
@@ -97,23 +101,118 @@ public:
       * Return global duration of the shape animation
       */
     int globalDuration();
+
+    /**
+     * @brief Set the begin time for the animation
+     *
+     * @param timeMS time in miliseconds
+     */
     void setBeginTime(int timeMS);
+
+    /**
+     * @brief Set duration time for the animation
+     *
+     * @param timeMS time in miliseconds
+     */
     void setGlobalDuration(int timeMS);
+
+    /**
+     * @brief asign text block data
+     *
+     * @param textBlockData
+     */
     void setKoTextBlockData(KoTextBlockData *textBlockData);
 
+    /// The following data are just for quick access
+    /// to different params of the animation
+    /// Use set methods to mantain them in sync with the
+    /// real animation data
+    /**
+     * @brief Set the node type of the animation
+     * used just like quick access, Node Type is actually
+     * determined using the step, substep structure
+     *
+     * @param type Node Type
+     */
     void setNodeType(Node_Type type);
+
+    /**
+     * @brief Set class of the animation
+     *
+     * @param presetClass
+     */
     void setPresetClass(Preset_Class presetClass);
+
+    /**
+     * @brief Set the id (name) of the animation
+     *
+     * @param id QString with the animation name
+     */
     void setId(QString id);
+
+    /**
+     * @brief Returns the stored node type for the animation
+     *
+     * @return Node_Type
+     */
     Node_Type NodeType() const;
+
+    /**
+     * @brief Returns stored class of the animation
+     *
+     * @return Preset_Class
+     */
     Preset_Class presetClass() const;
+
+    /**
+     * @brief Returns the id (name) of the animation
+     *
+     * @return animation id
+     */
     QString id() const;
+
+    /**
+     * @brief Returns the class of the animation as String
+     *
+     * @return animation class text
+     */
     QString presetClassText() const;
+
+    /**
+     * @brief Set a pointer to the parent step of the animation
+     *
+     * @param step pointer to the step that holds the substep of the
+     * animation
+     */
     void setStep(KPrAnimationStep *step);
+
+    /**
+     * @brief Set a pointer to the parent substep of the animation
+     *
+     * @param step pointer to the substep that holds the animation
+     */
     void setSubStep(KPrAnimationSubStep *subStep);
+
+    /// The following pointers are used to reduce the necessity to
+    /// look for animation in all the step-substep structure
+    /// But they must be maintain in sync manually
+    /**
+     * @brief Returns the stored pointer of the animation step
+     *
+     * @return animation step
+     */
     KPrAnimationStep *step();
+
+    /**
+     * @brief Returns the stored pointer of the animation substep
+     *
+     * @return animation substep
+     */
     KPrAnimationSubStep *subStep();
 
     /// Store index for undo redo commands
+    /// The indexes are used and updated with in the remove/move commands
+    /// during other times they could be ou of sync
     void setStepIndex(int index);
     void setSubStepIndex(int index);
     void setAnimIndex(int index);
@@ -122,6 +221,7 @@ public:
     int animIndex();
 
 signals:
+    /// Notify if an animation stored property has been changed
     void timeChanged(int begin, int end);
     void triggerEventChanged(KPrShapeAnimation::Node_Type event);
 

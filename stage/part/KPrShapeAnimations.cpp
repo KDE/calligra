@@ -346,7 +346,6 @@ void KPrShapeAnimations::removeStep(KPrAnimationStep *step)
 
 void KPrShapeAnimations::swapSteps(int i, int j)
 {
-    qDebug() << "swaping steps" << i << j;
     m_shapeAnimations.swap(i, j);
     emit dataChanged(this->index(i,0), this->index(i, COLUMN_COUNT));
     emit dataChanged(this->index(j,0), this->index(j, COLUMN_COUNT));

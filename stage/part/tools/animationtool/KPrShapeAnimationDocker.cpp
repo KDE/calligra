@@ -34,6 +34,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTreeView>
+#include <QHeaderView>
 #include <QMenu>
 #include <QDebug>
 
@@ -201,21 +202,6 @@ void KPrShapeAnimationDocker::moveAnimationDown()
     m_animationsModel->moveDown(index);
 }
 
-void KPrShapeAnimationDocker::setBeginTime(const QModelIndex &index, const int begin)
-{
-    m_animationsModel->setBeginTime(index, begin);
-}
-
-void KPrShapeAnimationDocker::setDuration(const QModelIndex &index, const int duration)
-{
-    m_animationsModel->setDuration(index, duration);
-}
-
-bool KPrShapeAnimationDocker::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
-{
-    return m_animationsModel->setTriggerEvent(index, type);
-}
-
 KPrShapeAnimations *KPrShapeAnimationDocker::animationsByPage(KoPAPageBase *page)
 {
     KPrPageData * pageData = dynamic_cast<KPrPageData *>(page);
@@ -236,6 +222,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         //Config columns
         m_animationsView->hideColumn(0);
         m_animationsView->setColumnWidth(1, 3);
+        m_animationsView->header()->moveSection(4, 3);
         m_animationsView->hideColumn(5);
         m_animationsView->hideColumn(6);
         m_animationsView->hideColumn(7);

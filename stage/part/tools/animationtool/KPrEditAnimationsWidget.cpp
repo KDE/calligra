@@ -214,14 +214,14 @@ void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 void KPrEditAnimationsWidget::setBeginTime()
 {
     if (m_timeLineView->currentIndex().isValid()) {
-        m_docker->setBeginTime(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_delayEdit->time().msecsTo(QTime()));
+        m_docker->mainModel()->setBeginTime(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_delayEdit->time().msecsTo(QTime()));
     }
 }
 
 void KPrEditAnimationsWidget::setDuration()
 {
     if (m_timeLineView->currentIndex().isValid()) {
-        m_docker->setDuration(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_durationEdit->time().msecsTo(QTime()));
+        m_docker->mainModel()->setDuration(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), -m_durationEdit->time().msecsTo(QTime()));
     }
 }
 
@@ -235,7 +235,7 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
             if (row == 0) newType = KPrShapeAnimation::On_Click;
             else if (row == 1) newType = KPrShapeAnimation::After_Previous;
             else newType = KPrShapeAnimation::With_Previous;
-            m_docker->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
+            m_docker->mainModel()->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
         }
     }
 }

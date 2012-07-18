@@ -28,7 +28,6 @@ class QToolButton;
 class KoPAViewBase;
 class KPrView;
 class QTreeView;
-//class KPrAnimationsTreeModel;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimations;
 class KPrAnimationsDataModel;
@@ -80,11 +79,6 @@ public slots:
 
     void moveAnimationUp();
     void moveAnimationDown();
-
-    void setBeginTime(const QModelIndex &index, const int begin);
-    void setDuration(const QModelIndex &index, const int duration);
-
-    bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
 
     KPrShapeAnimations *mainModel();
 

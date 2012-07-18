@@ -31,16 +31,23 @@
 
 class KPrDocument;
 
+
+/**
+ * Model for Animations data of each KPrPage
+ */
 class STAGE_EXPORT KPrShapeAnimations : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+
+    /// Time to be updated
     enum TimeUpdated {
         BeginTime,
         DurationTime,
         BothTimes
     };
 
+    /// column names
     enum ColumnNames {
         Group = 0,
         StepCount = 1,
@@ -57,7 +64,7 @@ public:
     explicit KPrShapeAnimations(QObject *parent = 0);
     ~KPrShapeAnimations();
 
-    // Model Methods
+    /// Model Methods
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index,
                int role=Qt::DisplayRole) const;
@@ -89,11 +96,35 @@ public:
      */
     void remove( KPrShapeAnimation * animation );
 
+    /**
+     * @brief Insert a new step on the steps list
+     *
+     * @param i position in which the step will be inserted
+     * @param step step to be inserted
+     */
     void insertStep(const int i, KPrAnimationStep *step);
+
+    /**
+     * @brief Remove a step on the steps list
+     *
+     * @param step step to be removed
+     */
     void removeStep(KPrAnimationStep *step);
 
+    /**
+     * @brief Swap steps in positions i and j
+     *
+     * @param i position of the first step
+     * @param j position of the second step
+     */
     void swapSteps(int i, int j);
 
+    /**
+     * @brief Replace old animation with new animation
+     *
+     * @param oldAnimation animation to be replaced
+     * @param newAnimation
+     */
     void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 
 
@@ -114,33 +145,111 @@ public:
     /// Save a edit command
     void endTimeLineEdition();
 
-    /// Set time range for item (times in miliseconds)
+    /**
+     * @brief Set animation begin and duration
+     *
+     * @param index index of the animation
+     * @param begin time in miliseconds
+     * @param duration time in miliseconds
+     */
     void setTimeRange(KPrShapeAnimation *item, const int begin, const int duration);
 
     /// requiere to send commands
     void setDocument(KPrDocument *document);
 
-    /// Return previous item end time in seconds
+    /**
+     * Get the previous animation end time for the given animation
+     *
+     * @param index of the animation
+     * @return the time in seconds of the previous animation end
+     */
     qreal previousItemEnd(const QModelIndex &index);
 
-    /// Return previous item begin time
+    /**
+     * Get the previous animation begin for the given animation
+     *
+     * @param index of the animation
+     * @return the time in seconds of the previous animation begin
+     */
     qreal previousItemBegin(const QModelIndex &index);
 
+    /**
+     * @brief Replace animation in the given index
+     *
+     * @param index index of the animation
+     * @param newAnimation animation to be used to replace
+     */
     QModelIndex replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation);
+
+    /**
+     * @brief Change trigger event of the animation on index
+     *
+     * @param index index of the animation
+     * @param type new Node Type for the animation
+     */
     bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
+
+    /**
+     * @brief Redefine start of the animation if is moved below the minimun limit
+     * of its animation trigger event.
+     *
+     * @param mIndex index of the animation
+     */
     void recalculateStart(const QModelIndex &mIndex);
 
+    /**
+     * @brief Move animation up in the animation list
+     * Redefine trigger event if it's necessary
+     *
+     * @param index of the animation
+     */
     QModelIndex moveUp(const QModelIndex &index);
+
+    /**
+     * @brief Move animation down in the animation list
+     * Redefine trigger event if it's necessary
+     *
+     * @param index of the animation
+     */
     QModelIndex moveDown(const QModelIndex &index);
+
+    /**
+     * @brief Move animation from oldRow to newRow
+     * Redefine trigger event if it's necessary
+     *
+     * @param index of the animation
+     */
     QModelIndex moveItem(int oldRow, int newRow);
 
+    /**
+     * @brief remove animation on index
+     *
+     * @param index of the animation to be removed
+     */
     QModelIndex removeItemByIndex(const QModelIndex &index);
+
+    /**
+     * @brief Return the shape of the animation on given index
+     *
+     * @param index of the animation
+     */
     KoShape *shapeByIndex(const QModelIndex &index);
 
     /// Return the first animation index for the given shape
     QModelIndex indexByShape(KoShape* shape);
 
+    /**
+     * @brief Set begin time for the animation on index
+     *
+     * @param index of the animation
+     */
     void setBeginTime(const QModelIndex &index, const int begin);
+
+    /**
+     * @brief Set duration for the animation on index
+     *
+     * @param index of the animation
+     */
     void setDuration(const QModelIndex &index, const int duration);
 
     KPrShapeAnimation *animationByRow(const int row) const;
@@ -148,6 +257,8 @@ public:
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
+
+    /// Notify if an animation set as OnClick has changed of trigger event
     void notifyOnClickEventChanged();
 
 signals:
