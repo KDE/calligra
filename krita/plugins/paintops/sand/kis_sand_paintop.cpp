@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  (at your option) ag_numy later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -144,3 +144,114 @@ void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
         p.append(part);
     }
 }
+
+
+void KisSandPaintOp::makeGrid()
+{
+    QList<Particle *> grains;
+    m_sandBrush->getGrains(grains);
+    
+    /*
+     * Clear the past relationship of particles and the grid
+     */
+
+    //acho q nem precisa disso
+    for(int ix = 0; ix < grid.size(); ix++){
+        for(int iy = 0; iy < grid[ix].size(); iy++){
+            grid[ix][iy].clear();
+        }
+    }
+
+    //Get the grid cells where each particle is and hold it in the grid list
+    for(unsigned int i = 0; i < grains.size(); i++){
+        /*
+         * Calculate the indices of the particles
+         */
+        int ix = int( g_numx * grains[i]->pos()->x()/m_image->width() );
+        int iy = int( g_numy * grains[i]->pos()->y()/m_image->height() );
+
+        /*
+         * Verify the indices and the grid limits
+         */
+
+        if(( ix >= 0) && ( ix < g_numx ) && ( iy >= 0) && ( iy < g_numy )){
+            //if the position is correct
+            grid[ix][iy].push_back(i);
+
+        } else {
+            //if the position is out of the grid size
+            exit(0);
+
+        }
+    }
+}
+
+bool KisSandPaintOp::is_valid_neighbor(int ix, int iy, int iix, int iiy)
+{
+    //(iix,iiy) is the upper-left corner cell of (ix,iy)
+    if((iix == (ix-1+g_numx)%g_numx) && (iiy == (iy+1+g_numy)%g_numy))
+        return true;
+
+    //(iix,iiy) is the upper cell of (ix,iy)
+    if((iix == (ix+g_numx)%g_numx) && (iiy == (iy+1+g_numy)%g_numy))
+        return true;
+
+    //(iix,iiy) is the upper-right corner cell of (ix,iy)
+    if((iix == (ix+1+g_numx)%g_numx) && (iiy == (iy+1+g_numy)%g_numy))
+        return true;
+
+    //(iix,iiy) is the right cell of (ix,iy)
+    if((iix == (ix+1+g_numx)%g_numx) && (iiy == (iy+g_numy)%g_numy))
+        return true;
+
+    //Otherwise...
+    return false;
+}
+
+void KisSandPaintOp::makeNeighbors()
+{
+
+    int iix;
+    int iiy;
+    
+    // Defining the X-coordinates for the neighborhood
+    neighbors.resize(g_numx);
+
+    for(int ix = 0; ix < g_numx; ix++){
+        // Defining the Y-coordinates for the neighborhood
+        neighbors[ix].resize(g_numy);
+    }
+
+    /*
+     * Searching in the neighborhood (grid)
+     */
+    for(int ix = 0; ix < g_numx; ix++){
+        for(int iy = 0; iy < g_numy; iy++){
+
+            /*
+             * Define the search space for cell (ix,iy)
+             * It's sufficient to search only in the up, right, upper-right
+             * and upper-left corners neighbor grids, since the commutativity
+             * of the neighborhood can be used to restrict this search space.
+             */
+            for(int dx = -1; dx <= 1; dx++){
+                for(int dy = -1; dy <= 1; dy++){
+
+                    //Calculate all the neighbors of (ix,iy)
+                    iix = ( ix + dx + g_numx)%g_numx;
+                    iiy = ( iy + dy + g_numx)%g_numx;
+
+                    /*
+                     * Restric the neighborhood based on commutativity
+                     * The result should be only the upper-left, up, upper-right,
+                     * right neighbor grids of (ix,iy)
+                     */
+                    if(is_valid_neighbor(ix,iy,iix,iiy)) {
+                        neighbors[ix][iy].push_back(QPair<int,int>(iix,iiy));
+                    }
+                }
+            }
+        }
+    }
+}
+

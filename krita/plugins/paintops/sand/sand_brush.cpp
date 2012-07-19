@@ -137,6 +137,7 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
 
 
             drawParticle(drawer, pixelX , pixelY, vel, accel);
+            
             if(m_grainCount > 0)
                 m_grainCount--; //decrease the amount of grains
             else
@@ -211,3 +212,4 @@ void SandBrush::setGrains(QList<Particle *> &g_copy){
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
 }
+

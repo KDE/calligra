@@ -59,6 +59,8 @@ public:
     ///Set the Particles to be used in the desired operations
     void setGrains(QList<Particle *> &g_copy);
 
+
+
 private:
     KoColor m_inkColor;
 
@@ -76,52 +78,6 @@ private:
 
     ///Hold the particles created by this paintop
     QList<Particle *> m_grains;
-
-    /**
-     * Hold the grid structure. The grid is created by taking the canvas width and height and
-     * dividing each by a number of rows/columns disired.
-     * Supose we have the m_grains list with the following particle structure :
-     * 
-     *  0 1 2 3 4
-     *  | | | | |
-     * [C,A,D,B,E]
-     *
-     * This container holds the grid cells where the particle is:
-     *
-     *    _0__1__2__3__4__5__6__7__8__9__10_11_12_13_
-     * 0  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 1  |__|__|__|__|__|__|__|__|_D|__|__|__|__|__|
-     * 2  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 3  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 4  |__|__|__|__|__|_A|__|__|__|__|__|__|__|__|
-     * 5  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 6  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 7  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 8  |__|__|__|__|__|__|B_|__|__|__|__|__|__|__|
-     * 9  |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 10 |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 11 |_E|__|__|__|__|__|__|__|__|_C|__|__|__|__|
-     * 12 |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 13 |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
-     * 
-     * If we have a grid of 7x7 cells of size 2, in pixels, if we want all the neightbors of B, I get the cell
-     * where B is, and :
-     * 
-     * -> get B position (6,8)
-     * -> divide by the image size (14,14)
-     * -> multiply by the number of grids( 7,7)
-     * 
-     * => grid_b = (7,7)*((6,8)/(14,14)) = (3,4)
-     * 
-     *
-     * In the position (3,4) of 'grid', we have a list of indices of all particles that
-     * are on this grid cell and making possible to search in the neightborhood of the
-     * cell for the particles closest to B
-     *
-     * QList<uint> b_neighbors = grid.at(3).at(4);
-     * 
-     */
-    QList< QList<QList<uint> > > grid;
 
     //Usual members to painting operations
     
