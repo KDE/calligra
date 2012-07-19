@@ -31,6 +31,9 @@ Page {
 
             onButtonClicked: {
                 switch( button ) {
+                    case "new":
+                        newPanel.collapsed = !newPanel.collapsed;
+                        break;
                     case "settings":
                         pageStack.push( settingsPage );
                         break;
@@ -42,6 +45,7 @@ Page {
         }
 
         CreateNewPanel {
+            id: newPanel;
             anchors.left: parent.left;
             width: Constants.GridWidth * 4;
             height: Constants.GridHeight * 7;
