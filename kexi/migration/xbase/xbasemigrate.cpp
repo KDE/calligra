@@ -28,10 +28,10 @@
 #include <kdebug.h>
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
@@ -163,7 +163,10 @@ bool xBaseMigrate::drv_readTableSchema(
         new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
 
     if ( fld->type() == KexiDB::Field::Text ) {
-      fld->setLength( tableDbf->GetFieldLen(i) );
+      uint len = tableDbf->GetFieldLen(i);
+      if (len < 255) { // limit for small lengths only
+          fld->setMaxLength(len);
+      }
     }
 
     if ( fld->isFPNumericType() ) {

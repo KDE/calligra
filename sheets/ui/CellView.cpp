@@ -1560,7 +1560,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
                 //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
                 if (i < idxOfDecimal) {
-                    //first try removing thousands seperators before replacing text with ######
+                    //first try removing thousands separators before replacing text with ######
                     QString tmp2 = d->displayText;
                     tmp2.remove(locale->thousandsSeparator());
                     int sepCount = d->displayText.length() - tmp2.length();
@@ -2203,7 +2203,7 @@ void CellView::Private::calculateRichTextSize(const QFont& font, const QFontMetr
     textHeight = textSize.height();
     textWidth = textSize.width();
     textLinesCount = richText->lineCount();
-    // TODO: linescount is not correct, and distributed vertical allignment doesn't
+    // TODO: linescount is not correct, and distributed vertical alignment doesn't
     // work anyway for richtext at the momemnt
     fittingHeight = textHeight <= (height - 2 * s_borderSpace
                             - 0.5 * style.topBorderPen().widthF()

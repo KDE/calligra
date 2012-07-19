@@ -24,10 +24,10 @@
 
 #include <kdebug.h>
 
-#include <kexidb/field.h>
-#include <kexidb/RecordData.h>
-#include <kexidb/cursor.h>
-#include <kexidb/drivermanager.h>
+#include <db/field.h>
+#include <db/RecordData.h>
+#include <db/cursor.h>
+#include <db/drivermanager.h>
 #include <core/kexi.h>
 #include <migration/keximigratedata.h>
 
@@ -154,7 +154,7 @@ bool xBaseExportPrivate::appendRecord( const QString& sourceTableName , KexiDB::
 
 int xBaseExportPrivate::fieldLength(KexiDB::Field* f ) {
   if ( f->type() == KexiDB::Field::Text ) {
-    return f->length();
+    return f->maxLength();
   }
   // return the max possible (string)length of the types
   // see http://linux.techass.com/projects/xdb/xbasedocs/xbase_c3.html

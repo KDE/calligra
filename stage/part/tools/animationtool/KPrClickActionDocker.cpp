@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -68,6 +68,12 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
         connect( optionWidget, SIGNAL( addCommand( KUndo2Command * ) ),
                  this, SLOT( addCommand( KUndo2Command * ) ) );
     }
+    // The following widget activates a special feature in the
+    // ToolOptionsDocker that makes the components of the widget align
+    // to the top if there is extra space.
+    QWidget *specialSpacer = new QWidget(this);
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer);
 
     setLayout( layout );
 }

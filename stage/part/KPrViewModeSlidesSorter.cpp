@@ -52,7 +52,7 @@
 #include <KoCanvasController.h>
 #include <KoCopyController.h>
 #include <KoCutController.h>
-#include <KoSelectionManager.h>
+#include <KoViewItemContextBar.h>
 
 //KDE Headers
 #include <klocale.h>
@@ -63,6 +63,8 @@
 #include <KGlobalSettings>
 #include <KMessageBox>
 #include <KActionCollection>
+
+const int DEFAULT_ICON_SIZE = 200;
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -80,6 +82,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
+    centralWidgetLayout->setMargin(0);
+    centralWidgetLayout->setSpacing(0);
 
     QLabel *slideShowsLabel = new QLabel(i18n("Slide Show: "));
     m_customSlideShowsList = new QComboBox;
@@ -142,6 +146,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     m_customSlideShowView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_customSlideShowView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_customSlideShowView->setDragDropMode(QAbstractItemView::InternalMove);
+    m_customSlideShowView->setSpacing(10);
 
     //Setup slides sorter view
     m_slidesSorterModel->setDocument(m_view->kopaDocument());
@@ -149,6 +154,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     m_slidesSorterView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_slidesSorterView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_slidesSorterView->setDragDropMode(QAbstractItemView::InternalMove);
+    m_slidesSorterView->setSpacing(10);
 
     //setup signals
     connect(m_slidesSorterView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
@@ -176,8 +182,17 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
 
     //install selection manager for Slides Sorter View and Custom Shows View
-    new KoSelectionManager(m_slidesSorterView);
-    new KoSelectionManager(m_customSlideShowView);
+    m_slidesSorterItemContextBar = new KoViewItemContextBar(m_slidesSorterView);
+    new KoViewItemContextBar(m_customSlideShowView);
+    QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
+    QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"),QString("edit-delete"));
+    QToolButton *startPresentation = m_slidesSorterItemContextBar->addContextButton(i18n("Start Slideshow"),QString("view-presentation"));
+    connect(view->kopaDocument(), SIGNAL(pageRemoved(KoPAPageBase*)), m_slidesSorterItemContextBar, SLOT(update()));
+
+    //setup signals for item context bar buttons
+    connect(duplicateButton, SIGNAL(clicked()), this, SLOT(contextBarDuplicateSlide()));
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(contextBarDeleteSlide()));
+    connect(startPresentation, SIGNAL(clicked()), this, SLOT(contextBarStartSlideshow()));
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -251,7 +266,6 @@ void KPrViewModeSlidesSorter::wheelEvent(QWheelEvent *event, const QPointF &poin
 void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 {
     Q_UNUSED(previousViewMode);
-    populate();
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
         view->replaceCentralWidget(m_centralWidget);
@@ -279,7 +293,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    // Give the ressources back to the canvas
+    // Give the resources back to the canvas
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
@@ -336,16 +350,6 @@ void KPrViewModeSlidesSorter::addShape( KoShape *shape )
 void KPrViewModeSlidesSorter::removeShape( KoShape *shape )
 {
     Q_UNUSED(shape);
-}
-
-void KPrViewModeSlidesSorter::populate()
-{
-    //Init m_slidesSorter view
-    QModelIndex item = m_slidesSorterModel->index(0, 0, QModelIndex());
-    m_slidesSorterView->setItemSize(m_slidesSorterView->visualRect(item));
-
-    //Init m_customSlidesShowsView
-    m_customSlideShowView->setItemSize(m_slidesSorterView->visualRect(item));
 }
 
 QSize KPrViewModeSlidesSorter::iconSize() const
@@ -480,16 +484,17 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(mode);
     //at zoom 100%, iconSize is set in 200 x 200
     //KPrSlidesSorterDocumentModel uses iconSize function in decorate Role.
-    setIconSize(QSize(qRound(zoom*200),qRound(zoom*200)));
+    //Check if is enough room for context bar
+    int newIconSize = (zoom*DEFAULT_ICON_SIZE > m_slidesSorterItemContextBar->preferredWidth()) ?
+                qRound(zoom*DEFAULT_ICON_SIZE) : m_slidesSorterItemContextBar->preferredWidth();
+    //Check if slide is not too big
+    newIconSize = (newIconSize < qMin(m_centralWidget->size().height(), m_centralWidget->size().width())) ?
+                newIconSize : qMin(m_centralWidget->size().height(), m_centralWidget->size().width());
+
+    setIconSize(QSize(newIconSize, newIconSize));
     m_slidesSorterView->setIconSize(iconSize());
     m_customSlideShowModel->setIconSize(iconSize());
     m_customSlideShowView->setIconSize(iconSize());
-
-    //update item size
-    QModelIndex item = m_slidesSorterModel->index(0, 0, QModelIndex());
-    m_slidesSorterView->setItemSize(m_slidesSorterView->visualRect(item));
-    m_customSlideShowView->setItemSize(m_slidesSorterView->visualRect(item));
-
     setZoom(qRound(zoom * 100.));
 }
 
@@ -725,4 +730,39 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
     customShowChanged(m_customSlideShowsList->currentIndex());
 
     connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+}
+
+void KPrViewModeSlidesSorter::contextBarDuplicateSlide()
+{
+    QList<KoPAPageBase *> slides;
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    if (page) {
+        slides.append(page);
+        updateActivePage(page);
+        m_slidesSorterModel->copySlides(slides);
+        editPaste();
+    }
+}
+
+void KPrViewModeSlidesSorter::contextBarDeleteSlide()
+{
+    QList<KoPAPageBase *> slides;
+    if ((m_slidesSorterItemContextBar->currentIndex().row() >= 0) &&
+            (m_slidesSorterItemContextBar->currentIndex().row() < m_slidesSorterModel->rowCount(QModelIndex()))) {
+        KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row(), false);
+        if (page) {
+            slides.append(page);
+            m_slidesSorterModel->removeSlides(slides);
+        }
+    }
+}
+
+void KPrViewModeSlidesSorter::contextBarStartSlideshow()
+{
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    updateActivePage(page);
+    KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
+    if (kPrview) {
+       kPrview->startPresentation();
+    }
 }

@@ -437,9 +437,7 @@ void KWStatusBar::setCurrentView(KWView *view)
         connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
         zoomWidget->setVisible(m_currentView->kwdocument()->config().statusBarShowZoom());
     } else {
-        // do it delayed to avoid a race condition where this code
-        // is ran from the constructor of KWView before the zoomController is created.
-        QTimer::singleShot(0, this, SLOT(createZoomWidget()));
+        createZoomWidget();
     }
 
     KoCanvasResourceManager *resourceManager = view->canvasBase()->resourceManager();

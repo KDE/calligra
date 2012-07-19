@@ -43,6 +43,7 @@
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
+#include <kdeversion.h>
 
 
 namespace KPlato
@@ -827,7 +828,11 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
             if ( e.hasAttribute( "currency-digits" ) ) {
+#if KDE_IS_VERSION(4,4,0)
+                l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
+#else
                 l->setFracDigits( e.attribute( "currency-digits" ).toInt() );
+#endif
             }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
@@ -1142,7 +1147,11 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
+#if KDE_IS_VERSION(4,4,0)
+    loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
+#else
     loc.setAttribute( "currency-digits", l->fracDigits() );
+#endif
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );
@@ -1765,6 +1774,17 @@ ResourceGroup *Project::groupByName( const QString& name ) const
         }
     }
     return 0;
+}
+
+QList<Resource*> Project::autoAllocateResources() const
+{
+    QList<Resource*> lst;
+    foreach ( Resource *r, resourceIdDict ) {
+        if ( r->autoAllocate() ) {
+            lst << r;
+        }
+    }
+    return lst;
 }
 
 void Project::insertResourceId( const QString &id, Resource *resource )

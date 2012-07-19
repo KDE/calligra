@@ -26,11 +26,14 @@
 #include <KoView.h>
 
 #include "kptcontext.h"
+#include "kptviewbase.h"
 
 #include <QMenu>
 #include <QDockWidget>
 #include <QTimer>
 #include <QMap>
+#include <QPointer>
+#include <QPrintDialog>
 
 #include <KConfigDialog>
 
@@ -80,8 +83,11 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
+class ReportWidget;
 
 class ReportDesignDialog;
+
+class DockWidget;
 
 class ConfigDialog : public KConfigDialog
 {
@@ -153,6 +159,8 @@ public:
 
     QWidget *canvas() const;
 
+    KoPageLayout pageLayout() const;
+
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
     void setActiveSchedule( long id );
@@ -186,6 +194,7 @@ public:
     ViewBase *createReportView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
+    QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
 
     virtual KoZoomController *zoomController() const {
         return 0;
@@ -283,8 +292,6 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotEditReportDesign( ReportView *view );
-    void slotCreateReport();
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
@@ -369,7 +376,7 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    // if multiple changes occure, only issue the last change
+    // if multiple changes occur, only issue the last change
     bool m_trigged;
     ScheduleManager *m_nextScheduleManager;
 
@@ -377,6 +384,8 @@ private:
     QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
+
+    QList<DockWidget*> m_dockers;
 
     // ------ File
     QAction *actionCreateTemplate;
@@ -399,7 +408,6 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
-    KAction *actionCreateReport;
     KAction *actionOpenReportFile;
 
     // ------ Settings
@@ -427,6 +435,7 @@ private:
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
 };
+
 
 } //Kplato namespace
 

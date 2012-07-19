@@ -14,6 +14,7 @@ Name[fr]=Calligra Flow
 Name[gl]=Calligra Flow
 Name[hu]=Calligra Flow
 Name[it]=Calligra Flow
+Name[ja]=Calligra Flow
 Name[kk]=Calligra Flow
 Name[nb]=Calligra Flow
 Name[nds]=Calligra-Flow
@@ -89,7 +90,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 # application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
 # Flow will be used only in absence of Karbon
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
-X-DocPath=http://userbase.kde.org/Flow
+X-DocPath=http://userbase.kde.org/Special:MyLanguage/Flow
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.calligra.flow

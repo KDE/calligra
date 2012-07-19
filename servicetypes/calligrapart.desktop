@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
 X-KDE-ServiceType=CalligraPart
-X-KDE-Derived=KParts/ReadWritePart
 Comment=Calligra Component
 Comment[bg]=Компонент на Calligra
 Comment[ca]=Component del Calligra
@@ -17,6 +16,7 @@ Comment[fr]=Composant gestion de projets de Calligra
 Comment[gl]=Compoñente de xestión de proxectos de Calligra
 Comment[hu]=Calligra komponens
 Comment[it]=Componente di Calligra
+Comment[ja]=Calligra コンポーネント
 Comment[kk]=Calligra-ның компоненті
 Comment[nb]=Calligra-komponent
 Comment[nds]=Calligra-Komponent

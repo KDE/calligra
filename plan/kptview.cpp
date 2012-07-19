@@ -59,7 +59,6 @@
 #include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
@@ -127,6 +126,7 @@
 #include "kptdebug.h"
 
 #include "plansettings.h"
+#include "kptprintingcontrolprivate.h"
 
 // #include "KPtViewAdaptor.h"
 
@@ -207,12 +207,12 @@ bool ConfigDialog::isDefault()
 
 //------------------------------------
 View::View( Part* part, QWidget* parent )
-        : KoView( part, parent ),
-        m_currentEstimateType( Estimate::Use_Expected ),
-        m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_trigged( false ),
-        m_nextScheduleManager( 0 ),
-        m_readWrite( false )
+    : KoView( part, parent ),
+    m_currentEstimateType( Estimate::Use_Expected ),
+    m_scheduleActionGroup( new QActionGroup( this ) ),
+    m_trigged( false ),
+    m_nextScheduleManager( 0 ),
+    m_readWrite( false )
 {
     //kDebug(planDbg());
 //    getProject().setCurrentSchedule( Schedule::Expected );
@@ -311,11 +311,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
-    actionCreateReport  = new KAction(KIcon( "document-new" ), i18n("Create Report..."), this);
-    actionCollection()->addAction( "reportdesigner_create_report", actionCreateReport );
-    connect( actionCreateReport, SIGNAL( triggered( bool ) ), SLOT( slotCreateReport() ) );
-
-    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open File..."), this);
+    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
@@ -450,20 +446,8 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = getPart()->generatePreview(QSize(width, height));
-
-    KTemporaryFile tempFile;
-    tempFile.setSuffix( ".plant" );
-    //Check that creation of temp file was successful
-    if ( ! tempFile.open() ) {
-        kWarning()<<"Creation of temprary file to store template failed.";
-        return;
-    }
-    kDebug(planDbg())<<"Created temporaray file:"<<tempFile.fileName();
-    getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+                                        Factory::global(), getPart(), this);
 }
 
 void View::createViews()
@@ -811,7 +795,7 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
 {
     ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
-    resourceeditor->draw( getProject() );
+    resourceeditor->setProject( &(getProject()) );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "", index );
     ViewInfo vi = defaultViewInfo( "ResourceEditor" );
@@ -849,7 +833,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
         i->setToolTip( 0, tip );
     }
 
-    taskeditor->draw( getProject() );
+    taskeditor->setProject( &(getProject()) );
     taskeditor->setScheduleManager( currentScheduleManager() );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( setScheduleManager( ScheduleManager* ) ) );
@@ -1346,14 +1330,12 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -2567,6 +2549,16 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
         foreach( const QString &name, view->actionListNames() ) {
             plugActionList( name, view->actionList( name ) );
         }
+        foreach ( DockWidget *ds, view->dockers() ) {
+            m_dockers.append( ds );
+            ds->activate( shell() );
+        }
+        kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
+    } else {
+        kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
+        while ( ! m_dockers.isEmpty() ) {
+            m_dockers.takeLast()->deactivate( shell() );
+        }
     }
 }
 
@@ -2631,20 +2623,6 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
     m_viewlist->blockSignals( false );
 }
 
-void View::slotCreateReport()
-{
-    ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
-    // The ReportDesignDialog can not know how to create and insert views,
-    // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
@@ -2680,26 +2658,12 @@ void View::slotOpenReportFileFinished( int result )
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
-    ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, v.reportModels(), this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( e, Report::createBaseReportDataModels( this ), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-
-void View::slotEditReportDesign( ReportView *view )
-{
-    if ( view == 0 ) {
-        return;
-    }
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2769,6 +2733,27 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 QWidget *View::canvas() const
 {
     return m_tab->currentWidget();//KoView::canvas();
+}
+
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
+}
+
+QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
+{
+    kDebug(planDbg())<<printJob;
+    KoPrintingDialog *job = dynamic_cast<KoPrintingDialog*>( printJob );
+    if ( ! job ) {
+        return 0;
+    }
+    QPrintDialog *dia = KoView::createPrintDialog( job, parent );
+
+    PrintingDialog *j = dynamic_cast<PrintingDialog*>( job );
+    if ( j ) {
+        new PrintingControlPrivate( j, dia );
+    }
+    return dia;
 }
 
 void View::slotCurrentChanged( int )
@@ -2844,7 +2829,7 @@ bool View::loadContext()
 {
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
-        return true;
+        return false;
     }
     KoXmlElement n = ctx->context();
     QString cv = n.attribute( "current-view" );
@@ -3081,7 +3066,34 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
+//---------------------------------
+PrintingControlPrivate::PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia )
+    : QObject( dia ),
+    m_job( job ),
+    m_dia( dia )
+{
+    connect(job, SIGNAL(changed()), SLOT(slotChanged()));
+}
+
+void PrintingControlPrivate::slotChanged()
+{
+    if ( ! m_job || ! m_dia ) {
+        return;
+    }
+    QSpinBox *to = m_dia->findChild<QSpinBox*>("to");
+    QSpinBox *from = m_dia->findChild<QSpinBox*>("from");
+    if ( to && from ) {
+        from->setMinimum( m_job->documentFirstPage() );
+        from->setMaximum( m_job->documentLastPage() );
+        from->setValue( from->minimum() );
+        to->setMinimum( from->minimum() );
+        to->setMaximum( from->maximum() );
+        to->setValue( to->maximum() );
+    }
+}
+
 
 }  //KPlato namespace
 
+#include "kptprintingcontrolprivate.moc"
 #include "kptview.moc"

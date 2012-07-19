@@ -132,7 +132,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     kDebug() << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
-        // if there is allready an aniation create a new step
+        // if there is already an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();

@@ -24,6 +24,8 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoViewConverter.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -407,7 +409,7 @@ void Selection::update(const QPoint& point)
     QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
 
     // If the updated range is bigger, it may cover already existing ranges.
-    // These get removed, if multiple occurences are not allowed. Store the old
+    // These get removed, if multiple occurrences are not allowed. Store the old
     // amount of ranges, to figure out how many ranges have been removed later.
     const int count = cells().count();
     // The update may have shrunk the range, which would be containend in
@@ -1076,6 +1078,28 @@ void Selection::emitChanged(const Region& region)
         extendedRegion.add(masterCells[i].cellPosition(), sheet);
 
     emit changed(extendedRegion);
+}
+
+void Selection::scrollToCursor()
+{
+    const QPoint location = cursor();
+    Sheet *const sheet = activeSheet();
+
+    // Adjust the maximum accessed column and row for the scrollbars.
+    emit updateAccessedCellRange(sheet, location);
+
+    // The cell geometry expanded by some pixels in each direction.
+    const Cell cell = Cell(sheet, location).masterCell();
+    const double xpos = sheet->columnPosition(cell.cellPosition().x());
+    const double ypos = sheet->rowPosition(cell.cellPosition().y());
+    const double pixelWidth = canvas()->viewConverter()->viewToDocumentX(1);
+    const double pixelHeight = canvas()->viewConverter()->viewToDocumentY(1);
+    QRectF rect(xpos, ypos, cell.width(), cell.height());
+    rect.adjust(-2*pixelWidth, -2*pixelHeight, +2*pixelWidth, +2*pixelHeight);
+    rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
+
+    // Scroll to cell.
+    canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
 void Selection::dump() const

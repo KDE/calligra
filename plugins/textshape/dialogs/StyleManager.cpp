@@ -52,6 +52,16 @@ StyleManager::StyleManager(QWidget *parent)
     layout()->setMargin(0);
     widget.bNew->setToolTip(i18n("Create a new style inheriting the current style"));
 
+    // Force "Base" background of the style listviews to white, so the background
+    // is consistent with the one of the preview area. Also the usual document text colors
+    // are dark, because made for a white paper background, so with a dark UI
+    // color scheme they are hardly seen.
+    // TODO: update to background color of currently selected/focused shape/page
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, QColor(Qt::white));
+    widget.paragraphStylesListView->setPalette(palette);
+    widget.characterStylesListView->setPalette(palette);
+
     m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setProvideStyleNone(false);
@@ -101,8 +111,9 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     m_characterStylesModel->setStyleManager(m_styleManager);
     connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //also updates style combos
+    widget.characterStylePage->setStyleManager(m_styleManager); //also updates style combos
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
-    widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
@@ -259,7 +270,7 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {
     if (m_blockSignals) return;
 
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
     setParagraphStyle(style);
     m_unappliedStyleChanges = true;
 }
@@ -268,6 +279,7 @@ void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 {
     if (m_blockSignals) return;
 
+    widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
     setCharacterStyle(style);
     m_unappliedStyleChanges = true;
 }
@@ -276,13 +288,14 @@ void StyleManager::removeParagraphStyle(KoParagraphStyle* style)
 {
     if (m_alteredParagraphStyles.contains(style->styleId()))
         m_alteredParagraphStyles.remove(style->styleId());
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
 void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
 {
     if (m_alteredCharacterStyles.contains(style->styleId()))
         m_alteredCharacterStyles.remove(style->styleId());
+    widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
 void StyleManager::slotStyleSelected(QModelIndex index)

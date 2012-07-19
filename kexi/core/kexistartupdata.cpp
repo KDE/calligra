@@ -20,8 +20,8 @@
 #include "kexistartupdata.h"
 #include "kexi.h"
 
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
 
 #include <QFileInfo>
 
@@ -31,6 +31,7 @@ KexiStartupData::KexiStartupData()
         , m_forcedUserMode(false)
         , m_forcedDesignMode(false)
         , m_isProjectNavigatorVisible(false)
+        , m_forcedFullScreen(false)
 // , m_createDB(false)
 // , m_dropDB(false)
 // , m_alsoOpenDB(false)
@@ -86,4 +87,9 @@ KexiStartupData::Import::Import()
 KexiStartupData::Import::operator bool() const
 {
     return !fileName.isEmpty() && !mimeType.isEmpty();
+}
+
+bool KexiStartupData::forcedFullScreen() const
+{
+    return m_forcedFullScreen;
 }

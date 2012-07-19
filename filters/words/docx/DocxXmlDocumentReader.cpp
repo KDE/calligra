@@ -2,7 +2,7 @@
  * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2010 KoGmbh (casper.boemann@kogmbh.com).
+ * Copyright (C) 2010 KoGmbh (cbo@kogmbh.com).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -864,8 +864,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lnNumType()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
  - pos (Footnote Placement) §17.11.21
 
 */
@@ -874,10 +874,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer endBuf;
+    body = endBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "endnote");
 
@@ -886,17 +884,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString endStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString endStyle;
+    body = endBuf.releaseWriter(endStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, endStyle.toUtf8());
 
     READ_EPILOGUE
@@ -913,9 +909,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 
  Child elements:
  - [done] numFmt (Footnote Numbering Format) §17.11.18
- - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
- - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
- - pos (Footnote Placement) §17.11.21
+ - [done] numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - [done] numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - [done] pos (Footnote Placement) §17.11.21
 
 */
 //! @todo support all elements
@@ -923,31 +919,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 {
     READ_PROLOGUE
 
-    QBuffer buffer;
-    KoXmlWriter *oldBody = body;
-    body = new KoXmlWriter(&buffer);
-
+    MSOOXML::Utils::XmlWriteBuffer footBuf;
+    body = footBuf.setWriter(body);
     body->startElement("text:notes-configuration");
     body->addAttribute("text:note-class", "footnote");
-    body->addAttribute("text:footnotes-position", "page");
-    body->addAttribute("text:start-numbering-at", "document");
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            ELSE_TRY_READ_IF(numRestart)
+            ELSE_TRY_READ_IF(numStart)
+            ELSE_TRY_READ_IF(pos)
             SKIP_UNKNOWN
         }
     }
 
     body->endElement(); // text:notes-configuration
-
-    QString footStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
-    delete body;
-    body = oldBody;
-
+    QString footStyle;
+    body = footBuf.releaseWriter(footStyle);
     mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, footStyle.toUtf8());
 
     READ_EPILOGUE
@@ -955,17 +946,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 
 #undef CURRENT_EL
 #define CURRENT_EL numFmt
-//! w:numFmt handler (Footnote Numbering format)
+//! numFmt handler (Footnote Numbering format)
 /*
  Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
  - [done] footnotePr (§17.11.12)
  - [done] footnotePr (§17.11.11)
 
  Child elements:
  - none
-
 */
-//! @toodo support all elements
+//! @todo support all attributes
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 {
     READ_PROLOGUE
@@ -977,12 +969,125 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
         if (val == "upperLetter") {
             body->addAttribute("style:num-format", "A");
         }
-        else if (val == "decimal") {
+        else if (val == "lowerLetter") {
+            body->addAttribute("style:num-format", "a");
+        }
+        else if (val == "upperRoman") {
+            body->addAttribute("style:num-format", "I");
+        }
+        else if (val == "lowerRoman") {
+            body->addAttribute("style:num-format", "i");
+        }
+        else if (val == "none") {
+            body->addAttribute("style:num-format", "");
+        }
+        else {
             body->addAttribute("style:num-format", "1");
         }
     }
-    else { // For now let's use letter format as the default
-        body->addAttribute("style:num-format", "A");
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numRestart
+//! numRestart (Footnote and Endnote Numbering Restart Location)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numRestart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "eachPage") {
+            body->addAttribute("text:start-numbering-at", "page");
+        }
+        else if (val == "eachSect") {
+            body->addAttribute("text:start-numbering-at", "chapter");
+        }
+        else { //continuous
+            body->addAttribute("text:start-numbering-at", "document");
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numStart
+//! numStart (Footnote and Endnote Numbering Starting Value)
+/*
+ Parent elements:
+ - [done] endnotePr (§17.11.4)
+ - [done] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numStart()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        body->addAttribute("text:start-value", val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pos
+//! pos (Footnote Placement)
+/*
+ Parent elements:
+ - [not applicable] endnotePr (§17.11.4)
+ - [not applicable] endnotePr (§17.11.5)
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+ */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_pos()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "beneathText") {
+            body->addAttribute("text:footnotes-position", "text");
+        }
+        else if (val == "docEnd") {
+            body->addAttribute("text:footnotes-position", "document");
+        }
+        else if (val == "sectEnd") {
+            body->addAttribute("text:footnotes-position", "section");
+        }
+        else { // pageBottom
+            body->addAttribute("text:footnotes-position", "page");
+        }
     }
 
     readNext();
@@ -1000,7 +1105,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
 
  Child Elements:
  - col (Single Column Definition) §17.6.3
-
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
@@ -6475,7 +6579,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                     }
                 }
                 else {
-                    saveStyleWrap("none");
+                    m_currentDrawStyle->addProperty("style:wrap", "none");
                 }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
@@ -6486,7 +6590,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom))) {
                     return KoFilter::WrongFormat;
                 }
-                saveStyleWrap("none");
+                m_currentDrawStyle->addProperty("style:wrap", "none");
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -6751,9 +6855,111 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_posOffset(posOffsetCaller
 }
 
 #undef CURRENT_EL
+
+void DocxXmlDocumentReader::readWrapAttrs()
+{
+    if (QUALIFIED_NAME_IS(wrapTight)) {
+        m_currentDrawStyle->addProperty("style:wrap-contour", "true");
+        m_currentDrawStyle->addProperty("style:wrap-contour-mode", "outside");
+    }
+    else if (QUALIFIED_NAME_IS(wrapThrough)) {
+        m_currentDrawStyle->addProperty("style:wrap-contour", "true");
+        m_currentDrawStyle->addProperty("style:wrap-contour-mode", "full");
+    }
+    m_currentDrawStyle->addProperty("style:number-wrapped-paragraphs", "no-limit");
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(wrapText)
+
+    if (wrapText == "bothSides") {
+        m_currentDrawStyle->addProperty("style:wrap", "parallel");
+    }
+    else if (wrapText == "largest") {
+        m_currentDrawStyle->addProperty("style:wrap", "biggest");
+    } else {
+        m_currentDrawStyle->addProperty("style:wrap", wrapText);
+    }
+}
+
+#define CURRENT_EL wrapPolygon
+//! wrapPolygon (Wrapping Polygon)
+/*! ECMA-376, 20.4.2.16, p.3495
+ This element specifies the wrapping polygon which shall be used to determine
+ the extents to which text can wrap around the specified object in the
+ document. This polygon shall be defined by the following:
+
+ - The start element defines the coordinates of the origin of the wrap polygon
+ - Two or more lineTo elements define the point of the wrap polygon
+
+ TODO: If the set of child elements does not result in a closed polygon (the
+ last lineTo element does not return to the position specified by the start
+ element), then a single additional line shall be inferred as needed to close
+ the wrapping polygon.
+
+ Parent elements:
+ - [done] wrapThrough (§20.4.2.18)
+ - [done] wrapTight (§20.4.2.19)
+
+ Child elements:
+ - lineTo (Wrapping Polygon Line End Position)
+ - start (Wrapping Polygon Start)
+
+ Attributes:
+ - edited (Wrapping Points Modified)
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapPolygon()
+{
+    READ_PROLOGUE
+    QString points;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(start) || QUALIFIED_NAME_IS(lineTo)) {
+                const QXmlStreamAttributes attrs(attributes());
+                READ_ATTR_WITHOUT_NS(x)
+                READ_ATTR_WITHOUT_NS(y)
+
+                bool ok;
+                int _x = x.toInt(&ok);
+                int _y = y.toInt(&ok);
+
+                // EMUs - TODO: Which units do I have to use?
+                if (ok) {
+                    // x = QString::number(PT_TO_PX(EMU_TO_POINT(_x)), 'f');
+                    // y = QString::number(PT_TO_PX(EMU_TO_POINT(_y)), 'f');
+                    x = QString::number(EMU_TO_POINT(_x), 'f');
+                    y = QString::number(EMU_TO_POINT(_y), 'f');
+                }
+                //TODO: else a number followed immediately by a unit identifier.
+
+                //TODO: find max and min to set svg:width, svg:height and svg:viewBox
+
+                points.append(x);
+                points.append(",");
+                points.append(y);
+                points.append(" ");
+
+                skipCurrentElement();
+            }
+            SKIP_UNKNOWN
+        }
+    }
+
+    if (!points.isEmpty()) {
+        points.chop(1); //remove last space
+        body->startElement("draw:contour-polygon");
+        body->addAttribute("draw:points", points);
+        body->endElement(); //draw:contour-polygon
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL wrapSquare
 //! wrapSquare handler (Square Wrapping)
-/*! ECMA-376, 20.4.2.17, p.3497.
+/*! ECMA-376, 20.4.2.17, p.3496.
  This element specifies that text shall wrap around a virtual rectangle bounding
  this object. The bounds of the wrapping rectangle shall be dictated by the extents
  including the addition of the effectExtent element as a child of this element
@@ -6776,7 +6982,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_posOffset(posOffsetCaller
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapSquare()
 {
     READ_PROLOGUE
-    readWrap();
+    readWrapAttrs();
 
     while (!atEnd()) {
         readNext();
@@ -6812,14 +7018,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapSquare()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapTight()
 {
     READ_PROLOGUE
-    readWrap();
+    readWrapAttrs();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-//        if (isStartElement()) {
-//! @todo effectExtent
-//        }
+        // if (isStartElement()) {
+        //     TRY_READ_IF(wrapPolygon)
+        //     SKIP_UNKNOWN
+        // }
     }
     READ_EPILOGUE
 }
@@ -6848,17 +7055,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapTight()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 {
     READ_PROLOGUE
-    readWrap();
+    readWrapAttrs();
 
-    // Note that the name wrapThrough is misleading, it does not mean run-through it just means that wrapping
-    // happens potentially inside the container
+    // NOTE: The name wrapThrough is misleading, it does not mean run-through it
+    // just means that wrapping happens potentially inside of the container.
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-//        if (isStartElement()) {
-//! @todo effectExtent
-//        }
+        // if (isStartElement()) {
+        //     TRY_READ_IF(wrapPolygon)
+        //     SKIP_UNKNOWN
+        // }
     }
     READ_EPILOGUE
 }

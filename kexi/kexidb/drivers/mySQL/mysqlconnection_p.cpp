@@ -27,7 +27,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "mysqlconnection_p.h"
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 
 #ifdef MYSQLMIGRATE_H
 #define NAMESPACE KexiMigration
@@ -133,7 +133,14 @@ bool MySqlConnectionInternal::db_disconnect()
 bool MySqlConnectionInternal::useDatabase(const QString &dbName)
 {
 //TODO is here escaping needed?
-    return executeSQL(QLatin1String("USE ") + escapeIdentifier(dbName));
+    if (!executeSQL(QLatin1String("USE ") + escapeIdentifier(dbName))) {
+        return false;
+    }
+    if (!executeSQL("SET SESSION sql_mode='TRADITIONAL'")) {
+        // needed to turn warnings about trimming string values into SQL errors
+        return false;
+    }
+    return true;
 }
 
 /*! Executes the given SQL statement on the server.

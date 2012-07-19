@@ -1021,7 +1021,7 @@ Project::schedule(int sc)
             done = false;
             /* Each task has a scheduling direction (forward or backward)
              * depending on it's constrains. The task with the highest
-             * priority/pathCriticalness determins the time slot and hence the
+             * priority/pathCriticalness determines the time slot and hence the
              * scheduling direction. Since tasks that have the other direction
              * cannot the scheduled then, we have to stop this run as soon as
              * we hit a task that runs in the other direction. If we would not

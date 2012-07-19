@@ -65,6 +65,7 @@ KoListLevelProperties::KoListLevelProperties()
 
     setRelativeBulletSize(100);
     setAlignmentMode(false);
+    setDisplayLevel(1);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
@@ -582,7 +583,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         if (style.localName() == "outline-level-style") {
             setOutlineList(true);
         }
-        setRelativeBulletSize(100); //arbitary value for numbered list
+        setRelativeBulletSize(100); //arbitrary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);

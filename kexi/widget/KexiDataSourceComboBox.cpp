@@ -32,7 +32,7 @@
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define ADD_DEFINEQUERY_ROW

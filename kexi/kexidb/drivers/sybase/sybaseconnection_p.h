@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <QMap>
 
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 
 //#include <config.h>
 #include <sqlfront.h>

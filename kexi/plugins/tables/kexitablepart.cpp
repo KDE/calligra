@@ -36,8 +36,8 @@
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 #include <KexiWindow.h>
 
 //! @internal

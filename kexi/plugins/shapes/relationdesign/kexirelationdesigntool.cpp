@@ -25,7 +25,7 @@
 #pragma WARNING( replace KexiStartupDialog by the new assistant )
 #endif
 #include "kexi/main/startup/KexiStartupDialog.h"
-#include "kexi/kexidb/utils.h"
+#include <db/utils.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>

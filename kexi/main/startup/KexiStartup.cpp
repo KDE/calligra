@@ -25,9 +25,9 @@
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
 
-#include <kexidb/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
+#include <db/utils.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
@@ -368,6 +368,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     m_forcedDesignMode = args->isSet("design-mode");
     m_isProjectNavigatorVisible = args->isSet("show-navigator");
     m_isMainMenuVisible = !args->isSet("hide-menu");
+    m_forcedFullScreen = args->isSet("fullscreen");
     bool createDB = args->isSet("createdb");
     const bool alsoOpenDB = args->isSet("create-opendb");
     if (alsoOpenDB)

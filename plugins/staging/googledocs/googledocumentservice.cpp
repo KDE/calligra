@@ -88,7 +88,7 @@ void GoogleDocumentService::listDocuments()
     case OnlineDocument::STAGE:
         url = "https://docs.google.com/feeds/default/private/full/-/presentation";
         break;
-    case OnlineDocument::TABLES:
+    case OnlineDocument::SHEETS:
         url = "https://docs.google.com/feeds/default/private/full/-/spreadsheet";
         break;
     }
@@ -155,13 +155,13 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
         }
     } else {
         QString errorString(networkReply->readAll());
-        qDebug() << "Error occured !!!!  " << errorString;
+        qDebug() << "Error occurred !!!!  " << errorString;
         errorString = errorString.right(errorString.length() - errorString.indexOf("Error=") - 6);
         if (!loggedin) {
             emit userAuthenticated(loggedin, errorString);
         } else {
             QMessageBox msgBox(QMessageBox::Information, i18n("Online Document Services"),
-                               "Error occured !!!!  " + errorString);
+                               "Error occurred !!!!  " + errorString);
             msgBox.exec();
         }
     }
