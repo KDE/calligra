@@ -357,6 +357,64 @@
         </Help>
     </Function>
 
+   <Function>
+       <Name>COUNTIFS</Name>
+       <Type>Float</Type>
+       <Parameter optional="false">
+           <Comment>Criteria range 1</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria 1</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 2</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 2</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 3</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 3</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 4</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 4</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 5</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 5</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Help>
+           <Text>Counts the number of cells that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range R2, and so on. All 		 reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array result of each 		 selection; an entry is counted only if the same position in each array is the result of a Criterion match.
+	   </Text>
+           <Syntax>COUNTIFS( Reference R1 ; Criterion C1 [ ; Reference R2 ; Criterion C2 ]... )</Syntax>
+           <Example>SCOUNTIFS(B2:B4;">1";C2:C4;2) Counts the number of cells which match >1 in B2:B4 and =2 in C2:C4.</Example>
+           <Related>AVERAGEIFS</Related>
+           <Related>COUNT</Related>
+	   <Related>COUNTA</Related>
+	   <Related>COUNTBLANK</Related>
+	   <Related>COUNTIF</Related>
+	   <Related>SUMIF</Related>
+	   <Related>SUMIFS</Related>
+        </Help>
+    </Function>
+
     <Function>
         <Name>FACT</Name>
         <Type>Float</Type>
@@ -444,6 +502,63 @@
             <Example>SUMIF(A1:A4;"=0";B1:B4) sums all values in range B1:B4 if the corresponding value in A1:A4 matches =0</Example>
             <Related>SUM</Related>
             <Related>COUNTIF</Related>
+        </Help>
+    </Function>
+
+    <Function>
+       <Name>SUMIFS</Name>
+       <Type>Float</Type>
+       <Parameter optional="false">
+           <Comment>Sum range</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria range 1</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria 1</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 2</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 2</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 3</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 3</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 4</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 4</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 5</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 5</Comment>
+           <Type>String</Type>
+       </Parameter>
+        <Help>
+            <Text>Sums the value of cells in range R that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range R2, and so on. All 			  reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array result of each 			  selection; an entry is counted only if the same position in each array is the result of a criteria match.</Text>
+            <Syntax> SUMIFS( Reference R ; Reference R1 ; Criterion C1 [ ; Reference R2 ; Criterion C2 ]... )</Syntax>
+            <Example>SUMIFS(A2:A4;B2:B4;">1";C2:C4;2) sums all values in the range A2:A4 which match >1 in B2:B4 and =2 in C2:C4.</Example>
+            <Related>AVERAGEIFS</Related>
+            <Related>COUNTIFS</Related>
+	    <Related>SUMIF</Related>
         </Help>
     </Function>
 

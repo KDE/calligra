@@ -157,6 +157,36 @@
     </Function>
 
     <Function>
+        <Name>NETWORKDAYS</Name>
+        <Type>Int</Type>
+        <Parameter optional="false">
+            <Comment>Date1</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Parameter optional="false">
+            <Comment>Date2</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Holidays</Comment>
+            <Type range = "true">String</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Workdays</Comment>
+            <Type range = "true">String</Type>
+        </Parameter>
+        <Help>
+            <Text>Returns the whole number of work days between two dates.</Text>
+	    <Text>Work days are defined as non-weekend, non-holiday days. By default, weekends are Saturdays and Sundays and there are no holidays.
+The optional 3rd parameter Holidays can be used to specify a list of dates to be treated as holidays. Note that this parameter can be omitted as an empty parameter (two consecutive ;; semicolons) to be able to pass the set of Workdays without Holidays.
+The optional 4th parameter Workdays can be used to specify a different definition for the standard work week by passing in a list of numbers which define which days of the week are workdays (indicated by 0) or not (indicated by non-zero) in order Sunday, Monday,...,Saturday. So, the default definition of the work week excludes Saturday and Sunday and is: {1;0;0;0;0;0;1}. To define the work week as excluding Friday and Saturday, the third parameter would be: {0;0;0;0;0;1;1}.</Text>
+            <Syntax>NETWORKDAYS(Date1;Date2;holidays;workdays)</Syntax>
+            <Example>NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;12)) returns 10</Example>
+            <Example>NETWORKDAYS(DATE(2007;1;1);DATE(2007;1;12);DATE(2007;1;1)) returns 9</Example>
+        </Help>
+    </Function>
+
+    <Function>
         <Name>DAY</Name>
         <Type>Int</Type>
         <Parameter>

@@ -162,11 +162,13 @@ private:
     QLabel* label3;
     QLabel* label4;
     QLabel* label5;
+    //QLabel* labels[252];
     KLineEdit *firstElement;
     KLineEdit *secondElement;
     KLineEdit *thirdElement;
     KLineEdit *fourElement;
     KLineEdit *fiveElement;
+    //KLineEdit *extraElements[252];
     /**
      * Tells which of the lineedits has the logical focus currently.
      * It may happen that a lineedit does not have qt focus but

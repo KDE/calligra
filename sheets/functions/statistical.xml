@@ -85,6 +85,90 @@
    </Function>
 
    <Function>
+       <Name>AVERAGEIF</Name>
+       <Type>Float</Type>
+       <Parameter optional="false">
+           <Comment>Check range</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Average range</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Help>
+           <Text>The AVERAGEIF() function calculates the average of all values given as parameters which match the criteria. The average range is optional. If not     			 supplied, the values in the check range are averaged. The length of the check range should be equal or less than the length of the average range.
+	   </Text>
+           <Syntax>AVERAGEIF(checkrange;criteria;averagerange)</Syntax>
+           <Example>AVERAGEIF(A1:A4;">1") averages all values in range A1:A4 which match >1</Example>
+	   <Example>AVERAGEIF(A1:A4;"=0";B1:B4) averages all values in range B1:B4 if the corresponding value in A1:A4 matches =0</Example>
+           <Related>AVERAGE</Related>
+           <Related>COUNTIF</Related>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>AVERAGEIFS</Name>
+       <Type>Float</Type>
+       <Parameter optional="false">
+           <Comment>Average range</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria range 1</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="false">
+           <Comment>Criteria 1</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 2</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 2</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 3</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 3</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 4</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 4</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria range 5</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter optional="ture">
+           <Comment>Criteria 5</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Help>
+           <Text>Averages the values of cells in the reference range A that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range 		 R2, and so on. All reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array 			 result of each selection; a cell of reference range A is evaluated only if the same position in each array is the result of a Criterion match. If no 			 numbers are in the result set to be averaged, an Error is returned.
+	   </Text>
+           <Syntax>AVERAGEIFS( Reference A ; Reference R1 ; Criterion C1 [ ; Reference R2 ; Criterion C2 ]... )</Syntax>
+           <Example>AVERAGEIFS(A2:A4;B2:B4;">1";C2:C4;2) averages all values in the range A2:A4 which match >1 in B2:B4 and =2 in C2:C4.</Example>
+           <Related>AVERAGEIF</Related>
+           <Related>COUNTIFS</Related>
+	   <Related>SUMIFS</Related>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>BETADIST</Name>
        <Type>Float</Type>
        <Parameter>
@@ -169,6 +253,49 @@
            <Text>CHIDIST compares the Chi square value to be given for a random sample that is calculated from the sum of (observed value-expected value)^2/expected value for all values with the theoretical Chi square distribution and determines from this the probability of error for the hypothesis to be tested.</Text>
            <Syntax>CHIDIST(number;degrees_freedom)</Syntax>
            <Example>CHIDIST(13.27;5) returns 0.021</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>CHISQDIST</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Number</Comment>
+           <Type>Float</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Degrees of freedom</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Cumulative</Comment>
+           <Type>Boolean</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns the value of the probability density function or the cumulative distribution function for the c2-distribution.</Text>
+           <Text>The χ^2 distribution is associated with a χ^2 test. Use the χ^2 test to compare observed and expected values.</Text>
+           <Syntax>CHISQDIST(number;degrees_freedom;cumulative)</Syntax>
+           <Example>CHISQDIST(3;2;FALSE) returns 0.111566</Example>
+	   <Related>LEGACY.CHIDIST</Related>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>CHISQINV</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Number</Comment>
+           <Type>Float</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Degrees of freedom</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>returns the inverse of CHISQDIST(x;DegreesOfFreedom;TRUE()).</Text>
+           <Syntax>CHISQINV(number;degrees_freedom)</Syntax>
+           <Example>CHISQINV(0.1;3) returns 0.594374374</Example>
+	   <Related>CHISQDIST</Related>
        </Help>
    </Function>
 
@@ -267,6 +394,31 @@
            <Text>The COVAR() function calculates the covariance of two cell ranges.</Text>
            <Syntax>COVAR(range1; range2)</Syntax>
            <Example>COVAR(A1:A3; B1:B3)</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>CRITBINOM</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Trials</Comment>
+           <Type range="false">Int</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Success probability</Comment>
+           <Type range="false">Float</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Alpha</Comment>
+           <Type range="false">Float</Type>
+       </Parameter>
+       <Help>
+           <Text>The CRITBINOM() function Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value.</Text>
+	   <Text>Trials is the total number of trials.</Text>
+	   <Text>SP is the probability of success for one trial.</Text>
+	   <Text>Alpha is the threshold probability to be reached or exceeded.</Text>
+           <Syntax>CRITBINOM(Trials;SP;Alpha)</Syntax>
+           <Example>CRITBINOM(100;0.5;0.1) returns 44</Example>
        </Help>
    </Function>
 
@@ -382,6 +534,29 @@
            <Syntax>FISHER(number)</Syntax>
            <Example>FISHER(0.2859) equals 0.294096</Example>
            <Example>FISHER(0.8105) equals 1.128485</Example>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>FORECAST</Name>
+       <Type>Float</Type>
+       <Parameter>
+           <Comment>Number</Comment>
+           <Type range="false">Float</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Data Y</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Data X</Comment>
+           <Type range="true">Float</Type>
+       </Parameter>
+       <Help>
+           <Text>The FORECAST() function extrapolates future values based on existing x and y values.</Text>
+           <Syntax>FORECAST(Value;Data_Y;Data_X)</Syntax>
+           <Example>FORECAST(8;{1;2;3};{4;5;6}) returns 5</Example>
+           <Example>FORECAST(7;{5.8;-1};{2;-5}) returns 10.65714286</Example>
        </Help>
    </Function>
 
@@ -675,6 +850,26 @@
                    <Text>The LARGE() function returns the k-th largest value from the data set.</Text>
                    <Syntax>LARGE(range; k)</Syntax>
                    <Example>A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3</Example>
+               </Help>
+           </Function>
+
+           <Function>
+               <Name>LEGACYCHITEST</Name>
+               <Type>Float</Type>
+       	       <Parameter optional="false">
+          	   <Comment>Array A</Comment>
+                   <Type range="true">String</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Array E</Comment>
+                   <Type range="true">String</Type>
+               </Parameter>
+               <Help>
+                   <Text>The LEGACYCHITEST() function returns some Chi square goodness-for-fit test.</Text>
+                   <Syntax>LEGACYCHITEST(Array A;Array E)</Syntax>
+		   <Syntax>CHITEST(Array A;Array E)</Syntax>
+                   <Example>CHITEST({253;197;204};{240;240;240}) RETURNS 0.0010036</Example>
+		   <Related>LEGACYCHIDIST</Related>
                </Help>
            </Function>
 
@@ -1017,6 +1212,62 @@
                    <Syntax>POISSON(number;lambda;cumulative)</Syntax>
                    <Example>POISSON(60;50;0) equals 0.020105</Example>
                    <Example>POISSON(60;50;1) equals 0.927840</Example>
+               </Help>
+           </Function>
+
+           <Function>
+               <Name>PROB</Name>
+               <Type>Float</Type>
+               <Parameter optional = "false">
+                   <Comment>Data</Comment>
+                   <Type range = "true">Float</Type>
+               </Parameter>
+               <Parameter optional = "false">
+                   <Comment>Probabilities</Comment>
+                   <Type range = "true">Float</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Lower limit</Comment>
+                   <Type range = "false">Float</Type>
+               </Parameter>
+               <Parameter optional="true">
+                   <Comment>Upper limit</Comment>
+                   <Type range = "false">Float</Type>
+               </Parameter>
+               <Help>
+                   <Text>The PROB() function returns the probability that a discrete random variable lies between two limits.</Text>
+                   <Text>Data is the array or range of data in the sample</Text>
+                   <Text>Probability is the array or range of the corresponding probabilities.</Text>
+                   <Text>Lower limit is the lower bound of the interval whose probabilities are to be summed.</Text>
+		   <Text>Upper limit is the upper bound of the interval whose probabilities are to be summed. If omitted, upper_lim = lower_lim is used.</Text>
+                   <Syntax>PROB(x_range;prob_range;lower_lim;upper_lim)</Syntax>
+               </Help>
+           </Function>
+
+           <Function>
+               <Name>PERCENTRANK</Name>
+               <Type>Float</Type>
+               <Parameter optional = "false">
+                   <Comment>Data</Comment>
+                   <Type range = "true">Float</Type>
+               </Parameter>
+               <Parameter optional = "false">
+                   <Comment>X</Comment>
+                   <Type range = "false">Float</Type>
+               </Parameter>
+               <Parameter optional="true">
+                   <Comment>Significance</Comment>
+                   <Type range = "false">Float</Type>
+               </Parameter>
+               <Help>
+                   <Text>The PERCENTRANK() function returns the percentage rank of a value in a sample.</Text>
+                   <Text>Data is the array or range of data with numeric values.</Text>
+                   <Text>X is the value whose rank is to be determined.</Text>
+                   <Text>Significance is an optional value that identifies the number of significant digits for the returned percentage value. If omitted, a value of 3 is used (0.xxx).</Text>
+		   <Text>Returns the rank of a value in a data set Data as a percentage of the data set, a value between 0 and 1, inclusive. This function can be used to evaluate the relative standing of a value within a data set.</Text>
+                   <Syntax>PERCENTRANK(Data;X;Significance)</Syntax>
+		   <Related>PERCENTILE</Related>
+		   <Related>RANK</Related>
                </Help>
            </Function>
 

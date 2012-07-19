@@ -149,6 +149,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     int index = m_tabwidget->currentIndex();
 
     m_input = new QWidget(m_tabwidget);
+
     QVBoxLayout *grid2 = new QVBoxLayout(m_input);
     grid2->setMargin(KDialog::marginHint());
     grid2->setSpacing(KDialog::spacingHint());
@@ -184,6 +185,14 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     fiveElement = new KLineEdit(m_input);
     grid2->addWidget(fiveElement);
+
+    /*for (int i = 0; i < 252; i++) {
+        labels[i] = new QLabel(m_input);
+        grid2->addWidget(labels[i]);
+
+        extraElements[i] = new KLineEdit(m_input);
+        grid2->addWidget(extraElements[i]);
+    }*/
 
     grid2->addStretch(10);
 
@@ -222,6 +231,10 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
             this, SLOT(slotChangeText(const QString &)));
     connect(fiveElement, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotChangeText(const QString &)));
+    /*for (int i = 0; i < 252; i++) {
+        connect(extraElements[i], SIGNAL(textChanged(const QString &)),
+                this, SLOT(slotChangeText(const QString &)));;
+    }*/
 
     connect(m_selection, SIGNAL(changed(const Region&)),
             this, SLOT(slotSelectionChanged()));
@@ -324,6 +337,13 @@ bool FormulaDialog::eventFilter(QObject* obj, QEvent* ev)
         m_focus = fourElement;
     else if (obj == fiveElement && ev->type() == QEvent::FocusIn)
         m_focus = fiveElement;
+    /*else if (obj == extraElements[0] && ev->type() == QEvent::FocusIn)
+        for (int i = 0; i < 252; i++) {
+            if (obj == extraElements[i] && ev->type() == QEvent::FocusIn)
+                m_focus = extraElements[i];
+            else if (obj == extraElements[i+1] && ev->type() == QEvent::FocusIn)
+                m_focus = extraElements[i+1];
+        }*/
     else
         return false;
 
@@ -451,6 +471,15 @@ QString FormulaDialog::createFormula()
         else
             tmp = tmp + createParameter(fiveElement->text(), 4);
     }
+    /*for (int i = 6; i < m_desc->params(); i++) {
+        if (!extraElements[i-6]->text().isEmpty() && count >= i) {
+            first = false;
+            if (!first)
+                tmp = tmp + ';' + createParameter(extraElements[i-6]->text(), i-1);
+            else
+                tmp = tmp + createParameter(extraElements[i-6]->text(), i-1);
+        }
+    }*/
 
     return(tmp);
 }
@@ -623,6 +652,18 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
 
     if (m_desc->params() > 5)
         kDebug(36001) << "Error in param->nb_param";
+
+    /*if (m_desc->params() > 5) {
+        //kDebug(36001) << "Error in param->nb_param";
+        for (int i = 0; i < m_desc->params()-5; i++)
+            showEntry(extraElements[i], labels[i], m_desc, (i+5));
+    }
+    else
+        for (int i = 0; i < 252; i++) {
+            labels[i]->hide();
+            extraElements[i]->hide();
+        }*/
+
     refresh_result = true;
 
     //
